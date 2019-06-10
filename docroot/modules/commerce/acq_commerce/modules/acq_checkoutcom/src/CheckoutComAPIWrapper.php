@@ -46,6 +46,12 @@ class CheckoutComAPIWrapper {
   // API response success code.
   const SUCCESS_CODE = '10000';
 
+  // Mada bins file name.
+  const KEY_MADA_BINS_FILE = 'mada_bins.csv';
+
+  // Mada bins test file name.
+  const KEY_MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
+
   /**
    * API Helper service object.
    *
@@ -103,6 +109,59 @@ class CheckoutComAPIWrapper {
     $this->httpClientFactory = $http_client_factory;
     $this->apiHelper = $api_helper;
     $this->logger = $logger_factory->get('acq_checkoutcom');
+  }
+
+  /**
+   * Return the MADA BINS file path.
+   *
+   * @return string
+   *   Return the mada bin file path.
+   */
+  public function getMadaBinsPath() {
+    return (string) '/files/' . (($this->isLive())
+      ? self::KEY_MADA_BINS_FILE
+      : self::KEY_MADA_BINS_FILE_TEST);
+  }
+
+  /**
+   * Checks if the given bin is belong to mada bin.
+   *
+   * @return bool
+   *   Return true if one of the mada bin, false otherwise.
+   */
+  public function isMadaBin($bin) {
+    // Set mada bin file path.
+    $mada_bin_csv_path = drupal_get_path('module', 'acq_checkoutcom') . $this->getMadaBinsPath();
+
+    // Read CSV rows.
+    $mada_bin_csv_file = fopen($mada_bin_csv_path, 'r+');
+
+    $mada_bin_csv_data = [];
+    while ($mada_bin_csv_row = fgetcsv($mada_bin_csv_file)) {
+      $mada_bin_csv_data[] = $mada_bin_csv_row;
+    }
+    fclose($mada_bin_csv_file);
+
+    // Remove the first row of csv columns.
+    unset($mada_bin_csv_data[0]);
+
+    // Build the mada bin array.
+    $mada_bin_array = array_map(function ($row) {
+      return $row[1];
+    }, $mada_bin_csv_data);
+
+    return in_array($bin, $mada_bin_array);
+  }
+
+  /**
+   * Get current environment is live or not.
+   *
+   * @return bool
+   *   Return true if current env is live else false.
+   */
+  protected function isLive() {
+    $config = $this->configFactory->get('acq_checkoutcom.settings');
+    return ($config->get('env') == 'live');
   }
 
   /**
