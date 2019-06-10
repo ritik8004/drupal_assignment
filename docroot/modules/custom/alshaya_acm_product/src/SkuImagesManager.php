@@ -641,7 +641,7 @@ class SkuImagesManager {
   public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
 
-    $media = $this->getProductMedia($sku, $context);
+    $media = $this->getProductMedia($sku, $context, FALSE);
 
     if (empty($media) && !$add_default_image) {
       return [];
