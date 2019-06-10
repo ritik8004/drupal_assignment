@@ -102,7 +102,7 @@ class KnetController extends ControllerBase {
     $response['quote_id'] = $data['udf3'];
     $response['state_key'] = $data['udf4'];
 
-    $this->knetHelper->processKnetResponse($response);
+    return $this->knetHelper->processKnetResponse($response);
 
   }
 

@@ -463,12 +463,10 @@ class KnetHelper {
     $output = [];
     // Decrypted data contains a string which seperates values by `&`, so we
     // need to explode this. Example - 'paymentId=123&amt=4545'.
-    $decrypted_data = explode('&', $en_dec->decrypt($input['trandata'], $terminal_resource_key));
+    $decrypted_data = array_filter(explode('&', $en_dec->decrypt($input['trandata'], $terminal_resource_key)));
     array_walk($decrypted_data, function ($val, $key) use (&$output) {
       list($key, $value) = explode('=', $val);
-      if ($key) {
-        $output[$key] = $value;
-      }
+      $output[$key] = $value;
     });
 
     return $output;

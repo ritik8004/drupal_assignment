@@ -231,7 +231,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     // Allow other modules to alter success/fail route.
     $this->moduleHandler->alter('alshaya_knet_success_route', $route, $state_data);
 
-    $result_url .= Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
+    $redirect_url = Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
+    $result_url .= $redirect_url;
     $this->logger->info('KNET update for @quote_id: Redirect: @result_url Response: @message Cart: @cart State: @state', [
       '@quote_id' => $response['quote_id'],
       '@result_url' => $result_url,
@@ -239,8 +240,15 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       '@state' => json_encode($state_data),
       '@cart' => $cartToLog,
     ]);
-    print $result_url;
-    exit;
+
+    // For new K-Net toolkit, we need to redirect.
+    if ($this->knetHelper->useNewKnetToolKit()) {
+      return new RedirectResponse($redirect_url, 302);
+    }
+    else {
+      print $result_url;
+      exit;
+    }
   }
 
   /**
