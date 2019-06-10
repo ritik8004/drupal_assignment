@@ -60,6 +60,7 @@ $whisper-light-59: rgba(235, 235, 235, 0.59);
 $white-four-70: rgba(247, 247, 247, 0.7);
 $_white-four: #f7f7f7;
 $_grey_11: #f2f2f2;
+$_greenish_1: #a3a1a1;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -189,6 +190,10 @@ $oos_pdp_text: $hnm-grey;
 // Social links
 $social_links: $white-five;
 $social_links_hover: $grey5;
+
+// Social login.
+$social-network-text: $hnm-black-two;
+$social_auth_login_button_border: $_greenish_1;
 
 //Address book
 $address_tile_selected_bg: $grey3;
