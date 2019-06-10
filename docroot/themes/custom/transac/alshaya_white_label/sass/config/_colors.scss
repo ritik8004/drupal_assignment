@@ -83,6 +83,9 @@ $_plp_facet_count_color: #7d7d7d;
 $_plp_sort_by_options: $brownish-grey;
 $_plp_selected_filter_text: #555;
 $_plp_clear_all_btn_disabled: #8d8d8d;
+$light-blue-border: #b3d3f0;
+$_algolia_search_icon_bg: #0072ce;
+$_algolia_suggestion_list_bg: #f7fafe;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -994,3 +997,23 @@ $lhn_l4: $grey-ash;
 $lhn_sticky-filter-background: $white-five;
 $lhn_sticky-header-shadow: rgba(0, 0, 0, 0.24);
 $lhn_sticky-header-desktop-shadow: rgba(26, 26, 26, 0.1);
+
+//Algolia search bar.
+$algolia-input-text: $marine-blue-two;
+$algolia-input-placeholder-text: $grey-ash;
+$algolia-input-border: $white;
+$algolia-trending-title-text: $marine-blue;
+$algolia-suggestion-text: $greyish;
+$algolia-suggestion-border: $white-smoke-light;
+$algolia-suggestion-input-popout-icon: $light-ash;
+$algolia-dropdown-border: $black;
+$algolia-dropdown-background: $white-five;
+$algolia-search-icon: $white-five;
+$algolia_sticky-header-shadow: rgba(0, 0, 0, 0.24);
+$algolia-trending-title-border: $warm-grey-two;
+$algolia-search-bar-background: $white-five;
+$algolia-auto-complete-border: $light-blue-border;
+$algolia-search-icon-background: $_algolia_search_icon_bg;
+$algolia-input-text: $grey-ash;
+$algolia-search-clear-text-icon: $_algolia_search_icon_bg;
+$algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
