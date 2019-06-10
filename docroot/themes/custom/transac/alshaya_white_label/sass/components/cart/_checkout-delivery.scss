@@ -498,7 +498,6 @@
   .form-type-radio {
     width: 100%;
     margin: 0;
-    height: 4.063rem;
     margin-top: 0.5rem;
     padding: 1.125rem 0;
     border-bottom: 1px solid $checkout_section_title_border;
@@ -508,7 +507,6 @@
     }
 
     @include breakpoint($tablet) {
-      height: 70px;
       margin-top: 1.875rem;
       padding: 1.125rem 1.5rem;
     }
@@ -566,7 +564,6 @@
 
           &-price {
             float: $right;
-            margin-top: -10px;
 
             @include breakpoint($only-mobile) {
               font-weight: bold;
@@ -574,6 +571,7 @@
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
+              width: 80%;
             }
           }
 

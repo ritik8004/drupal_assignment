@@ -17,8 +17,27 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Enable alshaya options list module.
  */
-function alshaya_transac_update_8121() {
+function alshaya_transac_update_8122() {
   \Drupal::service('module_installer')->install(['alshaya_options_list']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable `alshaya_knet` module and update k-net configs.
+ */
+function alshaya_transac_update_8121() {
+  // Install module.
+  \Drupal::service('module_installer')->install(['alshaya_knet']);
+
+  // Update the k-net settings.
+  $data = \Drupal::config('alshaya_acm_knet.settings')->getRawData();
+  \Drupal::configFactory()->getEditable('alshaya_knet.settings')
+    ->setData($data)
+    ->save();
+
+  // Delete old k-net settings.
+  \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings')->delete();
 }
 
 /**

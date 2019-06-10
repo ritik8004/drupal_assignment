@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_knet_alshaya_i18n_onetime_translation_add() {
+  // Set K-Net langcode for AR.
+  $settings = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_knet.settings');
+  $settings->set('knet_language_code', 'ARA');
+  $settings->save();
+}
