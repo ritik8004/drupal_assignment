@@ -273,6 +273,11 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     return;
   }
 
+  // Return if already modified by other modules.
+  if (strpos($alias, '/shop-') > -1) {
+    return;
+  }
+
   // For all the category terms we want shop- prefix for L1 only.
   $alias = '/shop-' . ltrim($alias, '/');
 }
