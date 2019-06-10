@@ -70,7 +70,14 @@ class KnetController extends ControllerBase {
    * Page callback to process the payment and return redirect URL.
    */
   public function response() {
-    $quote_id = isset($_POST['udf3']) ? $_POST['udf3'] : '';
+    $data = $_POST;
+
+    // For new K-Net toolkit, parse and decrypt the response first.
+    if ($this->knetHelper->useNewKnetToolKit()) {
+      $data = $this->knetHelper->parseAndPrepareKnetData($data);
+    }
+
+    $quote_id = isset($data['udf3']) ? $data['udf3'] : '';
     try {
       if (empty($quote_id)) {
         throw new \Exception();
@@ -78,22 +85,22 @@ class KnetController extends ControllerBase {
     }
     catch (\Exception $e) {
       $this->logger->error('Invalid KNET response call found.<br>POST: @message', [
-        '@message' => json_encode($_POST),
+        '@message' => json_encode($data),
       ]);
       throw new NotFoundHttpException();
     }
 
-    $response['payment_id'] = $_POST['paymentid'];
-    $response['result'] = $_POST['result'];
-    $response['post_date'] = $_POST['postdate'];
-    $response['transaction_id'] = $_POST['tranid'];
-    $response['auth_code'] = $_POST['auth'];
-    $response['ref'] = $_POST['ref'];
-    $response['tracking_id'] = $_POST['trackid'];
-    $response['user_id'] = $_POST['udf1'];
-    $response['customer_id'] = $_POST['udf2'];
-    $response['quote_id'] = $_POST['udf3'];
-    $response['state_key'] = $_POST['udf4'];
+    $response['payment_id'] = $data['paymentid'];
+    $response['result'] = $data['result'];
+    $response['post_date'] = $data['postdate'];
+    $response['transaction_id'] = $data['tranid'];
+    $response['auth_code'] = $data['auth'];
+    $response['ref'] = $data['ref'];
+    $response['tracking_id'] = $data['trackid'];
+    $response['user_id'] = $data['udf1'];
+    $response['customer_id'] = $data['udf2'];
+    $response['quote_id'] = $data['udf3'];
+    $response['state_key'] = $data['udf4'];
 
     $this->knetHelper->processKnetResponse($response);
 

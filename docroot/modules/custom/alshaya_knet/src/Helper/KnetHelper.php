@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_knet\Helper;
 
-use Drupal\alshaya_knet\E24PaymentPipe;
+use Drupal\alshaya_knet\Knet\E24PaymentPipe;
 use Drupal\alshaya_knet\Knet\KnetEncryptDecypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -120,10 +120,11 @@ class KnetHelper {
     // If using new K-Net toolkit.
     if ($this->useNewKnetToolKit()) {
       $pipe = new KnetNewToolKit();
-      // @Todo: Discuss about how we store/get these values.
-      $pipe->setTranportalId('');
-      $pipe->setTranportalPassword('');
-      $pipe->setTerminalResourceKey('');
+      // Get K-Net creds for new toolkit.
+      $knet_creds = $this->getNewKnetToolkitCreds();
+      $pipe->setTranportalId($knet_creds['tranportal_id']);
+      $pipe->setTranportalPassword($knet_creds['tranportal_password']);
+      $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
     }
     else {
       $pipe = new E24PaymentPipe();
@@ -425,6 +426,52 @@ class KnetHelper {
   public function useNewKnetToolKit() {
     return $this->configFactory->get('alshaya_knet.settings')
       ->get('use_new_knet_toolkit');
+  }
+
+  /**
+   * Get tranportal id, password and resource key for new K-Net toolkit.
+   *
+   * @return array
+   *   Array of credentials.
+   */
+  public function getNewKnetToolkitCreds() {
+    // @Todo: Need to discuss the way to store/safe these values.
+    return [
+      'tranportal_id' => '',
+      'tranportal_password' => '',
+      'terminal_resource_key' => '',
+    ];
+  }
+
+  /**
+   * Parse and prepare K-Net response data for new toolkit.
+   *
+   * @param array $input
+   *   Data to parse.
+   *
+   * @return array
+   *   Data to return after parse.
+   */
+  public function parseAndPrepareKnetData(array $input) {
+    // If error is available.
+    if (!empty($input['ErrorText']) || !empty($input['Error'])) {
+      return $input;
+    }
+
+    $en_dec = new KnetEncryptDecypt();
+    $terminal_resource_key = $this->getNewKnetToolkitCreds()['terminal_resource_key'];
+    $output = [];
+    // Decrypted data contains a string which seperates values by `&`, so we
+    // need to explode this. Example - 'paymentId=123&amt=4545'.
+    $decrypted_data = explode('&', $en_dec->decrypt($input['trandata'], $terminal_resource_key));
+    array_walk($decrypted_data, function ($val, $key) use (&$output) {
+      list($key, $value) = explode('=', $val);
+      if ($key) {
+        $output[$key] = $value;
+      }
+    });
+
+    return $output;
   }
 
 }
