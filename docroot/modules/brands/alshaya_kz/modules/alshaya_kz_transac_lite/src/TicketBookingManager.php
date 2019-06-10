@@ -165,7 +165,7 @@ class TicketBookingManager {
       // Re-initialize token if expired from kidsoft
       // by invalidating cache and get new one.
       if (empty($parks->getParksResult) && $this->getTicketBookingCachedData('getToken')) {
-        cache::invalidateTags(['alshaya_kz_transac_lite:kidsoft']);
+        Cache::invalidateTags(['alshaya_kz_transac_lite:kidsoft']);
       }
       $this->setTicketBookingCachedData($parks, 'getParkData');
       return $parks;

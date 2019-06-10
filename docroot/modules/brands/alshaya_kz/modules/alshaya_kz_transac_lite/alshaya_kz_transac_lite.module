@@ -16,7 +16,6 @@ function alshaya_kz_transac_lite_theme($existing, $type, $theme, $path) {
       'qr_code' => NULL,
       'booking_info' => NULL,
       'visitor_list' => NULL,
-      '#email_logo' => NULL,
     ],
   ];
 
