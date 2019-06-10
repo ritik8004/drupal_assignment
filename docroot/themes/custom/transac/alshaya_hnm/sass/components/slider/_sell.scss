@@ -24,13 +24,15 @@
 }
 
 .subtitle.crossell-title {
-  @include arabic-letter-spacing;
-
   font-family: $hnm-demibold;
 
   @include breakpoint($tablet) {
     margin-bottom: 0.25rem;
     font-size: 1rem;
+
+    html[lang=ar] & {
+      font-size: 0.875rem;
+    }
   }
 }
 
