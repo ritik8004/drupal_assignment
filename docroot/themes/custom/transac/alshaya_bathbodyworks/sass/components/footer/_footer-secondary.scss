@@ -25,6 +25,10 @@
 
   .c-footer-secondary & {
     .country-ae & {
+      @include breakpoint($only-mobile) {
+        padding-top: 1.5625rem;
+      }
+
       html[lang=ar] & {
         padding: 1.875rem 0;
       }

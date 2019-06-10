@@ -1,5 +1,6 @@
-alshaya_acm_product_position.settings:
+alshaya_acm_product_position.plp_sort_settings_admin_form:
   title: 'Product sorting settings'
   base_route_name: alshaya_acm_product_position.plp_sort_settings_admin_form
+  parent_id: alshaya_acm_product_position.plp_sort_settings_admin_form
   names:
     - alshaya_acm_product_position.settings

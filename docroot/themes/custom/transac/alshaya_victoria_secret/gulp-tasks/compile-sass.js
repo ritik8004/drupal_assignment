@@ -17,6 +17,7 @@ module.exports = function (gulp, plugins, options) {
       }))
       .pipe(plugins.autoprefixer({
         browsers: ['last 4 versions'],
+        grid: true,
         cascade: false
       }))
       .pipe(plugins.plumber.stop())

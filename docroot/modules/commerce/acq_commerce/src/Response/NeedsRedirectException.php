@@ -3,6 +3,8 @@
 namespace Drupal\acq_commerce\Response;
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\EnforcedResponseException;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -29,10 +31,17 @@ class NeedsRedirectException extends EnforcedResponseException {
       throw new \InvalidArgumentException('Invalid URL provided.');
     }
 
-    $response = new TrustedRedirectResponse($url, $status_code, $headers);
-    $cacheable_metadata = new CacheableMetadata();
-    $cacheable_metadata->setCacheMaxAge(0);
-    $response->addCacheableDependency($cacheable_metadata);
+    if (\Drupal::request()->isXmlHttpRequest()) {
+      $response = new AjaxResponse();
+      $response->addCommand(new RedirectCommand($url));
+    }
+    else {
+      $response = new TrustedRedirectResponse($url, $status_code, $headers);
+      $cacheable_metadata = new CacheableMetadata();
+      $cacheable_metadata->setCacheMaxAge(0);
+      $response->addCacheableDependency($cacheable_metadata);
+    }
+
     parent::__construct($response);
   }
 

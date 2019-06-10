@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_email_signup
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: alshaya_email_signup_link
-theme: whitelabel_non_transac
+theme: whitelabel
 region: header_secondary
 weight: -5
 provider: null

@@ -24,3 +24,12 @@ stock_check:
     - alshaya_acm_product/product_view
     - alshaya_acm_cart_notification/cart_notification_js
     - alshaya_white_label/jquery_mobile_touch_swipe
+
+sku_gallery_format:
+  version: 1.x
+  js:
+    js/sku_gallery_format.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

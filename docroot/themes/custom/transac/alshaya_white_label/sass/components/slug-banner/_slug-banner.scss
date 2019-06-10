@@ -121,6 +121,13 @@
       }
     }
   }
+
+  @include breakpoint($desktop) {
+    .region__banner-top {
+      z-index: 5;
+      position: relative;
+    }
+  }
 }
 
 .slug-banner-modal {

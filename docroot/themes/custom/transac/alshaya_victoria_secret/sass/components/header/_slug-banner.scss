@@ -37,16 +37,6 @@
       }
     }
 
-    .page-standard {
-      @include breakpoint($only-tablet) {
-        margin-top: 2.625rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        margin-top: 2.6875rem;
-      }
-    }
-
     &.mobile--overlay {
       .branding__menu {
         @include breakpoint($upto-desktop) {
@@ -73,13 +63,35 @@
     }
 
     @include breakpoint($only-mobile) {
-      margin-top: 4.25rem !important;
+      margin-top: 2.875rem !important;
     }
   }
 
   .branding__menu.navbar-fixed-top {
     @include breakpoint($upto-desktop) {
       position: static;
+    }
+  }
+
+  #block-sizefacetblock {
+    @include breakpoint($only-mobile) {
+      margin-top: 2.75rem;
+    }
+  }
+
+  .page-standard {
+    @include breakpoint($only-tablet) {
+      margin-top: 2.625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 2.6875rem;
+    }
+
+    &.user-page {
+      @include breakpoint($only-mobile) {
+        margin-top: 5rem;
+      }
     }
   }
 }

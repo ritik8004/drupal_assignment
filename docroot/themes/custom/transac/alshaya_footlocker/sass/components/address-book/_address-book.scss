@@ -17,6 +17,10 @@
 
   @include breakpoint($tablet) {
     max-width: 20rem;
+
+    &:nth-of-type(odd) {
+      clear: both;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -41,9 +45,10 @@
   .block-system > a {
     text-transform: uppercase;
     margin-bottom: 1rem;
+    padding: 0.875rem 2.625rem 0.5rem;
 
     @include breakpoint($only-tablet) {
-      top: -1.625rem;
+      top: -1rem;
     }
   }
 }
@@ -85,11 +90,10 @@
       border: 0;
       border-#{$left}: 0.0625rem solid $address_book_border;
       height: 2.5rem;
-      padding: 0.9375rem 0;
+      padding: 0.75rem 0;
       min-width: 4.9375rem;
 
       @include breakpoint($desktop) {
-        padding: 0.9375rem 0;
         font-weight: normal;
       }
     }
@@ -99,7 +103,7 @@
     text-align: unset;
     padding-#{$left}: 2.125rem;
     padding-bottom: 0;
-    padding-top: 0.4375rem;
+    padding-top: 0.125rem;
 
     @include breakpoint($tablet) {
       width: auto;
@@ -149,6 +153,7 @@
 
     &:nth-of-type(odd) {
       margin-#{$right}: 1.5rem;
+      clear: both;
     }
   }
 }
@@ -160,7 +165,7 @@
       .address--deliver-to-this-address {
         a {
           border-width: 2px;
-          background-color: transparent;
+          color: $checkout_deliver_address_hover_text;
           text-transform: uppercase;
 
           @include breakpoint($desktop) {
@@ -168,6 +173,23 @@
               opacity: 1;
             }
           }
+
+          @include breakpoint($only-mobile) {
+            padding: 1rem 0.5rem;
+
+            html[lang=ar] & {
+              padding: 1rem 1.5rem;
+            }
+          }
+        }
+      }
+
+      .address--edit {
+        border-#{$left}: 0.0625rem solid transparent;
+        border-#{$right}: 0.0625rem solid transparent;
+
+        @include breakpoint($only-mobile) {
+          line-height: 3.8;
         }
       }
     }
@@ -181,12 +203,8 @@
 
       a {
         text-transform: uppercase;
-        height: 0;
         display: inline-block;
-
-        @include breakpoint($tablet) {
-          height: 1rem;
-        }
+        font-weight: normal;
       }
     }
 
@@ -203,8 +221,31 @@
         @include breakpoint($tablet) {
           margin: 0;
           border: 0.125rem solid transparent;
-          border-right: 0.0625rem solid $address_button_border;
         }
+
+        @include breakpoint($only-mobile) {
+          border-#{$right}: 0;
+
+          html[lang=ar] & {
+            padding: 1rem 1.5rem;
+          }
+        }
+      }
+    }
+
+    &--options {
+      .address--edit {
+        min-height: 2.75rem;
+        line-height: 3.2;
+        border-#{$right}: 0;
+
+        @include breakpoint($only-mobile) {
+          line-height: 3.8;
+        }
+      }
+
+      .address--deliver-to-this-address {
+        border-#{$right}: 0.0625rem solid $address_button_border;
       }
     }
   }

@@ -11,8 +11,10 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -188,7 +190,17 @@ class ProductResource extends ResourceBase {
       throw (new NotFoundHttpException());
     }
 
-    $data = $this->getSkuData($skuEntity);
+    $node = $this->skuManager->getDisplayNode($sku);
+    if (!($node instanceof NodeInterface)) {
+      throw (new NotFoundHttpException());
+    }
+
+    $link = $node->toUrl('canonical', ['absolute' => TRUE])
+      ->toString(TRUE)
+      ->getGeneratedUrl();
+
+    $data = $this->getSkuData($skuEntity, $link);
+
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
@@ -201,6 +213,8 @@ class ProductResource extends ResourceBase {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
     }
 
+    $response->addCacheableDependency($cacheableMetadata);
+
     return $response;
   }
 
@@ -209,11 +223,13 @@ class ProductResource extends ResourceBase {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string $link
+   *   Product link if main product.
    *
    * @return array
    *   Product Data.
    */
-  private function getSkuData(SKUInterface $sku): array {
+  private function getSkuData(SKUInterface $sku, string $link = ''): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -222,6 +238,9 @@ class ProductResource extends ResourceBase {
 
     $data['id'] = (int) $sku->id();
     $data['sku'] = $sku->getSku();
+    if ($link) {
+      $data['link'] = $link;
+    }
     $parent_sku = $this->skuManager->getParentSkuBySku($sku);
     $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
@@ -229,8 +248,8 @@ class ProductResource extends ResourceBase {
     $prices = $this->skuManager->getMinPrices($sku);
     $data['original_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['price']);
     $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
-    $data['stock'] = (int) $sku->get('stock')->getString();
-    $data['in_stock'] = (bool) alshaya_acm_get_stock_from_sku($sku);
+    $data['stock'] = (int) $this->skuManager->getStockQuantity($sku);
+    $data['in_stock'] = $this->skuManager->isProductInStock($sku);
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
@@ -297,6 +316,9 @@ class ProductResource extends ResourceBase {
         $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
         $data['variants'][] = $variant;
       }
+
+      $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
+      $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
     }
 
     return $data;
@@ -351,22 +373,7 @@ class ProductResource extends ResourceBase {
    *   Media Items.
    */
   private function getMedia(SKUInterface $sku, string $context): array {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $media = $this->skuImagesManager->getProductMedia($sku, $context);
-
-    if (!isset($media['images_with_type'])) {
-      $media['images_with_type'] = array_map(function ($image) {
-        return [
-          'url' => $image,
-          'image_type' => 'image',
-        ];
-      }, array_values($media['images']));
-    }
-
-    return [
-      'images' => $media['images_with_type'],
-      'videos' => array_values($media['videos']),
-    ];
+    return $this->mobileAppUtility->getMedia($sku, $context);
   }
 
   /**
@@ -482,8 +489,20 @@ class ProductResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size' && !empty($size_labels[$value])) {
-          $attr_value['label'] = $size_labels[$value];
+        if ($attribute_code == 'size') {
+          if (!empty($size_labels[$value])) {
+            $attr_value['label'] = $size_labels[$value];
+          }
+          elseif (
+            ($term = $this->productOptionsManager->loadProductOptionByOptionId(
+              $attribute_code,
+              $value,
+              $this->mobileAppUtility->currentLanguage())
+            )
+            && $term instanceof TermInterface
+          ) {
+            $attr_value['label'] = $term->label();
+          }
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;

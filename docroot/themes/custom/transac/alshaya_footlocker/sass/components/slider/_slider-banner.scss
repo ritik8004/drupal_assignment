@@ -19,21 +19,3 @@
     }
   }
 }
-
-.owl-prev,
-.slick-prev {
-  @include icon(chevronleft) {
-    html[lang=ar] & {
-      transform: rotate(-180deg);
-    }
-  }
-}
-
-.owl-next,
-.slick-next {
-  @include icon(chevronright) {
-    html[lang=ar] & {
-      transform: rotate(180deg);
-    }
-  }
-}

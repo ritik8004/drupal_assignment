@@ -3,7 +3,7 @@
     .c-header {
       .block-views-exposed-filter-blocksearch-page {
         @include breakpoint($only-mobile) {
-          top: 3.0625rem;
+          top: 3.5625rem;
 
           .ui-autocomplete {
             top: 2.9375rem !important;

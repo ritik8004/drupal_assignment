@@ -4,13 +4,10 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
-    js/back_to_top.js: {}
-    js/menu.js: {}
     js/form.js: {}
     js/custom_overrides.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
-    - core/modernizr
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion

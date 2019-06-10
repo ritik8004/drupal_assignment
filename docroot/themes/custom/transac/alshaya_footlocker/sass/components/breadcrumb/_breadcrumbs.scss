@@ -11,6 +11,9 @@
     }
 
     &:last-of-type {
+      font-weight: normal;
+      text-transform: capitalize;
+
       a {
         font-weight: normal;
       }

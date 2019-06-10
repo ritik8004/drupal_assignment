@@ -1,56 +1,58 @@
 // Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/fonts';
+
 @font-face {
   font-family: "BBWTradeGothicLTStd_Bold";
-  src: url("../fonts/BBWTradeGothicLTStd-Bd2.eot");
+  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot");
   src:
-    url("../fonts/BBWTradeGothicLTStd-Bd2.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/BBWTradeGothicLTStd-Bd2.otf") format("opentype"),
-    url("../fonts/BBWTradeGothicLTStd-Bd2.svg") format("svg"),
-    url("../fonts/BBWTradeGothicLTStd-Bd2.ttf") format("truetype"),
-    url("../fonts/BBWTradeGothicLTStd-Bd2.woff") format("woff"),
-    url("../fonts/BBWTradeGothicLTStd-Bd2.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "BBWTradeGothicLTStd";
-  src: url("../fonts/BBWTradeGothicLTStd.eot");
+  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.eot");
   src:
-    url("../fonts/BBWTradeGothicLTStd.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/BBWTradeGothicLTStd.otf") format("opentype"),
-    url("../fonts/BBWTradeGothicLTStd.svg") format("svg"),
-    url("../fonts/BBWTradeGothicLTStd.ttf") format("truetype"),
-    url("../fonts/BBWTradeGothicLTStd.woff") format("woff"),
-    url("../fonts/BBWTradeGothicLTStd.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "DroidArabicKufi_Bold";
-  src: url("../fonts/BBWTradeGothicLTStd-Bd2.eot");
+  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot");
   src:
-    url("../fonts/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/DroidArabicKufi-Bold.otf") format("opentype"),
-    url("../fonts/DroidArabicKufi-Bold.svg") format("svg"),
-    url("../fonts/DroidArabicKufi-Bold.ttf") format("truetype"),
-    url("../fonts/DroidArabicKufi-Bold.woff") format("woff"),
-    url("../fonts/DroidArabicKufi-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "DroidKufi_Regular";
-  src: url("../fonts/BBWTradeGothicLTStd-Bd2.eot");
+  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot");
   src:
-    url("../fonts/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/DroidKufi-Regular.otf") format("opentype"),
-    url("../fonts/DroidKufi-Regular.svg") format("svg"),
-    url("../fonts/DroidKufi-Regular.ttf") format("truetype"),
-    url("../fonts/DroidKufi-Regular.woff") format("woff"),
-    url("../fonts/DroidKufi-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }

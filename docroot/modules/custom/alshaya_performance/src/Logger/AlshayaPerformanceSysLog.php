@@ -15,7 +15,7 @@ class AlshayaPerformanceSysLog extends SysLog {
   const ALSHAYA_PERFORMANCE_PRODUCTION_MODE = 'production';
 
   /**
-   * A configuration object containing alshaya_performance settings.
+   * A configuration object containing custom alshaya_performance settings.
    *
    * @var \Drupal\Core\Config\Config
    */

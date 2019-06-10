@@ -11,10 +11,13 @@ use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\Core\Template\Attribute;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\file\Entity\File;
 
 /**
  * Implements hook_css_alter().
@@ -168,11 +171,24 @@ function alshaya_white_label_preprocess_page(&$variables) {
     '#markup' => \Drupal::config('alshaya_master.settings')->get('js_disable_message'),
   ];
 
+  // Initialising the variable to check the sidebar visibilty.
+  // This will be disable by default.
+  $variables['enable_lhn_tree'] = 0;
+
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+
+      // Taking the sidebar visibility check from config for PLP.
+      $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
+
+      // If LHN config is enabled but the LHN block not rendering due to data.
+      $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('categorylhnblock');
+      if (empty($lhn_block->getPlugin()->build())) {
+        $variables['enable_lhn_tree'] = 0;
+      }
 
       $plp_type = $term->get('field_plp_layout')->value;
       if ($plp_type == ProductCategoryTree::PLP_LAYOUT_1) {
@@ -259,6 +275,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Make site_name and site_logo available to all TWIG templates.
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $variables['site_logo'] = theme_get_setting('logo.url');
+  $mobile_logo = alshaya_master_get_mobile_logo();
+  $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
 }
 
 /**
@@ -273,6 +291,25 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('block--' . $bundle_class);
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
+
+    // Check if block is our brands block.
+    $block_id = $variables['elements']['content']['#block_content']->get('template_suggestion')->value;
+    if ($block_id === 'block__ourbrands') {
+      $paragraph_content = $variables['elements']['content']['#block_content']->get('field_paragraph_content')->getValue();
+      $brands = [];
+      foreach ($paragraph_content as $paragraph_id) {
+        $paragraph_entity = Paragraph::load($paragraph_id['target_id']);
+        $link = $paragraph_entity->get('field_link')->getValue();
+        $brand_logo_target_id = $paragraph_entity->get('field_banner')->getValue();
+        $file = File::load($brand_logo_target_id[0]['target_id']);
+        $brands[] = [
+          'title' => $paragraph_entity->get('field_title')->value,
+          'link' => Url::fromUri($link[0]['uri'])->toString(),
+          'brand_logo' => file_create_url($file->getFileUri()),
+        ];
+      }
+      $variables['brands'] = $brands;
+    }
   }
   elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
     $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
@@ -280,6 +317,42 @@ function alshaya_white_label_preprocess_block(&$variables) {
 
   if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
     $variables['attributes']['class'][] = 'horizontal-crossell';
+  }
+
+  // Custom block type helper classes.
+  if (isset($variables['elements'], $variables['elements']['#id']) && $variables['elements']['#id'] === 'branding') {
+    $mobile_logo = alshaya_master_get_mobile_logo();
+    $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+  }
+
+  $listing_pages_plugin_id = [
+    'views_block:alshaya_product_list-block_1',
+    'views_block:alshaya_product_list-block_2',
+  ];
+  if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
+    $variables['attributes']['class'][] = 'c-products-list';
+    $variables['attributes']['class'][] = 'product-small';
+  }
+
+  // If `all filters` block of PLP.
+  if ($variables['plugin_id'] == 'alshaya_plp_facets_block_all') {
+    if ($variables['elements']['content']['#class'] == 'empty-category') {
+      $variables['attributes']['class'][] = 'empty-category';
+    }
+  }
+
+  if ($variables['plugin_id'] == 'search_api_algolia_autocomplete_block') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/algolia_search';
+  }
+
+  // Add class for category facet.
+  $category_facets = [
+    'facet_block:category_facet_plp',
+    'facet_block:category_facet_promo',
+    'facet_block:category_facet_search',
+  ];
+  if (in_array($variables['plugin_id'], $category_facets)) {
+    $variables['attributes']['class'][] = 'category-facet';
   }
 }
 
@@ -425,8 +498,10 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $settings = \Drupal::config('alshaya_acm_product.settings');
 
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
+    $variables['vat_text'] = $settings->get('vat_text');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
+    $variables['pdp_layout'] = $settings->get('pdp_layout');
 
     // Cross sell/ Up sell items count on carousel on pdp page.
     $variables['#attached']['drupalSettings']['pdp_items_mob'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
@@ -451,12 +526,20 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = $product_display_settings->get('color_swatches_hover');
 
     if ($variables['view_mode'] == 'full') {
-      if ($settings->get('pdp_layout') == 'magazine') {
-        $variables['#attached']['library'][] = 'alshaya_white_label/magazine_select2Option';
-      }
-
-      else {
-        $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+      $node = $variables['node'];
+      if ($node instanceof NodeInterface) {
+        /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+        $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+        if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
+          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
+          $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
+        }
+        else {
+          $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+          $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
+        }
       }
     }
   }
@@ -673,18 +756,17 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
   $node = $variables['elements']['#node'];
 
   // Check if the current node is front page.
-  if (\Drupal::service('path.matcher')->isFrontPage()) {
-    if ($node instanceof Node) {
-      if ($node->getType() == 'advanced_page') {
-        $suggestions[] = 'node__advanced_page_front';
-      }
+  if ($node instanceof Node) {
+    if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
+      $suggestions[] = 'node__advanced_page_front';
     }
-  }
-
-  if ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
-    $settings = \Drupal::config('alshaya_acm_product.settings');
-    if ($settings->get('pdp_layout') == 'magazine') {
-      $suggestions[] = 'node__acq_product__full_magazine';
+    elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+      if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+        $suggestions[] = 'node__acq_product__full_magazine';
+      }
     }
   }
 }
@@ -1090,6 +1172,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
         // If category is null/empty, no need to process further.
         if (!$category_id) {
+          $variables['content'] = [];
           return;
         }
 
@@ -1392,5 +1475,67 @@ function alshaya_white_label_preprocess_alshaya_address(&$variables) {
   if (isset($variables['address']['country'])) {
     $variables['address']['country_code'] = $variables['address']['country'];
     unset($variables['address']['country']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_breadcrumb().
+ */
+function alshaya_white_label_preprocess_breadcrumb(&$variables) {
+  $variables['breadcrumb'] = [];
+  /** @var \Drupal\Core\Link $link */
+  foreach ($variables['links'] as $key => $link) {
+    $class = 'brdcrb-nav';
+    if (!empty($attributes = $link->getUrl()->getOption('attributes'))
+      && !empty($attributes['class'])) {
+      $class .= ' ' . implode(' ', $attributes['class']);
+    }
+
+    $variables['breadcrumb'][$key] = [
+      'text' => $link->getText(),
+      'url' => $link->getUrl()->toString(),
+      'class' => $class,
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  // Flag to determine if category facet has active item.
+  $category_active_facet = FALSE;
+
+  // Category facet array.
+  $category_facets = [
+    'category_facet_plp',
+    'category_facet_search',
+    'category_facet_promo',
+  ];
+  // If category facet.
+  $is_category_facet = in_array($variables['attributes']['data-drupal-facet-id'], $category_facets);
+  foreach ($variables['items'] as $key => $item) {
+    if (isset($item['value']['#attributes']['class'])
+      && in_array('is-active', $item['value']['#attributes']['class'])) {
+      if ($variables['items'][$key]['attributes'] instanceof Attribute) {
+        $variables['items'][$key]['attributes']->addClass('is-active');
+
+        // Update flag as there is active category facet.
+        if ($is_category_facet) {
+          $category_active_facet = TRUE;
+        }
+      }
+    }
+  }
+
+  // If its category facet and it has no active item, then mark `All` active.
+  if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0])) {
+    $variables['items'][0]['attributes']->addClass('is-active');
+  }
+
+  if ($is_category_facet) {
+    if (!empty($variables['items'][0]['attributes'])) {
+      $variables['items'][0]['attributes']->addClass('category-all');
+    }
   }
 }

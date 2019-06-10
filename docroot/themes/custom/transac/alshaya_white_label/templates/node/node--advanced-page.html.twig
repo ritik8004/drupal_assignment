@@ -22,13 +22,12 @@
       {% endif %}
 
       <div class="c-content__container clearfix">
-        {% if content.field_delivery_banner %}
-          {{ content.field_delivery_banner }}
-        {% endif %}
-
         <div class="c-content__primary">
           <div class="c-content__body">
             {{ content.body }}
+            {% if content.field_delivery_banner %}
+              {{ content.field_delivery_banner }}
+            {% endif %}
             {{ content.field_promo_blocks }}
           </div>
         </div>

@@ -1,56 +1,58 @@
 // Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fonts';
+
 @font-face {
   font-family: "Roboto-Bold";
-  src: url("../fonts/roboto-bold.eot");
+  src: url("#{$base_theme_fonts_directory_path}/roboto-bold.eot");
   src:
-    url("../fonts/roboto-bold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/Roboto-bold.otf") format("opentype"),
-    url("../fonts/roboto-bold.svg") format("svg"),
-    url("../fonts/Roboto-bold.ttf") format("truetype"),
-    url("../fonts/roboto-bold.woff") format("woff"),
-    url("../fonts/roboto-bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Roboto-bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Roboto-bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Roboto-Regular";
-  src: url("../fonts/roboto-regular.eot");
+  src: url("#{$base_theme_fonts_directory_path}/roboto-regular.eot");
   src:
-    url("../fonts/roboto-regular.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/Roboto-Regular.otf") format("opentype"),
-    url("../fonts/roboto-regular.svg") format("svg"),
-    url("../fonts/Roboto-Regular.ttf") format("truetype"),
-    url("../fonts/roboto-regular.woff") format("woff"),
-    url("../fonts/roboto-regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Roboto-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Roboto-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "DroidArabicKufi_Bold";
-  src: url("../fonts/DroidArabicKufi-Bold.eot");
+  src: url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot");
   src:
-    url("../fonts/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/DroidArabicKufi-Bold.otf") format("opentype"),
-    url("../fonts/DroidArabicKufi-Bold.svg") format("svg"),
-    url("../fonts/DroidArabicKufi-Bold.ttf") format("truetype"),
-    url("../fonts/DroidArabicKufi-Bold.woff") format("woff"),
-    url("../fonts/DroidArabicKufi-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "DroidKufi_Regular";
-  src: url("../fonts/DroidKufi-Regular.eot");
+  src: url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot");
   src:
-    url("../fonts/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/DroidKufi-Regular.otf") format("opentype"),
-    url("../fonts/DroidKufi-Regular.svg") format("svg"),
-    url("../fonts/DroidKufi-Regular.ttf") format("truetype"),
-    url("../fonts/DroidKufi-Regular.woff") format("woff"),
-    url("../fonts/DroidKufi-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }

@@ -4,6 +4,7 @@ namespace Drupal\alshaya_search_api;
 
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class AlshayaSearchApiHelper.
@@ -18,13 +19,23 @@ class AlshayaSearchApiHelper {
   protected $termStorage;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaSearchApiHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -84,6 +95,9 @@ class AlshayaSearchApiHelper {
 
       $query_params['f'][$key] = $data[0] . ':' . $term->label();
     }
+
+    // Call hook alter for other parameters.
+    $this->moduleHandler->alter('alshaya_search_api_language_switcher', $query_params, $langcode);
 
     return $query_params;
   }

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
@@ -60,6 +61,7 @@ $magentos = [
   // H&M.
   'hm_qa' => [
     'url' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'pims_base_url' => 'http://34.249.182.88:3020',
     'magento_secrets' => [
       'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
       'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
@@ -81,17 +83,18 @@ $magentos = [
   ],
   'hm_uat' => [
     'url' => 'https://hm-uat.store.alshaya.com',
+    'pims_base_url' => 'http://34.249.182.88:3030',
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 2],
+      'store_id' => ['en' => 1, 'ar' => 5],
     ],
     'sa' => [
-      'store_id' => ['en' => 8, 'ar' => 5],
+      'store_id' => ['en' => 8, 'ar' => 14],
     ],
     'ae' => [
-      'store_id' => ['en' => 14, 'ar' => 11],
+      'store_id' => ['en' => 17, 'ar' => 23],
     ],
     'eg' => [
-      'store_id' => ['en' => 19, 'ar' => 16],
+      'store_id' => ['en' => 30, 'ar' => 27],
     ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
@@ -102,6 +105,7 @@ $magentos = [
   ],
   'hm_prod' => [
     'url' => 'https://hm.store.alshaya.com',
+    'pims_base_url' => 'http://34.248.5.79:2080',
     'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 5],
@@ -318,6 +322,19 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+  ],
+  'fl_prod' => [
+    'url' => 'https://fl.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 19],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 7, 'ar' => 10],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 13, 'ar' => 16],
     ],
   ],
   'default' => [

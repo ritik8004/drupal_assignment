@@ -4,14 +4,14 @@ namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Form\AcqSkuFormBuilder;
-use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -40,13 +40,6 @@ class ProductStockController extends ControllerBase {
   protected $currentRequest;
 
   /**
-   * SKU Plugin manager.
-   *
-   * @var \Drupal\Component\Plugin\PluginManagerInterface
-   */
-  protected $pluginManager;
-
-  /**
    * ACQ SKU Form builder.
    *
    * @var \Drupal\acq_sku\Form\AcqSkuFormBuilder
@@ -54,11 +47,11 @@ class ProductStockController extends ControllerBase {
   protected $skuFormBuilder;
 
   /**
-   * The module handler service.
+   * SKU Manager.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var \Drupal\alshaya_acm_product\SkuManager
    */
-  protected $moduleHandler;
+  protected $skuManager;
 
   /**
    * AjaxResponse object to use in ajax form callbacks.
@@ -74,9 +67,8 @@ class ProductStockController extends ControllerBase {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('plugin.manager.sku'),
       $container->get('acq_sku.form_builder'),
-      $container->get('module_handler')
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -87,23 +79,19 @@ class ProductStockController extends ControllerBase {
    *   Current request object.
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
-   *   SKU Plugin manager.
    * @param \Drupal\acq_sku\Form\AcqSkuFormBuilder $sku_form_builder
    *   ACQ SKU Form builder.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
-                              PluginManagerInterface $plugin_manager,
                               AcqSkuFormBuilder $sku_form_builder,
-                              ModuleHandlerInterface $module_handler) {
+                              SkuManager $sku_manager) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
-    $this->pluginManager = $plugin_manager;
     $this->skuFormBuilder = $sku_form_builder;
-    $this->moduleHandler = $module_handler;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -136,7 +124,7 @@ class ProductStockController extends ControllerBase {
       $build['max_quantity'] = 100;
       $build['html'] = '';
     }
-    elseif ($max_quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
+    elseif ($max_quantity = $this->skuManager->getStockQuantity($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
       $build['html'] = '';
     }
@@ -199,6 +187,13 @@ class ProductStockController extends ControllerBase {
     if (empty($commands)) {
       $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
       self::$response->addCommand(new HtmlCommand($wrapper, $html));
+
+      // For server side validations failure we return whole form.
+      // We need to show the form again after replacing.
+      self::$response->addCommand(new InvokeCommand($wrapper . ' form.visually-hidden', 'removeClass', ['visually-hidden']));
+
+      // Remove the loader too.
+      self::$response->addCommand(new InvokeCommand('.ajax-progress.ajax-progress-throbber', 'remove'));
     }
 
     return self::$response;

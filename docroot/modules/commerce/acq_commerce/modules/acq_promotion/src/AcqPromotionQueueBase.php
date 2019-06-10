@@ -4,6 +4,7 @@ namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
@@ -38,6 +39,20 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
   protected $i18nHelper;
 
   /**
+   * Promotion manager.
+   *
+   * @var \Drupal\acq_promotion\AcqPromotionsManager
+   */
+  protected $promotionManager;
+
+  /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $db;
+
+  /**
    * AcqPromotionAttachQueue constructor.
    *
    * @param array $configuration
@@ -52,17 +67,25 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
    *   Logger service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\acq_promotion\AcqPromotionsManager $promotion_manager
+   *   Promotion manager.
+   * @param \Drupal\Core\Database\Connection $db
+   *   Database connection.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               IngestAPIWrapper $ingestApiWrapper,
                               LoggerChannelFactory $loggerFactory,
-                              I18nHelper $i18n_helper) {
+                              I18nHelper $i18n_helper,
+                              AcqPromotionsManager $promotion_manager,
+                              Connection $db) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->ingestApiWrapper = $ingestApiWrapper;
     $this->logger = $loggerFactory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
+    $this->promotionManager = $promotion_manager;
+    $this->db = $db;
   }
 
   /**
@@ -87,7 +110,9 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
       $plugin_definition,
       $container->get('acq_commerce.ingest_api'),
       $container->get('logger.factory'),
-      $container->get('acq_commerce.i18n_helper')
+      $container->get('acq_commerce.i18n_helper'),
+      $container->get('acq_promotion.promotions_manager'),
+      $container->get('database')
     );
   }
 

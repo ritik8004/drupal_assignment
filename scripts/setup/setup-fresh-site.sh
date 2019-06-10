@@ -28,7 +28,7 @@ drush -l $site status &>> $HOME/site-install.log
 drush -l $site apdi --brand_module="alshaya_$brand_code" --country_code="$country_code" &>> $HOME/site-install.log
 
 # Get the installed profile on the given site.
-profile="$(drush -l $site php-eval 'echo drupal_get_profile();')"
+profile="$(drush -l $site php-eval 'echo \Drupal::installProfile();')"
 
 # Next operations are for transac sites only.
 if [ $profile = "alshaya_transac" ]; then
@@ -36,13 +36,13 @@ if [ $profile = "alshaya_transac" ]; then
   ## Next operations are not done on production.
   if [ $target_env != "01live" -o $target_env != "01update" ]; then
     ## Create default users (not on production).
-    drush -l $site upwd "Site factory admin" --password="AlShAyAU1@123" &>> $HOME/site-install.log
+    drush -l $site upwd "Site factory admin" "AlShAyAU1@123" &>> $HOME/site-install.log
 
-    drush -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin &>> $HOME/site-install.log
-    drush -l $site user-add-role "administrator" --name=siteadmin &>> $HOME/site-install.log
+    drush -l $site user-create siteadmin --mail="user3+admin@example.com" --password="AlShAyAU1admin" &>> $HOME/site-install.log
+    drush -l $site user-add-role "administrator" siteadmin &>> $HOME/site-install.log
 
-    drush -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster &>> $HOME/site-install.log
-    drush -l $site user-add-role "webmaster" --name=webmaster &>> $HOME/site-install.log
+    drush -l $site user-create webmaster --mail="user3+webmaster@example.com" --password="AlShAyAU1webmaster" &>> $HOME/site-install.log
+    drush -l $site user-add-role "webmaster" webmaster &>> $HOME/site-install.log
 
     drush -l $site cr &>> $HOME/site-install.log
 

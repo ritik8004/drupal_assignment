@@ -10,6 +10,30 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Delete default texts for checkout_guest_summary, checkout_guest_email_usage
+ * and checkout_guest_login.
+ */
+function alshaya_acm_checkout_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    [
+      'replace_keys' => [
+        'checkout_guest_summary',
+        'checkout_guest_email_usage',
+        'checkout_guest_login',
+      ],
+    ]
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add default settings for cod_surcharge.
  */
 function alshaya_acm_checkout_update_8003() {
@@ -26,7 +50,7 @@ function alshaya_acm_checkout_update_8003() {
 /**
  * Implements hook_update_N().
  *
- * Remove/hide tax info for MCKW (all trans sites).
+ * Update config to remove/hide tax info.
  */
 function alshaya_acm_checkout_update_8002() {
   // Remove/hide tax config.
@@ -38,7 +62,7 @@ function alshaya_acm_checkout_update_8002() {
 /**
  * Implements hook_update_N().
  *
- * Add config for show tax info.
+ * Add config to show tax info.
  */
 function alshaya_acm_checkout_update_8001() {
   // Show tax config to all sites.

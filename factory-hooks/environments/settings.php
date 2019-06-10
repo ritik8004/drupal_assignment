@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file.
@@ -21,12 +22,38 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
+      'kw' => [
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-PP5PK4C',
+          ],
+        ],
+      ],
+      'ae' => [
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-TTQFBZ',
+          ],
+        ],
+      ],
+      'sa' => [
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-NMZXSP',
+          ],
+        ],
+      ],
     ],
     'hm' => [
       'kw' => [
         '01live' => [
-          'alshaya_acm_knet.settings' => [
+          'alshaya_knet.settings' => [
             'alias' => 'hm',
+          ],
+        ],
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-NQ4JXJP',
           ],
         ],
       ],
@@ -34,6 +61,20 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         'default' => [
           'google_tag.settings' => [
             'container_id' => 'GTM-NQ4JXJP',
+          ],
+        ],
+      ],
+      'ae' => [
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-5ZNGJRP',
+          ],
+        ],
+      ],
+      'sa' => [
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-PXGWK9J',
           ],
         ],
       ],
@@ -46,11 +87,18 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
+      'ae' => [
+        '01uat' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-N6X25H2',
+          ],
+        ],
+      ],
     ],
     'default' => [
       'default' => [
         'default' => [
-          'alshaya_acm_knet.settings' => [
+          'alshaya_knet.settings' => [
             'alias' => 'alshaya',
           ],
           'google_tag.settings' => [

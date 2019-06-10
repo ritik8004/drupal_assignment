@@ -1,10 +1,10 @@
-<div class="composition-wrapper">
-	{% if composition is not empty %}
-	<div class="composition-label">
-		{% trans %} composition {% endtrans %}
-	</div>
-	<div class="composition-value">
-		{{ composition }}
-	</div>
-	{% endif %}
-</div>
+{% if composition is not empty %}
+  <div class="composition-wrapper">
+    <div class="composition-label">
+      {% trans %} composition {% endtrans %}
+    </div>
+    <div class="composition-value">
+      {{ composition }}
+    </div>
+  </div>
+{% endif %}

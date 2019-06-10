@@ -107,6 +107,17 @@
       margin-top: 2.75rem;
     }
   }
+
+  #cloud-zoom-big {
+    #{$left}: 128.5% !important;
+    #{$right}: auto !important;
+  }
+
+  &.thumbnail-count-1 {
+    #cloud-zoom-big {
+      #{$left}: 141.8% !important;
+    }
+  }
 }
 
 #product-image-gallery-container {
@@ -218,5 +229,12 @@
         }
       }
     }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  #product-image-gallery,
+  #lightSlider {
+    height: auto;
   }
 }

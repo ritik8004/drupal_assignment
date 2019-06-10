@@ -10,6 +10,49 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * For PLP use higher res image so 1 col layout is not blurred.
+ */
+function alshaya_image_styles_update_8106() {
+  // Install the config for image styles.
+  $configs = [
+    'image.style.product_listing',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add image styles for each layout separately (split 291x288).
+ */
+function alshaya_image_styles_update_8105() {
+  \Drupal::service('module_installer')->install(['image_style_quality']);
+
+  // Install the config for image styles.
+  $configs = [
+    'image.style.cart_thumbnail',
+    'image.style.pdp_gallery_thumbnail',
+    'image.style.product_listing',
+    'image.style.product_teaser',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the the height for 291x288 image style.
+ */
+function alshaya_image_styles_update_8104() {
+  // Re-install the config for image style.
+  alshaya_config_install_configs(['image.style.291x288'], 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the the w304 image style to 2x width.
  */
 function alshaya_image_styles_update_8103() {

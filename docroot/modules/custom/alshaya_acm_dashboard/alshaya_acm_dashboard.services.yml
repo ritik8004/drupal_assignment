@@ -1,7 +1,0 @@
-services:
-  alshaya_acm_dashboard.dashboard_manager:
-    class: 'Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager'
-    arguments:
-      - '@http_client_factory'
-      - '@config.factory'
-      - '@logger.factory'

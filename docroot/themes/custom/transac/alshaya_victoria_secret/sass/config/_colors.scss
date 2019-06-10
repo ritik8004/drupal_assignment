@@ -195,7 +195,6 @@ $modal_close_bg: $black;
 $modal_close_icon: $vanilla;
 
 // VAT text
-$vat: $ash-triplet;
 $vat_dark: $whisper-light;
 
 /* ------- 3. Secondary color  ----- */
@@ -527,6 +526,12 @@ $plp_filterbar_filter_clear: $white-five;
 $plp_filterbar_clearall_border: $nero;
 $plp_filterbar_clearall_text: $nero;
 $plp_search_count: $nero;
+$plp_grid_active_color: $brilliant-rose;
+$plp_all_filter_title: $brilliant-rose;
+$plp_clear_all_btn_text: $nero;
+$plp_all_filter_button_color: $brilliant-rose;
+$plp_filter_icon: $black;
+$plp_filter_active_tick: $black;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
@@ -742,6 +747,8 @@ $multistep_checkout_text: $nero;
 $checkout_request_password_link: $nero;
 $checkout_login_form_action: $black;
 $checkout_login_btn_bg: $brilliant-rose;
+$checkout_guest_button_border: $brilliant-rose;
+$checkout_guest_button_txt: $brilliant-rose;
 
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
@@ -1003,6 +1010,7 @@ $order_detail_order_sub_total_border: $gainsboro;
 $order_detail_order_details_row_td_blend: $vanilla;
 $order_detail_warm_white: $vanilla;
 $order_search_form_icon: $vanilla;
+$order_search_form_input_bg: $vanilla;
 $order_search_form_border: $whisper-dark;
 $order_search_form_label: $black;
 $order_search_form_label_mobile: $nero;
@@ -1061,3 +1069,8 @@ $pink_shop_by_bra_size_border: $dark-pink;
 $sport_bra_size_filter_box_bg: $white-smoke;
 $bra_size_filter_sizeguide: $grey-ash;
 $bra_size_filter_slider_arrow_color: $mothercare-black;
+
+// PLP LHN Block.
+$lhn_l2: $nero;
+$lhn_l3: $black;
+$lhn_l4: $black;

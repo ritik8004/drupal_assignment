@@ -1,6 +1,6 @@
 services:
   alshaya_master.commands:
     class: \Drupal\alshaya_master\Commands\AlshayaMasterCommands
-    arguments: [ '@state', '@config.factory', '@module_installer', '@module_handler', '@config.storage', '@language_manager', '@entity.query', '@entity_type.manager' ]
+    arguments: [ '@state', '@config.factory', '@module_installer', '@module_handler', '@config.storage', '@language_manager', '@entity.query', '@entity_type.manager', '@extension.list.module' ]
     tags:
       - { name: drush.command }

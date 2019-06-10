@@ -11,7 +11,6 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
-use Drupal\file\FileInterface;
 use GuzzleHttp\Exception\RequestException;
 
 /**
@@ -31,10 +30,8 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
 
   if ($product instanceof Node) {
     // Get SKU from product.
-    $sku_entity = $product->get('field_skus')
-      ->first()
-      ->get('entity')
-      ->getValue();
+    $sku = $product->get('field_skus')->getString();
+    $sku_entity = SKU::loadFromSku($sku);
 
     // Get the processed media data for the SKU.
     if ($sku_entity instanceof SKU) {
@@ -107,7 +104,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  * @param string $langcode
  *   Language code.
  *
- * @return \Drupal\acq_sku\Entity\SKU
+ * @return \Drupal\acq_sku\Entity\SKU|null
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
@@ -151,22 +148,20 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
     return [];
   }
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
   // Load the first image.
-  $media_image = $skuImagesManager->getFirstImage($sku);
+  $media_image = $skuImagesManager->getFirstImage($sku, $context);
   $image = [];
 
   // If we have image for the product.
   if (!empty($media_image)) {
-    if ($media_image['file'] instanceof FileInterface) {
-      $image = alshaya_acm_product_get_sku_image($media_image, $image_style);
-    }
+    $image = $skuManager->getSkuImage($media_image['drupal_uri'], $sku->label(), $image_style);
   }
-
-  // Alter cart product image found in child sku in case of config products.
-  \Drupal::moduleHandler()->alter('acq_sku_cart_media', $image, $sku, $context);
 
   // If still image is not available, set default one.
   if (empty($image)) {
@@ -177,8 +172,8 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
         '#theme' => 'image',
         '#attributes' => [
           'src' => $default_image_url,
-          'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
-          'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'title' => $sku->label(),
+          'alt' => $sku->label(),
           'class' => [
             'product-default-image',
           ],
@@ -188,69 +183,6 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   }
 
   return $image;
-}
-
-/**
- * Helper function to get child skus for a configurable sku from tree.
- *
- * @param array $tree
- *   Tree containing configurable options and SKU objects.
- * @param array $configurables
- *   Configurable values array.
- *
- * @return null|SKU
- *   Null or SKU instance.
- */
-function alshaya_acm_product_get_selected_option_sku(array $tree, array $configurables) {
-  $tree_pointer = &$tree['options'];
-
-  foreach ($configurables as $key => $value) {
-    if (empty($value)) {
-      continue;
-    }
-
-    // Move the tree pointer if the selection is valid.
-    if (isset($tree_pointer["$key:$value"])) {
-      return $tree_pointer["$key:$value"];
-    }
-  }
-
-  return NULL;
-}
-
-/**
- * Helper function to get product tree based on the conf attributes values.
- *
- * @param array $tree
- *   Config product tree.
- * @param array $configurables
- *   Config values keyed by the attributec code as selected by the end-users.
- *
- * @return array
- *   Array pointing to the tree state based on the options selected.
- */
-function alshaya_acm_product_fetch_selected_option_tree(array $tree, array $configurables) {
-  $tree_pointer = $tree['options'];
-  $tree_config_options = [];
-  foreach ($configurables as $key => $value) {
-    if (($value) && ($tree_pointer["$key:$value"])) {
-      $tree_pointer = $tree_pointer["$key:$value"];
-    }
-  }
-
-  if ($tree_pointer instanceof SKU) {
-    $tree_config_options["$key:$value"] = $tree_pointer;
-  }
-  else {
-    // Filter out all non-empty config attributes from the list.
-    foreach ($tree_pointer as $key => $value) {
-      if (!empty($value) && ($key !== '#available_config')) {
-        $tree_config_options[$key] = $value;
-      }
-    }
-  }
-
-  return $tree_config_options;
 }
 
 /**

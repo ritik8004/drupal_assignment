@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme().
@@ -25,9 +26,22 @@ function alshaya_social_theme() {
  * Implements hook_form_alter().
  */
 function alshaya_social_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (in_array($form_id, ['user_register_form', 'user_login_form'])) {
+    alshaya_social_display_social_authentication_links($form, $form_id);
+  }
+}
+
+/**
+ * Helper class to add social auth links to given form.
+ *
+ * @param array $form
+ *   The array of form elements.
+ * @param string $form_id
+ *   The current form id.
+ */
+function alshaya_social_display_social_authentication_links(array &$form, $form_id) {
   if (
-    in_array($form_id, ['user_register_form', 'user_login_form'])
-    && \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
+    \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
     && !empty($social_networks = \Drupal::configFactory()->get('social_auth.settings')->get('auth'))
   ) {
     $form['#attributes']['class'][] = 'social-signup-form';
@@ -38,6 +52,7 @@ function alshaya_social_form_alter(array &$form, FormStateInterface $form_state,
       '#weight' => 1000,
     ];
   }
+  $form['#cache']['tags'][] = 'config:alshaya_social.settings';
 }
 
 /**
@@ -74,5 +89,9 @@ function alshaya_social_user_settings_submit(array &$form, FormStateInterface $f
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_social_preprocess_alshaya_social(&$variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'acq_checkout.form') {
+    $variables['destination'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString();
+  }
+
   $variables['base_path'] = base_path();
 }

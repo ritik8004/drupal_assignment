@@ -43,7 +43,7 @@ class FacetsCacheContext implements CacheContextInterface {
     $request = $this->requestStack->getCurrentRequest();
     $facets = $request->request->get('f');
     $facetContextValue = '';
-    if (count($facets)) {
+    if (is_array($facets) && count($facets)) {
       $facetContextValue = implode('|', $facets);
     }
     return $facetContextValue;

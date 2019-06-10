@@ -55,18 +55,6 @@
   }
 }
 
-@mixin select-bg($select-width) {
-  &::before {
-    width: $select-width;
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    height: 2.1875rem;
-    z-index: 1;
-  }
-}
-
 @mixin select2-style($select-width) {
   width: $select-width !important;
 

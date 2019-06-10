@@ -198,11 +198,11 @@ function get_theme_directory($site, $env) {
 function request_theme_files($site, $env, $webnode) {
   $endpoint = 'site-api/v1/theme/deploy';
   try {
-    $parameters = array(
+    $parameters = [
       'sitegroup' => $site,
       'webnode' => $webnode,
       'environment' => $env,
-    );
+    ];
     $creds = get_shared_creds($site, $env);
     $message = new SimpleRestMessage($site, $env);
     $response = $message->send('POST', $endpoint, $parameters, $creds);
@@ -210,7 +210,7 @@ function request_theme_files($site, $env, $webnode) {
   catch (Exception $e) {
     $error_message = sprintf('Theme deploy failed with error: %s', $e->getMessage());
     syslog(LOG_ERR, $error_message);
-    $response = new SimpleRestResponse($endpoint, 500, array('message' => $error_message));
+    $response = new SimpleRestResponse($endpoint, 500, ['message' => $error_message]);
   }
   return $response;
 }
@@ -231,7 +231,7 @@ function request_theme_files($site, $env, $webnode) {
 function get_wip_task_status($site, $env, $task_id) {
   $endpoint = sprintf('site-api/v1/wip/task/%s/status', $task_id);
   try {
-    $parameters = array();
+    $parameters = [];
     $creds = get_shared_creds($site, $env);
     $message = new SimpleRestMessage($site, $env);
     $response = $message->send('GET', $endpoint, $parameters, $creds);
@@ -240,7 +240,7 @@ function get_wip_task_status($site, $env, $task_id) {
     $error_message = sprintf('Wip task status failed with error: %s', $e->getMessage());
     $file = __FILE__;
     syslog(LOG_ERR, "Error in cloud hook pre-web-activate/$file: $error_message");
-    $response = new SimpleRestResponse($endpoint, 500, array('message' => $error_message));
+    $response = new SimpleRestResponse($endpoint, 500, ['message' => $error_message]);
   }
   return $response;
 }
@@ -271,6 +271,7 @@ class SimpleRestCreds {
     $this->password = $password;
     $this->url = $url;
   }
+
 }
 
 /**
@@ -339,10 +340,10 @@ class SimpleRestMessage {
     if ($method != 'GET' && !empty($parameters)) {
       $data_string = json_encode($parameters);
       curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-      curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      curl_setopt($curl, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
         'Content-Length: ' . strlen($data_string),
-      ));
+      ]);
     }
 
     $full_url = sprintf('%s/%s%s', $creds->url, $endpoint, $query_string);
@@ -367,7 +368,7 @@ class SimpleRestMessage {
     $response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
     if (!is_array($response_body)) {
-      $response_body = array();
+      $response_body = [];
     }
 
     curl_close($curl);
@@ -419,4 +420,5 @@ class SimpleRestResponse {
     $this->code = $response_code;
     $this->body = $response_body;
   }
+
 }

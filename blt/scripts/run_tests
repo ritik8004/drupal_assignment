@@ -2,7 +2,7 @@
 
 set -e
 
-if ([ $TRAVIS_PULL_REQUEST == "false" ])
+if ([ $TRAVIS_PULL_REQUEST == "false" ]) && ([ $TRAVIS_EVENT_TYPE != "cron" ])
 then
   echo "No need to run validations."
 else
@@ -25,8 +25,31 @@ else
     cd ${BUILD_DIR}
 
     echo -en "travis_fold:end:Setup\r"
-  fi
 
-  # Disabling Behat tests on CI.
-  #blt tests:all --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
+    if [[ $TRAVIS_EVENT_TYPE == "cron" ]]
+    then
+      blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
+    else
+      echo "Local behat tests are being run only on cron run."
+    fi
+  fi
+fi
+
+# This part will invoke selected integration tests against cloud enviroment on daily basis
+if [[ $TRAVIS_EVENT_TYPE == "cron" && $PROFILE == "alshaya_transac" ]]
+then
+  # Run google chrome in headless mode in background
+  google-chrome --version
+  google-chrome --headless --remote-debugging-port=9222 --disable-gpu --no-sandbox --window-size=1920,1080 http://localhost &
+  sleep 2
+
+  # Run selected tests on hmkw-uat profile
+  vendor/bin/behat --format pretty alshaya_behat/features/hmkw/common/sign_in.feature --colors --no-interaction --stop-on-failure --strict --config tests/behat/integration.yml --profile hmkw-uat -v
+
+  # Run selected tests on mckw-uat profile, for this we must also inject UAT host's IP address as factory is not translating DNS always properly
+  echo '104.25.248.95  mckw-uat.factory.alshaya.com' | sudo tee -a /etc/hosts
+  vendor/bin/behat --format pretty alshaya_behat/features/mothercare/common/sign_in.feature --colors --no-interaction --stop-on-failure --strict --config tests/behat/integration.yml --profile mckw-uat -v
+
+  # Kill chrome background process when tests were successfully invoked
+  ps aux | grep -i google-chrome | grep -v grep | awk '{print $2}' | xargs kill -9 2>&1
 fi

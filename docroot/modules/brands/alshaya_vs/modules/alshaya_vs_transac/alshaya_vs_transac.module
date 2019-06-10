@@ -12,7 +12,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Implements hook_module_implements_alter().
@@ -71,9 +70,11 @@ function alshaya_vs_transac_form_sku_base_form_alter(&$form, FormStateInterface 
  */
 function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variables) {
   $view = $variables['view'];
-  if (!in_array($view->current_display, ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
+  if (!in_array($view->current_display,
+  ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
     return;
   }
+
   // Change the position of the field brand, to display it after store address.
   if (isset($variables['fields']['field_brand'])) {
     $fields = $variables['fields'];
@@ -137,27 +138,11 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
       '#markup' => $title,
     ];
 
-    $settings = \Drupal::config('alshaya_acm_product.display_settings');
-
-    $swatches_display_status = $settings->get('color_swatches');
-
-    // We do not display swatches for color nodes.
-    $color = $build['#color'] ?? '';
-
-    // Display swatches only if enabled in configuration and not color node.
-    if ($swatches_display_status && empty($color)) {
-      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
-      $swatches = $sku_manager->getSwatches($sku);
-      if ($swatches) {
-        $swatch_plp_limit = $settings->get('swatch_plp_limit');
-        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);
-        $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
-          ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
-          : FALSE;
-      }
-    }
+    /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
+    $productHelper = \Drupal::service('alshaya_acm_product.helper');
+    // Display swatches on PLP/Search/Promo. We use sku gallery formatter for
+    // all these cases and context received here is 'search' for that.
+    $productHelper->updateSwatches($build, $sku);
   }
   else {
     $build['title'] = [
@@ -240,7 +225,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
     $short_desc['label'] = [
       '#markup' => t('Short Description'),
     ];
-    
+
     // Get short description of given html.
     /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
     $product_helper = \Drupal::service('alshaya_acm_product.helper');
@@ -312,8 +297,9 @@ function alshaya_vs_transac_alshaya_stores_finder_marker_label_position_alter(ar
 }
 
 /**
- * Implements hook_acq_sku_magazine_product_description_alter().
+ * Implements hook_alshaya_get_currency_code().
  */
-function alshaya_vs_transac_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
-  $prod_description = _alshaya_vs_transac_get_product_description($sku);
+function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
+  // Updated UAE currency code.
+  $currency['ae']['en'] = 'DHS';
 }

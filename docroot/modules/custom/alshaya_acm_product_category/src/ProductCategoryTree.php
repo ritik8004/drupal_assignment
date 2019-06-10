@@ -11,6 +11,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 
 /**
  * Class ProductCategoryTree.
@@ -26,6 +27,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   const CACHE_TAG = 'acq_product_category_list';
 
   const PLP_LAYOUT_1 = 'campaign-plp-style-1';
+
+  /**
+   * This will be used whether include_in_menu used or not.
+   *
+   * @var bool
+   */
+  protected $excludeNotInMenu = TRUE;
 
   /**
    * Term storage object.
@@ -105,6 +113,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $termsImagesAndColors = [];
 
   /**
+   * PDP Breadcrumb service.
+   *
+   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   */
+  protected $pdpBreadcrumbBuiler;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -117,18 +132,22 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
+   *   PDP Breadcrumb service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
-                              Connection $connection) {
+                              Connection $connection,
+                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
+    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
   }
 
@@ -185,8 +204,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $data = [];
 
+    $exclude_not_in_menu = $this->getExcludeNotInMenu();
+
     // Get all child terms for the given parent.
-    $terms = $this->allChildTerms($langcode, $parent_tid);
+    $terms = $this->allChildTerms($langcode, $parent_tid, $exclude_not_in_menu);
 
     if (empty($terms)) {
       return [];
@@ -217,6 +238,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         //
         // @see alshaya_main_menu_alshaya_main_menu_links_alter().
         'depth' => (int) $term->depth_level,
+        'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
       ];
 
       if ($highlight_paragraph) {
@@ -430,7 +452,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
-    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
@@ -441,8 +463,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $query->innerJoin('taxonomy_term__field_mobile_only_dpt_page_link', 'ttmo', 'ttmo.entity_id = tfd.tid');
       $query->condition('ttmo.field_mobile_only_dpt_page_link_value', 1);
     }
+
+    // For the lhn.
+    $query->leftJoin('taxonomy_term__field_show_in_lhn', 'tlhn', 'tlhn.entity_id = tfd.tid');
+    $query->fields('tlhn', ['field_show_in_lhn_value']);
+
     $query->condition('ttcs.field_commerce_status_value', 1);
-    $query->condition('tth.parent', $parent_tid);
+    $query->condition('tth.parent_target_id', $parent_tid);
     $query->condition('tfd.langcode', $langcode);
     $query->condition('tfd.vid', $vid);
     $query->orderBy('tfd.weight', 'ASC');
@@ -618,6 +645,92 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return [];
+  }
+
+  /**
+   * Get the innermost term id for a product from current route.
+   *
+   * @return int|null
+   *   Return the taxonomy term ID if found else NULL.
+   */
+  public function getProductInnermostCategoryIdFromRoute() {
+    $route_name = $this->routeMatch->getRouteName();
+    $tid = NULL;
+
+    if ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      $terms = [];
+      if ($node->bundle() == 'acq_product') {
+        $terms = $node->get('field_category')->getValue();
+      }
+
+      if (count($terms) > 0) {
+        $tid = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
+      }
+    }
+
+    return $tid;
+  }
+
+  /**
+   * Get the complete category tree.
+   *
+   * @param mixed $langcode
+   *   (Optional) Language code.
+   * @param mixed $parent_id
+   *   (Optional) Parent id.
+   *
+   * @return array
+   *   Term tree.
+   */
+  public function getCategoryTreeWithIncludeInMenu($langcode = NULL, $parent_id = 0) {
+    // This to not consider `include_in_menu` check.
+    $this->setExcludeNotInMenu(FALSE);
+    if (!$langcode) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    // This will be like - `category_tree_0_en`.
+    $cid = 'category_tree_' . $parent_id . '_' . $langcode;
+
+    // If exists in cache.
+    if ($cache = $this->cache->get($cid)) {
+      $term_data = $cache->data;
+    }
+    else {
+      // Child terms of given parent term id.
+      $term_data = $this->getCategoryTree($langcode, $parent_id);
+      $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
+    }
+
+    // Reset `$excludeNotInMenu` to default value.
+    $this->setExcludeNotInMenu(TRUE);
+
+    return $term_data;
+  }
+
+  /**
+   * Sets whether include in menu to consider or not.
+   *
+   * @param bool $exclude_not_in_menu
+   *   Include in menu.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setExcludeNotInMenu(bool $exclude_not_in_menu) {
+    $this->excludeNotInMenu = $exclude_not_in_menu;
+    return $this;
+  }
+
+  /**
+   * Get the include in menu to skip or not.
+   *
+   * @return mixed
+   *   exclude in menu or not.
+   */
+  public function getExcludeNotInMenu() {
+    return $this->excludeNotInMenu;
   }
 
 }

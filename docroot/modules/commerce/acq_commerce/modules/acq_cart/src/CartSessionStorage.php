@@ -317,8 +317,9 @@ class CartSessionStorage implements CartStorageInterface {
     }
 
     foreach ($items as $item) {
-      $sku_entity = SKU::loadFromSku($item['sku']);
-      $sku_entity->clearStockCache();
+      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+        $sku_entity->refreshStock();
+      }
     }
   }
 

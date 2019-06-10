@@ -141,10 +141,13 @@
     }
 
     #coupon-button.add {
-      @extend %button-wide;
-
       padding: 0.75rem;
       margin-#{$left}: 0;
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      min-width: 10.625rem;
+      text-align: center;
     }
   }
 }
@@ -152,5 +155,15 @@
 .cart-promotions-wrapper {
   @include breakpoint($only-mobile) {
     margin: 0.875rem 0 0;
+  }
+}
+
+.block-basket-horizontal-recommendation {
+  & > h3 {
+    font-family: $alshaya-thin;
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 1.125rem;
+    margin-bottom: 0.9375rem;
   }
 }

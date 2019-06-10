@@ -121,7 +121,12 @@ class APIWrapper implements APIWrapperInterface {
     };
 
     try {
-      return $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
+      $message = $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
+
+      // Add sku to message to allow processing it the same way as stock push.
+      $message['sku'] = $sku;
+
+      return $message;
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
@@ -168,7 +173,7 @@ class APIWrapper implements APIWrapperInterface {
     // But for robustness we go back to the SKU plugin and ask
     // it to return a name as a string only.
     $originalItemsNames = [];
-    $items = $cart->items;
+    $items = $cart->items ?? NULL;
     if ($items) {
       foreach ($items as $key => &$item) {
         $cart->items[$key]['qty'] = (int) $item['qty'];

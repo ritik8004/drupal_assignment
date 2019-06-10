@@ -54,6 +54,21 @@ schemas:
           }
         }
       }
+  - UserStatus: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "true if user is active, otherwise false."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user if user is active, otherwise nothing."
+          }
+        }
+      }
   - GetWebformSubmission: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -100,7 +115,7 @@ schemas:
           "required": [ "media", "url" ]
         }
       }
-  - GetErrorMessages: |
+  - GetStaticTexts: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
         "type": "array",
@@ -467,6 +482,9 @@ schemas:
           "deeplink": {
             "type": "string"
           },
+          "link": {
+            "type": "string"
+          },
           "original_price": {
             "type": "string"
           },
@@ -776,6 +794,9 @@ schemas:
           "in_stock": {
             "type": "boolean",
             "description": "Status of product in stock."
+          },
+          "link": {
+            "type": "string"
           },
           "delivery_options": {
             "type": "object",
@@ -1509,6 +1530,19 @@ schemas:
                     }
                   ]
                 }
+  /store/search:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetStores
+              example: |
+                [
+                  "RB2-1886-HEN",
+                  "RB2-1957-HEN",
+                  "RB2-1988-HEN"
+                ]
   /store/search/{lat}/{lng}:
     uriParameters:
       lat:
@@ -1645,14 +1679,14 @@ schemas:
                     "url": "https://www.instagram.com/hm/"
                   }
                 ]
-  /error-messages:
+  /get-static-texts:
     get:
-      description: Get the error messages to be displayed on the frontend after validation.
+      description: Get the static texts to be displayed on the frontend.
       responses:
         200:
           body:
             application/json:
-              schema: GetErrorMessages
+              schema: GetStaticTexts
               example: |
                 [
                   {
@@ -1953,6 +1987,23 @@ schemas:
                 {
                   "success": false,
                   "message": "User with email randomuser@gmail.com does not exist.",
+                }
+  /user/get-status/{email}:
+    uriParameters:
+      email:
+        type: string
+        description: "The email ID of the user."
+    get:
+      description: "Get the status of a particular user."
+      responses:
+        200:
+          body:
+            application/json:
+              schema: UserStatus
+              example: |
+                {
+                  "status": true,
+                  "email": "randomuser@gmail.com",
                 }
 /oauth/token:
   description: "Get the token for mobile app consumer."

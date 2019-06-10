@@ -15,7 +15,6 @@ services:
       - '@language_manager'
       - '@module_handler'
       - '@cache.linked_skus'
-      - '@cache.stock'
       - '@cache_tags.invalidator'
     tags:
       - { name: drush.command }

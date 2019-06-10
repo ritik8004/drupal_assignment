@@ -7,9 +7,9 @@ dependencies:
     - system
     - views
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: exposedformstores_finderpage_1
-theme: whitelabel_non_transac
+theme: whitelabel
 region: content
 weight: -6
 provider: null

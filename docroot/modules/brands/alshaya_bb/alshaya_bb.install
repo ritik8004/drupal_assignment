@@ -15,7 +15,7 @@ function alshaya_bb_install() {
   \Drupal::service('theme_handler')->install(['bouchon_bakery'], TRUE);
   \Drupal::service('theme_handler')->setDefault('bouchon_bakery');
 
-  // Disable some default blocks provided by whitelabel_non_transac that we
+  // Disable some default blocks provided by whitelabel that we
   // don't want on bouchon_bakery.
   alshaya_block_delete_blocks(['branding']);
 

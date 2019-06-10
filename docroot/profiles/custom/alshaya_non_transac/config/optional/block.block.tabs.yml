@@ -2,9 +2,9 @@ langcode: en
 status: true
 dependencies:
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: tabs
-theme: whitelabel_non_transac
+theme: whitelabel
 region: content
 weight: -7
 provider: null

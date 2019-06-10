@@ -36,7 +36,7 @@ class AcqPromotionCommands extends DrushCommands {
    *
    * @validate-module-enabled acq_promotion
    *
-   * @aliases acspm,sync-commerce-promotions,sync-options
+   * @aliases acspm,sync-commerce-promotions
    *
    * @usage drush acspm
    *   Run a full synchronization of all available promotions.
@@ -44,7 +44,7 @@ class AcqPromotionCommands extends DrushCommands {
    *   Run a full synchronization of all available cart promotions.
    * @param array $options
    */
-  public function syncProductOptions($options = ['types' => NULL]) {
+  public function synPromotions($options = ['types' => NULL]) {
     if ($types = $options['types']) {
       $this->logger->notice(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
       $types = explode(',', $types);

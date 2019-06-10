@@ -50,10 +50,10 @@ header {
       }
 
       @include breakpoint($only-mobile) {
-        top: 2.9rem;
+        top: 3.5625rem;
 
         html[lang=ar] & {
-          top: 3rem;
+          top: 3.5625rem;
         }
       }
     }
@@ -159,8 +159,8 @@ header {
       height: 2.125rem;
 
       @include breakpoint($only-mobile) {
-        width: 1.75rem;
-        height: 1.75rem;
+        width: 2rem;
+        height: 2rem;
         background-size: contain;
         margin-bottom: -0.25rem;
       }
@@ -298,25 +298,25 @@ header .block-views-exposed-filter-blocksearch-page {
   @include breakpoint($only-mobile) {
     li {
       .mobile--menu {
-        top: 0.625rem;
+        top: 0.75rem;
         margin-#{$left}: 0;
 
         &::before {
-          width: 1.75rem;
-          height: 1.75rem;
+          width: 2rem;
+          height: 2rem;
         }
       }
 
       .mobile--search {
-        top: 0.5rem;
-        #{$left}: 12.5%;
+        top: 0.625rem;
+        #{$left}: 10.5%;
         #{$right}: inherit;
 
         &::before {
           content: '';
           font-size: 0;
-          width: 1.75rem;
-          height: 1.75rem;
+          width: 2rem;
+          height: 2rem;
         }
       }
 
@@ -325,12 +325,16 @@ header .block-views-exposed-filter-blocksearch-page {
         padding: 0.5rem;
         top: 0.5125rem;
 
+        html[lang=ar] & {
+          top: 0.3125rem;
+        }
+
         &:hover {
           background: none;
         }
 
         &::before {
-          font-size: 1.5rem;
+          font-size: 2rem;
         }
       }
     }
@@ -762,9 +766,9 @@ header .region__header {
 
       @include breakpoint($only-mobile) {
         width: 100%;
-        margin-#{$left}: 0.9375rem;
+        margin-#{$left}: 1.1875rem;
 
-        html[lang="ar"] & {
+        html[lang=ar] & {
           margin-#{$left}: 0.5625rem;
         }
       }
@@ -784,10 +788,11 @@ header .region__header {
 
         @include breakpoint($only-mobile) {
           max-width: 11.25rem;
-          margin-top: 0.125rem;
+          margin-top: 0.375rem;
 
-          html[lang="ar"] & {
-            max-width: 10rem;
+          html[lang=ar] & {
+            max-width: 10.9375rem;
+            margin-top: 2px;
           }
         }
       }
@@ -809,6 +814,24 @@ header .region__header {
         }
       }
     }
+  }
+}
+
+/**
+ * Different logo sizes for mobile screen widths.
+ */
+
+@media (max-width: 767px) and (min-width: 425px) {
+  header .region__header .block-system-branding-block .site-brand-home a {
+    max-width: 13.125rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 424px) and (min-width: 375px) {
+  header .region__header .block-system-branding-block .site-brand-home a {
+    max-width: 12.5rem;
+    margin-top: 0.5rem;
   }
 }
 

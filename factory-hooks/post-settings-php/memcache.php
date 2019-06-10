@@ -1,8 +1,11 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
- * Contains memcache configuration.
+ * Factory hook implementation for memcache.
+ *
+ * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
 use Composer\Autoload\ClassLoader;
@@ -19,7 +22,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
 
   if (class_exists(ClassLoader::class)) {
     $class_loader = new ClassLoader();
-    $class_loader->addPsr4('Drupal\\memcache\\', 'modules/contrib/memcache/src');
+    $class_loader->addPsr4('Drupal\\memcache\\', DRUPAL_ROOT . '/modules/contrib/memcache/src');
     $class_loader->register();
 
     $settings['container_yamls'][] = DRUPAL_ROOT . '/modules/contrib/memcache/memcache.services.yml';
@@ -75,12 +78,9 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // Use memcache as the default bin.
     $settings['cache']['default'] = 'cache.backend.memcache';
 
-    // Use pcb_memcache for stock.
-    $settings['cache']['bins']['stock'] = 'cache.backend.permanent_memcache';
-    // Use pcb_memcache for category tree.
     $settings['cache']['bins']['product_category_tree'] = 'cache.backend.permanent_memcache';
-    // Use pcb_memcache for product options.
     $settings['cache']['bins']['product_options'] = 'cache.backend.permanent_memcache';
+    $settings['cache']['bins']['hm_product_configurations'] = 'cache.backend.permanent_memcache';
 
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
@@ -93,6 +93,26 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
+    }
+
+    // Optionally set up chainedfast backend to measure performance difference.
+    // The purpose is to measure performance difference between using memcache
+    // and chainedfast backend for bootstrap, discovery and config cache bins.
+    // Default setting is memcache backend.
+    //
+    // To switch backend to chainedfast, create/edit the /home/alshaya/includes
+    // /memcache-settings.php file and enter
+    // $_ENV[<host>]['MEMCACHE_CHAINEDFAST_ENABLE'] = 1;
+    // (e.g. $_ENV['bbkw.uat-alshaya.acsitefactory.com']['MEMCACHE_CHAINEDFAST_ENABLE'] = 1;
+    // to enable chanedfast backend instead of memcache.
+    if (file_exists('/home/alshaya/includes/memcache-settings.php')) {
+      include_once '/home/alshaya/includes/memcache-settings.php';
+
+      if (!empty($_ENV[$_ENV['HTTP_HOST']]['MEMCACHE_CHAINEDFAST_ENABLE'])) {
+        $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+        $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+        $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+      }
     }
   }
 }

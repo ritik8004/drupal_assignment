@@ -4,9 +4,9 @@ dependencies:
   module:
     - language
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: language_switcher_footer
-theme: whitelabel_non_transac
+theme: whitelabel
 region: footer_primary
 weight: 0
 provider: null

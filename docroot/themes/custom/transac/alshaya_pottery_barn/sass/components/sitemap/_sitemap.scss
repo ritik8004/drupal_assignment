@@ -1,0 +1,45 @@
+.sitemap {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .level--1__description {
+    text-transform: capitalize;
+  }
+
+  .level--1__meta a {
+    font-size: 22px;
+    text-transform: uppercase;
+    color: $_sitemap_l1;
+
+    &:hover {
+      color: $_sitemap_l1;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 1rem;
+    }
+  }
+
+  .level--2__meta a {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: $_sitemap_l1;
+
+    &:hover {
+      color: $_sitemap_l1;
+    }
+  }
+
+  a.level--3__label {
+    color: $_sitemap_l3;
+    font-size: 0.75rem;
+    text-transform: capitalize;
+
+    &:hover {
+      color: $_sitemap_l3;
+    }
+  }
+}

@@ -1,19 +1,56 @@
 imports:
   - behat.yml
 
-integration:
+hmkw-uat:
+  autoload:
+    '': alshaya_behat/features/hmkw/bootstrap
+  suites:
+    default:
+      paths:
+        features: alshaya_behat/features/hmkw
+        bootstrap: alshaya_behat/features/hmkw/bootstrap
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/knitted-jumper'
+              simpletitle: 'Knitted jumper'
+              simpletitlear: 'Knitted jumper'
+              configurl: '/jacquard-weave-bath-mat?selected=1171'
+              configtitle: 'Jacquard-weave bath mat'
+              configtitlear: 'مفرش استحمام منسوج من الجاكارد'
+              configvariant: '50x70'
+              base_url: https://hmkw-uat.factory.alshaya.com
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrushContext
   extensions:
     Behat\MinkExtension:
-      # This is an example URL For an integration server.
-      base_url: https://example-integration-server.prod.acquia-sites.com/
-      selenium2:
-        # This is an example SauceLabs host URL.
-        wd_host: 4e19c8b-0986-4642-8ffd-c033649db9a2@ondemand.saucelabs.com/wd/hub
-        browser: "firefox"
-        capabilities: { "platform": "Windows 7", "browser": "firefox", "max-duration" : 3600}
-    Drupal\DrupalExtension:
-      drupal:
-        # This must be an absolute path.
-        drupal_root: "/var/www/html/example.integration/docroot"
-      drush:
-        alias: '@example.integration'
+      # configure the base url for your site
+      base_url: https://hmkw-uat.factory.alshaya.com
+
+mckw-uat:
+  autoload:
+    '': alshaya_behat/features/mothercare/bootstrap
+  suites:
+    default:
+      paths:
+        features: alshaya_behat/features/mothercare
+        bootstrap: alshaya_behat/features/mothercare/bootstrap
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/mothercare-farm-newborn-bibs-3-pack?selected=316'
+              simpletitle: 'Mothercare Farm Newborn Bibs - 3 Pack'
+              simpletitlear: 'صدريات Farm لحديثي الولادة من مذركير - عدد 3'
+              configurl: '/horse-photographic-t-shirt?selected=256'
+              configtitle: 'Horse Photographic T-Shirt'
+              configtitlear: 'Horse Photographic تي- شيرت'
+              configvariant: '18-24 Months'
+              base_url: https://mckw-uat.factory.alshaya.com
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'https://mckw-uat.factory.alshaya.com/'

@@ -16,7 +16,6 @@
   }
 }
 
-.paragraph--type--product-carousel-category,
 .horizontal-upell,
 .horizontal-related,
 .horizontal-crossell,
@@ -136,5 +135,12 @@
         }
       }
     }
+  }
+}
+
+.view-display-id-category_product_slider {
+  .c-products__item__label {
+    font-size: 0.875rem;
+    max-width: none;
   }
 }

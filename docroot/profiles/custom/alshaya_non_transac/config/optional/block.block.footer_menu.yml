@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: footer_menu
-theme: whitelabel_non_transac
+theme: whitelabel
 region: footer_secondary
 weight: -8
 provider: null

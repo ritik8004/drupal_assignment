@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_stores_finder
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: alshaya_stores_finder_header
-theme: whitelabel_non_transac
+theme: whitelabel
 region: header_secondary
 weight: -4
 provider: null

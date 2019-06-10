@@ -3,7 +3,6 @@
 namespace Drupal\acq_sku\Entity;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
@@ -59,21 +58,12 @@ use GuzzleHttp\Exception\RequestException;
  */
 class SKU extends ContentEntityBase implements SKUInterface {
 
-  const SWATCH_IMAGE_ROLE = 'swatch_image';
-
   /**
    * Processed media array.
    *
    * @var array
    */
   protected $mediaData = [];
-
-  /**
-   * Processed swatch media item array.
-   *
-   * @var array
-   */
-  protected $swatchData = [];
 
   /**
    * {@inheritdoc}
@@ -135,10 +125,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        if (isset($data['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
-          continue;
-        }
-
         $this->mediaData[] = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
       }
 
@@ -149,60 +135,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     return $this->mediaData;
-  }
-
-  /**
-   * Function to return swatch media item for a SKU.
-   *
-   * @param bool $download
-   *   Whether to download media or not.
-   * @param bool $reset
-   *   Flag to reset cache and generate array again from serialized string.
-   * @param string $default_label
-   *   Default value for alt/title.
-   *
-   * @return array
-   *   Array containing media item.
-   */
-  public function getSwatchImage($download = TRUE, $reset = FALSE, $default_label = '') {
-    if (!$reset && !empty($this->swatchData)) {
-      return $this->swatchData;
-    }
-
-    if ($media_data = $this->get('media')->getString()) {
-      $update_sku = FALSE;
-
-      $media_data = unserialize($media_data);
-
-      if (empty($media_data)) {
-        return [];
-      }
-
-      foreach ($media_data as &$data) {
-        // We don't want to show disabled images.
-        if (isset($data['disabled']) && $data['disabled']) {
-          continue;
-        }
-
-        if (empty($data['roles']) || !in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
-          continue;
-        }
-
-        $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
-
-        if ($media_item) {
-          $this->swatchData = $media_item;
-          break;
-        }
-      }
-
-      if ($update_sku) {
-        $this->get('media')->setValue(serialize($media_data));
-        $this->save();
-      }
-    }
-
-    return $this->swatchData;
   }
 
   /**
@@ -381,21 +313,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Found SKU
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
-    $skus_static_cache = &drupal_static(__FUNCTION__, []);
+    if (empty($sku)) {
+      // Simply log for debugging later on why this function is called
+      // with empty sku.
+      \Drupal::logger('acq_sku')->error('SKU::loadFromSku invoked with empty sku string: @trace.', [
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
+
+      return NULL;
+    }
 
     $is_multilingual = \Drupal::languageManager()->isMultilingual();
 
     if ($is_multilingual && empty($langcode)) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    }
-
-    $static_cache_sku_identifier = $sku . ':' . $langcode;
-
-    // Check if data is available in static cache, return from there.
-    // If create translation is true, it means we are doing product sync.
-    // For this case we don't want to use any static cache.
-    if (isset($skus_static_cache[$static_cache_sku_identifier]) && !$create_translation) {
-      return $skus_static_cache[$static_cache_sku_identifier];
     }
 
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
@@ -432,14 +363,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
-    if ($is_multilingual) {
+    if ($is_multilingual && $sku_entity->language()->getId() != $langcode) {
       if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
-
-        // Set value in static variable.
-        // We set in static cache only for proper case, when returning different
-        // language or creating translation we can avoid static cache.
-        $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
       }
       elseif ($create_translation) {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
@@ -448,10 +374,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       elseif ($log_not_found) {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
-    }
-    else {
-      // Set value in static variable directly if not a multi-lingual site.
-      $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
     }
 
     return $sku_entity;
@@ -587,17 +509,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => -11,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['stock'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Stock'))
-      ->setDescription(t('Stock quantity.'))
-      ->setTranslatable(FALSE)
-      ->setDisplayOptions('form', [
-        'type' => 'number',
-        'weight' => -10,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -781,6 +692,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           throw new \RuntimeException('Field type not defined yet, please contact TA.');
         }
 
+        // @codingStandardsIgnoreLine
         $field->setLabel(new TranslatableMarkup($field_info['label']));
 
         // Update cardinality with default value if empty.
@@ -788,6 +700,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field->setDescription($field_info['description']);
 
         $field->setTranslatable(TRUE);
+        if (isset($field_info['translatable']) && $field_info['translatable'] == 0) {
+          $field->setTranslatable(FALSE);
+        }
 
         // Update cardinality with default value if empty.
         $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
@@ -805,30 +720,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
-   * Helper function to clear stock cache for particular sku.
-   */
-  public function clearStockCache() {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-
-    // Clear product and forms related to sku.
-    Cache::invalidateTags(['acq_sku:' . $this->id()]);
-
-    if ($stock_mode == 'push') {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $this->getPluginInstance();
-
-      // Reset the stock value.
-      $plugin->getProcessedStock($this, TRUE);
-    }
-    else {
-      $stock_cid = 'stock:' . $this->getSku();
-
-      // Clear stock cache.
-      \Drupal::cache('stock')->invalidate($stock_cid);
-    }
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
@@ -836,16 +727,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Delete media files.
     foreach ($entities as $entity) {
-      /** @var \Drupal\acq_sku\Entity\SKU $entity  */
+      /** @var \Drupal\acq_sku\Entity\SKU $entity */
       foreach ($entity->getMedia(FALSE) as $media) {
         if ($media['file'] instanceof FileInterface) {
           $media['file']->delete();
         }
-      }
-
-      $swatch = $entity->getSwatchImage(FALSE);
-      if ($swatch && $swatch['file'] instanceof FileInterface) {
-        $swatch['file']->delete();
       }
     }
   }
@@ -861,6 +747,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // We don't use entity storage and use custom code for static cache.
     drupal_static_reset('loadFromSku');
     drupal_static_reset('getParentSku');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function refreshStock() {
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $this->getPluginInstance();
+    $plugin->refreshStock($this);
   }
 
 }

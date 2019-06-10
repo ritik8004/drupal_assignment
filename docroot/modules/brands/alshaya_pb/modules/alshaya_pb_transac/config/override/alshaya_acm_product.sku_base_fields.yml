@@ -85,3 +85,8 @@ fields:
   short_description:
     label: 'Product Info'
     type: 'text_long'
+  feature_lhn:
+    label: 'Features'
+    cardinality: -1
+    index: 1
+    facet: 1

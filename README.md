@@ -86,6 +86,23 @@ To prepare your local env:
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
 
+### Running behat tests with headless Chrome locally on MacOS
+This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.
+You **do not** need Java/Selenium/BLT/drupalvm installed for this.
+
+* Make sure you have Google Chrome browser installed on your host PC
+* Navigate to your repo root (you will run all commands below from repo root of host PC)
+* Make alias to your chrome browser, e.g. `alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"`
+* Run `chrome --headless --remote-debugging-port=9222 --window-size=1920,1080 http://localhost`
+* Open new terminal window
+* Run `vendor/bin/behat  --format pretty alshaya_behat/features/hmkw/common/sign_in.feature --colors --no-interaction --stop-on-failure --strict --config tests/behat/integration.yml --profile hmkw-uat -v`
+
+Notes:
+* Replace the "sign_in.feature" with other features or folder to run different tests
+* Replace "hmkw-uat" profile with other profiles, see `tests/behat/integration.yml` file for more examples.
+* While headless chrome is running, you can visit http://localhost:9222 to see how the "screen" of the tests looks like.
+* You can also see the screenshots of failed tests in `tests/behat/reports` folder
+
 ### Troubleshooting
 
 * `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
@@ -101,21 +118,52 @@ installation profile will enable all the modules required for an a site with
 commercial features and integration with Conductor/Magento. `non_transac`
 profile is a light/static site without any commercial feature.`
 
-* Create a new theme for your site. See `docroot/themes/custom/README.md` for
-more information on how to create a custom theme.
-* Create a custom module in `docroot/modules/brands`. This module goal is to
+* Create a custom module in `docroot/modules/brands`. This module's goal is to
 enable the appropriate theme, place the blocks in the theme's regions and
 install the specific configuration. See existing brand modules for example.
+* Install the new theme for the respective brand inside this brand module.
+* See "Create a new theme for the site." for specific instructions on creating a new theme.
 * Add a new brand support:
   * Add DB and Alias in `box/config.yml`
   * Add site in `blt/alshaya_local_sites.yml` with proper values (check existing sites for example)
   * Add drush aliases to the site into `drush/sites` folder with proper values (check existing sites for example)
-  * (For transact site) Add proper settings for the new site in 
+  * (For transact site) Add proper settings for the new site in
     * factory-hooks/environments/magento.php
     * factory-hooks/environments/settings.php
     * factory-hooks/environments/conductor.php
 * `vagrant reload --provision`
 * Run `blt refresh:local` commands and enter appropriate site code when asked.
+
+### Create a new theme for the site.
+
+#### Overview.
+* There are three three different theme types, transac theme, non transac theme and amp theme.
+* You will find this under `themes/custom/transac`, `themes/custom/non_transac` and `themes/custom/amp`.
+* We heavily rely on theme inheritance, so each theme type has a alshaya specific base theme to spped up the theme creation process.
+* Transac theme is for trnasactional sites, and `alshaya_white_label` is used as a base theme by default for transac installation profile.
+* Non-Transac theme is for non transactional sites, which are usually a placeholder sites until the transactional sites are launched. `whitelabel` is used as a base theme by default for non transac installation profile.
+* AMP themes use "Accelerated Mobile Pages" specifications for certain pages on the site, AMP theme is by default enabled for all profiles. `alshaya_amp_white_label` is the base AMP theme.
+* Also see `docroot/themes/custom/README.md` for some additional steps related to CI applicable to all themes.
+
+#### Transac theme.
+* `alshaya_example_subtheme` is designed as a copy paste starter kit for new brands.
+* Check `docroot/themes/custom/transac/alshaya_example_subtheme/README.md` for steps to create a new transac theme.
+* Use standard Drupal practices to override anything that is coming from base theme.
+* Use any of the existing brand themes as an example for reference.
+
+#### Non Transac theme.
+* Duplicate any of the brand themes inside `non_transac` directory.
+* Change the info file, directory name and hook names in approprite files.
+* Non transac themes use patternlab with all the components inherited from base theme.
+* Remove any scss files inside sass directory from the duplicated themed.
+* You should have a clean non transac theme with all styles inherited from base theme.
+* Override what is necessary.
+
+#### AMP theme.
+* AMP as a spec provides limited customization.
+* If any custom work is needed for a brand on AMP pages, copy paste any of the brand amp themes.
+* Change the name of the theme in appropriate files.
+* Override what is necessary, follow other brand AMP themes as reference.
 
 ### Update local site from cloud.
 Script is created to download db from cloud env and configure local env
@@ -126,7 +174,7 @@ in local as and when required. All required changes are done.
 * Enable dblog and other ui modules
 * Allows hooking into the script, we can create scripts/install-site-dev.sh
 which is already added to .gitignore and add any code we want to execute post
-this script (for instance command to shout loud in mac - `say installation 
+this script (for instance command to shout loud in mac - `say installation
 done`). One argument - site code will be passed to this script.
 
 Script usage:
@@ -159,15 +207,9 @@ In order to perform the private key forwarding, do following:
 
 As mentioned above, you should typically run all the blt and drush commands (except the initial one `blt vm` that initializes your virtual machine) from inside of your vm. This should cover all the typical cases and you can skip this part if you are fully comfortable with that approach. However, for the better convenience, it is sometimes quicker to run some drush commands from host PC. For example, running drush uli from host logs quickly user 1 into the site without need of copy/pasting of login link. PC To make this working follow these steps:
 
-* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (before that, please make sure you don’t need drush 8 for Alshaya anymore, or you archive old drush 8 e.g. under drush8 command - see Transition phase between drush 8 and drush 9 article for more details). Alternatively, you can manually run vendor/drush/drush/drush command if you want to run drush 9 commands without installing Drush launcher
+* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
 * To connect to vagrant instances from host pc, use @<site>.vm aliases, e.g. `drush @hmkw.vm status`. These aliases cannot be used to sync databases to local (see Technical details on aliases structure for more information)
 * To connect to remote sites, use standard `drush @<site>.01<env>` form, e.g. `drush @hmkw.01dev3 status`. Note this will only work if the remote site has already deployed blt9 and drush9 (see next topic)
-
-### Transition phase between drush 8 and drush 9
-
-General rule is: drush 8 site aliases can be properly interpreted only with drush 8, drush 9 sites only with drush 9. That brings some challenges when trying to reach the sites with old (drush 8) codebase from the new (already upgraded) drush 9 local environment.
-
-In order to still reach the old drush 8 sites after upgrade with old drush aliases (e.g. `drush @alshaya.01uat status -l ...`), it’s recommended to make the drush 8 command reachable from host PC (either by keeping the old version on host, or by renaming the drush executable to drush8 or by installing it as a separate distribution) and make it reachable with e.g. drush8 command. That way, you can still reach the drush 8 sites by typing e.g. `drush8 @alshaya.01uat -l ... status`. Ensure the drush8 is reaching the proper version by typing drush8 --version.
 
 ### Technical details on drush 9 aliases structure
 
@@ -211,9 +253,9 @@ Execution:
 bin/behat --@tagname --profile=mcuat
 
 
-    
+
 ### How to interpret the Behat reports:
-  * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
+  * When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
   * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
   * In order to share the reports, compress the html directory immediately after every run.
 
@@ -242,7 +284,7 @@ XDebug debugger is enabled by default. In order to debug your code from browser,
 
 * Make sure you firstly invoked debugger from browser at least once.
 * In File/Preferences of phpStorm, section Languages & Frameworks / PHP / Servers, write down server name the debugger invoked in previous step (e.g. "local.alshaya-mckw.com")
-* Change variable php_xdebug_cli_disable to "no" in box/config.yml and run vagrant provision. 
+* Change variable php_xdebug_cli_disable to "no" in box/config.yml and run vagrant provision.
 * wait until machine is successfully re-provisioned
 * make sure your PhpStorm is listening to php debug connections
 * vagrant ssh to your guest
@@ -259,5 +301,5 @@ Specific notes for debugging drush commands:
 After finishing CLI debuging it's recommended to disable xdebug back again, to increase performance. To debug CLI commands like Drush, Drupal console or PhpUnit, follow these steps:
 
 ### Remote debugging from ACSF
-On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging. 
+On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging.
 Follow instructions [here](https://support.acquia.com/hc/en-us/articles/360006231933-How-to-debug-an-Acquia-Cloud-environment-using-PhpStorm-and-Remote-Xdebug) to set up remote debugging on your local PhpStorm to leverage it.

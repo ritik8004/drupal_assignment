@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_acm_dashboard\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager;
+use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,9 +16,9 @@ class AlshayaAcmDashboardController extends ControllerBase {
   /**
    * Acm dashboard manager instance.
    *
-   * @var \Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager
+   * @var \Drupal\alshaya_acm\AlshayaMdcQueueManager
    */
-  private $acmDashboardManager;
+  private $mdcQueueManager;
 
   /**
    * Date formatter service.
@@ -37,17 +37,17 @@ class AlshayaAcmDashboardController extends ControllerBase {
   /**
    * AlshayaAcmDashboardController constructor.
    *
-   * @param \Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager $acmDashboardManager
-   *   Acm dashboard manager instance.
+   * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
+   *   Mdc Queue Manager
    * @param \Drupal\Core\Datetime\DateFormatter $dateFormatter
    *   Date formatter service.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   Conductor API  wrapper service.
    */
-  public function __construct(AlshayaAcmDashboardManager $acmDashboardManager,
+  public function __construct(AlshayaMdcQueueManager $mdcQueueManager,
                               DateFormatter $dateFormatter,
                               APIWrapper $api_wrapper) {
-    $this->acmDashboardManager = $acmDashboardManager;
+    $this->mdcQueueManager = $mdcQueueManager;
     $this->dateFormatter = $dateFormatter;
     $this->apiWrapper = $api_wrapper;
   }
@@ -57,7 +57,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_acm_dashboard.dashboard_manager'),
+      $container->get('alshaya_acm.mdc_queue_manager'),
       $container->get('date.formatter'),
       $container->get('acq_commerce.agent_api')
     );
@@ -72,7 +72,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
     $mdc_queue_stats = [];
 
     foreach ($mdc_queues as $queue_machine_name => $label) {
-      $mdc_queue_result = $this->acmDashboardManager->getMdcQueueStats($queue_machine_name);
+      $mdc_queue_result = $this->mdcQueueManager->getMdcQueueStats($queue_machine_name);
       if (!$mdc_queue_result) {
         continue;
       }

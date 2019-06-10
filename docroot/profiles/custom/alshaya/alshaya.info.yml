@@ -25,20 +25,4 @@ themes:
   - seven
   - whitelabel
 
-base profile:
-  name: lightning
-  excluded_dependencies:
-    - dblog
-    - help
-    - history
-    - lightning_landing_page
-    - lightning_layout
-    - lightning_media_instagram
-    - lightning_media_twitter
-    - lightning_media_video
-    - lightning_media_audio
-    - lightning_search
-    - shortcut
-    - views_ui
-    - lightning_scheduler
-    - moderation_sidebar
+base profile: lightning

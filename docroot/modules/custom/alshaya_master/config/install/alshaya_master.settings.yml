@@ -1,4 +1,6 @@
 email_logo:
   path: ''
+mobile_logo:
+  path: ''
 ajax_spinner_message_interval: 3000
 js_disable_message: '<strong>JavaScript seems to be disabled in your browser</strong>. For the best experience on our site, be sure to turn on javascript in your browser.'

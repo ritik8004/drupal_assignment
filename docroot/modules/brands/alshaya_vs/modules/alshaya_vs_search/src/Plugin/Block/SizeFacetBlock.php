@@ -37,6 +37,21 @@ class SizeFacetBlock extends BlockBase {
       '#markup' => '<div class="sfb-facets-container"></div>',
     ];
 
+    $build['band_cup']['shop_by_size_paddle_nav'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['shop-by-size-paddle-nav'],
+      ],
+    ];
+    $build['band_cup']['shop_by_size_paddle_nav']['prev'] = [
+      '#type' => 'markup',
+      '#markup' => '<div class="paddle_prev"></div>',
+    ];
+    $build['band_cup']['shop_by_size_paddle_nav']['next'] = [
+      '#type' => 'markup',
+      '#markup' => '<div class="paddle_next"></div>',
+    ];
+
     $build['letter'] = [
       '#type' => 'container',
       '#attributes' => [

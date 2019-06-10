@@ -28,6 +28,11 @@ type_settings:
       published: true
       default_revision: true
       weight: 4
+    archived:
+      label: Archived
+      published: false
+      default_revision: true
+      weight: 5
   transitions:
     draft_draft:
       label: 'Create New Draft'
@@ -107,3 +112,21 @@ type_settings:
         - published
       to: published
       weight: 13
+    from_published_to_archived:
+      label: 'Published to Archived'
+      from:
+        - published
+      to: archived
+      weight: 14
+    from_archived_to_published:
+      label: 'Archived to Published'
+      from:
+        - archived
+      to: published
+      weight: 15
+    from_archived_to_archived:
+      label: 'Archived to Archived'
+      from:
+        - archived
+      to: archived
+      weight: 16

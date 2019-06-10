@@ -302,7 +302,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $plugin->validatePaymentForm($pane_form, $form_state, $complete_form);
     }
     else {
-      $form_state->setErrorByName('acm_payment_methods][payment_options', $this->t('Please select a payment option to continue.', [], ['context' => 'alshaya_error_message|empty_payment_option']));
+      $form_state->setErrorByName('acm_payment_methods][payment_options', $this->t('Please select a payment option to continue.', [], ['context' => 'alshaya_static_text|empty_payment_option']));
     }
   }
 

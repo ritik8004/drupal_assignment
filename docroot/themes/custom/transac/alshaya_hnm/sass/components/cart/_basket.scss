@@ -1,12 +1,4 @@
 .path--cart {
-  @include breakpoint($only-tablet) {
-    .price-wrapper {
-      .price {
-        max-width: none !important;
-      }
-    }
-  }
-
   #table-cart-items {
     table tr {
       td {
@@ -44,10 +36,7 @@
     .tooltip {
       font-family: $hnm-regular;
       top: 1.6rem;
-      #{$left}: -4.3rem;
-      color: $tooltip_text;
-      background-color: $tooltip_bg;
-      border: 1px solid $tooltip_border_2;
+      border: 1px solid $tooltip_border;
       margin: 0;
 
       @include breakpoint($only-tablet) {
@@ -85,8 +74,17 @@
   }
 
   .tooltip::after {
+    @extend %tooltip-after;
+
+    border-bottom-color: $tooltip_border_2;
     border-bottom-width: 0.4375rem;
     bottom: calc(100% + -1px);
+  }
+
+  .tooltip::before {
+    @extend %tooltip-before;
+
+    border-bottom-color: $tooltip_border;
   }
 }
 
@@ -96,10 +94,7 @@
   color: $privilege_card_title;
 
   @include icon(dropdown-expand, after) {
-    position: absolute;
     #{$right}: 0.3125rem;
-    top: 50%;
-    transform: translateY(-50%);
     color: $myaccount_icon;
     font-size: 2.4rem;
   }
@@ -136,26 +131,15 @@
 
       font-family: $hnm-bold;
       text-transform: uppercase;
-      display: block;
-      margin-bottom: 14px;
-      padding: 9px 30px;
       background: $basket_header_promo_bg;
       color: $basket_header_promo_txt;
-      cursor: pointer;
-      margin-#{$left}: 1.5rem;
       font-size: 0.8125rem;
-      max-width: 6.25rem;
       letter-spacing: 1px;
     }
 
     &.remove {
-      margin-#{$left}: 1.5rem;
-      text-decoration: underline;
       color: $basket_header_promo_bg;
       font-family: $hnm-bold;
-      font-size: 0.75rem;
-      display: block;
-      margin-bottom: 0.75rem;
     }
   }
 }
@@ -165,11 +149,7 @@
     @include arabic-letter-spacing;
 
     color: $basket_block_title;
-    margin-bottom: 0.3rem;
-    padding-bottom: 0.56rem;
     font-family: $hnm-demibold;
-    font-size: 1rem;
-    font-weight: normal;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 1px;
@@ -181,7 +161,6 @@
 
   .view-product-slider {
     .owl-carousel .owl-item img {
-      max-width: 11.625rem;
       max-height: unset;
     }
 
@@ -308,25 +287,6 @@ html[lang=ar] {
       .price--discount {
         .discount-prefix {
           font-family: $hnm-regular;
-          font-size: 0.75rem;
-
-          @include breakpoint($only-tablet) {
-            font-size: 0.75rem !important;
-          }
-
-          @include breakpoint($only-mobile) {
-            font-size: 0.625rem;
-          }
-        }
-
-        .discount-value {
-          @include breakpoint($only-tablet) {
-            font-size: 0.75rem;
-          }
-
-          @include breakpoint($only-mobile) {
-            font-size: 0.625rem;
-          }
         }
       }
     }

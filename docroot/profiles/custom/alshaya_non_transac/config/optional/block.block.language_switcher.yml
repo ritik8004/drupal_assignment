@@ -4,9 +4,9 @@ dependencies:
   module:
     - language
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: language_switcher
-theme: whitelabel_non_transac
+theme: whitelabel
 region: header_secondary
 weight: -3
 provider: null

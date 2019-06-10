@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm;
 
+use Drupal\alshaya_custom\AlshayaCountryManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -59,6 +60,13 @@ class AlshayaAcmConfigCheck {
   protected $state;
 
   /**
+   * Alshaya country manager.
+   *
+   * @var \Drupal\alshaya_custom\AlshayaCountryManager
+   */
+  protected $alshayaCountryManager;
+
+  /**
    * AlshayaAcmConfigCheck constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -73,19 +81,23 @@ class AlshayaAcmConfigCheck {
    *   The date time service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state factory.
+   * @param \Drupal\alshaya_custom\AlshayaCountryManager $alshaya_country_manager
+   *   Alshaya country manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleInstallerInterface $module_installer,
                               ModuleHandlerInterface $module_handler,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
-                              StateInterface $state) {
+                              StateInterface $state,
+                              AlshayaCountryManager $alshaya_country_manager) {
     $this->configFactory = $config_factory;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $language_manager;
     $this->dateTime = $date_time;
     $this->state = $state;
+    $this->alshayaCountryManager = $alshaya_country_manager;
   }
 
   /**
@@ -95,11 +107,14 @@ class AlshayaAcmConfigCheck {
    *   Force reset.
    * @param string $config_reset
    *   Config that needs to reset.
+   *
+   * @return bool
+   *   Command run fully or not.
    */
   public function checkConfig($force = FALSE, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
-      return;
+      return FALSE;
     }
 
     // Get the current env.
@@ -107,21 +122,21 @@ class AlshayaAcmConfigCheck {
 
     // We don't do anything on update envs like 01uatup.
     if (substr($env, -2) === 'up') {
-      return;
+      return FALSE;
     }
 
     // If we want to force reset or config is empty, we don't check for
     // other conditions.
     // We don't do anything on prod.
     if (alshaya_is_env_prod() && (!$force || empty($config_reset))) {
-      return;
+      return FALSE;
     }
 
     $request_time = $this->dateTime->getRequestTime();
 
     // Check if reverting of settings is disabled.
     if (!$force && !empty(Settings::get('disable_config_reset'))) {
-      return;
+      return FALSE;
     }
 
     $flag_var = 'alshaya_acm_config_check.' . $env;
@@ -130,7 +145,7 @@ class AlshayaAcmConfigCheck {
     $reset_time = $this->state->get($flag_var);
 
     if (!$force && !empty($reset_time)) {
-      return;
+      return FALSE;
     }
 
     // Set the first request time in state.
@@ -140,16 +155,18 @@ class AlshayaAcmConfigCheck {
       'acq_commerce.conductor',
       'alshaya_api.settings',
       'acq_cybersource.settings',
-      'alshaya_acm_knet.settings',
+      'alshaya_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.settings',
       'social_auth_facebook.settings',
     ];
 
+    $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);
+
     if (!empty($config_reset)) {
       if (!in_array($config_reset, $reset)) {
-        return;
+        return FALSE;
       }
       else {
         $reset = [$config_reset];
@@ -162,6 +179,11 @@ class AlshayaAcmConfigCheck {
       $settings = Settings::get($config_key);
 
       foreach ($settings as $key => $value) {
+        if (is_array($value)) {
+          $existing = $config->get($key) ?? [];
+          $value = array_replace_recursive($existing, $value);
+        }
+
         $config->set($key, $value);
       }
 
@@ -208,6 +230,8 @@ class AlshayaAcmConfigCheck {
     if (function_exists('alshaya_performance_reset_log_mode')) {
       alshaya_performance_reset_log_mode();
     }
+
+    return TRUE;
   }
 
   /**
@@ -222,7 +246,7 @@ class AlshayaAcmConfigCheck {
     // If the target country code does not have related country module, that
     // means we are not using a valid country code which may be on purpose so
     // don't do anything.
-    $modules = $this->state->get('system.module.files', []);
+    $modules = system_rebuild_module_data();
     if (!isset($modules['alshaya_' . $expected_country_code])) {
       return;
     }
@@ -247,12 +271,12 @@ class AlshayaAcmConfigCheck {
 
     // Reset currency code - EN.
     $this->configFactory->getEditable('acq_commerce.currency')
-      ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'en'))
+      ->set('currency_code', $this->alshayaCountryManager->getCurrencyCode($expected_country_code, 'en'))
       ->save();
 
     // Reset currency code - AR.
     $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.currency')
-      ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'ar'))
+      ->set('currency_code', $this->alshayaCountryManager->getCurrencyCode($expected_country_code, 'ar'))
       ->save();
   }
 

@@ -46,12 +46,6 @@
       height: 2.5rem !important;
     }
   }
-
-  @include breakpoint($tablet) {
-    .form-type-checkbox .option::before {
-      font-size: 1.125rem;
-    }
-  }
 }
 
 .user-login-form {

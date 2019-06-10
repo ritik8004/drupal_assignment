@@ -5,3 +5,4 @@ package: 'Alshaya'
 core: 8.x
 dependencies:
   - alshaya_acm_checkout:alshaya_acm_checkout
+  - alshaya_knet:alshaya_knet

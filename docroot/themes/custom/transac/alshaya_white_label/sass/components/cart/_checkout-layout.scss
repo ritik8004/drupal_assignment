@@ -145,6 +145,7 @@
 
     padding: 0.6rem 0.5rem;
     margin: 0 auto;
+    text-align: center;
 
     @include breakpoint($tablet) {
       padding: 1rem 1.5rem;
@@ -157,8 +158,13 @@
 
     a {
       margin-#{$left}: 0;
-      width: 52.5%;
+      width: 100%;
       display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        max-width: 11.875rem;
+      }
 
       @include breakpoint($tablet) {
         width: 29%;
@@ -186,6 +192,11 @@
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
+
+    @include breakpoint($desktop) {
+      padding-left: 8.0625rem;
+      padding-right: 8.0625rem;
+    }
   }
 }
 
@@ -197,7 +208,6 @@
   text-transform: lowercase;
   font-size: 0.6875rem;
   padding: 1.375rem 1.5rem;
-  padding-#{$right}: 1rem;
 
   p {
     color: $checkout_footer_txt;
@@ -209,6 +219,8 @@
   }
 
   p:last-child {
+    margin-bottom: 0;
+
     .light {
       font-family: $alshaya-bold;
       font-weight: normal;
@@ -236,6 +248,7 @@
 
   @include breakpoint($only-mobile) {
     text-align: center;
+    padding: 1rem;
   }
 }
 

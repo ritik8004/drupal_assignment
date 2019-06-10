@@ -72,7 +72,13 @@
 
         &::before {
           @include breakpoint($upto-desktop) {
-            margin-#{$right}: 0.5rem;
+            margin-#{$right}: 0;
+          }
+        }
+
+        .payment-method-name {
+          @include breakpoint($upto-desktop) {
+            width: 90%;
           }
         }
       }
@@ -111,6 +117,7 @@
     .card-type {
       opacity: 0.3;
       background-size: 100% 100% !important;
+      margin-#{$left}: 0.25rem;
 
       &.active {
         opacity: 1;
@@ -126,7 +133,6 @@
 
       &.card-type-diners-club {
         background: url('../imgs/cards/dinersclub-active.svg') no-repeat;
-        width: 2.6875rem;
       }
     }
   }
@@ -159,5 +165,37 @@
 .cybersource-global-error {
   @include breakpoint($tablet) {
     margin: 0 1.5rem;
+  }
+}
+
+#payment_details_wrapper {
+  > div:first-child {
+    border-top: none;
+
+    @include breakpoint($only-mobile) {
+      border-top: none;
+    }
+  }
+}
+
+.checkout-payment {
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: none;
+
+        .messages {
+          margin-top: 1rem;
+        }
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: none;
+            }
+          }
+        }
+      }
+    }
   }
 }

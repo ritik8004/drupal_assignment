@@ -18,6 +18,7 @@ use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
+use CommerceGuys\Addressing\AddressFormat\FieldOverride;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -95,19 +96,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     return $element;
   }
 
-  $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
-
-  $magento_form = NULL;
-
-  /** @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $area_terms_helper */
-  $area_terms_helper = \Drupal::service('alshaya_addressbook.area_terms_helper');
-
-  if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-    $magento_form = $address_book_manager->getMagentoFormFields();
-  }
+  $magento_form = $element['#magento_form'];
 
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
@@ -217,108 +206,84 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ],
   ];
 
-  // Change the fields if dm version is 2 and magento form has data.
-  if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2 && !empty($magento_form)) {
-    $fields_mapped = [];
-    $mapping = $address_book_manager->getMagentoFieldMappings();
-    $mapping = array_flip($mapping);
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+  $mapping = $address_book_manager->getMagentoFieldMappings();
+  $mapping = array_flip($mapping);
 
-    foreach ($magento_form as $form_item) {
-      if (empty($form_item['attribute_code'])) {
-        continue;
-      }
-
-      if (isset($mapping[$form_item['attribute_code']])) {
-        $field_code = $mapping[$form_item['attribute_code']];
-        $fields_mapped[$form_item['attribute_code']] = $field_code;
-
-        // Set access for all form items.
-        $element[$field_code]['#access'] = TRUE;
-
-        // Set weight for all form items.
-        $element[$field_code]['#weight'] = $form_item['sort_order'];
-
-        // Special case for country.
-        if ($field_code == 'country_code') {
-          // For country field, we display name as markup in separate form
-          // item, we update the weight even for that field here.
-          $country_field['country_name']['#weight'] = $form_item['sort_order'];
-          $country_label = $form_item['store_label'];
-        }
-        else {
-          $element[$field_code]['#title'] = $form_item['store_label'];
-        }
-      }
+  foreach ($magento_form as $form_item) {
+    if (empty($form_item['attribute_code'])) {
+      continue;
     }
 
-    if (isset($element['area_parent'])) {
-      $address_value = $form_state->getValue(explode('[', str_replace(']', '', $element['#name'])));
-      if (!empty($address_value['area_parent'])) {
-        $area_parent = $address_value['area_parent'];
+    if (isset($mapping[$form_item['attribute_code']])) {
+      $field_code = $mapping[$form_item['attribute_code']];
+
+      // Set access for all form items.
+      $element[$field_code]['#access'] = TRUE;
+
+      // Set weight for all form items.
+      $element[$field_code]['#weight'] = $form_item['sort_order'];
+
+      // Special case for country.
+      if ($field_code == 'country_code') {
+        // For country field, we display name as markup in separate form
+        // item, we update the weight even for that field here.
+        $country_field['country_name']['#weight'] = $form_item['sort_order'];
+        $country_label = $form_item['store_label'];
       }
       else {
-        $parent = $address_book_manager->getLocationParentTerm($element['administrative_area']['#default_value']);
-        $area_parent = $parent ? $parent->id() : NULL;
+        $element[$field_code]['#title'] = $form_item['store_label'];
       }
-
-      // Configure area_parent field.
-      $element['area_parent']['#type'] = 'select';
-      $element['area_parent']['#required'] = TRUE;
-      $element['area_parent']['#access'] = TRUE;
-      $element['area_parent']['#multiple'] = FALSE;
-      $element['area_parent']['#default_value'] = $area_parent;
-
-      $empty_option = [
-        '' => t('Select @title', [
-          '@title' => $element['area_parent']['#title'],
-        ]),
-      ];
-
-      $element['area_parent']['#empty_option'] = reset($empty_option);
-      $element['area_parent']['#options'] = $empty_option + $area_terms_helper->getAllGovernates();
-      $element['area_parent']['#attributes'] = [
-        'class' => ['select2-select'],
-      ];
-      $element['area_parent']['#attached'] = [
-        'library' => [
-          'alshaya_white_label/convert_to_select2',
-        ],
-      ];
-      $element['area_parent']['#ajax'] = [
-        'url' => Url::fromRoute('alshaya_addressbook.get_areas_from_governate'),
-        'wrapper' => 'alshaya-addressbook-area',
-      ];
-
-      // Populate all area terms from level 2, we don't use parent field
-      // but we are using DMV2.
-      $area_options = $area_terms_helper->getAllAreasWithParent($area_parent);
-    }
-    else {
-      // Populate all area terms from level 2, we don't use parent field
-      // but we are using DMV2.
-      $area_options = $area_terms_helper->getAllAreas();
-    }
-
-    // Disable the fields which we couldn't map.
-    $field_unmapped = array_diff($mapping, $fields_mapped);
-    foreach ($field_unmapped as $field_code) {
-      $element[$field_code]['#type'] = 'hidden';
-      $element[$field_code]['#required'] = FALSE;
-      $element[$field_code]['#validated'] = TRUE;
-      $element[$field_code]['#value'] = ($field_code == 'postal_code') ? '' : '&#8203;';
-    }
-
-    $fields_disabled = $address_book_manager->getMagentoDisabledFields();
-    foreach ($fields_disabled as $field_code => $magento_field_code) {
-      $element[$field_code]['#type'] = 'hidden';
-      $element[$field_code]['#required'] = FALSE;
-      $element[$field_code]['#validated'] = TRUE;
-      $element[$field_code]['#value'] = ($field_code == 'postal_code') ? '' : '&#8203;';
     }
   }
+
+  /** @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $area_terms_helper */
+  $area_terms_helper = \Drupal::service('alshaya_addressbook.area_terms_helper');
+
+  if (isset($element['area_parent'])) {
+    $address_value = $form_state->getValue(explode('[', str_replace(']', '', $element['#name'])));
+    if (!empty($address_value['area_parent'])) {
+      $area_parent = $address_value['area_parent'];
+    }
+    else {
+      $parent = $address_book_manager->getLocationParentTerm($element['administrative_area']['#default_value']);
+      $area_parent = $parent ? $parent->id() : NULL;
+    }
+
+    // Configure area_parent field.
+    $element['area_parent']['#type'] = 'select';
+    $element['area_parent']['#required'] = TRUE;
+    $element['area_parent']['#access'] = TRUE;
+    $element['area_parent']['#multiple'] = FALSE;
+    $element['area_parent']['#default_value'] = $area_parent;
+
+    $empty_option = [
+      '' => t('Select @title', [
+        '@title' => $element['area_parent']['#title'],
+      ]),
+    ];
+
+    $element['area_parent']['#empty_option'] = reset($empty_option);
+    $element['area_parent']['#options'] = $empty_option + $area_terms_helper->getAllGovernates();
+    $element['area_parent']['#attributes'] = [
+      'class' => ['select2-select'],
+    ];
+    $element['area_parent']['#attached'] = [
+      'library' => [
+        'alshaya_white_label/convert_to_select2',
+      ],
+    ];
+    $element['area_parent']['#ajax'] = [
+      'url' => Url::fromRoute('alshaya_addressbook.get_areas_from_governate'),
+      'wrapper' => 'alshaya-addressbook-area',
+    ];
+
+    // Populate all area terms from level 2.
+    $area_options = $area_terms_helper->getAllAreasWithParent($area_parent);
+  }
   else {
-    // Populate area terms from level 1.
-    $area_options = $area_terms_helper->getAllAreasWithParent(0);
+    $area_options = $area_terms_helper->getAllAreas();
   }
 
   $area_empty_option = [
@@ -342,6 +307,37 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Adding country code field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
+
+  return $element;
+}
+
+/**
+ * Make unnecessary fields optional.
+ */
+function _alshaya_addressbook_set_optional_field(array &$element, FormStateInterface $form_state) {
+  // No processing for field_ui admin page.
+  if (strpos($element['#name'], 'default_value_input') > -1) {
+    return $element;
+  }
+
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+  $element['#magento_form'] = $address_book_manager->getMagentoFormFields();
+
+  // Hide all the fields which we couldn't map.
+  foreach ($address_book_manager->getMagentoUnmappedFields() as $field_code) {
+    $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
+    $element['#field_overrides'][$field_code] = FieldOverride::HIDDEN;
+  }
+
+  // Hide all disabled fields.
+  foreach ($address_book_manager->getMagentoDisabledFields() as $field_code => $magento_field_code) {
+    $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
+    $element['#field_overrides'][$field_code] = FieldOverride::HIDDEN;
+  }
+
+  // Remove custom field area_parent from overrides.
+  unset($element['#field_overrides']['areaParent']);
 
   return $element;
 }
@@ -378,6 +374,7 @@ function _alshaya_addressbook_name_validation($element, FormStateInterface $form
  */
 function alshaya_addressbook_element_info_alter(array &$info) {
   if (isset($info['address']['#process'])) {
+    array_unshift($info['address']['#process'], '_alshaya_addressbook_set_optional_field');
     $info['address']['#process'][] = '_alshaya_addressbook_country_process';
   }
 }

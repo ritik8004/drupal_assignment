@@ -5,4 +5,5 @@ description: 'Mobile application related code.'
 dependencies:
   - drupal:rest
   - webform:webform_rest
+  - mobile_app_links:mobile_app_links
 package: Alshaya

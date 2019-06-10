@@ -1,23 +1,8 @@
-.c-search {
-  @include breakpoint($only-mobile) {
-    padding-top: 1.375rem;
-  }
-
-  .region__content {
-    .view-id-search {
-      .views-row {
-        .c-products__item__label {
-          a,
-          span {
-            font-family: $hnm-regular;
-          }
-        }
-      }
-
-      nav.pager {
-        .pager__item.is-active a {
-          font-family: $hnm-bold;
-        }
+.alias--search {
+  .block-page-title-block {
+    @include breakpoint($only-mobile) {
+      h1 {
+        text-transform: inherit;
       }
     }
   }
@@ -41,7 +26,6 @@
 
     a {
       font-family: $hnm-regular;
-      color: $autocomplete_text;
     }
   }
 }
@@ -100,10 +84,6 @@
       padding: 0.4375rem 0.78125rem 0.4375rem 0.84375rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
-
-      span {
-        color: $plp_filterbar_clearall_text;
-      }
     }
   }
 }

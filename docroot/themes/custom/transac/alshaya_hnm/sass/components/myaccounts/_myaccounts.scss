@@ -16,10 +16,6 @@
         font-size: 0.75rem;
       }
 
-      @include breakpoint($desktop) {
-        font-size: 0.875rem;
-      }
-
       &.active {
         color: $content_link_color;
         font-family: $hnm-demibold;
@@ -28,7 +24,6 @@
 
       &:hover {
         color: $content_link_color;
-        text-decoration: underline;
       }
     }
   }

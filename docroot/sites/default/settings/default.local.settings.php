@@ -120,6 +120,21 @@ $config['system.performance']['js']['preprocess'] = FALSE;
 $settings['extension_discovery_scan_tests'] = FALSE;
 
 /**
+ * The default list of directories that will be ignored by Drupal's file API.
+ *
+ * By default ignore node_modules and bower_components folders to avoid issues
+ * with common frontend tools and recursive scanning of directories looking for
+ * extensions.
+ *
+ * @see file_scan_directory()
+ * @see \Drupal\Core\Extension\ExtensionDiscovery::scanDirectory()
+ */
+$settings['file_scan_ignore_directories'] = [
+  'node_modules',
+  'bower_components',
+];
+
+/**
  * Enable access to rebuild.php.
  *
  * This setting can be enabled to allow Drupal's php and database cached

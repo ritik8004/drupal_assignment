@@ -54,19 +54,38 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     // Reset all static caches.
     drupal_static_reset();
 
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $entity->getPluginInstance();
+    // Get all parent skus this sku.
+    $parent_skus = $this->skuManager->getParentSkus([$entity->getSku()]);
 
-    // @TODO: Make this smart in CORE-3443.
-    if ($parent = $plugin->getParentSku($entity)) {
-      Cache::invalidateTags($parent->getCacheTagsToInvalidate());
+    $cache_tags = [];
+
+    // If there any parent sku available.
+    if (!empty($parent_skus)) {
+      foreach ($parent_skus as $sku_id => $parent_sku) {
+        // Invalidate caches for all parent skus here.
+        $cache_tags = Cache::mergeTags($cache_tags, ['acq_sku:' . $sku_id]);
+        // We also invalidate caches for node here.
+        $node = $this->skuManager->getDisplayNode($parent_sku);
+        if ($node instanceof NodeInterface) {
+          $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
+        }
+      }
+    }
+    else {
+      // If no parent sku, means this will either be a configurable sku or just
+      // a simple sku directly attached to node. Just invalidate the display
+      // node cache in this case.
+      $node = $this->skuManager->getDisplayNode($entity);
+      if ($node instanceof NodeInterface) {
+        $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
+      }
     }
 
-    // We also invalidate caches for node here.
-    $node = $this->skuManager->getDisplayNode($entity);
-    if ($node instanceof NodeInterface) {
-      Cache::invalidateTags($node->getCacheTagsToInvalidate());
+    // Invalidate cache.
+    if (!empty($cache_tags)) {
+      Cache::invalidateTags($cache_tags);
     }
+
   }
 
   /**
@@ -76,16 +95,26 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdatedProcessColor(ProductUpdatedEvent $event) {
+    // Do nothing when listing display mode is not non-aggregated.
+    if (!$this->skuManager->isListingModeNonAggregated()) {
+      return;
+    }
+
     $entity = $event->getSku();
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 
-    if ($parent = $plugin->getParentSku($entity)) {
-      // Update color nodes on save of each child.
-      $node = $this->skuManager->getDisplayNode($parent, FALSE);
-      if ($node instanceof NodeInterface) {
-        $this->skuManager->processColorNodesForConfigurable($node);
+    $parent_skus = $plugin->getParentSku($entity, FALSE);
+
+    if (!empty($parent_skus)) {
+      foreach ($parent_skus as $parent_sku) {
+        // Update color nodes on save of each child.
+        $node = $this->skuManager->getDisplayNode($parent_sku, FALSE);
+        if ($node instanceof NodeInterface) {
+          $this->skuManager->processColorNodesForConfigurable($node);
+          break;
+        }
       }
     }
   }

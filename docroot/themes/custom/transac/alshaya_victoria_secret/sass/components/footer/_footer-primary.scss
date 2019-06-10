@@ -268,7 +268,9 @@
 }
 
 .page-standard {
-  padding-bottom: 3.5rem;
+  &:not('.checkout') {
+    padding-bottom: 3.5rem;
+  }
 
   @include breakpoint($tablet) {
     padding-bottom: 2.75rem;

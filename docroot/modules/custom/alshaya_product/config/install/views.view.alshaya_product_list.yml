@@ -42,7 +42,7 @@ display:
           submit_button: Apply
           reset_button: false
           reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          exposed_sorts_label: 'sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -55,7 +55,7 @@ display:
               autosubmit: true
               autosubmit_hide: true
             sort:
-              bef_format: default
+              bef_format: bef
               advanced:
                 collapsible: false
                 collapsible_label: 'Sort options'
@@ -567,7 +567,7 @@ display:
           not: false
           plugin_id: search_api
       display_extenders: {  }
-      css_class: c-products-list
+      css_class: ''
       use_ajax: true
     cache_metadata:
       max-age: -1
@@ -588,7 +588,7 @@ display:
     display_options:
       display_extenders:
         views_ajax_get:
-          ajax_get: 1
+          ajax_get: true
       cache:
         type: search_api_tag
         options: {  }
@@ -645,6 +645,18 @@ display:
           expose:
             label: Price
           plugin_id: search_api
+        stock_quantity:
+          id: stock_quantity
+          table: search_api_index_product
+          field: stock_quantity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: true
+          expose:
+            label: Stock
+          plugin_id: search_api
         name_1_1:
           id: name_1_1
           table: search_api_index_product
@@ -698,7 +710,9 @@ display:
     display_title: 'Promotional Products'
     position: 2
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        views_ajax_get:
+          ajax_get: true
       arguments:
         promotion_nid:
           id: promotion_nid

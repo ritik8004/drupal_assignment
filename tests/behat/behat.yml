@@ -1,19 +1,24 @@
+# This file defines common settings for all profiles (local and travis)
 default:
-  suites:
-    default:
-      paths:
-        - %paths.base%/features
   extensions:
+    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
     Behat\MinkExtension:
-      default_session: goutte
-      javascript_session: selenium2
-      goutte:
-        guzzle_parameters:
-          verify: false
-      files_path: "%paths.base%/media"
+      browser_name: chrome
+      javascript_session: default
+      show_cmd: "open %s"
+      files_path: "tests/behat/media"
+      sessions:
+        default:
+          chrome:
+            api_url: "http://localhost:9222"
     Drupal\DrupalExtension:
       blackbox: ~
       api_driver: "drupal"
     jarnaiz\JUnitFormatter\JUnitFormatterExtension:
-        filename: report.xml
-        outputDir: %paths.base%/build/tests
+      filename: report.xml
+      outputDir: tests/behat/build/tests
+    Bex\Behat\ScreenshotExtension:
+      screenshot_taking_mode: failed_steps
+      image_drivers:
+        local:
+          screenshot_directory: tests/behat/reports

@@ -25,7 +25,7 @@ function alshaya_vs_non_transac_install() {
   \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
   \Drupal::service('theme_handler')->setDefault('victoria_secret');
 
-  // Disable some default blocks provided by whitelabel_non_transac that we
+  // Disable some default blocks provided by whitelabel that we
   // don't want on victoria_secret.
   alshaya_block_delete_blocks(['branding']);
 

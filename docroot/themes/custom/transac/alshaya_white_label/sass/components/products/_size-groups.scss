@@ -1,0 +1,58 @@
+.group-anchor-wrapper {
+  a {
+    min-width: 94px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-#{$right}: 0.625rem;
+    margin-bottom: 0.625rem;
+    border: 1px solid #333;
+    color: #333;
+    font-size: 0.875rem;
+
+    &.active {
+      background: #353132;
+      color: #fff;
+    }
+  }
+}
+
+.group-wrapper {
+  .select2Option {
+    @include breakpoint($mobile) {
+      display: block;
+    }
+
+    .select-buttons li {
+      a {
+        min-width: 42px;
+        height: 42px;
+        margin-top: 0;
+        margin-bottom: 0.625rem;
+        margin-#{$right}: 0.625rem;
+        border: 1px solid #333;
+        color: #333;
+
+        &.picked {
+          background: #353132;
+          color: #fff;
+        }
+
+        &:hover {
+          background: none;
+        }
+      }
+    }
+  }
+}
+
+.form-type-configurable-select-group {
+  position: relative;
+  padding-top: 20px !important;
+
+  h4.list-title {
+    position: absolute;
+    top: 0;
+  }
+}

@@ -76,6 +76,9 @@ function template_preprocess_acq_commerce_price(array &$variables) {
   $variables['price'] = acq_commerce_get_clean_price($variables['price']);
 
   $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
+
+  // To invalidate the cache on currency config update.
+  $variables['#cache']['tags'][] = 'config:acq_commerce.currency';
 }
 
 /**

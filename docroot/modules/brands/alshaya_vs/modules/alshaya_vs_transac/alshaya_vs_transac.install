@@ -7,6 +7,79 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+use Drupal\Component\Utility\Unicode;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Save translations for meta tags.
+ */
+function alshaya_vs_transac_update_8008() {
+  $strings = [
+    "Victoria's Secret" => [
+      'ar' => 'فيكتوريا سيكريت',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update sort orders for size facet to match order in Magento.
+ */
+function alshaya_vs_transac_update_8007() {
+  $size_facets = [
+    'facets.facet.size',
+    'facets.facet.plp_size',
+    'facets.facet.promo_size',
+  ];
+
+  foreach ($size_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable WhatsApp and Email in Sharethis.
+ */
+function alshaya_vs_transac_update_8006() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the currency_code to DHS.
+ */
+function alshaya_vs_transac_update_8005() {
+  $country_code = Unicode::strtolower(Settings::get('country_code'));
+  if ($country_code === 'ae') {
+    \Drupal::configFactory()->getEditable('acq_commerce.currency')
+      ->set('currency_code', 'DHS')
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Clear product cache.
+ */
+function alshaya_vs_transac_update_8004() {
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
 
 /**
  * Implements hook_update_N().
@@ -128,6 +201,9 @@ function alshaya_vs_transac_install() {
     'I would like to receive exclusive deals from Victoria\'s Secret' => [
       'ar' => 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت',
     ],
+    "Victoria's Secret" => [
+      'ar' => 'فيكتوريا سيكريت',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
@@ -156,4 +232,12 @@ function alshaya_vs_transac_install() {
   /* @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   $super_category_feature->enableSuperCategory();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }

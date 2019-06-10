@@ -3,6 +3,10 @@
   .checkout-progress__step {
     font-family: $alshaya-thin;
 
+    @include breakpoint($tablet) {
+      font-size: 0.875rem;
+    }
+
     &.-current {
       &::before {
         border: 1px solid $checkout_current_counter_border;

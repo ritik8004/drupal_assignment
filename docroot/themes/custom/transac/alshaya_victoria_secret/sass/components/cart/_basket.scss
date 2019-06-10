@@ -294,12 +294,6 @@
     }
   }
 
-  .price-wrapper .price {
-    @include breakpoint($only-tablet) {
-      max-width: none !important;
-    }
-  }
-
   .customer-cart-form {
     .items,
     .item-code {

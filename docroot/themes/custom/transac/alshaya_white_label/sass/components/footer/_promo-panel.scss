@@ -53,6 +53,7 @@
 
     @include breakpoint($desktop) {
       border-#{$right}-width: 2.5rem;
+      padding-#{$right}: 11.875rem;
     }
   }
 

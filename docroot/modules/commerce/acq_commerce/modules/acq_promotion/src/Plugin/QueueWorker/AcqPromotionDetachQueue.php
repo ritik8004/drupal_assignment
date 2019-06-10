@@ -44,52 +44,36 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
   public function processItem($data) {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
-    $promotion_type = $data['promotion_type'];
-    $promotion_detach_item[] = ['target_id' => $promotion_nid];
-    $invalidate_tags = ['node:' . $promotion_nid];
+    $detached_skus = [];
+    $unprocessed_skus = [];
+
     foreach ($skus as $sku) {
+      $sku_entity = SKU::loadFromSku($sku);
+
       // Check if the SKU added to queue is available before processing.
-      if (($sku_entity = SKU::loadFromSku($sku)) &&
-        ($sku_entity instanceof SKU)) {
-        $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
-
-        $sku_promotions = array_udiff($sku_promotions, $promotion_detach_item, function ($array1, $array2) {
-          return $array1['target_id'] - $array2['target_id'];
-        });
-
-        $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
-        $sku_entity->save();
-
-        // Update Sku Translations.
-        $translation_languages = $sku_entity->getTranslationLanguages(TRUE);
-
-        if (!empty($translation_languages)) {
-          foreach ($translation_languages as $langcode => $language) {
-            $sku_entity_translation = $sku_entity->getTranslation($langcode);
-            $sku_entity_translation->get('field_acq_sku_promotions')->setValue($sku_promotions);
-            $sku_entity_translation->save();
-          }
-        }
-
-        $invalidate_tags[] = 'acq_sku:' . $sku_entity->id();
+      if ($sku_entity instanceof SKU) {
+        $this->promotionManager->removeOrphanPromotionFromSku($sku_entity, $promotion_nid);
+        $detached_skus[] = $sku;
       }
       else {
         $unprocessed_skus[] = $sku;
       }
     }
 
-    $sku_texts = implode(',', $skus);
+    // Invalidate cache tags for promotion.
+    Cache::invalidateTags(['node:' . $promotion_nid]);
 
-    // Invalidate cache tags for updated skus & promotions.
-    Cache::invalidateTags($invalidate_tags);
-
-    $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
-      ['@promo' => $promotion_nid, '@skus' => $sku_texts]);
+    $this->logger->notice('Detached Promotion: @promo from SKUs: @skus', [
+      '@promo' => $promotion_nid,
+      '@skus' => implode(',', $detached_skus),
+    ]);
 
     // Log unprocessed SKUs while detatching from Promotion.
     if (!empty($unprocessed_skus)) {
-      $this->logger->info('SKUs @skus not found while detatching from promotion: @promo',
-        ['@promo' => $promotion_nid, '@skus' => implode(',', $unprocessed_skus)]);
+      $this->logger->notice('SKUs @skus not found while detaching from promotion: @promo', [
+        '@promo' => $promotion_nid,
+        '@skus' => implode(',', $unprocessed_skus),
+      ]);
     }
   }
 

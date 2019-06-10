@@ -310,9 +310,27 @@
     }
   };
 
-  // Show loader every-time we are reloading page.
-  $(window).on('beforeunload', function () {
+  // Show loader every-time we are moving to a different page.
+  // Do this on specific selectors only.
+  var addLoaderTargets = '.tab-home-delivery:not(.disabled--tab--head), .tab-click-collect:not(.disabled--tab--head), .back-link, .tab-new-customer a, .tab-returning-customer a, button.cc-action, button.delivery-home-next';
+  $(addLoaderTargets).on('click', function () {
     $(this).showCheckoutLoader();
+  });
+
+   // For Payment, we check for payment method before we add a loader.
+   // Handle the "Cybersrouce" usecase as the acq_cybersource module adds it own
+   // loader.
+   var paymentPageTarget = '.checkout-payment .multistep-checkout .form-actions button.form-submit';
+   $(paymentPageTarget).on('click', function () {
+     // Check if we are using Cybersource.
+     if (!$('#payment_method_cybersource .payment-plugin-wrapper-div').hasClass('plugin-selected')) {
+       $(this).showCheckoutLoader();
+     }
+   });
+
+  // As a precaution stop loader when the page is fully loaded.
+  $(window).on('load', function () {
+    $('.checkout-ajax-progress-throbber').remove();
   });
 
 })(jQuery, Drupal);

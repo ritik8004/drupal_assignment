@@ -5,6 +5,70 @@
  * Contains install, update, uninstall hooks for alshaya_hm_images module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make assets field non-translatable.
+ */
+function alshaya_hm_images_update_8010() {
+  alshaya_config_install_configs(['alshaya_hm_images.sku_base_fields'], 'alshaya_hm_images');
+
+  $additions = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
+  $assets = $additions->get('assets');
+  $assets['translatable'] = 0;
+  $additions->set('assets', $assets);
+  $additions->save();
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entityManager */
+  $entityManager = \Drupal::service('entity_field.manager');
+  $fields = $entityManager->getBaseFieldDefinitions('acq_sku');
+  $field = $fields['attr_assets'];
+  $field->setTranslatable(FALSE);
+  $update_manager->updateFieldStorageDefinition($field);
+  $update_manager->applyUpdates();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the width for 291x288 image style.
+ * Add new config keys in alshaya_hm_images.settings.
+ */
+function alshaya_hm_images_update_8009() {
+  // Re-install the config for image style.
+  alshaya_config_install_configs(['image.style.291x288'], 'alshaya_image_styles');
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_hm_images.settings'],
+    'alshaya_hm_images',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  // Reset Image Settings to set proper pims_base_url.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'alshaya_hm_images.settings');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update default value for swatch type attribute to "Details"
+ */
+function alshaya_hm_images_update_8008() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(['field.field.taxonomy_term.acq_product_category.field_swatch_type'], 'alshaya_hm_images');
+}
+
 /**
  * Implements hook_update_N().
  *

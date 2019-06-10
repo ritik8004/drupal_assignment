@@ -29,6 +29,49 @@ function alshaya_acm_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Cleanup cache tags.
+ */
+function alshaya_acm_update_8011() {
+  $db = \Drupal::database();
+  $logger = \Drupal::logger('alshaya_acm');
+
+  // Gather data for metrics.
+  $before = $db->select('cachetags')->countQuery()->execute()->fetchField();
+
+  // Delete obsolete cart_ cachetags.
+  $query = $db->delete('cachetags');
+  $query->condition('tag', 'cart_%', 'like');
+  $query->execute();
+
+  // Delete obsolete mini_cart cachetags.
+  $db = \Drupal::database();
+  $query = $db->delete('cachetags');
+  $query->condition('tag', 'mini_cart%', 'like');
+  $query->execute();
+
+  // Delete all the caches from alshaya_api bin before deleting cachetags
+  // related to it.
+  $cache = \Drupal::cache('alshaya_api');
+  $cache->deleteAll();
+
+  $query = $db->delete('cachetags');
+  $query->condition('tag', 'acq_cart_shipping_estimate%', 'like');
+  $query->execute();
+
+  $query = $db->delete('cachetags');
+  $query->condition('tag', 'acq_cart_payment_methods%', 'like');
+  $query->execute();
+
+  $after = $db->select('cachetags')->countQuery()->execute()->fetchField();
+  $logger->notice('Number of entries in cachetags before alshaya_acm_update_8011: @before and after that: @after', [
+    '@before' => $before,
+    '@after' => $after,
+  ]);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Correct price info in local.
  */
 function alshaya_acm_update_8010() {
@@ -226,20 +269,11 @@ function alshaya_acm_install() {
 
   $config->save();
 
-  $country_code = _alshaya_custom_get_site_level_country_code();
-
-  \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
-  $currency_code = _alshaya_get_currency_code($country_code, 'en');
-
-  // Update the currency code to one required for the site.
-  $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
-  $config->set('currency_code', $currency_code);
-  $config->set('decimal_points', 3);
-  $config->save();
-
   // Delete default store node.
   _alshaya_acm_delete_default_store_node();
 
+  // Exclude sync requests from shield.
+  _alshaya_acm_exclude_sync_from_shield();
 }
 
 /**

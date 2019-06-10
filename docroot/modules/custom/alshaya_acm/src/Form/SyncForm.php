@@ -6,13 +6,16 @@ use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
-use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_admin\QueueHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_stores_finder_transac\StoresFinderManager;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,13 +33,12 @@ class SyncForm extends FormBase {
    */
   private $productCategoriesManager;
 
-
   /**
-   * Conductor product options manager.
+   * Product Options Helper.
    *
-   * @var \Drupal\acq_sku\ProductOptionsManager
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
    */
-  private $productOptionsManager;
+  private $productOptionshelper;
 
   /**
    * Conductor promotions manager.
@@ -95,12 +97,26 @@ class SyncForm extends FormBase {
   private $queueHelper;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
    *   Category manager interface.
-   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
-   *   Product options manager interface.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper
+   *   Product Options Helper.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $promotions_manager
    *   Promotions manager interface.
    * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingest_api
@@ -117,10 +133,14 @@ class SyncForm extends FormBase {
    *   AddressBook Manager service object.
    * @param \Drupal\alshaya_admin\QueueHelper $queue_helper
    *   Queue Helper service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
-    ProductOptionsManager $product_options_manager,
+    ProductOptionsHelper $productOptionsHelper,
     AcqPromotionsManager $promotions_manager,
     IngestAPIWrapper $ingest_api,
     AlshayaApiWrapper $alshaya_api,
@@ -128,9 +148,12 @@ class SyncForm extends FormBase {
     LanguageManagerInterface $language_manager,
     StoresFinderManager $stores_manager,
     AlshayaAddressBookManager $address_book_manager,
-    QueueHelper $queue_helper) {
+    QueueHelper $queue_helper,
+    EntityTypeManagerInterface $entity_type_manager,
+    ModuleHandlerInterface $module_handler
+  ) {
     $this->productCategoriesManager = $product_categories_manager;
-    $this->productOptionsManager = $product_options_manager;
+    $this->productOptionshelper = $productOptionsHelper;
     $this->promotionsManager = $promotions_manager;
     $this->ingestApi = $ingest_api;
     $this->alshayaApi = $alshaya_api;
@@ -139,6 +162,8 @@ class SyncForm extends FormBase {
     $this->storesManager = $stores_manager;
     $this->addressBookManager = $address_book_manager;
     $this->queueHelper = $queue_helper;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -147,7 +172,7 @@ class SyncForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_sku.category_manager'),
-      $container->get('acq_sku.product_options_manager'),
+      $container->get('alshaya_product_options.helper'),
       $container->get('acq_promotion.promotions_manager'),
       $container->get('acq_commerce.ingest_api'),
       $container->get('alshaya_api.api'),
@@ -155,7 +180,9 @@ class SyncForm extends FormBase {
       $container->get('language_manager'),
       $container->get('alshaya_stores_finder_transac.manager'),
       $container->get('alshaya_addressbook.manager'),
-      $container->get('alshaya_admin.queue_helper')
+      $container->get('alshaya_admin.queue_helper'),
+      $container->get('entity_type.manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -198,12 +225,56 @@ class SyncForm extends FormBase {
 
     switch ($action) {
       case $this->t('Synchronize product categories'):
-        $this->productCategoriesManager->synchronizeTree('acq_product_category');
+        $response = $this->productCategoriesManager->synchronizeTree('acq_product_category');
+        $deleted_orphans = [];
+        $not_deleted_orphans = [];
+        // If there is any term update/create during category sync.
+        if (!empty($response['created']) || !empty($response['updated'])) {
+          // Get orphan terms.
+          $all_orphan_terms = $to_be_delete_orphans_terms = $this->productCategoriesManager->getOrphanCategories($response);
+          // If there is any orphan term.
+          if (!empty($to_be_delete_orphans_terms)) {
+            // Allow other modules to skipping the deleting of terms.
+            $this->moduleHandler->alter('acq_sku_sync_categories_delete', $to_be_delete_orphans_terms);
+
+            // If there are orphans which we not deleting (due to alter hook).
+            if (count($all_orphan_terms) != count($to_be_delete_orphans_terms)) {
+              // Get orphans which are not deleted.
+              $orphan_diff = array_diff($all_orphan_terms, $to_be_delete_orphans_terms);
+              $not_deleted_orphans = array_map(function ($orphan) {
+                return $orphan['name'];
+              }, $orphan_diff);
+            }
+
+            foreach (array_keys($to_be_delete_orphans_terms) as $tid) {
+              $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+              if ($term instanceof TermInterface) {
+                $deleted_orphans[] = $term->getName();
+                $term->delete();
+              }
+            }
+          }
+        }
+
         drupal_set_message($this->t('Product categories synchronization complete.'), 'status');
+
+        // If any term deleted.
+        if (!empty($deleted_orphans)) {
+          $this->messenger()->addMessage($this->t('Orphan terms @deleted_terms deleted successfully.', [
+            '@deleted_terms' => implode(', ', $deleted_orphans),
+          ]));
+        }
+
+        // If any orphan term not deleted.
+        if (!empty($not_deleted_orphans)) {
+          $this->messenger()->addMessage($this->t('Orphan terms @not_deleted_terms not deleted.', [
+            '@not_deleted_terms' => implode(', ', $not_deleted_orphans),
+          ]));
+        }
         break;
 
       case $this->t('Synchronize product options'):
-        $this->productOptionsManager->synchronizeProductOptions();
+        $this->productOptionshelper->synchronizeProductOptions();
         drupal_set_message($this->t('Product options synchronization complete.'), 'status');
         break;
 

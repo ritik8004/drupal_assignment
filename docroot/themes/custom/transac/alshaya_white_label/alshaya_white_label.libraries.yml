@@ -16,7 +16,6 @@ global_styles:
     vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
-    - core/modernizr
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion
@@ -139,21 +138,19 @@ checkout_scroll:
   js:
     js/checkout_scroll.js: {}
 
-plp_hover:
-  js:
-    js/plp-hover.js: {}
-
 pace:
   js:
     /libraries/pace/pace.min.js: {}
 
-magazine_select2Option:
+magazine_attribute:
   js:
-    js/magazine_select2Option.js: {}
+    js/select2Option.js: {}
     js/magazine_attribute.js: {}
   css:
     theme:
       css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+  dependencies:
+    - core/jquery.ui.effects.slide
 
 campaign-plp-style-1-video-provider:
   css:
@@ -167,3 +164,17 @@ campaign-plp-style-1-video-provider:
 campaign-plp-style-1-common:
   js:
     js/campaign-plp-style-1-layout.js: {}
+
+magazine_socialSharepopup:
+  js:
+    js/socialshare_popup.js: {}
+plp-swatch-hover:
+  js:
+    js/plp-swatch-hover.js: {}
+
+algolia_search:
+  js:
+    conditional-sass/algolia-search/js/algolia-search.js: {}
+  css:
+    theme:
+      css/conditional-sass/algolia-search/algolia-search.ltr.css: {}

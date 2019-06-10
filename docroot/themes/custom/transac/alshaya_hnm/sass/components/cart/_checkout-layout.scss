@@ -28,15 +28,12 @@
 .alias--cart-checkout-login,
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
-  margin-top: 0 !important;
-
   .c-post-content {
     background-color: $hnm-black;
     border-top: none;
   }
 
   .block-customer-service-block {
-    border-top: none;
     padding-top: 3.25rem;
     padding-bottom: 0.625rem;
 
@@ -59,6 +56,11 @@
   .site-brand-home {
     @include breakpoint($tablet) {
       padding: 1rem 1.5rem 1rem 1.25rem;
+      text-align: center;
+
+      a {
+        text-align: center;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -71,39 +73,22 @@
     }
 
     a {
-      margin-#{$left}: 0;
-      width: 52.5%;
-      text-align: $left;
-      display: inline-block;
+      @include breakpoint($upto-tablet) {
+        max-width: none;
 
-      @include breakpoint($upto-desktop) {
         img {
           width: 2.5rem;
           height: 2.25rem;
         }
       }
-
-      @include breakpoint($desktop) {
-        width: 53.5%;
-        text-align: $right;
-        max-width: none;
-      }
     }
-  }
-
-  .c-post-content .l-container {
-    max-width: 80.25rem;
-    margin: auto;
   }
 }
 
 .block-customer-service-block {
   background-color: $block_acm_customer_txt;
   font-family: $hnm-regular;
-  font-weight: normal;
   font-size: 0.75rem;
-  padding: 1.375rem 1.5rem;
-  padding-#{$right}: 1rem;
   text-align: center;
   text-transform: unset;
 
@@ -174,9 +159,7 @@
 
     .light {
       font-family: $hnm-regular;
-      font-weight: normal;
       color: $primary_dark_color;
-      line-height: 1.5;
     }
   }
 

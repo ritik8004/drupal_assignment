@@ -13,6 +13,54 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Adding class to product list view.
+ */
+function alshaya_product_update_8024() {
+  alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update views to add stock sorting filter.
+ */
+function alshaya_product_update_8023() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.alshaya_product_list', 'search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+  // Save product index to flag all products for re-index.
+  $index = Index::load('product');
+  $index->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating database search index to run on cron and content update/create.
+ */
+function alshaya_product_update_8022() {
+  /** @var AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating alshaya product list view.
+ */
+function alshaya_product_update_8021() {
+  alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-create promotion facets using label field.
  */
 function alshaya_product_update_8020() {
@@ -220,7 +268,7 @@ function alshaya_product_update_8011() {
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 جديدنا تنازلي|جديدنا
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
 
@@ -401,7 +449,7 @@ function alshaya_product_update_8002() {
 
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
 

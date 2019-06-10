@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: main_navigation
-theme: whitelabel_non_transac
+theme: whitelabel
 region: header
 weight: 0
 provider: null

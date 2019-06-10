@@ -138,9 +138,14 @@
   }
 }
 
+.footer--static-links {
+  float: $left;
+}
+
 .c-footer-menu--about,
 .c-footer-menu--help,
-.c-footer-menu--category {
+.c-footer-menu--category,
+.c-footer-menu--static-links {
   h3 {
     font-size: 0.875rem;
     color: $footer_title_h3;
