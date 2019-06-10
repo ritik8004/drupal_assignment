@@ -8,6 +8,19 @@
 /**
  * Implements hook_update_N().
  *
+ * Correct the mapping to handle locality and area parent for KW.
+ */
+function alshaya_kw_update_8003() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_addressbook.settings'],
+      'alshaya_addressbook',
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Save translations for meta tags.
  */
 function alshaya_ae_update_8002() {
