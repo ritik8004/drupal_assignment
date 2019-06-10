@@ -25,6 +25,7 @@
 
       button[type="submit"] {
         display: none;
+        pointer-events: none;
       }
     }
   }
@@ -42,7 +43,7 @@
     border-radius: inherit;
 
     @include breakpoint($only-mobile) {
-      #{$left}: 0.75rem;
+      #{$left}: 0.1875rem;
       top: 0;
     }
   }
