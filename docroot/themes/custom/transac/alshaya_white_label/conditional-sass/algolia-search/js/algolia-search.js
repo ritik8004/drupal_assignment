@@ -63,7 +63,7 @@
       // Add the trending title by default to algolia search suggestion list.
       input.on('focus', function (e) {
         if ($('.algolia-autocomplete pre').text().length < 1 && $('.trending-title').length < 1) {
-          $('.aa-dropdown-menu').prepend('<span class="trending-title">Trending searches</span>');
+          $('.aa-dropdown-menu').prepend('<span class="trending-title">' + Drupal.t('Trending searches') + '</span>');
         }
 
         if ($('.algolia-autocomplete pre').text().length < 1) {
