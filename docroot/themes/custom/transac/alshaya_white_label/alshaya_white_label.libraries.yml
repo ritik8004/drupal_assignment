@@ -181,3 +181,10 @@ magazine_article:
     dependencies:
       - core/jquery
       - alshaya_white_label/slick
+
+algolia_search:
+  js:
+    conditional-sass/algolia-search/js/algolia-search.js: {}
+  css:
+    theme:
+      css/conditional-sass/algolia-search/algolia-search.ltr.css: {}
