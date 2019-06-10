@@ -25,6 +25,7 @@
 
       button[type="submit"] {
         display: none;
+        pointer-events: none;
       }
     }
   }
@@ -42,7 +43,7 @@
     border-radius: inherit;
 
     @include breakpoint($only-mobile) {
-      #{$left}: 0.75rem;
+      #{$left}: 0.1875rem;
       top: 0;
     }
   }
@@ -234,6 +235,11 @@ body {
       button[type="submit"] {
         height: 2.25rem;
         bottom: 0;
+      }
+
+      .algolia-form-wrapper,
+      .aa-dropdown-menu {
+        box-shadow: 0 0 1.25rem 0 $hnm-black-two-50;
       }
     }
   }

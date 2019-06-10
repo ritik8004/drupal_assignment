@@ -109,6 +109,12 @@
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
           $('.trending-title').show();
         });
+
+        // On click of search icon
+        $('#search_api_algolia_autocomplete_block-submit').once().on('click', function (e) {
+          input.focus();
+          algoliaAutocompleteBlock.addClass('algolia-search-active');
+        });
       }
 
       /**
