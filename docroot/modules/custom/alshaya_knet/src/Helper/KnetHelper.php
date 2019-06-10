@@ -7,6 +7,7 @@ use Drupal\alshaya_knet\Knet\KnetEncryptDecypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\alshaya_knet\Knet\KnetNewToolKit;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -116,7 +117,17 @@ class KnetHelper {
 
     $knetSettings = $this->configFactory->get('alshaya_knet.settings');
 
-    $pipe = new E24PaymentPipe();
+    // If using new K-Net toolkit.
+    if ($this->useNewKnetToolKit()) {
+      $pipe = new KnetNewToolKit();
+      // @Todo: Discuss about how we store/get these values.
+      $pipe->setTranportalId('');
+      $pipe->setTranportalPassword('');
+      $pipe->setTerminalResourceKey('');
+    }
+    else {
+      $pipe = new E24PaymentPipe();
+    }
 
     $pipe->setCurrency($knetSettings->get('knet_currency_code'));
     $pipe->setLanguage($knetSettings->get('knet_language_code'));
@@ -153,10 +164,6 @@ class KnetHelper {
     $udf5_prefix = $knetSettings->get('knet_udf5_prefix');
     $pipe->setUdf5($udf5_prefix . ' ' . $order_id);
 
-    //$pp = $this->testNewToolkitRequest();
-    //$response = new \Symfony\Component\HttpFoundation\RedirectResponse($pp['url']);
-    //$response->send();
-    //exit;
     $pipe->performPaymentInitialization();
 
     // Check again once if there is any error.
@@ -415,7 +422,8 @@ class KnetHelper {
    * @return bool
    */
   public function useNewKnetToolKit() {
-    return TRUE;
+    return $this->configFactory->get('alshaya_knet.settings')
+      ->get('use_new_knet_toolkit');
   }
 
   public function testNewToolkitRequest() {
