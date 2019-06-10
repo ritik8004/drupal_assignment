@@ -420,54 +420,11 @@ class KnetHelper {
    * Determines if use of new K-Net toolkit.
    *
    * @return bool
+   *   True if using new toolkit.
    */
   public function useNewKnetToolKit() {
     return $this->configFactory->get('alshaya_knet.settings')
       ->get('use_new_knet_toolkit');
-  }
-
-  public function testNewToolkitRequest() {
-    // This needs to know
-    $TranportalId="IDHERE";
-    $ReqTranportalId="id=".$TranportalId;
-
-    // This needs to know
-    $TranportalPassword='PASSWORD HERE';
-    $ReqTranportalPassword="password=".$TranportalPassword;
-
-    $TranAmount = 10;
-    $ReqAmount="amt=".$TranAmount;
-
-    $TranTrackid=mt_rand();
-    $ReqTrackId="trackid=".$TranTrackid;
-
-    $ReqCurrency="currencycode=414";
-
-    $ReqLangid="langid=USA";
-
-    $ReqAction="action=1";
-
-    $ResponseUrl="https://local.alshaya-hmsa.com/en/knet/response";
-    $ReqResponseUrl="responseURL=".$ResponseUrl;
-
-    $ErrorUrl="https://local.alshaya-hmsa.com/en/knet/error/0";
-    $ReqErrorUrl="errorURL=".$ErrorUrl;
-
-    $ReqUdf1="udf1=test1";
-    $ReqUdf2="udf2=test2";
-    $ReqUdf3="udf3=test3";
-    $ReqUdf4="udf4=test4";
-    $ReqUdf5="udf5=test5";
-
-    $param=$ReqTranportalId."&".$ReqTranportalPassword."&".$ReqAction."&".$ReqLangid."&".$ReqCurrency."&".$ReqAmount."&".$ReqResponseUrl."&".$ReqErrorUrl."&".$ReqTrackId."&".$ReqUdf1."&".$ReqUdf2."&".$ReqUdf3."&".$ReqUdf4."&".$ReqUdf5;
-
-    $termResourceKey="";
-    $enc_dec = new KnetEncryptDecypt();
-    $param=$enc_dec->encryptAES($param,$termResourceKey)."&tranportalId=".$TranportalId."&responseURL=".$ResponseUrl."&errorURL=".$ErrorUrl;
-
-    return [
-      'url' => "https://kpaytest.com.kw/kpg/PaymentHTTP.htm?param=paymentInit"."&trandata=".$param,
-    ];
   }
 
 }
