@@ -47,6 +47,37 @@ function alshaya_acm_product_category_update_8030() {
       'install',
       AlshayaConfigManager::MODE_MERGE
     );
+
+  // Set include in desktop and mobile to true, to make existing links visible
+  // on all devices as is.
+  $tids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', 'acq_product_category')
+    ->sort('tid', 'ASC')
+    ->execute();
+
+  foreach ($tids as $tid) {
+    foreach (['field_include_in_desktop', 'field_include_in_mobile_tablet'] as $field_name) {
+      $query = \Drupal::database()->select("taxonomy_term__{$field_name}");
+      $query->fields("taxonomy_term__{$field_name}", ['entity_id']);
+      $query->condition('entity_id', $tid);
+      $query->condition('bundle', 'acq_product_category');
+      $result = $query->execute()->fetchCol();
+
+      if (empty($result)) {
+        \Drupal::database()->insert("taxonomy_term__{$field_name}")
+          ->fields([
+            'bundle' => 'acq_product_category',
+            'deleted' => 0,
+            'entity_id' => $tid,
+            'revision_id' => $tid,
+            'langcode' => 'en',
+            'delta' => 0,
+            "{$field_name}_value" => TRUE,
+          ])
+          ->execute();
+      }
+    }
+  }
 }
 
 /**
