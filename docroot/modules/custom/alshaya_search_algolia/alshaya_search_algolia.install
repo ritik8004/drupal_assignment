@@ -37,6 +37,9 @@ function alshaya_search_algolia_install() {
       'ar' => 'عن ماذا تبحث؟',
       'context' => 'algolia_search_block_placeholder',
     ],
+    'Trending searches' => [
+      'ar' => 'الأكثر بحثاً',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
