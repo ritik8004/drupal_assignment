@@ -16,7 +16,6 @@ function alshaya_kz_transac_lite_theme($existing, $type, $theme, $path) {
       'qr_code' => NULL,
       'booking_info' => NULL,
       'visitor_list' => NULL,
-      '#email_logo' => NULL,
     ],
   ];
 
@@ -189,7 +188,7 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
     'Online Booking Confirmation' => [
       'ar' => 'تأكيد الحجز',
     ],
-    'Kai! Please print and present your email at KidZania’ s ticketing counters on the day of your visit. Z-U Soon!' => [
+    'Kai! Please print and present your email at KidZania ticketing counters on the day of your visit. Z-U Soon!' => [
       'ar' => 'مرحباً! يُرجى طباعة بريدك الالكتروني وتقديمه عند شباك التذاكر يوم زيارتك لِكدزانيا.  نراكَ قريباً!',
     ],
     'Customer Name' => [
@@ -206,6 +205,18 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
     ],
     'Payment' => [
       'ar' => 'طريقة الدفع',
+    ],
+    'Visitor Types' => [
+      'ar' => 'نوع الزيارة',
+    ],
+    'Price' => [
+      'ar' => 'السعر',
+    ],
+    'Ticket Number' => [
+      'ar' => 'رقم التذكرة',
+    ],
+    'KidZania Operations S.A.R.L. © 2019, KidZania, and all related characters and elements are trademarks of KidZania Operations S.A.R.L. All Rights Reserved. Privacy Policy' => [
+      'ar' => 'عمليات KidZania S.A.R.L. © 2019 ، KidZania ، وجميع الشخصيات والعناصر ذات الصلة هي علامات تجارية لشركة KidZania Operations S.A.R.L. كل الحقوق محفوظة. سياسة خاصة',
     ],
   ];
 
