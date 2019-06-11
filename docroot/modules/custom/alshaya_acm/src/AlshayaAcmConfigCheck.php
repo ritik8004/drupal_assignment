@@ -159,7 +159,6 @@ class AlshayaAcmConfigCheck {
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.settings',
-      'social_auth_facebook.settings',
     ];
 
     $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);

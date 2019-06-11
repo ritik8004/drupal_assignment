@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the alshaya_social module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_social_update_8001() {
+  // Save client_id and client_secret.
+  \Drupal::configFactory()->getEditable('social_auth.settings')
+    ->set('post_login', '/user')
+    ->set('disable_admin_login', TRUE)
+    ->set('user_allowed', 'register')
+    ->save();
+
+  // Enable alshaya_social_google module.
+  \Drupal::service('module_installer')->install(['alshaya_social_google']);
+}
