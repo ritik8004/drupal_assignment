@@ -11,11 +11,11 @@
  * Correct the mapping to handle locality for SA.
  */
 function alshaya_sa_update_8004() {
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
-      ['alshaya_addressbook.settings'],
-      'alshaya_addressbook',
-    );
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook'
+  );
 }
 
 /**
