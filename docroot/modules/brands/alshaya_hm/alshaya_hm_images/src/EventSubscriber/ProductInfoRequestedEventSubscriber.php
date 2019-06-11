@@ -167,7 +167,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $swatch['display_value'] = empty($assets)
       ? $sku->get('attr_rgb_color')->getString()
-      : file_url_transform_relative(file_create_url($assets[0]['drupal_uri']));
+      : file_create_url($assets[0]['drupal_uri']);
 
     $event->setValue($swatch);
   }
