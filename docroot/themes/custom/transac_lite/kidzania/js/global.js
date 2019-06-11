@@ -12,6 +12,14 @@
         $('.menu-navigation').toggleClass('show-menu');
         e.preventDefault();
       });
+
+      // Get booking info from local storage.
+      if (localStorage.getItem('booking_info') !== null) {
+        var getDataFromLocal = JSON.parse(localStorage.getItem('booking_info'));
+        $('.visit-date').html(getDataFromLocal.visit_date);
+        $('.order-total').html(getDataFromLocal.total.price);
+        $('#booking-info').val(JSON.stringify(getDataFromLocal));
+      }
     }
   };
 

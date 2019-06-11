@@ -50,21 +50,21 @@ class BookingPaymentForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity manager.
-   * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticketBooking
+   * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The ticket booking object.
-   * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $bookingPayment
+   * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $booking_payment
    *   The booking payment object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory object.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
-                              TicketBookingManager $ticketBooking,
-                              BookingPaymentManager $bookingPayment,
+                              TicketBookingManager $ticket_booking,
+                              BookingPaymentManager $booking_payment,
                               ConfigFactoryInterface $config_factory) {
 
     $this->entityTypeManager = $entityTypeManager;
-    $this->ticketBooking = $ticketBooking;
-    $this->bookingPayment = $bookingPayment;
+    $this->ticketBooking = $ticket_booking;
+    $this->bookingPayment = $booking_payment;
     $this->configFactory = $config_factory;
   }
 
@@ -95,20 +95,14 @@ class BookingPaymentForm extends FormBase {
    * {@inheritdoc}.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $get_parks = json_decode($this->ticketBooking->tempStore()->get('get_parks'));
-    $visit_date = $this->ticketBooking->tempStore()->get('visit_date');
-    $final_visitor_list = json_decode($this->ticketBooking->tempStore()->get('final_visitor_list'));
-
-    $form['visit_date'] = [
-      '#markup' => $visit_date,
+    $parks = $this->ticketBooking->getParkData();
+    $form['booking_info'] = [
+      '#type' => 'hidden',
+      '#attributes' => ['id' => ['booking-info']],
     ];
 
-    $form['park'] = [
-      '#markup' => $get_parks->getParksResult->Park->Name,
-    ];
-
-    $form['order_total'] = [
-      '#markup' => $final_visitor_list->total->price,
+    $form['parks'] = [
+      '#markup' => $parks->getParksResult->Park->Name,
     ];
 
     $form['name'] = [
@@ -126,7 +120,7 @@ class BookingPaymentForm extends FormBase {
 
     $form['mobile'] = [
       '#type' => 'mobile_number',
-      '#title' => $this->t('Mobile Number'),
+      '#title' => '',
       '#placeholder' => $this->t('Mobile Number'),
       '#required' => TRUE,
     ];
@@ -142,9 +136,8 @@ class BookingPaymentForm extends FormBase {
     $form['payment_option']['knet'] = [
       '#type' => 'checkbox',
       '#required' => TRUE,
-      '#suffix' => '<div class="payment_option">
-          <span class="k-net">K-NET</span>
-          </div>',
+      '#prefix' => '<div class="payment_option">',
+      '#suffix' => '<span class="k-net"></span></div>',
     ];
 
     $form['payment_option']['cybersource'] = [
@@ -179,34 +172,29 @@ class BookingPaymentForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
-    $sales_number = $this->ticketBooking->tempStore()->get('sales_number');
-    $visit_date = $this->ticketBooking->tempStore()->get('visit_date');
-    $final_visitor_list = json_decode($this->ticketBooking->tempStore()->get('final_visitor_list'));
     $visitor_types = '';
-    foreach ($final_visitor_list->data as $value) {
-      $visitor_types .= $value->Description . '-' . $value->Ticket->count . ',';
-    }
-
-    $order_total = $this->ticketBooking->tempStore()->get('order_total');
-
-    $knet = ($form_state->getValue('knet')) ? 'knet' : '';
-    $booking = [
-      'name' => $form_state->getValue('name'),
-      'email' => $form_state->getValue('email'),
-      'mobile' => $form_state->getValue('mobile'),
-      'payment_type' => $knet,
-      'sales_number' => $sales_number,
-      'visitor_types' => rtrim($visitor_types, ','),
-      'visit_date' => $visit_date,
-      'order_total' => $order_total,
-      'order_date' => date('Y-m-d'),
-    ];
-
-    // Create content for ticket entity type.
-    if ($this->bookingPayment->saveTicketDetails($booking, $sales_number)) {
-      $this->ticketBooking->tempStore()->set('booking_info', json_encode($booking));
-      $form_state->setRedirect('alshaya_kz_transac_lite.payemnt_option', ['option' => $knet]);
+    $final_visitor_list = json_decode($form_state->getValue('booking_info'));
+    if (isset($final_visitor_list)) {
+      foreach ($final_visitor_list->data as $value) {
+        $visitor_types .= $value->Description . '-' . $value->Ticket->count . ',';
+      }
+      $order_total = $this->ticketBooking->getOrderTotal($final_visitor_list->sales_number);
+      $knet = ($form_state->getValue('knet')) ? 'knet' : '';
+      $booking = [
+        'name' => $form_state->getValue('name'),
+        'email' => $form_state->getValue('email'),
+        'mobile' => $form_state->getValue('mobile'),
+        'payment_type' => $knet,
+        'sales_number' => $final_visitor_list->sales_number,
+        'visitor_types' => rtrim($visitor_types, ','),
+        'visit_date' => $final_visitor_list->visit_date,
+        'order_total' => $order_total,
+        'order_date' => date('Y-m-d'),
+      ];
+      // Create content for ticket entity type.
+      if ($this->bookingPayment->saveTicketDetails($booking, $final_visitor_list->sales_number)) {
+        // @Todo - Knet integration here.
+      }
     }
   }
 

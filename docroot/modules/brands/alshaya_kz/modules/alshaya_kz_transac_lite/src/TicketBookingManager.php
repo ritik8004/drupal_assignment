@@ -4,7 +4,8 @@ namespace Drupal\alshaya_kz_transac_lite;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
  * TicketBookingManager integrate and receive response from kidsoft API.
@@ -12,11 +13,11 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 class TicketBookingManager {
 
   /**
-   * The private temp store.
+   * Cache Backend object for "cache.data".
    *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $privateTempStore;
+  protected $cache;
 
   /**
    * Logger.
@@ -42,51 +43,67 @@ class TicketBookingManager {
   /**
    * TicketBooking constructor.
    *
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
-   *   Temporary store factory object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory object.
    */
-  public function __construct(PrivateTempStoreFactory $temp_store_factory,
+  public function __construct(CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory,
                               ConfigFactoryInterface $config_factory) {
 
-    $this->privateTempStore = $temp_store_factory;
-    $this->privateTempStore = $this->privateTempStore->get('alshaya_kz_transac_lite_cart');
+    $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->configFactory = $config_factory;
     $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'));
   }
 
   /**
-   * The private temp store object.
+   * Get cache id for booking steps.
    *
-   * @return \Drupal\Core\TempStore\PrivateTempStoreFactory
-   *   private temporary store factory object.
+   * @return string
+   *   Cache key.
    */
-  public function tempStore() {
-    return $this->privateTempStore;
+  public function getTicketBookingCachedId($key) {
+    return 'alshaya_kz_transac_lite:' . $key;
   }
 
   /**
-   * Removes all the keys from the store collection.
+   * Get data from Cache for booking steps.
+   *
+   * @param string $key
+   *   Key of the data to get from cache.
+   *
+   * @return array|null
+   *   Data if found or null.
    */
-  public function deleteStore() {
-    $keys = [
-      'get_parks',
-      'get_shifts',
-      'visit_date',
-      'visitor_types',
-      'get_sexes',
-      'sales_number',
-      'order_total',
-      'final_visitor_list',
-    ];
-    foreach ($keys as $key) {
-      $this->store->delete($key);
+  public function getTicketBookingCachedData($key) {
+    $cid = $this->getTicketBookingCachedId($key);
+    $static = &drupal_static($cid);
+    if (!isset($static) && $cache = $this->cache->get($cid)) {
+      $static = $cache->data;
     }
+    return json_decode($static);
+  }
+
+  /**
+   * Set data in Cache for booking steps.
+   *
+   * @param object $data
+   *   Data to set in cache.
+   * @param string $key
+   *   Key of the data to get from cache.
+   */
+  public function setTicketBookingCachedData($data, $key) {
+    $cid = $this->getTicketBookingCachedId($key);
+    $data = json_encode($data);
+    $this->cache->set($cid, $data, Cache::PERMANENT, ['alshaya_kz_transac_lite:kidsoft']);
+
+    // Update data in static cache too.
+    $static = &drupal_static($cid);
+    $static = $data;
   }
 
   /**
@@ -96,9 +113,13 @@ class TicketBookingManager {
    *   Return token with AuthString and AuthVal.
    */
   public function getToken() {
+    if (isset($this->getTicketBookingCachedData('getToken')->authenticateResult)) {
+      return $this->getTicketBookingCachedData('getToken');
+    }
+    // Get token from kidsoft.
     $settings = $this->configFactory->get('alshaya_kz_transac_lite.settings');
     try {
-      return $this->soapClient->__soapCall("authenticate",
+      $token = $this->soapClient->__soapCall("authenticate",
         [
           "parameters" =>
             [
@@ -107,6 +128,8 @@ class TicketBookingManager {
             ],
         ]
       );
+      $this->setTicketBookingCachedData($token, 'getToken');
+      return $token;
     }
     catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting token - %faultcode: %message', [
@@ -123,6 +146,10 @@ class TicketBookingManager {
    *   Object of parks data.
    */
   public function getParkData() {
+    if (isset($this->getTicketBookingCachedData('getParks')->getParksResult)) {
+      return $this->getTicketBookingCachedData('getParks');
+    }
+
     try {
       $parks = $this->soapClient->__soapCall("getParks",
         [
@@ -135,7 +162,12 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->tempStore()->set('get_parks', json_encode($parks));
+      // Re-initialize token if expired from kidsoft
+      // by invalidating cache and get new one.
+      if (empty($parks->getParksResult) && $this->getTicketBookingCachedData('getToken')) {
+        Cache::invalidateTags(['alshaya_kz_transac_lite:kidsoft']);
+      }
+      $this->setTicketBookingCachedData($parks, 'getParkData');
       return $parks;
     }
     catch (\ SoapFault $fault) {
@@ -156,16 +188,14 @@ class TicketBookingManager {
    *   object of shift data.
    */
   public function getShiftsData($visit_date) {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
-
     try {
       $shifts = $this->soapClient->__soapCall("getShifts",
         [
           "parameters" =>
             [
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'visitdate' => $visit_date,
               'auth' => [
@@ -175,8 +205,6 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->tempStore()->set('visit_date', $visit_date);
-      $this->tempStore()->set('get_shifts', json_encode($shifts));
       return $shifts;
     }
     catch (\ SoapFault $fault) {
@@ -190,29 +218,34 @@ class TicketBookingManager {
   /**
    * Get list of visitor types from Kidsoft.
    *
+   * @param string $shifts
+   *   The visit date.
+   * @param string $visit_date
+   *   The visit date.
+   *
    * @return object
    *   object of visitorTypes.
    */
-  public function getVisitorTypesData() {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
-    $get_shifts = json_decode($this->tempStore()->get('get_shifts'));
-    $visit_date = $this->tempStore()->get('visit_date');
-
+  public function getVisitorTypesData(string $shifts, string $visit_date) {
+    if (isset($this->getTicketBookingCachedData('getVisitorTypesData')->getVisitorTypesResult)) {
+      return $this->getTicketBookingCachedData('getVisitorTypesData');
+    }
+    $shifts = json_decode($shifts);
     try {
       $visitorTypes = $this->soapClient->__soapCall("getVisitorTypes",
         [
           "parameters" =>
             [
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'shift' => [
-                'EndHour' => $get_shifts->getShiftsResult->Shift->EndHour,
-                'ID' => $get_shifts->getShiftsResult->Shift->ID,
-                'Name' => $get_shifts->getShiftsResult->Shift->Name,
-                'StartHour' => $get_shifts->getShiftsResult->Shift->StartHour,
-                'Tickets' => $get_shifts->getShiftsResult->Shift->Tickets,
+                'EndHour' => $shifts->getShiftsResult->Shift->EndHour,
+                'ID' => $shifts->getShiftsResult->Shift->ID,
+                'Name' => $shifts->getShiftsResult->Shift->Name,
+                'StartHour' => $shifts->getShiftsResult->Shift->StartHour,
+                'Tickets' => $shifts->getShiftsResult->Shift->Tickets,
               ],
               'visitdate' => $visit_date,
               'auth' => [
@@ -222,7 +255,7 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->tempStore()->set('visitor_types', json_encode($visitorTypes));
+      $this->setTicketBookingCachedData($visitorTypes, 'getVisitorTypesData');
       return $visitorTypes;
     }
     catch (\SoapFault $fault) {
@@ -240,16 +273,17 @@ class TicketBookingManager {
    *   object of sexes data.
    */
   public function getSexesData() {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
-
+    if (isset($this->getTicketBookingCachedData('getSexesData')->getSexesResult)) {
+      return $this->getTicketBookingCachedData('getSexesData');
+    }
     try {
       $getSexes = $this->soapClient->__soapCall("getSexes",
         [
           "parameters" =>
             [
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -258,7 +292,7 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->tempStore()->set('get_sexes', json_encode($getSexes));
+      $this->setTicketBookingCachedData($getSexes, 'getSexesData');
       return $getSexes;
     }
     catch (\ SoapFault $fault) {
@@ -276,15 +310,14 @@ class TicketBookingManager {
    *   The sales number.
    */
   public function generateSalesNumber() {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
     try {
       $generateSaleNumber = $this->soapClient->__soapCall("generateSaleNumber",
         [
           "parameters" =>
             [
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -293,7 +326,6 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->tempStore()->set('sales_number', $generateSaleNumber->generateSaleNumberResult);
       return $generateSaleNumber->generateSaleNumberResult;
     }
     catch (\SoapFault $fault) {
@@ -311,15 +343,14 @@ class TicketBookingManager {
    *   The Ticket number.
    */
   public function generateTicketNumber() {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
     try {
       $generateTicketNumber = $this->soapClient->__soapCall("generateTicketNumber",
         [
           "parameters" =>
             [
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -347,17 +378,18 @@ class TicketBookingManager {
    *   Array of booked tickets.
    * @param string $ticket_number
    *   The ticket number.
+   * @param string $shifts
+   *   The shifts data.
    * @param string $sales_number
    *   The sales number.
+   * @param string $visit_date
+   *   The visit date.
    *
    * @return bool
    *   return a boolean value.
    */
-  public function saveTicket(array $visitor_list, array $book_ticket, $ticket_number, $sales_number) {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
-    $get_shifts = json_decode($this->tempStore()->get('get_shifts'));
-    $visit_date = $this->tempStore()->get('visit_date');
-
+  public function saveTicket(array $visitor_list, array $book_ticket, $ticket_number, $shifts, $sales_number, $visit_date) {
+    $shifts = json_decode($shifts);
     try {
       $saveTicket = $this->soapClient->__soapCall("saveTicket",
         [
@@ -381,11 +413,11 @@ class TicketBookingManager {
                   'Initial' => $book_ticket['gender']['initial'],
                 ],
                 'Shift' => [
-                  'EndHour' => $get_shifts->getShiftsResult->Shift->EndHour,
-                  'ID' => $get_shifts->getShiftsResult->Shift->ID,
-                  'Name' => $get_shifts->getShiftsResult->Shift->Name,
-                  'StartHour' => $get_shifts->getShiftsResult->Shift->StartHour,
-                  'Tickets' => $get_shifts->getShiftsResult->Shift->Tickets,
+                  'EndHour' => $shifts->getShiftsResult->Shift->EndHour,
+                  'ID' => $shifts->getShiftsResult->Shift->ID,
+                  'Name' => $shifts->getShiftsResult->Shift->Name,
+                  'StartHour' => $shifts->getShiftsResult->Shift->StartHour,
+                  'Tickets' => $shifts->getShiftsResult->Shift->Tickets,
                 ],
                 'Shortcode' => 'ONLINE',
                 'Status' => [
@@ -406,8 +438,8 @@ class TicketBookingManager {
                 ],
               ],
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -416,6 +448,7 @@ class TicketBookingManager {
             ],
         ]
       );
+      return $saveTicket->saveTicketResult;
     }
     catch (\SoapFault $fault) {
       $this->logger->warning('API Error in saving ticket - %faultcode: %message', [
@@ -423,8 +456,6 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
-
-    return $saveTicket->saveTicketResult;
   }
 
   /**
@@ -434,7 +465,6 @@ class TicketBookingManager {
    *   integer Total amount.
    */
   public function getOrderTotal($sales_number) {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
     try {
       $getOrderTotal = $this->soapClient->__soapCall("getOrderTotal",
         [
@@ -442,8 +472,8 @@ class TicketBookingManager {
             [
               'saleNum' => $sales_number,
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -452,7 +482,6 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->tempStore()->set('order_total', $getOrderTotal->getOrderTotalResult);
     }
     catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting total order - %faultcode: %message', [
@@ -474,7 +503,6 @@ class TicketBookingManager {
    *   Activate the order status.
    */
   public function activateOrder(string $sales_number) {
-    $get_parks = json_decode($this->tempStore()->get('get_parks'));
     try {
       $activateOrder = $this->soapClient->__soapCall("activateOrder",
         [
@@ -482,8 +510,8 @@ class TicketBookingManager {
             [
               'saleNum' => $sales_number,
               'park' => [
-                'Name' => $get_parks->getParksResult->Park->Name,
-                'Prefix' => $get_parks->getParksResult->Park->Prefix,
+                'Name' => $this->getParkData()->getParksResult->Park->Name,
+                'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
               ],
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -535,7 +563,6 @@ class TicketBookingManager {
         }
       }
     }
-
     return $flag;
   }
 
