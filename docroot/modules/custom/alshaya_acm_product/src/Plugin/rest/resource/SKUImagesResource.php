@@ -5,8 +5,9 @@ namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_api\AlshayaI18nHelper;
-use Drupal\node\NodeInterface;
+use Drupal\Core\Url;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -42,6 +43,13 @@ class SKUImagesResource extends ResourceBase {
   private $i18nHelper;
 
   /**
+   * SkuManager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * SKUImagesResource constructor.
    *
    * @param array $configuration
@@ -58,6 +66,8 @@ class SKUImagesResource extends ResourceBase {
    *   SKU Images Manager service object.
    * @param \Drupal\alshaya_api\AlshayaI18nHelper $i18n_helper
    *   Alshaya I18n Helper service object.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   Sku Manager service object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -65,10 +75,12 @@ class SKUImagesResource extends ResourceBase {
                               array $serializer_formats,
                               LoggerInterface $logger,
                               SkuImagesManager $sku_images_manager,
-                              AlshayaI18nHelper $i18n_helper) {
+                              AlshayaI18nHelper $i18n_helper,
+                              SkuManager $sku_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuImagesManager = $sku_images_manager;
     $this->i18nHelper = $i18n_helper;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -82,7 +94,8 @@ class SKUImagesResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_api'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('alshaya_api.i18n_helper')
+      $container->get('alshaya_api.i18n_helper'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -114,25 +127,29 @@ class SKUImagesResource extends ResourceBase {
 
     $skus = is_array($request['skus']) ? $request['skus'] : [$request['skus']];
 
-    $response = [];
+    $response = $skipped_skus = [];
 
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku, $langcode);
 
       if ($sku_entity instanceof SKUInterface) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-        $node = $plugin->getDisplayNode($sku_entity);
-
+        $node_id = $this->skuManager->getDisplayNodeId($sku);
         // We may have some child SKUs which don't have a parent SKU / Node
         // in Drupal as they might be disabled.
-        if ($node instanceof NodeInterface) {
+        if ($node_id) {
           $response[$sku] = [
-            'product_url' => $node->toUrl()->setAbsolute()->toString(),
+            'product_url' => Url::fromRoute('entity.node.canonical', ['node' => $node_id], ['absolute' => 'true'])->toString(),
             'images' => $this->skuImagesManager->getMediaImages($sku_entity),
           ];
         }
+        else {
+          $skipped_skus[] = $sku;
+        }
       }
+    }
+
+    if (!empty($skipped_skus)) {
+      $this->logger->notice("Skipped Skus since no parent node for them were found: @skus", ['@skus' => implode(',', $skipped_skus)]);
     }
 
     return new ModifiedResourceResponse($response);

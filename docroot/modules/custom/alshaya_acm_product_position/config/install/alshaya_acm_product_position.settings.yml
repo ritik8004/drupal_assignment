@@ -10,6 +10,7 @@ sort_options:
   final_price: final_price
   created: created
   stock_quantity: stock_quantity
+skip_sync_missing_position_sort: 0
 sort_options_labels:
   -
     value: 'nid ASC'

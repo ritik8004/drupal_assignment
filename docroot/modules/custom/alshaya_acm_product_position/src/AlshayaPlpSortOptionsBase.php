@@ -130,7 +130,7 @@ class AlshayaPlpSortOptionsBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  protected function getPlpSortConfigForTerm(TermInterface $taxonomy_term, $type = 'options') : ?array {
+  public function getPlpSortConfigForTerm(TermInterface $taxonomy_term, $type = 'options') : ?array {
     $sorting_options = $taxonomy_term->get(self::SORT_OPTIONS_SETTINGS[$type]['type'])->getString();
 
     if ($sorting_options == 'override'
