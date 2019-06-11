@@ -302,8 +302,12 @@ class StockManager {
       // Reset static cache of stocks.
       drupal_static_reset('stock_static_cache');
 
+      // Trigger the event and invalidate caches if:
+      // * status changed.
+      // * old quantity was low.
+      // * new quantity is low.
       $status_changed = $current
-        ? $this->isStockStatusChanged($current, $new)
+        ? ($this->isStockStatusChanged($current, $new) || $this->isQuantityLow($current) || $this->isQuantityLow($new))
         : TRUE;
     }
 
