@@ -19,8 +19,6 @@ function alshaya_acm_product_update_8048() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm');
   $manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_acm_product');
-
-  // @TODO: Re-create all the url aliases for products and add redirect.
 }
 
 /**
