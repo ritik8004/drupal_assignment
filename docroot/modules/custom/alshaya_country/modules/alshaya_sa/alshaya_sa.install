@@ -8,6 +8,19 @@
 /**
  * Implements hook_update_N().
  *
+ * Correct the mapping to handle locality for SA.
+ */
+function alshaya_sa_update_8004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Save translations for meta tags.
  */
 function alshaya_sa_update_8003() {
