@@ -5,7 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "f3276b66425f003811073e0f6aea4c4c",
-    "paalshaya_acm_product.installckages": [
+    "packages": [
         {
             "name": "HubSpot/pace",
             "version": "1.0.0",
