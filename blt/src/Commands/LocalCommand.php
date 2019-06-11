@@ -114,7 +114,7 @@ class LocalCommand extends BltTasks {
       ->run();
 
     // Now the last thing, dev script, I love it :).
-    $dev_script_path = 'scripts/install-site-dev.sh';
+    $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
       $this->_exec('sh ' . $dev_script_path . ' ' . $site);
     }

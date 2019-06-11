@@ -16,7 +16,6 @@ global_styles:
     vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
-    - core/modernizr
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion
@@ -172,3 +171,10 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+
+algolia_search:
+  js:
+    conditional-sass/algolia-search/js/algolia-search.js: {}
+  css:
+    theme:
+      css/conditional-sass/algolia-search/algolia-search.ltr.css: {}
