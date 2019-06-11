@@ -29,6 +29,13 @@ function alshaya_acm_checkout_update_8004() {
       ],
     ]
   );
+
+  $strings = [
+    'sign in with email address' => [
+      'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
@@ -79,4 +86,11 @@ function alshaya_acm_checkout_install() {
   $configFactory = \Drupal::configFactory()->getEditable('acq_checkout.settings');
   $configFactory->set('checkout_flow_plugin', 'multistep_checkout');
   $configFactory->save();
+
+  $strings = [
+    'sign in with email address' => [
+      'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
