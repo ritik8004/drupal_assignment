@@ -1,13 +1,13 @@
 <div class="magazine-backfeed mobile-only-block">
-  {{ back_to_feed }}
+  {{ content.back_to_feed }}
 </div>
 
 <article{{ attributes }}>
   <div{{ content_attributes }}>
-    {{ content }}
+    {{ content|without('back_to_feed') }}
   </div>
 </article>
 
 <div class="magazine-backfeed">
-  {{ back_to_feed }}
+  {{ content.back_to_feed }}
 </div>
