@@ -61,6 +61,20 @@
         }
       }
     }
+
+    &.product-small {
+      .alshaya_search_gallery {
+        .alshaya_search_mainimage {
+          @include breakpoint($only-tablet) {
+            height: 13.5rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            height: 10.25rem;
+          }
+        }
+      }
+    }
   }
 
   .c-products__item {
@@ -93,25 +107,16 @@
     .promotions .sku-promotion-link {
       color: $plp_promotion_link;
     }
-
-    .alshaya_search_gallery {
-      max-height: 18rem;
-
-      .alshaya_search_mainimage {
-        height: auto;
-        min-height: auto;
-
-        @include breakpoint($desktop) {
-          min-height: 16.57625rem;
-        }
-      }
-    }
   }
 
   .c-products-list.product-large {
     @include breakpoint($only-tablet) {
       .alshaya_search_gallery {
         max-height: 20rem;
+
+        .alshaya_search_mainimage {
+          height: auto;
+        }
       }
     }
 
@@ -121,6 +126,16 @@
 
         .alshaya_search_mainimage {
           height: 21rem;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .alshaya_search_gallery {
+        max-height: none;
+
+        .alshaya_search_mainimage {
+          height: auto;
         }
       }
     }

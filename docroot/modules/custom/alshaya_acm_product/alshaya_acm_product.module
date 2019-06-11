@@ -155,6 +155,38 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   if (isset($product['attributes']['product_activation_date'])) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
   }
+
+  $attr_to_skip = \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.settings')
+    ->get('acq_sku__attributes_skip') ?? [];
+
+  // Get configurable fields/attributes.
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  $attributes = $sku->get('attributes')->getValue();
+  foreach ($attributes as $key => $attr) {
+    // If attribute is not configurable (not available in fields), remove it.
+    if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
+      unset($attributes[$key]);
+    }
+  }
+
+  // Price is only available on simple skus.
+  if ($sku->get('type')->first()->getString() == 'simple') {
+    $price = (float) $sku->get('price')->first()->getString();
+    $final_price = (float) $sku->get('final_price')->first()->getString();
+    $max_discount = (int) \Drupal::config('alshaya_acm_product.settings')
+      ->get('max_discount_to_log');
+    if ($max_discount && $final_price < $price && ((($price - $final_price) / $price) * 100) > $max_discount) {
+      \Drupal::logger('alshaya_acm_product')->notice('SKU:@sku having discount more than @discount_percent. Price:@price Final price:@final_price.', [
+        '@sku' => $sku->get('sku')->first()->getString(),
+        '@discount_percent' => $max_discount . '%',
+        '@price' => $price,
+        '@final_price' => $final_price,
+      ]);
+    }
+  }
+
+  $sku->get('attributes')->setValue($attributes);
 }
 
 /**
@@ -1511,6 +1543,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $skuManager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
   }
 
+  $tree_pointer = NULL;
   if ($variant_sku = $form_state->get('variant_sku')) {
     $tree_pointer = SKU::loadFromSku($variant_sku);
   }
@@ -1705,10 +1738,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $configurable_codes = array_keys($product_tree['configurables']);
     $attribute = reset($configurable_codes);
-    $option_id = $selected[$attribute];
+    $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-    if ($display_settings->get('show_child_images_after_selecting') !== 'all') {
+    if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
       $selected_sku = $first_child;

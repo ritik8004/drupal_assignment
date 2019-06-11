@@ -5,8 +5,6 @@
  * Contains install, update, uninstall hooks for alshaya_acm_knet module.
  */
 
-use Drupal\Core\Site\Settings;
-
 /**
  * Implements hook_update_N().
  *
@@ -15,21 +13,5 @@ use Drupal\Core\Site\Settings;
 function alshaya_acm_knet_update_8401() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings');
   $config->set('knet_udf5_prefix', 'ptlf');
-  $config->save();
-}
-
-/**
- * Implements hook_install().
- */
-function alshaya_acm_knet_install() {
-  // Configure K-Net settings.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings');
-
-  $settings = Settings::get('alshaya_acm_knet.settings');
-
-  foreach ($settings as $key => $value) {
-    $config->set($key, $value);
-  }
-
   $config->save();
 }

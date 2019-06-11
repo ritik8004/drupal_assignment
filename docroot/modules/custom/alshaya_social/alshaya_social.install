@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_social module.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_social_update_8001() {
+  $strings = [
+    'sign in with social media' => [
+      'ar' => 'تسجيل الدخول عن طريق برامج التواصل الاجتماعي',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_social_install() {
+  $strings = [
+    'sign in with social media' => [
+      'ar' => 'تسجيل الدخول عن طريق برامج التواصل الاجتماعي',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}

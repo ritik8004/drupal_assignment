@@ -14,13 +14,28 @@ use Drupal\node\Entity\Node;
  *
  * Split pathauto pattern for product and add .html suffix.
  */
-function alshaya_acm_product_update_8047() {
+function alshaya_acm_product_update_8048() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm');
   $manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_acm_product');
 
   // @TODO: Re-create all the url aliases for products and add redirect.
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Correct the path for memory limit policy config.
+ */
+function alshaya_acm_product_update_8047() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['memory_limit_policy.memory_limit_policy.path_based_memory'],
+    'alshaya_acm_product',
+    'optional'
+  );
 }
 
 /**
