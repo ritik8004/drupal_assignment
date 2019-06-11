@@ -912,6 +912,18 @@ header {
         }
       }
     }
+
+    &.hide-on-desktop {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+
+    &.hide-on-mobile {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
   }
 }
 
