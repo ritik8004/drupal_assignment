@@ -58,6 +58,9 @@ class AlshayaOptionsListRoutes implements ContainerInjectionInterface {
           ],
           [
             '_access' => 'TRUE',
+          ],
+          [
+            '_title' => $page['title'],
           ]
         );
         $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);

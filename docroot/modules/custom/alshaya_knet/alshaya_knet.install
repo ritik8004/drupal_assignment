@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_knet module.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_knet_install() {
+  // Configure K-Net settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_knet.settings');
+
+  $settings = Settings::get('alshaya_knet.settings');
+
+  foreach ($settings as $key => $value) {
+    $config->set($key, $value);
+  }
+
+  $config->save();
+}

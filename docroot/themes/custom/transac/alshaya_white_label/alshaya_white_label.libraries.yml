@@ -171,3 +171,17 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+
+algolia_search:
+  js:
+    conditional-sass/algolia-search/js/algolia-search.js: {}
+  css:
+    theme:
+      css/conditional-sass/algolia-search/algolia-search.ltr.css: {}
+
+optionlist_filter:
+  js:
+    js/optionlist_filter.js: {}
+  css:
+    theme:
+      css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: {}
