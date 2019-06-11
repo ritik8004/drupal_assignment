@@ -12,6 +12,18 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Split pathauto pattern for product and add .html suffix.
+ */
+function alshaya_acm_product_update_8048() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm');
+  $manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_acm_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Correct the path for memory limit policy config.
  */
 function alshaya_acm_product_update_8047() {
