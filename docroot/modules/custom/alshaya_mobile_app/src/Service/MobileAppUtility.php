@@ -711,7 +711,7 @@ class MobileAppUtility {
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $return['images'][] = [
         'url' => file_create_url($media_item['drupal_uri']),
-        'type' => 'image',
+        'image_type' => $media_item['sortAssetType'] ?? 'image',
       ];
     }
 
