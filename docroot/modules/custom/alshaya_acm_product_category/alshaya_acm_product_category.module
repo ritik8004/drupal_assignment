@@ -264,3 +264,20 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
     Cache::invalidateTags([ProductCategoryManager::CATEGORIZATION_IDS_CACHE_TAG]);
   }
 }
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $context) {
+  if ($context['module'] != 'taxonomy' || $context['bundle'] != ProductCategoryTree::VOCABULARY_ID) {
+    return;
+  }
+
+  // Return if already modified by other modules.
+  if (strpos($alias, '/shop-') > -1) {
+    return;
+  }
+
+  // For all the category terms we want shop- prefix for L1 only.
+  $alias = '/shop-' . ltrim($alias, '/');
+}
