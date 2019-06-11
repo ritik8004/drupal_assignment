@@ -13,8 +13,6 @@
           {% endif %}
             {% if social_network.text_link is defined %}
               <span class="social-network-text"> {{ social_network.text_link }} </span>
-            {% else %}
-              <img class="{{ module }} auth-icon" src="{{ base_path }}{{ social_network.img_path }}" alt="" />
             {% endif %}
           </a>
         </div>
