@@ -118,3 +118,13 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
 
   $variables['base_path'] = base_path();
 }
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_social_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $social_helper = \Drupal::service('alshaya_social.helper');
+  if ($social_helper->getStatus()) {
+    $reset = array_merge($reset, array_keys($social_helper->getSocialNetworks()));
+  }
+}
