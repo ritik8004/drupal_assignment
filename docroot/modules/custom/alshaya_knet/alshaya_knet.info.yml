@@ -1,0 +1,5 @@
+name: 'Alshaya K-Net'
+type: module
+description: 'Contains K-Net payment related stuff.'
+package: 'Alshaya'
+core: 8.x

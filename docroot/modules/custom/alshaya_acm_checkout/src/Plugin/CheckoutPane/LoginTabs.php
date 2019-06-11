@@ -14,7 +14,7 @@ use Drupal\Core\Url;
  * @ACQCheckoutPane(
  *   id = "login_tabs",
  *   label = @Translation("Login Tabs"),
- *   defaultStep = "login",
+ *   defaultStep = "_disabled",
  *   wrapperElement = "container",
  * )
  */

@@ -79,6 +79,10 @@
           height: 20.5rem;
         }
 
+        @include breakpoint($tablet) {
+          height: auto;
+        }
+
         @include breakpoint($only-mobile) {
           height: 15.125rem;
         }
@@ -136,10 +140,10 @@
     .c-products-list.product-large {
       @include breakpoint($desktop) {
         .alshaya_search_gallery {
-          max-height: 31rem;
+          max-height: 33rem;
 
           .alshaya_search_mainimage {
-            height: 31rem;
+            height: 33rem;
           }
         }
 

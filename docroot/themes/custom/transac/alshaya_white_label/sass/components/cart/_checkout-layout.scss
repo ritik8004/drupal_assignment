@@ -145,6 +145,7 @@
 
     padding: 0.6rem 0.5rem;
     margin: 0 auto;
+    text-align: center;
 
     @include breakpoint($tablet) {
       padding: 1rem 1.5rem;
@@ -157,8 +158,13 @@
 
     a {
       margin-#{$left}: 0;
-      width: 52.5%;
+      width: 100%;
       display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        max-width: 11.875rem;
+      }
 
       @include breakpoint($tablet) {
         width: 29%;
@@ -185,6 +191,11 @@
     @include breakpoint($tablet) {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-left: 8.0625rem;
+      padding-right: 8.0625rem;
     }
   }
 }
