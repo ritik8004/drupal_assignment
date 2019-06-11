@@ -202,11 +202,11 @@
       &.icon {
         margin-#{$right}: 0.4375rem;
 
-        &.icon-FEMALE {
+        &-woman {
           @include icon(woman);
         }
 
-        &.icon-MALE {
+        &-man {
           @include icon(man);
         }
 
