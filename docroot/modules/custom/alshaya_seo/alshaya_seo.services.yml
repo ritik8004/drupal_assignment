@@ -3,3 +3,20 @@ services:
     class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+  alshaya_seo.generator:
+    decorates: pathauto.generator
+    decoration_priority: 9
+    public: false
+    class: Drupal\alshaya_seo\AlshayaSeoPathautoGenerator
+    arguments:
+      - '@config.factory'
+      - '@module_handler'
+      - '@token'
+      - '@pathauto.alias_cleaner'
+      - '@pathauto.alias_storage_helper'
+      - '@pathauto.alias_uniquifier'
+      - '@pathauto.verbose_messenger'
+      - '@string_translation'
+      - '@token.entity_mapper'
+      - '@entity_type.manager'
+      - '@plugin.manager.alias_type'
