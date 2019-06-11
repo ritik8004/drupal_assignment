@@ -8,6 +8,18 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ */
+function alshaya_social_facebook_update_8001() {
+  $strings = [
+    'Sign in with facebook' => [
+      'ar' => 'تسجيل الدخول عن طريق الفيس بوك',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_social_facebook_install() {
@@ -24,4 +36,11 @@ function alshaya_social_facebook_install() {
   }
 
   $config->save();
+
+  $strings = [
+    'Sign in with facebook' => [
+      'ar' => 'تسجيل الدخول عن طريق الفيس بوك',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
