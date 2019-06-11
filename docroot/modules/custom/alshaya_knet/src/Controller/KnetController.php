@@ -7,7 +7,6 @@ use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Helper\KnetHelper;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -73,7 +72,7 @@ class KnetController extends ControllerBase {
     $data = $_POST;
 
     // For new K-Net toolkit, parse and decrypt the response first.
-    if ($this->knetHelper->useNewKnetToolKit()) {
+    if (!empty($data) && $this->knetHelper->useNewKnetToolKit()) {
       $data = $this->knetHelper->parseAndPrepareKnetData($data);
     }
 
@@ -87,7 +86,7 @@ class KnetController extends ControllerBase {
       $this->logger->error('Invalid KNET response call found.<br>POST: @message', [
         '@message' => json_encode($data),
       ]);
-      throw new NotFoundHttpException();
+      throw new AccessDeniedHttpException();
     }
 
     $response['payment_id'] = $data['paymentid'];
