@@ -12,7 +12,7 @@
     attach: function (context, settings) {
       // Initialize.
       Blazy({
-        offset: 370 // Loads images 100px before they're visible
+        offset: 570 // Loads images before they're visible
       });
     }
   };
