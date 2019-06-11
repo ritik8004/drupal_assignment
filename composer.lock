@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b3ea8c89d62fc55ebb99903159ef528",
+    "content-hash": "1c94df2b34e22560e4703733492a4172",
     "packages": [
         {
             "name": "HubSpot/pace",
