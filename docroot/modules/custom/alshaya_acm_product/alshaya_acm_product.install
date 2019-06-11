@@ -14,11 +14,25 @@ use Drupal\node\Entity\Node;
  *
  * Split pathauto pattern for product and add .html suffix.
  */
-function alshaya_acm_product_update_8048() {
+function alshaya_acm_product_update_8049() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm');
   $manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_acm_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Resave image.settings config so that overrides take effect.
+ */
+function alshaya_acm_product_update_8048() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['image.settings'],
+    'image'
+  );
 }
 
 /**
