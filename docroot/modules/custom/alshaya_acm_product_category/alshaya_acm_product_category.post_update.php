@@ -25,7 +25,7 @@ function alshaya_acm_product_category_post_update_8030() {
             'deleted' => 0,
             'entity_id' => $tid,
             'revision_id' => $tid,
-            'langcode' => 'en',
+            'langcode' => \Drupal::languageManager()->getDefaultLanguage()->getId(),
             'delta' => 0,
             "{$field_name}_value" => TRUE,
           ])
