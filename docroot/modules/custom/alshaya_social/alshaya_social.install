@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Install, update, and uninstall functions for the alshaya_social module.
+ * Contains install, update, uninstall hooks for alshaya_social module.
  */
 
 /**
- * Implements hook_install().
+ * Implements hook_update_N().
  */
-function alshaya_social_update_8001() {
+function alshaya_social_update_8002() {
   // Save client_id and client_secret.
   \Drupal::configFactory()->getEditable('social_auth.settings')
     ->set('post_login', '/user')
@@ -18,4 +18,28 @@ function alshaya_social_update_8001() {
 
   // Enable alshaya_social_google module.
   \Drupal::service('module_installer')->install(['alshaya_social_google']);
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_social_update_8001() {
+  $strings = [
+    'sign in with social media' => [
+      'ar' => 'تسجيل الدخول عن طريق برامج التواصل الاجتماعي',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_social_install() {
+  $strings = [
+    'sign in with social media' => [
+      'ar' => 'تسجيل الدخول عن طريق برامج التواصل الاجتماعي',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }

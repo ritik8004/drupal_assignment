@@ -51,4 +51,14 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
     return $pane_form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isVisible() {
+    return (
+      \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
+      && !empty(\Drupal::configFactory()->get('social_auth.settings')->get('auth'))
+    );
+  }
+
 }
