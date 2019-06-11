@@ -171,7 +171,7 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   }
 
   // Price is only available on simple skus.
-  if ($sku->get('sku')->first()->getString() == 'simple') {
+  if ($sku->get('type')->first()->getString() == 'simple') {
     $price = (float) $sku->get('price')->first()->getString();
     $final_price = (float) $sku->get('final_price')->first()->getString();
     $max_discount = (int) \Drupal::config('alshaya_acm_product.settings')
