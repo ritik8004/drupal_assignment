@@ -16,7 +16,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AlshayaAcmKnetHelper.
@@ -200,7 +199,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
         '@state' => json_encode($state_data),
         '@cart' => $cartToLog,
       ]);
-      throw new NotFoundHttpException();
+      throw new AccessDeniedHttpException();
     }
     $totals = $cart['totals'];
     if ($state_data['amount'] != $totals['grand']) {
