@@ -37,6 +37,7 @@
   .view-items {
     display: flex;
     flex-flow: row wrap;
+    justify-content: center;
 
     @include breakpoint($only-tablet) {
       width: 94%;
