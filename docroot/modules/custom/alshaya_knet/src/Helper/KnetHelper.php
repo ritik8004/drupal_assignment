@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_knet\Helper;
 
 use Drupal\alshaya_knet\Knet\E24PaymentPipe;
-use Drupal\alshaya_knet\Knet\KnetEncryptDecypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\State\StateInterface;
@@ -117,17 +116,16 @@ class KnetHelper {
 
     $knetSettings = $this->configFactory->get('alshaya_knet.settings');
 
+    // Get K-Net toolkit.
+    $pipe = $this->getKnetToolKit();
+
     // If using new K-Net toolkit.
     if ($this->useNewKnetToolKit()) {
-      $pipe = new KnetNewToolKit();
       // Get K-Net creds for new toolkit.
       $knet_creds = $this->getNewKnetToolkitCreds();
       $pipe->setTranportalId($knet_creds['tranportal_id']);
       $pipe->setTranportalPassword($knet_creds['tranportal_password']);
       $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
-    }
-    else {
-      $pipe = new E24PaymentPipe();
     }
 
     $pipe->setCurrency($knetSettings->get('knet_currency_code'));
@@ -429,6 +427,20 @@ class KnetHelper {
   }
 
   /**
+   * Get the K-Net toolkit object.
+   *
+   * @return \Drupal\alshaya_knet\Knet\E24PaymentPipe|\Drupal\alshaya_knet\Knet\KnetNewToolKit
+   *   K-Net toolkit object.
+   */
+  public function getKnetToolKit() {
+    if ($this->useNewKnetToolKit()) {
+      return new KnetNewToolKit();
+    }
+
+    return new E24PaymentPipe();
+  }
+
+  /**
    * Get tranportal id, password and resource key for new K-Net toolkit.
    *
    * @return array
@@ -458,7 +470,7 @@ class KnetHelper {
       return $input;
     }
 
-    $en_dec = new KnetEncryptDecypt();
+    $en_dec = $this->getKnetToolKit();
     $terminal_resource_key = $this->getNewKnetToolkitCreds()['terminal_resource_key'];
     $output = [];
     // Decrypted data contains a string which seperates values by `&`, so we
