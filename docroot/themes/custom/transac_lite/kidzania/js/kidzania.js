@@ -429,6 +429,7 @@
           });
           if (isValid) {
             actions.hideEle(eleFormErrMsg);
+            $('.loading-overlay').addClass('active');
             ticketTypesFinal['visit_date'] = book_visit_date;
             // Pre validate visitors at server level.
             $.post(Drupal.url('validate-visitor-details'), {
