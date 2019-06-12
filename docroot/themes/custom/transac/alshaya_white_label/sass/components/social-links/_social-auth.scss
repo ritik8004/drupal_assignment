@@ -237,3 +237,23 @@
     }
   }
 }
+
+.block-alshaya-signup-signin-buttons {
+  margin-top: 2.5rem;
+
+  .sub-text {
+    font-size: 0.875rem;
+    color: $user_login_sub_text;
+  }
+
+  .link-button {
+    margin-top: 1.0625rem;
+    border: 1px solid $social_auth_login_button_border;
+    font-size: 0.875rem;
+    height: 2.875rem;
+    width: 9.5rem;
+    color: $user_login_link_btn_text;
+    line-height: 2.875rem;
+    text-align: center;
+  }
+}
