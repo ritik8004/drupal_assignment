@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_seo;
 
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
@@ -20,7 +19,7 @@ class AlshayaSeoPathautoGenerator extends PathautoGenerator {
    * {@inheritdoc}
    */
   public function createEntityAlias(EntityInterface $entity, $op) {
-    if (!($entity instanceof ContentEntityBase)) {
+    if (!method_exists($entity, 'hasTranslation')) {
       return parent::createEntityAlias($entity, $op);
     }
 
@@ -40,13 +39,15 @@ class AlshayaSeoPathautoGenerator extends PathautoGenerator {
       $langcode = LanguageInterface::LANGCODE_NOT_SPECIFIED;
     }
 
-    if ($entity->language()->getId() != 'en' && $entity->hasTranslation('en')) {
-      $entity = $entity->getTranslation('en');
-    }
-    else {
-      // We don't want alias to be generated as per requirement if english
-      // version is not available.
-      return NULL;
+    if ($entity->language()->getId() != 'en') {
+      if ($entity->hasTranslation('en')) {
+        $entity = $entity->getTranslation('en');
+      }
+      else {
+        // We don't want alias to be generated as per requirement if english
+        // version is not available.
+        return NULL;
+      }
     }
 
     // Build token data.
@@ -88,7 +89,7 @@ class AlshayaSeoPathautoGenerator extends PathautoGenerator {
     $alias = $this->token->replace($pattern->getPattern(), $data, [
       'clear' => TRUE,
       'callback' => [$this->aliasCleaner, 'cleanTokenValues'],
-      'langcode' => $langcode,
+      'langcode' => 'en',
       'pathauto' => TRUE,
     ], new BubbleableMetadata());
 

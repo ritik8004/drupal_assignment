@@ -273,8 +273,8 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     return;
   }
 
-  // Return if already modified by other modules.
-  if (strpos($alias, '/shop-') > -1) {
+  // Return if already modified by alshaya_super_category.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category') && \Drupal::config('alshaya_super_category.settings')->get('status')) {
     return;
   }
 
