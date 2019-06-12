@@ -193,8 +193,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
           // Do not add selected param if we are using parent sku itself for
           // gallery. This is normal for PB, MC, etc.
-          if (($sku_for_gallery->id() != $sku->id()) &&
-            ($this->skuManager->isListingModeNonAggregated())) {
+          if ($sku_for_gallery->id() != $sku->id()) {
             $product_url .= '?selected=' . $sku_for_gallery->id();
           }
         }
