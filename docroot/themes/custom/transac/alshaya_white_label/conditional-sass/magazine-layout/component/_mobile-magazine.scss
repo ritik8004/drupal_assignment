@@ -138,14 +138,10 @@
         text-align: $right;
         width: calc((100% - 1rem) / 2);
 
-        .price-type__wrapper {
+        .price-block {
           .price {
             margin-bottom: 0;
           }
-        }
-
-        .price--discount {
-          display: inline;
         }
 
         > div {
@@ -267,7 +263,7 @@
         flex-flow: row wrap;
         max-width: 100%;
         overflow: hidden;
-        margin-top: 0.625rem;
+        margin-top: 1rem;
 
         .js-form-wrapper {
           grid-column: 1 / -1;
@@ -316,6 +312,34 @@
             padding: 0.65rem;
           }
         }
+      }
+    }
+  }
+
+  .content__title_wrapper {
+    .promotions {
+      a {
+        display: inline-block;
+        font-size: 0.75rem;
+        margin-#{$right}: 0.1875rem;
+
+        &::after {
+          content: ',';
+          width: 0.125rem;
+          height: 0.125rem;
+        }
+
+        &:last-child {
+          margin-#{$right}: 0;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+
+      br {
+        display: none;
       }
     }
   }
