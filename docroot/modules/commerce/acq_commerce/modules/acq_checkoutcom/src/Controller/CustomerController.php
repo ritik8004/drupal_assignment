@@ -2,7 +2,7 @@
 
 namespace Drupal\acq_checkoutcom\Controller;
 
-use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
@@ -33,11 +33,11 @@ class CustomerController extends ControllerBase {
   protected $currentRequest;
 
   /**
-   * Api wrapper.
+   * Api helper object.
    *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   * @var \Drupal\acq_checkoutcom\ApiHelper
    */
-  protected $apiWrapper;
+  protected $apiHelper;
 
   /**
    * The current user object.
@@ -53,20 +53,20 @@ class CustomerController extends ControllerBase {
    *   Current request object.
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   Api wrapper.
+   * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
+   *   The api helper object.
    * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
    *   The current user.
    */
   public function __construct(
     Request $current_request,
     Renderer $renderer,
-    AlshayaApiWrapper $api_wrapper,
+    ApiHelper $api_helper,
     AccountProxyInterface $account_proxy
   ) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
-    $this->apiWrapper = $api_wrapper;
+    $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
   }
 
@@ -77,7 +77,7 @@ class CustomerController extends ControllerBase {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('alshaya_api.api'),
+      $container->get('acq_checkoutcom.agent_api'),
       $container->get('current_user')
     );
   }
@@ -108,10 +108,9 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function listCards(UserInterface $user) {
-    // @todo: Repalce this code with API call.
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
-    $data = file_get_contents($file);
-    $existing_cards = !empty($data) ? json_decode($data) : [];
+    $existing_cards = $this->apiHelper->getCustomerCards(
+      $user->get('acq_customer_id')->getString()
+    );
 
     $options = [];
     foreach ($existing_cards as $card) {

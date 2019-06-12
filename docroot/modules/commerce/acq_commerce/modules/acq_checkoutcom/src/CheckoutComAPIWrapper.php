@@ -62,6 +62,13 @@ class CheckoutComAPIWrapper {
   protected $configFactory;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * The logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -75,17 +82,21 @@ class CheckoutComAPIWrapper {
    *   ConfigFactoryInterface object.
    * @param \Drupal\Core\Http\ClientFactory $http_client_factory
    *   ClientFactory object.
+   * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
+   *   ApiHelper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     HttpClientFactory $http_client_factory,
+    ApiHelper $api_helper,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->logger = $logger_factory->get('acq_checkoutcom');
     $this->httpClientFactory = $http_client_factory;
+    $this->apiHelper = $api_helper;
+    $this->logger = $logger_factory->get('acq_checkoutcom');
   }
 
   /**
@@ -106,7 +117,7 @@ class CheckoutComAPIWrapper {
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
-        'Authorization' => 'sk_test_863d1545-5253-4387-b86b-df6a86797baa',
+        'Authorization' => $this->apiHelper->getSubscriptionKeys('secret_key'),
       ],
     ];
 

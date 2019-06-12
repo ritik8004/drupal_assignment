@@ -3,7 +3,6 @@
 namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -82,34 +81,6 @@ class CheckoutComController implements ContainerInjectionInterface {
     // $post_data = $request->query->get('cko-payment-token');
     // Todo: add setPaymentMethod when cko-payment-token with api
     // is in place.
-  }
-
-  /**
-   * Gets the token from Magento.
-   *
-   * @return mixed
-   *   API response containing all the data to be passed on to Cybersource.
-   *
-   * @throws \Exception
-   *   Failed request exception.
-   */
-  public function getSubscriptionRequest() {
-    $endpoint = $this->apiVersion . '/agent/token/checkoutcom';
-
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
-
-    try {
-      return $this->apiWrapper->tryAgentRequest($doReq, 'getSubscriptionRequest');
-    }
-    catch (ConnectorException $e) {
-      $this->logger->warning('Error occurred while getting cybersource token for cart id: %cart_id and card type: %card_type: %message', [
-        '%message' => $e->getMessage(),
-      ]);
-
-      throw new \Exception($e->getMessage(), $e->getCode());
-    }
   }
 
 }

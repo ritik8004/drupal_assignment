@@ -2,8 +2,8 @@
 
 namespace Drupal\acq_checkoutcom\Form;
 
+use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
@@ -49,6 +49,13 @@ class CustomerCardForm extends FormBase {
   protected $configFactory;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * Messenger service.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
@@ -64,6 +71,8 @@ class CustomerCardForm extends FormBase {
    *   Current request object.
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
    *   Checkout.com api wrapper object.
+   * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
+   *   The api helper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
@@ -73,12 +82,14 @@ class CustomerCardForm extends FormBase {
     ModuleHandlerInterface $module_handler,
     Request $current_request,
     CheckoutComAPIWrapper $checkout_com_Api,
+    ApiHelper $api_helper,
     ConfigFactoryInterface $config_factory,
     MessengerInterface $messenger
   ) {
     $this->moduleHandler = $module_handler;
     $this->currentRequest = $current_request;
     $this->checkoutComApi = $checkout_com_Api;
+    $this->apiHelper = $api_helper;
     $this->configFactory = $config_factory;
     $this->messenger = $messenger;
   }
@@ -90,7 +101,8 @@ class CustomerCardForm extends FormBase {
     return new static(
       $container->get('module_handler'),
       $container->get('request_stack')->getCurrentRequest(),
-      $container->get('acq_checkoutcom.api'),
+      $container->get('acq_checkoutcom.checkout_api'),
+      $container->get('acq_checkoutcom.agent_api'),
       $container->get('config.factory'),
       $container->get('messenger')
     );
@@ -110,6 +122,11 @@ class CustomerCardForm extends FormBase {
     $form['uid'] = [
       '#type' => 'hidden',
       '#value' => $user->id(),
+    ];
+
+    $form['customer_id'] = [
+      '#type' => 'hidden',
+      '#value' => $user->get('acq_customer_id')->getString(),
     ];
 
     $form['payment_details'] = [
@@ -184,13 +201,10 @@ class CustomerCardForm extends FormBase {
       ],
     ];
 
-    $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
-    $debug = $checkout_com_settings->get('debug') ? 'true' : 'false';
-    // Replace with api call.
-    $public_key = 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f';
+    $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
     $script = "window.CKOConfig = {
       debugMode: {$debug},
-      publicKey: '{$public_key}',
+      publicKey: '{$this->apiHelper->getSubscriptionKeys('public_key')}',
       ready: function (event) {
         CheckoutKit.monitorForm('.acq-checkoutcom-customer-card-form', CheckoutKit.CardFormModes.CARD_TOKENISATION);
       },
@@ -253,7 +267,7 @@ class CustomerCardForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $inputs = $form_state->getUserInput();
 
-    $cardData = $this->checkoutComApi->authorizeNewCard(
+    $card_data = $this->checkoutComApi->authorizeNewCard(
       $this->currentRequest->get('user'),
       [
         'cardToken' => $inputs['cko-card-token'],
@@ -262,16 +276,13 @@ class CustomerCardForm extends FormBase {
       ]
     );
 
-    if (empty($cardData)) {
+    if (empty($card_data)) {
       $this->messenger->addError(
         $this->t('Something went wrong while saving your card, please contact administrator.')
       );
     }
 
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
-    $data = file_get_contents($file);
-    $data = array_merge(!empty($data) ? Json::decode($data) : [], [$cardData]);
-    file_put_contents($file, Json::encode($data));
+    $this->apiHelper->storeCustomerCard($form_state->getValue('customer_id'), $card_data);
     $form_state->setRedirect('acq_checkoutcom.payment_cards', ['user' => $form_state->getValue('uid')]);
   }
 

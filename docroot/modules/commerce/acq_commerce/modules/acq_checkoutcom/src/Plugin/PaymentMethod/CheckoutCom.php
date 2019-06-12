@@ -25,6 +25,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $checkoutComApi;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * The config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -45,7 +52,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
-    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.api');
+    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
+    $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
     $this->configFactory = \Drupal::service('config.factory');
   }
 
@@ -60,8 +68,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
-
     $pane_form['payment_details'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -124,13 +130,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ],
     ];
 
-    $debug = $checkout_com_settings->get('debug') ? 'true' : 'false';
-    // @todo: Replace with api call.
-    $public_key = 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f';
+    $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
 
     $string = "window.CKOConfig = {
       debugMode: {$debug},
-      publicKey: '{$public_key}',
+      publicKey: '{$this->apiHelper->getSubscriptionKeys('public_key')}',
       ready: function (event) {
         CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
       },

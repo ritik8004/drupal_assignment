@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkoutcom\Form;
 
+use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
@@ -25,6 +26,13 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
   protected $checkoutComApi;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * Current user object.
    *
    * @var \Drupal\Core\Session\AccountProxyInterface
@@ -36,14 +44,18 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    *
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
    *   Checkout.com api wrapper object.
+   * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
+   *   The api helper object.
    * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
    *   The current user object.
    */
   public function __construct(
     CheckoutComAPIWrapper $checkout_com_Api,
+    ApiHelper $api_helper,
     AccountProxyInterface $account_proxy
   ) {
     $this->checkoutComApi = $checkout_com_Api;
+    $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
   }
 
@@ -52,7 +64,8 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acq_checkoutcom.api'),
+      $container->get('acq_checkoutcom.checkout_api'),
+      $container->get('acq_checkoutcom.agent_api'),
       $container->get('current_user')
     );
   }
@@ -113,6 +126,11 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
       '#value' => $user->id(),
     ];
 
+    $form['customer_id'] = [
+      '#type' => 'hidden',
+      '#value' => $user->get('acq_customer_id')->getString(),
+    ];
+
     $form['card_id'] = [
       '#type' => 'hidden',
       '#value' => $card_id,
@@ -154,7 +172,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
     $card_id = $form_state->getValue('card_id');
     // Delete the card for given user.
     if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer users')) && $card_id) {
-      // Delete card script.
+      $this->apiHelper->deleteCustomerCard($form_state->getValue('customer_id'), $card_id);
     }
     return $response;
   }
