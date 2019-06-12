@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\alshaya_acm\ApiHelper;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
  * Provides a resource to init k-net request and get url.
@@ -49,11 +49,11 @@ class CartPromotionsResource extends ResourceBase {
   protected $entityTypeManager;
 
   /**
-   * API Helper object.
+   * API Wrapper object.
    *
-   * @var \Drupal\alshaya_acm\ApiHelper
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
    */
-  protected $apiHelper;
+  protected $apiWrapper;
 
   /**
    * CartPromotionsResource constructor.
@@ -74,8 +74,8 @@ class CartPromotionsResource extends ResourceBase {
    *   The alshaya promotion manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\alshaya_acm\ApiHelper $api_helper
-   *   API Helper object.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   ApiWrapper object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -85,12 +85,12 @@ class CartPromotionsResource extends ResourceBase {
                               MobileAppUtility $mobile_app_utility,
                               AlshayaPromotionsManager $alshaya_acm_promotion_manager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ApiHelper $api_helper) {
+                              APIWrapper $api_wrapper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->apiHelper = $api_helper;
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -105,7 +105,8 @@ class CartPromotionsResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('alshaya_acm_promotion.manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('acq_commerce.api')
     );
   }
 
@@ -142,8 +143,8 @@ class CartPromotionsResource extends ResourceBase {
       $selected_promotions = array_filter($block->get('settings')['promotions']);
 
       // Get all the rules applied in cart.
-      $cart = $this->apiHelper->getCart($cart_id);
-      $cartRulesApplied = $cart->get('cart_rules');
+      $cart = $this->apiWrapper->getCart($cart_id);
+      $cartRulesApplied = $cart['cart_rules'];
 
       $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied);
 
