@@ -23,4 +23,28 @@
     }
   };
 
+  Drupal.behaviors.mobilenoValidation = {
+    attach: function () {
+      var field = $('#edit-mobile-mobile');
+
+      function validateField() {
+        $('.mobile-error').remove();
+        field.removeClass('error');
+        var mobile = $('.local-number').val();
+
+        if (!mobile) {
+          field.addClass('error');
+          $('.local-number').after('<div class="mobile-error error">Please enter your This field.</div>');
+        }
+      }
+      $('#booking-payment-form').on('submit', function () {
+        validateField();
+      });
+
+      field.on('change', function () {
+        validateField();
+      });
+    }
+  };
+
 })(jQuery, Drupal);
