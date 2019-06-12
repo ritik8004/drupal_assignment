@@ -196,4 +196,84 @@ class AlshayaPromotionsManager {
     return self::SUBTYPE_OTHER;
   }
 
+  /**
+   * Helper function to fetch all cart promotions.
+   *
+   * @param array $selected_promotions
+   *   An array of selected promotions.
+   * @param array $cartRulesApplied
+   *   An array of rules applied on the cart.
+   *
+   * @return array
+   *   Array of all cart promotions.
+   */
+  public function getAllCartPromotions(array $selected_promotions, array $cartRulesApplied) {
+    $promotions = [];
+    if (!empty($selected_promotions)) {
+      foreach ($selected_promotions as $promotion_rule_id) {
+        if ($promotion_rule_id) {
+          $node = $this->getPromotionByRuleId($promotion_rule_id);
+
+          if ($node instanceof NodeInterface && $node->isPublished()) {
+            // Get translation if available.
+            $node = $this->entityRepository->getTranslationFromContext($node);
+
+            $message = $node->get('field_acq_promotion_label')->getString();
+
+            if ($message) {
+              $promotions[$promotion_rule_id] = ['#markup' => $message];
+            }
+          }
+        }
+      }
+    }
+
+    // Load all the promotions of the three specific types we check below.
+    // We load only published promotions.
+    $subTypePromotions = $this->getAllPromotions([
+      [
+        'field' => 'status',
+        'value' => NodeInterface::PUBLISHED,
+      ],
+      [
+        'field' => 'field_alshaya_promotion_subtype',
+        'value' => [
+          self::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER,
+          self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER,
+          self::SUBTYPE_FREE_SHIPPING_ORDER,
+        ],
+        'operator' => 'IN',
+      ],
+    ]);
+
+    foreach ($subTypePromotions as $subTypePromotion) {
+      $message = '';
+
+      $promotion_rule_id = $subTypePromotion->get('field_acq_promotion_rule_id')->getString();
+      $sub_type = $subTypePromotion->get('field_alshaya_promotion_subtype')->getString();
+
+      // Special condition for free shipping type promotion.
+      if ($sub_type == self::SUBTYPE_FREE_SHIPPING_ORDER) {
+        // For free shipping, we only show if it is applied.
+        if (in_array($promotion_rule_id, $cartRulesApplied)) {
+          $message = $this->t('Your order qualifies for free delivery.');
+        }
+      }
+      // For the rest, we show only if they are not applied.
+      elseif (!in_array($promotion_rule_id, $cartRulesApplied)) {
+        // Get translation if available.
+        $subTypePromotion = $this->entityRepository->getTranslationFromContext($subTypePromotion);
+
+        // Get message from magento data stored in drupal.
+        $message = $subTypePromotion->get('field_acq_promotion_label')->getString();
+      }
+
+      if ($message) {
+        $promotions[$promotion_rule_id] = ['#markup' => $message];
+      }
+    }
+
+    return array_filter($promotions);
+  }
+
 }
