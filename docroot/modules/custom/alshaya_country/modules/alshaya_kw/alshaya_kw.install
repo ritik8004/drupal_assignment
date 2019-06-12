@@ -10,7 +10,7 @@
  *
  * Save translations for meta tags.
  */
-function alshaya_ae_update_8002() {
+function alshaya_kw_update_8002() {
   $strings = [
     'Kuwait' => [
       'ar' => 'اتش اند ام',
