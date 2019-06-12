@@ -8,6 +8,10 @@
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'custom.php';
 
+global $source_app_id, $source_app_secret_admin, $source_index;
+global $languages, $sorts, $facets, $query_facets, $query_generate;
+global $searchable_attributes, $ranking;
+
 $source_app_id = 'VP3QKEIIC5';
 $source_app_secret_admin = 'a695124fb2716596ee47a1521e3fb2a0';
 $source_index = 'template';
