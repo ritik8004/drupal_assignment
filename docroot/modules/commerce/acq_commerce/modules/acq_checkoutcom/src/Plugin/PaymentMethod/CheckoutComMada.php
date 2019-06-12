@@ -187,13 +187,25 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
   /**
    * {@inheritdoc}
    */
+  public function validatePaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    parent::validatePaymentForm($pane_form, $form_state, $complete_form);
+    $acm_payment_methods = $form_state->getValue('acm_payment_methods');
+    $card_bin = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['card_bin'];
+    if (empty($card_bin) || ($this->checkoutComApi->isMadaEnabled() && !$this->checkoutComApi->isMadaBin($card_bin))) {
+      $form_state->setError($pane_form['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['cc_number'], $this->t('Entered Card is not mada card.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
     $acm_payment_methods = $form_state->getValue('acm_payment_methods');
     $card_bin = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['card_bin'];
     // @todo: Replace this with APi call + cache / config.
-    if (!empty($inputs['cko-card-token'])) {
+    if (!empty($inputs['cko-card-token']) && !empty($card_bin)) {
       $this->initiateMadaCardPayment($inputs, $card_bin);
     }
   }

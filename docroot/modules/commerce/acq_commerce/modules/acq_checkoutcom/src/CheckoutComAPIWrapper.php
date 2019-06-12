@@ -112,6 +112,16 @@ class CheckoutComAPIWrapper {
   }
 
   /**
+   * Is mada bin check enabled.
+   *
+   * @return bool
+   *   Return TRUE for enabled, FALSE otherwise.
+   */
+  public function isMadaEnabled() {
+    return $this->configFactory->get('acq_checkoutcom.settings')->get('mada_enabled');
+  }
+
+  /**
    * Return the MADA BINS file path.
    *
    * @return string

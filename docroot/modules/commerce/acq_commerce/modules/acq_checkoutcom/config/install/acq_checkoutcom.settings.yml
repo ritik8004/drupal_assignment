@@ -1,4 +1,5 @@
 debug: false
+mada_enabled: true
 env: 'sandbox'
 base_uri:
   live: 'https://api2.checkout.com/v2/'
