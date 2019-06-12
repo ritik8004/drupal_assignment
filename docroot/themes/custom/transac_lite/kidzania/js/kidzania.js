@@ -270,7 +270,10 @@
             }
             var genderHtml = '';
             for (var k = 0, l = genderResponse.length; k < l; k++) {
-              genderHtml += "<input type='radio' name='gender_" + id + '_' + index + "' value='" + genderResponse[k].Description + '_' + genderResponse[k].Initial + "'><span class='icon icon-" + genderResponse[k].Description + "'></span>";
+              let desc = genderResponse[k].Description;
+              let isMale = (desc === 'MALE') ? true : false;
+              let getIcon = (id < 4) ? (isMale) ? 'boy' : 'girl' : (isMale) ? 'man' : 'woman';
+              genderHtml += "<input type='radio' name='gender_" + id + '_' + index + "' value='" + desc + '_' + genderResponse[k].Initial + "'><span class='icon icon-" + getIcon + "'></span>";
             }
 
             return (
