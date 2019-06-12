@@ -51,6 +51,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $currentUser;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -68,6 +75,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
     $this->configFactory = \Drupal::service('config.factory');
     $this->currentUser = \Drupal::service('current_user');
+    $this->entityTypeManager = \Drupal::service('entity_type.manager');
   }
 
   /**
@@ -82,11 +90,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $payment_card = 'new';
-    // @todo: Replace this code with API call.
+
     if ($this->currentUser->isAuthenticated()) {
-      $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
-      $data = file_get_contents($file);
-      $existing_cards = !empty($data) ? json_decode($data) : [];
+      $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
+      $existing_cards = $this->apiHelper->getCustomerCards($user->get('acq_customer_id')->getString());
 
       $options = [];
       foreach ($existing_cards as $card) {
