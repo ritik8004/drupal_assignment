@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
@@ -86,5 +87,30 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
 function alshaya_magazine_theme_suggestions_views_view_unformatted_alter(array &$suggestions, &$variables) {
   if ($variables['view']->id() == 'magazine_articles' && $variables['view']->current_display == 'homepage_block') {
     $suggestions[] = "views_view_unformatted__magazine_articles";
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_magazine_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id != 'node_magazine_article_edit_form' && $form_id != 'node_magazine_article_form') {
+    return;
+  }
+
+  $form['field_magazine_paragraphs']['widget']['add_more']['add_more_button_image_title_subtitle']['#value'] = t('Add @type', ['@type' => 'Image']);
+
+  foreach ($form['field_magazine_paragraphs']['widget'] as $index => $widget) {
+    if (empty($widget['#paragraph_type']) || $widget['#paragraph_type'] != 'image_title_subtitle') {
+      continue;
+    }
+
+    $form['field_magazine_paragraphs']['widget'][$index]['top']['paragraph_type_title']['info']['#markup'] = t('Image');
+
+    if (isset($widget['subform']['field_title'])) {
+      $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_title']['#access'] = FALSE;
+      $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_sub_title']['#access'] = FALSE;
+      $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_link']['#access'] = FALSE;
+    }
   }
 }
