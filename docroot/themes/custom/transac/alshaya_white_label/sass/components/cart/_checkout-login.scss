@@ -201,17 +201,19 @@
 }
 
 .multistep-checkout {
-  .tabs--content {
-    @include breakpoint($only-mobile) {
-      display: flex;
-      flex-direction: column;
+  .alias--cart-checkout-login & {
+    .tabs--content {
+      @include breakpoint($only-mobile) {
+        display: flex;
+        flex-direction: column;
 
-      #edit-checkout-login {
-        order: 4;
-      }
+        #edit-checkout-login {
+          order: 4;
+        }
 
-      #edit-checkout-guest {
-        order: 6;
+        #edit-checkout-guest {
+          order: 6;
+        }
       }
     }
   }
@@ -220,7 +222,6 @@
     width: 100%;
     border: 0;
     padding: 0;
-    text-align: center;
 
     @include breakpoint($tablet) {
       width: 50%;
