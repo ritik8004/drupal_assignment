@@ -27,8 +27,8 @@
     attach: function () {
       var field = $('#edit-mobile-mobile');
 
-      function validateField(){
-        $(".mobile-error").remove();
+      function validateField() {
+        $('.mobile-error').remove();
         field.removeClass('error');
         var mobile = $('.local-number').val();
 
@@ -37,12 +37,12 @@
           $('.local-number').after('<div class="mobile-error error">Please enter your This field.</div>');
         }
       }
-      $('#booking-payment-form').on('submit', function() {
-          validateField();
+      $('#booking-payment-form').on('submit', function () {
+        validateField();
       });
 
-      field.on('change', function() {
-          validateField();
+      field.on('change', function () {
+        validateField();
       });
     }
   };
