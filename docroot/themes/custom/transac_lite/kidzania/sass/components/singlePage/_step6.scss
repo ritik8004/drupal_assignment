@@ -39,7 +39,8 @@
       width: 100%;
     }
 
-    label.error {
+    label.error,
+    div.error {
       display: block !important;
       text-align: $left;
       color: $error_form_msg;
