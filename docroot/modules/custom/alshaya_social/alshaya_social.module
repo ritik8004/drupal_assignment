@@ -17,42 +17,30 @@ function alshaya_social_theme() {
       'variables' => [
         'social_networks' => NULL,
         'form' => NULL,
+        'section_title' => NULL,
       ],
     ],
   ];
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
-function alshaya_social_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  if (in_array($form_id, ['user_register_form', 'user_login_form'])) {
-    alshaya_social_display_social_authentication_links($form, $form_id);
-  }
+function alshaya_social_form_user_login_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $form['alshaya_social_login_form_title'] = [
+    '#weight' => -10,
+    '#markup' => '<div class="section-title">' . t('Sign in with email address') . '</div>',
+  ];
 }
 
 /**
- * Helper class to add social auth links to given form.
- *
- * @param array $form
- *   The array of form elements.
- * @param string $form_id
- *   The current form id.
+ * Implements hook_form_FORM_ID_alter().
  */
-function alshaya_social_display_social_authentication_links(array &$form, $form_id) {
-  if (
-    \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
-    && !empty($social_networks = \Drupal::configFactory()->get('social_auth.settings')->get('auth'))
-  ) {
-    $form['#attributes']['class'][] = 'social-signup-form';
-    $form['social_media_auth_links'] = [
-      '#theme' => 'alshaya_social',
-      '#social_networks' => $social_networks,
-      '#form' => $form_id,
-      '#weight' => 1000,
-    ];
-  }
-  $form['#cache']['tags'][] = 'config:alshaya_social.settings';
+function alshaya_social_form_user_register_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $form['alshaya_social_register_form_title'] = [
+    '#weight' => -10,
+    '#markup' => '<div class="section-title">' . t('Sign up with email address') . '</div>',
+  ];
 }
 
 /**

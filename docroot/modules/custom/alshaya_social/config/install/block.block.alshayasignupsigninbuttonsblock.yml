@@ -1,0 +1,26 @@
+uuid: 6e409acf-1003-40ba-b26f-a198bb4d7984
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_social
+    - system
+  theme:
+    - alshaya_white_label
+id: alshayasignupsigninbuttonsblock
+theme: alshaya_white_label
+region: sidebar_second
+weight: -46
+provider: null
+plugin: alshaya_signup_signin_buttons
+settings:
+  id: alshaya_signup_signin_buttons
+  label: 'Alshaya Sign Up Sign In Buttons Block'
+  provider: alshaya_social
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/login\r\n/user/register"
+    negate: false
+    context_mapping: {  }

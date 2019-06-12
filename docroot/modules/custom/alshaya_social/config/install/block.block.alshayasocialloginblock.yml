@@ -1,0 +1,26 @@
+uuid: de74489c-7049-48c8-a35c-a700fc98e375
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_social
+    - system
+  theme:
+    - alshaya_white_label
+id: alshayasocialloginblock
+theme: alshaya_white_label
+region: sidebar_second
+weight: -47
+provider: null
+plugin: alshaya_social_login
+settings:
+  id: alshaya_social_login
+  label: 'Alshaya Social Login Block'
+  provider: alshaya_social
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/user/login\r\n/user/register"
+    negate: false
+    context_mapping: {  }

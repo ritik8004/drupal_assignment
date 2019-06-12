@@ -2,4 +2,5 @@ name: 'Alshaya Social'
 type: module
 core: 8.x
 dependencies:
+  - block
   - social_auth:social_auth
