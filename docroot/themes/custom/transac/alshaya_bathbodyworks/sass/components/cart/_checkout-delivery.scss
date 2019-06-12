@@ -276,3 +276,26 @@
   text-transform: capitalize;
   letter-spacing: normal;
 }
+
+#payment_details_wrapper > .form-wrapper:last-child .payment-plugin-wrapper-div {
+  html[lang=ar] & {
+    @include breakpoint($only-mobile) {
+      padding: 1.25rem 0.5rem;
+    }
+  }
+
+  .payment-method-name {
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        width: 88%;
+      }
+    }
+  }
+  .method-title {
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        padding-left: 5rem;
+      }
+    }
+  }
+}
