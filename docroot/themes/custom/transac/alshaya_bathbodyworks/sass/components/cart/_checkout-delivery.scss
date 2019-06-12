@@ -291,6 +291,7 @@
       }
     }
   }
+
   .method-title {
     html[lang=ar] & {
       @include breakpoint($only-mobile) {
