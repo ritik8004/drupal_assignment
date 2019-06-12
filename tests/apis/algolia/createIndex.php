@@ -34,77 +34,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
-use AlgoliaSearch\Client;
-
-$clientSource = new Client($source_app_id, $source_app_secret_admin);
-$client = new Client($app_id, $app_secret_admin);
+global $languages;
 
 foreach ($languages as $language) {
-  $indexSource = $clientSource->initIndex($source_index . '_' . $language);
-  $settingsSource = $indexSource->getSettings();
-  $ranking = $settingsSource['ranking'];
-  $searchable_attributes = $settingsSource['searchableAttributes'];
-
-  $name = $prefix . '_' . $language;
-
-  // Just need a dummy index to create our index as there is no API to create
-  // new index directly.
-  $client->copyIndex('dummy', $name);
-  $index = $client->initIndex($name);
-//  do {
-//    try {
-//      sleep(10);
-//
-//    }
-//    catch (\Exception $e) {
-//      print $e->getMessage() . PHP_EOL;
-//    }
-//  } while (!empty($index));
-//  print PHP_EOL . PHP_EOL;
-
-  $settings = $settingsSource;
-  $settings['attributesForFaceting'] = $facets;
-  $settings['searchableAttributes'] = $searchable_attributes;
-  $settings['ranking'] = $ranking;
-  $index->setSettings($settings, TRUE);
-
-  foreach ($sorts as $sort) {
-    $replica = $name . '_' . implode('_', $sort);
-    $settings['replicas'][] = $replica;
-    $client->copyIndex($name, $replica);
-  }
-  sleep(3);
-
-  $index->setSettings($settings, TRUE);
-
-  foreach ($sorts as $sort) {
-    $replica = $name . '_' . implode('_', $sort);
-    $replica_index = $client->initIndex($replica);
-    $replica_settings = $replica_index->getSettings();
-    $replica_settings['ranking'] = [
-      'desc(stock)',
-      $sort['direction'] . '(' . $sort['field'] . ')',
-    ] + $ranking;
-    $replica_index->setSettings($replica_settings);
-  }
-
-  $query_suggestion = $name . '_query';
-  $query = [
-    'indexName' => $query_suggestion,
-    'sourceIndices' => [
-      [
-        'indexName' => $name,
-        'facets' => $query_facets,
-        'generate' => $query_generate,
-      ],
-    ],
-  ];
-
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
-  sleep(30);
-
-  print $name . PHP_EOL;
-  print $query_suggestion . PHP_EOL;
-  print implode(PHP_EOL, $settings['replicas']);
-  print PHP_EOL . PHP_EOL . PHP_EOL;
+  algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
 }
