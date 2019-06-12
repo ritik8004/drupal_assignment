@@ -58,6 +58,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $entityTypeManager;
 
   /**
+   * Current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -76,6 +83,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->configFactory = \Drupal::service('config.factory');
     $this->currentUser = \Drupal::service('current_user');
     $this->entityTypeManager = \Drupal::service('entity_type.manager');
+    $this->currentRequest = \Drupal::service('request_stack')->getCurrentRequest();
   }
 
   /**
@@ -106,7 +114,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ';
       }
 
-      $payment_card = empty($options) ? $payment_card : \Drupal::requestStack()->getCurrentRequest()->query->get('payment-card');
+      $payment_card = empty($options) ? $payment_card : $this->currentRequest->query->get('payment-card');
       if (!empty($form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
         $payment_card = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
       }
@@ -281,14 +289,17 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $cart->setPaymentMethod($this->getId(), ['card_token_id' => $inputs['cko-card-token']]);
     }
     elseif ($process_type == '3d') {
-      $acm_payment_methods = $form_state->getValue('acm_payment_methods');
-      $payment_card = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+      $payment_method = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com'];
+      $payment_card = $payment_method['payment_card'];
 
       if ((empty($payment_card) || $payment_card == 'new') && !empty($inputs['cko-card-token'])) {
         $this->initiate3dSecurePayment($inputs);
       }
       else {
-        $this->initiateStoredCardPayment($payment_card, (int) $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_details'][$payment_card]['cc_cvv']);
+        $this->initiateStoredCardPayment(
+          $payment_card,
+          (int) $payment_method['payment_details'][$payment_card]['cc_cvv']
+        );
       }
     }
   }
