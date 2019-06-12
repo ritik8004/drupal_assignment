@@ -94,7 +94,7 @@ function alshaya_magazine_theme_suggestions_views_view_unformatted_alter(array &
  * Implements hook_form_alter().
  */
 function alshaya_magazine_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id != 'node_magazine_article_edit_form') {
+  if ($form_id != 'node_magazine_article_edit_form' && $form_id != 'node_magazine_article_form') {
     return;
   }
 
