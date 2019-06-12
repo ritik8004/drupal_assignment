@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\NodeInterface;
-use Drupal\node\Entity\Node;
 
 /**
  * Class AlshayaPromotionsManager.
@@ -234,7 +233,7 @@ class AlshayaPromotionsManager {
     $subTypePromotions = $this->getAllPromotions([
       [
         'field' => 'status',
-        'value' => Node::PUBLISHED,
+        'value' => NodeInterface::PUBLISHED,
       ],
       [
         'field' => 'field_alshaya_promotion_subtype',

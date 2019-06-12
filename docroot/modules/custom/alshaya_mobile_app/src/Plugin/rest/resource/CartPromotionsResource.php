@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
-use Drupal\rest\ModifiedResourceResponse;
+use Drupal\block\BlockInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -29,7 +31,7 @@ class CartPromotionsResource extends ResourceBase {
    *
    * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
    */
-  private $mobileAppUtility;
+  protected $mobileAppUtility;
 
 
   /**
@@ -54,7 +56,7 @@ class CartPromotionsResource extends ResourceBase {
   protected $apiHelper;
 
   /**
-   * KnetFinalizeRequestResource constructor.
+   * CartPromotionsResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -115,8 +117,8 @@ class CartPromotionsResource extends ResourceBase {
    * @param string $cart_id
    *   Cart ID.
    *
-   * @return \Drupal\rest\ModifiedResourceResponse
-   *   Non-cacheable response object.
+   * @return \Drupal\rest\ResourceResponse
+   *   Cacheable response object.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -135,15 +137,28 @@ class CartPromotionsResource extends ResourceBase {
         'status' => TRUE,
       ]);
     $block = reset($blocks);
-    $selected_promotions = array_filter($block->get('settings')['promotions']);
 
-    // Get all the rules applied in cart.
-    $cart = $this->apiHelper->getCart($cart_id);
-    $cartRulesApplied = $cart->get('cart_rules');
+    if ($block instanceof BlockInterface) {
+      $selected_promotions = array_filter($block->get('settings')['promotions']);
 
-    $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied);
+      // Get all the rules applied in cart.
+      $cart = $this->apiHelper->getCart($cart_id);
+      $cartRulesApplied = $cart->get('cart_rules');
 
-    return new ModifiedResourceResponse($promotions);
+      $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied);
+
+      $response = new ResourceResponse($promotions);
+      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
+        '#cache' => [
+          'tags' => [
+            'node_type:acq_promotion',
+            'cart:' . $cart_id,
+          ],
+        ],
+      ]));
+
+      return $response;
+    }
   }
 
 }
