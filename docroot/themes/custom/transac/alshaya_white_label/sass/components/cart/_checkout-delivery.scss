@@ -21,7 +21,6 @@
 
   h1.c-page-title {
     @include breakpoint($only-mobile) {
-      padding-#{$left}: 2rem;
       font-size: 1.115rem;
     }
   }
