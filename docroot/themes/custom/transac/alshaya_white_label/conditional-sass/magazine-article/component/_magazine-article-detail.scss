@@ -57,7 +57,8 @@
       }
     }
 
-    .field--name-field-banner {
+    .field--name-field-banner,
+    .paragraph--type--video {
       margin-bottom: 1.25rem;
     }
 
@@ -165,6 +166,7 @@ body {
   .field__item {
     article {
       margin: 0 0.75rem;
+      text-align: center;
 
       @include breakpoint($only-mobile) {
         margin: 0;
@@ -196,6 +198,19 @@ body {
           line-height: 1.2;
           display: block;
         }
+      }
+    }
+
+    .promotions {
+      margin-top: 0.25rem;
+      font-weight: 700;
+
+      a {
+        font-size: 0.75rem;
+        color: $plp_promotion_link;
+        display: inline-block;
+        margin-left: 0.125rem;
+        margin-right: 0.125rem;
       }
     }
   }
