@@ -42,6 +42,9 @@ function alshaya_acm_checkout_update_8004() {
     'sign in with email address' => [
       'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
     ],
+    'continue as a guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
