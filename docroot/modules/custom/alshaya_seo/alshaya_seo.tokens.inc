@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_token_info().
@@ -42,6 +43,11 @@ function alshaya_seo_token_info() {
     'name' => t('Summary custom'),
     'description' => t("The summary of the node's main body text with dynamic length."),
     'dynamic' => TRUE,
+  ];
+
+  $info['tokens']['node']['category_names'] = [
+    'name' => t('Category Names'),
+    'description' => t("Comma separated list of all categories referenced in the node."),
   ];
 
   $info['tokens']['custom_meta']['brand_name'] = [
@@ -122,7 +128,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
   }
 
-  if ($type == 'node' && !empty($data['node'])) {
+  if ($type == 'node' && !empty($data['node']) && $data['node'] instanceof NodeInterface) {
 
     /** @var \Drupal\node\NodeInterface $node */
     $node = $data['node'];
@@ -169,6 +175,19 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         }
         $replacements[$original] = text_summary($output, 'plain_text', $size);
       }
+    }
+    if (isset($tokens['category_names'])) {
+      // Get all categories for the node.
+      $categories = $node->get('field_category')->referencedEntities();
+      $category_tokens = [];
+      foreach ($categories as $term) {
+        if ($term instanceof TermInterface && $term->hasTranslation($current_langcode)) {
+          $translated_term = $term->getTranslation($current_langcode);
+          $category_tokens[] = $translated_term->getName();
+        }
+      }
+      $category_tokens = implode(', ', $category_tokens);
+      $replacements[$tokens['category_names']] = $category_tokens;
     }
   }
 
