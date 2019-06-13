@@ -12,6 +12,7 @@ services:
       - '@cache.orders'
       - '@language_manager'
       - '@logger.factory'
+      - '@cache.orders_count'
 
   alshaya_acm_customer.helper:
     class: Drupal\alshaya_acm_customer\CustomerHelper
@@ -19,8 +20,15 @@ services:
       - '@acq_commerce.api'
 
   cache.orders:
-    class: Drupal\Core\Cache\CacheInterface
+    class: Drupal\Core\Cache\CacheBackendInterface
     tags:
       - { name: cache.bin }
     factory: cache_factory:get
     arguments: [orders]
+
+  cache.orders_count:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [orders_count]
