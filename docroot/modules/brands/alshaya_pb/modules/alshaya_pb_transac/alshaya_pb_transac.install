@@ -9,6 +9,16 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable free design services module.
+ */
+function alshaya_pb_transac_update_8012()  {
+  \Drupal::service('module_installer')->install(['alshaya_pb_free_design_services']);
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -16,7 +26,8 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_pb_transac_update_8012() {
   $strings = [
-    'Pottery Barn' => [
+    'seo_brand_name' => [
+      'en' => 'Pottery Barn',
       'ar' => 'بوتري بارن',
     ],
   ];
@@ -312,7 +323,8 @@ function alshaya_pb_transac_install() {
     '@group_name/@sku_name' => [
       'ar' => '@sku_name/@group_name',
     ],
-    'Pottery Barn' => [
+    'seo_brand_name' => [
+      'en' => 'Pottery Barn',
       'ar' => 'بوتري بارن',
     ],
   ];

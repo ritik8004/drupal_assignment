@@ -16,7 +16,7 @@ $config['block.block.autocompletewidgetofalgolia']['settings']['index'] = $setti
 
 // Values for developer machine here. This will need to be overridden in brand
 // specific settings files on each env for each brand.
-$settings['search_api.server.algolia']['backend_config']['application_id'] = 'HGR051I5XN';
-$settings['search_api.server.algolia']['backend_config']['api_key'] = '6fc229a5d5d0f0d9cc927184b2e4af3f';
-$settings['block.block.autocompletewidgetofalgolia']['settings']['application_id'] = 'HGR051I5XN';
-$settings['block.block.autocompletewidgetofalgolia']['settings']['search_api_key'] = 'a2fdc9d456e5e714d8b654dfe1d8aed8';
+$settings['search_api.server.algolia']['backend_config']['application_id'] = 'testing24192T8KHZ';
+$settings['search_api.server.algolia']['backend_config']['api_key'] = '628e74a9b6f3817cdd868278c8b8656e';
+$settings['block.block.autocompletewidgetofalgolia']['settings']['application_id'] = 'testing24192T8KHZ';
+$settings['block.block.autocompletewidgetofalgolia']['settings']['search_api_key'] = 'afeb84ab13757e11fbe8765142e2d7ad';

@@ -16,7 +16,8 @@ use Drupal\Component\Utility\Unicode;
  */
 function alshaya_vs_transac_update_8008() {
   $strings = [
-    "Victoria's Secret" => [
+    'seo_brand_name' => [
+      'en' => "Victoria's Secret",
       'ar' => 'فيكتوريا سيكريت',
     ],
   ];
@@ -201,7 +202,8 @@ function alshaya_vs_transac_install() {
     'I would like to receive exclusive deals from Victoria\'s Secret' => [
       'ar' => 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت',
     ],
-    "Victoria's Secret" => [
+    'seo_brand_name' => [
+      'en' => "Victoria's Secret",
       'ar' => 'فيكتوريا سيكريت',
     ],
   ];

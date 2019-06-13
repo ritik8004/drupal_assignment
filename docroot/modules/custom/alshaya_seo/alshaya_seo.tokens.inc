@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_token_info().
@@ -42,6 +43,11 @@ function alshaya_seo_token_info() {
     'name' => t('Summary custom'),
     'description' => t("The summary of the node's main body text with dynamic length."),
     'dynamic' => TRUE,
+  ];
+
+  $info['tokens']['node']['category_names'] = [
+    'name' => t('Category Names'),
+    'description' => t('Comma separated list of all categories referenced in the node.'),
   ];
 
   $info['tokens']['custom_meta']['brand_name'] = [
@@ -122,7 +128,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
   }
 
-  if ($type == 'node' && !empty($data['node'])) {
+  if ($type == 'node' && !empty($data['node']) && $data['node'] instanceof NodeInterface) {
 
     /** @var \Drupal\node\NodeInterface $node */
     $node = $data['node'];
@@ -170,12 +176,26 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         $replacements[$original] = text_summary($output, 'plain_text', $size);
       }
     }
+    if (isset($tokens['category_names'])) {
+      // Get all categories for the node.
+      $categories = $node->get('field_category')->referencedEntities();
+      $category_tokens = [];
+      foreach ($categories as $term) {
+        if ($term instanceof TermInterface) {
+          if ($term->hasTranslation($current_langcode)) {
+            $term = $term->getTranslation($current_langcode);
+          }
+          $category_tokens[] = $term->getName();
+        }
+      }
+      $category_tokens = implode(', ', $category_tokens);
+      $replacements[$tokens['category_names']] = $category_tokens;
+    }
   }
 
   if ($type == 'custom_meta') {
-    $master_config = \Drupal::configFactory()->get('alshaya_master.seo_site_variables');
     $seo_config = \Drupal::configFactory()->get('alshaya_seo_transac.meta_variables');
-    $brand_name = $master_config->get('brand_name');
+    $brand_name = (string) t('seo_brand_name');
     $min_amount = $seo_config->get('min_shipping_amount');
     $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
 
@@ -202,15 +222,15 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'country':
-          $replacements[$original] = $seo_config->get('country');
+          $replacements[$original] = t('seo_country');
           break;
 
         case 'city1':
-          $replacements[$original] = $seo_config->get('city1');
+          $replacements[$original] = t('seo_city1');
           break;
 
         case 'city2':
-          $replacements[$original] = $seo_config->get('city2');
+          $replacements[$original] = t('seo_city2');
           break;
       }
     }
