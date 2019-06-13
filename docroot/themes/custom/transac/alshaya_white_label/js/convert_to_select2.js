@@ -32,6 +32,10 @@
           minimumResultsForSearch: -1
         });
 
+        $('.form-item-preferred-store .form-select').select2({
+          minimumResultsForSearch: -1
+        });
+
         // See https://github.com/select2/select2/pull/5035.
         $('.cybersource-credit-card-exp-month-select').once('manage-disable').on('change', function () {
           setTimeout(function () {
