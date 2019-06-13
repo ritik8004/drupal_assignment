@@ -3,9 +3,10 @@
 namespace Drupal\acq_checkoutcom;
 
 use Drupal\acq_commerce\Conductor\ClientFactory;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\user\UserDataInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Class ApiHelper.
@@ -27,6 +28,13 @@ class ApiHelper {
   protected $configFactory;
 
   /**
+   * The user data service.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
    * LoggerChannelFactory object.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -34,22 +42,26 @@ class ApiHelper {
   protected $logger;
 
   /**
-   * Constructor.
+   * ApiHelper constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
    *   ClientFactory object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   ConfigFactoryInterface object.
+   * @param \Drupal\user\UserDataInterface $user_data
+   *   The user data service.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
   public function __construct(
     ClientFactory $client_factory,
     ConfigFactoryInterface $config_factory,
+    UserDataInterface $user_data,
     LoggerChannelFactory $logger_factory
   ) {
     $this->clientFactory = $client_factory;
     $this->configFactory = $config_factory;
+    $this->userData = $user_data;
     $this->logger = $logger_factory->get('acq_checkoutcom');
   }
 
@@ -78,50 +90,54 @@ class ApiHelper {
   /**
    * Get customer stored card.
    *
-   * @param string $customer_id
-   *   The customer id.
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
    *
    * @return array
    *   Return array of customer cards or empty array.
    */
-  public function getCustomerCards(string $customer_id): array {
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
-    $data = file_get_contents($file);
-    $existing_cards = !empty($data) ? json_decode($data) : [];
-    return $existing_cards;
+  public function getCustomerCards(UserInterface $user) {
+    return $this->userData->get('acq_checkoutcom', $user->id(), 'payment_cards');
   }
 
   /**
    * Store new card for customer.
    *
-   * @param string $customer_id
-   *   The customer id.
-   * @param array $card_data
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param array $new_card
    *   The card data to be stored.
    *
    * @return bool
    *   Return TRUE if card stored, FALSE otherwise.
    */
-  public function storeCustomerCard(string $customer_id, array $card_data) {
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
-    $data = file_get_contents($file);
-    $data = array_merge(!empty($data) ? Json::decode($data) : [], [$card_data]);
-    file_put_contents($file, Json::encode($data));
+  public function storeCustomerCard(UserInterface $user, array $new_card) {
+    $card_data = $this->getCustomerCards($user);
+    $card_data = array_merge(!empty($card_data) ? $card_data : [], [$new_card]);
+    $this->userData->set('acq_checkoutcom', $user->id(), 'payment_cards', $card_data);
     return TRUE;
   }
 
   /**
    * Delete given card for the customer.
    *
-   * @param string $customer_id
-   *   The customer id.
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
    * @param string $card_id
    *   The card id to delete.
    *
    * @return bool
-   *   Return TRUE if card delete, FALSE otherwise.
+   *   Return TRUE if card deleted, FALSE otherwise.
    */
-  public function deleteCustomerCard(string $customer_id, string $card_id) {
+  public function deleteCustomerCard(UserInterface $user, string $card_id) {
+    $card_data = $this->getCustomerCards($user);
+    $new_card_data = array_filter($card_data, function ($card) use ($card_id) {
+      return ($card['id'] != $card_id);
+    });
+    if (count($card_data) == count($new_card_data)) {
+      return FALSE;
+    }
+    $this->userData->set('acq_checkoutcom', $user->id(), 'payment_cards', $new_card_data);
     return TRUE;
   }
 

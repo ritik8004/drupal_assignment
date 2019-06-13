@@ -108,23 +108,26 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function listCards(UserInterface $user) {
-    $existing_cards = $this->apiHelper->getCustomerCards(
-      $user->get('acq_customer_id')->getString()
-    );
-
     $options = [];
-    foreach ($existing_cards as $card) {
-      $options[$card->id] = [
-        '#theme' => 'payment_card_teaser',
-        '#card_info' => $card,
-        '#user' => $user,
-      ];
+    if ($existing_cards = $this->apiHelper->getCustomerCards($user)) {
+      foreach ($existing_cards as $card) {
+        $options[$card['id']] = [
+          '#theme' => 'payment_card_teaser',
+          '#card_info' => $card,
+          '#user' => $user,
+        ];
+      }
     }
 
     return [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $options,
+      '#cache' => [
+        'tags' => [
+          'user:' . $this->currentUser->id() . ':payment_cards',
+        ],
+      ],
     ];
   }
 

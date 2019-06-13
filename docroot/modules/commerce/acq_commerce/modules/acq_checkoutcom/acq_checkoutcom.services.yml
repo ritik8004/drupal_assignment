@@ -12,4 +12,5 @@ services:
     arguments:
       - '@acq_commerce.client_factory'
       - '@config.factory'
+      - '@user.data'
       - '@logger.factory'

@@ -4,6 +4,9 @@ namespace Drupal\acq_checkoutcom\Form;
 
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
+use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
@@ -40,6 +43,13 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
   protected $currentUser;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * CustomerCardDeleteForm constructor.
    *
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
@@ -48,15 +58,19 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    *   The api helper object.
    * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
    *   The current user object.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
   public function __construct(
     CheckoutComAPIWrapper $checkout_com_Api,
     ApiHelper $api_helper,
-    AccountProxyInterface $account_proxy
+    AccountProxyInterface $account_proxy,
+    MessengerInterface $messenger
   ) {
     $this->checkoutComApi = $checkout_com_Api;
     $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -66,7 +80,8 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
     return new static(
       $container->get('acq_checkoutcom.checkout_api'),
       $container->get('acq_checkoutcom.agent_api'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('messenger')
     );
   }
 
@@ -166,14 +181,26 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    *   Return the ajax response object.
    */
   public function deleteCard(array &$form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-    $response->addCommand(new CloseModalDialogCommand());
     $uid = $form_state->getValue('uid');
     $card_id = $form_state->getValue('card_id');
     // Delete the card for given user.
     if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer users')) && $card_id) {
-      $this->apiHelper->deleteCustomerCard($form_state->getValue('customer_id'), $card_id);
+      $user = $form_state->getBuildInfo()['args'][0];
+      if (!$this->apiHelper->deleteCustomerCard($user, $card_id)) {
+        $this->messenger->addError(
+          $this->t('sorry! we could not able to delete your card, please try again later.')
+        );
+      }
+      else {
+        $this->messenger->addStatus(
+          $this->t('Your card has been deleted.')
+        );
+      }
+      Cache::invalidateTags(['user:' . $uid . ':payment_cards']);
     }
+    $response = new AjaxResponse();
+    $response->addCommand(new CloseModalDialogCommand());
+    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkoutcom.payment_cards', ['user' => $form_state->getValue('uid')])->toString()));
     return $response;
   }
 

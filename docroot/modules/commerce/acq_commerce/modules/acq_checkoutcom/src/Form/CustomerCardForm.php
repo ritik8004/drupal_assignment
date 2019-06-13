@@ -4,6 +4,7 @@ namespace Drupal\acq_checkoutcom\Form;
 
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
@@ -281,8 +282,16 @@ class CustomerCardForm extends FormBase {
         $this->t('Something went wrong while saving your card, please contact administrator.')
       );
     }
+    else {
+      $user = $form_state->getBuildInfo()['args'][0];
+      $this->apiHelper->storeCustomerCard($user, $card_data);
+      Cache::invalidateTags(['user:' . $form_state->getValue('uid') . ':payment_cards']);
 
-    $this->apiHelper->storeCustomerCard($form_state->getValue('customer_id'), $card_data);
+      $this->messenger->addStatus(
+        $this->t('You card has been successfully saved.')
+      );
+    }
+
     $form_state->setRedirect('acq_checkoutcom.payment_cards', ['user' => $form_state->getValue('uid')]);
   }
 

@@ -5,7 +5,6 @@
  * Module file for acq_checkoutcom.
  */
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Url;
 
 /**
@@ -35,7 +34,7 @@ function template_preprocess_payment_card_teaser(array &$variables) {
       'acq_checkoutcom.payment_card.remove_card',
       [
         'user' => $variables['user']->id(),
-        'card_id' => $variables['card_info']->id,
+        'card_id' => $variables['card_info']['id'],
       ],
       [
         'attributes' => [
@@ -46,6 +45,4 @@ function template_preprocess_payment_card_teaser(array &$variables) {
       ]
     ),
   ];
-  // @todo: Remove this with API integration, we won't need this.
-  $variables['card_info'] = Json::decode(Json::encode($variables['card_info']));
 }
