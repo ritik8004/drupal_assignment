@@ -6,6 +6,8 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
 
 /**
  * Provides Login button on Register Page and Signup Button on Login Page.
@@ -52,10 +54,12 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
     $output = [];
     if ($route_name === 'user.register') {
       $sub_text = $this->t('already have an account?');
+      $link_url = Url::fromRoute('user.login')->toString();
       $link_text = $this->t('sign in here');
     }
     elseif ($route_name === 'user.login') {
       $sub_text = $this->t('dont have an account yet?');
+      $link_url = Url::fromRoute('user.register')->toString();
       $link_text = $this->t('sign up here');
     }
     else {
@@ -63,10 +67,16 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
     }
 
     if (isset($sub_text) && isset($link_text)) {
-      $output['#markup'] = '<div class="sub-text">' . $sub_text . '</div><div class="link-button">' . $link_text . '</div>';
+      $output['#markup'] = '<div class="sub-text">' . $sub_text . '</div><a class="link-button" href="' . $link_url . '">' . $link_text . '</a>';
     }
     return $output;
+  }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }

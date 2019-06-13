@@ -4,7 +4,6 @@ namespace Drupal\alshaya_social\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\alshaya_social\AlshayaSocialHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,29 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Alshaya Social Helper Service.
-   *
-   * @var \Drupal\alshaya_social\AlshayaSocialHelper
-   */
-  protected $alshayaSocialHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AlshayaSocialHelper $alshaya_social) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->alshayaSocialHelper = $alshaya_social;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition,
-      $container->get('alshaya_social.helper')
+      $plugin_definition
     );
   }
 
@@ -53,9 +36,10 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
       '#theme' => 'alshaya_social',
     ];
 
+    $networks = alshaya_social_display_social_authentication_links();
     // Check for Social Login Enable status.
-    if ($this->alshayaSocialHelper->getStatus()) {
-      $output['#social_networks'] = $this->alshayaSocialHelper->getSocialNetworks();
+    if ($networks !== NULL) {
+      $output['#social_networks'] = $networks;
       $output['#section_title'] = $this->t('sign in with social media');
     }
 
