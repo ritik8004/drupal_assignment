@@ -5,6 +5,8 @@ namespace Drupal\alshaya_social\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides Social Login alternative for login/register on Alshaya sites.
@@ -17,13 +19,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->routeMatch = $route_match;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition
+      $plugin_definition,
+      $container->get('current_route_match')
     );
   }
 
@@ -40,10 +58,24 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
     // Check for Social Login Enable status.
     if ($networks !== NULL) {
       $output['#social_networks'] = $networks;
-      $output['#section_title'] = $this->t('sign in with social media');
+      // Check Route.
+      $route_name = $this->routeMatch->getRouteName();
+      if ($route_name === 'user.login') {
+        $output['#section_title'] = $this->t('sign in with social media');
+      }
+      if ($route_name === 'user.register') {
+        $output['#section_title'] = $this->t('sign up with social media');
+      }
     }
 
     return $output;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }
