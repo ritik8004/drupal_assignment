@@ -39,7 +39,8 @@ function alshaya_hm_update_8035() {
   $configFactory->save();
 
   $strings = [
-    'H&M' => [
+    'seo_brand_name' => [
+      'en' => 'H&M',
       'ar' => 'اتش اند ام',
     ],
   ];
@@ -660,7 +661,8 @@ function alshaya_hm_install() {
       'ar' => 'المفهوم',
       'en' => 'Concept',
     ],
-    'H&M' => [
+    'seo_brand_name' => [
+      'en' => 'H&M',
       'ar' => 'اتش اند ام',
     ],
   ];
