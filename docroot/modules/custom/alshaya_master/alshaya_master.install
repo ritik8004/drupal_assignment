@@ -1686,6 +1686,9 @@ function alshaya_master_install() {
     'sign in with email address' => [
       'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
     ],
+    'continue as a guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
