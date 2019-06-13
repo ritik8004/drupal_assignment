@@ -53,7 +53,7 @@ class OrdersManager {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  private $logger;
+  protected $logger;
 
   /**
    * Cache Backend service for orders_count.
