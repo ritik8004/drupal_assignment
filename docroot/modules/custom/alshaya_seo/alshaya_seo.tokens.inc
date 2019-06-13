@@ -47,7 +47,7 @@ function alshaya_seo_token_info() {
 
   $info['tokens']['node']['category_names'] = [
     'name' => t('Category Names'),
-    'description' => t("Comma separated list of all categories referenced in the node."),
+    'description' => t('Comma separated list of all categories referenced in the node.'),
   ];
 
   $info['tokens']['custom_meta']['brand_name'] = [
@@ -181,9 +181,11 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
       $categories = $node->get('field_category')->referencedEntities();
       $category_tokens = [];
       foreach ($categories as $term) {
-        if ($term instanceof TermInterface && $term->hasTranslation($current_langcode)) {
-          $translated_term = $term->getTranslation($current_langcode);
-          $category_tokens[] = $translated_term->getName();
+        if ($term instanceof TermInterface) {
+          if ($term->hasTranslation($current_langcode)) {
+            $term = $term->getTranslation($current_langcode);
+          }
+          $category_tokens[] = $term->getName();
         }
       }
       $category_tokens = implode(', ', $category_tokens);
