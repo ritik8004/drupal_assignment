@@ -173,9 +173,8 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
   }
 
   if ($type == 'custom_meta') {
-    $master_config = \Drupal::configFactory()->get('alshaya_master.seo_site_variables');
     $seo_config = \Drupal::configFactory()->get('alshaya_seo_transac.meta_variables');
-    $brand_name = $master_config->get('brand_name');
+    $brand_name = (string) t('seo_brand_name');
     $min_amount = $seo_config->get('min_shipping_amount');
     $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
 
@@ -202,15 +201,15 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'country':
-          $replacements[$original] = $seo_config->get('country');
+          $replacements[$original] = t('seo_country');
           break;
 
         case 'city1':
-          $replacements[$original] = $seo_config->get('city1');
+          $replacements[$original] = t('seo_city1');
           break;
 
         case 'city2':
-          $replacements[$original] = $seo_config->get('city2');
+          $replacements[$original] = t('seo_city2');
           break;
       }
     }
