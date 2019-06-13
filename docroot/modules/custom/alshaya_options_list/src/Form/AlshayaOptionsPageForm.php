@@ -65,6 +65,16 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             '#Collapsible' => TRUE,
             '#title' => 'Settings for ' . $selected_attribute,
           ];
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['title'] = [
+            '#type' => 'textfield',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['title'] ?? '',
+            '#title' => $this->t('Title for %attribute', ['%attribute' => $selected_attribute]),
+          ];
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['description'] = [
+            '#type' => 'textfield',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['description'] ?? '',
+            '#title' => $this->t('Description for %attribute', ['%attribute' => $selected_attribute]),
+          ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-search'] = [
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-search'] ?? '',
@@ -90,22 +100,20 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-images'] ?? '',
             '#title' => $this->t('Show images for %attribute', ['%attribute' => $selected_attribute]),
+            '#description' => $this->t('Select this if the attribute should be shown with images. Images need to be added to the attribute taxonomy term. You cannot group the terms alphabetically if this option is selected.'),
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['group'] = [
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['group'] ?? '',
             '#title' => $this->t('Group %attribute alphabetically.', ['%attribute' => $selected_attribute]),
-          ];
-          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['title'] = [
-            '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['title'] ?? '',
-            '#title' => $this->t('Title for %attribute', ['%attribute' => $selected_attribute]),
+            '#description' => $this->t('Select this to group the attributes by alphabet. Do not select this if the previous option - show images, is selected.'),
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title_toggle'] = [
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title_toggle'] ?? '',
             '#title' => $this->t('Show button on mobile.'),
             '#attributes' => ['class' => ['mobile-title-toggle']],
+            '#description' => $this->t('If this is selected, a button will be visible in mobile display. The attribute options will be displayed on clicking this button.'),
           ];
 
           $name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][mobile_title_toggle]';
@@ -123,11 +131,6 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
                 ':input[name="' . $name . '"]' => ['checked' => TRUE],
               ],
             ],
-          ];
-          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['description'] = [
-            '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['description'] ?? '',
-            '#title' => $this->t('Description for %attribute', ['%attribute' => $selected_attribute]),
           ];
         }
 
