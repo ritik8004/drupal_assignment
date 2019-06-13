@@ -15,7 +15,8 @@ use Drupal\search_api\Entity\Index;
  */
 function alshaya_bbw_transac_update_8007() {
   $strings = [
-    'Bath and body works' => [
+    'seo_brand_name' => [
+      'en' => 'Bath and body works',
       'ar' => 'باث اند بودي ووركس',
     ],
   ];
@@ -222,7 +223,8 @@ function alshaya_bbw_transac_install() {
   $configFactory->save();
 
   $strings = [
-    'Bath and body works' => [
+    'seo_brand_name' => [
+      'en' => 'Bath and body works',
       'ar' => 'باث اند بودي ووركس',
     ],
   ];
