@@ -277,26 +277,19 @@
   letter-spacing: normal;
 }
 
-#payment_details_wrapper > .form-wrapper:last-child .payment-plugin-wrapper-div {
-  html[lang=ar] & {
-    @include breakpoint($only-mobile) {
-      padding: 1.25rem 0.5rem;
-    }
-  }
-
-  .payment-method-name {
-    html[lang=ar] & {
-      @include breakpoint($only-mobile) {
-        width: 88%;
+@include breakpoint($only-mobile) {
+  #payment_details_wrapper {
+    #payment_method_title_cybersource {
+      html[lang=ar] & {
+        padding: 1.5rem 0.5rem 2rem;
       }
     }
-  }
 
-  .method-title {
-    html[lang=ar] & {
-      @include breakpoint($only-mobile) {
-        padding-left: 5rem;
+    .card-types-wrapper {
+      html[lang=ar] & {
+        top: 2.75rem;
       }
     }
   }
 }
+
