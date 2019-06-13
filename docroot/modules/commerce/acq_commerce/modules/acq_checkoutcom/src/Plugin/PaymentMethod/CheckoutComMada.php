@@ -39,6 +39,13 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
   protected $currentUser;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -55,6 +62,7 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
     $this->checkoutComApi = \Drupal::service('acq_checkoutcom.api');
     $this->configFactory = \Drupal::service('config.factory');
     $this->currentUser = \Drupal::service('current_user');
+    $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
   }
 
   /**
@@ -68,8 +76,6 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
-
     $pane_form['payment_details'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -153,13 +159,10 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
       ],
     ];
 
-    $debug = $checkout_com_settings->get('debug') ? 'true' : 'false';
-    // Replace with api call.
-    $public_key = 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f';
-
+    $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
     $string = "window.CKOConfig = {
       debugMode: {$debug},
-      publicKey: '{$public_key}',
+      publicKey: '{$this->apiHelper->getSubscriptionKeys('public_key')}',
       ready: function (event) {
         CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
       },
@@ -189,10 +192,12 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
    */
   public function validatePaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     parent::validatePaymentForm($pane_form, $form_state, $complete_form);
-    $acm_payment_methods = $form_state->getValue('acm_payment_methods');
-    $card_bin = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['card_bin'];
+    $card_bin = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['card_bin'];
     if (empty($card_bin) || ($this->checkoutComApi->isMadaEnabled() && !$this->checkoutComApi->isMadaBin($card_bin))) {
-      $form_state->setError($pane_form['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['cc_number'], $this->t('Entered Card is not mada card.'));
+      $form_state->setError(
+        $pane_form['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['cc_number'],
+        $this->t('Entered Card is not mada card.')
+      );
     }
   }
 
@@ -202,9 +207,7 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
-    $acm_payment_methods = $form_state->getValue('acm_payment_methods');
-    $card_bin = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['card_bin'];
-    // @todo: Replace this with APi call + cache / config.
+    $card_bin = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com_mada']['payment_details']['card_bin'];
     if (!empty($inputs['cko-card-token']) && !empty($card_bin)) {
       $this->initiateMadaCardPayment($inputs, $card_bin);
     }
