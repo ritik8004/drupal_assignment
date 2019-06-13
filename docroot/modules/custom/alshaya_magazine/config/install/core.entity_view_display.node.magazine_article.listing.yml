@@ -5,12 +5,13 @@ dependencies:
     - core.entity_view_mode.node.listing
     - field.field.node.magazine_article.field_magazine_category
     - field.field.node.magazine_article.field_magazine_date
-    - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_hero_image
+    - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_paragraphs
     - field.field.node.magazine_article.field_magazine_shop_the_story
     - field.field.node.magazine_article.field_magazine_slogan
     - field.field.node.magazine_article.field_magazine_weight
+    - image.style.magazine_article_listing
     - node.type.magazine_article
   module:
     - datetime
@@ -44,7 +45,7 @@ content:
     region: content
     label: hidden
     settings:
-      image_style: ''
+      image_style: magazine_article_listing
       image_link: ''
     third_party_settings: {  }
   field_magazine_slogan:
