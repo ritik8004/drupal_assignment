@@ -16,7 +16,8 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_pb_transac_update_8012() {
   $strings = [
-    'Pottery Barn' => [
+    'seo_brand_name' => [
+      'en' => 'Pottery Barn',
       'ar' => 'بوتري بارن',
     ],
   ];
@@ -312,7 +313,8 @@ function alshaya_pb_transac_install() {
     '@group_name/@sku_name' => [
       'ar' => '@sku_name/@group_name',
     ],
-    'Pottery Barn' => [
+    'seo_brand_name' => [
+      'en' => 'Pottery Barn',
       'ar' => 'بوتري بارن',
     ],
   ];
