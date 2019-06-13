@@ -379,11 +379,12 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
  * Update url alias for product node based on super category feature status.
  */
 function alshaya_super_category_pathauto_alias_alter(&$alias, array $context) {
-  if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
-    $super_category = \Drupal::config('alshaya_super_category.settings');
-    if (!$super_category->get('status') || !$super_category->get('product_path_alter')) {
-      return;
-    }
+  $super_category = \Drupal::config('alshaya_super_category.settings');
+  if (!$super_category->get('status')) {
+    return;
+  }
+
+  if ($context['module'] == 'node' && $context['bundle'] == 'acq_product' && $super_category->get('product_path_alter')) {
     // Get the node object.
     $node = $context['data']['node'];
 
