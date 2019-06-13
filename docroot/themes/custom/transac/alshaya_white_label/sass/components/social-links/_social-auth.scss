@@ -38,7 +38,7 @@
       content: '';
       height: 2.875rem;
       width: 2.875rem;
-      background-size: 2.5rem;
+      background-size: 2.9375rem;
       display: inline-block;
     }
   }
@@ -196,6 +196,7 @@
     #edit-checkout-guest-checkout-as-guest {
       width: 12.5625rem;
       height: 2.875rem;
+      font-family: $alshaya-bold;
 
       @include breakpoint($only-mobile) {
         width: 100%;

@@ -503,6 +503,7 @@
     .c-page-title {
       @include breakpoint($only-mobile) {
         text-align: center;
+        font-size: 1.25rem;
       }
     }
   }
