@@ -3,49 +3,56 @@
     display: flex;
     align-items: center;
     width: 14.375rem;
-    max-width: 15.4375rem;
+    max-width: 14.375rem;
     padding: 0.5rem;
+    padding-#{$left}: 0;
     margin-top: 1.5rem;
-    border-radius: 0.25rem;
+    background-color: $social-auth-bg;
+    height: 2.875rem;
+    border: 1px solid $social_auth_login_button_border;
+    transition: background-color 0.2s ease-in-out;
 
     @include breakpoint($only-mobile) {
-      margin-#{$left}: auto;
-      margin-#{$right}: auto;
+      max-width: none;
+      width: 100%;
+      justify-content: center;
     }
 
     .social-network-text {
-      margin: 0 auto;
+      margin: 0 0.5rem;
       color: $social-network-text;
-      text-transform: uppercase;
-      font-family: $alshaya-bold;
+      text-transform: none;
+      font-family: $alshaya-thin;
       font-size: 0.875rem;
+
+      @include breakpoint($only-mobile) {
+        margin: 0;
+      }
+    }
+
+    &:hover {
+      background-color: $social-auth-bg-hover;
+    }
+
+    &::before {
+      content: '';
+      height: 2.875rem;
+      width: 2.875rem;
+      background-size: 2.5rem;
+      display: inline-block;
     }
   }
 }
 
 .social_auth_facebook {
-  background-color: $social-auth-facebook-bg;
-
   &::before {
-    content: '';
-    width: 1.5rem;
-    height: 1.5rem;
-    background: url("/themes/custom/transac/alshaya_hnm/imgs/social-icons/facebook-icon.png") no-repeat center;
-    background-size: 1.5rem;
-    display: inline-block;
+    background: url(#{$base_theme_img_directory_path}/social-icons/facebook-login-logo.svg) no-repeat center;
   }
 }
 
-.signin-option {
-  font-size: 0.75rem;
-  line-height: 1.33;
-  color: $social-sign-in-option-text;
-  text-transform: capitalize;
-  display: block;
-  margin-top: 1.5rem;
-
-  @include breakpoint($only-mobile) {
-    text-align: center;
+.social_auth_google {
+  &::before {
+    background: url(#{$base_theme_img_directory_path}/social-icons/google-login-logo.svg) no-repeat center;
   }
 }
 
@@ -81,7 +88,7 @@
   }
 }
 
-.checkout-login {
+.alias--cart-checkout-login {
   #edit-checkout-social-auth,
   #edit-checkout-guest {
     padding: 0 7.875rem;
