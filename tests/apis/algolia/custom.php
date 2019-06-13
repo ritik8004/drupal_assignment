@@ -156,3 +156,33 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   print implode(PHP_EOL, $settings['replicas']);
   print PHP_EOL . PHP_EOL . PHP_EOL;
 }
+
+function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $brand) {
+  $brand_code = substr($brand, 0, -2);
+  $file = __DIR__ . '/../../../architecture/algolia/synonyms/' . $brand_code . '_' . $language . '.txt';
+  $synonyms = file_get_contents($file);
+  if (empty($synonyms)) {
+    print 'No synonyms found in ' . $file . PHP_EOL;
+    return;
+  }
+
+  $client = new Client($app_id, $app_secret_admin);
+  $client->setConnectTimeout(3000, 3000);
+  $name = $env . '_' . $brand . '_' . $language;
+  $index = $client->initIndex($name);
+
+  $synonyms = explode(PHP_EOL, $synonyms);
+  foreach ($synonyms as $synonym) {
+    $values = explode(',', $synonym);
+    $key = 'syn_' . $values[0];
+
+    $content = [
+      'type' => 'synonym',
+      'synonyms' => $values,
+      'objectID' => $key,
+    ];
+    $index->saveSynonym($key, $content, TRUE);
+  }
+
+  print 'Synonyms saved for: ' . $name . PHP_EOL;
+}
