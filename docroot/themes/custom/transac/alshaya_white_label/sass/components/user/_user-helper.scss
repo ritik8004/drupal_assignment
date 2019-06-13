@@ -150,13 +150,13 @@
   }
 
   @include breakpoint($tablet) {
-    padding: 1em 0;
-    margin: 4.25em 1.5em 1em;
+    padding: 2.5rem 0;
+    margin: 4.25rem auto 1rem;
   }
 
   @include breakpoint($desktop) {
-    padding: 0.7em 0;
-    margin: 4.6rem auto 1em;
+    margin: 4.6rem auto 1rem;
+    max-width: 64.125rem;
   }
 
   .messages__wrapper {
@@ -168,16 +168,6 @@
   }
 
   .user-login-form {
-    @include breakpoint($tablet) {
-      position: relative;
-      top: 0.5em;
-    }
-
-    @include breakpoint($desktop) {
-      max-width: 24.8rem;
-      top: 0.8125rem;
-    }
-
     .form-text,
     .form-email {
       color: $user_form_text;

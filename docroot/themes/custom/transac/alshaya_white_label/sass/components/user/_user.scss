@@ -88,7 +88,7 @@
 
     .c-sidebar-second__region {
       @include breakpoint($desktop) {
-        padding-#{$left}: 6.5em;
+        padding-#{$left}: 6.1875rem;
 
         p {
           line-height: 1.2;
@@ -427,6 +427,18 @@
     }
   }
 
+  .user-login-form,
+  .user-register-form {
+    .form-submit {
+      margin-top: 1rem;
+      height: 2.875rem;
+
+      @include breakpoint($tablet) {
+        width: 11.875rem;
+      }
+    }
+  }
+
   .form-item input:focus ~ label:not(.error),
   .form-item input:not(:focus):valid ~ label:not(.error),
   .form-item input:active ~ label:not(.error),
@@ -482,23 +494,16 @@
   position: relative;
 
   & > a {
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       #{$left}: 9em;
       bottom: 0.5em;
       width: auto;
-
-      html[lang='ar'] & {
-        #{$left}: 13em;
-        bottom: 0.75em;
-      }
     }
 
     @include breakpoint($desktop) {
-      bottom: 0.7em;
-
-      html[lang='ar'] & {
-        #{$left}: 12em;
-      }
+      #{$left}: 15.38rem;
+      bottom: 1.05rem;
+      width: auto;
     }
 
     position: absolute;

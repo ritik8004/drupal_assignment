@@ -36,3 +36,14 @@
     }
   }
 }
+
+.c-user-login,
+.c-user-register {
+  .section-title {
+    font-family: $hnm-demibold;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}

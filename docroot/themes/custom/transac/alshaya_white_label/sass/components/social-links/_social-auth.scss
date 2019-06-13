@@ -225,6 +225,15 @@
   }
 }
 
+.c-user-login,
+.c-user-register {
+  .section-title {
+    font-size: 1.125rem;
+    font-family: $alshaya-bold;
+    color: $user_login_section_title;
+  }
+}
+
 .path--cart {
   .multistep-checkout {
     #edit-checkout-login {
@@ -257,5 +266,10 @@
     color: $user_login_link_btn_text;
     line-height: 2.875rem;
     text-align: center;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $social-auth-bg-hover;
+    }
   }
 }
