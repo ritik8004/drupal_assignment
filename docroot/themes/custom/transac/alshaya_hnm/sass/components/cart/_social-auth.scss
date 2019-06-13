@@ -1,9 +1,8 @@
 .checkout-login-separator {
   > span {
-    font-family: $hnm-demibold;
-    letter-spacing: 0.8px;
-
-    &::first-letter {
+    @include breakpoint($only-mobile) {
+      font-family: $hnm-demibold !important;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
     }
   }
@@ -19,5 +18,14 @@
 
   .fieldset-legend::first-letter {
     text-transform: uppercase;
+  }
+}
+
+.alias--cart-checkout-login {
+  #edit-checkout-guest {
+    #edit-checkout-guest-checkout-as-guest {
+      font-family: $hnm-bold;
+      letter-spacing: 1px;
+    }
   }
 }
