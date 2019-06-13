@@ -235,6 +235,11 @@ class OrdersManager {
         // Store in cache.
         $this->cache->set($cid, $orders, $expire);
       }
+
+      // Verify count again and reset if required.
+      if (count($orders) != $this->getOrdersCount($email)) {
+        $this->countCache->set('orders_count_' . $email, count($orders));
+      }
     }
 
     return $orders;
