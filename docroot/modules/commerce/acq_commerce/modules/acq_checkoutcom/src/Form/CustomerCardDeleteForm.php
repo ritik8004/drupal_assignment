@@ -188,7 +188,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
       $user = $form_state->getBuildInfo()['args'][0];
       if (!$this->apiHelper->deleteCustomerCard($user, $card_id)) {
         $this->messenger->addError(
-          $this->t('sorry! we could not able to delete your card, please try again later.')
+          $this->t('Could not delete your card, please try again later.')
         );
       }
       else {
