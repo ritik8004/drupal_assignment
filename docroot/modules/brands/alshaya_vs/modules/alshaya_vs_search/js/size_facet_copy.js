@@ -199,7 +199,7 @@
       else {
         // Scroll to left.
         $(rightPaddle).once().on('click', function () {
-          if (sliderIndex >= sliderIndexidentifier - 1) {
+          if (sliderIndex > sliderIndexidentifier - 1) {
             sliderIndex = sliderIndexidentifier - 1;
           }
           else {
