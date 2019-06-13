@@ -7,6 +7,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Provides Social Login alternative for login/register on Alshaya sites.
@@ -76,6 +78,13 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockAccess(AccountInterface $account) {
+    return AccessResult::allowedIf(alshaya_social_display_social_authentication_links() !== NULL);
   }
 
 }

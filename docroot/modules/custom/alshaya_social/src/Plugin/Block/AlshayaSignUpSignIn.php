@@ -67,8 +67,14 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
     }
 
     if (isset($sub_text) && isset($link_text)) {
-      $output['#markup'] = '<div class="sub-text">' . $sub_text . '</div><a class="link-button" href="' . $link_url . '">' . $link_text . '</a>';
+      $output = [
+        '#theme' => 'alshaya_social_link_button',
+        '#sub_text' => $sub_text,
+        '#link_text' => $link_text,
+        '#link_url' => $link_url,
+      ];
     }
+
     return $output;
   }
 
