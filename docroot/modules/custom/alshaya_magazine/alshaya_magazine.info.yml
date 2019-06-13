@@ -5,6 +5,7 @@ description: 'Feature to manage magazine articles.'
 dependencies:
   - alshaya_master:alshaya_master
   - drupal:field
+  - drupal:image_style_quality
   - drupal:system
   - drupal:user
 package: Alshaya
