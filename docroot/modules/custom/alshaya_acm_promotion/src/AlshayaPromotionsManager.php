@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 
 /**
@@ -15,6 +16,8 @@ use Drupal\node\NodeInterface;
  * @package Drupal\alshaya_acm_promotion
  */
 class AlshayaPromotionsManager {
+
+  use StringTranslationTrait;
 
   /**
    * Denotes the fixed_percentage_discount_order promotion subtype.
