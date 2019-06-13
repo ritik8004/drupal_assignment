@@ -49,6 +49,20 @@ class OrdersManager {
   protected $languageManager;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
+   * Cache Backend service for orders_count.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $countCache;
+
+  /**
    * OrdersManager constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
@@ -61,17 +75,21 @@ class OrdersManager {
    *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $count_cache
+   *   Cache Backend service for orders_count.
    */
   public function __construct(APIWrapper $api_wrapper,
                               ConfigFactoryInterface $config_factory,
                               CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              CacheBackendInterface $count_cache) {
     $this->apiWrapper = $api_wrapper;
     $this->config = $config_factory->get('alshaya_acm_customer.orders_config');
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_acm_customer');
+    $this->countCache = $count_cache;
   }
 
   /**
@@ -83,12 +101,13 @@ class OrdersManager {
    *   User id for which cache needs to be cleared.
    */
   public function clearOrderCache($email, $uid = 0) {
+    // Clear user's order cache.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
-      $cid = 'orders_list_' . $langcode . '_' . $email;
-
-      // Clear user's order cache.
-      $this->cache->invalidate($cid);
+      $this->cache->delete('orders_list_' . $langcode . '_' . $email);
     }
+
+    // Clear user's order count cache.
+    $this->countCache->delete('orders_count_' . $email);
 
     if ($uid) {
       // Invalidate the cache tag when order is placed to reflect on the
@@ -170,6 +189,82 @@ class OrdersManager {
     }
 
     return $status;
+  }
+
+  /**
+   * Get orders.
+   *
+   * Status of orders keep changing, we store it in cache for only sometime.
+   * Time to store in cache is configurable.
+   *
+   * @param string $email
+   *   E-Mail address.
+   *
+   * @return array
+   *   Orders.
+   */
+  public function getOrders(string $email) {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $cid = 'orders_list_' . $langcode . '_' . $email;
+
+    if ($cache = $this->cache->get($cid)) {
+      $orders = $cache->data;
+    }
+    else {
+      try {
+        $orders = $this->apiWrapper->getCustomerOrders($email);
+      }
+      catch (\Exception $e) {
+        // Exception message is already added to log in APIWrapper.
+        $orders = [];
+      }
+
+      // Sort them by default by date.
+      usort($orders, function ($a, $b) {
+        return $b['created_at'] > $a['created_at'];
+      });
+
+      // Get the cache expiration time based on config value.
+      $cacheTimeLimit = $this->config->get('cache_time_limit');
+
+      // We can disable caching via config by setting it to zero.
+      if ($cacheTimeLimit > 0) {
+        $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
+
+        // Store in cache.
+        $this->cache->set($cid, $orders, $expire);
+      }
+    }
+
+    return $orders;
+  }
+
+  /**
+   * Get orders count.
+   *
+   * We need only count for some cases like GTM and count won't change like
+   * orders so we store them permanently.
+   *
+   * @param string $email
+   *   E-Mail address.
+   *
+   * @return int
+   *   Orders count.
+   */
+  public function getOrdersCount(string $email) {
+    $cid = 'orders_count_' . $email;
+
+    if ($cache = $this->countCache->get($cid)) {
+      $count = $cache->data;
+    }
+    else {
+      $orders = $this->getOrders($email);
+      $count = count($orders);
+      $this->countCache->set($cid, $count);
+    }
+
+    return $count;
   }
 
 }
