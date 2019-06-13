@@ -46,12 +46,3 @@ acq_checkoutcom.payment_card.remove_card:
     user: \d+
     card_id: '^[a-z0-9_-].*?$'
     _csrf_token: 'TRUE'
-
-acq_checkoutcom.select_card_type:
-  path: 'checkoutcom/select-card-method'
-  defaults:
-    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::selectCardType'
-    _title: ''
-  requirements:
-    # User can checkout as a guest.
-    _access: 'TRUE'

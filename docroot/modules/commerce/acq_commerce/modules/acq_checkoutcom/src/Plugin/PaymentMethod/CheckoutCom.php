@@ -100,18 +100,23 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $payment_card = 'new';
 
     if ($this->currentUser->isAuthenticated()) {
-      $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-      $existing_cards = $this->apiHelper->getCustomerCards($user->get('acq_customer_id')->getString());
+      $existing_cards = $this->apiHelper->getCustomerCards(
+        $this->entityTypeManager->getStorage('user')->load(
+          $this->currentUser->id()
+        )
+      );
 
-      $options = [];
-      foreach ($existing_cards as $card) {
-        $options[$card->id] = '
-        <div class="saved-card">
-          <div class="card-number">**** **** **** ' . $card->last4 . '</div>
-          <div class="card-name">' . $card->name . '</div>
-          <div class="card-expiry-date">' . "{$card->expiryMonth}/{$card->expiryYear}" . '</div>
-        </div>
-      ';
+      if (!empty($existing_cards)) {
+        $options = [];
+        foreach ($existing_cards as $card) {
+          $options[$card['id']] = '
+          <div class="saved-card">
+            <div class="card-number">**** **** **** ' . $card['last4'] . '</div>
+            <div class="card-name">' . $card['name'] . '</div>
+            <div class="card-expiry-date">' . "{$card['expiryMonth']}/{$card['expiryYear']}" . '</div>
+          </div>
+        ';
+        }
       }
 
       $payment_card = empty($options) ? $payment_card : $this->currentRequest->query->get('payment-card');
