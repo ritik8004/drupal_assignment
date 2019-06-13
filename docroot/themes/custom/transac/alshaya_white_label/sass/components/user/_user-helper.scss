@@ -151,7 +151,7 @@
 
   @include breakpoint($tablet) {
     padding: 2.5rem 0;
-    margin: 4.25rem auto 1rem;
+    margin: 4.25em 2rem;
   }
 
   @include breakpoint($desktop) {

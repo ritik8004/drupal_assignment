@@ -495,9 +495,9 @@
 
   & > a {
     @include breakpoint($only-tablet) {
-      #{$left}: 9em;
-      bottom: 0.5em;
+      bottom: 1rem;
       width: auto;
+      #{$right}: 0;
     }
 
     @include breakpoint($desktop) {
