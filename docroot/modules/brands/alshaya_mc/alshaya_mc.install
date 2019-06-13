@@ -27,7 +27,8 @@ function alshaya_mc_update_8315() {
   $configFactory->save();
 
   $strings = [
-    'Mothercare' => [
+    'seo_brand_name' => [
+      'en' => 'Mothercare',
       'ar' => 'مذركير',
     ],
   ];
@@ -339,7 +340,8 @@ function alshaya_mc_install() {
   _alshaya_master_initialize_amp('alshaya_amp_mothercare');
 
   $strings = [
-    'Mothercare' => [
+    'seo_brand_name' => [
+      'en' => 'Mothercare',
       'ar' => 'مذركير',
     ],
   ];
