@@ -40,7 +40,7 @@
         <li>
           <span>{{ 'Order Date'|t }}
             :</span>
-          <span>{{booking_info.order_date}}</span>
+          <span>{{booking_info.booking_date}}</span>
         </li>
         <li>
           <span>{{ 'Visit Date'|t }}
@@ -85,7 +85,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for key, types in visitor_list.data %}
+    {% for key, types in visitor_list %}
       {% for val in types.Book %}
         <tr>
           <td>

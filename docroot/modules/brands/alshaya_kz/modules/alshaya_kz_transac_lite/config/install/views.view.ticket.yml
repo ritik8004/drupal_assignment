@@ -7,8 +7,6 @@ dependencies:
     - alshaya_kz_transac_lite
     - datetime
     - options
-_core:
-  default_config_hash: SR9qglTekN8IdIPOUlv6YMShyz6mZUv53GXaNjAUybg
 id: ticket
 label: Ticket
 module: views
@@ -331,14 +329,14 @@ display:
           entity_type: ticket
           entity_field: telephone
           plugin_id: field
-        booking_date:
-          id: booking_date
+        created:
+          id: created
           table: ticket
-          field: booking_date
+          field: created
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Booking date'
+          label: 'Booking Date'
           exclude: false
           alter:
             alter_text: false
@@ -371,7 +369,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -383,7 +381,7 @@ display:
           type: timestamp
           settings:
             date_format: custom
-            custom_date_format: 'Y-m-d h:i:s A'
+            custom_date_format: 'd-m-Y H:i:s A'
             timezone: Asia/Kuwait
           group_column: value
           group_columns: {  }
@@ -396,7 +394,7 @@ display:
           separator: ', '
           field_api_classes: false
           entity_type: ticket
-          entity_field: booking_date
+          entity_field: created
           plugin_id: field
         booking_status:
           id: booking_status
@@ -852,6 +850,71 @@ display:
           entity_type: ticket
           entity_field: order_total
           plugin_id: field
+        transaction_id:
+          id: transaction_id
+          table: ticket
+          field: transaction_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Transaction id'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          entity_type: ticket
+          entity_field: transaction_id
+          plugin_id: field
       filters:
         sales_number:
           id: sales_number
@@ -1000,6 +1063,59 @@ display:
           entity_type: ticket
           entity_field: name
           plugin_id: string
+        created:
+          id: created
+          table: ticket
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: created_op
+            label: From
+            description: ''
+            use_operator: false
+            operator: created_op
+            identifier: created
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              media_creator: '0'
+              media_manager: '0'
+              webmaster: '0'
+              reviewer: '0'
+              seo_admin: '0'
+              site_builder: '0'
+            placeholder: ''
+            min_placeholder: ''
+            max_placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: ticket
+          entity_field: created
+          plugin_id: date
       sorts:
         id:
           id: id
@@ -1029,7 +1145,7 @@ display:
           empty: true
           tokenize: false
           content:
-            value: 'No ticket is booked yet on this site.'
+            value: 'No results found.'
             format: limited_options
           plugin_id: text
       relationships: {  }

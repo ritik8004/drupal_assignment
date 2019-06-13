@@ -8,3 +8,6 @@ dependencies:
   - telephone:telephone
   - sms_textanywhere:sms_textanywhere
   - endroid_qr_code:endroid_qr_code
+  - alshaya_knet:alshaya_knet
+  - date_popup:date_popup
+  - datetime_range:datetime_range
