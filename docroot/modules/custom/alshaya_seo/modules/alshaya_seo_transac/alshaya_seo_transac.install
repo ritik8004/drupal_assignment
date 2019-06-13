@@ -22,11 +22,6 @@ function alshaya_seo_transac_update_8402() {
     'alshaya_seo_transac',
     'install'
   );
-  $manager->updateConfigs(
-    ['alshaya_master.seo_site_variables'],
-    'alshaya_master',
-    'install'
-  );
 
   // Add ar translation for config.
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.node__acq_product');

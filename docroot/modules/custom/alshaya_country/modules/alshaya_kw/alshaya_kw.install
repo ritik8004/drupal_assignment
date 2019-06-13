@@ -12,10 +12,12 @@
  */
 function alshaya_kw_update_8002() {
   $strings = [
-    'Kuwait' => [
+    'seo_country' => [
+      'en' => 'Kuwait',
       'ar' => 'اتش اند ام',
     ],
-    'Kuwait City' => [
+    'seo_city1' => [
+      'en' => 'Kuwait City',
       'ar' => 'كويت سيتي',
     ],
   ];
@@ -34,10 +36,12 @@ function alshaya_kw_install() {
   alshaya_country_set_default_store_search_placeholder('e.g. Salmiya', 'مثل السالمية');
 
   $strings = [
-    'Kuwait' => [
+    'seo_country' => [
+      'en' => 'Kuwait',
       'ar' => 'اتش اند ام',
     ],
-    'Kuwait City' => [
+    'seo_city1' => [
+      'en' => 'Kuwait City',
       'ar' => 'كويت سيتي',
     ],
   ];
