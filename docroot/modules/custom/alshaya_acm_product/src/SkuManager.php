@@ -3078,7 +3078,7 @@ class SkuManager {
    */
   public function getSelectedVariantId() {
     $from_query = $this->currentRequest->query->get('selected');
-    if (!empty(self::$selectedVariantId) && !empty($from_query)) {
+    if (empty(self::$selectedVariantId) && !empty($from_query)) {
       $this->setSelectedVariantId($from_query);
     }
 
