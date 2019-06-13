@@ -12,13 +12,16 @@
  */
 function alshaya_ae_update_8005() {
   $strings = [
-    'UAE' => [
+    'seo_country' => [
+      'en' => 'UAE',
       'ar' => 'الامارات',
     ],
-    'Dubai' => [
+    'seo_city1' => [
+      'en' => 'Dubai',
       'ar' => 'دبي',
     ],
-    'Abu dhabi' => [
+    'seo_city2' => [
+      'en' => 'Abu dhabi',
       'ar' => 'ابوظبي',
     ],
   ];
@@ -85,13 +88,16 @@ function alshaya_ae_install() {
   alshaya_country_set_default_store_search_placeholder('e.g. Dubai', 'مثل دبي');
 
   $strings = [
-    'UAE' => [
+    'seo_country' => [
+      'en' => 'UAE',
       'ar' => 'الامارات',
     ],
-    'Dubai' => [
+    'seo_city1' => [
+      'en' => 'Dubai',
       'ar' => 'دبي',
     ],
-    'Abu dhabi' => [
+    'seo_city2' => [
+      'en' => 'Abu dhabi',
       'ar' => 'ابوظبي',
     ],
   ];
