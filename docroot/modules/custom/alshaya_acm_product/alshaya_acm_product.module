@@ -417,7 +417,7 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 function alshaya_acm_product_file_delete(FileInterface $entity) {
   \Drupal::logger('alshaya_acm_product')->notice('Deleting file @fid with uri @uri on page @page', [
     '@fid' => $entity->id(),
-    '@fid' => $entity->getFileUri(),
+    '@uri' => $entity->getFileUri(),
     '@page' => $_SERVER['REQUEST_URI'] ?? '-',
   ]);
 }
