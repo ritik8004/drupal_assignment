@@ -57,11 +57,7 @@
     top: -3.7rem;
 
     @include breakpoint($tablet) {
-      top: -5.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      top: -0.9rem;
+      top: -4.5rem;
     }
   }
 }

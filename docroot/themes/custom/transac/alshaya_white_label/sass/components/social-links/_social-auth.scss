@@ -257,7 +257,8 @@
   }
 
   .link-button {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-top: 1.0625rem;
     border: 1px solid $social_auth_login_button_border;
     font-size: 0.875rem;
@@ -265,11 +266,24 @@
     width: 9.5rem;
     color: $user_login_link_btn_text;
     line-height: 2.875rem;
-    text-align: center;
     transition: background-color 0.2s ease-in-out;
+
+    span {
+      display: inline-block;
+      margin: 0 0.5rem;
+    }
 
     &:hover {
       background-color: $social-auth-bg-hover;
+    }
+
+    &::before {
+      content: '';
+      height: 2.875rem;
+      width: 2.875rem;
+      background-size: 2.9375rem;
+      display: inline-block;
+      background: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg) no-repeat center;
     }
   }
 }
