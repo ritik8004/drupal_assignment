@@ -151,10 +151,40 @@ function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
+  static $attr_to_skip;
+
   // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
   }
+
+  // Skip additional attributes specified in config.
+  if (empty($attr_to_skip)) {
+    $attr_to_skip = \Drupal::configFactory()
+      ->getEditable('alshaya_acm_product.settings')
+      ->get('acq_sku__attributes_skip') ?? [];
+
+    // Skip configurable attributes, we get it from attribute_weights config.
+    $configurable_attribute_sets = \Drupal::configFactory()
+      ->getEditable('acq_sku.configurable_form_settings')
+      ->get('attribute_weights') ?? [];
+
+    foreach ($configurable_attribute_sets as $attributes_in_set) {
+      $attr_to_skip = array_merge($attr_to_skip, array_keys($attributes_in_set));
+    }
+  }
+
+  // Get configurable fields/attributes.
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  $attributes = $sku->get('attributes')->getValue();
+  foreach ($attributes as $key => $attr) {
+    // If attribute is not configurable (not available in fields), remove it.
+    if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
+      unset($attributes[$key]);
+    }
+  }
+
+  $sku->get('attributes')->setValue($attributes);
 }
 
 /**
@@ -1511,6 +1541,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $skuManager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
   }
 
+  $tree_pointer = NULL;
   if ($variant_sku = $form_state->get('variant_sku')) {
     $tree_pointer = SKU::loadFromSku($variant_sku);
   }
@@ -1705,10 +1736,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $configurable_codes = array_keys($product_tree['configurables']);
     $attribute = reset($configurable_codes);
-    $option_id = $selected[$attribute];
+    $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-    if ($display_settings->get('show_child_images_after_selecting') !== 'all') {
+    if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
       $selected_sku = $first_child;

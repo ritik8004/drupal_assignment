@@ -43,17 +43,19 @@
         {% block pricePrefix %}
         {% endblock %}
 
-        <div class="price-block {{ content.price_block_identifier }}">
-          {{ content.price_block }}
-        </div>
-
-        <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
-
-        {% if vat_text %}
-          <div class="vat-text">
-            {{ vat_text }}
+        <div class="info-wrapper">
+          <div class="price-block {{ content.price_block_identifier }}">
+            {{ content.price_block }}
           </div>
-        {% endif %}
+
+          <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+
+          {% if vat_text %}
+            <div class="vat-text">
+              {{ vat_text }}
+            </div>
+          {% endif %}
+        </div>
 
         {% if content.delivery_link is not empty %}
           <div class="delivery">
