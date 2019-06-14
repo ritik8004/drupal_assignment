@@ -17,7 +17,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 
 /**
- * Delete the {id} purger instance.
+ * Delete the {card_id} of user.
  */
 class CustomerCardDeleteForm extends ConfirmFormBase {
 
