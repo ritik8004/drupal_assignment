@@ -722,6 +722,34 @@ main .user-register-form {
           margin-#{$right}: 3.4375rem;
         }
       }
+
+      @include breakpoint($only-mobile) {
+        .region__content {
+          display: flex;
+          flex-direction: column;
+
+          .block-alshaya-social-login {
+            order: 1;
+          }
+
+          .block-alshaya-signup-signin-buttons {
+            order: 2;
+          }
+
+          .block-system-main-block {
+            order: 3;
+          }
+
+          .block-page-title-block {
+            h1 {
+              font-size: 1.25rem;
+              text-align: center;
+              width: 100%;
+              top: -3.5rem;
+            }
+          }
+        }
+      }
     }
 
     .c-sidebar-second {

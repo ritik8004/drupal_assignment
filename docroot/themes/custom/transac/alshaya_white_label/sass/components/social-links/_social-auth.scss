@@ -16,6 +16,7 @@
       max-width: none;
       width: 100%;
       justify-content: center;
+      position: relative;
     }
 
     .social-network-text {
@@ -40,6 +41,12 @@
       width: 2.875rem;
       background-size: 2.9375rem;
       display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        top: 0;
+        #{$left}: 0;
+      }
     }
   }
 }
@@ -204,6 +211,10 @@
     font-size: 1.125rem;
     font-family: $alshaya-bold;
     color: $user_login_section_title;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
   }
 }
 
@@ -227,6 +238,10 @@
   .sub-text {
     font-size: 0.875rem;
     color: $user_login_sub_text;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
   }
 
   .link-button {
@@ -240,6 +255,12 @@
     color: $user_login_link_btn_text;
     line-height: 2.875rem;
     transition: background-color 0.2s ease-in-out;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      position: relative;
+      justify-content: center;
+    }
 
     span {
       display: inline-block;
@@ -257,6 +278,12 @@
       background-size: 2.9375rem;
       display: inline-block;
       background: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg) no-repeat center;
+
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        top: 0;
+        #{$left}: 0;
+      }
     }
   }
 }
