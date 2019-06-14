@@ -362,7 +362,9 @@ function alshaya_hm_form_sku_base_form_alter(&$form, FormStateInterface $form_st
         $parent_sku = $sku_manager->getParentSkuBySku($article_castor_id_child_sku);
         // Set SKU tree to the parent based on color chosen. This is used while
         // submitting the data back to MDC.
-        $form_state->set('tree_sku', $parent_sku->getSku());
+        if ($parent_sku instanceof SKU) {
+          $form_state->set('tree_sku', $parent_sku->getSku());
+        }
       }
     }
   }
@@ -394,7 +396,7 @@ function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStat
         $parent_sku = $sku_manager->getParentSkuBySku($article_castor_id_child_sku);
 
         // Update Item code when switching the color.
-        $item_code['#markup'] = $parent_sku->getSku();
+        $item_code['#markup'] = $parent_sku instanceof SKU ? $parent_sku->getSku() : '';
         $item_code['#prefix'] = '<span class="field__value">';
         $item_code['#suffix'] = '</span>';
 
