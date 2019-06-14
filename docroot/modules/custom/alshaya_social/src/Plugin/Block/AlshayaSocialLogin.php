@@ -65,7 +65,7 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
       if ($route_name === 'user.login') {
         $output['#section_title'] = $this->t('sign in with social media');
       }
-      if ($route_name === 'user.register') {
+      elseif ($route_name === 'user.register') {
         $output['#section_title'] = $this->t('sign up with social media');
       }
     }

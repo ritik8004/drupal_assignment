@@ -52,6 +52,7 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
   public function build() {
     $route_name = $this->routeMatch->getRouteName();
     $output = [];
+    $sub_text = $link_text = NULL;
     if ($route_name === 'user.register') {
       $sub_text = $this->t('already have an account?');
       $link_url = Url::fromRoute('user.login')->toString();
@@ -61,9 +62,6 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
       $sub_text = $this->t('dont have an account yet?');
       $link_url = Url::fromRoute('user.register')->toString();
       $link_text = $this->t('sign up here');
-    }
-    else {
-      $sub_text = $link_text = NULL;
     }
 
     if (isset($sub_text) && isset($link_text)) {
