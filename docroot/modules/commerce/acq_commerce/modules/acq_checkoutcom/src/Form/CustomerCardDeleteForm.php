@@ -163,7 +163,9 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
       '#type' => 'submit',
       '#value' => $this->t('No'),
       '#weight' => -10,
-      '#ajax' => ['callback' => '::closeDialog'],
+      '#attributes' => [
+        'class' => ['button', 'dialog-cancel'],
+      ],
     ];
 
     return $form;
@@ -208,22 +210,5 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {}
-
-  /**
-   * Respond a CloseModalDialogCommand to close the modal dialog.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Return the ajax response object.
-   */
-  public function closeDialog(array &$form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-    $response->addCommand(new CloseModalDialogCommand());
-    return $response;
-  }
 
 }
