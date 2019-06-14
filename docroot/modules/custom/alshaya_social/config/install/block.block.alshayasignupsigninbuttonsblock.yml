@@ -8,8 +8,8 @@ dependencies:
     - alshaya_white_label
 id: alshayasignupsigninbuttonsblock
 theme: alshaya_white_label
-region: sidebar_second
-weight: -46
+region: content
+weight: 12
 provider: null
 plugin: alshaya_signup_signin_buttons
 settings:

@@ -1,4 +1,5 @@
-.checkout-login-separator {
+.checkout-login-separator,
+.login-separator {
   > span {
     @include breakpoint($only-mobile) {
       font-family: $hnm-demibold !important;

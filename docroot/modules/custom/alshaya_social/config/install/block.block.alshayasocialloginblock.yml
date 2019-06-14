@@ -8,8 +8,8 @@ dependencies:
     - alshaya_white_label
 id: alshayasocialloginblock
 theme: alshaya_white_label
-region: sidebar_second
-weight: -47
+region: content
+weight: 12
 provider: null
 plugin: alshaya_social_login
 settings:
