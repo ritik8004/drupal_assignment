@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
@@ -214,6 +215,13 @@ class AlshayaGtmManager {
   protected $moduleHandler;
 
   /**
+   * Orders Manager.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -244,6 +252,8 @@ class AlshayaGtmManager {
    *   Sku Manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -258,7 +268,8 @@ class AlshayaGtmManager {
                               Connection $database,
                               AlshayaAddressBookManager $addressBookManager,
                               SkuManager $skuManager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              OrdersManager $orders_manager) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -273,6 +284,7 @@ class AlshayaGtmManager {
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $module_handler;
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -846,8 +858,6 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchCompletedOrderAttributes(array $order) {
-    $orders = alshaya_acm_customer_get_user_orders($order['email']);
-
     $orderItems = $order['items'];
 
     $dimension7 = '';
@@ -928,13 +938,16 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
+    /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
+    $orders_count = $this->ordersManager->getOrdersCount($order['email']);
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
-      'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
