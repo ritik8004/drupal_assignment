@@ -77,25 +77,15 @@ class TicketBookingKnetHelper extends KnetHelper {
     $url_options = [
       'https' => TRUE,
       'absolute' => TRUE,
-      'query' => ['ref_number' => $response['quote_id']],
     ];
     $result_url = 'REDIRECT=';
     if ($response['result'] == 'CAPTURED') {
-      $option = 'success';
-      // Activate order and notify the user via mail
-      // and sms about ticket booking.
-      if ($this->ticketBooking->activateOrder($response['quote_id'])) {
-        $this->bookingPayment->updateTicketDetails($response, 1);
-        $booking_info = $this->bookingPayment->getTicketDetails($response['quote_id']);
-        $this->bookingPayment->bookingConfirmationMail($booking_info);
-        // @todo - send sms.
-      }
+      $route = 'alshaya_knet.success';
     }
     else {
-      $option = 'failed';
-      $this->bookingPayment->updateTicketDetails($response);
+      $route = 'alshaya_knet.failed';
     }
-    $result_url .= Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => $option], $url_options)->toString();
+    $result_url .= Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
     $this->logger->info('KNET update for Response: @message State: @state', [
       '@message' => json_encode($response),
       '@state' => json_encode($state_data),
@@ -111,11 +101,20 @@ class TicketBookingKnetHelper extends KnetHelper {
     if ($data['result'] !== 'CAPTURED') {
       return $this->processKnetFailed($state_key);
     }
+    // Activate order and notify the user via mail
+    // and sms about ticket booking.
+    if ($this->ticketBooking->activateOrder($data['quote_id'])) {
+      $this->bookingPayment->updateTicketDetails($data, 1);
+      $booking_info = $this->bookingPayment->getTicketDetails($data['quote_id']);
+      $this->bookingPayment->bookingConfirmationMail($booking_info);
+      // @todo - send sms.
+    }
+
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $data['quote_id'],
       '@message' => json_encode($data),
     ]);
-    $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => 'success'])->toString();
+    $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => 'success'], ['query' => ['ref_number' => $data['quote_id']]])->toString();
     return new RedirectResponse($url);
   }
 
@@ -125,12 +124,15 @@ class TicketBookingKnetHelper extends KnetHelper {
   public function processKnetFailed(string $state_key) {
     $data = $this->state->get($state_key);
     parent::processKnetFailed($state_key);
+    // Update current ticket details with payment id and transaction id.
+    $this->bookingPayment->updateTicketDetails($data);
+
     $this->logger->error('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : '',
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],
     ]);
-    $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => 'failed'])->toString();
+    $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => 'failed'], ['query' => ['ref_number' => $data['quote_id']]])->toString();
     return new RedirectResponse($url, 302);
   }
 

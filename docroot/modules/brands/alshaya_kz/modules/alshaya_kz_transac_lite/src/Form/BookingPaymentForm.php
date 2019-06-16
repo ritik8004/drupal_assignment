@@ -185,19 +185,17 @@ class BookingPaymentForm extends FormBase {
       $order_total = $this->ticketBooking->getOrderTotal($final_visitor_list->sales_number);
       $booking_info = $this->bookingPayment->getTicketDetails($final_visitor_list->sales_number);
       if (!empty($order_total) && empty($booking_info)) {
-        $knet = ($form_state->getValue('knet')) ? 'knet' : '';
         $booking = [
           'name' => $form_state->getValue('name'),
           'email' => $form_state->getValue('email'),
           'mobile' => $form_state->getValue('mobile'),
-          'payment_type' => $knet,
+          'payment_type' => 'knet',
           'sales_number' => $final_visitor_list->sales_number,
           'visitor_types' => rtrim($visitor_types, ','),
           'visit_date' => $final_visitor_list->visit_date,
           'order_total' => $order_total,
           'ticket_info' => $final_visitor_list->data,
         ];
-
         // Save ticket details.
         if ($this->bookingPayment->saveTicketDetails($booking, $final_visitor_list->sales_number)) {
           // Initiate K-Net request.

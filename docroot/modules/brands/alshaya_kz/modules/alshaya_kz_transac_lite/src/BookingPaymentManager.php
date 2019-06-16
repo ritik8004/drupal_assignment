@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Class BookingPaymentManager.
@@ -53,6 +54,13 @@ class BookingPaymentManager {
   protected $currentUser;
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * BookingPaymentManager constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -65,18 +73,22 @@ class BookingPaymentManager {
    *   Render object.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   Current user object.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_factory,
                               EntityTypeManagerInterface $entity_manager,
                               MailManagerInterface $mail_manager,
                               Renderer $renderer,
-                              AccountProxy $current_user) {
+                              AccountProxy $current_user,
+                              DateFormatterInterface $date_formatter) {
 
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->entityManager = $entity_manager;
     $this->mailManager = $mail_manager;
     $this->renderer = $renderer;
     $this->currentUser = $current_user;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -161,7 +173,7 @@ class BookingPaymentManager {
       $booking_info['visitor_types'] = $ticket->get('visitor_types')->getString();
       $booking_info['visit_date'] = $ticket->get('visit_date')->getString();
       $booking_info['order_total'] = $ticket->get('order_total')->getString();
-      $booking_info['booking_date'] = date('Y-m-d', $ticket->get('created')->getString());
+      $booking_info['booking_date'] = $this->dateFormatter->format($ticket->get('created')->getString(), '', 'Y-m-d');
       $booking_info['ticket_info'] = $ticket->get('ticket_info')->getString();
     }
     return $booking_info;

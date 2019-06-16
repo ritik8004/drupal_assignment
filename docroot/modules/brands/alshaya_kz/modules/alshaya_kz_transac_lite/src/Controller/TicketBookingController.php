@@ -189,14 +189,12 @@ class TicketBookingController extends ControllerBase {
       return $build;
     }
 
-    if ($option == 'failed') {
-      $build = [
-        '#theme' => 'payment_failed',
-        '#ref_number' => $sales_number,
-        '#attached' => ['drupalSettings' => ['book_status' => 1]],
-      ];
-      return $build;
-    }
+    $build = [
+      '#theme' => 'payment_failed',
+      '#ref_number' => $sales_number,
+      '#attached' => ['drupalSettings' => ['book_status' => 1]],
+    ];
+    return $build;
   }
 
 }

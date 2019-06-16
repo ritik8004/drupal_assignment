@@ -13,11 +13,12 @@ services:
       - '@plugin.manager.mail'
       - '@renderer'
       - '@current_user'
-  alshaya_kz_transac_lite.helper:
+      - '@date.formatter'
+  alshaya_kz_transac_lite_knet.helper:
     class: Drupal\alshaya_kz_transac_lite\Helper\TicketBookingKnetHelper
     decorates: alshaya_knet.helper
     arguments:
-      - '@alshaya_kz_transac_lite.helper.inner'
+      - '@alshaya_kz_transac_lite_knet.helper.inner'
       - '@config.factory'
       - '@state'
       - '@logger.factory'
