@@ -172,6 +172,12 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       ],
     ];
 
+    // Saved cards list.
+    $links['payment_cards'] = [
+      'text' => t('Payment Cards'),
+      'route' => 'acq_checkoutcom.payment_cards',
+    ];
+
     // Communication preferences link.
     $links['communication_preference'] = [
       'text' => t('communication preferences'),
@@ -252,6 +258,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       unset($links['orders']);
       unset($links['address_book']);
       unset($links['communication_preference']);
+      unset($links['payment_cards']);
     }
 
     if ($uid != $account->id() && isset($links['my_account'])) {

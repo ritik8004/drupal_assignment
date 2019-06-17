@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Component\Serialization\Json;
@@ -28,7 +29,7 @@ class CheckoutComAPIWrapper {
   const CARD_PAYMENT_ENDPOINT = 'charges/card';
 
   // Void payment endpoint.
-  const VOID_PAYMENT_ENDPOINT = 'charges/@id/void';
+  const VOID_PAYMENT_ENDPOINT = 'charges/{id}/void';
 
   // Void payment amount.
   const VOID_PAYMENT_AMOUNT = 1.0;
@@ -61,6 +62,13 @@ class CheckoutComAPIWrapper {
   protected $configFactory;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * The logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -74,17 +82,21 @@ class CheckoutComAPIWrapper {
    *   ConfigFactoryInterface object.
    * @param \Drupal\Core\Http\ClientFactory $http_client_factory
    *   ClientFactory object.
+   * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
+   *   ApiHelper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     HttpClientFactory $http_client_factory,
+    ApiHelper $api_helper,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->logger = $logger_factory->get('acq_checkoutcom');
     $this->httpClientFactory = $http_client_factory;
+    $this->apiHelper = $api_helper;
+    $this->logger = $logger_factory->get('acq_checkoutcom');
   }
 
   /**
@@ -105,7 +117,7 @@ class CheckoutComAPIWrapper {
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
-        'Authorization' => 'sk_test_863d1545-5253-4387-b86b-df6a86797baa',
+        'Authorization' => $this->apiHelper->getSubscriptionKeys('secret_key'),
       ],
     ];
 
@@ -231,6 +243,103 @@ class CheckoutComAPIWrapper {
   }
 
   /**
+   * Authorize a card for payment.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param string $endpoint
+   *   The end point to call.
+   * @param array $params
+   *   The array of params.
+   * @param string $caller
+   *   The caller method name.
+   *
+   * @return array
+   *   Return array of reponse or empty array.
+   *
+   * @throws \Exception
+   */
+  protected function authorizeCardForPayment(UserInterface $user, string $endpoint, array $params, $caller = '') {
+    $doReq = function ($client, $req_param) use ($endpoint, $params) {
+      $opt = ['json' => $req_param['commerce'] + $params];
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      $result = $this->tryCheckoutRequest($doReq, $caller);
+    }
+    catch (\UnexpectedValueException $e) {
+      $this->logger->error('Error occurred while processing card authorization for user: %user : %message', [
+        '%user' => $user->getEmail(),
+        '%message' => $e->getMessage(),
+      ]);
+      throw new \Exception(
+        new FormattableMarkup(
+          'Error occurred while processing card authorization for user: %user',
+          ['%user' => $user->getEmail()]
+        )
+      );
+    }
+
+    if (array_key_exists('errorCode', $result)) {
+      throw new \Exception('Error Code ' . $result['errorCode'] . ': ' . $result['message']);
+    }
+
+    // Validate authorisation.
+    if (array_key_exists('status', $result) && $result['status'] === 'Declined') {
+      throw new \Exception('Void transaction decliened by checkout.com');
+    }
+
+    return $result;
+  }
+
+  /**
+   * Make void transaction.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param string $endpoint
+   *   The end point to call.
+   * @param array $params
+   *   The array of params.
+   * @param string $caller
+   *   The caller method.
+   *
+   * @return array
+   *   The array of reponse or empty array.
+   *
+   * @throws \Exception
+   */
+  protected function makeVoidTransaction(UserInterface $user, string $endpoint, array $params, $caller = '') {
+    $doReq = function ($client, $req_param) use ($endpoint, $params) {
+      $opt = ['json' => $req_param['commerce'] + $params];
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      $result = $this->tryCheckoutRequest($doReq, $caller);
+    }
+    catch (\UnexpectedValueException $e) {
+      $this->logger->error('Error occurred while processing card authorization for user: %user : %message', [
+        '%user' => $user->getEmail(),
+        '%message' => $e->getMessage(),
+      ]);
+      throw new \Exception(
+        new FormattableMarkup(
+          'Error occurred while processing card authorization for user: %user',
+          ['%user' => $user->getEmail()]
+        )
+      );
+    }
+
+    if (array_key_exists('errorCode', $result)) {
+      throw new \Exception('Error Code ' . $result['errorCode'] . ': ' . $result['message']);
+    }
+
+    return $result;
+  }
+
+  /**
    * Process the payment for given cart.
    *
    * @param \Drupal\acq_cart\Cart $cart
@@ -252,6 +361,59 @@ class CheckoutComAPIWrapper {
     if ($response instanceof RedirectResponse) {
       $response->send();
     }
+  }
+
+  /**
+   * Authorize new card with void payment to be saved.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param array $request_param
+   *   The payment card params.
+   *
+   * @return array
+   *   Return array of card data to be saved.
+   *
+   * @throws \Exception
+   */
+  public function authorizeNewCard(UserInterface $user, array $request_param) {
+    $params = [
+      'cardToken' => $request_param['cardToken'],
+      'email' => $request_param['email'],
+      'value' => (float) self::VOID_PAYMENT_AMOUNT * 100,
+      'autoCapture' => 'N',
+      'description' => 'Saving new card',
+      'customerName' => $request_param['name'],
+    ];
+
+    // Authorize a card for payment.
+    $response = $this->authorizeCardForPayment(
+      $user,
+      self::AUTHORIZE_PAYMENT_ENDPOINT,
+      $params,
+      __METHOD__
+    );
+
+    // Run the void transaction for the gateway.
+    $this->makeVoidTransaction(
+      $user,
+      strtr(self::VOID_PAYMENT_ENDPOINT, ['{id}' => $response['id']]),
+      ['trackId' => ''],
+      __METHOD__
+    );
+
+    // Prepare the card data to save.
+    $cardData = array_filter($response['card'], function ($key) {
+      return !in_array($key, [
+        'billingDetails',
+        'bin',
+        'fingerprint',
+        'cvvCheck',
+        'avsCheck',
+      ]);
+    }, ARRAY_FILTER_USE_KEY);
+
+    return $cardData;
   }
 
 }

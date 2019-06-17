@@ -5,3 +5,44 @@ acq_checkoutcom.status:
     _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::status'
   requirements:
     _permission: 'access content'
+
+acq_checkoutcom.payment_cards:
+  path: '/user/{user}/payment-cards'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::listCards'
+    _title: 'Payment Cards'
+  requirements:
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+acq_checkoutcom.payment_card.add_card:
+  path: '/user/{user}/payment-card/add'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::addCard'
+    _title: 'Add new card'
+  requirements:
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+acq_checkoutcom.payment_card.remove_card:
+  path: '/user/{user}/payment-card/{card_id}/remove'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::removeCard'
+    _title: 'Remove card'
+  options:
+    parameters:
+      user:
+        type: entity:user
+  requirements:
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
+    user: \d+
+    card_id: '^[a-z0-9_-].*?$'
+    _csrf_token: 'TRUE'
