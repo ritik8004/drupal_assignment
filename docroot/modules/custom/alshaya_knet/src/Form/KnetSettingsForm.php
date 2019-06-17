@@ -30,10 +30,6 @@ class KnetSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_knet.settings')
       ->set('use_new_knet_toolkit', $form_state->getValue('use_new_knet_toolkit'))
-      ->set('tranportal_id', $form_state->getValue('tranportal_id'))
-      ->set('tranportal_password', $form_state->getValue('tranportal_password'))
-      ->set('terminal_key', $form_state->getValue('terminal_key'))
-      ->set('knet_url', $form_state->getValue('knet_url'))
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
@@ -56,36 +52,6 @@ class KnetSettingsForm extends ConfigFormBase {
       '#description' => $this->t('If checked, then new K-Net toolkit will be used and requires tranportal id, password and key.'),
       '#title' => $this->t('Use new K-Net toolkit.'),
       '#default_value' => $config->get('use_new_knet_toolkit'),
-    ];
-
-    $form['new_toolkit'] = [
-      '#type' => 'fieldset',
-      '#states' => [
-        'visible' => [
-          [':input[name="use_new_knet_toolkit"]' => ['checked' => TRUE]],
-        ],
-      ],
-    ];
-    $form['new_toolkit']['tranportal_id'] = [
-      '#type' => 'password',
-      '#description' => $this->t('K-Net tranportal id.'),
-      '#title' => $this->t('Tranportal id'),
-    ];
-    $form['new_toolkit']['tranportal_password'] = [
-      '#type' => 'password',
-      '#description' => $this->t('K-Net tranportal password.'),
-      '#title' => $this->t('Tranportal password'),
-    ];
-    $form['new_toolkit']['terminal_key'] = [
-      '#type' => 'password',
-      '#description' => $this->t('K-Net terminal resource key.'),
-      '#title' => $this->t('Terminal resource key'),
-    ];
-    $form['new_toolkit']['knet_url'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('K-Net url.'),
-      '#title' => $this->t('K-Net payment gateway redirect url'),
-      '#default_value' => $config->get('knet_url'),
     ];
 
     $form['resource_path'] = [

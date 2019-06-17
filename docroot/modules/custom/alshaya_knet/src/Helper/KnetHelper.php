@@ -5,6 +5,7 @@ namespace Drupal\alshaya_knet\Helper;
 use Drupal\alshaya_knet\Knet\E24PaymentPipe;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Knet\KnetNewToolKit;
 use Drupal\Core\Url;
@@ -457,13 +458,17 @@ class KnetHelper {
   public function getNewKnetToolkitCreds() {
     // Get the K-Net keys etc from settings. These settings are stored in
     // secret settings file. See `post-settings/zzz_overrides`.
-    $knet_settings = $this->configFactory->get('alshaya_knet.settings');
+    $knet_settings = Settings::get('alshaya_knet.settings');
+
+    if (empty($knet_settings)) {
+      return [];
+    }
 
     return [
-      'tranportal_id' => $knet_settings->get('tranportal_id') ?? '',
-      'tranportal_password' => $knet_settings->get('tranportal_password') ?? '',
-      'terminal_resource_key' => $knet_settings->get('terminal_key') ?? '',
-      'knet_url' => $knet_settings->get('knet_url') ?? '',
+      'tranportal_id' => $knet_settings['tranportal_id'] ?? '',
+      'tranportal_password' => $knet_settings['tranportal_password'] ?? '',
+      'terminal_resource_key' => $knet_settings['terminal_key'] ?? '',
+      'knet_url' => $knet_settings['knet_url'] ?? '',
     ];
   }
 

@@ -2,18 +2,6 @@ alshaya_knet.settings:
   type: config_object
   label: 'K-Net Settings'
   mapping:
-    tranportal_id:
-      type: string
-      label: 'Tranportal id'
-    tranportal_password:
-      type: string
-      label: 'Tranportal password'
-    terminal_key:
-      type: string
-      label: 'Terminal key'
-    knet_url:
-      type: string
-      label: 'Knet url'
     resource_path:
       type: string
       label: 'Resource path'
