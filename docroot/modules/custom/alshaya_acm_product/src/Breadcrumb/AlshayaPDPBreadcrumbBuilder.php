@@ -210,7 +210,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * @return array
    *   Filtered terms.
    */
-  protected function filterEnabled(array $terms = []) {
+  public function filterEnabled(array $terms = []) {
     // Remove disabled terms.
     foreach ($terms as $index => $row) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($row['target_id']);

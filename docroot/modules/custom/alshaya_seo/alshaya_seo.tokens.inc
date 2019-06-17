@@ -10,7 +10,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_token_info().
@@ -178,14 +177,17 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
     if (isset($tokens['category_names'])) {
       // Get all categories for the node.
-      $categories = $node->get('field_category')->referencedEntities();
-      $category_tokens = [];
-      foreach ($categories as $term) {
-        if ($term instanceof TermInterface) {
-          if ($term->hasTranslation($current_langcode)) {
-            $term = $term->getTranslation($current_langcode);
+      if ($field_category = $node->get('field_category')) {
+        $term_list = $field_category->getValue();
+        $pdpBreadcrumbBuilder = \Drupal::service('alshaya_acm_product.breadcrumb');
+        $term_list = $pdpBreadcrumbBuilder->filterEnabled($term_list);
+        $inner_term = $pdpBreadcrumbBuilder->termTreeGroup($term_list);
+        if ($inner_term) {
+          $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($inner_term);
+          foreach (array_reverse($parents) as $term) {
+            $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+            $category_tokens[] = $term->getName();
           }
-          $category_tokens[] = $term->getName();
         }
       }
       $category_tokens = implode(', ', $category_tokens);
