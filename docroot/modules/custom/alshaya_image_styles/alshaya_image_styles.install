@@ -10,6 +10,22 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * PDP - Reduce the size of images by comprising on quality a bit.
+ */
+function alshaya_image_styles_update_8107() {
+  // Update the config for image styles.
+  $configs = [
+    'image.style.pdp_gallery_thumbnail',
+    'image.style.product_teaser',
+    'image.style.product_zoom_medium_606x504',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * For PLP use higher res image so 1 col layout is not blurred.
  */
 function alshaya_image_styles_update_8106() {
