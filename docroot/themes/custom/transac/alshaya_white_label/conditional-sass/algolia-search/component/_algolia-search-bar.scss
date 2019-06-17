@@ -139,6 +139,7 @@
     @include breakpoint($only-mobile) {
       height: 100vh;
       overflow-y: auto;
+      padding-bottom: 5rem;
     }
   }
 
@@ -289,7 +290,7 @@
     &.Sticky-algolia-search {
       .block-search-api-algolia-autocomplete-block {
         position: fixed;
-        top: 0;
+        top: 0 !important;
       }
     }
 

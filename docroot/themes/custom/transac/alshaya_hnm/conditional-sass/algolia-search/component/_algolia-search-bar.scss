@@ -10,6 +10,8 @@
     border-top: 1px solid $algolia-dropdown-border;
     border-bottom: 1px solid $algolia-dropdown-border;
     padding: 0;
+    box-shadow: none;
+    margin-top: -1px;
 
     html[lang=ar] & {
       top: 3rem;
@@ -164,7 +166,8 @@
         &.algolia-search-active {
           .algolia-search-icon {
             @include icon(arrow-#{$left}) {
-              #{$left}: -0.375rem;
+              font-size: 2.75rem;
+              #{$left}: -0.75rem;
             }
           }
         }
