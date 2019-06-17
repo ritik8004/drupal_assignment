@@ -93,23 +93,19 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public function build() {
-    $link_markup = '<ul><li class="options-page-menu-title"><a href="#">' . $this->configuration['link_title'] . '</a></li>';
+    $menu_title = $this->configuration['link_title'];
+    $links = [];
     $pages = $this->configFactory->get('alshaya_options_list.admin_settings')->get('alshaya_options_pages');
     if (!empty($pages)) {
       foreach ($pages as $page) {
-        $page_name = str_replace('/', '-', $page['url']);
-        $route_name = 'alshaya_options_list.options_page' . $page_name;
-        $link_markup .= '<li>' . Link::createFromRoute($page_name, $route_name, [], [
-          'attributes' =>
-            [
-              'class' => ['options-page-menu-link'],
-            ],
-        ])->toString() . '</li>';
+        $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
+        $links[] = Link::createFromRoute($page['menu-title'], $route_name, [])->toString();
       }
     }
-    $link_markup .= '</ul>';
     return [
-      '#markup' => $link_markup,
+      '#theme' => 'alshaya_options_menu_link',
+      '#menu_title' => $menu_title,
+      '#links' => $links,
     ];
   }
 

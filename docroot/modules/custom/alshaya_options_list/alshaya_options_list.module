@@ -27,5 +27,12 @@ function alshaya_options_list_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['alshaya_options_menu_link'] = [
+    'variables' => [
+      'menu_title' => '',
+      'links' => [],
+    ],
+  ];
+
   return $items;
 }

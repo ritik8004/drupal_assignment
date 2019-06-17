@@ -28,7 +28,7 @@ alshaya_options_list.admin_settings:
             label: 'Description'
           attribute_details:
             type: sequence
-            label: 'Page Attributes'
+            label: 'Page attributes'
             sequence:
               type: mapping
               mapping:
