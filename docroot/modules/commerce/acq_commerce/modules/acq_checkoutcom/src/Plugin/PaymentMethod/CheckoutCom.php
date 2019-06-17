@@ -65,6 +65,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $currentRequest;
 
   /**
+   * Renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -84,6 +91,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->currentUser = \Drupal::service('current_user');
     $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $this->currentRequest = \Drupal::service('request_stack')->getCurrentRequest();
+    $this->renderer = \Drupal::service('renderer');
   }
 
   /**
@@ -111,13 +119,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       if (!empty($existing_cards)) {
         $options = [];
         foreach ($existing_cards as $card) {
-          $options[$card['id']] = '
-          <div class="saved-card">
-            <div class="card-number">**** **** **** ' . $card['last4'] . '</div>
-            <div class="card-name">' . $card['name'] . '</div>
-            <div class="card-expiry-date">' . "{$card['expiryMonth']}/{$card['expiryYear']}" . '</div>
-          </div>
-        ';
+          $build = [
+            '#theme' => 'payment_card_teaser',
+            '#card_info' => $card,
+          ];
+          $options[$card['id']] = $this->renderer->render($build);
         }
       }
 

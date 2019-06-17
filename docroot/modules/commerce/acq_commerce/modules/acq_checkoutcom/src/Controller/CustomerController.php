@@ -112,7 +112,7 @@ class CustomerController extends ControllerBase {
     if ($existing_cards = $this->apiHelper->getCustomerCards($user)) {
       foreach ($existing_cards as $card) {
         $options[$card['id']] = [
-          '#theme' => 'payment_card_teaser',
+          '#theme' => 'payment_card_info',
           '#card_info' => $card,
           '#user' => $user,
         ];
