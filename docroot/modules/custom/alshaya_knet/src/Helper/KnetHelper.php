@@ -5,6 +5,7 @@ namespace Drupal\alshaya_knet\Helper;
 use Drupal\alshaya_knet\Knet\E24PaymentPipe;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Knet\KnetNewToolKit;
 use Drupal\Core\Url;
@@ -123,6 +124,12 @@ class KnetHelper {
     if ($this->useNewKnetToolKit()) {
       // Get K-Net creds for new toolkit.
       $knet_creds = $this->getNewKnetToolkitCreds();
+
+      // If not configured K-Net.
+      if (empty($knet_creds)) {
+        throw new \RuntimeException('K-Net PG is not configured.');
+      }
+
       $pipe->setTranportalId($knet_creds['tranportal_id']);
       $pipe->setTranportalPassword($knet_creds['tranportal_password']);
       $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
@@ -449,12 +456,22 @@ class KnetHelper {
    *   Array of credentials.
    */
   public function getNewKnetToolkitCreds() {
-    // @Todo: Need to discuss the way to store/safe these values.
+    // @codingStandardsIgnoreLine.
+    global $acsf_site_name;
+    // Get the K-Net keys etc from settings. These settings are stored in
+    // secret settings file. See `post-settings/knet.php`.
+    $knet_settings = Settings::get('knet')[$acsf_site_name] ?? [];
+
+    // If not found any setting.
+    if (empty($knet_settings)) {
+      return [];
+    }
+
     return [
-      'tranportal_id' => '',
-      'tranportal_password' => '',
-      'terminal_resource_key' => '',
-      'knet_url' => '',
+      'tranportal_id' => $knet_settings['tranportal_id'] ?? '',
+      'tranportal_password' => $knet_settings['tranportal_password'] ?? '',
+      'terminal_resource_key' => $knet_settings['terminal_resource_key'] ?? '',
+      'knet_url' => $knet_settings['knet_url'] ?? '',
     ];
   }
 
@@ -466,6 +483,8 @@ class KnetHelper {
    *
    * @return array
    *   Data to return after parse.
+   *
+   * @throws \Exception
    */
   public function parseAndPrepareKnetData(array $input) {
     // If error is available.
@@ -474,6 +493,14 @@ class KnetHelper {
     }
 
     $en_dec = $this->getKnetToolKit();
+    $knet_creds = $this->getNewKnetToolkitCreds();
+
+    // If K-Net is not configured or key is not available.
+    if (empty($knet_creds) || empty($knet_creds['terminal_resource_key'])) {
+      $this->logger->error('K-Net is not configured or resource key is not available');
+      throw new \Exception();
+    }
+
     $terminal_resource_key = $this->getNewKnetToolkitCreds()['terminal_resource_key'];
     $output = [];
     // Decrypted data contains a string which seperates values by `&`, so we

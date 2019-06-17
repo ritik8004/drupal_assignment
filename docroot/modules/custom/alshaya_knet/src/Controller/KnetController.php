@@ -73,7 +73,15 @@ class KnetController extends ControllerBase {
 
     // For new K-Net toolkit, parse and decrypt the response first.
     if (!empty($data) && $this->knetHelper->useNewKnetToolKit()) {
-      $data = $this->knetHelper->parseAndPrepareKnetData($data);
+      try {
+        $data = $this->knetHelper->parseAndPrepareKnetData($data);
+      }
+      catch (\Exception $e) {
+        $this->logger->error('K-Net is not configured properly<br>POST: @message', [
+          '@message' => json_encode($data),
+        ]);
+        throw new AccessDeniedHttpException();
+      }
     }
 
     $quote_id = isset($data['udf3']) ? $data['udf3'] : '';

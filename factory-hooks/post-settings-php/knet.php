@@ -31,3 +31,19 @@ $settings['alshaya_knet.settings']['knet_currency_code'] = '414';
 
 // Knet udf5 prefix.
 $settings['alshaya_knet.settings']['knet_udf5_prefix'] = 'ptlf';
+
+// For the new K-Net toolkit.
+if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+  // Storing K-Net information like id, password, key in secret information
+  // file for new toolkit.
+  // @see `secrets.settings.php` in `/mnt/files/`
+  $secrets_file = sprintf('/mnt/files/%s.%s/secrets.settings.php', $_ENV['AH_SITE_GROUP'], $_ENV['AH_SITE_ENVIRONMENT']);
+  if (file_exists($secrets_file)) {
+    require $secrets_file;
+  }
+}
+$settings['knet'][$acsf_site_name]['knet_url'] = 'https://kpaytest.com.kw/kpg/PaymentHTTP.htm';
+// For prod env, K-Net redirecting url is different.
+if ($env == '01live' || $env == '01update') {
+  $settings['knet'][$acsf_site_name]['knet_url'] = 'https://kpay.com.kw/kpg/PaymentHTTP.htm';
+}
