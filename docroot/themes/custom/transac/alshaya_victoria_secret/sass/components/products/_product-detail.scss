@@ -53,6 +53,12 @@
       height: 2.5rem;
       margin-top: 2.125rem;
 
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          margin-right: 0;
+        }
+      }
+
       .super-category-victorias-secret & {
         font-family: $vs-bentonsanscomp-medium;
         font-size: 1.1875rem;
