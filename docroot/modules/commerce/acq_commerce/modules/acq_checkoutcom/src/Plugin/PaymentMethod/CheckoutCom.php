@@ -105,10 +105,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // Set the default payment card to display form to ennter new card.
+    // Set the default payment card to display form to enter new card.
     $payment_card = 'new';
 
-    // Display tokenised cards for logged innn user.
+    // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $existing_cards = $this->apiHelper->getCustomerCards(
         $this->entityTypeManager->getStorage('user')->load(
@@ -128,8 +128,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       }
 
       $payment_card = empty($options) ? $payment_card : $this->currentRequest->query->get('payment-card');
-      if (!empty($form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
-        $payment_card = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+      $values = $form_state->getValue('acm_payment_methods');
+      if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
+        $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
       }
 
       if (!empty($options)) {

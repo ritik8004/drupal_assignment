@@ -43,6 +43,9 @@ class CheckoutComAPIWrapper {
   // 3D secure autocapture.
   const AUTOCAPTURE = 'Y';
 
+  // API response success code.
+  const SUCCESS_CODE = '10000';
+
   /**
    * API Helper service object.
    *
@@ -229,7 +232,7 @@ class CheckoutComAPIWrapper {
       );
     }
 
-    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == 10000) {
+    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS_CODE) {
       return new RedirectResponse($response[self::REDIRECT_URL]);
     }
     else {
