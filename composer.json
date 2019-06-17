@@ -72,6 +72,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/scheduled_updates": "^1.0@alpha",
+        "drupal/search_api_algolia": "1.x-dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
@@ -231,16 +232,16 @@
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
             },
             "drupal/core": {
-                "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
-                "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
-                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
-                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
-                "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
-                "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
-                "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
-                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch"
+              "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
+              "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
+              "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
+              "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
+              "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
+              "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
+              "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
+              "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
+              "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
+              "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -320,6 +321,9 @@
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
+            },
+            "drupal/search_api_algolia": {
+                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-06-11/3054878-11.patch"
             }
         },
         "installer-paths": {

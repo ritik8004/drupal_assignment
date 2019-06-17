@@ -13,7 +13,12 @@ use Drupal\Core\Render\BubbleableMetadata;
  */
 function alshaya_acm_product_token_info() {
   $info = [];
-  $info['tokens']['node']['sku-color'][] = 'Token to fetch color label for the SKU connected with the Product node.';
+
+  $info['tokens']['node']['sku-color'] = [
+    'name' => 'sku-color',
+    'description' => t('Token to fetch color label for the SKU connected with the Product node.'),
+  ];
+
   return $info;
 }
 

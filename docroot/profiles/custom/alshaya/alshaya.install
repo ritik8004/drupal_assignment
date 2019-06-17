@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Uninstall `scheduled_updates` module.
+ */
+function alshaya_update_8013() {
+  if (\Drupal::moduleHandler()->moduleExists('scheduled_updates')) {
+    \Drupal::service('module_installer')->uninstall(['scheduled_updates']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install memory_limit_policy module and path plugin.
  */
 function alshaya_update_8012() {
