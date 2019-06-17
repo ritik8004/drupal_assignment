@@ -5,6 +5,7 @@ namespace Drupal\alshaya_kz_transac_lite\Helper;
 use Drupal\Core\Url;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Helper\KnetHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,6 +41,13 @@ class TicketBookingKnetHelper extends KnetHelper {
   protected $ticketBooking;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * TicketBookingKnetHelper constructor.
    *
    * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
@@ -54,17 +62,21 @@ class TicketBookingKnetHelper extends KnetHelper {
    *   The booking payment.
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The ticket booking.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
   public function __construct(KnetHelper $knet_helper,
                               ConfigFactoryInterface $config_factory,
                               StateInterface $state,
                               LoggerChannelFactoryInterface $logger_factory,
                               BookingPaymentManager $booking_payment,
-                              TicketBookingManager $ticket_booking) {
+                              TicketBookingManager $ticket_booking,
+                              MessengerInterface $messenger) {
     parent::__construct($config_factory, $state, $logger_factory->get('alshaya_kz_transac_lite_knet'));
     $this->knetHelper = $knet_helper;
     $this->bookingPayment = $booking_payment;
     $this->ticketBooking = $ticket_booking;
+    $this->messenger = $messenger;
 
   }
 
@@ -132,6 +144,13 @@ class TicketBookingKnetHelper extends KnetHelper {
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],
     ]);
+
+    $this->messenger->addMessage($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+      '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : '',
+      '@payment_id' => $data['payment_id'],
+      '@result_code' => $data['result'],
+    ]), 'error');
+
     $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => 'failed'], ['query' => ['ref_number' => $data['quote_id']]])->toString();
     return new RedirectResponse($url, 302);
   }
