@@ -9,7 +9,7 @@ field_name: field_category_include_menu
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Include in Menu'
-description: ''
+description: 'Check to display this term in main menu.'
 required: false
 translatable: true
 default_value:

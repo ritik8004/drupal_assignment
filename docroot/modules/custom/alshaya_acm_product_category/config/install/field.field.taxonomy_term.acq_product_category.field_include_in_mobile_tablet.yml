@@ -9,7 +9,7 @@ field_name: field_include_in_mobile_tablet
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Include in mobile/tablet'
-description: ''
+description: 'Check to make this link visible inside main menu for mobile and tablet view.'
 required: false
 translatable: false
 skip_translation_check: 0

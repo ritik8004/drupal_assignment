@@ -286,6 +286,19 @@ function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_fo
       ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
     ],
   ];
+
+  $form['field_include_in_desktop']['#states'] = [
+    'visible' => [
+      ':input[name="field_category_include_menu[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $form['field_include_in_mobile_tablet']['#states'] = [
+    'visible' => [
+      ':input[name="field_category_include_menu[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
   $form['path']['widget']['#after_build'][] = 'alshaya_acm_product_category_after_build';
 }
 
@@ -306,5 +319,12 @@ function alshaya_acm_product_category_after_build(array $element, FormStateInter
       ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
     ],
   ];
+
+  $element[0]['alias']['#states'] = [
+    'empty' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
   return $element;
 }

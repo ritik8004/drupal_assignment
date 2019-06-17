@@ -11,7 +11,7 @@ field_name: field_target_link
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Target link'
-description: ''
+description: 'Allows you to customise the link URL for this term.'
 required: false
 translatable: true
 skip_translation_check: 0
