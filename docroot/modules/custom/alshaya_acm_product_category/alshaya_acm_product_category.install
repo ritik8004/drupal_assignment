@@ -37,6 +37,16 @@ function alshaya_acm_product_category_update_8030() {
       'install'
     );
 
+  // Update descriptions for the fields.
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs([
+      'field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link',
+    ],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       [
