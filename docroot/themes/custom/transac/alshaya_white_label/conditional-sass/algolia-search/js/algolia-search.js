@@ -156,6 +156,8 @@
           }, 100);
         }
         else {
+          // Show on non listing pages.
+          $('.block-search-api-algolia-autocomplete-block').css('visibility', 'visible');
           stickyAlgoliaHeader();
         }
       }

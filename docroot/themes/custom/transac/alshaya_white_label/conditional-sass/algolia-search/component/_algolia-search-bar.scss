@@ -232,7 +232,7 @@
 
 @include breakpoint($only-mobile) {
   .block-search-api-algolia-autocomplete-block {
-    display: none;
+    visibility: hidden;
     transition: border-bottom-color 0.5s ease, box-shadow 0.5s ease;
 
     &.algolia-search-active {
@@ -348,10 +348,8 @@
 
     &.no-sticky-algolia-search-bar {
       .block-search-api-algolia-autocomplete-block {
-        display: none;
-
         &.show-algolia-search-bar {
-          display: block;
+          visibility: visible;
           top: 0;
           z-index: 1;
         }
