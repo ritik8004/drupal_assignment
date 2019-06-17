@@ -84,8 +84,12 @@ class TicketBookingKnetHelper extends KnetHelper {
    * {@inheritdoc}
    */
   public function processKnetResponse(array $response = []) {
-    $state_key = $response['state_key'];
-    $state_data = $this->state->get($state_key);
+    $state_data = '';
+    $state_key = $response['state_key'] ?? '';
+    if (!empty($state_key)) {
+      $state_data = $this->state->get($state_key);
+      $state_data = json_encode($state_data);
+    }
     $url_options = [
       'https' => TRUE,
       'absolute' => TRUE,
@@ -100,7 +104,7 @@ class TicketBookingKnetHelper extends KnetHelper {
     $result_url .= Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
     $this->logger->info('KNET update for Response: @message State: @state', [
       '@message' => json_encode($response),
-      '@state' => json_encode($state_data),
+      '@state' => $state_data,
     ]);
     print $result_url;
     exit;

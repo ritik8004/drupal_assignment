@@ -184,7 +184,7 @@ class TicketBookingController extends ControllerBase {
       $build = [
         '#theme' => 'payment_success',
         '#ref_number' => $sales_number,
-        '#attached' => ['drupalSettings' => ['book_status' => 1]],
+        '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
       ];
       return $build;
     }
@@ -192,7 +192,7 @@ class TicketBookingController extends ControllerBase {
     $build = [
       '#theme' => 'payment_failed',
       '#ref_number' => $sales_number,
-      '#attached' => ['drupalSettings' => ['book_status' => 1]],
+      '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
     ];
     return $build;
   }

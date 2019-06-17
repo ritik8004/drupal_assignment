@@ -13,7 +13,7 @@
         e.preventDefault();
       });
       // Delete local storage after booking complete.
-      if (drupalSettings.book_status) {
+      if (drupalSettings.clear_storage) {
         localStorage.removeItem('booking_info');
       }
       // Get booking info from local storage.

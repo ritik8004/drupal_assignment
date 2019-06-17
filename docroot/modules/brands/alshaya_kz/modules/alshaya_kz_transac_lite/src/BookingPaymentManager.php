@@ -114,7 +114,7 @@ class BookingPaymentManager {
         'ticket_info' => json_encode($booking['ticket_info']),
       ]);
 
-      return $ticket->save($ticket);
+      return $ticket->save();
     }
     catch (\Exception $e) {
       $this->logger->warning('Unable to create ticket content - %message', [
