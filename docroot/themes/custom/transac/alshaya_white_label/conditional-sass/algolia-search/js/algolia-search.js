@@ -70,6 +70,15 @@
           $('.trending-title').show();
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
         }
+
+        // Adding the clear text button on focus.
+        if ($(this).val().length > 0) {
+          $('.algolia-form-wrapper').addClass('algolia-cleartext-active');
+          $('.trending-title').hide();
+          $('.algolia-form-wrapper').addClass('algolia-cleartext-active');
+          $('.algolia-autocomplete').addClass('algolia-autocomplete-active');
+        }
+
         $(this).parents('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
       });
 
