@@ -97,8 +97,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    // Set the default payment card to display form to ennter new card.
     $payment_card = 'new';
 
+    // Display tokenised cards for logged innn user.
     if ($this->currentUser->isAuthenticated()) {
       $existing_cards = $this->apiHelper->getCustomerCards(
         $this->entityTypeManager->getStorage('user')->load(
@@ -147,6 +149,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ],
     ];
 
+    // Ask for cvv again when using existing card.
     if (!empty($payment_card) && $payment_card != 'new') {
       $pane_form['payment_details'][$payment_card]['cc_cvv'] = [
         '#type' => 'password',
@@ -218,6 +221,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         ],
       ];
 
+      // Card can be saved in account for authenticated users only.
       if ($this->currentUser->isAuthenticated()) {
         $pane_form['payment_details']['save_card'] = [
           '#type'  => 'checkbox',
@@ -226,7 +230,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       }
 
       $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
-
       $string = "window.CKOConfig = {
         debugMode: {$debug},
         publicKey: '{$this->apiHelper->getSubscriptionKeys('public_key')}',
@@ -255,12 +258,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   }
 
   /**
-   * Ajax callback method to render cvv.
+   * Ajax callback method to render cvv or display form to add new card.
    */
   public function renderSelectedCardFields(&$form, FormStateInterface $form_state) {
     $element = $form_state->getTriggeringElement();
 
-    // Confirm it is a POST request and contains form data.
     if (empty($element)) {
       throw new NotFoundHttpException();
     }
@@ -287,7 +289,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
-    // @todo: Replace this with APi call + cache / config.
+    // @todo: Replace this with APi call + cache / config, Will there be a
+    // configuration coming from api or drupal.
     $process_type = '3d';
     if ($process_type == '2d') {
       $cart = $this->getCart();
