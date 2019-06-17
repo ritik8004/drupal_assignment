@@ -176,7 +176,7 @@ class KnetHelper {
       '@quote_id' => $cart_id,
       '@payment_id' => $pipe->getPaymentId(),
       '@state_key' => $state_key,
-      '@version' => $this->useNewKnetToolKit() ? 'v1' : 'v2',
+      '@version' => $this->useNewKnetToolKit() ? 'v2' : 'v1',
     ]);
 
     $state_data['context'] = $context;
