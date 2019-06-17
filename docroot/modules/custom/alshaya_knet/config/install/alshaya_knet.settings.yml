@@ -1,4 +1,8 @@
 use_new_knet_toolkit: true
+tranportal_id: ''
+tranportal_password: ''
+terminal_key: ''
+knet_url: ''
 resource_path: ''
 use_secure_response_url: 1
 alias: ''
