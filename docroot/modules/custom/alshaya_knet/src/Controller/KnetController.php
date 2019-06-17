@@ -101,6 +101,14 @@ class KnetController extends ControllerBase {
     $response['quote_id'] = $data['udf3'];
     $response['state_key'] = $data['udf4'];
 
+    // For the new toolkit, payment id not available before redirecting to
+    // PG. So adding the payment id in state variable later.
+    if ($this->knetHelper->useNewKnetToolKit()
+      && !empty($state = $this->state->get($response['state_key']))) {
+      $state['payment_id'] = $response['payment_id'];
+      $this->state->set($response['state_key'], $state);
+    }
+
     return $this->knetHelper->processKnetResponse($response);
 
   }

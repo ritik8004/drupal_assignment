@@ -126,6 +126,7 @@ class KnetHelper {
       $pipe->setTranportalId($knet_creds['tranportal_id']);
       $pipe->setTranportalPassword($knet_creds['tranportal_password']);
       $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
+      $pipe->setKnetUrl($knet_creds['knet_url']);
     }
 
     $pipe->setCurrency($knetSettings->get('knet_currency_code'));
@@ -170,11 +171,12 @@ class KnetHelper {
       throw new \RuntimeException($error);
     }
 
-    $this->logger->info('Payment info for quote id @quote_id is @payment_id. Reserved order id is @order_id. State key: @state_key', [
+    $this->logger->info('Payment info for K-Net toolkit version:@version quote id is @quote_id. Reserved order id is @order_id. State key: @state_key', [
       '@order_id' => $order_id,
       '@quote_id' => $cart_id,
       '@payment_id' => $pipe->getPaymentId(),
       '@state_key' => $state_key,
+      '@version' => $this->useNewKnetToolKit() ? 'v1' : 'v2',
     ]);
 
     $state_data['context'] = $context;
@@ -452,6 +454,7 @@ class KnetHelper {
       'tranportal_id' => '',
       'tranportal_password' => '',
       'terminal_resource_key' => '',
+      'knet_url' => '',
     ];
   }
 

@@ -40,7 +40,7 @@ class KnetNewToolKit extends E24PaymentPipe {
    *
    * @var mixed
    */
-  protected $knetUrl = 'https://kpaytest.com.kw/kpg/PaymentHTTP.htm';
+  protected $knetUrl = NULL;
 
   /**
    * Set tranportal id.
@@ -103,10 +103,13 @@ class KnetNewToolKit extends E24PaymentPipe {
    * {@inheritdoc}
    */
   public function performPaymentInitialization() {
-    // If id, password or key is not available, then don't process
+    // If id, password, key or url is not available, then don't process
     // further.
-    if (empty($this->tranportalId) || empty($this->tranportalPassword) || empty($this->terminalResourceKey)) {
-      $this->error = 'Required parameters not available.';
+    if (empty($this->tranportalId)
+      || empty($this->tranportalPassword)
+      || empty($this->terminalResourceKey)
+      || empty($this->knetUrl)) {
+      $this->error = 'K-Net required parameters not available.';
       return FALSE;
     }
 
