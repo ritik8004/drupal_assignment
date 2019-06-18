@@ -9,7 +9,7 @@ dependencies:
 id: alshayasocialloginblock
 theme: alshaya_white_label
 region: content
-weight: 12
+weight: 29
 provider: null
 plugin: alshaya_social_login
 settings:

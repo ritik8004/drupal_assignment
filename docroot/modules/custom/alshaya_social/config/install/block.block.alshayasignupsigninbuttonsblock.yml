@@ -9,7 +9,7 @@ dependencies:
 id: alshayasignupsigninbuttonsblock
 theme: alshaya_white_label
 region: content
-weight: 12
+weight: 30
 provider: null
 plugin: alshaya_signup_signin_buttons
 settings:
