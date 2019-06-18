@@ -12,10 +12,10 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
- * Update config for showing gallery images per color on color filter.
+ * Update config for showing images of specific color product in listing.
+ * This is done when filtered by color.
  */
 function alshaya_vs_transac_update_8009() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   \Drupal::configFactory()
     ->getEditable('alshaya_acm_product.display_settings')
     ->set('show_color_images_on_filter', 1)
