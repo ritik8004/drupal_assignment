@@ -4,7 +4,7 @@
   padding: 0.5rem 1rem;
 
   @include breakpoint($tablet) {
-    margin: 1.2rem auto 9.2rem;
+    margin: 1.2rem auto 6.2rem;
   }
 
   @include breakpoint($desktop) {
@@ -107,6 +107,24 @@
 }
 
 .alias--cart-checkout-login {
+  .checkout-login-actions-wrapper {
+    clear: both;
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin-top: 1.875rem !important;
+    text-decoration: underline;
+    width: auto !important;
+
+    a {
+      font-size: 0.875rem !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none !important;
+    }
+  }
+
   .form-wrapper,
   .form-item {
     @include breakpoint($tablet) {
@@ -207,15 +225,15 @@
         display: flex;
         flex-direction: column;
 
+        .checkout-login-separator:first-child {
+          display: none;
+        }
+
         #edit-checkout-login {
           order: 4;
         }
 
         #edit-checkout-guest {
-          order: 6;
-        }
-
-        .checkout-login-actions-wrapper {
           order: 6;
         }
       }

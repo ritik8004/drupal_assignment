@@ -108,7 +108,6 @@
   #edit-checkout-social-auth {
     @include breakpoint($only-mobile) {
       order: 2;
-      margin-top: 1.5625rem !important;
     }
   }
 
@@ -141,16 +140,16 @@
         color: $checkout_login_separtor_txt;
       }
 
-      &:nth-of-type(1) {
+      &.o-1 {
         order: 1;
         display: none;
       }
 
-      &:nth-of-type(2) {
+      &.o-3 {
         order: 3;
       }
 
-      &:nth-of-type(3) {
+      &.o-5 {
         order: 5;
       }
     }
@@ -221,6 +220,12 @@
 
     @include breakpoint($only-mobile) {
       width: 100%;
+    }
+  }
+
+  .block-page-title-block {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.5625rem;
     }
   }
 }
