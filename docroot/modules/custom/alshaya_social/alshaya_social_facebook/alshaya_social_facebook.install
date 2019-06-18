@@ -12,7 +12,7 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_social_facebook_update_8002() {
   $strings = [
-    'Sign up with facebook' => [
+    'sign up with facebook' => [
       'ar' => 'سجل الاشتراك عن طريق الفيس بوك',
     ],
   ];
@@ -53,7 +53,7 @@ function alshaya_social_facebook_install() {
     'Sign in with facebook' => [
       'ar' => 'تسجيل الدخول عن طريق الفيس بوك',
     ],
-    'Sign up with facebook' => [
+    'sign up with facebook' => [
       'ar' => 'سجل الاشتراك عن طريق الفيس بوك',
     ],
   ];
