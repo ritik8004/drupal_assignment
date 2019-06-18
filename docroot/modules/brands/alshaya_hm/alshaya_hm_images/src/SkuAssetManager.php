@@ -235,6 +235,10 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
+
+      $this->logger->notice('Downloaded new asset images for sku @sku.', [
+        '@sku' => $sku->getSku(),
+      ]);
     }
 
     return $assets;
