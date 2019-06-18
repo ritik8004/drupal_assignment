@@ -558,7 +558,8 @@
         }
 
         .alshaya_search_gallery {
-          max-height: none;
+          // We dont want any height to restrict the transform on hover.
+          max-height: none !important;
         }
       }
     }
