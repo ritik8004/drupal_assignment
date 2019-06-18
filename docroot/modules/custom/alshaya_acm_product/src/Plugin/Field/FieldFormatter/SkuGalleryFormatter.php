@@ -168,6 +168,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $color = $colorNode->get('field_product_color')->getString();
     }
 
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
@@ -193,8 +195,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
           // Do not add selected param if we are using parent sku itself for
           // gallery. This is normal for PB, MC, etc.
-          if (($sku_for_gallery->id() != $sku->id()) &&
-            ($this->skuManager->isListingModeNonAggregated())) {
+          if ($sku_for_gallery->id() != $sku->id()) {
             $product_url .= '?selected=' . $sku_for_gallery->id();
           }
         }
@@ -238,9 +239,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
 
-        if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
+        if ($display_settings->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
-          $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->configFactory->get('alshaya_acm_product.display_settings')->get('show_variants_thumbnail_plp_gallery');
+          $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->skuManager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');
         }
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
@@ -263,7 +264,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       if (empty($element['#gallery']['#mainImage'])) {
         $default_image = $this->skuImagesManager->getProductDefaultImage();
         if ($default_image) {
-          $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
+          $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', 'product_listing');
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';
         }

@@ -6,7 +6,22 @@
  */
 
 /**
- * Implements hook_install()
+ * Implements hook_update_n().
+ *
+ * Update translation of meta content.
+ */
+function alshaya_fl_update_8001() {
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'Footlocker',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_install().
  */
 function alshaya_fl_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_fl', 'inc', 'alshaya_fl.content');
@@ -41,6 +56,9 @@ function alshaya_fl_install() {
     ],
     'Connect with us' => [
       'ar' => ' تواصلي معنا ',
+    ],
+    'seo_brand_name' => [
+      'en' => 'Footlocker',
     ],
   ];
 

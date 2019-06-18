@@ -728,7 +728,6 @@ function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_
   $token = '[supercategory:meta_title]';
   $meta_configs = [
     'metatag.metatag_defaults.node__advanced_page'                 => '[node:title] | ' . $token,
-    'metatag.metatag_defaults.node__acq_product'                   => '[node:title] | ' . $token,
     'metatag.metatag_defaults.node__acq_promotion'                 => '[node:field_acq_promotion_label] | ' . $token,
     'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[term:name] | ' . $token,
   ];
@@ -794,6 +793,19 @@ function alshaya_super_category_alshaya_search_api_language_switcher_alter(&$que
       // Decode url string of encoded value. (arabic strings are encoded).
       $alias = str_replace("/", '', urldecode($alias));
       $query_params['brand'] = $alias;
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_seo_brandname_alter().
+ */
+function alshaya_super_category_alshaya_seo_brandname_alter(&$brand_name) {
+  // If super category feature is enabled.
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+    if (!empty($super_category)) {
+      $brand_name = $super_category['label'];
     }
   }
 }

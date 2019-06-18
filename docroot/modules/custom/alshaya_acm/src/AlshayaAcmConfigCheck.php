@@ -155,12 +155,14 @@ class AlshayaAcmConfigCheck {
       'acq_commerce.conductor',
       'alshaya_api.settings',
       'acq_cybersource.settings',
-      'alshaya_acm_knet.settings',
+      'alshaya_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.settings',
       'social_auth_facebook.settings',
     ];
+
+    $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);
 
     if (!empty($config_reset)) {
       if (!in_array($config_reset, $reset)) {
@@ -177,6 +179,11 @@ class AlshayaAcmConfigCheck {
       $settings = Settings::get($config_key);
 
       foreach ($settings as $key => $value) {
+        if (is_array($value)) {
+          $existing = $config->get($key) ?? [];
+          $value = array_replace_recursive($existing, $value);
+        }
+
         $config->set($key, $value);
       }
 

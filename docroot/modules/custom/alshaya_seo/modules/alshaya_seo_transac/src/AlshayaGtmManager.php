@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
@@ -214,6 +215,13 @@ class AlshayaGtmManager {
   protected $moduleHandler;
 
   /**
+   * Orders Manager.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -244,6 +252,8 @@ class AlshayaGtmManager {
    *   Sku Manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -258,7 +268,8 @@ class AlshayaGtmManager {
                               Connection $database,
                               AlshayaAddressBookManager $addressBookManager,
                               SkuManager $skuManager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              OrdersManager $orders_manager) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -273,6 +284,7 @@ class AlshayaGtmManager {
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $module_handler;
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -846,8 +858,6 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchCompletedOrderAttributes(array $order) {
-    $orders = alshaya_acm_customer_get_user_orders($order['email']);
-
     $orderItems = $order['items'];
 
     $dimension7 = '';
@@ -928,13 +938,16 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
+    /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
+    $orders_count = $this->ordersManager->getOrdersCount($order['email']);
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
-      'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
@@ -993,13 +1006,10 @@ class AlshayaGtmManager {
         $product_terms = $this->fetchProductCategories($node);
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
-        if ($product_media) {
-          $product_media_file = $product_media['file'];
-          $product_media_url = file_create_url($product_media_file->getFileUri());
-        }
-        else {
-          $product_media_url = '';
-        }
+        $product_media_url = !empty($product_media)
+          ? file_create_url($product_media['drupal_uri'])
+          : '';
+
         $oldprice = '';
         if ((float) $sku_entity->get('price')->getString() != (float) $sku_attributes['gtm-price']) {
           $oldprice = (float) $sku_entity->get('price')->getString();
@@ -1283,13 +1293,11 @@ class AlshayaGtmManager {
       if ($product_node instanceof NodeInterface) {
         $sku_media = alshaya_acm_product_get_product_media($product_node->id(), TRUE) ?: '';
       }
-      if ($sku_media) {
-        $sku_media_file = $sku_media['file'];
-        $sku_media_url = file_create_url($sku_media_file->getFileUri());
-      }
-      else {
-        $sku_media_url = 'image not available';
-      }
+
+      $sku_media_url = empty($sku_media)
+        ? 'image not available'
+        : file_create_url($sku_media['drupal_uri']);
+
       $sku_entity = SKU::loadFromSku($item['sku']);
       if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
         $sku_entity = $sku_entity->getTranslation('en');

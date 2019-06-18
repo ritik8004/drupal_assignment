@@ -441,7 +441,7 @@ class ProductSyncResource extends ResourceBase {
         $plugin->processImport($sku, $product);
 
         // Invoke the alter hook to allow all modules to update the sku.
-        \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product);
+        \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product, $skuData);
 
         $sku->save();
 
@@ -630,17 +630,7 @@ class ProductSyncResource extends ResourceBase {
    *   Array of terms.
    */
   private function formatCategories(array $categories) {
-
-    $terms = [];
-
-    foreach ($categories as $cid) {
-      $term = $this->categoryRepo->loadCategoryTerm($cid);
-      if ($term) {
-        $terms[] = $term->id();
-      }
-    }
-
-    return ($terms);
+    return $this->categoryRepo->getTermIdsFromCommerceIds($categories);
   }
 
   /**

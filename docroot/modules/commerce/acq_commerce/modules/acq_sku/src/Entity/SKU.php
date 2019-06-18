@@ -323,21 +323,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
       return NULL;
     }
 
-    $skus_static_cache = &drupal_static(__FUNCTION__, []);
-
     $is_multilingual = \Drupal::languageManager()->isMultilingual();
 
     if ($is_multilingual && empty($langcode)) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    }
-
-    $static_cache_sku_identifier = $sku . ':' . $langcode;
-
-    // Check if data is available in static cache, return from there.
-    // If create translation is true, it means we are doing product sync.
-    // For this case we don't want to use any static cache.
-    if (isset($skus_static_cache[$static_cache_sku_identifier]) && !$create_translation) {
-      return $skus_static_cache[$static_cache_sku_identifier];
     }
 
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
@@ -374,14 +363,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
-    if ($is_multilingual) {
+    if ($is_multilingual && $sku_entity->language()->getId() != $langcode) {
       if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
-
-        // Set value in static variable.
-        // We set in static cache only for proper case, when returning different
-        // language or creating translation we can avoid static cache.
-        $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
       }
       elseif ($create_translation) {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
@@ -390,10 +374,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       elseif ($log_not_found) {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
-    }
-    else {
-      // Set value in static variable directly if not a multi-lingual site.
-      $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
     }
 
     return $sku_entity;
@@ -712,6 +692,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           throw new \RuntimeException('Field type not defined yet, please contact TA.');
         }
 
+        // @codingStandardsIgnoreLine
         $field->setLabel(new TranslatableMarkup($field_info['label']));
 
         // Update cardinality with default value if empty.
@@ -719,6 +700,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field->setDescription($field_info['description']);
 
         $field->setTranslatable(TRUE);
+        if (isset($field_info['translatable']) && $field_info['translatable'] == 0) {
+          $field->setTranslatable(FALSE);
+        }
 
         // Update cardinality with default value if empty.
         $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];

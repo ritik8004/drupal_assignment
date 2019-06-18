@@ -309,10 +309,14 @@ class StockManager {
 
     $this->releaseLock($sku);
 
-    if ($status_changed) {
+    $low_quantity = $this->isQuantityLow($new) || (!empty($current) && $this->isQuantityLow($current));
+    if ($status_changed || $low_quantity) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
-        $low_quantity = $this->isQuantityLow($new);
+        // Trigger the event if:
+        // * status changed.
+        // * old quantity was low.
+        // * new quantity is low.
         $event = new StockUpdatedEvent($sku_entity, $status_changed, $low_quantity);
         $this->dispatcher->dispatch(StockUpdatedEvent::EVENT_NAME, $event);
       }
