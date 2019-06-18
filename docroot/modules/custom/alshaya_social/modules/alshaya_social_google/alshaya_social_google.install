@@ -25,4 +25,14 @@ function alshaya_social_google_install() {
   \Drupal::configFactory()->getEditable('alshaya_social.settings')
     ->set('social_networks.social_auth_google', 0)
     ->save();
+
+  $strings = [
+    'Sign in with google' => [
+      'ar' => 'تسجيل الدخول عن طريق جوجل',
+    ],
+    'Sign up with google' => [
+      'ar' => 'سجل الاشتراك عن طريق جوجل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
