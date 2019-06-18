@@ -7,6 +7,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutLoginTabsTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  * Provides the login pane to checkout as guest.
@@ -65,6 +66,24 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
         '#markup' => '<div class="checkout-guest-summary">' . $config->get('checkout_guest_summary.value') . '</div>',
       ];
     }
+
+    $complete_form['actions'] = [
+      '#type' => 'actions',
+      '#weight' => 100,
+      '#attributes' => [
+        'class' => ['checkout-login-actions-wrapper'],
+      ],
+    ];
+
+    $complete_form['actions']['back_to_basket'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Back to basket'),
+      '#url' => Url::fromRoute('acq_cart.cart'),
+      '#attributes' => [
+        'class' => ['back-to-basket'],
+      ],
+      '#weight' => 99,
+    ];
 
     return $pane_form;
   }
