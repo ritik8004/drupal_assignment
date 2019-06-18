@@ -50,7 +50,7 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
       $checkout_guest_options
     );
 
-    $pane_form['#prefix'] = '<div class="checkout-login-separator"><span>' . $this->t('or') . '</span></div>';
+    $pane_form['#prefix'] = '<div class="checkout-login-separator o-5"><span>' . $this->t('or') . '</span></div>';
     $pane_form['checkout_as_guest'] = $link->toRenderable();
     $pane_form['checkout_as_guest']['#prefix'] = '<div class="above-mobile-block">';
     $pane_form['checkout_as_guest']['#suffix'] = '</div>';
