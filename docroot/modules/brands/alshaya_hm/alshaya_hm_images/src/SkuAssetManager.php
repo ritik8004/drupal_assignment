@@ -210,9 +210,21 @@ class SkuAssetManager {
         continue;
       }
 
-      // We already have drupal_uri in asset data.
-      if (!empty($asset['drupal_uri'])) {
-        continue;
+      // Check if we already have fid and drupal_uri in asset data.
+      if (!empty($asset['fid']) && !empty($asset['drupal_uri'])) {
+        $file = $this->fileStorage->load($asset['fid']);
+
+        // Verify file entity exists. We might remove this check in future.
+        if ($file instanceof FileInterface) {
+          continue;
+        }
+
+        $this->logger->warning('Fid @fid available in asset for sku @sku but not available in system. Trying to download again.', [
+          '@fid' => $asset['fid'],
+          '@sku' => $sku->getSku(),
+        ]);
+
+        unset($asset['fid']);
       }
 
       try {
@@ -227,7 +239,7 @@ class SkuAssetManager {
         watchdog_exception('SkuAssetManager', $e);
       }
 
-      if (empty($asset['drupal_uri'])) {
+      if (empty($asset['fid'])) {
         unset($assets[$index]);
       }
     }
@@ -382,6 +394,7 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset) {
+    $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image']);
     }
@@ -389,7 +402,16 @@ class SkuAssetManager {
       $file = $this->downloadLiquidPixelImage($asset);
     }
 
-    return $file ?? NULL;
+    if ($file instanceof FileInterface) {
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
+        '@fid' => $file->id(),
+        '@uri' => $file->getFileUri(),
+        '@id' => $id,
+      ]);
+    }
+
+    return $file;
   }
 
   /**
