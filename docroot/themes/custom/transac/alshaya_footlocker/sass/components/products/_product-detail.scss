@@ -1,6 +1,10 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    .brand-logo-wrapper {
+      float: none;
+    }
+
     h1 {
       font-size: 1rem;
       font-weight: normal;
