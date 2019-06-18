@@ -308,6 +308,16 @@
           padding-top: 0.3125rem;
         }
       }
+
+      .ajax-progress-throbber {
+        display: none;
+      }
+    }
+
+    .select2-container--focus {
+      .select2-selection {
+        outline: none;
+      }
     }
 
     .form-type-select {
