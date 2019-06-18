@@ -90,6 +90,7 @@
 
       .form-item-preferred-store {
         clear: both;
+        padding-bottom: 1.25rem !important;
       }
 
       .webform-composite-visible-title {
@@ -172,6 +173,14 @@
           label {
             top: -1.5rem;
             font-size: 0.75rem;
+
+            &.error {
+              position: relative;
+              top: auto !important;
+              font-size: 0.75rem;
+              color: $primary_input_inline_error;
+              padding-top: 0.3125rem;
+            }
           }
         }
       }
@@ -200,6 +209,14 @@
         width: 47%;
         display: inline-block;
       }
+
+      legend {
+        padding: 0;
+
+        .fieldset-legend {
+          padding-bottom: 1.5rem;
+        }
+      }
     }
 
     .form-item-address-area-parent,
@@ -217,6 +234,15 @@
         position: absolute;
         text-transform: uppercase;
         color: $form-field-title;
+
+        &.error {
+          top: auto !important;
+          bottom: 0;
+          color: $primary_input_inline_error;
+          padding-top: 0.3125rem;
+          font-size: 0.75rem;
+          text-transform: capitalize;
+        }
       }
 
       #edit-preferred-store,
@@ -261,7 +287,7 @@
         font-family: $arial;
         line-height: 1.188rem !important;
         color: $form-select-text;
-        font-size: 0.75rem;
+        font-size: 1rem;
         padding: 0.25rem !important;
       }
     }
@@ -274,6 +300,23 @@
         position: absolute;
         text-transform: capitalize;
         color: $form-field-label;
+
+        &.error {
+          top: auto !important;
+          bottom: 0;
+          color: $primary_input_inline_error;
+          padding-top: 0.3125rem;
+        }
+      }
+
+      .ajax-progress-throbber {
+        display: none;
+      }
+    }
+
+    .select2-container--focus {
+      .select2-selection {
+        outline: none;
       }
     }
 
@@ -352,6 +395,7 @@
 
       #edit-anything-else {
         border: 1px solid $form-field-textarea-border;
+        padding: 0.25rem 0.75rem;
       }
     }
 
@@ -397,5 +441,17 @@
 
   .select2-dropdown {
     border-color: $form-select-border;
+  }
+}
+
+.alias--free-design-services {
+  .form-item {
+    input {
+      font-size: 1rem;
+
+      &::placeholder {
+        font-size: 1rem;
+      }
+    }
   }
 }
