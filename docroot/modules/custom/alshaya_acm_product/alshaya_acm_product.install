@@ -12,12 +12,81 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Clear product cache to rebuild swatches data.
+ * Resave image.settings config so that overrides take effect.
  */
-function alshaya_acm_product_update_8044() {
+function alshaya_acm_product_update_8048() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['image.settings'],
+    'image'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Correct the path for memory limit policy config.
+ */
+function alshaya_acm_product_update_8047() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['memory_limit_policy.memory_limit_policy.path_based_memory'],
+    'alshaya_acm_product',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new config key for listing page display of hover images.
+ * Clear product cache after code changes to reduce data in cache and to rebuild
+ * swatches data.
+ */
+function alshaya_acm_product_update_8046() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
   /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
   $cache = \Drupal::service('cache.alshaya_product');
   $cache->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding `is_sale` and `is_new` attribute to the product.
+ */
+function alshaya_acm_product_update_8045() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new config key for listing page display of hover images.
+ * Clear product cache after code changes to reduce data in cache and to rebuild
+ * swatches data.
+ */
+function alshaya_acm_product_update_8044() {
+  // Done now in 8046. Because of back-merges and feature branch flow it was not
+  // getting executed.
 }
 
 /**

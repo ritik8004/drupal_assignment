@@ -5,9 +5,13 @@
 
     li {
       font-size: 0.75rem;
+      line-height: 2;
 
-      a {
+      a,
+      span {
         color: $lhn_l3;
+        font-family: $alshaya-thin;
+        text-transform: lowercase;
 
         &.lhn-3,
         &.lhn-4 {
@@ -35,8 +39,9 @@
     > .lhn-2 {
       color: $lhn_l2;
       font-family: $alshaya-bold;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.15rem;
       display: inline-block;
+      font-size: 0.875rem;
     }
   }
 

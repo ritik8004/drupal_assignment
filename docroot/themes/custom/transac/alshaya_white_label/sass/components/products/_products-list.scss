@@ -337,6 +337,12 @@
           margin: 0 0 13.5%;
         }
       }
+
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          max-height: 29.5rem;
+        }
+      }
     }
 
     &.product-small {
@@ -371,6 +377,26 @@
           }
         }
       }
+
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          max-height: 21.75rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          max-height: none;
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-tablet) {
+            height: 17.5rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            height: 24.125rem;
+          }
+        }
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -379,10 +405,24 @@
           height: 13.125rem;
         }
       }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 17.75rem;
+          }
+        }
+      }
 
       &.product-large {
-        .alshaya_search_gallery .alshaya_search_mainimage {
-          height: 17.125rem;
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 24rem;
+          }
         }
       }
     }
@@ -421,20 +461,10 @@
 
     .alshaya_search_gallery {
       overflow: hidden;
-      max-height: 20.125rem;
 
       .alshaya_search_mainimage {
         z-index: 5;
-        height: 18.125rem;
-        overflow: hidden;
-
-        @include breakpoint($tablet) {
-          min-height: 15.5rem;
-        }
-
-        @include breakpoint($desktop) {
-          height: 20.125rem;
-        }
+        height: auto;
       }
     }
 
@@ -528,7 +558,8 @@
         }
 
         .alshaya_search_gallery {
-          max-height: none;
+          // We dont want any height to restrict the transform on hover.
+          max-height: none !important;
         }
       }
     }

@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\search_api\IndexInterface;
+
+/**
+ * Implements hook_search_api_algolia_sorts_alter().
+ */
+function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, IndexInterface $index) {
+  // We have added stock as ranking already in all the replicas.
+  // It is added in views to keep consistency with solr / db.
+  unset($sorts['stock']);
+
+  // Sort by relevance is default index.
+  if (isset($sorts['search_api_relevance'])) {
+    unset($sorts['search_api_relevance']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $reset[] = 'search_api.server.algolia';
+  $reset[] = 'block.block.autocompletewidgetofalgolia';
+}
