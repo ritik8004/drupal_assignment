@@ -275,9 +275,9 @@
       content: '';
       height: 2.875rem;
       width: 2.875rem;
+      background: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg) no-repeat center;
       background-size: 2.9375rem;
       display: inline-block;
-      background: url(#{$base_theme_img_directory_path}/icons/profile-icon.svg) no-repeat center;
 
       @include breakpoint($only-mobile) {
         position: absolute;
