@@ -287,13 +287,13 @@ class StockManager {
     // First try to check if stock changed.
     $current = $this->getStock($sku);
 
+    $new = [
+      'quantity' => $quantity,
+      'status' => $status,
+    ];
+
     // Update only if value changed.
     if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity) {
-      $new = [
-        'quantity' => $quantity,
-        'status' => $status,
-      ];
-
       $this->connection->merge('acq_sku_stock')
         ->key(['sku' => $sku])
         ->fields($new)
