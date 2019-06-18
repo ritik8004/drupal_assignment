@@ -2,6 +2,9 @@ alshaya_knet.settings:
   type: config_object
   label: 'K-Net Settings'
   mapping:
+    knet_url:
+      type: string
+      label: 'K-Net url'
     resource_path:
       type: string
       label: 'Resource path'

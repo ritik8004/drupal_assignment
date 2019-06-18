@@ -458,9 +458,10 @@ class KnetHelper {
   public function getNewKnetToolkitCreds() {
     // Get the K-Net keys etc from settings. These settings are stored in
     // secret settings file. See `post-settings/zzz_overrides`.
-    $knet_settings = Settings::get('alshaya_knet.settings');
+    $knet_settings = Settings::get('knet');
+    $knet_url = $this->configFactory->get('alshaya_knet.settings')->get('knet_url');
 
-    if (empty($knet_settings)) {
+    if (empty($knet_settings) || empty($knet_url)) {
       return [];
     }
 
@@ -468,7 +469,7 @@ class KnetHelper {
       'tranportal_id' => $knet_settings['tranportal_id'] ?? '',
       'tranportal_password' => $knet_settings['tranportal_password'] ?? '',
       'terminal_resource_key' => $knet_settings['terminal_key'] ?? '',
-      'knet_url' => $knet_settings['knet_url'] ?? '',
+      'knet_url' => $knet_url,
     ];
   }
 
@@ -494,11 +495,12 @@ class KnetHelper {
 
     // If K-Net is not configured or key is not available.
     if (empty($knet_creds) || empty($knet_creds['terminal_resource_key'])) {
-      $this->logger->error('K-Net is not configured or resource key is not available');
-      throw new \Exception();
+      $message = 'K-Net is not configured or resource key is not available';
+      $this->logger->error($message);
+      throw new \Exception($message);
     }
 
-    $terminal_resource_key = $this->getNewKnetToolkitCreds()['terminal_resource_key'];
+    $terminal_resource_key = $knet_creds['terminal_resource_key'];
     $output = [];
     // Decrypted data contains a string which seperates values by `&`, so we
     // need to explode this. Example - 'paymentId=123&amt=4545'.
