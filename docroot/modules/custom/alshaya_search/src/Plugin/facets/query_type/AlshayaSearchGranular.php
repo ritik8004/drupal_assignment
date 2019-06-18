@@ -94,10 +94,10 @@ class AlshayaSearchGranular extends SearchApiGranular {
 
     // If this is the first range, display, "under X".
     if (floor($range['start']) == 0) {
-      $displayValue = t('under @stop', $t_options)->render();
+      $displayValue = $this->t('under @stop', $t_options)->render();
     }
     else {
-      $displayValue = t('@start - @stop', $t_options)->render();
+      $displayValue = $this->t('@start - @stop', $t_options)->render();
     }
 
     // Invoke the alter hook to allow all modules to update the price facet.

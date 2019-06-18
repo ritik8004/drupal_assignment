@@ -46,35 +46,35 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
       ],
       'component_restrictions' => [
         '#type' => 'fieldset',
-        '#title' => t("Component Restrictions"),
+        '#title' => $this->t("Component Restrictions"),
         'route' => [
           '#type' => 'textfield',
           '#default_value' => $settings['route'],
-          '#title' => t("Route"),
+          '#title' => $this->t("Route"),
           '#size' => 15,
         ],
         'locality' => [
           '#type' => 'textfield',
           '#default_value' => $settings['locality'],
-          '#title' => t("Locality"),
+          '#title' => $this->t("Locality"),
           '#size' => 15,
         ],
         'administrativeArea' => [
           '#type' => 'textfield',
           '#default_value' => $settings['administrativeArea'],
-          '#title' => t("Administrative Area"),
+          '#title' => $this->t("Administrative Area"),
           '#size' => 15,
         ],
         'postalCode' => [
           '#type' => 'textfield',
           '#default_value' => $settings['postalCode'],
-          '#title' => t("Postal code"),
+          '#title' => $this->t("Postal code"),
           '#size' => 5,
         ],
         'country' => [
           '#type' => 'textfield',
           '#default_value' => $settings['country'],
-          '#title' => t("Country"),
+          '#title' => $this->t("Country"),
           '#size' => 5,
         ],
       ],
@@ -89,7 +89,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
 
     $render_array['geolocation_geocoder_google_places_api'] = [
       '#type' => 'textfield',
-      '#description' => t('Enter an address to filter results.'),
+      '#description' => $this->t('Enter an address to filter results.'),
       '#attributes' => [
         'class' => [
           'geolocation-views-filter-geocoder',
@@ -161,7 +161,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
       $location_data = $this->geocode($input['geolocation_geocoder_google_places_api']);
 
       if (empty($location_data)) {
-        $form_state->setErrorByName('geolocation_geocoder_google_places_api', t('Failed to geocode %input.', ['%input' => $input['geolocation_geocoder_google_places_api']]));
+        $form_state->setErrorByName('geolocation_geocoder_google_places_api', $this->t('Failed to geocode %input.', ['%input' => $input['geolocation_geocoder_google_places_api']]));
         return FALSE;
       }
     }
