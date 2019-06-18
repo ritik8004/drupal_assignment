@@ -272,6 +272,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
 function alshaya_vs_transac_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
 
+  // Add links of all enabled promo panel blocks in main menu for mobile view.
   foreach (array_keys($promo_panel_blocks) as $block_plugin_id) {
     $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['plugin' => $block_plugin_id]);
     $block = reset($blocks);
