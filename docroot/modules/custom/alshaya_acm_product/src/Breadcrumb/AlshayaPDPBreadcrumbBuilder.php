@@ -15,7 +15,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Class AlshayaPDPBreadcrumbBuilder.
@@ -84,11 +84,11 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   protected $currentRequest;
 
   /**
-   * Product Category Tree service object.
+   * Product Category Helper service object.
    *
-   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
-  protected $productCategoryTree;
+  protected $productCategoryHelper;
 
   /**
    * AlshayaPDPBreadcrumbBuilder constructor.
@@ -109,8 +109,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The Title Resolver.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stock service object.
-   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
-   *   Product Category Tree service object.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   Product Category Helper service object.
    */
   public function __construct(Connection $connection,
                               LanguageManagerInterface $language_manager,
@@ -120,7 +120,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
                               PathValidatorInterface $path_validator,
                               TitleResolverInterface $title_resolver,
                               RequestStack $request_stack,
-                              ProductCategoryTree $product_category_tree) {
+                              ProductCategoryHelper $product_category_helper) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
@@ -129,7 +129,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $this->pathValidator = $path_validator;
     $this->titleResolver = $title_resolver;
     $this->currentRequest = $request_stack->getCurrentRequest();
-    $this->productCategoryTree = $product_category_tree;
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -162,7 +162,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       foreach ($term_list as $term) {
         $breadcrumb_cache_tags[] = 'taxonomy_term:' . $term['target_id'];
       }
-      if ($parents = $this->productCategoryTree->getBreadcrumbTermList($term_list)) {
+      if ($parents = $this->productCategoryHelper->getBreadcrumbTermList($term_list)) {
         foreach (array_reverse($parents) as $term) {
           $term = $this->entityRepository->getTranslationFromContext($term);
 

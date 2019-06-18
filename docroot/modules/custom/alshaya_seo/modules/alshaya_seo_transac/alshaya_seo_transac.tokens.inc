@@ -32,7 +32,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
       // Get all categories for the node.
       if ($field_category = $node->get('field_category')) {
         $term_list = $field_category->getValue();
-        if ($parents = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getBreadcrumbTermList($term_list)) {
+        if ($parents = \Drupal::service('alshaya_acm_product.category_helper')->getBreadcrumbTermList($term_list)) {
           $replacements[$tokens['category_names']] = reset($parents)->getName() ?? '';
         }
       }

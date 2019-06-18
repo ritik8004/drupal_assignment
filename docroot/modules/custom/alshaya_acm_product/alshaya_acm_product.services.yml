@@ -12,13 +12,19 @@ services:
       - '@path.validator'
       - '@title_resolver'
       - '@request_stack'
-      - '@alshaya_acm_product_category.product_category_tree'
+      - '@alshaya_acm_product.category_helper'
   alshaya_acm_product.helper:
     class: Drupal\alshaya_acm_product\ProductHelper
     arguments:
       - '@config.factory'
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
+  alshaya_acm_product.category_helper:
+    class: Drupal\alshaya_acm_product\ProductCategoryHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@database'
+      - '@language_manager'
 
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
@@ -38,7 +44,7 @@ services:
       - '@cache.product_labels'
       - '@cache.alshaya_product'
       - '@acq_sku.fields_manager'
-      - '@alshaya_acm_product_category.product_category_tree'
+      - '@alshaya_acm_product.category_helper'
       - '@http_client'
       - '@renderer'
       - '@simple_sitemap.generator'
