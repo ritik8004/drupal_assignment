@@ -254,7 +254,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       if ($link = $this->getOverrideTargetLink($term->tid, $langcode)) {
         $data[$term->tid]['path'] = Url::fromUri($link)->toString();
-        $data[$term->tid]['class'][] = 'non-category';
+        $data[$term->tid]['class'][] = 'overridden-link';
       }
 
       if ($icon = $this->getIcon($term->tid, $langcode)) {

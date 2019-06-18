@@ -108,9 +108,10 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       return [];
     }
 
-    // Do not display non category links for "shop by" block in footer.
+    // Exclude terms with overridden target link from "shop by" block.
+    // As per requirement, we do not want to show these terms in footer.
     $term_data = array_filter($term_data, function ($term) {
-      return !in_array('non-category', $term['class']);
+      return !in_array('overridden-link', $term['class']);
     });
 
     // Get all parents of the given term.
