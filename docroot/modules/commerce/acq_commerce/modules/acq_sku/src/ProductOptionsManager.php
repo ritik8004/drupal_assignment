@@ -82,7 +82,7 @@ class ProductOptionsManager {
    *   Attribute code - Magento value.
    * @param int $option_id
    *   Option id - Magento value.
-   * @param int $langcode
+   * @param string $langcode
    *   Lannguage code.
    * @param bool $log_error
    *   Flag to stop logging term not found errors during sync.
