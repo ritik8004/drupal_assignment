@@ -545,19 +545,13 @@ class ProductSyncResource extends ResourceBase {
       catch (\Exception $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $variables = Error::decodeException($e);
-        unset($variables['backtrace']);
-        $variables['@sku'] = $product['sku'];
-        $failed_skus[] = $this->t('@sku : %type: @message in %function (line %line of %file).', $variables);
+        $failed_skus[] = $this->formatErrorMessage($e, $product);
         $failed++;
       }
       catch (\Throwable $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $variables = Error::decodeException($e);
-        unset($variables['backtrace']);
-        $variables['@sku'] = $product['sku'];
-        $failed_skus[] = $this->t('@sku : %type: @message in %function (line %line of %file).', $variables);
+        $failed_skus[] = $this->formatErrorMessage($e, $product);
         $failed++;
       }
       finally {
@@ -600,6 +594,24 @@ class ProductSyncResource extends ResourceBase {
     }
 
     return (new ModifiedResourceResponse($response));
+  }
+
+  /**
+   * Make error message readable.
+   *
+   * @param \Throwable $e
+   *   Object of error message.
+   * @param array $product
+   *   Array of product info.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   Return string object.
+   */
+  protected function formatErrorMessage(\Throwable $e, array $product) {
+    $variables = Error::decodeException($e);
+    unset($variables['backtrace']);
+    $variables['@sku'] = $product['sku'];
+    return $this->t('@sku : %type: @message in %function (line %line of %file).', $variables);
   }
 
   /**
