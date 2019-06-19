@@ -317,7 +317,7 @@
           margin-bottom: 5%;
           margin-#{$left}: 2%;
 
-          &:nth-child(3n+1) {
+          &:nth-of-type(3n+1) {
             margin-#{$left}: 0;
           }
         }
@@ -327,7 +327,7 @@
           margin-bottom: 6.75%;
           margin-#{$left}: 3.334%;
 
-          &:nth-child(2n+1) {
+          &:nth-of-type(2n+1) {
             margin-#{$left}: 0;
           }
         }
@@ -352,7 +352,7 @@
           margin-bottom: 5%;
           margin-#{$left}: 1.797%;
 
-          &:nth-child(4n+1) {
+          &:nth-of-type(4n+1) {
             margin-#{$left}: 0;
           }
         }
@@ -362,7 +362,7 @@
           margin-bottom: 6.75%;
           margin-#{$left}: 1.528%;
 
-          &:nth-child(3n+1) {
+          &:nth-of-type(3n+1) {
             margin-#{$left}: 0;
           }
         }
@@ -372,7 +372,7 @@
           margin-bottom: 8%;
           margin-#{$left}: 1.875%;
 
-          &:nth-child(2n+1) {
+          &:nth-of-type(2n+1) {
             margin-#{$left}: 0;
           }
         }
@@ -442,11 +442,11 @@
     }
 
     @include breakpoint($only-mobile) {
-      &:nth-child(2n) {
+      &:nth-of-type(2n) {
         float: $right;
       }
 
-      &:nth-child(2n + 1) {
+      &:nth-of-type(2n + 1) {
         clear: both;
       }
     }

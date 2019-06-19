@@ -38,19 +38,12 @@ function alshaya_acm_product_category_update_8030() {
     AlshayaConfigManager::MODE_MERGE
   );
 
-  // Create and enable the new category lhn block.
+  // Place block.
   $manager->updateConfigs(
-    ['block.block.categorylhnblock'],
-    'alshaya_transac',
-    'optional'
-  );
-
-  // Global config for show/hide the lhn block.
-  $manager->updateConfigs(
-    ['alshaya_acm_product_category.settings'],
+    ['block.block.subcategoryblock'],
     'alshaya_acm_product_category',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    'optional',
+    AlshayaConfigManager::MODE_MERGE
   );
 }
 

@@ -97,6 +97,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
 
         if ($subcategory instanceof TermInterface) {
           $subcategories[$subcategory->id()]['title'] = $subcategory->label();
+          $subcategories[$subcategory->id()]['tid'] = $subcategory->id();
           if ($subcategory->get('field_plp_group_category_img')->first()) {
             $file_value = $subcategory->get('field_plp_group_category_img')->first()->getValue();
             $image = $this->fileStorage->load($file_value['target_id']);
@@ -107,6 +108,9 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
           $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_plp_group_category_desc')->value;
         }
       }
+
+      // Sort the results so that the block categories are in same order.
+      ksort($subcategories);
 
       return [
         '#theme' => 'alshaya_subcategory_block',
