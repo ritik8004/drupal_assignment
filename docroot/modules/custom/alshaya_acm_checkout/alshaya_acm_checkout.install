@@ -14,6 +14,11 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * and checkout_guest_login.
  */
 function alshaya_acm_checkout_update_8004() {
+  $remove_values = [
+    'checkout_guest_summary',
+    'checkout_guest_email_usage',
+    'checkout_guest_login',
+  ];
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -22,17 +27,23 @@ function alshaya_acm_checkout_update_8004() {
     'install',
     AlshayaConfigManager::MODE_REPLACE_KEY,
     [
-      'replace_keys' => [
-        'checkout_guest_summary',
-        'checkout_guest_email_usage',
-        'checkout_guest_login',
-      ],
+      'replace_keys' => $remove_values,
     ]
   );
+
+  // Remove any existing arabic translations.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_checkout.settings');
+  foreach ($remove_values as $key) {
+    $config->set("{$key}.value", '');
+  }
+  $config->save();
 
   $strings = [
     'sign in with email address' => [
       'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
+    ],
+    'continue as a guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
     ],
   ];
   alshaya_i18n_save_translations($strings);

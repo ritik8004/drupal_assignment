@@ -152,14 +152,28 @@ function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
+  static $attr_to_skip;
+
   // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
   }
 
-  $attr_to_skip = \Drupal::configFactory()
-    ->getEditable('alshaya_acm_product.settings')
-    ->get('acq_sku__attributes_skip') ?? [];
+  // Skip additional attributes specified in config.
+  if (empty($attr_to_skip)) {
+    $attr_to_skip = \Drupal::configFactory()
+      ->getEditable('alshaya_acm_product.settings')
+      ->get('acq_sku__attributes_skip') ?? [];
+
+    // Skip configurable attributes, we get it from attribute_weights config.
+    $configurable_attribute_sets = \Drupal::configFactory()
+      ->getEditable('acq_sku.configurable_form_settings')
+      ->get('attribute_weights') ?? [];
+
+    foreach ($configurable_attribute_sets as $attributes_in_set) {
+      $attr_to_skip = array_merge($attr_to_skip, array_keys($attributes_in_set));
+    }
+  }
 
   // Get configurable fields/attributes.
   $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
@@ -417,7 +431,7 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 function alshaya_acm_product_file_delete(FileInterface $entity) {
   \Drupal::logger('alshaya_acm_product')->notice('Deleting file @fid with uri @uri on page @page', [
     '@fid' => $entity->id(),
-    '@fid' => $entity->getFileUri(),
+    '@uri' => $entity->getFileUri(),
     '@page' => $_SERVER['REQUEST_URI'] ?? '-',
   ]);
 }

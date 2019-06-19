@@ -40,9 +40,20 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
     'email' => $user->getEmail(),
   ];
 
-  $customer = $api_wrapper->updateCustomer($customer_array, [
-    'password' => $password,
-  ]);
+  try {
+    $customer = $api_wrapper->updateCustomer($customer_array, [
+      'password' => $password,
+    ]);
+  }
+  catch (\Exception $e) {
+    // IF API Down or some other issue, log message is already added
+    // in AgentRequestTrait. We can simply return empty array here.
+    $customer = [];
+
+    // Clear all messages first as there is success message available.
+    \Drupal::messenger()->deleteAll();
+    \Drupal::messenger()->addError(acq_commerce_api_down_global_error_message());
+  }
 
   return $customer;
 }

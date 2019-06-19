@@ -1,7 +1,7 @@
-diff --git a/docroot/.htaccess b/docroot/.htaccess
+diff --git a/.htaccess b/.htaccess
 index d20700cc1..f43b97a7c 100644
---- a/docroot/.htaccess
-+++ b/docroot/.htaccess
+--- a/.htaccess
++++ b/.htaccess
 @@ -69,6 +69,14 @@ AddEncoding gzip svgz
  <IfModule mod_rewrite.c>
    RewriteEngine on

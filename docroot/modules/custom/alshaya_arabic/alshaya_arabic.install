@@ -6,11 +6,22 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Remove pathauto pattern for category specific to arabic language.
+ */
+function alshaya_arabic_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('pathauto.pattern.product_category_pathauto_arabic')
+    ->delete();
+}
+
+/**
  * Implements hook_uninstall().
  *
  * Reset config. We need to ensure all the configuration added in the module
  * is deleted to allow the ON/OFF code to work.
  */
 function alshaya_arabic_uninstall() {
-  Drupal::configFactory()->getEditable('language.entity.ar')->delete();
+  \Drupal::configFactory()->getEditable('language.entity.ar')->delete();
 }

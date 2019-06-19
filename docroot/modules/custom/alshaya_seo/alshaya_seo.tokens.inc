@@ -44,6 +44,11 @@ function alshaya_seo_token_info() {
     'dynamic' => TRUE,
   ];
 
+  $info['tokens']['node']['category_names'] = [
+    'name' => t('Category Names'),
+    'description' => t('Comma separated list of all categories referenced in the node.'),
+  ];
+
   $info['tokens']['custom_meta']['brand_name'] = [
     'name' => t('Brand name'),
     'description' => t('The brand name for the website.'),
@@ -57,6 +62,11 @@ function alshaya_seo_token_info() {
   $info['tokens']['custom_meta']['city2'] = [
     'name' => t('City 2'),
     'description' => t('City for meta data.'),
+  ];
+
+  $info['tokens']['custom_meta']['cities'] = [
+    'name' => t('Cities'),
+    'description' => t('Cities for meta data.'),
   ];
 
   $info['tokens']['custom_meta']['country'] = [
@@ -122,7 +132,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
   }
 
-  if ($type == 'node' && !empty($data['node'])) {
+  if ($type == 'node' && !empty($data['node']) && $data['node'] instanceof NodeInterface) {
 
     /** @var \Drupal\node\NodeInterface $node */
     $node = $data['node'];
@@ -210,6 +220,11 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'city2':
           $replacements[$original] = t('seo_city2');
+          break;
+
+        case 'cities':
+          $token_service = \Drupal::token();
+          $replacements[$original] = $token_service->replace('[custom_meta:city1], [custom_meta:city2]');
           break;
       }
     }
