@@ -7,7 +7,7 @@ dependencies:
 id: product_pathauto
 label: 'Product Pathauto'
 type: 'canonical_entities:node'
-pattern: '[node:title].html'
+pattern: 'buy-[node:title].html'
 selection_criteria:
   eff3f0fa-a9f5-4e0e-8e73-6e07761352e4:
     id: node_type
