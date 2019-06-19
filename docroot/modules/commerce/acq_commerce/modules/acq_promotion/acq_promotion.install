@@ -4,3 +4,36 @@
  * @file
  * Contains install hooks for acq_promotion.
  */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add field to store sort_order.
+ */
+function acq_promotion_update_8001() {
+  $module_path = drupal_get_path('module', 'acq_promotion');
+
+  // Create the field storage.
+  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.field_acq_promotion_sort_order.yml'));
+  if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
+    FieldStorageConfig::create($yml)->save();
+  }
+
+  // Create the field.
+  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.field.node.acq_promotion.field_acq_promotion_sort_order.yml'));
+  if (!FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
+    FieldConfig::create($yml)->save();
+  }
+
+  // Show the field in form display.
+  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/core.entity_form_display.node.acq_promotion.default.yml'));
+  $config = \Drupal::configFactory()->getEditable('core.entity_form_display.node.acq_promotion.default');
+  $content = $config->get('content');
+  $content = array_merge_recursive($yml['content'], $content);
+  $config->set('content', $content);
+  $config->save();
+}
