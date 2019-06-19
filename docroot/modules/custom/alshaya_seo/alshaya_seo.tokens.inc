@@ -10,7 +10,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_token_info().
@@ -63,6 +62,11 @@ function alshaya_seo_token_info() {
   $info['tokens']['custom_meta']['city2'] = [
     'name' => t('City 2'),
     'description' => t('City for meta data.'),
+  ];
+
+  $info['tokens']['custom_meta']['cities'] = [
+    'name' => t('Cities'),
+    'description' => t('Cities for meta data.'),
   ];
 
   $info['tokens']['custom_meta']['country'] = [
@@ -176,21 +180,6 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         $replacements[$original] = text_summary($output, 'plain_text', $size);
       }
     }
-    if (isset($tokens['category_names'])) {
-      // Get all categories for the node.
-      $categories = $node->get('field_category')->referencedEntities();
-      $category_tokens = [];
-      foreach ($categories as $term) {
-        if ($term instanceof TermInterface) {
-          if ($term->hasTranslation($current_langcode)) {
-            $term = $term->getTranslation($current_langcode);
-          }
-          $category_tokens[] = $term->getName();
-        }
-      }
-      $category_tokens = implode(', ', $category_tokens);
-      $replacements[$tokens['category_names']] = $category_tokens;
-    }
   }
 
   if ($type == 'custom_meta') {
@@ -231,6 +220,11 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'city2':
           $replacements[$original] = t('seo_city2');
+          break;
+
+        case 'cities':
+          $token_service = \Drupal::token();
+          $replacements[$original] = $token_service->replace('[custom_meta:city1], [custom_meta:city2]');
           break;
       }
     }
