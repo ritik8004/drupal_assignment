@@ -200,8 +200,9 @@ class AlshayaConfigManager {
 
         /** @var \Drupal\image\Entity\ImageStyle $style */
         $style = $this->entityTypeManager->getStorage('image_style')->load($style_id);
-        // Using flush() method of ImageStyle entity takes a lot of time,
-        // deleting the directory using sell cmd is quicker with hook_update.
+        // Using flush() method of ImageStyle entity takes a lot of time as it
+        // iterates recursively and deletes each file one by one, deleting
+        // the directory using shell cmd is quicker with hook_update.
         $directory = file_url_transform_relative(file_create_url(file_default_scheme() . '://styles/' . $style->id()));
         shell_exec(sprintf('rm -rf %s', escapeshellarg(ltrim($directory, '/'))));
       }
