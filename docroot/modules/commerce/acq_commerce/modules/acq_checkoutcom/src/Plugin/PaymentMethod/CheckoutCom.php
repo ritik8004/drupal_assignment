@@ -167,59 +167,67 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
     }
     elseif ($payment_card == 'new') {
+      $states = [
+        '#states' => [
+          'required' => [
+            ':input[name="acm_payment_methods[payment_details_wrapper][payment_method_checkout_com][payment_details][card_token]"]' => ['value' => ''],
+          ],
+        ],
+      ];
+
       $pane_form['payment_details']['cc_number'] = [
         '#type' => 'tel',
         '#title' => $this->t('Credit Card Number'),
         '#default_value' => '',
-        '#required' => TRUE,
         '#attributes' => [
           'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
           'autocomplete' => 'cc-number',
           'data-checkout' => 'card-number',
+          'id' => 'cardNumber',
         ],
-      ];
+      ] + $states;
 
       $pane_form['payment_details']['cc_cvv'] = [
         '#type' => 'password',
         '#maxlength' => 4,
         '#title' => $this->t('Security code (CVV)'),
         '#default_value' => '',
-        '#required' => TRUE,
         '#attributes' => [
           'class' => [
             'checkoutcom-credit-card-cvv-input',
             'checkoutcom-input',
           ],
+          'id' => 'cardCvv',
           'autocomplete' => 'cc-csc',
           'data-checkout' => 'cvv',
         ],
-      ];
+      ] + $states;
 
       $pane_form['payment_details']['cc_exp_month'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Expiration Month'),
-        '#required' => TRUE,
         '#attributes' => [
           'class' => [
             'checkoutcom-credit-card-exp-month-select',
             'checkoutcom-input',
           ],
+          'id' => 'expMonth',
           'data-checkout' => 'expiry-month',
         ],
-      ];
+      ] + $states;
 
       $pane_form['payment_details']['cc_exp_year'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Expiration Year'),
-        '#required' => TRUE,
         '#attributes' => [
           'class' => [
             'checkoutcom-credit-card-exp-year-select',
             'checkoutcom-input',
           ],
+          'id' => 'expYear',
           'data-checkout' => 'expiry-year',
         ],
-      ];
+      ] + $states;
 
       $pane_form['payment_details']['card_token'] = [
         '#type' => 'hidden',
@@ -245,6 +253,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         },
         cardTokenised: function(event) {
           cardToken.value = event.data.cardToken
+          cardNumber.value = ''
+          cardCvv.value = ''
+          expMonth.value = ''
+          expYear.value = ''
           document.getElementById('multistep-checkout').submit();
         },
         apiError: function (event) {
@@ -304,7 +316,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $cart->setPaymentMethod($this->getId(), ['card_token_id' => $inputs['cko-card-token']]);
     }
     elseif ($process_type == '3d') {
-      $payment_method = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com'];
+      $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
       $payment_card = $payment_method['payment_card'];
 
       if ((empty($payment_card) || $payment_card == 'new') && !empty($inputs['cko-card-token'])) {
