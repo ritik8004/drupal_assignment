@@ -223,7 +223,12 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'cities':
-          $replacements[$original] = t('seo_cities');
+          $token_service = \Drupal::token();
+          $replacements[$original] = $token_service->replace('[custom_meta:city1], [custom_meta:city2]');
+          if (_alshaya_custom_get_site_level_country_code() === 'KW') {
+            $replacements[$original] = $token_service->replace('[custom_meta:city1]');
+          }
+          break;
       }
     }
   }
