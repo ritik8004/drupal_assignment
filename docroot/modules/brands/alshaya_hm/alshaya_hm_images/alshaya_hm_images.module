@@ -56,6 +56,12 @@ function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existi
         $assets[$key]['fid'] = $existing_assets[$id]['fid'];
         $assets[$key]['drupal_uri'] = $existing_assets[$id]['drupal_uri'];
       }
+      else {
+        // Ensure fid and drupal_uri are not available in assets if we are
+        // not re-using.
+        unset($assets[$key]['fid']);
+        unset($assets[$key]['drupal_uri']);
+      }
 
       if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
         continue;
