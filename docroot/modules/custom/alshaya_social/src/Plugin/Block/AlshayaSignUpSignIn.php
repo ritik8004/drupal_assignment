@@ -80,7 +80,17 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'config:alshaya_social.settings',
+      'config:social_auth.settings',
+    ]);
   }
 
 }
