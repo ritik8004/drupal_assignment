@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_kz_transac_lite.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_kz_transac_lite_install() {
+  // Enable and set kidzania as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('kidzania');
+}

@@ -287,13 +287,13 @@ class StockManager {
     // First try to check if stock changed.
     $current = $this->getStock($sku);
 
+    $new = [
+      'quantity' => $quantity,
+      'status' => $status,
+    ];
+
     // Update only if value changed.
     if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity) {
-      $new = [
-        'quantity' => $quantity,
-        'status' => $status,
-      ];
-
       $this->connection->merge('acq_sku_stock')
         ->key(['sku' => $sku])
         ->fields($new)
@@ -302,21 +302,21 @@ class StockManager {
       // Reset static cache of stocks.
       drupal_static_reset('stock_static_cache');
 
-      // Trigger the event and invalidate caches if:
-      // * status changed.
-      // * old quantity was low.
-      // * new quantity is low.
       $status_changed = $current
-        ? ($this->isStockStatusChanged($current, $new) || $this->isQuantityLow($current) || $this->isQuantityLow($new))
+        ? $this->isStockStatusChanged($current, $new)
         : TRUE;
     }
 
     $this->releaseLock($sku);
 
-    if ($status_changed) {
+    $low_quantity = $this->isQuantityLow($new) || (!empty($current) && $this->isQuantityLow($current));
+    if ($status_changed || $low_quantity) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
-        $low_quantity = $this->isQuantityLow($new);
+        // Trigger the event if:
+        // * status changed.
+        // * old quantity was low.
+        // * new quantity is low.
         $event = new StockUpdatedEvent($sku_entity, $status_changed, $low_quantity);
         $this->dispatcher->dispatch(StockUpdatedEvent::EVENT_NAME, $event);
       }
