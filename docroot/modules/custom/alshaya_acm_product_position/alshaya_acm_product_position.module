@@ -169,12 +169,12 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
 /**
  * Implements hook_acq_sku_position_sync_category_chunk_processed().
  */
-function alshaya_acm_product_position_acq_sku_position_sync_category_chunk_processed($category_chunk) {
+function alshaya_acm_product_position_acq_sku_position_sync_category_chunk_processed(array $category_chunk) {
   $invalidate_cache_tags = [];
 
   // Invalidate cache tags for categories processed during position sync.
-  foreach ($category_chunk as $tid) {
-    $invalidate_cache_tags[] = 'search_api_list:product:sort_position:' . $tid;
+  foreach ($category_chunk as $term) {
+    $invalidate_cache_tags[] = 'search_api_list:product:sort_position:' . $term->tid;
   }
 
   Cache::invalidateTags($invalidate_cache_tags);
