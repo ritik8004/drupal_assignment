@@ -10,6 +10,22 @@
  *
  * Save translations for meta tags.
  */
+function alshaya_ae_update_8006() {
+  $strings = [
+    'seo_cities' => [
+      'en' => 'Dubai, Abu dhabi',
+      'ar' => 'دبي, ابوظبي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Save translations for meta tags.
+ */
 function alshaya_ae_update_8005() {
   $strings = [
     'seo_country' => [
@@ -99,6 +115,10 @@ function alshaya_ae_install() {
     'seo_city2' => [
       'en' => 'Abu dhabi',
       'ar' => 'ابوظبي',
+    ],
+    'seo_cities' => [
+      'en' => 'Dubai, Abu dhabi',
+      'ar' => 'دبي, ابوظبي',
     ],
   ];
 

@@ -64,6 +64,11 @@ function alshaya_seo_token_info() {
     'description' => t('City for meta data.'),
   ];
 
+  $info['tokens']['custom_meta']['cities'] = [
+    'name' => t('Cities'),
+    'description' => t('Cities for meta data.'),
+  ];
+
   $info['tokens']['custom_meta']['country'] = [
     'name' => t('Country'),
     'description' => t('The website country.'),
@@ -216,6 +221,9 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         case 'city2':
           $replacements[$original] = t('seo_city2');
           break;
+
+        case 'cities':
+          $replacements[$original] = t('seo_cities');
       }
     }
   }
