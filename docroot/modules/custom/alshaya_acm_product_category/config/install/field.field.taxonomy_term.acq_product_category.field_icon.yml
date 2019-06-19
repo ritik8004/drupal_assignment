@@ -11,7 +11,7 @@ field_name: field_icon
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: Icon
-description: ''
+description: 'Upload icon for mobile and tablet view only, it will not be visible for desktop view.'
 required: false
 translatable: false
 skip_translation_check: 0
