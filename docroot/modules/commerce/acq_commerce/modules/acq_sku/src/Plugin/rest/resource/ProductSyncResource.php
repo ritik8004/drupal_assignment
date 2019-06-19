@@ -13,6 +13,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Utility\Error;
 use Drupal\node\Entity\Node;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -544,13 +545,19 @@ class ProductSyncResource extends ResourceBase {
       catch (\Exception $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() . ')';
+        $variables = Error::decodeException($e);
+        unset($variables['backtrace']);
+        $variables['@sku'] = $product['sku'];
+        $failed_skus[] = $this->t('@sku : %type: @message in %function (line %line of %file).', $variables);
         $failed++;
       }
       catch (\Throwable $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() . ')';
+        $variables = Error::decodeException($e);
+        unset($variables['backtrace']);
+        $variables['@sku'] = $product['sku'];
+        $failed_skus[] = $this->t('@sku : %type: @message in %function (line %line of %file).', $variables);
         $failed++;
       }
       finally {

@@ -7,6 +7,7 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a service for product options data to taxonomy synchronization.
@@ -81,6 +82,8 @@ class ProductOptionsManager {
    *   Attribute code - Magento value.
    * @param int $option_id
    *   Option id - Magento value.
+   * @param int $langcode
+   *   Lannguage code.
    * @param bool $log_error
    *   Flag to stop logging term not found errors during sync.
    *
@@ -117,7 +120,7 @@ class ProductOptionsManager {
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $this->termStorage->load($tid);
 
-    if ($langcode && $term->hasTranslation($langcode)) {
+    if ($langcode && $term instanceof TermInterface && $term->hasTranslation($langcode)) {
       $term = $term->getTranslation($langcode);
     }
 
@@ -137,6 +140,8 @@ class ProductOptionsManager {
    *   Attribute id.
    * @param string $attribute_code
    *   Attribute code.
+   * @param string $weight
+   *   Term weight.
    *
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object or null.
@@ -242,7 +247,7 @@ class ProductOptionsManager {
     $options_in_db = reset($result);
 
     $synced_option_ids = [];
-    foreach ($synced_options as $attribute_code => $options) {
+    foreach ($synced_options as $options) {
       $synced_option_ids = array_merge($synced_option_ids, $options);
     }
 
