@@ -12,7 +12,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Class ProductCategoryTree.
@@ -114,11 +114,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $termsImagesAndColors = [];
 
   /**
-   * PDP Breadcrumb service.
+   * Product Category Helper service object.
    *
-   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
-  protected $pdpBreadcrumbBuiler;
+  protected $productCategoryHelper;
 
   /**
    * ProductCategoryTree constructor.
@@ -133,23 +133,23 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
-   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
-   *   PDP Breadcrumb service.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   Product Category Helper service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
                               Connection $connection,
-                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
+                              ProductCategoryHelper $product_category_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
-    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -738,7 +738,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if (count($terms) > 0) {
-        $tid = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
+        $tid = $this->productCategoryHelper->termTreeGroup($terms);
       }
     }
 

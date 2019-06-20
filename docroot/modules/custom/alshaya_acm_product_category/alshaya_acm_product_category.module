@@ -272,6 +272,23 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
 }
 
 /**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $context) {
+  if ($context['module'] != 'taxonomy' || $context['bundle'] != ProductCategoryTree::VOCABULARY_ID) {
+    return;
+  }
+
+  // Return if already modified by alshaya_super_category.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category') && \Drupal::config('alshaya_super_category.settings')->get('status')) {
+    return;
+  }
+
+  // For all the category terms we want shop- prefix for L1 only.
+  $alias = '/shop-' . ltrim($alias, '/');
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {

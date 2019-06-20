@@ -12,7 +12,6 @@ selection_criteria:
   211aac69-8aa6-42c6-8e5d-e3cfb90c1dc8:
     id: node_type
     bundles:
-      acq_product: acq_product
       page: page
       advanced_page: advanced_page
     negate: false
