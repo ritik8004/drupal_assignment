@@ -130,70 +130,75 @@ class CustomerCardForm extends FormBase {
       '#value' => $user->get('acq_customer_id')->getString(),
     ];
 
+    $states = [
+      '#states' => [
+        'required' => [
+          ':input[name="payment_details[card_token]"]' => ['value' => ''],
+        ],
+      ],
+    ];
+
     $form['payment_details'] = [
       '#type' => 'container',
       '#attributes' => [
         'id' => ['payment_details_checkout_com'],
-      ],
-      '#attached' => [
-        'library' => ['acq_checkoutcom/checkoutcom.kit'],
       ],
     ];
 
     $form['payment_details']['cc_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Name on card'),
-      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
         'data-customer-name' => 'card-sname',
+        'id' => 'cardName',
       ],
-    ];
+    ] + $states;
 
     $form['payment_details']['cc_number'] = [
       '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
-      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',
         'data-checkout' => 'card-number',
+        'id' => 'cardNumber',
       ],
-    ];
+    ] + $states;
 
     $form['payment_details']['cc_cvv'] = [
       '#type' => 'password',
       '#maxlength' => 4,
       '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
-      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-cvv-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-csc',
         'data-checkout' => 'cvv',
+        'id' => 'cardCvv',
       ],
-    ];
+    ] + $states;
 
     $form['payment_details']['cc_exp_month'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expiration Month'),
-      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-exp-month-select', 'checkoutcom-input'],
         'data-checkout' => 'expiry-month',
+        'id' => 'expMonth',
       ],
-    ];
+    ] + $states;
 
     $form['payment_details']['cc_exp_year'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expiration Year'),
-      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-exp-year-select', 'checkoutcom-input'],
         'data-checkout' => 'expiry-year',
+        'id' => 'expYear',
       ],
-    ];
+    ] + $states;
 
     $form['payment_details']['card_token'] = [
       '#type' => 'hidden',
@@ -211,6 +216,11 @@ class CustomerCardForm extends FormBase {
       },
       cardTokenised: function(event) {
         cardToken.value = event.data.cardToken
+        cardName.value = ''
+        cardNumber.value = ''
+        cardCvv.value = ''
+        expMonth.value = ''
+        expYear.value = ''
         document.getElementById('acq-checkoutcom-customer-card-form').submit();
       },
       apiError: function (event) {
@@ -243,6 +253,14 @@ class CustomerCardForm extends FormBase {
       '#type' => 'submit',
       '#button_type' => 'primary',
       '#value' => $this->t('Save'),
+    ];
+
+    $form['#attached'] = [
+      'library' => [
+        'core/drupal.form',
+        'clientside_validation_jquery/cv.jquery.validate',
+        'acq_checkoutcom/checkoutcom.kit',
+      ],
     ];
 
     return $form;

@@ -1,0 +1,18 @@
+<div class="payment-card">
+  <div class="payment-card--data">
+    <div class="payment-card--type">
+      {{ card_info.paymentMethod }}
+    </div>
+
+    <div class="payment-card--info">
+      <div class="payment-card--number">**** **** **** {{ card_info.last4 }}</div>
+      <div class="payment-card--name">{{ card_info.name }}</div>
+      <div class="payment-card--expiry">{% trans %}Expiry{% endtrans %}: {{ card_info.expiryMonth ~ '/' ~ card_info.expiryYear }} </div>
+    </div>
+  </div>
+  <div class="payment-card--options">
+    <div class="payment-card--delete payment-card--controls">
+      {{ link(delete_operation.title, delete_operation.url) }}
+    </div>
+  </div>
+</div>

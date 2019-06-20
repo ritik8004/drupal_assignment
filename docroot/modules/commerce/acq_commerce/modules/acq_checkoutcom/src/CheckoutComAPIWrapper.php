@@ -22,6 +22,9 @@ class CheckoutComAPIWrapper {
 
   use StringTranslationTrait;
 
+  // Key that contains redirect url.
+  const REDIRECT_URL = 'redirectUrl';
+
   // Authorize payment endpoint.
   const AUTHORIZE_PAYMENT_ENDPOINT = 'charges/token';
 
@@ -35,10 +38,13 @@ class CheckoutComAPIWrapper {
   const VOID_PAYMENT_AMOUNT = 1.0;
 
   // 3D secure charge mode.
-  const CHARGE_MODE_3D = '2';
+  const VERIFY_3DSECURE = '2';
 
   // 3D secure autocapture.
   const AUTOCAPTURE = 'Y';
+
+  // API response success code.
+  const SUCCESS_CODE = '10000';
 
   /**
    * API Helper service object.
@@ -200,7 +206,7 @@ class CheckoutComAPIWrapper {
    */
   protected function make3dSecurePaymentRequest(Cart $cart, string $endpoint, array $params, $caller = '') {
     // Set parameters required for 3d secure payment.
-    $params['chargeMode'] = self::CHARGE_MODE_3D;
+    $params['chargeMode'] = self::VERIFY_3DSECURE;
     $params['autoCapture'] = self::AUTOCAPTURE;
     $params['successUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
@@ -211,7 +217,7 @@ class CheckoutComAPIWrapper {
     };
 
     try {
-      $result = $this->tryCheckoutRequest($doReq, $caller);
+      $response = $this->tryCheckoutRequest($doReq, $caller);
     }
     catch (\UnexpectedValueException $e) {
       $this->logger->error('Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id : %message', [
@@ -226,7 +232,10 @@ class CheckoutComAPIWrapper {
       );
     }
 
-    if ($result['responseCode'] !== '10000' && empty($result['redirectUrl'])) {
+    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS_CODE) {
+      return new RedirectResponse($response[self::REDIRECT_URL]);
+    }
+    else {
       $this->logger->warning('checkout.com card charges request did not process.');
 
       throw new \Exception(
@@ -235,10 +244,6 @@ class CheckoutComAPIWrapper {
           ['%cart_id' => $cart->id()]
         )
       );
-    }
-    // Redirect user for 3d verification page.
-    if (isset($result['redirectUrl'])) {
-      return new RedirectResponse($result['redirectUrl']);
     }
   }
 
