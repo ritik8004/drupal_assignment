@@ -1632,7 +1632,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-      $discount_block = $price_block['#discount'];
+      $discount_block['#markup'] = '(' . $price_block['#discount']['#markup'] . ')';
       $response->addCommand(new HtmlCommand('.discount-price-block-' . $sku_identifier, $discount_block));
     }
 
@@ -1784,9 +1784,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $selected_sku = $first_child;
 
       if ($first_child instanceof SKU) {
-        $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
         $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE);
-
         if (!empty($build['gallery'])) {
           if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE && $context != 'modal') {
             $dynamic_parts['alshaya_magazine'] = $build['gallery']['alshaya_magazine'];
@@ -1804,7 +1802,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-      $discount_block = $price_block['#discount'];
+      $discount_block['#markup'] = '(' . $price_block['#discount']['#markup'] . ')';
       $response->addCommand(new HtmlCommand('.discount-price-block-' . $sku_identifier, $discount_block));
     }
 
