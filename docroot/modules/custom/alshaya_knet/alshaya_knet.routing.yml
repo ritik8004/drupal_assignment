@@ -11,6 +11,7 @@ alshaya_knet.response:
   defaults:
     _controller: '\Drupal\alshaya_knet\Controller\KnetController::response'
     _title: ''
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
@@ -21,6 +22,7 @@ alshaya_knet.success:
   defaults:
     _controller: '\Drupal\alshaya_knet\Controller\KnetController::success'
     _title: ''
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
@@ -31,6 +33,7 @@ alshaya_knet.error:
   defaults:
     _controller: '\Drupal\alshaya_knet\Controller\KnetController::error'
     _title: 'Error'
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
@@ -41,6 +44,7 @@ alshaya_knet.failed:
   defaults:
     _controller: '\Drupal\alshaya_knet\Controller\KnetController::failed'
     _title: 'Failed'
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
