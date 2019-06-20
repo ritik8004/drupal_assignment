@@ -171,7 +171,7 @@
             display: inline-table;
           }
 
-          .promotions {
+          &.promotions {
             margin-bottom: 0;
           }
 
@@ -430,7 +430,7 @@
 @include breakpoint($tablet) {
   .promotion-wrapper {
     .price--discount {
-      display: none !important;
+      font-size: 0 !important;
     }
   }
 }
