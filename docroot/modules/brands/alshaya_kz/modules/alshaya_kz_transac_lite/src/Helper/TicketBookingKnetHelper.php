@@ -101,13 +101,23 @@ class TicketBookingKnetHelper extends KnetHelper {
     else {
       $route = 'alshaya_knet.failed';
     }
-    $result_url .= Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
+
+    $redirect_url = Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
+    $result_url .= $redirect_url;
+
     $this->logger->info('KNET update for Response: @message State: @state', [
       '@message' => json_encode($response),
       '@state' => $state_data,
     ]);
-    print $result_url;
-    exit;
+
+    // For new K-Net toolkit, we need to redirect.
+    if ($this->knetHelper->useNewKnetToolKit()) {
+      return new RedirectResponse($redirect_url, 302);
+    }
+    else {
+      print $result_url;
+      exit;
+    }
   }
 
   /**
