@@ -5,6 +5,7 @@
  * Module file for alshaya_super_category.
  */
 
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
@@ -50,9 +51,16 @@ function alshaya_super_category_module_implements_alter(&$implementations, $hook
     unset($implementations['alshaya_super_category']);
     return;
   }
-  if ($hook == 'alshaya_main_menu_links_alter') {
+
+  $hooks = [
+    'alshaya_main_menu_links_alter',
+    'pathauto_alias_alter',
+  ];
+
+  if (in_array($hook, $hooks) && isset($implementations['alshaya_super_category'])) {
+    $current = $implementations['alshaya_super_category'];
     unset($implementations['alshaya_super_category']);
-    $implementations = array_merge(['alshaya_super_category' => 'alshaya_main_menu_links_alter'], $implementations);
+    $implementations = ['alshaya_super_category' => $current] + $implementations;
   }
 }
 
@@ -371,11 +379,12 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
  * Update url alias for product node based on super category feature status.
  */
 function alshaya_super_category_pathauto_alias_alter(&$alias, array $context) {
-  if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
-    $super_category = \Drupal::config('alshaya_super_category.settings');
-    if (!$super_category->get('status') || !$super_category->get('product_path_alter')) {
-      return;
-    }
+  $super_category = \Drupal::config('alshaya_super_category.settings');
+  if (!$super_category->get('status')) {
+    return;
+  }
+
+  if ($context['module'] == 'node' && $context['bundle'] == 'acq_product' && $super_category->get('product_path_alter')) {
     // Get the node object.
     $node = $context['data']['node'];
 
@@ -428,6 +437,15 @@ function alshaya_super_category_pathauto_alias_alter(&$alias, array $context) {
     else {
       $alias = $term_alias . $alias;
     }
+  }
+  elseif ($context['module'] == 'taxonomy' && $context['bundle'] == ProductCategoryTree::VOCABULARY_ID) {
+    $array = explode('/', trim($alias, '/'));
+    $array[1] = 'shop-' . $array[1];
+
+    // For all the category terms we want shop- prefix for L1 only.
+    // We do not want it to be added to super category so we do it for
+    // second one.
+    $alias = '/' . implode('/', $array);
   }
 }
 
