@@ -221,6 +221,10 @@
       text-align: center;
     }
   }
+
+  .block-alshaya-social-login {
+    margin-bottom: 2.5rem;
+  }
 }
 
 .path--cart {
@@ -238,8 +242,6 @@
 }
 
 .block-alshaya-signup-signin-buttons {
-  margin-top: 2.5rem;
-
   .sub-text {
     font-size: 0.875rem;
     color: $user_login_sub_text;
