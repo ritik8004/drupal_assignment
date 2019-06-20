@@ -91,7 +91,7 @@ class AlshayaSocialHelper {
       return FALSE;
     }
 
-    return (bool) !empty($this->getEnabledNetworks());
+    return !empty($this->getEnabledNetworks());
   }
 
   /**
