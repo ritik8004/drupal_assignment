@@ -37,7 +37,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $pane_form['#prefix'] = '<div class="checkout-login-separator o-3"><span>' . $this->t('or') . '</span></div>';
+    $pane_form['#prefix'] = '<div class="checkout-login-separator order-3"><span>' . $this->t('or') . '</span></div>';
     $pane_form['returning_customer'] = [
       '#markup' => '<span class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</span>',
       '#weight' => -51,
