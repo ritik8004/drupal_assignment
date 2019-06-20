@@ -139,7 +139,7 @@ class ProductReportController extends ControllerBase {
     $select = $this->database->select('node__field_skus', 'nfs');
     $select->fields('nfs', ['field_skus_value']);
     $select->join('node__field_category', 'nfc', 'nfs.entity_id = nfc.entity_id');
-    $select->addExpression("GROUP_CONCAT(field_category_target_id,'')", "TermId");
+    $select->addExpression("GROUP_CONCAT(field_category_target_id,' ')", "TermId");
     $select->join('taxonomy_term_field_data', 'ttfd', 'ttfd.tid = nfc.field_category_target_id');
     $select->addExpression("GROUP_CONCAT(name,'')", "TermName");
     $select->condition('ttfd.langcode', 'en');
@@ -147,8 +147,7 @@ class ProductReportController extends ControllerBase {
     $result = $select->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
-      $term_ids = str_replace(',', ', ', $sku['TermId']);
-      fputcsv($fp, [$sku['field_skus_value'], $term_ids, $sku['TermName']]);
+      fputcsv($fp, [$sku['field_skus_value'], $sku['TermId'], $sku['TermName']]);
     }
 
     fclose($fp);
