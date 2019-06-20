@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_category;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
@@ -253,7 +254,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if ($link = $this->getOverrideTargetLink($term->tid, $langcode)) {
-        $data[$term->tid]['path'] = Url::fromUri($link)->toString();
+        $data[$term->tid]['path'] = UrlHelper::isExternal($link) ? $link : Url::fromUri($link)->toString();
         $data[$term->tid]['class'][] = 'overridden-link';
       }
 
@@ -646,7 +647,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected function getOverrideTargetLink($tid, $langcode) {
     $query = $this->connection->select('taxonomy_term__field_target_link', 'target_link');
     $query->fields('target_link', ['field_target_link_uri']);
-    $query->innerJoin('taxonomy_term__field_override_target_link', 'override_target', 'target_link.entity_id = override_target.entity_id AND target_link.langcode = override_target.langcode');
+    $query->innerJoin('taxonomy_term__field_override_target_link', 'override_target', 'target_link.entity_id = override_target.entity_id');
     $query->condition('target_link.entity_id', $tid);
     $query->condition('target_link.langcode', $langcode);
     $query->condition('override_target.field_override_target_link_value', 1);
