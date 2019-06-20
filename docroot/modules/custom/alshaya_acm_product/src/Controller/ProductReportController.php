@@ -147,7 +147,8 @@ class ProductReportController extends ControllerBase {
     $result = $select->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
-      fputcsv($fp, [$sku['field_skus_value'], $sku['TermId'], $sku['TermName']]);
+      $term_ids = str_replace(',', ', ', $sku['TermId']);
+      fputcsv($fp, [$sku['field_skus_value'], $term_ids, $sku['TermName']]);
     }
 
     fclose($fp);
