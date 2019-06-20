@@ -1,6 +1,6 @@
 .nodetype--magazine_article {
   .page-standard {
-    @include container(844px);
+    @include container(52.75rem);
 
     margin-top: 1.5rem;
 
@@ -292,7 +292,6 @@ body {
   .field--name-field-magazine-slogan {
     @include container(39.5rem);
 
-    max-width: 632px;
     margin: 0 auto 0.9375rem;
     font-style: italic;
     font-size: 1.125rem;
