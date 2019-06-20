@@ -46,7 +46,7 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
         '#weight' => -1000,
       ];
     }
-    $pane_form['#prefix'] = '<div class="checkout-login-separator o-1"><span>' . $this->t('or') . '</span></div>';
+    $pane_form['#prefix'] = '<div class="checkout-login-separator order-1"><span>' . $this->t('or') . '</span></div>';
     $pane_form['#cache']['tags'][] = 'config:alshaya_social.settings';
     return $pane_form;
   }
