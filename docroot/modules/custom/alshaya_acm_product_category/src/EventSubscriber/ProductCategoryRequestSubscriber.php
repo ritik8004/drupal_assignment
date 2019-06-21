@@ -2,7 +2,12 @@
 
 namespace Drupal\alshaya_acm_product_category\EventSubscriber;
 
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Cache\CacheableRedirectResponse;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -22,13 +27,26 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
   protected $routeMatch;
 
   /**
-   * AlshayaAdvancedPageEventSubscriber constructor.
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * ProductCategoryRequestSubscriber constructor.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route matcher.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    */
-  public function __construct(RouteMatchInterface $route_match) {
+  public function __construct(
+    RouteMatchInterface $route_match,
+    LanguageManagerInterface $language_manager
+  ) {
     $this->routeMatch = $route_match;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -54,6 +72,30 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
       if ($taxonomy_term->get('field_commerce_status')->getString() !== '1') {
         throw new NotFoundHttpException();
       }
+
+      if ($taxonomy_term->get('field_override_target_link')->value == '1') {
+        $qs = $request->getQueryString();
+        if ($qs) {
+          $qs = '?' . $qs;
+        }
+
+        $langcode = $this->languageManager->getCurrentLanguage()->getId();
+        if ($this->languageManager->getDefaultLanguage()->getId() != $langcode
+          && $taxonomy_term->hasTranslation($langcode)
+        ) {
+          $taxonomy_term = $taxonomy_term->getTranslation($langcode);
+        }
+
+        $target_link = $taxonomy_term->get('field_target_link')->getString();
+        if (UrlHelper::isExternal($target_link)) {
+          $event->setResponse(new TrustedRedirectResponse($target_link));
+        }
+        else {
+          $path = Url::fromUri($target_link)->toString();
+          $event->setResponse(new CacheableRedirectResponse($request->getUriForPath($path) . $qs));
+        }
+
+      }
     }
   }
 
@@ -61,7 +103,7 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[KernelEvents::REQUEST][] = ['onRequest', 20];
+    $events[KernelEvents::REQUEST][] = ['onRequest', 30];
     return $events;
   }
 

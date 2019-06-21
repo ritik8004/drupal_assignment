@@ -880,6 +880,50 @@ header {
         }
       }
     }
+
+    &.with-icon {
+      .icon {
+        @include breakpoint($desktop) {
+          display: none;
+        }
+      }
+    }
+
+    &.with-icon {
+      > div > a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: $left;
+        width: 100%;
+
+        @include breakpoint($upto-desktop) {
+          padding: 0.5rem 0;
+
+          .icon {
+            display: inline-block;
+            max-width: 2rem;
+            max-height: 2rem;
+            margin-#{$right}: 0.3125rem;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          display: block;
+        }
+      }
+    }
+
+    &.hide-on-desktop {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+
+    &.hide-on-mobile {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
   }
 }
 
