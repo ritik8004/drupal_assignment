@@ -47,10 +47,10 @@
           <div class="price-block {{ content.price_block_identifier }}">
             {{ content.price_block }}
           </div>
-          <div class="promotion-wrapper">
-            <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+          <div class="promotion-wrapper promotions">
             <div class="price--discount discount-{{ content.price_block_identifier }}">
               ({{ content.price_block['#discount'] }})
+              {% if content.promotions %}{{ content.promotions }}{% endif %}
             </div>
           </div>
 
