@@ -108,6 +108,12 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       return [];
     }
 
+    // Exclude terms with overridden target link from "shop by" block.
+    // As per requirement, we do not want to show these terms in footer.
+    $term_data = array_filter($term_data, function ($term) {
+      return !in_array('overridden-link', $term['class']);
+    });
+
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
       $parents = $this->productCategoryTree->getCategoryTermParents($term);
