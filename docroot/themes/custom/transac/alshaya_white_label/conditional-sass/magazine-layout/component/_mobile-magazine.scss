@@ -166,9 +166,9 @@
           }
         }
 
-        .promotion-wrapper {
+        .promotion-discount-wrapper {
           > div {
-            display: inline-table;
+            display: inline;
           }
 
           &.promotions {
@@ -428,9 +428,11 @@
 }
 
 @include breakpoint($tablet) {
-  .promotion-wrapper {
+  .promotion-discount-wrapper {
+    display: inline;
+
     .price--discount {
-      font-size: 0 !important;
+      display: none !important;
     }
   }
 }
