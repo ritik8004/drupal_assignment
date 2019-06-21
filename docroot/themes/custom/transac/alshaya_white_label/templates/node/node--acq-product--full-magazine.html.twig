@@ -47,8 +47,16 @@
           <div class="price-block {{ content.price_block_identifier }}">
             {{ content.price_block }}
           </div>
-
-          <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+          <div class="promotion-discount-wrapper">
+            <div class="price--discount discount-{{ content.price_block_identifier }}">
+              {% if content.price_block['#discount'] %}
+                ({{ content.price_block['#discount'] }})
+              {% endif %}
+            </div>
+            {% if content.promotions %}
+              <div class="promotions">{{ content.promotions }}</div>
+            {% endif %}
+          </div>
 
           {% if vat_text %}
             <div class="vat-text">
