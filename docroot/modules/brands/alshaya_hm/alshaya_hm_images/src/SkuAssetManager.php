@@ -299,11 +299,7 @@ class SkuAssetManager {
     }
 
     // Prepare the directory path.
-    $directory = 'public://assets' . DIRECTORY_SEPARATOR . $sku . DIRECTORY_SEPARATOR . $data['path'];
-
-    // Replace double forward slash coming in data with single forward slash
-    // to have clean directory structure.
-    $directory = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $directory);
+    $directory = 'public://assets/' . $sku . '/' . trim($data['path'], '/');
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
@@ -383,11 +379,7 @@ class SkuAssetManager {
     }
 
     // Prepare the directory path.
-    $directory = 'public://assets-lp' . DIRECTORY_SEPARATOR . $sku . DIRECTORY_SEPARATOR . dirname($asset['Data']['FilePath']);
-
-    // Replace double forward slash coming in data with single forward slash
-    // to have clean directory structure.
-    $directory = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $directory);
+    $directory = 'public://assets-lp/' . $sku . '/' . trim(dirname($asset['Data']['FilePath']), '/');
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
