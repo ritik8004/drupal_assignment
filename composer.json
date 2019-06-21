@@ -83,6 +83,7 @@
         "drupal/social_api": "2.x-dev",
         "drupal/social_auth": "2.x-dev",
         "drupal/social_auth_facebook": "^2.0",
+        "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
