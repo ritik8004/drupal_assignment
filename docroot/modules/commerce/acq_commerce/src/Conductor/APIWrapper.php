@@ -794,14 +794,15 @@ class APIWrapper implements APIWrapperInterface {
 
       return ($client->get($endpoint, $opt));
     };
-    $products = [];
+
     try {
-      $products = $this->tryAgentRequest($doReq, 'getProducts', 'products');
+      return $this->tryAgentRequest($doReq, 'getProducts', 'products', $this->storeId ?? '');
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
-    return $products;
+
+    return [];
   }
 
   /**
