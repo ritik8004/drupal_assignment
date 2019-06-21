@@ -3,6 +3,7 @@ alshaya_mobile_app.mobile_complete:
   defaults:
     _controller: '\Drupal\alshaya_mobile_app\Controller\AlshayaMobileAppController::mobileComplete'
     _title: 'Final'
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
@@ -13,6 +14,7 @@ alshaya_mobile_app.mobile_final:
   defaults:
     _controller: '\Drupal\alshaya_mobile_app\Controller\AlshayaMobileAppController::mobileFinal'
     _title: 'Final'
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
@@ -23,6 +25,7 @@ alshaya_mobile_app.mobile_error:
   defaults:
     _controller: '\Drupal\alshaya_mobile_app\Controller\AlshayaMobileAppController::mobileError'
     _title: 'Error'
+    _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'
   options:
