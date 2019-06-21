@@ -19,7 +19,6 @@ use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * SkuAssetManager Class.
@@ -288,7 +287,7 @@ class SkuAssetManager {
         throw new \Exception('Failed to download asset file: ' . $url);
       }
     }
-    catch (RequestException $e) {
+    catch (\Exception $e) {
       $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
         '@sku' => $sku,
         '@url' => $url,
@@ -341,7 +340,7 @@ class SkuAssetManager {
    *
    * @throws \Exception
    */
-  public function downloadLiquidPixelImage(array $asset, string $sku) {
+  private function downloadLiquidPixelImage(array $asset, string $sku) {
     $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
     $cache = $this->cachePimsFiles->get($skipped_key);
     if (isset($cache, $cache->data)) {
@@ -358,7 +357,7 @@ class SkuAssetManager {
         throw new \Exception('Failed to download asset file');
       }
     }
-    catch (RequestException $e) {
+    catch (\Exception $e) {
       $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
         '@sku' => $sku,
         '@url' => $url,
