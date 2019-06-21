@@ -407,6 +407,7 @@
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
             "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
             "cd docroot && rm robots.txt"
         ],
         "nuke": [
