@@ -159,6 +159,27 @@
             margin-bottom: 0;
           }
         }
+
+        .price-block {
+          .price--discount {
+            display: none;
+          }
+        }
+
+        .promotion-discount-wrapper {
+          > div {
+            display: inline;
+          }
+
+          &.promotions {
+            margin-bottom: 0;
+          }
+
+          .price--discount {
+            font-size: 0.75rem;
+            font-family: $alshaya-thin;
+          }
+        }
       }
 
       .basic-details-wrapper {
@@ -293,10 +314,6 @@
             transform: translateY(-50%);
           }
 
-          &.selected-text {
-            justify-content: center;
-          }
-
           + .edit-add-to-cart {
             width: calc((100% - 1rem) / 2);
           }
@@ -406,6 +423,16 @@
           }
         }
       }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .promotion-discount-wrapper {
+    display: inline;
+
+    .price--discount {
+      display: none !important;
     }
   }
 }
