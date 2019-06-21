@@ -38,6 +38,10 @@ body {
     width: 20rem;
   }
 
+  @include breakpoint($desktop) {
+    border-bottom: 1px solid $header_secondary_border_upto_desk;
+  }
+
   a {
     @include breakpoint($upto-desktop) {
       font-size: 0.875rem;
@@ -50,7 +54,7 @@ body {
     }
 
     @include breakpoint($desktop) {
-      text-transform: uppercase;
+      text-transform: none;
       padding-top: 0.4375rem;
       font-size: 0.75rem;
 
@@ -58,6 +62,11 @@ body {
       &::before {
         display: none;
       }
+    }
+
+    &:hover,
+    &.is-active {
+      color: $header_secondary_menu_link_hover;
     }
   }
 
@@ -70,6 +79,10 @@ body {
   }
 
   .menu--account {
+    @include breakpoint($desktop) {
+      text-transform: none;
+    }
+
     li a {
       &::before {
         display: none;

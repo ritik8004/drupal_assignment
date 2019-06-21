@@ -317,12 +317,9 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
       $result_row = [];
       foreach ($view->result as $row) {
-        $product_categories = $row->_object->getValue()
-          ->get('field_category')
-          ->getValue();
+        $product_categories = $row->_object->getValue()->get('field_category')->getValue();
         // Get all selected subcategories to be displayed on PLP.
-        $selected_subcategories = $term->get('field_select_subcategories_plp')
-          ->getValue();
+        $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
           foreach ($product_categories as $product_category) {
             if ($product_category_tree->checkIfSubCategory($product_category['target_id'], $selected_subcategory['value'])) {
@@ -363,4 +360,21 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $context) {
+  if ($context['module'] != 'taxonomy' || $context['bundle'] != ProductCategoryTree::VOCABULARY_ID) {
+    return;
+  }
+
+  // Return if already modified by alshaya_super_category.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category') && \Drupal::config('alshaya_super_category.settings')->get('status')) {
+    return;
+  }
+
+  // For all the category terms we want shop- prefix for L1 only.
+  $alias = '/shop-' . ltrim($alias, '/');
 }
