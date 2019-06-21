@@ -10,9 +10,13 @@ $white-four: #ebebeb;
 $tomato: #e6591b;
 $grey-ash: #666;
 $warm-grey: #777;
-$black: #333;
+$black: #000;
 $dark-red: #e2193a;
 $info-blue: #4285f4;
+
+// Header color.
+$dark-brown: #504a4a;
+$brand-red: #dc062b;
 
 //global for entire site
 $primary_btn_bg: $black;
@@ -64,13 +68,14 @@ $primary_th_bg: $white;
 $modal_close_bg: $purplish-brown;
 
 // Header.
-$header_bg: $white-two;
-$header_search_block_bg: $white-two;
+$header_bg: $black;
+$header_search_block_bg: $brand-red;
 $header_border: $white-three;
-$header_secondary_menu_link: $purplish-brown;
-$header_secondary_bg: $white;
+$header_secondary_menu_link: $white-two;
+$header_secondary_menu_link_hover: $brand-red;
+$header_secondary_bg: $black;
 $header_c_menu_text: $black;
-$header_c_menu_icon_color: $purplish-brown;
+$header_c_menu_icon_color: $white-two;
 $header_c_menu_icon_text: $purplish-brown;
 $header_toggle_sign_default: $white;
 $header_mobile_menu_close_bg: $black;
@@ -79,14 +84,18 @@ $header_toggle_sign_active_tab: $black;
 $header_secondary_menu_link_mobile: $black;
 
 // Header my account nav.
-$header_my_account_bg: $white-two;
+$header_my_account_bg: $black;
 $header_my_account_link_hover: $purplish-brown;
 $header_my_account_icon: $purplish-brown;
-$header_my_account_h3_title: $purplish-brown;
+$header_my_account_h3_title: $warm-grey;
 $my_account_nav: $black;
 $my_account_nav_active : $purplish-brown;
 $my_account_nav_hover: $purplish-brown;
 $my_account_mobile_nav_border: $white-three;
+$header_secondary_bg_upto_desk: $white-two;
+$header_secondary_border_upto_desk: $purplish-brown;
+$header_secondary_menu_link_hover_bg: $black;
+$primary_search_input_placeholder: $black;
 
 // My Account Pages
 $user_order_help_bg: $info-blue;
@@ -98,13 +107,18 @@ $user_nav_mobile_title2: $warm-grey;
 $password_tooltip_list: $red;
 
 //mega menu
+$mm_l1_link: $white-two;
 $mm_l1_link_active_border: false;
 $mm_l1_link_hover_border_to_fill_space: $purplish-brown;
+$mm_l1_link_hover_bg: $brand-red;
+$mm_l1_link_hover_active: $brand-red;
 $mm_l2_link: $black;
 $mm_l2_link: $purplish-brown;
-$mm_l1_link_hover: $purplish-brown;
+$mm_l1_link_hover: $white-two;
+$mm_l2_bg: $white-two;
 $mm_l3_link: $warm-grey;
 $mm_body_overlay: rgba(0, 0, 0, 0.6);
+$mm_bg_desk: $dark-brown;
 $mm_bg: $white-two;
 $mm_l1_border: $white-three;
 $mm_l1_link_bg: $white-two;
@@ -438,7 +452,7 @@ $order_detail_total_tr_row_price_td: rgba(218, 218, 218, 0.19);
 $primary_minicart_quantity_bg: $dark-red;
 $minicart_notification_border: $purplish-brown;
 $minicart_notification_text: $purplish-brown;
-$primary_minicart_text: $purplish-brown;
+$primary_minicart_text: $white-two;
 $minicart_notification_product_title: $black;
 $minicart_notification_btn_bg: $black;
 $minicart_notification_shadow: $warm-grey;
