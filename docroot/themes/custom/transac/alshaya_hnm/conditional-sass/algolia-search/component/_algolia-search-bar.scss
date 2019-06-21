@@ -29,6 +29,10 @@
         display: none;
         pointer-events: none;
       }
+
+      .form-text {
+        width: calc(100% - 4.5625rem);
+      }
     }
   }
 
@@ -61,7 +65,7 @@
     font-size: 0.875rem;
 
     @include breakpoint($tablet) {
-      width: calc(100% - 2.25rem);
+      width: calc(100% - 4.125rem);
       height: 2.25rem;
       margin-#{$left}: 0;
       padding: 0;
