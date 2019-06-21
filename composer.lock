@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0715f8e19a10cb658764fc5f2c74a70",
+    "content-hash": "d429cafcf922e8f87d292bff3e422ffb",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11362,6 +11362,7 @@
             }
         },
         {
+<<<<<<< HEAD
             "name": "drupal/scheduled_updates",
             "version": "1.0.0-alpha7",
             "source": {
@@ -22358,7 +22359,6 @@
         "drupal/r4032login": 20,
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
-        "drupal/scheduled_updates": 15,
         "drupal/search_api_algolia": 20,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,

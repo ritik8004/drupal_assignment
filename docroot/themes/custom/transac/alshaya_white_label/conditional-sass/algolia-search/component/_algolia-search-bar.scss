@@ -22,13 +22,13 @@
     border: none;
     font-family: $alshaya-thin;
     color: $algolia-input-text;
-    padding: 0.34375rem 0 0.59375rem;
     margin-bottom: 0;
     margin-#{$left}: 0.75rem;
     font-size: 0.875rem;
 
     @include breakpoint($tablet) {
       width: calc(100% - 3.375rem);
+      padding: 0.34375rem 0;
     }
 
     &::placeholder {
@@ -37,6 +37,12 @@
       line-height: 1.4375rem;
       color: $algolia-input-placeholder-text;
       text-transform: lowercase;
+
+      @include breakpoint($only-mobile) {
+        html[lang=ar] & {
+          line-height: 1.875rem;
+        }
+      }
     }
   }
 
@@ -455,6 +461,16 @@ body {
 
     @include breakpoint($upto-desktop) {
       #{$right}: 3.3125rem;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .path--search {
+    .block-page-title-block {
+      h1 {
+        padding: 0.75rem !important;
+      }
     }
   }
 }
