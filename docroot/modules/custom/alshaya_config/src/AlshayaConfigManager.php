@@ -227,7 +227,6 @@ class AlshayaConfigManager {
             '@directory' => $directory,
           ]);
         }
-
       }
     }
   }
