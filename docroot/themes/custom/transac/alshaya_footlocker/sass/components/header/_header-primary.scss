@@ -7,6 +7,7 @@
     @include breakpoint($only-mobile) {
       width: 100%;
       margin-#{$left}: 0.8125rem;
+      text-align: center;
     }
 
     html[lang='ar'] & {
@@ -18,20 +19,19 @@
 
       img {
         width: 13rem;
-        margin-top: -0.3125rem;
 
         @include breakpoint($desktop) {
           margin-#{$left}: 0.1875rem;
         }
 
         @include breakpoint($only-tablet) {
-          max-width: 9rem;
+          max-width: 6rem;
           height: auto;
           margin-top: 0;
         }
 
         @include breakpoint($only-mobile) {
-          width: 6.5rem;
+          width: 5rem;
         }
       }
     }
@@ -115,20 +115,24 @@ header.c-header {
 
     .form-text {
       border-#{$right}: 0;
+      text-transform: none;
+
+      &::placeholder {
+        color: $primary_search_input_placeholder;
+        font-size: 0.9375rem;
+      }
     }
 
     #edit-submit-search,
     #edit-submit-search--2 {
-      background-color: transparent;
-      border: 1px solid $primary_search_border;
+      background-color: $header_search_block_bg;
       border-#{$left}: 0;
-      background-position: -0.3125rem;
-      background-size: cover;
-      width: 2.125rem;
-
-      html[lang=ar] & {
-        background-position: 0.3125rem;
-      }
+      background-position: 0.8125rem;
+      background-size: 1.125rem;
+      width: 2.8125rem;
+      height: 2.8125rem;
+      border-top-#{$right}-radius: 0.3125rem;
+      border-bottom-#{$right}-radius: 0.3125rem;
     }
   }
 
@@ -160,10 +164,13 @@ header.c-header {
 
         input[type="text"],
         input[type="search"] {
-          width: 100%;
+          width: 24.6875rem;
           font-size: 0.875rem;
           padding-#{$right}: 2.1875rem;
-          max-width: 15.5rem;
+          max-width: 24.6875rem;
+          border-top-#{$left}-radius: 0.3125rem;
+          border-bottom-#{$left}-radius: 0.3125rem;
+          text-transform: none;
         }
       }
 
@@ -172,18 +179,22 @@ header.c-header {
           width: 100%;
           max-width: 100%;
         }
+
+        @include breakpoint($desktop) {
+          height: 2.8125rem;
+        }
       }
     }
 
     @include breakpoint($desktop) {
-      top: 0.625rem;
+      top: -0.1875rem;
     }
   }
 
   .block-cart-mini-block {
     .cart-link {
       background: url(#{$fl_theme_img_directory_path}/icons/shopping-bag.svg) no-repeat;
-      margin-bottom: -0.625rem;
+      margin-bottom: 0;
       background-size: cover;
 
       @include breakpoint($desktop) {
@@ -192,19 +203,17 @@ header.c-header {
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 16%;
-
-        html[lang=ar] & {
-          margin-bottom: -1.4375rem;
-        }
+        margin-top: 0.875rem;
       }
 
       @include breakpoint($only-mobile) {
         height: 2rem;
         width: 1.5rem;
         margin-#{$right}: -0.125rem;
+        margin-top: 0.5rem;
 
         html[lang=ar] & {
-          margin-top: -0.0625rem;
+          margin-top: 0.5rem;
         }
       }
     }
@@ -284,6 +293,7 @@ header {
 
     ul.menu--one__list {
       width: auto;
+      background: $mm_bg_desk;
     }
 
     li.menu--one__list-item {
@@ -293,12 +303,15 @@ header {
       height: 2.5rem;
 
       .menu--one__link {
-        border-bottom: 0;
-        height: auto;
+        border: 0;
+        height: 2.5rem;
         font-size: 1rem;
         padding: 0.625rem 1.5rem;
         font-family: $alshaya-bold;
-        line-height: 0.8;
+        line-height: 1;
+        color: $mm_l1_link;
+        margin-top: 0;
+        text-transform: capitalize;
 
         html[lang=ar] & {
           font-size: 0.875rem;
@@ -308,32 +321,20 @@ header {
 
       &:hover {
         .menu--one__link {
-          border-bottom-width: 0.1875rem;
+          background: $mm_l1_link_hover_bg;
+          border: 0;
         }
       }
 
       &.active {
         .menu--one__link {
-          border-bottom: 0.1875rem solid $mm_l1_link_hover_border_to_fill_space;
-        }
-      }
-    }
-
-    .active--menu--links {
-      li.menu--one__list-item {
-        &:hover {
-          .menu--one__link {
-            border-bottom: 0.1875rem solid $mm_l1_link_hover_border_to_fill_space;
-          }
+          background: $mm_l1_link_hover_active;
+          border: 0;
         }
       }
 
-      &:hover {
-        li.menu--one__list-item.active {
-          .menu--one__link.active {
-            border-bottom: 0.1875rem solid $mm_l1_link_hover_border_to_fill_space;
-          }
-        }
+      .menu--two__list {
+        background: $mm_l2_bg;
       }
     }
   }
@@ -341,7 +342,7 @@ header {
 
 .c-pre-content__region {
   @include breakpoint($desktop) {
-    border-top: 0;
+    border: 0;
     height: auto;
   }
 }
@@ -350,10 +351,11 @@ header {
   .mobile--menu {
     @include icon_img('#{$fl_theme_img_directory_path}/icons/mobile-menu.svg', 2.125rem, 2.125rem);
 
-    @include breakpoint($only-mobile) {
-      &::before {
+    &::before {
+      @include breakpoint($only-mobile) {
         height: 1.75rem;
         width: 1.75rem;
+        background-size: 1.25rem;
       }
     }
   }
@@ -382,10 +384,6 @@ header {
 
       &::before {
         margin-#{$right}: 0;
-
-        @include breakpoint($tablet) {
-          background-size: cover;
-        }
       }
     }
 
@@ -400,13 +398,12 @@ header {
       @include icon_img('#{$fl_theme_img_directory_path}/assets/search.svg', 2rem, 2rem);
 
       &::before {
+        background-size: 1.25rem;
+
         @include breakpoint($only-mobile) {
           height: 1.75rem;
           width: 1.75rem;
-        }
-
-        @include breakpoint($tablet) {
-          background-size: cover;
+          background-size: 1.125rem;
         }
       }
     }
@@ -416,11 +413,14 @@ header {
         @include icon_img('#{$fl_theme_img_directory_path}/assets/search-selected.svg', 2rem, 2rem);
 
         &::before {
+          background-size: 1.25rem;
+
           @include breakpoint($only-mobile) {
             top: -0.125rem;
             height: 1.75rem;
             width: 1.625rem;
             #{$left}: -0.3125rem;
+            background-size: 1.125rem;
           }
         }
       }
@@ -636,5 +636,11 @@ header {
         padding: 0.3125rem 0.25rem;
       }
     }
+  }
+}
+
+.c-pre-content {
+  @include breakpoint($desktop) {
+    background: $mm_bg_desk;
   }
 }
