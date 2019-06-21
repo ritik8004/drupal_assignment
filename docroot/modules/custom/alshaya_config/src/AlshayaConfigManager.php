@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -79,6 +80,13 @@ class AlshayaConfigManager {
   protected $moduleHandler;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
    * Constructs a new AlshayaConfigManager object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -89,15 +97,19 @@ class AlshayaConfigManager {
    *   Theme Manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Channel Factory.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               ThemeManagerInterface $theme_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->themeManager = $theme_manager;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger_factory->get('alshaya_config');
   }
 
   /**
@@ -204,7 +216,18 @@ class AlshayaConfigManager {
         // iterates recursively and deletes each file one by one, deleting
         // the directory using shell cmd is quicker with hook_update.
         $directory = file_url_transform_relative(file_create_url(file_default_scheme() . '://styles/' . $style->id()));
-        shell_exec(sprintf('rm -rf %s', escapeshellarg(ltrim($directory, '/'))));
+        if (file_exists($directory)) {
+          $this->logger->info('Removing style directory: @directory.', [
+            '@directory' => $directory,
+          ]);
+          shell_exec(sprintf('rm -rf %s', escapeshellarg(ltrim($directory, '/'))));
+        }
+        else {
+          $this->logger->info('Could not find style directory: @directory to remove.', [
+            '@directory' => $directory,
+          ]);
+        }
+
       }
     }
   }
