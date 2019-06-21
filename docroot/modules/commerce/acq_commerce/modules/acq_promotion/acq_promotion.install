@@ -33,7 +33,7 @@ function acq_promotion_update_8001() {
   $yml = Yaml::parse(file_get_contents($module_path . '/config/install/core.entity_form_display.node.acq_promotion.default.yml'));
   $config = \Drupal::configFactory()->getEditable('core.entity_form_display.node.acq_promotion.default');
   $content = $config->get('content');
-  $content = array_merge_recursive($yml['content'], $content);
+  $content['field_acq_promotion_sort_order'] = $yml['content']['field_acq_promotion_sort_order'];
   $config->set('content', $content);
   $config->save();
 }
