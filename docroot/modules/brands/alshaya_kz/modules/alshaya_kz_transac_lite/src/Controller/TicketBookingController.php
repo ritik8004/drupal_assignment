@@ -180,21 +180,12 @@ class TicketBookingController extends ControllerBase {
    */
   public function paymentOption($option) {
     $sales_number = $_GET['ref_number'] ?? '';
-    if ($option == 'success') {
-      $build = [
-        '#theme' => 'payment_success',
-        '#ref_number' => $sales_number,
-        '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
-      ];
-      return $build;
-    }
-
-    $build = [
-      '#theme' => 'payment_failed',
+    $theme = $option == 'success' ? 'payment_success' : 'payment_failed';
+    return [
+      '#theme' => $theme,
       '#ref_number' => $sales_number,
       '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
     ];
-    return $build;
   }
 
 }

@@ -11406,7 +11406,7 @@
             "description": "Create scheduled updates to field values on entities such content, users, and terms.",
             "homepage": "https://www.drupal.org/project/scheduled_updates",
             "support": {
-                "source": "http://cgit.drupalcode.org/scheduled_updates"
+                "source": "https://git.drupalcode.org/project/scheduled_updates"
             }
         },
         {
