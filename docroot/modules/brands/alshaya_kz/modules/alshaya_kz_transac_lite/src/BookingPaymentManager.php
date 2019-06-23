@@ -2,12 +2,14 @@
 
 namespace Drupal\alshaya_kz_transac_lite;
 
+use Drupal\alshaya_kz_transac_lite\Entity\Ticket;
 use Drupal\Core\Url;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Class BookingPaymentManager.
@@ -52,6 +54,13 @@ class BookingPaymentManager {
   protected $currentUser;
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * BookingPaymentManager constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -64,18 +73,22 @@ class BookingPaymentManager {
    *   Render object.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   Current user object.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_factory,
                               EntityTypeManagerInterface $entity_manager,
                               MailManagerInterface $mail_manager,
                               Renderer $renderer,
-                              AccountProxy $current_user) {
+                              AccountProxy $current_user,
+                              DateFormatterInterface $date_formatter) {
 
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->entityManager = $entity_manager;
     $this->mailManager = $mail_manager;
     $this->renderer = $renderer;
     $this->currentUser = $current_user;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -89,22 +102,19 @@ class BookingPaymentManager {
    */
   public function saveTicketDetails(array $booking) {
     try {
-      $node = $this->entityManager->getStorage('ticket')->create([
-        'sales_number' => $booking['sales_number'],
-        'email' => $booking['email'],
-        'telephone' => $booking['mobile'],
+      $ticket = $this->entityManager->getStorage('ticket')->create([
         'name' => $booking['name'],
+        'email' => $booking['email'],
+        'telephone' => $booking['mobile']['value'],
+        'payment_type' => $booking['payment_type'],
+        'sales_number' => $booking['sales_number'],
         'visitor_types' => $booking['visitor_types'],
         'visit_date' => $booking['visit_date'],
-        'booking_date' => time(),
-        'booking_status' => 'inactive',
-        'payment_status' => 'pending',
-        'payment_type' => $booking['payment_type'],
-        'payment_id' => '',
         'order_total' => $booking['order_total'],
+        'ticket_info' => json_encode($booking['ticket_info']),
       ]);
 
-      return $node->save($node);
+      return $ticket->save();
     }
     catch (\Exception $e) {
       $this->logger->warning('Unable to create ticket content - %message', [
@@ -116,26 +126,23 @@ class BookingPaymentManager {
   /**
    * Update ticket details.
    *
-   * @param string $sales_number
-   *   Sales nunmber generated from kidsoft api.
-   * @param string $payment_id
-   *   Payment id generated from payment method.
+   * @param array $knet_response
+   *   Array of K-Net response.
+   * @param int $flag
+   *   To validate the payment status.
    */
-  public function updateTicketDetails(string $sales_number, string $payment_id) {
-
+  public function updateTicketDetails(array $knet_response, int $flag = 0) {
     try {
-      $query = $this->entityManager->getStorage('ticket')->getQuery()
-        ->condition('sales_number', $sales_number);
-      $result = $query->execute();
-
-      if (isset($result) && !empty($result)) {
-        foreach ($result as $id) {
-          $ticket = $this->entityManager->getStorage('ticket')->load($id);
-          $ticket->payment_id = $payment_id;
+      $result = $this->entityManager->getStorage('ticket')->loadByProperties(['sales_number' => $knet_response['quote_id']]);
+      $ticket = reset($result);
+      if ($ticket instanceof Ticket) {
+        $ticket->payment_id = $knet_response['payment_id'] ?? '';
+        $ticket->transaction_id = $knet_response['transaction_id'] ?? '';
+        if ($flag) {
           $ticket->booking_status = 'active';
           $ticket->payment_status = 'complete';
-          $ticket->save();
         }
+        $ticket->save();
       }
     }
     catch (\Exception $e) {
@@ -143,18 +150,42 @@ class BookingPaymentManager {
         '%message' => $e->getMessage(),
       ]);
     }
+  }
 
+  /**
+   * Get ticket details.
+   *
+   * @param string $sales_number
+   *   The sales number.
+   *
+   * @return array
+   *   Array of booking info.
+   */
+  public function getTicketDetails(string $sales_number) {
+    $booking_info = [];
+    $ticket = $this->entityManager->getStorage('ticket')->loadByProperties(['sales_number' => $sales_number]);
+    $ticket = reset($ticket);
+    if ($ticket instanceof Ticket) {
+      $booking_info['name'] = $ticket->get('name')->getString();
+      $booking_info['email'] = $ticket->get('email')->getString();
+      $booking_info['payment_type'] = $ticket->get('payment_type')->getString();
+      $booking_info['sales_number'] = $ticket->get('sales_number')->getString();
+      $booking_info['visitor_types'] = $ticket->get('visitor_types')->getString();
+      $booking_info['visit_date'] = $ticket->get('visit_date')->getString();
+      $booking_info['order_total'] = $ticket->get('order_total')->getString();
+      $booking_info['booking_date'] = $this->dateFormatter->format($ticket->get('created')->getString(), '', 'Y-m-d');
+      $booking_info['ticket_info'] = $ticket->get('ticket_info')->getString();
+    }
+    return $booking_info;
   }
 
   /**
    * Send booking confirmation mail to the user.
    *
    * @param array $booking_info
-   *   Array of booking details.
-   * @param array $final_visitor_list
-   *   Array of final visitor list.
+   *   The booking details.
    */
-  public function bookingConfirmationMail(array $booking_info, array $final_visitor_list) {
+  public function bookingConfirmationMail(array $booking_info) {
     try {
       $qr_code = [
         '#theme' => 'image',
@@ -172,13 +203,13 @@ class BookingPaymentManager {
         '#theme' => 'booking_mail',
         '#qr_code' => $qr_code,
         '#booking_info' => $booking_info,
-        '#visitor_list' => $final_visitor_list,
+        '#visitor_list' => json_decode($booking_info['ticket_info']),
       ];
 
       $body = $this->renderer->render($build);
       $params['message'] = $body;
       $params['visit_date'] = $booking_info['visit_date'];
-      $params['ticket_count'] = $final_visitor_list['total']['count'];
+      $params['ticket_count'] = $booking_info['order_total'];
       $params['ref_number'] = $booking_info['sales_number'];
 
       $send = TRUE;

@@ -76,14 +76,10 @@ class Ticket extends ContentEntityBase {
       ->setSetting('datetime_type', 'date')
       ->setRequired(TRUE);
 
-    $fields['booking_date'] = BaseFieldDefinition::create('timestamp')
-      ->setLabel(t('Booking date'))
-      ->setDescription(t('The booking date of ticket entity'))
-      ->setRequired(TRUE);
-
     $fields['booking_status'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Booking status'))
       ->setDescription(t('The Booking status of the ticket entity.'))
+      ->setDefaultValue('inactive')
       ->setSettings([
         'allowed_values' => [
           'active' => 'Active',
@@ -94,6 +90,7 @@ class Ticket extends ContentEntityBase {
     $fields['payment_status'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Payment status'))
       ->setDescription(t('The Payment status of the ticket entity.'))
+      ->setDefaultValue('pending')
       ->setSettings([
         'allowed_values' => [
           'pending' => 'Pending',
@@ -114,6 +111,16 @@ class Ticket extends ContentEntityBase {
     $fields['payment_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Payment id'))
       ->setDescription(t('The payment id of the ticket entity.'))
+      ->setRequired(FALSE);
+
+    $fields['transaction_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Transaction id'))
+      ->setDescription(t('The transaction id of the ticket entity.'))
+      ->setRequired(FALSE);
+
+    $fields['ticket_info'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Ticket info'))
+      ->setDescription(t('The ticket info of the ticket entity.'))
       ->setRequired(FALSE);
 
     $fields['order_total'] = BaseFieldDefinition::create('integer')

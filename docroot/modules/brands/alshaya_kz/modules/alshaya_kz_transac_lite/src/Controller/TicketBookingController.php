@@ -173,13 +173,19 @@ class TicketBookingController extends ControllerBase {
   }
 
   /**
-   * Set the payment option and update the ticket status.
+   * Set the payment option and redirect to booking status page.
    *
    * @param string $option
    *   The option parameter.
    */
   public function paymentOption($option) {
-    // @Todo - Knet integration here.
+    $sales_number = $_GET['ref_number'] ?? '';
+    $theme = $option == 'success' ? 'payment_success' : 'payment_failed';
+    return [
+      '#theme' => $theme,
+      '#ref_number' => $sales_number,
+      '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
+    ];
   }
 
 }

@@ -4,25 +4,19 @@ namespace Drupal\alshaya_kz_transac_lite\Form;
 
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\alshaya_knet\Helper\KnetHelper;
 
 /**
  * BookingPaymentForm provide a form to do the booking payment.
  */
 class BookingPaymentForm extends FormBase {
-
-  /**
-   * The entity manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
 
   /**
    * The ticket booking.
@@ -46,26 +40,33 @@ class BookingPaymentForm extends FormBase {
   protected $configFactory;
 
   /**
+   * K-Net Helper class.
+   *
+   * @var \Drupal\alshaya_knet\Helper\KnetHelper
+   */
+  protected $knetHelper;
+
+  /**
    * BookingPaymentForm constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity manager.
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The ticket booking object.
    * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $booking_payment
    *   The booking payment object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory object.
+   * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
+   *   Kidzania ticket booking K-net helper.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager,
-                              TicketBookingManager $ticket_booking,
+  public function __construct(TicketBookingManager $ticket_booking,
                               BookingPaymentManager $booking_payment,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              KnetHelper $knet_helper) {
 
-    $this->entityTypeManager = $entityTypeManager;
     $this->ticketBooking = $ticket_booking;
     $this->bookingPayment = $booking_payment;
     $this->configFactory = $config_factory;
+    $this->knetHelper = $knet_helper;
   }
 
   /**
@@ -73,10 +74,10 @@ class BookingPaymentForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
       $container->get('alshaya_kz_transac_lite.booking_manager'),
       $container->get('alshaya_kz_transac_lite.booking_payment_manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_knet.helper')
     );
   }
 
@@ -100,7 +101,6 @@ class BookingPaymentForm extends FormBase {
       '#type' => 'hidden',
       '#attributes' => ['id' => ['booking-info']],
     ];
-
     $form['parks'] = [
       '#markup' => $parks->getParksResult->Park->Name,
     ];
@@ -166,6 +166,10 @@ class BookingPaymentForm extends FormBase {
     if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $name)) {
       $form_state->setErrorByName('name', $this->t('Please enter a valid name.'));
     }
+    $mobile = $form_state->getValue('mobile');
+    if (empty($mobile['mobile'])) {
+      $form_state->setErrorByName('mobile', $this->t('Please enter your Mobile number.'));
+    }
   }
 
   /**
@@ -179,23 +183,33 @@ class BookingPaymentForm extends FormBase {
         $visitor_types .= $value->Description . '-' . $value->Ticket->count . ',';
       }
       $order_total = $this->ticketBooking->getOrderTotal($final_visitor_list->sales_number);
-      $knet = ($form_state->getValue('knet')) ? 'knet' : '';
-      $booking = [
-        'name' => $form_state->getValue('name'),
-        'email' => $form_state->getValue('email'),
-        'mobile' => $form_state->getValue('mobile'),
-        'payment_type' => $knet,
-        'sales_number' => $final_visitor_list->sales_number,
-        'visitor_types' => rtrim($visitor_types, ','),
-        'visit_date' => $final_visitor_list->visit_date,
-        'order_total' => $order_total,
-        'order_date' => date('Y-m-d'),
-      ];
-      // Create content for ticket entity type.
-      if ($this->bookingPayment->saveTicketDetails($booking, $final_visitor_list->sales_number)) {
-        // @Todo - Knet integration here.
+      $booking_info = $this->bookingPayment->getTicketDetails($final_visitor_list->sales_number);
+      if (!empty($order_total) && empty($booking_info)) {
+        $booking = [
+          'name' => $form_state->getValue('name'),
+          'email' => $form_state->getValue('email'),
+          'mobile' => $form_state->getValue('mobile'),
+          'payment_type' => 'knet',
+          'sales_number' => $final_visitor_list->sales_number,
+          'visitor_types' => rtrim($visitor_types, ','),
+          'visit_date' => $final_visitor_list->visit_date,
+          'order_total' => $order_total,
+          'ticket_info' => $final_visitor_list->data,
+        ];
+        // Save ticket details.
+        if ($this->bookingPayment->saveTicketDetails($booking, $final_visitor_list->sales_number)) {
+          // Initiate K-Net request.
+          $this->knetHelper->setCartId($final_visitor_list->sales_number);
+          $request = $this->knetHelper->initKnetRequest($order_total);
+
+          $response = new RedirectResponse($request['url']);
+          $response->send();
+          exit;
+        }
       }
     }
+    // Redirect to home page if booking steps are not followed properly.
+    $form_state->setRedirect('<front>');
   }
 
 }
