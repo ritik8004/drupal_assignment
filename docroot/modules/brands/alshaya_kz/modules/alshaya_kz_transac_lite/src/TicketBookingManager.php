@@ -119,9 +119,9 @@ class TicketBookingManager {
     // Get token from kidsoft.
     $settings = $this->configFactory->get('alshaya_kz_transac_lite.settings');
     try {
-      $token = $this->soapClient->__soapCall("authenticate",
+      $token = $this->soapClient->__soapCall('authenticate',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'user' => $settings->get('kidsoft_external_login'),
               'passwd' => $settings->get('kidsoft_external_pass'),
@@ -142,8 +142,8 @@ class TicketBookingManager {
   /**
    * Get the parks data from kidsoft.
    *
-   * @return object
-   *   Object of parks data.
+   * @return object|null
+   *   Object of parks data or null.
    */
   public function getParkData() {
     if (isset($this->getTicketBookingCachedData('getParks')->getParksResult)) {
@@ -151,9 +151,9 @@ class TicketBookingManager {
     }
 
     try {
-      $parks = $this->soapClient->__soapCall("getParks",
+      $parks = $this->soapClient->__soapCall('getParks',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'auth' => [
                 'AuthString' => $this->getToken()->authenticateResult->AuthString,
@@ -176,6 +176,7 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
@@ -184,14 +185,14 @@ class TicketBookingManager {
    * @param string $visit_date
    *   The visit date.
    *
-   * @return object
-   *   object of shift data.
+   * @return object|null
+   *   object of shift data or null.
    */
   public function getShiftsData($visit_date) {
     try {
-      $shifts = $this->soapClient->__soapCall("getShifts",
+      $shifts = $this->soapClient->__soapCall('getShifts',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'park' => [
                 'Name' => $this->getParkData()->getParksResult->Park->Name,
@@ -213,6 +214,7 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
@@ -223,8 +225,8 @@ class TicketBookingManager {
    * @param string $visit_date
    *   The visit date.
    *
-   * @return object
-   *   object of visitorTypes.
+   * @return object|null
+   *   object of visitorTypes or null.
    */
   public function getVisitorTypesData(string $shifts, string $visit_date) {
     if (isset($this->getTicketBookingCachedData('getVisitorTypesData')->getVisitorTypesResult)) {
@@ -232,9 +234,9 @@ class TicketBookingManager {
     }
     $shifts = json_decode($shifts);
     try {
-      $visitorTypes = $this->soapClient->__soapCall("getVisitorTypes",
+      $visitorTypes = $this->soapClient->__soapCall('getVisitorTypes',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'park' => [
                 'Name' => $this->getParkData()->getParksResult->Park->Name,
@@ -264,22 +266,23 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
    * Provide sexes object with detais from Kidsoft.
    *
-   * @return object
-   *   object of sexes data.
+   * @return object|null
+   *   object of sexes data or null.
    */
   public function getSexesData() {
     if (isset($this->getTicketBookingCachedData('getSexesData')->getSexesResult)) {
       return $this->getTicketBookingCachedData('getSexesData');
     }
     try {
-      $getSexes = $this->soapClient->__soapCall("getSexes",
+      $getSexes = $this->soapClient->__soapCall('getSexes',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'park' => [
                 'Name' => $this->getParkData()->getParksResult->Park->Name,
@@ -301,19 +304,20 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
    * Generate Sales number to be used as reference for each generated ticket.
    *
-   * @return string
-   *   The sales number.
+   * @return string|null
+   *   The sales number or null.
    */
   public function generateSalesNumber() {
     try {
-      $generateSaleNumber = $this->soapClient->__soapCall("generateSaleNumber",
+      $generateSaleNumber = $this->soapClient->__soapCall('generateSaleNumber',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'park' => [
                 'Name' => $this->getParkData()->getParksResult->Park->Name,
@@ -334,19 +338,20 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
    * Generate the tickect number for each selected visitors from Kidsoft.
    *
-   * @return string
-   *   The Ticket number.
+   * @return string|null
+   *   The Ticket number or null.
    */
   public function generateTicketNumber() {
     try {
-      $generateTicketNumber = $this->soapClient->__soapCall("generateTicketNumber",
+      $generateTicketNumber = $this->soapClient->__soapCall('generateTicketNumber',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'park' => [
                 'Name' => $this->getParkData()->getParksResult->Park->Name,
@@ -367,6 +372,7 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
@@ -385,15 +391,15 @@ class TicketBookingManager {
    * @param string $visit_date
    *   The visit date.
    *
-   * @return bool
-   *   return a boolean value.
+   * @return bool|null
+   *   return a boolean value or null.
    */
   public function saveTicket(array $visitor_list, array $book_ticket, $ticket_number, $shifts, $sales_number, $visit_date) {
     $shifts = json_decode($shifts);
     try {
-      $saveTicket = $this->soapClient->__soapCall("saveTicket",
+      $saveTicket = $this->soapClient->__soapCall('saveTicket',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'ticket' => [
                 'Age' => $book_ticket['age'],
@@ -456,19 +462,20 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**
    * Generate order total.
    *
-   * @return int
-   *   integer Total amount.
+   * @return int|null
+   *   integer Total amount or null.
    */
   public function getOrderTotal($sales_number) {
     try {
-      $getOrderTotal = $this->soapClient->__soapCall("getOrderTotal",
+      $getOrderTotal = $this->soapClient->__soapCall('getOrderTotal',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'saleNum' => $sales_number,
               'park' => [
@@ -482,6 +489,7 @@ class TicketBookingManager {
             ],
         ]
       );
+      return $getOrderTotal->getOrderTotalResult;
     }
     catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting total order - %faultcode: %message', [
@@ -489,8 +497,7 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
-
-    return $getOrderTotal->getOrderTotalResult;
+    return NULL;
   }
 
   /**
@@ -499,14 +506,14 @@ class TicketBookingManager {
    * @param string $sales_number
    *   The sales number.
    *
-   * @return bool
-   *   Activate the order status.
+   * @return bool|null
+   *   Activate the order status or null.
    */
   public function activateOrder(string $sales_number) {
     try {
-      $activateOrder = $this->soapClient->__soapCall("activateOrder",
+      $activateOrder = $this->soapClient->__soapCall('activateOrder',
         [
-          "parameters" =>
+          'parameters' =>
             [
               'saleNum' => $sales_number,
               'park' => [
@@ -528,6 +535,7 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
+    return NULL;
   }
 
   /**

@@ -212,8 +212,7 @@ class BookingPaymentManager {
       $params['ticket_count'] = $booking_info['order_total'];
       $params['ref_number'] = $booking_info['sales_number'];
 
-      $send = TRUE;
-      $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+      $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, TRUE);
       if ($result['result']) {
         $this->logger->info('Message has been sent - @sales_number', [
           '@sales_number' => $booking_info['sales_number'],

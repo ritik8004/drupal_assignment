@@ -17,6 +17,7 @@ function alshaya_kz_transac_lite_install() {
 
   // Create stickycart block.
   $block_content = BlockContent::create([
+    // Place this block in footer region during installation.
     'uuid' => '74ccd0d9-b219-486a-aa9c-600001ddc10a',
     'info' => 'Stickycart',
     'machine_name' => 'stickycart',

@@ -2,11 +2,11 @@
 
 namespace Drupal\alshaya_kz_transac_lite\Controller;
 
+use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -61,7 +61,7 @@ class TicketBookingController extends ControllerBase {
   public function getParks() {
     $parks = $this->ticketBooking->getParkData();
 
-    $response = new JsonResponse();
+    $response = new CacheableJsonResponse();
     $response->setData($parks->getParksResult->Park->Name);
 
     return $response;
@@ -80,7 +80,7 @@ class TicketBookingController extends ControllerBase {
     $visit_date = $request->request->get('visit_date');
     $shifts = $this->ticketBooking->getShiftsData($visit_date);
 
-    $response = new JsonResponse();
+    $response = new CacheableJsonResponse();
     $response->setData($shifts);
 
     return $response;
@@ -100,7 +100,7 @@ class TicketBookingController extends ControllerBase {
     $shifts = $request->request->get('shifts');
     $visitor_types = $this->ticketBooking->getVisitorTypesData($shifts, $visit_date);
 
-    $response = new JsonResponse();
+    $response = new CacheableJsonResponse();
     $response->setData($visitor_types);
 
     return $response;
@@ -115,7 +115,7 @@ class TicketBookingController extends ControllerBase {
   public function getSexes() {
     $sexes = $this->ticketBooking->getSexesData();
 
-    $response = new JsonResponse();
+    $response = new CacheableJsonResponse();
     $response->setData($sexes);
 
     return $response;
@@ -133,7 +133,7 @@ class TicketBookingController extends ControllerBase {
   public function validateVisitorDetails(Request $request) {
     $responseData = new \stdClass();
     $responseData->err = FALSE;
-    $response = new JsonResponse();
+    $response = new CacheableJsonResponse();
     $shifts = $request->request->get('shifts');
     $final_visitor_list = $request->request->get('final_visitor_list');
 
