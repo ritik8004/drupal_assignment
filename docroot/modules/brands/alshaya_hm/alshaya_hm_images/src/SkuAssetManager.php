@@ -19,7 +19,6 @@ use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * SkuAssetManager Class.
@@ -210,13 +209,25 @@ class SkuAssetManager {
         continue;
       }
 
-      // We already have drupal_uri in asset data.
-      if (!empty($asset['drupal_uri'])) {
-        continue;
+      // Check if we already have fid and drupal_uri in asset data.
+      if (!empty($asset['fid']) && !empty($asset['drupal_uri'])) {
+        $file = $this->fileStorage->load($asset['fid']);
+
+        // Verify file entity exists. We might remove this check in future.
+        if ($file instanceof FileInterface) {
+          continue;
+        }
+
+        $this->logger->warning('Fid @fid available in asset for sku @sku but not available in system. Trying to download again.', [
+          '@fid' => $asset['fid'],
+          '@sku' => $sku->getSku(),
+        ]);
+
+        unset($asset['fid']);
       }
 
       try {
-        $file = $this->downloadImage($asset);
+        $file = $this->downloadImage($asset, $sku->getSku());
         if ($file instanceof FileInterface) {
           $asset['drupal_uri'] = $file->getFileUri();
           $asset['fid'] = $file->id();
@@ -227,7 +238,7 @@ class SkuAssetManager {
         watchdog_exception('SkuAssetManager', $e);
       }
 
-      if (empty($asset['drupal_uri'])) {
+      if (empty($asset['fid'])) {
         unset($assets[$index]);
       }
     }
@@ -235,6 +246,10 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
+
+      $this->logger->notice('Downloaded new asset images for sku @sku.', [
+        '@sku' => $sku->getSku(),
+      ]);
     }
 
     return $assets;
@@ -245,13 +260,15 @@ class SkuAssetManager {
    *
    * @param array $data
    *   PIMS Data.
+   * @param string $sku
+   *   SKU of asset.
    *
    * @return \Drupal\file\FileInterface|null
    *   File entity if image download successful.
    *
    * @throws \Exception
    */
-  private function downloadPimsImage(array $data) {
+  private function downloadPimsImage(array $data, string $sku) {
     $base_url = $this->hmImageSettings->get('pims_base_url');
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
@@ -270,28 +287,37 @@ class SkuAssetManager {
         throw new \Exception('Failed to download asset file: ' . $url);
       }
     }
-    catch (RequestException $e) {
-      watchdog_exception('SkuAssetManager', $e);
+    catch (\Exception $e) {
+      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
+        '@sku' => $sku,
+        '@url' => $url,
+        '@message' => $e->getMessage(),
+      ]);
 
       // Not able to download image, no further processing required.
       return NULL;
     }
 
     // Prepare the directory path.
-    $directory = 'public://assets' . $data['path'];
+    $directory = 'public://assets/' . $sku . '/' . trim($data['path'], '/');
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
+    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
     try {
-      $file = file_save_data($file_data, $directory . '/' . $data['filename'], FILE_EXISTS_REPLACE);
+      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
 
       if (!($file instanceof FileInterface)) {
-        throw new \Exception('Failed to save asset file: ' . $url);
+        throw new \Exception('Failed to save asset file');
       }
     }
     catch (\Exception $e) {
-      watchdog_exception('SkuAssetManager', $e);
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
     }
 
     return $file ?? [];
@@ -302,13 +328,15 @@ class SkuAssetManager {
    *
    * @param array $asset
    *   Asset data.
+   * @param string $sku
+   *   SKU of asset.
    *
    * @return \Drupal\file\FileInterface|null
    *   File entity download successful.
    *
    * @throws \Exception
    */
-  public function downloadLiquidPixelImage(array $asset) {
+  private function downloadLiquidPixelImage(array $asset, string $sku) {
     $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
     $cache = $this->cachePimsFiles->get($skipped_key);
     if (isset($cache, $cache->data)) {
@@ -322,11 +350,15 @@ class SkuAssetManager {
       $file_data = $this->httpClient->get($url)->getBody();
 
       if (empty($file_data)) {
-        throw new \Exception('Failed to download asset file: ' . $url);
+        throw new \Exception('Failed to download asset file');
       }
     }
-    catch (RequestException $e) {
-      watchdog_exception('SkuAssetManager', $e);
+    catch (\Exception $e) {
+      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
+        '@sku' => $sku,
+        '@url' => $url,
+        '@message' => $e->getMessage(),
+      ]);
 
       // Not able to download image, no further processing required.
       return NULL;
@@ -347,20 +379,25 @@ class SkuAssetManager {
     }
 
     // Prepare the directory path.
-    $directory = 'public://assets-lp/' . dirname($asset['Data']['FilePath']);
+    $directory = 'public://assets-lp/' . $sku . '/' . trim(dirname($asset['Data']['FilePath']), '/');
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
+    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
     try {
-      $file = file_save_data($file_data, $directory . '/' . basename($asset['Data']['FilePath']), FILE_EXISTS_REPLACE);
+      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
 
       if (!($file instanceof FileInterface)) {
         throw new \Exception('Failed to save asset file: ' . $url);
       }
     }
     catch (\Exception $e) {
-      watchdog_exception('SkuAssetManager', $e);
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
     }
 
     return $file ?? NULL;
@@ -371,21 +408,33 @@ class SkuAssetManager {
    *
    * @param array $asset
    *   Asset data.
+   * @param string $sku
+   *   SKU of asset.
    *
    * @return \Drupal\file\FileInterface|null
    *   File from asset if available.
    *
    * @throws \Exception
    */
-  private function downloadImage(array $asset) {
+  private function downloadImage(array $asset, string $sku) {
+    $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
-      $file = $this->downloadPimsImage($asset['pims_image']);
+      $file = $this->downloadPimsImage($asset['pims_image'], $sku);
     }
     elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
-      $file = $this->downloadLiquidPixelImage($asset);
+      $file = $this->downloadLiquidPixelImage($asset, $sku);
     }
 
-    return $file ?? NULL;
+    if ($file instanceof FileInterface) {
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
+        '@fid' => $file->id(),
+        '@uri' => $file->getFileUri(),
+        '@id' => $id,
+      ]);
+    }
+
+    return $file;
   }
 
   /**

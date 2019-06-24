@@ -72,7 +72,6 @@
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
-        "drupal/scheduled_updates": "^1.0@alpha",
         "drupal/search_api_algolia": "1.x-dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
@@ -84,6 +83,7 @@
         "drupal/social_api": "2.x-dev",
         "drupal/social_auth": "2.x-dev",
         "drupal/social_auth_facebook": "^2.0",
+        "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
@@ -400,7 +400,6 @@
         "post-drupal-scaffold-cmd": [
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
             "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
             "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
             "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
@@ -408,7 +407,9 @@
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
+            "cd docroot && rm robots.txt"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

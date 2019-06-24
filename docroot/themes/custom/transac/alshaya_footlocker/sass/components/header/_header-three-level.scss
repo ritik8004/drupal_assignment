@@ -28,7 +28,6 @@
 .block-alshaya-main-menu {
   li.menu--one__list-item {
     @include breakpoint($desktop) {
-      height: 2.25rem;
       vertical-align: middle;
     }
   }
