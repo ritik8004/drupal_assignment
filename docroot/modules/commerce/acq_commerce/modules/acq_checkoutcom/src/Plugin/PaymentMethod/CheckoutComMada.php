@@ -59,7 +59,7 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
-    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.api');
+    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
     $this->configFactory = \Drupal::service('config.factory');
     $this->currentUser = \Drupal::service('current_user');
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
@@ -76,6 +76,14 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $states = [
+      '#states' => [
+        'required' => [
+          ':input[name="acm_payment_methods[payment_details_wrapper][payment_method_checkout_com_mada][payment_details][card_token]"]' => ['value' => ''],
+        ],
+      ],
+    ];
+
     $pane_form['payment_details'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -87,55 +95,55 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
       '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
-      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',
         'data-checkout' => 'card-number',
+        'id' => 'cardNumber',
       ],
-    ];
+    ] + $states;
 
     $pane_form['payment_details']['cc_cvv'] = [
       '#type' => 'password',
       '#maxlength' => 4,
       '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
-      '#required' => TRUE,
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-cvv-input',
           'checkoutcom-input',
         ],
+        'id' => 'cardCvv',
         'autocomplete' => 'cc-csc',
         'data-checkout' => 'cvv',
       ],
-    ];
+    ] + $states;
 
     $pane_form['payment_details']['cc_exp_month'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expiration Month'),
-      '#required' => TRUE,
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-month-select',
           'checkoutcom-input',
         ],
+        'id' => 'expMonth',
         'data-checkout' => 'expiry-month',
       ],
-    ];
+    ] + $states;
 
     $pane_form['payment_details']['cc_exp_year'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expiration Year'),
-      '#required' => TRUE,
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-year-select',
           'checkoutcom-input',
         ],
+        'id' => 'expYear',
         'data-checkout' => 'expiry-year',
       ],
-    ];
+    ] + $states;
 
     $pane_form['payment_details']['card_token'] = [
       '#type' => 'hidden',
@@ -169,9 +177,11 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
       cardTokenised: function(event) {
         cardBin.value = event.data.card.bin;
         cardToken.value = event.data.cardToken;
+        cardNumber.value = ''
+        cardCvv.value = ''
+        expMonth.value = ''
+        expYear.value = ''
         document.getElementById('multistep-checkout').submit();
-      },
-      apiError: function (event) {
       }
     };";
 

@@ -258,8 +258,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
           expMonth.value = ''
           expYear.value = ''
           document.getElementById('multistep-checkout').submit();
-        },
-        apiError: function (event) {
         }
       };";
 
