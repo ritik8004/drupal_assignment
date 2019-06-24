@@ -1,0 +1,61 @@
+.saved-paymentcard-list {
+  list-style: none;
+  padding: 0;
+
+  > li {
+    width: 19rem;
+    margin-#{$right}: 1.5rem;
+    margin-bottom: 1.5rem;
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+
+  .payment-card--data {
+    border: 1px solid #dadada;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+
+    .label {
+      font-size: 0.75rem;
+      font-family: $alshaya-bold;
+    }
+
+    .payment-card--number,
+    .payment-card--name,
+    .payment-card--expiry {
+      font-size: 0.875rem;
+      font-family: $alshaya-thin;
+      margin-bottom: 0.625rem;
+    }
+
+    .payment-card--type {
+      min-width: 53px;
+      margin-#{$right}: 13px;
+
+      &.visa {
+        background: url(#{$base_theme_img_directory_path}/cards/visa-active.png) no-repeat;
+        background-size: contain;
+      }
+
+      &.mastercard {
+        background: url(#{$base_theme_img_directory_path}/cards/mastercard-active.png) no-repeat;
+        background-size: contain;
+      }
+    }
+  }
+
+  .payment-card--options {
+    .payment-card--delete {
+      a {
+        float: $right;
+        border: 1px solid #dadada;
+        border-top: none;
+        padding: 0.625rem;
+      }
+    }
+  }
+}
