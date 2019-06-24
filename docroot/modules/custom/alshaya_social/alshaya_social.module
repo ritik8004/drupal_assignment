@@ -16,7 +16,6 @@ function alshaya_social_theme() {
     'alshaya_social' => [
       'variables' => [
         'social_networks' => NULL,
-        'form' => NULL,
       ],
     ],
   ];
@@ -46,7 +45,6 @@ function alshaya_social_display_social_authentication_links(array &$form, $form_
     $form['social_media_auth_links'] = [
       '#theme' => 'alshaya_social',
       '#social_networks' => $social_helper->getSocialNetworks(),
-      '#form' => $form_id,
       '#weight' => 1000,
     ];
   }

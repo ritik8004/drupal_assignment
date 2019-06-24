@@ -63,7 +63,6 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
     $pane_form['social_media_auth_links'] = [
       '#theme' => 'alshaya_social',
       '#social_networks' => $this->socialHelper->getSocialNetworks(),
-      '#form' => $this->getPluginId(),
       '#weight' => -1000,
     ];
     $pane_form['#prefix'] = '<div class="checkout-login-separator order-1"><span>' . $this->t('or') . '</span></div>';

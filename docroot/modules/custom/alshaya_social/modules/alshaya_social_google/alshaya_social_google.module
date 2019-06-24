@@ -12,11 +12,11 @@ function alshaya_social_google_preprocess_alshaya_social(&$variables) {
   if (!isset($variables['social_networks']['social_auth_google'])) {
     return;
   }
-
-  if (in_array($variables['form'], ['user_login_form', 'checkout_social_auth'])) {
-    $variables['social_networks']['social_auth_google']['text_link'] = t('Sign in with google');
+  $route = \Drupal::routeMatch();
+  if (in_array($route->getRouteName(), ['user.login', 'acq_checkout.form'])) {
+    $variables['social_networks']['social_auth_google']['text_link'] = t('sign in with google');
   }
-  elseif ($variables['form'] == 'user_register_form') {
-    $variables['social_networks']['social_auth_google']['text_link'] = t('Sign up with google');
+  elseif ($route->getRouteName() == 'user.register') {
+    $variables['social_networks']['social_auth_google']['text_link'] = t('sign up with google');
   }
 }
