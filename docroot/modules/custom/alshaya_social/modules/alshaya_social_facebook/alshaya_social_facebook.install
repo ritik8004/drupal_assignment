@@ -9,6 +9,17 @@ use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_update_N().
+ *
+ * Disable social_auth_facebook by default.
+ */
+function alshaya_social_facebook_update_8002() {
+  \Drupal::configFactory()->getEditable('alshaya_social.settings')
+    ->set('social_networks.social_auth_facebook', 0)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_social_facebook_update_8001() {
   $strings = [

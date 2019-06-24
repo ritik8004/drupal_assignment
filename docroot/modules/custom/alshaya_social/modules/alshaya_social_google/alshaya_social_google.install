@@ -27,10 +27,10 @@ function alshaya_social_google_install() {
     ->save();
 
   $strings = [
-    'Sign in with google' => [
+    'sign in with google' => [
       'ar' => 'تسجيل الدخول عن طريق جوجل',
     ],
-    'Sign up with google' => [
+    'sign up with google' => [
       'ar' => 'سجل الاشتراك عن طريق جوجل',
     ],
   ];
