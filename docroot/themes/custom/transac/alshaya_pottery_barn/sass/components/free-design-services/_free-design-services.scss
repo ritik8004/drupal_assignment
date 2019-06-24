@@ -161,6 +161,7 @@
 
         &.js-form-type-tel {
           margin-top: 3rem;
+          width: 75%;
 
           .flag-container {
             display: none;
@@ -175,8 +176,8 @@
             font-size: 0.75rem;
 
             &.error {
-              position: relative;
-              top: auto !important;
+              position: absolute;
+              top: 1.5rem !important;
               font-size: 0.75rem;
               color: $primary_input_inline_error;
               padding-top: 0.3125rem;
