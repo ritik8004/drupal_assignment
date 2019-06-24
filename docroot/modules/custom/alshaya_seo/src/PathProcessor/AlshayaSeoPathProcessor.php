@@ -23,15 +23,27 @@ class AlshayaSeoPathProcessor implements OutboundPathProcessorInterface {
                                   BubbleableMetadata $bubbleable_metadata = NULL) {
 
     $route = $options['route'] ?? NULL;
+    // Avoid urls that have _disable_route_normalizer.
     if ($route instanceof Route && $route->getDefault('_disable_route_normalizer')) {
       return $path;
     }
 
-    if (substr($path, -1) !== '/' && strpos($path, '.') === FALSE) {
-      $path .= '/';
+    // Avoid rest urls.
+    if (strpos($path, '/rest/') > -1 || strpos($path, '/oauth/') > -1) {
+      return $path;
     }
 
-    return $path;
+    // Avoid urls already having trailing slash.
+    if (substr($path, -1) === '/') {
+      return $path;
+    }
+
+    // Avoid urls with dot in alias .html / .txt / etc.
+    if (strpos($path, '.') > -1) {
+      return $path;
+    }
+
+    return $path . '/';
   }
 
 }
