@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\mobile_number\MobileNumberUtilInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -20,16 +21,38 @@ function alshaya_pb_free_design_services_module_implements_alter(&$implementatio
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_webform_submission_form_alter().
  */
-function alshaya_pb_free_design_services_form_webform_submission_free_design_services_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinderUtility */
-  $storeFinderUtility = \Drupal::service('alshaya_stores_finder_transac.utility');
-  $form['elements']['preferred_store']['#type'] = 'select';
-  $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
-  $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getAllStoresAsOptions();
+function alshaya_pb_free_design_services_webform_submission_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (empty($form['#webform_id']) || $form['#webform_id'] != 'free_design_services') {
+    return;
+  }
+  // Webform doesn't have mobile_number webform element, it doesn't show with
+  // the design that we did for mobile number form element. we have to do form
+  // alter and replace it with form element.
+  if (isset($form['elements']['contact_information']['mobile_number'])) {
+    $entity = $form_state->getFormObject()->getEntity();
+    $mobile_number = !empty($entity->getData()) ? $entity->getData()['mobile_number'] : '';
 
-  $form['#validate'][] = 'alshaya_pb_free_design_services_form_webform_submission_free_design_services_validate';
+    $form['elements']['contact_information']['mobile_number'] = [
+      '#title' => 'Mobile number',
+      '#type' => 'mobile_number',
+      '#verify' => MobileNumberUtilInterface::MOBILE_NUMBER_VERIFY_NONE,
+      '#tfa' => NULL,
+      '#required' => $form['elements']['contact_information']['mobile_number']['#required'],
+      '#default_value' => ['value' => _alshaya_acm_checkout_clean_address_phone($mobile_number)],
+    ];
+  }
+
+  if ($form_id == 'webform_submission_free_design_services_add_form') {
+    /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinderUtility */
+    $storeFinderUtility = \Drupal::service('alshaya_stores_finder_transac.utility');
+    $form['elements']['preferred_store']['#type'] = 'select';
+    $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
+    $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getAllStoresAsOptions();
+
+    $form['#validate'][] = 'alshaya_pb_free_design_services_form_webform_submission_free_design_services_validate';
+  }
 }
 
 /**
