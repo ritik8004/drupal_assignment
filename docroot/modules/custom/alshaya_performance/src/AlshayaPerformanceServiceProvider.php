@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_performance;
 
+use Drupal\alshaya_performance\EventSubscriber\AlshayaLateRuntimeProcessor;
 use Drupal\alshaya_performance\Logger\AlshayaPerformanceSysLog;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
@@ -22,9 +23,15 @@ class AlshayaPerformanceServiceProvider extends ServiceProviderBase implements S
       if ($syslog) {
         $syslog->setClass(AlshayaPerformanceSysLog::class);
       }
+
+      // Override purge late runtime processor.
+      $purge_late_runtime = $container->getDefinition('purge_processor_lateruntime.processor');
+      if ($purge_late_runtime) {
+        $purge_late_runtime->setClass(AlshayaLateRuntimeProcessor::class);
+      }
     }
     catch (\Exception $e) {
-      // Do nothing, system might still be installing or syslog module might
+      // Do nothing, system might still be installing or module might
       // be disabled.
     }
   }

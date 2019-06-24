@@ -73,6 +73,8 @@ $query_generate = [
   ['attr_product_collection'],
   ['attr_concept'],
   ['attr_color'],
+  ['field_category_name'],
+  ['attr_color', 'field_category_name'],
 ];
 
 // For backup.
