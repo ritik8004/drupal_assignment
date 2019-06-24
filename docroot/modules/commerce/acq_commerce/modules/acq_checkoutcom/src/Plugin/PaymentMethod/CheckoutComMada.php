@@ -3,12 +3,13 @@
 namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides the CheckoutCom payment method.
+ * Provides the CheckoutCom mada card payment method.
  *
  * @ACQPaymentMethod(
  *   id = "checkout_com_mada",
@@ -69,7 +70,7 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
    * {@inheritdoc}
    */
   public function buildPaymentSummary() {
-    return $this->t('checkout.com details here.');
+    return $this->t('checkout.com mada details here.');
   }
 
   /**
@@ -241,7 +242,7 @@ class CheckoutComMada extends PaymentMethodBase implements PaymentMethodInterfac
     $this->checkoutComApi->processCardPayment(
       $cart,
       [
-        'value' => $totals['grand'] * 100,
+        'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
         'cardToken' => $inputs['cko-card-token'],
         'email' => $cart->customerEmail(),
         'udf1' => $this->checkoutComApi->isMadaBin($card_bin) ? 'MADA' : '',

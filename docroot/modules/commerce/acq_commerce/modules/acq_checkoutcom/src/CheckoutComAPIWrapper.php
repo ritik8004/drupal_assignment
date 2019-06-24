@@ -52,6 +52,9 @@ class CheckoutComAPIWrapper {
   // Mada bins test file name.
   const KEY_MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
 
+  // Multiply currency value to hundreds.
+  const MULTIPLY_HUNDREDS = 100;
+
   /**
    * API Helper service object.
    *

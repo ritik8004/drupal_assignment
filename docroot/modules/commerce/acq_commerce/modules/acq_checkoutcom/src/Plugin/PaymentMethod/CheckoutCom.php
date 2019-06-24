@@ -3,6 +3,7 @@
 namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -368,7 +369,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     $this->checkoutComApi->processCardPayment($cart, [
       'cardId' => $card_id,
-      'value' => $totals['grand'] * 100,
+      'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
       'email' => $cart->customerEmail(),
       'cvv' => $cvv,
     ]);
