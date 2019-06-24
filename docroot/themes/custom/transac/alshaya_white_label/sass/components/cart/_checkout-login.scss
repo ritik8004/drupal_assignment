@@ -271,6 +271,7 @@
       top: 0;
       float: $left;
       margin-top: 3.0625rem;
+      font-size: 0.875rem;
 
       @include breakpoint($desktop) {
         #{$left}: 2.4rem;
