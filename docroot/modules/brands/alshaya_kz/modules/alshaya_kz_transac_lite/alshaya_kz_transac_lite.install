@@ -5,6 +5,8 @@
  * Install, uninstall and update for alshaya_kz_transac_lite.
  */
 
+use Drupal\block_content\Entity\BlockContent;
+
 /**
  * Implements hook_install().
  */
@@ -12,4 +14,14 @@ function alshaya_kz_transac_lite_install() {
   // Enable and set kidzania as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('kidzania');
+
+  // Create stickycart block.
+  $block_content = BlockContent::create([
+    'uuid' => '74ccd0d9-b219-486a-aa9c-600001ddc10a',
+    'info' => 'Stickycart',
+    'machine_name' => 'stickycart',
+    'type' => 'basic',
+    'langcode' => 'en',
+  ]);
+  $block_content->save();
 }
