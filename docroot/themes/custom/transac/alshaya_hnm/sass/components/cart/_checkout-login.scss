@@ -157,3 +157,13 @@
     color: $checkout_guest_summary;
   }
 }
+
+.alshaya-social {
+  .social-network-text {
+    text-transform: lowercase;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
