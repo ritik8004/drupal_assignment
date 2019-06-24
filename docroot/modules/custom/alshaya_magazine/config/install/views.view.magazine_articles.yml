@@ -198,7 +198,7 @@ display:
       use_ajax: true
       use_more: false
       use_more_always: true
-      use_more_text: 'READ H&M MAGAZINE'
+      use_more_text: 'READ MAGAZINE'
     cache_metadata:
       max-age: -1
       contexts:
@@ -313,7 +313,8 @@ display:
       link_url: ''
       use_more: true
       use_more_always: true
-      use_more_text: 'READ H&M MAGAZINE'
+      use_more_text: 'READ MAGAZINE'
+      block_hide_empty: true
     cache_metadata:
       max-age: -1
       contexts:
