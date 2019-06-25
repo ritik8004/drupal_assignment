@@ -1113,3 +1113,17 @@ html[lang=ar] {
     }
   }
 }
+
+body.chrome {
+  .content__title_wrapper {
+    .price-block {
+      .price--discount {
+        @include breakpoint($tablet) {
+          html[lang=ar] & {
+            display: inline;
+          }
+        }
+      }
+    }
+  }
+}
