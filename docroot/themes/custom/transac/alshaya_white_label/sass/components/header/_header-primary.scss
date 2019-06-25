@@ -234,7 +234,7 @@ header {
 
     #edit-submit-search,
     #edit-submit-search--2 {
-      background: $primary_search_btn_icon url(#{$base_theme_img_directory_path}/assets/search.svg) 0.625rem 0.4375rem no-repeat;
+      background: $primary_search_btn_icon url('../imgs/assets/search.svg') 10px 7px no-repeat;
       border: none;
       text-indent: -9999px;
       width: 2.625rem;
@@ -281,7 +281,7 @@ header {
     }
 
     .cart-link {
-      background: url(#{$base_theme_img_directory_path}/icons/basket.svg) no-repeat;
+      background: url('../imgs/icons/basket.svg') no-repeat;
       display: inline-block;
       width: 2rem;
       height: 2rem;
