@@ -3,7 +3,7 @@
     <div class="payment-card--type {{ card_info.paymentMethod|lower }}"></div>
     <div class="payment-card--info">
       <div class="label">{{ "card number"|t }}</div>
-      <div class="payment-card--number">**** **** **** {{ card_info.last4 }}</div>
+      <div class="payment-card--number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.last4 }}</div>
       <div class="label">{{ "name of card holder"|t }}</div>
       <div class="payment-card--name">{{ card_info.name }}</div>
       <div class="label">{{ "expiry"|t }}</div>

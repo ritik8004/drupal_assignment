@@ -217,7 +217,7 @@
     }
 
     &[id^=edit-submit-stores-finder] {
-      background: url('../imgs/icons/store-search.svg');
+      background: url(#{$base_theme_img_directory_path}/icons/store-search.svg);
       border: none;
       background-repeat: no-repeat;
       text-indent: -9999px;

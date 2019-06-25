@@ -197,22 +197,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         ],
       ] + $states;
 
-      $pane_form['payment_details']['cc_cvv'] = [
-        '#type' => 'password',
-        '#maxlength' => 4,
-        '#title' => $this->t('Security code (CVV)'),
-        '#default_value' => '',
-        '#attributes' => [
-          'class' => [
-            'checkoutcom-credit-card-cvv-input',
-            'checkoutcom-input',
-          ],
-          'id' => 'cardCvv',
-          'autocomplete' => 'cc-csc',
-          'data-checkout' => 'cvv',
-        ],
-      ] + $states;
-
       $pane_form['payment_details']['cc_exp_month'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Expiration Month'),
@@ -239,6 +223,22 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         ],
       ] + $states;
 
+      $pane_form['payment_details']['cc_cvv'] = [
+        '#type' => 'password',
+        '#maxlength' => 4,
+        '#title' => $this->t('Security code (CVV)'),
+        '#default_value' => '',
+        '#attributes' => [
+          'class' => [
+            'checkoutcom-credit-card-cvv-input',
+            'checkoutcom-input',
+          ],
+          'id' => 'cardCvv',
+          'autocomplete' => 'cc-csc',
+          'data-checkout' => 'cvv',
+        ],
+      ] + $states;
+
       $pane_form['payment_details']['card_token'] = [
         '#type' => 'hidden',
         '#attributes' => [
@@ -252,6 +252,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
           '#type'  => 'checkbox',
           '#title' => $this->t('Save card for future use'),
         ];
+
+        $pane_form['payment_details']['cc_save_help_text'] = [
+          '#markup' => '<div class = "cc-save-help-text">' . $this->t('This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info') . '</div>',
+        ] + $states;
       }
 
       $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';

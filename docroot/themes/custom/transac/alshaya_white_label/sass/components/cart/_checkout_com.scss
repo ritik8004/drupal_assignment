@@ -1,0 +1,82 @@
+#payment_details_checkout_com {
+  padding: 1.5rem;
+}
+
+#edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card {
+  padding: 1.5rem 2rem;
+
+  .form-type-radio {
+    width: 100%;
+    margin: 0;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid #e3e3e3;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    label.option {
+      top: 0;
+
+      &::before {
+        position: absolute;
+      }
+
+      .saved-card {
+        padding-#{$left}: 2rem;
+
+        .name-number {
+          width: 85%;
+          float: $left;
+          font-family: $alshaya-thin;
+
+          .card-number {
+            color: #777;
+            font-size: 0.75rem;
+          }
+
+          .card-name {
+            font-size: 0.875rem;
+            color: #333;
+          }
+        }
+
+        .actions {
+          float: $right;
+
+          .label {
+            color: $content_link_color;
+            font-family: $alshaya-thin;
+          }
+
+          .card-expiry-date {
+            color: #333;
+            font-size: 0.875rem;
+            font-family: $alshaya-thin;
+          }
+
+          .card-delete a {
+            color: $content_link_color;
+            font-weight: bold;
+          }
+        }
+
+        .name-number,
+        .actions {
+          > div {
+            margin-bottom: 7px;
+          }
+        }
+      }
+    }
+
+    label[for="edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-new"] {
+      padding-#{$left}: 2rem;
+
+      &::before {
+        #{$left}: 0;
+        top: 0;
+      }
+    }
+  }
+}
