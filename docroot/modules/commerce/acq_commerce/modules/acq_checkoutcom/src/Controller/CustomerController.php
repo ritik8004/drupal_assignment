@@ -123,6 +123,11 @@ class CustomerController extends ControllerBase {
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $options,
+      '#attributes' => [
+        'class' => [
+          'saved-paymentcard-list',
+        ],
+      ],
       '#cache' => [
         'tags' => [
           'user:' . $this->currentUser->id() . ':payment_cards',
