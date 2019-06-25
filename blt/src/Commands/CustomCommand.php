@@ -323,7 +323,7 @@ class CustomCommand extends BltTasks {
     if ($profile_name == 'alshaya_transac') {
       $this->invokeCommand('sync:products', ['uri' => $uri]);
       $this->invokeCommand('sync:promotions', ['uri' => $uri]);
-      $this->invokeCommand('sync-areas', ['uri' => $uri]);
+      $this->invokeCommand('sync:areas', ['uri' => $uri]);
       $this->invokeCommand('sync:stores', ['uri' => $uri]);
     }
   }
