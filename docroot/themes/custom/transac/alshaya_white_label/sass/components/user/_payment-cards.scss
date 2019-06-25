@@ -1,61 +1,104 @@
-.saved-paymentcard-list {
-  list-style: none;
-  padding: 0;
+.payment-cards {
+  .saved-paymentcard-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 19rem 19rem;
+    grid-gap: 1.5rem;
 
-  > li {
-    width: 19rem;
-    margin-#{$right}: 1.5rem;
-    margin-bottom: 1.5rem;
-    float: $left;
+    @include breakpoint($only-tablet) {
+      grid-template-columns: calc(100% / 2 - 0.75rem) calc(100% / 2 - 0.75rem);
+    }
 
     @include breakpoint($only-mobile) {
-      width: 100%;
+      grid-template-columns: 100%;
+    }
+
+    .payment-card--data {
+      border: 1px solid $warm-grey-two;
+      padding: 1rem;
+      display: flex;
+      flex-direction: row;
+
+      .label {
+        font-size: 0.75rem;
+        font-family: $alshaya-bold;
+        color: $payment_card_text;
+      }
+
+      .payment-card--number,
+      .payment-card--name,
+      .payment-card--expiry {
+        font-size: 0.875rem;
+        font-family: $alshaya-thin;
+        margin-bottom: 0.625rem;
+        color: $payment_card_text;
+      }
+
+      .payment-card--type {
+        min-width: 53px;
+        margin-#{$right}: 13px;
+
+        &.visa {
+          background: url(#{$base_theme_img_directory_path}/cards/visa-active.png) no-repeat;
+          background-size: contain;
+        }
+
+        &.mastercard {
+          background: url(#{$base_theme_img_directory_path}/cards/mastercard-active.png) no-repeat;
+          background-size: contain;
+        }
+      }
+    }
+
+    .payment-card--options {
+      .payment-card--delete {
+        a {
+          float: $right;
+          border: 1px solid #dadada;
+          border-top: none;
+          padding: 0.625rem;
+        }
+      }
     }
   }
 
-  .payment-card--data {
-    border: 1px solid #dadada;
-    padding: 1rem;
-    display: flex;
-    flex-direction: row;
+  .block-local-actions-block {
+    position: absolute;
+    #{$right}: 0;
+    top: -0.75rem;
 
-    .label {
-      font-size: 0.75rem;
-      font-family: $alshaya-bold;
+    @include breakpoint($only-tablet) {
+      top: 0.75rem;
     }
 
-    .payment-card--number,
-    .payment-card--name,
-    .payment-card--expiry {
-      font-size: 0.875rem;
-      font-family: $alshaya-thin;
-      margin-bottom: 0.625rem;
+    @include breakpoint($only-mobile) {
+      position: relative;
+      top: 0;
     }
 
-    .payment-card--type {
-      min-width: 53px;
-      margin-#{$right}: 13px;
+    li {
+      list-style: none;
 
-      &.visa {
-        background: url(#{$base_theme_img_directory_path}/cards/visa-active.png) no-repeat;
-        background-size: contain;
-      }
-
-      &.mastercard {
-        background: url(#{$base_theme_img_directory_path}/cards/mastercard-active.png) no-repeat;
-        background-size: contain;
-      }
-    }
-  }
-
-  .payment-card--options {
-    .payment-card--delete {
       a {
-        float: $right;
-        border: 1px solid #dadada;
-        border-top: none;
-        padding: 0.625rem;
+        background: $primary_btn_bg;
+        color: $primary_btn_text;
+        text-transform: lowercase;
+        height: 2.1875rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 12.5rem;
+        font-size: 0.75rem;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
       }
     }
+  }
+
+  .region__content {
+    position: relative;
   }
 }
