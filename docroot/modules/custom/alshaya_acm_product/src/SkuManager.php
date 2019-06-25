@@ -279,7 +279,7 @@ class SkuManager {
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
-   *   Alshaya arraty utility service.
+   *   Alshaya array utility service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -398,8 +398,7 @@ class SkuManager {
 
     $image['#attributes']['class'][] = 'b-lazy';
     $image['#attributes']['data-src'] = ImageStyle::load($image_style)->buildUrl($image['#uri']);
-    $image['#attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
-    $image['#attached']['library'][] = 'alshaya_white_label/alshaya_image_lazy_load';
+    $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
 
     if ($rel_image_style) {
       $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
@@ -1006,8 +1005,7 @@ class SkuManager {
 
         $image['#attributes']['class'][] = 'b-lazy';
         $image['#attributes']['data-src'] = Url::fromUri($image['#uri']);
-        $image['#attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
-        $image['#attached']['library'][] = 'alshaya_white_label/alshaya_image_lazy_load';
+        $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
 
         $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
@@ -1198,8 +1196,6 @@ class SkuManager {
    *   List of skus related with a promotion.
    */
   public function getSkutextsForPromotion(Node $promotion) {
-    $skus = [];
-
     $cid = 'promotions_sku_' . $promotion->id();
     if (!empty($this->cache->get($cid))) {
       $skus_cache = $this->cache->get($cid);
@@ -1492,7 +1488,7 @@ class SkuManager {
    * Helper function to fetch attributes for PDP.
    *
    * Use configurable SKU for configurable attributes & simple SKUs as source
-   * for non-configurable attribtues.
+   * for non-configurable attributes.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity for which the attribute data needs to be pulled.
@@ -2276,6 +2272,7 @@ class SkuManager {
       return $term->get('field_pdp_image_slider_position')
         ->getString();
     }
+    return NULL;
   }
 
   /**
@@ -2762,7 +2759,7 @@ class SkuManager {
         ]);
       }
       catch (\Exception $e) {
-        \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
+        $this->logger->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
           '@nids' => implode(',', $nids),
           '@pid' => $node->id(),
           '@message' => $e->getMessage(),
