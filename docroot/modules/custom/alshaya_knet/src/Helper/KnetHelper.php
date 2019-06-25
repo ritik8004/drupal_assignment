@@ -2,10 +2,12 @@
 
 namespace Drupal\alshaya_knet\Helper;
 
-use Drupal\alshaya_knet\E24PaymentPipe;
+use Drupal\alshaya_knet\Knet\E24PaymentPipe;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
+use Drupal\alshaya_knet\Knet\KnetNewToolKit;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -115,7 +117,24 @@ class KnetHelper {
 
     $knetSettings = $this->configFactory->get('alshaya_knet.settings');
 
-    $pipe = new E24PaymentPipe();
+    // Get K-Net toolkit.
+    $pipe = $this->getKnetToolKit();
+
+    // If using new K-Net toolkit.
+    if ($this->useNewKnetToolKit()) {
+      // Get K-Net creds for new toolkit.
+      $knet_creds = $this->getNewKnetToolkitCreds();
+
+      // If not configured K-Net.
+      if (empty($knet_creds)) {
+        throw new \RuntimeException('K-Net PG is not configured.');
+      }
+
+      $pipe->setTranportalId($knet_creds['tranportal_id']);
+      $pipe->setTranportalPassword($knet_creds['tranportal_password']);
+      $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
+      $pipe->setKnetUrl($knet_creds['knet_url']);
+    }
 
     $pipe->setCurrency($knetSettings->get('knet_currency_code'));
     $pipe->setLanguage($knetSettings->get('knet_language_code'));
@@ -159,11 +178,12 @@ class KnetHelper {
       throw new \RuntimeException($error);
     }
 
-    $this->logger->info('Payment info for quote id @quote_id is @payment_id. Reserved order id is @order_id. State key: @state_key', [
+    $this->logger->info('Payment info for K-Net toolkit version:@version quote id is @quote_id. Reserved order id is @order_id. State key: @state_key', [
       '@order_id' => $order_id,
       '@quote_id' => $cart_id,
       '@payment_id' => $pipe->getPaymentId(),
       '@state_key' => $state_key,
+      '@version' => $this->useNewKnetToolKit() ? 'v2' : 'v1',
     ]);
 
     $state_data['context'] = $context;
@@ -402,6 +422,95 @@ class KnetHelper {
       '@quote_id' => $quote_id,
       '@message' => $message,
     ]);
+  }
+
+  /**
+   * Determines if use of new K-Net toolkit.
+   *
+   * @return bool
+   *   True if using new toolkit.
+   */
+  public function useNewKnetToolKit() {
+    return $this->configFactory->get('alshaya_knet.settings')
+      ->get('use_new_knet_toolkit');
+  }
+
+  /**
+   * Get the K-Net toolkit object.
+   *
+   * @return \Drupal\alshaya_knet\Knet\E24PaymentPipe|\Drupal\alshaya_knet\Knet\KnetNewToolKit
+   *   K-Net toolkit object.
+   */
+  public function getKnetToolKit() {
+    if ($this->useNewKnetToolKit()) {
+      return new KnetNewToolKit();
+    }
+
+    return new E24PaymentPipe();
+  }
+
+  /**
+   * Get tranportal id, password and resource key for new K-Net toolkit.
+   *
+   * @return array
+   *   Array of credentials.
+   */
+  public function getNewKnetToolkitCreds() {
+    // Get the K-Net keys etc from settings. These settings are stored in
+    // secret settings file. See `post-settings/zzz_overrides`.
+    $knet_settings = Settings::get('knet');
+    $knet_url = $this->configFactory->get('alshaya_knet.settings')->get('knet_url');
+
+    if (empty($knet_settings) || empty($knet_url)) {
+      return [];
+    }
+
+    return [
+      'tranportal_id' => $knet_settings['tranportal_id'] ?? '',
+      'tranportal_password' => $knet_settings['tranportal_password'] ?? '',
+      'terminal_resource_key' => $knet_settings['terminal_key'] ?? '',
+      'knet_url' => $knet_url,
+    ];
+  }
+
+  /**
+   * Parse and prepare K-Net response data for new toolkit.
+   *
+   * @param array $input
+   *   Data to parse.
+   *
+   * @return array
+   *   Data to return after parse.
+   *
+   * @throws \Exception
+   */
+  public function parseAndPrepareKnetData(array $input) {
+    // If error is available.
+    if (!empty($input['ErrorText']) || !empty($input['Error'])) {
+      return $input;
+    }
+
+    $en_dec = $this->getKnetToolKit();
+    $knet_creds = $this->getNewKnetToolkitCreds();
+
+    // If K-Net is not configured or key is not available.
+    if (empty($knet_creds) || empty($knet_creds['terminal_resource_key'])) {
+      $message = 'K-Net is not configured or resource key is not available';
+      $this->logger->error($message);
+      throw new \Exception($message);
+    }
+
+    $terminal_resource_key = $knet_creds['terminal_resource_key'];
+    $output = [];
+    // Decrypted data contains a string which seperates values by `&`, so we
+    // need to explode this. Example - 'paymentId=123&amt=4545'.
+    $decrypted_data = array_filter(explode('&', $en_dec->decrypt($input['trandata'], $terminal_resource_key)));
+    array_walk($decrypted_data, function ($val, $key) use (&$output) {
+      list($key, $value) = explode('=', $val);
+      $output[$key] = $value;
+    });
+
+    return $output;
   }
 
 }
