@@ -388,7 +388,6 @@ class CheckoutComAPIWrapper {
       'value' => (float) self::VOID_PAYMENT_AMOUNT * 100,
       'autoCapture' => 'N',
       'description' => 'Saving new card',
-      'customerName' => $request_param['name'],
     ];
 
     // Authorize a card for payment.
