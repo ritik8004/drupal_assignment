@@ -36,6 +36,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
     $config->set('price_display_mode', $form_state->getValue('price_display_mode'));
+    $config->set('show_color_images_on_filter', (int) $form_state->getValue('show_color_images_on_filter'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -53,6 +54,12 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Display image thumb gallery on product node.'),
       '#default_value' => $config->get('image_thumb_gallery'),
+    ];
+
+    $form['show_color_images_on_filter'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show images in gallery on listing pages from filtered color.'),
+      '#default_value' => $config->get('show_color_images_on_filter'),
     ];
 
     $form['color_swatches'] = [
@@ -95,6 +102,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#title' => $this->t('No. of characters that should be displayed as short decription on PDP page.'),
       '#default_value' => $config->get('short_desc_characters'),
     ];
+
     return $form;
   }
 
