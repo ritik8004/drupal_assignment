@@ -24,3 +24,6 @@ alshaya_acm_product.display_settings:
     short_desc_text_summary:
       type: boolean
       label: 'Use text_summary to generate short description.'
+    show_color_images_on_filter:
+      type: integer
+      label: 'Flag to show images from specific color on filter.'
