@@ -9,14 +9,14 @@
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_social_facebook_preprocess_alshaya_social(&$variables) {
-  if (!isset($variables['social_networks']['social_auth_google'])) {
+  if (!isset($variables['social_networks']['social_auth_facebook'])) {
     return;
   }
-
-  if (in_array($variables['form'], ['user_login_form', 'checkout_social_auth'])) {
+  $route = \Drupal::routeMatch();
+  if (in_array($route->getRouteName(), ['user.login', 'acq_checkout.form'])) {
     $variables['social_networks']['social_auth_facebook']['text_link'] = t('sign in with facebook');
   }
-  elseif ($variables['form'] == 'user_register_form') {
+  elseif ($route->getRouteName() == 'user.register') {
     $variables['social_networks']['social_auth_facebook']['text_link'] = t('sign up with facebook');
   }
 }

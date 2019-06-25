@@ -16,7 +16,6 @@ function alshaya_social_theme() {
     'alshaya_social' => [
       'variables' => [
         'social_networks' => NULL,
-        'form' => NULL,
       ],
     ],
   ];
@@ -27,7 +26,7 @@ function alshaya_social_theme() {
  */
 function alshaya_social_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (in_array($form_id, ['user_register_form', 'user_login_form'])) {
-    alshaya_social_display_social_authentication_links($form, $form_id);
+    alshaya_social_display_social_authentication_links($form);
   }
 }
 
@@ -36,17 +35,14 @@ function alshaya_social_form_alter(array &$form, FormStateInterface $form_state,
  *
  * @param array $form
  *   The array of form elements.
- * @param string $form_id
- *   The current form id.
  */
-function alshaya_social_display_social_authentication_links(array &$form, $form_id) {
+function alshaya_social_display_social_authentication_links(array &$form) {
   $social_helper = \Drupal::service('alshaya_social.helper');
   if ($social_helper->getStatus()) {
     $form['#attributes']['class'][] = 'social-signup-form';
     $form['social_media_auth_links'] = [
       '#theme' => 'alshaya_social',
       '#social_networks' => $social_helper->getSocialNetworks(),
-      '#form' => $form_id,
       '#weight' => 1000,
     ];
   }
@@ -125,6 +121,9 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
 function alshaya_social_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $social_helper = \Drupal::service('alshaya_social.helper');
   if ($social_helper->getStatus()) {
-    $reset = array_merge($reset, array_keys($social_helper->getSocialNetworks()));
+    $configs = array_map(function ($key) {
+      return "{$key}.settings";
+    }, array_keys($social_helper->getSocialNetworks()));
+    $reset = array_merge($reset, $configs);
   }
 }
