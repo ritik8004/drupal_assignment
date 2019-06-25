@@ -5,6 +5,9 @@ acq_checkoutcom.settings:
     debug:
       type: boolean
       label: 'Debug mode'
+    mada_enabled:
+      type: boolean
+      label: 'Enable Mada bin verification'
     env:
       type: string
       label: 'Environment to use (sandbox / live)'
