@@ -9,6 +9,29 @@
  * Implements hook_install().
  */
 function alshaya_magazine_install() {
+  $strings = [
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
+    ],
+    'Magazine' => [
+      'ar' => 'المجلة',
+    ],
+    'read the story' => [
+      'ar' => 'اقرأ المقال',
+    ],
+    'Back to feed' => [
+      'ar' => 'الرجوع إلى قائمة المقالات',
+    ],
+    'Shop the story' => [
+      'ar' => 'تسوق منتجات المقال',
+    ],
+    'Load More Content' => [
+      'ar' => 'حمل مزيد من المحتوى',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
   // Get current default theme.
   $current_theme = \Drupal::config('system.theme')->get('default');
 

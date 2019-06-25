@@ -17,6 +17,15 @@ use Drupal\Component\Utility\Unicode;
  */
 function alshaya_hm_update_8036() {
   \Drupal::service('module_installer')->install(['alshaya_magazine']);
+
+  $strings = [
+    'READ MAGAZINE' => [
+      'en' => 'READ H&M MAGAZINE',
+      'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
@@ -665,7 +674,12 @@ function alshaya_hm_install() {
       'en' => 'H&M',
       'ar' => 'اتش اند ام',
     ],
+    'READ MAGAZINE' => [
+      'en' => 'READ H&M MAGAZINE',
+      'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
   ];
+
   alshaya_i18n_save_translations($strings);
 
   // Save overridden configs.
