@@ -21,29 +21,23 @@ class AlshayaSeoPathProcessor implements OutboundPathProcessorInterface {
                                   &$options = [],
                                   Request $request = NULL,
                                   BubbleableMetadata $bubbleable_metadata = NULL) {
-
     $route = $options['route'] ?? NULL;
-    // Avoid urls that have _disable_route_normalizer.
+
     if ($route instanceof Route && $route->getDefault('_disable_route_normalizer')) {
       return $path;
     }
 
-    // Avoid rest urls.
-    if (strpos($path, '/rest/') > -1 || strpos($path, '/oauth/') > -1) {
-      return $path;
+    // Remove trailing slash from all urls.
+    // We want it on category pages so we do not have this forced in htaccess.
+    // We force it from here.
+    $path = rtrim($path, '/');
+
+    // Add trailing slash for term pages.
+    if ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
+      $path = $path . '/';
     }
 
-    // Avoid urls already having trailing slash.
-    if (substr($path, -1) === '/') {
-      return $path;
-    }
-
-    // Avoid urls with dot in alias .html / .txt / etc.
-    if (strpos($path, '.') > -1) {
-      return $path;
-    }
-
-    return $path . '/';
+    return $path;
   }
 
 }
