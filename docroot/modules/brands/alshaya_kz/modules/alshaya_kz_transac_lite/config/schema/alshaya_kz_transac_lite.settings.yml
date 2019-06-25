@@ -3,7 +3,7 @@ alshaya_kz_transac_lite.settings:
   label: 'Kidzania settings'
   mapping:
     service_url:
-      type: label
+      type: string
       label: 'Service url'
     tnc_url:
       type: label

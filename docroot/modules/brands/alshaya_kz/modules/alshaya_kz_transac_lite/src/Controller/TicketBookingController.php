@@ -3,10 +3,12 @@
 namespace Drupal\alshaya_kz_transac_lite\Controller;
 
 use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -61,8 +63,17 @@ class TicketBookingController extends ControllerBase {
   public function getParks() {
     $parks = $this->ticketBooking->getParkData();
 
-    $response = new CacheableJsonResponse();
-    $response->setData($parks->getParksResult->Park->Name);
+    $response = new CacheableJsonResponse($parks, 200);
+    $response->addCacheableDependency($parks);
+    $response->addcacheabledependency(['url.path']);
+
+    // Adding cacheability metadata, so whenever, cache invalidates, this
+    // url's cached response also gets invalidate.
+    $cacheMeta = new CacheableMetadata();
+
+    // Adding cache tags.
+    $cacheMeta->addCacheTags(['booking_steps:getParks']);
+    $response->addCacheableDependency($cacheMeta);
 
     return $response;
   }
@@ -80,7 +91,7 @@ class TicketBookingController extends ControllerBase {
     $visit_date = $request->request->get('visit_date');
     $shifts = $this->ticketBooking->getShiftsData($visit_date);
 
-    $response = new CacheableJsonResponse();
+    $response = new JsonResponse();
     $response->setData($shifts);
 
     return $response;
@@ -100,8 +111,17 @@ class TicketBookingController extends ControllerBase {
     $shifts = $request->request->get('shifts');
     $visitor_types = $this->ticketBooking->getVisitorTypesData($shifts, $visit_date);
 
-    $response = new CacheableJsonResponse();
-    $response->setData($visitor_types);
+    $response = new CacheableJsonResponse($visitor_types, 200);
+    $response->addCacheableDependency($visitor_types);
+    $response->addcacheabledependency(['url.path']);
+
+    // Adding cacheability metadata, so whenever, cache invalidates, this
+    // url's cached response also gets invalidate.
+    $cacheMeta = new CacheableMetadata();
+
+    // Adding cache tags.
+    $cacheMeta->addCacheTags(['booking_steps:getVisitorTypes']);
+    $response->addCacheableDependency($cacheMeta);
 
     return $response;
   }
@@ -115,8 +135,17 @@ class TicketBookingController extends ControllerBase {
   public function getSexes() {
     $sexes = $this->ticketBooking->getSexesData();
 
-    $response = new CacheableJsonResponse();
-    $response->setData($sexes);
+    $response = new CacheableJsonResponse($sexes, 200);
+    $response->addCacheableDependency($sexes);
+    $response->addcacheabledependency(['url.path']);
+
+    // Adding cacheability metadata, so whenever, cache invalidates, this
+    // url's cached response also gets invalidate.
+    $cacheMeta = new CacheableMetadata();
+
+    // Adding cache tags.
+    $cacheMeta->addCacheTags(['booking_steps:getSexes']);
+    $response->addCacheableDependency($cacheMeta);
 
     return $response;
   }
@@ -133,7 +162,7 @@ class TicketBookingController extends ControllerBase {
   public function validateVisitorDetails(Request $request) {
     $responseData = new \stdClass();
     $responseData->err = FALSE;
-    $response = new CacheableJsonResponse();
+    $response = new JsonResponse();
     $shifts = $request->request->get('shifts');
     $final_visitor_list = $request->request->get('final_visitor_list');
 

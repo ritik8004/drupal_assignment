@@ -59,7 +59,7 @@
               Drupal.url('get-parks'),
               function (data) {
                 if (data) {
-                  $('.countryBtn .value, .countryDisplay').html(data);
+                  $('.countryBtn .value, .countryDisplay').html(data.getParksResult.Park.Name);
                   this.getGender();
                 }
               }.bind(this)
