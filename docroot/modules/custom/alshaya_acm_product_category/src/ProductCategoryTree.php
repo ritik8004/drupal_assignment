@@ -258,12 +258,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $data[$term->tid]['class'][] = 'overridden-link';
       }
 
-      if ($icon = $this->getIcon($term->tid, $langcode)) {
-        $data[$term->tid]['icon'] = $icon;
-        $data[$term->tid]['class'][] = 'with-icon';
-      }
-
-      if (is_object($file = $this->getIcon($term->tid, $langcode))
+      if (is_object($file = $this->getIcon($term->tid))
           && !empty($file->field_icon_target_id)
       ) {
         $image = $this->fileStorage->load($file->field_icon_target_id);
@@ -272,6 +267,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           'width' => (int) $file->field_icon_width,
           'height' => (int) $file->field_icon_height,
         ];
+        $data[$term->tid]['class'][] = 'with-icon';
       }
 
       if ($highlight_paragraph) {
@@ -585,14 +581,12 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *
    * @param int $tid
    *   Taxonomy term id.
-   * @param string $langcode
-   *   Language code.
    *
    * @return object
    *   Object containing fields data.
    */
-  public function getIcon($tid, $langcode) {
-    return $this->getImageField($tid, 'field_icon', $langcode);
+  public function getIcon($tid) {
+    return $this->getImageField($tid, 'field_icon');
   }
 
   /**
@@ -617,13 +611,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   The term id.
    * @param string $field
    *   The field name.
-   * @param string $langcode
-   *   Language code.
+   * @param string|null $langcode
+   *   (optional) Language code.
    *
    * @return object|null
    *   Object containing fields data.
    */
-  protected function getImageField($tid, $field, $langcode) {
+  protected function getImageField($tid, $field, $langcode = NULL) {
     $query = $this->connection->select("taxonomy_term__{$field}", 'term_image_field');
     $query->fields('term_image_field', [
       'entity_id',
@@ -632,8 +626,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       "{$field}_height",
     ]);
     $query->condition('term_image_field.entity_id', $tid);
-    $query->condition('term_image_field.langcode', $langcode);
     $query->condition('term_image_field.bundle', ProductCategoryTree::VOCABULARY_ID);
+    if (!empty($langcode)) {
+      $query->condition('term_image_field.langcode', $langcode);
+    }
     return $query->execute()->fetchObject();
   }
 
