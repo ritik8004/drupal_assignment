@@ -104,10 +104,7 @@
       font-family: $hnm-demibold;
       font-weight: normal;
       color: $primary_dark_color;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      text-decoration: underline;
     }
 
     .fieldset-wrapper {
