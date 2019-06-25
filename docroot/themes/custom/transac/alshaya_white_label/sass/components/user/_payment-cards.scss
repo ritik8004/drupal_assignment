@@ -100,42 +100,6 @@
     }
   }
 
-  .block-local-actions-block {
-    position: absolute;
-    #{$right}: 0;
-    top: -0.75rem;
-
-    @include breakpoint($only-tablet) {
-      top: 0.75rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      position: relative;
-      top: 0;
-      margin-top: 0.875rem;
-    }
-
-    li {
-      list-style: none;
-
-      a {
-        background: $primary_btn_bg;
-        color: $primary_btn_text;
-        text-transform: lowercase;
-        height: 2.1875rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 12.5rem;
-        font-size: 0.75rem;
-
-        @include breakpoint($only-mobile) {
-          width: 100%;
-        }
-      }
-    }
-  }
-
   .region__content {
     position: relative;
   }
