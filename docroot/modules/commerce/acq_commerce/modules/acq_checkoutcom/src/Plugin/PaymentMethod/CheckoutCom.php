@@ -175,6 +175,16 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         ],
       ];
 
+      $pane_form['payment_details']['cc_name'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Name on card'),
+        '#attributes' => [
+          'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
+          'data-checkout' => 'card-name',
+          'id' => 'cardName',
+        ],
+      ] + $states;
+
       $pane_form['payment_details']['cc_number'] = [
         '#type' => 'tel',
         '#title' => $this->t('Credit Card Number'),
@@ -253,6 +263,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         },
         cardTokenised: function(event) {
           cardToken.value = event.data.cardToken
+          cardName.value = ''
           cardNumber.value = ''
           cardCvv.value = ''
           expMonth.value = ''

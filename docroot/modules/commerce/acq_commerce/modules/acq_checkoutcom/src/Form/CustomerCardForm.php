@@ -150,7 +150,7 @@ class CustomerCardForm extends FormBase {
       '#title' => $this->t('Name on card'),
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
-        'data-customer-name' => 'card-sname',
+        'data-checkout' => 'card-name',
         'id' => 'cardName',
       ],
     ] + $states;
@@ -291,7 +291,6 @@ class CustomerCardForm extends FormBase {
       [
         'cardToken' => $inputs['cko-card-token'],
         'email' => $this->currentRequest->get('user')->getEmail(),
-        'name' => $form_state->getValue('cc_name'),
       ]
     );
 
