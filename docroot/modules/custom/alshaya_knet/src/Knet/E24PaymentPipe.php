@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_knet;
+namespace Drupal\alshaya_knet\Knet;
 
 define('KNET_LANGUAGE_EN', 'ENG');
 define('KNET_LANGUAGE_AR', 'ARA');
