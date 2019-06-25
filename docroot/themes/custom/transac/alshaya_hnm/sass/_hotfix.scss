@@ -35,6 +35,14 @@ body.chrome {
     .price--discount {
       display: inline-table;
     }
+
+    .price--discount {
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          display: inline;
+        }
+      }
+    }
   }
 }
 
