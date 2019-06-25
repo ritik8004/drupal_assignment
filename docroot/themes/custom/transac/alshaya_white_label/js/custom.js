@@ -144,8 +144,8 @@
           if (settings.url.indexOf(ajaxString) !== -1) {
             $('body').addClass(className);
           }
-          modalCloseBtnEvent(className);
         });
+        modalCloseBtnEvent(className);
       }
 
       $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').on('click', function () {
