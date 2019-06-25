@@ -156,10 +156,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 
-  if ($routematch->getRouteName() === 'acq_checkoutcom.payment_cards') {
-    $variables['attributes']['class'][] = 'payment-cards';
-  }
-
   $node_bundle = '';
   if (isset($variables['node'])) {
     if (is_object($variables['node'])) {
