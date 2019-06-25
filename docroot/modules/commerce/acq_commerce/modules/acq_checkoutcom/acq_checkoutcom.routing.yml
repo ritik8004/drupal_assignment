@@ -19,19 +19,6 @@ acq_checkoutcom.payment_cards:
       user:
         type: entity:user
 
-acq_checkoutcom.payment_card.add_card:
-  path: '/user/{user}/payment-card/add'
-  defaults:
-    _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::addCard'
-    _title: 'Add new card'
-  requirements:
-    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
-    user: \d+
-  options:
-    parameters:
-      user:
-        type: entity:user
-
 acq_checkoutcom.payment_card.remove_card:
   path: '/user/{user}/payment-card/{card_id}/remove'
   defaults:

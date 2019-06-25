@@ -132,19 +132,6 @@ class CustomerController extends ControllerBase {
   }
 
   /**
-   * Returns the list of saved cards.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   User object for which the orders list page is being viewed.
-   *
-   * @return array
-   *   Build array.
-   */
-  public function addCard(UserInterface $user) {
-    return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardForm', $user);
-  }
-
-  /**
    * Remove card for given user.
    *
    * @param \Drupal\user\UserInterface $user
