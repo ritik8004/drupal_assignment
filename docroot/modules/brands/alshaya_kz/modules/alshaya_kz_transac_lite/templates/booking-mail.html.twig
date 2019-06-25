@@ -1,0 +1,122 @@
+<style type="text/css">
+  .user-info {
+    width: 50%;
+    display: inline-block;
+  }
+  .qr-code {
+    max-width: 50%;
+    margin: 25px 0;
+    display: inline-block;
+  }
+  .qr-code img {
+    max-width: 100%;
+  }
+  .reference-number {
+    font-size: 1.625rem;
+    width: 100%;
+  }
+  .reference-number strong {
+    font-size: 1.625rem;
+    padding: 10px;
+  }
+</style>
+<h2>{{ 'Online Booking Confirmation'|t }}</h2>
+<table>
+  <tr>
+    <td colspan="2">
+      <strong>
+        {{ 'Kai! Please print and present your email at KidZania ticketing counters on the day of your visit. Z-U Soon!'|t }}
+      </strong>
+    </td>
+  </tr>
+  <tr>
+    <td style="width:60%;">
+      <ul>
+        <li>
+          <span>{{ 'Customer Name'|t }}
+            :</span>
+          <span>{{booking_info.name}}</span>
+        </li>
+        <li>
+          <span>{{ 'Order Date'|t }}
+            :</span>
+          <span>{{booking_info.booking_date}}</span>
+        </li>
+        <li>
+          <span>{{ 'Visit Date'|t }}
+            :</span>
+          <span>{{booking_info.visit_date}}</span>
+        </li>
+        <li>
+          <span>{{ 'Facility'|t }}
+            :</span>
+          <span>KidZania Kuwait, Grand Avenues, Kuwait</span>
+        </li>
+        <li>
+          <span>{{ 'Payment'|t }}:</span>
+          <span>{{booking_info.payment_type}}</span>
+        </li>
+      </ul>
+    </td>
+    <td style="width:40%;">
+      <div class="qr-code">
+        {{qr_code}}
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div class="reference-number">
+        <p>
+          {{ 'Reference Number'|t }}:
+          <strong>{{booking_info.sales_number}}</strong>
+        </p>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table border='1' cellspacing='0' cellpadding='0'>
+  <thead>
+    <tr>
+      <th>{{ 'Visitor Types'|t }}</th>
+      <th>{{ 'Price'|t }}</th>
+      <th>{{ 'Ticket Number'|t }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, types in visitor_list %}
+      {% for val in types.Book %}
+        <tr>
+          <td>
+            <span>{{types.Description}}</span>
+            <span>({{types.MinAge}}-{{types.MaxAge}}Years)</span>
+          </td>
+          <td>
+            <span>KWD</span>
+            <span>{{types.Price}}</span>
+          </td>
+          <td>{{val.ticket_id}}</td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+    <tr>
+      <td>
+        <span>
+          <strong>{{ 'Total'|t }}</strong>
+        </span>
+      </td>
+      <td colspan="2">
+        <strong>
+          <span>KWD</span>
+          <span>
+            {{booking_info.order_total}}
+          </span>
+        </strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  {{ 'For safety and liability purposes, all children up to the age of 14 years need to be registered by and adult (18+ Years) at the front desk before they can enter the park.'|t }}
+</p>
