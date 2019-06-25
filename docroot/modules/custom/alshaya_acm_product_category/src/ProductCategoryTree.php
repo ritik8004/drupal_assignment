@@ -611,7 +611,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   The term id.
    * @param string $field
    *   The field name.
-   * @param string $langcode
+   * @param string|null $langcode
    *   (optional) Language code.
    *
    * @return object|null
