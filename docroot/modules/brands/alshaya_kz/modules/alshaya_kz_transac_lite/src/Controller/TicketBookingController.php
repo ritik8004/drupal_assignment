@@ -64,8 +64,6 @@ class TicketBookingController extends ControllerBase {
     $parks = $this->ticketBooking->getParkData();
 
     $response = new CacheableJsonResponse($parks, 200);
-    $response->addCacheableDependency($parks);
-    $response->addcacheabledependency(['url.path']);
 
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.
@@ -112,8 +110,6 @@ class TicketBookingController extends ControllerBase {
     $visitor_types = $this->ticketBooking->getVisitorTypesData($shifts, $visit_date);
 
     $response = new CacheableJsonResponse($visitor_types, 200);
-    $response->addCacheableDependency($visitor_types);
-    $response->addcacheabledependency(['url.path']);
 
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.
@@ -136,8 +132,6 @@ class TicketBookingController extends ControllerBase {
     $sexes = $this->ticketBooking->getSexesData();
 
     $response = new CacheableJsonResponse($sexes, 200);
-    $response->addCacheableDependency($sexes);
-    $response->addcacheabledependency(['url.path']);
 
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.
