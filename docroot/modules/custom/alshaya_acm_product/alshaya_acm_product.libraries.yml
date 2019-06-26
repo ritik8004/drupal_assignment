@@ -33,3 +33,12 @@ sku_gallery_format:
     - core/drupal
     - core/jquery
     - core/jquery.once
+
+show_color_images_on_filter:
+  version: 1.x
+  js:
+    js/show_color_images_on_filter.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

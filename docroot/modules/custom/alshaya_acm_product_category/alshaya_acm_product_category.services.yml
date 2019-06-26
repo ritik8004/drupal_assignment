@@ -12,7 +12,7 @@ services:
 
   alshaya_acm_product_category.event_subscriber:
     class: Drupal\alshaya_acm_product_category\EventSubscriber\ProductCategoryRequestSubscriber
-    arguments: ['@current_route_match']
+    arguments: ['@current_route_match', '@language_manager']
     tags:
       - { name: event_subscriber }
 

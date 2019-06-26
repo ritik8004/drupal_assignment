@@ -1,0 +1,58 @@
+alshaya_kz_transac_lite.parks:
+  path: '/get-parks'
+  defaults:
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::getParks'
+  requirements:
+    _permission: 'access content'
+
+alshaya_kz_transac_lite.shifts:
+  path: '/get-shifts'
+  defaults:
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::getShifts'
+  requirements:
+    _permission: 'access content'
+
+alshaya_kz_transac_lite.visitor_types:
+  path: '/get-visitor-types'
+  defaults:
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::getVisitorTypes'
+  requirements:
+    _permission: 'access content'
+
+alshaya_kz_transac_lite.sexes:
+  path: '/get-sexes'
+  defaults:
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::getSexes'
+  requirements:
+    _permission: 'access content'
+
+alshaya_kz_transac_lite.validate_visitor_details:
+  path: '/validate-visitor-details'
+  defaults:
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::validateVisitorDetails'
+  requirements:
+    _permission: 'access content'
+
+alshaya_kz_transac_lite.kidzania_settings_form:
+  path: '/admin/config/kidzania-settings'
+  defaults:
+    _form: '\Drupal\alshaya_kz_transac_lite\Form\KidzaniaSettingsForm'
+    _title: 'Kidzania settings'
+  requirements:
+    _permission: 'administer kidzania settings'
+
+alshaya_kz_transac_lite.payemnt_form:
+  path: '/payment'
+  defaults:
+    _form: '\Drupal\alshaya_kz_transac_lite\Form\BookingPaymentForm'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+alshaya_kz_transac_lite.payemnt_option:
+  path: '/payment/{option}'
+  defaults:
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::paymentOption'
+    _title: ''
+  requirements:
+    _permission: 'access content'

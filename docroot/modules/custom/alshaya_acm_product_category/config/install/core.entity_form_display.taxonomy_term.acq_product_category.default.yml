@@ -9,26 +9,32 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_commerce_status
     - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.acq_product_category.field_icon
     - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
     - field.field.taxonomy_term.acq_product_category.field_image_text_font_color
+    - field.field.taxonomy_term.acq_product_category.field_include_in_desktop
+    - field.field.taxonomy_term.acq_product_category.field_include_in_mobile_tablet
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
     - field.field.taxonomy_term.acq_product_category.field_meta_tags
     - field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
-    - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
-    - field.field.taxonomy_term.acq_product_category.field_plp_menu
+    - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
+    - field.field.taxonomy_term.acq_product_category.field_override_target_link
+    - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
+    - field.field.taxonomy_term.acq_product_category.field_pdp_layout
     - field.field.taxonomy_term.acq_product_category.field_plp_layout
+    - field.field.taxonomy_term.acq_product_category.field_plp_menu
+    - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
     - field.field.taxonomy_term.acq_product_category.field_plp_upload_video
     - field.field.taxonomy_term.acq_product_category.field_plp_video_links
     - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
     - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
+    - field.field.taxonomy_term.acq_product_category.field_target_link
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
-    - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
-    - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
     - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
     - field.field.taxonomy_term.acq_product_category.field_plp_group_category_img
@@ -37,22 +43,43 @@ dependencies:
     - entity_browser
     - field_group
     - file
-    - image
     - jquery_minicolors
     - link
     - metatag
     - paragraphs
     - path
+    - redirect
+    - svg_image
     - text
 third_party_settings:
   field_group:
+    group_plp_content:
+      children:
+        - field_plp_layout
+        - group_plp_sorting_options
+        - group_promotion_
+        - group_right_side_menu
+        - group_videos
+        - group_group_by_sub_category
+      parent_name: group_taxonomy_fields
+      weight: 4
+      format_type: tab
+      format_settings:
+        id: ''
+        classes: ''
+        direction: horizontal
+        formatter: closed
+        description: ''
+        required_fields: true
+      label: 'PLP content'
+      region: content
     group_category_image:
       children:
         - field_category_image
         - field_image_text_bg_color
         - field_image_text_font_color
       parent_name: group_mega_menu_content
-      weight: 13
+      weight: 28
       format_type: details
       format_settings:
         id: ''
@@ -85,13 +112,13 @@ third_party_settings:
         - langcode
         - field_commerce_status
         - field_pdp_layout
-        - field_group_by_sub_category
-        - field_select_subcategories_plp
         - description
-        - field_pdp_image_slider_position
         - path
         - translation
         - field_meta_tags
+        - field_pdp_image_slider_position
+        - field_group_by_sub_category
+        - field_select_subcategories_plp
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -106,9 +133,8 @@ third_party_settings:
       region: content
     group_mega_menu_content:
       children:
-        - field_display_as_clickable_link
-        - field_category_include_menu
-        - field_show_in_lhn
+        - group_link_url
+        - group_link_visibility
         - group_promo_block
         - group_menu_item_colors
         - group_category_image
@@ -141,25 +167,6 @@ third_party_settings:
         required_fields: true
       label: 'Link configuration on internal pages'
       region: content
-    group_plp_content:
-      children:
-        - field_plp_layout
-        - group_group_by_sub_category
-        - group_promotion_
-        - group_right_side_menu
-        - group_videos
-      parent_name: group_taxonomy_fields
-      weight: 4
-      format_type: tab
-      format_settings:
-        id: ''
-        classes: ''
-        direction: horizontal
-        formatter: closed
-        description: ''
-        required_fields: true
-      label: 'PLP content'
-      region: content
     group_taxonomy_fields:
       children:
         - group_configuration
@@ -181,7 +188,7 @@ third_party_settings:
         - field_term_font_color
         - field_term_background_color
       parent_name: group_mega_menu_content
-      weight: 12
+      weight: 27
       format_type: details
       format_settings:
         id: ''
@@ -195,7 +202,7 @@ third_party_settings:
       children:
         - field_main_menu_highlight
       parent_name: group_mega_menu_content
-      weight: 11
+      weight: 26
       format_type: details
       format_settings:
         id: ''
@@ -262,6 +269,38 @@ third_party_settings:
         required_fields: true
       label: 'Group by sub-category'
       region: hidden
+    group_link_url:
+      children:
+        - field_display_as_clickable_link
+        - field_override_target_link
+        - field_target_link
+      parent_name: group_mega_menu_content
+      weight: 20
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: true
+        required_fields: true
+      label: 'Link URL'
+      region: content
+    group_link_visibility:
+      children:
+        - field_icon
+        - field_category_include_menu
+        - field_include_in_desktop
+        - field_include_in_mobile_tablet
+        - field_show_in_lhn
+      parent_name: group_mega_menu_content
+      weight: 21
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: true
+        required_fields: true
+      label: 'Link visibility'
+      region: content
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
 bundle: acq_product_category
@@ -287,7 +326,7 @@ content:
         file_links: true
         remove_button: true
   field_category_include_menu:
-    weight: 10
+    weight: 27
     settings:
       display_label: true
     third_party_settings: {  }
@@ -307,7 +346,7 @@ content:
     type: options_select
     region: content
   field_display_as_clickable_link:
-    weight: 9
+    weight: 21
     settings:
       display_label: true
     third_party_settings: {  }
@@ -320,6 +359,14 @@ content:
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
+  field_icon:
+    type: image_image
+    weight: 26
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
   field_image_text_bg_color:
     weight: 16
     settings:
@@ -364,6 +411,20 @@ content:
     third_party_settings: {  }
     type: jquery_minicolors_widget
     region: content
+  field_include_in_desktop:
+    type: boolean_checkbox
+    weight: 28
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_include_in_mobile_tablet:
+    type: boolean_checkbox
+    weight: 29
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_main_menu_highlight:
     type: entity_reference_paragraphs
     weight: 8
@@ -397,6 +458,13 @@ content:
     third_party_settings: {  }
     type: link_default
     region: content
+  field_override_target_link:
+    type: boolean_checkbox
+    weight: 22
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_pdp_image_slider_position:
     weight: 21
     settings:
@@ -405,19 +473,18 @@ content:
     type: string_textfield
     region: content
     third_party_settings: {  }
-  field_plp_menu_icon:
-    type: entity_browser_file
-    weight: 30
-    settings:
-      entity_browser: image_browser
-      field_widget_edit: true
-      field_widget_remove: true
-      view_mode: default
-      preview_image_style: thumbnail
-      open: true
-      selection_mode: selection_append
-    region: content
+  field_pdp_layout:
+    weight: 4
+    settings: {  }
     third_party_settings: {  }
+    type: options_select
+    region: content
+  field_plp_layout:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_plp_menu:
     type: entity_reference_paragraphs
     weight: 29
@@ -430,6 +497,20 @@ content:
       default_paragraph_type: ''
     third_party_settings: {  }
     region: content
+  field_plp_menu_icon:
+    type: entity_browser_file
+    weight: 30
+    settings:
+      entity_browser: image_browser
+      field_widget_edit: true
+      field_widget_remove: true
+      view_mode: default
+      preview_image_style: thumbnail
+      open: true
+      selection_mode: selection_append
+      field_widget_replace: false
+    region: content
+    third_party_settings: {  }
   field_plp_paragraph:
     type: entity_reference_paragraphs
     weight: 28
@@ -442,12 +523,6 @@ content:
       default_paragraph_type: ''
     third_party_settings: {  }
     region: content
-  field_plp_layout:
-    weight: 4
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
-    region: content
   field_plp_upload_video:
     weight: 26
     settings:
@@ -457,17 +532,9 @@ content:
     region: content
   field_plp_video_links:
     weight: 25
-    settings:
-      placeholder_url: ''
-      placeholder_title: 'Please enter provider - youtube, vimeo or custom'
-    third_party_settings: {  }
-    type: string_textfield
-    region: content
-  field_pdp_layout:
-    weight: 4
     settings: {  }
     third_party_settings: {  }
-    type: options_select
+    type: redirect_source
     region: content
   field_promo_banner_for_mobile:
     weight: 22
@@ -494,18 +561,16 @@ content:
     third_party_settings: {  }
   field_show_in_lhn:
     type: boolean_checkbox
-    weight: 11
+    weight: 30
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
   field_select_subcategories_plp:
     weight: 3
     settings: {  }
     third_party_settings: {  }
     type: options_select
-    region: content
   field_size_guide_anchor:
     type: string_textfield
     weight: 0
@@ -536,6 +601,14 @@ content:
     third_party_settings: {  }
     type: text_textfield
     region: content
+  field_target_link:
+    type: link_default
+    weight: 23
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   field_term_background_color:
     weight: 9
     settings:

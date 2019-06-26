@@ -104,16 +104,7 @@
       font-family: $hnm-demibold;
       font-weight: normal;
       color: $primary_dark_color;
-
-      &:hover {
-        text-decoration: underline;
-      }
-
-      @include breakpoint($tablet) {
-        html[lang=ar] & {
-          right: 12.5rem;
-        }
-      }
+      text-decoration: underline;
     }
 
     .fieldset-wrapper {
@@ -155,5 +146,15 @@
 
   .checkout-guest-summary {
     color: $checkout_guest_summary;
+  }
+}
+
+.alshaya-social {
+  .social-network-text {
+    text-transform: lowercase;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
 }

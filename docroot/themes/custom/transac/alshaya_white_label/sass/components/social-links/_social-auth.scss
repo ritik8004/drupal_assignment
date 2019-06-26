@@ -12,6 +12,13 @@
     border: 1px solid $social_auth_login_button_border;
     transition: background-color 0.2s ease-in-out;
 
+    @include breakpoint($tablet) {
+      html[lang=ar] & {
+        width: auto;
+        max-width: fit-content;
+      }
+    }
+
     @include breakpoint($only-mobile) {
       max-width: none;
       width: 100%;
@@ -134,7 +141,7 @@
 
       > span {
         font-family: $alshaya-thin;
-        font-size: 1.125rem;
+        font-size: 1rem;
         display: inline-block;
         padding: 0.375rem 0.625rem;
         background: $checkout_login_separtor_txt_bg;
@@ -197,6 +204,13 @@
       width: 12.5625rem;
       height: 2.875rem;
       font-family: $alshaya-bold;
+
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          width: auto;
+          padding: 0 0.5rem;
+        }
+      }
 
       @include breakpoint($only-mobile) {
         width: 100%;
