@@ -1,4 +1,8 @@
 .alshaya-social {
+  @include breakpoint($only-mobile) {
+    margin-top: 5rem;
+  }
+
   .auth-link {
     display: flex;
     align-items: center;
@@ -75,11 +79,7 @@
   .social-signup-form {
     &.user-login-form {
       > a {
-        bottom: 7rem;
-
-        @include breakpoint($only-mobile) {
-          bottom: 6.25rem;
-        }
+        bottom: 5rem;
       }
     }
   }
