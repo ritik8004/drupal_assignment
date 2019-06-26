@@ -80,10 +80,6 @@
     &.user-login-form {
       > a {
         bottom: 5rem;
-
-        @include breakpoint($only-mobile) {
-          bottom: 5rem;
-        }
       }
     }
   }
