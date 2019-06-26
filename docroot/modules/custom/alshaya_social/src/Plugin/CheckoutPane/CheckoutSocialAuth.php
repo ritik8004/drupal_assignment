@@ -38,6 +38,7 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
       \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
       && !empty($social_networks = \Drupal::configFactory()->get('social_auth.settings')->get('auth'))
     ) {
+      $complete_form['#attributes']['class'][] = 'social-signin-enabled';
       $pane_form['#attributes']['class'][] = 'social-signup-form';
       $pane_form['social_media_auth_links'] = [
         '#theme' => 'alshaya_social',
