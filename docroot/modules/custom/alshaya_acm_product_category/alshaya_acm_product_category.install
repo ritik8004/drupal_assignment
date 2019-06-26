@@ -48,6 +48,8 @@ function alshaya_acm_product_category_update_8032() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Add fields to create term items that can be displayed as a main menu, and
  * which are not commerce category items.
  */
