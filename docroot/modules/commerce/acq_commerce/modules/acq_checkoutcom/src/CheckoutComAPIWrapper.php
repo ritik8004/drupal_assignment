@@ -195,7 +195,7 @@ class CheckoutComAPIWrapper {
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
-        'Authorization' => $this->apiHelper->getSubscriptionKeys('secret_key'),
+        'Authorization' => $this->apiHelper->getSubscriptionInfo('secret_key'),
       ],
     ];
 
