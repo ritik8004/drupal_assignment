@@ -2262,10 +2262,10 @@ class SkuManager {
    * @param \Drupal\taxonomy\TermInterface $term
    *   Taxonomy term for which image slider position needs to be fetched.
    *
-   * @return string
+   * @return string|null
    *   Image slider position type for the term.
    *
-   * @throws \InvalidArgumentException
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   protected function getImagePositionFromTerm(TermInterface $term) {
     if ($term->get('field_pdp_image_slider_position')->first()) {
