@@ -153,6 +153,16 @@
       }
     }
   }
+
+  .multistep-checkout {
+    #edit-checkout-login {
+      .form-actions {
+        @include breakpoint($only-tablet) {
+          margin-#{$right}: 1rem;
+        }
+      }
+    }
+  }
 }
 
 .multistep-checkout {
@@ -161,10 +171,6 @@
       @include breakpoint($only-mobile) {
         display: flex;
         flex-direction: column;
-
-        .checkout-login-separator:first-child {
-          display: none;
-        }
 
         #edit-checkout-login {
           order: 4;
@@ -265,7 +271,11 @@
       top: 0;
       float: $left;
       margin-top: 3.0625rem;
-      #{$left}: 2.4rem;
+      font-size: 0.875rem;
+
+      @include breakpoint($desktop) {
+        #{$left}: 2.4rem;
+      }
 
       @include breakpoint($only-mobile) {
         margin-top: 0.625rem;

@@ -471,12 +471,13 @@
     .alshaya_search_slider {
       opacity: 0;
       z-index: -1;
+      visibility: hidden;
       display: none;
 
       @include breakpoint($desktop) {
         display: block;
         transform: translateY(-110%);
-        transition: all 0.3s ease-in-out;
+        transition: opacity 0.3s, visibility 0s;
       }
     }
 
@@ -535,6 +536,7 @@
           opacity: 1;
           z-index: 2;
           transform: translateY(0);
+          visibility: visible;
         }
 
         &::after {

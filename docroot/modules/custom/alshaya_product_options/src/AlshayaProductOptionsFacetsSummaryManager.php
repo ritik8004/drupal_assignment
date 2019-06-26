@@ -143,6 +143,8 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
           '#is_active' => TRUE,
         ];
         $item = (new Link($item, $result->getUrl()))->toRenderable();
+        $item['#attributes']['data-drupal-facet-id'] = $facet->id();
+        $item['#attributes']['data-drupal-facet-item-value'] = $result->getRawValue();
         $items[] = $item;
       }
       if ($children = $result->getChildren()) {

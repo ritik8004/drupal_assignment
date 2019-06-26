@@ -1,0 +1,13 @@
+alshaya_kz_transac_lite.settings:
+  type: config_object
+  label: 'Kidzania settings'
+  mapping:
+    service_url:
+      type: string
+      label: 'Service url'
+    tnc_url:
+      type: label
+      label: 'Terms and condition url'
+    langcode:
+      type: string
+      label: 'Language code'

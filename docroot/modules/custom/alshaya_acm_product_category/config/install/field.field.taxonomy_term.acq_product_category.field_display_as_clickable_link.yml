@@ -9,7 +9,7 @@ field_name: field_display_as_clickable_link
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Display as a clickable link'
-description: ''
+description: 'Check to make the corresponding link for this term clickable in all places where it appears.'
 required: false
 translatable: false
 default_value:
