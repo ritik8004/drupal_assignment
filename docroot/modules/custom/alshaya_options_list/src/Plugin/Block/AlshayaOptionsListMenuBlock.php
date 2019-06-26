@@ -106,6 +106,11 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
       '#theme' => 'alshaya_options_menu_link',
       '#menu_title' => $menu_title,
       '#links' => $links,
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/optionlist_menu',
+        ],
+      ],
     ];
   }
 

@@ -1,0 +1,20 @@
+.block-alshaya-options-list-menu {
+  float: right;
+
+  .options-page-menu-title {
+    display: none;
+  }
+
+  .options-page-menu-list {
+    a {
+      color: #ed088c;
+      font-size: 13px;
+      font-style: italic;
+      text-transform: capitalize;
+
+      &:hover {
+        color: #ed088c;
+      }
+    }
+  }
+}

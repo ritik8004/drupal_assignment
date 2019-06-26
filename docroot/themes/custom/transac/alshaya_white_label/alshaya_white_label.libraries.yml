@@ -185,3 +185,8 @@ optionlist_filter:
   css:
     theme:
       css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: {}
+
+optionlist_menu:
+  css:
+    theme:
+      css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
