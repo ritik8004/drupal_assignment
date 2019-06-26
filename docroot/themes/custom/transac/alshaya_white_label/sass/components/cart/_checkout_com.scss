@@ -1,5 +1,74 @@
 #payment_details_checkout_com {
-  padding: 1.5rem;
+  float: $left;
+  padding: 1.5rem 4rem;
+  margin-top: -2rem;
+  padding-top: 0;
+  width: 100%;
+  border-bottom: 1px solid #e3e3e3;
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-name,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-number {
+    width: 26.0625rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-year,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv {
+    width: 12.3125rem;
+    margin-#{$right}: 1.5rem;
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-year {
+    float: $left;
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-number,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv {
+    label:not(.error) {
+      @include placeholder-label;
+    }
+
+    input:focus ~ label:not(.error),
+    input:active ~ label:not(.error),
+    input:not(:focus):valid ~ label:not(.error),
+    input:not(:active):valid ~ label:not(.error) {
+      @include placeholder-active;
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv {
+    margin-top: 2.6em;
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-save-card,
+  .cc-save-help-text {
+    clear: both;
+    float: $left;
+  }
+
+  .cc-save-help-text {
+    position: relative;
+    padding-#{$left}: 2rem;
+    max-width: 25.3125rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
+    @include icon('login', 'before') {
+      font-size: 1.75rem;
+      position: absolute;
+      #{$left}: -0.3125rem;
+      top: -0.625rem;
+      color: $primary_radiobtn_filled;
+    }
+  }
 }
 
 #edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card {
