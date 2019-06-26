@@ -80,6 +80,12 @@
     &.user-login-form {
       > a {
         bottom: 5rem;
+
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            right: 10rem;
+          }
+        }
       }
     }
   }
@@ -163,10 +169,21 @@
 
       &.order-3 {
         order: 3;
+        display: none;
       }
 
       &.order-5 {
         order: 5;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .social-signin-enabled {
+      .checkout-login-separator {
+        &.order-3 {
+          display: block;
+        }
       }
     }
   }
