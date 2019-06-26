@@ -210,7 +210,7 @@ class CustomerCardForm extends FormBase {
     $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
     $script = "window.CKOConfig = {
       debugMode: {$debug},
-      publicKey: '{$this->apiHelper->getSubscriptionKeys('public_key')}',
+      publicKey: '{$this->apiHelper->getSubscriptionInfo('public_key')}',
       ready: function (event) {
         CheckoutKit.monitorForm('.acq-checkoutcom-customer-card-form', CheckoutKit.CardFormModes.CARD_TOKENISATION);
       },
