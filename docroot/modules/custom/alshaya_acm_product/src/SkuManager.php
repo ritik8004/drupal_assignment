@@ -1196,6 +1196,8 @@ class SkuManager {
    *   List of skus related with a promotion.
    */
   public function getSkutextsForPromotion(Node $promotion) {
+    $skus = [];
+
     $cid = 'promotions_sku_' . $promotion->id();
     if (!empty($this->cache->get($cid))) {
       $skus_cache = $this->cache->get($cid);
