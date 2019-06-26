@@ -35,8 +35,6 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
-    - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
-    - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
     - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
     - field.field.taxonomy_term.acq_product_category.field_plp_group_category_img
@@ -62,6 +60,7 @@ third_party_settings:
         - group_promotion_
         - group_right_side_menu
         - group_videos
+        - group_group_by_sub_category
       parent_name: group_taxonomy_fields
       weight: 4
       format_type: tab
@@ -113,13 +112,13 @@ third_party_settings:
         - langcode
         - field_commerce_status
         - field_pdp_layout
-        - field_group_by_sub_category
-        - field_select_subcategories_plp
         - description
         - path
         - translation
         - field_meta_tags
         - field_pdp_image_slider_position
+        - field_group_by_sub_category
+        - field_select_subcategories_plp
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -167,25 +166,6 @@ third_party_settings:
         description: ''
         required_fields: true
       label: 'Link configuration on internal pages'
-      region: content
-    group_plp_content:
-      children:
-        - field_plp_layout
-        - group_group_by_sub_category
-        - group_promotion_
-        - group_right_side_menu
-        - group_videos
-      parent_name: group_taxonomy_fields
-      weight: 4
-      format_type: tab
-      format_settings:
-        id: ''
-        classes: ''
-        direction: horizontal
-        formatter: closed
-        description: ''
-        required_fields: true
-      label: 'PLP content'
       region: content
     group_taxonomy_fields:
       children:
@@ -281,6 +261,14 @@ third_party_settings:
         - field_plp_group_category_img
       parent_name: group_plp_content
       weight: 5
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Group by sub-category'
+      region: hidden
     group_link_url:
       children:
         - field_display_as_clickable_link
@@ -292,10 +280,6 @@ third_party_settings:
       format_settings:
         id: ''
         classes: ''
-        open: false
-        required_fields: true
-      label: 'Group by sub-category'
-      region: hidden
         open: true
         required_fields: true
       label: 'Link URL'
@@ -582,13 +566,11 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
   field_select_subcategories_plp:
     weight: 3
     settings: {  }
     third_party_settings: {  }
     type: options_select
-    region: content
   field_size_guide_anchor:
     type: string_textfield
     weight: 0
