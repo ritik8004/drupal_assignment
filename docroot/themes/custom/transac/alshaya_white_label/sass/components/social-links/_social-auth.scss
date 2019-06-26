@@ -75,10 +75,10 @@
   .social-signup-form {
     &.user-login-form {
       > a {
-        bottom: 7rem;
+        bottom: 5rem;
 
         @include breakpoint($only-mobile) {
-          bottom: 6.25rem;
+          bottom: -3.5rem;
         }
       }
     }
