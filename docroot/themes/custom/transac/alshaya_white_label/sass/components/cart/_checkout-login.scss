@@ -487,6 +487,13 @@
 }
 
 .alias--cart-checkout-login {
+  .user-page.checkout-login {
+    @include breakpoint($only-mobile) {
+      padding: 0.5rem 1.25rem;
+      margin-bottom: 3.25rem;
+    }
+  }
+
   .block-page-title-block {
     @include breakpoint($desktop) {
       margin-top: 0.75rem;
