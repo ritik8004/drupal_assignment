@@ -440,7 +440,10 @@ function alshaya_super_category_pathauto_alias_alter(&$alias, array $context) {
   }
   elseif ($context['module'] == 'taxonomy' && $context['bundle'] == ProductCategoryTree::VOCABULARY_ID) {
     $array = explode('/', trim($alias, '/'));
-    $array[1] = 'shop-' . $array[1];
+    // Do not add shop- to super categories.
+    if (isset($array[1])) {
+      $array[1] = 'shop-' . $array[1];
+    }
 
     // For all the category terms we want shop- prefix for L1 only.
     // We do not want it to be added to super category so we do it for
