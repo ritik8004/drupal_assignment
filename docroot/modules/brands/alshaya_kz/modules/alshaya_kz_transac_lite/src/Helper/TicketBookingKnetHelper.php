@@ -89,6 +89,7 @@ class TicketBookingKnetHelper extends KnetHelper {
     if (!empty($state_key)) {
       $state_data = $this->state->get($state_key);
       $state_data = json_encode($state_data);
+      $this->state->set($state_key, $response);
     }
     $url_options = [
       'https' => TRUE,
