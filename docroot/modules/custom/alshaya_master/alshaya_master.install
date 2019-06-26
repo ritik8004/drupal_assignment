@@ -719,12 +719,6 @@ function alshaya_master_install() {
     'checkout as guest' => [
       'ar' => 'إتمام عملية الشراء كزبون زائر',
     ],
-    'Your email will be used only to send you information about your order.' => [
-      'ar' => 'سيتم استخدام عنوان البريد الإلكتروني الخاص بك فقط عند إرسال تفاصيل الطلبية',
-    ],
-    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>' => [
-      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p>',
-    ],
     'Checkout' => [
       'ar' => 'إتمام عملية الشراء',
     ],
@@ -736,9 +730,6 @@ function alshaya_master_install() {
     ],
     'returning customers' => [
       'ar' => 'الزبائن العائدون',
-    ],
-    'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.' => [
-      'ar' => 'يرجى تسجيل الدخول لتسريع عملية الشراء ومراجعة اختياراتك والدخول لسجل عناوينك وإتمام عملية الشراء',
     ],
     'ID, name, SKU' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
@@ -1674,6 +1665,17 @@ function alshaya_master_install() {
     ],
     'All' => [
       'ar' => 'جميع',
+    ],
+    'Search' => [
+      'en' => 'What are you looking for?',
+      'ar' => 'عن ماذا تبحث؟',
+      'context' => 'algolia_search_block_placeholder',
+    ],
+    'sign in with email address' => [
+      'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
+    ],
+    'continue as a guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
     ],
   ];
 

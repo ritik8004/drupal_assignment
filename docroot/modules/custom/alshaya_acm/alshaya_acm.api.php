@@ -28,6 +28,16 @@ function hook_alshaya_acm_get_remove_from_basket_link_alter(&$remove_url, CartIn
 }
 
 /**
+ * Allow other modules to specify which configs should be reset.
+ *
+ * @param array $reset
+ *   Configs to reset from Settings.
+ */
+function hook_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $reset[] = 'alshaya_hm_images.settings';
+}
+
+/**
  * Add configs to be reset when switching to different Magento instance.
  *
  * @param array $configs

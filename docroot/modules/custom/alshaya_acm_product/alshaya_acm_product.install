@@ -12,6 +12,35 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Resave image.settings config so that overrides take effect.
+ */
+function alshaya_acm_product_update_8048() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['image.settings'],
+    'image'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Correct the path for memory limit policy config.
+ */
+function alshaya_acm_product_update_8047() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['memory_limit_policy.memory_limit_policy.path_based_memory'],
+    'alshaya_acm_product',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new config key for listing page display of hover images.
  * Clear product cache after code changes to reduce data in cache and to rebuild
  * swatches data.

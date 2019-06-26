@@ -21,7 +21,6 @@
 
   h1.c-page-title {
     @include breakpoint($only-mobile) {
-      padding-#{$left}: 2rem;
       font-size: 1.115rem;
     }
   }
@@ -497,8 +496,8 @@
 
   .form-type-radio {
     width: 100%;
+    min-height: 4.375rem;
     margin: 0;
-    height: 4.063rem;
     margin-top: 0.5rem;
     padding: 1.125rem 0;
     border-bottom: 1px solid $checkout_section_title_border;
@@ -508,7 +507,6 @@
     }
 
     @include breakpoint($tablet) {
-      height: 70px;
       margin-top: 1.875rem;
       padding: 1.125rem 1.5rem;
     }
@@ -541,6 +539,7 @@
           &-name {
             float: $right;
             width: 88%;
+            position: relative;
 
             @include breakpoint($tablet) {
               width: 90%;
@@ -553,6 +552,14 @@
 
           &-title,
           &-description {
+            @include breakpoint($desktop) {
+              width: 83%;
+            }
+
+            @include breakpoint($only-tablet) {
+              width: 79%;
+            }
+
             @include breakpoint($only-mobile) {
               width: 68%;
             }
@@ -566,7 +573,10 @@
 
           &-price {
             float: $right;
-            margin-top: -10px;
+            position: absolute !important;
+            top: 50%;
+            transform: translateY(-50%);
+            #{$right}: 0;
 
             @include breakpoint($only-mobile) {
               font-weight: bold;
@@ -1209,15 +1219,6 @@ html[lang=ar] {
       position: absolute;
       width: 1.063rem;
       height: 1.375rem;
-
-      @include icon(arrowup, before) {
-        position: absolute;
-        #{$left}: -0.5rem;
-        top: -3px;
-        color: $checkout_mobile_back_link_icon;
-        font-size: 2.125rem;
-        transform: rotate(270deg);
-      }
     }
   }
 }

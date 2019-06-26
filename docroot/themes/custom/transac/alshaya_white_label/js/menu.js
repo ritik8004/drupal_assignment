@@ -251,6 +251,28 @@
           $(this).parent().removeClass('active--menu--without__child');
         });
       }
+
+      function stickyHeader() {
+        $(window, context).once().on('scroll', function () {
+          var position = $('.region__banner-top').outerHeight();
+
+          if ($(this).scrollTop() > position) {
+            $('.branding__menu').addClass('navbar-fixed-top');
+            $('body').addClass('header--fixed');
+          }
+          else {
+            $('.branding__menu').removeClass('navbar-fixed-top');
+            $('body').removeClass('header--fixed');
+          }
+        });
+      }
+
+      $(window, context).on('load', function () {
+        // Apply the sticky header only on non plp,srp,promo pages.
+        if ($(window).width() < 768 && $('.region__banner-top').length > 0 && $('.c-plp').length < 1) {
+          stickyHeader();
+        }
+      });
     }
   };
 

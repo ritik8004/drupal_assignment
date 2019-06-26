@@ -40,6 +40,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\file\FileInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -181,6 +182,22 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     // If attribute is not configurable (not available in fields), remove it.
     if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
       unset($attributes[$key]);
+    }
+  }
+
+  // Price is only available on simple skus.
+  if ($sku->get('type')->first()->getString() == 'simple') {
+    $price = (float) $sku->get('price')->first()->getString();
+    $final_price = (float) $sku->get('final_price')->first()->getString();
+    $max_discount = (int) \Drupal::config('alshaya_acm_product.settings')
+      ->get('max_discount_to_log');
+    if ($max_discount && $final_price < $price && ((($price - $final_price) / $price) * 100) > $max_discount) {
+      \Drupal::logger('alshaya_acm_product')->notice('SKU:@sku having discount more than @discount_percent. Price:@price Final price:@final_price.', [
+        '@sku' => $sku->get('sku')->first()->getString(),
+        '@discount_percent' => $max_discount . '%',
+        '@price' => $price,
+        '@final_price' => $final_price,
+      ]);
     }
   }
 
@@ -406,6 +423,17 @@ function alshaya_acm_product_acq_sku_update(SKU $entity) {
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
   _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_DELETE);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_acm_product_file_delete(FileInterface $entity) {
+  \Drupal::logger('alshaya_acm_product')->notice('Deleting file @fid with uri @uri on page @page', [
+    '@fid' => $entity->id(),
+    '@uri' => $entity->getFileUri(),
+    '@page' => $_SERVER['REQUEST_URI'] ?? '-',
+  ]);
 }
 
 /**
@@ -1603,6 +1631,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $price_block = $priceHelper->getPriceBlockForSku($tree_pointer);
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
+    if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+      $discount_block['#markup'] = !empty($price_block['#discount']['#markup']) ? '(' . $price_block['#discount']['#markup'] . ')' : '';
+      $response->addCommand(new HtmlCommand('.discount-price-block-' . $sku_identifier, $discount_block));
+    }
+
     $selector = '.configurable-wrapper-' . $sku_identifier;
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
@@ -1739,6 +1772,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+
+    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
+    $pdp_layout = $skuManager->getPdpLayout($sku, $context);
+
     if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
@@ -1748,11 +1785,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
       if ($first_child instanceof SKU) {
-        $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
-
-        $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
         $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE);
-
         if (!empty($build['gallery'])) {
           if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE && $context != 'modal') {
             $dynamic_parts['alshaya_magazine'] = $build['gallery']['alshaya_magazine'];
@@ -1767,8 +1800,12 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
     $price_block = $priceHelper->getPriceBlockForSku($sku);
-
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
+
+    if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+      $discount_block['#markup'] = !empty($price_block['#discount']['#markup']) ? '(' . $price_block['#discount']['#markup'] . ')' : '';
+      $response->addCommand(new HtmlCommand('.discount-price-block-' . $sku_identifier, $discount_block));
+    }
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
 

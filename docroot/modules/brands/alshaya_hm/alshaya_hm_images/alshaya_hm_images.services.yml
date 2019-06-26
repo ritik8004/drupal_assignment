@@ -33,5 +33,6 @@ services:
     class: Drupal\alshaya_hm_images\EventSubscriber\ProductUpdatedEventSubscriber
     arguments:
       - '@entity_type.manager'
+      - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }

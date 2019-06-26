@@ -2786,6 +2786,9 @@ class SkuManager {
     if (!($sku instanceof SKUInterface)) {
       throw new \Exception('Not able to load sku from node.');
     }
+    elseif ($sku->language()->getId() != $langcode) {
+      throw new \Exception('SKU not available for language of Node');
+    }
 
     // Set nid to original node's id.
     $original = $this->getDisplayNode($sku);
@@ -2893,10 +2896,11 @@ class SkuManager {
 
     $data = [];
     $has_color_data = FALSE;
+    $children = $this->getAvailableChildren($sku) ?? [];
+    $configurable_attributes = $this->getConfigurableAttributes($sku);
 
     // Gather data from children to set in parent.
-    $configurable_attributes = $this->getConfigurableAttributes($sku);
-    foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
+    foreach ($children as $child) {
       $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
 
       // Need to have a flag to avoid indexing main node when it has colors.
@@ -2907,6 +2911,11 @@ class SkuManager {
 
       // Avoid all products of different color when indexing product color node.
       if ($product_color && $child_color !== $product_color) {
+        continue;
+      }
+
+      // Do not add data from child to parent if language do not match.
+      if ($child->language()->getId() != $sku->language()->getId()) {
         continue;
       }
 
@@ -2923,7 +2932,7 @@ class SkuManager {
     }
 
     // We do not index for color node with no variant in stock.
-    if ($product_color && empty($data)) {
+    if ($product_color && empty($children)) {
       throw new \Exception('No valid children found for color ' . $product_color);
     }
 
@@ -3069,7 +3078,7 @@ class SkuManager {
    */
   public function getSelectedVariantId() {
     $from_query = $this->currentRequest->query->get('selected');
-    if (!empty(self::$selectedVariantId) && !empty($from_query)) {
+    if (empty(self::$selectedVariantId) && !empty($from_query)) {
       $this->setSelectedVariantId($from_query);
     }
 
@@ -3084,6 +3093,37 @@ class SkuManager {
    */
   public function setSelectedVariantId($id) {
     self::$selectedVariantId = $id;
+  }
+
+  /**
+   * Cheaper function to fetch the node id of the parent node for a SKU.
+   *
+   * @param string $sku
+   *   Sku for which we need to determine the parent's nid.
+   *
+   * @return string
+   *   Node id for the parent node for the SKU.
+   */
+  public function getDisplayNodeId($sku) {
+    // Fetch parent SKU for this SKU, if exists.
+    $query = $this->connection->select('acq_sku_field_data', 'asfd');
+    $query->fields('asfd', ['sku']);
+    $query->join('acq_sku__field_configured_skus', 'fcs', "fcs.entity_id = asfd.id");
+    $parent_sku = $query->condition('fcs.field_configured_skus_value', $sku)
+      ->execute()->fetchField();
+
+    // If parent exists, use the parent to pull up the node id, else the SKU
+    // passed.
+    if ($parent_sku) {
+      $sku = $parent_sku;
+    }
+
+    $parent_nid = $this->connection->select('node__field_skus', 'nfs')
+      ->fields('nfs', ['entity_id'])
+      ->condition('nfs.field_skus_value', $sku)
+      ->execute()->fetchField();
+
+    return $parent_nid;
   }
 
 }
