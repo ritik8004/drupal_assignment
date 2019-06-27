@@ -752,6 +752,11 @@ html[lang=ar] {
   position: relative;
   padding-bottom: 1rem;
 
+  .view-alshaya-product-list {
+    width: 100%;
+    clear: both;
+  }
+
   .js-pager__items.visually-hidden {
     position: static !important;
   }
