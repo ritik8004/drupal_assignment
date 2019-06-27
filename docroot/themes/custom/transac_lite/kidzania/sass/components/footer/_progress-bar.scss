@@ -1,0 +1,93 @@
+.sticky-cart {
+  background: $cart_bg;
+  border-top: 1px solid $cart_border;
+  height: 4.875rem;
+  position: fixed;
+  bottom: 0;
+  #{$left}: 0;
+  width: 100%;
+  z-index: 100;
+
+  .region__wrapper {
+    max-width: 50rem;
+
+    @include breakpoint($upto-desktop) {
+      max-width: 100%;
+      display: flex;
+      padding: 0 0.9375rem;
+    }
+  }
+}
+
+.progress-bar {
+  padding-top: 1.375rem;
+  width: 32%;
+  text-align: center;
+  float: $left;
+  padding-#{$right}: 0.625rem;
+  line-height: 1;
+
+  @include breakpoint($upto-desktop) {
+    width: auto;
+    padding: 0;
+  }
+
+  .progress-bar-title {
+    font-family: $ubuntu-sans;
+    font-size: 1.125rem;
+    color: $progress_bar_text;
+    margin-bottom: 0.625rem;
+
+    @include breakpoint($upto-desktop) {
+      display: none !important;
+    }
+  }
+
+  .progress-steps {
+    @extend %list-clear;
+
+    display: flex;
+
+    @include breakpoint($upto-desktop) {
+      position: absolute;
+      top: -0.625rem;
+    }
+
+    .step {
+      flex: 1;
+      border: 1px solid $progress_step_border;
+      background: $progress_step;
+      border-radius: 0.625rem;
+      transition: all 0.7s;
+      min-width: 1.875rem;
+      margin-#{$right}: 0.3125rem;
+      font-size: 0;
+      height: 0.4375rem;
+      box-sizing: border-box;
+
+      @include breakpoint($upto-desktop) {
+        height: 0.625rem;
+        margin-#{$right}: 0;
+        border-radius: 0;
+        width: 2.1875rem;
+
+        &.current {
+          font-size: 1.125rem;
+          padding: 0.125rem 0 0.25rem;
+          color: #fff;
+          margin-top: -1.25rem;
+          height: 1.875rem;
+          border-radius: 0.3125rem 0.3125rem 0 0;
+        }
+      }
+
+      &.current {
+        background: $progress_step_current;
+      }
+
+      &.done {
+        background: $progress_step_done;
+      }
+    }
+  }
+}

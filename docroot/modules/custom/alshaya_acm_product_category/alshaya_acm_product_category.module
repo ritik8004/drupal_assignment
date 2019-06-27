@@ -263,7 +263,7 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
 
   /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
   $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
-  $sale_ids = $manager->getCategorizationIds();
+  $sale_ids = $manager->getCategorizationIds()['sale'];
 
   // Invalidate cache if term or it's parent are part of sales category tree.
   if (array_intersect($sale_ids, $term_ids)) {
