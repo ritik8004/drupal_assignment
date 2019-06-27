@@ -78,7 +78,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
         }
 
         if (!empty($options)) {
-          $options += ['new' => $this->t('New Card')];
+          $options += ['new' => '<span class="new">' . $this->t('New Card') . '</span>'];
           $pane_form['payment_card'] = [
             '#type' => 'radios',
             '#options' => $options,
@@ -126,6 +126,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
                 '#maxlength' => 4,
                 '#title' => t('Security code (CVV)'),
                 '#default_value' => '',
+                '#attributes' => ['placeholder' => $this->t('Enter CVV')],
                 '#required' => TRUE,
                 '#prefix' => $cc_prefix,
                 '#suffix' => $cc_suffix,

@@ -1,103 +1,250 @@
 #payment_details_checkout_com {
   float: $left;
-  padding: 1.5rem 4rem;
-  margin-top: -2rem;
   padding-top: 0;
   width: 100%;
   border-bottom: 1px solid #e3e3e3;
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-name,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-number {
-    width: 26.0625rem;
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-name,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-number {
+    @include breakpoint($desktop) {
+      width: 26.0625rem;
+    }
 
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       width: 100%;
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-month,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-year,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv {
-    width: 12.3125rem;
-    margin-#{$right}: 1.5rem;
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-month {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 1.5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 1rem;
+    }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-month,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-exp-year {
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-year,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv {
+    @include breakpoint($desktop) {
+      width: 12.3125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: calc(50% - 0.75rem);
+    }
+
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.5rem);
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-year {
     float: $left;
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-number,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv {
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-number,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv {
     label:not(.error) {
       @include placeholder-label;
     }
 
     input:focus ~ label:not(.error),
     input:active ~ label:not(.error),
-    input:not(:focus):valid ~ label:not(.error),
-    input:not(:active):valid ~ label:not(.error) {
+    input:valid ~ label:not(.error) {
       @include placeholder-active;
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv {
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv {
     margin-top: 2.6em;
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-cc-cvv,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-details-save-card,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-save-card,
   .cc-save-help-text {
     clear: both;
     float: $left;
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-save-card {
+    label {
+      top: 0;
+      font-size: 0.875rem;
+
+      &.option {
+        &::before {
+          top: -0.25rem;
+        }
+      }
+    }
   }
 
   .cc-save-help-text {
     position: relative;
     padding-#{$left}: 2rem;
     max-width: 25.3125rem;
+    font-size: 0.875rem;
+    margin-top: 1.5rem;
 
-    @include breakpoint($only-mobile) {
-      width: 100%;
+    @include breakpoint($upto-desktop) {
+      width: 75%;
     }
 
     @include icon('login', 'before') {
       font-size: 1.75rem;
       position: absolute;
       #{$left}: -0.3125rem;
-      top: -0.625rem;
+      top: -0.4375rem;
       color: $primary_radiobtn_filled;
     }
   }
 }
 
 #edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card {
-  padding: 1.5rem 2rem;
+  display: none;
+}
 
-  .form-type-radio {
-    width: 100%;
-    margin: 0;
-    padding: 0.875rem 0;
-    border-bottom: 1px solid #e3e3e3;
+#payment_method_checkout_com {
+  #payment_details_checkout_com {
+    margin-top: 0;
 
-    &:last-child {
-      border-bottom: none;
+    @include clearfix;
+
+    #payment_method_new {
+      min-height: auto;
     }
 
-    label.option {
-      top: 0;
+    > .form-wrapper {
+      width: 100%;
+      margin: 0;
+      padding: 0.875rem 0;
+      float: $left;
+      border-bottom: 1px solid #e3e3e3;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      padding-#{$left}: 3.75rem;
+      padding-#{$right}: 1.375rem;
+      min-height: 100px;
 
-      &::before {
-        position: absolute;
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 2.125rem;
+        padding-#{$right}: 1rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 2rem;
+        padding-#{$right}: 1rem;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .payment-card-wrapper-div {
+        @include clearfix;
+
+        position: relative;
+
+        &::before {
+          content: '';
+          width: 0.875rem;
+          height: 0.875rem;
+          background: white;
+          display: inline-block;
+          border-radius: 100%;
+          border: 1px solid $primary_radiobtn_empty;
+          position: absolute;
+          top: 3px;
+        }
+
+        &.card-selected {
+          &::before {
+            border: 3px solid $primary_radiobtn_filled;
+          }
+
+          + .cvv-wrapper {
+            padding-#{$left}: 2rem;
+
+            .form-type-password {
+              margin-top: 0;
+              width: 80px;
+              float: $left;
+              margin-bottom: 2rem;
+
+              @include breakpoint($desktop) {
+                margin-bottom: 1rem;
+              }
+
+              @include breakpoint($only-mobile) {
+                margin-bottom: 0.5rem;
+              }
+
+              label:not(.error) {
+                display: none;
+              }
+
+              input {
+                border: 1px solid $primary_input_label;
+                padding-#{$left}: 0.25rem;
+                height: 35px;
+
+                &::placeholder {
+                  font-size: 0.875rem;
+                  color: $primary_input_label;
+                }
+              }
+            }
+
+            .cvv-help-text-wrapper {
+              @include breakpoint($only-mobile) {
+                #{$left}: 0;
+                top: 1px;
+              }
+
+              .cc_cvv_help_text {
+                @include breakpoint($desktop) {
+                  top: 0;
+                  #{$left}: 21%;
+                }
+
+                @include breakpoint($only-tablet) {
+                  top: 0;
+                  #{$left}: 31%;
+                  width: 50%;
+                }
+              }
+            }
+
+            .mobile-tooltip-icon {
+              top: 0.4375rem;
+              #{$left}: 7.5rem;
+            }
+          }
+        }
+
+        span.new {
+          padding-#{$left}: 2rem;
+        }
       }
 
       .saved-card {
         padding-#{$left}: 2rem;
+        position: relative;
+        float: $left;
+        width: 100%;
 
         .name-number {
           width: 85%;
           float: $left;
           font-family: $alshaya-thin;
+
+          @include breakpoint($upto-desktop) {
+            width: 73%;
+          }
 
           .card-number {
             color: #777;
@@ -112,6 +259,8 @@
 
         .actions {
           float: $right;
+          position: absolute;
+          #{$right}: 0;
 
           .label {
             color: $content_link_color;
@@ -137,15 +286,31 @@
           }
         }
       }
-    }
 
-    label[for="edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-new"] {
-      padding-#{$left}: 2rem;
+      label[for="edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-new"] {
+        padding-#{$left}: 2rem;
 
-      &::before {
-        #{$left}: 0;
-        top: 0;
+        &::before {
+          #{$left}: 0;
+          top: 0;
+        }
       }
+    }
+  }
+
+  .plugin-selected {
+    + .card-types-wrapper {
+      .card-type {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+#payment_method_new {
+  #payment_card_new {
+    @include breakpoint($tablet) {
+      padding-#{$left}: 2rem;
     }
   }
 }
