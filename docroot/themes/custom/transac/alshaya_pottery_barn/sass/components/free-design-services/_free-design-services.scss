@@ -91,6 +91,16 @@
       .form-item-preferred-store {
         clear: both;
         padding-bottom: 1.25rem !important;
+
+        label {
+          &.error {
+            #{$left}: 0;
+
+            @include breakpoint($only-mobile) {
+              #{$left}: 0.5rem;
+            }
+          }
+        }
       }
 
       .webform-composite-visible-title {
@@ -138,6 +148,35 @@
         margin-top: 1.5rem;
         padding-bottom: 1.5rem;
         position: relative;
+
+        .country-select {
+          border-bottom: 1px solid $form-field-title;
+        }
+
+        &.mobile_number {
+          padding-bottom: 0;
+
+          .mobile-input--wrapper {
+            position: relative;
+
+            .js-form-type-tel {
+              position: unset;
+
+              input {
+                &::placeholder {
+                  display: none;
+                }
+              }
+
+              label.error {
+                width: 100%;
+                top: 4.75rem !important;
+                #{$left}: 0;
+                border-top: 0.125rem solid $primary_input_inline_error !important;
+              }
+            }
+          }
+        }
 
         label:last-of-type {
           position: absolute;
@@ -216,6 +255,12 @@
 
         .fieldset-legend {
           padding-bottom: 1.5rem;
+        }
+      }
+
+      > .address--wrapper {
+        @include breakpoint($only-mobile) {
+          margin-top: 0;
         }
       }
     }
