@@ -228,6 +228,9 @@ class CheckoutHelper {
 
       // Clear the cart in session.
       $this->cartStorage->clearCart();
+
+      // Clear user's cache.
+      Cache::invalidateTags(['user:' . $this->currentUser->id()]);
     }
     catch (\Exception $e) {
       // Restore the cart.
