@@ -57,6 +57,10 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       return [];
     }
 
+    // Increase memory limit for promotions sync as we have a lot of promotions
+    // now on production.
+    ini_set('memory_limit', '1024M');
+
     $endpoint = $this->apiVersion . "/agent/promotions/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
