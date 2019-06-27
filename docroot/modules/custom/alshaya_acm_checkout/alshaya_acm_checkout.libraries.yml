@@ -15,3 +15,11 @@ click-and-collect:
     - core/drupal.ajax
     - core/underscore
     - geolocation/geolocation.geocoder.googlegeocodingapi
+
+checkout_com:
+  js:
+    js/alshaya_acm_checkout.checkout_com.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

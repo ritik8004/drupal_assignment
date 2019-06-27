@@ -77,6 +77,15 @@ function template_preprocess_alshaya_address(array &$variables) {
 }
 
 /**
+ * Implements hook_acq_payment_method_info_alter().
+ */
+function alshaya_acm_checkout_acq_payment_method_info_alter(array &$definitions) {
+  if (isset($definitions['checkout_com'])) {
+    $definitions['checkout_com']['class'] = 'Drupal\alshaya_acm_checkout\Plugin\PaymentMethod\AlshayaCheckoutCom';
+  }
+}
+
+/**
  * Implements hook_acq_checkout_pane_pane_info_alter().
  */
 function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definitions) {
