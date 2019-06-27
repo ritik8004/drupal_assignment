@@ -41,7 +41,7 @@
    * @returns {null}
    */
   function getStorageValues() {
-    let value = localStorage.getItem(window.location.pathname);
+    var value = localStorage.getItem(window.location.pathname);
     if (typeof value !== 'undefined' && value !== null) {
       return JSON.parse(value);
     }
