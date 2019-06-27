@@ -7,23 +7,26 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ConfigFactory;
 use Drupal\google_page_speed\Form\GooglePageSpeedConfigForm;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Symfony\Component\Serializer\Serializer;
 
 class GooglePageSpeedCommands extends DrushCommands
 {
   use StringTranslationTrait;
 
   /**
-   * Drupal\Core\Config\ConfigFactoryInterface definition.
+   * Drupal\Core\Config\ConfigFactory definition.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactory
    */
   protected $configFactory;
 
   /**
+   * Database connection object.
+   *
    * @var \Drupal\Core\Database\Connection
    */
   protected $database;
@@ -34,44 +37,59 @@ class GooglePageSpeedCommands extends DrushCommands
   protected $cacheInvalidator;
 
   /**
+   * The Serializer service object.
+   *
+   * @var \Symfony\Component\Serializer\Serializer
+   */
+  protected $serializer;
+
+  /**
    * GooglePageSpeedCommands constructor.
-   * @param ConfigFactoryInterface $config_factory
+   * @param ConfigFactory $config_factory
    * @param Connection $database
    * @param CacheTagsInvalidatorInterface $cache_invalidator
+   * @param Serializer $serializer
    */
-  public function __construct(ConfigFactoryInterface $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator)
+  public function __construct(ConfigFactory $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator, Serializer $serializer)
   {
     parent::__construct();
     $this->configFactory = $config_factory;
     $this->database = $database;
     $this->cacheInvalidator = $cache_invalidator;
+    $this->serializer = $serializer;
   }
 
   /**
-   * Echos back hello with the argument provided.
+   * Drush command to get insights data.
    *
    *
    * @command google_page_speed:getinsights
    * @aliases gps-gi
    * @options url An option that takes the target url.
    * @options screen An option that takes target screen
-   * @usage google_page_speed:getinsights --url https://google.com --screen desktop
+   * @usage google_page_speed:insights --url https://google.com --screen desktop
    *   Display data for https://google.com on screen desktop
    */
-  public function getinsights($options = ['url' => '', 'screen' => ''])
+  public function insights($options = ['url' => '', 'screen' => ''])
   {
     $config = $this->configFactory->get(GooglePageSpeedConfigForm::CONFIG_NAME);
     $api_key = $config->get('api_key');
-    $urls = explode(PHP_EOL, $config->get('page_url'));
-    $screens = $config->get('screen');
-    $client = new Client();
-    $serializer = \Drupal::service('serializer');
+    if (empty($api_key)) {
+      $this->output->writeln('Google API key is empty');
+    }
 
+    $client = new Client();
+    $serializer = $this->serializer;
+
+    // Get data from options.
     if (!empty($api_key) && !empty($options['url'])) {
       $options['screen'] = (empty($options['screen'])) ? 'desktop' : $options['screen'];
       $this->getPageSpeedData($client, $serializer, $api_key, $options['url'], $options['screen']);
     }
+    // Get data from configurations.
     else{
+      $urls = explode(PHP_EOL, $config->get('page_url'));
+      $screens = $config->get('screen');
       if (isset($api_key, $urls, $screens, $client, $serializer)) {
         foreach ($urls as $url) {
           foreach ($screens as $screen) {
@@ -102,7 +120,7 @@ class GooglePageSpeedCommands extends DrushCommands
    * @throws \Exception
    */
 
-  public function getPageSpeedData($client, $serializer, $api_key, $url, $screen) {
+  protected function getPageSpeedData($client, $serializer, $api_key, $url, $screen) {
     $siteUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=' . $api_key . '&url=' . $url . '&strategy=' . $screen;
 
     $response = $client->get($siteUrl, ['http_errors' => false]);

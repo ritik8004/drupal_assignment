@@ -93,4 +93,16 @@ class GooglePageSpeedController extends ControllerBase {
 
   }
 
+  /**
+   * Shows the data chart.
+   *
+   * @return array
+   */
+  public function showDataChart() {
+    $build = [
+      '#markup' => $this->t('The PageSpeed score related to the configured URLs can be seen here.'),
+    ];
+    return $build;
+  }
+
 }

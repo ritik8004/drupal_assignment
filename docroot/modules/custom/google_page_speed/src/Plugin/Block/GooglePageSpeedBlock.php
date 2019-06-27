@@ -110,4 +110,3 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
   }
 
 }
-
