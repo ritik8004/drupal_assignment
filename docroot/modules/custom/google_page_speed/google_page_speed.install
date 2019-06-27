@@ -5,26 +5,24 @@
  * Install, update and uninstall functions for the Google Page Speed integration module.
  */
 
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+
 /**
  * Implements hook_install().
  */
 function google_page_speed_install() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
+  $config_link = Link::fromTextAndUrl(t('configurations here'), Url::fromRoute('google_page_speed.config'))->toString();
+  \Drupal::messenger()->addStatus(t('The module is successfully enabled. Please add %configurations. Also enable the Google Page Speed block from block layout.', ['%configurations' => $config_link]));
 }
 
-/**
- * Implements hook_uninstall().
- */
-function google_page_speed_uninstall() {
-  \Drupal::messenger()->addStatus(__FUNCTION__);
-}
 
 /**
  * Implements hook_schema().
  */
 function google_page_speed_schema() {
   $schema['google_page_speed_data'] = [
-    'description' => 'Table to store Google Page Speed Insights data.',
+    'description' => 'Table to store Google PageSpeed Insights data.',
     'fields' => [
       'id' => [
         'type' => 'serial',
@@ -33,7 +31,7 @@ function google_page_speed_schema() {
       ],
       'url' => [
         'type' => 'varchar_ascii',
-        'length' => 64,
+        'length' => 255,
         'not null' => TRUE,
         'default' => '',
         'description' => 'Url of the page to analyse.',
@@ -68,22 +66,4 @@ function google_page_speed_schema() {
   ];
 
   return $schema;
-}
-
-/**
- * Implements hook_requirements().
- */
-function google_page_speed_requirements($phase) {
-  $requirements = [];
-
-  if ($phase == 'runtime') {
-    $value = mt_rand(0, 100);
-    $requirements['google_page_speed_status'] = [
-      'title' => t('Google Page Speed integration status'),
-      'value' => t('Google Page Speed integration value: @value', ['@value' => $value]),
-      'severity' => $value > 50 ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
-    ];
-  }
-
-  return $requirements;
 }

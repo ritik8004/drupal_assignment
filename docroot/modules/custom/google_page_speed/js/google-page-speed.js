@@ -1,6 +1,6 @@
 /**
  * @file
- * Unmask Password.
+ * Javascript to draw google chart and show data.
  */
 
 (function ($, Drupal) {
