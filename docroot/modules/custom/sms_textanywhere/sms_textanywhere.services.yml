@@ -1,0 +1,4 @@
+services:
+  sms_textanywhere.sms:
+    class: Drupal\sms_textanywhere\Helper\SmsHelper
+    arguments: ['@sms.provider', '@logger.factory']

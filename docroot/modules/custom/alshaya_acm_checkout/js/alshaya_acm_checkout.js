@@ -325,6 +325,7 @@
      // Check if we are using Cybersource.
      if (!$('#payment_method_cybersource .payment-plugin-wrapper-div').hasClass('plugin-selected')
        && !$('#payment_method_checkout_com .payment-plugin-wrapper-div').hasClass('plugin-selected')
+       && !$('#payment_method_title_checkout_com_mada .payment-plugin-wrapper-div').hasClass('plugin-selected')
      ) {
        $(this).showCheckoutLoader();
      }
