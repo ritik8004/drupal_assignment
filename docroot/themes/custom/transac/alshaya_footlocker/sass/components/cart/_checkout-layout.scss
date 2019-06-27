@@ -2,6 +2,10 @@
 .alias--cart-checkout-login,
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
+  .site-brand-wrapper {
+    background: $header_bg;
+  }
+
   .site-brand-home {
     text-align: center;
 
@@ -38,12 +42,6 @@
       }
     }
 
-    .form-item {
-      @include breakpoint($desktop) {
-        max-width: 75%;
-      }
-    }
-
     #edit-checkout-login {
       .fieldset-wrapper {
         @include breakpoint($tablet) {
@@ -53,12 +51,7 @@
 
       .request-password-link {
         @include breakpoint($tablet) {
-          #{$left}: 13rem;
           bottom: 1.25rem;
-        }
-
-        @include breakpoint($desktop) {
-          #{$left}: 16.5rem;
         }
       }
     }
