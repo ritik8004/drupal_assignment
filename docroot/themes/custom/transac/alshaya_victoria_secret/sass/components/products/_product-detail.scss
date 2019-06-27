@@ -55,7 +55,7 @@
 
       @include breakpoint($desktop) {
         html[lang=ar] & {
-          margin-right: 1rem;
+          margin-right: 0.5rem;
           font-size: 1rem;
         }
       }
