@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Google Page Speed integration module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+/**
+ * Implements hook_theme().
+ */
+/**
+ * Implements hook_theme().
+ */
+function google_page_speed_theme($existing, $type, $theme, $path)
+{
+  return [
+    'google_page_speed_block' => [
+      'template' => 'google-page-speed-block',
+      'variables' => [
+        'block_title' => '',
+        'urls' => ''
+      ],
+    ],
+  ];
+}

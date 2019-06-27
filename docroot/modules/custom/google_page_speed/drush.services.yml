@@ -1,0 +1,6 @@
+services:
+  google_page_speed.commands:
+    class: Drupal\google_page_speed\Commands\GooglePageSpeedCommands
+    arguments: ['@config.factory', '@database', '@cache_tags.invalidator']
+    tags:
+      - { name: drush.command }
