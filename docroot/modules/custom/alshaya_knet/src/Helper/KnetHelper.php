@@ -120,6 +120,8 @@ class KnetHelper {
     // Get K-Net toolkit.
     $pipe = $this->getKnetToolKit();
 
+    $pipe->setLanguage($knetSettings->get('knet_language_code'));
+
     // If using new K-Net toolkit.
     if ($this->useNewKnetToolKit()) {
       // Get K-Net creds for new toolkit.
@@ -134,10 +136,14 @@ class KnetHelper {
       $pipe->setTranportalPassword($knet_creds['tranportal_password']);
       $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
       $pipe->setKnetUrl($knet_creds['knet_url']);
+
+      // @TODO: When removing support for old toolkit use only AR.
+      if ($knetSettings->get('knet_language_code') == 'ARA') {
+        $pipe->setLanguage('AR');
+      }
     }
 
     $pipe->setCurrency($knetSettings->get('knet_currency_code'));
-    $pipe->setLanguage($knetSettings->get('knet_language_code'));
 
     // Set resource path.
     $pipe->setResourcePath($knetSettings->get('resource_path'));
