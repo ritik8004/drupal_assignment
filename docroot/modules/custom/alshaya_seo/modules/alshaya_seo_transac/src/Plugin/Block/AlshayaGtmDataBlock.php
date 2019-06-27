@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class AlshayaGtmDataBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  const GTM_DATA_BLOCK_CACHETAG = 'alshaya_gtm_data_block';
-
   /**
    * Array of terms for cache bubbling up.
    *
@@ -112,8 +109,9 @@ class AlshayaGtmDataBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    $this->cacheTags[] = self::GTM_DATA_BLOCK_CACHETAG;
-
+    if ($this->currentUser->isAuthenticated()) {
+      $this->cacheTags[] = 'user:' . $this->currentUser->id();
+    }
     return Cache::mergeTags(
       parent::getCacheTags(),
       $this->cacheTags
