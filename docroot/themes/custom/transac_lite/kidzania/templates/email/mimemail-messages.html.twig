@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style type="text/css">
+      .en {
+        direction: ltr;
+      }
+      .ar {
+        direction: rtl;
+      }
+      body,
+      p {
+        font-family: Arial, helvetica;
+        font-size: 14px;
+        line-height: 1.31;
+        color: #000;
+      }
+      p {
+        margin: 15px 0;
+      }
+      h2 {
+        font-size: 30px;
+        font-family: Arial, helvetica;
+        text-align: center;
+        margin: 20px auto;
+      }
+      strong {
+        font-weight: bold;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      ul li {
+        display: block;
+        margin: 10px 0;
+      }
+      ul li span {
+        display: inline-block;
+        margin: 0 5px;
+      }
+      .container {
+        width: 100%;
+      }
+      table {
+        width: 100%;
+      }
+      table td,
+      table th {
+        padding: 10px;
+        text-align: left;
+      }
+      .ar table td,
+      .ar table th {
+        text-align: right;
+      }
+      table td span,
+      table th span {
+        display: inline-block;
+        padding-right: 5px;
+      }
+      .ar table td span,
+      .ar table th span {
+        padding-left: 5px;
+      }
+      br {
+        display: none;
+      }
+    </style>
+  </head>
+  <body id="mimemail-body" class="{{ lang }}">
+    <div class="container">
+      <table>
+        <tr>
+          <td style="background:#f18b21; text-align: center;">
+            <img src="{{ email_logo }}" width="115px" alt="logo" title="logo"/>
+            <p style="color: #fff; margin: 0;">{{ 'Kuwait'|t }}</p>
+          </td>
+        </tr>
+      </table>
+      {{ body|raw }}
+      <table>
+        <tr>
+          <td style="background: #f18b21; padding: 15px;">{{ 'KidZania Operations S.A.R.L. © 2019, KidZania, and all related characters and elements are trademarks of KidZania Operations S.A.R.L. All Rights Reserved. Privacy Policy'|t }}</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

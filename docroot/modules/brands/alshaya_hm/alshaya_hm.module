@@ -556,36 +556,35 @@ function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $s
     return;
   }
 
-  $variants = \Drupal::entityTypeManager()
-    ->getStorage('acq_sku')
-    ->loadByProperties([
-      'attr_style_code' => $style_code,
-      'type' => 'configurable',
-    ]);
+  $query = \Drupal::database()->select('acq_sku__field_configured_skus', 'asfcs');
 
-  if (empty($variants)) {
-    return;
-  }
+  $query->leftJoin('acq_sku_field_data', 'sku', 'sku.id = asfcs.entity_id AND sku.langcode = asfcs.langcode AND sku.default_langcode = :default AND sku.type = :type', [
+    ':default' => 1,
+    ':type' => 'configurable',
+  ]);
+  $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = asfcs.field_configured_skus_value');
+
+  $query->condition('sku.attr_style_code', $style_code);
+  $query->condition('stock.quantity', 0, '>');
+  $query->condition('stock.status', 1);
+
+  $query->fields('asfcs', ['field_configured_skus_value']);
+
+  $result = $query->execute()->fetchAll();
 
   $children = [];
 
-  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-  $plugin = $sku->getPluginInstance();
-  foreach ($variants as $variant) {
-    if (!$plugin->isProductInStock($variant)) {
+  foreach ($result ?? [] as $row) {
+    if (isset($children[$row->field_configured_skus_value])) {
       continue;
     }
 
-    $variant_children = Configurable::getChildSkus($variant);
-
-    foreach ($variant_children as $child_sku_code) {
-      $child = SKU::loadFromSku($child_sku_code);
-      if (!($child instanceof SKU)) {
-        continue;
-      }
-
-      $children[$child->getSku()] = $child;
+    $child = SKU::loadFromSku($row->field_configured_skus_value);
+    if (!($child instanceof SKU)) {
+      continue;
     }
+
+    $children[$child->getSku()] = $child;
   }
 }
 

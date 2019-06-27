@@ -59,6 +59,7 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $complete_form['#attributes']['class'][] = 'social-signin-enabled';
     $pane_form['#attributes']['class'][] = 'social-signup-form';
     $pane_form['social_media_auth_links'] = [
       '#theme' => 'alshaya_social',
