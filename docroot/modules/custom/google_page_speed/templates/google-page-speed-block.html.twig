@@ -1,0 +1,41 @@
+{{ attach_library('google_page_speed/google-chart-loader') }}
+{{ attach_library('google_page_speed/google_page_speed') }}
+{% set title_attributes = title_attributes.addClass('google_page_speed--title') %}
+{%
+  set classes = [
+    'block',
+    'google_page_speed_data',
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  <div class="inner__container">
+    {{ title_prefix }}
+    {% if block_title %}
+      <h2{{ title_attributes }}>{{ block_title }}</h2>
+    {% endif %}
+    {{ title_suffix }}
+    {% block content %}
+      <div class="interpreting__guide--content">
+        {{ content }}
+          <select id = 'gps-data-select'>
+              <option value="any">Any</option>
+              {% for url in urls %}
+                  <option value = {{ url }}>{{ url }}</option>
+              {% endfor %}
+          </select>
+          <select id = 'gps-screen-select'>
+              <option value="any">Any</option>
+              <option value="mobile">Mobile</option>
+              <option value="desktop">Desktop</option>
+          </select>
+          <br/>
+          <br/>
+          <p> The time is coming in seconds </p>
+          <div id="chart_div1" style="width:100%; height:500px"></div>.
+      </div>
+    {% endblock %}
+  </div>
+</div>
+
+
+

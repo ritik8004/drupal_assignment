@@ -1,0 +1,15 @@
+google_page_speed.controller:
+  path: '/google-page-speed/{screen}'
+  defaults:
+    _title: 'Page Speed Score'
+    _controller: '\Drupal\google_page_speed\Controller\GooglePageSpeedController::getPageScore'
+  requirements:
+    _permission: 'access content'
+
+google_page_speed.config:
+  path: '/admin/config/alshaya/google-page-speed'
+  defaults:
+    _title: 'Google Page Speed integration settings'
+    _form: 'Drupal\google_page_speed\Form\GooglePageSpeedConfigForm'
+  requirements:
+    _permission: 'administer google_page_speed configuration'

@@ -1,0 +1,4 @@
+administer google_page_speed configuration:
+  title: 'Administer google_page_speed configuration'
+  description: 'Page Speed Permission.'
+  restrict access: true
