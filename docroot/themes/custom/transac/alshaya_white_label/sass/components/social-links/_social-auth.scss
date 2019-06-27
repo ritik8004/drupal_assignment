@@ -1,6 +1,8 @@
 .alshaya-social {
-  @include breakpoint($only-mobile) {
-    margin-top: 5rem;
+  .c-user-login & {
+    @include breakpoint($only-mobile) {
+      margin-top: 5rem;
+    }
   }
 
   .auth-link {
