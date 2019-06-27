@@ -14,11 +14,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a block for GTM data.
  *
  * @Block(
- *   id = "alshaya_gtm_data_block",
- *   admin_label = @Translation("GTM data"),
+ *   id = "alshaya_gtm_user_data_block",
+ *   admin_label = @Translation("GTM User data block"),
  * )
  */
-class AlshayaGtmDataBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * Array of terms for cache bubbling up.
    *
@@ -41,7 +41,7 @@ class AlshayaGtmDataBlock extends BlockBase implements ContainerFactoryPluginInt
   protected $ordersManager;
 
   /**
-   * AlshayaGtmDataBlock constructor.
+   * AlshayaGtmUserDataBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
