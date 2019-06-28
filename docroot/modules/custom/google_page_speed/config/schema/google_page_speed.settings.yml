@@ -11,4 +11,3 @@ google_page_speed.settings:
     screen:
       type: array
       label: 'Screen'
-      

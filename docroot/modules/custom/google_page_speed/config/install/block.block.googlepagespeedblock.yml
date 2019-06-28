@@ -3,9 +3,9 @@ status: true
 dependencies:
   enforced:
     module:
-      - google_page_speed
+      - google_page_spee
 id: googlepagespeedblock
-theme: seven
+theme: adminimal_theme
 region: content
 weight: 10
 provider: null
