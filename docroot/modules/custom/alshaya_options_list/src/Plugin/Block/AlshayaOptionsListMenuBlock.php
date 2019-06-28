@@ -64,6 +64,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
   public function defaultConfiguration() {
     return [
       'link_title' => $this->t('Shop by'),
+      'link_align' => 'right',
     ];
   }
 
@@ -110,9 +111,13 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
     if (!empty($pages)) {
       foreach ($pages as $page) {
         $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
-        $links[] = Link::createFromRoute($page['menu-title'], $route_name, [])->toString();
+        if (isset($page['menu-title'])) {
+          $links[] = Link::createFromRoute($page['menu-title'], $route_name, [])->toString();
+        }
       }
     }
+
+    $menu_class = count($links) > 1 ? 'alshaya-multiple-links' : 'alshaya-single-link';
 
     return [
       '#theme' => 'alshaya_options_menu_link',
@@ -124,7 +129,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
         ],
       ],
       '#attributes' => [
-        'class' => [$alignment_class, 'options-list-block'],
+        'class' => [$alignment_class, $menu_class],
       ],
     ];
   }
