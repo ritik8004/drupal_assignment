@@ -1,4 +1,3 @@
-allow_insecure_derivatives: true
 allowed_insecure_styles:
     - 'cart_thumbnail'
     - 'product_listing'
