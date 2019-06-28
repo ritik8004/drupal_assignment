@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Configure Google Page Speed integration settings for this site.
  *
- * Class GooglePageSpeedConfigForm
+ * Class GooglePageSpeedConfigForm.
  */
 class GooglePageSpeedConfigForm extends ConfigFormBase {
 
@@ -54,19 +54,12 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
       '#description' => $this->t('Select the screen(s) for which analysis is to be done.'),
       '#options' => [
         'desktop' => $this->t('Desktop'),
-        'mobile' => $this->t('Mobile')
+        'mobile' => $this->t('Mobile'),
       ],
-      '#default_value' => $this->config(self::CONFIG_NAME)->get('screen')
+      '#default_value' => $this->config(self::CONFIG_NAME)->get('screen'),
     ];
 
     return parent::buildForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
   }
 
   /**
@@ -79,8 +72,8 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
       ->save();
 
     $this->config(self::CONFIG_NAME)
-        ->set('page_url', $form_state->getValue('page_url'))
-        ->save();
+      ->set('page_url', $form_state->getValue('page_url'))
+      ->save();
 
     $screen_items = array_keys(array_filter($form_state->getValues()['screen']));
 

@@ -12,9 +12,14 @@ use Drupal\google_page_speed\Form\GooglePageSpeedConfigForm;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Symfony\Component\Serializer\Serializer;
+use Drupal\Component\Datetime\Time;
 
-class GooglePageSpeedCommands extends DrushCommands
-{
+/**
+ * Class GooglePageSpeedCommands.
+ *
+ * @package Drupal\google_page_speed\Commands
+ */
+class GooglePageSpeedCommands extends DrushCommands {
   use StringTranslationTrait;
 
   /**
@@ -32,6 +37,8 @@ class GooglePageSpeedCommands extends DrushCommands
   protected $database;
 
   /**
+   * CacheInvalidator object.
+   *
    * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
    */
   protected $cacheInvalidator;
@@ -44,24 +51,37 @@ class GooglePageSpeedCommands extends DrushCommands
   protected $serializer;
 
   /**
-   * GooglePageSpeedCommands constructor.
-   * @param ConfigFactory $config_factory
-   * @param Connection $database
-   * @param CacheTagsInvalidatorInterface $cache_invalidator
-   * @param Serializer $serializer
+   * The Time object.
+   *
+   * @var \Drupal\Component\Datetime\Time
    */
-  public function __construct(ConfigFactory $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator, Serializer $serializer)
-  {
+  protected $time;
+
+  /**
+   * GooglePageSpeedCommands constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   *   The ConfigFactory object to inject configfactory service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The Database object to inject database service.
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_invalidator
+   *   The CacheInvalidator object to inject cache invalidator service.
+   * @param \Symfony\Component\Serializer\Serializer $serializer
+   *   The Symfony serializer object to inject serializer service.
+   * @param \Drupal\Component\Datetime\Time $time
+   *   Injecting time service.
+   */
+  public function __construct(ConfigFactory $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator, Serializer $serializer, Time $time) {
     parent::__construct();
     $this->configFactory = $config_factory;
     $this->database = $database;
     $this->cacheInvalidator = $cache_invalidator;
     $this->serializer = $serializer;
+    $this->time = $time;
   }
 
   /**
    * Drush command to get insights data.
-   *
    *
    * @command google_page_speed:getinsights
    * @aliases gps-gi
@@ -70,8 +90,7 @@ class GooglePageSpeedCommands extends DrushCommands
    * @usage google_page_speed:insights --url https://google.com --screen desktop
    *   Display data for https://google.com on screen desktop
    */
-  public function insights($options = ['url' => '', 'screen' => ''])
-  {
+  public function insights($options = ['url' => '', 'screen' => '']) {
     $config = $this->configFactory->get(GooglePageSpeedConfigForm::CONFIG_NAME);
     $api_key = $config->get('api_key');
     if (empty($api_key)) {
@@ -87,22 +106,24 @@ class GooglePageSpeedCommands extends DrushCommands
       $this->getPageSpeedData($client, $serializer, $api_key, $options['url'], $options['screen']);
     }
     // Get data from configurations.
-    else{
+    else {
       $urls = explode(PHP_EOL, $config->get('page_url'));
       $screens = $config->get('screen');
       if (isset($api_key, $urls, $screens, $client, $serializer)) {
         foreach ($urls as $url) {
           foreach ($screens as $screen) {
             try {
-              if (!empty($api_key) && !empty($url) && !empty($screen)){
+              if (!empty($api_key) && !empty($url) && !empty($screen)) {
                 $this->getPageSpeedData($client, $serializer, $api_key, trim($url), trim($screen));
               }
-            } catch (RequestException $e) {
+            }
+            catch (RequestException $e) {
               return($this->t('Error'));
             }
           }
         }
-      } else {
+      }
+      else {
         $this->output->writeln('Arguments are empty');
       }
     }
@@ -111,19 +132,29 @@ class GooglePageSpeedCommands extends DrushCommands
   }
 
   /**
-   * @param $client
-   * @param $serializer
-   * @param $api_key
-   * @param $url
-   * @param $screen
+   * Gets Insights data and then store it in database against a timestamp.
+   *
+   * @param \GuzzleHttp\Client $client
+   *   The client object to make a request.
+   * @param mixed $serializer
+   *   The serializer object to serialize the data before saving.
+   * @param string $api_key
+   *   The Google API key for authentication.
+   * @param string $url
+   *   The url whose data is needed.
+   * @param string $screen
+   *   The screen for which data is needed.
+   *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|int
+   *   The integer return statement.
+   *
    * @throws \Exception
+   *   Throws Exception.
    */
-
-  protected function getPageSpeedData($client, $serializer, $api_key, $url, $screen) {
+  protected function getPageSpeedData(Client $client, $serializer, $api_key, $url, $screen) {
     $siteUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=' . $api_key . '&url=' . $url . '&strategy=' . $screen;
 
-    $response = $client->get($siteUrl, ['http_errors' => false]);
+    $response = $client->get($siteUrl, ['http_errors' => FALSE]);
 
     if ($response->getStatusCode() == 200) {
       $response_body = $response->getBody();
@@ -137,7 +168,7 @@ class GooglePageSpeedCommands extends DrushCommands
         $audits['speed-index']['displayValue'],
         $audits['first-cpu-idle']['displayValue'],
         $audits['interactive']['displayValue'],
-        $audits['max-potential-fid']['displayValue']
+        $audits['max-potential-fid']['displayValue'],
       ];
       $score = $serializer->serialize($score_array, 'json');
 
@@ -157,18 +188,17 @@ class GooglePageSpeedCommands extends DrushCommands
           'screen',
           'created',
           'metrics',
-          'score'
+          'score',
         ])
         ->values([
           $url,
           $screen,
-          \Drupal::time()
-            ->getRequestTime(),
+          $this->time->getRequestTime(),
           $metrics,
-          $score
+          $score,
         ])->execute();
 
-      if (!isset($drush_insert) || is_null($drush_insert) || empty($drush_insert) ) {
+      if (!isset($drush_insert) || is_null($drush_insert) || empty($drush_insert)) {
         $this->output->writeln('Problem in database insert.');
       }
     }
@@ -180,4 +210,5 @@ class GooglePageSpeedCommands extends DrushCommands
 
     return 1;
   }
+
 }

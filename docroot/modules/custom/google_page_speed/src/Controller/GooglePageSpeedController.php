@@ -14,12 +14,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class GooglePageSpeedController extends ControllerBase {
 
   /**
-   * @var Connection
+   * The Database connection object.
+   *
+   * @var \Drupal\Core\Database\Connection
    */
   protected $database;
 
   /**
-   * @var RequestStack
+   * The request stack object.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   protected $requestStack;
 
@@ -28,14 +32,9 @@ class GooglePageSpeedController extends ControllerBase {
    *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
    *   Container interface.
-   * @param array $configuration
-   *   Plugin configs.
-   * @param string $plugin_id
-   *   Plugin Id.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
    *
    * @return static
+   *   Injecting database and request_stack service objects.
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -47,14 +46,10 @@ class GooglePageSpeedController extends ControllerBase {
   /**
    * Constructor.
    *
-   * @param array $configuration
-   *   Plugin configs.
-   * @param string $plugin_id
-   *   Plugin Id.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
-   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
-   *   Injecting CacheTagsInvalidatorInterface.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Injecting database connection.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Injecting request.
    */
   public function __construct(Connection $database, RequestStack $request_stack) {
     $this->database = $database;
@@ -68,7 +63,7 @@ class GooglePageSpeedController extends ControllerBase {
     $url = $this->requestStack->getCurrentRequest()->query->get('url');
     $rows = [];
     $query = $this->database->select('google_page_speed_data', 'gps');
-    $query->fields('gps', ['created','score']);
+    $query->fields('gps', ['created', 'score']);
     $query->condition('gps.url', trim($url), '=');
     $query->condition('gps.screen', trim($screen), '=');
     $query->orderBy('gps.created', 'DESC');
@@ -83,7 +78,7 @@ class GooglePageSpeedController extends ControllerBase {
         $scores[2],
         $scores[3],
         $scores[4],
-        $scores[5]
+        $scores[5],
       ];
     }
 
@@ -97,6 +92,7 @@ class GooglePageSpeedController extends ControllerBase {
    * Shows the data chart.
    *
    * @return array
+   *   Returning renderable array.
    */
   public function showDataChart() {
     $build = [
