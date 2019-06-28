@@ -168,7 +168,8 @@
                 }
               }
 
-              label.error {
+              label.error,
+              .form-item--error-message {
                 width: 100%;
                 top: 4.75rem !important;
                 #{$left}: 0;
@@ -212,15 +213,16 @@
           label {
             top: -1.5rem;
             font-size: 0.75rem;
+          }
 
-            &.error {
-              position: absolute;
-              top: 1.5rem !important;
-              font-size: 0.75rem;
-              color: $primary_input_inline_error;
-              padding-top: 0.3125rem;
-              display: block;
-            }
+          label.error,
+          .form-item--error-message {
+            position: absolute;
+            top: 1.5rem !important;
+            font-size: 0.75rem;
+            color: $primary_input_inline_error;
+            padding-top: 0.3125rem;
+            display: block;
           }
         }
       }
@@ -261,6 +263,10 @@
       > .address--wrapper {
         @include breakpoint($only-mobile) {
           margin-top: 0;
+        }
+
+        .form-item--error-message {
+          position: absolute;
         }
       }
     }
