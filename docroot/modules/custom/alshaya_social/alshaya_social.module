@@ -119,6 +119,7 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
  * Implements hook_alshaya_reset_config_configs_to_reset_alter().
  */
 function alshaya_social_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  // Get the config name of all enabled social auth networks to reset.
   $social_helper = \Drupal::service('alshaya_social.helper');
   if ($social_helper->getStatus()) {
     $configs = array_map(function ($key) {
