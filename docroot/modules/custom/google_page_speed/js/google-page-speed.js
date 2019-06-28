@@ -13,22 +13,23 @@
         data: [0,0,0,0,0,0,0]
       }
 
-      $('#gps-data-select, #gps-screen-select').on('change', function () {
+      $('#gps-data-select, #gps-screen-select, #gps-time-select').on('change', function () {
         urlObject = {
           url: $(this).value,
           data: [0,0,0,0,0,0,0]
         }
 
         let url = document.getElementById('gps-data-select').value;
-        screen = document.getElementById('gps-screen-select').value;
+        let screen = document.getElementById('gps-screen-select').value;
+        let time = document.getElementById('gps-time-select').value;
 
-        let urlTest = '/google-page-speed/' + screen + '?url=' + encodeURIComponent(url);
+        let urlTest = '/google-page-speed/' + screen + '/' + time + '?url=' + encodeURIComponent(url);
 
         jQuery.get(urlTest, function(data, status){
           if (status == 'success' && data) {
             let showData = jQuery.parseJSON(data);
             urlObject.data = showData;
-            google.charts.load('current', {'packages':['annotatedtimeline']});
+            google.charts.load('current', {'packages':['corechart','line']});
             google.charts.setOnLoadCallback(drawChart);
           }
         });
@@ -61,12 +62,19 @@
         })
 
         var options = {
-          colors: ['#a52714', '#097138', '#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF'],
-          displayAnnotations: true,
-          displayExactValues: true
+          colors: ['#a52714', '#097138', '#FF0000', '#FF7F00', '#000000', '#00FF00'],
+          hAxis: {
+            title: 'Date and time'
+          },
+          vAxis: {
+            title: 'Time(s)'
+          },
+          'width':'100%',
+          'height':'auto',
+          pointsVisible: true
         };
 
-        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div1'));
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
     }
