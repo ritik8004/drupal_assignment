@@ -140,6 +140,8 @@ class AlshayaCheckoutCom extends CheckoutCom {
                 ],
               ];
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#prefix'] = $cc_prefix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#suffix'] = $cc_suffix;
             }
           }
         }
@@ -147,9 +149,16 @@ class AlshayaCheckoutCom extends CheckoutCom {
     }
 
     if ($this->currentUser->isAnonymous() || empty($options)) {
-      $pane_form['payment_card_details'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_card_details'], $form_state);
-      $pane_form['payment_card_details']['cc_cvv']['#prefix'] = $cc_prefix;
-      $pane_form['payment_card_details']['cc_cvv']['#suffix'] = $cc_suffix;
+      $pane_form['payment_card_details']['payment_card_new'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => ['payment_method_new'],
+        ],
+      ];
+
+      $pane_form['payment_card_details']['payment_card_new'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
+      $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#prefix'] = $cc_prefix;
+      $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#suffix'] = $cc_suffix;
     }
     return $pane_form;
   }
