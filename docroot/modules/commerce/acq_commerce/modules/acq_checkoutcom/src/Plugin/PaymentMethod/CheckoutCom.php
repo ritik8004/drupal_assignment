@@ -8,7 +8,6 @@ use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -106,11 +105,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
-      $existing_cards = $this->apiHelper->getCustomerCards(
-        $this->entityTypeManager->getStorage('user')->load(
-          $this->currentUser->id()
-        )
+      $user = $this->entityTypeManager->getStorage('user')->load(
+        $this->currentUser->id()
       );
+      $existing_cards = $this->apiHelper->getCustomerCards($user);
 
       if (!empty($existing_cards)) {
         $options = [];
@@ -118,6 +116,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
           $build = [
             '#theme' => 'payment_card_teaser',
             '#card_info' => $card,
+            '#user' => $user,
           ];
           $options[$card['id']] = $this->renderer->render($build);
         }
@@ -190,7 +189,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         ],
       ]
     );
-    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand($url->toString()));
     return $response;
   }
