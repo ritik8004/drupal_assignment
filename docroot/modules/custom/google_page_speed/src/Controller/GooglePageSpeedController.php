@@ -58,14 +58,38 @@ class GooglePageSpeedController extends ControllerBase {
 
   /**
    * Builds the response.
+   *
+   * @param string $screen
+   *   Passing screen type.
+   * @param string $time
+   *   Passing time period for which data is needed.
    */
-  public function getPageScore($screen = 'desktop') {
+  public function getPageScore($screen = 'desktop', $time = 'one-week') {
     $url = $this->requestStack->getCurrentRequest()->query->get('url');
+
+    switch ($time) {
+      case 'one-week':
+        $timestamp = strtotime('-1 week');
+        break;
+
+      case 'one-month':
+        $timestamp = strtotime('-1 month');
+        break;
+
+      case 'one-year':
+        $timestamp = strtotime('-1 year');
+        break;
+
+      default:
+        $timestamp = strtotime('-1 week');
+    }
+
     $rows = [];
     $query = $this->database->select('google_page_speed_data', 'gps');
     $query->fields('gps', ['created', 'score']);
     $query->condition('gps.url', trim($url), '=');
     $query->condition('gps.screen', trim($screen), '=');
+    $query->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
     $query->orderBy('gps.created', 'DESC');
     $results = $query->execute()->fetchAll();
 
@@ -96,7 +120,7 @@ class GooglePageSpeedController extends ControllerBase {
    */
   public function showDataChart() {
     $build = [
-      '#markup' => $this->t('The PageSpeed score related to the configured URLs can be seen here.'),
+      '#markup' => $this->t('See the Google PageSpeed Insights data in below chart.'),
     ];
     return $build;
   }
