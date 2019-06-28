@@ -26,6 +26,7 @@ global_styles:
     - mobile_number/element
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
+    - alshaya_white_label/alshaya_image_lazy_load
 
 ltr_styles:
   css:
