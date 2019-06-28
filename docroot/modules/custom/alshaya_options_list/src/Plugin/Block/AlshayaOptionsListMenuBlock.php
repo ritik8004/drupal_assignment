@@ -5,7 +5,6 @@ namespace Drupal\alshaya_options_list\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -128,13 +127,6 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
         'class' => [$alignment_class, 'options-list-block'],
       ],
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }
