@@ -122,13 +122,13 @@ class AlshayaOptionsListService {
   /**
    * Groups attributes alphabetically.
    *
-   * @param string $options_array
+   * @param array $options_array
    *   List of all options.
    *
    * @return array
    *   Alphabetically grouped array.
    */
-  public function groupAlphabetically($options_array) {
+  public function groupAlphabetically(array $options_array) {
     $return_array = [];
     foreach ($options_array as $option) {
       $char = strtolower($option['title'][0]);
