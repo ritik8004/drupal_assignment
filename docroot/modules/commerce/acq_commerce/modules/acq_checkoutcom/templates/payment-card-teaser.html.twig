@@ -1,5 +1,15 @@
 <div class="saved-card">
-  <div class="card-number">**** **** **** {{ card_info.last4 }}</div>
-  <div class="card-name">{{ card_info.name }}</div>
-  <div class="card-expiry-date">{{ card_info.expiryMonth ~ '/' ~ card_info.expiryYear }}</div>
+  <div class="name-number">
+    <div class="card-name">{{ card_info.name }}</div>
+    <div class="card-number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.last4 }}</div>
+  </div>
+  <div class="actions">
+    {% if not card_info.expired %}
+      <div class="label">{{ "expires on"|t }}</div>
+      <div class="card-expiry-date">{{ card_info.expiryMonth ~ '/' ~ card_info.expiryYear }}</div>
+    {% else %}
+      <div class="label">{{ "expired"}}</div>
+      <div class="card-delete">{{ link(delete_operation.title, delete_operation.url) }}</div>
+    {% endif %}
+  </div>
 </div>

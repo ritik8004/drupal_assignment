@@ -27,15 +27,6 @@ class AlshayaCheckoutCom extends CheckoutCom {
     // Set the default payment card to display form to enter new card.
     $payment_card = 'new';
 
-    $pane_form['card_types'] = [
-      '#markup' => '
-        <div class="card-types-wrapper">
-          <span class="card-type card-type-visa"></span>
-          <span class="card-type card-type-mastercard"></span>
-        </div>
-      ',
-    ];
-
     $pane_form['payment_card_details'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -55,11 +46,10 @@ class AlshayaCheckoutCom extends CheckoutCom {
     $options = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
-      $existing_cards = $this->apiHelper->getCustomerCards(
-        $this->entityTypeManager->getStorage('user')->load(
-          $this->currentUser->id()
-        )
+      $user = $this->entityTypeManager->getStorage('user')->load(
+        $this->currentUser->id()
       );
+      $existing_cards = $this->apiHelper->getCustomerCards($user);
 
       if (!empty($existing_cards)) {
         $options = [];
@@ -67,6 +57,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
           $build = [
             '#theme' => 'payment_card_teaser',
             '#card_info' => $card,
+            '#user' => $user,
           ];
           $options[$card['id']] = $this->renderer->render($build);
         }
