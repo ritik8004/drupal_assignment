@@ -106,7 +106,6 @@ class AlshayaOptionsListService {
         ];
         $list_object['url'] = Url::fromUri('internal:/search', $url);
         if ($showImages) {
-          $list_object['image_url'] = '';
           if (!empty($option->image)) {
             $file = $this->fileStorage->load($option->image);
             if ($file instanceof File) {
@@ -121,7 +120,13 @@ class AlshayaOptionsListService {
   }
 
   /**
-   * {@inheritdoc}
+   * Groups attributes alphabetically.
+   *
+   * @param string $options_array
+   *   List of all options.
+   *
+   * @return array
+   *   Alphabetically grouped array.
    */
   public function groupAlphabetically($options_array) {
     $return_array = [];

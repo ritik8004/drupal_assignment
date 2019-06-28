@@ -17,7 +17,7 @@ alshaya_options_list.page_settings:
 alshaya_options_list.autocomplete:
   path: '/options-list/autocomplete/{param}'
   defaults:
-    controller: '\Drupal\alshaya_options_list\AlshayaOptionsPageController::searchAutocomplete'
+    _controller: '\Drupal\alshaya_options_list\Controller\AlshayaOptionsPageController::searchAutocomplete'
   requirements:
     _permission: 'access content'
 
