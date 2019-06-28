@@ -9,7 +9,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 
-
 /**
  * Provides a 'Google Page Speed Display' block.
  *
@@ -22,7 +21,9 @@ use Drupal\Core\Database\Connection;
 class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * @var Connection
+   * The Database Connection object.
+   *
+   * @var \Drupal\Core\Database\Connection
    */
   protected $database;
 
@@ -61,6 +62,8 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Plugin definition.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
    *   Injecting CacheTagsInvalidatorInterface.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Injecting database connection.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CacheTagsInvalidatorInterface $cacheTagsInvalidator, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -100,12 +103,13 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
    * This function fetches the distinct urls from the database.
    *
    * @return mixed
+   *   Returning distinct url values from the database.
    */
   public function getTestedUrls() {
     $query = $this->database->select('google_page_speed_data', 'gps');
     $query->fields('gps', ['url']);
     $query->distinct();
-    $urls = $query->execute()->fetchAllKeyed(0,0);
+    $urls = $query->execute()->fetchAllKeyed(0, 0);
     return $urls;
   }
 

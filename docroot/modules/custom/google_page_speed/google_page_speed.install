@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the Google Page Speed integration module.
+ * Install, update and uninstall functions for the module.
  */
 
 use Drupal\Core\Link;
@@ -15,7 +15,6 @@ function google_page_speed_install() {
   $config_link = Link::fromTextAndUrl(t('configurations here'), Url::fromRoute('google_page_speed.config'))->toString();
   \Drupal::messenger()->addStatus(t('The module is successfully enabled. Please add %configurations. Also enable the Google Page Speed block from block layout.', ['%configurations' => $config_link]));
 }
-
 
 /**
  * Implements hook_schema().
@@ -62,7 +61,7 @@ function google_page_speed_schema() {
         'description' => 'To store score data',
       ],
     ],
-    'primary key' => ['id']
+    'primary key' => ['id'],
   ];
 
   return $schema;
