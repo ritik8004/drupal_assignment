@@ -8,14 +8,13 @@
 /**
  * Implements hook_theme().
  */
-function google_page_speed_theme($existing, $type, $theme, $path)
-{
+function google_page_speed_theme($existing, $type, $theme, $path) {
   return [
     'google_page_speed_block' => [
       'template' => 'google-page-speed-block',
       'variables' => [
         'block_title' => '',
-        'urls' => ''
+        'urls' => '',
       ],
     ],
   ];
