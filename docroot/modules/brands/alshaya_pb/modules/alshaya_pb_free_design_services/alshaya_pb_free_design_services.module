@@ -126,3 +126,33 @@ function alshaya_pb_free_design_services_element_info_alter(array &$info) {
     $info['address']['#process'][] = '_alshaya_pb_free_design_services_process_address_form';
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_pb_free_design_services_form_webform_submission_free_design_services_add_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
+    $form['elements']['contact_information']['full_name']['#default_value'] = $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString() ?? '';
+    $form['elements']['contact_information']['email']['#default_value'] = $current_user->get('mail')->getString();
+    $form['elements']['contact_information']['mobile_number']['#default_value'] = ['value' => _alshaya_acm_checkout_clean_address_phone($current_user->get('field_mobile_number')->value ?? '')];
+
+    $profiles = \Drupal::entityTypeManager()->getStorage('profile')->loadByProperties([
+      'type' => 'address_book',
+      'uid' => $current_user->id(),
+      'is_default' => 1,
+    ]);
+
+    if ($profiles && $profile = reset($profiles)) {
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $manager */
+      $manager = \Drupal::service('alshaya_addressbook.manager');
+      $address = $manager->getAddressArrayFromMagentoAddress($manager->getAddressFromEntity($profile));
+
+      $form['elements']['address']['#webform_composite_elements']['address_line2']['#default_value'] = $address['address_line2'];
+      $form['elements']['address']['#webform_composite_elements']['dependent_locality']['#default_value'] = $address['dependent_locality'];
+      $form['elements']['address']['#webform_composite_elements']['administrative_area']['#default_value'] = $address['administrative_area'];
+      $form['elements']['address']['#webform_composite_elements']['locality']['#default_value'] = $address['area_parent'];
+      $form['elements']['address']['#webform_composite_elements']['address_line1']['#default_value'] = $address['address_line1'];
+    }
+  }
+}
