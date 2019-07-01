@@ -298,6 +298,7 @@
 
       > .address--wrapper {
         margin-top: 1.25rem;
+        width: 100%;
 
         @include breakpoint($only-mobile) {
           margin-top: 0;
@@ -509,10 +510,16 @@
 
       #edit-anything-else {
         border: 1px solid $form-field-textarea-border;
-        padding: 0.25rem 0.75rem;
         max-width: 26.5rem;
         width: 100%;
         height: 9.75rem;
+        padding: 1rem;
+
+        &::placeholder {
+          font-size: 0.75rem;
+          line-height: 1.25;
+          color: $form-field-label;
+        }
       }
     }
 
@@ -538,11 +545,11 @@
       padding: 0.8125rem 0.75rem 1.5rem;
 
       @include breakpoint($desktop) {
-        padding: 2.375rem;
+        padding: 2.375rem 2.375rem 0.875rem;
       }
     }
 
-    #edit-submit {
+    .webform-button--submit {
       @extend %btn;
 
       background: $primary_btn_bg;
