@@ -91,6 +91,10 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
  * Processor for the country in address field.
  */
 function _alshaya_addressbook_country_process(array &$element, FormStateInterface $form_state) {
+
+  // Checking if address is required.
+  $is_element_required = $element['#required'] ?? FALSE;
+
   // No processing for field_ui admin page.
   if (strpos($element['#name'], 'default_value_input') > -1) {
     return $element;
@@ -125,6 +129,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     // Use organization field as email.
     $element['organization'] = [
       '#type' => 'email',
+      '#required' => $is_element_required,
       '#default_value' => isset($element['organization']) ? $element['organization']['#default_value'] : '',
       '#title' => t('Email', [], ['context' => 'Address label']),
       '#description' => t("We'll send your order confirmation here."),
@@ -135,6 +140,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     }
   }
   else {
+    $element['organization']['#required'] = FALSE;
     $element['organization']['#access'] = FALSE;
   }
 
@@ -148,10 +154,13 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['locality']['#maxlength'] = 92;
   $element['sorting_code']['#title'] = t('Landmark (Optional)', [], ['context' => 'Address label']);
   $element['sorting_code']['#maxlength'] = 92;
+  $element['sorting_code']['#required'] = FALSE;
   $element['additional_name']['#title'] = t('Apartment (Optional)', [], ['context' => 'Address label']);
   $element['additional_name']['#maxlength'] = 92;
+  $element['additional_name']['#required'] = FALSE;
   $element['postal_code']['#title'] = t('Postal Code (Optional)', [], ['context' => 'Address label']);
   $element['postal_code']['#maxlength'] = 8;
+  $element['postal_code']['#required'] = FALSE;
   $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
   $element['address_line2']['#maxlength'] = 92;
 
@@ -190,6 +199,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['administrative_area'] = [
     '#type' => 'select',
     '#title' => t('Area'),
+    '#required' => $is_element_required,
     '#multiple' => FALSE,
     '#default_value' => $administrative_area_default_value,
     '#attributes' => [
@@ -252,6 +262,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
     // Configure area_parent field.
     $element['area_parent']['#type'] = 'select';
+    $element['area_parent']['#required'] = $is_element_required;
     $element['area_parent']['#access'] = TRUE;
     $element['area_parent']['#multiple'] = FALSE;
     $element['area_parent']['#default_value'] = $area_parent;
@@ -308,20 +319,15 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ? $country_field + $element
     : _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
 
-  // Making all address related field required or not based on address field.
-  $address_flag = FALSE;
-  if ($element['#required']) {
-    $address_flag = TRUE;
-  }
-  $element['additional_name']['#required'] = $address_flag;
-  $element['organization']['#required'] = $address_flag;
-  $element['postal_code']['#required'] = $address_flag;
-  $element['administrative_area']['#required'] = $address_flag;
-  $element['sorting_code']['#required'] = $address_flag;
-  $element['city']['#required'] = $address_flag;
-  $element['area_parent']['#required'] = $address_flag;
-  $element['address_line1']['#required'] = $address_flag;
-  $element['dependent_locality']['#required'] = $address_flag;
+  $element['additional_name']['#required'] = $is_element_required;
+  $element['organization']['#required'] = $is_element_required;
+  $element['postal_code']['#required'] = $is_element_required;
+  $element['administrative_area']['#required'] = $is_element_required;
+  $element['sorting_code']['#required'] = $is_element_required;
+  $element['city']['#required'] = $is_element_required;
+  $element['area_parent']['#required'] = $is_element_required;
+  $element['address_line1']['#required'] = $is_element_required;
+  $element['dependent_locality']['#required'] = $is_element_required;
 
   // Special case - city is not required.
   $element['city']['#required'] = FALSE;
