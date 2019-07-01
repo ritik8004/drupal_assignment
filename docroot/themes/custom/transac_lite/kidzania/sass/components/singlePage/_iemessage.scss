@@ -7,12 +7,12 @@
   top: 0;
   background-color: rgba(255, 255, 255, 0.85);
   z-index: 1000;
-  padding: 50px 0;
+  padding: 4rem 0;
   text-align: center;
 
   .messageArea {
     background: $header_bg;
-    padding: 20px;
+    padding: 2rem;
     display: inline-block;
   }
 }
