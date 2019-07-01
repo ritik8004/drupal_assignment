@@ -29,6 +29,8 @@ class KnetSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_knet.settings')
+      ->set('use_new_knet_toolkit', $form_state->getValue('use_new_knet_toolkit'))
+      ->set('knet_url', $form_state->getValue('knet_url'))
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
@@ -45,6 +47,29 @@ class KnetSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_knet.settings');
+
+    $form['use_new_knet_toolkit'] = [
+      '#type' => 'checkbox',
+      '#description' => $this->t('If checked, then new K-Net toolkit will be used and requires tranportal id, password and key.'),
+      '#title' => $this->t('Use new K-Net toolkit.'),
+      '#default_value' => $config->get('use_new_knet_toolkit'),
+    ];
+
+    $form['new_toolkit_container'] = [
+      '#type' => 'fieldset',
+      '#states' => [
+        'visible' => [
+          [':input[name="use_new_knet_toolkit"]' => ['checked' => TRUE]],
+        ],
+      ],
+    ];
+
+    $form['new_toolkit_container']['knet_url'] = [
+      '#type' => 'textfield',
+      '#description' => $this->t('K-Net PG url where the user will be redirected for the payment.'),
+      '#title' => $this->t('K-Net url'),
+      '#default_value' => $config->get('knet_url'),
+    ];
 
     $form['resource_path'] = [
       '#type' => 'textfield',

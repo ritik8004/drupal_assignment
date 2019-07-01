@@ -8,7 +8,7 @@
 
   Drupal.behaviors.formsInput = {
     attach: function (context, settings) {
-      $('.address-book-address input:not([type=hidden]), .profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input').each(function () {
+      $('.address-book-address input:not([type=hidden]), .profile-form input, .c-user-edit .user-form input, .user-login-form input, .order-confirmation .user-register-form input, #edit-contact-information input').each(function () {
         if ($.trim($(this).val()).length !== 0) {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -17,7 +17,7 @@
         }
       });
 
-      $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .c-user-edit .user-form input, .address-book-address input').focusout(function () {
+      $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .c-user-edit .user-form input, .address-book-address input, #edit-contact-information input').focusout(function () {
         if ($(this).val() !== '') {
           $(this).parent().find('label').last().addClass('active-label');
         }
