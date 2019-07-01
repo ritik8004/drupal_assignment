@@ -1,4 +1,8 @@
+{% if card_info.expired %}
+<div class="payment-card error">
+{% else %}
 <div class="payment-card">
+{% endif %}
   <div class="payment-card--data">
     <div class="payment-card--type {{ card_info.paymentMethod|lower }}"></div>
     <div class="payment-card--info">
