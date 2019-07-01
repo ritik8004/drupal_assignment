@@ -5,6 +5,7 @@ namespace Drupal\acq_checkoutcom;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Provides required elements for checkout card form.
@@ -13,6 +14,7 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 class CheckoutComFormHelper {
 
+  use StringTranslationTrait;
   /**
    * API Helper service object.
    *
@@ -83,7 +85,7 @@ class CheckoutComFormHelper {
 
     $form['cc_name'] = [
       '#type' => 'textfield',
-      '#title' => t('Name on card'),
+      '#title' => $this->t('Name on card'),
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
         'data-checkout' => 'card-name',
@@ -93,7 +95,7 @@ class CheckoutComFormHelper {
 
     $form['cc_number'] = [
       '#type' => 'tel',
-      '#title' => t('Credit Card Number'),
+      '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
@@ -105,7 +107,7 @@ class CheckoutComFormHelper {
 
     $form['cc_exp_month'] = [
       '#type' => 'textfield',
-      '#title' => t('Expiration Month'),
+      '#title' => $this->t('Expiration Month'),
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-month-select',
@@ -118,7 +120,7 @@ class CheckoutComFormHelper {
 
     $form['cc_exp_year'] = [
       '#type' => 'textfield',
-      '#title' => t('Expiration Year'),
+      '#title' => $this->t('Expiration Year'),
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-year-select',
@@ -132,7 +134,7 @@ class CheckoutComFormHelper {
     $form['cc_cvv'] = [
       '#type' => 'password',
       '#maxlength' => 4,
-      '#title' => t('Security code (CVV)'),
+      '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
       '#attributes' => [
         'class' => [
@@ -156,12 +158,12 @@ class CheckoutComFormHelper {
     if ($this->currentUser->isAuthenticated()) {
       $form['save_card'] = [
         '#type'  => 'checkbox',
-        '#title' => t('Save card for future use'),
+        '#title' => $this->t('Save card for future use'),
       ];
 
       $form['cc_save_help_text'] = [
         '#type'  => 'markup',
-        '#markup' => '<div class = "cc-save-help-text">' . t('This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info') . '</div>',
+        '#markup' => '<div class="cc-save-help-text">' . $this->t('This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info') . '</div>',
       ];
     }
 
