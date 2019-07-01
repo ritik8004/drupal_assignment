@@ -187,7 +187,7 @@ class TicketBookingKnetHelper extends KnetHelper {
     ]);
 
     $this->messenger->addMessage($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Payment: @result_code', [
-      '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],
+      '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : '',
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],
     ]), 'error');
