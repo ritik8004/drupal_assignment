@@ -37,6 +37,7 @@
           ticketNextEle = $('#step-3 .nextBtn'),
           totalEle = $('#totalWrapper'),
           formEle = $('#paymentForm'),
+          eleStep0 = $('#step-0'),
           eleStep3 = $('#step-3'),
           eleStep4 = $('#step-4'),
           eleTotWrapper = $('#totalWrapper'),
@@ -49,6 +50,7 @@
         var actions = {
           init: function () {
             this.hideEle(timeEle);
+            this.showEle(eleStep0);
             this.getParks();
             this.progressBar(-1);
             errorEle.hide();
