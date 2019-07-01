@@ -3,7 +3,6 @@
 namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_cart\CartInterface;
-use Drupal\acq_checkoutcom\CheckoutComCardInfoFormTrait;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
@@ -22,8 +21,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * )
  */
 class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
-
-  use CheckoutComCardInfoFormTrait;
 
   /**
    * Checkout.com api wrapper object.
@@ -68,6 +65,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $renderer;
 
   /**
+   * Form helper.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComFormHelper
+   */
+  protected $formHelper;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -87,6 +91,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $this->currentRequest = \Drupal::service('request_stack')->getCurrentRequest();
     $this->renderer = \Drupal::service('renderer');
+    $this->formHelper = \Drupal::service('acq_checkoutcom.form_helper');
   }
 
   /**
@@ -162,7 +167,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
     }
     elseif ($payment_card == 'new') {
-      $pane_form['payment_details'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_details'], $form_state);
+      $pane_form['payment_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_details'], $form_state);
     }
 
     return $pane_form;

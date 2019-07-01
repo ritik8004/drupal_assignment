@@ -2,14 +2,64 @@
 
 namespace Drupal\acq_checkoutcom;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
- * Provides required elements for checkout card from.
+ * Provides required elements for checkout card form.
  *
  * @package Drupal\acq_checkoutcom
  */
-trait CheckoutComCardInfoFormTrait {
+class CheckoutComFormHelper {
+
+  /**
+   * API Helper service object.
+   *
+   * @var \Drupal\acq_commerce\APIHelper
+   */
+  protected $helper;
+
+  /**
+   * Current user object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The config factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
+   * CheckoutComAPIWrapper constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   ConfigFactoryInterface object.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
+   *   The current user object.
+   * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
+   *   ApiHelper object.
+   */
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    AccountProxyInterface $account_proxy,
+    ApiHelper $api_helper
+  ) {
+    $this->configFactory = $config_factory;
+    $this->currentUser = $account_proxy;
+    $this->apiHelper = $api_helper;
+  }
 
   /**
    * Returns the card related necessary elements.
@@ -22,7 +72,7 @@ trait CheckoutComCardInfoFormTrait {
    * @return array
    *   Returns form elements.
    */
-  public static function newCardInfoForm(array $form, FormStateInterface $form_state) {
+  public function newCardInfoForm(array $form, FormStateInterface $form_state) {
     $states = [
       '#states' => [
         'required' => [
@@ -103,7 +153,7 @@ trait CheckoutComCardInfoFormTrait {
     ];
 
     // Card can be saved in account for authenticated users only.
-    if (\Drupal::service('current_user')->isAuthenticated()) {
+    if ($this->currentUser->isAuthenticated()) {
       $form['save_card'] = [
         '#type'  => 'checkbox',
         '#title' => t('Save card for future use'),
@@ -115,8 +165,8 @@ trait CheckoutComCardInfoFormTrait {
       ];
     }
 
-    $debug = \Drupal::service('config.factory')->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
-    $public_key = \Drupal::service('acq_checkoutcom.agent_api')->getSubscriptionInfo('public_key');
+    $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
+    $public_key = $this->apiHelper->getSubscriptionInfo('public_key');
     $string = "window.CKOConfig = {
         debugMode: {$debug},
         publicKey: '{$public_key}',
