@@ -108,30 +108,30 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
-      $existing_cards = $this->apiHelper->getCustomerCards($user);
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
 
-      if (!empty($existing_cards)) {
-        $options = [];
-        foreach ($existing_cards as $card) {
+      if (!empty($customer_stored_cards)) {
+        $stored_cards_list = [];
+        foreach ($customer_stored_cards as $stored_cards) {
           $build = [
             '#theme' => 'payment_card_teaser',
-            '#card_info' => $card,
+            '#card_info' => $stored_cards,
             '#user' => $user,
           ];
-          $options[$card['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_cards['id']] = $this->renderer->render($build);
         }
       }
 
-      $payment_card = empty($options) ? $payment_card : $this->currentRequest->query->get('payment-card');
+      $payment_card = empty($stored_cards_list) ? $payment_card : $this->currentRequest->query->get('payment-card');
       $values = $form_state->getValue('acm_payment_methods');
       if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
         $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
       }
 
-      if (!empty($options)) {
+      if (!empty($stored_cards_list)) {
         $pane_form['payment_card'] = [
           '#type' => 'radios',
-          '#options' => $options + ['new' => $this->t('New Card')],
+          '#options' => $stored_cards_list + ['new' => $this->t('New Card')],
           '#default_value' => $payment_card,
           '#required' => TRUE,
           '#ajax' => [
