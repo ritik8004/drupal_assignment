@@ -192,7 +192,11 @@ class BookingPaymentManager {
         '#uri' => Url::fromRoute('endroid_qr_code.qr.generator', ['content' => $booking_info['sales_number']])->toString(),
         '#attributes' => ['class' => 'qr-code-image'],
       ];
-
+      $ticket_info = json_decode($booking_info['ticket_info']);
+      $ticket_count = 0;
+      foreach ($ticket_info as $value) {
+        $ticket_count += $value->Ticket->count;
+      }
       $langcode = $this->currentUser->getPreferredLangcode();
 
       $params = [];
@@ -203,13 +207,13 @@ class BookingPaymentManager {
         '#theme' => 'booking_mail',
         '#qr_code' => $qr_code,
         '#booking_info' => $booking_info,
-        '#visitor_list' => json_decode($booking_info['ticket_info']),
+        '#visitor_list' => $ticket_info,
       ];
 
       $body = $this->renderer->render($build);
       $params['message'] = $body;
       $params['visit_date'] = $booking_info['visit_date'];
-      $params['ticket_count'] = $booking_info['order_total'];
+      $params['ticket_count'] = $ticket_count;
       $params['ref_number'] = $booking_info['sales_number'];
 
       $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, TRUE);
