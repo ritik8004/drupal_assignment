@@ -54,3 +54,16 @@ function alshaya_pb_free_design_services_install() {
 
   $config->save();
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_pb_free_design_services_update_8601() {
+  // Add translations for the webform.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.free_design_services');
+  $elements = $config->get('elements');
+  $elements = Yaml::parse($elements);
+  $elements['anything_else']['#placeholder'] = 'هل يوجد شيء آخر علينا معرفته؟';
+  $config->set('elements', Yaml::dump($elements));
+  $config->save();
+}
