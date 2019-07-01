@@ -1,11 +1,8 @@
-uuid: eacea681-4c0e-432f-859b-8aacece9a311
 langcode: en
 status: open
 dependencies:
   module:
     - alshaya_pb_free_design_services
-_core:
-  default_config_hash: qQQtj7QRgP8T2AVz7cjJ7aRInw2sSlTHPlj2Q0gbCL0
 open: null
 close: null
 weight: 0

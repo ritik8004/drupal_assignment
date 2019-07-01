@@ -43,7 +43,7 @@ function alshaya_pb_free_design_services_install() {
   $elements['room']['#options']['Diwaniya / Majlis'] = 'الديوانية/المجلس';
   $elements['room']['#options']['Home Office'] = 'المكتب المنزلي';
   $elements['room']['#options']['Cinema'] = 'غرفة السينما';
-  $elements['anything_else']['#title'] = 'هل يوجد شيء آخر علينا معرفته؟';
+  $elements['anything_else']['#placeholder'] = 'هل يوجد شيء آخر علينا معرفته؟';
   $elements['privacy_text']['#text'] = '<p>نحن نقدر خصوصيتك. لمزيد من التفاصيل، يرجى زيارة صفحة سياسة الخصوصية <a href="/ar/privacy-policy"></a></p>';
   $config->set('elements', Yaml::dump($elements));
 
@@ -52,18 +52,5 @@ function alshaya_pb_free_design_services_install() {
   $settings['confirmation_message'] = '<div class="h1">خدمات التصميم الداخلية المجانية</div><p>تعاون مع مصممينا وخبراء التركيب لدينا سواء في منزلك أو في أقرب محل إليك لتصمم منزل أحلامك. احجز موعد من الأسفل أو قم بزيارة أقرب محل إليك للبدء</p>';
   $config->set('settings', $settings);
 
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- */
-function alshaya_pb_free_design_services_update_8601() {
-  // Add translations for the webform.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.free_design_services');
-  $elements = $config->get('elements');
-  $elements = Yaml::parse($elements);
-  $elements['anything_else']['#placeholder'] = 'هل يوجد شيء آخر علينا معرفته؟';
-  $config->set('elements', Yaml::dump($elements));
   $config->save();
 }
