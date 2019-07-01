@@ -125,7 +125,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     // Use organization field as email.
     $element['organization'] = [
       '#type' => 'email',
-      '#required' => TRUE,
       '#default_value' => isset($element['organization']) ? $element['organization']['#default_value'] : '',
       '#title' => t('Email', [], ['context' => 'Address label']),
       '#description' => t("We'll send your order confirmation here."),
@@ -136,7 +135,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     }
   }
   else {
-    $element['organization']['#required'] = FALSE;
     $element['organization']['#access'] = FALSE;
   }
 
@@ -150,13 +148,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['locality']['#maxlength'] = 92;
   $element['sorting_code']['#title'] = t('Landmark (Optional)', [], ['context' => 'Address label']);
   $element['sorting_code']['#maxlength'] = 92;
-  $element['sorting_code']['#required'] = FALSE;
   $element['additional_name']['#title'] = t('Apartment (Optional)', [], ['context' => 'Address label']);
   $element['additional_name']['#maxlength'] = 92;
-  $element['additional_name']['#required'] = FALSE;
   $element['postal_code']['#title'] = t('Postal Code (Optional)', [], ['context' => 'Address label']);
   $element['postal_code']['#maxlength'] = 8;
-  $element['postal_code']['#required'] = FALSE;
   $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
   $element['address_line2']['#maxlength'] = 92;
 
@@ -164,9 +159,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['address_line2']['#attributes']['class'][] = 'form-item-field-address-floor';
   $element['address_line2']['#attached']['library'][] = 'alshaya_addressbook/alshaya_addressbook';
   $element['address_line2']['#title_display'] = 'before';
-
-  // Special case - city is not required.
-  $element['city']['#required'] = FALSE;
 
   if (!$is_webform) {
     // Adding mobile number.
@@ -198,7 +190,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['administrative_area'] = [
     '#type' => 'select',
     '#title' => t('Area'),
-    '#required' => TRUE,
     '#multiple' => FALSE,
     '#default_value' => $administrative_area_default_value,
     '#attributes' => [
@@ -261,7 +252,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
     // Configure area_parent field.
     $element['area_parent']['#type'] = 'select';
-    $element['area_parent']['#required'] = TRUE;
     $element['area_parent']['#access'] = TRUE;
     $element['area_parent']['#multiple'] = FALSE;
     $element['area_parent']['#default_value'] = $area_parent;
@@ -317,6 +307,24 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element = $is_webform
     ? $country_field + $element
     : _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
+
+  // Making all address related field required or not based on address field.
+  $address_flag = FALSE;
+  if ($element['#required']) {
+    $address_flag = TRUE;
+  }
+  $element['additional_name']['#required'] = $address_flag;
+  $element['organization']['#required'] = $address_flag;
+  $element['postal_code']['#required'] = $address_flag;
+  $element['administrative_area']['#required'] = $address_flag;
+  $element['sorting_code']['#required'] = $address_flag;
+  $element['city']['#required'] = $address_flag;
+  $element['area_parent']['#required'] = $address_flag;
+  $element['address_line1']['#required'] = $address_flag;
+  $element['dependent_locality']['#required'] = $address_flag;
+
+  // Special case - city is not required.
+  $element['city']['#required'] = FALSE;
 
   return $element;
 }
