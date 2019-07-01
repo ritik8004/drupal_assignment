@@ -26,3 +26,11 @@
     }
   }
 }
+
+.region-footer-tertiary {
+  padding-top: 7.1875rem;
+
+  @include breakpoint ($only-mobile) {
+    padding-top: 6rem;
+  }
+}
