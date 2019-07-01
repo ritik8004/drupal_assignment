@@ -8,9 +8,9 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Helper\KnetHelper;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class TicketBookingKnetHelper.
@@ -84,13 +84,34 @@ class TicketBookingKnetHelper extends KnetHelper {
    * {@inheritdoc}
    */
   public function processKnetResponse(array $response = []) {
-    $state_data = '';
-    $state_key = $response['state_key'] ?? '';
-    if (!empty($state_key)) {
-      $state_data = $this->state->get($state_key);
-      $state_data = json_encode($state_data);
-      $this->state->set($state_key, $response);
+    // Get the cart using API to validate.
+    $booking = $this->bookingPayment->getTicketDetails($response['quote_id']);
+    if (empty($booking)) {
+      throw new \Exception();
     }
+    $state_key = $response['state_key'];
+    $state_data = $this->state->get($state_key);
+    // Check if we have data in state available and it matches data in POST.
+    if (empty($state_data)
+      || $state_data['cart_id'] != $response['quote_id']
+      || $state_data['payment_id'] != $response['payment_id']
+    ) {
+      $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>State: @state', [
+        '@message' => json_encode($_POST),
+        '@state' => json_encode($state_data),
+      ]);
+      throw new \Exception();
+    }
+    if ($state_data['amount'] != $booking['order_total']) {
+      $this->logger->error('Currently, amount dont match amount in state variable.<br>POST: @message<br>State: @state', [
+        '@message' => json_encode($_POST),
+        '@state' => json_encode($state_data),
+      ]);
+      throw new \Exception();
+    }
+    // Store amount in state variable for logs.
+    $response['amount'] = $booking['order_total'];
+    $this->state->set($state_key, $response);
     $url_options = [
       'https' => TRUE,
       'absolute' => TRUE,
@@ -130,13 +151,18 @@ class TicketBookingKnetHelper extends KnetHelper {
     }
     // Activate order and notify the user via mail
     // and sms about ticket booking.
-    if ($this->ticketBooking->activateOrder($data['quote_id'])) {
+    if (!empty($data['transaction_id'])
+      && $this->ticketBooking->payOrder($data['quote_id'], $data['amount'], $data['transaction_id'])
+      && $this->ticketBooking->activateOrder($data['quote_id'])
+    ) {
       $this->bookingPayment->updateTicketDetails($data, 1);
       $booking_info = $this->bookingPayment->getTicketDetails($data['quote_id']);
       $this->bookingPayment->bookingConfirmationMail($booking_info);
       // @todo - send sms.
     }
-
+    else {
+      return $this->processKnetFailed($state_key);
+    }
     $this->logger->info('KNET payment complete for @quote_id.<br>@message', [
       '@quote_id' => $data['quote_id'],
       '@message' => json_encode($data),
@@ -160,7 +186,7 @@ class TicketBookingKnetHelper extends KnetHelper {
       '@result_code' => $data['result'],
     ]);
 
-    $this->messenger->addMessage($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+    $this->messenger->addMessage($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Payment: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : '',
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],
