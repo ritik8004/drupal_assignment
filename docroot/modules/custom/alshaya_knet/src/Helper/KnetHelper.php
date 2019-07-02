@@ -493,6 +493,9 @@ class KnetHelper {
   public function parseAndPrepareKnetData(array $input) {
     // If error is available.
     if (!empty($input['ErrorText']) || !empty($input['Error'])) {
+      $this->logger->error('K-Net response contains Error: @error', [
+        '@error' => json_encode($input),
+      ]);
       return $input;
     }
 
