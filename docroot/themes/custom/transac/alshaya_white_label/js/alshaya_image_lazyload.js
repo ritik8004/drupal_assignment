@@ -12,7 +12,7 @@
     attach: function (context, settings) {
       // Initialize.
       Blazy({
-        offset: 570 // Loads images before they're visible
+        offset: $(window).height() // Loads images before they're visible
       });
     }
   };
