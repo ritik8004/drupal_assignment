@@ -397,7 +397,9 @@ class SkuManager {
     ];
 
     $image['#attributes']['class'][] = 'b-lazy';
-    $image['#attributes']['data-src'] = ImageStyle::load($image_style)->buildUrl($image['#uri']);
+    $image['#attributes']['data-src'] = !empty($image_style)
+      ? ImageStyle::load($image_style)->buildUrl($image['#uri'])
+      : file_create_url($image['#uri']);
     $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
 
     if ($rel_image_style) {
