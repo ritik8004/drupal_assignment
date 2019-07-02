@@ -2,7 +2,7 @@
   float: $left;
   padding-top: 0;
   width: 100%;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom: 1px solid $checkout_payment_checkoutcom_border;
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-name,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-number,
@@ -162,7 +162,7 @@
       margin: 0;
       padding: 0.875rem 0;
       float: $left;
-      border-bottom: 1px solid #e3e3e3;
+      border-bottom: 1px solid $checkout_payment_checkoutcom_border;
       padding-top: 0.75rem;
       padding-#{$left}: 3.75rem;
       padding-#{$right}: 1.375rem;
@@ -213,7 +213,7 @@
 
             .form-type-password {
               margin-top: 0;
-              width: 80px;
+              width: 5rem;
               float: $left;
               margin-bottom: 2rem;
 
@@ -291,13 +291,13 @@
           }
 
           .card-number {
-            color: #777;
+            color: $checkout_payment_checkoutcom_card_details;
             font-size: 0.75rem;
           }
 
           .card-name {
             font-size: 0.875rem;
-            color: #333;
+            color: $checkout_payment_checkoutcom_card_details;
           }
         }
 
@@ -312,7 +312,7 @@
           }
 
           .card-expiry-date {
-            color: #333;
+            color: $checkout_payment_checkoutcom_card_details_expiry;
             font-size: 0.875rem;
             font-family: $alshaya-thin;
           }
@@ -326,7 +326,7 @@
         .name-number,
         .actions {
           > div {
-            margin-bottom: 7px;
+            margin-bottom: 0.4375rem;
           }
         }
       }
