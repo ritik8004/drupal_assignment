@@ -91,6 +91,10 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
  * Processor for the country in address field.
  */
 function _alshaya_addressbook_country_process(array &$element, FormStateInterface $form_state) {
+
+  // Checking if address is required.
+  $is_element_required = $element['#required'] ?? FALSE;
+
   // No processing for field_ui admin page.
   if (strpos($element['#name'], 'default_value_input') > -1) {
     return $element;
@@ -125,7 +129,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     // Use organization field as email.
     $element['organization'] = [
       '#type' => 'email',
-      '#required' => TRUE,
+      '#required' => $is_element_required,
       '#default_value' => isset($element['organization']) ? $element['organization']['#default_value'] : '',
       '#title' => t('Email', [], ['context' => 'Address label']),
       '#description' => t("We'll send your order confirmation here."),
@@ -198,7 +202,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['administrative_area'] = [
     '#type' => 'select',
     '#title' => t('Area'),
-    '#required' => TRUE,
+    '#required' => $is_element_required,
     '#multiple' => FALSE,
     '#default_value' => $administrative_area_default_value,
     '#attributes' => [
@@ -261,7 +265,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
     // Configure area_parent field.
     $element['area_parent']['#type'] = 'select';
-    $element['area_parent']['#required'] = TRUE;
+    $element['area_parent']['#required'] = $is_element_required;
     $element['area_parent']['#access'] = TRUE;
     $element['area_parent']['#multiple'] = FALSE;
     $element['area_parent']['#default_value'] = $area_parent;
