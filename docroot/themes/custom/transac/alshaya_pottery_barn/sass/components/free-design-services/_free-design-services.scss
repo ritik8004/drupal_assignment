@@ -123,6 +123,10 @@
       #edit-actions {
         width: 49%;
         overflow: auto;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
       }
     }
   }
@@ -151,31 +155,17 @@
 
         .country-select {
           border-bottom: 1px solid $form-field-title;
-        }
+          height: auto;
 
-        &.mobile_number {
-          padding-bottom: 0;
+          .mobile-number-flag,
+          .arrow {
+            display: none;
+          }
 
-          .mobile-input--wrapper {
-            position: relative;
-
-            .js-form-type-tel {
-              position: unset;
-
-              input {
-                &::placeholder {
-                  display: none;
-                }
-              }
-
-              label.error,
-              .form-item--error-message {
-                width: 100%;
-                top: 4.75rem !important;
-                #{$left}: 0;
-                border-top: 0.125rem solid $primary_input_inline_error !important;
-              }
-            }
+          .prefix {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: $form-field-label;
           }
         }
 
@@ -188,6 +178,46 @@
           color: $form-field-label;
           transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
           pointer-events: none;
+        }
+
+        &.mobile_number {
+          padding-bottom: 0;
+
+          .mobile-input--wrapper {
+            position: relative;
+
+            .js-form-type-tel {
+              position: unset;
+              margin-top: 1.25rem;
+              width: calc(100% - 2.6875rem);
+
+              input {
+                padding-bottom: 0 !important;
+                height: 1.563rem;
+
+                &::placeholder {
+                  color: $mobile-field-placeholder;
+                }
+              }
+
+              label.error,
+              .form-item--error-message {
+                width: 100%;
+                top: 2.6875rem !important;
+                #{$left}: 0;
+                border-top: 0.125rem solid $primary_input_inline_error !important;
+              }
+            }
+
+            .form-item-mobile-number-country-code {
+              margin-top: 0;
+            }
+          }
+
+          > label {
+            font-size: 0.75rem;
+            line-height: 1.33;
+          }
         }
 
         input:focus ~ label:last-of-type,
@@ -237,7 +267,12 @@
       .form-item-address-dependent-locality {
         width: 47%;
         display: inline-block;
-        margin-#{$right}: 4.5%;
+        margin-#{$left}: 4.5%;
+
+        &.form-item--error {
+          margin-#{$left}: 0;
+          margin-#{$right}: 4.5%;
+        }
 
         label[for=edit-address-dependent-locality] {
           white-space: nowrap;
@@ -257,10 +292,14 @@
 
         .fieldset-legend {
           padding-bottom: 1.5rem;
+          font-weight: normal;
         }
       }
 
       > .address--wrapper {
+        margin-top: 1.25rem;
+        width: 100%;
+
         @include breakpoint($only-mobile) {
           margin-top: 0;
         }
@@ -344,6 +383,14 @@
       }
     }
 
+    .form-item-preferred-store {
+      &.form-type-select {
+        label {
+          color: $form-field-legend;
+        }
+      }
+    }
+
     .form-item-address-area-parent,
     .form-item-address-administrative-area {
       label {
@@ -388,10 +435,10 @@
     }
 
     #edit-room--wrapper {
-      padding: 1.5rem 0.5rem;
+      padding: 1.5rem 0.5rem 0;
 
       @include breakpoint($desktop) {
-        padding: 2.375rem;
+        padding: 2.375rem 2.375rem 0;
       }
 
       .fieldset-legend {
@@ -412,15 +459,31 @@
             top: -2rem;
           }
         }
+
+        @include breakpoint($only-mobile) {
+          #edit-room {
+            display: flex;
+            flex-flow: row wrap;
+          }
+        }
       }
 
       .form-item {
         padding: 0 0 1.25rem;
         position: relative;
 
+        @include breakpoint($only-mobile) {
+          width: 50%;
+        }
+
         label {
           font-size: 0.75rem;
           vertical-align: top;
+
+          @include breakpoint($only-mobile) {
+            display: flex;
+            align-items: center;
+          }
         }
 
         input[type=checkbox] ~ label::before {
@@ -431,23 +494,32 @@
     }
 
     .form-item-anything-else {
-      padding: 1.5rem 0.5rem;
+      padding: 0 0.5rem 1.5rem;
       position: relative;
 
       @include breakpoint($desktop) {
-        padding: 1.375rem 2.375rem;
+        padding: 0 3.25rem 0 2.375rem;
       }
 
       label {
         position: absolute;
-        top: 2rem;
+        top: 1rem;
         #{$left}: 3rem;
         font-size: 0.75rem;
       }
 
       #edit-anything-else {
         border: 1px solid $form-field-textarea-border;
-        padding: 0.25rem 0.75rem;
+        max-width: 26.5rem;
+        width: 100%;
+        height: 9.75rem;
+        padding: 1rem;
+
+        &::placeholder {
+          font-size: 0.75rem;
+          line-height: 1.25;
+          color: $form-field-label;
+        }
       }
     }
 
@@ -456,6 +528,10 @@
 
       p {
         font-size: 0.75rem;
+
+        a {
+          display: block;
+        }
       }
 
       @include breakpoint($desktop) {
@@ -466,18 +542,17 @@
     }
 
     #edit-actions {
-      padding: 1.5rem 0.75rem;
+      padding: 0.8125rem 0.75rem 1.5rem;
 
       @include breakpoint($desktop) {
-        padding: 2.375rem;
+        padding: 2.375rem 2.375rem 0.875rem;
       }
     }
 
-    #edit-submit {
+    .webform-button--submit {
       @extend %btn;
 
       background: $primary_btn_bg;
-      margin-top: 1rem;
       width: 100%;
       text-transform: uppercase;
 
@@ -486,7 +561,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-top: 1.563rem;
+        margin-top: 0;
       }
     }
   }
@@ -494,15 +569,21 @@
   .select2-dropdown {
     border-color: $form-select-border;
   }
+
+  .country-field-wrapper {
+    margin-top: 0.75rem;
+  }
 }
 
 .alias--free-design-services {
   .form-item {
     input {
       font-size: 1rem;
+      padding-bottom: 0.25rem !important;
 
       &::placeholder {
         font-size: 1rem;
+        color: $form-field-label;
       }
     }
   }
