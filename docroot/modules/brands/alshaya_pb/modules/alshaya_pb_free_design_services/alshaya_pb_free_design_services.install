@@ -44,6 +44,7 @@ function alshaya_pb_free_design_services_install() {
   $elements['room']['#options']['Home Office'] = 'المكتب المنزلي';
   $elements['room']['#options']['Cinema'] = 'غرفة السينما';
   $elements['anything_else']['#title'] = 'هل يوجد شيء آخر علينا معرفته؟';
+  $elements['anything_else']['#placeholder'] = 'هل يوجد شيء آخر علينا معرفته؟';
   $elements['privacy_text']['#text'] = '<p>نحن نقدر خصوصيتك. لمزيد من التفاصيل، يرجى زيارة صفحة سياسة الخصوصية <a href="/ar/privacy-policy"></a></p>';
   $config->set('elements', Yaml::dump($elements));
 
