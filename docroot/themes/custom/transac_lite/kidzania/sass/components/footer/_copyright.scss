@@ -1,0 +1,20 @@
+.footer-copyright {
+  p {
+    font-family: $ubuntu-sans;
+    clear: both;
+    text-align: center;
+    float: $left;
+    width: 100%;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    padding-bottom: 4.5rem;
+
+    @include breakpoint ($only-mobile) {
+      padding-bottom: 7rem;
+    }
+
+    a {
+      color: $secondary_link;
+    }
+  }
+}
