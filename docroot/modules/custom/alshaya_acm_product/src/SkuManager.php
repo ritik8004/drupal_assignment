@@ -396,13 +396,19 @@ class SkuManager {
       '#alt' => $alt,
     ];
 
+    $original_image = empty($image_style) || empty($rel_image_style)
+      ? file_create_url($image['#uri'])
+      : '';
+
     $image['#attributes']['class'][] = 'b-lazy';
-    $image['#attributes']['data-src'] = ImageStyle::load($image_style)->buildUrl($image['#uri']);
+    $image['#attributes']['data-src'] = !empty($image_style)
+      ? ImageStyle::load($image_style)->buildUrl($image['#uri'])
+      : $original_image;
     $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
 
-    if ($rel_image_style) {
-      $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
-    }
+    $image['#attributes']['rel'] = !empty($rel_image_style)
+      ? ImageStyle::load($rel_image_style)->buildUrl($image['#uri'])
+      : $original_image;
 
     return $image;
   }
