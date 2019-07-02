@@ -113,6 +113,10 @@ function _alshaya_pb_free_design_services_process_address_form(array &$element, 
     // For webform, we show name fields separately.
     $element['given_name']['#access'] = FALSE;
     $element['family_name']['#access'] = FALSE;
+
+    $is_element_required = $element['#required'] ?? FALSE;
+    $element['address_line1']['#required'] = $is_element_required;
+    $element['dependent_locality']['#required'] = $is_element_required;
   }
 
   return $element;

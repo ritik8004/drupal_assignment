@@ -169,6 +169,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['address_line2']['#attached']['library'][] = 'alshaya_addressbook/alshaya_addressbook';
   $element['address_line2']['#title_display'] = 'before';
 
+  // Special case - city is not required.
+  $element['city']['#required'] = FALSE;
+
   if (!$is_webform) {
     // Adding mobile number.
     $mobile_number = [
@@ -318,19 +321,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element = $is_webform
     ? $country_field + $element
     : _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
-
-  $element['additional_name']['#required'] = $is_element_required;
-  $element['organization']['#required'] = $is_element_required;
-  $element['postal_code']['#required'] = $is_element_required;
-  $element['administrative_area']['#required'] = $is_element_required;
-  $element['sorting_code']['#required'] = $is_element_required;
-  $element['city']['#required'] = $is_element_required;
-  $element['area_parent']['#required'] = $is_element_required;
-  $element['address_line1']['#required'] = $is_element_required;
-  $element['dependent_locality']['#required'] = $is_element_required;
-
-  // Special case - city is not required.
-  $element['city']['#required'] = FALSE;
 
   return $element;
 }
