@@ -15,8 +15,10 @@ function alshaya_options_list_update_8001() {
   $manager = \Drupal::service('alshaya_config.manager');
 
   $manager->updateConfigs(
-    ['block.block.alshayaoptionslistpagemenu',
-    'block.block.alshayaoptionslistpagemenu_2'],
+    [
+      'block.block.alshayaoptionslistpagemenu',
+      'block.block.alshayaoptionslistpagemenu_2',
+    ],
     'optional'
   );
 }
