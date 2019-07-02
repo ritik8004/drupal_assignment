@@ -47,4 +47,37 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     return $result;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotions($type = 'category') {
+    // As the parameter is used in endpoint path, we restrict it to avoid
+    // unexpected exception.
+    if (!in_array($type, ['category', 'cart'])) {
+      return [];
+    }
+
+    // Increase memory limit for promotions sync as we have a lot of promotions
+    // now on production.
+    ini_set('memory_limit', '1024M');
+
+    $endpoint = $this->apiVersion . "/agent/promotions/$type";
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      $opt['timeout'] = (int) Settings::get('promotions_sync_timeout', 180);
+      return ($client->get($endpoint, $opt));
+    };
+
+    $result = [];
+
+    try {
+      $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
+    }
+    catch (ConnectorException $e) {
+      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    }
+
+    return $result;
+  }
+
 }

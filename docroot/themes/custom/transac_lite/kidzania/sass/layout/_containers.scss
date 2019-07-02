@@ -1,0 +1,31 @@
+.region__wrapper {
+  position: relative;
+  padding: 0 1.25rem;
+  margin: 0 auto;
+
+  @include breakpoint($upto-desktop) {
+    max-width: 100%;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 73.125rem;
+    margin: auto;
+  }
+}
+
+.container {
+  margin: 0 auto;
+
+  @include breakpoint($only-tablet) {
+    margin: 0 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 73.125rem;
+  }
+
+  &::before {
+    display: table;
+    content: " ";
+  }
+}

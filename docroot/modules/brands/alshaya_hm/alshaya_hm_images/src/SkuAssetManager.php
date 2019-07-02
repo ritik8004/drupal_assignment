@@ -17,6 +17,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
+use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
 
@@ -130,6 +131,13 @@ class SkuAssetManager {
   private $time;
 
   /**
+   * File Usage.
+   *
+   * @var \Drupal\file\FileUsage\FileUsageInterface
+   */
+  private $fileUsage;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -154,6 +162,8 @@ class SkuAssetManager {
    *   Logger Channel Factory.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   Date Time service.
+   * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
+   *   File Usage.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -165,7 +175,8 @@ class SkuAssetManager {
                               CacheBackendInterface $cache_pims_files,
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
-                              TimeInterface $time) {
+                              TimeInterface $time,
+                              FileUsageInterface $file_usage) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -178,6 +189,7 @@ class SkuAssetManager {
     $this->httpClient = $http_client;
     $this->logger = $logger_factory->get('SkuAssetManager');
     $this->time = $time;
+    $this->fileUsage = $file_usage;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -229,6 +241,8 @@ class SkuAssetManager {
       try {
         $file = $this->downloadImage($asset, $sku->getSku());
         if ($file instanceof FileInterface) {
+          $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+
           $asset['drupal_uri'] = $file->getFileUri();
           $asset['fid'] = $file->id();
           $save = TRUE;

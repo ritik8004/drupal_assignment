@@ -32,8 +32,10 @@
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
         "drupal/datalayer": "^1.0@beta",
+        "drupal/date_popup": "^1.0",
         "drupal/default_content": "^1.0@alpha",
         "drupal/email_registration": "^1.0",
+        "drupal/endroid_qr_code": "^1.1",
         "drupal/external_hreflang": "1.x-dev",
         "drupal/facets": "1.0-alpha11",
         "drupal/field_group": "^3.0@beta",
@@ -80,9 +82,11 @@
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "2.x-dev",
+        "drupal/sms": "^1.1",
         "drupal/social_api": "2.x-dev",
         "drupal/social_auth": "2.x-dev",
         "drupal/social_auth_facebook": "^2.0",
+        "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
@@ -95,6 +99,7 @@
         "drupal/webform": "^5.0.0-rc1",
         "drupal/webform_rest": "^2.0",
         "drush/drush": "^9.0.0",
+        "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
@@ -246,7 +251,7 @@
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
                 "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch",
-                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-13/add_a_new_setting_allow_insecure_derivates-3059836-8.patch"
+                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch"
   },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -407,6 +412,7 @@
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
             "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
             "cd docroot && rm robots.txt"
         ],
         "nuke": [

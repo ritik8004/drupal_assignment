@@ -1,0 +1,45 @@
+.over-elements {
+  width: 100%;
+  top: 40%;
+  position: relative;
+}
+
+.loading-overlay {
+  background: $loading_overlay_bg;
+  z-index: 20;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  display: none;
+  color: $loading_overlay_text;
+  font-size: 1.25rem;
+  text-align: center;
+  align-items: center;
+  transition: all 0.4s;
+  top: 0;
+
+  &.active {
+    display: block;
+
+    .icon-refresh {
+      animation: infRotate 60s linear infinite;
+    }
+  }
+
+  .icon-refresh {
+    margin: 0 auto;
+    display: block;
+
+    @include icon_img('#{$theme_img_directory_path}/icons/refresh.svg', 7.5rem, 7.5rem);
+  }
+}
+
+@keyframes infRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(10800deg);
+  }
+}

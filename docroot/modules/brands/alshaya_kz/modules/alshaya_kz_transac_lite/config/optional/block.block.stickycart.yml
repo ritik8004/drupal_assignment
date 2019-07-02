@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:74ccd0d9-b219-486a-aa9c-600001ddc10a'
+  module:
+    - block_content
+    - system
+  theme:
+    - kidzania
+id: stickycart
+theme: kidzania
+region: footer_secondary
+weight: 0
+provider: null
+plugin: 'block_content:74ccd0d9-b219-486a-aa9c-600001ddc10a'
+settings:
+  id: 'block_content:74ccd0d9-b219-486a-aa9c-600001ddc10a'
+  label: 'Sticky Cart'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/payment/success\r\n/payment/failed"
+    negate: true
+    context_mapping: {  }

@@ -14,6 +14,17 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Update description for field_category_include_menu.
+ */
+function acq_sku_update_8022() {
+  $field_config = FieldConfig::loadByName('taxonomy_term', 'acq_product_category', 'field_category_include_menu');
+  $field_config->setDescription('Check to display this term in main menu.');
+  $field_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make field_acq_sku_promotions non-translatable.
  */
 function acq_sku_update_8021() {
