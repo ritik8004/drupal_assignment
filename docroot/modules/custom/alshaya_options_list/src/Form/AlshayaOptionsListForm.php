@@ -85,7 +85,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $config = $this->config('alshaya_options_list.admin_settings');
-    $attribute_options = $config->get('alshaya_options_pages');
+    $attribute_options = (array) $config->get('alshaya_options_pages');
 
     $form['alshaya_options_on_off'] = [
       '#type' => 'checkbox',
