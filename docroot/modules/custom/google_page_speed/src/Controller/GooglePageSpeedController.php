@@ -59,13 +59,14 @@ class GooglePageSpeedController extends ControllerBase {
   /**
    * Builds the response.
    *
+   * @param int $metric_id
+   *   Passing metric id as filter.
    * @param string $screen
    *   Passing screen type.
    * @param string $time
    *   Passing time period for which data is needed.
    */
-  public function getPageScore($screen = 'desktop', $time = 'one-week') {
-    $url = $this->requestStack->getCurrentRequest()->query->get('url');
+  public function getPageScore($metric_id = '', $screen = 'desktop', $time = 'one-week') {
 
     switch ($time) {
       case 'one-week':
@@ -85,29 +86,35 @@ class GooglePageSpeedController extends ControllerBase {
     }
 
     $rows = [];
-    $query = $this->database->select('google_page_speed_data', 'gps');
-    $query->fields('gps', ['created', 'score']);
-    $query->condition('gps.url', trim($url), '=');
-    $query->condition('gps.screen', trim($screen), '=');
+    $final_data = [];
+    $query = $this->database->select('google_page_speed_scores', 'gps');
+    $query->fields('gps', ['created', 'value', 'url_id']);
+    $query->condition('gps.metric_id', trim($metric_id), '=');
+    $query->condition('gps.device', trim($screen), '=');
     $query->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
-    $query->orderBy('gps.created', 'DESC');
+    $query->orderBy('gps.url_id', 'ASC');
     $results = $query->execute()->fetchAll();
-
     foreach ($results as $result) {
-      $scores = Json::decode($result->score);
-      $rows[] = [
-        $result->created,
-        $scores[0],
-        $scores[1],
-        $scores[2],
-        $scores[3],
-        $scores[4],
-        $scores[5],
-      ];
+      if ($rows[$result->created][0] != $result->created) {
+        $rows[$result->created][0] = $result->created;
+      }
+      $rows[$result->created][] = $result->value;
     }
 
-    $rows = Json::encode($rows);
-    echo $rows;
+    $select_query = $this->database->select('google_page_speed_scores', 'gps');
+    $select_query->fields('gps', ['url_id'])
+      ->condition('gps.metric_id', trim($metric_id), '=')
+      ->condition('gps.device', trim($screen), '=')
+      ->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
+    $row_counts = $select_query->distinct()->countQuery()->execute()->fetchField();
+    foreach ($rows as $row) {
+      for ($i = 0; $i <= $row_counts; $i++) {
+        $row[$i] = (isset($row[$i])) ? round(floatval($row[$i]), 2) : 0;
+      }
+      $final_data[] = $row;
+    }
+    $final_data = Json::encode($final_data);
+    echo $final_data;
     die;
 
   }

@@ -3,7 +3,7 @@ status: true
 dependencies:
   enforced:
     module:
-      - google_page_spee
+      - google_page_speed
 id: googlepagespeedblock
 theme: adminimal_theme
 region: content

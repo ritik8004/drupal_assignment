@@ -20,13 +20,13 @@ function google_page_speed_install() {
  * Implements hook_schema().
  */
 function google_page_speed_schema() {
-  $schema['google_page_speed_data'] = [
-    'description' => 'Table to store Google PageSpeed Insights data.',
+  $schema['google_page_speed_url'] = [
+    'description' => 'Table to store unique URLs.',
     'fields' => [
-      'id' => [
+      'url_id' => [
         'type' => 'serial',
         'not null' => TRUE,
-        'description' => 'Primary Key: Unique record ID.',
+        'description' => 'Primary Key: Unique url ID.',
       ],
       'url' => [
         'type' => 'varchar_ascii',
@@ -35,12 +35,43 @@ function google_page_speed_schema() {
         'default' => '',
         'description' => 'Url of the page to analyse.',
       ],
-      'screen' => [
+    ],
+    'primary key' => ['url_id'],
+  ];
+
+  $schema['google_page_speed_metrics'] = [
+    'description' => 'Table to store metrics.',
+    'fields' => [
+      'metric_id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique metric ID.',
+      ],
+      'category' => [
         'type' => 'varchar_ascii',
-        'length' => 10,
+        'length' => 20,
         'not null' => TRUE,
         'default' => '',
-        'description' => 'Screen on which analysis is done.',
+        'description' => 'Category of the metric.',
+      ],
+      'reference' => [
+        'type' => 'varchar_ascii',
+        'length' => 30,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Reference of the metric.',
+      ],
+    ],
+    'primary key' => ['metric_id'],
+  ];
+
+  $schema['google_page_speed_scores'] = [
+    'description' => 'Table to store scores.',
+    'fields' => [
+      'score_id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique score ID.',
       ],
       'created' => [
         'type' => 'int',
@@ -48,20 +79,47 @@ function google_page_speed_schema() {
         'default' => 0,
         'description' => 'Timestamp when the record was created.',
       ],
-      'metrics' => [
-        'type' => 'blob',
+      'metric_id' => [
+        'type' => 'int',
         'not null' => TRUE,
-        'size' => 'big',
-        'description' => 'To store metrics data coming in response.',
+        'default' => 0,
+        'description' => 'Metric Id of the page to analyse.',
       ],
-      'score' => [
-        'type' => 'blob',
+      'url_id' => [
+        'type' => 'int',
         'not null' => TRUE,
-        'size' => 'big',
+        'default' => 0,
+        'description' => 'Url Id of the page to analyse.',
+      ],
+      'device' => [
+        'type' => 'varchar_ascii',
+        'length' => 10,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Screen on which analysis is done.',
+      ],
+      'value' => [
+        'type' => 'float',
+        'not null' => TRUE,
+        'default' => 0,
         'description' => 'To store score data',
       ],
     ],
-    'primary key' => ['id'],
+    'primary key' => ['score_id'],
+    'foreign keys' => [
+      'data_url' => [
+        'table' => 'google_page_speed_url',
+        'columns' => [
+          'url_id' => 'url_id',
+        ],
+      ],
+      'data_metric' => [
+        'table' => 'google_page_speed_metrics',
+        'columns' => [
+          'metric_id' => 'metric_id',
+        ],
+      ],
+    ],
   ];
 
   return $schema;
