@@ -204,9 +204,15 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $payment_has_descriptions[$plugin_id] = (bool) $description;
 
+      // Checkout.com has different title for logged in and anonymous user.
+      // hence, can not use term label.
+      $payment_method_label = ($plugin_id == 'checkout_com')
+        ? $this->getPlugin($plugin_id)->getLabel()
+        : $payment_term->getName();
+
       $method_name = '
         <div class="payment-method-name">
-          <div class="method-title">' . $payment_term->getName() . '</div>
+          <div class="method-title">' . $payment_method_label . '</div>
           <div class="method-sub-title">' . $sub_title . '</div>
           <div class="method-side-info method-' . $plugin_id . '"></div>
           <div class="method-description">' . $description . '</div>

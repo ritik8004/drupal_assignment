@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\PaymentMethod;
 
-use Drupal\acq_checkoutcom\CheckoutComCardInfoFormTrait;
 use Drupal\acq_checkoutcom\Plugin\PaymentMethod\CheckoutCom;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
@@ -17,8 +16,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @package Drupal\alshaya_acm_checkout\Plugin\PaymentMethod
  */
 class AlshayaCheckoutCom extends CheckoutCom {
-
-  use CheckoutComCardInfoFormTrait;
 
   /**
    * {@inheritdoc}
@@ -43,36 +40,35 @@ class AlshayaCheckoutCom extends CheckoutCom {
     $cc_prefix = '<div class="cvv-wrapper">';
     $cc_suffix = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div></div>';
 
-    $options = [];
+    $stored_cards_list = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
-      $existing_cards = $this->apiHelper->getCustomerCards($user);
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
 
-      if (!empty($existing_cards)) {
-        $options = [];
-        foreach ($existing_cards as $card) {
+      if (!empty($customer_stored_cards)) {
+        foreach ($customer_stored_cards as $stored_card) {
           $build = [
             '#theme' => 'payment_card_teaser',
-            '#card_info' => $card,
+            '#card_info' => $stored_card,
             '#user' => $user,
           ];
-          $options[$card['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_card['id']] = $this->renderer->render($build);
         }
 
-        $payment_card = empty($options) ? $payment_card : $this->currentRequest->query->get('payment-card');
+        $payment_card = empty($stored_cards_list) ? $payment_card : $this->currentRequest->query->get('payment-card');
         $values = $form_state->getValue('acm_payment_methods');
         if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
           $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
         }
 
-        if (!empty($options)) {
-          $options += ['new' => '<span class="new">' . $this->t('New Card') . '</span>'];
+        if (!empty($stored_cards_list)) {
+          $stored_cards_list += ['new' => '<span class="new">' . $this->t('New Card') . '</span>'];
           $pane_form['payment_card'] = [
             '#type' => 'radios',
-            '#options' => $options,
+            '#options' => $stored_cards_list,
             '#default_value' => $payment_card,
             '#required' => TRUE,
             '#ajax' => [
@@ -84,7 +80,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
           ];
 
           $weight = 0;
-          foreach ($options as $card_id => $card_info) {
+          foreach ($stored_cards_list as $card_id => $card_info) {
             $pane_form['payment_card_details']['payment_card_' . $card_id] = [
               '#type' => 'container',
               '#attributes' => [
@@ -130,7 +126,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
                   'id' => ['payment_card_' . $card_id],
                 ],
               ];
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#prefix'] = $cc_prefix;
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#suffix'] = $cc_suffix;
             }
@@ -139,7 +135,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       }
     }
 
-    if ($this->currentUser->isAnonymous() || empty($options)) {
+    if ($this->currentUser->isAnonymous() || empty($stored_cards_list)) {
       $pane_form['payment_card_details']['payment_card_new'] = [
         '#type' => 'container',
         '#attributes' => [
@@ -147,7 +143,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
         ],
       ];
 
-      $pane_form['payment_card_details']['payment_card_new'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
+      $pane_form['payment_card_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#prefix'] = $cc_prefix;
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#suffix'] = $cc_suffix;
     }

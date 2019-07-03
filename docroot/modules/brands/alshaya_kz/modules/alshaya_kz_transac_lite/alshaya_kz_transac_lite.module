@@ -92,8 +92,8 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
     'Customer Information' => [
       'ar' => ' معلومات الزبون',
     ],
-    'Buy tickets for toddlers, kids, adults and seniors. Children under 120cm must be accompanied by an adult.' => [
-      'ar' => 'اشترِ تذاكر للصغار والأطفال والبالغين وكبار السن. يجب أن يكون الأطفال الذين يقل طولهم عن 120 سم برفقة بالغ.',
+    'Buy tickets for infants, kids, children and adult. Children under the age of 8 must be accompanied by an adult.' => [
+      'ar' => 'شراء تذاكر للرضع ، والأطفال والكبار. يجب أن يكون الأطفال تحت سن 8 سنوات برفقة شخص بالغ.',
     ],
     'Kuwait' => [
       'ar' => 'الكويت',
@@ -128,8 +128,8 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
     'Note: Adults are allowed entry only if they are accompanying at least 1 child.' => [
       'ar' => 'ملاحظة: يسمح بدخول البالغين إذا كانوا برفقة طفل واحد على الأقل.',
     ],
-    'Note: Children under 120cm of height, should be accompanied by an Adult.' => [
-      'ar' => 'ملاحظة: يجب أن يكون الأطفال الذين يقل طولهم عن 120 سم برفقة بالغ.',
+    'Note: Children under the age of 8, must be accompanied by an Adult.' => [
+      'ar' => 'ملاحظة: يجب أن يكون الأطفال تحت سن 8 سنوات برفقة شخص بالغ.',
     ],
     'Visitor Details' => [
       'ar' => 'تفاصيل خاصة بالزوار',
