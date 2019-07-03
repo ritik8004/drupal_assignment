@@ -197,6 +197,17 @@ function alshaya_acm_product_category_field_widget_link_default_form_alter(&$ele
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['field_promotion_banner_mobile']['#states'] = [
+    'invisible' => [
+      'input[name="field_promo_banner_for_mobile[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+}
+
+/**
  * Implements allowed values callback for PLP layout.
  */
 function alshaya_acm_product_category_plp_layout_values() {
