@@ -447,6 +447,15 @@ class AcqPromotionsManager {
           }
         }
 
+        // Filter skus which not exists in system before attaching to queue.
+        if (!empty($fetched_promotion_sku_attach_data)) {
+          $query = $this->connection->select('acq_sku_field_data', 'sku');
+          $query->fields('sku', ['sku']);
+          $query->condition('sku.sku', array_keys($fetched_promotion_sku_attach_data), 'IN');
+          $query->condition('sku.default_langcode', 1);
+          $fetched_promotion_sku_attach_data = $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
+        }
+
         $this->queueItemsInBatches(
           $promotion_attach_queue,
           $promotion_node->id(),
