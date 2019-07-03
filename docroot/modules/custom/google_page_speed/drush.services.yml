@@ -1,6 +1,6 @@
 services:
   google_page_speed.commands:
     class: Drupal\google_page_speed\Commands\GooglePageSpeedCommands
-    arguments: ['@config.factory', '@database', '@cache_tags.invalidator', '@serializer', '@datetime.time']
+    arguments: ['@config.factory', '@database', '@cache_tags.invalidator', '@datetime.time']
     tags:
       - { name: drush.command }

@@ -4,7 +4,7 @@ namespace Drupal\google_page_speed\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
@@ -14,7 +14,7 @@ use Drupal\Core\Database\Connection;
  *
  * @property \Drupal\Core\Cache\CacheTagsInvalidatorInterface cacheInvalidator
  * @Block(
- *   id = "google_page_speed_block",
+ *   id = "googlepagespeedblock",
  *   admin_label = @Translation("Google Page Speed Block"),
  * )
  */
@@ -28,7 +28,7 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $database;
 
   /**
-   * Inject cache_tags.invalidator sservice.
+   * Inject cache_tags.invalidator service.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
    *   Container interface.
@@ -73,44 +73,36 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
 
   /**
    * {@inheritdoc}
-   *
-   * This method processes the blockForm() form fields when the block
-   * configuration form is submitted.
-   *
-   * The blockValidate() method can be used to validate the form submission.
    */
-  public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->cacheInvalidator->invalidateTags(['google-page-speed:block']);
+  public function build() {
+    $build['#theme'] = 'google_page_speed_block';
+    $build['#block_title'] = $this->label();
+    $build['#metrics'] = $this->getMetrics();
+    return $build;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function build() {
-    $build['#theme'] = 'google_page_speed_block';
-
-    $build['#block_title'] = $this->label();
-    $build['#cache'] = [
-      'tags' => ['google-page-speed:block'],
-    ];
-
-    $build['#urls'] = $this->getTestedUrls();
-
-    return $build;
+  public function getCacheTags() {
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      ['google-page-speed:block']
+    );
   }
 
   /**
    * This function fetches the distinct urls from the database.
    *
    * @return mixed
-   *   Returning distinct url values from the database.
+   *   Returning distinct metrics from the database.
    */
-  public function getTestedUrls() {
-    $query = $this->database->select('google_page_speed_data', 'gps');
-    $query->fields('gps', ['url']);
+  protected function getMetrics() {
+    $query = $this->database->select('google_page_speed_metrics', 'gps_metrics');
+    $query->fields('gps_metrics', ['metric_id', 'reference']);
     $query->distinct();
-    $urls = $query->execute()->fetchAllKeyed(0, 0);
-    return $urls;
+    $metrics = $query->execute()->fetchAllKeyed(0, 1);
+    return $metrics;
   }
 
 }
