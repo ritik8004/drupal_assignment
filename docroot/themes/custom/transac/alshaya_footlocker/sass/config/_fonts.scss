@@ -13,6 +13,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -27,6 +28,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
     url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -41,6 +43,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -55,20 +58,21 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 // Font Family
-$fl-bold: 'Roboto-Bold', 'DroidArabicKufi_Bold';
-$fl-bold-nodir: 'Roboto-Bold', 'DroidArabicKufi_Bold';
+$fl-bold: 'Roboto-Bold', 'DroidArabicKufi_Bold', 'Arial';
+$fl-bold-nodir: 'Roboto-Bold', 'DroidArabicKufi_Bold', 'Arial';
 
-$fl-thin: 'Roboto-Regular', 'DroidKufi_Regular';
-$fl-thin-nodir: 'Roboto-Regular', 'DroidKufi_Regular';
+$fl-thin: 'Roboto-Regular', 'DroidKufi_Regular', 'Arial';
+$fl-thin-nodir: 'Roboto-Regular', 'DroidKufi_Regular', 'Arial';
 
-$fl-arabic-bold: 'DroidArabicKufi_Bold', 'Roboto-Bold';
-$fl-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'Roboto-Bold';
+$fl-arabic-bold: 'DroidArabicKufi_Bold', 'Roboto-Bold', 'Arial';
+$fl-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'Roboto-Bold', 'Arial';
 
-$fl-arabic-thin: 'DroidKufi_Regular', 'Roboto-Regular';
-$fl-arabic-thin-nodir: 'DroidKufi_Regular', 'Roboto-Regular';
+$fl-arabic-thin: 'DroidKufi_Regular', 'Roboto-Regular', 'Arial';
+$fl-arabic-thin-nodir: 'DroidKufi_Regular', 'Roboto-Regular', 'Arial';
 
 $arial: $fl-thin;
 $arial-nodir: $fl-thin-nodir;

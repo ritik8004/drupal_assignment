@@ -687,6 +687,14 @@ function alshaya_white_label_theme() {
       ],
       'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates',
     ],
+    'alshaya_white_label_picture' => [
+      'variables' => [
+        'desktop_image' => NULL,
+        'mobile_image' => NULL,
+        'default_image' => NULL,
+        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
+      ],
+    ],
   ];
 }
 
@@ -1135,10 +1143,13 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['selector_class'] = $style_data['selector_class'];
     }
 
-    if (!empty($default_image)) {
-      $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
-      $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
-      $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
+    if (!empty($default_image) && (!empty($desktop_image) || !empty($mobile_image))) {
+      $variables['promo_block_picture'] = [
+        '#theme' => 'alshaya_white_label_picture',
+        '#desktop_image' => !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image),
+        '#mobile_image' => !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image),
+        '#default_image' => _alshaya_white_label_get_image_url($default_image),
+      ];
     }
   }
 
@@ -1149,10 +1160,13 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     $desktop_banner_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
     $banner_default_image = !empty($desktop_banner_image) ? $desktop_banner_image : $mobile_banner_image;
 
-    if (!empty($banner_default_image)) {
-      $variables['mobile_banner_image'] = !empty($mobile_banner_image) ? _alshaya_white_label_get_image_url($mobile_banner_image) : _alshaya_white_label_get_image_url($desktop_banner_image);
-      $variables['desktop_banner_image'] = !empty($desktop_banner_image) ? _alshaya_white_label_get_image_url($desktop_banner_image) : _alshaya_white_label_get_image_url($mobile_banner_image);
-      $variables['banner_default_image'] = _alshaya_white_label_get_image_url($banner_default_image);
+    if (!empty($banner_default_image) && (!empty($desktop_banner_image) || !empty($mobile_banner_image))) {
+      $variables['promo_block_picture'] = [
+        '#theme' => 'alshaya_white_label_picture',
+        '#desktop_image' => !empty($desktop_banner_image) ? _alshaya_white_label_get_image_url($desktop_banner_image) : _alshaya_white_label_get_image_url($mobile_banner_image),
+        '#mobile_image' => !empty($mobile_banner_image) ? _alshaya_white_label_get_image_url($mobile_banner_image) : _alshaya_white_label_get_image_url($desktop_banner_image),
+        '#default_image' => _alshaya_white_label_get_image_url($banner_default_image),
+      ];
     }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
@@ -1542,4 +1556,19 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
       $variables['items'][0]['attributes']->addClass('category-all');
     }
   }
+}
+
+/**
+ * Implements template_preprocess_image().
+ */
+function alshaya_white_label_preprocess_image(&$variables) {
+  $variables['attributes']['class'][] = 'b-lazy';
+  $scheme = \Drupal::service('file_system')->uriScheme($variables['uri']);
+  if ($scheme == 'public') {
+    $variables['attributes']['data-src'] = file_create_url($variables['uri']);
+  }
+  else {
+    $variables['attributes']['data-src'] = $variables['uri'];
+  }
+  $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
 }
