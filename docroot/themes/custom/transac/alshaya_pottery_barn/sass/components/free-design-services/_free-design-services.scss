@@ -211,8 +211,7 @@
                 }
               }
 
-              label.error,
-              .form-item--error-message {
+              label.error {
                 width: 100%;
                 top: 2.6875rem !important;
                 #{$left}: 0;
@@ -254,16 +253,15 @@
           label {
             top: -1.5rem;
             font-size: 0.75rem;
-          }
 
-          label.error,
-          .form-item--error-message {
-            position: absolute;
-            top: 1.5rem !important;
-            font-size: 0.75rem;
-            color: $primary_input_inline_error;
-            padding-top: 0.3125rem;
-            display: block;
+            &.error {
+              position: absolute;
+              top: 1.5rem !important;
+              font-size: 0.75rem;
+              color: $primary_input_inline_error;
+              padding-top: 0.3125rem;
+              display: block;
+            }
           }
         }
       }
@@ -313,10 +311,6 @@
 
         @include breakpoint($only-mobile) {
           margin-top: 0;
-        }
-
-        .form-item--error-message {
-          position: absolute;
         }
       }
     }

@@ -679,6 +679,7 @@ function alshaya_transac_install() {
     'alshaya_search',
     'alshaya_seo_transac',
     'alshaya_social_facebook',
+    'alshaya_social_google',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
     'alshaya_super_category',

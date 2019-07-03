@@ -5,3 +5,8 @@ alshaya_social.settings:
     social_login:
       type: boolean
       label: 'Display social login links'
+    social_networks:
+      type: sequence
+      label: 'Social auth networks status'
+      sequence:
+        type: boolean
