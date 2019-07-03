@@ -66,53 +66,35 @@ class GooglePageSpeedController extends ControllerBase {
    * @param string $time
    *   Passing time period for which data is needed.
    */
-  public function getPageScore($metric_id = '', $screen = 'desktop', $time = 'one-week') {
-
-    switch ($time) {
-      case 'one-week':
-        $timestamp = strtotime('-1 week');
-        break;
-
-      case 'one-month':
-        $timestamp = strtotime('-1 month');
-        break;
-
-      case 'one-year':
-        $timestamp = strtotime('-1 year');
-        break;
-
-      default:
-        $timestamp = strtotime('-1 week');
-    }
+  public function getPageScore($metric_id = '', $screen = 'desktop', $time = 'one-month') {
 
     $rows = [];
     $final_data = [];
-    $query = $this->database->select('google_page_speed_scores', 'gps');
+    $timestamp = $this->getTimeStamp($time);
+    $query = $this->getSelectQuery($metric_id, $screen, $timestamp);
     $query->fields('gps', ['created', 'value', 'url_id']);
-    $query->condition('gps.metric_id', trim($metric_id), '=');
-    $query->condition('gps.device', trim($screen), '=');
-    $query->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
     $query->orderBy('gps.url_id', 'ASC');
     $results = $query->execute()->fetchAll();
     foreach ($results as $result) {
       if ($rows[$result->created][0] != $result->created) {
         $rows[$result->created][0] = $result->created;
       }
-      $rows[$result->created][] = $result->value;
+      $rows[$result->created][intval($result->url_id)] = $result->value;
     }
+    $row_counts = $this->getSelectQuery($metric_id, $screen, $timestamp)
+      ->distinct()
+      ->countQuery()
+      ->execute()
+      ->fetchField();
 
-    $select_query = $this->database->select('google_page_speed_scores', 'gps');
-    $select_query->fields('gps', ['url_id'])
-      ->condition('gps.metric_id', trim($metric_id), '=')
-      ->condition('gps.device', trim($screen), '=')
-      ->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
-    $row_counts = $select_query->distinct()->countQuery()->execute()->fetchField();
     foreach ($rows as $row) {
       for ($i = 0; $i <= $row_counts; $i++) {
-        $row[$i] = (isset($row[$i])) ? round(floatval($row[$i]), 2) : 0;
+        $row[intval($i)] = (isset($row[intval($i)])) ? round(floatval($row[intval($i)]), 2) : 0;
       }
+      ksort($row);
       $final_data[] = $row;
     }
+
     $final_data = Json::encode($final_data);
     echo $final_data;
     die;
@@ -130,6 +112,96 @@ class GooglePageSpeedController extends ControllerBase {
       '#markup' => $this->t('See the Google PageSpeed Insights data in below chart.'),
     ];
     return $build;
+  }
+
+  /**
+   * To fetch the url lists in the given time.
+   *
+   * @param int $metric_id
+   *   The metric id to search.
+   * @param string $screen
+   *   The screen to search for.
+   * @param string $time
+   *   The time to search for.
+   *
+   * @throws \Exception
+   */
+  public function getUrlList($metric_id, $screen, $time) {
+    $timestamp = $this->getTimeStamp($time);
+    $url_id_list = $this->getSelectQuery($metric_id, $screen, $timestamp)
+      ->execute()
+      ->fetchAllKeyed(0, 0);
+
+    $urls_list_select = $this->database->select('google_page_speed_url', 'gps_url');
+    $urls_list_select->fields('gps_url', ['url_id', 'url']);
+    $urls_list_select->condition('url_id', $url_id_list, 'IN');
+    $url_list = $urls_list_select->execute()->fetchAllKeyed(0, 1);
+    $url_list = Json::encode($url_list);
+    echo $url_list;
+    die;
+  }
+
+  /**
+   * To prepare the common select query object.
+   *
+   * @param int $metric_id
+   *   The metric id to search for.
+   * @param string $screen
+   *   The screen to search for.
+   * @param int $timestamp
+   *   The timestamp of the relative time to search for.
+   *
+   * @return \Drupal\Core\Database\Query\SelectInterface
+   *   The returned select query object.
+   */
+  protected function getSelectQuery($metric_id, $screen, $timestamp) {
+    $select_query = $this->database->select('google_page_speed_scores', 'gps');
+    $select_query->fields('gps', ['url_id'])
+      ->condition('gps.metric_id', trim($metric_id), '=')
+      ->condition('gps.device', trim($screen), '=')
+      ->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
+
+    return $select_query;
+  }
+
+  /**
+   * To get timestamp based on time.
+   *
+   * @param string $time
+   *   The time to search for.
+   *
+   * @return \DateTime|false|int
+   *   The returning timestamp.
+   *
+   * @throws \Exception
+   */
+  protected function getTimeStamp($time) {
+    switch ($time) {
+      case 'one-week':
+        $timestamp = strtotime('-1 week');
+        break;
+
+      case 'one-month':
+        $timestamp = strtotime('-1 month');
+        break;
+
+      case 'one-year':
+        $timestamp = strtotime('-1 year');
+        break;
+
+      case 'three-month':
+        $timestamp = strtotime('-3 month');
+        break;
+
+      case 'all-time':
+        $timestamp = 0;
+        break;
+
+      default:
+        $timestamp = strtotime('-1 month');
+    }
+
+    return $timestamp;
   }
 
 }
