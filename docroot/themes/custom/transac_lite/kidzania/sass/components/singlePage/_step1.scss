@@ -3,6 +3,8 @@ section {
 }
 
 .ticketing__steps {
+  display: none;
+
   &.one {
     padding-top: 2.5rem;
 
@@ -21,6 +23,10 @@ section {
         padding-top: 0;
       }
     }
+  }
+
+  &.six {
+    display: block;
   }
 }
 

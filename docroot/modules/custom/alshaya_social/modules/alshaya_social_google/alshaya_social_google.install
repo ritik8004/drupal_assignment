@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_social_google.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_social_google_install() {
+  // Save client_id and client_secret.
+  $config = \Drupal::configFactory()->getEditable('social_auth_google.settings');
+  $google_settings = Settings::get('social_auth_google.settings');
+  if (!empty($google_settings)) {
+    foreach ($google_settings as $key => $value) {
+      $config->set($key, $value);
+    }
+  }
+  $config->save();
+
+  // Set google social auth disable by default.
+  \Drupal::configFactory()->getEditable('alshaya_social.settings')
+    ->set('social_networks.social_auth_google', 0)
+    ->save();
+
+  $strings = [
+    'sign in with google' => [
+      'ar' => 'تسجيل الدخول عن طريق جوجل',
+    ],
+    'sign up with google' => [
+      'ar' => 'سجل الاشتراك عن طريق جوجل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}

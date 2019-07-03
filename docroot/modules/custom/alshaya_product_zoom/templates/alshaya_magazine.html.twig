@@ -13,7 +13,7 @@
         {% elseif loop.first %}
           <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
             <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
-              <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+              <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
             </a>
             {%  if labels|length > 0 %}
               <div class="product-labels">
@@ -24,7 +24,7 @@
         {% else %}
           <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
             <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
-              <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+              <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
             </a>
           </figure>
         {% endif %}
@@ -45,7 +45,7 @@
             {% elseif firstItem.type == 'vimeo' %}
               <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
             {% else %}
-              <img class="imagegallery__full__image" style="max-width: none;" id="full-image" src="{{ firstItem.fullurl }}"  alt="{{ firstItem.label }}" title="{{ firstItem.label }}" />
+              <img class="imagegallery__full__image b-lazy" style="max-width: none;" id="full-image" data-src="{{ firstItem.fullurl }}"  src="{{ lazy_load_placeholder }}" alt="{{ firstItem.label }}" title="{{ firstItem.label }}" />
             {% endif %}
         </div>
         <div class="yt-vi-container cloudzoom__video_modal"></div>
@@ -62,7 +62,7 @@
                 {% else %}
                   <li>
                     <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                      <img src="{{ thumbs.thumburl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                      <img class="b-lazy" data-src="{{ thumbs.thumburl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                     </a>
                   </li>
                 {% endif %}
@@ -93,7 +93,7 @@
                   </li>
                 {% else %}
                   <li class="mob-imagegallery__thumbnails__image zoom">
-                    <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                    <img class="b-lazy" data-src="{{ thumbs.fullurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                   </li>
                 {% endif %}
             {% endfor %}

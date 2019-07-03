@@ -3,7 +3,6 @@
 namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_cart\CartInterface;
-use Drupal\acq_checkoutcom\CheckoutComCardInfoFormTrait;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
@@ -22,8 +21,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * )
  */
 class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
-
-  use CheckoutComCardInfoFormTrait;
 
   /**
    * Checkout.com api wrapper object.
@@ -68,6 +65,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $renderer;
 
   /**
+   * Form helper.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComFormHelper
+   */
+  protected $formHelper;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -87,6 +91,16 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $this->currentRequest = \Drupal::service('request_stack')->getCurrentRequest();
     $this->renderer = \Drupal::service('renderer');
+    $this->formHelper = \Drupal::service('acq_checkoutcom.form_helper');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLabel() {
+    return $this->currentUser->isAuthenticated()
+      ? $this->t('Saved Credit/Debit Cards')
+      : $this->t('Credit/Debit Cards');
   }
 
   /**
@@ -108,30 +122,30 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
-      $existing_cards = $this->apiHelper->getCustomerCards($user);
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
 
-      if (!empty($existing_cards)) {
-        $options = [];
-        foreach ($existing_cards as $card) {
+      if (!empty($customer_stored_cards)) {
+        $stored_cards_list = [];
+        foreach ($customer_stored_cards as $stored_card) {
           $build = [
             '#theme' => 'payment_card_teaser',
-            '#card_info' => $card,
+            '#card_info' => $stored_card,
             '#user' => $user,
           ];
-          $options[$card['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_card['id']] = $this->renderer->render($build);
         }
       }
 
-      $payment_card = empty($options) ? $payment_card : $this->currentRequest->query->get('payment-card');
+      $payment_card = empty($stored_cards_list) ? $payment_card : $this->currentRequest->query->get('payment-card');
       $values = $form_state->getValue('acm_payment_methods');
       if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
         $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
       }
 
-      if (!empty($options)) {
+      if (!empty($stored_cards_list)) {
         $pane_form['payment_card'] = [
           '#type' => 'radios',
-          '#options' => $options + ['new' => $this->t('New Card')],
+          '#options' => $stored_cards_list + ['new' => $this->t('New Card')],
           '#default_value' => $payment_card,
           '#required' => TRUE,
           '#ajax' => [
@@ -162,7 +176,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
     }
     elseif ($payment_card == 'new') {
-      $pane_form['payment_details'] += CheckoutComCardInfoFormTrait::newCardInfoForm($pane_form['payment_details'], $form_state);
+      $pane_form['payment_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_details'], $form_state);
     }
 
     return $pane_form;
@@ -238,7 +252,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->checkoutComApi->processCardPayment(
       $cart,
       [
-        'value' => $totals['grand'] * 100,
+        'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
         'cardToken' => $inputs['cko-card-token'],
         'email' => $cart->customerEmail(),
       ],

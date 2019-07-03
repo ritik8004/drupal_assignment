@@ -34,4 +34,34 @@
     }
   };
 
+  var supportsES6 = function () {
+    try {
+      new Function('(a = 0) => a');
+      return true;
+    }
+    catch (err) {
+      return false;
+    }
+  }();
+
+  if (!supportsES6) {
+    $('.IESupportMsg').show();
+  }
+
+  $('#booking-payment-form').on('keypress input', '#edit-name', function (e) {
+    var $this = $(this);
+    var val = $this.val().trim();
+    var regex = new RegExp('^[a-zA-Z ]+$');
+    if (e.type === 'keypress') {
+      var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+      if (!regex.test(key)) {
+        e.preventDefault();
+      }
+    }
+    else {
+      if (!val.match(regex)) {
+        $this.val(val.replace(/[^A-Za-z ]/g, '').replace(/ {1,}/g, ' '));
+      }
+    }
+  });
 })(jQuery, Drupal, drupalSettings);
