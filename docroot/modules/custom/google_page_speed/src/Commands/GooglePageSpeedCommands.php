@@ -159,48 +159,52 @@ class GooglePageSpeedCommands extends DrushCommands {
     if ($response->getStatusCode() == 200) {
       $response_body = $response->getBody();
       $decoded = Json::decode($response_body);
-      $metrics_array = [$decoded['lighthouseResult']['audits']['metrics']['details']['items'][0]];
-      $metrics = $serializer->serialize($metrics_array, 'json');
+      $categories = $decoded['lighthouseResult']['categories'];
       $audits = $decoded['lighthouseResult']['audits'];
-      $score_array = [
-        $audits['first-contentful-paint']['displayValue'],
-        $audits['first-meaningful-paint']['displayValue'],
-        $audits['speed-index']['displayValue'],
-        $audits['first-cpu-idle']['displayValue'],
-        $audits['interactive']['displayValue'],
-        $audits['max-potential-fid']['displayValue'],
-      ];
-      $score = $serializer->serialize($score_array, 'json');
 
+      // Writing data on terminal.
       $this->output->writeln('URL: ' . $url);
       $this->output->writeln('Screen: ' . $screen);
-      $this->output->writeln('First Contentful Paint: ' . $audits['first-contentful-paint']['displayValue']);
-      $this->output->writeln('First Meaningful Paint: ' . $audits['first-meaningful-paint']['displayValue']);
-      $this->output->writeln('Speed Index: ' . $audits['speed-index']['displayValue']);
-      $this->output->writeln('First CPU Idle: ' . $audits['first-cpu-idle']['displayValue']);
-      $this->output->writeln('Interactive: ' . $audits['interactive']['displayValue']);
-      $this->output->writeln('Maximum Potential First Input Delay: ' . $audits['max-potential-fid']['displayValue']);
-      $this->output->writeln('--------------------------------------------------------------------------------------');
+      $this->output->writeln('Performance Score: ' . $categories['performance']['score']);
 
-      $drush_insert = $this->database->insert('google_page_speed_data')
-        ->fields([
-          'url',
-          'screen',
-          'created',
-          'metrics',
-          'score',
-        ])
-        ->values([
-          $url,
-          $screen,
-          $this->time->getRequestTime(),
-          $metrics,
-          $score,
-        ])->execute();
+      // Fetch url_id if present.
+      $url_id = $this->getUrlId($url);
+      if (empty($url_id)) {
+        $url_id = $this->insertUrlData($url);
+      }
 
-      if (!isset($drush_insert) || is_null($drush_insert) || empty($drush_insert)) {
+      // Check if performance score is present.
+      $metric_id = $this->getMetricId('pf_score');
+      if (empty($metric_id)) {
+        $metric_id = $this->insertMetricData('pf_score');
+      }
+
+      $score_id = $this->insertScoreData($metric_id, $url_id, $screen, $categories['performance']['score']);
+      if (!isset($score_id) || is_null($score_id) || empty($score_id)) {
         $this->output->writeln('Problem in database insert.');
       }
+
+      foreach ($categories['performance']['auditRefs'] as $auditRef) {
+        if ($auditRef['weight'] > 0) {
+          $this->output->writeln($audits[$auditRef['id']]['title'] . ' : ' . $audits[$auditRef['id']]['score']);
+
+          $metric_id = $this->getMetricId($auditRef['id']);
+
+          if (empty($metric_id)) {
+            $metric_id = $this->insertMetricData($auditRef['id']);
+          }
+
+          if (!empty($url_id) && !empty($metric_id)) {
+            $score_id = $this->insertScoreData($metric_id, $url_id, $screen, $audits[$auditRef['id']]['score']);
+            if (!isset($score_id) || is_null($score_id) || empty($score_id)) {
+              $this->output->writeln('Problem in database insert.');
+            }
+          }
+        }
+      }
+
+      $this->output->writeln('--------------------------------------------------------------------------------------');
+
     }
     else {
       $response_body = $response->getBody();
@@ -209,6 +213,109 @@ class GooglePageSpeedCommands extends DrushCommands {
     }
 
     return 1;
+  }
+
+  /**
+   * To check if url id is present or not.
+   *
+   * @param string $url
+   *   The url to check.
+   *
+   * @return int
+   *   The found url id.
+   */
+  protected function getUrlId($url) {
+    $drush_select = $this->database->select('google_page_speed_url', 'gps_url');
+    $drush_select->fields('gps_url', ['url_id']);
+    $drush_select->condition('url', trim($url));
+    $url_id = $drush_select->execute()->fetchField();
+    return $url_id;
+  }
+
+  /**
+   * To insert new url entry.
+   *
+   * @param string $url
+   *   The url to enter.
+   *
+   * @return \Drupal\Core\Database\StatementInterface|int|null
+   *   The url id of newly created url.
+   *
+   * @throws \Exception
+   */
+  protected function insertUrlData($url) {
+    $url_id = $this->database->insert('google_page_speed_url')
+      ->fields(['url'])
+      ->values([$url])
+      ->execute();
+    return $url_id;
+  }
+
+  /**
+   * To check if metric is present or not.
+   *
+   * @param string $reference
+   *   The metric to check.
+   *
+   * @return int
+   *   The found metric id .
+   */
+  protected function getMetricId($reference) {
+    $drush_select = $this->database->select('google_page_speed_metrics', 'gps_metrics');
+    $drush_select->fields('gps_metrics', ['metric_id']);
+    $drush_select->condition('reference', trim($reference));
+    $metric_id = $drush_select->execute()->fetchField();
+    return $metric_id;
+  }
+
+  /**
+   * To insert new metric.
+   *
+   * @param string $reference
+   *   The metric name.
+   *
+   * @return \Drupal\Core\Database\StatementInterface|int|null
+   *   The metric id of newly entered metric.
+   *
+   * @throws \Exception
+   */
+  protected function insertMetricData($reference) {
+    $metric_id = $this->database->insert('google_page_speed_metrics')
+      ->fields(['category', 'reference'])
+      ->values(['performance', trim($reference)])
+      ->execute();
+    return $metric_id;
+  }
+
+  /**
+   * To insert the score based on metric, time and url.
+   *
+   * @param int $metric_id
+   *   The metric id of metric.
+   * @param int $url_id
+   *   The url is of url.
+   * @param string $screen
+   *   The device type.
+   * @param string $value
+   *   The score value.
+   *
+   * @return \Drupal\Core\Database\StatementInterface|int|null
+   *   The id of newly inserted score.
+   *
+   * @throws \Exception
+   */
+  protected function insertScoreData($metric_id, $url_id, $screen, $value) {
+    $score_id = $this->database->insert('google_page_speed_scores')
+      ->fields(['created', 'metric_id', 'url_id', 'device', 'value'])
+      ->values([
+        $this->time->getRequestTime(),
+        $metric_id,
+        $url_id,
+        $screen,
+        $value,
+      ])
+      ->execute();
+    return $score_id;
   }
 
 }
