@@ -77,7 +77,7 @@
                 title: 'Date and time'
               },
               vAxis: {
-                title: 'Time(s)'
+                title: 'Scores between 0 & 1'
               },
               'width':'100%',
               'height':'auto',
