@@ -173,8 +173,9 @@ class CheckoutComAPIWrapper {
    *   Return true if current env is live else false.
    */
   protected function isLive() {
-    $config = $this->configFactory->get('acq_checkoutcom.settings');
-    return ($config->get('env') == 'live');
+    return (
+      $this->configFactory->get('acq_checkoutcom.settings')->get('env') == 'live'
+    );
   }
 
   /**
@@ -221,14 +222,12 @@ class CheckoutComAPIWrapper {
   protected function tryCheckoutRequest(callable $doReq, $action) {
     $client = $this->createClient();
 
-    $req_param['commerce'] = [
-      'currency' => $this->configFactory->get('acq_commerce.currency')->get('currency_code'),
-    ];
-
     // Make Request.
     try {
       /** @var \GuzzleHttp\Psr7\Response $result */
-      $result = $doReq($client, $req_param);
+      $result = $doReq($client, [
+        'currency' => $this->configFactory->get('acq_commerce.currency')->get('currency_code'),
+      ]);
     }
     catch (\Exception $e) {
       $msg = new FormattableMarkup(
@@ -284,7 +283,7 @@ class CheckoutComAPIWrapper {
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
 
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
-      $opt = ['json' => $req_param['commerce'] + $params];
+      $opt = ['json' => $req_param + $params];
       return ($client->post($endpoint, $opt));
     };
 
@@ -338,7 +337,7 @@ class CheckoutComAPIWrapper {
    */
   protected function authorizeCardForPayment(UserInterface $user, string $endpoint, array $params, $caller = '') {
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
-      $opt = ['json' => $req_param['commerce'] + $params];
+      $opt = ['json' => $req_param + $params];
       return ($client->post($endpoint, $opt));
     };
 
@@ -389,7 +388,7 @@ class CheckoutComAPIWrapper {
    */
   protected function makeVoidTransaction(UserInterface $user, string $endpoint, array $params, $caller = '') {
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
-      $opt = ['json' => $req_param['commerce'] + $params];
+      $opt = ['json' => $req_param + $params];
       return ($client->post($endpoint, $opt));
     };
 
