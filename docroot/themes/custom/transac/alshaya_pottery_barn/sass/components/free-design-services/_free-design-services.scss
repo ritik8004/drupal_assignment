@@ -387,7 +387,6 @@
 
       @include breakpoint($upto-desktop) {
         .form-select {
-          width: calc(100% - 2.25rem) !important;
           padding: 0.25rem 0.35rem !important;
           border: 1px solid $form-select-border !important;
         }
@@ -397,6 +396,17 @@
           top: 0;
           #{$right}: 0;
           height: 2.1875rem;
+          margin-#{$left}: 1px;
+        }
+
+        .c-input__bar {
+          &::after {
+            border-#{$left}: 1px solid $form-select-border;
+            width: 1px;
+            height: 2.1875rem !important;
+            #{$right}: 2.1875rem;
+            #{$left}: auto;
+          }
         }
       }
     }
