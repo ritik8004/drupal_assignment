@@ -94,12 +94,14 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
       $privilege_customer = 'Regular Customer';
       $email = '';
       $customer_type = 'New Customer';
+      $privilege_card_number = '';
 
       if ($this->currentUser->isAuthenticated()) {
         $current_user = $this->userStorage->load($current_user_id);
         $email = $current_user->get('mail')->getString();
         $customer_type = $this->ordersManager->getOrdersCount($email) > 1 ? 'Repeat Customer' : $customer_type;
-        $privilege_customer = !empty($current_user->get('field_privilege_card_number')->getString()) ? 'Privilege Customer' : $privilege_customer;
+        $privilege_card_number = $current_user->get('field_privilege_card_number')->getString() ?? '';
+        $privilege_customer = !empty($privilege_card_number) ? 'Privilege Customer' : $privilege_customer;
       }
 
       $user_details = [
@@ -112,6 +114,7 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
         'privilegeCustomer' => $privilege_customer,
       ];
       $build['#attached']['drupalSettings']['userDetails'] = $user_details;
+      $build['#attached']['drupalSettings']['privilegeCardNumber'] = $privilege_card_number;
       return $build;
     }
   }

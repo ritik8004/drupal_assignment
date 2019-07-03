@@ -44,6 +44,16 @@
       var footerNewsletterSubmiClicked = false;
       var deliveryType = 'Home Delivery';
       var userDetails = drupalSettings.userDetails;
+      var privilegeCardNumber = drupalSettings.privilegeCardNumber;
+
+      if (localStorage.getItem('userID') === undefined) {
+        localStorage.setItem('userID', userDetails.userID);
+      }
+
+      if(!empty(privilegeCardNumber && (localStorage.getItem('pcNumber') === undefined || localStorage.getItem('pcNumber') !== privilegeCardNumber))) {
+        localStorage.setItem('pcNumber', privilegeCardNumber);
+        localStorage.setItem('pcStatus', 'new');
+      }
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
@@ -180,15 +190,15 @@
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
-        if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
+        if (userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
-          $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
+          localStorage.setItem('userID', userDetails.userID);
         }
 
         // Fire logout success event on successful sign-in.
-        if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
+        if (userDetails.userID === 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
-          $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
+          localStorage.setItem('userID', userDetails.userID);
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -223,16 +233,15 @@
           $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
         }
 
-        var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
 
-        if (pcRegistration !== undefined && pcRegistration !== '6362544') {
+        if (localStorage.getItem('pcStatus') === 'new' && localStorage.getItem('pcNumber') !== '6362544') {
           dataLayer.push({
             event: 'pcMember',
             pcType: 'pc club member'
           });
         }
 
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
+        localStorage.setItem('pcStatus', 'eventFired');
       });
 
       /**
