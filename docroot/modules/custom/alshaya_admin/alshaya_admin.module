@@ -68,10 +68,6 @@ function alshaya_admin_form_alter(&$form, FormStateInterface $form_state, $form_
     if (isset($form['content_translation']['status'])) {
       $form['content_translation']['status']['#disabled'] = TRUE;
     }
-    // Relations field is hidden because it was loosing value after submit.
-    if (isset($form['relations'])) {
-      $form['relations']['#type'] = 'hidden';
-    }
   }
 }
 

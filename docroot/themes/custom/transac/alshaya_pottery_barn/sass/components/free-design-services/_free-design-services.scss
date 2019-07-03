@@ -276,12 +276,7 @@
       .form-item-address-dependent-locality {
         width: 47%;
         display: inline-block;
-        margin-#{$left}: 4.5%;
-
-        &.form-item--error {
-          margin-#{$left}: 0;
-          margin-#{$right}: 4.5%;
-        }
+        margin-#{$right}: 4.5%;
 
         label[for=edit-address-dependent-locality] {
           white-space: nowrap;
@@ -311,6 +306,7 @@
 
         @include breakpoint($only-mobile) {
           margin-top: 0;
+          margin-bottom: 0;
         }
       }
     }
@@ -391,7 +387,6 @@
 
       @include breakpoint($upto-desktop) {
         .form-select {
-          width: calc(100% - 2.25rem) !important;
           padding: 0.25rem 0.35rem !important;
           border: 1px solid $form-select-border !important;
         }
@@ -401,6 +396,17 @@
           top: 0;
           #{$right}: 0;
           height: 2.1875rem;
+          margin-#{$left}: 1px;
+        }
+
+        .c-input__bar {
+          &::after {
+            border-#{$left}: 1px solid $form-select-border;
+            width: 1px;
+            height: 2.1875rem !important;
+            #{$right}: 2.1875rem;
+            #{$left}: auto;
+          }
         }
       }
     }
@@ -409,6 +415,10 @@
       &.form-type-select {
         label {
           color: $form-field-legend;
+
+          @include breakpoint($only-mobile) {
+            top: -2.125rem;
+          }
         }
       }
     }
@@ -593,7 +603,13 @@
   }
 
   .country-field-wrapper {
-    margin-top: 0.75rem;
+    margin-top: 1.5rem;
+    height: auto;
+    margin-bottom: 0;
+  }
+
+  .form-item-address-area-parent {
+    padding-bottom: 0 !important;
   }
 }
 
