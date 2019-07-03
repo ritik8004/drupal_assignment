@@ -15,6 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Delete the {card_id} of user.
@@ -50,6 +51,13 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
   protected $messenger;
 
   /**
+   * A request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * CustomerCardDeleteForm constructor.
    *
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
@@ -60,17 +68,21 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    *   The current user object.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request object.
    */
   public function __construct(
     CheckoutComAPIWrapper $checkout_com_Api,
     ApiHelper $api_helper,
     AccountProxyInterface $account_proxy,
-    MessengerInterface $messenger
+    MessengerInterface $messenger,
+    RequestStack $requestStack
   ) {
     $this->checkoutComApi = $checkout_com_Api;
     $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
     $this->messenger = $messenger;
+    $this->request = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -81,7 +93,8 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
       $container->get('acq_checkoutcom.checkout_api'),
       $container->get('acq_checkoutcom.agent_api'),
       $container->get('current_user'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('request_stack')
     );
   }
 
@@ -124,7 +137,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('acq_checkoutcom.payment_cards', ['user' => $this->getRequest()->get('user')]);
+    return new Url('acq_checkoutcom.payment_cards', ['user' => $this->getRequest()->get('user')->id()]);
   }
 
   /**
@@ -202,7 +215,11 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
     }
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
-    $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkoutcom.payment_cards', ['user' => $form_state->getValue('uid')])->toString()));
+    $destination = $this->request->query->get('destination');
+    if (empty($destination)) {
+      $destination = $this->getCancelUrl()->toString();
+    }
+    $response->addCommand(new RedirectCommand($destination));
     return $response;
   }
 

@@ -74,10 +74,11 @@ class ApiHelper {
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getSubscriptionKeys(string $type = NULL) {
+  public function getSubscriptionInfo(string $type = NULL) {
     $keys = [
       'public_key' => 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
       'secret_key' => 'sk_test_863d1545-5253-4387-b86b-df6a86797baa',
+      'verify_3dsecure' => TRUE,
     ];
 
     if (!empty($type)) {

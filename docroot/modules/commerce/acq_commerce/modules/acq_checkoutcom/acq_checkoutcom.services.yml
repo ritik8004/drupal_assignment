@@ -14,3 +14,10 @@ services:
       - '@config.factory'
       - '@user.data'
       - '@logger.factory'
+
+  acq_checkoutcom.form_helper:
+    class: Drupal\acq_checkoutcom\CheckoutComFormHelper
+    arguments:
+      - '@config.factory'
+      - '@current_user'
+      - '@acq_checkoutcom.agent_api'
