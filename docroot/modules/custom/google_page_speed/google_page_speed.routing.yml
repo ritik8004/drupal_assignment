@@ -1,5 +1,5 @@
 google_page_speed.score:
-  path: '/google-page-speed/{screen}/{time}'
+  path: '/google-page-speed/{metric_id}/{screen}/{time}'
   defaults:
     _title: 'Page Speed Score'
     _controller: '\Drupal\google_page_speed\Controller\GooglePageSpeedController::getPageScore'
