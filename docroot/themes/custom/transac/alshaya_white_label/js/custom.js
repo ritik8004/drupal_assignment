@@ -125,12 +125,12 @@
        * The classname to be removed from body.
        */
       function modalCloseBtnEvent(className) {
-        // Remove overlay related classes only when last overlay getting closed.
-        if ($('.ui-dialog').length === 1) {
-          $('.ui-dialog-titlebar-close').on('click', function () {
+        $('.ui-dialog-titlebar-close').on('click', function () {
+          // Remove overlay related classes only when last overlay getting closed.
+          if ($('.ui-dialog').length < 1) {
             $('body').removeClass(className);
-          });
-        }
+          }
+        });
       }
 
       /**
