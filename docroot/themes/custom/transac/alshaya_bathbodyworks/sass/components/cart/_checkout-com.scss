@@ -46,6 +46,14 @@
       margin-#{$left}: 0.5rem;
       margin-#{$right}: 0.5rem;
       width: calc(100% - 1rem);
+
+      .saved-card {
+        .actions {
+          .label {
+            text-transform: capitalize;
+          }
+        }
+      }
     }
 
     #payment_method_new {

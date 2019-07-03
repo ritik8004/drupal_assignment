@@ -343,10 +343,12 @@
     }
   }
 
-  .plugin-selected {
-    + .card-types-wrapper {
-      .card-type {
-        opacity: 1;
+  #payment_method_title_checkout_com {
+    &.plugin-selected {
+      ~ .card-types-wrapper {
+        .card-type {
+          opacity: 1;
+        }
       }
     }
   }
