@@ -101,6 +101,17 @@
             }
           }
         }
+
+        @include breakpoint($upto-desktop) {
+          &::after {
+            top: 0.5rem !important;
+            #{$right}: 0.5rem !important;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          max-width: 25.1875rem;
+        }
       }
 
       .webform-composite-visible-title {
@@ -267,12 +278,7 @@
       .form-item-address-dependent-locality {
         width: 47%;
         display: inline-block;
-        margin-#{$left}: 4.5%;
-
-        &.form-item--error {
-          margin-#{$left}: 0;
-          margin-#{$right}: 4.5%;
-        }
+        margin-#{$right}: 4.5%;
 
         label[for=edit-address-dependent-locality] {
           white-space: nowrap;
@@ -302,6 +308,7 @@
 
         @include breakpoint($only-mobile) {
           margin-top: 0;
+          margin-bottom: 0;
         }
 
         .form-item--error-message {
@@ -314,7 +321,9 @@
     .form-item-address-administrative-area,
     .form-item-preferred-store.form-type-select {
       &::after {
-        display: none;
+        @include breakpoint($desktop) {
+          display: none;
+        }
       }
 
       @include select-wrapper(100%);
@@ -381,12 +390,31 @@
         font-size: 1rem;
         padding: 0.25rem !important;
       }
+
+      @include breakpoint($upto-desktop) {
+        .form-select {
+          width: calc(100% - 2.25rem) !important;
+          padding: 0.25rem 0.35rem !important;
+          border: 1px solid $form-select-border !important;
+        }
+
+        &::after {
+          background: $form-select-border;
+          top: 0;
+          #{$right}: 0;
+          height: 2.1875rem;
+        }
+      }
     }
 
     .form-item-preferred-store {
       &.form-type-select {
         label {
           color: $form-field-legend;
+
+          @include breakpoint($only-mobile) {
+            top: -2.125rem;
+          }
         }
       }
     }
@@ -542,7 +570,7 @@
     }
 
     #edit-actions {
-      padding: 0.8125rem 0.75rem 1.5rem;
+      padding: 0.8125rem 0.5rem 1.5rem;
 
       @include breakpoint($desktop) {
         padding: 2.375rem 2.375rem 0.875rem;
@@ -571,7 +599,13 @@
   }
 
   .country-field-wrapper {
-    margin-top: 0.75rem;
+    margin-top: 1.5rem;
+    height: auto;
+    margin-bottom: 0;
+  }
+
+  .form-item-address-area-parent {
+    padding-bottom: 0 !important;
   }
 }
 
