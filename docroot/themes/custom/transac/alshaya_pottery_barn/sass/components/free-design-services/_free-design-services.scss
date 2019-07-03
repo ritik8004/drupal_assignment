@@ -101,6 +101,17 @@
             }
           }
         }
+
+        @include breakpoint($upto-desktop) {
+          &::after {
+            top: 0.5rem !important;
+            #{$right}: 0.5rem !important;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          max-width: 25.1875rem;
+        }
       }
 
       .webform-composite-visible-title {
@@ -308,7 +319,9 @@
     .form-item-address-administrative-area,
     .form-item-preferred-store.form-type-select {
       &::after {
-        display: none;
+        @include breakpoint($desktop) {
+          display: none;
+        }
       }
 
       @include select-wrapper(100%);
@@ -374,6 +387,21 @@
         color: $form-select-text;
         font-size: 1rem;
         padding: 0.25rem !important;
+      }
+
+      @include breakpoint($upto-desktop) {
+        .form-select {
+          width: calc(100% - 2.25rem) !important;
+          padding: 0.25rem 0.35rem !important;
+          border: 1px solid $form-select-border !important;
+        }
+
+        &::after {
+          background: $form-select-border;
+          top: 0;
+          #{$right}: 0;
+          height: 2.1875rem;
+        }
       }
     }
 
@@ -536,7 +564,7 @@
     }
 
     #edit-actions {
-      padding: 0.8125rem 0.75rem 1.5rem;
+      padding: 0.8125rem 0.5rem 1.5rem;
 
       @include breakpoint($desktop) {
         padding: 2.375rem 2.375rem 0.875rem;
