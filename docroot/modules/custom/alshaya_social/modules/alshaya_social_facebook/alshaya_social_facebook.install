@@ -35,7 +35,7 @@ function alshaya_social_facebook_update_8001() {
  * Implements hook_install().
  */
 function alshaya_social_facebook_install() {
-  // Configure app_id and app_secret for facbook.
+  // Configure app_id and app_secret for facebook.
   $config = \Drupal::configFactory()->getEditable('social_auth_facebook.settings');
 
   $facebook_settings = Settings::get('social_auth_facebook.settings');
