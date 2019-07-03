@@ -36,3 +36,4 @@ permissions:
   - 'view any webform submission'
   - 'migrate alshaya_stores'
   - 'administer mobile app links'
+  - 'access administration pages'

@@ -11,6 +11,8 @@ use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -47,6 +49,20 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
   protected $alshayaArrayUtils;
 
   /**
+   * User account object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $account;
+
+  /**
+   * Logger channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs a new AlshayaConfigSubscriber object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -57,15 +73,23 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Config Factory.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshaya_array_utils
    *   Alshaya array utility service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account
+   *   User account object.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger factory.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler,
                               StorageInterface $configStorage,
                               ConfigFactoryInterface $configFactory,
-                              AlshayaArrayUtils $alshaya_array_utils) {
+                              AlshayaArrayUtils $alshaya_array_utils,
+                              AccountProxyInterface $account,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->moduleHandler = $moduleHandler;
     $this->configStorage = $configStorage;
     $this->configFactory = $configFactory;
     $this->alshayaArrayUtils = $alshaya_array_utils;
+    $this->account = $account;
+    $this->logger = $logger_factory->get('alshaya_config');
   }
 
   /**
@@ -106,6 +130,9 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $this->configStorage->write($config->getName(), $data);
     Cache::invalidateTags($config->getCacheTags());
     $this->configFactory->reset($config_name);
+
+    // Log the config changes.
+    $this->logConfigChanges($config_name, $config->getOriginal(), $data);
   }
 
   /**
@@ -135,6 +162,33 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // Remove duplicates in indexed arrays only if we have modified.
     if ($data_modified && is_array($data)) {
       $this->alshayaArrayUtils->arrayUnique($data);
+    }
+  }
+
+  /**
+   * Logs the config diff when config is saved/updated.
+   *
+   * @param string $config_name
+   *   Config name.
+   * @param array $old_config
+   *   Old config value.
+   * @param array $new_config
+   *   New config value.
+   */
+  protected function logConfigChanges(string $config_name, array $old_config = [], array $new_config = []) {
+    static $config_logged = [];
+
+    // Do not log the message multiple times for the same config change.
+    if (empty($config_logged[$config_name])) {
+      // If user email no available, means config is saved via drush.
+      $current_user_mail = $this->account->getEmail() ?? 'Drush';
+      $this->logger->info('Config: @config updated by @user. Old config: @old. New config: @new', [
+        '@config' => $config_name,
+        '@user' => $current_user_mail,
+        '@old' => json_encode($old_config),
+        '@new' => json_encode($new_config),
+      ]);
+      $config_logged[$config_name] = $config_logged;
     }
   }
 

@@ -1,4 +1,10 @@
 .alshaya-social {
+  .c-user-login & {
+    @include breakpoint($only-mobile) {
+      margin-top: 5rem;
+    }
+  }
+
   .auth-link {
     display: flex;
     align-items: center;
@@ -11,6 +17,21 @@
     height: 2.875rem;
     border: 1px solid $social_auth_login_button_border;
     transition: background-color 0.2s ease-in-out;
+
+    &:first-child {
+      margin-top: 1.75rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.125rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      html[lang=ar] & {
+        width: auto;
+        max-width: fit-content;
+      }
+    }
 
     @include breakpoint($only-mobile) {
       max-width: none;
@@ -60,10 +81,12 @@
   .social-signup-form {
     &.user-login-form {
       > a {
-        bottom: 7rem;
+        bottom: 5rem;
 
-        @include breakpoint($only-mobile) {
-          bottom: 6.25rem;
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            right: 10rem;
+          }
         }
       }
     }
@@ -91,7 +114,8 @@
 .alias--cart-checkout-login {
   #edit-checkout-social-auth,
   #edit-checkout-guest {
-    padding: 0 7.875rem;
+    padding: 0;
+    padding-#{$left}: 7.875rem;
     text-align: $left;
 
     @include breakpoint($only-tablet) {
@@ -108,7 +132,6 @@
   #edit-checkout-social-auth {
     @include breakpoint($only-mobile) {
       order: 2;
-      margin-top: 1.5625rem !important;
     }
   }
 
@@ -134,24 +157,35 @@
 
       > span {
         font-family: $alshaya-thin;
-        font-size: 1.125rem;
+        font-size: 1rem;
         display: inline-block;
         padding: 0.375rem 0.625rem;
         background: $checkout_login_separtor_txt_bg;
         color: $checkout_login_separtor_txt;
       }
 
-      &:nth-of-type(1) {
+      &.order-1 {
         order: 1;
         display: none;
       }
 
-      &:nth-of-type(2) {
+      &.order-3 {
         order: 3;
+        display: none;
       }
 
-      &:nth-of-type(3) {
+      &.order-5 {
         order: 5;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .social-signin-enabled {
+      .checkout-login-separator {
+        &.order-3 {
+          display: block;
+        }
       }
     }
   }
@@ -197,9 +231,22 @@
       width: 12.5625rem;
       height: 2.875rem;
       font-family: $alshaya-bold;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: $social-auth-bg-hover;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          width: auto;
+          padding: 0 0.5rem;
+        }
+      }
 
       @include breakpoint($only-mobile) {
         width: 100%;
+        margin: 2px 0;
       }
     }
 
@@ -221,6 +268,12 @@
 
     @include breakpoint($only-mobile) {
       width: 100%;
+    }
+  }
+
+  .block-page-title-block {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.5625rem;
     }
   }
 }

@@ -496,6 +496,7 @@
 
   .form-type-radio {
     width: 100%;
+    min-height: 4.375rem;
     margin: 0;
     margin-top: 0.5rem;
     padding: 1.125rem 0;
@@ -538,6 +539,7 @@
           &-name {
             float: $right;
             width: 88%;
+            position: relative;
 
             @include breakpoint($tablet) {
               width: 90%;
@@ -550,6 +552,14 @@
 
           &-title,
           &-description {
+            @include breakpoint($desktop) {
+              width: 83%;
+            }
+
+            @include breakpoint($only-tablet) {
+              width: 79%;
+            }
+
             @include breakpoint($only-mobile) {
               width: 68%;
             }
@@ -563,6 +573,10 @@
 
           &-price {
             float: $right;
+            position: absolute !important;
+            top: 50%;
+            transform: translateY(-50%);
+            #{$right}: 0;
 
             @include breakpoint($only-mobile) {
               font-weight: bold;
@@ -570,7 +584,6 @@
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
-              width: 80%;
             }
           }
 
@@ -1206,15 +1219,6 @@ html[lang=ar] {
       position: absolute;
       width: 1.063rem;
       height: 1.375rem;
-
-      @include icon(arrowup, before) {
-        position: absolute;
-        #{$left}: -0.5rem;
-        top: -3px;
-        color: $checkout_mobile_back_link_icon;
-        font-size: 2.125rem;
-        transform: rotate(270deg);
-      }
     }
   }
 }

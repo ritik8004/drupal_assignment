@@ -1,0 +1,24 @@
+%btn {
+  padding: 0.625rem 2.5rem;
+  transition: all 0.4s ease-in-out;
+  border-radius: 3.125rem;
+  font-size: 1.375rem;
+  display: inline-block;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: $ubuntu-sans;
+  cursor: pointer;
+  text-align: center;
+  outline: none;
+  border: none;
+
+  html[lang=ar] & {
+    line-height: 1;
+  }
+
+  &:hover {
+    background: $brand-orange;
+    color: $white;
+    text-decoration: none;
+  }
+}

@@ -13,6 +13,8 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Utility\Error;
+use Drupal\file\FileInterface;
 use Drupal\node\Entity\Node;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -544,13 +546,13 @@ class ProductSyncResource extends ResourceBase {
       catch (\Exception $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() . ')';
+        $failed_skus[] = $this->formatErrorMessage($e, $product);
         $failed++;
       }
       catch (\Throwable $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() . ')';
+        $failed_skus[] = $this->formatErrorMessage($e, $product);
         $failed++;
       }
       finally {
@@ -593,6 +595,24 @@ class ProductSyncResource extends ResourceBase {
     }
 
     return (new ModifiedResourceResponse($response));
+  }
+
+  /**
+   * Make error message readable.
+   *
+   * @param \Throwable $e
+   *   Object of error message.
+   * @param array $product
+   *   Array of product info.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   Return string object.
+   */
+  protected function formatErrorMessage(\Throwable $e, array $product) {
+    $variables = Error::decodeException($e);
+    unset($variables['backtrace']);
+    $variables['@sku'] = $product['sku'];
+    return $this->t('@sku : %type: @message in %function (line %line of %file).', $variables);
   }
 
   /**
@@ -821,23 +841,34 @@ class ProductSyncResource extends ResourceBase {
       });
     }
 
-    // Reassign old files to not have to redownload them.
-    if (!empty($media)) {
-      $current_media = unserialize($current_value);
-      if (!empty($current_media) && is_array($current_media)) {
-        $current_mapping = [];
-        foreach ($current_media as $value) {
-          if (!empty($value['fid'])) {
-            $current_mapping[$value['value_id']]['fid'] = $value['fid'];
-            $current_mapping[$value['value_id']]['file'] = $value['file'];
-          }
-        }
+    // Get old files mapped with commerce media value id.
+    $current_media = unserialize($current_value);
+    $current_mapping = [];
+    foreach ($current_media ?? [] as $value) {
+      if (!empty($value['fid'])) {
+        $current_mapping[$value['value_id']]['fid'] = $value['fid'];
+        $current_mapping[$value['value_id']]['file'] = $value['file'];
+      }
+    }
 
-        foreach ($media as $key => $value) {
-          if (isset($current_mapping[$value['value_id']])) {
-            $media[$key]['fid'] = $current_mapping[$value['value_id']]['fid'];
-            $media[$key]['file'] = $current_mapping[$value['value_id']]['file'];
-          }
+    // Reassign old files to not have to redownload them.
+    if (!empty($media) && !empty($current_mapping)) {
+      foreach ($media as $key => $value) {
+        if (isset($current_mapping[$value['value_id']])) {
+          $media[$key]['fid'] = $current_mapping[$value['value_id']]['fid'];
+          $media[$key]['file'] = $current_mapping[$value['value_id']]['file'];
+          unset($current_mapping[$value['value_id']]);
+        }
+      }
+    }
+
+    // Delete the files that are no longer used.
+    if (!empty($current_mapping)) {
+      $fileStorage = $this->entityManager->getStorage('file');
+      foreach ($current_mapping as $mapping) {
+        $file = $fileStorage->load($mapping['fid']);
+        if ($file instanceof FileInterface) {
+          $file->delete();
         }
       }
     }

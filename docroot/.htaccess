@@ -45,7 +45,7 @@ AddEncoding gzip svgz
   ExpiresActive On
 
   # Cache all files for 2 weeks after access (A).
-  ExpiresDefault A1209600
+  ExpiresDefault A31557600
 
   <FilesMatch \.php$>
     # Do not allow PHP scripts to be cached unless they explicitly send cache
@@ -88,13 +88,6 @@ AddEncoding gzip svgz
   RewriteRule ^ - [E=protossl:s]
   RewriteCond %{HTTP:X-Forwarded-Proto} https
   RewriteRule ^ - [E=protossl:s]
-
-  # Remove trailing slash from all URLs (except home which is practically not possible).
-  # We also don't remove it from /forwarded/* URLs as these are redirects from
-  # H&M and we loose access to the HMCORP cookie after redirect.
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
-  RewriteRule ^(.*)/$ http%{ENV:protossl}://%{HTTP_HOST}/$1 [L,R=301]
 
   # Make sure Authorization HTTP header is available to PHP
   # even when running as CGI or FastCGI.

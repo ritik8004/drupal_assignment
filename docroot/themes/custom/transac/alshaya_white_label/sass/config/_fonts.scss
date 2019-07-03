@@ -6,6 +6,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   src: url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff2') format('woff2'), url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -13,6 +14,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   src: url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff2') format('woff2'), url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff') format('woff');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -20,6 +22,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   src: url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff') format('woff'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.ttf')  format('truetype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -27,6 +30,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   src: url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff') format('woff'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.ttf')  format('truetype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -35,24 +39,25 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf#iefix') format('embedded-opentype'), url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?k2mqf') format('truetype'), url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?k2mqf') format('woff'), url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?k2mqf#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 // Font Family
-$alshaya-bold: 'Mothercare';
-$alshaya-bold-nodir: 'Mothercare';
+$alshaya-bold: 'Mothercare', 'Arial';
+$alshaya-bold-nodir: 'Mothercare', 'Arial';
 
-$alshaya-thin: 'MothercareThin';
-$alshaya-thin-nodir: 'MothercareThin';
+$alshaya-thin: 'MothercareThin', 'Arial';
+$alshaya-thin-nodir: 'MothercareThin', 'Arial';
 
-$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare';
-$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare';
+$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare', 'Arial';
+$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare', 'Arial';
 
-$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin';
-$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
+$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin', 'Arial';
+$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin', 'Arial';
 
 $alshaya-icons: 'alshaya-icons';
-$arial: 'arialmt', arial, sans-serif;
-$arial-nodir: 'arialmt', arial, sans-serif;
+$arial: 'arialmt', 'arial', 'sans-serif';
+$arial-nodir: 'arialmt', 'arial', 'sans-serif';
 $body_font: $arial;
 
 // campaign-plp-style-1 font family.

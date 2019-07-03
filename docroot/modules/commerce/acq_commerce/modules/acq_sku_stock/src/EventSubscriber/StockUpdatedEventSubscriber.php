@@ -35,8 +35,8 @@ class StockUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onStockUpdated(StockUpdatedEvent $event) {
-    // Do nothing if stock status not changed.
-    if (!$event->isStockStatusChanged()) {
+    // Invalidate caches only if stock status changed or quantity is low.
+    if (!($event->isStockStatusChanged() || $event->isLowQuantity())) {
       return;
     }
 
