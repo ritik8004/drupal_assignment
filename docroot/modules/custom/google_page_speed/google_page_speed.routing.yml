@@ -6,6 +6,14 @@ google_page_speed.score:
   requirements:
     _permission: 'access google_page_speed url scores'
 
+google_page_speed.urls:
+  path: '/google-page-speed/url/{metric_id}/{screen}/{time}'
+  defaults:
+    _title: 'Unique Urls'
+    _controller: '\Drupal\google_page_speed\Controller\GooglePageSpeedController::getUrlList'
+  requirements:
+    _permission: 'access google_page_speed url scores'
+
 google_page_speed.chart:
   path: '/admin/config/system/google-page-speed/chart'
   defaults:

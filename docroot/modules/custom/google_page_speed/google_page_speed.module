@@ -14,7 +14,7 @@ function google_page_speed_theme($existing, $type, $theme, $path) {
       'template' => 'google-page-speed-block',
       'variables' => [
         'block_title' => '',
-        'urls' => '',
+        'metrics' => '',
       ],
     ],
   ];

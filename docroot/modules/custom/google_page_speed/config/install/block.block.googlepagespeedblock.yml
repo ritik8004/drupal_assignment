@@ -5,7 +5,7 @@ dependencies:
     module:
       - google_page_speed
 id: googlepagespeedblock
-theme: adminimal_theme
+theme: seven
 region: content
 weight: 10
 provider: null

@@ -11,7 +11,6 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\google_page_speed\Form\GooglePageSpeedConfigForm;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
-use Symfony\Component\Serializer\Serializer;
 use Drupal\Component\Datetime\Time;
 
 /**
@@ -44,13 +43,6 @@ class GooglePageSpeedCommands extends DrushCommands {
   protected $cacheInvalidator;
 
   /**
-   * The Serializer service object.
-   *
-   * @var \Symfony\Component\Serializer\Serializer
-   */
-  protected $serializer;
-
-  /**
    * The Time object.
    *
    * @var \Drupal\Component\Datetime\Time
@@ -66,17 +58,14 @@ class GooglePageSpeedCommands extends DrushCommands {
    *   The Database object to inject database service.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_invalidator
    *   The CacheInvalidator object to inject cache invalidator service.
-   * @param \Symfony\Component\Serializer\Serializer $serializer
-   *   The Symfony serializer object to inject serializer service.
    * @param \Drupal\Component\Datetime\Time $time
    *   Injecting time service.
    */
-  public function __construct(ConfigFactory $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator, Serializer $serializer, Time $time) {
+  public function __construct(ConfigFactory $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator, Time $time) {
     parent::__construct();
     $this->configFactory = $config_factory;
     $this->database = $database;
     $this->cacheInvalidator = $cache_invalidator;
-    $this->serializer = $serializer;
     $this->time = $time;
   }
 
@@ -89,8 +78,10 @@ class GooglePageSpeedCommands extends DrushCommands {
    * @options screen An option that takes target screen
    * @usage google_page_speed:insights --url https://google.com --screen desktop
    *   Display data for https://google.com on screen desktop
+   *
+   * @throws \Exception
    */
-  public function insights($options = ['url' => '', 'screen' => '']) {
+  public function insights($options = ['url' => '', 'screen' => 'desktop']) {
     $config = $this->configFactory->get(GooglePageSpeedConfigForm::CONFIG_NAME);
     $api_key = $config->get('api_key');
     if (empty($api_key)) {
@@ -98,23 +89,21 @@ class GooglePageSpeedCommands extends DrushCommands {
     }
 
     $client = new Client();
-    $serializer = $this->serializer;
 
     // Get data from options.
-    if (!empty($api_key) && !empty($options['url'])) {
-      $options['screen'] = (empty($options['screen'])) ? 'desktop' : $options['screen'];
-      $this->getPageSpeedData($client, $serializer, $api_key, $options['url'], $options['screen']);
+    if (!empty($options['url'])) {
+      $this->getPageSpeedData($client, $api_key, $options['url'], $options['screen']);
     }
     // Get data from configurations.
     else {
       $urls = explode(PHP_EOL, $config->get('page_url'));
       $screens = $config->get('screen');
-      if (isset($api_key, $urls, $screens, $client, $serializer)) {
+      if (isset($api_key, $urls, $screens, $client)) {
         foreach ($urls as $url) {
           foreach ($screens as $screen) {
             try {
               if (!empty($api_key) && !empty($url) && !empty($screen)) {
-                $this->getPageSpeedData($client, $serializer, $api_key, trim($url), trim($screen));
+                $this->getPageSpeedData($client, $api_key, trim($url), trim($screen));
               }
             }
             catch (RequestException $e) {
@@ -136,8 +125,6 @@ class GooglePageSpeedCommands extends DrushCommands {
    *
    * @param \GuzzleHttp\Client $client
    *   The client object to make a request.
-   * @param mixed $serializer
-   *   The serializer object to serialize the data before saving.
    * @param string $api_key
    *   The Google API key for authentication.
    * @param string $url
@@ -151,8 +138,9 @@ class GooglePageSpeedCommands extends DrushCommands {
    * @throws \Exception
    *   Throws Exception.
    */
-  protected function getPageSpeedData(Client $client, $serializer, $api_key, $url, $screen) {
+  protected function getPageSpeedData(Client $client, $api_key, $url, $screen) {
     $siteUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=' . $api_key . '&url=' . $url . '&strategy=' . $screen;
+    $this->output->writeln('Fetching data....');
 
     $response = $client->get($siteUrl, ['http_errors' => FALSE]);
 

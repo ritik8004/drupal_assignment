@@ -9,73 +9,85 @@
   Drupal.behaviors.showPageSpeedDataChart = {
     attach: function (context, settings) {
       let urlObject = {
-        url: document.getElementById('gps-data-select').value,
-        data: [0,0,0,0,0,0,0]
-      }
+        url: [],
+        data: [0,0,0,0,0,0,0],
+        metric_id: 0,
+        screen: '',
+        time: ''
+      };
 
-      $('#gps-data-select, #gps-screen-select, #gps-time-select').on('change', function () {
+      $('document').ready(function () {
+        initialiseData();
+      });
+
+      $('#gps-metric-select, #gps-screen-select, #gps-time-select').on('change', function () {
+        initialiseData();
+      });
+
+      let initialiseData = function() {
         urlObject = {
           url: $(this).value,
           data: [0,0,0,0,0,0,0]
-        }
+        };
 
-        let url = document.getElementById('gps-data-select').value;
+        let metric_id = document.getElementById('gps-metric-select').value;
         let screen = document.getElementById('gps-screen-select').value;
         let time = document.getElementById('gps-time-select').value;
 
-        let urlTest = '/google-page-speed/' + screen + '/' + time + '?url=' + encodeURIComponent(url);
+        let getUrls = '/google-page-speed/url/' + metric_id + '/' + screen + '/' + time;
 
-        jQuery.get(urlTest, function(data, status){
-          if (status == 'success' && data) {
-            let showData = jQuery.parseJSON(data);
-            urlObject.data = showData;
+        jQuery.get(getUrls, function(data, status){
+          if (status === 'success' && data) {
+            urlObject.url = jQuery.parseJSON(data);
+            urlObject.metric_id = metric_id;
+            urlObject.screen = screen;
+            urlObject.time = time;
             google.charts.load('current', {'packages':['corechart','line']});
             google.charts.setOnLoadCallback(drawChart);
           }
         });
-      })
+      };
 
       function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('datetime', 'Date');
-        data.addColumn('number', 'First Contentful Paint');
-        data.addColumn('number', 'First Meaningful Paint');
-        data.addColumn('number', 'Speed Index');
-        data.addColumn('number', 'First CPU Idle');
-        data.addColumn('number', 'Interactive');
-        data.addColumn('number', 'Maximum Potential First Input Delay');
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn('datetime', 'Date');
+
+        for (var url_id in urlObject.url){
+          if (urlObject.url.hasOwnProperty(url_id)) {
+            dataTable.addColumn('number', urlObject.url[url_id]);
+          }
+        }
+
+        let getScores = '/google-page-speed/' + urlObject.metric_id + '/' + urlObject.screen + '/' + urlObject.time;
 
 
-        var element = '';
+        jQuery.get(getScores, function(data, status){
+          if (status === 'success' && data) {
+            let scoreData = jQuery.parseJSON(data);
+            scoreData.forEach(function (element) {
+              element[0] = new Date(element[0]*1000);
+              console.log(element);
+              dataTable.addRows([
+                element
+              ]);
+            });
 
-        urlObject.data.forEach(function (element) {
-          element.forEach(function (item, index) {
-            element[index] = element[index].replace(/[ms,]/g, '');
-            element[index] = parseFloat(element[index])
-          })
-          element[0] = new Date(element[0]*1000);
-          element[6] = parseFloat(element[6])/1000;
+            var options = {
+              hAxis: {
+                title: 'Date and time'
+              },
+              vAxis: {
+                title: 'Time(s)'
+              },
+              'width':'100%',
+              'height':'auto',
+              pointsVisible: true
+            };
 
-          data.addRows([
-            element
-          ]);
-        })
-
-        var options = {
-          colors: ['#a52714', '#097138', '#FF0000', '#FF7F00', '#000000', '#00FF00'],
-          hAxis: {
-            title: 'Date and time'
-          },
-          vAxis: {
-            title: 'Time(s)'
-          },
-          'width':'100%',
-          'height':'auto',
-          pointsVisible: true
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(dataTable, options);
+          }
+        });
       }
     }
   };
