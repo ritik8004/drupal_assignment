@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+    - node
+id: node.field_magazine_shop_the_story
+field_name: field_magazine_shop_the_story
+entity_type: node
+type: sku
+settings:
+  max_length: '255'
+  is_ascii: false
+  case_sensitive: false
+module: acq_sku
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
