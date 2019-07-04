@@ -36,14 +36,6 @@ class AlshayaSeoPathProcessor implements OutboundPathProcessorInterface {
     if ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
       $path = $path . '/';
     }
-    // Add trailing slash on home page.
-    elseif (empty($path)) {
-      // In Drupal\Core\Routing\UrlGenerator::generateFromRoute lot of trimming
-      // is done forcing us to do it this way.
-      $prefix = trim($options['prefix'], '/');
-      $path = '/' . $prefix . '/';
-      $options['prefix'] = NULL;
-    }
 
     return $path;
   }
