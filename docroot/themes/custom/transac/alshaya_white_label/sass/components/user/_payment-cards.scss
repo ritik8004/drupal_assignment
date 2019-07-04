@@ -26,7 +26,8 @@
         .label {
           font-size: 0.75rem;
           font-family: $alshaya-bold;
-          color: $payment_card_text;
+          color: $payment_card_label;
+          margin-bottom: 0.3125rem;
         }
 
         .payment-card--number,
@@ -72,7 +73,7 @@
     .payment-card--options {
       position: absolute;
       top: 0;
-      #{$right}: 0;
+      #{$right}: 1rem;
 
       .payment-card--delete {
         a {
@@ -85,13 +86,13 @@
           &::after {
             content: '';
             display: inline-block;
-            width: 1.875rem;
-            height: 1.875rem;
+            width: 18px;
+            height: 24px;
             top: 50%;
             position: absolute;
             transform: translateY(-50%);
             background-color: $payment_card_border;
-            mask-size: 58%;
+            mask-size: 100%;
             mask-repeat: no-repeat;
             mask-image: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg);
           }

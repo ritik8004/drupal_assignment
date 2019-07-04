@@ -117,6 +117,13 @@ class CustomerController extends ControllerBase {
           '#user' => $user,
         ];
       }
+      $list_class = ['saved-paymentcard-list'];
+    }
+    else {
+      $options['empty'] = [
+        '#markup' => $this->t('You dont have any saved payment cards.'),
+      ];
+      $list_class = ['saved-paymentcard-list', 'empty'];
     }
 
     return [
@@ -124,9 +131,7 @@ class CustomerController extends ControllerBase {
       '#list_type' => 'ul',
       '#items' => $options,
       '#attributes' => [
-        'class' => [
-          'saved-paymentcard-list',
-        ],
+        'class' => $list_class,
       ],
       '#cache' => [
         'tags' => [

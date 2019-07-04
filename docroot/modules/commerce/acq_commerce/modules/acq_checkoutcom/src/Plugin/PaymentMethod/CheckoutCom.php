@@ -126,13 +126,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
       if (!empty($customer_stored_cards)) {
         $stored_cards_list = [];
-        foreach ($customer_stored_cards as $stored_cards) {
+        foreach ($customer_stored_cards as $stored_card) {
           $build = [
             '#theme' => 'payment_card_teaser',
-            '#card_info' => $stored_cards,
+            '#card_info' => $stored_card,
             '#user' => $user,
           ];
-          $stored_cards_list[$stored_cards['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_card['id']] = $this->renderer->render($build);
         }
       }
 
