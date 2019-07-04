@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Add iso_currency_code for sa sites.
+ */
+function alshaya_sa_update_8005() {
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'SAR')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Correct the mapping to handle locality for SA.
  */
 function alshaya_sa_update_8004() {
@@ -54,6 +66,12 @@ function alshaya_sa_update_8001() {
  * Implements hook_install().
  */
 function alshaya_sa_install() {
+  // Add iso_currency_code for sa sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'SAR')
+    ->save();
+
   // Country code and timezone for Saudi Arabia.
   alshaya_country_set_default_regional_info('SA');
 
