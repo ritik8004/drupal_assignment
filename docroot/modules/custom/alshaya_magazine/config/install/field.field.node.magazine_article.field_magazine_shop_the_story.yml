@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_magazine_shop_the_story
+    - node.type.magazine_article
+  module:
+    - acq_sku
+id: node.magazine_article.field_magazine_shop_the_story
+field_name: field_magazine_shop_the_story
+entity_type: node
+bundle: magazine_article
+label: 'Shop the story'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: sku
