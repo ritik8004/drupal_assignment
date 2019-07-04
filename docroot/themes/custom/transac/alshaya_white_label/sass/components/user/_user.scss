@@ -404,12 +404,6 @@
       font-size: 16px;
     }
 
-    @include breakpoint($desktop) {
-      .form-email {
-        //margin-top: 9px;
-      }
-    }
-
     input.error {
       border-color: $primary_input_inline_error;
       border-width: 0 0 2px;
