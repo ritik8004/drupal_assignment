@@ -684,11 +684,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
                 $free_sku_media = [
                   'label' => $free_sku_entity->label(),
                   'file' => $default_image,
+                  'drupal_uri' => $default_image->getFileUri(),
                 ];
               }
 
               if ($free_sku_media) {
-                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, $free_sku_entity->label(), '192x168');
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku_entity->label(), '192x168');
                 $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
