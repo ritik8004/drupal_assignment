@@ -10,18 +10,9 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Add use_iso_code configuration key.
+ * Remove unnecessary gtm_currency_code configuration key.
  */
 function alshaya_seo_transac_update_8405() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_seo_transac.meta_variables'],
-    'alshaya_seo_transac',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-
-  // Remove key in favour of use_iso_code.
   \Drupal::configFactory()->getEditable('acq_commerce.currency')
     ->clear('gtm_currency_code')
     ->save();

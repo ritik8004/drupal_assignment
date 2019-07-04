@@ -430,34 +430,6 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_seo_transac_form_google_tag_settings_alter(&$form, FormStateInterface $form_state) {
-  $currency_config = \Drupal::configFactory()->get('acq_commerce.currency');
-  $form['settings']['use_iso_code'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Use ISO standard Currency Code: @code', ['@code' => $currency_config->get('iso_currency_code')]),
-    '#description' => t('Currency code to be sent to GTM. by default "@code" currency code will be used for GTM.',
-      ['@code' => $currency_config->get('currency_code')]
-    ),
-    '#required' => FALSE,
-    '#default_value' => \Drupal::configFactory()->getEditable('alshaya_seo_transac.meta_variables')->get('use_iso_code'),
-    '#disabled' => $currency_config->get('iso_currency_code') === $currency_config->get('currency_code')
-  ];
-
-  $form['#submit'][] = '_alshaya_seo_transac_acq_commerce_currency_settings_submit_handler';
-}
-
-/**
- * Submit handler for acq_commerce_settings form.
- */
-function _alshaya_seo_transac_acq_commerce_currency_settings_submit_handler(array &$form, FormStateInterface $form_state) {
-  \Drupal::configFactory()->getEditable('alshaya_seo_transac.meta_variables')
-    ->set('use_iso_code', $form_state->getValue('use_iso_code'))
-    ->save();
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {

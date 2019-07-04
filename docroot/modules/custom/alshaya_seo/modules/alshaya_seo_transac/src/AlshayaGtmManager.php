@@ -1324,7 +1324,7 @@ class AlshayaGtmManager {
    */
   public function getGtmCurrency() {
     $currency_code = $this->configFactory->get('acq_commerce.currency');
-    return (!$this->configFactory->get('alshaya_seo_transac.meta_variables')->get('use_iso_code'))
+    return !empty($currency_code->get('iso_currency_code'))
       ? $currency_code->get('currency_code')
       : $currency_code->get('iso_currency_code');
   }
