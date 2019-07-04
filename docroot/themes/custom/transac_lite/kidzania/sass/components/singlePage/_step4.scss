@@ -42,7 +42,7 @@
   .ticket-unit-price {
     display: inline-block;
     vertical-align: top;
-    font-size: 1.875rem;
+    font-size: 1.8125rem;
     float: $left;
     padding-#{$left}: 0.9375rem;
     width: 18.25rem;
@@ -64,6 +64,7 @@
       @include breakpoint($only-mobile) {
         width: auto;
         float: none;
+        line-height: 1;
       }
 
       .plusBtn,
