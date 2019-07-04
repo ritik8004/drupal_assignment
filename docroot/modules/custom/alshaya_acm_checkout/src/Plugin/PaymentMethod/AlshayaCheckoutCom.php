@@ -120,15 +120,15 @@ class AlshayaCheckoutCom extends CheckoutCom {
               ];
             }
             elseif ($payment_card == 'new') {
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] = [
+              $pane_form['payment_card_details']['payment_card_' . $payment_card] = [
                 '#type' => 'container',
                 '#attributes' => [
                   'id' => ['payment_card_' . $card_id],
                 ],
               ];
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#prefix'] = $cc_prefix;
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#suffix'] = $cc_suffix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card], $form_state);
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv']['#prefix'] = $cc_prefix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv']['#suffix'] = $cc_suffix;
             }
           }
         }
@@ -143,7 +143,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
         ],
       ];
 
-      $pane_form['payment_card_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
+      $pane_form['payment_card_details']['payment_card_new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#prefix'] = $cc_prefix;
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#suffix'] = $cc_suffix;
     }
@@ -189,7 +189,11 @@ class AlshayaCheckoutCom extends CheckoutCom {
       if ((empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
           && !empty($inputs['cko-card-token'])
       ) {
-        $this->initiate3dSecurePayment($inputs);
+        $this->initiate3dSecurePayment(
+          $inputs,
+          $this->checkoutComApi->isMadaEnabled()
+          ? $payment_method['payment_card_details']['payment_card_new']['card_bin']
+          : NULL);
       }
       elseif (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
         $this->initiateStoredCardPayment(

@@ -147,6 +147,13 @@ class CheckoutComFormHelper {
       ],
     ] + $states;
 
+    $form['card_bin'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'id' => 'cardBin',
+      ],
+    ];
+
     $form['card_token'] = [
       '#type' => 'hidden',
       '#attributes' => [
@@ -177,6 +184,7 @@ class CheckoutComFormHelper {
         },
         cardTokenised: function(event) {
           cardToken.value = event.data.cardToken
+          cardBin.value = event.data.card.bin;
           cardName.value = ''
           cardNumber.value = ''
           cardCvv.value = ''
