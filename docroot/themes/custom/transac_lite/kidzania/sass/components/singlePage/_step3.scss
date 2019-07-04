@@ -50,6 +50,12 @@
 
   .time-to-visit & {
     padding: 0.9375rem 0;
+
+    @include breakpoint($only-mobile) {
+      html[lang=ar] & {
+        width: 90%;
+      }
+    }
   }
 
   input {
