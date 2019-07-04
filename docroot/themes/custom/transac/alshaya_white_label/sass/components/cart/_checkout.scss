@@ -79,13 +79,7 @@
 
     .js-form-type-textfield {
       label {
-        font-size: 1rem;
-        color: $primary_input_label;
-        position: absolute;
-        pointer-events: none;
-        left: 0;
-        top: -0.125rem;
-        transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+        @include placeholder-label;
       }
     }
 
@@ -134,11 +128,7 @@
 
   input:focus ~ label.form-required,
   input:not(:focus):valid ~ label.form-required {
-    top: -1.25em;
-    bottom: 0;
-    #{$left}: 0;
-    opacity: 1;
-    font-size: 12px;
+    @include placeholder-active;
   }
 
   .ui-widget {

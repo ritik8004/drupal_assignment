@@ -760,6 +760,10 @@ $checkout_payment_method_subtitle: $grey-light;
 $checkout_payment_method_cod_desc: $grey-light;
 $checkout_transaction_type_color: $marine-blue-two;
 $checkout_payment_CVV_tooltip_image_bg: $white;
+$checkout_payment_checkoutcom_border: $_instagram_dots_default;
+$checkout_payment_checkoutcom_card_details: $grey-light;
+$checkout_payment_checkoutcom_card_details_expiry: $black;
+$checkout_payment_checkoutcom_new_option_text: $grey-ash;
 
 // Checkout Home delivery.
 $checkout_hd_selected_add_wrapper_border: $white;
@@ -849,6 +853,7 @@ $privilege_card_form_error: $scarlet-two;
 
 // Payment cards.
 $payment_card_border: $warm-grey-two;
+$payment_card_label: $black;
 $payment_card_text: $black;
 $payment_card_error: $red-error;
 

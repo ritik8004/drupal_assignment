@@ -65,7 +65,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
         }
 
         if (!empty($stored_cards_list)) {
-          $stored_cards_list += ['new' => $this->t('New Card')];
+          $stored_cards_list += ['new' => '<span class="new">' . $this->t('New Card') . '</span>'];
           $pane_form['payment_card'] = [
             '#type' => 'radios',
             '#options' => $stored_cards_list,
@@ -113,6 +113,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
                 '#maxlength' => 4,
                 '#title' => t('Security code (CVV)'),
                 '#default_value' => '',
+                '#attributes' => ['placeholder' => $this->t('Enter CVV')],
                 '#required' => TRUE,
                 '#prefix' => $cc_prefix,
                 '#suffix' => $cc_suffix,
@@ -126,6 +127,8 @@ class AlshayaCheckoutCom extends CheckoutCom {
                 ],
               ];
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#prefix'] = $cc_prefix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#suffix'] = $cc_suffix;
             }
           }
         }
@@ -133,9 +136,16 @@ class AlshayaCheckoutCom extends CheckoutCom {
     }
 
     if ($this->currentUser->isAnonymous() || empty($stored_cards_list)) {
-      $pane_form['payment_card_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details'], $form_state);
-      $pane_form['payment_card_details']['cc_cvv']['#prefix'] = $cc_prefix;
-      $pane_form['payment_card_details']['cc_cvv']['#suffix'] = $cc_suffix;
+      $pane_form['payment_card_details']['payment_card_new'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'id' => ['payment_method_new'],
+        ],
+      ];
+
+      $pane_form['payment_card_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
+      $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#prefix'] = $cc_prefix;
+      $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#suffix'] = $cc_suffix;
     }
     return $pane_form;
   }

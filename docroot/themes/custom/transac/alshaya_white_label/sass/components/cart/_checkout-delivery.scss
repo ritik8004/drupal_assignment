@@ -704,7 +704,7 @@
       &.plugin-selected {
         background-color: $checkout_payment_row_selected;
 
-        .method-description {
+        .method-description:not(:empty) {
           display: block;
         }
 
@@ -796,10 +796,6 @@
 
         &-side-info {
           float: $right;
-          height: 2rem;
-          width: 3rem;
-          background: $checkout_payment_method_icon_bg;
-          margin-top: -1.25rem;
         }
 
         &-knet {
@@ -807,7 +803,9 @@
           background-size: 100%;
           position: absolute;
           #{$right}: 0.8rem;
-          top: 54%;
+          height: 2rem;
+          width: 3rem;
+          top: 1.375rem;
 
           @include breakpoint($desktop) {
             #{$right}: 1.5rem;

@@ -305,11 +305,6 @@
       &.plugin-selected {
         background-color: $delivery_payment_selected_bg;
 
-        .method-knet {
-          background: url('../imgs/cards/knet-active.png') no-repeat;
-          background-size: 100%;
-        }
-
         @include icon(radio-filled, before) {
           top: 0.9375rem;
           border: none;
@@ -336,6 +331,10 @@
 
         @include breakpoint($only-tablet) {
           #{$left}: 2%;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin: 0;
         }
       }
 
