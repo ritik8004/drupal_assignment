@@ -105,7 +105,7 @@ function acq_checkoutcom_preprocess_card_info(array &$variables) {
         'acq_checkoutcom.payment_card.remove_card',
         [
           'user' => $variables['user']->id(),
-          'card_id' => $variables['card_info']['id'],
+          'public_hash' => $variables['card_info']['public_hash'],
         ],
         [
           'attributes' => [

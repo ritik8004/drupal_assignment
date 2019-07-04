@@ -10,7 +10,7 @@ services:
   acq_checkoutcom.agent_api:
     class: Drupal\acq_checkoutcom\ApiHelper
     arguments:
-      - '@acq_commerce.client_factory'
+      - '@alshaya_api.api'
       - '@config.factory'
       - '@user.data'
       - '@logger.factory'

@@ -2,7 +2,9 @@
 
 namespace Drupal\acq_checkoutcom;
 
-use Drupal\acq_commerce\Conductor\ClientFactory;
+use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\user\UserDataInterface;
@@ -14,11 +16,11 @@ use Drupal\user\UserInterface;
 class ApiHelper {
 
   /**
-   * ClientFactory object.
+   * Alshaya API Wrapper service object.
    *
-   * @var \Drupal\acq_commerce\Conductor\ClientFactory
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
-  protected $clientFactory;
+  protected $apiWrapper;
 
   /**
    * Config factory object.
@@ -42,10 +44,24 @@ class ApiHelper {
   protected $logger;
 
   /**
+   * Credit card type map.
+   *
+   * @var array
+   */
+  protected $ccTypesMap = [
+    'AE' => 'amex',
+    'VI' => 'visa',
+    'MC' => 'mastercard',
+    'DI' => 'discover',
+    'JCB' => 'jcb',
+    'DN' => 'dinersclub',
+  ];
+
+  /**
    * ApiHelper constructor.
    *
-   * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
-   *   ClientFactory object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Alshaya API Wrapper service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   ConfigFactoryInterface object.
    * @param \Drupal\user\UserDataInterface $user_data
@@ -54,15 +70,28 @@ class ApiHelper {
    *   LoggerChannelFactory object.
    */
   public function __construct(
-    ClientFactory $client_factory,
+    AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
     UserDataInterface $user_data,
     LoggerChannelFactory $logger_factory
   ) {
-    $this->clientFactory = $client_factory;
+    $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
     $this->userData = $user_data;
     $this->logger = $logger_factory->get('acq_checkoutcom');
+  }
+
+  /**
+   * Get card type based on code.
+   *
+   * @param string $type
+   *   Card type code.
+   *
+   * @return string|null
+   *   Return card type name or null.
+   */
+  public function getCardType($type) {
+    return $this->ccTypesMap[$type] ?? NULL;
   }
 
   /**
@@ -99,7 +128,39 @@ class ApiHelper {
    *   Return array of customer cards or empty array.
    */
   public function getCustomerCards(UserInterface $user) {
-    return $this->userData->get('acq_checkoutcom', $user->id(), 'payment_cards');
+    $customer_id = $user->get('acq_customer_id')->getString();
+    $response = $this->apiWrapper->invokeApi(
+      "checkoutcom/getTokenList/?customer_id=$customer_id",
+      [],
+      "GET"
+    );
+    $response = Json::decode($response);
+    return (!empty($response) && isset($response['message']))
+      ? strtr($response['message'], $response['parameters'] ?? [])
+      : $this->processsCardInfo($response['items']);
+  }
+
+  /**
+   * Extract card info.
+   *
+   * @param array $cards
+   *   List of stored cards.
+   *
+   * @return array
+   *   Return process array of card list.
+   */
+  protected function processsCardInfo(array $cards) {
+    if (empty($cards)) {
+      return [];
+    }
+
+    foreach ($cards as &$card) {
+      $token_details = Json::decode($card['token_details']);
+      list($card['expiryMonth'], $card['expiryYear']) = explode('/', $token_details['expirationDate']);
+      $card['last4'] = $token_details['maskedCC'];
+      $card['paymentMethod'] = $this->ccTypesMap[$token_details['type']] ?? NULL;
+    }
+    return $cards;
   }
 
   /**
@@ -107,17 +168,27 @@ class ApiHelper {
    *
    * @param \Drupal\user\UserInterface $user
    *   The user object.
-   * @param array $new_card
-   *   The card data to be stored.
+   * @param string $card_token
+   *   The card token to be stored.
    *
-   * @return bool
-   *   Return TRUE if card stored, FALSE otherwise.
+   * @return null|string
+   *   Return empty array or string.
    */
-  public function storeCustomerCard(UserInterface $user, array $new_card) {
-    $card_data = $this->getCustomerCards($user);
-    $card_data = array_merge(!empty($card_data) ? $card_data : [], [$new_card]);
-    $this->userData->set('acq_checkoutcom', $user->id(), 'payment_cards', $card_data);
-    return TRUE;
+  public function storeCustomerCard(UserInterface $user, string $card_token) {
+    $customer_id = $user->get('acq_customer_id')->getString();
+    $response = $this->apiWrapper->invokeApi(
+      "checkoutcom/saveCard/$card_token/customerId/$customer_id",
+      [],
+      "GET"
+    );
+
+    $response = Json::decode($response);
+    if (!empty($response) && isset($response['message'])) {
+      return $response['message'];
+    }
+
+    Cache::invalidateTags(['user:' . $user->id() . ':payment_cards']);
+    return NULL;
   }
 
   /**
@@ -125,22 +196,21 @@ class ApiHelper {
    *
    * @param \Drupal\user\UserInterface $user
    *   The user object.
-   * @param string $card_id
-   *   The card id to delete.
+   * @param string $public_hash
+   *   The card public hash to delete.
    *
-   * @return bool
-   *   Return TRUE if card deleted, FALSE otherwise.
+   * @return bool|null
+   *   Return TRUE if card deleted, null otherwise.
    */
-  public function deleteCustomerCard(UserInterface $user, string $card_id) {
-    $card_data = $this->getCustomerCards($user);
-    $new_card_data = array_filter($card_data, function ($card) use ($card_id) {
-      return ($card['id'] != $card_id);
-    });
-    if (count($card_data) == count($new_card_data)) {
-      return FALSE;
-    }
-    $this->userData->set('acq_checkoutcom', $user->id(), 'payment_cards', $new_card_data);
-    return TRUE;
+  public function deleteCustomerCard(UserInterface $user, string $public_hash) {
+    $customer_id = $user->get('acq_customer_id')->getString();
+    $response = $this->apiWrapper->invokeApi(
+      "checkoutcom/deleteTokenByCustomerIdAndHash/$public_hash/customerId/$customer_id",
+      [],
+      "DELETE"
+    );
+
+    return Json::decode($response);
   }
 
 }
