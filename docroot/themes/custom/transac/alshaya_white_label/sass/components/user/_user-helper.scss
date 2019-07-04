@@ -292,9 +292,9 @@
     }
 
     @include breakpoint($only-mobile) {
-      margin-bottom: 2.063rem;
-      padding-top: 0.9rem;
+      margin-bottom: 1rem;
       margin-top: 2.5rem;
+      padding-top: 1.7rem;
     }
 
     @include breakpoint($only-tablet) {

@@ -10,7 +10,7 @@
   *
   * Adding custom blocks for login/signup pages.
   */
-function alshaya_social_update_8002() {
+function alshaya_social_update_8003() {
   $configs = [
     'block.block.alshayasignupsigninbuttonsblock',
     'block.block.alshayasocialloginblock',
