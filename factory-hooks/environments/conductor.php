@@ -115,6 +115,10 @@ $conductors = [
     'hmac_id' => 'cd34bf1fd5c048df9b21fb80c0d9c392',
     'hmac_secret' => 'Njk4NjYxZDItMmIzYS00',
   ],
+  'hmeg_prod' => [
+    'hmac_id' => 'f96e2ac1dc7d4de09d162f6fe816823e',
+    'hmac_secret' => 'OWI0YzNmMjMtNmNkOS00',
+  ],
   // Pottery Barn KW.
   'pbkw_qa' => [
     'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
