@@ -326,6 +326,17 @@ function alshaya_seo_entity_insert(EntityInterface $entity) {
     catch (Exception $e) {
       \Drupal::logger('alshaya_seo')->warning('Field subscribe newsletter not found.');
     }
+
+    try {
+      if ($entity->get('field_privilege_card_number')->getString()) {
+        user_cookie_save([
+          'alshaya_gtm_create_user_pc' => $entity->get('field_privilege_card_number')->getString(),
+        ]);
+      }
+    }
+    catch (Exception $e) {
+      // Do nothing, loyalty might by off.
+    }
   }
 }
 

@@ -50,11 +50,6 @@
         localStorage.setItem('userID', userDetails.userID);
       }
 
-      if(!empty(privilegeCardNumber && (localStorage.getItem('pcNumber') === undefined || localStorage.getItem('pcNumber') !== privilegeCardNumber))) {
-        localStorage.setItem('pcNumber', privilegeCardNumber);
-        localStorage.setItem('pcStatus', 'new');
-      }
-
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
         var md = new MobileDetect(window.navigator.userAgent);
@@ -233,15 +228,16 @@
           $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
         }
 
+        var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
 
-        if (localStorage.getItem('pcStatus') === 'new' && localStorage.getItem('pcNumber') !== '6362544') {
+        if (pcRegistration !== undefined && pcRegistration !== '6362544') {
           dataLayer.push({
             event: 'pcMember',
             pcType: 'pc club member'
           });
         }
 
-        localStorage.setItem('pcStatus', 'eventFired');
+        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
       });
 
       /**
