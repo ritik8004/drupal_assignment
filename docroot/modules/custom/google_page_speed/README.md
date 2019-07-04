@@ -9,6 +9,8 @@ CONTENTS OF THIS FILE
     
  * Requirements
     
+    Please fill in configurations to connect to Google PageSpeed Insights API.
+    
     a. Google API key
     b. The URLs should be publicly accessible.
     
