@@ -98,10 +98,10 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Returning distinct metrics from the database.
    */
   protected function getMetrics() {
-    $query = $this->database->select('google_page_speed_metrics', 'gps_metrics');
-    $query->fields('gps_metrics', ['metric_id', 'reference']);
+    $query = $this->database->select('google_page_speed_measure_data', 'gps_md');
+    $query->fields('gps_md', ['reference']);
     $query->distinct();
-    $metrics = $query->execute()->fetchAllKeyed(0, 1);
+    $metrics = $query->execute()->fetchAllKeyed(0, 0);
     return $metrics;
   }
 

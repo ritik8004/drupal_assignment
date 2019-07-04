@@ -28,13 +28,62 @@ function google_page_speed_schema() {
     'primary key' => ['url_id'],
   ];
 
-  $schema['google_page_speed_metrics'] = [
-    'description' => 'Table to store metrics.',
+  $schema['google_page_speed_measure_attempts'] = [
+    'description' => 'Table to store measure attempts.',
     'fields' => [
-      'metric_id' => [
+      'measure_id' => [
         'type' => 'serial',
         'not null' => TRUE,
-        'description' => 'Primary Key: Unique metric ID.',
+        'description' => 'Primary Key: Unique measure ID.',
+      ],
+      'url_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Url Id of the page to analyse.',
+      ],
+      'device' => [
+        'type' => 'varchar_ascii',
+        'length' => 10,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Screen on which analysis is done.',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp when the record was created.',
+      ],
+      'status' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'size' => 'tiny',
+        'default' => 0,
+        'description' => 'Status of attempt.',
+      ],
+    ],
+    'primary key' => ['measure_id'],
+    'indexes' => [
+      'gps_msra_idx' => ['url_id', 'device', 'created', 'status'],
+    ],
+    'foreign keys' => [
+      'data_url' => [
+        'table' => 'google_page_speed_url',
+        'columns' => [
+          'url_id' => 'url_id',
+        ],
+      ],
+    ],
+  ];
+
+  $schema['google_page_speed_measure_data'] = [
+    'description' => 'Table to store measure data.',
+    'fields' => [
+      'measure_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Foreign key: Measure id.',
       ],
       'category' => [
         'type' => 'varchar_ascii',
@@ -50,43 +99,6 @@ function google_page_speed_schema() {
         'default' => '',
         'description' => 'Reference of the metric.',
       ],
-    ],
-    'primary key' => ['metric_id'],
-  ];
-
-  $schema['google_page_speed_scores'] = [
-    'description' => 'Table to store scores.',
-    'fields' => [
-      'score_id' => [
-        'type' => 'serial',
-        'not null' => TRUE,
-        'description' => 'Primary Key: Unique score ID.',
-      ],
-      'created' => [
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => 'Timestamp when the record was created.',
-      ],
-      'metric_id' => [
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => 'Metric Id of the page to analyse.',
-      ],
-      'url_id' => [
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-        'description' => 'Url Id of the page to analyse.',
-      ],
-      'device' => [
-        'type' => 'varchar_ascii',
-        'length' => 10,
-        'not null' => TRUE,
-        'default' => '',
-        'description' => 'Screen on which analysis is done.',
-      ],
       'value' => [
         'type' => 'float',
         'not null' => TRUE,
@@ -94,18 +106,12 @@ function google_page_speed_schema() {
         'description' => 'To store score data',
       ],
     ],
-    'primary key' => ['score_id'],
+    'primary key' => ['measure_id', 'category', 'reference'],
     'foreign keys' => [
-      'data_url' => [
-        'table' => 'google_page_speed_url',
+      'data_mid' => [
+        'table' => 'google_page_speed_measure_attempts',
         'columns' => [
-          'url_id' => 'url_id',
-        ],
-      ],
-      'data_metric' => [
-        'table' => 'google_page_speed_metrics',
-        'columns' => [
-          'metric_id' => 'metric_id',
+          'measure_id' => 'measure_id',
         ],
       ],
     ],

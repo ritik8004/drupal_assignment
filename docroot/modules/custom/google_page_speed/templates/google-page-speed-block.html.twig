@@ -19,7 +19,7 @@
                 {{ content }}
                 <select id = 'gps-metric-select'>
                     {% for id,metric in metrics %}
-                        {% if id == 1 %}
+                        {% if id == 'pf_score' %}
                             <option selected value = {{ id }}>{{ metric }}</option>
                         {% else %}
                             <option value = {{ id }}>{{ metric }}</option>

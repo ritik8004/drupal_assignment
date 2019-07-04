@@ -65,6 +65,8 @@ class GooglePageSpeedController extends ControllerBase {
    *   Passing screen type.
    * @param string $time
    *   Passing time period for which data is needed.
+   *
+   * @throws \Exception
    */
   public function getPageScore($metric_id = '', $screen = 'desktop', $time = 'one-month') {
 
@@ -72,8 +74,9 @@ class GooglePageSpeedController extends ControllerBase {
     $final_data = [];
     $timestamp = $this->getTimeStamp($time);
     $query = $this->getSelectQuery($metric_id, $screen, $timestamp);
-    $query->fields('gps', ['created', 'value', 'url_id']);
-    $query->orderBy('gps.url_id', 'ASC');
+    $query->fields('gps_ma', ['created', 'url_id']);
+    $query->fields('gps_md', ['value']);
+    $query->orderBy('gps_ma.url_id', 'ASC');
     $results = $query->execute()->fetchAll();
     foreach ($results as $result) {
       if ($rows[$result->created][0] != $result->created) {
@@ -155,11 +158,13 @@ class GooglePageSpeedController extends ControllerBase {
    *   The returned select query object.
    */
   protected function getSelectQuery($metric_id, $screen, $timestamp) {
-    $select_query = $this->database->select('google_page_speed_scores', 'gps');
-    $select_query->fields('gps', ['url_id'])
-      ->condition('gps.metric_id', trim($metric_id), '=')
-      ->condition('gps.device', trim($screen), '=')
-      ->condition('gps.created', [$timestamp, strtotime('now')], 'BETWEEN');
+    $select_query = $this->database->select('google_page_speed_measure_attempts', 'gps_ma');
+    $select_query->innerJoin('google_page_speed_measure_data', 'gps_md', 'gps_ma.measure_id = gps_md.measure_id');
+    $select_query->fields('gps_ma', ['url_id'])
+      ->condition('gps_ma.device', trim($screen), '=')
+      ->condition('gps_ma.created', [$timestamp, strtotime('now')], 'BETWEEN')
+      ->condition('gps_ma.status', 1, '=')
+      ->condition('gps_md.reference', trim($metric_id), '=');
 
     return $select_query;
   }
