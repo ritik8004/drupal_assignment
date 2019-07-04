@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - image_style_quality
+name: magazine_article_listing
+label: 'Magazine Article Listing'
+effects:
+  aa0bcf74-43bb-4170-96ff-19dd2fa4c6f3:
+    uuid: aa0bcf74-43bb-4170-96ff-19dd2fa4c6f3
+    id: image_scale
+    weight: 1
+    data:
+      width: 844
+      height: null
+      upscale: false
+  19a3d5fa-2ea9-4e3b-aa9d-37ecfe0e7ace:
+    uuid: 19a3d5fa-2ea9-4e3b-aa9d-37ecfe0e7ace
+    id: image_style_quality
+    weight: 2
+    data:
+      quality: 75
