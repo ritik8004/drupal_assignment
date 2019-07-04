@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo\PathProcessor;
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Route;
 
 /**
  * Class AlshayaSeoPathProcessor.
@@ -20,9 +21,28 @@ class AlshayaSeoPathProcessor implements OutboundPathProcessorInterface {
                                   &$options = [],
                                   Request $request = NULL,
                                   BubbleableMetadata $bubbleable_metadata = NULL) {
+    $route = $options['route'] ?? NULL;
 
-    if (substr($path, -1) !== '/' && strpos($path, '.') === FALSE) {
-      $path .= '/';
+    if ($route instanceof Route && $route->getDefault('_disable_route_normalizer')) {
+      return $path;
+    }
+
+    // Remove trailing slash from all urls.
+    // We want it on category pages so we do not have this forced in htaccess.
+    // We force it from here.
+    $path = rtrim($path, '/');
+
+    // Add trailing slash for term pages.
+    if ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
+      $path = $path . '/';
+    }
+    // Add trailing slash on home page.
+    elseif (empty($path)) {
+      // In Drupal\Core\Routing\UrlGenerator::generateFromRoute lot of trimming
+      // is done forcing us to do it this way.
+      $prefix = trim($options['prefix'], '/');
+      $path = '/' . $prefix . '/';
+      $options['prefix'] = NULL;
     }
 
     return $path;

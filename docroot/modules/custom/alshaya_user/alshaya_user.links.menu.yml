@@ -1,7 +1,7 @@
 alshaya_user.user_settings_form:
   title: 'Custom account settings'
   parent: alshaya_master.alshaya_admin
-  description: 'Configure custom user account settings added for Alshaya.'
+  description: 'Configure custom user account, social auth settings added for Alshaya.'
   weight: 10
   route_name: alshaya_user.user_settings_form
 

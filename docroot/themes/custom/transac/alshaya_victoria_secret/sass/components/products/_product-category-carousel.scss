@@ -27,8 +27,6 @@
 
         @include breakpoint($upto-desktop) {
           width: 8.875rem;
-          margin-#{$right}: 0.625rem;
-          padding-#{$right}: 0;
         }
       }
     }

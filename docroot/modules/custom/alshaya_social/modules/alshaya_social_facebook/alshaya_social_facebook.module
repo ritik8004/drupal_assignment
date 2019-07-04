@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_social_facebook.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_social_facebook_preprocess_alshaya_social(&$variables) {
+  if (!isset($variables['social_networks']['social_auth_facebook'])) {
+    return;
+  }
+  $route = \Drupal::routeMatch();
+  $link_texts = [
+    'user.login' => t('sign in with facebook'),
+    'user.register' => t('sign up with facebook'),
+  ];
+  if (in_array($route->getRouteName(), ['user.login', 'acq_checkout.form'])) {
+    $variables['social_networks']['social_auth_facebook']['text_link'] = $link_texts['user.login'];
+  }
+  elseif ($route->getRouteName() == 'user.register') {
+    $variables['social_networks']['social_auth_facebook']['text_link'] = $link_texts['user.register'];
+  }
+}

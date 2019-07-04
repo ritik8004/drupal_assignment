@@ -1,4 +1,10 @@
 .alshaya-social {
+  .c-user-login & {
+    @include breakpoint($only-mobile) {
+      margin-top: 5rem;
+    }
+  }
+
   .auth-link {
     display: flex;
     align-items: center;
@@ -11,6 +17,21 @@
     height: 2.875rem;
     border: 1px solid $social_auth_login_button_border;
     transition: background-color 0.2s ease-in-out;
+
+    &:first-child {
+      margin-top: 1.75rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.125rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      html[lang=ar] & {
+        width: auto;
+        max-width: fit-content;
+      }
+    }
 
     @include breakpoint($only-mobile) {
       max-width: none;
@@ -67,10 +88,12 @@
   .social-signup-form {
     &.user-login-form {
       > a {
-        bottom: 7rem;
+        bottom: 5rem;
 
-        @include breakpoint($only-mobile) {
-          bottom: 6.25rem;
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            right: 10rem;
+          }
         }
       }
     }
@@ -98,7 +121,8 @@
 .alias--cart-checkout-login {
   #edit-checkout-social-auth,
   #edit-checkout-guest {
-    padding: 0 7.875rem;
+    padding: 0;
+    padding-#{$left}: 7.875rem;
     text-align: $left;
 
     @include breakpoint($only-tablet) {
@@ -127,10 +151,21 @@
 
       &.order-3 {
         order: 3;
+        display: none;
       }
 
       &.order-5 {
         order: 5;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .social-signin-enabled {
+      .checkout-login-separator {
+        &.order-3 {
+          display: block;
+        }
       }
     }
   }
@@ -176,9 +211,22 @@
       width: 12.5625rem;
       height: 2.875rem;
       font-family: $alshaya-bold;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: $social-auth-bg-hover;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          width: auto;
+          padding: 0 0.5rem;
+        }
+      }
 
       @include breakpoint($only-mobile) {
         width: 100%;
+        margin: 2px 0;
       }
     }
 

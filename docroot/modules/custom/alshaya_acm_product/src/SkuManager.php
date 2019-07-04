@@ -24,6 +24,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -278,7 +279,7 @@ class SkuManager {
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
-   *   Alshaya arraty utility service.
+   *   Alshaya array utility service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -394,6 +395,12 @@ class SkuManager {
       '#title' => $alt,
       '#alt' => $alt,
     ];
+
+    $image['#attributes']['class'][] = 'b-lazy';
+    $image['#attributes']['data-src'] = !empty($image_style)
+      ? ImageStyle::load($image_style)->buildUrl($image['#uri'])
+      : file_create_url($image['#uri']);
+    $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
 
     if ($rel_image_style) {
       $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
@@ -998,6 +1005,10 @@ class SkuManager {
           '#alt' => $data[$text_key],
         ];
 
+        $image['#attributes']['class'][] = 'b-lazy';
+        $image['#attributes']['data-src'] = Url::fromUri($image['#uri']);
+        $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
+
         $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
 
@@ -1481,7 +1492,7 @@ class SkuManager {
    * Helper function to fetch attributes for PDP.
    *
    * Use configurable SKU for configurable attributes & simple SKUs as source
-   * for non-configurable attribtues.
+   * for non-configurable attributes.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity for which the attribute data needs to be pulled.
@@ -1891,6 +1902,18 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get attributes used for swatch on Listing.
+   *
+   * @return array
+   *   Array containing attributes used for swatch on Listing.
+   */
+  public function getProductListingSwatchAttributes() {
+    return $this->configFactory
+      ->get('alshaya_acm_product.display_settings')
+      ->get('swatches')['plp'] ?? ['actual_color_label_code'];
+  }
+
+  /**
    * Helper function to get attributes used for swatch on PDP.
    *
    * @return array
@@ -2243,16 +2266,17 @@ class SkuManager {
    * @param \Drupal\taxonomy\TermInterface $term
    *   Taxonomy term for which image slider position needs to be fetched.
    *
-   * @return string
+   * @return string|null
    *   Image slider position type for the term.
    *
-   * @throws \InvalidArgumentException
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   protected function getImagePositionFromTerm(TermInterface $term) {
     if ($term->get('field_pdp_image_slider_position')->first()) {
       return $term->get('field_pdp_image_slider_position')
         ->getString();
     }
+    return NULL;
   }
 
   /**
@@ -2739,7 +2763,7 @@ class SkuManager {
         ]);
       }
       catch (\Exception $e) {
-        \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
+        $this->logger->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
           '@nids' => implode(',', $nids),
           '@pid' => $node->id(),
           '@message' => $e->getMessage(),

@@ -1,0 +1,8 @@
+services:
+  alshaya_social_google.event_subscriber:
+    class: Drupal\alshaya_social_google\EventSubscriber\AlshayaSocialGoogleSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@social_auth_google.manager'
+      - '@alshaya_social.helper'

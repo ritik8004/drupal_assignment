@@ -1,0 +1,6 @@
+name: Textanywhere
+type: module
+description: 'Enables modules to use Textanywhere API, and integrates with SMS Framework.'
+core: '8.x'
+dependencies:
+  - sms:sms

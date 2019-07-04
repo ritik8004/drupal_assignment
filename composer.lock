@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39c2bf74ca20cd02a2ad839835a6444c",
+    "content-hash": "ec89586c2263b3029d408c76e30bef35",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -456,6 +456,55 @@
                 "stack"
             ],
             "time": "2017-12-20T14:37:45+00:00"
+        },
+        {
+            "name": "bacon/bacon-qr-code",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bacon/BaconQrCode.git",
+                "reference": "eaac909da3ccc32b748a65b127acd8918f58d9b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/eaac909da3ccc32b748a65b127acd8918f58d9b0",
+                "reference": "eaac909da3ccc32b748a65b127acd8918f58d9b0",
+                "shasum": ""
+            },
+            "require": {
+                "dasprid/enum": "^1.0",
+                "ext-iconv": "*",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phly/keep-a-changelog": "^1.4",
+                "phpunit/phpunit": "^6.4",
+                "squizlabs/php_codesniffer": "^3.1"
+            },
+            "suggest": {
+                "ext-imagick": "to generate QR code images"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BaconQrCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Scholzen 'DASPRiD'",
+                    "email": "mail@dasprids.de",
+                    "homepage": "http://www.dasprids.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "BaconQrCode is a QR code generator for PHP.",
+            "homepage": "https://github.com/Bacon/BaconQrCode",
+            "time": "2018-04-25T17:53:56+00:00"
         },
         {
             "name": "behat/behat",
@@ -2255,6 +2304,48 @@
             "time": "2018-05-11T18:00:16+00:00"
         },
         {
+            "name": "dasprid/enum",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DASPRiD/Enum.git",
+                "reference": "631ef6e638e9494b0310837fa531bedd908fc22b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/631ef6e638e9494b0310837fa531bedd908fc22b",
+                "reference": "631ef6e638e9494b0310837fa531bedd908fc22b",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.4",
+                "squizlabs/php_codesniffer": "^3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DASPRiD\\Enum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Scholzen 'DASPRiD'",
+                    "email": "mail@dasprids.de",
+                    "homepage": "https://dasprids.de/"
+                }
+            ],
+            "description": "PHP 7.1 enum implementation",
+            "keywords": [
+                "enum",
+                "map"
+            ],
+            "time": "2017-10-25T22:45:27+00:00"
+        },
+        {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
             "version": "v0.4.4",
             "source": {
@@ -3404,7 +3495,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.57",
-                    "datestamp": "1559672585",
+                    "datestamp": "1560943686",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3483,7 +3574,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.57",
-                    "datestamp": "1559672585",
+                    "datestamp": "1560943686",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3557,7 +3648,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.57",
-                    "datestamp": "1559672585",
+                    "datestamp": "1560943686",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3630,7 +3721,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.57",
-                    "datestamp": "1559672585",
+                    "datestamp": "1560943686",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5300,12 +5391,12 @@
                     "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                     "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                     "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
-                    "CORE-6959 - Adding logger to identify the issue": "patches/core/log-on-directoty-creation.patch",
+                    "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3-8.6.patch",
                     "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch",
                     "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
                     "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                     "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch",
-                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-13/add_a_new_setting_allow_insecure_derivates-3059836-8.patch",
+                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch",
                     "2998335 - [regression] \\Drupal\\user\\ContextProvider\\CurrentUserContext broken for anonymous users": "https://www.drupal.org/files/issues/2018-10-04/2998335-currentusercontext-16.patch",
                     "3032548 - ContentModerationRouteSubscriber assumes all parameters in an entity form route contain a 'type' key": "https://www.drupal.org/files/issues/2019-02-13/3032548-2.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
@@ -5618,6 +5709,53 @@
             "homepage": "https://www.drupal.org/project/datalayer",
             "support": {
                 "source": "http://cgit.drupalcode.org/datalayer"
+            }
+        },
+        {
+            "name": "drupal/date_popup",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/date_popup.git",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/date_popup-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "7a950c593e185bdf677f87b5d724b55a00768d67"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1496370243",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "benjy",
+                    "homepage": "https://www.drupal.org/user/1852732"
+                }
+            ],
+            "description": "Provides a HTML 5 date popup for all views filters.",
+            "homepage": "https://www.drupal.org/project/date_popup",
+            "support": {
+                "source": "https://git.drupalcode.org/project/date_popup"
             }
         },
         {
@@ -6084,6 +6222,65 @@
             "time": "2017-12-06T20:35:40+00:00"
         },
         {
+            "name": "drupal/dynamic_entity_reference",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/dynamic_entity_reference.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/dynamic_entity_reference-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "48473adb20413babb548a2501e396e66f13c30f2"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1554020884",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Lee Rowlands",
+                    "homepage": "https://www.drupal.org/u/larowlan",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jibran Ijaz",
+                    "homepage": "https://www.drupal.org/u/jibran",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                }
+            ],
+            "description": "Provides a field that allows an entity-reference field to reference more than one entity type.",
+            "homepage": "http://drupal.org/project/dynamic_entity_reference",
+            "support": {
+                "source": "http://cgit.drupalcode.org/dynamic_entity_reference",
+                "issues": "http://drupal.org/project/dynamic_entity_reference",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
             "name": "drupal/email_registration",
             "version": "1.0.0-rc7",
             "source": {
@@ -6210,6 +6407,54 @@
                 "source": "http://cgit.drupalcode.org/embed",
                 "issues": "https://www.drupal.org/project/issues/embed",
                 "irc": "irc://irc.freenode.org/drupal-media"
+            }
+        },
+        {
+            "name": "drupal/endroid_qr_code",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/endroid_qr_code.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/endroid_qr_code-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "2240231d89883dc97749ad825d1ddbe9923286cc"
+            },
+            "require": {
+                "drupal/core": "~8.0",
+                "endroid/qr-code": "~3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1544782684",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "pen",
+                    "homepage": "https://www.drupal.org/user/2435634"
+                }
+            ],
+            "description": "Generates Qr Code using Endroid Library.",
+            "homepage": "https://www.drupal.org/project/endroid_qr_code",
+            "support": {
+                "source": "https://git.drupalcode.org/project/endroid_qr_code"
             }
         },
         {
@@ -9269,7 +9514,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/mobile_app_links.git",
-                "reference": "64a839741015961097edf946085faf01850857d2"
+                "reference": "c55b7aaaaa0ddf99e196c7f82cc556ae051a0d3d"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -9282,7 +9527,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1557139084",
+                    "datestamp": "1557749886",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -9311,7 +9556,7 @@
                 "source": "https://cgit.drupalcode.org/mobile_app_links",
                 "issues": "https://drupal.org/project/issues/mobile_app_links"
             },
-            "time": "2019-05-13T12:13:03+00:00"
+            "time": "2019-06-20T13:44:50+00:00"
         },
         {
             "name": "drupal/mobile_number",
@@ -11107,54 +11352,6 @@
             }
         },
         {
-            "name": "drupal/scheduled_updates",
-            "version": "1.0.0-alpha7",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/scheduled_updates.git",
-                "reference": "8.x-1.0-alpha7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduled_updates-8.x-1.0-alpha7.zip",
-                "reference": "8.x-1.0-alpha7",
-                "shasum": "4c02187c7202bef453268ed3eb644bb411c01891"
-            },
-            "require": {
-                "drupal/core": "*",
-                "drupal/inline_entity_form": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.0-alpha7",
-                    "datestamp": "1524485284",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "tedbow",
-                    "homepage": "https://www.drupal.org/user/240860"
-                }
-            ],
-            "description": "Create scheduled updates to field values on entities such content, users, and terms.",
-            "homepage": "https://www.drupal.org/project/scheduled_updates",
-            "support": {
-                "source": "http://cgit.drupalcode.org/scheduled_updates"
-            }
-        },
-        {
             "name": "drupal/schemata",
             "version": "1.0.0-alpha6",
             "source": {
@@ -12265,6 +12462,114 @@
             }
         },
         {
+            "name": "drupal/sms",
+            "version": "1.1.0",
+            "require": {
+                "drupal/core": "^8.0",
+                "drupal/dynamic_entity_reference": "^1.0",
+                "drupal/smsframework": "self.version",
+                "drupal/telephone": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1519797784",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Aniebiet Udoh",
+                    "homepage": "https://www.drupal.org/u/almaudoh",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Daniel Phin",
+                    "homepage": "http://danielph.in",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "dpi",
+                    "homepage": "https://www.drupal.org/user/81431"
+                }
+            ],
+            "description": "Provides an extensible API that facilitates communication between Drupal and various SMS gateways.",
+            "homepage": "http://drupal.org/project/smsframework",
+            "support": {
+                "source": "http://cgit.drupalcode.org/smsframework",
+                "issues": "https://www.drupal.org/project/issues/smsframework"
+            }
+        },
+        {
+            "name": "drupal/smsframework",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/smsframework.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/smsframework-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "fdec4f6a3016fbf0da9364708a95cc63a00bece2"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/dynamic_entity_reference": "*",
+                "drupal/sms": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1519797784",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "almaudoh",
+                    "homepage": "https://www.drupal.org/user/488082"
+                },
+                {
+                    "name": "batje",
+                    "homepage": "https://www.drupal.org/user/2696"
+                },
+                {
+                    "name": "dpi",
+                    "homepage": "https://www.drupal.org/user/81431"
+                }
+            ],
+            "homepage": "https://www.drupal.org/project/smsframework",
+            "support": {
+                "source": "https://git.drupalcode.org/project/smsframework"
+            }
+        },
+        {
             "name": "drupal/social_api",
             "version": "dev-2.x",
             "source": {
@@ -12328,11 +12633,17 @@
         },
         {
             "name": "drupal/social_auth",
-            "version": "dev-2.x",
+            "version": "2.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth.git",
-                "reference": "c53c6001d44c261cfcf288eb9ac5df5c2604fe04"
+                "reference": "8.x-2.0-beta6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/social_auth-8.x-2.0-beta6.zip",
+                "reference": "8.x-2.0-beta6",
+                "shasum": "53d9ec0c3d43b319bd916ac2a9eea93022b733a5"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -12344,16 +12655,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-beta5+6-dev",
-                    "datestamp": "1552442588",
+                    "version": "8.x-2.0-beta6",
+                    "datestamp": "1552443188",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "Set login error destination to allow users to redirect back to the origin page on social auth fail.": "https://www.drupal.org/files/issues/2019-03-22/provider-redirect-event-dispatcher-3033749-12.patch",
-                    "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
+                    "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12388,8 +12698,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/social_auth",
                 "issues": "https://www.drupal.org/project/issues/social_auth"
-            },
-            "time": "2019-03-13T01:59:25+00:00"
+            }
         },
         {
             "name": "drupal/social_auth_facebook",
@@ -12424,7 +12733,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-03-23/use-event-dispatcher-method-3033751-7.patch"
+                    "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12460,6 +12769,115 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/social_auth_facebook",
                 "issues": "https://www.drupal.org/project/issues/social_auth_facebook"
+            }
+        },
+        {
+            "name": "drupal/social_auth_google",
+            "version": "2.0.0-beta4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/social_auth_google.git",
+                "reference": "8.x-2.0-beta4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/social_auth_google-8.x-2.0-beta4.zip",
+                "reference": "8.x-2.0-beta4",
+                "shasum": "7000da42ef7bcc215b12e14e292179d7637da10e"
+            },
+            "require": {
+                "drupal/core": "~8.0",
+                "drupal/social_auth": "^2",
+                "league/oauth2-google": "^3.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-2.0-beta4",
+                    "datestamp": "1549435980",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches_applied": {
+                    "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Getulio Valentin Sánchez (gvso)",
+                    "homepage": "https://www.drupal.org/user/3101285",
+                    "email": "valentin2507@gmail.com"
+                },
+                {
+                    "name": "Himanshu Dixit (himanshu-dixit)",
+                    "homepage": "https://www.drupal.org/user/3513954",
+                    "email": "hudixt@gmail.com"
+                }
+            ],
+            "description": "Social Auth integration for Google.",
+            "homepage": "https://www.drupal.org/project/social_auth_google",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/social_auth_google",
+                "issues": "https://www.drupal.org/project/issues/social_auth_google"
+            }
+        },
+        {
+            "name": "drupal/svg_image",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/svg_image.git",
+                "reference": "8.x-1.9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/svg_image-8.x-1.9.zip",
+                "reference": "8.x-1.9",
+                "shasum": "7b193de6ec7b7fc3626f170d0f5f8fccaa2f26bf"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.9",
+                    "datestamp": "1548492180",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "zvse",
+                    "homepage": "https://www.drupal.org/user/2870933"
+                }
+            ],
+            "description": "Overrides the standard image formatter and widget to support SVG files.",
+            "homepage": "https://www.drupal.org/project/svg_image",
+            "support": {
+                "source": "https://git.drupalcode.org/project/svg_image"
             }
         },
         {
@@ -13502,6 +13920,109 @@
             "time": "2018-09-25T20:59:41+00:00"
         },
         {
+            "name": "endroid/installer",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/endroid/installer.git",
+                "reference": "d4ae2bbd7977148dcb514ad625ece1a36f751a8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/endroid/installer/zipball/d4ae2bbd7977148dcb514ad625ece1a36f751a8b",
+                "reference": "d4ae2bbd7977148dcb514ad625ece1a36f751a8b",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1",
+                "php": ">=7.2"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                },
+                "class": "Endroid\\Installer\\Installer"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Endroid\\Installer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen van den Enden",
+                    "email": "info@endroid.nl"
+                }
+            ],
+            "time": "2019-03-30T21:42:01+00:00"
+        },
+        {
+            "name": "endroid/qr-code",
+            "version": "3.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/endroid/qr-code.git",
+                "reference": "3c96919701a2240b8aa2ad4bdce95ad5a69a8ac5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/3c96919701a2240b8aa2ad4bdce95ad5a69a8ac5",
+                "reference": "3c96919701a2240b8aa2ad4bdce95ad5a69a8ac5",
+                "shasum": ""
+            },
+            "require": {
+                "bacon/bacon-qr-code": "^2.0",
+                "endroid/installer": "^1.1.5",
+                "ext-gd": "*",
+                "khanamiryan/qrcode-detector-decoder": "^1.0.2",
+                "myclabs/php-enum": "^1.5",
+                "php": ">=7.2",
+                "symfony/http-foundation": "^3.4|^4.0",
+                "symfony/options-resolver": "^3.4|^4.0",
+                "symfony/property-access": "^3.4|^4.0"
+            },
+            "require-dev": {
+                "endroid/test": "^1.1.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Endroid\\QrCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen van den Enden",
+                    "email": "info@endroid.nl"
+                }
+            ],
+            "description": "Endroid QR Code",
+            "homepage": "https://github.com/endroid/qr-code",
+            "keywords": [
+                "bundle",
+                "code",
+                "endroid",
+                "php",
+                "qr",
+                "qrcode"
+            ],
+            "time": "2019-05-05T12:32:53+00:00"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.10.0",
             "source": {
@@ -14419,6 +14940,56 @@
             "type": "drupal-library"
         },
         {
+            "name": "khanamiryan/qrcode-detector-decoder",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/khanamiryan/php-qrcode-detector-decoder.git",
+                "reference": "a75482d3bc804e3f6702332bfda6cccbb0dfaa76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/a75482d3bc804e3f6702332bfda6cccbb0dfaa76",
+                "reference": "a75482d3bc804e3f6702332bfda6cccbb0dfaa76",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6|^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zxing\\": "lib/"
+                },
+                "files": [
+                    "lib/Common/customFunctions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ashot Khanamiryan",
+                    "email": "a.khanamiryan@gmail.com",
+                    "homepage": "https://github.com/khanamiryan",
+                    "role": "Developer"
+                }
+            ],
+            "description": "QR code decoder / reader",
+            "homepage": "https://github.com/khanamiryan/php-qrcode-detector-decoder/",
+            "keywords": [
+                "barcode",
+                "qr",
+                "zxing"
+            ],
+            "time": "2018-04-26T11:41:33+00:00"
+        },
+        {
             "name": "kub-at/php-simple-html-dom-parser",
             "version": "1.8.1",
             "source": {
@@ -14754,6 +15325,57 @@
                 "oauth2"
             ],
             "time": "2017-07-22T01:25:00+00:00"
+        },
+        {
+            "name": "league/oauth2-google",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth2-google.git",
+                "reference": "3290273029f7cc2a468aae68bad184479a23b9d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-google/zipball/3290273029f7cc2a468aae68bad184479a23b9d2",
+                "reference": "3290273029f7cc2a468aae68bad184479a23b9d2",
+                "shasum": ""
+            },
+            "require": {
+                "league/oauth2-client": "^2.0"
+            },
+            "require-dev": {
+                "eloquent/phony-phpunit": "^2.0",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^6.0",
+                "squizlabs/php_codesniffer": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth2\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Woody Gilk",
+                    "email": "woody.gilk@gmail.com",
+                    "homepage": "http://shadowhand.me"
+                }
+            ],
+            "description": "Google OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
+            "keywords": [
+                "Authentication",
+                "authorization",
+                "client",
+                "google",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2018-12-28T16:18:33+00:00"
         },
         {
             "name": "league/oauth2-server",
@@ -15248,6 +15870,51 @@
                 "object graph"
             ],
             "time": "2019-04-07T13:18:21+00:00"
+        },
+        {
+            "name": "myclabs/php-enum",
+            "version": "1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myclabs/php-enum.git",
+                "reference": "f46847626b8739de22e4ebc6b56010f317d4448d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/f46847626b8739de22e4ebc6b56010f317d4448d",
+                "reference": "f46847626b8739de22e4ebc6b56010f317d4448d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
+                "squizlabs/php_codesniffer": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MyCLabs\\Enum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP Enum contributors",
+                    "homepage": "https://github.com/myclabs/php-enum/graphs/contributors"
+                }
+            ],
+            "description": "PHP Enum implementation",
+            "homepage": "http://github.com/myclabs/php-enum",
+            "keywords": [
+                "enum"
+            ],
+            "time": "2019-05-05T10:12:03+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -18198,6 +18865,118 @@
             "time": "2019-05-01T13:03:24+00:00"
         },
         {
+            "name": "symfony/inflector",
+            "version": "v4.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/inflector.git",
+                "reference": "275e54941a4f17a471c68d2a00e2513fc1fd4a78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/inflector/zipball/275e54941a4f17a471c68d2a00e2513fc1fd4a78",
+                "reference": "275e54941a4f17a471c68d2a00e2513fc1fd4a78",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/polyfill-ctype": "~1.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Inflector\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bernhard Schussek",
+                    "email": "bschussek@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Inflector Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "inflection",
+                "pluralize",
+                "singularize",
+                "string",
+                "symfony",
+                "words"
+            ],
+            "time": "2019-01-16T20:31:39+00:00"
+        },
+        {
+            "name": "symfony/options-resolver",
+            "version": "v4.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "fd4a5f27b7cd085b489247b9890ebca9f3e10044"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/fd4a5f27b7cd085b489247b9890ebca9f3e10044",
+                "reference": "fd4a5f27b7cd085b489247b9890ebca9f3e10044",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony OptionsResolver Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "time": "2019-04-10T16:20:36+00:00"
+        },
+        {
             "name": "symfony/polyfill-ctype",
             "version": "v1.11.0",
             "source": {
@@ -18535,6 +19314,73 @@
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
             "time": "2019-04-08T16:15:54+00:00"
+        },
+        {
+            "name": "symfony/property-access",
+            "version": "v4.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-access.git",
+                "reference": "5440dd2b5373073beee051bd978b58a0f543b192"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/5440dd2b5373073beee051bd978b58a0f543b192",
+                "reference": "5440dd2b5373073beee051bd978b58a0f543b192",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/inflector": "~3.4|~4.0"
+            },
+            "require-dev": {
+                "symfony/cache": "~3.4|~4.0"
+            },
+            "suggest": {
+                "psr/cache-implementation": "To cache access methods."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyAccess\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony PropertyAccess Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "access",
+                "array",
+                "extraction",
+                "index",
+                "injection",
+                "object",
+                "property",
+                "property path",
+                "reflection"
+            ],
+            "time": "2019-03-04T09:16:25+00:00"
         },
         {
             "name": "symfony/psr-http-message-bridge",
@@ -21614,14 +22460,12 @@
         "drupal/r4032login": 20,
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
-        "drupal/scheduled_updates": 15,
         "drupal/search_api_algolia": 20,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
         "drupal/sharethis": 10,
         "drupal/simple_sitemap": 20,
         "drupal/social_api": 20,
-        "drupal/social_auth": 20,
         "drupal/views_ajax_get": 20,
         "drupal/views_block_filter_block": 10,
         "drupal/stage_file_proxy": 15,

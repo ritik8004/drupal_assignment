@@ -101,15 +101,3 @@
     }
   }
 }
-
-.alias--cart-checkout-delivery,
-.alias--cart-checkout-payment {
-  .back-link {
-    @include breakpoint($only-mobile) {
-      @include icon(arrowup, before) {
-        color: $checkout_mobile_back_link_icon;
-        transform: none;
-      }
-    }
-  }
-}

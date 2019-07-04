@@ -13,6 +13,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
     url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -27,6 +28,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
     url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -41,6 +43,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -55,20 +58,21 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 // Font Family
-$bbw-bold: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold';
-$bbw-bold-nodir: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold';
+$bbw-bold: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold', 'Arial';
+$bbw-bold-nodir: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold', 'Arial';
 
-$bbw-thin: 'BBWTradeGothicLTStd', 'DroidKufi_Regular';
-$bbw-thin-nodir: 'BBWTradeGothicLTStd', 'DroidKufi_Regular';
+$bbw-thin: 'BBWTradeGothicLTStd', 'DroidKufi_Regular', 'Arial';
+$bbw-thin-nodir: 'BBWTradeGothicLTStd', 'DroidKufi_Regular', 'Arial';
 
-$bbw-arabic-bold: 'DroidArabicKufi_Bold', 'BBWTradeGothicLTStd_Bold';
-$bbw-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'BBWTradeGothicLTStd_Bold';
+$bbw-arabic-bold: 'DroidArabicKufi_Bold', 'BBWTradeGothicLTStd_Bold', 'Arial';
+$bbw-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'BBWTradeGothicLTStd_Bold', 'Arial';
 
-$bbw-arabic-thin: 'DroidKufi_Regular', 'BBWTradeGothicLTStd';
-$bbw-arabic-thin-nodir: 'DroidKufi_Regular', 'BBWTradeGothicLTStd';
+$bbw-arabic-thin: 'DroidKufi_Regular', 'BBWTradeGothicLTStd', 'Arial';
+$bbw-arabic-thin-nodir: 'DroidKufi_Regular', 'BBWTradeGothicLTStd', 'Arial';
 
 $arial: $bbw-thin;
 $arial-nodir: $bbw-thin-nodir;

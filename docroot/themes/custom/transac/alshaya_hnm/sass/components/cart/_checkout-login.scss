@@ -28,23 +28,11 @@
       letter-spacing: 0;
     }
   }
-
-  a.back-link {
-    @include breakpoint($only-mobile) {
-      @include icon(arrowup, before) {
-        transform: none;
-
-        html[lang=ar] & {
-          transform: rotate(180deg);
-        }
-      }
-    }
-  }
 }
 
 .alias--cart-checkout-login {
   .tab {
-    @inlcude arabic-letter-spacing;
+    @include arabic-letter-spacing;
 
     padding: 0.5rem 2rem;
 
@@ -104,16 +92,7 @@
       font-family: $hnm-demibold;
       font-weight: normal;
       color: $primary_dark_color;
-
-      &:hover {
-        text-decoration: underline;
-      }
-
-      @include breakpoint($tablet) {
-        html[lang=ar] & {
-          right: 12.5rem;
-        }
-      }
+      text-decoration: underline;
     }
 
     .fieldset-wrapper {
@@ -155,5 +134,15 @@
 
   .checkout-guest-summary {
     color: $checkout_guest_summary;
+  }
+}
+
+.alshaya-social {
+  .social-network-text {
+    text-transform: lowercase;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
   }
 }

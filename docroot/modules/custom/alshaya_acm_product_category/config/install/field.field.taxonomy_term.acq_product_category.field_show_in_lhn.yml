@@ -9,7 +9,7 @@ field_name: field_show_in_lhn
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Show in LHN'
-description: ''
+description: 'Check to display this term in Left hand side navigation.'
 required: false
 translatable: false
 skip_translation_check: 0
