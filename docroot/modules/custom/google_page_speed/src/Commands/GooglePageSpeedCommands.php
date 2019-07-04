@@ -81,39 +81,32 @@ class GooglePageSpeedCommands extends DrushCommands {
    *
    * @throws \Exception
    */
-  public function insights($options = ['url' => '', 'screen' => 'desktop']) {
+  public function insights($options = [
+    'url' => '',
+    'screen' => ['desktop', 'mobile'],
+  ]) {
     $config = $this->configFactory->get(GooglePageSpeedConfigForm::CONFIG_NAME);
     $api_key = $config->get('api_key');
     if (empty($api_key)) {
-      $this->output->writeln('Google API key is empty');
+      $this->output->writeln('Google API key is not configured.');
     }
 
     $client = new Client();
 
     // Get data from options.
-    if (!empty($options['url'])) {
-      $this->getPageSpeedData($client, $api_key, $options['url'], $options['screen']);
-    }
-    // Get data from configurations.
-    else {
-      $urls = explode(PHP_EOL, $config->get('page_url'));
-      $screens = $config->get('screen');
-      if (isset($api_key, $urls, $screens, $client)) {
-        foreach ($urls as $url) {
-          foreach ($screens as $screen) {
-            try {
-              if (!empty($api_key) && !empty($url) && !empty($screen)) {
-                $this->getPageSpeedData($client, $api_key, trim($url), trim($screen));
-              }
-            }
-            catch (RequestException $e) {
-              return($this->t('Error'));
-            }
+    $urls = !empty($options['url'])
+      ? (array) $options['url']
+      : explode(PHP_EOL, $config->get('page_url'));
+    foreach ($urls as $url) {
+      foreach ($options['screen'] as $screen) {
+        try {
+          if (!empty($api_key) && !empty($url) && !empty($screen)) {
+            $this->getPageSpeedData($client, $api_key, trim($url), trim($screen));
           }
         }
-      }
-      else {
-        $this->output->writeln('Arguments are empty');
+        catch (RequestException $e) {
+          return($this->t('Error'));
+        }
       }
     }
     $this->cacheInvalidator->invalidateTags(['google-page-speed:block']);
