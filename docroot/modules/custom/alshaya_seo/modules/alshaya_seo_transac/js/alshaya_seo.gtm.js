@@ -192,9 +192,9 @@
         }
 
         // Fire lead tracking on registration success/ user update.
-        if ($.cookie('Drupal.visitor.alshaya_gtm_create_user_lead') !== undefined &&
-          $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename') !== undefined) {
-          var leadOriginPath = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename');
+        if (drupalSettings.alshaya_gtm_create_user_lead !== undefined &&
+            drupalSettings.alshaya_gtm_create_user_pagename !== undefined) {
+          var leadOriginPath = drupalSettings.alshaya_gtm_create_user_pagename;
 
           if (leadOriginPath === Drupal.url('user/register')) {
             leadType = 'registration';
@@ -209,10 +209,6 @@
               leadType: leadType
             });
           }
-
-          $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
-          $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
-          $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
         }
         else if ($.cookie('Drupal.visitor.alshaya_gtm_update_user_lead') !== undefined) {
           dataLayer.push({

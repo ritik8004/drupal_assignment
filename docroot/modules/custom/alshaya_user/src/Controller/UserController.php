@@ -82,6 +82,10 @@ class UserController extends ControllerBase {
     $build['#markup'] = str_replace('[email]', $account->getEmail(), $text);
 
     $build['#cache'] = ['max-age' => 0];
+    if ($account->get('field_subscribe_newsletter')->getString()) {
+      $build['#attached']['drupalSettings']['alshaya_gtm_create_user_lead'] = $account->id();
+      $build['#attached']['drupalSettings']['alshaya_gtm_create_user_pagename'] = $this->currentRequest->getPathInfo();
+    }
 
     return $build;
   }
