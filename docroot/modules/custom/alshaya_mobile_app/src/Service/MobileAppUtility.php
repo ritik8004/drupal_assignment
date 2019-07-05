@@ -359,9 +359,10 @@ class MobileAppUtility {
       // If langcode exists in the url string.
       if ($langcode && strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
         $url_to_get_deeplink = str_replace('/' . $langcode . '/', '', $url_to_get_deeplink);
-        $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
-        $url = $redirect ? $redirect->getRedirectUrl() : $url;
       }
+
+      $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
+      $url = $redirect ? $redirect->getRedirectUrl() : $url;
 
       return self::ENDPOINT_PREFIX
       . 'deeplink?url='
