@@ -226,7 +226,7 @@ class CheckoutComAPIWrapper {
     try {
       /** @var \GuzzleHttp\Psr7\Response $result */
       $result = $doReq($client, [
-        'currency' => $this->configFactory->get('acq_commerce.currency')->get('currency_code'),
+        'currency' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
       ]);
     }
     catch (\Exception $e) {
