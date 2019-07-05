@@ -12,6 +12,24 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Update config for showing images of specific color product in listing.
+ * This is done when filtered by color.
+ */
+function alshaya_acm_product_update_8050() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Split pathauto pattern for product and add .html suffix.
  */
 function alshaya_acm_product_update_8049() {

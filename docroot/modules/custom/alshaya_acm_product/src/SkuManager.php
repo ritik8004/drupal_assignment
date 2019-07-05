@@ -1891,6 +1891,18 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get attributes used for swatch on Listing.
+   *
+   * @return array
+   *   Array containing attributes used for swatch on Listing.
+   */
+  public function getProductListingSwatchAttributes() {
+    return $this->configFactory
+      ->get('alshaya_acm_product.display_settings')
+      ->get('swatches')['plp'] ?? ['actual_color_label_code'];
+  }
+
+  /**
    * Helper function to get attributes used for swatch on PDP.
    *
    * @return array

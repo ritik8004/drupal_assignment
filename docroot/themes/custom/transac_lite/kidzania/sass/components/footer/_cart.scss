@@ -1,0 +1,128 @@
+.cart {
+  width: 32%;
+  float: $left;
+  text-align: center;
+  color: $cart_text;
+  padding-top: 0.9375rem;
+  padding-#{$left}: 0.9375rem;
+  line-height: 1;
+
+  .cart-container {
+    position: relative;
+    float: $left;
+    margin-#{$left}: 0.9375rem;
+    margin-top: 0.3125rem;
+
+    @include breakpoint($upto-desktop) {
+      margin-#{$left}: 0;
+    }
+  }
+
+  .cart-icon {
+    font-size: 2.5rem;
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: -0.625rem;
+    margin-#{$right}: 0.3125rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 1.875rem;
+    }
+
+    @include icon(shopping-cart);
+
+    &.full {
+      animation: fullCart 1.2s infinite;
+    }
+  }
+
+  .currency,
+  .total-price {
+    font-size: 2rem;
+    font-family: $ubuntu-sans-bold;
+    margin-top: 0.3125rem;
+  }
+
+  .add-item {
+    position: absolute;
+    width: 1.5625rem;
+    height: 1.5625rem;
+    background: $cart_add_item_bg;
+    color: $cart_add_item_text;
+    border-radius: 50%;
+    font-size: 0.9375rem;
+    padding: 0;
+    #{$left}: 7%;
+    top: -2.5rem;
+    visibility: hidden;
+    opacity: 0;
+    font-family: $ubuntu-sans-bold;
+    line-height: 1.7;
+    box-shadow: 0 0.4375rem 0.625rem rgba(0, 0, 0, 0.13);
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      #{$left}: 6%;
+    }
+
+    html[lang=ar] & {
+      #{$left}: 2%;
+    }
+  }
+
+  .add-item.add {
+    animation: addItem 0.7s;
+  }
+
+  .add-item.remove {
+    animation: addItem 0.7s reverse;
+  }
+
+  @include breakpoint($upto-desktop) {
+    width: 55%;
+    padding-top: 1.5625rem;
+    padding-#{$left}: 5%;
+
+    .currency,
+    .total-price {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.path--payment {
+  .progress-bar-status {
+    visibility: hidden;
+  }
+}
+
+@keyframes addItem {
+  0% {
+    top: -2.5rem;
+    visibility: visible;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.8;
+  }
+
+  99% {
+    top: -0.5rem;
+  }
+}
+
+@keyframes fullCart {
+  0% {
+    color: $keyframes_fullcart0;
+  }
+
+  58% {
+    color: $keyframes_fullcart58;
+  }
+}

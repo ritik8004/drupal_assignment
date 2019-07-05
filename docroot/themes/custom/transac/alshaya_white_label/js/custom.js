@@ -126,7 +126,10 @@
        */
       function modalCloseBtnEvent(className) {
         $('.ui-dialog-titlebar-close').on('click', function () {
-          $('body').removeClass(className);
+          // Remove overlay related classes only when last overlay getting closed.
+          if ($('.ui-dialog').length < 1) {
+            $('body').removeClass(className);
+          }
         });
       }
 

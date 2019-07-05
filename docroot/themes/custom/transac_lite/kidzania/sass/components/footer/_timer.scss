@@ -1,0 +1,29 @@
+.timer {
+  width: 32%;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: $timer_text;
+  font-family: $ubuntu-sans-bold;
+  float: $left;
+  border-#{$right}: 1px solid $timer_border;
+  border-#{$left}: 1px solid $timer_border;
+  text-align: center;
+  padding-top: 0.625rem;
+  line-height: 1;
+  height: 4.875rem;
+
+  @include breakpoint($upto-desktop) {
+    width: 45%;
+    font-size: 1.5625rem;
+    padding-top: 0.9375rem;
+    border-#{$left}: 0;
+  }
+
+  small {
+    font-size: 0.875rem;
+    font-weight: 400;
+    display: block;
+    margin-top: 0.3125rem;
+    font-family: $ubuntu-sans;
+  }
+}
