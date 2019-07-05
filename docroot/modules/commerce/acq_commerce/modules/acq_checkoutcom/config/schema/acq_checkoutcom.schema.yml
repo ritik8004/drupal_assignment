@@ -7,7 +7,10 @@ acq_checkoutcom.settings:
       label: 'Debug mode'
     mada_enabled:
       type: boolean
-      label: 'Enable Mada bin verification'
+      label: 'Mada bin verification'
+    verify_3dsecure:
+      type: boolean
+      label: '3D Secure Verification'
     env:
       type: string
       label: 'Environment to use (sandbox / live)'

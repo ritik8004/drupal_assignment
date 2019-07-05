@@ -1,6 +1,7 @@
 debug: false
 mada_enabled: true
 env: 'sandbox'
+verify_3dsecure: true
 base_uri:
   live: 'https://api2.checkout.com/v2/'
   sandbox: 'https://sandbox.checkout.com/api2/v2/'
