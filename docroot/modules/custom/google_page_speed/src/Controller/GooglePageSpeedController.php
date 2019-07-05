@@ -79,7 +79,7 @@ class GooglePageSpeedController extends ControllerBase {
     $query->orderBy('gps_ma.created', 'ASC');
     $results = $query->execute()->fetchAll();
     foreach ($results as $result) {
-      if ($rows[$result->created][0] != $result->created) {
+      if (!isset($rows[$result->created][0])) {
         $rows[$result->created][0] = $result->created;
       }
       $rows[$result->created][intval($result->url_id)] = $result->value;

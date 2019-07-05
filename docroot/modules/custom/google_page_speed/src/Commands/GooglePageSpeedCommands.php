@@ -47,7 +47,7 @@ class GooglePageSpeedCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected static $loggerStatic;
+  protected $logger;
 
   /**
    * GooglePageSpeedCommands constructor.
@@ -69,7 +69,7 @@ class GooglePageSpeedCommands extends DrushCommands {
     $this->configFactory = $config_factory;
     $this->cacheInvalidator = $cache_invalidator;
     $this->gpsInsights = $gps_insights;
-    self::$loggerStatic = $logger;
+    $this->logger = $logger;
   }
 
   /**
@@ -177,12 +177,12 @@ class GooglePageSpeedCommands extends DrushCommands {
       $measure_id = $this->gpsInsights->insertMeasureData($url_id, $screen, 0);
       if ($measure_id) {
         $this->output->writeln('Problem in fetching data.');
-        self::$loggerStatic->error(dt('Error in fetching data'));
+        $this->logger->error(dt('Error in fetching data'));
       }
       $response_body = $response->getBody();
       $decoded = Json::decode($response_body);
       $this->output->writeln($decoded['error']['message']);
-      self::$loggerStatic->error($decoded['error']['message']);
+      $this->logger->error($decoded['error']['message']);
     }
 
     return 1;
