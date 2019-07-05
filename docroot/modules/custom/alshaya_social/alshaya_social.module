@@ -20,13 +20,6 @@ function alshaya_social_theme() {
         'section_title' => NULL,
       ],
     ],
-    'alshaya_social_link_button' => [
-      'variables' => [
-        'sub_text' => NULL,
-        'link_text' => NULL,
-        'link_url' => NULL,
-      ],
-    ],
   ];
 }
 

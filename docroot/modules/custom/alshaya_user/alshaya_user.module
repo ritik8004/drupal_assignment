@@ -16,6 +16,21 @@ use Drupal\user\Entity\User;
 use Drupal\Core\Url;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_user_theme() {
+  return [
+    'alshaya_user_signin_signup_button' => [
+      'variables' => [
+        'sub_text' => NULL,
+        'link_text' => NULL,
+        'link_url' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function alshaya_user_module_implements_alter(&$implementations, $hook) {
