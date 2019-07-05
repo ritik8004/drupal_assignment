@@ -1323,13 +1323,10 @@ class AlshayaGtmManager {
    *   GTM currency code.
    */
   public function getGtmCurrency() {
-    if (!empty($gtm_currency_code = $this->configFactory->get('acq_commerce.currency')
-      ->get('gtm_currency_code'))) {
-      return $gtm_currency_code;
-    }
-
-    return $this->configFactory->get('acq_commerce.currency')
-      ->get('currency_code');
+    $currency_code = $this->configFactory->get('acq_commerce.currency');
+    return !empty($currency_code->get('iso_currency_code'))
+      ? $currency_code->get('iso_currency_code')
+      : $currency_code->get('currency_code');
   }
 
 }
