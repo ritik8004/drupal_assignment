@@ -346,11 +346,18 @@ class MobileAppUtility {
       }
 
       $url_to_get_deeplink = $url->toString(TRUE)->getGeneratedUrl();
+      // Get the first occurence of string between '/' and '/'. So If url is
+      // like '/en/abc/def/xyz', it will have 'en'.
+      preg_match('#(?<=/)[^/]+#', $url_to_get_deeplink, $match);
+      $langcode = NULL;
 
-      // Get current langcode.
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      // If language exists for the given langcode.
+      if (!empty($match) && $this->languageManager->getLanguage($match[0])) {
+        $langcode = $match[0];
+      }
+
       // If langcode exists in the url string.
-      if (strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
+      if ($langcode && strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
         $url_to_get_deeplink = str_replace('/' . $langcode . '/', '', $url_to_get_deeplink);
       }
 
