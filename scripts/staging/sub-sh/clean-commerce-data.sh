@@ -47,7 +47,7 @@ drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets/
 drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets-lp/%';"
 
 echo "Deleting all product media files from filesystem"
-files_dir="$(drush -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_realpath("public://");')"
+files_dir="$(drush --uri=$uri php-eval 'echo drupal_realpath("public://");')"
 rm -rf "$files_dir/media"
 rm -rf "$files_dir/assets"
 rm -rf "$files_dir/assets-lp"
