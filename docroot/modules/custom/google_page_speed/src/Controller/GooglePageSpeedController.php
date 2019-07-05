@@ -76,7 +76,7 @@ class GooglePageSpeedController extends ControllerBase {
     $query = $this->getSelectQuery($metric_id, $screen, $timestamp);
     $query->fields('gps_ma', ['created', 'url_id']);
     $query->fields('gps_md', ['value']);
-    $query->orderBy('gps_ma.url_id', 'ASC');
+    $query->orderBy('gps_ma.created', 'ASC');
     $results = $query->execute()->fetchAll();
     foreach ($results as $result) {
       if ($rows[$result->created][0] != $result->created) {
@@ -102,19 +102,6 @@ class GooglePageSpeedController extends ControllerBase {
     echo $final_data;
     die;
 
-  }
-
-  /**
-   * Shows the data chart.
-   *
-   * @return array
-   *   Returning renderable array.
-   */
-  public function showDataChart() {
-    $build = [
-      '#markup' => $this->t('See the Google PageSpeed Insights data in below chart.'),
-    ];
-    return $build;
   }
 
   /**

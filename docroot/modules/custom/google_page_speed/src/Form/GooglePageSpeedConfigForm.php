@@ -2,6 +2,7 @@
 
 namespace Drupal\google_page_speed\Form;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -43,7 +44,7 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
     $form['page_url'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Page URLs'),
-      '#description' => $this->t('Please fill different URLs one per line.'),
+      '#description' => $this->t('Please fill different URLs one per line in absolute format.'),
       '#default_value' => $this->config(self::CONFIG_NAME)->get('page_url'),
       '#required' => TRUE,
     ];
@@ -57,9 +58,25 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
         'mobile' => $this->t('Mobile'),
       ],
       '#default_value' => $this->config(self::CONFIG_NAME)->get('screen'),
+      '#required' => TRUE,
     ];
 
     return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $urls = explode(PHP_EOL, $form_state->getValue('page_url'));
+    foreach ($urls as $url) {
+      if (!UrlHelper::isValid(trim($url), TRUE)) {
+        $form_state->setErrorByName('page_url', $this->t('Please enter valid Url.'));
+        break;
+      }
+    }
+
+    parent::validateForm($form, $form_state);
   }
 
   /**

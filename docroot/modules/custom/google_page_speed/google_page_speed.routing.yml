@@ -14,14 +14,6 @@ google_page_speed.urls:
   requirements:
     _permission: 'access google_page_speed url scores'
 
-google_page_speed.chart:
-  path: '/admin/config/system/google-page-speed/chart'
-  defaults:
-    _title: 'Page Speed Score Chart'
-    _controller: '\Drupal\google_page_speed\Controller\GooglePageSpeedController::showDataChart'
-  requirements:
-    _permission: 'administer google_page_speed configuration'
-
 google_page_speed.config:
   path: '/admin/config/system/google-page-speed'
   defaults:

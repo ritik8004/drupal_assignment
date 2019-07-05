@@ -83,7 +83,7 @@ class GooglePageSpeedCommands extends DrushCommands {
    */
   public function insights($options = [
     'url' => '',
-    'screen' => ['desktop', 'mobile'],
+    'screen' => '',
   ]) {
     $config = $this->configFactory->get(GooglePageSpeedConfigForm::CONFIG_NAME);
     $api_key = $config->get('api_key');
@@ -97,8 +97,13 @@ class GooglePageSpeedCommands extends DrushCommands {
     $urls = !empty($options['url'])
       ? (array) $options['url']
       : explode(PHP_EOL, $config->get('page_url'));
+
+    $screens = !empty($options['screen'])
+      ? (array) $options['screen']
+      : $config->get('screen');
+
     foreach ($urls as $url) {
-      foreach ($options['screen'] as $screen) {
+      foreach ($screens as $screen) {
         try {
           if (!empty($api_key) && !empty($url) && !empty($screen)) {
             $this->getPageSpeedData($client, $api_key, trim($url), trim($screen));
