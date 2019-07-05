@@ -19,6 +19,7 @@ use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\redirect\RedirectRepository;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
@@ -103,6 +104,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The factory for configuration objects.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   The renderer.
+   * @param \Drupal\redirect\RedirectRepository $redirect_repository
+   *   Redirect repository.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -120,9 +123,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     ModuleHandlerInterface $module_handler,
     ProductCategoryTreeInterface $product_category_tree,
     ConfigFactoryInterface $config_factory,
-    APIWrapper $api_wrapper
+    APIWrapper $api_wrapper,
+    RedirectRepository $redirect_repository
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
