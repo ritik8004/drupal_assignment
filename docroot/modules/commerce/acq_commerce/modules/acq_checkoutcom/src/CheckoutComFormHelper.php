@@ -78,7 +78,7 @@ class CheckoutComFormHelper {
     $states = [
       '#states' => [
         'required' => [
-          ':input[name="acm_payment_methods[payment_details_wrapper][payment_method_checkout_com][payment_details][card_token]"]' => ['value' => ''],
+          ':input[name="card_token"]' => ['value' => ''],
         ],
       ],
     ];
