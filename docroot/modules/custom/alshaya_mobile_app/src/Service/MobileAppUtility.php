@@ -346,14 +346,12 @@ class MobileAppUtility {
       }
 
       $url_to_get_deeplink = $url->toString(TRUE)->getGeneratedUrl();
-      $langcode = NULL;
-      // @Todo: find better way to check and remove langcode from url.
-      if (strpos($url_to_get_deeplink, '/en/') !== FALSE) {
-        $langcode = 'en';
-        $url_to_get_deeplink = str_replace('/en/', '', $url_to_get_deeplink);
-      }
-      elseif (strpos($url_to_get_deeplink, '/ar/') !== FALSE) {
-        $url_to_get_deeplink = str_replace('/en/', '', $url_to_get_deeplink);
+
+      // Get current langcode.
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      // If langcode exists in the url string.
+      if (strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
+        $url_to_get_deeplink = str_replace('/' . $langcode . '/', '', $url_to_get_deeplink);
       }
 
       $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
