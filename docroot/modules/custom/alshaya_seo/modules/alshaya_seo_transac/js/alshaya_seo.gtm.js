@@ -44,7 +44,6 @@
       var footerNewsletterSubmiClicked = false;
       var deliveryType = 'Home Delivery';
       var userDetails = drupalSettings.userDetails;
-      var privilegeCardNumber = drupalSettings.privilegeCardNumber;
 
       if (localStorage.getItem('userID') === undefined) {
         localStorage.setItem('userID', userDetails.userID);
@@ -53,6 +52,7 @@
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
         var md = new MobileDetect(window.navigator.userAgent);
+
         if (md.tablet() !== null) {
             userDetails.platformType = 'tablet';
         }
