@@ -8,6 +8,41 @@
 /**
  * Implements hook_update_N().
  *
+ * Add count_widget_order and remove raw_value_widget_order
+ * to product_brand facets.
+ */
+function alshaya_search_api_update_8005() {
+  $brand_facets = [
+    'product_brand',
+    'plp_product_brand',
+    'promo_product_brand',
+  ];
+  /** @var \Drupal\facets\FacetManager\DefaultFacetManager $service */
+  $service = \Drupal::service('facets.manager');
+
+  /** @var \Drupal\facets\Entity\Facet[] $facets */
+  $facets = $service->getEnabledFacets();
+
+  foreach ($facets as $facet) {
+    if (in_array($facet->id(), $brand_facets)) {
+      $processors = $facet->getProcessorConfigs();
+      if (isset($processors['count_widget_order'])) {
+        continue;
+      }
+      $facet->addProcessor([
+        'processor_id' => 'count_widget_order',
+        'weights' => ['build' => 10],
+        'settings' => ['sort' => 'DESC'],
+      ]);
+      $facet->removeProcessor('raw_value_widget_order');
+      $facet->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Allow multiple value selectable for brand facets.
  */
 function alshaya_search_api_update_8004() {

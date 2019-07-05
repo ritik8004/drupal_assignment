@@ -100,7 +100,7 @@ function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $par
 function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
   foreach ($data as &$item) {
     if ($item['depth'] == $max_depth) {
-      $item['class'] = 'max-depth';
+      $item['class'][] = 'max-depth';
     }
     if (!empty($item['child'])) {
       _alshaya_main_menu_process_max_depth($item['child'], $max_depth);

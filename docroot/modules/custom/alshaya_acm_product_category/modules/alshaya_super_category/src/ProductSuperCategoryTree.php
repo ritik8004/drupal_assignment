@@ -16,7 +16,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Class ProductSuperCategoryTree.
@@ -52,11 +52,11 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   protected $aliasManager;
 
   /**
-   * PDP Breadcrumb service.
+   * Product Category Helper service object.
    *
-   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
-  protected $pdpBreadcrumbBuiler;
+  protected $productCategoryHelper;
 
   /**
    * ProductCategoryTree constructor.
@@ -79,15 +79,15 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   The config factory.
    * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
    *   The path alias manager.
-   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
-   *   PDP Breadcrumb service.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   Product Category Helper service object.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager, AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager, ProductCategoryHelper $product_category_helper) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->requestStack = $request_stack;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection, $pdpBreadcrumbBuiler);
+    parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection, $product_category_helper);
   }
 
   /**
