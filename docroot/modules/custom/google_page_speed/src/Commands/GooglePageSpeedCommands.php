@@ -171,9 +171,7 @@ class GooglePageSpeedCommands extends DrushCommands {
           }
         }
       }
-
       $this->output->writeln('--------------------------------------------------------------------------------------');
-
     }
     else {
       $measure_id = $this->gpsInsights->insertMeasureData($url_id, $screen, 0);

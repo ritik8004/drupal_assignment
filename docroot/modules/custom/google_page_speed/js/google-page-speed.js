@@ -18,16 +18,16 @@
     attach: function (context, settings) {
 
       $('document').ready(function () {
-        Drupal.behaviors.initialiseData();
+        Drupal.initialiseData();
       });
 
       $('#gps-metric-select, #gps-screen-select, #gps-time-select').on('change', function () {
-        Drupal.behaviors.initialiseData();
+        Drupal.initialiseData();
       });
     }
   };
 
-  Drupal.behaviors.initialiseData = function() {
+  Drupal.initialiseData = function() {
     urlObject = {
       url: $(this).value,
       data: [0,0,0,0,0,0,0]
@@ -45,12 +45,12 @@
         urlObject.screen = screen;
         urlObject.time = time;
         google.charts.load('current', {'packages':['corechart','line']});
-        google.charts.setOnLoadCallback(Drupal.behaviors.drawChart);
+        google.charts.setOnLoadCallback(Drupal.drawChart);
       }
     });
   };
 
-  Drupal.behaviors.drawChart = function () {
+  Drupal.drawChart = function () {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn('datetime', 'Date');
 
