@@ -6,9 +6,6 @@
             {#Show the term tree only when term image is not available.#}
             <div class="menu__link-wrapper menu-two__link-wrapper">
                 <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{data.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
-                {% if level2.description|render is not empty %}
-                    <p>{{ level2.description }}</p>
-                {% endif %}
             </div>
             {% if level2.child is not empty %}
                 <ul class="menu__list menu--three__list">
