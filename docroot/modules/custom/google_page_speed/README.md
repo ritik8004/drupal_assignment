@@ -21,8 +21,7 @@ CONTENTS OF THIS FILE
  * Installation
  
     It can be installed using drush command as well as from admin panel.
-    After installing please place the Google Page Speed block in block Structure -> Block Layout at the desired page to
-    see the chart.
+    After installing please place the Google Page Speed block in block Structure -> Block Layout at the desired page to see the chart.
     
  * Configuration
     
