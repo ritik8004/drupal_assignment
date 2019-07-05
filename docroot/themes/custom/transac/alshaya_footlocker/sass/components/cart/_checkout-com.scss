@@ -29,16 +29,14 @@
       .saved-card {
         .actions {
           .label {
-            font-weight: 600;
-            text-transform: uppercase;
+            text-transform: capitalize;
           }
         }
       }
 
       .payment-card-wrapper-div {
         span.new {
-          font-weight: 600;
-          text-transform: uppercase;
+          text-transform: capitalize;
           padding-top: 2px;
         }
       }
