@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Component\Serialization\Json;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\google_page_speed\Service\GpsInsightsWrapper;
 
 /**
  * Returns responses for Google Page Speed integration routes.
@@ -21,11 +21,11 @@ class GooglePageSpeedController extends ControllerBase {
   protected $database;
 
   /**
-   * The request stack object.
+   * The GpsInsightsWrapper service object.
    *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
+   * @var \Drupal\google_page_speed\Service\GpsInsightsWrapper
    */
-  protected $requestStack;
+  protected $gpsInsights;
 
   /**
    * Inject cache_tags.invalidator sservice.
@@ -39,7 +39,7 @@ class GooglePageSpeedController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database'),
-      $container->get('request_stack')
+      $container->get('google_page_speed.gps_insights')
     );
   }
 
@@ -48,12 +48,12 @@ class GooglePageSpeedController extends ControllerBase {
    *
    * @param \Drupal\Core\Database\Connection $database
    *   Injecting database connection.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Injecting request.
+   * @param \Drupal\google_page_speed\Service\GpsInsightsWrapper $gps_insights
+   *   Injecting Gps Insights service.
    */
-  public function __construct(Connection $database, RequestStack $request_stack) {
+  public function __construct(Connection $database, GpsInsightsWrapper $gps_insights) {
     $this->database = $database;
-    $this->requestStack = $request_stack;
+    $this->gpsInsights = $gps_insights;
   }
 
   /**
@@ -72,7 +72,7 @@ class GooglePageSpeedController extends ControllerBase {
 
     $rows = [];
     $final_data = [];
-    $timestamp = $this->getTimeStamp($time);
+    $timestamp = $this->gpsInsights->getTimeStamp($time);
     $query = $this->getSelectQuery($metric_id, $screen, $timestamp);
     $query->fields('gps_ma', ['created', 'url_id']);
     $query->fields('gps_md', ['value']);
@@ -117,7 +117,7 @@ class GooglePageSpeedController extends ControllerBase {
    * @throws \Exception
    */
   public function getUrlList($metric_id, $screen, $time) {
-    $timestamp = $this->getTimeStamp($time);
+    $timestamp = $this->gpsInsights->getTimeStamp($time);
     $url_id_list = $this->getSelectQuery($metric_id, $screen, $timestamp)
       ->execute()
       ->fetchAllKeyed(0, 0);
@@ -154,46 +154,6 @@ class GooglePageSpeedController extends ControllerBase {
       ->condition('gps_md.reference', trim($metric_id), '=');
 
     return $select_query;
-  }
-
-  /**
-   * To get timestamp based on time.
-   *
-   * @param string $time
-   *   The time to search for.
-   *
-   * @return \DateTime|false|int
-   *   The returning timestamp.
-   *
-   * @throws \Exception
-   */
-  protected function getTimeStamp($time) {
-    switch ($time) {
-      case 'one-week':
-        $timestamp = strtotime('-1 week');
-        break;
-
-      case 'one-month':
-        $timestamp = strtotime('-1 month');
-        break;
-
-      case 'one-year':
-        $timestamp = strtotime('-1 year');
-        break;
-
-      case 'three-month':
-        $timestamp = strtotime('-3 month');
-        break;
-
-      case 'all-time':
-        $timestamp = 0;
-        break;
-
-      default:
-        $timestamp = strtotime('-1 month');
-    }
-
-    return $timestamp;
   }
 
 }

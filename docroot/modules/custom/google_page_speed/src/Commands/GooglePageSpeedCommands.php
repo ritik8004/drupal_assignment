@@ -8,10 +8,10 @@ use GuzzleHttp\Exception\RequestException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\google_page_speed\Form\GooglePageSpeedConfigForm;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
-use Drupal\Component\Datetime\Time;
+use Drupal\google_page_speed\Service\GpsInsightsWrapper;
 
 /**
  * Class GooglePageSpeedCommands.
@@ -29,13 +29,6 @@ class GooglePageSpeedCommands extends DrushCommands {
   protected $configFactory;
 
   /**
-   * Database connection object.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
    * CacheInvalidator object.
    *
    * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
@@ -43,30 +36,40 @@ class GooglePageSpeedCommands extends DrushCommands {
   protected $cacheInvalidator;
 
   /**
-   * The Time object.
+   * The GpsInsightsWrapper object.
    *
-   * @var \Drupal\Component\Datetime\Time
+   * @var \Drupal\google_page_speed\Service\GpsInsightsWrapper
    */
-  protected $time;
+  protected $gpsInsights;
+
+  /**
+   * Static reference to logger object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected static $loggerStatic;
 
   /**
    * GooglePageSpeedCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   The ConfigFactory object to inject configfactory service.
-   * @param \Drupal\Core\Database\Connection $database
-   *   The Database object to inject database service.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_invalidator
    *   The CacheInvalidator object to inject cache invalidator service.
-   * @param \Drupal\Component\Datetime\Time $time
-   *   Injecting time service.
+   * @param \Drupal\google_page_speed\Service\GpsInsightsWrapper $gps_insights
+   *   Injecting GpsInsights service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   Injecting logger channel.
    */
-  public function __construct(ConfigFactory $config_factory, Connection $database, CacheTagsInvalidatorInterface $cache_invalidator, Time $time) {
+  public function __construct(ConfigFactory $config_factory,
+                              CacheTagsInvalidatorInterface $cache_invalidator,
+                              GpsInsightsWrapper $gps_insights,
+                              LoggerChannelInterface $logger) {
     parent::__construct();
     $this->configFactory = $config_factory;
-    $this->database = $database;
     $this->cacheInvalidator = $cache_invalidator;
-    $this->time = $time;
+    $this->gpsInsights = $gps_insights;
+    self::$loggerStatic = $logger;
   }
 
   /**
@@ -145,9 +148,9 @@ class GooglePageSpeedCommands extends DrushCommands {
     $response = $client->get($siteUrl, ['http_errors' => FALSE]);
 
     // Fetch url_id if present.
-    $url_id = $this->getUrlId($url);
+    $url_id = $this->gpsInsights->getUrlId($url);
     if (empty($url_id)) {
-      $url_id = $this->insertUrlData($url);
+      $url_id = $this->gpsInsights->insertUrlData($url);
     }
 
     if ($response->getStatusCode() == 200) {
@@ -158,13 +161,13 @@ class GooglePageSpeedCommands extends DrushCommands {
 
       // Writing data on terminal.
       $this->output->writeln('Performance Score: ' . $categories['performance']['score']);
-      $measure_id = $this->insertMeasureData($url_id, $screen, 1);
-      $this->insertScoreData($measure_id, 'pf_score', $categories['performance']['score']);
+      $measure_id = $this->gpsInsights->insertMeasureData($url_id, $screen, 1);
+      $this->gpsInsights->insertScoreData($measure_id, 'pf_score', $categories['performance']['score']);
       foreach ($categories['performance']['auditRefs'] as $auditRef) {
         if ($auditRef['weight'] > 0) {
           $this->output->writeln($audits[$auditRef['id']]['title'] . ' : ' . $audits[$auditRef['id']]['score']);
           if (!empty($measure_id)) {
-            $this->insertScoreData($measure_id, trim($auditRef['id']), $audits[$auditRef['id']]['score']);
+            $this->gpsInsights->insertScoreData($measure_id, trim($auditRef['id']), $audits[$auditRef['id']]['score']);
           }
         }
       }
@@ -173,107 +176,17 @@ class GooglePageSpeedCommands extends DrushCommands {
 
     }
     else {
-      $measure_id = $this->insertMeasureData($url_id, $screen, 0);
+      $measure_id = $this->gpsInsights->insertMeasureData($url_id, $screen, 0);
       if ($measure_id) {
         $this->output->writeln('Problem in fetching data.');
+        self::$loggerStatic->error(dt('Error in fetching data'));
       }
       $response_body = $response->getBody();
       $decoded = Json::decode($response_body);
       $this->output->writeln($decoded['error']['message']);
+      self::$loggerStatic->error($decoded['error']['message']);
     }
 
-    return 1;
-  }
-
-  /**
-   * To check if url id is present or not.
-   *
-   * @param string $url
-   *   The url to check.
-   *
-   * @return int
-   *   The found url id.
-   */
-  protected function getUrlId($url) {
-    $drush_select = $this->database->select('google_page_speed_url', 'gps_url');
-    $drush_select->fields('gps_url', ['url_id']);
-    $drush_select->condition('url', trim($url));
-    $url_id = $drush_select->execute()->fetchField();
-    return $url_id;
-  }
-
-  /**
-   * To insert new url entry.
-   *
-   * @param string $url
-   *   The url to enter.
-   *
-   * @return \Drupal\Core\Database\StatementInterface|int|null
-   *   The url id of newly created url.
-   *
-   * @throws \Exception
-   */
-  protected function insertUrlData($url) {
-    $url_id = $this->database->insert('google_page_speed_url')
-      ->fields(['url'])
-      ->values([$url])
-      ->execute();
-    return $url_id;
-  }
-
-  /**
-   * To insert new metric.
-   *
-   * @param int $url_id
-   *   The url id.
-   * @param string $screen
-   *   The device type.
-   * @param bool $status
-   *   The entry status.
-   *
-   * @return \Drupal\Core\Database\StatementInterface|int|null
-   *   The measure id of newly entered metric.
-   *
-   * @throws \Exception
-   */
-  protected function insertMeasureData($url_id, $screen, $status) {
-    $measure_id = $this->database->insert('google_page_speed_measure_attempts')
-      ->fields(['url_id', 'device', 'created', 'status'])
-      ->values([
-        $url_id,
-        $screen,
-        $this->time->getRequestTime(),
-        $status,
-      ])
-      ->execute();
-    return $measure_id;
-  }
-
-  /**
-   * To insert the score based on metric, time and url.
-   *
-   * @param int $measure_id
-   *   The measure id of attempt.
-   * @param string $reference
-   *   The name of metric.
-   * @param float $value
-   *   The metric value.
-   *
-   * @return \Drupal\Core\Database\StatementInterface|int|null
-   *   The id of newly inserted score.
-   *
-   * @throws \Exception
-   */
-  protected function insertScoreData($measure_id, $reference, $value) {
-    $this->database->insert('google_page_speed_measure_data')
-      ->fields(['measure_id', 'category', 'reference', 'value'])
-      ->values([
-        $measure_id,
-        'performance',
-        $reference,
-        $value,
-      ])
-      ->execute();
     return 1;
   }
 

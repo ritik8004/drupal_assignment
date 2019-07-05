@@ -1,6 +1,10 @@
 services:
+  logger.channel.google_page_speed:
+    parent: logger.channel_base
+    arguments: ['google_page_speed']
+
   google_page_speed.commands:
     class: Drupal\google_page_speed\Commands\GooglePageSpeedCommands
-    arguments: ['@config.factory', '@database', '@cache_tags.invalidator', '@datetime.time']
+    arguments: ['@config.factory', '@cache_tags.invalidator', '@google_page_speed.gps_insights', '@logger.channel.google_page_speed']
     tags:
       - { name: drush.command }

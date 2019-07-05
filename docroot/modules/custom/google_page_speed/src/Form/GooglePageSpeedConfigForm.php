@@ -84,17 +84,10 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
+    $screen_items = array_keys(array_filter($form_state->getValues()['screen']));
     $this->config(self::CONFIG_NAME)
       ->set('api_key', $form_state->getValue('api_key'))
-      ->save();
-
-    $this->config(self::CONFIG_NAME)
       ->set('page_url', $form_state->getValue('page_url'))
-      ->save();
-
-    $screen_items = array_keys(array_filter($form_state->getValues()['screen']));
-
-    $this->config(self::CONFIG_NAME)
       ->set('screen', $screen_items)
       ->save();
 

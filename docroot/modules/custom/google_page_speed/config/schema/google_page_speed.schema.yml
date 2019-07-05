@@ -9,5 +9,8 @@ google_page_speed.settings:
       type: string
       label: 'Page Urls'
     screen:
-      type: array
+      type: sequence
       label: 'Screen'
+      sequence:
+        type: string
+        label: 'Screen'

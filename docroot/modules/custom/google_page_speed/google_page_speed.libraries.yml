@@ -5,6 +5,10 @@ google_page_speed:
     - core/drupalSettings
     - core/jquery
 
+  css:
+    theme:
+      css/google-page-speed.css: {}
+
 google-chart-loader:
   license:
     name: Apache License 2.0

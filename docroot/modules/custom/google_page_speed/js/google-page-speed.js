@@ -6,90 +6,88 @@
 (function ($, Drupal) {
   'use strict';
 
+  var urlObject = {
+    url: [],
+    data: [0,0,0,0,0,0,0],
+    metric_id: 0,
+    screen: '',
+    time: ''
+  };
+
   Drupal.behaviors.showPageSpeedDataChart = {
     attach: function (context, settings) {
-      let urlObject = {
-        url: [],
-        data: [0,0,0,0,0,0,0],
-        metric_id: 0,
-        screen: '',
-        time: ''
-      };
 
       $('document').ready(function () {
-        initialiseData();
+        Drupal.behaviors.initialiseData();
       });
 
       $('#gps-metric-select, #gps-screen-select, #gps-time-select').on('change', function () {
-        initialiseData();
+        Drupal.behaviors.initialiseData();
       });
+    }
+  };
 
-      let initialiseData = function() {
-        urlObject = {
-          url: $(this).value,
-          data: [0,0,0,0,0,0,0]
-        };
+  Drupal.behaviors.initialiseData = function() {
+    urlObject = {
+      url: $(this).value,
+      data: [0,0,0,0,0,0,0]
+    };
 
-        let metric_id = document.getElementById('gps-metric-select').value;
-        let screen = document.getElementById('gps-screen-select').value;
-        let time = document.getElementById('gps-time-select').value;
+    var metric_id = document.getElementById('gps-metric-select').value;
+    var screen = document.getElementById('gps-screen-select').value;
+    var time = document.getElementById('gps-time-select').value;
+    var getUrls = Drupal.url('google-page-speed/url/' + metric_id + '/' + screen + '/' + time);
 
-        let getUrls = '/google-page-speed/url/' + metric_id + '/' + screen + '/' + time;
+    $.get(getUrls, function(data, status){
+      if (status === 'success' && data) {
+        urlObject.url = $.parseJSON(data);
+        urlObject.metric_id = metric_id;
+        urlObject.screen = screen;
+        urlObject.time = time;
+        google.charts.load('current', {'packages':['corechart','line']});
+        google.charts.setOnLoadCallback(Drupal.behaviors.drawChart);
+      }
+    });
+  };
 
-        jQuery.get(getUrls, function(data, status){
-          if (status === 'success' && data) {
-            urlObject.url = jQuery.parseJSON(data);
-            urlObject.metric_id = metric_id;
-            urlObject.screen = screen;
-            urlObject.time = time;
-            google.charts.load('current', {'packages':['corechart','line']});
-            google.charts.setOnLoadCallback(drawChart);
-          }
-        });
-      };
+  Drupal.behaviors.drawChart = function () {
+    var dataTable = new google.visualization.DataTable();
+    dataTable.addColumn('datetime', 'Date');
 
-      function drawChart() {
-        var dataTable = new google.visualization.DataTable();
-        dataTable.addColumn('datetime', 'Date');
-
-        for (var url_id in urlObject.url){
-          if (urlObject.url.hasOwnProperty(url_id)) {
-            dataTable.addColumn('number', urlObject.url[url_id]);
-          }
-        }
-
-        let getScores = '/google-page-speed/' + urlObject.metric_id + '/' + urlObject.screen + '/' + urlObject.time;
-
-
-        jQuery.get(getScores, function(data, status){
-          if (status === 'success' && data) {
-            let scoreData = jQuery.parseJSON(data);
-            scoreData.forEach(function (element) {
-              element[0] = new Date(element[0]*1000);
-              console.log(element);
-              dataTable.addRows([
-                element
-              ]);
-            });
-
-            var options = {
-              hAxis: {
-                title: 'Date and time'
-              },
-              vAxis: {
-                title: 'Scores between 0 & 1'
-              },
-              'width':'100%',
-              'height':'auto',
-              pointsVisible: true
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(dataTable, options);
-          }
-        });
+    for (var url_id in urlObject.url){
+      if (urlObject.url.hasOwnProperty(url_id)) {
+        dataTable.addColumn('number', urlObject.url[url_id]);
       }
     }
+
+    var getScores = Drupal.url('google-page-speed/' + urlObject.metric_id + '/' + urlObject.screen + '/' + urlObject.time);
+
+    $.get(getScores, function(data, status){
+      if (status === 'success' && data) {
+        var scoreData = $.parseJSON(data);
+        scoreData.forEach(function (element) {
+          element[0] = new Date(element[0]*1000);
+          dataTable.addRows([
+            element
+          ]);
+        });
+
+        var options = {
+          hAxis: {
+            title: 'Date and time'
+          },
+          vAxis: {
+            title: 'Scores between 0 & 1'
+          },
+          'width':'100%',
+          'height':'auto',
+          pointsVisible: true
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('google-page-speed-chart-wrapper'));
+        chart.draw(dataTable, options);
+      }
+    });
   };
 
 })(jQuery, Drupal);
