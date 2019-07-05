@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - alshaya_social
+    - alshaya_user
     - system
   theme:
     - alshaya_white_label
@@ -15,7 +15,7 @@ plugin: alshaya_signup_signin_buttons
 settings:
   id: alshaya_signup_signin_buttons
   label: 'Alshaya Sign Up Sign In Buttons Block'
-  provider: alshaya_social
+  provider: alshaya_user
   label_display: '0'
 visibility:
   request_path:

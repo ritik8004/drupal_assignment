@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_social\Plugin\Block;
 
+use Drupal\alshaya_social\AlshayaSocialHelper;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,11 +29,19 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
   protected $routeMatch;
 
   /**
+   * Social helper.
+   *
+   * @var \Drupal\alshaya_social\AlshayaSocialHelper
+   */
+  protected $socialHelper;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, AlshayaSocialHelper $social_helepr) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
+    $this->socialHelper = $social_helepr;
   }
 
   /**
@@ -43,7 +52,8 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('alshaya_social.helper')
     );
   }
 
@@ -51,33 +61,27 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return AccessResult::allowedIf(alshaya_social_display_social_authentication_links() !== NULL);
+    return AccessResult::allowedIf($this->socialHelper->getStatus());
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    // Render object.
-    $output = [
-      '#theme' => 'alshaya_social',
-    ];
-
-    $networks = alshaya_social_display_social_authentication_links();
-    // Check for Social Login Enable status.
-    if ($networks !== NULL) {
-      $output['#social_networks'] = $networks;
-      // Check Route.
-      $route_name = $this->routeMatch->getRouteName();
-      if ($route_name === 'user.login') {
-        $output['#section_title'] = $this->t('sign in with social media');
-      }
-      elseif ($route_name === 'user.register') {
-        $output['#section_title'] = $this->t('sign up with social media');
-      }
+    if (!in_array($this->routeMatch->getRouteName(), ['user.login', 'user.register'])) {
+      return [];
     }
 
-    return $output;
+    $titles = [
+      'user.login' => $this->t('sign in with social media'),
+      'user.register' => $this->t('sign up with social media'),
+    ];
+
+    return [
+      '#theme' => 'alshaya_social',
+      '#social_networks' => $this->socialHelper->getSocialNetworks(),
+      '#section_title' => $titles[$this->routeMatch->getRouteName()] ?? '',
+    ];
   }
 
   /**

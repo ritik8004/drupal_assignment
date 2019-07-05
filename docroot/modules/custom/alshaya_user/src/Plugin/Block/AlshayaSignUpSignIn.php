@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_social\Plugin\Block;
+namespace Drupal\alshaya_user\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -51,29 +51,26 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
    */
   public function build() {
     $route_name = $this->routeMatch->getRouteName();
-    $output = [];
-    $sub_text = $link_text = NULL;
-    if ($route_name === 'user.register') {
-      $sub_text = $this->t('already have an account?');
-      $link_url = Url::fromRoute('user.login')->toString();
-      $link_text = $this->t('sign in here');
-    }
-    elseif ($route_name === 'user.login') {
-      $sub_text = $this->t('dont have an account yet?');
-      $link_url = Url::fromRoute('user.register')->toString();
-      $link_text = $this->t('sign up here');
+    if (!in_array($route_name, ['user.register', 'user.login'])) {
+      return [];
     }
 
-    if (isset($sub_text) && isset($link_text)) {
-      $output = [
-        '#theme' => 'alshaya_social_link_button',
-        '#sub_text' => $sub_text,
-        '#link_text' => $link_text,
-        '#link_url' => $link_url,
-      ];
-    }
+    $build = [
+      'user.register' => [
+        '#theme' => 'alshaya_user_signin_signup_button',
+        '#sub_text' => $this->t('already have an account?'),
+        '#link_text' => $this->t('sign in here'),
+        '#link_url' => Url::fromRoute('user.login')->toString(),
+      ],
+      'user.login' => [
+        '#theme' => 'alshaya_user_signin_signup_button',
+        '#sub_text' => $this->t('dont have an account yet?'),
+        '#link_text' => $this->t('sign up here'),
+        '#link_url' => Url::fromRoute('user.register')->toString(),
+      ],
+    ];
 
-    return $output;
+    return $build[$route_name];
   }
 
   /**
@@ -81,16 +78,6 @@ class AlshayaSignUpSignIn extends BlockBase implements ContainerFactoryPluginInt
    */
   public function getCacheContexts() {
     return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), [
-      'config:alshaya_social.settings',
-      'config:social_auth.settings',
-    ]);
   }
 
 }

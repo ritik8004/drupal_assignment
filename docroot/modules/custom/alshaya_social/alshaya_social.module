@@ -20,13 +20,6 @@ function alshaya_social_theme() {
         'section_title' => NULL,
       ],
     ],
-    'alshaya_social_link_button' => [
-      'variables' => [
-        'sub_text' => NULL,
-        'link_text' => NULL,
-        'link_url' => NULL,
-      ],
-    ],
   ];
 }
 
@@ -48,23 +41,6 @@ function alshaya_social_form_user_register_form_alter(array &$form, FormStateInt
     '#weight' => -10,
     '#markup' => '<div class="section-title">' . t('sign up with email address') . '</div>',
   ];
-}
-
-/**
- * Helper function to return enabled social links.
- *
- * @todo: Remove this function and use AlshayaSocialHelper from develop-social-auth.
- */
-function alshaya_social_display_social_authentication_links() {
-  if (
-    \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
-    && !empty($social_networks = \Drupal::configFactory()->get('social_auth.settings')->get('auth'))
-  ) {
-    return $social_networks;
-  }
-  else {
-    return NULL;
-  }
 }
 
 /**
