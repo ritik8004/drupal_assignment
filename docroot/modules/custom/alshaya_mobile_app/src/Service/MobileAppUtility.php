@@ -29,6 +29,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\redirect\RedirectRepository;
 
 /**
  * MobileAppUtility Class.
@@ -162,6 +163,13 @@ class MobileAppUtility {
   protected $listingConfig;
 
   /**
+   * Redirect repository.
+   *
+   * @var \Drupal\redirect\RedirectRepository
+   */
+  protected $redirectRepository;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -190,6 +198,8 @@ class MobileAppUtility {
    *   The ApiWrapper object.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\redirect\RedirectRepository $redirect_repsitory
+   *   Redirect repository.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -203,7 +213,8 @@ class MobileAppUtility {
                               ProductCategoryTreeInterface $product_category_tree,
                               ConfigFactoryInterface $config_factory,
                               APIWrapper $api_wrapper,
-                              RendererInterface $renderer) {
+                              RendererInterface $renderer,
+                              RedirectRepository $redirect_repsitory) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -219,6 +230,7 @@ class MobileAppUtility {
     $this->currencyConfig = $config_factory->get('acq_commerce.currency');
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
+    $this->redirectRepository = $redirect_repsitory;
   }
 
   /**
@@ -329,11 +341,27 @@ class MobileAppUtility {
    */
   public function getDeepLinkFromUrl(Url $url) {
     if (!$url->isRouted()) {
-      return $url->isExternal()
-      ? FALSE
-      : self::ENDPOINT_PREFIX
-        . 'deeplink?url='
-        . $url->toString(TRUE)->getGeneratedUrl();
+      if ($url->isExternal()) {
+        return FALSE;
+      }
+
+      $url_to_get_deeplink = $url->toString(TRUE)->getGeneratedUrl();
+      $langcode = NULL;
+      // @Todo: find better way to check and remove langcode from url.
+      if (strpos($url_to_get_deeplink, '/en/') !== FALSE) {
+        $langcode = 'en';
+        $url_to_get_deeplink = str_replace('/en/', '', $url_to_get_deeplink);
+      }
+      elseif (strpos($url_to_get_deeplink, '/ar/') !== FALSE) {
+        $url_to_get_deeplink = str_replace('/en/', '', $url_to_get_deeplink);
+      }
+
+      $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
+      $url = $redirect ? $redirect->getRedirectUrl() : $url;
+
+      return self::ENDPOINT_PREFIX
+      . 'deeplink?url='
+      . $url->toString(TRUE)->getGeneratedUrl();
     }
 
     $params = $url->getRouteParameters();
