@@ -346,14 +346,19 @@ class MobileAppUtility {
       }
 
       $url_to_get_deeplink = $url->toString(TRUE)->getGeneratedUrl();
+      // Get the first occurence of string between '/' and '/'. So If url is
+      // like '/en/abc/def/xyz', it will have 'en'.
+      preg_match('#(?<=/)[^/]+#', $url_to_get_deeplink, $match);
       $langcode = NULL;
-      // @Todo: find better way to check and remove langcode from url.
-      if (strpos($url_to_get_deeplink, '/en/') !== FALSE) {
-        $langcode = 'en';
-        $url_to_get_deeplink = str_replace('/en/', '', $url_to_get_deeplink);
+
+      // If language exists for the given langcode.
+      if (!empty($match) && $this->languageManager->getLanguage($match[0])) {
+        $langcode = $match[0];
       }
-      elseif (strpos($url_to_get_deeplink, '/ar/') !== FALSE) {
-        $url_to_get_deeplink = str_replace('/en/', '', $url_to_get_deeplink);
+
+      // If langcode exists in the url string.
+      if ($langcode && strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
+        $url_to_get_deeplink = str_replace('/' . $langcode . '/', '', $url_to_get_deeplink);
       }
 
       $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
