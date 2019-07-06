@@ -102,8 +102,19 @@ function alshaya_social_user_settings_submit(array &$form, FormStateInterface $f
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_social_preprocess_alshaya_social(&$variables) {
-  if (\Drupal::routeMatch()->getRouteName() == 'acq_checkout.form') {
-    $variables['destination'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString();
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name == 'acq_checkout.form') {
+    $variables['destination'] = Url::fromRoute($route_name, ['step' => 'delivery'])->toString();
+  }
+
+  if (in_array($route_name, ['user.login', 'acq_checkout.form', 'user.register'])) {
+    foreach ($variables['social_networks'] as $network => &$network_info) {
+      \Drupal::moduleHandler()->alter(
+        'alshaya_social_' . $network,
+        $network_info,
+        $route_name
+      );
+    }
   }
 
   $variables['base_path'] = base_path();
