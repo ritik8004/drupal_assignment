@@ -1646,10 +1646,6 @@ html {
       font-size: 0;
       padding-top: 0.625rem;
       padding-#{$right}: 1.25rem;
-
-      html[lang=ar] & {
-        font-size: 1px;
-      }
     }
 
     .store {
@@ -1664,10 +1660,6 @@ html {
 
       &::before {
         #{$left}: -0.125rem;
-      }
-
-      html[lang=ar] & {
-        font-size: 1px;
       }
     }
 
