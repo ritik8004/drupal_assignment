@@ -61,19 +61,19 @@ class GooglePageSpeedController extends ControllerBase {
    *
    * @param int $metric_id
    *   Passing metric id as filter.
-   * @param string $screen
-   *   Passing screen type.
+   * @param string $device
+   *   Passing device type.
    * @param string $time
    *   Passing time period for which data is needed.
    *
    * @throws \Exception
    */
-  public function getPageScore($metric_id = '', $screen = 'desktop', $time = 'one-month') {
+  public function getPageScore($metric_id = '', $device = 'desktop', $time = 'one-month') {
 
     $rows = [];
     $final_data = [];
     $timestamp = $this->gpsInsights->getTimeStamp($time);
-    $query = $this->getSelectQuery($metric_id, $screen, $timestamp);
+    $query = $this->getSelectQuery($metric_id, $device, $timestamp);
     $query->fields('gps_ma', ['created', 'url_id']);
     $query->fields('gps_md', ['value']);
     $query->orderBy('gps_ma.created', 'ASC');
@@ -84,7 +84,7 @@ class GooglePageSpeedController extends ControllerBase {
       }
       $rows[$result->created][intval($result->url_id)] = $result->value;
     }
-    $row_counts = $this->getSelectQuery($metric_id, $screen, $timestamp)
+    $row_counts = $this->getSelectQuery($metric_id, $device, $timestamp)
       ->distinct()
       ->countQuery()
       ->execute()
@@ -109,16 +109,16 @@ class GooglePageSpeedController extends ControllerBase {
    *
    * @param int $metric_id
    *   The metric id to search.
-   * @param string $screen
-   *   The screen to search for.
+   * @param string $device
+   *   The device to search for.
    * @param string $time
    *   The time to search for.
    *
    * @throws \Exception
    */
-  public function getUrlList($metric_id, $screen, $time) {
+  public function getUrlList($metric_id, $device, $time) {
     $timestamp = $this->gpsInsights->getTimeStamp($time);
-    $url_id_list = $this->getSelectQuery($metric_id, $screen, $timestamp)
+    $url_id_list = $this->getSelectQuery($metric_id, $device, $timestamp)
       ->execute()
       ->fetchAllKeyed(0, 0);
 
@@ -136,19 +136,19 @@ class GooglePageSpeedController extends ControllerBase {
    *
    * @param int $metric_id
    *   The metric id to search for.
-   * @param string $screen
-   *   The screen to search for.
+   * @param string $device
+   *   The device to search for.
    * @param int $timestamp
    *   The timestamp of the relative time to search for.
    *
    * @return \Drupal\Core\Database\Query\SelectInterface
    *   The returned select query object.
    */
-  protected function getSelectQuery($metric_id, $screen, $timestamp) {
+  protected function getSelectQuery($metric_id, $device, $timestamp) {
     $select_query = $this->database->select('google_page_speed_measure_attempts', 'gps_ma');
     $select_query->innerJoin('google_page_speed_measure_data', 'gps_md', 'gps_ma.measure_id = gps_md.measure_id');
     $select_query->fields('gps_ma', ['url_id'])
-      ->condition('gps_ma.device', trim($screen), '=')
+      ->condition('gps_ma.device', trim($device), '=')
       ->condition('gps_ma.created', [$timestamp, strtotime('now')], 'BETWEEN')
       ->condition('gps_ma.status', 1, '=')
       ->condition('gps_md.reference', trim($metric_id), '=');

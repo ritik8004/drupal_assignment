@@ -1,5 +1,5 @@
 google_page_speed.score:
-  path: '/google-page-speed/{metric_id}/{screen}/{time}'
+  path: '/google-page-speed/{metric_id}/{device}/{time}'
   defaults:
     _title: 'Page Speed Score'
     _controller: '\Drupal\google_page_speed\Controller\GooglePageSpeedController::getPageScore'
@@ -7,7 +7,7 @@ google_page_speed.score:
     _permission: 'access google_page_speed url scores'
 
 google_page_speed.urls:
-  path: '/google-page-speed/url/{metric_id}/{screen}/{time}'
+  path: '/google-page-speed/url/{metric_id}/{device}/{time}'
   defaults:
     _title: 'Unique Urls'
     _controller: '\Drupal\google_page_speed\Controller\GooglePageSpeedController::getUrlList'

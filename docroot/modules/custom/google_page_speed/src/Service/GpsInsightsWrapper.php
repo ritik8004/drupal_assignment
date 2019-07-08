@@ -80,7 +80,7 @@ class GpsInsightsWrapper {
    *
    * @param int $url_id
    *   The url id.
-   * @param string $screen
+   * @param string $device
    *   The device type.
    * @param bool $status
    *   The entry status.
@@ -90,12 +90,12 @@ class GpsInsightsWrapper {
    *
    * @throws \Exception
    */
-  public function insertMeasureData($url_id, $screen, $status) {
+  public function insertMeasureData($url_id, $device, $status) {
     $measure_id = $this->database->insert('google_page_speed_measure_attempts')
       ->fields(['url_id', 'device', 'created', 'status'])
       ->values([
         $url_id,
-        $screen,
+        $device,
         $this->time->getRequestTime(),
         $status,
       ])

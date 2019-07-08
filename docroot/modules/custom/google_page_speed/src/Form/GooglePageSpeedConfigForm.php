@@ -41,23 +41,23 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['page_url'] = [
+    $form['page_urls'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Page URLs'),
       '#description' => $this->t('Please fill different URLs one per line in absolute format.'),
-      '#default_value' => $this->config(self::CONFIG_NAME)->get('page_url'),
+      '#default_value' => $this->config(self::CONFIG_NAME)->get('page_urls'),
       '#required' => TRUE,
     ];
 
-    $form['screen'] = [
+    $form['device'] = [
       '#type' => 'checkboxes',
-      '#title' => $this->t('Analysis screen'),
-      '#description' => $this->t('Select the screen(s) for which analysis is to be done.'),
+      '#title' => $this->t('Analysis device'),
+      '#description' => $this->t('Select the device(s) for which analysis is to be done.'),
       '#options' => [
         'desktop' => $this->t('Desktop'),
         'mobile' => $this->t('Mobile'),
       ],
-      '#default_value' => $this->config(self::CONFIG_NAME)->get('screen'),
+      '#default_value' => $this->config(self::CONFIG_NAME)->get('device'),
       '#required' => TRUE,
     ];
 
@@ -68,10 +68,10 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $urls = explode(PHP_EOL, $form_state->getValue('page_url'));
+    $urls = explode(PHP_EOL, $form_state->getValue('page_urls'));
     foreach ($urls as $url) {
       if (!UrlHelper::isValid(trim($url), TRUE)) {
-        $form_state->setErrorByName('page_url', $this->t('Please enter valid Url.'));
+        $form_state->setErrorByName('page_urls', $this->t('Please enter valid Url.'));
         break;
       }
     }
@@ -84,11 +84,11 @@ class GooglePageSpeedConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    $screen_items = array_keys(array_filter($form_state->getValues()['screen']));
+    $device_items = array_keys(array_filter($form_state->getValues()['device']));
     $this->config(self::CONFIG_NAME)
       ->set('api_key', $form_state->getValue('api_key'))
-      ->set('page_url', $form_state->getValue('page_url'))
-      ->set('screen', $screen_items)
+      ->set('page_urls', $form_state->getValue('page_urls'))
+      ->set('device', $device_items)
       ->save();
 
     parent::submitForm($form, $form_state);

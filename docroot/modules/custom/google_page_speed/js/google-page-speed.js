@@ -10,7 +10,7 @@
     url: [],
     data: [0,0,0,0,0,0,0],
     metric_id: 0,
-    screen: '',
+    device: '',
     time: ''
   };
 
@@ -21,7 +21,7 @@
         Drupal.initialiseData();
       });
 
-      $('#gps-metric-select, #gps-screen-select, #gps-time-select').on('change', function () {
+      $('#gps-metric-select, #gps-device-select, #gps-time-select').on('change', function () {
         Drupal.initialiseData();
       });
     }
@@ -34,15 +34,15 @@
     };
 
     var metric_id = document.getElementById('gps-metric-select').value;
-    var screen = document.getElementById('gps-screen-select').value;
+    var device = document.getElementById('gps-device-select').value;
     var time = document.getElementById('gps-time-select').value;
-    var getUrls = Drupal.url('google-page-speed/url/' + metric_id + '/' + screen + '/' + time);
+    var getUrls = Drupal.url('google-page-speed/url/' + metric_id + '/' + device + '/' + time);
 
     $.get(getUrls, function(data, status){
       if (status === 'success' && data) {
         urlObject.url = $.parseJSON(data);
         urlObject.metric_id = metric_id;
-        urlObject.screen = screen;
+        urlObject.device = device;
         urlObject.time = time;
         google.charts.load('current', {'packages':['corechart','line']});
         google.charts.setOnLoadCallback(Drupal.drawChart);
@@ -60,7 +60,7 @@
       }
     }
 
-    var getScores = Drupal.url('google-page-speed/' + urlObject.metric_id + '/' + urlObject.screen + '/' + urlObject.time);
+    var getScores = Drupal.url('google-page-speed/' + urlObject.metric_id + '/' + urlObject.device + '/' + urlObject.time);
 
     $.get(getScores, function(data, status){
       if (status === 'success' && data) {

@@ -47,7 +47,7 @@ function google_page_speed_schema() {
         'length' => 10,
         'not null' => TRUE,
         'default' => '',
-        'description' => 'Screen on which analysis is done.',
+        'description' => 'device on which analysis is done.',
       ],
       'created' => [
         'type' => 'int',

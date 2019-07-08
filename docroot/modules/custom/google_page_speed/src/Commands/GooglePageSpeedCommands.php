@@ -78,15 +78,15 @@ class GooglePageSpeedCommands extends DrushCommands {
    * @command google_page_speed:getinsights
    * @aliases gps-gi
    * @options url An option that takes the target url.
-   * @options screen An option that takes target screen
-   * @usage google_page_speed:insights --url https://google.com --screen desktop
-   *   Display data for https://google.com on screen desktop
+   * @options device An option that takes target device
+   * @usage google_page_speed:insights --url https://google.com --device desktop
+   *   Display data for https://google.com on device desktop
    *
    * @throws \Exception
    */
   public function insights($options = [
     'url' => '',
-    'screen' => '',
+    'device' => '',
   ]) {
     $config = $this->configFactory->get(GooglePageSpeedConfigForm::CONFIG_NAME);
     $api_key = $config->get('api_key');
@@ -99,17 +99,17 @@ class GooglePageSpeedCommands extends DrushCommands {
     // Get data from options.
     $urls = !empty($options['url'])
       ? (array) $options['url']
-      : explode(PHP_EOL, $config->get('page_url'));
+      : explode(PHP_EOL, $config->get('page_urls'));
 
-    $screens = !empty($options['screen'])
-      ? (array) $options['screen']
-      : $config->get('screen');
+    $devices = !empty($options['device'])
+      ? (array) $options['device']
+      : $config->get('device');
 
     foreach ($urls as $url) {
-      foreach ($screens as $screen) {
+      foreach ($devices as $device) {
         try {
-          if (!empty($api_key) && !empty($url) && !empty($screen)) {
-            $this->getPageSpeedData($client, $api_key, trim($url), trim($screen));
+          if (!empty($api_key) && !empty($url) && !empty($device)) {
+            $this->getPageSpeedData($client, $api_key, trim($url), trim($device));
           }
         }
         catch (RequestException $e) {
@@ -130,8 +130,8 @@ class GooglePageSpeedCommands extends DrushCommands {
    *   The Google API key for authentication.
    * @param string $url
    *   The url whose data is needed.
-   * @param string $screen
-   *   The screen for which data is needed.
+   * @param string $device
+   *   The device for which data is needed.
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|int
    *   The integer return statement.
@@ -139,11 +139,11 @@ class GooglePageSpeedCommands extends DrushCommands {
    * @throws \Exception
    *   Throws Exception.
    */
-  protected function getPageSpeedData(Client $client, $api_key, $url, $screen) {
-    $siteUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=' . $api_key . '&url=' . $url . '&strategy=' . $screen;
+  protected function getPageSpeedData(Client $client, $api_key, $url, $device) {
+    $siteUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=' . $api_key . '&url=' . $url . '&strategy=' . $device;
     $this->output->writeln('Fetching data....');
     $this->output->writeln('URL: ' . $url);
-    $this->output->writeln('Screen: ' . $screen);
+    $this->output->writeln('device: ' . $device);
 
     $response = $client->get($siteUrl, ['http_errors' => FALSE]);
 
@@ -161,7 +161,7 @@ class GooglePageSpeedCommands extends DrushCommands {
 
       // Writing data on terminal.
       $this->output->writeln('Performance Score: ' . $categories['performance']['score']);
-      $measure_id = $this->gpsInsights->insertMeasureData($url_id, $screen, 1);
+      $measure_id = $this->gpsInsights->insertMeasureData($url_id, $device, 1);
       $this->gpsInsights->insertScoreData($measure_id, 'pf_score', $categories['performance']['score']);
       foreach ($categories['performance']['auditRefs'] as $auditRef) {
         if ($auditRef['weight'] > 0) {
@@ -174,7 +174,7 @@ class GooglePageSpeedCommands extends DrushCommands {
       $this->output->writeln('--------------------------------------------------------------------------------------');
     }
     else {
-      $measure_id = $this->gpsInsights->insertMeasureData($url_id, $screen, 0);
+      $measure_id = $this->gpsInsights->insertMeasureData($url_id, $device, 0);
       if ($measure_id) {
         $this->output->writeln('Problem in fetching data.');
         $this->logger->error(dt('Error in fetching data'));

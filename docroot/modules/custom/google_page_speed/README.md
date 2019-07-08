@@ -34,7 +34,3 @@ CONTENTS OF THIS FILE
  * FAQ
     
     Not Applicable
-    
- * Maintainers
-    
-    Ashutosh Gupta (https://www.drupal.org/u/ashu1629)

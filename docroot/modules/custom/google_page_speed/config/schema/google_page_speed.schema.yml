@@ -5,12 +5,12 @@ google_page_speed.settings:
     api_key:
       type: string
       label: 'Api Key'
-    page_url:
+    page_urls:
       type: string
       label: 'Page Urls'
-    screen:
+    device:
       type: sequence
-      label: 'Screen'
+      label: 'Device'
       sequence:
         type: string
-        label: 'Screen'
+        label: 'Device'
