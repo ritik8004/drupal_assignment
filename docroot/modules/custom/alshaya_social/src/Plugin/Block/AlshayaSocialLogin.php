@@ -38,10 +38,10 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, AlshayaSocialHelper $social_helepr) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, AlshayaSocialHelper $social_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
-    $this->socialHelper = $social_helepr;
+    $this->socialHelper = $social_helper;
   }
 
   /**
