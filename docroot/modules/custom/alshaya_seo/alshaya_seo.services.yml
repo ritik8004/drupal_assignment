@@ -11,7 +11,7 @@ services:
     decorates: pathauto.generator
     decoration_priority: 9
     public: false
-    class: Drupal\alshaya_seo\AlshayaSeoPathautoGenerator
+    class: Drupal\alshaya_seo\Decorator\AlshayaSeoPathautoGenerator
     arguments:
       - '@config.factory'
       - '@module_handler'
@@ -28,7 +28,7 @@ services:
     decorates: pathauto.alias_uniquifier
     decoration_priority: 9
     public: false
-    class: Drupal\alshaya_seo\AlshayaSeoAliasUniquifier
+    class: Drupal\alshaya_seo\Decorator\AlshayaSeoAliasUniquifier
     arguments:
       - '@config.factory'
       - '@pathauto.alias_storage_helper'
