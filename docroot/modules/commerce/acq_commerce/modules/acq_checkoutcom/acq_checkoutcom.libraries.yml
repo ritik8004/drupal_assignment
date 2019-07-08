@@ -7,3 +7,9 @@ checkoutcom.kit:
     gpl-compatible: true
   js:
     https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
+
+checkoutkit:
+  js:
+    js/acq_checkoutcom.js: {}
+  dependencies:
+    - acq_checkoutcom/checkoutcom.kit

@@ -106,27 +106,49 @@ class CheckoutComFormHelper {
     ] + $states;
 
     $form['cc_exp_month'] = [
-      '#type' => 'textfield',
+      '#type' => 'select',
       '#title' => $this->t('Expiration Month'),
+      '#options' => [
+        '01' => '01',
+        '02' => '02',
+        '03' => '03',
+        '04' => '04',
+        '05' => '05',
+        '06' => '06',
+        '07' => '07',
+        '08' => '08',
+        '09' => '09',
+        '10' => '10',
+        '11' => '11',
+        '12' => '12',
+      ],
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-month-select',
           'checkoutcom-input',
         ],
-        'id' => 'expMonth',
-        'data-checkout' => 'expiry-month',
+        'id' => 'cardMonth',
       ],
     ] + $states;
 
+    $year_options = [];
+    $years_out = 10;
+    for ($i = 0; $i <= $years_out; $i++) {
+      $year = date('Y', strtotime("+{$i} year"));
+      $year_options[$year] = $year;
+    }
+
     $form['cc_exp_year'] = [
-      '#type' => 'textfield',
+      '#type' => 'select',
       '#title' => $this->t('Expiration Year'),
+      '#options' => $year_options,
+      '#default_value' => date('Y'),
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-year-select',
           'checkoutcom-input',
         ],
-        'id' => 'expYear',
+        'id' => 'cardYear',
         'data-checkout' => 'expiry-year',
       ],
     ] + $states;
@@ -154,7 +176,7 @@ class CheckoutComFormHelper {
       ],
     ];
 
-    $form['card_token'] = [
+    $form['cko_card_token'] = [
       '#type' => 'hidden',
       '#attributes' => [
         'id' => 'cardToken',
@@ -179,19 +201,6 @@ class CheckoutComFormHelper {
     $string = "window.CKOConfig = {
         debugMode: {$debug},
         publicKey: '{$public_key}',
-        ready: function (event) {
-          CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
-        },
-        cardTokenised: function(event) {
-          cardToken.value = event.data.cardToken
-          cardBin.value = event.data.card.bin;
-          cardName.value = ''
-          cardNumber.value = ''
-          cardCvv.value = ''
-          expMonth.value = ''
-          expYear.value = ''
-          document.getElementById('multistep-checkout').submit();
-        },
       };";
 
     $form['checkout_kit'] = [
@@ -201,6 +210,7 @@ class CheckoutComFormHelper {
       '#attached' => [
         'library' => [
           'acq_checkoutcom/checkoutcom.kit',
+          'acq_checkoutcom/checkoutkit',
         ],
       ],
     ];

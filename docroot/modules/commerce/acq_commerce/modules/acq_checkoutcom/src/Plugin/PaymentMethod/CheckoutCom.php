@@ -212,15 +212,14 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // cko-card-token is not available in form state values.
-    $inputs = $form_state->getUserInput();
+    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];;
 
     if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
-      $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
       $payment_card = $payment_method['payment_card'];
 
-      if ((empty($payment_card) || $payment_card == 'new') && !empty($inputs['cko-card-token'])) {
+      if ((empty($payment_card) || $payment_card == 'new') && !empty($payment_method['payment_details']['cko_card_token'])) {
         $this->initiate3dSecurePayment(
-          $inputs,
+          $payment_method['payment_details']['cko_card_token'],
           $this->checkoutComApi->isMadaEnabled()
             ? $payment_method['payment_details']['card_bin']
             : NULL
@@ -237,7 +236,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->getCart()->setPaymentMethod(
         $this->getId(),
-        ['card_token_id' => $inputs['cko-card-token']]
+        ['card_token_id' => $payment_method['payment_details']['cko_card_token']]
       );
     }
   }
@@ -245,14 +244,14 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   /**
    * Process 3d secure payment for new card.
    *
-   * @param array $inputs
-   *   The array of inputs from user.
+   * @param string $card_token
+   *   The card token from user.
    * @param string|null $card_bin
    *   (Optional) The card bin.
    *
    * @throws \Exception
    */
-  protected function initiate3dSecurePayment(array $inputs, $card_bin = NULL) {
+  protected function initiate3dSecurePayment(string $card_token, $card_bin = NULL) {
     $cart = $this->getCart();
     $totals = $cart->totals();
     // Process 3d secure payment.
@@ -260,7 +259,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $cart,
       [
         'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
-        'cardToken' => $inputs['cko-card-token'],
+        'cardToken' => $card_token,
         'email' => $cart->customerEmail(),
         'udf1' => !empty($card_bin) && $this->checkoutComApi->isMadaBin($card_bin)
         ? 'MADA'
