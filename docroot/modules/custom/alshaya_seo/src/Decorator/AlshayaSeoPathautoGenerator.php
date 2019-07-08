@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_seo;
+namespace Drupal\alshaya_seo\Decorator;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Language\LanguageInterface;
