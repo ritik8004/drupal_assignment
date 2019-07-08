@@ -11,6 +11,36 @@ use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_update_N().
+ */
+function alshaya_acm_product_update_8057() {
+  $fields_missing_uuid = [
+    "field_display_as_clickable_link",
+    "field_pdp_layout",
+    "field_plp_layout",
+    "field_sorting_options",
+    "field_sorting_labels",
+    "field_commerce_status",
+  ];
+
+  $uuid_generator = \Drupal::service('uuid');
+  foreach ($fields_missing_uuid as $field_missing_uuid) {
+    $uuid = $uuid_generator->generate();
+    $field_storage_config = \Drupal::configFactory()->getEditable('field.storage.taxonomy_term.' . $field_missing_uuid);
+    if ($field_storage_config->get('uuid')) {
+      $field_storage_config->set('uuid', $uuid)->save();
+    }
+
+    $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+    $field_storage_definition = $entity_definition_update_manager->getFieldStorageDefinition($field_missing_uuid, 'taxonomy_term');
+    if (!$field_storage_definition->getUniqueStorageIdentifier()) {
+      $field_storage_definition->set('uuid', $uuid);
+      $entity_definition_update_manager->updateFieldStorageDefinition($field_storage_definition);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Resave image.settings config so that overrides take effect.
  */
