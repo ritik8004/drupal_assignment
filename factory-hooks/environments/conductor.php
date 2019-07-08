@@ -22,6 +22,10 @@ $conductors = [
     'hmac_secret' => 'OWQyY2NiODAtMmY2YS00',
   ],
   // Mothercare SA.
+  'mcsa_dev' => [
+    'hmac_id' => '0a161c94a6f74716b9f6f72ebf0eff0e',
+    'hmac_secret' => 'Zjg1NmM0NzctODhiYy00',
+  ],
   'mcsa_qa' => [
     'hmac_id' => '57ec2ca3b0d54828a264ab529b7fab39',
     'hmac_secret' => 'M2I1YjMwZjctYzgzNS00',
@@ -48,6 +52,10 @@ $conductors = [
     'hmac_secret' => 'NDI1NTM0NWEtYjMxNS00',
   ],
   // H&M KW.
+  'hmkw_dev' => [
+    'hmac_id' => '03551dee94ad4f91a20bf41459c02bdd',
+    'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
+  ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
@@ -107,6 +115,10 @@ $conductors = [
     'hmac_id' => 'cd34bf1fd5c048df9b21fb80c0d9c392',
     'hmac_secret' => 'Njk4NjYxZDItMmIzYS00',
   ],
+  'hmeg_prod' => [
+    'hmac_id' => 'f96e2ac1dc7d4de09d162f6fe816823e',
+    'hmac_secret' => 'OWI0YzNmMjMtNmNkOS00',
+  ],
   // Pottery Barn KW.
   'pbkw_qa' => [
     'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
@@ -134,6 +146,10 @@ $conductors = [
     'hmac_secret' => 'N2M3NTMzMDAtOWRjZC00',
   ],
   // Pottery Barn AE.
+  'pbae_dev' => [
+    'hmac_id' => 'a22d85c970484b17acb2511b4181aa81',
+    'hmac_secret' => 'ODczNzNiNGItNmQwMy00',
+  ],
   'pbae_qa' => [
     'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
     'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
@@ -173,6 +189,10 @@ $conductors = [
     'hmac_secret' => 'YTJmNTA3NDAtYTNmOC00',
   ],
   // BathBodyWorks AE.
+  'bbwae_dev' => [
+    'hmac_id' => 'c87b77ede1b14ac680b1ee0cd156a26f',
+    'hmac_secret' => 'OTk3YzBlN2UtOWM0Ny00',
+  ],
   'bbwae_qa' => [
     'hmac_id' => '83a388d79f834d20bef67de19ee177d7',
     'hmac_secret' => 'M2MyOWQ3YjgtNTJiNy00',
@@ -212,6 +232,10 @@ $conductors = [
     'hmac_secret' => 'YzczMzhiZTAtMGUzYS00',
   ],
   // VictoriaSecret AE.
+  'vsae_dev' => [
+    'hmac_id' => 'fcf0bc0e491a4d5d8c615973f4cd91ec',
+    'hmac_secret' => 'NWJmNjRlODItN2JkZi00',
+  ],
   'vsae_qa' => [
     'hmac_id' => 'c938cdcc017b44bfb7bc736a0ab8a150',
     'hmac_secret' => 'MjM5Y2Q0OTMtMjczNy00',
@@ -238,6 +262,10 @@ $conductors = [
     'hmac_secret' => 'M2U3NWQxYjAtMDE4Zi00',
   ],
   // FootLocker SA.
+  'flsa_dev' => [
+    'hmac_id' => '1a622d271f7946198e14ceb7eab616b9',
+    'hmac_secret' => 'YWNlMTJlOTEtMTg3ZS00',
+  ],
   'flsa_qa' => [
     'hmac_id' => '31a27139b98448379c08c90bee5e866e',
     'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',

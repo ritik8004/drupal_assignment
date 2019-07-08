@@ -184,23 +184,30 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $product_base_url = $product_url = $node->url();
         $product_label = $node->getTitle();
 
-        try {
-          $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color);
-
-          if (!($sku_for_gallery instanceof SKUInterface)) {
-            $sku_for_gallery = $sku;
-          }
-
-          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
-
-          // Do not add selected param if we are using parent sku itself for
-          // gallery. This is normal for PB, MC, etc.
-          if ($sku_for_gallery->id() != $sku->id()) {
-            $product_url .= '?selected=' . $sku_for_gallery->id();
-          }
+        $all_galleries = [];
+        if (empty($color) && $display_settings->get('show_color_images_on_filter')) {
+          $all_galleries = $this->skuImagesManager->getAllColorGallery($sku);
         }
-        catch (\Exception $e) {
-          $sku_gallery = [];
+
+        if (empty($all_galleries)) {
+          try {
+            $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color);
+
+            if (!($sku_for_gallery instanceof SKUInterface)) {
+              $sku_for_gallery = $sku;
+            }
+
+            $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
+
+            // Do not add selected param if we are using parent sku itself for
+            // gallery. This is normal for PB, MC, etc.
+            if ($sku_for_gallery->id() != $sku->id()) {
+              $product_url .= '?selected=' . $sku_for_gallery->id();
+            }
+          }
+          catch (\Exception $e) {
+            $sku_gallery = [];
+          }
         }
 
         $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
@@ -220,7 +227,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $elements[$delta] = [
           '#theme' => 'sku_teaser',
-          '#gallery' => $sku_gallery,
+          '#gallery' => $sku_gallery ?? [],
+          '#all_galleries' => $all_galleries,
           '#product_url' => $product_url,
           '#product_base_url' => $product_base_url,
           '#product_label' => $product_label,
@@ -239,12 +247,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
 
-        if ($display_settings->get('color_swatches_show_product_image')) {
+        if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
           $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->skuManager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');
         }
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
+        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/show_color_images_on_filter';
       }
     }
 
@@ -261,7 +270,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     foreach ($elements as $delta => $element) {
       // If main image is empty.
-      if (empty($element['#gallery']['#mainImage'])) {
+      if (empty($element['#all_galleries']) && empty($element['#gallery']['#mainImage'])) {
         $default_image = $this->skuImagesManager->getProductDefaultImage();
         if ($default_image) {
           $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', 'product_listing');

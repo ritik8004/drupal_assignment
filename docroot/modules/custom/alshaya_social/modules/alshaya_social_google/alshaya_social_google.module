@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_social_google.
+ */
+
+/**
+ * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
+ */
+function alshaya_social_google_alshaya_social_social_auth_google_alter(&$network, $route_name) {
+  $network['text_link'] = in_array($route_name, ['user.login', 'acq_checkout.form'])
+    ? t('sign in with google')
+    : t('sign up with google');
+}

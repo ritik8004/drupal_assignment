@@ -22,3 +22,4 @@ hide_not_required_option: false
 listing_display_mode: 'aggregated'
 price_display_mode: 'simple'
 show_currency_on_second_price: false
+show_color_images_on_filter: 0

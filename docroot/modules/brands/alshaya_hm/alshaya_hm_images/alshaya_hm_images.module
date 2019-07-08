@@ -10,6 +10,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\views\ViewExecutable;
 
@@ -38,23 +39,36 @@ function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product, a
  *   Serialized & processed assets.
  */
 function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existing_assets) {
+  $existing_assets_mapping = [];
+
+  foreach ($existing_assets ?? [] as $key => $asset) {
+    if (empty($asset['fid'])) {
+      continue;
+    }
+
+    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+    $existing_assets_mapping[$id] = $asset;
+  }
+
   $assets = [];
   if (isset($product['extension'], $product['extension']['assets'])) {
     $assets = $product['extension']['assets'];
-
-    foreach ($existing_assets as $key => $asset) {
-      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-      $existing_assets[$id] = $asset;
-    }
 
     foreach ($assets as $key => $asset) {
       // If asset had no pims data before and has pims data now, asset id here
       // won't match and hence we will not use old downloaded image.
       $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
 
-      if (isset($existing_assets[$id]) && isset($existing_assets[$id]['fid'])) {
-        $assets[$key]['fid'] = $existing_assets[$id]['fid'];
-        $assets[$key]['drupal_uri'] = $existing_assets[$id]['drupal_uri'];
+      if (isset($existing_assets_mapping[$id])) {
+        $assets[$key]['fid'] = $existing_assets_mapping[$id]['fid'];
+        $assets[$key]['drupal_uri'] = $existing_assets_mapping[$id]['drupal_uri'];
+        unset($existing_assets_mapping[$id]);
+      }
+      else {
+        // Ensure fid and drupal_uri are not available in assets if we are
+        // not re-using.
+        unset($assets[$key]['fid']);
+        unset($assets[$key]['drupal_uri']);
       }
 
       if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
@@ -69,6 +83,15 @@ function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existi
         $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
       }
       $assets[$key]['sortFacingType'] = $face_type;
+    }
+  }
+
+  $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+  foreach ($existing_assets_mapping ?? [] as $asset) {
+    $file = $fileStorage->load($asset['fid']);
+
+    if ($file instanceof FileInterface) {
+      $file->delete();
     }
   }
 

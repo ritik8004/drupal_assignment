@@ -24,6 +24,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -34,11 +35,10 @@ use Drupal\simple_sitemap\Simplesitemap;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\taxonomy\TermInterface;
-use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class SkuManager.
@@ -186,11 +186,11 @@ class SkuManager {
   protected $skuFieldsManager;
 
   /**
-   * PDP Breadcrumb service.
+   * Product Category Helper service object.
    *
-   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
-  protected $pdpBreadcrumbBuiler;
+  protected $productCategoryHelper;
 
   /**
    * GuzzleHttp\Client definition.
@@ -266,8 +266,8 @@ class SkuManager {
    *   Cache Backend service for configurable price info.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
-   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
-   *   PDP Breadcrumb service.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   Product Category Helper service object.
    * @param \GuzzleHttp\Client $http_client
    *   GuzzleHttp\Client object.
    * @param \Drupal\Core\Render\RendererInterface $renderer
@@ -279,7 +279,7 @@ class SkuManager {
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
-   *   Alshaya arraty utility service.
+   *   Alshaya array utility service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -299,7 +299,7 @@ class SkuManager {
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache,
                               SKUFieldsManager $sku_fields_manager,
-                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
+                              ProductCategoryHelper $product_category_helper,
                               Client $http_client,
                               RendererInterface $renderer,
                               Simplesitemap $generator,
@@ -324,7 +324,7 @@ class SkuManager {
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
     $this->skuFieldsManager = $sku_fields_manager;
-    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
+    $this->productCategoryHelper = $product_category_helper;
     $this->httpClient = $http_client;
     $this->renderer = $renderer;
     $this->generator = $generator;
@@ -395,6 +395,12 @@ class SkuManager {
       '#title' => $alt,
       '#alt' => $alt,
     ];
+
+    $image['#attributes']['class'][] = 'b-lazy';
+    $image['#attributes']['data-src'] = !empty($image_style)
+      ? ImageStyle::load($image_style)->buildUrl($image['#uri'])
+      : file_create_url($image['#uri']);
+    $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
 
     if ($rel_image_style) {
       $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
@@ -999,6 +1005,10 @@ class SkuManager {
           '#alt' => $data[$text_key],
         ];
 
+        $image['#attributes']['class'][] = 'b-lazy';
+        $image['#attributes']['data-src'] = Url::fromUri($image['#uri']);
+        $image['#attributes']['src'] = $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder');
+
         $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
 
@@ -1482,7 +1492,7 @@ class SkuManager {
    * Helper function to fetch attributes for PDP.
    *
    * Use configurable SKU for configurable attributes & simple SKUs as source
-   * for non-configurable attribtues.
+   * for non-configurable attributes.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity for which the attribute data needs to be pulled.
@@ -1892,6 +1902,18 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get attributes used for swatch on Listing.
+   *
+   * @return array
+   *   Array containing attributes used for swatch on Listing.
+   */
+  public function getProductListingSwatchAttributes() {
+    return $this->configFactory
+      ->get('alshaya_acm_product.display_settings')
+      ->get('swatches')['plp'] ?? ['actual_color_label_code'];
+  }
+
+  /**
    * Helper function to get attributes used for swatch on PDP.
    *
    * @return array
@@ -2213,7 +2235,7 @@ class SkuManager {
     }
 
     if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
-      $inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list);
+      $inner_term = $this->productCategoryHelper->termTreeGroup($term_list);
       if ($inner_term) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface) {
@@ -2244,16 +2266,17 @@ class SkuManager {
    * @param \Drupal\taxonomy\TermInterface $term
    *   Taxonomy term for which image slider position needs to be fetched.
    *
-   * @return string
+   * @return string|null
    *   Image slider position type for the term.
    *
-   * @throws \InvalidArgumentException
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   protected function getImagePositionFromTerm(TermInterface $term) {
     if ($term->get('field_pdp_image_slider_position')->first()) {
       return $term->get('field_pdp_image_slider_position')
         ->getString();
     }
+    return NULL;
   }
 
   /**
@@ -2488,7 +2511,7 @@ class SkuManager {
       $entity = $this->getDisplayNode($entity);
     }
     if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
-      if ($inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list)) {
+      if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
           $pdp_layout = $term->get('field_pdp_layout')->getString();
@@ -2740,7 +2763,7 @@ class SkuManager {
         ]);
       }
       catch (\Exception $e) {
-        \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
+        $this->logger->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
           '@nids' => implode(',', $nids),
           '@pid' => $node->id(),
           '@message' => $e->getMessage(),

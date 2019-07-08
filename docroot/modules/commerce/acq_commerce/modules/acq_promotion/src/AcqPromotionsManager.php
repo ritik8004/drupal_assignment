@@ -322,6 +322,9 @@ class AcqPromotionsManager {
     // Set promotion coupon code.
     $promotion_node->get('field_coupon_code')->setValue($promotion['coupon_code']);
 
+    // Set promotion sort order.
+    $promotion_node->get('field_acq_promotion_sort_order')->setValue($promotion['order']);
+
     // Set the Promotion label.
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
@@ -442,6 +445,15 @@ class AcqPromotionsManager {
           foreach ($attached_promotion_skus as $sku) {
             unset($fetched_promotion_sku_attach_data[$sku]);
           }
+        }
+
+        // Filter skus which not exists in system before attaching to queue.
+        if (!empty($fetched_promotion_sku_attach_data)) {
+          $query = $this->connection->select('acq_sku_field_data', 'sku');
+          $query->fields('sku', ['sku']);
+          $query->condition('sku.sku', array_keys($fetched_promotion_sku_attach_data), 'IN');
+          $query->condition('sku.default_langcode', 1);
+          $fetched_promotion_sku_attach_data = $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
         }
 
         $this->queueItemsInBatches(

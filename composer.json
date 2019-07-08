@@ -32,8 +32,10 @@
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
         "drupal/datalayer": "^1.0@beta",
+        "drupal/date_popup": "^1.0",
         "drupal/default_content": "^1.0@alpha",
         "drupal/email_registration": "^1.0",
+        "drupal/endroid_qr_code": "^1.1",
         "drupal/external_hreflang": "1.x-dev",
         "drupal/facets": "1.0-alpha11",
         "drupal/field_group": "^3.0@beta",
@@ -71,7 +73,6 @@
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
-        "drupal/scheduled_updates": "^1.0@alpha",
         "drupal/search_api_algolia": "1.x-dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
@@ -80,9 +81,12 @@
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "2.x-dev",
+        "drupal/sms": "^1.1",
         "drupal/social_api": "2.x-dev",
         "drupal/social_auth": "2.x-dev",
         "drupal/social_auth_facebook": "^2.0",
+        "drupal/social_auth_google": "^2.0",
+        "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
@@ -95,6 +99,7 @@
         "drupal/webform": "^5.0.0-rc1",
         "drupal/webform_rest": "^2.0",
         "drush/drush": "^9.0.0",
+        "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
@@ -315,9 +320,13 @@
             },
             "drupal/social_auth": {
                 "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
+                "Dispatch events for handling authentication errors in provider." : "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
             },
             "drupal/social_auth_facebook": {
-                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-03-23/use-event-dispatcher-method-3033751-7.patch"
+                "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
+            },
+            "drupal/social_auth_google": {
+                "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
             },
             "drupal/back_to_top": {
                 "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
@@ -386,7 +395,6 @@
         "post-drupal-scaffold-cmd": [
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
             "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
             "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
             "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
@@ -394,7 +402,9 @@
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
+            "cd docroot && rm robots.txt"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

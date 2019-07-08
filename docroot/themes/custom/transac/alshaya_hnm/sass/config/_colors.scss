@@ -60,6 +60,7 @@ $whisper-light-59: rgba(235, 235, 235, 0.59);
 $white-four-70: rgba(247, 247, 247, 0.7);
 $_white-four: #f7f7f7;
 $_grey_11: #f2f2f2;
+$_greenish_1: #a3a1a1;
 $_algolia_suggestion_list_bg: rgba(51, 51, 51, 0.06);
 $_greenish_1: #a3a1a1;
 
@@ -195,6 +196,9 @@ $social_links_hover: $grey5;
 // Social login.
 $social-network-text: $hnm-black-two;
 $social_auth_login_button_border: $_greenish_1;
+$user_login_sub_text: $hnm-black-two;
+$user_login_link_btn_text: $hnm-black;
+$user_login_section_title: $hnm-black;
 
 //Address book
 $address_tile_selected_bg: $grey3;
@@ -549,8 +553,14 @@ $magazine-pdp-description: $grey8;
 $magazine-pdp-description-separator: $grey8;
 $magazine-pdp-description-first-color: $hnm-black-four;
 
-// PDP Magazine layput
+// PDP Magazine layout
 $colour-swatches-simple-effect-bg: $grey1;
+
+// Magazine article layout
+$magazine-textarea-color: $hnm-black-three;
+$magazine-label-color: $grey8;
+$magazine-article-title: $hnm-black-four;
+$magazine-article-back-to-feed: $hnm-black-four;
 
 // PLP LHN block.
 $lhn_l2: $hnm-black-two;

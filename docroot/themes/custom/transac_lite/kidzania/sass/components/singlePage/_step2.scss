@@ -1,0 +1,90 @@
+.ticketing__steps {
+  padding: 2.5rem 0.9375rem;
+  margin-bottom: 4.375rem;
+  overflow: hidden;
+
+  &.two,
+  &.four {
+    background-color: $step_orange_bg;
+    color: $steps_even_text;
+    padding: 2.5rem 0.9375rem;
+
+    .icon {
+      font-size: 3.75rem;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 0.625rem;
+
+      &.icon-kids-day {
+        @include icon(kids-day) {
+          font-family: $icomoon !important;
+        }
+      }
+    }
+
+    .steps__information {
+      padding-top: 0;
+    }
+
+    .steps {
+      &.even {
+        @include breakpoint($desktop) {
+          top: -2.5rem;
+        }
+      }
+    }
+  }
+
+  .steps__information {
+    html[lang=ar] & {
+      line-height: 1.4;
+    }
+
+    .ticket__type {
+      width: 22%;
+      padding: 0 0.625rem;
+      display: inline-block;
+      margin-bottom: 2.125rem;
+      font-family: $ubuntu-sans;
+      float: $left;
+
+      @include breakpoint($upto-desktop) {
+        width: 66%;
+        padding: 0;
+        float: none;
+      }
+
+      p {
+        font-size: 1.125rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1rem;
+          line-height: 1.5;
+          margin-top: 0;
+          margin-bottom: 1.875rem;
+        }
+      }
+    }
+
+    .ticketBtn {
+      @extend %btn;
+
+      box-shadow: $box_shadow_inset;
+      color: $steps_even_text;
+      font-family: $ubuntu-sans-bold;
+      font-size: 1.125rem;
+      padding: 0.875rem 2.5rem;
+
+      &:hover {
+        background-image: $btn_hover_bg_img_gradient;
+        box-shadow: none;
+      }
+
+      &.active {
+        background-image: $btn_active_bg_img_gradient;
+        box-shadow: none;
+        color: $btn_active_text;
+      }
+    }
+  }
+}

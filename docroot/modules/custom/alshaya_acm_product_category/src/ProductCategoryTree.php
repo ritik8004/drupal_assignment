@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_category;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
@@ -11,7 +12,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Class ProductCategoryTree.
@@ -113,11 +114,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $termsImagesAndColors = [];
 
   /**
-   * PDP Breadcrumb service.
+   * Product Category Helper service object.
    *
-   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
    */
-  protected $pdpBreadcrumbBuiler;
+  protected $productCategoryHelper;
 
   /**
    * ProductCategoryTree constructor.
@@ -132,23 +133,23 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
-   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
-   *   PDP Breadcrumb service.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   Product Category Helper service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
                               Connection $connection,
-                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
+                              ProductCategoryHelper $product_category_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
-    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -231,7 +232,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'id' => $term->tid,
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
+        'class' => [],
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
+        'display_in_desktop' => $term->display_in_desktop,
+        'display_in_mobile' => $term->display_in_mobile,
         // The actual depth of the term. For super category feature enabled,
         // the depth may be wrong according to main menu. which can be
         // processed when required.
@@ -240,6 +244,31 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'depth' => (int) $term->depth_level,
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
       ];
+
+      if (!$term->display_in_desktop) {
+        $data[$term->tid]['class'][] = 'hide-on-desktop';
+      }
+
+      if (!$term->display_in_mobile) {
+        $data[$term->tid]['class'][] = 'hide-on-mobile';
+      }
+
+      if ($term->field_override_target_link_value) {
+        $data[$term->tid]['path'] = UrlHelper::isExternal($term->field_target_link_uri) ? $term->field_target_link_uri : Url::fromUri($term->field_target_link_uri)->toString();
+        $data[$term->tid]['class'][] = 'overridden-link';
+      }
+
+      if (is_object($file = $this->getIcon($term->tid))
+          && !empty($file->field_icon_target_id)
+      ) {
+        $image = $this->fileStorage->load($file->field_icon_target_id);
+        $data[$term->tid]['icon'] = [
+          'url' => file_create_url($image->getFileUri()),
+          'width' => (int) $file->field_icon_width,
+          'height' => (int) $file->field_icon_height,
+        ];
+        $data[$term->tid]['class'][] = 'with-icon';
+      }
 
       if ($highlight_paragraph) {
         $data[$term->tid]['highlight_paragraph'] = $this->getHighlightParagraph($term->tid, $langcode, self::VOCABULARY_ID);
@@ -450,12 +479,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
-      ->fields('ttdcl', ['field_display_as_clickable_link_value']);
+      ->fields('ttdcl', ['field_display_as_clickable_link_value'])
+      ->fields('target_link', ['field_target_link_uri'])
+      ->fields('override_target', ['field_override_target_link_value']);
     $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
+    $query->addField('in_desktop', 'field_include_in_desktop_value', 'display_in_desktop');
+    $query->addField('in_mobile', 'field_include_in_mobile_tablet_value', 'display_in_mobile');
     $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid');
+    $query->leftJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_target_link', 'target_link', 'target_link.entity_id = tfd.tid AND target_link.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_override_target_link', 'override_target', 'target_link.entity_id = tfd.tid');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);
     }
@@ -540,6 +577,19 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
+   * Gets the image from 'field_icon' field.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getIcon($tid) {
+    return $this->getImageField($tid, 'field_icon');
+  }
+
+  /**
    * Gets the image from 'field_promotion_banner_mobile' field.
    *
    * @param int $tid
@@ -551,16 +601,35 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Object containing fields data.
    */
   public function getMobileBanner($tid, $langcode) {
-    $query = $this->connection->select('taxonomy_term__field_promotion_banner_mobile', 'ttbc');
-    $query->fields('ttbc', [
+    return $this->getImageField($tid, 'field_promotion_banner_mobile', $langcode);
+  }
+
+  /**
+   * Get the image table fields for given field and term.
+   *
+   * @param int $tid
+   *   The term id.
+   * @param string $field
+   *   The field name.
+   * @param string|null $langcode
+   *   (optional) Language code.
+   *
+   * @return object|null
+   *   Object containing fields data.
+   */
+  protected function getImageField($tid, $field, $langcode = NULL) {
+    $query = $this->connection->select("taxonomy_term__{$field}", 'term_image_field');
+    $query->fields('term_image_field', [
       'entity_id',
-      'field_promotion_banner_mobile_target_id',
-      'field_promotion_banner_mobile_width',
-      'field_promotion_banner_mobile_height',
+      "{$field}_target_id",
+      "{$field}_width",
+      "{$field}_height",
     ]);
-    $query->condition('ttbc.entity_id', $tid);
-    $query->condition('ttbc.langcode', $langcode);
-    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    $query->condition('term_image_field.entity_id', $tid);
+    $query->condition('term_image_field.bundle', ProductCategoryTree::VOCABULARY_ID);
+    if (!empty($langcode)) {
+      $query->condition('term_image_field.langcode', $langcode);
+    }
     return $query->execute()->fetchObject();
   }
 
@@ -665,7 +734,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if (count($terms) > 0) {
-        $tid = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
+        $tid = $this->productCategoryHelper->termTreeGroup($terms);
       }
     }
 

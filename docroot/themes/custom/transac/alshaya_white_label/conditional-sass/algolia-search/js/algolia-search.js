@@ -30,7 +30,6 @@
         if ($('.algolia-autocomplete pre').text().length < 1) {
           $('.trending-title').show();
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
-          $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
         }
         else {
           $('.trending-title').hide();
@@ -43,6 +42,9 @@
         showAlgoliaSearchresult();
         if (input.val().length > 0) {
           $('.algolia-form-wrapper').addClass('algolia-cleartext-active');
+        }
+        else {
+          $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
         }
 
         // For first time case adding a delay.
@@ -148,8 +150,8 @@
       }
 
       if ($(window).width() < 768) {
-        // Only on listing and product pages.
-        if ($('.c-plp').length === 1 || $('.nodetype--acq_product').length === 1) {
+        // On all the pages except front page.
+        if ($('.frontpage').length < 1) {
           $('body').addClass('no-sticky-algolia-search-bar');
           setTimeout(function () {
             showAlgoliaSearchBar();

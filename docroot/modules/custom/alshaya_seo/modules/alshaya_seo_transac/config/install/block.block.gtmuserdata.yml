@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_seo_transac
+  theme:
+    - alshaya_white_label
+id: gtmuserdata
+theme: alshaya_white_label
+region: content
+weight: 0
+provider: null
+plugin: alshaya_gtm_user_data_block
+settings:
+  id: alshaya_gtm_user_data_block
+  label: 'GTM User data block'
+  provider: alshaya_seo_transac
+  label_display: '0'
+visibility: {}

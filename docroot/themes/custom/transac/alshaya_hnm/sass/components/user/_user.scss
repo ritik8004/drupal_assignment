@@ -126,23 +126,6 @@
 
 .user-login-form {
   & > a {
-    @include breakpoint($tablet) {
-      #{$left}: 10em;
-
-      html[lang='ar'] & {
-        #{$left}: 13em;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      #{$left}: 10em;
-      bottom: 0.7em;
-
-      html[lang='ar'] & {
-        #{$left}: 11rem;
-      }
-    }
-
     text-decoration: underline;
     font-weight: normal;
     color: $user_block_link;

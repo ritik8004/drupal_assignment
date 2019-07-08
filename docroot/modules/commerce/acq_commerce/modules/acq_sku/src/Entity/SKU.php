@@ -253,6 +253,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
+      $file_usage = \Drupal::service('file.usage');
+      $file_usage->add($file, $this->getEntityTypeId(), $this->getEntityTypeId(), $this->id());
       return $file;
     }
     else {

@@ -276,3 +276,20 @@
   text-transform: capitalize;
   letter-spacing: normal;
 }
+
+@include breakpoint($only-mobile) {
+  #payment_details_wrapper {
+    #payment_method_title_cybersource {
+      html[lang=ar] & {
+        padding: 1.5rem 0.5rem 2rem;
+      }
+    }
+
+    .card-types-wrapper {
+      html[lang=ar] & {
+        top: 2.75rem;
+      }
+    }
+  }
+}
+

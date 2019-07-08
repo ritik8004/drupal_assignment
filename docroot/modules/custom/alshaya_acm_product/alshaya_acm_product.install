@@ -11,8 +11,10 @@ use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_update_N().
+ *
+ * Update site uuid for taxonomy term fields missing them.
  */
-function alshaya_acm_product_update_8057() {
+function alshaya_acm_product_update_8051() {
   $fields_missing_uuid = [
     "field_display_as_clickable_link",
     "field_pdp_layout",
@@ -37,6 +39,36 @@ function alshaya_acm_product_update_8057() {
       $entity_definition_update_manager->updateFieldStorageDefinition($field_storage_definition);
     }
   }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update config for showing images of specific color product in listing.
+ * This is done when filtered by color.
+ */
+function alshaya_acm_product_update_8050() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Split pathauto pattern for product and add .html suffix.
+ */
+function alshaya_acm_product_update_8049() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm');
+  $manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_acm_product');
 }
 
 /**

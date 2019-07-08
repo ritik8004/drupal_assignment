@@ -40,7 +40,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
-use Drupal\file\FileInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -260,6 +259,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   $items['sku_teaser'] = [
     'variables' => [
       'gallery' => NULL,
+      'all_galleries' => NULL,
       'product_url' => NULL,
       'product_base_url' => NULL,
       'product_label' => NULL,
@@ -423,17 +423,6 @@ function alshaya_acm_product_acq_sku_update(SKU $entity) {
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
   _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_DELETE);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- */
-function alshaya_acm_product_file_delete(FileInterface $entity) {
-  \Drupal::logger('alshaya_acm_product')->notice('Deleting file @fid with uri @uri on page @page', [
-    '@fid' => $entity->id(),
-    '@uri' => $entity->getFileUri(),
-    '@page' => $_SERVER['REQUEST_URI'] ?? '-',
-  ]);
 }
 
 /**
@@ -684,11 +673,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
                 $free_sku_media = [
                   'label' => $free_sku_entity->label(),
                   'file' => $default_image,
+                  'drupal_uri' => $default_image->getFileUri(),
                 ];
               }
 
               if ($free_sku_media) {
-                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, $free_sku_entity->label(), '192x168');
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku_entity->label(), '192x168');
                 $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
@@ -1631,6 +1621,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $price_block = $priceHelper->getPriceBlockForSku($tree_pointer);
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
+    if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+      $discount_block['#markup'] = !empty($price_block['#discount']['#markup']) ? '(' . $price_block['#discount']['#markup'] . ')' : '';
+      $response->addCommand(new HtmlCommand('.discount-price-block-' . $sku_identifier, $discount_block));
+    }
+
     $selector = '.configurable-wrapper-' . $sku_identifier;
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
@@ -1767,6 +1762,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+
+    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
+    $pdp_layout = $skuManager->getPdpLayout($sku, $context);
+
     if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
@@ -1776,11 +1775,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
       if ($first_child instanceof SKU) {
-        $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
-
-        $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
         $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE);
-
         if (!empty($build['gallery'])) {
           if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE && $context != 'modal') {
             $dynamic_parts['alshaya_magazine'] = $build['gallery']['alshaya_magazine'];
@@ -1795,8 +1790,12 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
     $price_block = $priceHelper->getPriceBlockForSku($sku);
-
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
+
+    if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+      $discount_block['#markup'] = !empty($price_block['#discount']['#markup']) ? '(' . $price_block['#discount']['#markup'] . ')' : '';
+      $response->addCommand(new HtmlCommand('.discount-price-block-' . $sku_identifier, $discount_block));
+    }
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
 
