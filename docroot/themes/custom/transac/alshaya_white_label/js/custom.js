@@ -121,15 +121,11 @@
       /**
        * Helper function to remove classes from body when dailog is closed.
        *
-       * @param {*} className
-       * The classname to be removed from body.
        */
-      function modalCloseBtnEvent(className) {
-        $('.ui-dialog-titlebar-close').on('click', function () {
-          // Remove overlay related classes only when last overlay getting closed.
-          if ($('.ui-dialog').length < 1) {
-            $('body').removeClass(className);
-          }
+      function modalCloseBtnEvent() {
+        $('.ui-dialog-titlebar-close').once().on('click', function () {
+          // Remove the last class added for overlay.
+          $('body').removeClass($('body').attr('class').split(' ').pop());
         });
       }
 
@@ -147,7 +143,7 @@
           if (settings.url.indexOf(ajaxString) !== -1) {
             $('body').addClass(className);
           }
-          modalCloseBtnEvent(className);
+          modalCloseBtnEvent();
         });
       }
 
@@ -161,10 +157,10 @@
 
       $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
         $('body').addClass('free-gifts-modal-overlay');
-        modalCloseBtnEvent('free-gifts-modal-overlay');
+        modalCloseBtnEvent();
 
         $(document).ajaxComplete(function () {
-          modalCloseBtnEvent('free-gifts-modal-overlay');
+          modalCloseBtnEvent();
         });
       });
 
