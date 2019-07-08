@@ -1,4 +1,5 @@
-.checkout-login-separator {
+.checkout-login-separator,
+.login-separator {
   > span {
     @include breakpoint($only-mobile) {
       font-family: $hnm-demibold !important;
@@ -21,11 +22,29 @@
   }
 }
 
+.block-alshaya-signup-signin-buttons {
+  .sub-text::first-letter,
+  .link-button span::first-letter {
+    text-transform: uppercase;
+  }
+}
+
 .alias--cart-checkout-login {
   #edit-checkout-guest {
     #edit-checkout-guest-checkout-as-guest {
       font-family: $hnm-bold;
       letter-spacing: 1px;
+    }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  .section-title {
+    font-family: $hnm-demibold;
+
+    &::first-letter {
+      text-transform: uppercase;
     }
   }
 }

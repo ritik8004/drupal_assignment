@@ -15,6 +15,19 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Remove you will be able to block on login register pages.
+ */
+function alshaya_transac_update_8122() {
+  // On some sites we also have custom content blocks of "you will be able to"
+  // which are not present in config, using this opportunity to also cleanup
+  // this blocks.
+  $blocks = ['youllbeableto', 'youllbeableto..', 'youllbeableto...'];
+  alshaya_block_delete_blocks($blocks);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable `alshaya_knet` module and update k-net configs.
  */
 function alshaya_transac_update_8121() {
