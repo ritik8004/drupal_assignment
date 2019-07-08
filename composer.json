@@ -349,6 +349,9 @@
             },
             "drupal/search_api_algolia": {
                 "Add autocomplete block": "https://www.drupal.org/files/issues/2019-06-11/3054878-11.patch"
+            },
+            "drupal/acquia_purge": {
+                "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
             }
         },
         "installer-paths": {
