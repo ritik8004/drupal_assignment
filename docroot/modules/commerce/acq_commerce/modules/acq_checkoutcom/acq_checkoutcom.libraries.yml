@@ -1,13 +1,3 @@
-checkoutkit:
-  remote: https://cdn.checkout.com
-  version: VERSION
-  license:
-    name: UNKNOWN
-    url: UNKNOWN
-    gpl-compatible: FALSE
-  js:
-    https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
-
 checkoutcom.form:
   js:
     js/acq_checkoutcom.form.js: {}
