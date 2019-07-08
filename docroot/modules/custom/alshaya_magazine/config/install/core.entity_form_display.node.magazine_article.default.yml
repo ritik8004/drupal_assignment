@@ -1,0 +1,153 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.magazine_article.field_magazine_category
+    - field.field.node.magazine_article.field_magazine_date
+    - field.field.node.magazine_article.field_magazine_homepage_image
+    - field.field.node.magazine_article.field_magazine_hero_image
+    - field.field.node.magazine_article.field_magazine_paragraphs
+    - field.field.node.magazine_article.field_magazine_shop_the_story
+    - field.field.node.magazine_article.field_magazine_slogan
+    - field.field.node.magazine_article.field_magazine_weight
+    - image.style.thumbnail
+    - node.type.magazine_article
+  module:
+    - acq_sku
+    - content_moderation
+    - datetime
+    - image
+    - paragraphs
+    - path
+    - video_embed_field
+id: node.magazine_article.default
+targetEntityType: node
+bundle: magazine_article
+mode: default
+content:
+  field_magazine_category:
+    weight: 3
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_magazine_date:
+    weight: 6
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_magazine_homepage_image:
+    type: image_image
+    weight: 0
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_magazine_hero_image:
+    type: image_image
+    weight: 2
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_magazine_paragraphs:
+    type: entity_reference_paragraphs
+    weight: 7
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_magazine_shop_the_story:
+    weight: 8
+    settings:
+      size: 60
+    third_party_settings: {  }
+    type: sku_widget
+    region: content
+  field_magazine_slogan:
+    weight: 5
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_magazine_weight:
+    weight: 9
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  langcode:
+    type: language_select
+    weight: 10
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 16
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 14
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 12
+    region: content
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 17
+    region: content
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 13
+    region: content
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 4
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  translation:
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  url_redirects:
+    weight: 15
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true

@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: magazine_article_hero
+label: 'Magazine Article Hero'
+effects:
+  3a7e17d4-c4a4-42f2-b841-44c43f6ca7e5:
+    uuid: 3a7e17d4-c4a4-42f2-b841-44c43f6ca7e5
+    id: image_scale
+    weight: 1
+    data:
+      width: 844
+      height: null
+      upscale: false
