@@ -32,8 +32,12 @@ class AlshayaSeoPathProcessor implements OutboundPathProcessorInterface {
     // We force it from here.
     $path = rtrim($path, '/');
 
+    // Add trailing slash for home page.
+    if (empty($path)) {
+      $path = '/';
+    }
     // Add trailing slash for term pages.
-    if ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
+    elseif ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
       $path = $path . '/';
     }
 

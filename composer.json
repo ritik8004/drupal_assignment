@@ -252,8 +252,9 @@
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
                 "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch",
-                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch"
-  },
+                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch",
+                "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch"
+            },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
                 "Fix more notices": "patches/mobile_number/2978729-custom.patch",
