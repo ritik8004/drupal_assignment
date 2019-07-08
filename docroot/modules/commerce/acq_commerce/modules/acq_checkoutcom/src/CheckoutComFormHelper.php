@@ -209,8 +209,7 @@ class CheckoutComFormHelper {
       '#value' => $string,
       '#attached' => [
         'library' => [
-          'acq_checkoutcom/checkoutcom.kit',
-          'acq_checkoutcom/checkoutkit',
+          'acq_checkoutcom/checkoutcom.form',
         ],
       ],
     ];

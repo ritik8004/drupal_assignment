@@ -1,15 +1,15 @@
-checkoutcom.kit:
+checkoutkit:
   remote: https://cdn.checkout.com
   version: VERSION
   license:
-    name: GNU-GPL-2.0-or-later
-    url: http://www.gnu.org/licenses/gpl-2.0.html
-    gpl-compatible: true
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
   js:
     https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
 
-checkoutkit:
+checkoutcom.form:
   js:
-    js/acq_checkoutcom.js: {}
+    js/acq_checkoutcom.form.js: {}
   dependencies:
-    - acq_checkoutcom/checkoutcom.kit
+    - acq_checkoutcom/checkoutkit

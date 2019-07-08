@@ -1,12 +1,12 @@
 /**
  * @file
- * JavaScript behaviors for managed file uploads.
+ * JavaScript behaviors for acq_checkoutcom.js.
  */
 
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  Drupal.behaviors.acqCheckoutCom = {
+  Drupal.behaviors.acqCheckoutComForm = {
     attach: function attach(context) {
       $('#edit-actions-next', context).once('checkout-click').on('click', function (e) {
         e.preventDefault();
@@ -19,7 +19,6 @@
           "expiryYear": cardYear.value,
           "cvv": cardCvv.value
         },function(data){
-          console.log(data);
           cardToken.value = data.id;
           cardBin.value = data.card.bin;
           cardName.value = '';
