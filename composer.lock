@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e5beb179357a89d7a693afb8ee8a365",
+    "content-hash": "e5d6aa6fff92440cd30cbcef0b092eda",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3437,6 +3437,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
