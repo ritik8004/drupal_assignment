@@ -5,6 +5,8 @@ services:
       - '@config.factory'
       - '@http_client_factory'
       - '@acq_checkoutcom.agent_api'
+      - '@acq_cart.cart_storage'
+      - '@request_stack'
       - '@logger.factory'
 
   acq_checkoutcom.agent_api:

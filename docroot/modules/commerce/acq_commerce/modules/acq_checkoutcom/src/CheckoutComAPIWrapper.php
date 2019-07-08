@@ -4,6 +4,7 @@ namespace Drupal\acq_checkoutcom;
 
 use Acquia\Hmac\Exception\MalformedResponseException;
 use Drupal\acq_cart\Cart;
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -14,6 +15,7 @@ use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Component\Serialization\Json;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * CheckoutComAPIWrapper class.
@@ -84,6 +86,20 @@ class CheckoutComAPIWrapper {
   protected $apiHelper;
 
   /**
+   * The cart storage.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
+
+  /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * The logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -99,6 +115,10 @@ class CheckoutComAPIWrapper {
    *   ClientFactory object.
    * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
    *   ApiHelper object.
+   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
+   *   The cart storage.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The request stack.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
@@ -106,12 +126,34 @@ class CheckoutComAPIWrapper {
     ConfigFactoryInterface $config_factory,
     HttpClientFactory $http_client_factory,
     ApiHelper $api_helper,
+    CartStorageInterface $cart_storage,
+    RequestStack $request,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
     $this->httpClientFactory = $http_client_factory;
     $this->apiHelper = $api_helper;
+    $this->cartStorage = $cart_storage;
+    $this->request = $request->getCurrentRequest();
     $this->logger = $logger_factory->get('acq_checkoutcom');
+  }
+
+  /**
+   * Get cart object.
+   *
+   * @return \Drupal\acq_cart\CartInterface
+   *   return cart object or redirect to cart page.
+   */
+  public function getCart() {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+      $response->send();
+      exit;
+    }
+
+    return $cart;
   }
 
   /**
@@ -279,8 +321,10 @@ class CheckoutComAPIWrapper {
     // Set parameters required for 3d secure payment.
     $params['chargeMode'] = self::VERIFY_3DSECURE;
     $params['autoCapture'] = self::AUTOCAPTURE;
-    $params['successUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
-    $params['failUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
+    $params['successUrl'] = Url::fromRoute('acq_checkoutcom.payment_success', [], ['absolute' => TRUE])->toString();
+    $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
+    $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
+    $params['customerIp'] = $this->request->getClientIp();
 
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
       $opt = ['json' => $req_param + $params];
