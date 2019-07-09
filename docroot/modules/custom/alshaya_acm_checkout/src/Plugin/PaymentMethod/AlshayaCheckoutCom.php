@@ -182,16 +182,14 @@ class AlshayaCheckoutCom extends CheckoutCom {
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // cko-card-token is not available in form state values.
-    $inputs = $form_state->getUserInput();
+    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
 
     if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
-      $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
-
       if ((empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
-          && !empty($inputs['cko-card-token'])
+          && !empty($payment_method['payment_card_details']['payment_card_new']['cko_card_token'])
       ) {
         $this->initiate3dSecurePayment(
-          $inputs,
+          $payment_method['payment_card_details']['payment_card_new']['cko_card_token'],
           $this->checkoutComApi->isMadaEnabled()
           ? $payment_method['payment_card_details']['payment_card_new']['card_bin']
           : NULL);
@@ -207,7 +205,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->getCart()->setPaymentMethod(
         $this->getId(),
-        ['card_token_id' => $inputs['cko-card-token']]
+        ['card_token_id' => $payment_method['payment_card_details']['payment_card_new']['cko_card_token']]
       );
     }
   }

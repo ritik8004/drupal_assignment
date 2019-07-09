@@ -49,6 +49,34 @@ function template_preprocess_payment_card_teaser(array &$variables) {
 }
 
 /**
+ * Implements hook_library_info_build().
+ */
+function acq_checkoutcom_library_info_build() {
+  $libraries = [];
+
+  $checkoukit_js = (\Drupal::configFactory()->get('acq_checkoutcom.settings')->get('env') == 'live')
+    ? 'https://cdn.checkout.com/js/checkoutkit.js'
+    : 'https://cdn.checkout.com/sandbox/js/checkoutkit.js';
+
+  $libraries['checkoutkit'] = [
+    'remote' => 'https://cdn.checkout.com',
+    'version' => 'VERSION',
+    'license' => [
+      'name' => 'UNKNOWN',
+      'url' => 'UNKNOWN',
+      'gpl-compatible' => FALSE,
+    ],
+    'js' => [
+      $checkoukit_js => [
+        'type' => 'external',
+      ],
+    ],
+  ];
+
+  return $libraries;
+}
+
+/**
  * Process variable to add required info for card.
  *
  * @param array $variables
