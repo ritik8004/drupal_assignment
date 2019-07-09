@@ -22,5 +22,15 @@
     @include breakpoint($desktop) {
       padding: 0.5rem 0;
     }
+
+    html[lang=ar] & {
+      line-height: normal;
+      height: auto;
+      min-height: 2.1875rem;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      white-space: normal;
+    }
   }
 }
