@@ -57,7 +57,7 @@ class TicketBookingManager {
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->configFactory = $config_factory;
-    $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'));
+    $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'), ['cache_wsdl' => WSDL_CACHE_NONE]);
   }
 
   /**

@@ -45,3 +45,13 @@
     padding-bottom: 1.125rem;
   }
 }
+
+.alshaya-social {
+  .auth-link {
+    .social-network-text {
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
