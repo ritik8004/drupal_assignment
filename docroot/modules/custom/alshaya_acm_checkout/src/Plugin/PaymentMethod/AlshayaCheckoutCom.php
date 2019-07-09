@@ -55,7 +55,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
-          $stored_cards_list[$stored_card['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
 
         $payment_card = empty($stored_cards_list) ? $payment_card : $this->currentRequest->query->get('payment-card');

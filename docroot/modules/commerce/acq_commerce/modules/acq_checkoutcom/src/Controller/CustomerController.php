@@ -128,7 +128,7 @@ class CustomerController extends ControllerBase {
     if (!empty($existing_cards) && is_string($existing_cards)) {
       $this->messenger->addError($existing_cards);
     }
-    elseif (is_array($existing_cards)) {
+    elseif (!empty($existing_cards) && is_array($existing_cards)) {
       foreach ($existing_cards as $card) {
         $options[$card['public_hash']] = [
           '#theme' => 'payment_card_info',

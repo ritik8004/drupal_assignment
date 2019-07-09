@@ -132,7 +132,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
-          $stored_cards_list[$stored_card['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
       }
 
