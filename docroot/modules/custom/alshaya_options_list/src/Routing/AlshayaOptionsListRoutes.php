@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_options_list\Routing;
 
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,13 +22,23 @@ class AlshayaOptionsListRoutes implements ContainerInjectionInterface {
   protected $config;
 
   /**
+   * Alshaya Options List Service.
+   *
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
+   */
+  protected $alshayaOptionsService;
+
+  /**
    * Class constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory interface service.
+   * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
+   *   Alshaya options service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, AlshayaOptionsListHelper $alshaya_options_service) {
     $this->config = $config_factory->get('alshaya_options_list.settings');
+    $this->alshayaOptionsService = $alshaya_options_service;
   }
 
   /**
@@ -35,21 +46,24 @@ class AlshayaOptionsListRoutes implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_options_list.alshaya_options_service')
     );
   }
 
   /**
    * Returns an array of route objects.
    *
-   * @return \Symfony\Component\Routing\RouteCollection
+   * @return \Symfony\Component\Routing\RouteCollection|null
    *   An array of route objects.
    */
   public function routes() {
-    $route_collection = new RouteCollection();
+    if ($this->alshayaOptionsService->optionsPageEnabled()) {
+      return;
+    }
     $pages = $this->config->get('alshaya_options_pages');
-
     if (!empty($pages)) {
+      $route_collection = new RouteCollection();
       foreach ($pages as $page) {
         $route = new Route(
           '/' . $page['url'],

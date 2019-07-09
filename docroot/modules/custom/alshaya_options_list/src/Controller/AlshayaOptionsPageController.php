@@ -42,7 +42,7 @@ class AlshayaOptionsPageController extends ControllerBase {
    *
    * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
-  private $alshayaOptionsService;
+  protected $alshayaOptionsService;
 
   /**
    * AlshayaOptionsPageController constructor.
@@ -85,10 +85,10 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   Build array.
    */
   public function optionsPage() {
-    $config = $this->config('alshaya_options_list.settings');
-    if (!$config->get('alshaya_shop_by_pages_enable')) {
+    if (!$this->alshayaOptionsService->optionsPageEnabled()) {
       throw new NotFoundHttpException();
     }
+    $config = $this->config('alshaya_options_list.settings');
     $options_list = [];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get current request uri.
