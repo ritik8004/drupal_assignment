@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\alshaya_options_list\AlshayaOptionsListService;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 
 /**
  * Controller to add options list page.
@@ -40,7 +40,7 @@ class AlshayaOptionsPageController extends ControllerBase {
   /**
    * Alshaya Options List Service.
    *
-   * @var Drupal\alshaya_options_list\AlshayaOptionsListService
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
   private $alshayaOptionsService;
 
@@ -53,13 +53,13 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   Cache Backend service for alshaya.
    * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
-   * @param Drupal\alshaya_options_list\AlshayaOptionsListService $alshaya_options_service
+   * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya options service.
    */
   public function __construct(LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RequestStack $request_stack,
-                              AlshayaOptionsListService $alshaya_options_service) {
+                              AlshayaOptionsListHelper $alshaya_options_service) {
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->requestStack = $request_stack;
@@ -86,8 +86,8 @@ class AlshayaOptionsPageController extends ControllerBase {
    */
   public function optionsPage() {
     $options_list = [];
-    $config = $this->config('alshaya_options_list.admin_settings');
-    if (!$config->get('alshaya_options_on_off')) {
+    $config = $this->config('alshaya_options_list.settings');
+    if (!$config->get('alshaya_shop_by_pages_enable')) {
       throw new NotFoundHttpException();
     }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();

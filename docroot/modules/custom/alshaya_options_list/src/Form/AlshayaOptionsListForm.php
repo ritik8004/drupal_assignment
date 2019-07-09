@@ -75,7 +75,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_options_list.admin_settings'];
+    return ['alshaya_options_list.settings'];
   }
 
   /**
@@ -84,12 +84,12 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $config = $this->config('alshaya_options_list.admin_settings');
+    $config = $this->config('alshaya_options_list.settings');
     $attribute_options = $config->get('alshaya_options_pages');
 
-    $form['alshaya_options_on_off'] = [
+    $form['alshaya_shop_by_pages_enable'] = [
       '#type' => 'checkbox',
-      '#default_value' => $config->get('alshaya_options_on_off'),
+      '#default_value' => $config->get('alshaya_shop_by_pages_enable'),
       '#title' => $this->t('Enable options page on site.'),
     ];
 
@@ -101,7 +101,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#suffix' => '</div>',
       '#states' => [
         'visible' => [
-          ':input[name="alshaya_options_on_off"]' => ['checked' => TRUE],
+          ':input[name="alshaya_shop_by_pages_enable"]' => ['checked' => TRUE],
         ],
       ],
     ];
@@ -207,8 +207,8 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_options_list.admin_settings');
-    $config->set('alshaya_options_on_off', $form_state->getValue('alshaya_options_on_off'));
+    $config = $this->config('alshaya_options_list.settings');
+    $config->set('alshaya_shop_by_pages_enable', $form_state->getValue('alshaya_shop_by_pages_enable'));
     $values = $form_state->getValue('alshaya_options_page');
     foreach ($values as $value) {
       $url = ltrim($value['alshaya_options_page_url'] ?? '', '/');

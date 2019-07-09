@@ -95,7 +95,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
   public function build() {
     $menu_title = $this->configuration['link_title'];
     $links = [];
-    $pages = $this->configFactory->get('alshaya_options_list.admin_settings')->get('alshaya_options_pages');
+    $pages = $this->configFactory->get('alshaya_options_list.settings')->get('alshaya_options_pages');
     if (!empty($pages)) {
       foreach ($pages as $page) {
         $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);

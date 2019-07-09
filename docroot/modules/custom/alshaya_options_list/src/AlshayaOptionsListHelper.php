@@ -11,7 +11,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 /**
  * Helper functions for alshaya_options_list.
  */
-class AlshayaOptionsListService {
+class AlshayaOptionsListHelper {
 
   /**
    * Database connection service object.
@@ -36,7 +36,7 @@ class AlshayaOptionsListService {
   protected $fileStorage;
 
   /**
-   * AlshayaOptionsListService constructor.
+   * AlshayaOptionsListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service object.

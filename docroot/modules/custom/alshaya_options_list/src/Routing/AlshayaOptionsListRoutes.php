@@ -27,7 +27,7 @@ class AlshayaOptionsListRoutes implements ContainerInjectionInterface {
    *   The config factory interface service.
    */
   public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->config = $config_factory->get('alshaya_options_list.admin_settings');
+    $this->config = $config_factory->get('alshaya_options_list.settings');
   }
 
   /**
