@@ -104,13 +104,6 @@
     }
   }
 
-  .address--edit,
-  .address--delete {
-    a {
-      font-size: 0.875rem;
-    }
-  }
-
   &:hover,
   &.default {
     .address--data {
@@ -124,7 +117,10 @@
       font-weight: normal;
       color: $address_content_text;
       letter-spacing: 0;
-      font-size: 0.875rem;
+
+      @include breakpoint($desktop) {
+        font-size: 0.875rem;
+      }
     }
   }
 }

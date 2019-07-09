@@ -3,7 +3,6 @@
     @include breakpoint($upto-desktop) {
       &::before {
         z-index: 12;
-        top: -4.75rem;
       }
     }
   }
