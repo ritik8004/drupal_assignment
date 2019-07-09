@@ -6,17 +6,10 @@
  */
 
 /**
- * Implements hook_preprocess_HOOK().
+ * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
  */
-function alshaya_social_google_preprocess_alshaya_social(&$variables) {
-  if (!isset($variables['social_networks']['social_auth_google'])) {
-    return;
-  }
-  $route = \Drupal::routeMatch();
-  if (in_array($route->getRouteName(), ['user.login', 'acq_checkout.form'])) {
-    $variables['social_networks']['social_auth_google']['text_link'] = t('sign in with google');
-  }
-  elseif ($route->getRouteName() == 'user.register') {
-    $variables['social_networks']['social_auth_google']['text_link'] = t('sign up with google');
-  }
+function alshaya_social_google_alshaya_social_social_auth_google_alter(&$network, $route_name) {
+  $network['text_link'] = in_array($route_name, ['user.login', 'acq_checkout.form'])
+    ? t('sign in with google')
+    : t('sign up with google');
 }
