@@ -8,7 +8,7 @@
 
   Drupal.behaviors.skuShowColorImagesOnFilter = {
     attach: function (context, settings) {
-      setTimeout(Drupal.skuShowColorImagesOnFilter, 1);
+      setTimeout(Drupal.skuShowColorImagesOnFilter, 10);
 
       // Ensure if results are populated first we show gallery properly.
       $('li.facet-item').once('show-gallery').on('click tap', function () {
@@ -30,14 +30,24 @@
     $('.list-product-gallery').once('show-gallery').each(function () {
       var first = $(this).find('span:first');
       var active = $('ul[data-drupal-facet-id*="' + first.attr('data--color-attribute') + '"]').find('a.is-active:first');
+      var url = $(this).attr('data--original-url');
+      var selectedUrl = url + '?selected=';
 
+      $(this).find('span[data--color]').addClass('hidden');
       if (active.length > 0) {
-        $(this).find('span[data--color="' + active.attr('data-drupal-facet-item-value') + '"]').removeClass('hidden');
+        var activeSpan = $(this).find('span[data--color="' + active.attr('data-drupal-facet-item-value') + '"]');
+        activeSpan.removeClass('hidden');
+        selectedUrl += activeSpan.attr('data--id');
       }
       else {
         first.removeClass('hidden');
+        selectedUrl += first.attr('data--id');
       }
+
+      $(this).parents('article').find('a[href]').attr('href', selectedUrl);
     });
+
+    $('.search-lightSlider').slick('refresh');
   }
 
 })(jQuery, Drupal);
