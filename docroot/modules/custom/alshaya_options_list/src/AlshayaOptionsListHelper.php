@@ -87,7 +87,7 @@ class AlshayaOptionsListHelper {
       $query->orderBy('tfd.name');
     }
     if (!empty($searchString)) {
-      $query->condition('tfd.name', "%" . $this->connection->escapeLike($searchString) . "%", 'LIKE');
+      $query->condition('tfd.name', '%' . $this->connection->escapeLike($searchString) . '%', 'LIKE');
     }
     $options = $query->execute()->fetchAllAssoc('tid');
 
@@ -120,7 +120,7 @@ class AlshayaOptionsListHelper {
   }
 
   /**
-   * Groups attributes alphabetically.
+   * Group attributes starting with the same alphabet.
    *
    * @param array $options_array
    *   List of all options.

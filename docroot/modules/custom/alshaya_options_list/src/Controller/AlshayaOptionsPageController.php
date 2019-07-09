@@ -72,7 +72,7 @@ class AlshayaOptionsPageController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('language_manager'),
-      $container->get('cache.default'),
+      $container->get('cache.data'),
       $container->get('request_stack'),
       $container->get('alshaya_options_list.alshaya_options_service')
     );
@@ -85,11 +85,11 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   Build array.
    */
   public function optionsPage() {
-    $options_list = [];
     $config = $this->config('alshaya_options_list.settings');
     if (!$config->get('alshaya_shop_by_pages_enable')) {
       throw new NotFoundHttpException();
     }
+    $options_list = [];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get current request uri.
     $request = $this->requestStack->getCurrentRequest()->getRequestUri();
