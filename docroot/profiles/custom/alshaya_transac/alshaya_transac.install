@@ -17,8 +17,19 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Enable alshaya options list module.
  */
-function alshaya_transac_update_8122() {
+function alshaya_transac_update_8123() {
   \Drupal::service('module_installer')->install(['alshaya_options_list']);
+}
+
+/**
+ * Remove you will be able to block on login register pages.
+ */
+function alshaya_transac_update_8122() {
+  // On some sites we also have custom content blocks of "you will be able to"
+  // which are not present in config, using this opportunity to also cleanup
+  // this blocks.
+  $blocks = ['youllbeableto', 'youllbeableto..', 'youllbeableto...'];
+  alshaya_block_delete_blocks($blocks);
 }
 
 /**
@@ -679,6 +690,7 @@ function alshaya_transac_install() {
     'alshaya_search',
     'alshaya_seo_transac',
     'alshaya_social_facebook',
+    'alshaya_social_google',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
     'alshaya_super_category',

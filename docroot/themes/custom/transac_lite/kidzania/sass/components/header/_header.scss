@@ -17,12 +17,10 @@
   text-align: center;
 
   a {
-    margin-top: 1.125rem;
-    margin-#{$right}: 0.75rem;
+    margin-top: 0.5rem;
     width: 7.1875rem;
     display: inline-block;
     line-height: 1;
-    vertical-align: bottom;
 
     img {
       max-height: 2.875rem;
@@ -67,6 +65,10 @@
   &.show-menu {
     height: 3.75rem;
     padding-top: 1.875rem;
+
+    html[lang=ar] & {
+      height: 3.125rem;
+    }
   }
 
   a {
@@ -74,7 +76,6 @@
     font-size: 1.125rem;
     text-decoration: none;
     padding: 0.625rem;
-    float: $left;
     margin-#{$left}: 1.25rem;
 
     @include breakpoint($only-mobile) {

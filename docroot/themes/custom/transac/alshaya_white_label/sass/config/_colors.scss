@@ -962,6 +962,9 @@ $social-network-text: $grey-ash;
 $social-auth-bg: $white-five;
 $social-auth-bg-hover: rgba(51, 51, 51, 0.06);
 $social_auth_login_button_border: $grey-ash;
+$user_login_sub_text: $grey-ash;
+$user_login_link_btn_text: $grey-ash;
+$user_login_section_title: $grey-ash;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $mothercare-black;
@@ -990,6 +993,16 @@ $sharethis-icon-bg: $mothercare-black;
 $sharethis-label-color: $mothercare-black;
 $sharethis-social-displaytext-color: rgba(0, 0, 0, 0.87);
 $sharethis-border-color: $warm-grey-two;
+
+// Magazine article feature
+$magazine-textarea-color: $grey-light;
+$magazine-label-color: $matterhorn;
+$magazine-article-title: $black;
+$magazine-article-border-color: $warm-grey-two;
+$magazine-article-read-more-bg-color: $grey-light-two;
+$magazine-article-read-more-icon-color: $mothercare-black;
+$magazine-article-primary-color: $white-five;
+$magazine-article-back-to-feed: $black;
 
 // PLP LHN block.
 $lhn_l2: $marine-blue;
@@ -1036,6 +1049,8 @@ $options-list-autocomplete-form-background: $white-five;
 $options-list-autocomplete-form-border: $warm-grey-two;
 $attribute-filter-name-list-text: $black;
 $attribute-swatch-title-text: $white-five;
+$options-list-heading-group-border: $white-two;
+$option-list-search-icon-color: $marine-blue-two;
 
 // Option list menu.
 $option-list-menu-link: $grey-light;

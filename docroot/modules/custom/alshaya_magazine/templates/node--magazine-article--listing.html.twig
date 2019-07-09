@@ -1,0 +1,17 @@
+<article{{ attributes }}>
+
+  <div{{ content_attributes }}>
+    {{ content.field_magazine_date }}
+
+    <a href="{{ url }}">
+      {{ content.field_magazine_homepage_image }}
+    </a>
+
+    {{ content|without('field_magazine_homepage_image', 'field_magazine_date') }}
+
+    <div class="read-more">
+      <a href="{{ url }}">{{ 'read the story'|t }}</a>
+    </div>
+  </div>
+
+</article>

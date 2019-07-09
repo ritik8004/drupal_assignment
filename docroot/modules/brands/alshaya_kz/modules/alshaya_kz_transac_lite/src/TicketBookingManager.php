@@ -57,7 +57,7 @@ class TicketBookingManager {
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->configFactory = $config_factory;
-    $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'));
+    $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'), ['cache_wsdl' => WSDL_CACHE_NONE]);
   }
 
   /**
@@ -493,6 +493,54 @@ class TicketBookingManager {
     }
     catch (\SoapFault $fault) {
       $this->logger->warning('API Error in getting total order - %faultcode: %message', [
+        '%faultcode' => $fault->faultcode,
+        '%message' => $fault->faultstring,
+      ]);
+    }
+    return NULL;
+  }
+
+  /**
+   * Update Pay order status by requesting to Kidsoft after successful payment.
+   *
+   * @param string $sales_number
+   *   The sales number.
+   * @param int $total_amt
+   *   The total amount.
+   * @param int $transaction_id
+   *   The transaction number.
+   *
+   * @return bool|null
+   *   Pay order status or null.
+   */
+  public function payOrder(string $sales_number, $total_amt, $transaction_id) {
+    try {
+      $payOrder = $this->soapClient->__soapCall('payOrder',
+        [
+          'parameters' =>
+          [
+            'saleNum' => $sales_number,
+            'park' => [
+              'Name' => $this->getParkData()->getParksResult->Park->Name,
+              'Prefix' => $this->getParkData()->getParksResult->Park->Prefix,
+            ],
+            'amount' => $total_amt,
+            'card' => [
+              'CardType' => 'VISA',
+              'ID' => 1,
+              'Number' => $transaction_id,
+            ],
+            'auth' => [
+              'AuthString' => $this->getToken()->authenticateResult->AuthString,
+              'AuthVal' => $this->getToken()->authenticateResult->AuthVal,
+            ],
+          ],
+        ]
+      );
+      return $payOrder->payOrderResult;
+    }
+    catch (\SoapFault $fault) {
+      $this->logger->warning('API Error in activating order - %faultcode: %message', [
         '%faultcode' => $fault->faultcode,
         '%message' => $fault->faultstring,
       ]);
