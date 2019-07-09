@@ -170,6 +170,15 @@ class MobileAppUtility {
   protected $redirectRepository;
 
   /**
+   * Contains array of redirects urls.
+   *
+   * @var array
+   *
+   * @see self::getDeepLinkFromUrl()
+   */
+  protected $redirects = [];
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -359,10 +368,21 @@ class MobileAppUtility {
       // If langcode exists in the url string.
       if ($langcode && strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
         $url_to_get_deeplink = str_replace('/' . $langcode . '/', '', $url_to_get_deeplink);
-      }
 
-      $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
-      $url = $redirect ? $redirect->getRedirectUrl() : $url;
+        // Checking if redirects already available or not. If yes, then use or
+        // find the redirects.
+        // Populating the redirects array because to skip the infinite
+        // redirection as well as it goes in in infinite redirection if
+        // process/find the redirect for same url more than once in a request.
+        if (empty($this->redirects[$langcode][$url_to_get_deeplink])) {
+          $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
+          $url = $redirect ? $redirect->getRedirectUrl() : $url;
+          $this->redirects[$langcode][$url_to_get_deeplink] = $url;
+        }
+        else {
+          $url = $this->redirects[$langcode][$url_to_get_deeplink];
+        }
+      }
 
       return self::ENDPOINT_PREFIX
       . 'deeplink?url='
