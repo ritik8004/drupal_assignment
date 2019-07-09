@@ -538,6 +538,7 @@ class SkuImagesManager {
             'color' => $color,
             'attribute' => $listing_swatch_attribute,
             'gallery' => $gallery,
+            'id' => $variant->id(),
           ];
 
           break;
