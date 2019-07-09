@@ -112,7 +112,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
       foreach ($pages as $page) {
         $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
         if (isset($page['menu-title'])) {
-          $links[] = Link::createFromRoute($page['menu-title'], $route_name, [])->toString();
+          $links[] = Link::createFromRoute($page['menu-title'], $route_name, []);
         }
       }
     }

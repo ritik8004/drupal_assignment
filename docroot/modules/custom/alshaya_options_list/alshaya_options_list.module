@@ -36,3 +36,25 @@ function alshaya_options_list_theme($existing, $type, $theme, $path) {
 
   return $items;
 }
+
+/**
+ * Implements hook_alshaya_main_menu_links_alter().
+ */
+function alshaya_options_list_alshaya_main_menu_links_alter(array &$term_data, $parent_id, array $context) {
+  $block_manager = \Drupal::service('plugin.manager.block');
+  $plugin_block = $block_manager->createInstance('alshaya_options_list_menu', []);
+  $render = $plugin_block->build();
+  if (!empty($render['#links'])) {
+    foreach ($render['#links'] as $link) {
+      $item = [
+        'label' => $link->getText(),
+        'path' => $link->getUrl()->toString(),
+        'class' => 'options-list--mobile-link',
+        'clickable' => 1,
+        'display_in_desktop' => 0,
+        'display_in_mobile' => 1,
+      ];
+      $term_data[] = $item;
+    }
+  }
+}
