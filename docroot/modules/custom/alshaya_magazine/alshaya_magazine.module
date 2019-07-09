@@ -100,6 +100,11 @@ function alshaya_magazine_form_alter(&$form, FormStateInterface $form_state, $fo
 
   $form['field_magazine_paragraphs']['widget']['add_more']['add_more_button_image_title_subtitle']['#value'] = t('Add @type', ['@type' => 'Image']);
 
+  if (\Drupal::currentUser()->hasPermission('show promotion options')) {
+    $form['options']['#access'] = TRUE;
+    $form['promote']['#access'] = TRUE;
+  }
+
   foreach ($form['field_magazine_paragraphs']['widget'] as $index => $widget) {
     if (empty($widget['#paragraph_type']) || $widget['#paragraph_type'] != 'image_title_subtitle') {
       continue;
@@ -112,5 +117,19 @@ function alshaya_magazine_form_alter(&$form, FormStateInterface $form_state, $fo
       $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_sub_title']['#access'] = FALSE;
       $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_link']['#access'] = FALSE;
     }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_magazine_module_implements_alter(&$implementations, $hook) {
+  switch ($hook) {
+    // Move our form_alter() implementation to the end of the list.
+    case 'form_alter':
+      $group = $implementations['alshaya_magazine'];
+      unset($implementations['alshaya_magazine']);
+      $implementations['alshaya_magazine'] = $group;
+      break;
   }
 }
