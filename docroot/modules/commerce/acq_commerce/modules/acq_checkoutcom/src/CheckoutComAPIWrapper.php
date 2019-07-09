@@ -57,6 +57,10 @@ class CheckoutComAPIWrapper {
   // Multiply currency value to hundreds.
   const MULTIPLY_HUNDREDS = 100;
 
+  // The option that determines whether the payment method associated with
+  // the successful transaction should be stored in the Vault.
+  const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
+
   /**
    * API Helper service object.
    *
@@ -325,7 +329,6 @@ class CheckoutComAPIWrapper {
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
     $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
     $params['customerIp'] = $this->request->getClientIp();
-    $params['autoCapture'] = 'Y';
     $params['autoCapTime'] = '0';
 
     $doReq = function ($client, $req_param) use ($endpoint, $params) {

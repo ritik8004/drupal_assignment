@@ -183,8 +183,11 @@ class AlshayaCheckoutCom extends CheckoutCom {
     // cko-card-token is not available in form state values.
     $inputs = $form_state->getUserInput();
 
+    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
+    $save_card = isset($payment_method['payment_card_details']['payment_card_new']['save_card'])
+      ? $payment_method['payment_card_details']['payment_card_new']['save_card']
+      : FALSE;
     if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
-      $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
 
       if ((empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
           && !empty($inputs['cko-card-token'])
@@ -193,7 +196,9 @@ class AlshayaCheckoutCom extends CheckoutCom {
           $inputs,
           $this->checkoutComApi->isMadaEnabled()
           ? $payment_method['payment_card_details']['payment_card_new']['card_bin']
-          : NULL);
+          : NULL,
+          $save_card
+        );
       }
       elseif (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
         $this->initiateStoredCardPayment(
