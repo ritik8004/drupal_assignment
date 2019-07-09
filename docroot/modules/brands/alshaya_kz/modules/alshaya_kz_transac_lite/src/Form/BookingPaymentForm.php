@@ -200,6 +200,7 @@ class BookingPaymentForm extends FormBase {
         if ($this->bookingPayment->saveTicketDetails($booking, $final_visitor_list->sales_number)) {
           // Initiate K-Net request.
           $this->knetHelper->setCartId($final_visitor_list->sales_number);
+          $this->knetHelper->setOrderId($final_visitor_list->sales_number);
           $request = $this->knetHelper->initKnetRequest($order_total);
 
           $response = new RedirectResponse($request['url']);
