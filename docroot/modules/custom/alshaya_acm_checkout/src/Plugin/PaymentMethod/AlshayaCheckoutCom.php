@@ -108,6 +108,11 @@ class AlshayaCheckoutCom extends CheckoutCom {
 
             // Ask for cvv again when using existing card.
             if ($payment_card && $payment_card != 'new') {
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
+                '#type' => 'hidden',
+                '#value' => $customer_stored_cards[$payment_card]['gateway_token'],
+              ];
+
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [
                 '#type' => 'password',
                 '#maxlength' => 4,
@@ -196,7 +201,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       }
       elseif (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
         $this->initiateStoredCardPayment(
-          $payment_method['payment_card'],
+          $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
           (int) $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['cc_cvv']
         );
       }

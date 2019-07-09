@@ -3,10 +3,12 @@
 namespace Drupal\acq_checkoutcom;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Datetime\Time;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
@@ -52,6 +54,20 @@ class ApiHelper {
   protected $cache;
 
   /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\Time
+   */
+  protected $time;
+
+  /**
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -78,19 +94,27 @@ class ApiHelper {
    *   LoggerChannelFactory object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend object.
+   * @param \Drupal\Component\Datetime\Time $time
+   *   The time service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date Formatter service.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
     UserDataInterface $user_data,
     LoggerChannelFactory $logger_factory,
-    CacheBackendInterface $cache
+    CacheBackendInterface $cache,
+    Time $time,
+    DateFormatterInterface $date_formatter
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
     $this->userData = $user_data;
     $this->logger = $logger_factory->get('acq_checkoutcom');
     $this->cache = $cache;
+    $this->time = $time;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -182,13 +206,21 @@ class ApiHelper {
       return [];
     }
 
-    foreach ($cards as &$card) {
+    $time = $this->time->getRequestTime();
+    $card_list = [];
+    foreach ($cards as $card) {
       $token_details = Json::decode($card['token_details']);
-      list($card['expiryMonth'], $card['expiryYear']) = explode('/', $token_details['expirationDate']);
-      $card['last4'] = $token_details['maskedCC'];
+      list($expiryMonth, $expiryYear) = explode('/', $token_details['expirationDate']);
+
+      // Set card is expired or not.
+      $current_date = strtotime($this->dateFormatter->format($time, 'custom', 'Y-m'));
+      $card_date = strtotime($expiryYear . '-' . $expiryMonth);
+      $card['expired'] = ($current_date > $card_date);
+
       $card['paymentMethod'] = $this->ccTypesMap[$token_details['type']] ?? NULL;
+      $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
-    return $cards;
+    return $card_list;
   }
 
   /**

@@ -83,11 +83,6 @@ function acq_checkoutcom_library_info_build() {
  *   The array of variables.
  */
 function acq_checkoutcom_preprocess_card_info(array &$variables) {
-  $time = \Drupal::service('datetime.time')->getRequestTime();
-  $current_date = strtotime(\Drupal::service('date.formatter')->format($time, 'custom', 'Y-m'));
-  $card_date = strtotime($variables['card_info']['expiryYear'] . '-' . $variables['card_info']['expiryMonth']);
-  // Set card is expired or not.
-  $variables['card_info']['expired'] = ($current_date > $card_date);
   // Set the delete link.
   if ($variables['user'] instanceof UserInterface) {
     $destination = [];
