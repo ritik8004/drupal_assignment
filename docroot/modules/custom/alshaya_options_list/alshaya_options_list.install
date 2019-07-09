@@ -17,7 +17,6 @@ function alshaya_options_list_update_8001() {
   $manager->updateConfigs(
     [
       'block.block.alshayaoptionslistpagemenu',
-      'block.block.alshayaoptionslistpagemenu_2',
     ],
     'optional'
   );
