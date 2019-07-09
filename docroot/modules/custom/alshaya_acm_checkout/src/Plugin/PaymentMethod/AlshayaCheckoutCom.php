@@ -120,15 +120,16 @@ class AlshayaCheckoutCom extends CheckoutCom {
               ];
             }
             elseif ($payment_card == 'new') {
-              $pane_form['payment_card_details']['payment_card_' . $payment_card] = [
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] = [
                 '#type' => 'container',
+                '#tree' => FALSE,
                 '#attributes' => [
                   'id' => ['payment_card_' . $card_id],
                 ],
               ];
-              $pane_form['payment_card_details']['payment_card_' . $payment_card] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card], $form_state);
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv']['#prefix'] = $cc_prefix;
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv']['#suffix'] = $cc_suffix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#prefix'] = $cc_prefix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#suffix'] = $cc_suffix;
             }
           }
         }
@@ -181,19 +182,17 @@ class AlshayaCheckoutCom extends CheckoutCom {
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // cko-card-token is not available in form state values.
-    $inputs = $form_state->getUserInput();
-
     $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
     $save_card = isset($payment_method['payment_card_details']['payment_card_new']['save_card'])
       ? $payment_method['payment_card_details']['payment_card_new']['save_card']
       : FALSE;
-    if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
 
+    if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
       if ((empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
-          && !empty($inputs['cko-card-token'])
+          && !empty($payment_method['payment_card_details']['payment_card_new']['cko_card_token'])
       ) {
         $this->initiate3dSecurePayment(
-          $inputs,
+          $payment_method['payment_card_details']['payment_card_new']['cko_card_token'],
           $this->checkoutComApi->isMadaEnabled()
           ? $payment_method['payment_card_details']['payment_card_new']['card_bin']
           : NULL,
@@ -211,7 +210,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->getCart()->setPaymentMethod(
         $this->getId(),
-        ['card_token_id' => $inputs['cko-card-token']]
+        ['card_token_id' => $payment_method['payment_card_details']['payment_card_new']['cko_card_token']]
       );
     }
   }

@@ -196,6 +196,9 @@ $social_links_hover: $grey5;
 // Social login.
 $social-network-text: $hnm-black-two;
 $social_auth_login_button_border: $_greenish_1;
+$user_login_sub_text: $hnm-black-two;
+$user_login_link_btn_text: $hnm-black;
+$user_login_section_title: $hnm-black;
 
 //Address book
 $address_tile_selected_bg: $grey3;
@@ -474,6 +477,8 @@ $checkout_payment_help: $grey7;
 $checkout_payment_checkoutcom_card_details: $black-two;
 $checkout_payment_checkoutcom_card_details_expiry: $black-two;
 $checkout_payment_checkoutcom_new_option_text: $black-two;
+$checkout_payment_checkoutcom_save_card_label: $black-two;
+$checkout_payment_checkoutcom_save_card_help: $black-two;
 
 // Checkout Login
 $checkout_guest_summary: $grey-ash;
