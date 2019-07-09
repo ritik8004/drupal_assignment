@@ -1,7 +1,10 @@
-<a href="{{ product_url }}" class="list-product-gallery">
+<a href="{{ product_url }}" data--original-url="{{ product_url }}" class="list-product-gallery">
   {% if all_galleries is not empty %}
     {% for data in all_galleries %}
-      <span class="hidden" data--color="{{ data.color }}" data--color-attribute="{{ data.attribute }}">
+      <span class="hidden"
+            data--color="{{ data.color }}"
+            data--color-attribute="{{ data.attribute }}"
+            data--id="{{ data.id }}">
         {{ data.gallery }}
       </span>
     {% endfor %}
