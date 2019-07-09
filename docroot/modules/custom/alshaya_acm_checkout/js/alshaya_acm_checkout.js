@@ -327,7 +327,15 @@
        && !$('#payment_method_checkout_com .payment-plugin-wrapper-div').hasClass('plugin-selected')
        && !$('#payment_method_title_checkout_com_mada .payment-plugin-wrapper-div').hasClass('plugin-selected')
      ) {
-       $(this).showCheckoutLoader();
+       // Doing this to prevent race condition in check the `error` class and
+       // showing the throbber on click.
+       setTimeout(function() {
+         var form = $('form#multistep-checkout');
+         // Show loader only when there is no inline error.
+         if (form.valid()) {
+           $(this).showCheckoutLoader();
+         }
+       }, 1);
      }
    });
 
