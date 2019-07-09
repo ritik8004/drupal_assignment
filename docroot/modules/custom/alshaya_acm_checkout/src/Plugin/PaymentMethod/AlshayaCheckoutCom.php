@@ -139,6 +139,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
     if ($this->currentUser->isAnonymous() || empty($stored_cards_list)) {
       $pane_form['payment_card_details']['payment_card_new'] = [
         '#type' => 'container',
+        '#tree' => FALSE,
         '#attributes' => [
           'id' => ['payment_method_new'],
         ],
@@ -181,22 +182,19 @@ class AlshayaCheckoutCom extends CheckoutCom {
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // cko-card-token is not available in form state values.
     $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
-    $save_card = isset($payment_method['payment_card_details']['payment_card_new']['save_card'])
-      ? $payment_method['payment_card_details']['payment_card_new']['save_card']
-      : FALSE;
 
+    // Process 3d payment.
     if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
       if ((empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
-          && !empty($payment_method['payment_card_details']['payment_card_new']['cko_card_token'])
+          && !empty($form_state->getValue('cko_card_token'))
       ) {
         $this->initiate3dSecurePayment(
-          $payment_method['payment_card_details']['payment_card_new']['cko_card_token'],
+          $form_state->getValue('cko_card_token'),
           $this->checkoutComApi->isMadaEnabled()
-          ? $payment_method['payment_card_details']['payment_card_new']['card_bin']
+          ? $form_state->getValue('card_bin')
           : NULL,
-          $save_card
+          $form_state->getValue('save_card')
         );
       }
       elseif (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
@@ -210,7 +208,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->getCart()->setPaymentMethod(
         $this->getId(),
-        ['card_token_id' => $payment_method['payment_card_details']['payment_card_new']['cko_card_token']]
+        ['card_token_id' => $form_state->getValue('cko_card_token')]
       );
     }
   }
