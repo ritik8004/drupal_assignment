@@ -4,8 +4,8 @@
   width: 100%;
   border-bottom: 1px solid $checkout_payment_checkoutcom_border;
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-name,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-number,
+  .form-item-cc-name,
+  .form-item-cc-number,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-name,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-number {
     @include breakpoint($desktop) {
@@ -17,7 +17,7 @@
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-month,
+  .form-item-cc-exp-month,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-month {
     @include breakpoint($tablet) {
       margin-#{$right}: 1.5rem;
@@ -28,9 +28,9 @@
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-month,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-year,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv,
+  .form-item-cc-exp-month,
+  .form-item-cc-exp-year,
+  .form-item-cc-cvv,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-month,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-year,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-cvv {
@@ -47,35 +47,32 @@
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-month,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-exp-year,
+  .form-item-cc-exp-month,
+  .form-item-cc-exp-year,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-month,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-year {
     float: $left;
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-number,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv,
+  .form-item-cc-number,
+  .form-item-cc-cvv,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-number,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-cvv {
-    label:not(.error) {
-      @include placeholder-label;
-    }
-
     input:focus ~ label:not(.error),
+    input:not(:focus):valid ~ label:not(.error),
     input:active ~ label:not(.error),
-    input:valid ~ label:not(.error) {
+    input:not(:active):valid ~ label:not(.error),
+    input.error ~ label:not(.error) {
       @include placeholder-active;
     }
+
+    input ~ label:not(.error) {
+      @include placeholder-label;
+    }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-cvv {
-    margin-top: 2.6em;
-  }
-
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-cc-cvv,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-save-card,
+  .form-item-cc-cvv,
+  .form-item-save-card,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-cvv,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-save-card,
   .cc-save-help-text {
@@ -83,10 +80,12 @@
     float: $left;
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-new-save-card {
+  .form-item-save-card,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-save-card {
     label {
       top: 0;
       font-size: 0.875rem;
+      color: $checkout_payment_checkoutcom_save_card_label;
 
       &.option {
         &::before {
@@ -104,6 +103,7 @@
     max-width: 25.3125rem;
     font-size: 0.875rem;
     margin-top: 1.5rem;
+    color: $checkout_payment_checkoutcom_save_card_help;
 
     @include breakpoint($upto-desktop) {
       width: 75%;
@@ -131,6 +131,11 @@
 
     #payment_method_new {
       min-height: auto;
+      margin-bottom: 1.5rem;
+
+      .form-item {
+        margin-top: 2rem;
+      }
 
       .cvv-wrapper {
         clear: both;
@@ -138,7 +143,7 @@
         .cc_cvv_help_text {
           @include breakpoint ($desktop) {
             top: 1.5rem;
-            #{$left}: 27%;
+            #{$left}: 13.8rem;
           }
 
           @include breakpoint($only-tablet) {
@@ -200,6 +205,7 @@
           border: 1px solid $primary_radiobtn_empty;
           position: absolute;
           top: 3px;
+          #{$left}: 0;
         }
 
         &.card-selected {
@@ -358,6 +364,7 @@
   #payment_card_new {
     @include breakpoint($tablet) {
       padding-#{$left}: 2rem;
+      margin-top: 1rem;
     }
   }
 }
