@@ -11,10 +11,7 @@
  * Creates config for `alshaya_config` module.
  */
 function alshaya_config_update_8601() {
-  /* @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager*/
-  $config_manager = \Drupal::service('alshaya_config.manager');
-  $config_manager->updateConfigs(
-    ['alshaya_config.settings'],
-    'alshaya_config'
-  );
+  \Drupal::configFactory()->getEditable('alshaya_config.settings')
+    ->set('log_config_changes', TRUE)
+    ->save();
 }
