@@ -5,6 +5,7 @@ namespace Drupal\acq_checkoutcom;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\user\UserDataInterface;
@@ -44,6 +45,13 @@ class ApiHelper {
   protected $logger;
 
   /**
+   * Cache backend object.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -68,17 +76,21 @@ class ApiHelper {
    *   The user data service.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache backend object.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
     UserDataInterface $user_data,
-    LoggerChannelFactory $logger_factory
+    LoggerChannelFactory $logger_factory,
+    CacheBackendInterface $cache
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
     $this->userData = $user_data;
     $this->logger = $logger_factory->get('acq_checkoutcom');
+    $this->cache = $cache;
   }
 
   /**
@@ -128,20 +140,36 @@ class ApiHelper {
    *   Return array of customer cards or empty array.
    */
   public function getCustomerCards(UserInterface $user) {
+    $cache_key = 'acq_checkoutcom:payment_cards:' . $user->id();
+    $cache = $this->cache->get($cache_key);
+    if ($cache) {
+      return $cache->data;
+    }
+
     $customer_id = $user->get('acq_customer_id')->getString();
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/getTokenList/?customer_id=$customer_id",
       [],
-      "GET"
+      'GET'
     );
     $response = Json::decode($response);
-    return (!empty($response) && isset($response['message']))
-      ? strtr($response['message'], $response['parameters'] ?? [])
-      : $this->processsCardInfo($response['items']);
+
+    if (!empty($response) && isset($response['message'])) {
+      return strtr($response['message'], $response['parameters'] ?? []);
+    }
+
+    $cards = $this->extractCardInfo($response['items']);
+    $this->cache->set(
+      $cache_key,
+      $cards,
+      Cache::PERMANENT,
+      ['user:' . $user->id()]
+    );
+    return $cards;
   }
 
   /**
-   * Extract card info.
+   * Extract encoded token details of card info.
    *
    * @param array $cards
    *   List of stored cards.
@@ -149,7 +177,7 @@ class ApiHelper {
    * @return array
    *   Return process array of card list.
    */
-  protected function processsCardInfo(array $cards) {
+  protected function extractCardInfo(array $cards) {
     if (empty($cards)) {
       return [];
     }
@@ -179,7 +207,7 @@ class ApiHelper {
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/saveCard/$card_token/customerId/$customer_id",
       [],
-      "GET"
+      'GET'
     );
 
     $response = Json::decode($response);
@@ -187,7 +215,7 @@ class ApiHelper {
       return $response['message'];
     }
 
-    Cache::invalidateTags(['user:' . $user->id() . ':payment_cards']);
+    Cache::invalidateTags(['user:' . $user->id()]);
     return NULL;
   }
 
@@ -207,7 +235,7 @@ class ApiHelper {
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/deleteTokenByCustomerIdAndHash/$public_hash/customerId/$customer_id",
       [],
-      "DELETE"
+      'DELETE'
     );
 
     return Json::decode($response);

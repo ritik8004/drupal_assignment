@@ -211,7 +211,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
           $this->t('Your card has been deleted.')
         );
       }
-      Cache::invalidateTags(['user:' . $uid . ':payment_cards']);
+      Cache::invalidateTags(['user:' . $uid]);
     }
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());

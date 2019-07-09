@@ -153,7 +153,7 @@ class CustomerController extends ControllerBase {
       ],
       '#cache' => [
         'tags' => [
-          'user:' . $this->currentUser->id() . ':payment_cards',
+          'user:' . $this->currentUser->id(),
         ],
       ],
     ];
