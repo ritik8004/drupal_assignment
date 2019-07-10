@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_options_list\Form;
 
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -207,6 +208,9 @@ class AlshayaOptionsListForm extends ConfigFormBase {
 
     // Rebuild routes so that new routes get added.
     $this->routerBuilder->rebuild();
+
+    // Invalidate page cache.
+    Cache::invalidateTags(['alshaya-options-page']);
 
     return parent::submitForm($form, $form_state);
   }
