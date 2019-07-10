@@ -11,6 +11,9 @@ acq_checkoutcom.settings:
     verify_3dsecure:
       type: boolean
       label: '3D Secure Verification'
+    api_cache_time:
+      type: integer
+      label: 'api cache time'
     env:
       type: string
       label: 'Environment to use (sandbox / live)'

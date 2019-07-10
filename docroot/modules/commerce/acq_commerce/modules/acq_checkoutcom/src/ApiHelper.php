@@ -68,6 +68,13 @@ class ApiHelper {
   protected $dateFormatter;
 
   /**
+   * Api cache times.
+   *
+   * @var int
+   */
+  protected $cacheTime;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -110,6 +117,7 @@ class ApiHelper {
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
+    $this->cacheTime = (int) $config_factory->get('acq_checkoutcom.settings')->get('api_cache_time');
     $this->userData = $user_data;
     $this->logger = $logger_factory->get('acq_checkoutcom');
     $this->cache = $cache;
@@ -186,7 +194,7 @@ class ApiHelper {
     $this->cache->set(
       $cache_key,
       $cards,
-      Cache::PERMANENT,
+      $this->time->getRequestTime() + $this->cacheTime,
       ['user:' . $user->id()]
     );
     return $cards;
