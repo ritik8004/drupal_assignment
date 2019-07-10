@@ -644,13 +644,16 @@ class TicketBookingManager {
    *   Visitor price value.
    */
   public function getVisitorPrice($shifts, $visit_date, $visitor_id) {
+    $price_data = '';
     $visitor_types = $this->getVisitorTypesData($shifts, $visit_date);
-    $price_data = array_filter(
-      $visitor_types->getVisitorTypesResult->VisitorType,
-      function ($e) use (&$visitor_id) {
-        return $e->ID == $visitor_id;
-      }
-    );
+    if (!empty($visitor_types)) {
+      $price_data = array_filter(
+        $visitor_types->getVisitorTypesResult->VisitorType,
+        function ($e) use (&$visitor_id) {
+          return $e->ID == $visitor_id;
+        }
+      );
+    }
     if (!empty($price_data)) {
       return reset($price_data)->Price;
     }
