@@ -159,37 +159,56 @@ class TicketBookingController extends ControllerBase {
     $response = new JsonResponse();
     $shifts = $request->request->get('shifts');
     $final_visitor_list = $request->request->get('final_visitor_list');
-
-    if ($this->ticketBooking->validateVisitorsList($final_visitor_list['data'])) {
+    $valid = $this->ticketBooking->validateVisitorsList($final_visitor_list['data']);
+    if ($valid === 1) {
       $sales_number = $this->ticketBooking->generateSalesNumber();
       $flag = FALSE;
       foreach ($final_visitor_list['data'] as $key => $value) {
-        foreach ($value['Book'] as $k => $val) {
-          $flag = FALSE;
-          // Generate ticket number.
-          $ticket_number = $this->ticketBooking->generateTicketNumber();
-          $final_visitor_list['data'][$key]['Book'][$k]['ticket_id'] = $ticket_number;
-          if ($this->ticketBooking->saveTicket($final_visitor_list['data'][$key], $val, $ticket_number, $shifts, $sales_number, $final_visitor_list['visit_date'])) {
-            $flag = TRUE;
-          }
-          else {
-            $responseData->err = TRUE;
-            $responseData->message = $this->t('Unable to save ticket for the requested order.');
-            $response->setData($responseData);
-            return $response;
+        $price = $this->ticketBooking->getVisitorPrice($shifts, $final_visitor_list['visit_date'], $value['ID']);
+        if ($price !== NULL) {
+          foreach ($value['Book'] as $k => $val) {
+            $flag = FALSE;
+            // Generate ticket number.
+            $ticket_number = $this->ticketBooking->generateTicketNumber();
+            $final_visitor_list['data'][$key]['Book'][$k]['ticket_id'] = $ticket_number;
+            if ($this->ticketBooking->saveTicket($final_visitor_list['data'][$key], $val, $ticket_number, $shifts, $sales_number, $final_visitor_list['visit_date'])) {
+              $flag = TRUE;
+            }
+            else {
+              $responseData->err = TRUE;
+              $responseData->message = $this->t('Unable to save ticket for the requested order.');
+              $response->setData($responseData);
+              return $response;
+            }
           }
         }
+        else {
+          $responseData->err = TRUE;
+          $responseData->message = $this->t('Unable to validate price for requested visitor.');
+          $response->setData($responseData);
+          return $response;
+        }
       }
-      if ($flag) {
+      $order_total = $this->ticketBooking->getOrderTotal($sales_number);
+      if ($flag && ($order_total == $final_visitor_list['total']['price'])) {
         $final_visitor_list['sales_number'] = $sales_number;
         $final_visitor_list['status'] = TRUE;
         $response->setData($final_visitor_list);
         return $response;
       }
+      $responseData->err = TRUE;
+      $responseData->message = $this->t('Total amount is not valid as per requested order.');
+      $response->setData($responseData);
+      return $response;
     }
     else {
       $responseData->err = TRUE;
-      $responseData->message = $this->t('Please fill the complete form.');
+      if ($valid === 2) {
+        $responseData->message = $this->t('Children under the age of 8, must be accompanied by an Adult.');
+      }
+      else {
+        $responseData->message = $this->t('Please fill the complete form.');
+      }
       $response->setData($responseData);
       return $response;
     }
