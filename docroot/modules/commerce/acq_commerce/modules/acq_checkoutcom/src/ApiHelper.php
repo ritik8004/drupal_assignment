@@ -243,11 +243,13 @@ class ApiHelper {
    *   Return empty array or string.
    */
   public function storeCustomerCard(UserInterface $user, string $card_token) {
-    $customer_id = $user->get('acq_customer_id')->getString();
     $response = $this->apiWrapper->invokeApi(
-      "checkoutcom/saveCard/$card_token/customerId/$customer_id",
-      [],
-      'GET'
+      'checkoutcom/saveCard',
+      [
+        'card_token' => $card_token,
+        'customer_id' => $user->get('acq_customer_id')->getString(),
+      ],
+      'POST'
     );
 
     $response = Json::decode($response);
