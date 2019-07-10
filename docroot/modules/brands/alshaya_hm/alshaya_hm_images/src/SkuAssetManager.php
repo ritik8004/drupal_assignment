@@ -20,6 +20,7 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
+use Drupal\Core\Lock\PersistentDatabaseLockBackend;
 
 /**
  * SkuAssetManager Class.
@@ -138,6 +139,14 @@ class SkuAssetManager {
   private $fileUsage;
 
   /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\PersistentDatabaseLockBackend
+   */
+  protected $lock;
+
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -164,6 +173,8 @@ class SkuAssetManager {
    *   Date Time service.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File Usage.
+   * @param \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock
+   *   Lock service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -176,7 +187,8 @@ class SkuAssetManager {
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
                               TimeInterface $time,
-                              FileUsageInterface $file_usage) {
+                              FileUsageInterface $file_usage,
+                              PersistentDatabaseLockBackend $lock) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -190,6 +202,7 @@ class SkuAssetManager {
     $this->logger = $logger_factory->get('SkuAssetManager');
     $this->time = $time;
     $this->fileUsage = $file_usage;
+    $this->lock = $lock;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -214,14 +227,11 @@ class SkuAssetManager {
 
     $save = FALSE;
 
-    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-    $lock = \Drupal::service('lock.persistent');
-
     $lock_key = 'downloadSkuImage' . $sku->id();
 
     // Acquire lock to ensure parallel processes are executed one by one.
     do {
-      $lock_acquired = $lock->acquire($lock_key);
+      $lock_acquired = $this->lock->acquire($lock_key);
 
       // Sleep for half a second before trying again.
       if (!$lock_acquired) {
@@ -276,7 +286,7 @@ class SkuAssetManager {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
       if (!empty($lock_key) && !empty($lock_acquired)) {
-        $lock->release($lock_key);
+        $this->lock->release($lock_key);
 
         // To ensure we don't keep releasing the lock again and again
         // we set it to NULL here.
