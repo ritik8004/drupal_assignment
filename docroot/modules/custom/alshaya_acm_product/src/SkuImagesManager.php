@@ -494,6 +494,62 @@ class SkuImagesManager {
   }
 
   /**
+   * Get gallery for all the colors of product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Galleries for all color as array.
+   */
+  public function getAllColorGallery(SKU $sku) {
+    $listing_swatch_attributes = $this->skuManager->getProductListingSwatchAttributes();
+    if (empty($listing_swatch_attributes)) {
+      return [];
+    }
+
+    $listing_swatch_attribute = reset($listing_swatch_attributes);
+
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+
+    $color_attribute = NULL;
+    foreach ($this->skuManager->getPdpSwatchAttributes() as $attribute_code) {
+      if (isset($combinations['attribute_sku'][$attribute_code])) {
+        $color_attribute = $attribute_code;
+        break;
+      }
+    }
+
+    if (empty($color_attribute)) {
+      return [];
+    }
+
+    $galleries = [];
+
+    foreach ($combinations['attribute_sku'][$color_attribute] as $variants) {
+      foreach ($variants as $variant_sku) {
+        $variant = SKU::loadFromSku($variant_sku);
+        $gallery = $this->getGallery($variant);
+
+        if (!empty($gallery) && !empty($gallery['#mainImage'])) {
+          $color = $variant->get('attr_' . $listing_swatch_attribute)->getString();
+
+          $galleries[$color] = [
+            'color' => $color,
+            'attribute' => $listing_swatch_attribute,
+            'gallery' => $gallery,
+            'id' => $variant->id(),
+          ];
+
+          break;
+        }
+      }
+    }
+
+    return $galleries;
+  }
+
+  /**
    * Get SKU to use for gallery when no specific child is selected.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku

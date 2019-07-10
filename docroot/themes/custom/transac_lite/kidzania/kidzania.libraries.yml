@@ -1,0 +1,26 @@
+booking_steps:
+  js:
+    js/kidzania.js: {}
+
+global_styles:
+  css:
+    theme:
+      css/colors.css: {}
+
+  js:
+    js/global.js: {}
+
+  dependencies:
+    - core/jquery.ui.datepicker
+
+ltr_styles:
+  css:
+    theme:
+      css/ltr.css: {}
+      css/ltr-print.css: {media: print}
+
+rtl_styles:
+  css:
+    theme:
+      css/rtl.css: {}
+      css/rtl-print.css: {media: print}

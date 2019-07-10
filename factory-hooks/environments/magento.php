@@ -116,6 +116,9 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 17, 'ar' => 23],
     ],
+    'eg' => [
+      'store_id' => ['en' => 30, 'ar' => 27],
+    ],
   ],
   'hm_mapp' => [
     'url' => 'https://mapp-hjuuq7a-zbrr3sobrsb3o.eu.magentosite.cloud',

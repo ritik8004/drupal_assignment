@@ -1,0 +1,18 @@
+name: KidZania
+description: Theme for KidZania brands.
+type: theme
+core: 8.x
+base theme: cog
+alshaya_theme_type: alshaya_transac_lite
+
+regions:
+  header_primary: 'Header Primary'
+  header: Header
+  hero_content: 'Hero Content'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - kidzania/global_styles

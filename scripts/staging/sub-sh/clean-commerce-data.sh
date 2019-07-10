@@ -37,3 +37,23 @@ drush --uri=$uri p-queue-empty
 
 echo "Delete all active sessions so we can have fresh carts after resetting data"
 drush --uri=$uri sqlq "DELETE FROM sessions;"
+
+echo "Delete all product media files from database"
+drush --uri=$uri sqlq "DELETE FROM file_usage WHERE fid IN (SELECT fid from file_managed WHERE uri LIKE 'public://media/%');"
+drush --uri=$uri sqlq "DELETE FROM file_usage WHERE fid IN (SELECT fid from file_managed WHERE uri LIKE 'public://assets/%');"
+drush --uri=$uri sqlq "DELETE FROM file_usage WHERE fid IN (SELECT fid from file_managed WHERE uri LIKE 'public://assets-lp/%');"
+drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://media/%';"
+drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets/%';"
+drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets-lp/%';"
+
+echo "Deleting all product media files from filesystem"
+files_dir="$(drush --uri=$uri php-eval 'echo drupal_realpath("public://");')"
+rm -rf "$files_dir/media"
+rm -rf "$files_dir/assets"
+rm -rf "$files_dir/assets-lp"
+
+echo "Deleting styles directory"
+rm -rf "$files_dir/styles"
+
+echo "Re-creating empty styles directory"
+mkdir "$files_dir/styles"
