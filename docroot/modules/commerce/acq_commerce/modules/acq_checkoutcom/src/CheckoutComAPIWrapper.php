@@ -324,13 +324,15 @@ class CheckoutComAPIWrapper {
   protected function make3dSecurePaymentRequest(Cart $cart, string $endpoint, array $params, $caller = '') {
     // Set parameters required for 3d secure payment.
     $params['chargeMode'] = self::VERIFY_3DSECURE;
+    // Capture payment immediately, values 0 to 168 (0 to 7 days).
+    $params['autoCapTime'] = '0';
     $params['autoCapture'] = self::AUTOCAPTURE;
+    $params['attemptN3D'] = FALSE;
+    $params['customerIp'] = $this->request->getClientIp();
     $params['successUrl'] = Url::fromRoute('acq_checkoutcom.payment_success', [], ['absolute' => TRUE])->toString();
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
     $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
-    $params['customerIp'] = $this->request->getClientIp();
-    // Capture payment immediately, values 0 to 168 (0 to 7 days).
-    $params['autoCapTime'] = '0';
+    $params['products'] = $this->getCartItems();
 
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
       $opt = ['json' => $req_param + $params];
@@ -366,6 +368,30 @@ class CheckoutComAPIWrapper {
         )
       );
     }
+  }
+
+  /**
+   * Prepare cart items array to send with payment request.
+   *
+   * @return array
+   *   Array of cart items list.
+   */
+  protected function getCartItems() {
+    $items = $this->getCart()->items();
+
+    $products = [];
+    foreach ($items as $line_item) {
+      // Ensure object notation.
+      $line_item = (object) $line_item;
+      $products[] = [
+        'sku' => $line_item->sku,
+        'name' => $line_item->name['#title'],
+        'quantity' => $line_item->qty,
+        'price' => $line_item->price,
+        'description' => NULL,
+      ];
+    }
+    return $products;
   }
 
   /**
