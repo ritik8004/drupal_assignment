@@ -592,36 +592,40 @@ class TicketBookingManager {
    * @param array $final_visitor_list
    *   Array of visitors list.
    *
-   * @return bool
-   *   A boolean flag.
+   * @return int
+   *   A number flag.
    */
   public function validateVisitorsList(array $final_visitor_list) {
-    $flag = FALSE;
+    $flag = 0;
     $is_child = FALSE;
-    $i = 0;
     foreach ($final_visitor_list as $value) {
-      $flag = FALSE;
+      $flag = 0;
       if (isset($value['Book'])) {
         // Is infants available.
         if ($value['ID'] == 0 || $value['ID'] == 1) {
           $is_child = TRUE;
         }
         // Is kid available not need adult.
-        if ($value['ID'] == 2 && $value['Book'][$i]['age'] >= 8) {
-          $flag = TRUE;
+        if ($value['ID'] == 2) {
+          $flag = 1;
+          foreach ($value['Book'] as $val) {
+            if ($val['age'] < 8) {
+              $flag = 2;
+              break;
+            }
+          }
         }
         // Adult is required with infants.
         if ($value['ID'] == 4 && $is_child) {
-          $flag = TRUE;
+          $flag = 1;
         }
         // Adult must be allowed with infants or kids only.
         if ($value['ID'] == 4 && !$is_child) {
           if (array_search(2, array_column($value, 'ID'))) {
-            $flag = TRUE;
+            $flag = 1;
           }
         }
       }
-      $i++;
     }
     return $flag;
   }

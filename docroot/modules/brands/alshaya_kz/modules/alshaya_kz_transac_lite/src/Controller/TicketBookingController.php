@@ -159,8 +159,8 @@ class TicketBookingController extends ControllerBase {
     $response = new JsonResponse();
     $shifts = $request->request->get('shifts');
     $final_visitor_list = $request->request->get('final_visitor_list');
-
-    if ($this->ticketBooking->validateVisitorsList($final_visitor_list['data'])) {
+    $valid = $this->ticketBooking->validateVisitorsList($final_visitor_list['data']);
+    if ($valid === 1) {
       $sales_number = $this->ticketBooking->generateSalesNumber();
       $flag = FALSE;
       foreach ($final_visitor_list['data'] as $key => $value) {
@@ -203,7 +203,12 @@ class TicketBookingController extends ControllerBase {
     }
     else {
       $responseData->err = TRUE;
-      $responseData->message = $this->t('Please fill the complete form.');
+      if ($valid === 2) {
+        $responseData->message = $this->t('Children under the age of 8, must be accompanied by an Adult.');
+      }
+      else {
+        $responseData->message = $this->t('Please fill the complete form.');
+      }
       $response->setData($responseData);
       return $response;
     }
