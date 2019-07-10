@@ -238,7 +238,22 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
+      /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+      $lock = \Drupal::service('lock.persistent');
+
       try {
+        $lock_key = 'downloadSkuImage' . $sku->id();
+
+        // Acquire lock to ensure parallel processes are executed one by one.
+        do {
+          $lock_acquired = $lock->acquire($lock_key);
+
+          // Sleep for half a second before trying again.
+          if (!$lock_acquired) {
+            usleep(500000);
+          }
+        } while (!$lock_acquired);
+
         $file = $this->downloadImage($asset, $sku->getSku());
         if ($file instanceof FileInterface) {
           $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
@@ -260,7 +275,13 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
+      if (!empty($lock_key) && !empty($lock_acquired)) {
+        $lock->release($lock_key);
 
+        // To ensure we don't keep releasing the lock again and again
+        // we set it to NULL here.
+        $lock_key = NULL;
+      }
       $this->logger->notice('Downloaded new asset images for sku @sku.', [
         '@sku' => $sku->getSku(),
       ]);

@@ -119,6 +119,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
         return [];
       }
 
+      if ($download_media) {
+        /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+        $lock = \Drupal::service('lock.persistent');
+        $lock_key = 'downloadSkuImage' . $this->id();
+
+        // Acquire lock to ensure parallel processes are executed one by one.
+        do {
+          $lock_acquired = $lock->acquire($lock_key);
+
+          // Sleep for half a second before trying again.
+          if (!$lock_acquired) {
+            usleep(500000);
+          }
+        } while (!$lock_acquired);
+      }
+
       foreach ($media_data as &$data) {
         // We don't want to show disabled images.
         if (isset($data['disabled']) && $data['disabled']) {
@@ -131,6 +147,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($update_sku) {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
+        if ($download_media && !empty($lock_key) && !empty($lock_acquired)) {
+          $lock->release($lock_key);
+
+          // To ensure we don't keep releasing the lock again and again
+          // we set it to NULL here.
+          $lock_key = NULL;
+        }
       }
     }
 
