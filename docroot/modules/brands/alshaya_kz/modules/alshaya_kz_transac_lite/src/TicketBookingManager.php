@@ -606,7 +606,7 @@ class TicketBookingManager {
           $is_child = TRUE;
         }
         // Is kid available not need adult.
-        if ($value['ID'] == 2) {
+        elseif ($value['ID'] == 2) {
           $flag = 1;
           foreach ($value['Book'] as $val) {
             if ($val['age'] < 8) {
@@ -616,11 +616,11 @@ class TicketBookingManager {
           }
         }
         // Adult is required with infants.
-        if ($value['ID'] == 4 && $is_child) {
+        elseif ($value['ID'] == 4 && $is_child) {
           $flag = 1;
         }
         // Adult must be allowed with infants or kids only.
-        if ($value['ID'] == 4 && !$is_child) {
+        elseif ($value['ID'] == 4 && !$is_child) {
           if (array_search(2, array_column($value, 'ID'))) {
             $flag = 1;
           }
