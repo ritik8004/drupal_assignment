@@ -58,7 +58,7 @@ class AlshayaOptionsListRoutes implements ContainerInjectionInterface {
    *   An array of route objects.
    */
   public function routes() {
-    if ($this->alshayaOptionsService->optionsPageEnabled()) {
+    if (!$this->alshayaOptionsService->optionsPageEnabled()) {
       return;
     }
     $pages = $this->config->get('alshaya_options_pages');
