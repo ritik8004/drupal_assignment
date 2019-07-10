@@ -801,6 +801,14 @@ class AlshayaGtmManager {
    *   Root parent term id.
    */
   public function getRootGroup($tid) {
+    $roots = &drupal_static('alshaya_gtm_manager_get_root_group', []);
+
+    if (isset($roots[$tid])) {
+      return $roots[$tid];
+    }
+
+    $original = $tid;
+
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
       $query = $this->database->select('taxonomy_term__parent', 'tth');
@@ -808,6 +816,7 @@ class AlshayaGtmManager {
       $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
+        $roots[$original] = $tid;
         return $tid;
       }
 
