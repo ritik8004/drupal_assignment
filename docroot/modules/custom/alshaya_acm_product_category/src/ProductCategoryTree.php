@@ -723,10 +723,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Return the taxonomy term ID if found else NULL.
    */
   public function getProductInnermostCategoryIdFromRoute() {
-    $route_name = $this->routeMatch->getRouteName();
-    $tid = NULL;
+    static $tid = NULL;
 
-    if ($route_name == 'entity.node.canonical') {
+    if (empty($tid) && $this->routeMatch->getRouteName() == 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
       $terms = [];
       if ($node->bundle() == 'acq_product') {
