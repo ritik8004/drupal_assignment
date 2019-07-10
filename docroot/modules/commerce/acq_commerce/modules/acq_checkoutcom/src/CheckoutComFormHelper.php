@@ -197,7 +197,7 @@ class CheckoutComFormHelper {
     }
 
     $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
-    $public_key = $this->apiHelper->getSubscriptionInfo('public_key');
+    $public_key = $this->apiHelper->getCheckoutcomConfig('public_key');
     $string = "window.CKOConfig = {
         debugMode: {$debug},
         publicKey: '{$public_key}',

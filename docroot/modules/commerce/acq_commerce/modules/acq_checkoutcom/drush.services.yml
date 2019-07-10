@@ -1,0 +1,6 @@
+services:
+  acq_checkoutcom.commands:
+    class: Drupal\acq_checkoutcom\Commands\AcqCheckoutComCommands
+    arguments: [ '@logger.factory', '@acq_checkoutcom.agent_api' ]
+    tags:
+      - { name: drush.command }

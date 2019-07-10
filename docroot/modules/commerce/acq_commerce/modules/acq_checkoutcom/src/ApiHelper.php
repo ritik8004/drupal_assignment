@@ -143,23 +143,39 @@ class ApiHelper {
    *
    * @param string|null $type
    *   Type of key, public_key or secret_key.
+   * @param bool $reset
+   *   Reset cached data and fetch again.
    *
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getSubscriptionInfo(string $type = NULL) {
-    $keys = [
-      'public_key' => 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
-      'secret_key' => 'sk_test_863d1545-5253-4387-b86b-df6a86797baa',
-      // @todo: Remove config once api is in place.
-      'verify_3dsecure' => $this->configFactory->get('acq_checkoutcom.settings')->get('verify_3dsecure'),
-    ];
+  public function getCheckoutcomConfig(string $type = NULL, $reset = FALSE) {
+    $cache_key = 'acq_checkoutcom:api_configs';
+    $cache = $reset ? NULL : $this->cache->get($cache_key);
 
-    if (!empty($type)) {
-      return $keys[$type];
+    if (empty($cache)) {
+      $response = $this->apiWrapper->invokeApi(
+        'checkoutcom/getCheckoutcomConfig',
+        [],
+        'GET'
+      );
+      $response = Json::decode($response);
+
+      if (!empty($response) && isset($response['message'])) {
+        return strtr($response['message'], $response['parameters'] ?? []);
+      }
+      $configs = $response[0] ?? [];
+      $this->cache->set($cache_key, $configs);
+    }
+    else {
+      $configs = $cache->data;
     }
 
-    return $keys;
+    if (!empty($configs) && $type) {
+      return $configs[$type];
+    }
+
+    return $configs;
   }
 
   /**
