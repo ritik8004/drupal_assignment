@@ -12,3 +12,9 @@ effects:
       width: null
       height: 235
       upscale: false
+  373ba336-9855-4368-be3f-cffac44b8b70:
+    uuid: 373ba336-9855-4368-be3f-cffac44b8b70
+    id: image_style_quality
+    weight: 2
+    data:
+      quality: 75
