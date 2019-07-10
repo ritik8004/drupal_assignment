@@ -27,26 +27,48 @@
   };
 
   Drupal.skuShowColorImagesOnFilter = function () {
-    $('.list-product-gallery').once('show-gallery').each(function () {
-      var first = $(this).find('span:first');
-      var active = $('ul[data-drupal-facet-id*="' + first.attr('data--color-attribute') + '"]').find('a.is-active:first');
-      var url = $(this).attr('data--original-url');
-      var selectedUrl = url + '?selected=';
+    var firstGallery = $('.list-product-gallery span[data--color]:first');
+    if (firstGallery.length === 0) {
+      // Do nothing if no gallery to process.
+      return;
+    }
 
-      $(this).find('span[data--color]').addClass('hidden');
-      if (active.length > 0) {
-        var activeSpan = $(this).find('span[data--color="' + active.attr('data-drupal-facet-item-value') + '"]');
-        activeSpan.removeClass('hidden');
-        selectedUrl += activeSpan.attr('data--id');
-      }
-      else {
-        first.removeClass('hidden');
-        selectedUrl += first.attr('data--id');
-      }
-
-      $(this).parents('article').find('a[href]').attr('href', selectedUrl);
+    // Get all active facet values for color attribute.
+    var activeColors = $('ul[data-drupal-facet-id*="' + firstGallery.attr('data--color-attribute') + '"]').find('a.is-active');
+    var activeFacetValues = [];
+    $(activeColors).each(function () {
+      activeFacetValues.push($(this).attr('data-drupal-facet-item-value'));
     });
 
+    // We do it again if active facets change after ajax calls finish.
+    // So adding length of active colors in .once().
+    $('.list-product-gallery').once('show-gallery-' + activeColors.length).each(function () {
+      var first = $(this).find('span[data--color]:first');
+      var url = $(this).attr('data--original-url');
+      var selectedUrl = url + '?selected=';
+      var activeSpan = first;
+
+      for (var i in activeFacetValues) {
+        var activeColorGallery = $(this).find('span[data--color="' + activeFacetValues[i] + '"]:first');
+        if (activeColorGallery.length > 0) {
+          activeSpan = activeColorGallery;
+          break;
+        }
+      }
+
+      // It is possible we don't need to change and we are processing
+      // second time, do not show blinking by hiding and showing gallery.
+      if (activeSpan.hasClass('hidden')) {
+        $(this).find('span[data--color]').addClass('hidden');
+        activeSpan.removeClass('hidden');
+
+        // Update all href to have selected param.
+        $(this).parents('article').find('a[href]').attr('href', selectedUrl);
+        selectedUrl += activeSpan.attr('data--id');
+      }
+    });
+
+    // At the end, let's make sure sliders work fine.
     $('.search-lightSlider').slick('refresh');
   }
 
