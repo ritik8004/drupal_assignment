@@ -14,15 +14,6 @@
       @include normal-arabic-letter-spacing;
     }
 
-    .field--name-field-title {
-      font-family: $vs-bentonsanscomp-medium;
-      font-size: 1.5625rem;
-      // Using px value for 0.07em.
-      letter-spacing: 1.75px;
-
-      @include normal-arabic-letter-spacing;
-    }
-
     .field--name-field-sub-title {
       font-family: $vs-bentonsans-regular;
       font-size: 0.875rem;
@@ -30,21 +21,6 @@
       letter-spacing: 0.56px;
 
       @include normal-arabic-letter-spacing;
-    }
-
-    .field--name-field-link a {
-      font-family: $vs-bentonsanscomp-medium;
-      font-size: 0.9375rem;
-      // Using px value for 0.12em.
-      letter-spacing: 1.8px;
-      border: none;
-      padding: 0;
-
-      @include normal-arabic-letter-spacing;
-
-      &::after {
-        content: ' >';
-      }
     }
   }
 }

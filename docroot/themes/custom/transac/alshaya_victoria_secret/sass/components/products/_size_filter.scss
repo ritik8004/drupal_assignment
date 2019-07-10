@@ -110,17 +110,6 @@
   position: relative;
   margin-bottom: 0.75rem;
 
-  h3 {
-    font-family: $vs-bentonsanscomp-medium;
-    font-size: 2rem;
-    font-weight: 400;
-    color: $bra_shop_by_size_title;
-    letter-spacing: 1.16px;
-    text-align: center;
-    margin: 0;
-    padding-bottom: 1rem;
-  }
-
   .sfb-band-cup {
     font-family: $vs-regular;
     font-size: 0.8125rem;
@@ -243,27 +232,6 @@
   }
 }
 
-.super-category-victoria-sport {
-  #block-sizefacetblock {
-    background: $sport_bra_size_filter_box_bg;
-
-    h3 {
-      font-family: $vs-bentonsanscomp-medium;
-      font-size: 2.5rem;
-      color: $bra_shop_by_size_title;
-      letter-spacing: 2.8px;
-    }
-
-    .sfb-band-cup,
-    .sfb-letter {
-      font-family: $vs-bentonsans-regular;
-      font-size: 0.8125rem;
-      color: $bra_shop_by_size_title;
-      letter-spacing: 1.77px;
-    }
-  }
-}
-
 .super-category-pink {
   .sfb-letter {
     .shop-by-size-letter {
@@ -299,47 +267,6 @@
       &:hover {
         &::after {
           color: $bra_size_active_filter_box_bg_pink;
-        }
-      }
-    }
-  }
-}
-
-.super-category-victoria-sport {
-  .sfb-letter {
-    .shop-by-size-letter {
-      > div {
-        &.is-active {
-          background-color: $bra_size_active_filter_box_bg_sport;
-        }
-
-        @include breakpoint($desktop) {
-          &:hover {
-            background-color: $bra_size_active_filter_box_bg_sport;
-          }
-        }
-      }
-    }
-  }
-
-  .shop-by-size-band {
-    > div {
-      &:hover {
-        background-color: $bra_size_active_filter_box_bg_sport;
-      }
-    }
-
-    .is-active {
-      background-color: $bra_size_active_filter_box_bg_sport;
-    }
-  }
-
-  .shop-by-size-paddle-nav {
-    .paddle_next,
-    .paddle_prev {
-      &:hover {
-        &::after {
-          color: $bra_size_active_filter_box_bg_sport;
         }
       }
     }
@@ -400,24 +327,4 @@
 
 .empty-bras-filter {
   display: none;
-}
-
-@include breakpoint($only-mobile) {
-  .shop-by-size-clear-container {
-    list-style: none;
-    text-align: center;
-    border: 1px solid $bra_shop_by_size_title;
-    display: block;
-    font-family: $vs-bentonsanscomp-medium;
-    width: 11.3125rem;
-    margin: 1.25rem auto;
-    padding: 0.5rem 0;
-
-    a {
-      color: $bra_shop_by_size_title;
-      font-size: 0.8125rem;
-      letter-spacing: 1.78px;
-      text-transform: uppercase;
-    }
-  }
 }

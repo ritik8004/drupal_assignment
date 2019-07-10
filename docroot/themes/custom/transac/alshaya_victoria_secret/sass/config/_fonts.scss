@@ -189,20 +189,6 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
   font-display: swap;
 }
 
-@font-face {
-  font-family: "BentonSansCompMedium";
-  src: url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.eot");
-  src:
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 // VS specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
@@ -215,7 +201,6 @@ $vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light', 'Arial';
 $vs-bentonsans-medium: 'BentonSans-Medium', 'DroidArabicKufi-Bold', 'Arial';
 $vs-bentonsans-light: 'BentonSans-Light', 'DroidArabicKufi', 'Arial';
 $vs-bentonsans-regular: 'BentonSans-Regular', 'DroidArabicKufi', 'Arial';
-$vs-bentonsanscomp-medium: 'BentonSansCompMedium', 'DroidArabicKufi-Bold', 'Arial';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
