@@ -20,7 +20,7 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
-use Drupal\Core\Lock\PersistentDatabaseLockBackend;
+use Drupal\Core\Lock\LockBackendInterface;
 
 /**
  * SkuAssetManager Class.
@@ -141,10 +141,30 @@ class SkuAssetManager {
   /**
    * Lock service.
    *
-   * @var \Drupal\Core\Lock\PersistentDatabaseLockBackend
+   * @var \Drupal\Core\Lock\LockBackendInterface
    */
   protected $lock;
 
+  /**
+   * The lock key for the sku.
+   *
+   * @var string
+   */
+  private $lock_key;
+
+  /**
+   * @return string
+   */
+  public function getLockKey() {
+    return self::$lock_key;
+  }
+
+  /**
+   * @param string $lock_key
+   */
+  public function setLockKey($lock_key) {
+    self::$lock_key = $lock_key;
+  }
 
   /**
    * SkuAssetManager constructor.
@@ -173,7 +193,7 @@ class SkuAssetManager {
    *   Date Time service.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File Usage.
-   * @param \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Lock service.
    */
   public function __construct(ConfigFactory $configFactory,
@@ -188,7 +208,7 @@ class SkuAssetManager {
                               LoggerChannelFactoryInterface $logger_factory,
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
-                              PersistentDatabaseLockBackend $lock) {
+                              LockBackendInterface $lock) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -226,18 +246,6 @@ class SkuAssetManager {
     }
 
     $save = FALSE;
-
-    $lock_key = 'downloadSkuImage' . $sku->id();
-
-    // Acquire lock to ensure parallel processes are executed one by one.
-    do {
-      $lock_acquired = $this->lock->acquire($lock_key);
-
-      // Sleep for half a second before trying again.
-      if (!$lock_acquired) {
-        usleep(500000);
-      }
-    } while (!$lock_acquired);
 
     foreach ($assets as $index => &$asset) {
       // Sanity check, we always need asset id.
@@ -285,12 +293,12 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
-      if (!empty($lock_key) && !empty($lock_acquired)) {
-        $this->lock->release($lock_key);
+      if (!empty($this->getLockKey())) {
+        $this->lock->release($this->getLockKey());
 
         // To ensure we don't keep releasing the lock again and again
         // we set it to NULL here.
-        $lock_key = NULL;
+        $this->setLockKey(NULL);
       }
       $this->logger->notice('Downloaded new asset images for sku @sku.', [
         '@sku' => $sku->getSku(),
@@ -462,6 +470,19 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
+    $lock_key = 'downloadSkuImage' . $sku->id();
+    $this->setLockKey($lock_key);
+
+    // Acquire lock to ensure parallel processes are executed one by one.
+    do {
+      $lock_acquired = $this->lock->acquire($lock_key);
+
+      // Sleep for half a second before trying again.
+      if (!$lock_acquired) {
+        usleep(500000);
+      }
+    } while (!$lock_acquired);
+
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image'], $sku);

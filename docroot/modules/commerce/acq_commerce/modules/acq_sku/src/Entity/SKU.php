@@ -66,25 +66,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
   protected $mediaData = [];
 
   /**
-   * Lock service
-   *
-   * @var \Drupal\Core\Lock\PersistentDatabaseLockBackend
-   */
-  private static $lock;
-
-  /**
    * The lock key for the sku.
    *
    * @var string
    */
-  private static $lock_key;
-
-  /**
-   * Lock acquired or not.
-   *
-   * @var bool
-   */
-  private static $lock_acquired;
+  private $lock_key;
 
   /**
    * @return \Drupal\Core\Lock\PersistentDatabaseLockBackend
@@ -115,20 +101,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public function setLockKey($lock_key) {
     self::$lock_key = $lock_key;
-  }
-
-  /**
-   * @return bool
-   */
-  public function isLockAcquired() {
-    return self::$lock_acquired;
-  }
-
-  /**
-   * @param bool $lock_acquired
-   */
-  public function setLockAcquired($lock_acquired) {
-    self::$lock_acquired = $lock_acquired;
   }
 
   /**
@@ -198,7 +170,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
 
-        if (!empty($this->getLockKey()) && !empty($this->isLockAcquired())) {
+        if (!empty($this->getLockKey())) {
           $this->getLock()->release($this->getLockKey());
 
           // To ensure we don't keep releasing the lock again and again
@@ -260,7 +232,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
           // Acquire lock to ensure parallel processes are executed one by one.
           do {
             $lock_acquired = $lock->acquire($lock_key);
-            $this->setLockAcquired($lock_acquired);
 
             // Sleep for half a second before trying again.
             if (!$lock_acquired) {
