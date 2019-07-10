@@ -4,6 +4,7 @@ namespace Drupal\alshaya_kz_transac_lite\Controller;
 
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
@@ -31,17 +32,28 @@ class TicketBookingController extends ControllerBase {
   protected $bookingPayment;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * TicketBookingController constructor.
    *
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The TicketBooking object.
    * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $booking_payment
    *   The Booking payment object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory object.
    */
   public function __construct(TicketBookingManager $ticket_booking,
-                              BookingPaymentManager $booking_payment) {
+                              BookingPaymentManager $booking_payment,
+                              ConfigFactoryInterface $config_factory) {
     $this->ticketBooking = $ticket_booking;
     $this->bookingPayment = $booking_payment;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -50,7 +62,8 @@ class TicketBookingController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_kz_transac_lite.booking_manager'),
-      $container->get('alshaya_kz_transac_lite.booking_payment_manager')
+      $container->get('alshaya_kz_transac_lite.booking_payment_manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -196,17 +209,18 @@ class TicketBookingController extends ControllerBase {
   }
 
   /**
-   * Set the payment option and redirect to booking status page.
+   * Display the payment result and status.
    *
-   * @param string $option
-   *   The option parameter.
+   * @param string $ref_number
+   *   The reference number.
    */
-  public function paymentOption($option) {
-    $sales_number = $_GET['ref_number'] ?? '';
-    $theme = $option == 'success' ? 'payment_success' : 'payment_failed';
+  public function paymentStatus($ref_number) {
+    $booking_info = $this->bookingPayment->getTicketDetails($ref_number);
+    $booking_info['kidz_url'] = $this->configFactory->get('alshaya_kz_transac_lite.settings')->get('tnc_url');
+    $theme = isset($booking_info['payment_status']) && $booking_info['payment_status'] == 'complete' ? 'payment_success' : 'payment_failed';
     return [
       '#theme' => $theme,
-      '#ref_number' => $sales_number,
+      '#booking_info' => $booking_info,
       '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
     ];
   }

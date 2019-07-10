@@ -24,4 +24,3 @@ services:
       - '@logger.factory'
       - '@alshaya_kz_transac_lite.booking_payment_manager'
       - '@alshaya_kz_transac_lite.booking_manager'
-      - '@messenger'
