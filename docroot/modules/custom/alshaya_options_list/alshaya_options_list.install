@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_options_list module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add blocks for options list.
+ */
+function alshaya_options_list_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    [
+      'block.block.alshayaoptionslistpagemenu',
+    ],
+    'optional'
+  );
+}
