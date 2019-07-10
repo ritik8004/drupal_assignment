@@ -190,7 +190,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
     $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
 
     // Process 3d payment.
-    if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
+    if ($this->apiHelper->getCheckoutcomConfig('verify_3dsecure')) {
       if ((empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
           && !empty($form_state->getValue('cko_card_token'))
       ) {
