@@ -16,7 +16,7 @@ services:
       - '@config.factory'
       - '@user.data'
       - '@logger.factory'
-      - '@cache.default'
+      - '@cache.data'
       - '@datetime.time'
       - '@date.formatter'
 
