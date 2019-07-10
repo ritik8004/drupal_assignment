@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Psr\Log\LoggerInterface;
@@ -44,6 +45,13 @@ class CheckoutComController implements ContainerInjectionInterface {
   protected $cartStorage;
 
   /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * A logger instance.
    *
    * @var \Psr\Log\LoggerInterface
@@ -59,6 +67,8 @@ class CheckoutComController implements ContainerInjectionInterface {
    *   APIWrapper service object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart storage.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Messenger service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
    */
@@ -66,12 +76,14 @@ class CheckoutComController implements ContainerInjectionInterface {
     ConfigFactoryInterface $config_factory,
     APIWrapper $api_wrapper,
     CartStorageInterface $cart_storage,
+    MessengerInterface $messenger,
     LoggerInterface $logger
   ) {
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->logger = $logger;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -82,6 +94,7 @@ class CheckoutComController implements ContainerInjectionInterface {
       $container->get('config.factory'),
       $container->get('acq_commerce.agent_api'),
       $container->get('acq_cart.cart_storage'),
+      $container->get('messenger'),
       $container->get('logger.factory')->get('acq_checkoutcom')
     );
   }
@@ -117,7 +130,7 @@ class CheckoutComController implements ContainerInjectionInterface {
       ]);
     }
     catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), 'error');
+      $this->messenger->addError($e->getMessage());
       $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
       return new RedirectResponse($url, 302);
     }
