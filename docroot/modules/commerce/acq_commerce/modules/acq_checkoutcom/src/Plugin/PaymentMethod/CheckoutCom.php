@@ -214,6 +214,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     // cko-card-token is not available in form state values.
     $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];;
 
+    $save_card = isset($payment_method['payment_details']['save_card'])
+      ? $payment_method['payment_details']['save_card']
+      : FALSE;
     if ($this->apiHelper->getSubscriptionInfo('verify_3dsecure')) {
       $payment_card = $payment_method['payment_card'];
 
@@ -222,7 +225,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
           $payment_method['payment_details']['cko_card_token'],
           $this->checkoutComApi->isMadaEnabled()
             ? $payment_method['payment_details']['card_bin']
-            : NULL
+            : NULL,
+          $save_card
         );
       }
       else {
@@ -248,10 +252,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    *   The card token from user.
    * @param string|null $card_bin
    *   (Optional) The card bin.
+   * @param bool $save
+   *   (Optional) true to save card, otherwise false.
    *
    * @throws \Exception
    */
-  protected function initiate3dSecurePayment(string $card_token, $card_bin = NULL) {
+  protected function initiate3dSecurePayment(string $card_token, $card_bin = NULL, $save = FALSE) {
     $cart = $this->getCart();
     $totals = $cart->totals();
     // Process 3d secure payment.
@@ -261,6 +267,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
         'cardToken' => $card_token,
         'email' => $cart->customerEmail(),
+        'udf3' => $save ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
         'udf1' => !empty($card_bin) && $this->checkoutComApi->isMadaBin($card_bin)
         ? 'MADA'
         : '',

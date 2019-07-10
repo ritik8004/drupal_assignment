@@ -1,8 +1,16 @@
-acq_checkoutcom.status:
-  path: '/checkoutcom/status'
+acq_checkoutcom.payment_success:
+  path: '/checkoutcom/payment/success'
   defaults:
     _title: 'Checkout.com status'
-    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::status'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::success'
+  requirements:
+    _permission: 'access content'
+
+acq_checkoutcom.payment_fail:
+  path: '/checkoutcom/payment/fail'
+  defaults:
+    _title: 'Checkout.com status'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::fail'
   requirements:
     _permission: 'access content'
 
