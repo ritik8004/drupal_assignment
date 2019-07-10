@@ -63,8 +63,8 @@
         activeSpan.removeClass('hidden');
 
         // Update all href to have selected param.
-        $(this).parents('article').find('a[href]').attr('href', selectedUrl);
         selectedUrl += activeSpan.attr('data--id');
+        $(this).parents('article').find('a[href]').attr('href', selectedUrl);
       }
     });
 
