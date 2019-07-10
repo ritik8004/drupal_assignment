@@ -333,6 +333,8 @@ class CheckoutComAPIWrapper {
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
     $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
     $params['products'] = $this->getCartItems();
+    $params['billingDetails'] = $this->getAddressDetails('billing');
+    $params['shippingDetails'] = $this->getAddressDetails('shipping');
 
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
       $opt = ['json' => $req_param + $params];
@@ -392,6 +394,35 @@ class CheckoutComAPIWrapper {
       ];
     }
     return $products;
+  }
+
+  /**
+   * Get billing or shipping address info.
+   *
+   * @param string $type
+   *   The address type, billing or shipping.
+   *
+   * @return array
+   *   The keyed array of address info as required by checkout.com
+   */
+  protected function getAddressDetails($type = 'billing') {
+    if (!in_array($type, ['billing', 'shipping'])) {
+      return [];
+    }
+
+    $cart = $this->getCart();
+    $address = ($type == 'shipping')
+      ? $cart->getShipping()
+      : $cart->getBilling();
+
+    return [
+      'addressLine1' => $address['street'],
+      'addressLine2' => $address['street2'],
+      'postcode' => NULL,
+      'country' => $address['country_id'],
+      'state' => NULL,
+      'city' => $address['city'],
+    ];
   }
 
   /**
