@@ -48,7 +48,7 @@ class AcqCheckoutComCommands extends DrushCommands {
    *
    * @command acq_checkoutcom:sync-config
    *
-   * @aliases accsc,sync-checkout-com-config
+   * @aliases sync-checkout-com-config
    */
   public function syncCheckoutComConfig() {
     // Reset magento checkout.com config cache.
