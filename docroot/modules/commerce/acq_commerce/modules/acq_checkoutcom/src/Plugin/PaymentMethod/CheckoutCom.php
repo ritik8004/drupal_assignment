@@ -132,7 +132,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
-          $stored_cards_list[$stored_card['id']] = $this->renderer->render($build);
+          $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
       }
 
@@ -167,6 +167,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     // Ask for cvv again when using existing card.
     if (!empty($payment_card) && $payment_card != 'new') {
+
+      $pane_form['payment_details'][$payment_card]['card_id'] = [
+        '#type' => 'hidden',
+        '#value' => $customer_stored_cards[$payment_card]['gateway_token'],
+      ];
+
       $pane_form['payment_details'][$payment_card]['cc_cvv'] = [
         '#type' => 'password',
         '#maxlength' => 4,
@@ -231,7 +237,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       }
       else {
         $this->initiateStoredCardPayment(
-          $payment_card,
+          $payment_method['payment_details'][$payment_card]['card_id'],
           (int) $payment_method['payment_details'][$payment_card]['cc_cvv']
         );
       }

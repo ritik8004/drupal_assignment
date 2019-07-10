@@ -7,6 +7,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,13 @@ class CustomerController extends ControllerBase {
   protected $currentUser;
 
   /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * CustomerController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Request $current_request
@@ -57,17 +65,21 @@ class CustomerController extends ControllerBase {
    *   The api helper object.
    * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
    *   The current user.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Messenger service.
    */
   public function __construct(
     Request $current_request,
     Renderer $renderer,
     ApiHelper $api_helper,
-    AccountProxyInterface $account_proxy
+    AccountProxyInterface $account_proxy,
+    MessengerInterface $messenger
   ) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -78,7 +90,8 @@ class CustomerController extends ControllerBase {
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
       $container->get('acq_checkoutcom.agent_api'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('messenger')
     );
   }
 
@@ -108,22 +121,27 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function listCards(UserInterface $user) {
+    $list_class = ['saved-paymentcard-list'];
+    $existing_cards = $this->apiHelper->getCustomerCards($user);
+
     $options = [];
-    if ($existing_cards = $this->apiHelper->getCustomerCards($user)) {
+    if (!empty($existing_cards) && is_string($existing_cards)) {
+      $this->messenger->addError($existing_cards);
+    }
+    elseif (!empty($existing_cards) && is_array($existing_cards)) {
       foreach ($existing_cards as $card) {
-        $options[$card['id']] = [
+        $options[$card['public_hash']] = [
           '#theme' => 'payment_card_info',
           '#card_info' => $card,
           '#user' => $user,
         ];
       }
-      $list_class = ['saved-paymentcard-list'];
     }
     else {
       $options['empty'] = [
         '#markup' => $this->t('You dont have any saved payment cards.'),
       ];
-      $list_class = ['saved-paymentcard-list', 'empty'];
+      $list_class[] = 'empty';
     }
 
     return [
@@ -135,7 +153,7 @@ class CustomerController extends ControllerBase {
       ],
       '#cache' => [
         'tags' => [
-          'user:' . $this->currentUser->id() . ':payment_cards',
+          'user:' . $this->currentUser->id(),
         ],
       ],
     ];
@@ -146,14 +164,14 @@ class CustomerController extends ControllerBase {
    *
    * @param \Drupal\user\UserInterface $user
    *   The user object.
-   * @param string $card_id
-   *   The card id to delete.
+   * @param string $public_hash
+   *   The card public hash to delete.
    *
    * @return array
    *   Return the build array.
    */
-  public function removeCard(UserInterface $user, string $card_id) {
-    return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardDeleteForm', $user, $card_id);
+  public function removeCard(UserInterface $user, string $public_hash) {
+    return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardDeleteForm', $user, $public_hash);
   }
 
 }

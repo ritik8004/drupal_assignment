@@ -28,7 +28,7 @@ acq_checkoutcom.payment_cards:
         type: entity:user
 
 acq_checkoutcom.payment_card.remove_card:
-  path: '/user/{user}/payment-card/{card_id}/remove'
+  path: '/user/{user}/payment-card/{public_hash}/remove'
   defaults:
     _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::removeCard'
     _title: 'Remove card'
@@ -39,5 +39,5 @@ acq_checkoutcom.payment_card.remove_card:
   requirements:
     _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
     user: \d+
-    card_id: '^[a-z0-9_-].*?$'
+    public_hash: '^[a-z0-9_-].*?$'
     _csrf_token: 'TRUE'

@@ -12,10 +12,13 @@ services:
   acq_checkoutcom.agent_api:
     class: Drupal\acq_checkoutcom\ApiHelper
     arguments:
-      - '@acq_commerce.client_factory'
+      - '@alshaya_api.api'
       - '@config.factory'
       - '@user.data'
       - '@logger.factory'
+      - '@cache.default'
+      - '@datetime.time'
+      - '@date.formatter'
 
   acq_checkoutcom.form_helper:
     class: Drupal\acq_checkoutcom\CheckoutComFormHelper

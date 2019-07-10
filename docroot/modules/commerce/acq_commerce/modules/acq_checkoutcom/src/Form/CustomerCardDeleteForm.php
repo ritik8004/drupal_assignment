@@ -18,7 +18,7 @@ use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Delete the {card_id} of user.
+ * Delete the saved card of user.
  */
 class CustomerCardDeleteForm extends ConfirmFormBase {
 
@@ -143,7 +143,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, UserInterface $user = NULL, $card_id = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, UserInterface $user = NULL, $public_hash = NULL) {
     $form = parent::buildForm($form, $form_state);
 
     // This is rendered as a modal dialog, so we need to set some extras.
@@ -159,9 +159,9 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
       '#value' => $user->get('acq_customer_id')->getString(),
     ];
 
-    $form['card_id'] = [
+    $form['public_hash'] = [
       '#type' => 'hidden',
-      '#value' => $card_id,
+      '#value' => $public_hash,
     ];
 
     // Update the buttons and bind callbacks.
@@ -197,11 +197,11 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    */
   public function deleteCard(array &$form, FormStateInterface $form_state) {
     $uid = $form_state->getValue('uid');
-    $card_id = $form_state->getValue('card_id');
+    $public_hash = $form_state->getValue('public_hash');
     // Delete the card for given user.
-    if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer users')) && $card_id) {
+    if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer users')) && $public_hash) {
       $user = $form_state->getBuildInfo()['args'][0];
-      if (!$this->apiHelper->deleteCustomerCard($user, $card_id)) {
+      if (!$this->apiHelper->deleteCustomerCard($user, $public_hash)) {
         $this->messenger->addError(
           $this->t('Could not delete your card, please try again later.')
         );
@@ -211,7 +211,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
           $this->t('Your card has been deleted.')
         );
       }
-      Cache::invalidateTags(['user:' . $uid . ':payment_cards']);
+      Cache::invalidateTags(['user:' . $uid]);
     }
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
