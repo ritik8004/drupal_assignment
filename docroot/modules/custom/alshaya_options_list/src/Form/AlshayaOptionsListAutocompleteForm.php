@@ -6,7 +6,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\alshaya_options_list\AlshayaOptionsListService;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,17 +19,17 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
   /**
    * Alshaya Options List Service.
    *
-   * @var Drupal\alshaya_options_list\AlshayaOptionsListService
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
   protected $alshayaOptionsService;
 
   /**
    * Constructs a ContentEntityForm object.
    *
-   * @param Drupal\alshaya_options_list\AlshayaOptionsListService $alshaya_options_service
+   * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya options service.
    */
-  public function __construct(AlshayaOptionsListService $alshaya_options_service) {
+  public function __construct(AlshayaOptionsListHelper $alshaya_options_service) {
     $this->alshayaOptionsService = $alshaya_options_service;
   }
 
@@ -53,7 +53,7 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $form_arg = NULL) {
-    $config = $this->config('alshaya_options_list.admin_settings');
+    $config = $this->config('alshaya_options_list.settings');
     $attribute_options = $config->get('alshaya_options_pages');
     $placeholder = $attribute_options[$form_arg['page_code']]['attribute_details'][$form_arg['attribute_code']]['search-placeholder'];
 
@@ -110,7 +110,7 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
     $search_string = $form_state->getValue('alshaya_options_list_autocomplete_form');
     $page_code = $form_state->getValue('page_code');
     $attribute_code = $form_state->getValue('attribute_code');
-    $config = $this->config('alshaya_options_list.admin_settings');
+    $config = $this->config('alshaya_options_list.settings');
     $attribute_options = $config->get('alshaya_options_pages');
     $group = $attribute_options[$page_code]['attribute_details'][$attribute_code]['group'];
     $show_images = $attribute_options[$page_code]['attribute_details'][$attribute_code]['show-images'];

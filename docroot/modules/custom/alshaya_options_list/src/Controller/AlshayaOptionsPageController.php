@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\alshaya_options_list\AlshayaOptionsListService;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 
 /**
  * Controller to add options list page.
@@ -40,9 +40,9 @@ class AlshayaOptionsPageController extends ControllerBase {
   /**
    * Alshaya Options List Service.
    *
-   * @var Drupal\alshaya_options_list\AlshayaOptionsListService
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
-  private $alshayaOptionsService;
+  protected $alshayaOptionsService;
 
   /**
    * AlshayaOptionsPageController constructor.
@@ -53,13 +53,13 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   Cache Backend service for alshaya.
    * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
-   * @param Drupal\alshaya_options_list\AlshayaOptionsListService $alshaya_options_service
+   * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya options service.
    */
   public function __construct(LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RequestStack $request_stack,
-                              AlshayaOptionsListService $alshaya_options_service) {
+                              AlshayaOptionsListHelper $alshaya_options_service) {
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->requestStack = $request_stack;
@@ -72,7 +72,7 @@ class AlshayaOptionsPageController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('language_manager'),
-      $container->get('cache.default'),
+      $container->get('cache.data'),
       $container->get('request_stack'),
       $container->get('alshaya_options_list.alshaya_options_service')
     );
@@ -85,11 +85,11 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   Build array.
    */
   public function optionsPage() {
-    $options_list = [];
-    $config = $this->config('alshaya_options_list.admin_settings');
-    if (!$config->get('alshaya_options_on_off')) {
+    if (!$this->alshayaOptionsService->optionsPageEnabled()) {
       throw new NotFoundHttpException();
     }
+    $config = $this->config('alshaya_options_list.settings');
+    $options_list = [];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get current request uri.
     $request = $this->requestStack->getCurrentRequest()->getRequestUri();
