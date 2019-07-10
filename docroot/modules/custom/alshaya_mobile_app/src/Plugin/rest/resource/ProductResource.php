@@ -256,6 +256,18 @@ class ProductResource extends ResourceBase {
     ];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
 
+    $linked_types = [
+      LINKED_SKU_TYPE_RELATED,
+      LINKED_SKU_TYPE_UPSELL,
+      LINKED_SKU_TYPE_CROSSSELL,
+    ];
+    foreach ($linked_types as $linked_type) {
+      $data['linked'][] = [
+        'link_type' => $linked_type,
+        'skus' => $this->mobileAppUtility->getLinkedSkus($sku, $linked_type),
+      ];
+    }
+
     $media_contexts = [
       'pdp' => 'detail',
       'search' => 'listing',

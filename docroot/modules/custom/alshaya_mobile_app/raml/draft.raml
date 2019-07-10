@@ -864,6 +864,28 @@ schemas:
               }
             }
           },
+          "linked": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
+                "properties": {
+                  "link_type": {
+                    "type": "string"
+                  },
+                  "skus": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "schema": "LightProduct"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
           "media": {
             "type": "array",
             "description": "Images and videos for galleries.",
@@ -1093,6 +1115,28 @@ schemas:
                         }
                       }
                     }
+                  },
+                  "linked": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
+                        "properties": {
+                          "link_type": {
+                            "type": "string"
+                          },
+                          "skus": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
                   },
                   "media": {
                     "type": "array",
@@ -1770,6 +1814,42 @@ schemas:
                         "status": true
                       }
                     },
+                    "linked": [
+                      {
+                        "link_type": "related",
+                        "skus": [],
+                      },
+                      {
+                        "link_type": "upsell",
+                        "skus": [],
+                      },
+                      {
+                        "link_type": "crosssell",
+                        "skus": [
+                          {
+                            "id": 66,
+                            "title": "Suit trousers Slim fit_test",
+                            "sku": "0391750",
+                            "deeplink": "/rest/v1/product/0391750",
+                            "original_price": "8.00",
+                            "final_price": "8.00",
+                            "in_stock": true,
+                            "promo": [],
+                            "medias": {
+                              "images": [],
+                              "videos": []
+                            },
+                            "labels": [],
+                            "swatches": [
+                              {
+                                "key": 356,
+                                "color_code": "#494C4F"
+                              }
+                            ]
+                          },
+                        ]
+                      }
+                    ],
                     "media": [
                       {
                         "context": "detail",
