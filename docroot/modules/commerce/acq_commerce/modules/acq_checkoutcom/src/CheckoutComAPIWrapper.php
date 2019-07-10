@@ -329,6 +329,7 @@ class CheckoutComAPIWrapper {
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
     $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
     $params['customerIp'] = $this->request->getClientIp();
+    // Capture payment immediately, values 0 to 168 (0 to 7 days).
     $params['autoCapTime'] = '0';
 
     $doReq = function ($client, $req_param) use ($endpoint, $params) {

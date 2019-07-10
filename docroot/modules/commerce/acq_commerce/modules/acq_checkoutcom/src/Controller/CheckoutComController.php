@@ -110,9 +110,9 @@ class CheckoutComController implements ContainerInjectionInterface {
    */
   public function success(Request $request) {
     $payment_token = $request->query->get('cko-payment-token');
+    $cart = $this->cartStorage->getCart(FALSE);
     try {
       // Push the additional data to cart.
-      $cart = $this->cartStorage->getCart(FALSE);
       $cart->setPaymentMethod(
         'checkout_com',
         ['cko_payment_token' => $payment_token]
@@ -130,7 +130,13 @@ class CheckoutComController implements ContainerInjectionInterface {
       ]);
     }
     catch (\Exception $e) {
-      $this->messenger->addError($e->getMessage());
+      $this->logger->error(
+        'Failed to place order for cart @cart_id with message: @message',
+        ['@cart_id' => $cart->id(), '@message' => $e->getMessage()]
+      );
+      $this->messenger->addError(
+        $this->t('An error occurred while placing your order. Please contact our customer service team for assistance.')
+      );
       $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
       return new RedirectResponse($url, 302);
     }
