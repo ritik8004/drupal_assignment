@@ -214,6 +214,21 @@ class SkuAssetManager {
 
     $save = FALSE;
 
+    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+    $lock = \Drupal::service('lock.persistent');
+
+    $lock_key = 'downloadSkuImage' . $sku->id();
+
+    // Acquire lock to ensure parallel processes are executed one by one.
+    do {
+      $lock_acquired = $lock->acquire($lock_key);
+
+      // Sleep for half a second before trying again.
+      if (!$lock_acquired) {
+        usleep(500000);
+      }
+    } while (!$lock_acquired);
+
     foreach ($assets as $index => &$asset) {
       // Sanity check, we always need asset id.
       if (empty($asset['Data']['AssetId'])) {
@@ -238,22 +253,7 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
-      /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-      $lock = \Drupal::service('lock.persistent');
-
       try {
-        $lock_key = 'downloadSkuImage' . $sku->id();
-
-        // Acquire lock to ensure parallel processes are executed one by one.
-        do {
-          $lock_acquired = $lock->acquire($lock_key);
-
-          // Sleep for half a second before trying again.
-          if (!$lock_acquired) {
-            usleep(500000);
-          }
-        } while (!$lock_acquired);
-
         $file = $this->downloadImage($asset, $sku->getSku());
         if ($file instanceof FileInterface) {
           $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());

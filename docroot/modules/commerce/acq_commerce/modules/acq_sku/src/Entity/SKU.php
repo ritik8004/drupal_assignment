@@ -66,6 +66,72 @@ class SKU extends ContentEntityBase implements SKUInterface {
   protected $mediaData = [];
 
   /**
+   * Lock service
+   *
+   * @var \Drupal\Core\Lock\PersistentDatabaseLockBackend
+   */
+  private static $lock;
+
+  /**
+   * The lock key for the sku.
+   *
+   * @var string
+   */
+  private static $lock_key;
+
+  /**
+   * Lock acquired or not.
+   *
+   * @var bool
+   */
+  private static $lock_acquired;
+
+  /**
+   * @return \Drupal\Core\Lock\PersistentDatabaseLockBackend
+   */
+  public function getLock() {
+    if (empty(self::$lock)) {
+      $this->setLock();
+    }
+    return self::$lock;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLock() {
+    self::$lock = \Drupal::service('lock.persistent');
+  }
+
+  /**
+   * @return string
+   */
+  public function getLockKey() {
+    return self::$lock_key;
+  }
+
+  /**
+   * @param string $lock_key
+   */
+  public function setLockKey($lock_key) {
+    self::$lock_key = $lock_key;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isLockAcquired() {
+    return self::$lock_acquired;
+  }
+
+  /**
+   * @param bool $lock_acquired
+   */
+  public function setLockAcquired($lock_acquired) {
+    self::$lock_acquired = $lock_acquired;
+  }
+
+  /**
    * {@inheritdoc}
    *
    * When a new entity instance is added, set the user_id entity reference to
@@ -119,22 +185,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
         return [];
       }
 
-      if ($download_media) {
-        /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-        $lock = \Drupal::service('lock.persistent');
-        $lock_key = 'downloadSkuImage' . $this->id();
-
-        // Acquire lock to ensure parallel processes are executed one by one.
-        do {
-          $lock_acquired = $lock->acquire($lock_key);
-
-          // Sleep for half a second before trying again.
-          if (!$lock_acquired) {
-            usleep(500000);
-          }
-        } while (!$lock_acquired);
-      }
-
       foreach ($media_data as &$data) {
         // We don't want to show disabled images.
         if (isset($data['disabled']) && $data['disabled']) {
@@ -147,12 +197,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($update_sku) {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
-        if ($download_media && !empty($lock_key) && !empty($lock_acquired)) {
-          $lock->release($lock_key);
+
+        if (!empty($this->getLockKey()) && !empty($this->isLockAcquired())) {
+          $this->getLock()->release($this->getLockKey());
 
           // To ensure we don't keep releasing the lock again and again
           // we set it to NULL here.
-          $lock_key = NULL;
+          $this->setLockKey(NULL);
         }
       }
     }
@@ -202,6 +253,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
       elseif ($download) {
         try {
+          $lock = $this->getLock();
+          $lock_key = 'downloadSkuImage' . $this->id();
+          $this->setLockKey($lock_key);
+
+          // Acquire lock to ensure parallel processes are executed one by one.
+          do {
+            $lock_acquired = $lock->acquire($lock_key);
+            $this->setLockAcquired($lock_acquired);
+
+            // Sleep for half a second before trying again.
+            if (!$lock_acquired) {
+              usleep(500000);
+            }
+          } while (!$lock_acquired);
+
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
           $update_sku = TRUE;
