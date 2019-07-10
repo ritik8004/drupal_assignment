@@ -5,12 +5,6 @@ acq_checkoutcom.settings:
     debug:
       type: boolean
       label: 'Debug mode'
-    mada_enabled:
-      type: boolean
-      label: 'Mada bin verification'
-    verify_3dsecure:
-      type: boolean
-      label: '3D Secure Verification'
     api_cache_time:
       type: integer
       label: 'api cache time'
@@ -19,7 +13,7 @@ acq_checkoutcom.settings:
       label: 'Environment to use (sandbox / live)'
     base_uri:
       type: mapping
-      label: 'Environment to use (sandbox / live)'
+      label: 'Base uri based on environment to use'
       mapping:
         sandbox:
           type: string

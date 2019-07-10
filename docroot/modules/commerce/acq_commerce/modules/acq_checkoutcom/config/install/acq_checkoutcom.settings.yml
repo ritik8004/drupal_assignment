@@ -1,7 +1,5 @@
 debug: false
-mada_enabled: true
 env: 'sandbox'
-verify_3dsecure: true
 api_cache_time: 300
 base_uri:
   live: 'https://api2.checkout.com/v2/'
