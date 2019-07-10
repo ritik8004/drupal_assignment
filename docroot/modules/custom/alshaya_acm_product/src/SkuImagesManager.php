@@ -534,7 +534,7 @@ class SkuImagesManager {
         if (!empty($gallery) && !empty($gallery['#mainImage'])) {
           $color = $variant->get('attr_' . $listing_swatch_attribute)->getString();
 
-          $galleries[] = [
+          $galleries[$color] = [
             'color' => $color,
             'attribute' => $listing_swatch_attribute,
             'gallery' => $gallery,
