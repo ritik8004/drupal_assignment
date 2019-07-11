@@ -86,20 +86,27 @@ class GooglePageSpeedController extends ControllerBase {
     }
     $row_counts = $this->getSelectQuery($metric_id, $device, $timestamp)
       ->distinct()
-      ->countQuery()
       ->execute()
-      ->fetchField();
+      ->fetchAllKeyed(0, 0);
+
+    // Initialising index 0. It will help in array_diff_keys.
+    $row_counts[0] = 0;
 
     foreach ($rows as $row) {
-      for ($i = 0; $i <= $row_counts; $i++) {
-        $row[intval($i)] = (isset($row[intval($i)])) ? round(floatval($row[intval($i)]), 2) : 0;
+      $results = array_diff_key($row_counts, $row);
+      foreach ($results as $result) {
+        $row[$result] = 0;
       }
       ksort($row);
-      $final_data[] = $row;
+      $i = 0;
+      foreach ($row as $value) {
+        $final[intval($i)] = floatval($value); $i++;
+      }
+      $final_data[] = $final;
     }
 
     $final_data = Json::encode($final_data);
-    echo $final_data;
+    echo($final_data);
     die;
 
   }
