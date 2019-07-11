@@ -233,7 +233,7 @@ class AlshayaAcmCommands extends DrushCommands {
           '@value' => $magentos[$mdc]['url'],
         ]));
 
-        // Determine the langcode to use.
+        // Determine the country code to use.
         $country_code = !empty($options['country_code'])
           ? $options['country_code']
           : Settings::get('country_code');
