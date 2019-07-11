@@ -46,6 +46,46 @@
   }
 }
 
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      text-transform: uppercase;
+      height: 2.5rem;
+      margin-top: 2.125rem;
+
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          margin-right: 0.5rem;
+          font-size: 1rem;
+        }
+      }
+
+      .super-category-victorias-secret & {
+        font-family: $vs-bentonsanscomp-medium;
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+
+        @include normal-arabic-letter-spacing;
+      }
+
+      @include breakpoint($only-tablet) {
+        float: $left;
+        margin-#{$left}: 1.5rem;
+
+        .super-category-victorias-secret & {
+          margin-#{$left}: 1.25rem;
+        }
+
+        html[lang=ar] & {
+          padding: 0.725rem 0.5rem;
+          margin-right: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
 .acq-content-product {
   .content__title_wrapper {
     h1,

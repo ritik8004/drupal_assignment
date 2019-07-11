@@ -110,6 +110,17 @@
   position: relative;
   margin-bottom: 0.75rem;
 
+  h3 {
+    font-family: $vs-bentonsanscomp-medium;
+    font-size: 2rem;
+    font-weight: 400;
+    color: $bra_shop_by_size_title;
+    letter-spacing: 1.16px;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 1rem;
+  }
+
   .sfb-band-cup {
     font-family: $vs-regular;
     font-size: 0.8125rem;
@@ -327,4 +338,24 @@
 
 .empty-bras-filter {
   display: none;
+}
+
+@include breakpoint($only-mobile) {
+  .shop-by-size-clear-container {
+    list-style: none;
+    text-align: center;
+    border: 1px solid $bra_shop_by_size_title;
+    display: block;
+    font-family: $vs-bentonsanscomp-medium;
+    width: 11.3125rem;
+    margin: 1.25rem auto;
+    padding: 0.5rem 0;
+
+    a {
+      color: $bra_shop_by_size_title;
+      font-size: 0.8125rem;
+      letter-spacing: 1.78px;
+      text-transform: uppercase;
+    }
+  }
 }
