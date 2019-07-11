@@ -56,15 +56,6 @@
     &:hover {
       text-decoration: underline;
     }
-
-    @include breakpoint($tablet) {
-      #{$left}: 13em;
-
-      html[lang='ar'] & {
-        #{$left}: 15em;
-        bottom: 0.75em;
-      }
-    }
   }
 }
 
@@ -135,5 +126,12 @@
         width: 100%;
       }
     }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  .section-title {
+    text-transform: capitalize;
   }
 }
