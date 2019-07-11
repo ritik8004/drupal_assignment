@@ -1,5 +1,23 @@
 checkoutcom.form:
   js:
     js/acq_checkoutcom.form.js: {}
-  dependencies:
-    - acq_checkoutcom/checkoutkit
+
+sandbox_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
+
+live_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/js/checkoutkit.js: { type: external }
