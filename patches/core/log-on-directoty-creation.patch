@@ -1,29 +1,8 @@
-diff --git a/core/includes/file.inc b/core/includes/file.inc
-index 3037a23360..ff29ac74d2 100644
---- a/core/includes/file.inc
-+++ b/core/includes/file.inc
-@@ -303,6 +303,7 @@ function file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS)
-     if ($options & FILE_CREATE_DIRECTORY) {
-       return @drupal_mkdir($directory, NULL, TRUE);
-     }
-+    FileSystem::$debugLogs[] = sprintf('Directory %s does not exists or not a directory.', $directory);
-     return FALSE;
-   }
-   // The directory exists, so check to see if it is writable.
-@@ -311,6 +312,8 @@ function file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS)
-     return drupal_chmod($directory);
-   }
- 
-+  FileSystem::$debugLogs[] = sprintf('Directory %s is writable or not-writable: %b.', $directory, $writable);
-+
-   return $writable;
- }
- 
 diff --git a/core/lib/Drupal/Core/File/FileSystem.php b/core/lib/Drupal/Core/File/FileSystem.php
-index 9f92d0bd8b..090878a0f1 100644
+index ebb113c380..8b9e3c9158 100644
 --- a/core/lib/Drupal/Core/File/FileSystem.php
 +++ b/core/lib/Drupal/Core/File/FileSystem.php
-@@ -42,6 +42,13 @@ class FileSystem implements FileSystemInterface {
+@@ -49,6 +49,13 @@ class FileSystem implements FileSystemInterface {
     */
    protected $streamWrapperManager;
  
@@ -37,7 +16,7 @@ index 9f92d0bd8b..090878a0f1 100644
    /**
     * Constructs a new FileSystem.
     *
-@@ -175,7 +182,9 @@ public function mkdir($uri, $mode = NULL, $recursive = FALSE, $context = NULL) {
+@@ -182,7 +189,9 @@ public function mkdir($uri, $mode = NULL, $recursive = FALSE, $context = NULL) {
      // If the URI has a scheme, don't override the umask - schemes can handle
      // this issue in their own implementation.
      if ($this->uriScheme($uri)) {
@@ -48,7 +27,7 @@ index 9f92d0bd8b..090878a0f1 100644
      }
  
      // If recursive, create each missing component of the parent directory
-@@ -205,10 +214,12 @@ public function mkdir($uri, $mode = NULL, $recursive = FALSE, $context = NULL) {
+@@ -212,10 +221,12 @@ public function mkdir($uri, $mode = NULL, $recursive = FALSE, $context = NULL) {
  
          if (!file_exists($recursive_path)) {
            if (!$this->mkdirCall($recursive_path, $mode, FALSE, $context)) {
@@ -61,7 +40,7 @@ index 9f92d0bd8b..090878a0f1 100644
              return FALSE;
            }
          }
-@@ -220,6 +231,7 @@ public function mkdir($uri, $mode = NULL, $recursive = FALSE, $context = NULL) {
+@@ -227,6 +238,7 @@ public function mkdir($uri, $mode = NULL, $recursive = FALSE, $context = NULL) {
      // Do not check if the top-level directory already exists, as this condition
      // must cause this function to fail.
      if (!$this->mkdirCall($uri, $mode, FALSE, $context)) {
@@ -69,26 +48,44 @@ index 9f92d0bd8b..090878a0f1 100644
        return FALSE;
      }
      // Not necessary to use self::chmod() as there is no scheme.
+@@ -551,6 +563,7 @@ public function prepareDirectory(&$directory, $options = self::MODIFY_PERMISSION
+       if ($options & static::CREATE_DIRECTORY) {
+         return @$this->mkdir($directory, NULL, TRUE);
+       }
++      FileSystem::$debugLogs[] = sprintf('Directory %s does not exists or not a directory.', $directory);
+       return FALSE;
+     }
+     // The directory exists, so check to see if it is writable.
+@@ -559,6 +572,8 @@ public function prepareDirectory(&$directory, $options = self::MODIFY_PERMISSION
+       return $this->chmod($directory);
+     }
+ 
++    FileSystem::$debugLogs[] = sprintf('Directory %s is writable or not-writable: %b.', $directory, $writable);
++
+     return $writable;
+   }
+ 
 diff --git a/core/modules/image/src/Entity/ImageStyle.php b/core/modules/image/src/Entity/ImageStyle.php
-index 94e3f3c12d..edf462e5ce 100644
+index 3baded7cee..3cef7849d1 100644
 --- a/core/modules/image/src/Entity/ImageStyle.php
 +++ b/core/modules/image/src/Entity/ImageStyle.php
-@@ -10,6 +10,7 @@
+@@ -8,6 +8,7 @@
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
+ use Drupal\Core\File\Exception\FileException;
++use Drupal\Core\File\FileSystem;
+ use Drupal\Core\File\FileSystemInterface;
  use Drupal\Core\Routing\RequestHelper;
  use Drupal\Core\Site\Settings;
- use Drupal\Core\Url;
-+use Drupal\Core\File\FileSystem;
- use Drupal\image\ImageEffectPluginCollection;
- use Drupal\image\ImageEffectInterface;
- use Drupal\image\ImageStyleInterface;
-@@ -294,6 +295,10 @@ public function createDerivative($original_uri, $derivative_uri) {
+@@ -308,6 +309,11 @@ public function createDerivative($original_uri, $derivative_uri) {
  
      // Build the destination folder tree if it doesn't already exist.
-     if (!file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
+     if (!\Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
 +      // Log the message for debug purpose.
 +      foreach (FileSystem::$debugLogs ?? [] as $log) {
 +        \Drupal::logger('image')->error($log);
 +      }
++
        \Drupal::logger('image')->error('Failed to create style directory: %directory', ['%directory' => $directory]);
        return FALSE;
      }
