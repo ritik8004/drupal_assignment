@@ -52,6 +52,38 @@
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-month,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-year {
     float: $left;
+    margin-top: 3rem !important;
+
+    label:not(.error) {
+      color: $primary_input_label;
+      position: absolute;
+      top: -1.35rem;
+      #{$left}: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      @include select-wrapper(calc(50% - 0.5rem));
+
+      select.form-select {
+        @include select-style(100%);
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      @include select-wrapper(calc(50% - 0.75rem));
+
+      select.form-select {
+        @include select-style(100%);
+      }
+    }
+
+    @include breakpoint($desktop) {
+      @include select-wrapper(12.3125rem);
+
+      .select2-container {
+        @include select2-style(12.3125rem);
+      }
+    }
   }
 
   .form-item-cc-number,

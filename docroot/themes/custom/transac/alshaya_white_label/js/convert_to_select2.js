@@ -56,6 +56,11 @@
         $('.form-item-quantity .form-select').select2({
           minimumResultsForSearch: -1
         });
+
+        // Checkout.com Month & Year select fields.
+        $('#payment_method_checkout_com #payment_method_new .form-select').select2({
+          minimumResultsForSearch: -1
+        });
       }
     }
   };
