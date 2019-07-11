@@ -151,31 +151,39 @@ class ApiHelper {
    */
   public function getCheckoutcomConfig(string $type = NULL, $reset = FALSE) {
     $cache_key = 'acq_checkoutcom:api_configs';
+
     $cache = $reset ? NULL : $this->cache->get($cache_key);
 
-    if (empty($cache)) {
+    if (empty($cache) || empty($cache->data)) {
       $response = $this->apiWrapper->invokeApi(
-        'checkoutcom/getCheckoutcomConfig',
+        'checkoutcom/getConfig',
         [],
         'GET'
       );
-      $response = Json::decode($response);
+      $configs = Json::decode($response);
 
-      if (!empty($response) && isset($response['message'])) {
-        return strtr($response['message'], $response['parameters'] ?? []);
+      if (!empty($configs) || isset($configs['public_key'])) {
+        $this->cache->set($cache_key, $configs);
       }
-      $configs = $response[0] ?? [];
-      $this->cache->set($cache_key, $configs);
     }
     else {
       $configs = $cache->data;
     }
 
-    if (!empty($configs) && $type) {
-      return $configs[$type];
+    if (empty($configs['public_key'])) {
+      if ($reset) {
+        $this->logger->error('Invalid response from checkout.com api, @response', [
+          '@response' => json_encode($configs),
+        ]);
+
+        return NULL;
+      }
+
+      // Try resetting once.
+      return $this->getCheckoutcomConfig($type, TRUE);
     }
 
-    return $configs;
+    return $type ? $configs[$type] : $configs;
   }
 
   /**

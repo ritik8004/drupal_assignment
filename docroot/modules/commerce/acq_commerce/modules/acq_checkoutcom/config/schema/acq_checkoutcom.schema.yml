@@ -8,9 +8,6 @@ acq_checkoutcom.settings:
     api_cache_time:
       type: integer
       label: 'api cache time'
-    env:
-      type: string
-      label: 'Environment to use (sandbox / live)'
     base_uri:
       type: mapping
       label: 'Base uri based on environment to use'

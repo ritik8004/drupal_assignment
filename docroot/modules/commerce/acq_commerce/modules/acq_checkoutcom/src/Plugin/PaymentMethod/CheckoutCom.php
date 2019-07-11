@@ -223,7 +223,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $save_card = isset($payment_method['payment_details']['save_card'])
       ? $payment_method['payment_details']['save_card']
       : FALSE;
-    if ($this->apiHelper->getCheckoutcomConfig('verify_3dsecure')) {
+    if ($this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
       $payment_card = $payment_method['payment_card'];
 
       if ((empty($payment_card) || $payment_card == 'new') && !empty($payment_method['payment_details']['cko_card_token'])) {

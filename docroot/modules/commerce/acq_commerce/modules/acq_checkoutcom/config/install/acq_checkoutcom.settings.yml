@@ -1,5 +1,4 @@
 debug: false
-env: 'sandbox'
 api_cache_time: 300
 base_uri:
   live: 'https://api2.checkout.com/v2/'
