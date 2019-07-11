@@ -234,7 +234,11 @@ class AlshayaAcmCommands extends DrushCommands {
         ]));
 
         // Determine the langcode to use.
-        $country_code = !empty($options['country_code']) ?: Unicode::strtolower(Settings::get('country_code'));
+        $country_code = !empty($options['country_code'])
+          ? $options['country_code']
+          : Settings::get('country_code');
+
+        $country_code = strtolower($country_code);
 
         if (!isset($magentos[$mdc][$country_code])) {
           $this->output->writeln(dt('Unknown "@country_code" country code for "@mdc" MDC. Using the current site\'s country code "@current_country_code".', [
