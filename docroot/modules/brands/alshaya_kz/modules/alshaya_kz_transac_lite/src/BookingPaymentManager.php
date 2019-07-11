@@ -175,6 +175,9 @@ class BookingPaymentManager {
       $booking_info['order_total'] = $ticket->get('order_total')->getString();
       $booking_info['booking_date'] = $this->dateFormatter->format($ticket->get('created')->getString(), '', 'Y-m-d');
       $booking_info['ticket_info'] = $ticket->get('ticket_info')->getString();
+      $booking_info['payment_id'] = $ticket->get('payment_id')->getString();
+      $booking_info['transaction_id'] = $ticket->get('transaction_id')->getString();
+      $booking_info['payment_status'] = $ticket->get('payment_status')->getString();
     }
     return $booking_info;
   }
