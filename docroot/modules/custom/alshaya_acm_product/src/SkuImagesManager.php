@@ -1152,7 +1152,7 @@ class SkuImagesManager {
           'mediumurl' => $image_medium,
           'zoomurl' => $image_zoom,
           'fullurl' => $original_image,
-          'label' => $media_item['label'],
+          'label' => $media_item['label'] ?? '',
           'type' => 'image',
         ];
       }
