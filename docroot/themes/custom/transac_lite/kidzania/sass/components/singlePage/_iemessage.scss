@@ -14,5 +14,26 @@
     background: $header_bg;
     padding: 2rem;
     display: inline-block;
+    color: $error_msg_white_text;
+  }
+}
+
+@media all and (-ms-high-contrast: none) {
+  .IESupportMsg {
+    display: none;
+  }
+
+  body {
+    overflow: hidden;
+  }
+}
+
+@media screen\0 {
+  .IESupportMsg {
+    display: none;
+  }
+
+  body {
+    overflow: hidden;
   }
 }
