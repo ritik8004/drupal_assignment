@@ -108,6 +108,7 @@ class CustomerController extends ControllerBase {
     return AccessResult::allowedIf(
       !empty($user->get('acq_customer_id')->getString())
       && $this->currentUser->id() == $user->id()
+      && $this->apiHelper->getCheckoutcomConfig('vault_enabled')
     );
   }
 

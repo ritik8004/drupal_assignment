@@ -149,18 +149,21 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $links['my_account'] = [
       'text' => t('my account'),
       'route' => 'entity.user.canonical',
+      'weight' => 10,
     ];
 
     // Orders link.
     $links['orders'] = [
       'text' => t('orders'),
       'route' => 'acq_customer.orders',
+      'weight' => 20,
     ];
 
     // Contact details link.
     $links['contact_details'] = [
       'text' => t('contact details'),
       'route' => 'entity.user.edit_form',
+      'weight' => 30,
     ];
 
     // Address book link.
@@ -170,24 +173,21 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       'options' => [
         'profile_type' => 'address_book',
       ],
-    ];
-
-    // Saved cards list.
-    $links['payment_cards'] = [
-      'text' => t('Payment Cards'),
-      'route' => 'acq_checkoutcom.payment_cards',
+      'weight' => 40,
     ];
 
     // Communication preferences link.
     $links['communication_preference'] = [
       'text' => t('communication preferences'),
       'route' => 'alshaya_user.user_communication_preference',
+      'weight' => 50,
     ];
 
     // Change password link.
     $links['change_password'] = [
       'text' => t('change password'),
       'route' => 'change_pwd_page.change_password_form',
+      'weight' => 60,
     ];
 
     // Sign out link.
@@ -195,7 +195,12 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       'text' => t('Sign out'),
       'route' => 'user.logout',
       'options' => [],
+      'weight' => 100,
     ];
+
+    \Drupal::moduleHandler()->alter('alshaya_my_account_links', $links);
+
+    array_multisort(array_column($links, 'weight'), SORT_ASC, $links);
 
     return $links;
   }
