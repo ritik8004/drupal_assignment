@@ -68,6 +68,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $priceHelper;
 
   /**
+   * Module installer service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  protected $moduleHandler;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -94,6 +101,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Language Manager.
    * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $price_helper
    *   Price Helper.
+   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   *   Module handler service.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -106,13 +115,15 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               SkuImagesManager $skuImagesManager,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
-                              SkuPriceHelper $price_helper) {
+                              SkuPriceHelper $price_helper,
+                              ModuleHandler $module_handler) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->priceHelper = $price_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -201,7 +212,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
             // Do not add selected param if we are using parent sku itself for
             // gallery. This is normal for PB, MC, etc.
-            if ($sku_for_gallery->id() != $sku->id()) {
+            if (($sku_for_gallery->id() != $sku->id()) &&
+              (!$this->moduleHandler->moduleExists('alshaya_color_split'))) {
               $product_url .= '?selected=' . $sku_for_gallery->id();
             }
           }
@@ -221,7 +233,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         if (alshaya_acm_product_is_buyable($sku) && !$this->skuManager->isProductInStock($sku)) {
           $stock_placeholder = [
-            '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
+            '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . $this->t('out of stock') . '</span></div>',
           ];
         }
 
@@ -311,7 +323,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
       $container->get('language_manager'),
-      $container->get('alshaya_acm_product.price_helper')
+      $container->get('alshaya_acm_product.price_helper'),
+      $container->get('module_handler')
     );
   }
 
