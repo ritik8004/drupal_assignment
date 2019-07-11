@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
-use Drupal\redirect\RedirectRepository;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Path\AliasManagerInterface;
@@ -64,13 +63,6 @@ class DeeplinkResource extends ResourceBase {
   protected $baseUrl;
 
   /**
-   * Redirect repository.
-   *
-   * @var \Drupal\redirect\RedirectRepository
-   */
-  protected $redirectRepository;
-
-  /**
    * DeeplinkResource constructor.
    *
    * @param array $configuration
@@ -93,8 +85,6 @@ class DeeplinkResource extends ResourceBase {
    *   The request stack service.
    * @param \Drupal\Core\Routing\RequestContext $request_context
    *   The request context.
-   * @param \Drupal\redirect\RedirectRepository $redirect_repository
-   *   Redirect repository.
    */
   public function __construct(
     array $configuration,
@@ -106,8 +96,7 @@ class DeeplinkResource extends ResourceBase {
     AliasManagerInterface $alias_manager,
     MobileAppUtility $mobile_app_utility,
     RequestStack $request_stack,
-    RequestContext $request_context,
-    RedirectRepository $redirect_repository
+    RequestContext $request_context
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
@@ -115,7 +104,6 @@ class DeeplinkResource extends ResourceBase {
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->baseUrl = $request_context->getCompleteBaseUrl();
-    $this->redirectRepository = $redirect_repository;
   }
 
   /**
@@ -132,8 +120,7 @@ class DeeplinkResource extends ResourceBase {
       $container->get('path.alias_manager'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('request_stack'),
-      $container->get('router.request_context'),
-      $container->get('redirect.repository')
+      $container->get('router.request_context')
     );
   }
 
@@ -168,7 +155,7 @@ class DeeplinkResource extends ResourceBase {
       $url = $internal_url->getGeneratedUrl();
     }
     else {
-      $alias = $this->getRedirectUrl($alias);
+      $alias = $this->mobileAppUtility->getRedirectUrl($alias);
       // Get the internal path of given alias and get route object.
       $internal_path = $this->aliasManager->getPathByAlias(
         '/' . $alias,
@@ -182,40 +169,6 @@ class DeeplinkResource extends ResourceBase {
     }
 
     return new ModifiedResourceResponse(['deeplink' => $url]);
-  }
-
-  /**
-   * Get redirect url for a given url.
-   *
-   * @param string $url
-   *   Url for which redirect needs to check.
-   *
-   * @return mixed|string
-   *   Redirect url.
-   */
-  protected function getRedirectUrl(string $url = '') {
-    if (empty($url)) {
-      return $url;
-    }
-
-    preg_match('#(?<=/)[^/]+#', $url, $match);
-    $langcode = NULL;
-
-    // If language exists for the given langcode.
-    if (!empty($match) && $this->languageManager->getLanguage($match[0])) {
-      $langcode = $match[0];
-    }
-
-    // If langcode exists in the url string.
-    if ($langcode && strpos($url, '/' . $langcode . '/') !== FALSE) {
-      $url = str_replace('/' . $langcode . '/', '', $url);
-      $redirect = $this->redirectRepository->findMatchingRedirect($url, [], $langcode);
-      $url = $redirect
-        ? $redirect->getRedirectUrl()->toString(TRUE)->getGeneratedUrl()
-        : $url;
-    }
-
-    return $url;
   }
 
 }
