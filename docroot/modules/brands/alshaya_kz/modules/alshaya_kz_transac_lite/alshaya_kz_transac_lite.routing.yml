@@ -49,10 +49,10 @@ alshaya_kz_transac_lite.payemnt_form:
   requirements:
     _permission: 'access content'
 
-alshaya_kz_transac_lite.payemnt_option:
-  path: '/payment/{option}'
+alshaya_kz_transac_lite.payemnt_status:
+  path: '/payment/{ref_number}'
   defaults:
-    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::paymentOption'
+    _controller: '\Drupal\alshaya_kz_transac_lite\Controller\TicketBookingController::paymentStatus'
     _title: ''
   requirements:
     _permission: 'access content'
