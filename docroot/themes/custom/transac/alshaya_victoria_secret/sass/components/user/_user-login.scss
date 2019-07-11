@@ -1,10 +1,6 @@
 .c-user-login {
   &.user-page {
     .user-login-form {
-      @include breakpoint($desktop) {
-        max-width: 19.8rem;
-      }
-
       #edit-actions input {
         font-size: 0.875rem;
         text-transform: uppercase;
@@ -18,16 +14,6 @@
       & > a {
         font-size: 0.875rem;
         font-weight: normal;
-
-        @include breakpoint($tablet) {
-          #{$left}: 9.875rem;
-        }
-
-        html[lang="ar"] & {
-          @include breakpoint($tablet) {
-            right: 9.875rem;
-          }
-        }
       }
     }
 
@@ -69,5 +55,12 @@
     @include breakpoint($only-mobile) {
       margin-top: 5.5rem;
     }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  .section-title {
+    text-transform: capitalize;
   }
 }
