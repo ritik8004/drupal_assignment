@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_color_split\AlshayaColorSplitManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -160,7 +161,7 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
 
   $configurations = [
     'color' => [
-      'attribute_id' => 999999,
+      'attribute_id' => AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE,
       'code' => $attribute_code_color_id,
       'label' => (string) t('@color_attribute_form_label', ['@color_attribute_form_label' => $color_label_cart_form]),
       'position' => -1,
@@ -235,7 +236,7 @@ function alshaya_color_split_acq_sku_configurable_cart_options_alter(array &$opt
 
   if ($skuManager->fetchStyleCode($sku)) {
     foreach ($options as $index => $option) {
-      if ($option['option_id'] == 999999) {
+      if ($option['option_id'] == AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE) {
         unset($options[$index]);
         break;
       }
