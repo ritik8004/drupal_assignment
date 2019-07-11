@@ -1,8 +1,8 @@
-alshaya_options_list.admin_settings:
+alshaya_options_list.settings:
   type: config_object
   label: 'Alshaya Options List admin Settings'
   mapping:
-    alshaya_options_on_off:
+    alshaya_shop_by_pages_enable:
       type: boolean
       label: 'Turn this feature on or off'
     alshaya_options_pages:

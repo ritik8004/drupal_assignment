@@ -67,9 +67,9 @@
         var scoreData = $.parseJSON(data);
         scoreData.forEach(function (element) {
           element[0] = new Date(element[0]*1000);
-          dataTable.addRows([
+          dataTable.addRow(
             element
-          ]);
+          );
         });
 
         var options = {

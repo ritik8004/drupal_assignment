@@ -439,6 +439,7 @@
               shifts: book_shifts
             }, function (data) {
               if (data.err) {
+                $('.loading-overlay').removeClass('active');
                 actions.showEle(eleFormErrMsg);
                 eleFormErrMsg.html(data.message);
               }

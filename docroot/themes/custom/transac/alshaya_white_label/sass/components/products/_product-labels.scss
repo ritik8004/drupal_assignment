@@ -8,6 +8,10 @@
       z-index: 5;
     }
 
+    .c-plp & {
+      z-index: 1;
+    }
+
     &.top {
       &-left {
         top: 0.5rem;

@@ -1,5 +1,9 @@
 name: 'Alshaya options list'
 type: module
-description: 'Create a page for configurable attributes.'
+description: 'Create shop by pages for configurable product attributes.'
 package: Alshaya
 core: 8.x
+dependencies:
+  - acq_sku:acq_sku
+themes:
+  - alshaya_white_label

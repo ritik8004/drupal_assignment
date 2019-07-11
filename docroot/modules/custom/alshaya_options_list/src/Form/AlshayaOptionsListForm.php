@@ -2,11 +2,11 @@
 
 namespace Drupal\alshaya_options_list\Form;
 
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Routing\RouteBuilderInterface;
 
 /**
@@ -15,18 +15,11 @@ use Drupal\Core\Routing\RouteBuilderInterface;
 class AlshayaOptionsListForm extends ConfigFormBase {
 
   /**
-   * Database connection service object.
+   * Alshaya Options List Service.
    *
-   * @var \Drupal\Core\Database\Connection
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
-  protected $connection;
-
-  /**
-   * SKU Fields Manager.
-   *
-   * @var \Drupal\acq_sku\SKUFieldsManager
-   */
-  protected $skuFieldsManager;
+  protected $alshayaOptionsService;
 
   /**
    * The router builder.
@@ -38,18 +31,14 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   /**
    * AlshayaOptionsListForm constructor.
    *
-   * @param \Drupal\Core\Database\Connection $connection
-   *   Database connection service object.
-   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
-   *   SKU Fields Manager.
+   * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
+   *   Alshaya options service.
    * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
    */
-  public function __construct(Connection $connection,
-                              SKUFieldsManager $sku_fields_manager,
+  public function __construct(AlshayaOptionsListHelper $alshaya_options_service,
                               RouteBuilderInterface $router_builder) {
-    $this->connection = $connection;
-    $this->skuFieldsManager = $sku_fields_manager;
+    $this->alshayaOptionsService = $alshaya_options_service;
     $this->routerBuilder = $router_builder;
   }
 
@@ -58,8 +47,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('database'),
-      $container->get('acq_sku.fields_manager'),
+      $container->get('alshaya_options_list.alshaya_options_service'),
       $container->get('router.builder')
     );
   }
@@ -75,7 +63,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_options_list.admin_settings'];
+    return ['alshaya_options_list.settings'];
   }
 
   /**
@@ -84,12 +72,12 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $config = $this->config('alshaya_options_list.admin_settings');
+    $config = $this->config('alshaya_options_list.settings');
     $attribute_options = (array) $config->get('alshaya_options_pages');
 
-    $form['alshaya_options_on_off'] = [
+    $form['alshaya_shop_by_pages_enable'] = [
       '#type' => 'checkbox',
-      '#default_value' => $config->get('alshaya_options_on_off'),
+      '#default_value' => $config->get('alshaya_shop_by_pages_enable'),
       '#title' => $this->t('Enable options page on site.'),
     ];
 
@@ -101,17 +89,12 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#suffix' => '</div>',
       '#states' => [
         'visible' => [
-          ':input[name="alshaya_options_on_off"]' => ['checked' => TRUE],
+          ':input[name="alshaya_shop_by_pages_enable"]' => ['checked' => TRUE],
         ],
       ],
     ];
 
-    if (count($attribute_options) == 0) {
-      $temp_count = $form_state->get('temp_count') + 1;
-    }
-    else {
-      $temp_count = $form_state->get('temp_count');
-    }
+    $temp_count = count($attribute_options) == 0 ? $form_state->get('temp_count') + 1 : $form_state->get('temp_count');
 
     if (!empty($attribute_options)) {
       foreach ($attribute_options as $key => $attribute_option) {
@@ -133,7 +116,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
 
         $form['alshaya_options_page'][$key]['alshaya_options_attributes'] = [
           '#type' => 'checkboxes',
-          '#options' => $this->getAttributeCodeOptions(),
+          '#options' => $this->alshayaOptionsService->getAttributeCodeOptions(),
           '#default_value' => !empty($attribute_option['attributes']) ? $attribute_option['attributes'] : [],
           '#title' => $this->t('The attribute to list on the options page.'),
         ];
@@ -158,7 +141,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
 
         $form['alshaya_options_page'][$i]['alshaya_options_attributes'] = [
           '#type' => 'checkboxes',
-          '#options' => $this->getAttributeCodeOptions(),
+          '#options' => $this->alshayaOptionsService->getAttributeCodeOptions(),
           '#title' => $this->t('The attribute to list on the options page.'),
         ];
       }
@@ -191,8 +174,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    */
   public function addOne(array &$form, FormStateInterface $form_state) {
     $options_field = $form_state->get('temp_count') ?? 0;
-    $add_button = $options_field + 1;
-    $form_state->set('temp_count', $add_button);
+    $form_state->set('temp_count', ($options_field + 1));
     $form_state->setRebuild();
   }
 
@@ -207,8 +189,8 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_options_list.admin_settings');
-    $config->set('alshaya_options_on_off', $form_state->getValue('alshaya_options_on_off'));
+    $config = $this->config('alshaya_options_list.settings');
+    $config->set('alshaya_shop_by_pages_enable', $form_state->getValue('alshaya_shop_by_pages_enable'));
     $values = $form_state->getValue('alshaya_options_page');
     foreach ($values as $value) {
       $url = ltrim($value['alshaya_options_page_url'] ?? '', '/');
@@ -227,26 +209,10 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     // Rebuild routes so that new routes get added.
     $this->routerBuilder->rebuild();
 
+    // Invalidate page cache.
+    Cache::invalidateTags(['alshaya-options-page']);
+
     return parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAttributeCodeOptions() {
-    $query = $this->connection->select('taxonomy_term__field_sku_attribute_code', 'tfa');
-    $query->fields('tfa', ['field_sku_attribute_code_value']);
-    $query->groupBy('tfa.field_sku_attribute_code_value');
-    $options = $query->execute()->fetchAllKeyed(0, 0);
-
-    // Only show those fields which have a facet.
-    $fields = $this->skuFieldsManager->getFieldAdditions();
-    foreach ($options as $key => $option) {
-      if (!isset($fields[$option]['facet']) || $fields[$option]['facet'] != 1) {
-        unset($options[$key]);
-      }
-    }
-    return $options;
   }
 
 }

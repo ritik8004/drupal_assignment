@@ -21,7 +21,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_options_list.admin_settings'];
+    return ['alshaya_options_list.settings'];
   }
 
   /**
@@ -29,7 +29,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-    $config = $this->config('alshaya_options_list.admin_settings');
+    $config = $this->config('alshaya_options_list.settings');
     $attribute_options = $config->get('alshaya_options_pages');
 
     if (!empty($attribute_options)) {
@@ -151,7 +151,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_options_list.admin_settings');
+    $config = $this->config('alshaya_options_list.settings');
     $options_pages = $config->get('alshaya_options_pages');
     $values = $form_state->getValue('alshaya_options_page_settings');
     foreach ($values as $key => $value) {
