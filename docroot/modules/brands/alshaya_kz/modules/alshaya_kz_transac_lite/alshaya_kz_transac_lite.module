@@ -21,13 +21,13 @@ function alshaya_kz_transac_lite_theme($existing, $type, $theme, $path) {
 
   $items['payment_success'] = [
     'variables' => [
-      'ref_number' => NULL,
+      'booking_info' => NULL,
     ],
   ];
 
   $items['payment_failed'] = [
     'variables' => [
-      'ref_number' => NULL,
+      'booking_info' => NULL,
     ],
   ];
 
@@ -93,7 +93,7 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
       'ar' => ' معلومات الزبون',
     ],
     'Buy tickets for infants, kids, children and adult. Children under the age of 8 must be accompanied by an adult.' => [
-      'ar' => 'شراء تذاكر للرضع ، والأطفال والكبار. يجب أن يكون الأطفال تحت سن 8 سنوات برفقة شخص بالغ.',
+      'ar' => 'شراء تذاكر الرضع والأطفال والبالغين. يجب أن يرافق الأطفال الأقل من 8 سنوات شخص بالغ.',
     ],
     'Kuwait' => [
       'ar' => 'الكويت',
@@ -129,7 +129,7 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
       'ar' => 'ملاحظة: يسمح بدخول البالغين إذا كانوا برفقة طفل واحد على الأقل.',
     ],
     'Note: Children under the age of 8, must be accompanied by an Adult.' => [
-      'ar' => 'ملاحظة: يجب أن يكون الأطفال تحت سن 8 سنوات برفقة شخص بالغ.',
+      'ar' => 'ملاحظة: يجب أن يرافق الأطفال الأقل من 8 سنوات شخص بالغ.',
     ],
     'Visitor Details' => [
       'ar' => 'تفاصيل خاصة بالزوار',
@@ -217,6 +217,45 @@ function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
     ],
     'KidZania Operations S.A.R.L. © 2019, KidZania, and all related characters and elements are trademarks of KidZania Operations S.A.R.L. All Rights Reserved. Privacy Policy' => [
       'ar' => 'عمليات KidZania S.A.R.L. © 2019 ، KidZania ، وجميع الشخصيات والعناصر ذات الصلة هي علامات تجارية لشركة KidZania Operations S.A.R.L. كل الحقوق محفوظة. سياسة خاصة',
+    ],
+    'K-Net Payment Details' => [
+      'ar' => 'تفاصيل الدفع عن طريق K-Net',
+    ],
+    'Transaction Id' => [
+      'ar' => 'العملية التجارية',
+    ],
+    'Payment Id' => [
+      'ar' => 'الدفع',
+    ],
+    'Total Payment' => [
+      'ar' => 'المبلغ الإجمالي',
+    ],
+    'Date of Payment' => [
+      'ar' => 'تاريخ الدفع',
+    ],
+    'Status' => [
+      'ar' => 'الحالة',
+    ],
+    'Online Booking Failed' => [
+      'ar' => 'فشل الحجز عبر الإنترنت',
+    ],
+    'You online payment transaction is failed. You may contact your bank for this failed transaction for more details.' => [
+      'ar' => 'لقد فشلت معاملة الدفع عبر الإنترنت. يمكنك الاتصال بالبنك الذي تتعامل معه للحصول على هذه الصفقة الفاشلة للحصول على مزيد من التفاصيل.',
+    ],
+    'Try Again' => [
+      'ar' => 'حاول مرة أخري',
+    ],
+    'Take me to Kidzania Website' => [
+      'ar' => 'خذني إلى موقع كيدزانيا',
+    ],
+    'Online Booking Completed Successfully' => [
+      'ar' => 'تم الحجز عبر الإنترنت بنجاح',
+    ],
+    'Success' => [
+      'ar' => 'نجاح',
+    ],
+    'Failed' => [
+      'ar' => 'فشل',
     ],
   ];
 
