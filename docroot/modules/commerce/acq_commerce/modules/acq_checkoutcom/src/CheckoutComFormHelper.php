@@ -187,6 +187,7 @@ class CheckoutComFormHelper {
     if ($this->currentUser->isAuthenticated()) {
       $form['save_card'] = [
         '#type'  => 'checkbox',
+        '#id' => 'saveCard',
         '#title' => $this->t('Save card for future use'),
       ];
 

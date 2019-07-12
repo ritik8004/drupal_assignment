@@ -244,10 +244,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     }
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
-      $this->initiate2dPayment(
-        $payment_method['payment_details']['cko_card_token'],
-        $save_card
-      );
+      $this->initiate2dPayment($payment_method['payment_details']['cko_card_token']);
     }
   }
 
@@ -256,18 +253,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    *
    * @param string $card_token
    *   The card token from user.
-   * @param bool $save
-   *   (Optional) true to save card, otherwise false.
    *
    * @throws \Exception
    */
-  protected function initiate2dPayment(string $card_token, $save = FALSE) {
+  protected function initiate2dPayment(string $card_token) {
     $this->getCart()->setPaymentMethod(
       $this->getId(),
-      [
-        'card_token_id' => $card_token,
-        'udf3' => $save ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
-      ]
+      ['card_token_id' => $card_token]
     );
   }
 
