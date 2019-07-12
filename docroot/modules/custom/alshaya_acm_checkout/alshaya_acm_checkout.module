@@ -437,3 +437,19 @@ function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInte
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_acm_checkout_alshaya_my_account_links_alter(array &$links) {
+  if ((alshaya_acm_customer_is_customer(\Drupal::currentUser()) || \Drupal::currentUser()->hasPermission('administer users'))
+    && \Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('vault_enabled')) {
+
+    // Saved cards list.
+    $links['payment_cards'] = [
+      'text' => t('Payment Cards'),
+      'route' => 'acq_checkoutcom.payment_cards',
+      'weight' => 41,
+    ];
+  }
+}
