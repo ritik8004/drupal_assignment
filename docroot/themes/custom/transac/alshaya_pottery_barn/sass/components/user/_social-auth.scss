@@ -1,0 +1,15 @@
+.c-user-login,
+.c-user-register {
+  .section-title {
+    text-transform: uppercase;
+  }
+}
+
+.block-alshaya-signup-signin-buttons {
+  .sub-text,
+  .link-button span {
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
