@@ -1,0 +1,9 @@
+services:
+  alshaya_color_split.commands:
+    class: Drupal\alshaya_color_split\Commands\AlshayaColorSplitCommands
+    arguments:
+      - '@alshaya_config.manager'
+      - '@config.factory'
+      - '@acq_sku.fields_manager'
+    tags:
+      - { name: drush.command }
