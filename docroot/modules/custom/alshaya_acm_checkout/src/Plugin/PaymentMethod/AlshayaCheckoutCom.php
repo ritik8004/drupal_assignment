@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\PaymentMethod;
 
-use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_checkoutcom\Plugin\PaymentMethod\CheckoutCom;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
@@ -212,12 +211,9 @@ class AlshayaCheckoutCom extends CheckoutCom {
     }
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
-      $this->getCart()->setPaymentMethod(
-        $this->getId(),
-        [
-          'card_token_id' => $form_state->getValue('cko_card_token'),
-          'udf3' => $form_state->getValue('save_card') ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
-        ]
+      $this->initiate2dPayment(
+        $form_state->getValue('cko_card_token'),
+        $form_state->getValue('save_card')
       );
     }
   }
