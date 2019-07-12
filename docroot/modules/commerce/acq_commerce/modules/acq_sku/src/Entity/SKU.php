@@ -139,12 +139,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
 
-        if (!empty(self::$lockKey)) {
-          \Drupal::service('lock.persistent')->release(self::$lockKey);
+        if (!empty($this->lockKey)) {
+          \Drupal::service('lock.persistent')->release($this->lockKey);
 
           // To ensure we don't keep releasing the lock again and again
           // we set it to NULL here.
-          self::$lockKey = NULL;
+          $this->lockKey = NULL;
         }
       }
     }
@@ -196,7 +196,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         try {
           // Acquire lock, if lock is not already set,
           // to ensure parallel processes are executed one by one.
-          if (empty(self::$lockKey)) {
+          if (empty($this->lockKey)) {
             $lock_key = 'downloadSkuImage' . $this->id();
             do {
               $lock_acquired = \Drupal::service('lock.persistent')->acquire($lock_key);
@@ -207,7 +207,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
               }
             } while (!$lock_acquired);
             // Set lockKey once lock has been acquired.
-            self::$lockKey = $lock_key;
+            $this->lockKey = $lock_key;
           }
 
           // Prepare the File object when we access it the first time.

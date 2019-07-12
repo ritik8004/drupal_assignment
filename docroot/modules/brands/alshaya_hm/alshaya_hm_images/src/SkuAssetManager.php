@@ -279,12 +279,12 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
-      if (!empty(self::$lockKey)) {
-        $this->lock->release(self::$lockKey);
+      if (!empty($this->lockKey)) {
+        $this->lock->release($this->lockKey);
 
         // To ensure we don't keep releasing the lock again and again
         // we set it to NULL here.
-        self::$lockKey = NULL;
+        $this->lockKey = NULL;
       }
       $this->logger->notice('Downloaded new asset images for sku @sku.', [
         '@sku' => $sku->getSku(),
@@ -458,7 +458,7 @@ class SkuAssetManager {
   private function downloadImage(array $asset, string $sku) {
     // Acquire lock, if lock is not already set,
     // to ensure parallel processes are executed one by one.
-    if (empty(self::$lockKey)) {
+    if (empty($this->lockKey)) {
       $lock_key = 'downloadSkuImage' . $sku->id();
       do {
         $lock_acquired = $this->lock->acquire($lock_key);
@@ -469,7 +469,7 @@ class SkuAssetManager {
         }
       } while (!$lock_acquired);
       // Set lockKey once lock has been acquired.
-      self::$lockKey = $lock_key;
+      $this->lockKey = $lock_key;
     }
 
     $file = NULL;
