@@ -43,7 +43,8 @@
     }
 
     @include breakpoint($only-mobile) {
-      width: 100% !important;
+      width: calc(100% - 0.5rem) !important;
+      margin: 0 0.25rem;
     }
 
     .ui-dialog-buttonpane {
