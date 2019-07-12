@@ -70,8 +70,6 @@ class GooglePageSpeedController extends ControllerBase {
    */
   public function getPageScore($metric_id = '', $device = 'desktop', $time = 'one-month') {
 
-    $measure_data = [];
-    $response_data_full = [];
     $timestamp = $this->gpsInsights->getTimeStamp($time);
 
     // Get all url ids for given timeframe.
@@ -92,6 +90,7 @@ class GooglePageSpeedController extends ControllerBase {
     $query->fields('gps_md', ['value']);
     $query->orderBy('gps_ma.created', 'ASC');
     $results = $query->execute()->fetchAll();
+    $measure_data = [];
     foreach ($results as $result) {
       if (!isset($measure_data[$result->created][0])) {
         $measure_data[$result->created][0] = $result->created;
@@ -99,6 +98,7 @@ class GooglePageSpeedController extends ControllerBase {
       $measure_data[$result->created][intval($result->url_id)] = $result->value;
     }
 
+    $response_data_full = [];
     // Preparing response data for chart.
     foreach ($measure_data as $measure_data_item) {
       // Merging the measure data values into initial list.
