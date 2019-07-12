@@ -20,7 +20,7 @@
 
 @media all and (-ms-high-contrast: none) {
   .IESupportMsg {
-    display: none;
+    display: block;
   }
 
   body {
@@ -30,7 +30,7 @@
 
 @media screen\0 {
   .IESupportMsg {
-    display: none;
+    display: block;
   }
 
   body {
