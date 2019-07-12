@@ -10,6 +10,12 @@
     attach: function attach(context) {
       $('#edit-actions-next', context).once('checkout-click').on('click', function (e) {
         e.preventDefault();
+
+        var form = $(this).closest('form');
+        if (!$(form).valid()) {
+          return;
+        }
+
         var paymentForm = $(this).parents('form');
 
         CheckoutKit.createCardToken({
@@ -19,6 +25,8 @@
           "expiryYear": cardYear.value,
           "cvv": cardCvv.value
         },function(data){
+          $('#payment_details_checkout_com').hide();
+
           cardToken.value = data.id;
           cardBin.value = data.card.bin;
           cardName.value = '';
