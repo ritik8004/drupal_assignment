@@ -143,28 +143,14 @@ class SkuAssetManager {
    *
    * @var \Drupal\Core\Lock\LockBackendInterface
    */
-  protected $lock;
+  private $lock;
 
   /**
    * The lock key for the sku.
    *
    * @var string
    */
-  private $lock_key;
-
-  /**
-   * @return string
-   */
-  public function getLockKey() {
-    return self::$lock_key;
-  }
-
-  /**
-   * @param string $lock_key
-   */
-  public function setLockKey($lock_key) {
-    self::$lock_key = $lock_key;
-  }
+  private $lockKey;
 
   /**
    * SkuAssetManager constructor.
@@ -293,12 +279,12 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
-      if (!empty($this->getLockKey())) {
-        $this->lock->release($this->getLockKey());
+      if (!empty(self::$lockKey)) {
+        $this->lock->release(self::$lockKey);
 
         // To ensure we don't keep releasing the lock again and again
         // we set it to NULL here.
-        $this->setLockKey(NULL);
+        self::$lockKey = NULL;
       }
       $this->logger->notice('Downloaded new asset images for sku @sku.', [
         '@sku' => $sku->getSku(),
@@ -470,18 +456,21 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
-    $lock_key = 'downloadSkuImage' . $sku->id();
-    $this->setLockKey($lock_key);
+    // Acquire lock, if lock is not already set,
+    // to ensure parallel processes are executed one by one.
+    if (empty(self::$lockKey)) {
+      $lock_key = 'downloadSkuImage' . $sku->id();
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
 
-    // Acquire lock to ensure parallel processes are executed one by one.
-    do {
-      $lock_acquired = $this->lock->acquire($lock_key);
-
-      // Sleep for half a second before trying again.
-      if (!$lock_acquired) {
-        usleep(500000);
-      }
-    } while (!$lock_acquired);
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
+      } while (!$lock_acquired);
+      // Set lockKey once lock has been acquired.
+      self::$lockKey = $lock_key;
+    }
 
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {

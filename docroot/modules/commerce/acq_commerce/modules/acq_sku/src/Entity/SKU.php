@@ -70,38 +70,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *
    * @var string
    */
-  private $lock_key;
-
-  /**
-   * @return \Drupal\Core\Lock\PersistentDatabaseLockBackend
-   */
-  public function getLock() {
-    if (empty(self::$lock)) {
-      $this->setLock();
-    }
-    return self::$lock;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setLock() {
-    self::$lock = \Drupal::service('lock.persistent');
-  }
-
-  /**
-   * @return string
-   */
-  public function getLockKey() {
-    return self::$lock_key;
-  }
-
-  /**
-   * @param string $lock_key
-   */
-  public function setLockKey($lock_key) {
-    self::$lock_key = $lock_key;
-  }
+  private $lockKey;
 
   /**
    * {@inheritdoc}
@@ -170,12 +139,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
 
-        if (!empty($this->getLockKey())) {
-          $this->getLock()->release($this->getLockKey());
+        if (!empty(self::$lockKey)) {
+          \Drupal::service('lock.persistent')->release(self::$lockKey);
 
           // To ensure we don't keep releasing the lock again and again
           // we set it to NULL here.
-          $this->setLockKey(NULL);
+          self::$lockKey = NULL;
         }
       }
     }
@@ -225,19 +194,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
       elseif ($download) {
         try {
-          $lock = $this->getLock();
-          $lock_key = 'downloadSkuImage' . $this->id();
-          $this->setLockKey($lock_key);
+          // Acquire lock, if lock is not already set,
+          // to ensure parallel processes are executed one by one.
+          if (empty(self::$lockKey)) {
+            $lock_key = 'downloadSkuImage' . $this->id();
+            do {
+              $lock_acquired = \Drupal::service('lock.persistent')->acquire($lock_key);
 
-          // Acquire lock to ensure parallel processes are executed one by one.
-          do {
-            $lock_acquired = $lock->acquire($lock_key);
-
-            // Sleep for half a second before trying again.
-            if (!$lock_acquired) {
-              usleep(500000);
-            }
-          } while (!$lock_acquired);
+              // Sleep for half a second before trying again.
+              if (!$lock_acquired) {
+                usleep(500000);
+              }
+            } while (!$lock_acquired);
+            // Set lockKey once lock has been acquired.
+            self::$lockKey = $lock_key;
+          }
 
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
