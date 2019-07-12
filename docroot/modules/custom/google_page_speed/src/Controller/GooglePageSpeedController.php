@@ -4,7 +4,6 @@ namespace Drupal\google_page_speed\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
-use Drupal\Component\Serialization\Json;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\google_page_speed\Service\GpsInsightsWrapper;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -71,8 +70,8 @@ class GooglePageSpeedController extends ControllerBase {
    */
   public function getPageScore($metric_id = '', $device = 'desktop', $time = 'one-month') {
 
-    $rows = [];
-    $final_data = [];
+    $measure_data = [];
+    $response_data_full = [];
     $timestamp = $this->gpsInsights->getTimeStamp($time);
 
     // Get all url ids for given timeframe.
@@ -87,33 +86,32 @@ class GooglePageSpeedController extends ControllerBase {
     // Filling url_ids array with 0 as value for all url_id_key.
     $url_ids = array_fill_keys($url_ids, 0);
 
+    // Getting measure data from tables.
     $query = $this->getSelectQuery($metric_id, $device, $timestamp);
     $query->fields('gps_ma', ['created', 'url_id']);
     $query->fields('gps_md', ['value']);
     $query->orderBy('gps_ma.created', 'ASC');
     $results = $query->execute()->fetchAll();
     foreach ($results as $result) {
-      if (!isset($rows[$result->created][0])) {
-        $rows[$result->created][0] = $result->created;
+      if (!isset($measure_data[$result->created][0])) {
+        $measure_data[$result->created][0] = $result->created;
       }
-      $rows[$result->created][intval($result->url_id)] = $result->value;
+      $measure_data[$result->created][intval($result->url_id)] = $result->value;
     }
 
-    foreach ($rows as $row) {
-      $results = array_diff_key($url_ids, $row);
-      foreach ($results as $result) {
-        $row[$result] = 0;
+    // Preparing response data for chart.
+    foreach ($measure_data as $measure_data_item) {
+      // Merging the measure data values into initial list.
+      $merged_measure_data = array_replace($url_ids, $measure_data_item);
+      ksort($merged_measure_data);
+      $response_data_item = [];
+      foreach ($merged_measure_data as $value) {
+        $response_data_item[] = floatval($value);
       }
-      ksort($row);
-      $i = 0;
-      foreach ($row as $value) {
-        $final[intval($i)] = floatval($value); $i++;
-      }
-      $final_data[] = $final;
+      $response_data_full[] = $response_data_item;
     }
 
-    $final_data = Json::encode($final_data);
-    return new JsonResponse($final_data);
+    return new JsonResponse($response_data_full);
 
   }
 
@@ -139,9 +137,7 @@ class GooglePageSpeedController extends ControllerBase {
     $urls_list_select->fields('gps_url', ['url_id', 'url']);
     $urls_list_select->condition('url_id', $url_id_list, 'IN');
     $url_list = $urls_list_select->execute()->fetchAllKeyed(0, 1);
-    $url_list = Json::encode($url_list);
-    echo $url_list;
-    die;
+    return new JsonResponse($url_list);
   }
 
   /**
