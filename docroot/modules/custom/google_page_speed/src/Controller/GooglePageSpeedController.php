@@ -7,6 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Component\Serialization\Json;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\google_page_speed\Service\GpsInsightsWrapper;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Returns responses for Google Page Speed integration routes.
@@ -73,6 +74,19 @@ class GooglePageSpeedController extends ControllerBase {
     $rows = [];
     $final_data = [];
     $timestamp = $this->gpsInsights->getTimeStamp($time);
+
+    // Get all url ids for given timeframe.
+    $url_ids = $this->getSelectQuery($metric_id, $device, $timestamp)
+      ->distinct()
+      ->execute()
+      ->fetchAllKeyed(0, 0);
+
+    // Putting 1st element as 0.
+    array_unshift($url_ids, 0);
+
+    // Filling url_ids array with 0 as value for all url_id_key.
+    $url_ids = array_fill_keys($url_ids, 0);
+
     $query = $this->getSelectQuery($metric_id, $device, $timestamp);
     $query->fields('gps_ma', ['created', 'url_id']);
     $query->fields('gps_md', ['value']);
@@ -84,16 +98,9 @@ class GooglePageSpeedController extends ControllerBase {
       }
       $rows[$result->created][intval($result->url_id)] = $result->value;
     }
-    $row_counts = $this->getSelectQuery($metric_id, $device, $timestamp)
-      ->distinct()
-      ->execute()
-      ->fetchAllKeyed(0, 0);
-
-    // Initialising index 0. It will help in array_diff_keys.
-    $row_counts[0] = 0;
 
     foreach ($rows as $row) {
-      $results = array_diff_key($row_counts, $row);
+      $results = array_diff_key($url_ids, $row);
       foreach ($results as $result) {
         $row[$result] = 0;
       }
@@ -106,8 +113,7 @@ class GooglePageSpeedController extends ControllerBase {
     }
 
     $final_data = Json::encode($final_data);
-    echo($final_data);
-    die;
+    return new JsonResponse($final_data);
 
   }
 
