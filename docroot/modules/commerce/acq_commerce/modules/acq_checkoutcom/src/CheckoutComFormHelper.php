@@ -78,7 +78,7 @@ class CheckoutComFormHelper {
     $states = [
       '#states' => [
         'required' => [
-          ':input[name="card_token"]' => ['value' => ''],
+          ':input[name="cko_card_token"]' => ['value' => ''],
         ],
       ],
     ];

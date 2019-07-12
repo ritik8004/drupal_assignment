@@ -13,6 +13,8 @@ form select.error {
   }
 }
 
+// Apply Select style mixin for tablet and mobile on select tag.
+// We dont use selec2 in devices, allowing native OS to handle inputs.
 @mixin select-style($select-width) {
   appearance: none;
   border: 1px solid $primary_dropdown_border;
@@ -43,6 +45,12 @@ form select.error {
   }
 }
 
+// Apply Select Wrapper mixin for all resolutions.
+// Style it in two stages.
+// 1. Apply select-wrapper($wrapper-width) on form-item div.
+// 2. Then apply select2-style mixin on selec2-container div for desktop.
+// Above only true if using select2 on desktop.
+// 3. Apply select-style mixing for select tag on mobile and tablets.
 @mixin select-wrapper($wrapper-width) {
   width: $wrapper-width;
   margin-bottom: 0.75rem;
@@ -79,6 +87,7 @@ form select.error {
   }
 }
 
+// Style select2 container.
 @mixin select2-style($select-width) {
   width: $select-width !important;
 
