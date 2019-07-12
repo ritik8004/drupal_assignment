@@ -113,8 +113,8 @@ $social_config = [
 ];
 
 if (!empty($social_config[$env])) {
-  foreach ($social_config[$env] as $provider => $config) {
-    $settings["social_auth_{$provider}.settings"] = $config;
+  foreach ($social_config[$env] as $provider => $provider_config) {
+    $settings["social_auth_{$provider}.settings"] = $provider_config;
   }
 }
 
