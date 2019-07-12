@@ -80,7 +80,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
 
     $settings['cache']['bins']['product_category_tree'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['product_options'] = 'cache.backend.permanent_memcache';
-    $settings['cache']['bins']['hm_product_configurations'] = 'cache.backend.permanent_memcache';
+    $settings['cache']['bins']['alshaya_product_configurations'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['orders_count'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['product_processed_data'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['cart_history'] = 'cache.backend.permanent_memcache';

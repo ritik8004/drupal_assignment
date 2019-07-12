@@ -1,0 +1,4 @@
+fields:
+  style_code:
+    label: 'Style Code'
+    type: 'string'
