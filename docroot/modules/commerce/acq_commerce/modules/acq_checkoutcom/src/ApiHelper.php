@@ -214,6 +214,10 @@ class ApiHelper {
       return strtr($response['message'], $response['parameters'] ?? []);
     }
 
+    if (empty($response['items'])) {
+      return [];
+    }
+
     $cards = $this->extractCardInfo($response['items']);
     $this->cache->set(
       $cache_key,
