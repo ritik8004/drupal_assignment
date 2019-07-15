@@ -28,7 +28,7 @@ function alshaya_acm_product_update_8051() {
   foreach ($fields_missing_uuid as $field_missing_uuid) {
     $uuid = $uuid_generator->generate();
     $field_storage_config = \Drupal::configFactory()->getEditable('field.storage.taxonomy_term.' . $field_missing_uuid);
-    if ($field_storage_config->get('uuid')) {
+    if (!$field_storage_config->get('uuid')) {
       $field_storage_config->set('uuid', $uuid)->save();
     }
 
