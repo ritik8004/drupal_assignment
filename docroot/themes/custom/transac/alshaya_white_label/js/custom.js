@@ -147,6 +147,28 @@
         });
       }
 
+      // On dialog close.
+      $(window).on('dialog:afterclose', function (e, dialog, $element) {
+        // If body has overlay class, remove it.
+        if ($('body').hasClass('modal-overlay')) {
+          $('body').removeClass('modal-overlay');
+          // We have a menu timer with delay on desktop for body::before
+          // transition, also some regions have differnet z-index.
+          // This class holds the z-index consisitent till all animations are
+          // over. Otherwise we get a step animation, where the opacity for
+          // background closes at different times for differnet regions.
+          // see _utils.scss for classes where this gets applied.
+          setTimeout(function () {
+            $('body').removeClass('reduce-zindex');
+          }, 550);
+        }
+      });
+
+      $('.payment-card--delete a').on('click', function () {
+        $('body').addClass('reduce-zindex');
+        $('body').addClass('modal-overlay');
+      });
+
       $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').on('click', function () {
         modalClasses('product-quick-view', 'pdp-modal-overlay');
       });
