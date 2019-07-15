@@ -1,6 +1,5 @@
 #!/usr/bin/php
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
