@@ -217,16 +217,19 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // cko-card-token is not available in form state values.
-    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];;
+    // cko_card_token is not available in form state values.
+    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
 
     $save_card = isset($payment_method['payment_details']['save_card'])
       ? $payment_method['payment_details']['save_card']
       : FALSE;
-    if ($this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
-      $payment_card = $payment_method['payment_card'];
+    $payment_card = $payment_method['payment_card'];
 
-      if ((empty($payment_card) || $payment_card == 'new') && !empty($payment_method['payment_details']['cko_card_token'])) {
+    $is_new_card = (empty($payment_card) || $payment_card == 'new');
+    $new_card_token = !empty($payment_method['payment_details']['cko_card_token']);
+
+    if ($this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
+      if ($is_new_card && $new_card_token) {
         $this->initiate3dSecurePayment(
           $payment_method['payment_details']['cko_card_token'],
           $this->checkoutComApi->isMadaEnabled()
@@ -244,7 +247,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     }
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
-      $this->initiate2dPayment($payment_method['payment_details']['cko_card_token']);
+      $this->initiate2dPayment(
+        ($is_new_card && $new_card_token)
+          ? $payment_method['payment_details']['cko_card_token']
+          : $payment_method['payment_details'][$payment_card]['card_id']
+      );
     }
   }
 
