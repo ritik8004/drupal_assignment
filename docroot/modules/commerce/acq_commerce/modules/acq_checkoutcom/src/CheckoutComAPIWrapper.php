@@ -543,6 +543,7 @@ class CheckoutComAPIWrapper {
     );
     if ($response instanceof RedirectResponse) {
       $response->send();
+      exit;
     }
   }
 

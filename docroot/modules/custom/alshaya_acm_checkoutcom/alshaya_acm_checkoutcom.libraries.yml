@@ -1,0 +1,7 @@
+alshaya_checkoutcom:
+  js:
+    js/alshaya_acm_checkoutcom.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

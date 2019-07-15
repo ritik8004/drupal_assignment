@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Contains customisations for acq_checkoutcom module.
+ */
+
+use Drupal\acq_cart\CartInterface;
+use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_alshaya_acm_checkout_pre_place_order().
+ */
+function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
+  $session = \Drupal::request()->getSession();
+  $selected_payment = $session->get('selected_payment_method');
+
+  // Redirect to 3d secure screen only for checkout.com payment method.
+  if ($selected_payment != 'checkout_com') {
+    return;
+  }
+
+  /** @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $knetHelper */
+  $checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
+
+  $totals = $cart->totals();
+  $card_info = $session->get('acq_checkout_com_card');
+  // Remove data from session, as we no longer want to use the same data again.
+  $session->remove('acq_checkout_com_card');
+  try {
+    // Prepare parameters to send for 3d secure payment.
+    $params = [
+      'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
+      'email' => $cart->customerEmail(),
+    ];
+
+    if ($card_info['type'] == 'new') {
+      $params = [
+        'cardToken' => $card_info['card_token'],
+        'udf3' => $card_info['save_card'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
+        'udf1' => !empty($card_info['card_bin']) && $checkoutComApi->isMadaBin($card_info['card_bin'])
+        ? 'MADA'
+        : '',
+      ];
+    }
+    elseif ($card_info['type'] == 'existing') {
+      $params = [
+        'cardId' => $card_info['card_token'],
+        'cvv' => $card_info['cvv'],
+      ];
+    }
+    $checkoutComApi->processCardPayment($cart, $params, TRUE);
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_acm_checkoutcom')->error($e->getMessage());
+
+    // Show generic message to user.
+    \Drupal::messenger()->addError(
+      t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
+    );
+
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
+    $response->send();
+    exit;
+  }
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_acm_checkoutcom_alshaya_my_account_links_alter(array &$links) {
+  if ((alshaya_acm_customer_is_customer(\Drupal::currentUser()) || \Drupal::currentUser()->hasPermission('administer users'))
+      && \Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('vault_enabled')) {
+
+    // Saved cards list.
+    $links['payment_cards'] = [
+      'text' => t('Payment Cards'),
+      'route' => 'acq_checkoutcom.payment_cards',
+      'weight' => 41,
+    ];
+  }
+}
+
+/**
+ * Implements hook_acq_payment_method_info_alter().
+ */
+function alshaya_acm_checkoutcom_acq_payment_method_info_alter(array &$definitions) {
+  if (isset($definitions['checkout_com'])) {
+    $definitions['checkout_com']['class'] = 'Drupal\alshaya_acm_checkoutcom\Plugin\PaymentMethod\AlshayaCheckoutCom';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_checkoutcom_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details_wrapper'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['title'])) {
+    $cc_form =& $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com'];
+
+    $cc_form['card_types'] = [
+      '#markup' => '
+        <div class="card-types-wrapper">
+          <span class="card-type card-type-visa"></span>
+          <span class="card-type card-type-mastercard"></span>
+        </div>
+      ',
+    ];
+  }
+}

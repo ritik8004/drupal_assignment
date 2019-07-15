@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_checkout\Plugin\PaymentMethod;
+namespace Drupal\alshaya_acm_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_checkoutcom\Plugin\PaymentMethod\CheckoutCom;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -31,7 +31,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       ],
       '#attached' => [
         'library' => [
-          'alshaya_acm_checkout/checkout_com',
+          'alshaya_acm_checkoutcom/alshaya_checkoutcom',
         ],
       ],
     ];
@@ -187,27 +187,37 @@ class AlshayaCheckoutCom extends CheckoutCom {
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
+    $payment_method = !empty($form_state->getValue($pane_form['#parents'])['payment_details_wrapper'])
+      ? $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com']
+      : ['payment_card' => 'new'];
 
     $is_new_card = (empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new');
     $new_card_token = !empty($form_state->getValue('cko_card_token'));
     // Process 3d payment.
     if ($this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
+      $card_data = [];
       if ($is_new_card && $new_card_token) {
-        $this->initiate3dSecurePayment(
-          $form_state->getValue('cko_card_token'),
-          $this->checkoutComApi->isMadaEnabled()
+        $card_data = [
+          'type' => 'new',
+          'card_token' => $form_state->getValue('cko_card_token'),
+          'save_card' => $form_state->getValue('save_card'),
+          'card_bin' => $this->checkoutComApi->isMadaEnabled()
           ? $form_state->getValue('card_bin')
           : NULL,
-          $form_state->getValue('save_card')
-        );
+        ];
       }
       elseif (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
-        $this->initiateStoredCardPayment(
-          $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
-          (int) $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['cc_cvv']
-        );
+        $card_data = [
+          'type' => 'existing',
+          'card_token' => $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
+          'cvv' => (int) $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['cc_cvv'],
+        ];
       }
+
+      // Set the card related data in session to use it to prepare request data
+      // for checkout.com api.
+      $session = $this->currentRequest->getSession();
+      $session->set('acq_checkout_com_card', $card_data);
     }
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
