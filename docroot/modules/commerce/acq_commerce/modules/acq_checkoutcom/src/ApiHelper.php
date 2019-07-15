@@ -218,15 +218,10 @@ class ApiHelper {
       ? $this->extractCardInfo($response['items'])
       : [];
 
-    // Set cache for only 5 minutes when cards are empty to check again.
-    $cache_time = ($this->cacheTime > 300 && empty($cards))
-      ? 300
-      : $this->cacheTime;
-
     $this->cache->set(
       $cache_key,
       $cards,
-      $this->time->getRequestTime() + $cache_time,
+      $this->time->getRequestTime() + $this->cacheTime,
       ['user:' . $user->id()]
     );
     return $cards;
