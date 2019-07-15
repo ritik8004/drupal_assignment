@@ -66,13 +66,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
   protected $mediaData = [];
 
   /**
-   * The lock key for the sku.
-   *
-   * @var string
-   */
-  private $lockKey;
-
-  /**
    * {@inheritdoc}
    *
    * When a new entity instance is added, set the user_id entity reference to
@@ -138,14 +131,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($update_sku) {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
-
-        if (!empty($this->lockKey)) {
-          \Drupal::service('lock.persistent')->release($this->lockKey);
-
-          // To ensure we don't keep releasing the lock again and again
-          // we set it to NULL here.
-          $this->lockKey = NULL;
-        }
       }
     }
 
@@ -194,22 +179,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
       elseif ($download) {
         try {
-          // Acquire lock, if lock is not already set,
-          // to ensure parallel processes are executed one by one.
-          if (empty($this->lockKey)) {
-            $lock_key = 'downloadSkuImage' . $this->id();
-            do {
-              $lock_acquired = \Drupal::service('lock.persistent')->acquire($lock_key);
-
-              // Sleep for half a second before trying again.
-              if (!$lock_acquired) {
-                usleep(500000);
-              }
-            } while (!$lock_acquired);
-            // Set lockKey once lock has been acquired.
-            $this->lockKey = $lock_key;
-          }
-
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
           $update_sku = TRUE;
