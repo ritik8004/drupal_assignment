@@ -23,11 +23,15 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     return;
   }
 
+  $card_info = $session->get('acq_checkout_com_card', NULL);
+  if (empty($card_info) || !\Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('verify3dsecure')) {
+    return;
+  }
+
   /** @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $knetHelper */
   $checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
 
   $totals = $cart->totals();
-  $card_info = $session->get('acq_checkout_com_card');
   // Remove data from session, as we no longer want to use the same data again.
   $session->remove('acq_checkout_com_card');
   try {
