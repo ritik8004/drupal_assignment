@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16714d9cff9e9c2250fb0c337db8b6df",
+    "content-hash": "14b68b8f2e1942da069c8711eb0999ad",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -4173,17 +4173,11 @@
         },
         {
             "name": "drupal/back_to_top",
-            "version": "1.0.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/back_to_top.git",
-                "reference": "8.x-1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/back_to_top-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "28e17327f779bad5140ab55ef071a5f6727adbd7"
+                "reference": "f1e21b9d4892bdbb58da2a4a4732282b0f7ba4b0"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -4194,15 +4188,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1536664080",
+                    "version": "8.x-1.0+4-dev",
+                    "datestamp": "1562836688",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4231,7 +4222,8 @@
             "homepage": "https://www.drupal.org/project/back_to_top",
             "support": {
                 "source": "https://git.drupalcode.org/project/back_to_top"
-            }
+            },
+            "time": "2019-07-11T14:55:51+00:00"
         },
         {
             "name": "drupal/better_exposed_filters",
@@ -22442,7 +22434,7 @@
     "stability-flags": {
         "acquia/acsf-tools": 20,
         "drupal/acquia_purge": 10,
-        "drupal/back_to_top": 10,
+        "drupal/back_to_top": 20,
         "drupal/better_exposed_filters": 20,
         "drupal/block_field": 15,
         "drupal/captcha": 10,
