@@ -122,6 +122,7 @@ class CheckoutComFormHelper {
         '11' => '11',
         '12' => '12',
       ],
+      '#default_value' => date('m'),
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-month-select',
