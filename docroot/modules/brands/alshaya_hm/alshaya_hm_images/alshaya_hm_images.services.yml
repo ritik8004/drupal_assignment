@@ -20,7 +20,6 @@ services:
       - '@logger.factory'
       - '@datetime.time'
       - '@file.usage'
-      - '@lock.persistent'
   alshaya_hm_images.route_subscriber:
     class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
     tags:
