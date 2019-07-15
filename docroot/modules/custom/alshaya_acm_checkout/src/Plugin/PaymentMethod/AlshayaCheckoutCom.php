@@ -211,10 +211,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
     }
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
-      $this->getCart()->setPaymentMethod(
-        $this->getId(),
-        ['card_token_id' => $form_state->getValue('cko_card_token')]
-      );
+      $this->initiate2dPayment($form_state->getValue('cko_card_token'));
     }
   }
 

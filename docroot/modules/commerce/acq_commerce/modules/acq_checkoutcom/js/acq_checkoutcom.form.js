@@ -23,7 +23,8 @@
           "number": cardNumber.value,
           "expiryMonth": cardMonth.value,
           "expiryYear": cardYear.value,
-          "cvv": cardCvv.value
+          "cvv": cardCvv.value,
+          "udf3": saveCard.value ? 'storeInVaultOnSuccess' : ''
         },function(data){
           $('#payment_details_checkout_com').hide();
 
