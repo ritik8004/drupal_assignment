@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -63,28 +64,38 @@ class Analytics extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
+    self::addAnalyticsInfoToCart(
+      $this->getCart(),
+      $form_state->getValue('ga_client_id'),
+      $form_state->getValue('tracking_id')
+    );
+  }
+
+  /**
+   * Add analytics data to cart.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart object.
+   * @param string $client_id
+   *   Client ID.
+   * @param string $tracking_id
+   *   Tracking ID.
+   */
+  public static function addAnalyticsInfoToCart(CartInterface $cart, $client_id, $tracking_id) {
     $request = \Drupal::request();
 
-    $cart = $this->getCart();
     $cart->setExtension('customer_id', $cart->customerId());
 
     // GA / Tracking id added into form via javascript.
-    $cart->setExtension('ga_client_id', $form_state->getValue('ga_client_id'));
-    $cart->setExtension('tracking_id', $form_state->getValue('tracking_id'));
+    $cart->setExtension('ga_client_id', $client_id);
+    $cart->setExtension('tracking_id', $tracking_id);
 
     // Add user agent from request headers, it won't be cached ever as it is
     // POST request.
     $cart->setExtension('user_agent', $request->headers->get('User-Agent', ''));
 
     // Use the last ip from client ips.
-    if (isset($_ENV['AH_CLIENT_IP'])) {
-      $ip = $_ENV['AH_CLIENT_IP'];
-    }
-    else {
-      $ips = $request->getClientIps();
-      $ip = end($ips);
-    }
-    $cart->setExtension('client_ip', $ip);
+    $cart->setExtension('client_ip', $_ENV['AH_CLIENT_IP'] ?? '');
   }
 
 }
