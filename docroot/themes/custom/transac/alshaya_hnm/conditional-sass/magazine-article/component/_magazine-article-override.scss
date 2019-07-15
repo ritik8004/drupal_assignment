@@ -3,10 +3,13 @@
   .magazine-article-title,
   h2 a {
     font-family: $magazine-regular;
+    font-weight: 300;
+    text-transform: uppercase;
   }
 
   .field--name-field-magazine-slogan {
-    font-family: $magazine-italic;
+    font-family: $magazine-regular;
+    font-weight: 400;
   }
 }
 
@@ -23,6 +26,21 @@ body {
   > h3,
   article h3 {
     font-family: $magazine-regular;
+    font-weight: 300;
+  }
+
+  .more-link {
+    a {
+      font-family: $hnm-bold;
+    }
+  }
+
+  .views-row {
+    h3 {
+      span {
+        font-family: $magazine-text-regular;
+      }
+    }
   }
 }
 
@@ -30,6 +48,7 @@ body {
   .block-page-title-block {
     h1 {
       font-family: $magazine-regular;
+      font-weight: 300;
     }
   }
 }
