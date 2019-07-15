@@ -67,10 +67,18 @@ class Analytics extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $cart = $this->getCart();
     $cart->setExtension('customer_id', $cart->customerId());
+
+    // GA / Tracking id added into form via javascript.
     $cart->setExtension('ga_client_id', $form_state->getValue('ga_client_id'));
     $cart->setExtension('tracking_id', $form_state->getValue('tracking_id'));
-    $cart->setExtension('client_ip', $request->getClientIp());
+
+    // Add user agent from request headers, it won't be cached ever as it is
+    // POST request.
     $cart->setExtension('user_agent', $request->headers->get('User-Agent', ''));
+
+    // Use the last ip from client ips.
+    $ips = $request->getClientIps();
+    $cart->setExtension('client_ip', end($ips));
   }
 
 }
