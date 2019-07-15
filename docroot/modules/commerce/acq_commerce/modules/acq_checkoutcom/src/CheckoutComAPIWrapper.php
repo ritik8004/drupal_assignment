@@ -322,20 +322,6 @@ class CheckoutComAPIWrapper {
    * @throws \Exception
    */
   protected function make3dSecurePaymentRequest(Cart $cart, string $endpoint, array $params, $caller = '') {
-    // Set parameters required for 3d secure payment.
-    $params['chargeMode'] = self::VERIFY_3DSECURE;
-    // Capture payment immediately, values 0 to 168 (0 to 7 days).
-    $params['autoCapTime'] = '0';
-    $params['autoCapture'] = self::AUTOCAPTURE;
-    $params['attemptN3D'] = FALSE;
-    $params['customerIp'] = $this->request->getClientIp();
-    $params['successUrl'] = Url::fromRoute('acq_checkoutcom.payment_success', [], ['absolute' => TRUE])->toString();
-    $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
-    $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
-    $params['products'] = $this->getCartItems();
-    $params['billingDetails'] = $this->getAddressDetails('billing');
-    $params['shippingDetails'] = $this->getAddressDetails('shipping');
-
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
       $opt = ['json' => $req_param + $params];
       return ($client->post($endpoint, $opt));
@@ -523,21 +509,33 @@ class CheckoutComAPIWrapper {
   }
 
   /**
-   * Process the payment for given cart.
+   * Process the 3d secure payment for given cart.
    *
    * @param \Drupal\acq_cart\Cart $cart
    *   The cart object.
    * @param array $params
    *   The array of parameters.
-   * @param bool $is_new
-   *   TRUE if processing new card, False otherwise.
    *
    * @throws \Exception
    */
-  public function processCardPayment(Cart $cart, array $params, $is_new = FALSE) {
+  public function processCardPayment(Cart $cart, array $params) {
+    // Set parameters required for 3d secure payment.
+    $params['chargeMode'] = self::VERIFY_3DSECURE;
+    // Capture payment immediately, values 0 to 168 (0 to 7 days).
+    $params['autoCapTime'] = '0';
+    $params['autoCapture'] = self::AUTOCAPTURE;
+    $params['attemptN3D'] = FALSE;
+    $params['customerIp'] = $this->request->getClientIp();
+    $params['successUrl'] = Url::fromRoute('acq_checkoutcom.payment_success', [], ['absolute' => TRUE])->toString();
+    $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
+    $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
+    $params['products'] = $this->getCartItems();
+    $params['billingDetails'] = $this->getAddressDetails('billing');
+    $params['shippingDetails'] = $this->getAddressDetails('shipping');
+
     $response = $this->make3dSecurePaymentRequest(
       $cart,
-      $is_new ? self::AUTHORIZE_PAYMENT_ENDPOINT : self::CARD_PAYMENT_ENDPOINT,
+      !empty($params['cardToken']) ? self::AUTHORIZE_PAYMENT_ENDPOINT : self::CARD_PAYMENT_ENDPOINT,
       $params,
       __METHOD__
     );

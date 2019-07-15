@@ -23,6 +23,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     return;
   }
 
+  // Redirect only for 3ds, we don't want to proceed further for 2d payment.
   $card_info = $session->get('acq_checkout_com_card', NULL);
   if (empty($card_info) || !\Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('verify3dsecure')) {
     return;
@@ -56,7 +57,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
         'cvv' => $card_info['cvv'],
       ];
     }
-    $checkoutComApi->processCardPayment($cart, $params, TRUE);
+    $checkoutComApi->processCardPayment($cart, $params);
   }
   catch (\Exception $e) {
     \Drupal::logger('alshaya_acm_checkoutcom')->error($e->getMessage());

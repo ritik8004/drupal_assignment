@@ -296,8 +296,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'udf1' => !empty($card_bin) && $this->checkoutComApi->isMadaBin($card_bin)
         ? 'MADA'
         : '',
-      ],
-      TRUE
+      ]
     );
   }
 
