@@ -214,15 +214,19 @@ class ApiHelper {
       return strtr($response['message'], $response['parameters'] ?? []);
     }
 
-    if (empty($response['items'])) {
-      return [];
-    }
+    $cards = !empty($response['items'])
+      ? $this->extractCardInfo($response['items'])
+      : [];
 
-    $cards = $this->extractCardInfo($response['items']);
+    // Set cache for only 5 minutes when cards are empty to check again.
+    $cache_time = ($this->cacheTime > 300 && empty($cards))
+      ? 300
+      : $this->cacheTime;
+
     $this->cache->set(
       $cache_key,
       $cards,
-      $this->time->getRequestTime() + $this->cacheTime,
+      $this->time->getRequestTime() + $cache_time,
       ['user:' . $user->id()]
     );
     return $cards;
