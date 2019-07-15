@@ -1,7 +1,11 @@
 <div class="saved-card">
   <div class="name-number">
-    <div class="card-name">{{ card_info.name }}</div>
-    <div class="card-number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.maskedCC }}</div>
+    {% if card_info.name %}
+      <div class="card-name">{{ card_info.name }}</div>
+    {% endif %}
+    {% if card_info.maskedCC %}
+      <div class="card-number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.maskedCC }}</div>
+    {% endif %}
   </div>
   <div class="actions">
     {% if not card_info.expired %}
