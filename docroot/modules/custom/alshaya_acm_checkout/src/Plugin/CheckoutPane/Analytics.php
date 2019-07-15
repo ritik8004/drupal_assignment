@@ -77,8 +77,14 @@ class Analytics extends CheckoutPaneBase implements CheckoutPaneInterface {
     $cart->setExtension('user_agent', $request->headers->get('User-Agent', ''));
 
     // Use the last ip from client ips.
-    $ips = $request->getClientIps();
-    $cart->setExtension('client_ip', end($ips));
+    if (isset($_ENV['AH_CLIENT_IP'])) {
+      $ip = $_ENV['AH_CLIENT_IP'];
+    }
+    else {
+      $ips = $request->getClientIps();
+      $ip = end($ips);
+    }
+    $cart->setExtension('client_ip', $ip);
   }
 
 }
