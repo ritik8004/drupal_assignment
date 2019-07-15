@@ -109,28 +109,28 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete this card?');
+    return $this->t('delete card');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDescription() {
-    return $this->t('This will delete the saved card. This action cannot be undone.');
+    return $this->t('You have selected to delete this card, are you sure?');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return $this->t('Delete');
+    return $this->t('yes, delete this card');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCancelText() {
-    return $this->t('Cancel');
+    return $this->t('No, take me back');
   }
 
   /**
@@ -174,8 +174,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
 
     $form['actions']['cancel'] = [
       '#type' => 'submit',
-      '#value' => $this->t('No'),
-      '#weight' => -10,
+      '#value' => $this->getCancelText(),
       '#attributes' => [
         'class' => ['button', 'dialog-cancel'],
       ],

@@ -6,12 +6,18 @@
   <div class="payment-card--data">
     <div class="payment-card--type {{ card_info.paymentMethod|lower }}"></div>
     <div class="payment-card--info">
-      <div class="label">{{ "card number"|t }}</div>
-      <div class="payment-card--number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.maskedCC }}</div>
-      <div class="label">{{ "name of card holder"|t }}</div>
-      <div class="payment-card--name">{{ card_info.name }}</div>
-      <div class="label">{{ "expiry"|t }}</div>
-      <div class="payment-card--expiry">{{ card_info.expirationDate }} </div>
+      {% if card_info.maskedCC %}
+        <div class="label">{{ "card number"|t }}</div>
+        <div class="payment-card--number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.maskedCC }}</div>
+      {% endif %}
+      {% if card_info.name %}
+        <div class="label">{{ "name of card holder"|t }}</div>
+        <div class="payment-card--name">{{ card_info.name }}</div>
+      {% endif %}
+      {% if card_info.expirationDate %}
+        <div class="label">{{ "expiry"|t }}</div>
+        <div class="payment-card--expiry">{{ card_info.expirationDate }} </div>
+      {% endif %}
     </div>
   </div>
   <div class="payment-card--options">

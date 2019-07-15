@@ -122,6 +122,7 @@ class CheckoutComFormHelper {
         '11' => '11',
         '12' => '12',
       ],
+      '#default_value' => date('m'),
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-month-select',
@@ -187,6 +188,7 @@ class CheckoutComFormHelper {
     if ($this->currentUser->isAuthenticated()) {
       $form['save_card'] = [
         '#type'  => 'checkbox',
+        '#id' => 'saveCard',
         '#title' => $this->t('Save card for future use'),
       ];
 

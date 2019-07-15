@@ -97,6 +97,10 @@
             mask-image: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg);
           }
         }
+
+        .ajax-progress-throbber {
+          @include fullPageLoader();
+        }
       }
     }
   }

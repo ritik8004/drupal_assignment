@@ -135,6 +135,7 @@
     max-width: 25.3125rem;
     font-size: 0.875rem;
     margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
     color: $checkout_payment_checkoutcom_save_card_help;
 
     @include breakpoint($upto-desktop) {
@@ -163,7 +164,6 @@
 
     #payment_method_new {
       min-height: auto;
-      margin-bottom: 1.5rem;
 
       .form-item {
         margin-top: 2rem;
@@ -200,7 +200,6 @@
       padding: 0.875rem 0;
       float: $left;
       border-bottom: 1px solid $checkout_payment_checkoutcom_border;
-      padding-top: 0.75rem;
       padding-#{$left}: 2rem;
       padding-#{$right}: 1rem;
 
@@ -223,7 +222,7 @@
 
         position: relative;
 
-        + .cvv-wrapper {
+        ~ .cvv-wrapper {
           display: none;
         }
 
@@ -245,7 +244,7 @@
             border: 3px solid $primary_radiobtn_filled;
           }
 
-          + .cvv-wrapper {
+          ~ .cvv-wrapper {
             padding-#{$left}: 2rem;
             display: block;
 
@@ -288,7 +287,7 @@
               .cc_cvv_help_text {
                 @include breakpoint($desktop) {
                   top: 0;
-                  #{$left}: 21%;
+                  #{$left}: 8rem;
                 }
 
                 @include breakpoint($only-tablet) {
@@ -342,8 +341,6 @@
 
         .actions {
           float: $right;
-          position: absolute;
-          #{$right}: 0;
 
           .label {
             color: $content_link_color;
