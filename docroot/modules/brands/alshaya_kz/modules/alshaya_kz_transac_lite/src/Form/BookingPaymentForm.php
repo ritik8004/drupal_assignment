@@ -107,6 +107,7 @@ class BookingPaymentForm extends FormBase {
 
     $form['name'] = [
       '#title' => $this->t('Name'),
+      '#title_display' => ['invisible' => TRUE],
       '#type' => 'textfield',
       '#placeholder' => $this->t('Name'),
       '#maxlength' => 50,
@@ -115,6 +116,7 @@ class BookingPaymentForm extends FormBase {
 
     $form['email'] = [
       '#title' => $this->t('Email'),
+      '#title_display' => ['invisible' => TRUE],
       '#type' => 'email',
       '#placeholder' => $this->t('Email'),
       '#required' => TRUE,
