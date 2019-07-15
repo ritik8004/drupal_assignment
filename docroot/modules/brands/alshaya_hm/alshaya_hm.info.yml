@@ -11,3 +11,4 @@ dependencies:
   - alshaya_hm:alshaya_hm_images
   - alshaya_hm:alshaya_hm_redirect
   - alshaya_hm:alshaya_mobile_app
+  - alshaya_color_split:alshaya_color_split

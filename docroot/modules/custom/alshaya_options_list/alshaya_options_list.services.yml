@@ -1,0 +1,4 @@
+services:
+  alshaya_options_list.alshaya_options_service:
+    class: Drupal\alshaya_options_list\AlshayaOptionsListHelper
+    arguments: [ '@database', '@language_manager', '@entity_type.manager', '@config.factory', '@acq_sku.fields_manager']

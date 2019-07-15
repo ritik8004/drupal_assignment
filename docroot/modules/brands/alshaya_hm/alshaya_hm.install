@@ -15,7 +15,7 @@ use Drupal\Component\Utility\Unicode;
  *
  * Enable magazine articles feature.
  */
-function alshaya_hm_update_8036() {
+function alshaya_hm_update_8037() {
   \Drupal::service('module_installer')->install(['alshaya_magazine']);
 
   $strings = [
@@ -26,6 +26,15 @@ function alshaya_hm_update_8036() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable color split module.
+ */
+function alshaya_hm_update_8036() {
+  \Drupal::service('module_installer')->install(['alshaya_color_split']);
 }
 
 /**

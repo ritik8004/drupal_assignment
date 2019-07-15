@@ -195,3 +195,10 @@ algolia_search:
   css:
     theme:
       css/conditional-sass/algolia-search/algolia-search.ltr.css: {}
+
+optionlist_filter:
+  js:
+    js/optionlist_filter.js: {}
+  css:
+    theme:
+      css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: {}

@@ -57,7 +57,7 @@ class TicketBookingManager {
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->configFactory = $config_factory;
-    $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'), ['cache_wsdl' => WSDL_CACHE_NONE]);
+    $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'));
   }
 
   /**
@@ -526,8 +526,8 @@ class TicketBookingManager {
             ],
             'amount' => $total_amt,
             'card' => [
-              'CardType' => 'VISA',
-              'ID' => 1,
+              'CardType' => 'KNET',
+              'ID' => 8,
               'Number' => $transaction_id,
             ],
             'auth' => [
@@ -592,34 +592,68 @@ class TicketBookingManager {
    * @param array $final_visitor_list
    *   Array of visitors list.
    *
-   * @return bool
-   *   A boolean flag.
+   * @return int
+   *   A number flag.
    */
   public function validateVisitorsList(array $final_visitor_list) {
-    $flag = FALSE;
+    $flag = 0;
     $is_child = FALSE;
+    $is_kid = FALSE;
     foreach ($final_visitor_list as $value) {
-      $flag = FALSE;
-      // Is infants available.
-      if ($value['Book'] && (($value['ID'] == 0 || $value['ID'] == 1))) {
-        $is_child = TRUE;
-      }
-      // Is kid available not need adult.
-      if ($value['Book'] && ($value['ID'] == 2)) {
-        $flag = TRUE;
-      }
-      // Adult is required with infants.
-      if ($value['Book'] && $value['ID'] == 4 && $is_child) {
-        $flag = TRUE;
-      }
-      // Adult must be allowed with infants or kids only.
-      if ($value['Book'] && $value['ID'] == 4 && !$is_child) {
-        if (array_search(2, array_column($value, 'ID'))) {
-          $flag = TRUE;
+      $flag = 0;
+      if (isset($value['Book'])) {
+        // Is infants available.
+        if ($value['ID'] == 0 || $value['ID'] == 1) {
+          $is_child = TRUE;
+        }
+        // Is kid available not need adult.
+        elseif ($value['ID'] == 2) {
+          $is_kid = TRUE;
+          $flag = 1;
+          foreach ($value['Book'] as $val) {
+            if ($val['age'] < 8) {
+              $flag = 2;
+              break;
+            }
+          }
+        }
+        // Adult must be allowed with infants or kids only.
+        elseif ($value['ID'] == 4 && ($is_child || $is_kid)) {
+          $flag = 1;
         }
       }
     }
     return $flag;
+  }
+
+  /**
+   * Get valid booking price from visitor types.
+   *
+   * @param string $shifts
+   *   The shifts timing.
+   * @param string $visit_date
+   *   The visitor data.
+   * @param string $visitor_id
+   *   The visitor id.
+   *
+   * @return int|null
+   *   Visitor price value.
+   */
+  public function getVisitorPrice($shifts, $visit_date, $visitor_id) {
+    $price_data = '';
+    $visitor_types = $this->getVisitorTypesData($shifts, $visit_date);
+    if (!empty($visitor_types)) {
+      $price_data = array_filter(
+        $visitor_types->getVisitorTypesResult->VisitorType,
+        function ($e) use (&$visitor_id) {
+          return $e->ID == $visitor_id;
+        }
+      );
+    }
+    if (!empty($price_data)) {
+      return reset($price_data)->Price;
+    }
+    return NULL;
   }
 
 }

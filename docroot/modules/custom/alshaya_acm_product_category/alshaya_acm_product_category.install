@@ -16,7 +16,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  *
  * Add fields for group by subcategory.
  */
-function alshaya_acm_product_category_update_8032() {
+function alshaya_acm_product_category_update_8033() {
   $manager = \Drupal::service('alshaya_config.manager');
 
   $configs = [
@@ -45,6 +45,20 @@ function alshaya_acm_product_category_update_8032() {
     'optional',
     AlshayaConfigManager::MODE_MERGE
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set default value for include in menu for desktop/tablet/mobile to true.
+ */
+function alshaya_acm_product_category_update_8032() {
+  $configs = [
+    'field.field.taxonomy_term.acq_product_category.field_include_in_desktop',
+    'field.field.taxonomy_term.acq_product_category.field_include_in_mobile_tablet',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product_category');
 }
 
 /**
