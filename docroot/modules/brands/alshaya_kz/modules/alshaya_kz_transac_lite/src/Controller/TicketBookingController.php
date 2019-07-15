@@ -4,6 +4,7 @@ namespace Drupal\alshaya_kz_transac_lite\Controller;
 
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
@@ -31,17 +32,28 @@ class TicketBookingController extends ControllerBase {
   protected $bookingPayment;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * TicketBookingController constructor.
    *
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The TicketBooking object.
    * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $booking_payment
    *   The Booking payment object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory object.
    */
   public function __construct(TicketBookingManager $ticket_booking,
-                              BookingPaymentManager $booking_payment) {
+                              BookingPaymentManager $booking_payment,
+                              ConfigFactoryInterface $config_factory) {
     $this->ticketBooking = $ticket_booking;
     $this->bookingPayment = $booking_payment;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -50,7 +62,8 @@ class TicketBookingController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_kz_transac_lite.booking_manager'),
-      $container->get('alshaya_kz_transac_lite.booking_payment_manager')
+      $container->get('alshaya_kz_transac_lite.booking_payment_manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -159,54 +172,74 @@ class TicketBookingController extends ControllerBase {
     $response = new JsonResponse();
     $shifts = $request->request->get('shifts');
     $final_visitor_list = $request->request->get('final_visitor_list');
-
-    if ($this->ticketBooking->validateVisitorsList($final_visitor_list['data'])) {
+    $valid = $this->ticketBooking->validateVisitorsList($final_visitor_list['data']);
+    if ($valid === 1) {
       $sales_number = $this->ticketBooking->generateSalesNumber();
       $flag = FALSE;
       foreach ($final_visitor_list['data'] as $key => $value) {
-        foreach ($value['Book'] as $k => $val) {
-          $flag = FALSE;
-          // Generate ticket number.
-          $ticket_number = $this->ticketBooking->generateTicketNumber();
-          $final_visitor_list['data'][$key]['Book'][$k]['ticket_id'] = $ticket_number;
-          if ($this->ticketBooking->saveTicket($final_visitor_list['data'][$key], $val, $ticket_number, $shifts, $sales_number, $final_visitor_list['visit_date'])) {
-            $flag = TRUE;
-          }
-          else {
-            $responseData->err = TRUE;
-            $responseData->message = $this->t('Unable to save ticket for the requested order.');
-            $response->setData($responseData);
-            return $response;
+        $price = $this->ticketBooking->getVisitorPrice($shifts, $final_visitor_list['visit_date'], $value['ID']);
+        if ($price !== NULL) {
+          foreach ($value['Book'] as $k => $val) {
+            $flag = FALSE;
+            // Generate ticket number.
+            $ticket_number = $this->ticketBooking->generateTicketNumber();
+            $final_visitor_list['data'][$key]['Book'][$k]['ticket_id'] = $ticket_number;
+            if ($this->ticketBooking->saveTicket($final_visitor_list['data'][$key], $val, $ticket_number, $shifts, $sales_number, $final_visitor_list['visit_date'])) {
+              $flag = TRUE;
+            }
+            else {
+              $responseData->err = TRUE;
+              $responseData->message = $this->t('Unable to save ticket for the requested order.');
+              $response->setData($responseData);
+              return $response;
+            }
           }
         }
+        else {
+          $responseData->err = TRUE;
+          $responseData->message = $this->t('Unable to validate price for requested visitor.');
+          $response->setData($responseData);
+          return $response;
+        }
       }
-      if ($flag) {
+      $order_total = $this->ticketBooking->getOrderTotal($sales_number);
+      if ($flag && ($order_total == $final_visitor_list['total']['price'])) {
         $final_visitor_list['sales_number'] = $sales_number;
         $final_visitor_list['status'] = TRUE;
         $response->setData($final_visitor_list);
         return $response;
       }
+      $responseData->err = TRUE;
+      $responseData->message = $this->t('Total amount is not valid as per requested order.');
+      $response->setData($responseData);
+      return $response;
     }
     else {
       $responseData->err = TRUE;
-      $responseData->message = $this->t('Please fill the complete form.');
+      if ($valid === 2) {
+        $responseData->message = $this->t('Children under the age of 8, must be accompanied by an Adult.');
+      }
+      else {
+        $responseData->message = $this->t('Please fill the complete form.');
+      }
       $response->setData($responseData);
       return $response;
     }
   }
 
   /**
-   * Set the payment option and redirect to booking status page.
+   * Display the payment result and status.
    *
-   * @param string $option
-   *   The option parameter.
+   * @param string $ref_number
+   *   The reference number.
    */
-  public function paymentOption($option) {
-    $sales_number = $_GET['ref_number'] ?? '';
-    $theme = $option == 'success' ? 'payment_success' : 'payment_failed';
+  public function paymentStatus($ref_number) {
+    $booking_info = $this->bookingPayment->getTicketDetails($ref_number);
+    $booking_info['kidz_url'] = $this->configFactory->get('alshaya_kz_transac_lite.settings')->get('tnc_url');
+    $theme = isset($booking_info['payment_status']) && $booking_info['payment_status'] == 'complete' ? 'payment_success' : 'payment_failed';
     return [
       '#theme' => $theme,
-      '#ref_number' => $sales_number,
+      '#booking_info' => $booking_info,
       '#attached' => ['drupalSettings' => ['clear_storage' => 1]],
     ];
   }

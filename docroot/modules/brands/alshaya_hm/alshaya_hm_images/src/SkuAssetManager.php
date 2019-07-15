@@ -20,6 +20,7 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
+use Drupal\Core\Lock\LockBackendInterface;
 
 /**
  * SkuAssetManager Class.
@@ -138,6 +139,20 @@ class SkuAssetManager {
   private $fileUsage;
 
   /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  private $lock;
+
+  /**
+   * The lock key for the sku.
+   *
+   * @var string
+   */
+  private $lockKey;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -164,6 +179,8 @@ class SkuAssetManager {
    *   Date Time service.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File Usage.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -176,7 +193,8 @@ class SkuAssetManager {
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
                               TimeInterface $time,
-                              FileUsageInterface $file_usage) {
+                              FileUsageInterface $file_usage,
+                              LockBackendInterface $lock) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -190,6 +208,7 @@ class SkuAssetManager {
     $this->logger = $logger_factory->get('SkuAssetManager');
     $this->time = $time;
     $this->fileUsage = $file_usage;
+    $this->lock = $lock;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -260,7 +279,13 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
+      if (!empty($this->lockKey)) {
+        $this->lock->release($this->lockKey);
 
+        // To ensure we don't keep releasing the lock again and again
+        // we set it to NULL here.
+        $this->lockKey = NULL;
+      }
       $this->logger->notice('Downloaded new asset images for sku @sku.', [
         '@sku' => $sku->getSku(),
       ]);
@@ -431,6 +456,22 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
+    // Acquire lock, if lock is not already set,
+    // to ensure parallel processes are executed one by one.
+    if (empty($this->lockKey)) {
+      $lock_key = 'downloadSkuImage' . $sku->id();
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
+      } while (!$lock_acquired);
+      // Set lockKey once lock has been acquired.
+      $this->lockKey = $lock_key;
+    }
+
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image'], $sku);

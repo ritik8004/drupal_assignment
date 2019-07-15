@@ -37,25 +37,10 @@ $client = new Client($app_id, $app_secret_admin);
 foreach ($languages as $language) {
   $indexSource = $clientSource->initIndex($source_index . '_' . $language);
   $settingsSource = $indexSource->getSettings();
+
   $name = $prefix . '_' . $language;
-  $index = $client->initIndex($name);
-
-  $settings = $index->getSettings();
-  $settingsSource['replicas'] = $settings['replicas'];
-  $index->setSettings($settingsSource);
-  sleep(3);
-
-  unset($settingsSource['replicas']);
-
-  foreach ($settings['replicas'] as $replica) {
-    $replicaIndex = $client->initIndex($replica);
-    $replicaSettings = $replicaIndex->getSettings();
-    $settingsSource['ranking'] = $replicaSettings['ranking'];
-    $replicaIndex->setSettings($settingsSource);
-    sleep(3);
-  }
-
   print $name . PHP_EOL;
-  print implode(PHP_EOL, $settings['replicas']);
-  print PHP_EOL . PHP_EOL . PHP_EOL;
+
+  $index = $client->initIndex($name);
+  algolia_update_index($client, $index, $settingsSource, algolia_get_rules($indexSource));
 }

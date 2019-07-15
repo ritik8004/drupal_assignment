@@ -10,7 +10,7 @@ use AlgoliaSearch\Client;
 function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
   static $result;
 
-  if (empty($result)) {
+  if (empty($result[$app_id])) {
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, 'https://query-suggestions.fi.algolia.com/1/configs');
@@ -22,7 +22,7 @@ function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
     $headers[] = 'X-Algolia-Application-Id: ' . $app_id;
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-    $result = curl_exec($ch);
+    $result[$app_id] = curl_exec($ch);
     if (curl_errno($ch)) {
       echo 'Error:' . curl_error($ch);
     }
@@ -30,7 +30,7 @@ function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
     curl_close($ch);
   }
 
-  $queries = array_filter(json_decode($result, TRUE),
+  $queries = array_filter(json_decode($result[$app_id], TRUE),
     function ($a) use ($index) {
       $sources = array_column($a['sourceIndices'], 'indexName');
       return in_array($index, $sources);
@@ -66,7 +66,6 @@ function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) 
   }
   curl_close($ch);
 }
-
 
 function algolia_delete_query_suggestion($app_id, $app_secret_admin, $index) {
   $ch = curl_init();
@@ -185,4 +184,55 @@ function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $b
   }
 
   print 'Synonyms saved for: ' . $name . PHP_EOL;
+}
+
+function algolia_get_rules($indexSource) {
+  $page = 0;
+  $rules = [];
+  do {
+    $rulesPage = $indexSource->searchRules(['page' => $page]);
+    if (empty($rulesPage['hits'])) {
+      break;
+    }
+
+    $rules += $rulesPage['hits'];
+
+    $page++;
+    if ($page >= $rulesPage['nbPages']) {
+      break;
+    }
+  } while(1);
+
+  if ($rules) {
+    foreach ($rules as &$rule) {
+      unset($rule['_highlightResult']);
+    }
+  }
+
+  return $rules;
+}
+
+function algolia_save_rules($index, $rules) {
+  if (is_array($rules) && !empty($rules)) {
+    $index->batchRules($rules, TRUE, TRUE);
+  }
+}
+
+function algolia_update_index($client, $index, $settingsSource, $rules) {
+  $settings = $index->getSettings();
+  $settingsSource['replicas'] = $settings['replicas'];
+  $index->setSettings($settingsSource);
+  sleep(1);
+
+  unset($settingsSource['replicas']);
+
+  foreach ($settings['replicas'] as $replica) {
+    $replicaIndex = $client->initIndex($replica);
+    $replicaSettings = $replicaIndex->getSettings();
+    $settingsSource['ranking'] = $replicaSettings['ranking'];
+    $replicaIndex->setSettings($settingsSource);
+    sleep(1);
+  }
+
+  algolia_save_rules($index, $rules);
 }

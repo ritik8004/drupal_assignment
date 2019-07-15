@@ -271,7 +271,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
   // Make site_name and site_logo available to all TWIG templates.
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
-  $variables['site_logo'] = theme_get_setting('logo.url') . '?38gZp';
+  $variables['site_logo'] = theme_get_setting('logo.url') . '?H8gK3';
   $mobile_logo = alshaya_master_get_mobile_logo();
   $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
 }
@@ -353,7 +353,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
   }
 
   if ($variables['plugin_id'] == 'system_branding_block') {
-    $variables['site_logo'] = theme_get_setting('logo.url') . '?RdMG5';
+    $variables['site_logo'] = theme_get_setting('logo.url') . '?LdMh5';
   }
 }
 

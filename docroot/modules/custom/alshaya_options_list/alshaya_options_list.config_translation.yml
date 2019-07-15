@@ -1,0 +1,5 @@
+alshaya_options_list.settings:
+  title: 'Alshaya Options list settings'
+  base_route_name: alshaya_options_list.settings
+  names:
+    - alshaya_options_list.settings

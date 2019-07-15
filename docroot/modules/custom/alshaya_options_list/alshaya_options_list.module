@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya options list.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\taxonomy\TermInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_options_list_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['alshaya_options_page'] = [
+    'render element' => 'form',
+    'variables' => [
+      'options_list' => NULL,
+      'page_title' => '',
+      'description' => '',
+    ],
+  ];
+
+  $items['alshaya_options_attribute'] = [
+    'variables' => [
+      'option' => NULL,
+      'attribute_code' => NULL,
+    ],
+  ];
+
+  $items['alshaya_options_menu_link'] = [
+    'variables' => [
+      'menu_title' => '',
+      'links' => [],
+    ],
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_taxonomy_term_presave().
+ */
+function alshaya_options_list_taxonomy_term_presave(TermInterface $term) {
+  if ($term->bundle() == 'sku_product_option') {
+    // Invalidate page cache.
+    Cache::invalidateTags(['alshaya-options-page']);
+  }
+}
+
+/**
+ * Implements hook_taxonomy_term_delete().
+ */
+function alshaya_options_list_taxonomy_term_delete(TermInterface $term) {
+  if ($term->bundle() == 'sku_product_option') {
+    // Invalidate page cache.
+    Cache::invalidateTags(['alshaya-options-page']);
+  }
+}
