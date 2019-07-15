@@ -59,6 +59,10 @@ header {
         .ui-autocomplete {
           position: absolute !important;
           top: 2.9375rem !important;
+
+          html[lang=ar] & {
+            top: 2.9375rem !important;
+          }
         }
       }
     }
