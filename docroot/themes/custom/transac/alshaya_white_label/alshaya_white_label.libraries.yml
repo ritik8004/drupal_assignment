@@ -180,9 +180,9 @@ magazine_article:
       css/conditional-sass/magazine-article/magazine-article.ltr.css: {}
   js:
     js/magazine_article.js: {}
-    dependencies:
-      - core/jquery
-      - alshaya_white_label/slick
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/slick
 
 alshaya_image_lazy_load:
   js:
