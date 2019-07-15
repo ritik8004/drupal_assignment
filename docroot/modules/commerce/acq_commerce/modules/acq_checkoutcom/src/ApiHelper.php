@@ -170,7 +170,7 @@ class ApiHelper {
       $configs = $cache->data;
     }
 
-    if (empty($configs['public_key'])) {
+    if (empty($configs['public_key']) || empty($configs['secret_key'])) {
       if ($reset) {
         $this->logger->error('Invalid response from checkout.com api, @response', [
           '@response' => json_encode($configs),
