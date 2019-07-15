@@ -197,8 +197,8 @@ class AlshayaCheckoutCom extends CheckoutCom {
         $this->initiate3dSecurePayment(
           $form_state->getValue('cko_card_token'),
           $this->checkoutComApi->isMadaEnabled()
-            ? $form_state->getValue('card_bin')
-            : NULL,
+          ? $form_state->getValue('card_bin')
+          : NULL,
           $form_state->getValue('save_card')
         );
       }
