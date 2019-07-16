@@ -44,6 +44,10 @@
       text-decoration: underline;
       cursor: pointer;
 
+      html[lang=ar] & {
+        padding: 0.5rem 1.1875rem 0.4375rem 0.5625rem;
+      }
+
       @include icon(dropdown-expand, before) {
         position: absolute;
         #{$left}: -0.25rem;
