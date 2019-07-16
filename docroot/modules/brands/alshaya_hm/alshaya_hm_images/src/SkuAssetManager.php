@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
@@ -138,6 +139,13 @@ class SkuAssetManager {
   private $fileUsage;
 
   /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  private $lock;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -164,6 +172,8 @@ class SkuAssetManager {
    *   Date Time service.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File Usage.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -176,7 +186,8 @@ class SkuAssetManager {
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
                               TimeInterface $time,
-                              FileUsageInterface $file_usage) {
+                              FileUsageInterface $file_usage,
+                              LockBackendInterface $lock) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -190,6 +201,7 @@ class SkuAssetManager {
     $this->logger = $logger_factory->get('SkuAssetManager');
     $this->time = $time;
     $this->fileUsage = $file_usage;
+    $this->lock = $lock;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -238,18 +250,36 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
+      // Use pims/asset id for lock key.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_image_' . $id;
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
+      } while (!$lock_acquired);
+
+      $file = NULL;
       try {
         $file = $this->downloadImage($asset, $sku->getSku());
-        if ($file instanceof FileInterface) {
-          $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
-
-          $asset['drupal_uri'] = $file->getFileUri();
-          $asset['fid'] = $file->id();
-          $save = TRUE;
-        }
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
+      }
+
+      $this->lock->release($lock_key);
+
+      if ($file instanceof FileInterface) {
+        $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+
+        $asset['drupal_uri'] = $file->getFileUri();
+        $asset['fid'] = $file->id();
+        $save = TRUE;
       }
 
       if (empty($asset['fid'])) {
