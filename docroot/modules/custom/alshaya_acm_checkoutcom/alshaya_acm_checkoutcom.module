@@ -43,7 +43,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     ];
 
     if ($card_info['type'] == 'new') {
-      $params = [
+      $params += [
         'cardToken' => $card_info['card_token'],
         'udf3' => $card_info['save_card'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
         'udf1' => !empty($card_info['card_bin']) && $checkoutComApi->isMadaBin($card_info['card_bin'])
@@ -52,7 +52,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
       ];
     }
     elseif ($card_info['type'] == 'existing') {
-      $params = [
+      $params += [
         'cardId' => $card_info['card_token'],
         'cvv' => $card_info['cvv'],
       ];
