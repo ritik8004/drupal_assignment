@@ -273,6 +273,7 @@ body {
 
   .magazine-article-title,
   h2 a {
+    display: block;
     font-size: 3.125rem;
     text-align: center;
     color: $magazine-textarea-color;
@@ -283,7 +284,9 @@ body {
     @include breakpoint($only-mobile) {
       font-size: 2rem;
     }
+  }
 
+  h2 a {
     &:hover {
       color: $magazine-label-color;
     }
