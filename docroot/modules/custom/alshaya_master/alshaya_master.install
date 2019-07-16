@@ -11,6 +11,22 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - Forgot password message.
+ */
+function alshaya_master_update_8028() {
+  $strings = [
+    'Further instructions have been sent to your email address.' => [
+      'en' => 'If your account is locked, an email will be sent with instructions for resetting your password.',
+      'ar' => 'إذا كان حسابك مغلق، فسيتم إرسال بريد إلكتروني يحتوي على إرشادات لإعادة تعيين كلمة المرور الخاصة بكء',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Setting default value for lazy load placeholder.
  */
 function alshaya_master_update_8027() {
