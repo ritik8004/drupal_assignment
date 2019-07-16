@@ -94,7 +94,7 @@ class Analytics extends CheckoutPaneBase implements CheckoutPaneInterface {
     // POST request.
     $cart->setExtension('user_agent', $request->headers->get('User-Agent', ''));
 
-    // Use the last ip from client ips.
+    // Use the IP address from Acquia Cloud ENV variable.
     $cart->setExtension('client_ip', $_ENV['AH_CLIENT_IP'] ?? '');
   }
 
