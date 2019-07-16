@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\Analytics;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
@@ -416,6 +417,12 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
     $address = $address_book_manager->getMagentoAddressFromAddressArray($billing['address']['billing']);
     $helper->setBillingInfo(FALSE, $address);
   }
+
+  Analytics::addAnalyticsInfoToCart(
+    $cart,
+    $form_data['ga_client_id'],
+    $form_data['tracking_id']
+  );
 
 }
 
