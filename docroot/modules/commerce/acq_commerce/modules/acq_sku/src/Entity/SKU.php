@@ -199,13 +199,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
           $update_sku = TRUE;
+          $lock->release($lock_key);
         }
         catch (\Exception $e) {
+          $lock->release($lock_key);
           \Drupal::logger('acq_sku')->error($e->getMessage());
           return NULL;
         }
-
-        $lock->release($lock_key);
       }
 
       if ($file instanceof FileInterface) {
