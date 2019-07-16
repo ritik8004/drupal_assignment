@@ -286,6 +286,25 @@ interface CartInterface {
   public function setExtension($key, $value);
 
   /**
+   * Get json encoded string to log.
+   *
+   * @return string
+   *   Return json representation string of cart object.
+   */
+  public function getDataToLog();
+
+  /**
+   * Get magento address as array.
+   *
+   * @param mixed $address
+   *   Address object or array.
+   *
+   * @return array
+   *   Processed address array.
+   */
+  public function getAddressArray($address);
+
+  /**
    * Converts this cart to the customer cart provided.
    *
    * @param array $cart

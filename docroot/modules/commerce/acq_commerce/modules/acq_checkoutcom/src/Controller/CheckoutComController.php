@@ -125,7 +125,7 @@ class CheckoutComController implements ContainerInjectionInterface {
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
-        '@cart' => $cart->id(),
+        '@cart' => $cart->getDataToLog(),
         '@method' => 'checkout_com',
       ]);
     }
