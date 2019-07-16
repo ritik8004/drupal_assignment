@@ -250,35 +250,36 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
-      try {
-        // Use pims/asset id for lock key.
-        $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-        $lock_key = 'download_image_' . $id;
+      // Use pims/asset id for lock key.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_image_' . $id;
 
-        // Acquire lock to ensure parallel processes are executed one by one.
-        do {
-          $lock_acquired = $this->lock->acquire($lock_key);
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
 
-          // Sleep for half a second before trying again.
-          if (!$lock_acquired) {
-            usleep(500000);
-          }
-        } while (!$lock_acquired);
-
-        $file = $this->downloadImage($asset, $sku->getSku());
-
-        $this->lock->release($lock_key);
-
-        if ($file instanceof FileInterface) {
-          $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
-
-          $asset['drupal_uri'] = $file->getFileUri();
-          $asset['fid'] = $file->id();
-          $save = TRUE;
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
         }
+      } while (!$lock_acquired);
+
+      $file = NULL;
+      try {
+        $file = $this->downloadImage($asset, $sku->getSku());
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
+      }
+
+      $this->lock->release($lock_key);
+
+      if ($file instanceof FileInterface) {
+        $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+
+        $asset['drupal_uri'] = $file->getFileUri();
+        $asset['fid'] = $file->id();
+        $save = TRUE;
       }
 
       if (empty($asset['fid'])) {
