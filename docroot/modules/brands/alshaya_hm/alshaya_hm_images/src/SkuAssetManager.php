@@ -251,28 +251,12 @@ class SkuAssetManager {
       }
 
       // Use pims/asset id for lock key.
-      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-      $lock_key = 'download_image_' . $id;
-
-      // Acquire lock to ensure parallel processes are executed one by one.
-      do {
-        $lock_acquired = $this->lock->acquire($lock_key);
-
-        // Sleep for half a second before trying again.
-        if (!$lock_acquired) {
-          usleep(500000);
-        }
-      } while (!$lock_acquired);
-
-      $file = NULL;
       try {
         $file = $this->downloadImage($asset, $sku->getSku());
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
       }
-
-      $this->lock->release($lock_key);
 
       if ($file instanceof FileInterface) {
         $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
@@ -309,8 +293,6 @@ class SkuAssetManager {
    *
    * @return \Drupal\file\FileInterface|null
    *   File entity if image download successful.
-   *
-   * @throws \Exception
    */
   private function downloadPimsImage(array $data, string $sku) {
     $base_url = $this->hmImageSettings->get('pims_base_url');
@@ -377,8 +359,6 @@ class SkuAssetManager {
    *
    * @return \Drupal\file\FileInterface|null
    *   File entity download successful.
-   *
-   * @throws \Exception
    */
   private function downloadLiquidPixelImage(array $asset, string $sku) {
     $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
@@ -461,6 +441,19 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
+    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+    $lock_key = 'download_image_' . $id;
+
+    // Acquire lock to ensure parallel processes are executed one by one.
+    do {
+      $lock_acquired = $this->lock->acquire($lock_key);
+
+      // Sleep for half a second before trying again.
+      if (!$lock_acquired) {
+        usleep(500000);
+      }
+    } while (!$lock_acquired);
+
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image'], $sku);
@@ -470,13 +463,14 @@ class SkuAssetManager {
     }
 
     if ($file instanceof FileInterface) {
-      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
       $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
         '@uri' => $file->getFileUri(),
         '@id' => $id,
       ]);
     }
+
+    $this->lock->release($lock_key);
 
     return $file;
   }

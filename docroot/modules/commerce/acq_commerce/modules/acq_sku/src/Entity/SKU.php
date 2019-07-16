@@ -178,31 +178,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
         }
       }
       elseif ($download) {
-        /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-        $lock = \Drupal::service('lock.persistent');
-
-        // Use file id for lock key.
-        $id = $data['value_id'] ?? $this->id();
-        $lock_key = 'download_image_' . $id;
-
-        // Acquire lock to ensure parallel processes are executed one by one.
-        do {
-          $lock_acquired = $lock->acquire($lock_key);
-
-          // Sleep for half a second before trying again.
-          if (!$lock_acquired) {
-            usleep(500000);
-          }
-        } while (!$lock_acquired);
-
         try {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
           $update_sku = TRUE;
-          $lock->release($lock_key);
         }
         catch (\Exception $e) {
-          $lock->release($lock_key);
           \Drupal::logger('acq_sku')->error($e->getMessage());
           return NULL;
         }
@@ -238,6 +219,23 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @throws \Exception
    */
   protected function downloadMediaImage(array $data) {
+    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+    $lock = \Drupal::service('lock.persistent');
+
+    // Use file id for lock key.
+    $id = $data['value_id'] ?? $this->id();
+    $lock_key = 'download_image_' . $id;
+
+    // Acquire lock to ensure parallel processes are executed one by one.
+    do {
+      $lock_acquired = $lock->acquire($lock_key);
+
+      // Sleep for half a second before trying again.
+      if (!$lock_acquired) {
+        usleep(500000);
+      }
+    } while (!$lock_acquired);
+
     // Preparing args for all info/error messages.
     $args = ['@file' => $data['file'], '@sku_id' => $this->id()];
 
@@ -251,6 +249,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Check to ensure empty file is not saved in SKU.
     if (empty($file_data)) {
+      $lock->release($lock_key);
       throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
     }
 
@@ -272,14 +271,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      $lock->release($lock_key);
       /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
       $file_usage = \Drupal::service('file.usage');
       $file_usage->add($file, $this->getEntityTypeId(), $this->getEntityTypeId(), $this->id());
       return $file;
     }
-    else {
-      throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
-    }
+
+    $lock->release($lock_key);
+    throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
   }
 
   /**
