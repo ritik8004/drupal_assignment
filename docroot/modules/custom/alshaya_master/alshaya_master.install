@@ -16,7 +16,7 @@ use Drupal\Core\Config\FileStorage;
 function alshaya_master_update_8028() {
   $strings = [
     'Further instructions have been sent to your email address.' => [
-      'en' => 'If your account is locked, an email will be sent with instructions for resetting your password.',
+      'en' => 'If your account is located, an email will be sent with instructions for resetting your password.',
       'ar' => 'إذا كان حسابك مغلق، فسيتم إرسال بريد إلكتروني يحتوي على إرشادات لإعادة تعيين كلمة المرور الخاصة بكء',
     ],
   ];
