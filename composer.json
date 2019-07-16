@@ -254,7 +254,8 @@
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch",
                 "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch",
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
-                "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch"
+                "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-07-16/password-reset-text-1521996-182.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -300,7 +301,8 @@
                 "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
             },
             "drupal/user_registrationpassword": {
-                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
+                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch",
+                "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/seckit": {
                 "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
