@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31663caa6be90144558990c766c98b3c",
+    "content-hash": "81618d966c3d3ac5151395f97e2fd615",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5401,6 +5401,7 @@
                     "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch",
                     "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                     "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
+                    "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-07-16/password-reset-text-1521996-182.patch",
                     "2998335 - [regression] \\Drupal\\user\\ContextProvider\\CurrentUserContext broken for anonymous users": "https://www.drupal.org/files/issues/2018-10-04/2998335-currentusercontext-16.patch",
                     "3032548 - ContentModerationRouteSubscriber assumes all parameters in an entity form route contain a 'type' key": "https://www.drupal.org/files/issues/2019-02-13/3032548-2.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
@@ -13179,7 +13180,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
+                    "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch",
+                    "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13199,7 +13201,7 @@
             "description": "Let users register with a password on the registration form when verification mail is required.",
             "homepage": "https://www.drupal.org/project/user_registrationpassword",
             "support": {
-                "source": "http://cgit.drupalcode.org/user_registrationpassword"
+                "source": "https://git.drupalcode.org/project/user_registrationpassword"
             }
         },
         {
