@@ -93,6 +93,34 @@ class CartHelper {
   }
 
   /**
+   * Get magento address as array.
+   *
+   * @param mixed $address
+   *   Address object or array.
+   *
+   * @return array
+   *   Processed address array.
+   */
+  public function getAddressArray($address) {
+    // Convert this to array, we always deal with arrays in our custom code.
+    if (is_object($address)) {
+      $address = (array) $address;
+    }
+
+    // Empty check.
+    if (empty($address['country_id'])) {
+      return [];
+    }
+
+    // Convert extension too.
+    if (isset($address['extension']) && is_object($address['extension'])) {
+      $address['extension'] = (array) $address['extension'];
+    }
+
+    return $address;
+  }
+
+  /**
    * Get clean cart to log.
    *
    * @param \Drupal\acq_cart\Cart|object|array $cart
@@ -102,8 +130,23 @@ class CartHelper {
    *   Cleaned cart data as JSON string.
    */
   public function getCleanCartToLog($cart) {
-    $cart = $cart instanceof Cart ? $cart->getCart() : $cart;
-    return $cart->getDataToLog();
+    if ($cart instanceof Cart) {
+      return $cart->getDataToLog();
+    }
+
+    $cartData = is_object($cart) ? (array) $cart : $cart;
+
+    $shipping = $this->getAddressArray($cartData['shipping']);
+
+    // Billing is not required for debugging.
+    unset($cartData['billing']);
+
+    // We will remove all at root level.
+    // We will leave fields in extension here.
+    unset($cartData['shipping']);
+    $cartData['shipping']['extension'] = $shipping['extension'];
+
+    return json_encode($cartData);
   }
 
   /**
