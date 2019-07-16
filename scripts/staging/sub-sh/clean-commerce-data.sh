@@ -48,10 +48,10 @@ drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets-
 
 files_dir="$(drush --uri=$uri php-eval 'echo drupal_realpath("public://");')"
 
-echo "Creating directory todelete to move all files we want to delete inside it."
+echo "Creating directory 'todelete' to move all files we want to delete inside it."
 mkdir -p "$files_dir/todelete"
 
-echo "Moving product media files directory inside todelete"
+echo "Moving product media files directory inside 'todelete'"
 if [ -d "$files_dir/media" ]
 then
  mv "$files_dir/media" "$files_dir/todelete/media"
@@ -65,7 +65,7 @@ then
  mv "$files_dir/assets-lp" "$files_dir/todelete/assets-lp"
 fi
 
-echo "Moving styles directory inside todelete"
+echo "Moving styles directory inside 'todelete'"
 if [ -d "$files_dir/styles" ]
 then
   mv "$files_dir/styles" "$files_dir/todelete/styles"
