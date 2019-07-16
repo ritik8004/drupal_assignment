@@ -31,6 +31,13 @@ body.ie {
     // Removes the scrollbar which IE adds by default.
     overflow: hidden !important;
   }
+
+  .sticky-filter-wrapper .site-brand-home,
+  .alshaya_search_mainimage {
+    img {
+      flex-shrink: 0;
+    }
+  }
 }
 
 /**
