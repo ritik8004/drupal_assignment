@@ -39,6 +39,19 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'HMAmperserif_text_regular';
+  src: url('#{$base_theme_fonts_directory_path}/HMAmperserif-text-regular.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-text-regular.eot?#iKfix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-text-regular.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-text-regular.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-text-regular.svg#HMAmperserif-text-regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 $magazine-regular: 'AmperserifDisp_Regular', 'GESSTwoBold-Bold';
 $magazine-italic: 'AmperserifDisp_Italic', 'GESSTwoMedium-Medium';
 $magazine-light: 'HMAmpersand_Light', 'GESSTwoLight-Light';
+$magazine-text-regular: 'HMAmperserif_text_regular', 'GESSTwoLight-Light';
