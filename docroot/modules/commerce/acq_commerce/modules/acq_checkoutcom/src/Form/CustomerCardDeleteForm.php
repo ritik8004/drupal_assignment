@@ -116,14 +116,14 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getDescription() {
-    return $this->t('You have selected to delete this card, are you sure?');
+    return $this->t('Are you sure you want to delete this card?');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getConfirmText() {
-    return $this->t('yes, delete this card');
+    return $this->t('Yes, delete this card');
   }
 
   /**
