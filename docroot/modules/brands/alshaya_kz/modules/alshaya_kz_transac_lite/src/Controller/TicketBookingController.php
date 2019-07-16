@@ -171,6 +171,7 @@ class TicketBookingController extends ControllerBase {
             // Generate ticket number.
             $ticket_number = $this->ticketBooking->generateTicketNumber();
             $final_visitor_list['data'][$key]['Book'][$k]['ticket_id'] = $ticket_number;
+            $final_visitor_list['data'][$key]['Price'] = $price;
             if ($this->ticketBooking->saveTicket($final_visitor_list['data'][$key], $val, $ticket_number, $shifts, $sales_number, $final_visitor_list['visit_date'])) {
               $flag = TRUE;
             }
