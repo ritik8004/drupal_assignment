@@ -220,12 +220,25 @@ class CheckoutComAPIWrapper {
    */
   protected function isLive() {
     return (
-      $this->configFactory->get('acq_checkoutcom.settings')->get('env') == 'live'
+      $this->apiHelper->getCheckoutcomConfig('environment') == 'live'
     );
   }
 
   /**
-   * Createclient.
+   * Get the base uri for api call.
+   *
+   * @return string
+   *   Return base uri for sandbox or live.
+   */
+  protected function getBaseUri(): string {
+    $env = $this->apiHelper->getCheckoutcomConfig('environment');
+    return $this->configFactory
+      ->get('acq_checkoutcom.settings')
+      ->get('base_uri')[$env];
+  }
+
+  /**
+   * Crate a new client object.
    *
    * Create a Guzzle http client configured to connect to the
    * checkout.com instance.
@@ -236,9 +249,8 @@ class CheckoutComAPIWrapper {
    * @throws \InvalidArgumentException
    */
   protected function createClient() {
-    $config = $this->configFactory->get('acq_checkoutcom.settings');
     $clientConfig = [
-      'base_uri' => $config->get('base_uri')[$config->get('env')],
+      'base_uri' => $this->getBaseUri(),
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
@@ -290,7 +302,7 @@ class CheckoutComAPIWrapper {
 
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
         throw new \Exception(
-          $this->t('Could not make request to checkout.com, please contact administator if the error presist.')
+          $this->t('Could not make request to checkout.com, please contact administator if the error persist.')
         );
       }
       elseif ($e instanceof RequestException) {
