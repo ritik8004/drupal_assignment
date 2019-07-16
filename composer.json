@@ -22,7 +22,7 @@
         "drupal/amp": "^1.0",
         "drupal/amptheme": "^1.0",
         "drupal/autologout": "^1.0",
-        "drupal/back_to_top": "^1.0@beta",
+        "drupal/back_to_top": "1.x-dev",
         "drupal/better_exposed_filters": "3.x-dev",
         "drupal/block_content_machine_name": "^1.5",
         "drupal/block_field": "^1.0@alpha",
@@ -80,7 +80,7 @@
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
-        "drupal/simple_sitemap": "2.x-dev",
+        "drupal/simple_sitemap": "^3.2",
         "drupal/sms": "^1.1",
         "drupal/social_api": "2.x-dev",
         "drupal/social_auth": "^2.0",
@@ -198,7 +198,7 @@
         "enable-patching": true,
         "patches": {
             "acquia/blt": {
-              "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
+                "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
             },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
@@ -252,7 +252,9 @@
               "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
               "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
               "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
-              "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch"
+              "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch",
+              "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
+              "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -263,9 +265,10 @@
                 "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             },
             "drupal/simple_sitemap": {
-                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109.patch"
+                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014.patch"
             },
             "drupal/password_policy": {
+                "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
                 "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2933746-3.patch"
             },
             "drupal/change_pwd_page": {
@@ -292,7 +295,8 @@
                 "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
             },
             "drupal/user_registrationpassword": {
-                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
+                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch",
+                "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
@@ -318,17 +322,11 @@
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
-            "drupal/social_auth": {
-                "Dispatch events for handling authentication errors in provider." : "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
-            },
             "drupal/social_auth_facebook": {
                 "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
             },
             "drupal/social_auth_google": {
                 "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
-            },
-            "drupal/back_to_top": {
-                "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"

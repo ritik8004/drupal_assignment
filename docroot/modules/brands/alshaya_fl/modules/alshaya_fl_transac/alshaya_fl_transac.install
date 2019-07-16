@@ -10,15 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Save pathauto configuration for product node urls.
- */
-function alshaya_fl_transac_update_8004() {
-  \Drupal::service('module_installer')->install(['alshaya_color_split']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {

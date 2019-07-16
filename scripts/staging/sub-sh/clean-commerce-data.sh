@@ -46,14 +46,30 @@ drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://media/%
 drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets/%';"
 drush --uri=$uri sqlq "DELETE FROM file_managed WHERE uri LIKE 'public://assets-lp/%';"
 
-echo "Deleting all product media files from filesystem"
 files_dir="$(drush --uri=$uri php-eval 'echo drupal_realpath("public://");')"
-rm -rf "$files_dir/media"
-rm -rf "$files_dir/assets"
-rm -rf "$files_dir/assets-lp"
 
-echo "Deleting styles directory"
-rm -rf "$files_dir/styles"
+echo "Creating directory 'todelete' to move all files we want to delete inside it."
+mkdir -p "$files_dir/todelete"
+
+echo "Moving product media files directory inside 'todelete'"
+if [ -d "$files_dir/media" ]
+then
+ mv "$files_dir/media" "$files_dir/todelete/media"
+fi
+if [ -d "$files_dir/assets" ]
+then
+ mv "$files_dir/assets" "$files_dir/todelete/assets"
+fi
+if [ -d "$files_dir/assets-lp" ]
+then
+ mv "$files_dir/assets-lp" "$files_dir/todelete/assets-lp"
+fi
+
+echo "Moving styles directory inside 'todelete'"
+if [ -d "$files_dir/styles" ]
+then
+  mv "$files_dir/styles" "$files_dir/todelete/styles"
+fi
 
 echo "Re-creating empty styles directory"
 mkdir "$files_dir/styles"
