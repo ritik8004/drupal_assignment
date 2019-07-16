@@ -34,6 +34,10 @@
     width: 1.1875rem;
     height: 1.9375rem;
     margin-#{$left}: -0.8125rem;
+
+    html[lang=ar] & {
+      transform: rotate(180deg);
+    }
   }
 }
 

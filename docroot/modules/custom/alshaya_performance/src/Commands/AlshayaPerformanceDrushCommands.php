@@ -57,7 +57,7 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
   public function deleteStagedExtraFiles() {
     $dir = $this->fileSystem->realpath('public://todelete');
     if (file_exists($dir)) {
-      shell_exec(sprintf('rm -rf %s', escapeshellarg(ltrim($dir, '/'))));
+      shell_exec(sprintf('rm -rf %s', escapeshellarg($dir)));
     }
   }
 
