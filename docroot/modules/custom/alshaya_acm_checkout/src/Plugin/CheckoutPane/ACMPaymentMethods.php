@@ -83,7 +83,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       $apiHelper = \Drupal::service('alshaya_acm.api_helper');
       $payment_methods = $apiHelper->getPaymentMethods();
       $payment_methods = array_intersect($payment_methods, array_keys($plugins));
-      $payment_methods[] = 'checkout_com_applepay';
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
