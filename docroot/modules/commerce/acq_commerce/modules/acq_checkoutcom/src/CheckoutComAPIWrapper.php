@@ -525,7 +525,8 @@ class CheckoutComAPIWrapper {
     $params['autoCapTime'] = '0';
     $params['autoCapture'] = self::AUTOCAPTURE;
     $params['attemptN3D'] = FALSE;
-    $params['customerIp'] = $this->request->getClientIp();
+    // Use the IP address from Acquia Cloud ENV variable.
+    $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? '';
     $params['successUrl'] = Url::fromRoute('acq_checkoutcom.payment_success', [], ['absolute' => TRUE])->toString();
     $params['failUrl'] = Url::fromRoute('acq_checkoutcom.payment_fail', [], ['absolute' => TRUE])->toString();
     $params['trackId'] = $this->getCart()->getExtension('real_reserved_order_id');
