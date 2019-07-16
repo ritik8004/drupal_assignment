@@ -201,6 +201,7 @@
 
       &.icon {
         margin-#{$right}: 0.4375rem;
+        display: inline-block;
 
         &-woman {
           @include icon(woman);
