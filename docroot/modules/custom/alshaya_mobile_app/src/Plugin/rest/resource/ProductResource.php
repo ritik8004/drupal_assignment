@@ -571,7 +571,7 @@ class ProductResource extends ResourceBase {
    */
   private function getPromotions(SKUInterface $sku): array {
     $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
       $promotion_node = $this->nodeStorage->load($nid);
