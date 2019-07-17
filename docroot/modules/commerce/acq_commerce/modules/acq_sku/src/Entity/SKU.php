@@ -9,7 +9,6 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -159,7 +158,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Processing is required only for media type image as of now.
     if (isset($data['media_type']) && $data['media_type'] == 'image') {
       if (!empty($data['fid'])) {
-        $file = File::load($data['fid']);
+        $file = $this->getFileStorage()->load($data['fid']);
         if (!($file instanceof FileInterface)) {
           // Leave a message for developers to find out why this happened.
           \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku" having language @langcode. Trace: @trace', [
@@ -222,9 +221,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
     /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
     $lock = \Drupal::service('lock.persistent');
 
-    // Use file id for lock key.
-    $id = $data['value_id'] ?? $this->id();
-    $lock_key = 'download_image_' . $id;
+    // Use remote id for lock key.
+    $lock_key = 'download_image_' . $data['value_id'];
 
     // Acquire lock to ensure parallel processes are executed one by one.
     do {
@@ -233,6 +231,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
       // Sleep for half a second before trying again.
       if (!$lock_acquired) {
         usleep(500000);
+
+        // Check once if downloaded by another process.
+        $cache = \Drupal::cache('media_file_mapping')->get($lock_key);
+        if ($cache && $cache->data) {
+          $file = $this->getFileStorage()->load($cache->data);
+          if ($file instanceof FileInterface) {
+            return $file;
+          }
+        }
       }
     } while (!$lock_acquired);
 
@@ -271,10 +278,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      // Add file id in cache for other processes to be able to use.
+      \Drupal::cache('media_file_mapping')->set($lock_key, $file->id(), strtotime('+1 hour'));
+
+      // Release the lock now.
       $lock->release($lock_key);
+
       /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
       $file_usage = \Drupal::service('file.usage');
       $file_usage->add($file, $this->getEntityTypeId(), $this->getEntityTypeId(), $this->id());
+
       return $file;
     }
 
@@ -778,6 +791,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $this->getPluginInstance();
     $plugin->refreshStock($this);
+  }
+
+  /**
+   * Get File Storage.
+   *
+   * @return \Drupal\file\FileStorageInterface
+   *   File Storage.
+   */
+  private function getFileStorage() {
+    static $storage;
+
+    if (empty($storage)) {
+      $storage = $this->entityTypeManager()->getStorage('file');
+    }
+
+    return $storage;
   }
 
 }

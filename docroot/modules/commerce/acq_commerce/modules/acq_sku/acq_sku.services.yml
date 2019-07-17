@@ -80,6 +80,13 @@ services:
     factory: cache_factory:get
     arguments: [linked_skus]
 
+  cache.media_file_mapping:
+    class: Drupal\Core\Cache\CacheInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [media_file_mapping]
+
   acq_sku.product_info_helper:
     class: Drupal\acq_sku\ProductInfoHelper
     arguments:

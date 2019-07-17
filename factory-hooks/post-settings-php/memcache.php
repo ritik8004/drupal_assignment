@@ -77,6 +77,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
 
     // Use memcache as the default bin.
     $settings['cache']['default'] = 'cache.backend.memcache';
+    $settings['cache']['bins']['media_file_mapping'] = 'cache.backend.memcache';
 
     $settings['cache']['bins']['product_category_tree'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['product_options'] = 'cache.backend.permanent_memcache';

@@ -146,6 +146,13 @@ class SkuAssetManager {
   private $lock;
 
   /**
+   * Cache for media_file_mapping.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  private $cacheMediaFileMapping;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -174,6 +181,8 @@ class SkuAssetManager {
    *   File Usage.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Lock service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
+   *   Cache for media_file_mapping.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -187,7 +196,8 @@ class SkuAssetManager {
                               LoggerChannelFactoryInterface $logger_factory,
                               TimeInterface $time,
                               FileUsageInterface $file_usage,
-                              LockBackendInterface $lock) {
+                              LockBackendInterface $lock,
+                              CacheBackendInterface $cache_media_file_mapping) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -202,6 +212,7 @@ class SkuAssetManager {
     $this->time = $time;
     $this->fileUsage = $file_usage;
     $this->lock = $lock;
+    $this->cacheMediaFileMapping = $cache_media_file_mapping;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -451,6 +462,15 @@ class SkuAssetManager {
       // Sleep for half a second before trying again.
       if (!$lock_acquired) {
         usleep(500000);
+
+        // Check once if downloaded by another process.
+        $cache = $this->cacheMediaFileMapping->get($lock_key);
+        if ($cache && $cache->data) {
+          $file = $this->fileStorage->load($cache->data);
+          if ($file instanceof FileInterface) {
+            return $file;
+          }
+        }
       }
     } while (!$lock_acquired);
 
@@ -463,6 +483,9 @@ class SkuAssetManager {
     }
 
     if ($file instanceof FileInterface) {
+      // Add file id in cache for other processes to be able to use.
+      $this->cacheMediaFileMapping->set($lock_key, $file->id(), strtotime('+1 hour'));
+
       $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
         '@uri' => $file->getFileUri(),
