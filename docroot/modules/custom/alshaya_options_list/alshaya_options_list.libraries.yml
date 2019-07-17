@@ -1,0 +1,7 @@
+alshaya_options_list_search:
+  version: 1.x
+  js:
+    js/alshaya_options_list_search.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

@@ -30,32 +30,37 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
+if (isset($argv, $argv[5])) {
+  $source_index = $env . '_' . $argv[5];
+  $source_app_id = $app_id;
+  $source_app_secret_admin = $app_secret_admin;
+}
+
 use AlgoliaSearch\Client;
 $clientSource = new Client($source_app_id, $source_app_secret_admin);
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
-  $indexSource = $clientSource->initIndex($source_index . '_' . $language);
-  $settingsSource = $indexSource->getSettings();
   $name = $prefix . '_' . $language;
-  $index = $client->initIndex($name);
-
-  $settings = $index->getSettings();
-  $settingsSource['replicas'] = $settings['replicas'];
-  $index->setSettings($settingsSource);
-  sleep(3);
-
-  unset($settingsSource['replicas']);
-
-  foreach ($settings['replicas'] as $replica) {
-    $replicaIndex = $client->initIndex($replica);
-    $replicaSettings = $replicaIndex->getSettings();
-    $settingsSource['ranking'] = $replicaSettings['ranking'];
-    $replicaIndex->setSettings($settingsSource);
-    sleep(3);
-  }
-
   print $name . PHP_EOL;
-  print implode(PHP_EOL, $settings['replicas']);
-  print PHP_EOL . PHP_EOL . PHP_EOL;
+
+  $source_name = $source_index . '_' . $language;
+  $indexSource = $clientSource->initIndex($source_name);
+  $settingsSource = $indexSource->getSettings();
+  $sourceQueries = algolia_get_query_suggestions($app_id, $app_secret_admin, $source_name);
+  $sourceQuery = reset($sourceQueries);
+  $sourceSynonyms = algolia_get_synonyms($indexSource);
+
+  $index = $client->initIndex($name);
+  algolia_update_index($client, $index, $settingsSource, algolia_get_rules($indexSource));
+
+  $queries = algolia_get_query_suggestions($app_id, $app_secret_admin, $name);
+  $query = reset($queries);
+  $query['sourceIndices'][0]['facets'] = $sourceQuery['sourceIndices'][0]['facets'];
+  $query['sourceIndices'][0]['generate'] = $sourceQuery['sourceIndices'][0]['generate'];
+  algolia_add_query_suggestion($app_id, $app_secret_admin, $query['indexName'], json_encode($query));
+
+  // Clear before creating.
+  $index->clearSynonyms(TRUE);
+  $index->batchSynonyms($sourceSynonyms, TRUE, TRUE);
 }

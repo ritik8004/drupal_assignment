@@ -54,6 +54,7 @@ use GuzzleHttp\Exception\RequestException;
  *     "collection" = "/admin/commerce/sku/list"
  *   },
  *   field_ui_base_route = "acq_sku.configuration",
+ *   not_update_base_table = TRUE,
  * )
  */
 class SKU extends ContentEntityBase implements SKUInterface {

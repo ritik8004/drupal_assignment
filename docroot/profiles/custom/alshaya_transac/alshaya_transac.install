@@ -15,6 +15,13 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya options list module.
+ */
+function alshaya_transac_update_8123() {
+  \Drupal::service('module_installer')->install(['alshaya_options_list']);
+}
+
+/**
  * Remove you will be able to block on login register pages.
  */
 function alshaya_transac_update_8122() {
