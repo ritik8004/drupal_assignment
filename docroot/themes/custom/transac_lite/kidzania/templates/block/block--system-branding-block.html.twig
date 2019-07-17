@@ -14,13 +14,12 @@
  * @ingroup themeable
  */
 #}
-{% set sitename_tag = is_front ? 'h1' : 'div' %}
 
 {% if site_logo %}
-  <{{ sitename_tag }} class="site__logo">
+  <h1 class="site__logo">
     <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home">
       <img src="{{ site_logo }}" alt="{{ site_name }}"/>
       <p class="slogan">{{ site_slogan }}</p>
     </a>
-  </{{ sitename_tag }}>
+  </h1>
 {% endif %}
