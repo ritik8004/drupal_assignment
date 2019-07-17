@@ -134,7 +134,7 @@ class ApiHelper {
    * @return string|null
    *   Return card type name or null.
    */
-  public function getCardType($type) {
+  public function getCardType($type): ?string {
     return $this->ccTypesMap[$type] ?? NULL;
   }
 
@@ -149,7 +149,7 @@ class ApiHelper {
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getCheckoutcomConfig(string $type = NULL, $reset = FALSE) {
+  public function getCheckoutcomConfig(?string $type, $reset = FALSE) {
     $cache_key = 'acq_checkoutcom:api_configs';
 
     $cache = $reset ? NULL : $this->cache->get($cache_key);
@@ -173,7 +173,7 @@ class ApiHelper {
     if (empty($configs['public_key']) || empty($configs['secret_key'])) {
       if ($reset) {
         $this->logger->error('Invalid response from checkout.com api, @response', [
-          '@response' => json_encode($configs),
+          '@response' => Json::encode($configs),
         ]);
 
         return NULL;
@@ -236,7 +236,7 @@ class ApiHelper {
    * @return array
    *   Return process array of card list.
    */
-  protected function extractCardInfo(array $cards) {
+  protected function extractCardInfo(array $cards): array {
     if (empty($cards)) {
       return [];
     }
@@ -268,8 +268,10 @@ class ApiHelper {
    *
    * @return null|string
    *   Return empty array or string.
+   *
+   * @todo: Remove after save card via checkout is working.
    */
-  public function storeCustomerCard(UserInterface $user, string $card_token) {
+  public function storeCustomerCard(UserInterface $user, string $card_token): ?string {
     $response = $this->apiWrapper->invokeApi(
       'checkoutcom/saveCard',
       [
