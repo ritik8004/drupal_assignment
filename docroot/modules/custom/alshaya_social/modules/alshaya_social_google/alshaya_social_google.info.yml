@@ -1,0 +1,6 @@
+name: 'Alshaya social google login'
+type: module
+core: 8.x
+dependencies:
+  - alshaya_social:alshaya_social
+  - social_auth_google:social_auth_google

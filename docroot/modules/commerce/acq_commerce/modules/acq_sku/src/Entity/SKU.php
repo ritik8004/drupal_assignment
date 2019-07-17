@@ -178,12 +178,31 @@ class SKU extends ContentEntityBase implements SKUInterface {
         }
       }
       elseif ($download) {
+        /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+        $lock = \Drupal::service('lock.persistent');
+
+        // Use file id for lock key.
+        $id = $data['value_id'] ?? $this->id();
+        $lock_key = 'download_image_' . $id;
+
+        // Acquire lock to ensure parallel processes are executed one by one.
+        do {
+          $lock_acquired = $lock->acquire($lock_key);
+
+          // Sleep for half a second before trying again.
+          if (!$lock_acquired) {
+            usleep(500000);
+          }
+        } while (!$lock_acquired);
+
         try {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
           $update_sku = TRUE;
+          $lock->release($lock_key);
         }
         catch (\Exception $e) {
+          $lock->release($lock_key);
           \Drupal::logger('acq_sku')->error($e->getMessage());
           return NULL;
         }

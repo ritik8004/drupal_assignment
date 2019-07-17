@@ -286,6 +286,12 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['field_promotion_banner_mobile']['#states'] = [
+    'invisible' => [
+      'input[name="field_promo_banner_for_mobile[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
   $form['field_display_as_clickable_link']['widget']['value']['#states'] = [
     'required' => [
       ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
