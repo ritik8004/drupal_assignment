@@ -167,7 +167,7 @@ class CheckoutComAPIWrapper {
    *   Return TRUE for enabled, FALSE otherwise.
    */
   public function isMadaEnabled() {
-    return $this->configFactory->get('acq_checkoutcom.settings')->get('mada_enabled');
+    return $this->apiHelper->getCheckoutcomConfig('mada_enabled');
   }
 
   /**
