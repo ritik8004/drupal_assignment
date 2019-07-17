@@ -452,27 +452,35 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
-    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-    $lock_key = 'download_image_' . $id;
+    $lock_key = '';
 
-    // Acquire lock to ensure parallel processes are executed one by one.
-    do {
-      $lock_acquired = $this->lock->acquire($lock_key);
+    // Allow disabling this through settings.
+    if (Settings::get('media_avoid_parallel_downloads', 1)) {
 
-      // Sleep for half a second before trying again.
-      if (!$lock_acquired) {
-        usleep(500000);
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_image_' . $id;
 
-        // Check once if downloaded by another process.
-        $cache = $this->cacheMediaFileMapping->get($lock_key);
-        if ($cache && $cache->data) {
-          $file = $this->fileStorage->load($cache->data);
-          if ($file instanceof FileInterface) {
-            return $file;
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+
+          // Check once if downloaded by another process.
+          $cache = $this->cacheMediaFileMapping->get($lock_key);
+          if ($cache && $cache->data) {
+            $file = $this->fileStorage->load($cache->data);
+            if ($file instanceof FileInterface) {
+              return $file;
+            }
+
+            throw new \Exception(sprintf('File id %s mapped for %s in cache invalid, not retrying', $cache->data, $id));
           }
         }
-      }
-    } while (!$lock_acquired);
+      } while (!$lock_acquired);
+    }
 
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
@@ -483,8 +491,10 @@ class SkuAssetManager {
     }
 
     if ($file instanceof FileInterface) {
-      // Add file id in cache for other processes to be able to use.
-      $this->cacheMediaFileMapping->set($lock_key, $file->id(), strtotime('+2 minute'));
+      if ($lock_key) {
+        // Add file id in cache for other processes to be able to use.
+        $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
+      }
 
       $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
@@ -493,7 +503,9 @@ class SkuAssetManager {
       ]);
     }
 
-    $this->lock->release($lock_key);
+    if ($lock_key) {
+      $this->lock->release($lock_key);
+    }
 
     return $file;
   }
