@@ -54,6 +54,7 @@ use GuzzleHttp\Exception\RequestException;
  *     "collection" = "/admin/commerce/sku/list"
  *   },
  *   field_ui_base_route = "acq_sku.configuration",
+ *   not_update_base_table = TRUE,
  * )
  */
 class SKU extends ContentEntityBase implements SKUInterface {
@@ -64,13 +65,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @var array
    */
   protected $mediaData = [];
-
-  /**
-   * The lock key for the sku.
-   *
-   * @var string
-   */
-  private $lockKey;
 
   /**
    * {@inheritdoc}
@@ -138,14 +132,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($update_sku) {
         $this->get('media')->setValue(serialize($media_data));
         $this->save();
-
-        if (!empty($this->lockKey)) {
-          \Drupal::service('lock.persistent')->release($this->lockKey);
-
-          // To ensure we don't keep releasing the lock again and again
-          // we set it to NULL here.
-          $this->lockKey = NULL;
-        }
       }
     }
 
@@ -193,28 +179,31 @@ class SKU extends ContentEntityBase implements SKUInterface {
         }
       }
       elseif ($download) {
-        try {
-          // Acquire lock, if lock is not already set,
-          // to ensure parallel processes are executed one by one.
-          if (empty($this->lockKey)) {
-            $lock_key = 'downloadSkuImage' . $this->id();
-            do {
-              $lock_acquired = \Drupal::service('lock.persistent')->acquire($lock_key);
+        /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+        $lock = \Drupal::service('lock.persistent');
 
-              // Sleep for half a second before trying again.
-              if (!$lock_acquired) {
-                usleep(500000);
-              }
-            } while (!$lock_acquired);
-            // Set lockKey once lock has been acquired.
-            $this->lockKey = $lock_key;
+        // Use file id for lock key.
+        $id = $data['value_id'] ?? $this->id();
+        $lock_key = 'download_image_' . $id;
+
+        // Acquire lock to ensure parallel processes are executed one by one.
+        do {
+          $lock_acquired = $lock->acquire($lock_key);
+
+          // Sleep for half a second before trying again.
+          if (!$lock_acquired) {
+            usleep(500000);
           }
+        } while (!$lock_acquired);
 
+        try {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);
           $update_sku = TRUE;
+          $lock->release($lock_key);
         }
         catch (\Exception $e) {
+          $lock->release($lock_key);
           \Drupal::logger('acq_sku')->error($e->getMessage());
           return NULL;
         }

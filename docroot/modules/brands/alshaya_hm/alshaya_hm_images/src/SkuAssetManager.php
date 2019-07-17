@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
@@ -20,7 +21,6 @@ use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
-use Drupal\Core\Lock\LockBackendInterface;
 
 /**
  * SkuAssetManager Class.
@@ -146,13 +146,6 @@ class SkuAssetManager {
   private $lock;
 
   /**
-   * The lock key for the sku.
-   *
-   * @var string
-   */
-  private $lockKey;
-
-  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -257,18 +250,36 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
+      // Use pims/asset id for lock key.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_image_' . $id;
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
+      } while (!$lock_acquired);
+
+      $file = NULL;
       try {
         $file = $this->downloadImage($asset, $sku->getSku());
-        if ($file instanceof FileInterface) {
-          $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
-
-          $asset['drupal_uri'] = $file->getFileUri();
-          $asset['fid'] = $file->id();
-          $save = TRUE;
-        }
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
+      }
+
+      $this->lock->release($lock_key);
+
+      if ($file instanceof FileInterface) {
+        $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+
+        $asset['drupal_uri'] = $file->getFileUri();
+        $asset['fid'] = $file->id();
+        $save = TRUE;
       }
 
       if (empty($asset['fid'])) {
@@ -279,13 +290,7 @@ class SkuAssetManager {
     if ($save) {
       $sku->get('attr_assets')->setValue(serialize($assets));
       $sku->save();
-      if (!empty($this->lockKey)) {
-        $this->lock->release($this->lockKey);
 
-        // To ensure we don't keep releasing the lock again and again
-        // we set it to NULL here.
-        $this->lockKey = NULL;
-      }
       $this->logger->notice('Downloaded new asset images for sku @sku.', [
         '@sku' => $sku->getSku(),
       ]);
@@ -456,22 +461,6 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
-    // Acquire lock, if lock is not already set,
-    // to ensure parallel processes are executed one by one.
-    if (empty($this->lockKey)) {
-      $lock_key = 'downloadSkuImage' . $sku->id();
-      do {
-        $lock_acquired = $this->lock->acquire($lock_key);
-
-        // Sleep for half a second before trying again.
-        if (!$lock_acquired) {
-          usleep(500000);
-        }
-      } while (!$lock_acquired);
-      // Set lockKey once lock has been acquired.
-      $this->lockKey = $lock_key;
-    }
-
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image'], $sku);
