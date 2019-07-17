@@ -43,7 +43,8 @@ foreach ($languages as $language) {
   $settingsSource[$language] = $indexSource[$language]->getSettings();
   $rules[$language] = algolia_get_rules($indexSource[$language]);
   $sourceQueries = algolia_get_query_suggestions($app_id, $app_secret_admin, $source_name);
-  $sourceQuery = reset($sourceQueries);
+  $sourceQuery[$language] = reset($sourceQueries);
+  $sourceSynonyms[$language] = algolia_get_synonyms($indexSource[$language]);
 }
 
 foreach ($sandbox_envs as $sandbox_env) {
@@ -55,9 +56,12 @@ foreach ($sandbox_envs as $sandbox_env) {
 
     $queries = algolia_get_query_suggestions($sandbox_app_id, $sandbox_app_secret_admin, $name);
     $query = reset($queries);
-    $query['sourceIndices'][0]['facets'] = $sourceQuery['sourceIndices'][0]['facets'];
-    $query['sourceIndices'][0]['generate'] = $sourceQuery['sourceIndices'][0]['generate'];
+    $query['sourceIndices'][0]['facets'] = $sourceQuery[$language]['sourceIndices'][0]['facets'];
+    $query['sourceIndices'][0]['generate'] = $sourceQuery[$language]['sourceIndices'][0]['generate'];
     algolia_add_query_suggestion($sandbox_app_id, $sandbox_app_secret_admin, $query['indexName'], json_encode($query));
+    // Clear before creating.
+    $index->clearSynonyms(TRUE);
+    $index->batchSynonyms($sourceSynonyms[$language], TRUE, TRUE);
   }
 }
 
@@ -70,8 +74,11 @@ foreach ($prod_envs as $prod_env) {
 
     $queries = algolia_get_query_suggestions($app_id, $app_secret_admin, $name);
     $query = reset($queries);
-    $query['sourceIndices'][0]['facets'] = $sourceQuery['sourceIndices'][0]['facets'];
-    $query['sourceIndices'][0]['generate'] = $sourceQuery['sourceIndices'][0]['generate'];
+    $query['sourceIndices'][0]['facets'] = $sourceQuery[$language]['sourceIndices'][0]['facets'];
+    $query['sourceIndices'][0]['generate'] = $sourceQuery[$language]['sourceIndices'][0]['generate'];
     algolia_add_query_suggestion($app_id, $app_secret_admin, $query['indexName'], json_encode($query));
+    // Clear before creating.
+    $index->clearSynonyms(TRUE);
+    $index->batchSynonyms($sourceSynonyms[$language], TRUE, TRUE);
   }
 }

@@ -16,10 +16,7 @@
 .vat-container {
   @include container(80.25rem);
 
-  display: flex;
-
   .vat-text-footer {
-    width: 100%;
     margin: 0 1.5rem 1.5rem;
 
     @include breakpoint($tablet) {
@@ -39,6 +36,6 @@
 
 .nodetype--acq_product {
   .vat-container {
-    @include container(66.35rem);
+    @include container(69.25rem);
   }
 }
