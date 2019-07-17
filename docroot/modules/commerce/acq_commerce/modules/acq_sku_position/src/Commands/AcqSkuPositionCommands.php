@@ -316,7 +316,7 @@ class AcqSkuPositionCommands extends DrushCommands {
 
         // If we have a position for this nid in DB, over here it would mean
         // it needs an update.
-        if (!empty($db_position_nid)) {
+        if ($db_position_nid !== NULL) {
           // Update new position data for the product.
           $this->connection->update('acq_sku_position')
             ->fields(['position' => $product_position['position']])
@@ -327,7 +327,7 @@ class AcqSkuPositionCommands extends DrushCommands {
           $this->updated++;
         }
         // Prepare insert query if no matching record found in DB.
-        elseif ($db_position_nid === NULL) {
+        else {
           $insert_record = [
             'nid' => $nids[$product_position['sku']],
             'tid' => $term->tid,
