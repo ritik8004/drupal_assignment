@@ -28,13 +28,13 @@ class CheckoutComAPIWrapper {
   const REDIRECT_URL = 'redirectUrl';
 
   // Authorize payment endpoint.
-  const AUTHORIZE_PAYMENT_ENDPOINT = 'charges/token';
+  const ENDPOINT_AUTHORIZE_PAYMENT = 'charges/token';
 
   // Saved card payment endpoint.
-  const CARD_PAYMENT_ENDPOINT = 'charges/card';
+  const ENDPOINT_CARD_PAYMENT = 'charges/card';
 
   // Void payment endpoint.
-  const VOID_PAYMENT_ENDPOINT = 'charges/{id}/void';
+  const ENDPOINT_VOID_PAYMENT = 'charges/{id}/void';
 
   // Void payment amount.
   const VOID_PAYMENT_AMOUNT = 1.0;
@@ -46,13 +46,13 @@ class CheckoutComAPIWrapper {
   const AUTOCAPTURE = 'Y';
 
   // API response success code.
-  const SUCCESS_CODE = '10000';
+  const SUCCESS = '10000';
 
   // Mada bins file name.
-  const KEY_MADA_BINS_FILE = 'mada_bins.csv';
+  const MADA_BINS_FILE = 'mada_bins.csv';
 
   // Mada bins test file name.
-  const KEY_MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
+  const MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
 
   // Multiply currency value to hundreds.
   const MULTIPLY_HUNDREDS = 100;
@@ -178,8 +178,8 @@ class CheckoutComAPIWrapper {
    */
   public function getMadaBinsPath() {
     return (string) '/files/' . (($this->isLive())
-      ? self::KEY_MADA_BINS_FILE
-      : self::KEY_MADA_BINS_FILE_TEST);
+      ? self::MADA_BINS_FILE
+      : self::MADA_BINS_FILE_TEST);
   }
 
   /**
@@ -333,7 +333,7 @@ class CheckoutComAPIWrapper {
    *
    * @throws \Exception
    */
-  protected function make3dSecurePaymentRequest(Cart $cart, string $endpoint, array $params, $caller = '') {
+  protected function request3dSecurePayment(Cart $cart, string $endpoint, array $params, $caller = '') {
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
       $opt = ['json' => $req_param + $params];
       return ($client->post($endpoint, $opt));
@@ -355,7 +355,7 @@ class CheckoutComAPIWrapper {
       );
     }
 
-    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS_CODE) {
+    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS) {
       return new RedirectResponse($response[self::REDIRECT_URL]);
     }
     else {
@@ -546,9 +546,9 @@ class CheckoutComAPIWrapper {
     $params['billingDetails'] = $this->getAddressDetails('billing');
     $params['shippingDetails'] = $this->getAddressDetails('shipping');
 
-    $response = $this->make3dSecurePaymentRequest(
+    $response = $this->request3dSecurePayment(
       $cart,
-      !empty($params['cardToken']) ? self::AUTHORIZE_PAYMENT_ENDPOINT : self::CARD_PAYMENT_ENDPOINT,
+      !empty($params['cardToken']) ? self::ENDPOINT_AUTHORIZE_PAYMENT : self::ENDPOINT_CARD_PAYMENT,
       $params,
       __METHOD__
     );
@@ -583,7 +583,7 @@ class CheckoutComAPIWrapper {
     // Authorize a card for payment.
     $response = $this->authorizeCardForPayment(
       $user,
-      self::AUTHORIZE_PAYMENT_ENDPOINT,
+      self::ENDPOINT_AUTHORIZE_PAYMENT,
       $params,
       __METHOD__
     );
@@ -591,7 +591,7 @@ class CheckoutComAPIWrapper {
     // Run the void transaction for the gateway.
     $this->makeVoidTransaction(
       $user,
-      strtr(self::VOID_PAYMENT_ENDPOINT, ['{id}' => $response['id']]),
+      strtr(self::ENDPOINT_VOID_PAYMENT, ['{id}' => $response['id']]),
       ['trackId' => ''],
       __METHOD__
     );
