@@ -21,3 +21,10 @@ live_kit:
     gpl-compatible: FALSE
   js:
     https://cdn.checkout.com/js/checkoutkit.js: { type: external }
+
+applepay:
+  css:
+    component:
+      css/applepay.css: {}
+  js:
+    js/acq_checkoutcom.applePay.js: {}
