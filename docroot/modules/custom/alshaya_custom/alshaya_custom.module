@@ -59,7 +59,7 @@ function alshaya_custom_paragraph_presave(Paragraph $paragraph) {
 }
 
 /**
- * Implements hook_entity_presave().
+ * Implements hook_entity_type_presave().
  *
  * @throws /Exception
  */
