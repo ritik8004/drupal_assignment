@@ -8,6 +8,24 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Updates arabic translation strings for social login - Google.
+ */
+function alshaya_social_google_update_8001() {
+  $strings = [
+    'sign in with Google' => [
+      'ar' => 'تسجيل الدخول عن طريق جوجل',
+    ],
+    'sign up with Google' => [
+      'ar' => 'سجل الاشتراك عن طريق جوجل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_social_google_install() {
@@ -27,10 +45,10 @@ function alshaya_social_google_install() {
     ->save();
 
   $strings = [
-    'sign in with google' => [
+    'sign in with Google' => [
       'ar' => 'تسجيل الدخول عن طريق جوجل',
     ],
-    'sign up with google' => [
+    'sign up with Google' => [
       'ar' => 'سجل الاشتراك عن طريق جوجل',
     ],
   ];

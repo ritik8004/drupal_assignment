@@ -13,3 +13,13 @@
     }
   }
 }
+
+.alshaya-social {
+  .auth-link {
+    .social-network-text {
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
