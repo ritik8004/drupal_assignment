@@ -186,6 +186,35 @@ function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $b
   print 'Synonyms saved for: ' . $name . PHP_EOL;
 }
 
+function algolia_get_synonyms(\AlgoliaSearch\Index $index) {
+  $page = 0;
+  $synonyms = [];
+
+  do {
+    $synonymsPage = $index->searchSynonyms(NULL, [], $page, 500);
+
+    if (empty($synonymsPage['hits'])) {
+      break;
+    }
+
+    $synonyms += $synonymsPage['hits'];
+
+    $page++;
+    $total = $synonymsPage['nbPages'] ?? 0;
+    if ($page >= $total) {
+      break;
+    }
+  } while(1);
+
+  if ($synonyms) {
+    foreach ($synonyms as &$synonym) {
+      unset($synonym['_highlightResult']);
+    }
+  }
+
+  return $synonyms;
+}
+
 function algolia_get_rules($indexSource) {
   $page = 0;
   $rules = [];
