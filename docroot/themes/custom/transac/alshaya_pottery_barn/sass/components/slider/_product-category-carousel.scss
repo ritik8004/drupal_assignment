@@ -12,10 +12,6 @@
     }
 
     .owl-carousel {
-      @include breakpoint($upto-desktop) {
-        font-size: 0;
-      }
-
       .views-row {
         @include breakpoint($only-tablet) {
           max-width: 12.5rem;
