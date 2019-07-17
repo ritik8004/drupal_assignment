@@ -185,7 +185,7 @@ class CheckoutComFormHelper {
     ];
 
     // Card can be saved in account for authenticated users only.
-    if ($this->currentUser->isAuthenticated()) {
+    if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
       $form['save_card'] = [
         '#type'  => 'checkbox',
         '#id' => 'saveCard',

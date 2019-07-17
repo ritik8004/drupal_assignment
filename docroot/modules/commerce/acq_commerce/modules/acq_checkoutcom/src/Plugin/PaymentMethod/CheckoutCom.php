@@ -117,6 +117,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     // Set the default payment card to display form to enter new card.
     $payment_card = 'new';
 
+    $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load(
