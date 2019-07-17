@@ -6,6 +6,8 @@
  */
 
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\Component\Utility\Html;
 
 /**
  * Utility function to get the site level country code.
@@ -53,5 +55,29 @@ function alshaya_custom_paragraph_presave(Paragraph $paragraph) {
       $default_slug_text = $paragraph->get('field_default_slug_text')->value;
       $paragraph->get('field_mobile_slug_text')->setValue($default_slug_text);
     }
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ *
+ * @throws /Exception
+ */
+function alshaya_custom_block_content_presave(BlockContent $block) {
+  // Implementing lazy loading on block body images.
+  $block_body = $block->get('body')->value;
+  $dom = Html::load($block_body);
+  $image_list = $dom->getElementsByTagName('img');
+  if ($image_list->length > 0) {
+    foreach ($image_list as $image) {
+      $src = !empty($image->getAttribute('data-src')) ? $image->getAttribute('data-src') : $image->getAttribute('src');
+      $image->setAttribute('data-src', $src);
+      $image->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+      $image->setAttribute('class', 'b-lazy');
+      $dom->saveHTML($image);
+    }
+    $block_body = Html::serialize($dom);
+    $block_body = Html::decodeEntities($block_body);
+    $block->body->setValue(['value' => $block_body, 'format' => 'mail_text']);
   }
 }
