@@ -40,7 +40,7 @@
 
     $.get(getUrls, function(data, status){
       if (status === 'success' && data) {
-        urlObject.url = $.parseJSON(data);
+        urlObject.url = data;
         urlObject.metric_id = metric_id;
         urlObject.device = device;
         urlObject.time = time;
@@ -62,9 +62,8 @@
 
     var getScores = Drupal.url('google-page-speed/' + urlObject.metric_id + '/' + urlObject.device + '/' + urlObject.time);
 
-    $.get(getScores, function(data, status){
-      if (status === 'success' && data) {
-        var scoreData = $.parseJSON(data);
+    $.get(getScores, function(scoreData, status){
+      if (status === 'success' && scoreData) {
         scoreData.forEach(function (element) {
           element[0] = new Date(element[0]*1000);
           dataTable.addRow(
