@@ -63,10 +63,6 @@ $social_config = [
       'app_id' => '383866358862411',
       'app_secret' => '0646a2901853b99062ff2d15127db379',
     ],
-    'google' => [
-      'client_id' => '576207661052-hv4ue4shsfesaacm6lu1bto1hvi2sv1h.apps.googleusercontent.com',
-      'client_secret' => '5NX6DGPesKIRzjpE1YW46ktK',
-    ],
   ],
   '01test' => [
     'facebook' => [
