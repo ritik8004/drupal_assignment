@@ -46,7 +46,7 @@ function _alshaya_custom_is_amp_route() {
 }
 
 /**
- * Implements hook_entity_presave().
+ * Implements hook_entity_type_presave().
  */
 function alshaya_custom_paragraph_presave(Paragraph $paragraph) {
   // If mobile settings are not present use default settings for slug banner.
