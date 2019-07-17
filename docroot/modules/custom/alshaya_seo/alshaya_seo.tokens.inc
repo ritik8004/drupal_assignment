@@ -44,11 +44,6 @@ function alshaya_seo_token_info() {
     'dynamic' => TRUE,
   ];
 
-  $info['tokens']['node']['category_names'] = [
-    'name' => t('Category Names'),
-    'description' => t('Comma separated list of all categories referenced in the node.'),
-  ];
-
   $info['tokens']['custom_meta']['brand_name'] = [
     'name' => t('Brand name'),
     'description' => t('The brand name for the website.'),
@@ -215,16 +210,25 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'city1':
-          $replacements[$original] = t('seo_city1');
+          // Show empty string if translation not available.
+          $value = t('seo_city1');
+          $replacements[$original] = $value == 'seo_city1' ? '' : $value;
           break;
 
         case 'city2':
-          $replacements[$original] = t('seo_city2');
+          // Show empty string if translation not available.
+          $value = t('seo_city2');
+          $replacements[$original] = $value == 'seo_city2' ? '' : $value;
           break;
 
         case 'cities':
           $token_service = \Drupal::token();
-          $replacements[$original] = $token_service->replace('[custom_meta:city1], [custom_meta:city2]');
+          $cities = [
+            $token_service->replace('[custom_meta:city1]'),
+            $token_service->replace('[custom_meta:city2]'),
+          ];
+
+          $replacements[$original] = implode(', ', array_filter($cities));
           break;
       }
     }
