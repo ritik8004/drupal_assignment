@@ -106,11 +106,11 @@
         "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
-        "drupal/console": "^1.8",
         "drupal/devel": "^2.0.0",
+        "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
-        "jakoch/phantomjs-installer": "^2.1.1-p07"
+        "drupal/console": "^1.8"
     },
     "repositories": {
         "drupal": {
@@ -270,8 +270,8 @@
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
                 "Cron expire date format and timezone is incorrect, leads to infinite password resets.": "https://www.drupal.org/files/issues/cron_expire_date_format-2860671-7.patch",
-                "Remove 'bypass password policies' permission": "https://www.drupal.org/files/issues/password_policy-2862906-2.patch",
-                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2933746-3.patch"
+                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2933746-3.patch",
+                "Remove 'bypass password policies' permission": "https://www.drupal.org/files/issues/password_policy-2862906-2.patch"
             },
             "drupal/change_pwd_page": {
                 "Integration with password_policy": "https://www.drupal.org/files/issues/2933747-4.patch"
@@ -292,6 +292,9 @@
             "drupal/views_infinite_scroll": {
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
             },
+            "drupal/clientside_validation": {
+                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2019-05-08/cv-validate-ajax-2952233-12.patch"
+            },
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
                 "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
@@ -299,6 +302,9 @@
             "drupal/user_registrationpassword": {
                 "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch",
                 "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
+            },
+            "drupal/seckit": {
+                "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
@@ -315,6 +321,10 @@
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
+            "drupal/simple_oauth": {
+                "Limit token delete on cron run": "https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch",
+                "oauth2_token entity type & cache tags": "https://www.drupal.org/files/issues/2019-05-10/3051648-9.patch"
+            },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
@@ -323,6 +333,9 @@
             },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
+            },
+            "drupal/social_auth": {
+                "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
             },
             "drupal/social_auth_facebook": {
                 "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
