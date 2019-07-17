@@ -279,7 +279,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
       // Add file id in cache for other processes to be able to use.
-      \Drupal::cache('media_file_mapping')->set($lock_key, $file->id(), strtotime('+1 hour'));
+      \Drupal::cache('media_file_mapping')->set($lock_key, $file->id(), strtotime('+2 minute'));
 
       // Release the lock now.
       $lock->release($lock_key);

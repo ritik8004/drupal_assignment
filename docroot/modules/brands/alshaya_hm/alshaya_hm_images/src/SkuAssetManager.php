@@ -484,7 +484,7 @@ class SkuAssetManager {
 
     if ($file instanceof FileInterface) {
       // Add file id in cache for other processes to be able to use.
-      $this->cacheMediaFileMapping->set($lock_key, $file->id(), strtotime('+1 hour'));
+      $this->cacheMediaFileMapping->set($lock_key, $file->id(), strtotime('+2 minute'));
 
       $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
