@@ -42,8 +42,11 @@ class CheckoutComAPIWrapper {
   // 3D secure charge mode.
   const VERIFY_3DSECURE = '2';
 
-  // 3D secure autocapture.
-  const AUTOCAPTURE = 'Y';
+  // Auto capture yes.
+  const AUTOCAPTURE_YES = 'Y';
+
+  // Auto capture no.
+  const AUTOCAPTURE_NO = 'N';
 
   // API response success code.
   const SUCCESS = '10000';
@@ -535,7 +538,7 @@ class CheckoutComAPIWrapper {
     $params['chargeMode'] = self::VERIFY_3DSECURE;
     // Capture payment immediately, values 0 to 168 (0 to 7 days).
     $params['autoCapTime'] = '0';
-    $params['autoCapture'] = self::AUTOCAPTURE;
+    $params['autoCapture'] = ($params['udf1'] == 'MADA') ? self::AUTOCAPTURE_YES : self::AUTOCAPTURE_NO;
     $params['attemptN3D'] = FALSE;
     // Use the IP address from Acquia Cloud ENV variable.
     $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? '';
