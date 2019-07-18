@@ -38,7 +38,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
   try {
     // Prepare parameters to send for 3d secure payment.
     $params = [
-      'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
+      'value' => $checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
     ];
 
