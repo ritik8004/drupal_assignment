@@ -57,12 +57,35 @@ class CheckoutComAPIWrapper {
   // Mada bins test file name.
   const MADA_BINS_FILE_TEST = 'mada_bins_test.csv';
 
-  // Multiply currency value to hundreds.
-  const MULTIPLY_HUNDREDS = 100;
-
   // The option that determines whether the payment method associated with
   // the successful transaction should be stored in the Vault.
   const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
+
+  /**
+   * Currencies where charge amount is full.
+   *
+   * @var array
+   * @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L32
+   */
+  const FULL_VALUE_CURRENCIES = [
+    'BYR', 'BIF', 'DJF', 'GNF', 'KMF',
+    'XAF', 'CLF', 'XPF', 'JPY', 'PYG',
+    'RWF', 'KRW', 'VUV', 'VND', 'XOF',
+  ];
+
+  /**
+   * Currencies where charge amount is divided by 1000.
+   *
+   * @var array
+   * @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L39
+   */
+  const DIV_1000_VALUE_CURRENCIES = ['BHD', 'KWD', 'OMR', 'JOD'];
+
+  // @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L41
+  const DIV_1000 = 1000;
+
+  // @ref https://github.com/checkout/checkout-magento2-plugin/blob/1.0.44/Model/Adapter/ChargeAmountAdapter.php#L43
+  const DIV_100 = 100;
 
   /**
    * API Helper service object.
@@ -238,6 +261,28 @@ class CheckoutComAPIWrapper {
     return $this->configFactory
       ->get('acq_checkoutcom.settings')
       ->get('base_uri')[$env];
+  }
+
+  /**
+   * Returns transformed amount by the given currency code.
+   *
+   * @param float $amount
+   *   The amount of order to convert.
+   *
+   * @return float
+   *   The processed amount.
+   */
+  public function getCheckoutAmount($amount) {
+    $currencyCode = $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code');
+    if (in_array($currencyCode, self::FULL_VALUE_CURRENCIES, TRUE)) {
+      return (float) $amount;
+    }
+
+    if (in_array($currencyCode, self::DIV_1000_VALUE_CURRENCIES, TRUE)) {
+      return (float) ($amount * self::DIV_1000);
+    }
+
+    return (float) ($amount * self::DIV_100);
   }
 
   /**

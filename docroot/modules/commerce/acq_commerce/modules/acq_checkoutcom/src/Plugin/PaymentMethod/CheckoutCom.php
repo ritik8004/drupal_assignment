@@ -290,7 +290,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->checkoutComApi->processCardPayment(
       $cart,
       [
-        'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
+        'value' => $this->checkoutComApi->getCheckoutAmount($totals['grand']),
         'cardToken' => $card_token,
         'email' => $cart->customerEmail(),
         'udf3' => $save ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
@@ -317,7 +317,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     $this->checkoutComApi->processCardPayment($cart, [
       'cardId' => $card_id,
-      'value' => $totals['grand'] * CheckoutComAPIWrapper::MULTIPLY_HUNDREDS,
+      'value' => $this->checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
       'cvv' => $cvv,
     ]);
