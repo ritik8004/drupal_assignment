@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_performance\Plugin\Filter;
+namespace Drupal\alshaya_master\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
 use Drupal\filter\FilterProcessResult;

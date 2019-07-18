@@ -1,8 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  module:
-    - alshaya_performance
+dependencies: {  }
 name: 'Mail Text'
 format: mail_text
 weight: 0

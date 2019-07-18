@@ -15,7 +15,6 @@ use Drupal\Core\Config\FileStorage;
  */
 function alshaya_master_update_8028() {
   $configs = [
-    'filter.format.full_text',
     'filter.format.mail_text',
   ];
 

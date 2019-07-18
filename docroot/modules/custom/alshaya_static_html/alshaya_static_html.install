@@ -11,6 +11,19 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding display mobile banner field in view.
+ */
+function alshaya_static_html_update_8002() {
+  $configs = [
+    'filter.format.full_text',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_static_html');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enabling the new field 'display_amp_menu' to static html bundle.
  */
 function alshaya_static_html_update_8001() {
