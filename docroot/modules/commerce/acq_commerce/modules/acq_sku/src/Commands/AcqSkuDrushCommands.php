@@ -18,6 +18,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
@@ -730,6 +731,167 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->linkedSkuCache->deleteAll();
 
     $this->output->writeln(dt('Cleared all linked SKUs cache.'));
+  }
+
+  /**
+   * Command to go through all the media and find ones with corrupt data.
+   *
+   * It also marks them for re-downloading.
+   *
+   * @param array $options
+   *   Command options.
+   *
+   * @command acq_sku:fix-corrupt-sku-media
+   *
+   * @option batch_size
+   *   Batch size.
+   * @option skus
+   *   Comma separated list of skus to limit process to those skus.
+   * @options check_file_exists
+   *   Check if file exists, this will take more time.
+   * @options dry-run
+   *   Do not update SKU but only show corrupt skus in logs.
+   *
+   * @usage drush fix-corrupt-sku-media
+   *   Process all the skus in system with fid in media data.
+   * @usage drush fix-corrupt-sku-media --skus="sku1,sku2"
+   *   Process all the skus specified in option --sku (separated by comma).
+   *
+   * @aliases fix-corrupt-sku-media
+   */
+  public function fixCorruptSkuMedia(array $options = [
+    'batch_size' => 50,
+    'skus' => '',
+    'check_file_exists' => FALSE,
+    'dry-run' => FALSE,
+  ]) {
+
+    $batch_size = (int) $options['batch_size'];
+    $check_file_exists = (bool) $options['check_file_exists'];
+    $dry_run = (bool) $options['dry-run'];
+    $skus = (string) $options['skus'];
+    $skus = array_filter(explode(',', $skus));
+    $verbose = $options['verbose'];
+
+    $this->logger()->notice('Checking all media...');
+
+    $select = $this->connection->select('acq_sku_field_data');
+    $select->fields('acq_sku_field_data', ['sku']);
+    $select->condition('default_langcode', 1);
+
+    if ($skus) {
+      $select->condition('sku', $skus, 'IN');
+    }
+    else {
+      $select->condition('media__value', '%fid%', 'LIKE');
+    }
+
+    $result = $select->execute()->fetchAll();
+
+    $skus = array_column($result, 'sku');
+
+    // If no sku available, then no need to process further as with empty
+    // array, drush throws error.
+    if (!$skus) {
+      $this->output->writeln(dt('No matched sku found for corrupt media check.'));
+      return;
+    }
+
+    $batch = [
+      'title' => 'Process skus',
+      'error_message' => 'Error occurred while processing skus, please check logs.',
+    ];
+
+    foreach (array_chunk($skus, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'correctCorruptMediaChunk'],
+        [$chunk, $check_file_exists, $dry_run, $verbose],
+      ];
+    }
+
+    batch_set($batch);
+    drush_backend_batch_process();
+
+    $this->logger()->notice('Processed all skus to find missing media items.');
+  }
+
+  /**
+   * Batch callback.
+   *
+   * @param array $skus
+   *   SKUs to process.
+   * @param bool $check_file_exists
+   *   Flag - check if file exists in file system or not.
+   * @param bool $dry_run
+   *   Flag - do not save skus yet, only output errors.
+   * @param bool $verbose
+   *   Flag - show debug output or not.
+   */
+  public static function correctCorruptMediaChunk(array $skus, $check_file_exists, $dry_run, $verbose) {
+    $logger = \Drupal::logger('AcqSkuDrushCommands');
+
+    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+
+    foreach ($skus as $sku_string) {
+      $sku = SKU::loadFromSku($sku_string);
+      if (!($sku instanceof SKU)) {
+        continue;
+      }
+
+      $media = unserialize($sku->get('media')->getString());
+
+      $resave = FALSE;
+      foreach ($media ?? [] as $index => $item) {
+        // If fid is not set, we will let it be downloaded in
+        // normal flow.
+        if (empty($item['fid'])) {
+          continue;
+        }
+
+        $redownload = '';
+        // If fid is empty, we have some issue, we will redownload.
+        if (empty($item['fid'])) {
+          $redownload = 'missing fid';
+        }
+        else {
+
+          $file = $fileStorage->load($item['fid']);
+
+          if ($file instanceof FileInterface) {
+            if ($check_file_exists) {
+              $data = @file_get_contents($file_system->realpath($file->getFileUri()));
+              if (empty($data)) {
+                $redownload = 'missing file';
+              }
+            }
+          }
+          else {
+            $redownload = 'missing file entity';
+          }
+        }
+
+        if ($redownload) {
+          $logger->error('Removing fid from media item from @sku, for @reason. @item.', [
+            '@sku' => $sku->getSku(),
+            '@reason' => $redownload,
+            '@item' => $verbose ? json_encode($item) : '',
+          ]);
+
+          $resave = TRUE;
+
+          unset($item['fid']);
+          $media[$index] = $item;
+        }
+      }
+
+      if ($resave && !$dry_run) {
+        $sku->get('media')->setValue(serialize($media));
+        $sku->save();
+      }
+    }
   }
 
 }
