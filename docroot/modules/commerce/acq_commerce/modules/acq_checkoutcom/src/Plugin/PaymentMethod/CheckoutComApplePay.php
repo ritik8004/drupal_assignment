@@ -67,11 +67,15 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $settings = [
-      'merchant_id' => 'merchant.com.checkoutmdcdemo.alshaya',
-      'button_style' => 'black',
-      'supported_networks' => ['visa', 'masterCard', 'amex'],
-      'merchant_capabilities' => ['supportsCredit', 'supportsDebit'],
-      'supported_countries' => ['KW'],
+      'merchantIdentifier' => 'merchant.com.checkoutmdcdemo.alshaya',
+      'buttonStyle' => 'black',
+      'supportedNetworks' => 'visa,masterCard,amex',
+      'merchantCapabilities' => 'supports3DS,supportsCredit,supportsDebit',
+      'supportedCountries' => 'KW',
+      'runningTotal' => $this->getCart()->totals()['grand'],
+      'storeName' => \Drupal::config('system.site')->get('name'),
+      'countryId' => \Drupal::config('system.date')->get('country.default'),
+      'currencyCode' => \Drupal::config('acq_commerce.currency')->get('iso_currency_code'),
     ];
 
     $complete_form['actions']['apple_wrapper'] = [

@@ -12,17 +12,6 @@
       this.settings = settings;
     }
 
-    cartData () {
-      return {
-        storeName: 'Mothercare Kuwait',
-        currencyCode: 'KWD',
-        billingAddress: {
-          countryId: 'KW',
-        },
-        runningTotal: 10000,
-      };
-    }
-
     performValidation (valURL) {
       var controllerUrl = Drupal.url('checkout_com/payment/applepayvalidation');
       var validationUrl = controllerUrl + '?u=' + valURL;
@@ -73,7 +62,7 @@
 
     // Check if the session is available.
     if (window.ApplePaySession) {
-      var promise = ApplePaySession.canMakePaymentsWithActiveCard(drupalSettings.checkoutCom.merchant_id);
+      var promise = ApplePaySession.canMakePaymentsWithActiveCard(drupalSettings.checkoutCom.merchantIdentifier);
       promise.then(function (canMakePayments) {
         if (canMakePayments) {
           $(button_target, checkoutApplePay.context).css('display', 'block');
@@ -92,23 +81,21 @@
       event.preventDefault();
       event.stopPropagation();
       // Prepare the parameters.
-      var cartData = checkoutApplePay.cartData();
       var paymentRequest = {
-        merchantIdentifier: drupalSettings.checkoutCom.merchant_id,
-        version: 6,
-        currencyCode: cartData.currencyCode,
-        countryCode: cartData.billingAddress.countryId,
+        merchantIdentifier: drupalSettings.checkoutCom.merchantIdentifier,
+        currencyCode: drupalSettings.checkoutCom.currencyCode,
+        countryCode: drupalSettings.checkoutCom.countryId,
         total: {
-          label: cartData.storeName,
-          amount: cartData.runningTotal
+          label: drupalSettings.checkoutCom.storeName,
+          amount: drupalSettings.checkoutCom.runningTotal
         },
-        supportedNetworks: drupalSettings.checkoutCom.supported_networks,
-        merchantCapabilities: drupalSettings.checkoutCom.merchant_capabilities,
-        supportedCountries: drupalSettings.checkoutCom.supported_countries
+        supportedNetworks: drupalSettings.checkoutCom.supportedNetworks.split(','),
+        merchantCapabilities: drupalSettings.checkoutCom.merchantCapabilities.split(','),
+        supportedCountries: drupalSettings.checkoutCom.supportedCountries.split(',')
       };
 
       // Start the payment session.
-      var session = new ApplePaySession(6, paymentRequest);
+      var session = new ApplePaySession(1, paymentRequest);
 
       // Merchant Validation.
       session.onvalidatemerchant = function (event) {
@@ -129,8 +116,8 @@
 
         var newTotal = {
           type: 'final',
-          label: cartData.storeName,
-          amount: cartData.runningTotal
+          label: drupalSettings.checkoutCom.storeName,
+          amount: drupalSettings.checkoutCom.runningTotal
         };
 
         session.completeShippingContactSelection(status, shippingOptions, newTotal, checkoutApplePay.getLineItems());
@@ -142,8 +129,8 @@
         var status = ApplePaySession.STATUS_SUCCESS;
         var newTotal = {
           type: 'final',
-          label: cartData.storeName,
-          amount: cartData.runningTotal
+          label: drupalSettings.checkoutCom.storeName,
+          amount: drupalSettings.checkoutCom.runningTotal
         };
 
         session.completeShippingMethodSelection(status, newTotal, checkoutApplePay.getLineItems());
@@ -154,8 +141,8 @@
         console.log(event);
         var newTotal = {
           type: 'final',
-          label: cartData.storeName,
-          amount: cartData.runningTotal
+          label: drupalSettings.checkoutCom.storeName,
+          amount: drupalSettings.checkoutCom.runningTotal
         };
 
         session.completePaymentMethodSelection(newTotal, checkoutApplePay.getLineItems());
