@@ -66,7 +66,6 @@
   }
 
   function launchApplePay(checkoutApplePay) {
-
     var button_target = '#ckoApplePayButton';
 
     // Apply the button style.
@@ -74,8 +73,7 @@
 
     // Check if the session is available.
     if (window.ApplePaySession) {
-      var merchantIdentifier = 'merchant.com.alshaya.checkout.demo';
-      var promise = ApplePaySession.canMakePaymentsWithActiveCard(merchantIdentifier);
+      var promise = ApplePaySession.canMakePaymentsWithActiveCard(drupalSettings.checkoutCom.merchant_id);
       promise.then(function (canMakePayments) {
         if (canMakePayments) {
           $(button_target, checkoutApplePay.context).css('display', 'block');
@@ -96,7 +94,7 @@
       // Prepare the parameters.
       var cartData = checkoutApplePay.cartData();
       var paymentRequest = {
-        merchantIdentifier: 'merchant.com.alshaya.checkout.demo',
+        merchantIdentifier: drupalSettings.checkoutCom.merchant_id,
         version: 6,
         currencyCode: cartData.currencyCode,
         countryCode: cartData.billingAddress.countryId,
@@ -104,9 +102,9 @@
           label: cartData.storeName,
           amount: cartData.runningTotal
         },
-        supportedNetworks: ['visa', 'masterCard', 'amex'],
-        merchantCapabilities: ['supports3DS'],
-        supportedCountries: ['KW']
+        supportedNetworks: drupalSettings.checkoutCom.supported_networks,
+        merchantCapabilities: drupalSettings.checkoutCom.merchant_capabilities,
+        supportedCountries: drupalSettings.checkoutCom.supported_countries
       };
 
       // Start the payment session.
