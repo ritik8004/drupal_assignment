@@ -66,6 +66,14 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $settings = [
+      'merchant_id' => 'merchant.com.checkoutmdcdemo.alshaya',
+      'button_style' => 'black',
+      'supported_networks' => ['visa', 'masterCard', 'amex'],
+      'merchant_capabilities' => ['supportsCredit', 'supportsDebit'],
+      'supported_countries' => ['KW'],
+    ];
+
     $complete_form['actions']['apple_wrapper'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -74,6 +82,9 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
       '#attached' => [
         'library' => [
           'acq_checkoutcom/applepay',
+        ],
+        'drupalSettings' => [
+          'checkoutCom' => $settings,
         ],
       ],
     ];
