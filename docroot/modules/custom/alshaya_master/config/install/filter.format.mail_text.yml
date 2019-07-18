@@ -1,6 +1,8 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - alshaya_performance
 name: 'Mail Text'
 format: mail_text
 weight: 0
@@ -8,6 +10,12 @@ filters:
   filter_autop:
     id: filter_autop
     provider: filter
+    status: true
+    weight: 0
+    settings: {  }
+  alshaya_image_lazy_load:
+    id: alshaya_image_lazy_load
+    provider: alshaya_performance
     status: true
     weight: 0
     settings: {  }

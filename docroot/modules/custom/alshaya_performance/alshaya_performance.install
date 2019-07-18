@@ -8,20 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Adding display mobile banner field in view.
- */
-function alshaya_performance_update_8002() {
-  $configs = [
-    'filter.format.full_text',
-    'filter.format.mail_text',
-  ];
-
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_performance');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add performance settings.
  */
 function alshaya_performance_update_8001() {
