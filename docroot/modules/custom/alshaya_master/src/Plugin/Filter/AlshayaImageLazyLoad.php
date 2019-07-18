@@ -24,7 +24,6 @@ class AlshayaImageLazyLoad extends FilterBase {
   public function process($text, $langcode) {
     $dom = Html::load($text);
     $image_list = $dom->getElementsByTagName('img');
-    $block_body = $text;
     if ($image_list->length > 0) {
       foreach ($image_list as $image) {
         $src = !empty($image->getAttribute('data-src')) ? $image->getAttribute('data-src') : $image->getAttribute('src');
@@ -33,10 +32,10 @@ class AlshayaImageLazyLoad extends FilterBase {
         $image->setAttribute('class', 'b-lazy');
         $dom->saveHTML($image);
       }
-      $block_body = Html::serialize($dom);
-      $block_body = Html::decodeEntities($block_body);
+      $text = Html::serialize($dom);
+      $text = Html::decodeEntities($text);
     }
-    return new FilterProcessResult($block_body);
+    return new FilterProcessResult($text);
   }
 
 }
