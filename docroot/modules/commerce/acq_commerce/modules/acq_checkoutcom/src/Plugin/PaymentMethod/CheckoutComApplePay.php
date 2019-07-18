@@ -25,13 +25,6 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   protected $apiHelper;
 
   /**
-   * Checkout.com api wrapper object.
-   *
-   * @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper
-   */
-  protected $checkoutComApi;
-
-  /**
    * CheckoutComApplePay constructor.
    *
    * @param array $configuration
@@ -46,7 +39,6 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
-    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
   }
 
   /**
@@ -80,7 +72,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
       'supportedNetworks' => 'visa,masterCard,amex',
       'merchantCapabilities' => 'supports3DS,supportsCredit,supportsDebit',
       'supportedCountries' => 'KW',
-      'runningTotal' => $this->checkoutComApi->getCheckoutAmount($this->getCart()->totals()['grand']),
+      'runningTotal' => $this->getCart()->totals()['grand'],
       'storeName' => \Drupal::config('system.site')->get('name'),
       'countryId' => \Drupal::config('system.date')->get('country.default'),
       'currencyCode' => \Drupal::config('acq_commerce.currency')->get('iso_currency_code'),
