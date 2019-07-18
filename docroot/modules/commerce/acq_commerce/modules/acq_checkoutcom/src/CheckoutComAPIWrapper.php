@@ -196,7 +196,7 @@ class CheckoutComAPIWrapper {
     $mada_bin_csv_path = drupal_get_path('module', 'acq_checkoutcom') . $this->getMadaBinsPath();
 
     // Read CSV rows.
-    $mada_bin_csv_file = fopen($mada_bin_csv_path, 'r+');
+    $mada_bin_csv_file = fopen($mada_bin_csv_path, 'r');
 
     $mada_bin_csv_data = [];
     while ($mada_bin_csv_row = fgetcsv($mada_bin_csv_file)) {
