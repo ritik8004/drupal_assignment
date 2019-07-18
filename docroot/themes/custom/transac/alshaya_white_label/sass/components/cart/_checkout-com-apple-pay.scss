@@ -24,4 +24,12 @@
       }
     }
   }
+
+  display: none;
+  pointer-events: none;
+
+  &.supported {
+    pointer-events: all;
+    display: block;
+  }
 }
