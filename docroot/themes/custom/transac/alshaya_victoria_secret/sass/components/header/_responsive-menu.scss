@@ -308,6 +308,10 @@ header {
           width: auto;
           margin: auto;
           text-align: center;
+
+          .ie & {
+            width: 100%;
+          }
         }
       }
     }
