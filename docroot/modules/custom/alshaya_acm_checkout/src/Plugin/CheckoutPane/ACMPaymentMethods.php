@@ -264,6 +264,13 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['#attached']['library'][] = 'acq_cybersource/cybersource';
       }
 
+      // We add apple pay JS, so early validation can be performed regarding
+      // browser support, if a non supported browser we can disable the Apple
+      // Pay payment Option while listing down all avaialble payment options.
+      if ($payment_plugin == 'checkout_com_applepay') {
+        $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['#attached']['library'][] = 'acq_checkoutcom/applepay';
+      }
+
       $title_class = [];
       $title_class[] = 'payment-plugin-wrapper-div';
 
