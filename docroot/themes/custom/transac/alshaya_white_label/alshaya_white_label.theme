@@ -550,6 +550,17 @@ function alshaya_white_label_preprocess_node(&$variables) {
         }
       }
     }
+    elseif ($variables['elements']['#view_mode'] == 'teaser') {
+      $current_route = \Drupal::routeMatch();
+      $variables['modal_link'] = TRUE;
+      if ($current_route->getRouteName() == 'entity.node.canonical') {
+        $node = $current_route->getParameter('node');
+        // Make modal link based on condition.
+        if ($node instanceof NodeInterface && $node->bundle() == 'magazine_article') {
+          $variables['modal_link'] = FALSE;
+        }
+      }
+    }
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
