@@ -15,6 +15,8 @@ class ConnectorException extends \UnexpectedValueException {
    * {@inheritdoc}
    */
   public function __construct($message = '', $code = 0, \Throwable $e = NULL) {
+    // Log the error message.
+    \Drupal::logger('acq_commerce')->error($message);
     // If error contains any HTML, or contains 'magento' string, use global
     // error message.
     if ($message != strip_tags($message) || $position = stripos($message, 'magento')) {
