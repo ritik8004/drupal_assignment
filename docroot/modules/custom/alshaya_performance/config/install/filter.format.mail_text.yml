@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_performance
+name: 'Mail Text'
+format: mail_text
+weight: 0
+filters:
+  alshaya_image_lazy_load:
+    id: alshaya_image_lazy_load
+    provider: alshaya_performance
+    status: true
+    weight: 0
+    settings: {  }
