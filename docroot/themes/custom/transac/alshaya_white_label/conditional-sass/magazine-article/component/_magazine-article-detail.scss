@@ -181,7 +181,6 @@ body {
       text-transform: none;
       text-align: center;
       color: $magazine-article-title;
-      font-weight: 700;
 
       @include breakpoint($tablet) {
         white-space: nowrap;
