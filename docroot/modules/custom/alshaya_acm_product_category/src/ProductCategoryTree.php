@@ -822,6 +822,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         return TRUE;
       }
     }
+    return FALSE;
   }
 
 }

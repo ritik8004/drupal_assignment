@@ -130,7 +130,6 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
         ->addCacheContexts(['route.name']);
     }
     return AccessResult::forbidden()->addCacheContexts(['route.name']);
-
   }
 
 }
