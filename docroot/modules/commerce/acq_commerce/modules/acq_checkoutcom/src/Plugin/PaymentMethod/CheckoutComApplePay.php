@@ -25,6 +25,13 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   protected $apiHelper;
 
   /**
+   * Checkout.com api wrapper object.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper
+   */
+  protected $checkoutComApi;
+
+  /**
    * CheckoutComApplePay constructor.
    *
    * @param array $configuration
@@ -39,6 +46,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
+    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
   }
 
   /**
@@ -67,11 +75,15 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $settings = [
-      'merchant_id' => 'merchant.com.checkoutmdcdemo.alshaya',
-      'button_style' => 'black',
-      'supported_networks' => ['visa', 'masterCard', 'amex'],
-      'merchant_capabilities' => ['supportsCredit', 'supportsDebit'],
-      'supported_countries' => ['KW'],
+      'merchantIdentifier' => 'merchant.com.checkoutmdcdemo.alshaya',
+      'buttonStyle' => 'black',
+      'supportedNetworks' => 'visa,masterCard,amex',
+      'merchantCapabilities' => 'supports3DS,supportsCredit,supportsDebit',
+      'supportedCountries' => 'KW',
+      'runningTotal' => $this->checkoutComApi->getCheckoutAmount($this->getCart()->totals()['grand']),
+      'storeName' => \Drupal::config('system.site')->get('name'),
+      'countryId' => \Drupal::config('system.date')->get('country.default'),
+      'currencyCode' => \Drupal::config('acq_commerce.currency')->get('iso_currency_code'),
     ];
 
     $complete_form['actions']['apple_wrapper'] = [
