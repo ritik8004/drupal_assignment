@@ -6,7 +6,6 @@ use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -121,17 +120,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
   public function build() {
     $menu_title = $this->configuration['link_title'];
     $alignment_class = 'alshaya-options-' . $this->configuration['link_align'];
-    $links = [];
-    $pages = $this->configFactory->get('alshaya_options_list.settings')->get('alshaya_options_pages');
-    if (!empty($pages)) {
-      foreach ($pages as $page) {
-        $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
-        if (isset($page['menu-title'])) {
-          $links[] = Link::createFromRoute($page['menu-title'], $route_name, []);
-        }
-      }
-    }
-
+    $links = $this->alshayaOptionsService->getOptionsPagesLinks();
     $menu_class = count($links) > 1 ? 'alshaya-multiple-links' : 'alshaya-single-link';
 
     return [
