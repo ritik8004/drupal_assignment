@@ -757,6 +757,8 @@ class AcqSkuDrushCommands extends DrushCommands {
    *
    * It also marks them for re-downloading.
    *
+   * @param string $field
+   *   Field to check.
    * @param array $options
    *   Command options.
    *
@@ -771,14 +773,14 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @options dry-run
    *   Do not update SKU but only show corrupt skus in logs.
    *
-   * @usage drush fix-corrupt-sku-media
+   * @usage drush fix-corrupt-sku-media media
    *   Process all the skus in system with fid in media data.
-   * @usage drush fix-corrupt-sku-media --skus="sku1,sku2"
+   * @usage drush fix-corrupt-sku-media media --skus="sku1,sku2"
    *   Process all the skus specified in option --sku (separated by comma).
    *
    * @aliases fix-corrupt-sku-media
    */
-  public function fixCorruptSkuMedia(array $options = [
+  public function fixCorruptSkuMedia($field = 'media', array $options = [
     'batch_size' => 50,
     'skus' => '',
     'check_file_exists' => FALSE,
@@ -802,7 +804,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       $select->condition('sku', $skus, 'IN');
     }
     else {
-      $select->condition('media__value', '%fid%', 'LIKE');
+      $select->condition($field . '__value', '%fid%', 'LIKE');
     }
 
     $result = $select->execute()->fetchAll();
@@ -824,7 +826,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     foreach (array_chunk($skus, $batch_size) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'correctCorruptMediaChunk'],
-        [$chunk, $check_file_exists, $dry_run, $verbose],
+        [$chunk, $field, $check_file_exists, $dry_run, $verbose],
       ];
     }
 
@@ -839,6 +841,8 @@ class AcqSkuDrushCommands extends DrushCommands {
    *
    * @param array $skus
    *   SKUs to process.
+   * @param string $field
+   *   Field name.
    * @param bool $check_file_exists
    *   Flag - check if file exists in file system or not.
    * @param bool $dry_run
@@ -846,7 +850,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @param bool $verbose
    *   Flag - show debug output or not.
    */
-  public static function correctCorruptMediaChunk(array $skus, $check_file_exists, $dry_run, $verbose) {
+  public static function correctCorruptMediaChunk(array $skus, string $field, $check_file_exists, $dry_run, $verbose) {
     $logger = \Drupal::logger('AcqSkuDrushCommands');
 
     $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
@@ -860,7 +864,7 @@ class AcqSkuDrushCommands extends DrushCommands {
         continue;
       }
 
-      $media = unserialize($sku->get('media')->getString());
+      $media = unserialize($sku->get($field)->getString());
 
       $resave = FALSE;
       foreach ($media ?? [] as $index => $item) {
@@ -907,7 +911,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       }
 
       if ($resave && !$dry_run) {
-        $sku->get('media')->setValue(serialize($media));
+        $sku->get($field)->setValue(serialize($media));
         $sku->save();
       }
     }

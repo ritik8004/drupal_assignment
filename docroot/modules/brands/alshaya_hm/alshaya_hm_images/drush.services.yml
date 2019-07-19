@@ -3,6 +3,5 @@ services:
     class: Drupal\alshaya_hm_images\Commands\AlshayaHmImagesCommands
     arguments:
       - '@database'
-      - '@alshaya_hm_images.skuassetsmanager'
     tags:
       - { name: drush.command }
