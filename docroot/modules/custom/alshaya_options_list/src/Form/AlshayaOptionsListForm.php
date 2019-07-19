@@ -120,6 +120,16 @@ class AlshayaOptionsListForm extends ConfigFormBase {
           '#default_value' => !empty($attribute_option['attributes']) ? $attribute_option['attributes'] : [],
           '#title' => $this->t('The attribute to list on the options page.'),
         ];
+
+        $form['alshaya_options_page'][$key]['alshaya_options_delete'] = [
+          '#type' => 'submit',
+          '#value' => $this->t('Delete'),
+          '#submit' => ['::deleteThis'],
+          '#ajax' => [
+            'callback' => '::addMoreCallback',
+            'wrapper' => 'options-fieldset-wrapper',
+          ],
+        ];
       }
     }
 
@@ -175,6 +185,18 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   public function addOne(array &$form, FormStateInterface $form_state) {
     $options_field = $form_state->get('temp_count') ?? 0;
     $form_state->set('temp_count', ($options_field + 1));
+    $form_state->setRebuild();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteThis(array &$form, FormStateInterface $form_state) {
+    $config = $this->config('alshaya_options_list.settings');
+    $triggering_element = $form_state->getTriggeringElement();
+    $key = $triggering_element['#parents'][1];
+    $config->clear('alshaya_options_pages.' . $key);
+    $config->save();
     $form_state->setRebuild();
   }
 
