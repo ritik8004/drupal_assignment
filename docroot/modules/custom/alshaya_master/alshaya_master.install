@@ -13,7 +13,7 @@ use Drupal\Core\Config\FileStorage;
  *
  * Add string translation for - Forgot password message.
  */
-function alshaya_master_update_8028() {
+function alshaya_master_update_8029() {
   $strings = [
     'Further instructions have been sent to your email address.' => [
       'en' => 'If your account is located, an email will be sent with instructions for resetting your password.',
@@ -22,6 +22,19 @@ function alshaya_master_update_8028() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding display mobile banner field in view.
+ */
+function alshaya_master_update_8028() {
+  $configs = [
+    'filter.format.mail_text',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_master');
 }
 
 /**
