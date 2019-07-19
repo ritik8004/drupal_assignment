@@ -20,8 +20,8 @@ class ConnectorException extends \UnexpectedValueException {
     // If error contains any HTML, or contains 'magento' string, use global
     // error message.
     if ($message != strip_tags($message)
-      || (($position = stripos($message, 'magento')) > -1)
-      || (($position = stripos($message, 'response error')) > -1)) {
+      || (stripos($message, 'magento') > -1)
+      || (stripos($message, 'response error') > -1)) {
       $message = acq_commerce_api_down_global_error_message();
       $message_overridden = TRUE;
     }
