@@ -415,10 +415,8 @@
 }
 
 @include breakpoint($only-mobile) {
-  .promo-banner {
-    .hide-on-mobile {
-      display: none;
-    }
+  div.hide-on-mobile.block-views-blockplp-promotional-banner-block-1 {
+    display: none;
   }
 }
 
