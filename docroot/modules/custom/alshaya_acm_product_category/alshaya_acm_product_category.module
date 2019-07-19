@@ -78,7 +78,7 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
     $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
     $hide_for_mobile = $term ? _alshaya_acm_product_category_hide_plp_banner_for_mobile($term) : FALSE;
     if ($hide_for_mobile) {
-      $variables['content']['#attributes']['class'][] = 'hide-on-mobile';
+      $variables['attributes']['class'][] = 'hide-on-mobile';
     }
   }
 }
