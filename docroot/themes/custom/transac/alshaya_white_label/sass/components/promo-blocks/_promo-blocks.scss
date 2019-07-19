@@ -416,9 +416,7 @@
 
 @include breakpoint($only-mobile) {
   .hide-on-mobile {
-    &.block-views-blockplp-promotional-banner-block-1 {
-      display: none;
-    }
+    display: none;
   }
 }
 
