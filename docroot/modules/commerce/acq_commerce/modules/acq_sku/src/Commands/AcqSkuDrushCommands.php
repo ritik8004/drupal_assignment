@@ -18,14 +18,18 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
 /**
- * class AcqSkuDrushCommands
+ * Class AcqSkuDrushCommands.
  */
 class AcqSkuDrushCommands extends DrushCommands {
+
+  use StringTranslationTrait;
 
   const DELETE_BATCH_COUNT = 200;
 
@@ -186,32 +190,37 @@ class AcqSkuDrushCommands extends DrushCommands {
   /**
    * Run a full synchronization of all commerce product records.
    *
-   * @throws \Drush\Exceptions\UserAbortException
-   *
-   * @command acq_sku:sync-products
-   *
    * @param string $langcode
    *   Sync products available in this langcode.
    * @param string $page_size
    *   Number of items to be synced in one batch.
-   *
    * @param array $options
+   *   Options.
    *
-   * @option skus SKUs to import (like query).
-   * @option category_id Magento category id to sync the products for.
+   * @option skus
+   *   SKUs to import (like query).
+   * @option category_id
+   *   Magento category id to sync the products for.
+   *
+   * @command acq_sku:sync-products
    *
    * @validate-module-enabled acq_sku
    *
    * @aliases acsp,sync-commerce-products
    *
    * @usage drush acsp en 50
-   *   Run a full product synchronization of all available products in store linked to en and page size 50.
-   * @usage drush acsp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
-   *   Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only in store linked to en and page size 50.
+   *   Run a full product synchronization of all available products in store
+   *   linked to en and page size 50.
+   * @usage drush acsp en 50 --skus=\'SKU 1',\'SKU 2',\'SKU 3\''
+   *   Synchronize sku data for the skus SKU 1, SKU 2 & SKU 3 only in store
+   *   linked to en and page size 50.
    * @usage drush acsp en 50 --category_id=1234
-   *   Synchronize sku data for the skus in category with id 1234 only in store linked to en and page size 50.
+   *   Synchronize sku data for the skus in category with id 1234 only in store
+   *   linked to en and page size 50.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
    */
-  public function syncProducts($langcode, $page_size, $options = ['skus' => NULL, 'category_id' => NULL]) {
+  public function syncProducts($langcode, $page_size, array $options = ['skus' => NULL, 'category_id' => NULL]) {
     $langcode = strtolower($langcode);
 
     $store_id = $this->i18nhelper->getStoreIdFromLangcode($langcode);
@@ -280,7 +289,15 @@ class AcqSkuDrushCommands extends DrushCommands {
       // If there are categories to delete.
       if (!empty($orphan_categories)) {
         // Show `tid + cat name + commerce id` for review.
-        $this->io()->table([dt('Category Id'), dt('Category Name'), dt('Category Commerce Id')], $orphan_categories);
+        $this->io()->table(
+          [
+            dt('Category Id'),
+            dt('Category Name'),
+            dt('Category Commerce Id'),
+          ],
+          $orphan_categories
+        );
+
         // Confirmation to delete old categories.
         if ($this->io()->confirm(dt('Are you sure you want to clean these old categories'), FALSE)) {
 
@@ -320,25 +337,26 @@ class AcqSkuDrushCommands extends DrushCommands {
   }
 
   /**
-   * Run a partial synchronization of commerce product records synchronously for testing / dev.
-   *
-   * @command acq_sku:sync-products-test
+   * Run a partial synchronization of commerce product records synchronously.
    *
    * @param int $count
    *   Number of product records to sync.
+   *
+   * @command acq_sku:sync-products-test
    *
    * @validate-module-enabled acq_sku
    *
    * @aliases acdsp,sync-commerce-products-test
    *
    * @usage drush acdsp
-   *   Run a partial synchronization of commerce product records synchronously for testing / dev.
+   *   Run a partial synchronization of commerce product records synchronously.
    */
   public function syncProductsTest($count) {
     $this->output->writeln(dt('Synchronizing @count commerce products for testing / dev...', ['@count' => $count]));
 
+    // @codingStandardsIgnoreLine
     $container = \Drupal::getContainer();
-    foreach ($this->i18nhelper->getStoreLanguageMapping() as $langcode => $store_id) {
+    foreach ($this->i18nhelper->getStoreLanguageMapping() as $store_id) {
       $this->apiWrapper->updateStoreContext($store_id);
 
       $products = $this->apiWrapper->getProducts($count);
@@ -365,10 +383,10 @@ class AcqSkuDrushCommands extends DrushCommands {
     $db = $this->connection;
 
     /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
-    $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     /** @var \Drupal\node\NodeStorageInterface $nodeStorage */
-    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     $query = $db->select('taxonomy_term__field_commerce_id', 'ttfci');
     $query->addField('ttfci', 'field_commerce_id_value', 'commerce_id');
@@ -556,7 +574,9 @@ class AcqSkuDrushCommands extends DrushCommands {
   }
 
   /**
-   * Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).
+   * Flush all commerce data from the site.
+   *
+   * For instance: Products, SKUs, Product Categories and Product Options.
    *
    * @throws \Drush\Exceptions\UserAbortException
    *
@@ -567,7 +587,8 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @aliases accd,clean-synced-data
    *
    * @usage drush accd
-   *   Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).
+   *   Flush all commerce data from the site (Products, SKUs, Product Categories
+   *   and Product Options).
    */
   public function flushSyncedData() {
     if (!$this->io()->confirm(dt("Are you sure you want to clean commerce data?"))) {
@@ -577,13 +598,13 @@ class AcqSkuDrushCommands extends DrushCommands {
 
     // Set batch operation.
     $batch = [
-      'title' => t('Clean synced data'),
-      'init_message' => t('Cleaning synced commerce data starting...'),
+      'title' => $this->t('Clean synced data'),
+      'init_message' => $this->t('Cleaning synced commerce data starting...'),
       'operations' => [
         ['\Drupal\acq_sku\Commands\AcqSkuDrushCommands::skuCleanProcess', []],
       ],
-      'progress_message' => t('Processed @current out of @total.'),
-      'error_message' => t('Synced data could not be cleaned because an error occurred.'),
+      'progress_message' => $this->t('Processed @current out of @total.'),
+      'error_message' => $this->t('Synced data could not be cleaned because an error occurred.'),
       'finished' => '_acq_sku_clean_finished',
     ];
 
@@ -655,7 +676,7 @@ class AcqSkuDrushCommands extends DrushCommands {
 
     $delete = [];
 
-    foreach ($results as $key => $result) {
+    foreach ($results as $result) {
       $context['results'][] = $results['type'] . ' : ' . $result['entity_id'];
       $context['sandbox']['progress']++;
       $context['sandbox']['current_id'] = $result['entity_id'];
@@ -687,13 +708,10 @@ class AcqSkuDrushCommands extends DrushCommands {
   /**
    * Clear linked SKUs cache.
    *
-   * @return void
-   *
-   * @throws \Drush\Exceptions\UserAbortException
+   * @param array $options
+   *   Options.
    *
    * @command acq_sku:clear-linked-skus-cache
-   *
-   * @param array $options
    *
    * @option sku SKU to clean linked skus cache of.
    *
@@ -705,8 +723,10 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Clear linked SKUs cache for all SKUs.
    * @usage drush acclsc --skus=SKU
    *   Clear linked SKUs cache for particular SKU.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
    */
-  public function flushLinkedSkuCache($options = ['sku' => NULL]) {
+  public function flushLinkedSkuCache(array $options = ['sku' => NULL]) {
     // Check if we are asked to clear cache of specific SKU.
     if (!empty($options['sku'])) {
       if ($sku_entity = SKU::loadFromSku($options['sku'])) {
@@ -730,6 +750,171 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->linkedSkuCache->deleteAll();
 
     $this->output->writeln(dt('Cleared all linked SKUs cache.'));
+  }
+
+  /**
+   * Command to go through all the media and find ones with corrupt data.
+   *
+   * It also marks them for re-downloading.
+   *
+   * @param string $field
+   *   Field to check.
+   * @param array $options
+   *   Command options.
+   *
+   * @command acq_sku:fix-corrupt-sku-media
+   *
+   * @option batch_size
+   *   Batch size.
+   * @option skus
+   *   Comma separated list of skus to limit process to those skus.
+   * @options check_file_exists
+   *   Check if file exists, this will take more time.
+   * @options dry-run
+   *   Do not update SKU but only show corrupt skus in logs.
+   *
+   * @usage drush fix-corrupt-sku-media media
+   *   Process all the skus in system with fid in media data.
+   * @usage drush fix-corrupt-sku-media media --skus="sku1,sku2"
+   *   Process all the skus specified in option --sku (separated by comma).
+   *
+   * @aliases fix-corrupt-sku-media
+   */
+  public function fixCorruptSkuMedia($field = 'media', array $options = [
+    'batch_size' => 50,
+    'skus' => '',
+    'check_file_exists' => FALSE,
+    'dry-run' => FALSE,
+  ]) {
+
+    $batch_size = (int) $options['batch_size'];
+    $check_file_exists = (bool) $options['check_file_exists'];
+    $dry_run = (bool) $options['dry-run'];
+    $skus = (string) $options['skus'];
+    $skus = array_filter(explode(',', $skus));
+    $verbose = $options['verbose'];
+
+    $this->logger()->notice('Checking all media...');
+
+    $select = $this->connection->select('acq_sku_field_data');
+    $select->fields('acq_sku_field_data', ['sku']);
+    $select->condition('default_langcode', 1);
+
+    if ($skus) {
+      $select->condition('sku', $skus, 'IN');
+    }
+    else {
+      $select->condition($field . '__value', '%fid%', 'LIKE');
+    }
+
+    $result = $select->execute()->fetchAll();
+
+    $skus = array_column($result, 'sku');
+
+    // If no sku available, then no need to process further as with empty
+    // array, drush throws error.
+    if (!$skus) {
+      $this->output->writeln(dt('No matched sku found for corrupt media check.'));
+      return;
+    }
+
+    $batch = [
+      'title' => 'Process skus',
+      'error_message' => 'Error occurred while processing skus, please check logs.',
+    ];
+
+    foreach (array_chunk($skus, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'correctCorruptMediaChunk'],
+        [$chunk, $field, $check_file_exists, $dry_run, $verbose],
+      ];
+    }
+
+    batch_set($batch);
+    drush_backend_batch_process();
+
+    $this->logger()->notice('Processed all skus to find missing media items.');
+  }
+
+  /**
+   * Batch callback.
+   *
+   * @param array $skus
+   *   SKUs to process.
+   * @param string $field
+   *   Field name.
+   * @param bool $check_file_exists
+   *   Flag - check if file exists in file system or not.
+   * @param bool $dry_run
+   *   Flag - do not save skus yet, only output errors.
+   * @param bool $verbose
+   *   Flag - show debug output or not.
+   */
+  public static function correctCorruptMediaChunk(array $skus, string $field, $check_file_exists, $dry_run, $verbose) {
+    $logger = \Drupal::logger('AcqSkuDrushCommands');
+
+    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+
+    foreach ($skus as $sku_string) {
+      $sku = SKU::loadFromSku($sku_string);
+      if (!($sku instanceof SKU)) {
+        continue;
+      }
+
+      $media = unserialize($sku->get($field)->getString());
+
+      $resave = FALSE;
+      foreach ($media ?? [] as $index => $item) {
+        // If fid is not set, we will let it be downloaded in
+        // normal flow.
+        if (empty($item['fid'])) {
+          continue;
+        }
+
+        $redownload = '';
+        // If fid is empty, we have some issue, we will redownload.
+        if (empty($item['fid'])) {
+          $redownload = 'missing fid';
+        }
+        else {
+
+          $file = $fileStorage->load($item['fid']);
+
+          if ($file instanceof FileInterface) {
+            if ($check_file_exists) {
+              $data = @file_get_contents($file_system->realpath($file->getFileUri()));
+              if (empty($data)) {
+                $redownload = 'missing file';
+              }
+            }
+          }
+          else {
+            $redownload = 'missing file entity';
+          }
+        }
+
+        if ($redownload) {
+          $logger->error('Removing fid from media item from @sku, for @reason. @item.', [
+            '@sku' => $sku->getSku(),
+            '@reason' => $redownload,
+            '@item' => $verbose ? json_encode($item) : '',
+          ]);
+
+          $resave = TRUE;
+
+          unset($item['fid']);
+          $media[$index] = $item;
+        }
+      }
+
+      if ($resave && !$dry_run) {
+        $sku->get($field)->setValue(serialize($media));
+        $sku->save();
+      }
+    }
   }
 
 }
