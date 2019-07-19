@@ -539,3 +539,19 @@
     }
   }
 }
+
+#drupal-modal {
+  .acq-content-product-modal {
+    .slider-position-bottom {
+      .cloudzoom {
+        .cloudzoom__thumbnails {
+          #lightSlider {
+            @include breakpoint($desktop) {
+              min-width: 35.125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
