@@ -27,7 +27,7 @@ function alshaya_master_update_8029() {
 /**
  * Implements hook_update_N().
  *
- * Adding display mobile banner field in view.
+ * Updating mail_text filter config.
  */
 function alshaya_master_update_8028() {
   $configs = [

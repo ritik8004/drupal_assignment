@@ -56,6 +56,11 @@
         top: 1px;
         transform: rotate(270deg);
         color: $magazine-article-read-more-icon-color;
+
+        html[lang=ar] & {
+          top: 0;
+          transform: rotate(90deg);
+        }
       }
 
       &:hover {
