@@ -3,9 +3,7 @@
 namespace Drupal\alshaya_hm_images\Commands;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Database\Connection;
-use Drupal\file\FileInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -23,23 +21,13 @@ class AlshayaHmImagesCommands extends DrushCommands {
   private $connection;
 
   /**
-   * Assets Manager.
-   *
-   * @var \Drupal\alshaya_hm_images\SkuAssetManager
-   */
-  private $assetsManager;
-
-  /**
    * AlshayaHmImagesCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
-   * @param \Drupal\alshaya_hm_images\SkuAssetManager $assets_manager
-   *   Assets Manager.
    */
-  public function __construct(Connection $connection, SkuAssetManager $assets_manager) {
+  public function __construct(Connection $connection) {
     $this->connection = $connection;
-    $this->assetsManager = $assets_manager;
   }
 
   /**
@@ -180,163 +168,6 @@ class AlshayaHmImagesCommands extends DrushCommands {
     }
 
     fclose($fp);
-  }
-
-  /**
-   * Command to go through all the assets and find ones with corrupt data.
-   *
-   * It also marks them for re-downloading.
-   *
-   * @param array $options
-   *   Command options.
-   *
-   * @command alshaya_hm_images:correct-corrupt-assets
-   *
-   * @option batch_size
-   *   Batch size.
-   * @option skus
-   *   Comma separated list of skus to limit process to those skus.
-   *
-   * @usage drush hm-correct-corrupt-assets
-   *   Process all the skus in system with drupal_uri in asset data.
-   * @usage drush hm-correct-corrupt-assets --skus="sku1,sku2"
-   *   Process all the skus specified in option --sku (separated by comma).
-   *
-   * @aliases hm-correct-corrupt-assets
-   */
-  public function correctCorruptAssets(array $options = [
-    'batch_size' => 50,
-    'skus' => '',
-    'check_file_exists' => FALSE,
-    'dry-run' => FALSE,
-  ]) {
-
-    $batch_size = (int) $options['batch_size'];
-    $check_file_exists = (bool) $options['check_file_exists'];
-    $dry_run = (bool) $options['dry-run'];
-    $skus = (string) $options['skus'];
-    $skus = array_filter(explode(',', $skus));
-    $verbose = $options['verbose'];
-
-    $this->logger()->notice('Checking all assets...');
-
-    $select = $this->connection->select('acq_sku_field_data');
-    $select->fields('acq_sku_field_data', ['sku']);
-    $select->condition('default_langcode', 1);
-    $select->condition('type', 'simple');
-
-    if ($skus) {
-      $select->condition('sku', $skus, 'IN');
-    }
-    else {
-      $select->condition('attr_assets__value', '%drupal_uri%', 'LIKE');
-    }
-
-    $result = $select->execute()->fetchAll();
-
-    $skus = array_column($result, 'sku');
-
-    // If no sku available, then no need to process further as with empty
-    // array, drush throws error.
-    if (!$skus) {
-      $this->output->writeln(dt('No matched sku found for corrupt assets check.'));
-      return;
-    }
-
-    $batch = [
-      'title' => 'Process assets',
-      'error_message' => 'Error occurred while processing assets, please check logs.',
-    ];
-
-    foreach (array_chunk($skus, $batch_size) as $chunk) {
-      $batch['operations'][] = [
-        [__CLASS__, 'correctCorruptAssetsChunk'],
-        [$chunk, $check_file_exists, $dry_run, $verbose],
-      ];
-    }
-
-    batch_set($batch);
-    drush_backend_batch_process();
-
-    $this->logger()->notice('Processed all assets to find missing assets and download.');
-  }
-
-  /**
-   * Batch callback.
-   *
-   * @param array $skus
-   *   SKUs to process.
-   * @param bool $check_file_exists
-   *   Flag - check if file exists in file system or not.
-   * @param bool $dry_run
-   *   Flag - do not save skus yet, only output errors.
-   * @param bool $verbose
-   *   Flag - show debug output or not.
-   */
-  public static function correctCorruptAssetsChunk(array $skus, $check_file_exists, $dry_run, $verbose) {
-    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
-    $logger = \Drupal::logger('AlshayaHmImagesCommands');
-    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-    $file_system = \Drupal::service('file_system');
-
-    foreach ($skus as $sku_string) {
-      $sku = SKU::loadFromSku($sku_string);
-      if (!($sku instanceof SKU)) {
-        continue;
-      }
-
-      $assets = unserialize($sku->get('attr_assets')->getString());
-
-      $resave = FALSE;
-      foreach ($assets ?? [] as $index => $asset) {
-        // If drupal_uri is not set, we will let it be downloaded in
-        // normal flow.
-        if (empty($asset['drupal_uri'])) {
-          continue;
-        }
-
-        $redownload = '';
-        // If fid is empty, we have some issue, we will redownload.
-        if (empty($asset['fid'])) {
-          $redownload = 'missing fid';
-        }
-        else {
-
-          $file = $fileStorage->load($asset['fid']);
-
-          if ($file instanceof FileInterface) {
-            if ($check_file_exists) {
-              $data = file_get_contents($file_system->realpath($file->getFileUri()));
-              if (empty($data)) {
-                $redownload = 'missing file';
-              }
-            }
-          }
-          else {
-            $redownload = 'missing file entity';
-          }
-        }
-
-        if ($redownload) {
-          $logger->error('Removing fid and/or drupal_uri from asset from @sku, for @reason. @asset.', [
-            '@sku' => $sku->getSku(),
-            '@reason' => $redownload,
-            '@asset' => $verbose ? json_encode($asset) : '',
-          ]);
-
-          $resave = TRUE;
-
-          unset($asset['drupal_uri']);
-          unset($asset['fid']);
-          $assets[$index] = $asset;
-        }
-      }
-
-      if ($resave && !$dry_run) {
-        $sku->get('attr_assets')->setValue(serialize($assets));
-        $sku->save();
-      }
-    }
   }
 
 }
