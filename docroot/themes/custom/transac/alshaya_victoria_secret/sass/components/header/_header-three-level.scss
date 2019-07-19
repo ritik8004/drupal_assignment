@@ -101,7 +101,6 @@
     &:hover > ul.menu--two__list {
       @include breakpoint($desktop) {
         padding-top: 1.5rem;
-        height: 20.5rem !important;
         min-height: 0;
       }
     }
