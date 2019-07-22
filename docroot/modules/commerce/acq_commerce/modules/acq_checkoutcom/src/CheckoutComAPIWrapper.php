@@ -353,7 +353,7 @@ class CheckoutComAPIWrapper {
 
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
         throw new \Exception(
-          $this->t('Could not make request to checkout.com, please contact administrator if the error persist.')
+          $this->t('Could not make request to checkout.com, please contact our customer service team for assistance.')
         );
       }
       elseif ($e instanceof RequestException) {
