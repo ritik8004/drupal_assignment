@@ -49,3 +49,5 @@ acq_checkoutcom.apple_pay_validate:
     _controller: '\Drupal\acq_checkoutcom\Controller\ApplePayController::validate'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: TRUE

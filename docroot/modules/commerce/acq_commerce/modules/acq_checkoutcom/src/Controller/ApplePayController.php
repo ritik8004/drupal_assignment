@@ -5,9 +5,9 @@ namespace Drupal\acq_checkoutcom\Controller;
 use Drupal\acq_checkoutcom\CheckoutComFormHelper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\rest\ModifiedResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -83,8 +83,6 @@ class ApplePayController implements ContainerInjectionInterface {
 
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_SSLCERT, $settings['merchantCertificate']);
-    curl_setopt($ch, CURLOPT_SSLKEY, $settings['processingCertificate']);
-    curl_setopt($ch, CURLOPT_SSLKEYPASSWD, $settings['processingCertificatePass']);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
 
@@ -99,7 +97,7 @@ class ApplePayController implements ContainerInjectionInterface {
 
     curl_close($ch);
 
-    return new ModifiedResourceResponse($return);
+    return new JsonResponse($return);
   }
 
 }

@@ -98,23 +98,24 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
       '#id' => 'ckoApplePayButton',
       '#attributes' => [
         'class' => [
-          'apple-pay-button',
+          'apple-pay-button-with-text',
+          'apple-pay-button-white-with-text',
           'action',
           'primary',
           'checkout',
         ],
+        'lang' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
       ],
+      '#value' => '<span class="text">' . $this->t('Buy with') . '</span><span class="logo"></span>',
     ];
 
     $complete_form['actions']['apple_wrapper']['launch_markup'] = [
       '#type' => 'inline_template',
-      '#template' => '
-      <p style="display:none;" id="got_notactive">ApplePay is possible on this browser, but not currently activated.</p>
-      <p style="display:none;" id="notgot">ApplePay is not available on this browser</p>
-      <div data-bind="visible: launchApplePay()"></div>
-    ',
+      '#template' => '<div data-bind="visible: launchApplePay()"></div>',
       '#context' => [],
     ];
+
+    $complete_form['actions']['next']['#access'] = FALSE;
 
     return $pane_form;
   }

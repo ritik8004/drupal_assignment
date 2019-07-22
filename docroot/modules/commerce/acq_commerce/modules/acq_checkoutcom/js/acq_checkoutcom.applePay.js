@@ -67,13 +67,7 @@
         if (canMakePayments) {
           $(button_target, checkoutApplePay.context).css('display', 'block');
         }
-        else {
-          $('#got_notactive', checkoutApplePay.context).css('display', 'block');
-        }
       });
-    }
-    else {
-      $('#notgot', checkoutApplePay.context).css('display', 'block');
     }
 
     // Handle the events.
@@ -95,7 +89,7 @@
       };
 
       // Start the payment session.
-      var session = new ApplePaySession(1, paymentRequest);
+      var session = new ApplePaySession(6, paymentRequest);
 
       // Merchant Validation.
       session.onvalidatemerchant = function (event) {
