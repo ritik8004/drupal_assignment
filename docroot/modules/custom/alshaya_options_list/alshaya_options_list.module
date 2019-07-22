@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 
 /**
  * Implements hook_theme().
@@ -46,7 +47,7 @@ function alshaya_options_list_theme($existing, $type, $theme, $path) {
 function alshaya_options_list_taxonomy_term_presave(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
   }
 }
 
@@ -56,6 +57,6 @@ function alshaya_options_list_taxonomy_term_presave(TermInterface $term) {
 function alshaya_options_list_taxonomy_term_delete(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
   }
 }

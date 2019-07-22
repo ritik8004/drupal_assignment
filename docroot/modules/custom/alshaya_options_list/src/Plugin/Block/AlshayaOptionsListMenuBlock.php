@@ -135,7 +135,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['alshaya-options-page']);
+    return Cache::mergeTags(parent::getCacheTags(), [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
   }
 
 }

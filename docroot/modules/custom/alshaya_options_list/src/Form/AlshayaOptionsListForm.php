@@ -200,7 +200,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     // Rebuild routes so that routes get deleted.
     $this->routerBuilder->rebuild();
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
 
     $form_state->setRebuild();
   }
@@ -237,7 +237,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $this->routerBuilder->rebuild();
 
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
 
     return parent::submitForm($form, $form_state);
   }

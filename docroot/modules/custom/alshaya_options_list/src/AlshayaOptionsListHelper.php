@@ -16,6 +16,11 @@ use Drupal\acq_sku\SKUFieldsManager;
 class AlshayaOptionsListHelper {
 
   /**
+   * Options page cache tag.
+   */
+  const OPTIONS_PAGE_CACHETAG = 'alshaya-options-page';
+
+  /**
    * Database connection service object.
    *
    * @var \Drupal\Core\Database\Connection
