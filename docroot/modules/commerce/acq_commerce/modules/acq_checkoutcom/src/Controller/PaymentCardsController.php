@@ -13,11 +13,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class CustomerController.
+ * Class PaymentCardsController.
  *
  * @package Drupal\acq_checkoutcom\Controller
  */
-class CustomerController extends ControllerBase {
+class PaymentCardsController extends ControllerBase {
 
   /**
    * Renderer service object.
@@ -55,7 +55,7 @@ class CustomerController extends ControllerBase {
   protected $messenger;
 
   /**
-   * CustomerController constructor.
+   * PaymentCardsController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Request $current_request
    *   Current request object.
