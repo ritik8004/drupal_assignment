@@ -735,7 +735,7 @@ class MobileAppUtility {
       $doc = new \DOMDocument();
       $doc->loadHTML((string) $label['image']);
       $xpath = new \DOMXPath($doc);
-      $label['image'] = Url::fromUserInput($xpath->evaluate("string(//img/@src)"), ['absolute' => TRUE])->toString();
+      $label['image'] = $xpath->evaluate("string(//img/@data-src)");
     }
 
     return $labels;
