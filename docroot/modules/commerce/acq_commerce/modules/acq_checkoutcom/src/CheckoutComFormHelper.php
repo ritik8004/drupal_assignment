@@ -247,9 +247,19 @@ class CheckoutComFormHelper {
       'currencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
     ];
 
+    return $settings;
+  }
+
+  /**
+   * Get all apple pay secret info.
+   *
+   * @return array
+   *   Apple pay config.
+   */
+  public function getApplePaySecretInfo() {
     // Add secret info from $settings.
     $secret_info = Settings::get('apple_pay_secret_info');
-    $settings += [
+    $settings = [
       'merchantCertificate' => $secret_info['merchantCertificate'],
       'processingCertificate' => $secret_info['processingCertificate'],
       'processingCertificatePass' => $secret_info['processingCertificatePass'],

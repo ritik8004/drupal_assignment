@@ -89,7 +89,7 @@
       };
 
       // Start the payment session.
-      var session = new ApplePaySession(6, paymentRequest);
+      var session = new ApplePaySession(1, paymentRequest);
 
       // Merchant Validation.
       session.onvalidatemerchant = function (event) {
