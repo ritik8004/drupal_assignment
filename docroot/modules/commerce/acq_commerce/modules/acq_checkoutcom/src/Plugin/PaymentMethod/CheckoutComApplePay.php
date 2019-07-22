@@ -98,11 +98,11 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
       '#type' => 'inline_template',
       '#template' => '
         <button id="ckoApplePayButton" lang="' . $lang . '"
-          data-bind="visible: launchApplePay()" 
           class="apple-pay-button apple-pay-button-with-text apple-pay-button-black-with-text action primary checkout form-submit">
           <span class="text">' . $text . '</span>
           <span class="logo"></span>
         </button>
+        <div data-bind="visible: launchApplePay()"></div>
       ',
     ];
 
