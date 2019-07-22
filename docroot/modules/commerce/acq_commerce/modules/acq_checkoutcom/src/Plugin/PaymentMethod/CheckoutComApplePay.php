@@ -92,27 +92,18 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
       ],
     ];
 
+    $lang = strtolower(\Drupal::languageManager()->getCurrentLanguage()->getId());
+    $text = $this->t('Buy with');
     $complete_form['actions']['apple_wrapper']['apple_pay'] = [
-      '#type' => 'button',
-      '#title' => 'Apple pay',
-      '#id' => 'ckoApplePayButton',
-      '#attributes' => [
-        'class' => [
-          'apple-pay-button-with-text',
-          'apple-pay-button-white-with-text',
-          'action',
-          'primary',
-          'checkout',
-        ],
-        'lang' => \Drupal::languageManager()->getCurrentLanguage()->getId(),
-      ],
-      '#value' => '<span class="text">' . $this->t('Buy with') . '</span><span class="logo"></span>',
-    ];
-
-    $complete_form['actions']['apple_wrapper']['launch_markup'] = [
       '#type' => 'inline_template',
-      '#template' => '<div data-bind="visible: launchApplePay()"></div>',
-      '#context' => [],
+      '#template' => '
+        <button id="ckoApplePayButton" lang="' . $lang . '"
+          data-bind="visible: launchApplePay()" 
+          class="apple-pay-button apple-pay-button-with-text apple-pay-button-black-with-text action primary checkout form-submit">
+          <span class="text">' . $text . '</span>
+          <span class="logo"></span>
+        </button>
+      ',
     ];
 
     $complete_form['actions']['next']['#access'] = FALSE;
