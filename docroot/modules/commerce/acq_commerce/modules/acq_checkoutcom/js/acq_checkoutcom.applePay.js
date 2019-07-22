@@ -13,7 +13,7 @@
     }
 
     performValidation (valURL) {
-      var controllerUrl = Drupal.url('checkout_com/payment/applepayvalidation');
+      var controllerUrl = Drupal.url('checkoutcom/applepay/validate');
       var validationUrl = controllerUrl + '?u=' + valURL;
 
       return new Promise(function(resolve, reject) {

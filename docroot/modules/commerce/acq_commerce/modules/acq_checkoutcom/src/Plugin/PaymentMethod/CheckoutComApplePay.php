@@ -25,6 +25,13 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   protected $apiHelper;
 
   /**
+   * Form helper.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComFormHelper
+   */
+  protected $formHelper;
+
+  /**
    * CheckoutComApplePay constructor.
    *
    * @param array $configuration
@@ -39,6 +46,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
+    $this->formHelper = \Drupal::service('acq_checkoutcom.form_helper');
   }
 
   /**
@@ -66,17 +74,8 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $settings = [
-      'merchantIdentifier' => 'merchant.com.checkoutmdcdemo.alshaya',
-      'buttonStyle' => 'black',
-      'supportedNetworks' => 'visa,masterCard,amex',
-      'merchantCapabilities' => 'supports3DS,supportsCredit,supportsDebit',
-      'supportedCountries' => 'KW',
-      'runningTotal' => $this->getCart()->totals()['grand'],
-      'storeName' => \Drupal::config('system.site')->get('name'),
-      'countryId' => \Drupal::config('system.date')->get('country.default'),
-      'currencyCode' => \Drupal::config('acq_commerce.currency')->get('iso_currency_code'),
-    ];
+    $settings = $this->formHelper->getApplePayConfig();
+    $settings['runningTotal'] = $this->getCart()->totals()['grand'];
 
     $complete_form['actions']['apple_wrapper'] = [
       '#type' => 'container',

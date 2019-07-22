@@ -5,6 +5,7 @@ namespace Drupal\acq_checkoutcom;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -222,6 +223,39 @@ class CheckoutComFormHelper {
     ];
 
     return $form;
+  }
+
+  /**
+   * Get all apple pay configuration.
+   *
+   * @return array
+   *   Apple pay config.
+   */
+  public function getApplePayConfig() {
+    // @TODO: Replace it with data from API.
+    $settings = [
+      'merchantIdentifier' => 'merchant.com.checkoutmdcdemo.alshaya',
+      'supportedNetworks' => 'visa,masterCard,amex',
+      'merchantCapabilities' => 'supports3DS,supportsCredit,supportsDebit',
+      'supportedCountries' => 'KW',
+    ];
+
+    // Add site info from config.
+    $settings += [
+      'storeName' => $this->configFactory->get('system.site')->get('name'),
+      'countryId' => $this->configFactory->get('system.date')->get('country.default'),
+      'currencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
+    ];
+
+    // Add secret info from $settings.
+    $secret_info = Settings::get('apple_pay_secret_info');
+    $settings += [
+      'merchantCertificate' => $secret_info['merchantCertificate'],
+      'processingCertificate' => $secret_info['processingCertificate'],
+      'processingCertificatePass' => $secret_info['processingCertificatePass'],
+    ];
+
+    return $settings;
   }
 
 }
