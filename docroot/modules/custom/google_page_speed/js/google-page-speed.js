@@ -76,7 +76,12 @@
         });
 
         var initState= {selectedValues: []};
-        // put the columns into this data table (skip column 0)
+        /**
+         * Put the urls into this url table.
+         * Skipping column 0 because column 0 contains Date object.
+         * We only need urls to be filtered.
+         * See line 72.
+         */
         for (var i = 1; i < scoreTable.getNumberOfColumns(); i++) {
           urlsTable.addRow([i, scoreTable.getColumnLabel(i)]);
           initState.selectedValues.push(scoreTable.getColumnLabel(i));
@@ -116,7 +121,7 @@
               allowMultiple: true,
               selectedValuesLayout: 'below',
               allowNone: false,
-              caption: 'Choose an URL...',
+              caption: Drupal.t('Choose an URL'),
               labelStacking: 'vertical'
             }
           },
