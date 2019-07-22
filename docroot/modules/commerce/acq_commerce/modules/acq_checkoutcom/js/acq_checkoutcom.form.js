@@ -92,7 +92,7 @@
 
       // Validate checkout.com payment form.
       Drupal.ajax({
-        url: Drupal.url('checkoutcom/process/payment-form'),
+        url: Drupal.url('checkoutcom/submit/payment-form'),
         element: $('#edit-actions-next').get(0),
         base: false,
         progress: {type: 'throbber'},

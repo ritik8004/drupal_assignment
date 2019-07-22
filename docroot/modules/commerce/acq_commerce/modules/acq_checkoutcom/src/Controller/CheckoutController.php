@@ -64,7 +64,7 @@ class CheckoutController implements ContainerInjectionInterface {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   AJAX Response.
    */
-  public function processPaymentForm(Request $request) {
+  public function submitMakePaymentForm(Request $request) {
     $request_params = $request->request->all();
     if (!is_array($request_params)) {
       throw new NotFoundHttpException();
