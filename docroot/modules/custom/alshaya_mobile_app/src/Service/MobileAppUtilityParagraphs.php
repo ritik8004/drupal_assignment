@@ -290,6 +290,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           ],
           'promo_block' => [
             'fields' => [
+              'field_banner' => [
+                'callback' => 'getImages',
+                'label' => 'field_banner',
+              ] + $default_values,
               'field_promotion_image_mobile' => [
                 'callback' => 'getImages',
                 'label' => 'image',
