@@ -192,9 +192,9 @@ class SkuImagesManager {
       $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
       $static[$static_id] = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
 
-      foreach ($static[$static_id]['media_items']['images'] ?? [] as &$item) {
+      foreach ($static[$static_id]['media_items']['images'] ?? [] as $key => $item) {
         if (empty($item['label'])) {
-          $item['label'] = $sku->label();
+          $static[$static_id]['media_items']['images'][$key]['label'] = $sku->label();
         }
       }
     }
@@ -1152,7 +1152,7 @@ class SkuImagesManager {
           'mediumurl' => $image_medium,
           'zoomurl' => $image_zoom,
           'fullurl' => $original_image,
-          'label' => $media_item['label'],
+          'label' => $media_item['label'] ?? '',
           'type' => 'image',
         ];
       }
