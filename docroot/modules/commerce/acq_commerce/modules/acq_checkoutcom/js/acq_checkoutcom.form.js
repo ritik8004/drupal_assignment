@@ -9,6 +9,7 @@
   Drupal.checkoutComProcessed = false;
   Drupal.checkoutComTokenised = false;
   var oldBillingAddress = '';
+  var oldCardInfo = '';
   Drupal.behaviors.acqCheckoutComForm = {
     attach: function attach(context) {
       $('.checkoutcom-credit-card-exp-year-select', context)
@@ -80,6 +81,7 @@
 
     // Remove all error messages displayed right now before validating again.
     $(form).find('.form-item--error-message, label.error').remove();
+    $(form).find('.checkoutcom-global-error').remove();
 
     // Collect data to be processed.
     var billingAddress = $(form).find('input:not(.checkoutcom-input), select:not(.checkoutcom-input)').serialize();
@@ -110,30 +112,39 @@
     element.parent().append(errorDiv);
   };
 
+  // Helper method to display global error.
+  Drupal.checkoutComShowGlobalError = function (error) {
+    Drupal.checkoutComProcessed = false;
+    var errorWrapper = $('<div class="messages__wrapper layout-container checkoutcom-global-error" />');
+    var errorDiv = $('<div class="messages messages--error"></div>').html(error);
+    errorWrapper.append(errorDiv);
+    $('#payment_details_checkout_com').parents('form').find('.checkoutcom-global-error').remove();
+    $('#payment_details_checkout_com').parents('form').prepend(errorWrapper);
+    window.scrollTo(0, 0);
+  };
+
   // Handle api error which triggered on card tokenisation fail.
   CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
     if (event.data.errorCode === '70000') {
       Drupal.checkoutComTokenisesd = false;
-
-      // Map checkoutkit error codes with related field to display errors.
-      const elements = {
-        '70067': $('#cardNumber'),
-        '70063': $('#cardMonth'),
-        '70065': $('#cardYear'),
-        '70105': $('#cardCvv'),
-      };
-
-      for (var key in event.data.errorMessageCodes) {
-        var code = event.data.errorMessageCodes[key];
-        Drupal.checkoutComShowError(elements[code], event.data.errors[key]);
-      }
+      Drupal.checkoutComShowGlobalError(Drupal.t('Transaction failed. Please try again or contact our customer service team for assistance.'));
     }
   });
 
   // Try to create card token for checkout.com if it's not already generated.
   $.fn.checkoutComCreateCardToken = function() {
-    if (Drupal.checkoutComTokenised || $('#cardNumber').length === 0) {
+    if ($('#cardNumber').length === 0) {
       Drupal.checkoutComTokenised = true;
+      return;
+    }
+
+    var cardInfo = $('.payment_card_new').find('input.checkoutcom-input, select.checkoutcom-input').serialize();
+    if (oldCardInfo !== cardInfo) {
+      oldCardInfo = cardInfo;
+      Drupal.checkoutComTokenised = false;
+    }
+
+    if (Drupal.checkoutComTokenised) {
       return;
     }
 
@@ -167,15 +178,24 @@
   // Submit form on success.
   $.fn.checkoutPaymentSuccess = function () {
     Drupal.checkoutComProcessed = true;
-    $('#payment_details_checkout_com').hide();
-    if (Drupal.checkoutComTokenised) {
+    // Wait for tokenisation before submitting form.
+    new Promise(function (resolve, reject) {
+      var wait_for_tokenisation = setInterval(function () {
+        if (Drupal.checkoutComTokenised === true) {
+          clearInterval(wait_for_tokenisation);
+          resolve();
+        }
+      }, 100);
+    }).then(function () {
+      document.getElementById('payment_details_checkout_com').style.display = 'none';
+
       if ($('.checkoutcom-input').length > 0) {
         $('.checkoutcom-input').each(function () {
           $(this).val('');
         });
       }
       $('#payment_details_checkout_com').parents('form').submit();
-    }
+    });
   };
 
 })(jQuery, Drupal, drupalSettings);
