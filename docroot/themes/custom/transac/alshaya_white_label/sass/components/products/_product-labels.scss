@@ -10,6 +10,10 @@
 
     .c-plp & {
       z-index: 1;
+
+      @include breakpoint($only-mobile) {
+        z-index: 0;
+      }
     }
 
     &.top {
