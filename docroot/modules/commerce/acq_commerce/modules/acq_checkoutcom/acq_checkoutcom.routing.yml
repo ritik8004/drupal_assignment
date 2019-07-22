@@ -51,3 +51,11 @@ acq_checkoutcom.apple_pay_validate:
     _permission: 'access content'
   options:
     no_cache: TRUE
+
+acq_checkoutcom.process_payment_form:
+  path: '/checkoutcom/process/payment-form'
+  defaults:
+    _title: 'Validate payment form and process data'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutController::processPaymentForm'
+  requirements:
+    _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'

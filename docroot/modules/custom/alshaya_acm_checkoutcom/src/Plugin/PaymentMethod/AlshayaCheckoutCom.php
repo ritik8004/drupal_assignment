@@ -31,7 +31,9 @@ class AlshayaCheckoutCom extends CheckoutCom {
       ],
       '#attached' => [
         'library' => [
+          $this->getCheckoutKitLibrary(),
           'alshaya_acm_checkoutcom/alshaya_checkoutcom',
+          'acq_checkoutcom/checkoutcom.form',
         ],
       ],
     ];
@@ -130,6 +132,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
                 '#tree' => FALSE,
                 '#attributes' => [
                   'id' => ['payment_card_' . $card_id],
+                  'class' => ['payment_card_new'],
                 ],
               ];
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
@@ -147,6 +150,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
         '#tree' => FALSE,
         '#attributes' => [
           'id' => ['payment_method_new'],
+          'class' => ['payment_card_new'],
         ],
       ];
 
