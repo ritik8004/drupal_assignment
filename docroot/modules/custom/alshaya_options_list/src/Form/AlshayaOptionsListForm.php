@@ -120,6 +120,16 @@ class AlshayaOptionsListForm extends ConfigFormBase {
           '#default_value' => !empty($attribute_option['attributes']) ? $attribute_option['attributes'] : [],
           '#title' => $this->t('The attribute to list on the options page.'),
         ];
+
+        $form['alshaya_options_page'][$key]['alshaya_options_delete'] = [
+          '#type' => 'submit',
+          '#value' => $this->t('Delete'),
+          '#submit' => ['::deleteThis'],
+          '#ajax' => [
+            'callback' => '::addRemoveCallback',
+            'wrapper' => 'options-fieldset-wrapper',
+          ],
+        ];
       }
     }
 
@@ -155,7 +165,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#value' => $this->t('Add More'),
       '#submit' => ['::addOne'],
       '#ajax' => [
-        'callback' => '::addmoreCallback',
+        'callback' => '::addRemoveCallback',
         'wrapper' => 'options-fieldset-wrapper',
       ],
     ];
@@ -181,7 +191,24 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function addmoreCallback(array &$form, FormStateInterface $form_state) {
+  public function deleteThis(array &$form, FormStateInterface $form_state) {
+    $config = $this->config('alshaya_options_list.settings');
+    $triggering_element = $form_state->getTriggeringElement();
+    $key = $triggering_element['#parents'][1];
+    $config->clear('alshaya_options_pages.' . $key);
+    $config->save();
+    // Rebuild routes so that routes get deleted.
+    $this->routerBuilder->rebuild();
+    // Invalidate page cache.
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
+
+    $form_state->setRebuild();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addRemoveCallback(array &$form, FormStateInterface $form_state) {
     return $form['alshaya_options_page'];
   }
 
@@ -210,7 +237,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $this->routerBuilder->rebuild();
 
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
 
     return parent::submitForm($form, $form_state);
   }
