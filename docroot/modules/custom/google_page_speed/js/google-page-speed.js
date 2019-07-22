@@ -53,10 +53,10 @@
   Drupal.drawChart = function () {
     var dataTable = new google.visualization.DataTable();
     dataTable.addColumn('datetime', 'Date');
+
     for (var url_id in urlObject.url){
       if (urlObject.url.hasOwnProperty(url_id)) {
         dataTable.addColumn('number', urlObject.url[url_id]);
-        addCheckbox(url_id, urlObject.url[url_id]);
       }
     }
 
@@ -88,12 +88,5 @@
       }
     });
   };
-
-  function addCheckbox(url_id, url) {
-    var container = $('#gps-url-list');
-    var id = url_id;
-    $('<input />', { type: 'checkbox', id: 'url-'+id, value: id }).appendTo(container);
-    $('<label />', { 'for': 'url-'+id, text: url }).appendTo(container);
-  }
 
 })(jQuery, Drupal);

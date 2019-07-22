@@ -136,7 +136,7 @@ class GooglePageSpeedController extends ControllerBase {
     $urls_list_select = $this->database->select('google_page_speed_url', 'gps_url');
     $urls_list_select->fields('gps_url', ['url_id', 'url']);
     $urls_list_select->condition('url_id', $url_id_list, 'IN');
-    $url_list = $urls_list_select->execute()->fetchCol(1);
+    $url_list = $urls_list_select->execute()->fetchAllKeyed(0, 1);
     return new JsonResponse($url_list);
   }
 
