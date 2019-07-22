@@ -89,10 +89,10 @@
 
         var options = {
           hAxis: {
-            title: 'Date and time'
+            title: Drupal.t('Date and time')
           },
           vAxis: {
-            title: 'Scores between 0 & 1'
+            title: Drupal.t('Scores between 0 & 1')
           },
           'width':'100%',
           'height':'auto',
@@ -116,7 +116,7 @@
           options: {
             filterColumnLabel: 'colLabel',
             ui: {
-              label: 'URL Filter',
+              label: Drupal.t('URL Filter'),
               allowTyping: true,
               allowMultiple: true,
               selectedValuesLayout: 'below',
