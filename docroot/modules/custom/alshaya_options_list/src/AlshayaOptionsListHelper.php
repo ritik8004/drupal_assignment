@@ -121,6 +121,7 @@ class AlshayaOptionsListHelper {
 
     foreach ($options as $option) {
       if (!empty($option->name)) {
+        $list_object = [];
         $list_object['title'] = $option->name;
         $url = [
           'query' => [
