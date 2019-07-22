@@ -112,7 +112,7 @@ class AlshayaOptionsPageController extends ControllerBase {
       }
       else {
         $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
-        $this->cache->set($cid, $option['terms'], Cache::PERMANENT, ['alshaya-options-page']);
+        $this->cache->set($cid, $option['terms'], Cache::PERMANENT, [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
       }
       if ($attribute_options[$request]['attribute_details'][$attributeCode]['show-search']) {
         $search_form = $this->formBuilder()
