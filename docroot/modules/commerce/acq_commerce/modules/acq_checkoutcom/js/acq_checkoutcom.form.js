@@ -138,12 +138,12 @@
     }
 
     CheckoutKit.createCardToken({
-      "name": $('#cardName').val(),
-      "number": $('#cardNumber').val(),
-      "expiryMonth": $('#cardMonth').val(),
-      "expiryYear": $('#cardYear').val(),
-      "cvv": $('#cardCvv').val(),
-      "udf3": ($('#saveCard').length > 0 && $('#saveCard').val()) ? 'storeInVaultOnSuccess' : ''
+      'name': $('#cardName').val(),
+      'number': $('#cardNumber').val(),
+      'expiryMonth': $('#cardMonth').val(),
+      'expiryYear': $('#cardYear').val(),
+      'cvv': $('#cardCvv').val(),
+      'udf3': ($('#saveCard').length > 0 && $('#saveCard').val()) ? 'storeInVaultOnSuccess' : ''
     },function(data){
       if (typeof data.card === 'undefined') {
         Drupal.checkoutComTokenised = false;
@@ -168,15 +168,14 @@
   $.fn.checkoutPaymentSuccess = function () {
     Drupal.checkoutComProcessed = true;
     $('#payment_details_checkout_com').hide();
-    if ($('.checkoutcom-input').length === 0) {
-      $('.checkoutcom-input').each(function () {
-        $(this).val('');
-      });
-    }
     if (Drupal.checkoutComTokenised) {
+      if ($('.checkoutcom-input').length > 0) {
+        $('.checkoutcom-input').each(function () {
+          $(this).val('');
+        });
+      }
       $('#payment_details_checkout_com').parents('form').submit();
     }
   };
-
 
 })(jQuery, Drupal, drupalSettings);
