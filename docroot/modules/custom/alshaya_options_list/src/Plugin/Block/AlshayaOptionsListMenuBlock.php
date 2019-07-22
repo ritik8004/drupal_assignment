@@ -7,7 +7,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -80,6 +79,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
   public function defaultConfiguration() {
     return [
       'link_title' => $this->t('Shop by'),
+      'link_align' => 'right',
     ];
   }
 
@@ -93,6 +93,16 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
       '#description' => $this->t('Title to be displayed for the link.'),
       '#default_value' => $this->configuration['link_title'],
     ];
+    $form['link_align'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Link alignment'),
+      '#description' => $this->t('Align the menu to the left or right.'),
+      '#default_value' => $this->configuration['link_align'] ?? '',
+      '#options' => [
+        'left' => $this->t('Left'),
+        'right' => $this->t('Right'),
+      ],
+    ];
 
     return $form;
   }
@@ -102,6 +112,7 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['link_title'] = $form_state->getValue('link_title');
+    $this->configuration['link_align'] = $form_state->getValue('link_align');
   }
 
   /**
@@ -109,18 +120,22 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
    */
   public function build() {
     $menu_title = $this->configuration['link_title'];
-    $links = [];
-    $pages = $this->configFactory->get('alshaya_options_list.settings')->get('alshaya_options_pages');
-    if (!empty($pages)) {
-      foreach ($pages as $page) {
-        $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
-        $links[] = Link::createFromRoute($page['menu-title'], $route_name, [])->toString();
-      }
-    }
+    $alignment_class = 'alshaya-options-' . $this->configuration['link_align'];
+    $links = $this->alshayaOptionsService->getOptionsPagesLinks();
+    $menu_class = count($links) > 1 ? 'alshaya-multiple-links' : 'alshaya-single-link';
+
     return [
       '#theme' => 'alshaya_options_menu_link',
       '#menu_title' => $menu_title,
       '#links' => $links,
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/optionlist_menu',
+        ],
+      ],
+      '#attributes' => [
+        'class' => [$alignment_class, $menu_class],
+      ],
     ];
   }
 
