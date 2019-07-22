@@ -41,3 +41,11 @@ acq_checkoutcom.payment_card.remove_card:
     user: \d+
     public_hash: '^[a-z0-9_-].*?$'
     _csrf_token: 'TRUE'
+
+acq_checkoutcom.apple_pay_validate:
+  path: '/checkoutcom/applepay/validate'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\acq_checkoutcom\Controller\ApplePayController::validate'
+  requirements:
+    _permission: 'access content'
