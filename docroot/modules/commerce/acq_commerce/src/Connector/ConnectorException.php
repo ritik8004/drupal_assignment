@@ -25,7 +25,7 @@ class ConnectorException extends \UnexpectedValueException {
       $message = acq_commerce_api_down_global_error_message();
       $message_overridden = TRUE;
     }
-    elseif ($position = stripos($message, 'Backend server error:')) {
+    elseif (($position = stripos($message, 'Backend server error:')) > -1) {
       $prefix = 'Backend server error:';
       $message = trim(substr($message, $position + strlen($prefix)));
       $message_overridden = TRUE;
