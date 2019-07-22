@@ -44,19 +44,23 @@
         urlObject.metric_id = metric_id;
         urlObject.device = device;
         urlObject.time = time;
-        google.charts.load('current', {'packages':['corechart','line']});
+        google.charts.load('current', {'packages':['corechart','line', 'controls']});
         google.charts.setOnLoadCallback(Drupal.drawChart);
       }
     });
   };
 
   Drupal.drawChart = function () {
-    var dataTable = new google.visualization.DataTable();
-    dataTable.addColumn('datetime', 'Date');
+    var scoreTable = new google.visualization.DataTable();
+    var urlsTable = new google.visualization.DataTable();
+    urlsTable.addColumn('number', 'colIndex');
+    urlsTable.addColumn('string', 'colLabel');
+
+    scoreTable.addColumn('datetime', 'Date');
 
     for (var url_id in urlObject.url){
       if (urlObject.url.hasOwnProperty(url_id)) {
-        dataTable.addColumn('number', urlObject.url[url_id]);
+        scoreTable.addColumn('number', urlObject.url[url_id]);
       }
     }
 
@@ -66,10 +70,17 @@
       if (status === 'success' && scoreData) {
         scoreData.forEach(function (element) {
           element[0] = new Date(element[0]*1000);
-          dataTable.addRow(
+          scoreTable.addRow(
             element
           );
         });
+
+        var initState= {selectedValues: []};
+        // put the columns into this data table (skip column 0)
+        for (var i = 1; i < scoreTable.getNumberOfColumns(); i++) {
+          urlsTable.addRow([i, scoreTable.getColumnLabel(i)]);
+          initState.selectedValues.push(scoreTable.getColumnLabel(i));
+        }
 
         var options = {
           hAxis: {
@@ -83,8 +94,52 @@
           pointsVisible: true
         };
 
-        var chart = new google.visualization.LineChart(document.getElementById('google-page-speed-chart-wrapper'));
-        chart.draw(dataTable, options);
+        // Initialise Line Chart wrapper.
+        var chart = new google.visualization.ChartWrapper({
+          chartType: 'LineChart',
+          containerId: 'google-page-speed-chart-wrapper',
+          dataTable: scoreTable,
+          options
+        });
+        chart.draw();
+
+        // Initialise Url filters wrapper.
+        var urlFilter = new google.visualization.ControlWrapper({
+          controlType: 'CategoryFilter',
+          containerId: 'google-page-speed-curve-filter',
+          dataTable: urlsTable,
+          options: {
+            filterColumnLabel: 'colLabel',
+            ui: {
+              label: 'URL Filter',
+              allowTyping: true,
+              allowMultiple: true,
+              selectedValuesLayout: 'below',
+              allowNone: false,
+              caption: 'Choose an URL...',
+              labelStacking: 'vertical'
+            }
+          },
+          state: initState
+        });
+
+        google.visualization.events.addListener(urlFilter, 'statechange', function () {
+          var state = urlFilter.getState();
+          var row;
+          var urlIndices = [0];
+          for (var i = 0; i < state.selectedValues.length; i++) {
+            row = urlsTable.getFilteredRows([{column: 1, value: state.selectedValues[i]}])[0];
+            urlIndices.push(urlsTable.getValue(row, 0));
+          }
+          // sort the indices into their original order
+          urlIndices.sort(function (a, b) {
+            return (a - b);
+          });
+          chart.setView({columns: urlIndices});
+          chart.draw();
+        });
+
+        urlFilter.draw();
       }
     });
   };
