@@ -14,7 +14,7 @@
       });
 
       // Hide the divs that do not have results.
-      $('div.plp-subcategory-block').find('div.sub-category').each(function(){
+      $('div.plp-subcategory-block').once().find('div.sub-category').each(function(){
         var tid = $(this).attr('data-tid');
         if($('term#' + tid).length === 0) {
           $(this).hide();
