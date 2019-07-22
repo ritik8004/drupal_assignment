@@ -126,7 +126,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
           '#value' => $this->t('Delete'),
           '#submit' => ['::deleteThis'],
           '#ajax' => [
-            'callback' => '::addMoreCallback',
+            'callback' => '::addRemoveCallback',
             'wrapper' => 'options-fieldset-wrapper',
           ],
         ];
@@ -165,7 +165,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#value' => $this->t('Add More'),
       '#submit' => ['::addOne'],
       '#ajax' => [
-        'callback' => '::addmoreCallback',
+        'callback' => '::addRemoveCallback',
         'wrapper' => 'options-fieldset-wrapper',
       ],
     ];
@@ -197,13 +197,18 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $key = $triggering_element['#parents'][1];
     $config->clear('alshaya_options_pages.' . $key);
     $config->save();
+    // Rebuild routes so that routes get deleted.
+    $this->routerBuilder->rebuild();
+    // Invalidate page cache.
+    Cache::invalidateTags(['alshaya-options-page']);
+
     $form_state->setRebuild();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function addmoreCallback(array &$form, FormStateInterface $form_state) {
+  public function addRemoveCallback(array &$form, FormStateInterface $form_state) {
     return $form['alshaya_options_page'];
   }
 

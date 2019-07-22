@@ -146,8 +146,8 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
     else {
       $form['empty_page'] = [
         '#markup' => $this->t('No page available. Create a page before configuring page settings.'),
-        '#prefix' => '<b>',
-        '#suffix' => '</b>',
+        '#prefix' => '<strong>',
+        '#suffix' => '</strong>',
       ];
     }
 

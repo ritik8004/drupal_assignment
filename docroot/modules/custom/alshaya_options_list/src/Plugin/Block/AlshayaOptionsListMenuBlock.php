@@ -5,6 +5,7 @@ namespace Drupal\alshaya_options_list\Plugin\Block;
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -128,6 +129,13 @@ class AlshayaOptionsListMenuBlock extends BlockBase implements ContainerFactoryP
    */
   public function access(AccountInterface $account, $return_as_object = FALSE) {
     return AccessResult::allowedIf($this->alshayaOptionsService->optionsPageEnabled());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), ['alshaya-options-page']);
   }
 
 }
