@@ -226,16 +226,22 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       : FALSE;
     $payment_card = $payment_method['payment_card'];
 
-    $is_new_card = (empty($payment_card) || $payment_card == 'new');
-    $new_card_token = !empty($payment_method['payment_details']['cko_card_token']);
+    $is_new_card = (empty($payment_card) || $payment_card == 'new') && !empty($payment_method['payment_details']['cko_card_token']);
 
-    if ($this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
-      if ($is_new_card && $new_card_token) {
+    $is_mada_card = FALSE;
+    if ($is_new_card
+        && $this->checkoutComApi->isMadaEnabled()
+        && !empty($payment_method['payment_details']['card_bin'])
+    ) {
+      $is_mada_card = $this->checkoutComApi->isMadaBin($payment_method['payment_details']['card_bin']);
+    }
+
+    if ($is_mada_card || $this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
+
+      if ($is_new_card) {
         $this->initiate3dSecurePayment(
           $payment_method['payment_details']['cko_card_token'],
-          $this->checkoutComApi->isMadaEnabled()
-            ? $payment_method['payment_details']['card_bin']
-            : NULL,
+          $is_mada_card,
           $save_card
         );
       }
@@ -249,7 +255,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->initiate2dPayment(
-        ($is_new_card && $new_card_token)
+        ($is_new_card)
           ? $payment_method['payment_details']['cko_card_token']
           : $payment_method['payment_details'][$payment_card]['card_id']
       );
@@ -276,14 +282,14 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    *
    * @param string $card_token
    *   The card token from user.
-   * @param string|null $card_bin
-   *   (Optional) The card bin.
+   * @param bool $is_mada_card
+   *   (Optional) The card bin is mada card.
    * @param bool $save
    *   (Optional) true to save card, otherwise false.
    *
    * @throws \Exception
    */
-  protected function initiate3dSecurePayment(string $card_token, $card_bin = NULL, $save = FALSE) {
+  protected function initiate3dSecurePayment(string $card_token, $is_mada_card = FALSE, $save = FALSE) {
     $cart = $this->getCart();
     $totals = $cart->totals();
     // Process 3d secure payment.
@@ -294,9 +300,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'cardToken' => $card_token,
         'email' => $cart->customerEmail(),
         'udf3' => $save ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
-        'udf1' => !empty($card_bin) && $this->checkoutComApi->isMadaBin($card_bin)
-        ? 'MADA'
-        : '',
+        'udf1' => $is_mada_card ? 'MADA' : '',
       ]
     );
   }
