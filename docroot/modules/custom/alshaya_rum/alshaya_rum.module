@@ -1,39 +1,40 @@
 <?php
 
-use Drupal\Core\Url;
-
 /**
  * @file
- *
  * Contains all hook implementations related to Drupal.
  */
+
+use Drupal\Core\Url;
 
 /**
  * Implements hook_page_attachments().
  */
 function alshaya_rum_page_attachments(array &$page) {
   $url = Url::fromRoute('<current>');
-  $whitelisted_paths = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
+  $whitelisted_rum_paths = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
+  $whitelisted_rum_path_array = array_filter(explode('\n', $whitelisted_rum_paths));
 
-  $whitelisted_run_paths_array = explode('\n', $whitelisted_paths);
-  if (in_array($url, $whitelisted_run_paths_array)) {
-    $page['attachments']['library'][] = 'alshaya_rum.rum_script';
+  // Load RUM script only on the whitelisted pages or if not configuration is
+  // set.
+  if (in_array($url, $whitelisted_rum_path_array) ||
+    (empty($whitelisted_rum_path_array))) {
+    $page['#attached']['library'][] = 'alshaya_rum.rum_script';
   }
 }
-
 
 /**
  * Implements hook_library_info_build().
  */
 function alshaya_rum_library_info_build() {
-  $user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
+  $rum_user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
 
   return [
     'alshaya_rum.rum_script' => [
       'js' => [
-        '//rum.monitis.com/get/jsbenchmark.min.js?id=' . $user_id => [
+        '//rum.monitis.com/get/jsbenchmark.min.js?id=' . $rum_user_id => [
           'type' => 'external',
-          'async' => 'async'
+          'async' => 'async',
         ],
       ],
     ],
