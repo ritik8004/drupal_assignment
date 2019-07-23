@@ -3,11 +3,7 @@
 namespace Drupal\alshaya_acm_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_checkoutcom\Plugin\PaymentMethod\CheckoutCom;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -171,20 +167,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       throw new NotFoundHttpException();
     }
 
-    $payment_card = $form_state->getValue($element['#parents']);
-    $response = new AjaxResponse();
-    $url = Url::fromRoute(
-      'acq_checkout.form',
-      ['step' => 'payment'],
-      [
-        'query' => [
-          'payment-card' => $payment_card,
-        ],
-      ]
-    );
-    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
-    $response->addCommand(new RedirectCommand($url->toString()));
-    return $response;
+    return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_card_details'];
   }
 
   /**
