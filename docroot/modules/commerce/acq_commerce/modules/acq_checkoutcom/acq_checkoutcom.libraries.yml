@@ -2,6 +2,11 @@ checkoutcom.form:
   js:
     js/acq_checkoutcom.form.js: {}
     js/jquery.creditCardValidator.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/underscore
 
 sandbox_kit:
   remote: https://cdn.checkout.com

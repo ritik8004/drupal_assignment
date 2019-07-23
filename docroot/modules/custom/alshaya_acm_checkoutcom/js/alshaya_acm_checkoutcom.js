@@ -26,10 +26,6 @@
         });
       });
 
-      // Remove the loader.
-      if ($('.checkout-ajax-progress-throbber').length > 0) {
-        $('.checkout-ajax-progress-throbber').remove();
-      }
     }
   };
 
