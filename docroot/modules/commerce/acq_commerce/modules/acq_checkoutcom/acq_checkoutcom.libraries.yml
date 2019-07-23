@@ -1,6 +1,7 @@
 checkoutcom.form:
   js:
     js/acq_checkoutcom.form.js: {}
+    js/jquery.creditCardValidator.js: {}
 
 sandbox_kit:
   remote: https://cdn.checkout.com
