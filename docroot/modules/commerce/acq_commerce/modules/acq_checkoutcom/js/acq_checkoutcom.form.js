@@ -62,6 +62,26 @@
             }
           });
         });
+
+      // Bind this only once after every ajax call.
+      $('.checkoutcom-credit-card-input')
+        .once('bind-events')
+        .each(function () {
+          $(this).validateCreditCard(function (result) {
+            // Reset the card type every-time.
+            $(this).parent().removeClass('cc-error');
+            $(this).removeClass('error');
+
+            // Check if we have card_type.
+            if (result.card_type !== null) {
+              // Set error class on wrapper if invalid card number.
+              if (!result.valid || !result.length_valid || !result.luhn_valid) {
+                $(this).parent().addClass('cc-error');
+                $(this).addClass('error');
+              }
+            }
+          });
+        });
     }
   };
 
