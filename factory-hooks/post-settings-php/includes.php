@@ -60,9 +60,9 @@ $rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home
 
 $settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
 
+// Avoid old & temporary tables in DB used while updating the entity.
+$settings['entity_update_backup'] = FALSE;
+
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env']));
-
-// Avoid old & temporary tables in DB used while updating the entity.
-$settings['entity_update_backup'] = FALSE;
