@@ -651,16 +651,40 @@ function alshaya_addressbook_acq_commerce_update_customer_api_request_alter(arra
 
 /**
  * Implements hook_alshaya_acm_customer_update_account_alter().
+ *
+ * @throws \Exception
  */
 function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountInterface $user, array $customer) {
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
+  // Getting all address profiles related to a user.
+  $address_profiles = \Drupal::entityTypeManager()
+    ->getStorage('profile')
+    ->loadByProperties([
+      'uid' => $user->id(),
+      'type' => 'address_book',
+    ]);
+
+  $drupal_address_ids = [];
+  foreach ($address_profiles as $address_profile) {
+    $drupal_address_ids[] = $address_profile->get('field_address_id')->getString();
+  }
+
+  $magento_address_ids = [];
   // Update privilege card number if available in customer data.
   if (isset($customer['addresses'])) {
     foreach ($customer['addresses'] as $address) {
+      $magento_address_ids[] = $address['address_id'];
       $address_book_manager->saveUserAddressFromApi($user, $address);
+
     }
+  }
+
+  // Deleting extra addresses.
+  $extra_address_ids = array_diff($drupal_address_ids, $magento_address_ids);
+  foreach ($extra_address_ids as $extra_address_id) {
+    $address_book_manager->deleteUserAddressesByAddressId($user, $extra_address_id);
   }
 }
 
