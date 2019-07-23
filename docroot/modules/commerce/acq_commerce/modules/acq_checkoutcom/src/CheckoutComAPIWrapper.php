@@ -538,7 +538,7 @@ class CheckoutComAPIWrapper {
    *   The caller method.
    *
    * @return array
-   *   The array of reponse or empty array.
+   *   The array of response or empty array.
    *
    * @throws \Exception
    */
