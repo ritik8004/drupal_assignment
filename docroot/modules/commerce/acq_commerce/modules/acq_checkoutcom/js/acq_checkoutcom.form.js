@@ -63,6 +63,15 @@
           });
         });
 
+      $('.payment_card_new', context)
+        .once('initialize-checkoutkit')
+        .each(function() {
+          CheckoutKit.configure({
+            debug: (drupalSettings.checkoutCom.debug === 'true'),
+            publicKey: drupalSettings.checkoutCom.public_key,
+          });
+        });
+
       // Bind this only once after every ajax call.
       $('.checkoutcom-credit-card-input')
         .once('bind-events')
