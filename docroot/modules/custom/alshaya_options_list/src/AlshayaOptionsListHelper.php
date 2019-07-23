@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_options_list;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Link;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -14,6 +15,11 @@ use Drupal\acq_sku\SKUFieldsManager;
  * Helper functions for alshaya_options_list.
  */
 class AlshayaOptionsListHelper {
+
+  /**
+   * Options page cache tag.
+   */
+  const OPTIONS_PAGE_CACHETAG = 'alshaya-options-page';
 
   /**
    * Database connection service object.
@@ -121,6 +127,7 @@ class AlshayaOptionsListHelper {
 
     foreach ($options as $option) {
       if (!empty($option->name)) {
+        $list_object = [];
         $list_object['title'] = $option->name;
         $url = [
           'query' => [
@@ -192,6 +199,31 @@ class AlshayaOptionsListHelper {
   public function optionsPageEnabled() {
     $config = $this->configFactory->get('alshaya_options_list.settings');
     return $config->get('alshaya_shop_by_pages_enable') ? TRUE : FALSE;
+  }
+
+  /**
+   * Return links of all options pages that have been created.
+   *
+   * @return array
+   *   The links array.
+   */
+  public function getOptionsPagesLinks() {
+    static $links;
+
+    if (!isset($links)) {
+      $links = [];
+      $pages = $this->configFactory->get('alshaya_options_list.settings')
+        ->get('alshaya_options_pages');
+      if (!empty($pages)) {
+        foreach ($pages as $page) {
+          $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
+          if (isset($page['menu-title'])) {
+            $links[] = Link::createFromRoute($page['menu-title'], $route_name, []);
+          }
+        }
+      }
+    }
+    return $links;
   }
 
 }

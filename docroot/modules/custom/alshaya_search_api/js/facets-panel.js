@@ -430,7 +430,7 @@
             }
           }
 
-          window.onscroll = function(e) {
+          $(window).on('scroll', function(e) {
             if ($(window).width() < 1024) {
               if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
                 if (this.oldScroll > this.scrollY) {

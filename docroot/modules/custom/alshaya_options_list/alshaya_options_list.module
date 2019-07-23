@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 
 /**
  * Implements hook_theme().
@@ -41,12 +42,30 @@ function alshaya_options_list_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_alshaya_main_menu_links_alter().
+ */
+function alshaya_options_list_alshaya_main_menu_links_alter(array &$term_data, $parent_id, array $context) {
+  $links = \Drupal::service('alshaya_options_list.alshaya_options_service')->getOptionsPagesLinks();
+  if (!empty($links)) {
+    foreach ($links as $link) {
+      $item = [
+        'label' => $link->getText(),
+        'path' => $link->getUrl()->toString(),
+        'class' => 'options-list--mobile-link hide-on-desktop',
+        'clickable' => 1,
+      ];
+      $term_data[] = $item;
+    }
+  }
+}
+
+/**
  * Implements hook_taxonomy_term_presave().
  */
 function alshaya_options_list_taxonomy_term_presave(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
   }
 }
 
@@ -56,6 +75,6 @@ function alshaya_options_list_taxonomy_term_presave(TermInterface $term) {
 function alshaya_options_list_taxonomy_term_delete(TermInterface $term) {
   if ($term->bundle() == 'sku_product_option') {
     // Invalidate page cache.
-    Cache::invalidateTags(['alshaya-options-page']);
+    Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
   }
 }

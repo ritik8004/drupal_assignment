@@ -30,3 +30,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css
+
+  alshaya_white_label/optionlist_menu:
+    css:
+      theme:
+        css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css
