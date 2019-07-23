@@ -327,6 +327,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       'value' => $this->checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
       'cvv' => $cvv,
+      'udf2' => 'cardIdCharge',
     ]);
   }
 
