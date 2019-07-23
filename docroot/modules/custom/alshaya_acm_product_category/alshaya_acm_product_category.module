@@ -294,7 +294,7 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
   $connection = \Drupal::service('database');
   $query = $connection->select('taxonomy_term__field_select_subcategories_plp', 'sc');
   $query->fields('sc', ['entity_id', 'field_select_subcategories_plp_value ']);
-  $result = $query->execute()->fetchAll();
+  $result = $query->execute()->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
 
   foreach ($result as $row) {
     if ($term->id() == $row['field_select_subcategories_plp_value'] && !array_key_exists($row['entity_id'], $parents)) {
