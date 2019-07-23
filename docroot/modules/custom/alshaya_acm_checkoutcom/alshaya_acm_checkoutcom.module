@@ -27,7 +27,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
 
   // Redirect only for 3ds, we don't want to proceed further for 2d payment.
   $card_info = $session->get('acq_checkout_com_card', NULL);
-  if (empty($card_info) || !\Drupal::service('acq_checkoutcom.agent_api')->getCheckoutcomConfig('verify3dsecure')) {
+  if (empty($card_info)) {
     return;
   }
 
@@ -48,14 +48,12 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
       $params += [
         'cardToken' => $card_info['card_token'],
         'udf3' => $card_info['save_card'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
-        'udf1' => !empty($card_info['card_bin']) && $checkoutComApi->isMadaBin($card_info['card_bin'])
-        ? 'MADA'
-        : '',
+        'udf1' => $card_info['mada_bin'],
       ];
     }
     elseif ($card_info['type'] == 'existing') {
       $params += [
-        'cardId' => $card_info['card_token'],
+        'cardId' => $card_info['card_id'],
         'cvv' => $card_info['cvv'],
       ];
     }

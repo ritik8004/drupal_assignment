@@ -195,29 +195,33 @@ class AlshayaCheckoutCom extends CheckoutCom {
       ? $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com']
       : ['payment_card' => 'new'];
 
-    $is_new_card = (empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new');
-    $new_card_token = !empty($form_state->getValue('cko_card_token'));
-    // Process 3d payment.
-    if ($this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
-      $card_data = [];
-      if ($is_new_card && $new_card_token) {
-        $card_data = [
-          'type' => 'new',
-          'card_token' => $form_state->getValue('cko_card_token'),
-          'save_card' => $form_state->getValue('save_card'),
-          'card_bin' => $this->checkoutComApi->isMadaEnabled()
-          ? $form_state->getValue('card_bin')
-          : NULL,
-        ];
+    $is_new_card = (empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
+                   && !empty($form_state->getValue('cko_card_token'));
+
+    $is_mada_card = FALSE;
+    $card_data = [];
+    if ($is_new_card) {
+      if ($this->checkoutComApi->isMadaEnabled() && !empty($form_state->getValue('card_bin'))) {
+        $is_mada_card = $this->checkoutComApi->isMadaBin($form_state->getValue('card_bin'));
       }
-      elseif (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
+
+      $card_data = [
+        'type' => 'new',
+        'card_token' => $form_state->getValue('cko_card_token'),
+        'save_card' => $form_state->getValue('save_card'),
+        'mada_bin' => $is_mada_card ? 'MADA' : '',
+      ];
+    }
+
+    // Process 3d payment.
+    if ($is_mada_card || $this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
+      if (!empty($payment_method['payment_card']) && $payment_method['payment_card'] != 'new') {
         $card_data = [
           'type' => 'existing',
-          'card_token' => $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
+          'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
           'cvv' => (int) $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['cc_cvv'],
         ];
       }
-
       // Set the card related data in session to use it to prepare request data
       // for checkout.com api.
       $session = $this->currentRequest->getSession();
@@ -226,7 +230,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
     else {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->initiate2dPayment(
-        ($is_new_card && $new_card_token)
+        ($is_new_card)
           ? $form_state->getValue('cko_card_token')
           : $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id']
       );
