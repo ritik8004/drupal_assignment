@@ -97,6 +97,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#type' => 'address',
       '#title' => '',
       '#default_value' => ['country_code' => _alshaya_custom_get_site_level_country_code()],
+      '#required' => TRUE,
     ];
 
     $pane_form['address_form']['save'] = [

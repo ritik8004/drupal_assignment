@@ -123,6 +123,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#title' => '',
       '#default_value' => $address_default_value,
       '#require_email' => TRUE,
+      '#required' => TRUE,
     ];
 
     $shipping_methods = [];
