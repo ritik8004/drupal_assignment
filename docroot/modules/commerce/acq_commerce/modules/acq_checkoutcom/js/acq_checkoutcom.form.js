@@ -156,7 +156,7 @@
   CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
     if (event.data.errorCode === '70000') {
       Drupal.checkoutComTokenisesd = false;
-      Drupal.checkoutComShowGlobalError(Drupal.t('Transaction failed. Please try again or contact our customer service team for assistance.'));
+      Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
     }
   });
 
