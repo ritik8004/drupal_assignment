@@ -12,7 +12,7 @@
     attach: function (context, settings) {
       // Initialize.
       Blazy();
-      $(window).on('load', function(){
+      $(window).on('load', function () {
         Blazy({
           offset: $(window).height() // Loads images before they're visible
         });
