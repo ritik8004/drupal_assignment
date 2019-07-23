@@ -10,6 +10,7 @@
   Drupal.checkoutComTokenised = false;
   var oldBillingAddress = '';
   var oldCardInfo = '';
+
   Drupal.behaviors.acqCheckoutComForm = {
     attach: function attach(context) {
       $('.checkoutcom-credit-card-exp-year-select', context)
@@ -224,6 +225,7 @@
         });
       }
       $('#payment_details_checkout_com').parents('form').submit();
+      $(this).showCheckoutLoader();
     });
   };
 
