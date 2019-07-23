@@ -199,27 +199,17 @@ class CheckoutComFormHelper {
       ];
     }
 
-    $kit = $this->apiHelper->getCheckoutcomConfig('environment') == 'sandbox'
-      ? 'acq_checkoutcom/sandbox_kit'
-      : 'acq_checkoutcom/live_kit';
-
     $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
     $public_key = $this->apiHelper->getCheckoutcomConfig('public_key');
     $string = "window.CKOConfig = {
-        debugMode: {$debug},
-        publicKey: '{$public_key}',
-      };";
+      debugMode: {$debug},
+      publicKey: '{$public_key}',
+    };";
 
     $form['checkout_kit'] = [
       '#type' => 'html_tag',
       '#tag' => 'script',
       '#value' => $string,
-      '#attached' => [
-        'library' => [
-          $kit,
-          'acq_checkoutcom/checkoutcom.form',
-        ],
-      ],
     ];
 
     return $form;

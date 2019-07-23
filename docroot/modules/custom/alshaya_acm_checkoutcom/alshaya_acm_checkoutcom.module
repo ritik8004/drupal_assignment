@@ -7,6 +7,8 @@
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
+use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\BillingAddress;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -113,5 +115,46 @@ function alshaya_acm_checkoutcom_form_multistep_checkout_alter(&$form, FormState
         </div>
       ',
     ];
+  }
+}
+
+/**
+ * Implements hook_acq_checkoutcom_payment_form_process_alter().
+ */
+function alshaya_acm_checkoutcom_acq_checkoutcom_payment_form_process_alter(&$response, $cart, $request_params) {
+  $addressbook_manager = \Drupal::service('alshaya_addressbook.manager');
+  $checkout_helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+
+  $terms_accepted = isset($request_params['checkout_terms'], $request_params['checkout_terms']['terms']) && !empty($request_params['checkout_terms']['terms']);
+
+  $billing = $request_params['billing_address'];
+
+  if (!$terms_accepted) {
+    $errors['checkout_terms[terms]'] = t('Please agree to the Terms and Conditions.', [], ['context' => 'alshaya_static_text|agree_terms_and_condition']);
+  }
+
+  // Validate billing address, to display errors in ajax response.
+  if ((empty($billing['same_as_shipping'])
+       || $billing['same_as_shipping'] != BillingAddress::BILLING_ADDR_CASE_SAME_AS_SHIPPING)
+      && $violations = $addressbook_manager->validateAddress($billing['address']['billing'])
+  ) {
+    foreach ($violations as $field => $message) {
+      $errors['billing_address[address][billing][' . $field . ']'] = $message;
+    }
+  }
+
+  $response->addCommand(new InvokeCommand(NULL, 'checkoutComCreateCardToken', []));
+  if (!empty($errors)) {
+    $response->addCommand(new InvokeCommand(NULL, 'checkoutPaymentError', [$errors]));
+  }
+  else {
+    if ($billing['same_as_shipping'] == BillingAddress::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
+      $checkout_helper->setBillingFromShipping(TRUE);
+    }
+    elseif ($violations = $addressbook_manager->validateAddress($billing['address']['billing'])) {
+      $address = $addressbook_manager->getMagentoAddressFromAddressArray($billing['address']['billing']);
+      $checkout_helper->setBillingInfo(FALSE, $address);
+    }
+    $response->addCommand(new InvokeCommand(NULL, 'checkoutPaymentSuccess', []));
   }
 }

@@ -211,6 +211,9 @@ class CheckoutComAPIWrapper {
   /**
    * Checks if the given bin is belong to mada bin.
    *
+   * @param string $bin
+   *   The card bin to verify.
+   *
    * @return bool
    *   Return true if one of the mada bin, false otherwise.
    */
@@ -350,7 +353,7 @@ class CheckoutComAPIWrapper {
 
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
         throw new \Exception(
-          $this->t('Could not make request to checkout.com, please contact administator if the error persist.')
+          $this->t('Could not make request to checkout.com, please contact our customer service team for assistance.')
         );
       }
       elseif ($e instanceof RequestException) {
@@ -583,7 +586,7 @@ class CheckoutComAPIWrapper {
     $params['chargeMode'] = self::VERIFY_3DSECURE;
     // Capture payment immediately, values 0 to 168 (0 to 7 days).
     $params['autoCapTime'] = '0';
-    $params['autoCapture'] = ($params['udf1'] == 'MADA') ? self::AUTOCAPTURE_YES : self::AUTOCAPTURE_NO;
+    $params['autoCapture'] = (isset($params['udf1']) && $params['udf1'] == 'MADA') ? self::AUTOCAPTURE_YES : self::AUTOCAPTURE_NO;
     $params['attemptN3D'] = FALSE;
     // Use the IP address from Acquia Cloud ENV variable.
     $params['customerIp'] = $_ENV['AH_CLIENT_IP'] ?? '';

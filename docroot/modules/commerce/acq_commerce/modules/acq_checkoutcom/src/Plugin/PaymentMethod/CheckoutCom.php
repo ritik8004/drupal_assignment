@@ -111,6 +111,18 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   }
 
   /**
+   * Return correct library based on correct environment.
+   *
+   * @return string
+   *   Return string of library.
+   */
+  protected function getCheckoutKitLibrary() {
+    return $this->apiHelper->getCheckoutcomConfig('environment') == 'sandbox'
+      ? 'acq_checkoutcom/sandbox_kit'
+      : 'acq_checkoutcom/live_kit';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
@@ -163,6 +175,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       '#type' => 'container',
       '#attributes' => [
         'id' => ['payment_details_checkout_com'],
+      ],
+      '#attached' => [
+        'library' => [
+          $this->getCheckoutKitLibrary(),
+          'alshaya_acm_checkoutcom/alshaya_checkoutcom',
+          'acq_checkoutcom/checkoutcom.form',
+        ],
       ],
     ];
 
