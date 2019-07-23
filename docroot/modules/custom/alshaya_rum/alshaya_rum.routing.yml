@@ -1,0 +1,7 @@
+alshaya_promo_panel.panel_config:
+  path: '/admin/config/alshaya/rum-settings'
+  defaults:
+    _form: '\Drupal\alshaya_rum\Form\AlshayaRumConfigForm'
+    _title: 'Alshaya Real User Monitoring Configuration'
+  requirements:
+    _permission: 'administer site configuration'

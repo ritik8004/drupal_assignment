@@ -1,0 +1,5 @@
+name: Alshaya Real User Monitoring
+description: The Real User Monitoring (RUM) is WEB service that provides monitoring for WEB pages based on actual user information such as performance data and statistics.
+package: "Alshaya"
+core: 8.x
+type: module
