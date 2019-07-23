@@ -683,8 +683,10 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
 
   // Deleting extra addresses.
   $extra_address_ids = array_diff($drupal_address_ids, $magento_address_ids);
-  foreach ($extra_address_ids as $extra_address_id) {
-    $address_book_manager->deleteUserAddressesByAddressId($user, $extra_address_id);
+  if (!empty($extra_address_ids)) {
+    foreach ($extra_address_ids as $extra_address_id) {
+      $address_book_manager->deleteUserAddressesByAddressId($user, $extra_address_id);
+    }
   }
 }
 
