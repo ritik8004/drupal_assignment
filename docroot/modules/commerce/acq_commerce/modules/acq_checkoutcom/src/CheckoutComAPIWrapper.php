@@ -423,7 +423,10 @@ class CheckoutComAPIWrapper {
       return new RedirectResponse($response[self::REDIRECT_URL]);
     }
     else {
-      $this->logger->warning('checkout.com card charges request did not process.');
+      $this->logger->debug(
+        'checkout.com card charges request did not process, getting response: @response.',
+        ['@response' => $response]
+      );
 
       // Show generic error message to user and redirect to payment page.
       $this->displayGenericMessage();
