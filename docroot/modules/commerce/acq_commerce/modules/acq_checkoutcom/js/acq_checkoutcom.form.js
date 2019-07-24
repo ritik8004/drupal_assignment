@@ -8,6 +8,7 @@
 
   Drupal.checkoutComProcessed = false;
   Drupal.checkoutComTokenised = false;
+  Drupal.checkoutComTokenisationProcessed = false;
   var oldBillingAddress = '';
   var oldCardInfo = '';
 
@@ -24,7 +25,6 @@
             var currentMonth = (new Date()).getMonth();
 
             month.find('option').each(function () {
-
               if (parseInt($(this).val()) <= currentMonth) {
                 if ($(this).is(':selected')) {
                   $(this).next().prop('selected', true);
@@ -64,6 +64,7 @@
           });
         });
 
+      // Initialize checkout.kit with public key.
       $('.payment_card_new', context)
         .once('initialize-checkoutkit')
         .each(function() {
@@ -92,6 +93,26 @@
             }
           });
         });
+
+      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAcqCheckoutCom === 'undefined') {
+        Drupal.Ajax.prototype.successAcqCheckoutCom = Drupal.Ajax.prototype.success;
+
+        // @See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.success()
+        Drupal.Ajax.prototype.success = function (response, status) {
+          // Invoke the original function.
+          this.successAcqCheckoutCom(response, status);
+          // Remove ajax loader when the ajax call does not contain
+          // checkoutPaymentSuccess, that means there are some form errors and
+          // can not continue with place order.
+          const checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
+          if (checkFinalCall.length < 1) {
+            if ($('.checkout-ajax-progress-throbber').length > 0) {
+              $('.checkout-ajax-progress-throbber').remove();
+            }
+          }
+        };
+      }
+
     }
   };
 
@@ -112,6 +133,12 @@
     // Remove all error messages displayed right now before validating again.
     $(form).find('.form-item--error-message, label.error').remove();
     $(form).find('.checkoutcom-global-error').remove();
+
+    // Reset tokenisation process, to verify it again on checkoutPaymentSuccess
+    // to submit and move next step or clear the loader and show error.
+    if (Drupal.checkoutComTokenised === false) {
+      Drupal.checkoutComTokenisationProcessed = false;
+    }
 
     // Collect data to be processed.
     var billingAddress = $(form).find('input:not(.checkoutcom-input), select:not(.checkoutcom-input)').serialize();
@@ -164,6 +191,8 @@
   // Try to create card token for checkout.com if it's not already generated.
   $.fn.checkoutComCreateCardToken = function() {
     if ($('#cardNumber').length === 0) {
+      // When using tokenised card, we don't need to check for validations.
+      Drupal.checkoutComTokenisationProcessed = true;
       Drupal.checkoutComTokenised = true;
       return;
     }
@@ -171,6 +200,9 @@
     var cardInfo = $('.payment_card_new').find('input.checkoutcom-input, select.checkoutcom-input').serialize();
     if (oldCardInfo !== cardInfo) {
       oldCardInfo = cardInfo;
+      // As the card info is changed we don't want to create the new card token,
+      // hence all validations are set to false.
+      Drupal.checkoutComTokenisationProcessed = false;
       Drupal.checkoutComTokenised = false;
     }
 
@@ -194,6 +226,7 @@
         $('#cardToken').val(data.id);
         $('#cardBin').val(data.card.bin);
       }
+      Drupal.checkoutComTokenisationProcessed = true;
     });
   };
 
@@ -208,15 +241,8 @@
   // Submit form on success.
   $.fn.checkoutPaymentSuccess = function () {
     Drupal.checkoutComProcessed = true;
-    // Wait for tokenisation before submitting form.
-    new Promise(function (resolve, reject) {
-      var wait_for_tokenisation = setInterval(function () {
-        if (Drupal.checkoutComTokenised === true) {
-          clearInterval(wait_for_tokenisation);
-          resolve();
-        }
-      }, 100);
-    }).then(function () {
+    // On resolve, submit form and redirect for confirmation.
+    var promiseResolve = function () {
       document.getElementById('payment_details_checkout_com').style.display = 'none';
 
       if ($('.checkoutcom-input').length > 0) {
@@ -226,7 +252,26 @@
       }
       $('#payment_details_checkout_com').parents('form').submit();
       $(this).showCheckoutLoader();
-    });
+    };
+
+    // On reject, remove loader to allow user to correct data.
+    var promiseReject = function() {
+      if ($('.checkout-ajax-progress-throbber').length > 0) {
+        $('.checkout-ajax-progress-throbber').remove();
+      }
+    };
+
+    // Wait for tokenisation before submitting form.
+    new Promise(function (resolve, reject) {
+      var wait_for_tokenisation = setInterval(function () {
+        if (Drupal.checkoutComTokenisationProcessed === true) {
+          clearInterval(wait_for_tokenisation);
+          (Drupal.checkoutComTokenised === true)
+            ? resolve()
+            : reject(new Error("Tokenisation failed."));
+        }
+      }, 100);
+    }).then(promiseResolve, promiseReject);
   };
 
 })(jQuery, Drupal, drupalSettings);
