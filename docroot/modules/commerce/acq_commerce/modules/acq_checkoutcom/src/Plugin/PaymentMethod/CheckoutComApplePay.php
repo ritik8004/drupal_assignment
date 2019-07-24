@@ -106,9 +106,38 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
       ',
     ];
 
-    $complete_form['actions']['next']['#access'] = FALSE;
+    $complete_form['actions']['next']['#attributes']['class'][] = 'hidden';
 
     return $pane_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validatePaymentForm(array &$pane_form,
+                                      FormStateInterface $form_state,
+                                      array &$complete_form) {
+
+    if ($form_state->getErrors()) {
+      return;
+    }
+
+    $cart = $this->getCart();
+    $payload = $cart->getPaymentMethodData();
+
+    if (empty($payload) || empty($payload['paymentData'])) {
+      $this->messenger()->addError($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      $form_state->setError($complete_form['actions']['apple_wrapper']['apple_pay'], $this->t('Payment failed'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitPaymentForm(array &$pane_form,
+                                    FormStateInterface $form_state,
+                                    array &$complete_form) {
+    // Do nothing, we have already set payment method and data.
   }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkoutcom\Controller;
 
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_checkoutcom\CheckoutComFormHelper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -16,6 +17,13 @@ use Symfony\Component\HttpFoundation\Request;
  * @package Drupal\acq_checkoutcom\Controller
  */
 class ApplePayController implements ContainerInjectionInterface {
+
+  /**
+   * The cart storage.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
 
   /**
    * Checkout.com form Helper.
@@ -36,6 +44,7 @@ class ApplePayController implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('acq_cart.cart_storage'),
       $container->get('acq_checkoutcom.form_helper'),
       $container->get('logger.factory')->get('ApplePayController')
     );
@@ -44,12 +53,17 @@ class ApplePayController implements ContainerInjectionInterface {
   /**
    * ApplePayController constructor.
    *
+   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
+   *   The cart storage.
    * @param \Drupal\acq_checkoutcom\CheckoutComFormHelper $form_helper
    *   Checkout.com form Helper.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger.
    */
-  public function __construct(CheckoutComFormHelper $form_helper, LoggerInterface $logger) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              CheckoutComFormHelper $form_helper,
+                              LoggerInterface $logger) {
+    $this->cartStorage = $cart_storage;
     $this->formHelper = $form_helper;
     $this->logger = $logger;
   }
@@ -59,6 +73,9 @@ class ApplePayController implements ContainerInjectionInterface {
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   HTTP Request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JSON Response.
    */
   public function validate(Request $request) {
     $return = [];
@@ -88,8 +105,10 @@ class ApplePayController implements ContainerInjectionInterface {
     curl_setopt($ch, CURLOPT_SSLKEYPASSWD, $settings['merchantCertificatePass']);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($ch);
 
-    if (curl_exec($ch) === FALSE) {
+    if ($response === FALSE) {
       $message = curl_error($ch);
       $this->logger->info('Failure while invoking apple.com api. @message', [
         '@message' => $message,
@@ -97,10 +116,40 @@ class ApplePayController implements ContainerInjectionInterface {
 
       $return['curlError'] = curl_error($ch);
     }
+    else {
+      $return = json_decode($response);
+    }
 
     curl_close($ch);
 
     return new JsonResponse($return);
+  }
+
+  /**
+   * Save payment info to cart.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   HTTP Request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JSON Response.
+   */
+  public function savePayment(Request $request) {
+    $params = $request->request->all();
+
+    if (empty($params) || empty($params['paymentData'])) {
+      return new JsonResponse(['status' => FALSE]);
+    }
+
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      return new JsonResponse(['status' => FALSE]);
+    }
+
+    $cart->setPaymentMethod('checkout_com_applepay', $params);
+
+    return new JsonResponse(['status' => TRUE]);
   }
 
 }
