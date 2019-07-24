@@ -51,10 +51,8 @@ function alshaya_options_list_alshaya_main_menu_links_alter(array &$term_data, $
       $item = [
         'label' => $link->getText(),
         'path' => $link->getUrl()->toString(),
-        'class' => 'options-list--mobile-link',
+        'class' => 'options-list--mobile-link hide-on-desktop',
         'clickable' => 1,
-        'display_in_desktop' => 0,
-        'display_in_mobile' => 1,
       ];
       $term_data[] = $item;
     }
