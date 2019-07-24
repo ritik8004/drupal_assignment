@@ -304,7 +304,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     if ($violations = $address_book_manager->validateAddress($address_values)) {
       foreach ($violations as $field => $message) {
-        $form_state->setErrorByName('billing_address][address][shipping][' . $field, $message);
+        $form_state->setErrorByName('guest_delivery_home][address][shipping][' . $field, $message);
       }
     }
 
