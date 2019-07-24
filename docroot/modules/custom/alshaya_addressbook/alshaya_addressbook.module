@@ -656,10 +656,45 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
+  $magento_address_ids = [];
   // Update privilege card number if available in customer data.
   if (isset($customer['addresses'])) {
     foreach ($customer['addresses'] as $address) {
+      $magento_address_ids[] = $address['address_id'];
       $address_book_manager->saveUserAddressFromApi($user, $address);
+    }
+  }
+
+  // Getting all address profiles related to a user.
+  $address_profiles = $address_book_manager->getUserAddressesFromProfile($user);
+
+  // Fetching and deleting extra address profiles.
+  foreach ($address_profiles as $address_profile) {
+    $drupal_address_id = $address_profile->get('field_address_id')->getString();
+    if (!in_array($drupal_address_id, $magento_address_ids)) {
+      $profile_id = $address_profile->id();
+      try {
+        $address_profile->delete();
+        \Drupal::logger('alshaya_addressbook')
+          ->info('Deleted drupal address profile @profile_id with field address id @address_id for user id @user_id',
+            [
+              '@profile_id' => $profile_id,
+              '@address_id' => $drupal_address_id,
+              '@user_id' => $user->id(),
+            ]);
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_addressbook')
+          ->error(
+            'Failed to delete address profile @profile_id with field address id @address_id for user id @user_id: @exeption_message',
+            [
+              '@profile_id' => $profile_id,
+              '@address_id' => $drupal_address_id,
+              '@user_id' => $user->id(),
+              '@exeption_message' => $e->getMessage(),
+            ]
+          );
+      }
     }
   }
 }
