@@ -189,14 +189,18 @@
     }
 
     .form-item {
-      margin-top: 4.55rem;
+      margin-top: 2.375rem;
 
-      @include breakpoint($only-tablet) {
-        margin-top: 4.6rem;
+      @include breakpoint($only-mobile) {
+        margin-top: 3.9375rem;
       }
 
-      @include breakpoint($desktop) {
-        margin-top: 4.438rem;
+      &.form-type-email {
+        margin-top: 2.5625rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.9375rem;
+        }
       }
     }
 
