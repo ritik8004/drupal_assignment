@@ -175,6 +175,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         '#type' => 'address',
         '#title' => '',
         '#default_value' => $address_default_value,
+        '#required' => TRUE,
       ];
     }
 
