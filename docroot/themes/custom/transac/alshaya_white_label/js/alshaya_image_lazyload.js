@@ -11,8 +11,11 @@
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
       // Initialize.
-      Blazy({
-        offset: $(window).height() // Loads images before they're visible
+      Blazy();
+      $(window).on('load', function () {
+        Blazy({
+          offset: $(window).height() // Loads images before they're visible
+        });
       });
     }
   };
