@@ -665,35 +665,34 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
     }
   }
 
-  try {
-    // Getting all address profiles related to a user.
-    $address_profiles = $address_book_manager->getUserAddressesFromProfile($user);
+  // Getting all address profiles related to a user.
+  $address_profiles = $address_book_manager->getUserAddressesFromProfile($user);
 
-    $drupal_address_ids = [];
+  $drupal_address_ids = [];
+  foreach ($address_profiles as $address_profile) {
+    $drupal_address_ids[] = $address_profile->get('field_address_id')->getString();
+  }
+
+  // Deleting extra addresses.
+  $extra_address_ids = array_diff($drupal_address_ids, $magento_address_ids);
+  if (!empty($extra_address_ids)) {
     foreach ($address_profiles as $address_profile) {
-      $drupal_address_ids[] = $address_profile->get('field_address_id')->getString();
-    }
-
-    // Deleting extra addresses.
-    $extra_address_ids = array_diff($drupal_address_ids, $magento_address_ids);
-    if (!empty($extra_address_ids)) {
-      foreach ($address_profiles as $address_profile) {
-        $address_id = $address_profile->get('field_address_id')->getString();
-        if (in_array($address_id, $extra_address_ids)) {
-          \Drupal::logger('alshaya_addressbook')
-            ->info(t('Deleted drupal address profile @profile_id with field address id @address_id',
-              [
-                '@profile_id' => $address_profile->id(),
-                '@address_id' => $address_id,
-              ]));
+      $address_id = $address_profile->get('field_address_id')->getString();
+      if (in_array($address_id, $extra_address_ids)) {
+        \Drupal::logger('alshaya_addressbook')
+          ->info(t('Deleted drupal address profile @profile_id with field address id @address_id',
+            [
+              '@profile_id' => $address_profile->id(),
+              '@address_id' => $address_id,
+            ]));
+        try {
           $address_profile->delete();
+        }
+        catch (\Exception $e) {
+          \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
         }
       }
     }
-  }
-  catch (\Exception $e) {
-    \Drupal::messenger()->addError($e->getMessage());
-    \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
   }
 }
 

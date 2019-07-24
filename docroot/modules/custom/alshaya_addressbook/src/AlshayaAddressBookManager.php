@@ -207,8 +207,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *
    * @return mixed
    *   An array of address profile objects.
-   *
-   * @throws \Exception
    */
   public function getUserAddressesFromProfile(AccountInterface $account) {
     $address_profiles = $this->profileStorage->loadByProperties([
