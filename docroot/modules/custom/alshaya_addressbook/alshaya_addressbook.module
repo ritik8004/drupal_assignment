@@ -679,17 +679,27 @@ function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountIn
     foreach ($address_profiles as $address_profile) {
       $address_id = $address_profile->get('field_address_id')->getString();
       if (in_array($address_id, $extra_address_ids)) {
-        \Drupal::logger('alshaya_addressbook')
-          ->info(t('Deleted drupal address profile @profile_id with field address id @address_id',
-            [
-              '@profile_id' => $address_profile->id(),
-              '@address_id' => $address_id,
-            ]));
+        $profile_id = $address_profile->id();
         try {
           $address_profile->delete();
+          \Drupal::logger('alshaya_addressbook')
+            ->info(t('Deleted drupal address profile @profile_id with field address id @address_id',
+              [
+                '@profile_id' => $profile_id,
+                '@address_id' => $address_id,
+              ]));
         }
         catch (\Exception $e) {
-          \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
+          \Drupal::logger('alshaya_addressbook')
+            ->error(
+              t('Failed to delete address profile @profile_id with field address id @address_id for user id @user_id',
+                [
+                  '@profile_id' => $profile_id,
+                  '@address_id' => $address_id,
+                  '@user_id' => $user->id(),
+                ]
+              )
+            );
         }
       }
     }
