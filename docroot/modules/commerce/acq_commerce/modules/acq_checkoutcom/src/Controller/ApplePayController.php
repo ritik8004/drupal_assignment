@@ -83,7 +83,9 @@ class ApplePayController implements ContainerInjectionInterface {
     ];
 
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_SSLCERT, $settings['merchantCertificate']);
+    curl_setopt($ch, CURLOPT_SSLCERT, $settings['merchantCertificatePem']);
+    curl_setopt($ch, CURLOPT_SSLKEY, $settings['merchantCertificateKey']);
+    curl_setopt($ch, CURLOPT_SSLKEYPASSWD, $settings['merchantCertificatePass']);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, Json::encode($data));
 

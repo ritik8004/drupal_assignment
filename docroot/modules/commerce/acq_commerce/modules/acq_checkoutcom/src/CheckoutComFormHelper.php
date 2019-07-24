@@ -242,9 +242,9 @@ class CheckoutComFormHelper {
     // Add secret info from $settings.
     $secret_info = Settings::get('apple_pay_secret_info');
     $settings = [
-      'merchantCertificate' => $secret_info['merchantCertificate'],
-      'processingCertificate' => $secret_info['processingCertificate'],
-      'processingCertificatePass' => $secret_info['processingCertificatePass'],
+      'merchantCertificateKey' => $secret_info['merchantCertificateKey'],
+      'merchantCertificatePem' => $secret_info['merchantCertificatePem'],
+      'merchantCertificatePass' => $secret_info['merchantCertificatePass'],
     ];
 
     return $settings;
