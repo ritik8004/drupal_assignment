@@ -10,8 +10,6 @@ use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\BillingAddress;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_alshaya_acm_checkout_pre_place_order().
@@ -62,13 +60,9 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
   catch (\Exception $e) {
     \Drupal::logger('alshaya_acm_checkoutcom')->error($e->getMessage());
 
-    // Show generic message to user.
-    \Drupal::messenger()->addError(
-      t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
-    );
-
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
-    $response->send();
+    // Show generic error message to user and redirect to payment page.
+    $checkoutComApi->displayGenericMessage();
+    $checkoutComApi->redirectToPayment();
     exit;
   }
 }

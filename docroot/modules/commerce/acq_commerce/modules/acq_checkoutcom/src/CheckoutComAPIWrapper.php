@@ -9,6 +9,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
@@ -130,6 +131,13 @@ class CheckoutComAPIWrapper {
   protected $request;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * The logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -149,6 +157,8 @@ class CheckoutComAPIWrapper {
    *   The cart storage.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   The request stack.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
@@ -158,6 +168,7 @@ class CheckoutComAPIWrapper {
     ApiHelper $api_helper,
     CartStorageInterface $cart_storage,
     RequestStack $request,
+    MessengerInterface $messenger,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
@@ -165,6 +176,7 @@ class CheckoutComAPIWrapper {
     $this->apiHelper = $api_helper;
     $this->cartStorage = $cart_storage;
     $this->request = $request->getCurrentRequest();
+    $this->messenger = $messenger;
     $this->logger = $logger_factory->get('acq_checkoutcom');
   }
 
@@ -398,12 +410,10 @@ class CheckoutComAPIWrapper {
         '%cart_id' => $cart->id(),
         '%message' => $e->getMessage(),
       ]);
-      throw new \Exception(
-        new FormattableMarkup(
-          'Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id',
-          ['%cart_id' => $cart->id()]
-        )
-      );
+
+      // Show generic error message to user and redirect to payment page.
+      $this->displayGenericMessage();
+      $this->redirectToPayment();
     }
 
     if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS) {
@@ -412,13 +422,29 @@ class CheckoutComAPIWrapper {
     else {
       $this->logger->warning('checkout.com card charges request did not process.');
 
-      throw new \Exception(
-        new FormattableMarkup(
-          'Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id',
-          ['%cart_id' => $cart->id()]
-        )
-      );
+      // Show generic error message to user and redirect to payment page.
+      $this->displayGenericMessage();
+      $this->redirectToPayment();
     }
+  }
+
+  /**
+   * Display generic message of payment fail.
+   */
+  public function displayGenericMessage() {
+    // Show generic message to user.
+    $this->messenger->addError(
+      t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
+    );
+  }
+
+  /**
+   * Redirect to payment page.
+   */
+  public function redirectToPayment() {
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
+    $response->send();
+    exit;
   }
 
   /**
