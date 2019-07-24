@@ -4,12 +4,11 @@ namespace Drupal\alshaya_acm_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_checkoutcom\Plugin\PaymentMethod\CheckoutCom;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AlshayaCheckoutCom.
  *
- * @package Drupal\alshaya_acm_checkout\Plugin\PaymentMethod
+ * @package Drupal\alshaya_acm_checkoutcom\Plugin\PaymentMethod
  */
 class AlshayaCheckoutCom extends CheckoutCom {
 
@@ -17,8 +16,9 @@ class AlshayaCheckoutCom extends CheckoutCom {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // Set the default payment card to display form to enter new card.
-    $payment_card = 'new';
+    // Set the default payment card to display form, to enter new card.
+    $session = $this->currentRequest->getSession();
+    $payment_card = $session->get('checkout_com_payment_card', 'new');
 
     $pane_form['payment_card_details'] = [
       '#type' => 'container',
@@ -56,7 +56,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
 
-        $payment_card = empty($stored_cards_list) ? $payment_card : $this->currentRequest->query->get('payment-card');
+        $payment_card = empty($stored_cards_list) ? 'new' : $payment_card;
         $values = $form_state->getValue('acm_payment_methods');
         if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
           $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
@@ -155,19 +155,6 @@ class AlshayaCheckoutCom extends CheckoutCom {
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#suffix'] = $cc_suffix;
     }
     return $pane_form;
-  }
-
-  /**
-   * Ajax callback method to render cvv or display form to add new card.
-   */
-  public function renderSelectedCardFields(&$form, FormStateInterface $form_state) {
-    $element = $form_state->getTriggeringElement();
-
-    if (empty($element)) {
-      throw new NotFoundHttpException();
-    }
-
-    return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_card_details'];
   }
 
   /**
