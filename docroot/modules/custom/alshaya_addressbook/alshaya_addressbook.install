@@ -13,6 +13,15 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_update_N().
  *
+ * Make field_address required for Address Profile.
+ */
+function alshaya_addressbook_update_8306() {
+  alshaya_config_install_configs(['field.field.profile.address_book.field_address'], 'alshaya_addressbook');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add mapping for EG and make V2 default and sync areas.
  * Correct the mapping to handle additional fields in EG
  * without creating issue for other markets.
