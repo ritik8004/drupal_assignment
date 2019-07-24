@@ -200,24 +200,23 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   }
 
   /**
-   * Function to delete address using addressId field.
+   * Function to get addresses from profile.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Account object.
-   * @param int $address_id
-   *   Magento address id.
+   *
+   * @return mixed
+   *   An array of address profile objects.
    *
    * @throws \Exception
    */
-  public function deleteUserAddressesByAddressId(AccountInterface $account, $address_id) {
-    if ($address = $this->profileStorage->loadByProperties(
-      [
-        'field_address_id' => $address_id,
-        'uid' => $account->id(),
-      ]
-    )) {
-      $this->profileStorage->delete($address);
-    }
+  public function getUserAddressesFromProfile(AccountInterface $account) {
+    $address_profiles = $this->profileStorage->loadByProperties([
+      'uid' => $account->id(),
+      'type' => 'address_book',
+    ]);
+
+    return $address_profiles;
   }
 
   /**
