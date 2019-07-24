@@ -8,7 +8,6 @@
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\BillingAddress;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -111,9 +110,9 @@ function alshaya_acm_checkoutcom_form_multistep_checkout_alter(&$form, FormState
 }
 
 /**
- * Implements hook_acq_checkoutcom_payment_form_process_alter().
+ * Implements hook_acq_checkoutcom_payment_form_validate_alter().
  */
-function alshaya_acm_checkoutcom_acq_checkoutcom_payment_form_process_alter(&$response, $cart, $request_params) {
+function alshaya_acm_checkoutcom_acq_checkoutcom_payment_form_validate_alter(&$errors, $request_params) {
   $addressbook_manager = \Drupal::service('alshaya_addressbook.manager');
   $checkout_helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
 
@@ -135,11 +134,7 @@ function alshaya_acm_checkoutcom_acq_checkoutcom_payment_form_process_alter(&$re
     }
   }
 
-  $response->addCommand(new InvokeCommand(NULL, 'checkoutComCreateCardToken', []));
-  if (!empty($errors)) {
-    $response->addCommand(new InvokeCommand(NULL, 'checkoutPaymentError', [$errors]));
-  }
-  else {
+  if (empty($errors)) {
     if ($billing['same_as_shipping'] == BillingAddress::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
       $checkout_helper->setBillingFromShipping(TRUE);
     }
@@ -147,6 +142,5 @@ function alshaya_acm_checkoutcom_acq_checkoutcom_payment_form_process_alter(&$re
       $address = $addressbook_manager->getMagentoAddressFromAddressArray($billing['address']['billing']);
       $checkout_helper->setBillingInfo(FALSE, $address);
     }
-    $response->addCommand(new InvokeCommand(NULL, 'checkoutPaymentSuccess', []));
   }
 }
