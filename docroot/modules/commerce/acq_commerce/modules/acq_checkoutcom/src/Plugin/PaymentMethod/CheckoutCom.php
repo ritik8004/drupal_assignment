@@ -123,8 +123,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // Set the default payment card to display form to enter new card.
-    $payment_card = 'new';
+    // Get the default payment card to display form, to enter new card.
+    $session = $this->currentRequest->getSession();
+    $payment_card = $session->get('checkout_com_payment_card', 'new');
 
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
@@ -146,7 +147,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         }
       }
 
-      $payment_card = empty($stored_cards_list) ? $payment_card : $this->currentRequest->query->get('payment-card');
+      $payment_card = empty($stored_cards_list) ? 'new' : $payment_card;
       $values = $form_state->getValue('acm_payment_methods');
       if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
         $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
@@ -168,7 +169,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       }
     }
 
-    $pane_form['payment_details'] = [
+    $pane_form['payment_card_details'] = [
       '#type' => 'container',
       '#attributes' => [
         'id' => ['payment_details_checkout_com'],
@@ -185,12 +186,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     // Ask for cvv again when using existing card.
     if (!empty($payment_card) && $payment_card != 'new') {
 
-      $pane_form['payment_details'][$payment_card]['card_id'] = [
+      $pane_form['payment_card_details'][$payment_card]['card_id'] = [
         '#type' => 'hidden',
         '#value' => $customer_stored_cards[$payment_card]['gateway_token'],
       ];
 
-      $pane_form['payment_details'][$payment_card]['cc_cvv'] = [
+      $pane_form['payment_card_details'][$payment_card]['cc_cvv'] = [
         '#type' => 'password',
         '#maxlength' => 4,
         '#title' => $this->t('Security code (CVV)'),
@@ -199,7 +200,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
     }
     elseif ($payment_card == 'new') {
-      $pane_form['payment_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_details'], $form_state);
+      $pane_form['payment_card_details'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details'], $form_state);
     }
 
     return $pane_form;
@@ -214,7 +215,15 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     if (empty($element)) {
       throw new NotFoundHttpException();
     }
-    return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_details'];
+
+    $values = $form_state->getValue('acm_payment_methods');
+    if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
+      $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+      $session = $this->currentRequest->getSession();
+      $session->set('checkout_com_payment_card', $payment_card);
+    }
+
+    return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_card_details'];
   }
 
   /**
@@ -224,34 +233,34 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     // cko_card_token is not available in form state values.
     $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'];
 
-    $save_card = isset($payment_method['payment_details']['save_card'])
-      ? $payment_method['payment_details']['save_card']
+    $save_card = isset($payment_method['payment_card_details']['save_card'])
+      ? $payment_method['payment_card_details']['save_card']
       : FALSE;
     $payment_card = $payment_method['payment_card'];
 
-    $is_new_card = (empty($payment_card) || $payment_card == 'new') && !empty($payment_method['payment_details']['cko_card_token']);
+    $is_new_card = (empty($payment_card) || $payment_card == 'new') && !empty($payment_method['payment_card_details']['cko_card_token']);
 
     $is_mada_card = FALSE;
     if ($is_new_card
         && $this->checkoutComApi->isMadaEnabled()
-        && !empty($payment_method['payment_details']['card_bin'])
+        && !empty($payment_method['payment_card_details']['card_bin'])
     ) {
-      $is_mada_card = $this->checkoutComApi->isMadaBin($payment_method['payment_details']['card_bin']);
+      $is_mada_card = $this->checkoutComApi->isMadaBin($payment_method['payment_card_details']['card_bin']);
     }
 
     if ($is_mada_card || $this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
 
       if ($is_new_card) {
         $this->initiate3dSecurePayment(
-          $payment_method['payment_details']['cko_card_token'],
+          $payment_method['payment_card_details']['cko_card_token'],
           $is_mada_card,
           $save_card
         );
       }
       else {
         $this->initiateStoredCardPayment(
-          $payment_method['payment_details'][$payment_card]['card_id'],
-          (int) $payment_method['payment_details'][$payment_card]['cc_cvv']
+          $payment_method['payment_card_details'][$payment_card]['card_id'],
+          (int) $payment_method['payment_card_details'][$payment_card]['cc_cvv']
         );
       }
     }
@@ -259,8 +268,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       // For 2d process MDC will handle the part of payment with card_token_id.
       $this->initiate2dPayment(
         ($is_new_card)
-          ? $payment_method['payment_details']['cko_card_token']
-          : $payment_method['payment_details'][$payment_card]['card_id']
+          ? $payment_method['payment_card_details']['cko_card_token']
+          : $payment_method['payment_card_details'][$payment_card]['card_id']
       );
     }
   }
