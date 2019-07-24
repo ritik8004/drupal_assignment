@@ -37,6 +37,9 @@ class CheckoutComAPIWrapper {
   // Void payment endpoint.
   const ENDPOINT_VOID_PAYMENT = 'charges/{id}/void';
 
+  // Void payment endpoint.
+  const ENDPOINT_CHARGES_INFO = 'charges/{payment_token}';
+
   // Void payment amount.
   const VOID_PAYMENT_AMOUNT = 1.0;
 
@@ -416,7 +419,7 @@ class CheckoutComAPIWrapper {
       $this->redirectToPayment();
     }
 
-    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS) {
+    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL])) {
       return new RedirectResponse($response[self::REDIRECT_URL]);
     }
     else {
@@ -434,7 +437,7 @@ class CheckoutComAPIWrapper {
   public function displayGenericMessage() {
     // Show generic message to user.
     $this->messenger->addError(
-      t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
+      $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
     );
   }
 
@@ -633,6 +636,33 @@ class CheckoutComAPIWrapper {
       $response->send();
       exit;
     }
+  }
+
+  /**
+   * Get charges info based on payment token.
+   *
+   * @param string $payment_token
+   *   The payment token.
+   *
+   * @return mixed
+   *   Return payment details.
+   *
+   * @throws \Exception
+   */
+  public function getChargesInfo($payment_token) {
+    $endpoint = strtr(self::ENDPOINT_CHARGES_INFO, ['{payment_token}' => $payment_token]);
+    $doReq = function ($client, $req_param) use ($endpoint) {
+      return ($client->get($endpoint, []));
+    };
+
+    try {
+      $result = $this->tryCheckoutRequest($doReq, __METHOD__);
+    }
+    catch (\UnexpectedValueException $e) {
+      $this->logger->error('Error occurred while processing getting payment info.');
+    }
+
+    return $result;
   }
 
   /**
