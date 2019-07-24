@@ -171,13 +171,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     $pane_form['payment_card_details'] = [
       '#type' => 'container',
-      '#attributes' => [
-        'id' => ['payment_details_checkout_com'],
-      ],
+      '#id' => 'payment_details_checkout_com',
       '#attached' => [
         'library' => [
           $this->getCheckoutKitLibrary(),
-          'alshaya_acm_checkoutcom/alshaya_checkoutcom',
           'acq_checkoutcom/checkoutcom.form',
         ],
       ],
