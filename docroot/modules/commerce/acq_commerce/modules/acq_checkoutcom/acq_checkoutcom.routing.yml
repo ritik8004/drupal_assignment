@@ -52,6 +52,16 @@ acq_checkoutcom.apple_pay_validate:
   options:
     no_cache: TRUE
 
+acq_checkoutcom.apple_pay_save_payment:
+  path: '/checkoutcom/applepay/save-payment'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\acq_checkoutcom\Controller\ApplePayController::savePayment'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
 acq_checkoutcom.submit_payment_form:
   path: '/checkoutcom/submit/payment-form'
   defaults:
