@@ -11,7 +11,9 @@
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
       // Initialize.
-      Blazy();
+      $(document).ajaxComplete(function () {
+        Blazy();
+      });
       $(window).on('load', function () {
         Blazy({
           offset: $(window).height() // Loads images before they're visible
