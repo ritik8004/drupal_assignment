@@ -173,8 +173,9 @@ class CheckoutComController implements ContainerInjectionInterface {
   public function fail(Request $request) {
     $payment_token = $request->query->get('cko-payment-token');
     $data = $this->checkoutComApi->getChargesInfo($payment_token);
-
-    $this->logger->debug(
+    unset($data['card']);
+    unset($data['shippingDetails']);
+    $this->logger->info(
       'transactions failed for order: @order and payment_token: @token. more info available here: @info',
       [
         '@order' => $data['trackId'],
@@ -183,10 +184,7 @@ class CheckoutComController implements ContainerInjectionInterface {
       ]
     );
 
-    $this->messenger->addError(
-      $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
-    );
-
+    $this->checkoutComApi->setGenericErrorMessage();
     $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
     return new RedirectResponse($url, 302);
   }

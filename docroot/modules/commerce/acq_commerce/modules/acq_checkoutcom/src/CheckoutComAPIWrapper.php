@@ -367,9 +367,7 @@ class CheckoutComAPIWrapper {
       $this->logger->error($msg);
 
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
-        throw new \Exception(
-          $this->t('Could not make request to checkout.com, please contact our customer service team for assistance.')
-        );
+        throw new \Exception($msg);
       }
       elseif ($e instanceof RequestException) {
         throw new \UnexpectedValueException($msg, $e->getCode(), $e);
@@ -409,27 +407,33 @@ class CheckoutComAPIWrapper {
       $response = $this->tryCheckoutRequest($doReq, $caller);
     }
     catch (\UnexpectedValueException $e) {
-      $this->logger->error('Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id : %message', [
-        '%cart_id' => $cart->id(),
-        '%message' => $e->getMessage(),
-      ]);
+      $this->logger->error(
+        'Error occurred while trying to get redirect url for checkout.com for cart id: %cart_id with param: @param :: %message',
+        [
+          '%cart_id' => $cart->id(),
+          '%message' => $e->getMessage(),
+          '@params' => Json::encode($params),
+        ]
+      );
 
       // Show generic error message to user and redirect to payment page.
-      $this->displayGenericMessage();
+      $this->setGenericErrorMessage();
       $this->redirectToPayment();
     }
 
     if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL])) {
-      return new RedirectResponse($response[self::REDIRECT_URL]);
+      $redirect = new RedirectResponse($response[self::REDIRECT_URL]);
+      $redirect->send();
+      exit;
     }
     else {
-      $this->logger->debug(
+      $this->logger->info(
         'checkout.com card charges request did not process, getting response: @response.',
-        ['@response' => $response]
+        ['@response' => Json::encode($response)]
       );
 
       // Show generic error message to user and redirect to payment page.
-      $this->displayGenericMessage();
+      $this->setGenericErrorMessage();
       $this->redirectToPayment();
     }
   }
@@ -437,7 +441,7 @@ class CheckoutComAPIWrapper {
   /**
    * Display generic message of payment fail.
    */
-  public function displayGenericMessage() {
+  public function setGenericErrorMessage() {
     // Show generic message to user.
     $this->messenger->addError(
       $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
