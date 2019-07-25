@@ -29,7 +29,7 @@ class AlshayaImageLazyLoad extends FilterBase {
         $src = !empty($image->getAttribute('data-src')) ? $image->getAttribute('data-src') : $image->getAttribute('src');
         $image->setAttribute('data-src', $src);
         $image->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-        $image->setAttribute('class', 'b-lazy');
+        $image->setAttribute('class', 'b-lazy ' . $image->getAttribute('class'));
         $dom->saveHTML($image);
       }
       $text = Html::serialize($dom);
