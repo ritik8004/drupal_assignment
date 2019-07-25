@@ -129,7 +129,7 @@ class CheckoutComFormHelper {
         'class' => [
           'checkoutcom-credit-card-exp-month-select',
           'checkoutcom-input',
-          'alshaya-select2',
+          'convert-to-select2',
         ],
       ],
     ] + $states;
@@ -151,7 +151,7 @@ class CheckoutComFormHelper {
         'class' => [
           'checkoutcom-credit-card-exp-year-select',
           'checkoutcom-input',
-          'alshaya-select2',
+          'convert-to-select2',
         ],
         'data-checkout' => 'expiry-year',
       ],

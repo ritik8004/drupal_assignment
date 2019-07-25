@@ -59,7 +59,7 @@
 
         // Checkout.com Month & Year select fields.
         // TODO: Use this generic approach everywhere and cleanup this file.
-        $('.alshaya-select2.form-select').select2({
+        $('.convert-to-select2.form-select').select2({
           minimumResultsForSearch: -1
         });
       }
