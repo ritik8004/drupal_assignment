@@ -497,8 +497,8 @@ class CheckoutComAPIWrapper {
 
     $cart = $this->getCart();
     $address = ($type == 'shipping')
-      ? $cart->getShipping()
-      : $cart->getBilling();
+      ? (array) $cart->getShipping()
+      : (array) $cart->getBilling();
 
     return [
       'addressLine1' => $address['street'],
