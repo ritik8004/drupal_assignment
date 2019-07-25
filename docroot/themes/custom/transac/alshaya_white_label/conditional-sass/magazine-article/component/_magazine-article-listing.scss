@@ -1,8 +1,14 @@
 .path--magazine {
   .page-standard {
+    @include container(60rem);
+  }
+
+  .view-magazine-articles {
     @include container(52.75rem);
 
-    padding: 0 1.25rem;
+    @include breakpoint($upto-desktop) {
+      padding: 0 0.96875rem;
+    }
   }
 
   .block-page-title-block {
@@ -11,6 +17,9 @@
     h1 {
       font-size: 2.5rem;
       margin-top: 1.5rem;
+      padding-bottom: 1.875rem;
+      border-bottom: 1px solid $magazine-article-border-color;
+      margin-bottom: 1.5rem;
     }
   }
 
@@ -26,6 +35,10 @@
         margin-bottom: 2rem;
       }
     }
+  }
+
+  .field--name-field-magazine-date {
+    margin-bottom: 2.125rem;
   }
 
   .read-more {
