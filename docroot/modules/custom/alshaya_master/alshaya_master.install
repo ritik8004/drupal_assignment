@@ -11,20 +11,6 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Add string translation for - magazine.
- */
-function alshaya_master_update_8029() {
-  $strings = [
-    'magazine' => [
-      'ar' => 'المجلةً',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Updating mail_text filter config.
  */
 function alshaya_master_update_8028() {

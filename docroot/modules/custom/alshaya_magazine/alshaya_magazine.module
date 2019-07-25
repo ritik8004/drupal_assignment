@@ -59,7 +59,7 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
 
     $build['magazine_page_title'] = [
       '#type' => 'link',
-      '#title' => t('magazine'),
+      '#title' => t('Magazine'),
       '#url' => Url::fromRoute('view.magazine_articles.list'),
       '#attributes' => [
         'class' => ['magazine-detail-page-title'],
