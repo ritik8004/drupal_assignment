@@ -139,8 +139,14 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')) {
-      return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value)
-        ->addCacheTags(['taxonomy_term:' . $term->id()]);
+      $cachetags[] = 'taxonomy_term:' . $term->id();
+      if ($term->get('field_group_by_sub_category')->value) {
+        $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
+        foreach ($selected_subcategories as $selected_subcategory) {
+          $cachetags[] = 'taxonomy_term:' . $selected_subcategory->id();
+        }
+        return AccessResult::allowed()->addCacheTags($cachetags);
+      }
     }
     return AccessResult::forbidden()->addCacheTags(['taxonomy_term:' . $term->id()]);
   }
