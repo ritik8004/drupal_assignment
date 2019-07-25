@@ -175,7 +175,7 @@ class CheckoutComController implements ContainerInjectionInterface {
     $data = $this->checkoutComApi->getChargesInfo($payment_token);
     unset($data['card']);
     unset($data['shippingDetails']);
-    $this->logger->info(
+    $this->logger->warning(
       'transactions failed for order: @order and payment_token: @token. more info available here: @info',
       [
         '@order' => $data['trackId'],

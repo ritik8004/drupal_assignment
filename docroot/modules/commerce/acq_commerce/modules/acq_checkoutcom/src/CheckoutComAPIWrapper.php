@@ -427,7 +427,7 @@ class CheckoutComAPIWrapper {
       exit;
     }
     else {
-      $this->logger->info(
+      $this->logger->warning(
         'checkout.com card charges request did not process, getting response: @response.',
         ['@response' => Json::encode($response)]
       );
@@ -662,11 +662,20 @@ class CheckoutComAPIWrapper {
       return ($client->get($endpoint, []));
     };
 
+    $cart = $this->cartStorage->getCart(FALSE);
     try {
       $result = $this->tryCheckoutRequest($doReq, __METHOD__);
     }
     catch (\UnexpectedValueException $e) {
-      $this->logger->error('Error occurred while processing getting payment info.');
+      $this->logger->error(
+        'Error occurred while getting info on payment failure, for cart: @cart_id, payment token: @payment_token with message: @message.',
+        [
+          '@cart_id' => $cart->id(),
+          '@mail' => $cart->customerEmail(),
+          '@payment_token' => $payment_token,
+          '@message' => $e->getMessage(),
+        ]
+      );
     }
 
     return $result;
