@@ -11,13 +11,12 @@
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
       // Initialize.
+      var blazyOptions = { offset: $(window).height() };
       $(document).ajaxComplete(function () {
-        Blazy();
+        Blazy(blazyOptions);
       });
       $(window).on('load', function () {
-        Blazy({
-          offset: $(window).height() // Loads images before they're visible
-        });
+        Blazy(blazyOptions);
       });
     }
   };
