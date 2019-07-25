@@ -143,7 +143,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
       if ($term->get('field_group_by_sub_category')->value) {
         $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
-          $cachetags[] = 'taxonomy_term:' . $selected_subcategory->id();
+          $cachetags[] = 'taxonomy_term:' . $selected_subcategory['value'];
         }
         return AccessResult::allowed()->addCacheTags($cachetags);
       }
