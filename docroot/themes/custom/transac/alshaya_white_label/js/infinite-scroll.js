@@ -3,6 +3,8 @@
  * Override infinite scroll library.
  */
 
+/* global Blazy */
+
 (function ($, Drupal, debounce) {
   'use strict';
 
@@ -87,6 +89,7 @@
             $window.off(scrollEvent);
           }
         }, 1));
+        Blazy();
       });
     },
     detach: function (context, settings, trigger) {
