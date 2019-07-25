@@ -6,10 +6,8 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  Drupal.checkoutComProcessed = false;
   Drupal.checkoutComTokenised = false;
   Drupal.checkoutComTokenisationProcessed = false;
-  var oldBillingAddress = '';
   var oldCardInfo = '';
 
   Drupal.behaviors.acqCheckoutComForm = {
@@ -140,45 +138,8 @@
       Drupal.checkoutComTokenisationProcessed = false;
     }
 
-    // Collect data to be processed.
-    var billingAddress = $(form).find('input:not(.checkoutcom-input), select:not(.checkoutcom-input)').serialize();
-
-    // Validate form only when there's a change and form has any validation error.
-    if (oldBillingAddress !== billingAddress || Drupal.checkoutComProcessed === false) {
-      // Store current billing address to validate again if there are any
-      // change in already validated form.
-      oldBillingAddress = billingAddress;
-
-      // Validate checkout.com payment form.
-      Drupal.ajax({
-        url: Drupal.url('checkoutcom/submit/payment-form'),
-        element: $('#edit-actions-next').get(0),
-        base: false,
-        progress: {type: 'throbber'},
-        submit: billingAddress,
-        dataType: 'json',
-        type: 'POST',
-      }).execute();
-    }
+    Drupal.checkoutComValidateBeforeCheckout(form);
   }
-
-  // Helper method that will place errors.
-  Drupal.checkoutComShowError = function (element, error) {
-    var errorDiv = $('<div class="form-item--error-message" />');
-    errorDiv.html(error);
-    element.parent().append(errorDiv);
-  };
-
-  // Helper method to display global error.
-  Drupal.checkoutComShowGlobalError = function (error) {
-    Drupal.checkoutComProcessed = false;
-    var errorWrapper = $('<div class="messages__wrapper layout-container checkoutcom-global-error" />');
-    var errorDiv = $('<div class="messages messages--error"></div>').html(error);
-    errorWrapper.append(errorDiv);
-    $('#payment_details_checkout_com').parents('form').find('.checkoutcom-global-error').remove();
-    $('#payment_details_checkout_com').parents('form').prepend(errorWrapper);
-    window.scrollTo(0, 0);
-  };
 
   // Handle api error which triggered on card tokenisation fail.
   CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
@@ -228,14 +189,6 @@
       }
       Drupal.checkoutComTokenisationProcessed = true;
     });
-  };
-
-  // Display errors for form fields.
-  $.fn.checkoutPaymentError = function (formErrors) {
-    Drupal.checkoutComProcessed = false;
-    for (const errorFieldName in formErrors) {
-      Drupal.checkoutComShowError($('[name="'+ errorFieldName +'"]'), formErrors[errorFieldName]);
-    }
   };
 
   // Submit form on success.

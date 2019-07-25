@@ -118,7 +118,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
                                       FormStateInterface $form_state,
                                       array &$complete_form) {
 
-    if ($form_state->getErrors()) {
+    if (!$form_state->isSubmitted() || $form_state->getErrors()) {
       return;
     }
 
