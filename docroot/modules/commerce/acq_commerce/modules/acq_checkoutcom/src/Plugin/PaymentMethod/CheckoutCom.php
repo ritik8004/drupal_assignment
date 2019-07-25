@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @ACQPaymentMethod(
  *   id = "checkout_com",
- *   label = @Translation("Checkout.com"),
+ *   label = @Translation("Credit / Debit Card"),
  * )
  */
 class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
