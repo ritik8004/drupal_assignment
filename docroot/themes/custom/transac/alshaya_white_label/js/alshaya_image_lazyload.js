@@ -11,7 +11,7 @@
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
       // Initialize.
-      var blazyOptions = { offset: $(window).height() };
+      var blazyOptions = {offset: $(window).height()};
       $(document).ajaxComplete(function () {
         Blazy(blazyOptions);
       });
