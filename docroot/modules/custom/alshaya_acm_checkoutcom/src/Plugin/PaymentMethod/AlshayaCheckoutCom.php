@@ -108,12 +108,12 @@ class AlshayaCheckoutCom extends CheckoutCom {
             if ($payment_card && $payment_card != 'new') {
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
                 '#type' => 'hidden',
-                '#value' => $customer_stored_cards[$payment_card]['gateway_token'],
+                '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
               ];
 
-              $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_type'] = [
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['mada'] = [
                 '#type' => 'hidden',
-                '#value' => $customer_stored_cards[$payment_card]['card_type'],
+                '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
               ];
 
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [

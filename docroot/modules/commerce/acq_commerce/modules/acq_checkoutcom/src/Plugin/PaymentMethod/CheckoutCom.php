@@ -198,12 +198,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
       $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
         '#type' => 'hidden',
-        '#value' => $customer_stored_cards[$payment_card]['gateway_token'],
+        '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
       ];
 
-      $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_type'] = [
+      $pane_form['payment_card_details']['payment_card_' . $payment_card]['mada'] = [
         '#type' => 'hidden',
-        '#value' => $customer_stored_cards[$payment_card]['card_type'],
+        '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
       ];
 
       $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [
@@ -261,8 +261,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     $is_new_card = (empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new') && !empty($form_state->getValue('cko_card_token'));
 
-    $is_mada_card = ($is_new_card == FALSE && !empty($payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_type']))
-      ? $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_type']
+    $payment_card = $payment_method['payment_card'] ?? '';
+
+    $is_mada_card = ($is_new_card == FALSE && isset($payment_method['payment_card_details']['payment_card_' . $payment_card]['mada']))
+      ? $payment_method['payment_card_details']['payment_card_' . $payment_card]['mada']
       : FALSE;
 
     if ($is_new_card) {
@@ -280,9 +282,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $card = [
         'type' => 'existing',
         'mada' => $is_mada_card,
-        'card_hash' => $payment_method['payment_card'],
-        'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
-        'card_cvv' => (int) $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['cc_cvv'],
+        'card_hash' => $payment_card,
+        'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_card]['card_id'],
+        'card_cvv' => (int) $payment_method['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'],
       ];
     }
 
