@@ -259,38 +259,6 @@ class ApiHelper {
   }
 
   /**
-   * Store new card for customer.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   The user object.
-   * @param string $card_token
-   *   The card token to be stored.
-   *
-   * @return null|string
-   *   Return empty array or string.
-   *
-   * @todo: Remove after save card via checkout is working.
-   */
-  public function storeCustomerCard(UserInterface $user, string $card_token): ?string {
-    $response = $this->apiWrapper->invokeApi(
-      'checkoutcom/saveCard',
-      [
-        'card_token' => $card_token,
-        'customer_id' => $user->get('acq_customer_id')->getString(),
-      ],
-      'POST'
-    );
-
-    $response = Json::decode($response);
-    if (!empty($response) && isset($response['message'])) {
-      return $response['message'];
-    }
-
-    Cache::invalidateTags(['user:' . $user->id()]);
-    return NULL;
-  }
-
-  /**
    * Delete given card for the customer.
    *
    * @param \Drupal\user\UserInterface $user
