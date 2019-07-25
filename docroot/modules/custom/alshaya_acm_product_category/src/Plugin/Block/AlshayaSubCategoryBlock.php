@@ -147,8 +147,10 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
         }
         return AccessResult::allowed()->addCacheTags($cachetags);
       }
+
+      return AccessResult::forbidden()->addCacheTags(['taxonomy_term:' . $term->id()]);
     }
-    return AccessResult::forbidden()->addCacheTags(['taxonomy_term:' . $term->id()]);
+    return AccessResult::forbidden();
   }
 
 }
