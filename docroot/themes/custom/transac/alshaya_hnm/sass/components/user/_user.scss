@@ -129,7 +129,7 @@
     text-decoration: underline;
     font-weight: normal;
     color: $user_block_link;
-    font-family: $hnm-regular;
+    font-family: $hnm-demibold;
   }
 }
 
@@ -337,4 +337,8 @@
       text-decoration: underline;
     }
   }
+}
+
+#unmask_password {
+  text-transform: uppercase;
 }
