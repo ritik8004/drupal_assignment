@@ -31,8 +31,8 @@
     sendChargeRequest (paymentData) {
       return new Promise(function(resolve, reject) {
         $.ajax({
-          url: Drupal.url('checkout_com/payment/applepayplaceorder'),
-          type: "POST",
+          url: Drupal.url('checkoutcom/applepay/save-payment'),
+          type: 'POST',
           data: paymentData,
           success: function(data, textStatus, xhr) {
             if (data.status === true) {
@@ -93,53 +93,10 @@
 
       // Merchant Validation.
       session.onvalidatemerchant = function (event) {
-        console.log(event);
         var promise = checkoutApplePay.performValidation(event.validationURL);
         promise.then(function (merchantSession) {
           session.completeMerchantValidation(merchantSession);
         });
-      };
-
-      // Shipping contact.
-      session.onshippingcontactselected = function(event) {
-        console.log(event);
-        var status = ApplePaySession.STATUS_SUCCESS;
-
-        // Shipping info.
-        var shippingOptions = [];
-
-        var newTotal = {
-          type: 'final',
-          label: drupalSettings.checkoutCom.storeName,
-          amount: drupalSettings.checkoutCom.runningTotal
-        };
-
-        session.completeShippingContactSelection(status, shippingOptions, newTotal, checkoutApplePay.getLineItems());
-      };
-
-      // Shipping method selection.
-      session.onshippingmethodselected = function(event) {
-        console.log(event);
-        var status = ApplePaySession.STATUS_SUCCESS;
-        var newTotal = {
-          type: 'final',
-          label: drupalSettings.checkoutCom.storeName,
-          amount: drupalSettings.checkoutCom.runningTotal
-        };
-
-        session.completeShippingMethodSelection(status, newTotal, checkoutApplePay.getLineItems());
-      };
-
-      // Payment method selection
-      session.onpaymentmethodselected = function(event) {
-        console.log(event);
-        var newTotal = {
-          type: 'final',
-          label: drupalSettings.checkoutCom.storeName,
-          amount: drupalSettings.checkoutCom.runningTotal
-        };
-
-        session.completePaymentMethodSelection(newTotal, checkoutApplePay.getLineItems());
       };
 
       // Payment method authorization
@@ -157,15 +114,19 @@
           session.completePayment(status);
 
           if (success) {
-            // @todo: Handle success part.
-            // redirect to success page
+            $('#ckoApplePayButton').closest('form').submit();
+          }
+          else if ($('.checkout-ajax-progress-throbber').length > 0) {
+            $('.checkout-ajax-progress-throbber').remove();
           }
         });
       };
 
       // Session cancellation
       session.oncancel = function(event) {
-        console.log(event);
+        if ($('.checkout-ajax-progress-throbber').length > 0) {
+          $('.checkout-ajax-progress-throbber').remove();
+        }
       };
 
       // Begin session

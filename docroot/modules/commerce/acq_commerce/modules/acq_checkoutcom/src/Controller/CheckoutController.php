@@ -4,6 +4,7 @@ namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -70,13 +71,17 @@ class CheckoutController implements ContainerInjectionInterface {
       throw new NotFoundHttpException();
     }
 
+    $errors = [];
     $response = new AjaxResponse();
-    $cart = $this->cartStorage->getCart(FALSE);
-    $this->moduleHandler->alter(
-      'acq_checkoutcom_payment_form_process',
-      $response,
-      $cart,
-      $request_params
+    $response->addCommand(new InvokeCommand(NULL, 'checkoutComCreateCardToken', []));
+    // Allow other modules to validate the request data.
+    $this->moduleHandler->alter('acq_checkoutcom_payment_form_validate', $errors, $request_params);
+    $response->addCommand(
+      new InvokeCommand(
+        NULL,
+        !empty($errors) ? 'checkoutPaymentError' : 'checkoutPaymentSuccess',
+        !empty($errors) ? [$errors] : []
+      )
     );
     return $response;
   }

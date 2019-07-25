@@ -87,10 +87,10 @@ class CheckoutComFormHelper {
     $form['cc_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Name on card'),
+      '#id' => 'cardName',
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
         'data-checkout' => 'card-name',
-        'id' => 'cardName',
       ],
     ] + $states;
 
@@ -98,17 +98,18 @@ class CheckoutComFormHelper {
       '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
+      '#id' => 'cardNumber',
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',
         'data-checkout' => 'card-number',
-        'id' => 'cardNumber',
       ],
     ] + $states;
 
     $form['cc_exp_month'] = [
       '#type' => 'select',
       '#title' => $this->t('Expiration Month'),
+      '#id' => 'cardMonth',
       '#options' => [
         '01' => '01',
         '02' => '02',
@@ -129,7 +130,6 @@ class CheckoutComFormHelper {
           'checkoutcom-credit-card-exp-month-select',
           'checkoutcom-input',
         ],
-        'id' => 'cardMonth',
       ],
     ] + $states;
 
@@ -145,12 +145,12 @@ class CheckoutComFormHelper {
       '#title' => $this->t('Expiration Year'),
       '#options' => $year_options,
       '#default_value' => date('Y'),
+      '#id' => 'cardYear',
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-exp-year-select',
           'checkoutcom-input',
         ],
-        'id' => 'cardYear',
         'data-checkout' => 'expiry-year',
       ],
     ] + $states;
@@ -160,12 +160,12 @@ class CheckoutComFormHelper {
       '#maxlength' => 4,
       '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
+      '#id' => 'cardCvv',
       '#attributes' => [
         'class' => [
           'checkoutcom-credit-card-cvv-input',
           'checkoutcom-input',
         ],
-        'id' => 'cardCvv',
         'autocomplete' => 'cc-csc',
         'data-checkout' => 'cvv',
       ],
@@ -199,13 +199,9 @@ class CheckoutComFormHelper {
       ];
     }
 
-    $form['#attached'] = [
-      'drupalSettings' => [
-        'checkoutCom' => [
-          'debug' => $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false',
-          'public_key' => $this->apiHelper->getCheckoutcomConfig('public_key'),
-        ],
-      ],
+    $form['#attached']['drupalSettings']['checkoutCom'] = [
+      'debug' => $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false',
+      'public_key' => $this->apiHelper->getCheckoutcomConfig('public_key'),
     ];
 
     return $form;
@@ -246,9 +242,9 @@ class CheckoutComFormHelper {
     // Add secret info from $settings.
     $secret_info = Settings::get('apple_pay_secret_info');
     $settings = [
-      'merchantCertificate' => $secret_info['merchantCertificate'],
-      'processingCertificate' => $secret_info['processingCertificate'],
-      'processingCertificatePass' => $secret_info['processingCertificatePass'],
+      'merchantCertificateKey' => $secret_info['merchantCertificateKey'],
+      'merchantCertificatePem' => $secret_info['merchantCertificatePem'],
+      'merchantCertificatePass' => $secret_info['merchantCertificatePass'],
     ];
 
     return $settings;

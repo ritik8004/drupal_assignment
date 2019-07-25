@@ -200,6 +200,24 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   }
 
   /**
+   * Function to get addresses from profile.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   Account object.
+   *
+   * @return mixed
+   *   An array of address profile objects.
+   */
+  public function getUserAddressesFromProfile(AccountInterface $account) {
+    $address_profiles = $this->profileStorage->loadByProperties([
+      'uid' => $account->id(),
+      'type' => 'address_book',
+    ]);
+
+    return $address_profiles;
+  }
+
+  /**
    * Save address from Magento to Drupal.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
