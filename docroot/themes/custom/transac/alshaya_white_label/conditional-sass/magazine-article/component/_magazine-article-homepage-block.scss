@@ -74,22 +74,48 @@
       margin: 0.375rem 0 0.3125rem;
       color: $magazine-article-primary-color;
       text-align: center;
+      text-transform: uppercase;
     }
 
     h3 {
       text-align: center;
+      height: 2.875rem;
+      overflow: hidden;
+      margin: 0 0 1.875rem;
+      position: relative;
+
+      &::after {
+        content: "";
+        text-align: $right;
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        #{$right}: 0;
+        width: 30%;
+        height: 1.2em;
+        background: $magazine-article-title-overflow-shadow;
+        background: linear-gradient(to left, $magazine-article-title-overflow-shadow 30%, rgba(34, 34, 34, 0));
+
+        html[lang=ar] & {
+          background: linear-gradient(to right, $magazine-article-title-overflow-shadow 30%, rgba(34, 34, 34, 0));
+        }
+      }
 
       span {
         font-size: 1.25rem;
         line-height: 1.2;
         margin: 0 0 1.875rem;
         color: $magazine-article-primary-color;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.0625rem;
+        }
       }
     }
 
     .read-more {
       text-align: center;
-      padding-bottom: 0.9375;
+      padding-bottom: 0.9375rem;
 
       @include breakpoint($only-mobile) {
         display: none;

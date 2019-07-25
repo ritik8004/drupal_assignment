@@ -44,6 +44,7 @@
   .magazine-backfeed {
     padding-top: 0.9375rem;
     position: relative;
+    padding-#{$left}: 0.5rem;
 
     .magazine-back-to-feed {
       position: unset;
@@ -53,7 +54,7 @@
       font-weight: normal;
 
       &::before {
-        #{$left}: 0;
+        #{$left}: 0.5rem;
         width: 0.625rem;
         height: 1rem;
         background-size: 0.625rem 1rem;
