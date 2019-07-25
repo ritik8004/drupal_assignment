@@ -57,6 +57,15 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
       '#attributes' => ['class' => ['magazine-article-title']],
     ];
 
+    $build['field_magazine_page_title'] = [
+      '#type' => 'link',
+      '#title' => t('magazine'),
+      '#url' => Url::fromRoute('view.magazine_articles.list'),
+      '#attributes' => [
+        'class' => ['magazine-detail-page-title'],
+      ],
+    ];
+
     $build['field_magazine_slogan']['#prefix'] = render($build['title']);
 
     $build['back_to_feed'] = [

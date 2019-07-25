@@ -1,18 +1,4 @@
 .nodetype--magazine_article {
-  .page-standard {
-    @include container(52.75rem);
-
-    margin-top: 1.5rem;
-
-    @include breakpoint($only-tablet) {
-      padding: 0 1.5rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      padding: 0 0.5rem;
-    }
-  }
-
   .c-breadcrumb {
     display: none;
   }
@@ -65,6 +51,44 @@
     .field--name-field-html-heading {
       p {
         margin: 0;
+      }
+    }
+  }
+
+  .magazine-page-title {
+    border-bottom: 1px solid $magazine-article-border-color;
+    margin-bottom: 3.125rem;
+    margin-top: 0.625rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.9375rem;
+    }
+
+    .magazine-detail-page-title {
+      display: block;
+      font-size: 1.875rem;
+      color: $magazine-article-title;
+      text-align: center;
+      text-transform: uppercase;
+      width: 18.75rem;
+      margin: 0 auto;
+
+      &:hover {
+        color: $magazine-label-color;
+      }
+    }
+  }
+
+  .magazine-backfeed {
+    + article {
+      @include container(52.75rem);
+
+      @include breakpoint($only-tablet) {
+        padding: 0 1.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding: 0 0.5rem;
       }
     }
   }
@@ -190,6 +214,8 @@ body {
     }
 
     .c-products__item__label {
+      margin-bottom: 0;
+
       span {
         font-size: 0.875rem;
 
@@ -259,6 +285,10 @@ body {
       padding: 0 0.625rem;
       font-size: 0.75rem;
     }
+  }
+
+  .magazine-shop-the-story__label {
+    margin-bottom: 2.125rem;
   }
 
   .field--name-field-magazine-category {
