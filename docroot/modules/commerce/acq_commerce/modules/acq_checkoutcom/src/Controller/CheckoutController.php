@@ -73,7 +73,11 @@ class CheckoutController implements ContainerInjectionInterface {
 
     $errors = [];
     $response = new AjaxResponse();
-    $response->addCommand(new InvokeCommand(NULL, 'checkoutComCreateCardToken', []));
+
+    if (isset($request_params['acm_payment_methods']['payment_options']) && $request_params['acm_payment_methods']['payment_options'] !== 'checkout_com_applepay') {
+      $response->addCommand(new InvokeCommand(NULL, 'checkoutComCreateCardToken', []));
+    }
+
     // Allow other modules to validate the request data.
     $this->moduleHandler->alter('acq_checkoutcom_payment_form_validate', $errors, $request_params);
     $response->addCommand(

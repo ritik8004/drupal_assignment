@@ -6,6 +6,8 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
+  var applePaySessionObject;
+
   class CheckoutComApplePay {
     constructor(settings, context) {
       this.context = context;
@@ -74,6 +76,10 @@
     $(button_target, checkoutApplePay.context).click(function (event) {
       event.preventDefault();
       event.stopPropagation();
+
+      Drupal.checkoutComProcessed = false;
+      Drupal.checkoutComValidateBeforeCheckout($(this).closest('form'));
+
       // Prepare the parameters.
       var paymentRequest = {
         merchantIdentifier: drupalSettings.checkoutCom.merchantIdentifier,
@@ -89,7 +95,7 @@
       };
 
       // Start the payment session.
-      var session = new ApplePaySession(1, paymentRequest);
+      applePaySessionObject = new ApplePaySession(1, paymentRequest);
 
       // Merchant Validation.
       session.onvalidatemerchant = function (event) {
@@ -101,7 +107,6 @@
 
       // Payment method authorization
       session.onpaymentauthorized = function (event) {
-        console.log(event);
         var promise = checkoutApplePay.sendChargeRequest(event.payment.token);
         promise.then(function (success) {
           var status;
@@ -129,8 +134,6 @@
         }
       };
 
-      // Begin session
-      session.begin();
       return false;
     });
   }
@@ -152,6 +155,12 @@
         return false;
       }
     }
+  };
+
+  // Submit form on success.
+  $.fn.checkoutPaymentSuccess = function () {
+    // Begin session
+    applePaySessionObject.begin();
   };
 
 })(jQuery, Drupal, drupalSettings);
