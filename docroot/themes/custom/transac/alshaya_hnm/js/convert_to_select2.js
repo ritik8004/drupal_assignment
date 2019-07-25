@@ -56,7 +56,8 @@
         });
 
         // Checkout.com Month & Year select fields.
-        $('#payment_method_checkout_com #payment_method_new .form-select').select2({
+        // TODO: Use this generic approach everywhere and cleanup this file.
+        $('.alshaya-select2.form-select').select2({
           minimumResultsForSearch: -1
         });
       }
