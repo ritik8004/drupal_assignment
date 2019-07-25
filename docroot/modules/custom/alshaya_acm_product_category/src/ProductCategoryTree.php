@@ -492,7 +492,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->leftJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     $query->leftJoin('taxonomy_term__field_target_link', 'target_link', 'target_link.entity_id = tfd.tid AND target_link.langcode = tfd.langcode');
-    $query->leftJoin('taxonomy_term__field_override_target_link', 'override_target', 'target_link.entity_id = tfd.tid');
+    $query->leftJoin('taxonomy_term__field_override_target_link', 'override_target', 'override_target.entity_id = tfd.tid');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);
     }
