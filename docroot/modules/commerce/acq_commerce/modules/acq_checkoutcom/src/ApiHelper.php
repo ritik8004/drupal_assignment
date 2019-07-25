@@ -252,7 +252,9 @@ class ApiHelper {
       $card_date = strtotime($expiryYear . '-' . $expiryMonth);
       $card['expired'] = ($current_date > $card_date);
 
-      $card['paymentMethod'] = $this->ccTypesMap[$token_details['type']] ?? NULL;
+      $card['paymentMethod'] = $this->getCardType($token_details['type']);
+      // @todo: Remove if we are already receiving mada:true/false.
+      $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
