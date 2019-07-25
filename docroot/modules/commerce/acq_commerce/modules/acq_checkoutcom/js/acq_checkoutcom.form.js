@@ -216,6 +216,7 @@
 
     // Wait for tokenisation before submitting form.
     new Promise(function (resolve, reject) {
+      $(this).showCheckoutLoader();
       var wait_for_tokenisation = setInterval(function () {
         if (Drupal.checkoutComTokenisationProcessed === true) {
           clearInterval(wait_for_tokenisation);
