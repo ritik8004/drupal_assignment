@@ -9,6 +9,20 @@
       top: 5.5rem;
     }
   }
+
+  .c-plp {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      ul {
+        .applied-filter {
+          &.max-height {
+            max-height: 5.625rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 @include breakpoint($upto-desktop) {
