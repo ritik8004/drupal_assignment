@@ -3,7 +3,9 @@
 namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -52,6 +54,13 @@ class CheckoutComController implements ContainerInjectionInterface {
   protected $messenger;
 
   /**
+   * Checkout.com api wrapper object.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper
+   */
+  protected $checkoutComApi;
+
+  /**
    * A logger instance.
    *
    * @var \Psr\Log\LoggerInterface
@@ -69,6 +78,8 @@ class CheckoutComController implements ContainerInjectionInterface {
    *   The cart storage.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   Messenger service.
+   * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
+   *   Checkout.com api wrapper object.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
    */
@@ -77,6 +88,7 @@ class CheckoutComController implements ContainerInjectionInterface {
     APIWrapper $api_wrapper,
     CartStorageInterface $cart_storage,
     MessengerInterface $messenger,
+    CheckoutComAPIWrapper $checkout_com_Api,
     LoggerInterface $logger
   ) {
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
@@ -84,6 +96,7 @@ class CheckoutComController implements ContainerInjectionInterface {
     $this->cartStorage = $cart_storage;
     $this->logger = $logger;
     $this->messenger = $messenger;
+    $this->checkoutComApi = $checkout_com_Api;
   }
 
   /**
@@ -95,6 +108,7 @@ class CheckoutComController implements ContainerInjectionInterface {
       $container->get('acq_commerce.agent_api'),
       $container->get('acq_cart.cart_storage'),
       $container->get('messenger'),
+      $container->get('acq_checkoutcom.checkout_api'),
       $container->get('logger.factory')->get('acq_checkoutcom')
     );
   }
@@ -153,11 +167,25 @@ class CheckoutComController implements ContainerInjectionInterface {
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect response object.
+   *
+   * @throws \Exception
    */
   public function fail(Request $request) {
-    // @todo: Update fail logic here.
-    // $payment_token = $request->query->get('cko-payment-token');
-    $url = Url::fromRoute('acq_cart.cart', [])->toString();
+    $payment_token = $request->query->get('cko-payment-token');
+    $data = $this->checkoutComApi->getChargesInfo($payment_token);
+    unset($data['card']);
+    unset($data['shippingDetails']);
+    $this->logger->warning(
+      'transactions failed for order: @order and payment_token: @token. more info available here: @info',
+      [
+        '@order' => $data['trackId'],
+        '@token' => $payment_token,
+        '@info' => Json::encode($data),
+      ]
+    );
+
+    $this->checkoutComApi->setGenericErrorMessage();
+    $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
     return new RedirectResponse($url, 302);
   }
 
