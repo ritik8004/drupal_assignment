@@ -98,15 +98,15 @@
       applePaySessionObject = new ApplePaySession(1, paymentRequest);
 
       // Merchant Validation.
-      session.onvalidatemerchant = function (event) {
+      applePaySessionObject.onvalidatemerchant = function (event) {
         var promise = checkoutApplePay.performValidation(event.validationURL);
         promise.then(function (merchantSession) {
-          session.completeMerchantValidation(merchantSession);
+          applePaySessionObject.completeMerchantValidation(merchantSession);
         });
       };
 
       // Payment method authorization
-      session.onpaymentauthorized = function (event) {
+      applePaySessionObject.onpaymentauthorized = function (event) {
         var promise = checkoutApplePay.sendChargeRequest(event.payment.token);
         promise.then(function (success) {
           var status;
@@ -116,7 +116,7 @@
             status = ApplePaySession.STATUS_FAILURE;
           }
 
-          session.completePayment(status);
+          applePaySessionObject.completePayment(status);
 
           if (success) {
             $('#ckoApplePayButton').closest('form').submit();
@@ -128,7 +128,7 @@
       };
 
       // Session cancellation
-      session.oncancel = function(event) {
+      applePaySessionObject.oncancel = function(event) {
         document.dispatchEvent(new CustomEvent('apple_pay_cancel', { bubbles: false }));
       };
 

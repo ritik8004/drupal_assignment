@@ -2,7 +2,6 @@
   float: $left;
   padding-top: 0;
   width: 100%;
-  border-bottom: 1px solid $checkout_payment_checkoutcom_border;
 
   .form-item-cc-name,
   .form-item-cc-number,
@@ -348,9 +347,13 @@
             font-family: $alshaya-thin;
           }
 
+          .label.card-expired {
+            color: $checkout_payment_checkoutcomcard_expired_label;
+          }
+
           .card-delete a {
             color: $content_link_color;
-            font-weight: bold;
+            font-family: $alshaya-bold;
           }
         }
 
@@ -380,6 +383,16 @@
           opacity: 1;
         }
       }
+    }
+  }
+
+  .payment-plugin-wrapper-div.plugin-selected {
+    border-bottom: 1px solid $checkout_payment_option_border;
+  }
+
+  &.pseudo-last-child {
+    #payment_details_checkout_com {
+      border-bottom: 1px solid $checkout_payment_option_border;
     }
   }
 }

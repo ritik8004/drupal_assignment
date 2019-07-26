@@ -80,7 +80,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
     $complete_form['actions']['apple_wrapper'] = [
       '#type' => 'container',
       '#attributes' => [
-        'class' => ['actions-toolbar'],
+        'class' => ['actions-toolbar', 'apple-pay-wrapper'],
       ],
       '#attached' => [
         'library' => [
