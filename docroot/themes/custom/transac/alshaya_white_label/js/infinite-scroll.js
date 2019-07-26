@@ -88,8 +88,8 @@
           }
         }, 1));
 
-        if (typeof Drupal.blazy !== 'undefined') {
-          Drupal.blazy.revalidate();
+        if (typeof Drupal.blazyRevalidate !== 'undefined') {
+          Drupal.blazyRevalidate();
         }
 
       });
