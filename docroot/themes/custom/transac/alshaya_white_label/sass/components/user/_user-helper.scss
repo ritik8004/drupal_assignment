@@ -410,6 +410,11 @@
         @include breakpoint($only-mobile) {
           width: 17.9375rem;
           margin: 0 auto;
+          text-align: $left;
+
+          &::before {
+            margin-#{$right}: 0.875rem;
+          }
         }
 
         @include breakpoint($tablet) {
