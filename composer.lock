@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57a7a737dd41d821943c1fa9fca2305b",
+    "content-hash": "11af10b7c8cb59af443d3b4e20ddf366",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11618,7 +11618,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-06-11/3054878-11.patch"
+                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -21416,6 +21416,41 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/stage_file_proxy"
             }
+        },
+        {
+            "name": "emuse/behat-html-formatter",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dutchiexl/BehatHtmlFormatterPlugin.git",
+                "reference": "c7a51a1013c0ee6fdc4a00e93842d5f9c8bc98ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dutchiexl/BehatHtmlFormatterPlugin/zipball/c7a51a1013c0ee6fdc4a00e93842d5f9c8bc98ec",
+                "reference": "c7a51a1013c0ee6fdc4a00e93842d5f9c8bc98ec",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "~3.0",
+                "php": ">=5.3.0",
+                "twig/twig": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "emuse\\BehatHTMLFormatter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Neal Vanmeert",
+                    "email": "neal@emuse.be"
+                }
+            ],
+            "description": "This will create a html formatter for Behat.",
+            "time": "2015-05-27T15:09:34+00:00"
         },
         {
             "name": "geerlingguy/drupal-vm",

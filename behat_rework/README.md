@@ -321,10 +321,12 @@ Here's the directory structure:
 Otherwise install it via brew or from java: 
 [https://www.java.com/en/download/help/index_installing.xml](https://www.java.com/en/download/help/index_installing.xml)
 
-1. `cd behat_rework`
-2. `composer install`
+
+1. `composer install`
+2. `cd vendor`
 3. `npm install --prefix bin chromedriver`
-4. `./behat-build.sh` This will generate feature files and 
+4. `cd ..`
+4. `./behat_rework/behat-build.sh` This will generate feature files and 
   - Also have parameters:
     - `--rebuild` (boolean): `TRUE` to recollect yml files and variables.
       - by default rebuild is false, and it will only regenerate features files
@@ -336,9 +338,10 @@ Otherwise install it via brew or from java:
       - brand + market + env: `--site=hm-kw-uat,hm-sa-uat`
       - brand + market + env + lang: `--site=hm-kw-uat-en,hm-sa-uat-ar`  
 5. (In a separate terminal window) 
-  - `cd behat_rework`
 ```bash
-java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
+java -Dwebdriver.chrome.driver=vendor/bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
 ```
-6. The script that we ran on point 4, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
-to Run behat test cases for any specific site - `bin/behat --profile=hm-kw-uat-en`
+6. The script that we ran on point 5, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
+to Run behat test cases for: 
+ - any specific site - `vendor/bin/behat --profile=hm-kw-uat-en`
+ - any specific feature for a site - `vendor/bin/behat --profile=hm-kw-uat-en ./behat_rework/build/features/hm-kw-uat-en/breadcrumb.feature`
