@@ -164,6 +164,10 @@
         Drupal.plpListingProductTileHeight();
       }, 300);
 
+      $(window).on('blazySuccess', function() {
+        Drupal.plpListingProductTileHeight();
+      });
+
       // Back to PLP and loading a PLP/SRP with facets active in URL.
       if (context === $(document)[0]) {
         showFilterCount();
