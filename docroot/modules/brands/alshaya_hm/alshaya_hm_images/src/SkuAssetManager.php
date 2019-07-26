@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
@@ -138,6 +139,20 @@ class SkuAssetManager {
   private $fileUsage;
 
   /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  private $lock;
+
+  /**
+   * Cache for media_file_mapping.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  private $cacheMediaFileMapping;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -164,6 +179,10 @@ class SkuAssetManager {
    *   Date Time service.
    * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
    *   File Usage.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
+   *   Cache for media_file_mapping.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -176,7 +195,9 @@ class SkuAssetManager {
                               Client $http_client,
                               LoggerChannelFactoryInterface $logger_factory,
                               TimeInterface $time,
-                              FileUsageInterface $file_usage) {
+                              FileUsageInterface $file_usage,
+                              LockBackendInterface $lock,
+                              CacheBackendInterface $cache_media_file_mapping) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -190,6 +211,8 @@ class SkuAssetManager {
     $this->logger = $logger_factory->get('SkuAssetManager');
     $this->time = $time;
     $this->fileUsage = $file_usage;
+    $this->lock = $lock;
+    $this->cacheMediaFileMapping = $cache_media_file_mapping;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -238,18 +261,20 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
+      // Use pims/asset id for lock key.
       try {
         $file = $this->downloadImage($asset, $sku->getSku());
-        if ($file instanceof FileInterface) {
-          $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
-
-          $asset['drupal_uri'] = $file->getFileUri();
-          $asset['fid'] = $file->id();
-          $save = TRUE;
-        }
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
+      }
+
+      if ($file instanceof FileInterface) {
+        $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+
+        $asset['drupal_uri'] = $file->getFileUri();
+        $asset['fid'] = $file->id();
+        $save = TRUE;
       }
 
       if (empty($asset['fid'])) {
@@ -279,8 +304,6 @@ class SkuAssetManager {
    *
    * @return \Drupal\file\FileInterface|null
    *   File entity if image download successful.
-   *
-   * @throws \Exception
    */
   private function downloadPimsImage(array $data, string $sku) {
     $base_url = $this->hmImageSettings->get('pims_base_url');
@@ -347,8 +370,6 @@ class SkuAssetManager {
    *
    * @return \Drupal\file\FileInterface|null
    *   File entity download successful.
-   *
-   * @throws \Exception
    */
   private function downloadLiquidPixelImage(array $asset, string $sku) {
     $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
@@ -431,6 +452,36 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset, string $sku) {
+    $lock_key = '';
+
+    // Allow disabling this through settings.
+    if (Settings::get('media_avoid_parallel_downloads', 1)) {
+
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_image_' . $id;
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+
+          // Check once if downloaded by another process.
+          $cache = $this->cacheMediaFileMapping->get($lock_key);
+          if ($cache && $cache->data) {
+            $file = $this->fileStorage->load($cache->data);
+            if ($file instanceof FileInterface) {
+              return $file;
+            }
+
+            throw new \Exception(sprintf('File id %s mapped for %s in cache invalid, not retrying', $cache->data, $id));
+          }
+        }
+      } while (!$lock_acquired);
+    }
+
     $file = NULL;
     if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image'], $sku);
@@ -440,12 +491,20 @@ class SkuAssetManager {
     }
 
     if ($file instanceof FileInterface) {
-      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      if ($lock_key) {
+        // Add file id in cache for other processes to be able to use.
+        $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
+      }
+
       $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
         '@uri' => $file->getFileUri(),
         '@id' => $id,
       ]);
+    }
+
+    if ($lock_key) {
+      $this->lock->release($lock_key);
     }
 
     return $file;

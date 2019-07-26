@@ -10,7 +10,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
@@ -287,7 +286,7 @@ class ProductResource extends ResourceBase {
     foreach ($label_contexts as $key => $context) {
       $data['labels'][] = [
         'context' => $context,
-        'labels' => $this->getLabels($sku, $key),
+        'labels' => $this->mobileAppUtility->getLabels($sku, $key),
       ];
     }
 
@@ -374,34 +373,6 @@ class ProductResource extends ResourceBase {
    */
   private function getMedia(SKUInterface $sku, string $context): array {
     return $this->mobileAppUtility->getMedia($sku, $context);
-  }
-
-  /**
-   * Wrapper function get labels and make the urls absolute.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $context
-   *   Context.
-   *
-   * @return array
-   *   Labels data.
-   */
-  private function getLabels(SKUInterface $sku, string $context): array {
-    $labels = $this->skuManager->getLabels($sku, $context);
-
-    if (empty($labels)) {
-      return [];
-    }
-
-    foreach ($labels as &$label) {
-      $doc = new \DOMDocument();
-      $doc->loadHTML((string) $label['image']);
-      $xpath = new \DOMXPath($doc);
-      $label['image'] = Url::fromUserInput($xpath->evaluate("string(//img/@src)"), ['absolute' => TRUE])->toString();
-    }
-
-    return $labels;
   }
 
   /**
@@ -571,7 +542,7 @@ class ProductResource extends ResourceBase {
    */
   private function getPromotions(SKUInterface $sku): array {
     $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
       $promotion_node = $this->nodeStorage->load($nid);

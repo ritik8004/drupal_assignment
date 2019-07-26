@@ -7,6 +7,29 @@
 
 /**
  * Implements hook_update_N().
+ *
+ * Adding custom blocks for social login blocks.
+ */
+function alshaya_social_update_8003() {
+  alshaya_config_install_configs(
+    ['block.block.alshayasocialloginblock'],
+    'alshaya_social'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install alshaya_social_google module.
+ */
+function alshaya_social_update_8002() {
+  \Drupal::service('module_installer')->install(['alshaya_social_google']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add string translation.
  */
 function alshaya_social_update_8001() {
   $strings = [

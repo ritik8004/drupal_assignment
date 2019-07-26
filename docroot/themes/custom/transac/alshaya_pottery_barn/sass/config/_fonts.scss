@@ -14,16 +14,17 @@ $cairo: 'Cairo';
     url('../fonts/alshaya-icons.svg?2pxs5l#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 // Theme specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$primary-font: $openSans, $cairo;
+$primary-font: $openSans, $cairo, 'Arial';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$font-arabic: $openSans, $cairo;
+$font-arabic: $openSans, $cairo, 'Arial';
 
 $alshaya-icons: 'alshaya-icons';
 $body_font: $primary-font;

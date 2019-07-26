@@ -5,7 +5,37 @@
  * Contains install, update, uninstall hooks for alshaya_master module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating mail_text filter config.
+ */
+function alshaya_master_update_8028() {
+  $configs = [
+    'filter.format.mail_text',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_master');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Setting default value for lazy load placeholder.
+ */
+function alshaya_master_update_8027() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshaya_config_manager */
+  $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
+  $alshaya_config_manager->updateConfigs(
+    ['alshaya_master.settings'],
+    'alshaya_master',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
 
 /**
  * Implements hook_update_N().

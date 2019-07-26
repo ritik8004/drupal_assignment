@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the alshaya_config module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Creates config for `alshaya_config` module.
+ */
+function alshaya_config_update_8601() {
+  \Drupal::configFactory()->getEditable('alshaya_config.settings')
+    ->set('log_config_changes', TRUE)
+    ->save();
+}

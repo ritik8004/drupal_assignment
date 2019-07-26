@@ -4,7 +4,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\user\UserInterface;
-use Drupal\rest\ModifiedResourceResponse;
+use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Psr\Log\LoggerInterface;
@@ -77,24 +77,28 @@ class UserGetStatusResource extends ResourceBase {
    *   Throws when term provided not exists.
    */
   public function get(string $email) {
+    $user = user_load_by_mail($email);
+
+    // If user not exists in the system.
+    if (!$user instanceof UserInterface) {
+      $this->mobileAppUtility->throwException('User not found.');
+    }
+
     $response_data = [
       'status' => FALSE,
     ];
 
-    if (!empty($email)) {
-      $user = user_load_by_mail($email);
-      if (!$user instanceof UserInterface) {
-        $this->mobileAppUtility->throwException('User not found.');
-      }
-      if ($user->isActive()) {
-        $response_data = [
-          'status' => TRUE,
-          'email' => $email,
-        ];
-      }
+    if ($user->isActive()) {
+      $response_data = [
+        'status' => TRUE,
+        'email' => $email,
+      ];
     }
 
-    return (new ModifiedResourceResponse($response_data));
+    $response = new ResourceResponse($response_data);
+    $response->addCacheableDependency($user);
+
+    return $response;
   }
 
 }

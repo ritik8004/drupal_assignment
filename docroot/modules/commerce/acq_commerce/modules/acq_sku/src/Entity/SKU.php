@@ -8,8 +8,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -159,7 +159,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Processing is required only for media type image as of now.
     if (isset($data['media_type']) && $data['media_type'] == 'image') {
       if (!empty($data['fid'])) {
-        $file = File::load($data['fid']);
+        $file = $this->getFileStorage()->load($data['fid']);
         if (!($file instanceof FileInterface)) {
           // Leave a message for developers to find out why this happened.
           \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku" having language @langcode. Trace: @trace', [
@@ -219,6 +219,38 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @throws \Exception
    */
   protected function downloadMediaImage(array $data) {
+    $lock_key = '';
+
+    // Allow disabling this through settings.
+    if (Settings::get('media_avoid_parallel_downloads', 1)) {
+      /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+      $lock = \Drupal::service('lock.persistent');
+
+      // Use remote id for lock key.
+      $lock_key = 'download_image_' . $data['value_id'];
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+
+          // Check once if downloaded by another process.
+          $cache = \Drupal::cache('media_file_mapping')->get($lock_key);
+          if ($cache && $cache->data) {
+            $file = $this->getFileStorage()->load($cache->data);
+            if ($file instanceof FileInterface) {
+              return $file;
+            }
+
+            throw new \Exception(sprintf('File id %s mapped for %s in cache invalid, not retrying', $cache->data, $data['value_id']));
+          }
+        }
+      } while (!$lock_acquired);
+    }
+
     // Preparing args for all info/error messages.
     $args = ['@file' => $data['file'], '@sku_id' => $this->id()];
 
@@ -232,6 +264,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Check to ensure empty file is not saved in SKU.
     if (empty($file_data)) {
+      if ($lock_key) {
+        $lock->release($lock_key);
+      }
       throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
     }
 
@@ -253,14 +288,26 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      if ($lock_key) {
+        // Add file id in cache for other processes to be able to use.
+        \Drupal::cache('media_file_mapping')->set($lock_key, $file->id(), \Drupal::time()->getRequestTime() + 120);
+
+        // Release the lock now.
+        $lock->release($lock_key);
+      }
+
       /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
       $file_usage = \Drupal::service('file.usage');
       $file_usage->add($file, $this->getEntityTypeId(), $this->getEntityTypeId(), $this->id());
+
       return $file;
     }
-    else {
-      throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
+
+    if ($lock_key) {
+      $lock->release($lock_key);
     }
+
+    throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
   }
 
   /**
@@ -759,6 +806,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $this->getPluginInstance();
     $plugin->refreshStock($this);
+  }
+
+  /**
+   * Get File Storage.
+   *
+   * @return \Drupal\file\FileStorageInterface
+   *   File Storage.
+   */
+  private function getFileStorage() {
+    static $storage;
+
+    if (empty($storage)) {
+      $storage = $this->entityTypeManager()->getStorage('file');
+    }
+
+    return $storage;
   }
 
 }

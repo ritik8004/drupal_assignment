@@ -40,7 +40,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
-use Drupal\file\FileInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -424,17 +423,6 @@ function alshaya_acm_product_acq_sku_update(SKU $entity) {
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
   _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_DELETE);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- */
-function alshaya_acm_product_file_delete(FileInterface $entity) {
-  \Drupal::logger('alshaya_acm_product')->notice('Deleting file @fid with uri @uri on page @page', [
-    '@fid' => $entity->id(),
-    '@uri' => $entity->getFileUri(),
-    '@page' => $_SERVER['REQUEST_URI'] ?? '-',
-  ]);
 }
 
 /**

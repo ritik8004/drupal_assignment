@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_magazine_theme() {
+  $items = [];
+
+  $items['node__magazine_article__full'] = [
+    'template' => 'node--magazine-article--full',
+    'base hook' => 'node',
+  ];
+
+  $items['node__magazine_article__listing'] = [
+    'template' => 'node--magazine-article--listing',
+    'base hook' => 'node',
+  ];
+
+  $items['node__magazine_article__teaser'] = [
+    'template' => 'node--magazine-article--teaser',
+    'base hook' => 'node',
+  ];
+
+  $items['views_view__magazine_articles__homepage_block'] = [
+    'template' => 'views-view--magazine-articles--homepage_block',
+    'base hook' => 'views',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityViewDisplayInterface $display, $view_mode) {
+  if ($node->bundle() != 'magazine_article') {
+    return;
+  }
+
+  $build['#attached']['library'][] = 'alshaya_white_label/magazine_article';
+
+  if ($view_mode == 'full') {
+    $build['title'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h1',
+      '#value' => $node->label(),
+      '#attributes' => ['class' => ['magazine-article-title']],
+    ];
+
+    $build['magazine_page_title'] = [
+      '#type' => 'link',
+      '#title' => t('Magazine'),
+      '#url' => Url::fromRoute('view.magazine_articles.list'),
+      '#attributes' => [
+        'class' => ['magazine-detail-page-title'],
+      ],
+    ];
+
+    $build['field_magazine_slogan']['#prefix'] = render($build['title']);
+
+    $build['back_to_feed'] = [
+      '#type' => 'link',
+      '#title' => t('Back to feed'),
+      '#url' => Url::fromRoute('view.magazine_articles.list'),
+      '#attributes' => [
+        'class' => ['magazine-back-to-feed'],
+      ],
+    ];
+  }
+  elseif ($view_mode == 'listing') {
+    $build['title'] = [
+      '#type' => 'link',
+      '#url' => $node->toUrl(),
+      '#title' => $node->label(),
+      '#prefix' => '<h2>',
+      '#suffix' => '</h2>',
+    ];
+
+    $build['field_magazine_slogan']['#prefix'] = render($build['title']);
+  }
+}
+
+/**
+ * Implements hook_theme_suggestion_view_unformatted_alter().
+ */
+function alshaya_magazine_theme_suggestions_views_view_unformatted_alter(array &$suggestions, &$variables) {
+  if ($variables['view']->id() == 'magazine_articles' && $variables['view']->current_display == 'homepage_block') {
+    $suggestions[] = "views_view_unformatted__magazine_articles";
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_magazine_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id != 'node_magazine_article_edit_form' && $form_id != 'node_magazine_article_form') {
+    return;
+  }
+
+  $form['field_magazine_paragraphs']['widget']['add_more']['add_more_button_image_title_subtitle']['#value'] = t('Add @type', ['@type' => 'Image']);
+
+  if (\Drupal::currentUser()->hasPermission('administer magazine promote to frontend')) {
+    $form['options']['#access'] = TRUE;
+    $form['promote']['#access'] = TRUE;
+  }
+
+  foreach ($form['field_magazine_paragraphs']['widget'] as $index => $widget) {
+    if (empty($widget['#paragraph_type']) || $widget['#paragraph_type'] != 'image_title_subtitle') {
+      continue;
+    }
+
+    $form['field_magazine_paragraphs']['widget'][$index]['top']['paragraph_type_title']['info']['#markup'] = t('Image');
+
+    if (isset($widget['subform']['field_title'])) {
+      $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_title']['#access'] = FALSE;
+      $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_sub_title']['#access'] = FALSE;
+      $form['field_magazine_paragraphs']['widget'][$index]['subform']['field_link']['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_magazine_module_implements_alter(&$implementations, $hook) {
+  switch ($hook) {
+    // Move our form_alter() implementation to the end of the list.
+    case 'form_alter':
+      $group = $implementations['alshaya_magazine'];
+      unset($implementations['alshaya_magazine']);
+      $implementations['alshaya_magazine'] = $group;
+      break;
+  }
+}

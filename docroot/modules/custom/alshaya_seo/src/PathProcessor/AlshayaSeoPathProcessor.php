@@ -32,8 +32,19 @@ class AlshayaSeoPathProcessor implements OutboundPathProcessorInterface {
     // We force it from here.
     $path = rtrim($path, '/');
 
+    if (strpos($path, '.') > -1) {
+      // Do nothing for urls with dot, simple test so doing first.
+      // We don't want to add trailing slash for urls with .html for instance.
+    }
+    // Add trailing slash for home page.
+    elseif (empty($path)) {
+      $path = '/';
+    }
     // Add trailing slash for term pages.
-    if ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
+    elseif ($route instanceof Route && $route->getPath() == '/taxonomy/term/{taxonomy_term}') {
+      $path = $path . '/';
+    }
+    elseif ($route instanceof Route && $route->getPath() == '/node/{node}') {
       $path = $path . '/';
     }
 
