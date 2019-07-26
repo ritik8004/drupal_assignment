@@ -700,12 +700,6 @@
       }
     }
 
-    &.pseudo-last-child {
-      .payment-plugin-wrapper-div {
-        border-bottom: 1px solid $checkout_payment_option_border;
-      }
-    }
-
     .payment-plugin-wrapper-div {
       &.plugin-selected {
         background-color: $checkout_payment_row_selected;
