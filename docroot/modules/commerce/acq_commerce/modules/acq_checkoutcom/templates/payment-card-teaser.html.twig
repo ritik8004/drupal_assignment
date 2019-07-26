@@ -9,7 +9,7 @@
       <div class="label">{{ "expires on"|t }}</div>
       <div class="card-expiry-date">{{ card_info.expirationDate }}</div>
     {% else %}
-      <div class="label">{{ "expired"}}</div>
+      <div class="label card-expired">{{ "expired"}}</div>
       <div class="card-delete">{{ link(delete_operation.title, delete_operation.url) }}</div>
     {% endif %}
   </div>

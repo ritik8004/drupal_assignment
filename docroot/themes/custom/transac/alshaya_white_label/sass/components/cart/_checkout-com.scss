@@ -348,9 +348,13 @@
             font-family: $alshaya-thin;
           }
 
+          .label.card-expired {
+            color: $checkout_payment_checkoutcomcard_expired_label;
+          }
+
           .card-delete a {
             color: $content_link_color;
-            font-weight: bold;
+            font-family: $alshaya-bold;
           }
         }
 
