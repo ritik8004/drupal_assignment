@@ -5,8 +5,9 @@
         $('.content-head', $(this)).on('click', function () {
           $(this).parent().toggleClass('active--accordion');
           $(this).next().slideToggle();
-          if (typeof Drupal.blazy !== 'undefined') {
-            Drupal.blazy.revalidate();
+
+          if (typeof Drupal.blazyRevalidate !== 'undefined') {
+            Drupal.blazyRevalidate();
           }
         });
       });
