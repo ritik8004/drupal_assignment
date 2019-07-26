@@ -105,6 +105,10 @@ function alshaya_acm_checkoutcom_form_multistep_checkout_alter(&$form, FormState
       ',
     ];
   }
+
+  if (isset($form['actions']['apple_wrapper'])) {
+    $form['actions']['apple_wrapper']['#attached']['library'][] = 'alshaya_acm_checkoutcom/applepay';
+  }
 }
 
 /**

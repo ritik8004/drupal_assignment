@@ -278,6 +278,12 @@
     $('.checkout-ajax-progress-throbber').show();
   };
 
+  $.fn.removeCheckoutLoader = function () {
+    if ($('.checkout-ajax-progress-throbber').length > 0) {
+      $('.checkout-ajax-progress-throbber').remove();
+    }
+  };
+
   Drupal.behaviors.fixCheckoutSummaryBlock = {
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');

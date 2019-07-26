@@ -121,17 +121,15 @@
           if (success) {
             $('#ckoApplePayButton').closest('form').submit();
           }
-          else if ($('.checkout-ajax-progress-throbber').length > 0) {
-            $('.checkout-ajax-progress-throbber').remove();
+          else {
+            document.dispatchEvent(new CustomEvent('apple_pay_authorisation_fail', { bubbles: false }));
           }
         });
       };
 
       // Session cancellation
       session.oncancel = function(event) {
-        if ($('.checkout-ajax-progress-throbber').length > 0) {
-          $('.checkout-ajax-progress-throbber').remove();
-        }
+        document.dispatchEvent(new CustomEvent('apple_pay_cancel', { bubbles: false }));
       };
 
       return false;
@@ -144,7 +142,9 @@
       if (window.ApplePaySession) {
         let applePay = new CheckoutComApplePay(settings, context);
         $('#payment_method_checkout_com_applepay', context).addClass('supported');
-        launchApplePay(applePay);
+        if (typeof settings.checkoutCom !== 'undefined' && typeof settings.checkoutCom.merchantIdentifier !== 'undefined') {
+          launchApplePay(applePay);
+        }
       }
       else {
         // Handle in case apple pay is last payment option, we need someone

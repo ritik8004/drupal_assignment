@@ -67,7 +67,7 @@
         .once('initialize-checkoutkit')
         .each(function() {
           CheckoutKit.configure({
-            debug: (drupalSettings.checkoutCom.debug === 'true'),
+            debugMode: (drupalSettings.checkoutCom.debug === 'true'),
             publicKey: drupalSettings.checkoutCom.public_key,
           });
         });
@@ -91,26 +91,6 @@
             }
           });
         });
-
-      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAcqCheckoutCom === 'undefined') {
-        Drupal.Ajax.prototype.successAcqCheckoutCom = Drupal.Ajax.prototype.success;
-
-        // @See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.success()
-        Drupal.Ajax.prototype.success = function (response, status) {
-          // Invoke the original function.
-          this.successAcqCheckoutCom(response, status);
-          // Remove ajax loader when the ajax call does not contain
-          // checkoutPaymentSuccess, that means there are some form errors and
-          // can not continue with place order.
-          const checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
-          if (checkFinalCall.length < 1) {
-            if ($('.checkout-ajax-progress-throbber').length > 0) {
-              $('.checkout-ajax-progress-throbber').remove();
-            }
-          }
-        };
-      }
-
     }
   };
 
@@ -204,14 +184,7 @@
         });
       }
       $('#payment_details_checkout_com').parents('form').submit();
-      $(this).showCheckoutLoader();
-    };
-
-    // On reject, remove loader to allow user to correct data.
-    var promiseReject = function() {
-      if ($('.checkout-ajax-progress-throbber').length > 0) {
-        $('.checkout-ajax-progress-throbber').remove();
-      }
+      document.dispatchEvent(new CustomEvent('checkoutcom_form_validated', { bubbles: false }));
     };
 
     // Wait for tokenisation before submitting form.
@@ -222,10 +195,10 @@
           clearInterval(wait_for_tokenisation);
           (Drupal.checkoutComTokenised === true)
             ? resolve()
-            : reject(new Error("Tokenisation failed."));
+            : reject(new Error("checkout.com tokenisation failed."));
         }
       }, 100);
-    }).then(promiseResolve, promiseReject);
+    }).then(promiseResolve);
   };
 
 })(jQuery, Drupal, drupalSettings);
