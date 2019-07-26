@@ -4,6 +4,7 @@
  */
 
 /* global debounce */
+/* global Blazy */
 
 (function ($, Drupal) {
   'use strict';
@@ -121,6 +122,8 @@
       $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
         $('.menu--two__list li:first', this).addClass('first--child_open');
+        var bLazy = new Blazy();
+        bLazy.revalidate();
       }, function () {
         $('body').removeClass('overlay');
         $('.menu--two__list li:first', this).removeClass('first--child_open');

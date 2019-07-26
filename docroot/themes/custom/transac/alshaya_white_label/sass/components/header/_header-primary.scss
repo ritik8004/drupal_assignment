@@ -687,6 +687,12 @@ header {
           opacity: 1;
           // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
           transition: all var(--menuTiming) ease-in 0.3s;
+
+          .highlights {
+            img {
+              display: block;
+            }
+          }
         }
       }
 
@@ -724,6 +730,12 @@ header {
         z-index: 1;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
         transition: all var(--menuTiming) ease-in 0.3s;
+
+        .highlights {
+          img {
+            display: none;
+          }
+        }
       }
     }
 
