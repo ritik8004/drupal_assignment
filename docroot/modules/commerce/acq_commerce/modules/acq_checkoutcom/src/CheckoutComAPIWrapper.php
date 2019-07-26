@@ -12,7 +12,6 @@ use Drupal\Core\Http\ClientFactory as HttpClientFactory;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Component\Serialization\Json;
@@ -35,10 +34,7 @@ class CheckoutComAPIWrapper {
   const ENDPOINT_CARD_PAYMENT = 'charges/card';
 
   // Void payment endpoint.
-  const ENDPOINT_VOID_PAYMENT = 'charges/{id}/void';
-
-  // Void payment amount.
-  const VOID_PAYMENT_AMOUNT = 1.0;
+  const ENDPOINT_CHARGES_INFO = 'charges/{payment_token}';
 
   // 3D secure charge mode.
   const VERIFY_3DSECURE = '2';
@@ -364,9 +360,7 @@ class CheckoutComAPIWrapper {
       $this->logger->error($msg);
 
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
-        throw new \Exception(
-          $this->t('Could not make request to checkout.com, please contact our customer service team for assistance.')
-        );
+        throw new \Exception($msg);
       }
       elseif ($e instanceof RequestException) {
         throw new \UnexpectedValueException($msg, $e->getCode(), $e);
@@ -406,24 +400,33 @@ class CheckoutComAPIWrapper {
       $response = $this->tryCheckoutRequest($doReq, $caller);
     }
     catch (\UnexpectedValueException $e) {
-      $this->logger->error('Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id : %message', [
-        '%cart_id' => $cart->id(),
-        '%message' => $e->getMessage(),
-      ]);
+      $this->logger->error(
+        'Error occurred while trying to get redirect url for checkout.com for cart id: %cart_id with param: @param :: %message',
+        [
+          '%cart_id' => $cart->id(),
+          '%message' => $e->getMessage(),
+          '@params' => Json::encode($params),
+        ]
+      );
 
       // Show generic error message to user and redirect to payment page.
-      $this->displayGenericMessage();
+      $this->setGenericErrorMessage();
       $this->redirectToPayment();
     }
 
-    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL]) && (int) $response['responseCode'] == self::SUCCESS) {
-      return new RedirectResponse($response[self::REDIRECT_URL]);
+    if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL])) {
+      $redirect = new RedirectResponse($response[self::REDIRECT_URL]);
+      $redirect->send();
+      exit;
     }
     else {
-      $this->logger->warning('checkout.com card charges request did not process.');
+      $this->logger->warning(
+        'checkout.com card charges request did not process, getting response: @response.',
+        ['@response' => Json::encode($response)]
+      );
 
       // Show generic error message to user and redirect to payment page.
-      $this->displayGenericMessage();
+      $this->setGenericErrorMessage();
       $this->redirectToPayment();
     }
   }
@@ -431,10 +434,10 @@ class CheckoutComAPIWrapper {
   /**
    * Display generic message of payment fail.
    */
-  public function displayGenericMessage() {
+  public function setGenericErrorMessage() {
     // Show generic message to user.
     $this->messenger->addError(
-      t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
+      $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
     );
   }
 
@@ -487,8 +490,8 @@ class CheckoutComAPIWrapper {
 
     $cart = $this->getCart();
     $address = ($type == 'shipping')
-      ? $cart->getShipping()
-      : $cart->getBilling();
+      ? (array) $cart->getShipping()
+      : (array) $cart->getBilling();
 
     return [
       'addressLine1' => $address['street'],
@@ -498,103 +501,6 @@ class CheckoutComAPIWrapper {
       'state' => NULL,
       'city' => $address['city'],
     ];
-  }
-
-  /**
-   * Authorize a card for payment.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   The user object.
-   * @param string $endpoint
-   *   The end point to call.
-   * @param array $params
-   *   The array of params.
-   * @param string $caller
-   *   The caller method name.
-   *
-   * @return array
-   *   Return array of reponse or empty array.
-   *
-   * @throws \Exception
-   */
-  protected function authorizeCardForPayment(UserInterface $user, string $endpoint, array $params, $caller = '') {
-    $doReq = function ($client, $req_param) use ($endpoint, $params) {
-      $opt = ['json' => $req_param + $params];
-      return ($client->post($endpoint, $opt));
-    };
-
-    try {
-      $result = $this->tryCheckoutRequest($doReq, $caller);
-    }
-    catch (\UnexpectedValueException $e) {
-      $this->logger->error('Error occurred while processing card authorization for user: %user : %message', [
-        '%user' => $user->getEmail(),
-        '%message' => $e->getMessage(),
-      ]);
-      throw new \Exception(
-        new FormattableMarkup(
-          'Error occurred while processing card authorization for user: %user',
-          ['%user' => $user->getEmail()]
-        )
-      );
-    }
-
-    if (array_key_exists('errorCode', $result)) {
-      throw new \Exception('Error Code ' . $result['errorCode'] . ': ' . $result['message']);
-    }
-
-    // Validate authorisation.
-    if (array_key_exists('status', $result) && $result['status'] === 'Declined') {
-      throw new \Exception('Void transaction decliened by checkout.com');
-    }
-
-    return $result;
-  }
-
-  /**
-   * Make void transaction.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   The user object.
-   * @param string $endpoint
-   *   The end point to call.
-   * @param array $params
-   *   The array of params.
-   * @param string $caller
-   *   The caller method.
-   *
-   * @return array
-   *   The array of response or empty array.
-   *
-   * @throws \Exception
-   */
-  protected function makeVoidTransaction(UserInterface $user, string $endpoint, array $params, $caller = '') {
-    $doReq = function ($client, $req_param) use ($endpoint, $params) {
-      $opt = ['json' => $req_param + $params];
-      return ($client->post($endpoint, $opt));
-    };
-
-    try {
-      $result = $this->tryCheckoutRequest($doReq, $caller);
-    }
-    catch (\UnexpectedValueException $e) {
-      $this->logger->error('Error occurred while processing card authorization for user: %user : %message', [
-        '%user' => $user->getEmail(),
-        '%message' => $e->getMessage(),
-      ]);
-      throw new \Exception(
-        new FormattableMarkup(
-          'Error occurred while processing card authorization for user: %user',
-          ['%user' => $user->getEmail()]
-        )
-      );
-    }
-
-    if (array_key_exists('errorCode', $result)) {
-      throw new \Exception('Error Code ' . $result['errorCode'] . ': ' . $result['message']);
-    }
-
-    return $result;
   }
 
   /**
@@ -636,55 +542,39 @@ class CheckoutComAPIWrapper {
   }
 
   /**
-   * Authorize new card with void payment to be saved.
+   * Get charges info based on payment token.
    *
-   * @param \Drupal\user\UserInterface $user
-   *   The user object.
-   * @param array $request_param
-   *   The payment card params.
+   * @param string $payment_token
+   *   The payment token.
    *
-   * @return array
-   *   Return array of card data to be saved.
+   * @return mixed
+   *   Return payment details.
    *
    * @throws \Exception
    */
-  public function authorizeNewCard(UserInterface $user, array $request_param) {
-    $params = [
-      'cardToken' => $request_param['cardToken'],
-      'email' => $request_param['email'],
-      'value' => (float) self::VOID_PAYMENT_AMOUNT * 100,
-      'autoCapture' => 'N',
-      'description' => 'Saving new card',
-    ];
+  public function getChargesInfo($payment_token) {
+    $endpoint = strtr(self::ENDPOINT_CHARGES_INFO, ['{payment_token}' => $payment_token]);
+    $doReq = function ($client, $req_param) use ($endpoint) {
+      return ($client->get($endpoint, []));
+    };
 
-    // Authorize a card for payment.
-    $response = $this->authorizeCardForPayment(
-      $user,
-      self::ENDPOINT_AUTHORIZE_PAYMENT,
-      $params,
-      __METHOD__
-    );
+    $cart = $this->cartStorage->getCart(FALSE);
+    try {
+      $result = $this->tryCheckoutRequest($doReq, __METHOD__);
+    }
+    catch (\UnexpectedValueException $e) {
+      $this->logger->error(
+        'Error occurred while getting info on payment failure, for cart: @cart_id, payment token: @payment_token with message: @message.',
+        [
+          '@cart_id' => $cart->id(),
+          '@mail' => $cart->customerEmail(),
+          '@payment_token' => $payment_token,
+          '@message' => $e->getMessage(),
+        ]
+      );
+    }
 
-    // Run the void transaction for the gateway.
-    $this->makeVoidTransaction(
-      $user,
-      strtr(self::ENDPOINT_VOID_PAYMENT, ['{id}' => $response['id']]),
-      ['trackId' => ''],
-      __METHOD__
-    );
-
-    // Prepare the card data to save.
-    $cardData = array_filter($response['card'], function ($key) {
-      return !in_array($key, [
-        'billingDetails',
-        'bin',
-        'fingerprint',
-        'cvvCheck',
-        'avsCheck',
-      ]);
-    }, ARRAY_FILTER_USE_KEY);
-
-    return $cardData;
+    return $result;
   }
 
 }

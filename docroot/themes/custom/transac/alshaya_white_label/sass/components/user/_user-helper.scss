@@ -145,7 +145,7 @@
 
 .c-user-login.user-page {
   @include breakpoint($only-mobile) {
-    margin-top: 2.5rem;
+    margin-top: 3rem;
     padding-top: 1.7rem;
   }
 
@@ -297,7 +297,7 @@
 
     @include breakpoint($only-mobile) {
       margin-bottom: 1rem;
-      margin-top: 2.5rem;
+      margin-top: 3rem;
       padding-top: 1.7rem;
     }
 
@@ -378,17 +378,20 @@
         margin-top: 1rem;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 3rem;
+          text-align: center;
         }
       }
 
       p {
-        margin-top: 0.875rem;
+        margin-top: 1.625rem;
         margin-bottom: 1.4rem;
         font-size: 0.75rem;
+        width: 15.9375rem;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 5rem;
+          text-align: center;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         a {
@@ -400,11 +403,23 @@
       label {
         position: static;
         width: 100%;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include breakpoint($only-mobile) {
+          width: 17.9375rem;
+          margin: 0 auto;
+        }
 
         @include breakpoint($tablet) {
-          text-indent: -2rem;
-          padding-#{$left}: 1.9rem;
+          justify-content: flex-start;
+          width: 18.4375rem;
+
+          &::before {
+            font-size: 1.4375rem;
+            top: 0;
+          }
         }
       }
     }
@@ -749,7 +764,7 @@ main .user-register-form {
               font-size: 1.25rem;
               text-align: center;
               width: 100%;
-              top: -3.5rem;
+              top: -3.6875rem;
             }
           }
         }

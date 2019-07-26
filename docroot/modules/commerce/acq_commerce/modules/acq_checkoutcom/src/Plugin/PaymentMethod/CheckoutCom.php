@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @ACQPaymentMethod(
  *   id = "checkout_com",
- *   label = @Translation("Checkout.com"),
+ *   label = @Translation("Credit / Debit Card"),
  * )
  */
 class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
@@ -67,6 +67,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * @var \Drupal\acq_checkoutcom\CheckoutComFormHelper
    */
   protected $formHelper;
+
+  protected static $paymentTypes = [
+    'new' => 'initiate2dPayment',
+    'existing' => 'initiate2dPayment',
+    'new_mada' => 'initiate3dSecurePayment',
+    'existing_mada' => 'initiateStoredCardPayment',
+  ];
 
   /**
    * CheckoutCom constructor.
@@ -191,7 +198,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
       $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
         '#type' => 'hidden',
-        '#value' => $customer_stored_cards[$payment_card]['gateway_token'],
+        '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
+      ];
+
+      $pane_form['payment_card_details']['payment_card_' . $payment_card]['mada'] = [
+        '#type' => 'hidden',
+        '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
       ];
 
       $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [
@@ -247,67 +259,77 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ? $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com']
       : ['payment_card' => 'new'];
 
-    $is_new_card = (empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new')
-                   && !empty($form_state->getValue('cko_card_token'));
+    $is_new_card = (empty($payment_method['payment_card']) || $payment_method['payment_card'] == 'new') && !empty($form_state->getValue('cko_card_token'));
 
-    $is_mada_card = FALSE;
-    if ($is_new_card && $this->checkoutComApi->isMadaEnabled()  && !empty($form_state->getValue('card_bin'))) {
-      $is_mada_card = $this->checkoutComApi->isMadaBin($form_state->getValue('card_bin'));
-    }
+    $payment_card = $payment_method['payment_card'] ?? '';
 
-    if ($is_mada_card || $this->apiHelper->getCheckoutcomConfig('verify3dsecure')) {
-      if ($is_new_card) {
-        $this->initiate3dSecurePayment(
-          $form_state->getValue('cko_card_token'),
-          $is_mada_card,
-          $form_state->getValue('save_card')
-        );
+    $is_mada_card = ($is_new_card == FALSE && isset($payment_method['payment_card_details']['payment_card_' . $payment_card]['mada']))
+      ? $payment_method['payment_card_details']['payment_card_' . $payment_card]['mada']
+      : FALSE;
+
+    if ($is_new_card) {
+      if ($this->checkoutComApi->isMadaEnabled()  && !empty($form_state->getValue('card_bin'))) {
+        $is_mada_card = $this->checkoutComApi->isMadaBin($form_state->getValue('card_bin'));
       }
-      else {
-        $this->initiateStoredCardPayment(
-          $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id'],
-          (int) $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['cc_cvv']
-        );
-      }
+      $card = [
+        'type' => 'new',
+        'mada' => $is_mada_card,
+        'card_save' => $form_state->getValue('save_card'),
+        'card_token' => $form_state->getValue('cko_card_token'),
+      ];
     }
     else {
-      // For 2d process MDC will handle the part of payment with card_token_id.
-      $this->initiate2dPayment(
-        ($is_new_card)
-          ? $form_state->getValue('cko_card_token')
-          : $payment_method['payment_card_details']['payment_card_' . $payment_method['payment_card']]['card_id']
-      );
+      $card = [
+        'type' => 'existing',
+        'mada' => $is_mada_card,
+        'card_hash' => $payment_card,
+        'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_card]['card_id'],
+        'card_cvv' => (int) $payment_method['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'],
+      ];
     }
+
+    $this->selectCheckoutComPayment($card);
+  }
+
+  /**
+   * Process with correct payment type for given card info.
+   *
+   * @param array $card
+   *   Card info.
+   */
+  protected function selectCheckoutComPayment(array $card) {
+    $current_type = ($card['mada']) ? $card['type'] . '_mada' : $card['type'];
+
+    call_user_func_array(
+      [$this, static::$paymentTypes[$current_type]],
+      [$card]
+    );
   }
 
   /**
    * Process 2d payment for new card.
    *
-   * @param string $card_token
-   *   The card token from user.
-   *
-   * @throws \Exception
+   * @param array $card
+   *   The array of card token containing type, card_hash or card_token.
    */
-  protected function initiate2dPayment(string $card_token) {
-    $this->getCart()->setPaymentMethod(
-      $this->getId(),
-      ['card_token_id' => $card_token]
-    );
+  protected function initiate2dPayment(array $card) {
+    if ($card['type'] == 'existing') {
+      $this->getCart()->setPaymentMethod($this->getId() . '_cc_vault', ['public_hash' => $card['card_hash']]);
+    }
+    else {
+      $this->getCart()->setPaymentMethod($this->getId(), ['card_token_id' => $card['card_token']]);
+    }
   }
 
   /**
    * Process 3d secure payment for new card.
    *
-   * @param string $card_token
-   *   The card token from user.
-   * @param bool $is_mada_card
-   *   (Optional) The card bin is mada card.
-   * @param bool $save
-   *   (Optional) true to save card, otherwise false.
+   * @param array $card
+   *   The array of card info with card_token, mada and save.
    *
    * @throws \Exception
    */
-  protected function initiate3dSecurePayment(string $card_token, $is_mada_card = FALSE, $save = FALSE) {
+  protected function initiate3dSecurePayment(array $card) {
     $cart = $this->getCart();
     $totals = $cart->totals();
     // Process 3d secure payment.
@@ -315,10 +337,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $cart,
       [
         'value' => $this->checkoutComApi->getCheckoutAmount($totals['grand']),
-        'cardToken' => $card_token,
+        'cardToken' => $card['card_token'],
         'email' => $cart->customerEmail(),
-        'udf3' => $save ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
-        'udf1' => $is_mada_card ? 'MADA' : '',
+        'udf3' => $card['card_save'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : NULL,
+        'udf1' => $card['mada'] ? 'MADA' : NULL,
       ]
     );
   }
@@ -326,22 +348,20 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   /**
    * Process 3d secure payment for stored card.
    *
-   * @param string $card_id
-   *   The stored card unique id.
-   * @param int $cvv
-   *   The cvv of stored card.
+   * @param array $card
+   *   The array of card info with card_id and card_cvv.
    *
    * @throws \Exception
    */
-  protected function initiateStoredCardPayment(string $card_id, int $cvv) {
+  protected function initiateStoredCardPayment(array $card) {
     $cart = $this->getCart();
     $totals = $cart->totals();
 
     $this->checkoutComApi->processCardPayment($cart, [
-      'cardId' => $card_id,
+      'cardId' => $card['card_id'],
       'value' => $this->checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
-      'cvv' => $cvv,
+      'cvv' => $card['card_cvv'],
       'udf2' => 'cardIdCharge',
     ]);
   }

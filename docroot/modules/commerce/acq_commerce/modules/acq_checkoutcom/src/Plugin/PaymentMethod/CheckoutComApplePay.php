@@ -12,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ACQPaymentMethod(
  *   id = "checkout_com_applepay",
- *   label = @Translation("Checkout.com apple pay"),
+ *   label = @Translation("Apple Pay"),
  * )
  */
 class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInterface {
@@ -118,7 +118,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
                                       FormStateInterface $form_state,
                                       array &$complete_form) {
 
-    if ($form_state->getErrors()) {
+    if (!$form_state->isSubmitted() || $form_state->getErrors()) {
       return;
     }
 

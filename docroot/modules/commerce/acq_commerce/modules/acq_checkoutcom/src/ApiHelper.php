@@ -252,42 +252,12 @@ class ApiHelper {
       $card_date = strtotime($expiryYear . '-' . $expiryMonth);
       $card['expired'] = ($current_date > $card_date);
 
-      $card['paymentMethod'] = $this->ccTypesMap[$token_details['type']] ?? NULL;
+      $card['paymentMethod'] = $this->getCardType($token_details['type']);
+      // @todo: Remove if we are already receiving mada:true/false.
+      $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
-  }
-
-  /**
-   * Store new card for customer.
-   *
-   * @param \Drupal\user\UserInterface $user
-   *   The user object.
-   * @param string $card_token
-   *   The card token to be stored.
-   *
-   * @return null|string
-   *   Return empty array or string.
-   *
-   * @todo: Remove after save card via checkout is working.
-   */
-  public function storeCustomerCard(UserInterface $user, string $card_token): ?string {
-    $response = $this->apiWrapper->invokeApi(
-      'checkoutcom/saveCard',
-      [
-        'card_token' => $card_token,
-        'customer_id' => $user->get('acq_customer_id')->getString(),
-      ],
-      'POST'
-    );
-
-    $response = Json::decode($response);
-    if (!empty($response) && isset($response['message'])) {
-      return $response['message'];
-    }
-
-    Cache::invalidateTags(['user:' . $user->id()]);
-    return NULL;
   }
 
   /**
