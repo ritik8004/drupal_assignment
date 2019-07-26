@@ -719,6 +719,11 @@
           Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
         }
 
+      // Tracking view of main promotion banner on homepage.
+      $('.paragraph--type--banner').each(function () {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionImpression');
+      });
+
       // Tracking of homepage banner.
       $('.c-content__slider .field--name-field-banner').each(function () {
         $(this).once('js-event').on('click', function () {
@@ -735,6 +740,13 @@
 
       // Tracking view of promotions.
       $('.paragraph--type--promo-block').each(function () {
+        $(this).once('js-event').on('click', function () {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        });
+      });
+
+      // Tracking click of main promotion banner on homepage.
+      $('.paragraph--type--banner').each(function () {
         $(this).once('js-event').on('click', function () {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
@@ -952,8 +964,14 @@
         if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
         }
-        creative = Drupal.url(imgSrc);
         position = key;
+        if (event === 'promotionClick') {
+          position = $(highlight).find('picture img').data('position');
+        }
+        else {
+          $(highlight).find('picture img').data('position', key);
+        }
+        creative = Drupal.url(imgSrc);
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
