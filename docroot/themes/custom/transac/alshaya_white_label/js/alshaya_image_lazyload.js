@@ -10,13 +10,19 @@
 
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
-      // Initialize.
-      var blazyOptions = {offset: $(window).height()};
       $(document).ajaxComplete(function () {
-        Blazy(blazyOptions);
+        Drupal.blazy.revalidate();
       });
       $(window).on('load', function () {
-        Blazy(blazyOptions);
+        Drupal.blazy.revalidate();
+      });
+
+      // Initialize.
+      Drupal.blazy = new Blazy({
+        offset: $(window).height(),
+        success: function () {
+          $(window).trigger('blazySuccess');
+        }
       });
     }
   };
