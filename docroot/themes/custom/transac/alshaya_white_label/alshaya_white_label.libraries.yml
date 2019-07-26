@@ -188,6 +188,9 @@ alshaya_image_lazy_load:
   js:
     vendor/js/blazy.min.js: { minified: true }
     js/alshaya_image_lazyload.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
 
 algolia_search:
   js:
