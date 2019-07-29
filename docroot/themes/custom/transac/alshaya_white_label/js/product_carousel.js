@@ -5,6 +5,8 @@
 
 /* global isRTL */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -133,6 +135,16 @@
       relatedSell.each(function () {
         applyRtl($(this), optionsPdp);
       });
+
+      // To fix lazyload for horizontal scroll areas on devices.
+      // We dont use a slider in devices.
+      if ($(window).width() < 1024) {
+        $('.product-category-carousel').on('touchmove', debounce(function () {
+          if (typeof Drupal.blazyRevalidate !== 'undefined') {
+            Drupal.blazyRevalidate();
+          }
+        }, 350));
+      }
     }
   };
 })(jQuery, Drupal);
