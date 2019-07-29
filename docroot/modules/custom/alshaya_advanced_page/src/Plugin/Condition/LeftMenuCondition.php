@@ -85,8 +85,8 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
    * Provides a human readable summary of the condition's configuration.
    */
   public function summary() {
-    $status = $this->getContextValue('leftMenuActive') ? t('enabled') : t('disabled');
-    return t(
+    $status = $this->getContextValue('leftMenuActive') ? $this->t('enabled') : $this->t('disabled');
+    return $this->t(
       'The node has left menu block @status.',
       ['@status' => $status]);
   }

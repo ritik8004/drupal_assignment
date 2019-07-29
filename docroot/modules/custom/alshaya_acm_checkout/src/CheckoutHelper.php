@@ -54,6 +54,11 @@ class CheckoutHelper {
    */
   protected $cartHelper;
 
+  /**
+   * Address book manager.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
   protected $addressManager;
 
   /**

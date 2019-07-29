@@ -92,6 +92,11 @@ class ProductOptionsHelper {
    */
   protected $logger;
 
+  /**
+   * List of options synced.
+   *
+   * @var array
+   */
   protected $syncedOptions = [];
 
   /**
