@@ -25,23 +25,6 @@
           $(this).showCheckoutLoader();
         });
       });
-
-      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAlshayaCheckoutCom === 'undefined') {
-        Drupal.Ajax.prototype.successAlshayaCheckoutCom = Drupal.Ajax.prototype.success;
-
-        // @See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.success()
-        Drupal.Ajax.prototype.success = function (response, status) {
-          // Invoke the original function.
-          this.successAlshayaCheckoutCom(response, status);
-          // Remove ajax loader when the ajax call does not contain
-          // checkoutPaymentSuccess, that means there are some form errors and
-          // can not continue with place order.
-          const checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
-          if (checkFinalCall.length < 1) {
-            $(this).removeCheckoutLoader();
-          }
-        };
-      }
     }
   };
 
@@ -58,6 +41,16 @@
   // Remove loader to allow user to edit form on form error.
   $(document).on('checkoutcom_form_error', function (e) {
     $(this).removeCheckoutLoader();
+  });
+
+  $(document).on('checkoutcom_form_ajax', function(e, response) {
+    // Remove ajax loader when the ajax call does not contain
+    // checkoutPaymentSuccess, that means there are some form errors and
+    // can not continue with place order.
+    const checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
+    if (checkFinalCall.length < 1) {
+      $(this).removeCheckoutLoader();
+    }
   });
 
 })(jQuery, Drupal, drupalSettings);

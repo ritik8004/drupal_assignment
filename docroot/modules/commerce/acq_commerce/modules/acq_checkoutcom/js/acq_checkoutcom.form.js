@@ -91,6 +91,17 @@
             }
           });
         });
+
+      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAlshayaCheckoutCom === 'undefined') {
+        Drupal.Ajax.prototype.successAcqCheckoutCom = Drupal.Ajax.prototype.success;
+
+        // @See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.success()
+        Drupal.Ajax.prototype.success = function (response, status) {
+          // Invoke the original function.
+          this.successAcqCheckoutCom(response, status);
+          $(document).trigger('checkoutcom_form_ajax', [response]);
+        };
+      }
     }
   };
 
