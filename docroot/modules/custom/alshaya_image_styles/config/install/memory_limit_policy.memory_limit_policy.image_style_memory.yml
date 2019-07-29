@@ -1,0 +1,10 @@
+id: image_style_memory
+label: 'Image Style Memory'
+weight: null
+status: true
+memory: 286M
+langcode: en
+policy_constraints:
+  -
+    id: path
+    paths: '*/files/styles/*'

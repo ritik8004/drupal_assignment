@@ -11,4 +11,5 @@ dependencies:
   - drupal:system
   - drupal:views
   - imagemagick:imagemagick
+  - memory_limit_policy:memory_limit_policy
 package: Alshaya
