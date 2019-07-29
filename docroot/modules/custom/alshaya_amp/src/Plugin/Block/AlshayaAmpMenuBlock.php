@@ -51,6 +51,11 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   protected $routeMatch;
 
+  /**
+   * Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $configFactory;
 
   /**
