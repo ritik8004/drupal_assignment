@@ -8,16 +8,36 @@
 (function ($, Drupal) {
   'use strict';
 
+  var blazyTimeout = null;
+
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
-      // Initialize.
-      var blazyOptions = {offset: $(window).height()};
-      $(document).ajaxComplete(function () {
-        Blazy(blazyOptions);
-      });
-      $(window).on('load', function () {
-        Blazy(blazyOptions);
+      $(window).once('blazy').each(function () {
+        $(document).ajaxComplete(function () {
+          Drupal.blazyRevalidate();
+        });
+
+        $(window).on('load', function () {
+          Drupal.blazyRevalidate();
+        });
+
+        // Initialize.
+        Drupal.blazy = new Blazy({
+          offset: $(window).height(),
+          success: function () {
+            $(window).trigger('blazySuccess');
+          }
+        });
       });
     }
   };
-})(jQuery, Drupal, drupalSettings);
+
+  Drupal.blazyRevalidate = function () {
+    if (typeof blazyTimeout !== 'undefined' && blazyTimeout !== null) {
+      clearTimeout(blazyTimeout);
+    }
+
+    blazyTimeout = setTimeout(Drupal.blazy.revalidate, 100);
+  };
+
+})(jQuery, Drupal);
