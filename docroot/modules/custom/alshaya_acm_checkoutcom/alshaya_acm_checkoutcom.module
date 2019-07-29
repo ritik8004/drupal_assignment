@@ -57,8 +57,6 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     $checkoutComApi->processCardPayment($cart, $params);
   }
   catch (\Exception $e) {
-    // Show generic error message to user and redirect to payment page.
-    $checkoutComApi->setGenericErrorMessage();
     $checkoutComApi->redirectToPayment();
     exit;
   }
