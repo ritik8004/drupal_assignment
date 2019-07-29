@@ -35,6 +35,13 @@
             font-family: $hnm-demibold;
             text-transform: uppercase;
           }
+
+          .card-delete a {
+            color: $content_link_color;
+            font-weight: normal;
+            font-family: $hnm-demibold;
+            text-decoration: underline;
+          }
         }
       }
 

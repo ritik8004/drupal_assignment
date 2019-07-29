@@ -5,7 +5,10 @@
         $('.content-head', $(this)).on('click', function () {
           $(this).parent().toggleClass('active--accordion');
           $(this).next().slideToggle();
-          Blazy();
+
+          if (typeof Drupal.blazyRevalidate !== 'undefined') {
+            Drupal.blazyRevalidate();
+          }
         });
       });
 
