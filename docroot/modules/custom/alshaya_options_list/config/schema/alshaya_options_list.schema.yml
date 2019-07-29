@@ -56,3 +56,11 @@ alshaya_options_list.settings:
                 mobile_title:
                   type: label
                   label: 'Mobile title'
+
+block.settings.alshaya_options_list_menu:
+  type: block_settings
+  label: 'Alshaya Options List'
+  mapping:
+    link_title:
+      type: label
+      label: 'Link title'
