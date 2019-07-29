@@ -38,11 +38,11 @@ class AlshayaImageLazyLoad extends FilterBase {
       /** @var \DOMElement $picture */
       foreach ($picture_list as $picture) {
         foreach ($picture->getElementsByTagName('source') as $source) {
-          $this->applyBlazyToSource($source);
+          $this->applyBlazy($source, 'srcset');
         }
 
         foreach ($picture->getElementsByTagName('img') ?? [] as $image) {
-          $this->applyBlazyToImage($image);
+          $this->applyBlazy($image, 'src');
         }
       }
     }
@@ -51,7 +51,7 @@ class AlshayaImageLazyLoad extends FilterBase {
     if ($image_list->length > 0) {
       /** @var \DOMElement $image */
       foreach ($image_list as $image) {
-        $this->applyBlazyToImage($image);
+        $this->applyBlazy($image, 'src');
       }
     }
 
@@ -64,51 +64,29 @@ class AlshayaImageLazyLoad extends FilterBase {
   }
 
   /**
-   * Wrapper function to apply blazy to img tag.
+   * Wrapper function to apply blazy to element.
    *
-   * @param \DOMElement $image
-   *   Image dom element.
+   * @param \DOMElement $element
+   *   DOM element.
+   * @param string $tag
+   *   Tag to change.
    */
-  private function applyBlazyToImage(\DOMElement $image) {
-    if (strpos($image->getAttribute('class') ?? '', 'b-lazy') > -1) {
+  private function applyBlazy(\DOMElement $element, string $tag) {
+    if (strpos($element->getAttribute('class') ?? '', 'b-lazy') > -1) {
       return;
     }
 
     $this->modified = TRUE;
 
-    $image->setAttribute('data-src', $image->getAttribute('src'));
-    $image->setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+    $element->setAttribute('data-' . $tag, $element->getAttribute($tag));
+    $element->setAttribute($tag, 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
 
     $classes = [
-      $image->getAttribute('class'),
+      $element->getAttribute('class'),
       'b-lazy',
     ];
 
-    $image->setAttribute('class', implode(' ', array_filter($classes)));
-  }
-
-  /**
-   * Wrapper function to apply blazy to source tag.
-   *
-   * @param \DOMElement $source
-   *   Source dom element.
-   */
-  private function applyBlazyToSource(\DOMElement $source) {
-    if (strpos($source->getAttribute('class') ?? '', 'b-lazy') > -1) {
-      return;
-    }
-
-    $this->modified = TRUE;
-
-    $source->setAttribute('data-srcset', $source->getAttribute('srcset'));
-    $source->setAttribute('srcset', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-
-    $classes = [
-      $source->getAttribute('class'),
-      'b-lazy',
-    ];
-
-    $source->setAttribute('class', implode(' ', array_filter($classes)));
+    $element->setAttribute('class', implode(' ', array_filter($classes)));
   }
 
 }
