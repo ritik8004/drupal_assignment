@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_options_list\Form;
 
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -229,6 +230,17 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       $config->set($config_key . '.title', $value['alshaya_options_page_title'] ?? '');
       $config->set($config_key . '.url', $url);
       $config->set($config_key . '.attributes', $attributes);
+
+      // Allow breadcrumb on url.
+      $block = Block::load('breadcrumbs');
+      $visibility = $block->getVisibility();
+      $breadcrumb_url_string = PHP_EOL . '/' . $url;
+      if (isset($visibility['request_path']['pages']) && !stripos($visibility['request_path']['pages'], $breadcrumb_url_string)) {
+        $visibility['request_path']['pages'] = $visibility['request_path']['pages'] . $breadcrumb_url_string;
+        $block->setVisibilityConfig('request_path', $visibility['request_path']);
+        $block->save();
+      }
+
     }
 
     $config->save();

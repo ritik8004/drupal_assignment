@@ -86,9 +86,11 @@ function alshaya_options_list_taxonomy_term_delete(TermInterface $term) {
  * Implements hook_block_access().
  */
 function alshaya_options_list_block_access(Block $block, $operation, AccountInterface $account) {
-  // Allow 'breadcrumb' block on options list pages.
-  if ($operation == 'view' && $block->getPluginId() == 'system_breadcrumb_block') {
-    $current_route = \Drupal::routeMatch()->getRouteName();
-    return AccessResult::allowedIf(stripos($current_route, 'alshaya_options_list') === 0);
+  // Do not allow 'page_title_block' block on Options page.
+  if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
+    $route = \Drupal::routeMatch();
+    if (stripos($route->getRouteName(), 'alshaya_options_list') === 0) {
+      return AccessResult::forbidden();
+    }
   }
 }
