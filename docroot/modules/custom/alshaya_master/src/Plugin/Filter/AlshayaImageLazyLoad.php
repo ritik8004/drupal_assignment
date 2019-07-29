@@ -33,6 +33,7 @@ class AlshayaImageLazyLoad extends FilterBase {
 
     $dom = Html::load($text);
 
+    // Apply blazy to all the source and img tag for picture tag.
     $picture_list = $dom->getElementsByTagName('picture');
     if ($picture_list->length > 0) {
       /** @var \DOMElement $picture */
@@ -47,6 +48,8 @@ class AlshayaImageLazyLoad extends FilterBase {
       }
     }
 
+    // Apply blazy to individual img tags. We won't process again if already
+    // processed once.
     $image_list = $dom->getElementsByTagName('img');
     if ($image_list->length > 0) {
       /** @var \DOMElement $image */
