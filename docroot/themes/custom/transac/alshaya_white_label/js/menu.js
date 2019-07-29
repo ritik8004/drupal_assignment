@@ -4,7 +4,6 @@
  */
 
 /* global debounce */
-/* global Blazy */
 
 (function ($, Drupal) {
   'use strict';
