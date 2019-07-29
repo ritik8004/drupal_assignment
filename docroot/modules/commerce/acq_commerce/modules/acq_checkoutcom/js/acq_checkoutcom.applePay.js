@@ -142,9 +142,7 @@
       if (window.ApplePaySession) {
         let applePay = new CheckoutComApplePay(settings, context);
         $('#payment_method_checkout_com_applepay', context).addClass('supported');
-        if (typeof settings.checkoutCom !== 'undefined' && typeof settings.checkoutCom.merchantIdentifier !== 'undefined') {
-          launchApplePay(applePay);
-        }
+        launchApplePay(applePay);
       }
       else {
         // Handle in case apple pay is last payment option, we need someone
