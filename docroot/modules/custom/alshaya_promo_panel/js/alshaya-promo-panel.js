@@ -17,7 +17,7 @@
         $(this).parent().toggleClass('active-promo-panel');
         $($body).toggleClass('active-promo-panel-content');
         if (typeof Drupal.blazy !== 'undefined') {
-          Drupal.blazy.revalidate();
+          Drupal.blazyRevalidate();
         }
       });
 
