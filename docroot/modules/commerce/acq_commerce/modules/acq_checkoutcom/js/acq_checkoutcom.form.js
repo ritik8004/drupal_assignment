@@ -184,7 +184,7 @@
         });
       }
       $('#payment_details_checkout_com').parents('form').submit();
-      document.dispatchEvent(new CustomEvent('checkoutcom_form_validated', { bubbles: false }));
+      $(document).trigger('checkoutcom_form_validated');
     };
 
     // Wait for tokenisation before submitting form.

@@ -15,7 +15,7 @@
     for (const errorFieldName in formErrors) {
       Drupal.checkoutComShowError($('[name="'+ errorFieldName +'"]'), formErrors[errorFieldName]);
     }
-    document.dispatchEvent(new CustomEvent('checkoutcom_form_error', { bubbles: false }));
+    $(document).trigger('checkoutcom_form_error');
   };
 
   // Helper method that will place errors.

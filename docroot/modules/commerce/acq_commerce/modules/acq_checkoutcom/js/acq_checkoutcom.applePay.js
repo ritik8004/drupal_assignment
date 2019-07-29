@@ -122,14 +122,14 @@
             $('#ckoApplePayButton').closest('form').submit();
           }
           else {
-            document.dispatchEvent(new CustomEvent('apple_pay_authorisation_fail', { bubbles: false }));
+            $(document).trigger('apple_pay_authorisation_fail');
           }
         });
       };
 
       // Session cancellation
       session.oncancel = function(event) {
-        document.dispatchEvent(new CustomEvent('apple_pay_cancel', { bubbles: false }));
+        $(document).trigger('apple_pay_cancel');
       };
 
       return false;

@@ -51,13 +51,13 @@
   });
 
   // Display loader while payment form is submitted.
-  document.addEventListener('checkoutcom_form_validated', function(e) {
+  $(document).on('checkoutcom_form_validated', function(e) {
     $(this).showCheckoutLoader();
-  }, {once: true});
+  });
 
   // Remove loader to allow user to edit form on form error.
-  document.addEventListener('checkoutcom_form_error', function (e) {
+  $(document).on('checkoutcom_form_error', function (e) {
     $(this).removeCheckoutLoader();
-  }, {once: true});
+  });
 
 })(jQuery, Drupal, drupalSettings);
