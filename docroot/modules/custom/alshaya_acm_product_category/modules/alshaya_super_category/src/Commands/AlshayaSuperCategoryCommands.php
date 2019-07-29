@@ -88,7 +88,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
    * @param array $options
    *   List of options supported by drush command.
    *
-   * @throws UserAbortException
+   * @throws \Drush\Exceptions\UserAbortException
    *
    * @command alshaya_super_category:switch
    *
