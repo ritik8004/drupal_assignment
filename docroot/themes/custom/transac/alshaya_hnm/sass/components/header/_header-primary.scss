@@ -930,8 +930,10 @@ header {
       height: 3.375rem;
     }
 
-    .ie & {
-      display: block;
+    img {
+      .ie & {
+        width: auto;
+      }
     }
   }
 }

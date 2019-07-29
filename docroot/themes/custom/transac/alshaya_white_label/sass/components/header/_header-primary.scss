@@ -1511,7 +1511,9 @@ header {
     max-width: 11.875rem;
 
     img {
-      width: 100%;
+      .ie & {
+        width: 100%;
+      }
     }
 
     @include breakpoint($only-tablet) {
