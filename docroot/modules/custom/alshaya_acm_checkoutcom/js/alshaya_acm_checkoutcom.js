@@ -25,8 +25,32 @@
           $(this).showCheckoutLoader();
         });
       });
-
     }
   };
+
+  // Handle api error which triggered on card tokenisation fail.
+  CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
+    $(this).removeCheckoutLoader();
+  });
+
+  // Display loader while payment form is submitted.
+  $(document).on('checkoutcom_form_validated', function(e) {
+    $(this).showCheckoutLoader();
+  });
+
+  // Remove loader to allow user to edit form on form error.
+  $(document).on('checkoutcom_form_error', function (e) {
+    $(this).removeCheckoutLoader();
+  });
+
+  $(document).on('checkoutcom_form_ajax', function(e, response) {
+    // Remove ajax loader when the ajax call does not contain
+    // checkoutPaymentSuccess, that means there are some form errors and
+    // can not continue with place order.
+    const checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
+    if (checkFinalCall.length < 1) {
+      $(this).removeCheckoutLoader();
+    }
+  });
 
 })(jQuery, Drupal, drupalSettings);

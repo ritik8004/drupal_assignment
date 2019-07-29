@@ -1,7 +1,11 @@
-alshaya_checkoutcom:
+checkoutcom:
   js:
     js/alshaya_acm_checkoutcom.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
+    - alshaya_acm_checkout/checkout_flow
+
+applepay:
+  js:
+    js/alshaya_acm_checkoutcom.applepay.js: {}
+  dependencies:
+    - alshaya_acm_checkout/checkout_flow

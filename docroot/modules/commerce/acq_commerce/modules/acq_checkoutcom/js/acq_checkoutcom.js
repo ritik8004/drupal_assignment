@@ -15,10 +15,7 @@
     for (const errorFieldName in formErrors) {
       Drupal.checkoutComShowError($('[name="'+ errorFieldName +'"]'), formErrors[errorFieldName]);
     }
-
-    if ($('.checkout-ajax-progress-throbber').length > 0) {
-      $('.checkout-ajax-progress-throbber').remove();
-    }
+    $(document).trigger('checkoutcom_form_error');
   };
 
   // Helper method that will place errors.

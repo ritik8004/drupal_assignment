@@ -121,17 +121,15 @@
           if (success) {
             $('#ckoApplePayButton').closest('form').submit();
           }
-          else if ($('.checkout-ajax-progress-throbber').length > 0) {
-            $('.checkout-ajax-progress-throbber').remove();
+          else {
+            $(document).trigger('apple_pay_authorisation_fail');
           }
         });
       };
 
       // Session cancellation
       applePaySessionObject.oncancel = function(event) {
-        if ($('.checkout-ajax-progress-throbber').length > 0) {
-          $('.checkout-ajax-progress-throbber').remove();
-        }
+        $(document).trigger('apple_pay_cancel');
       };
 
       return false;

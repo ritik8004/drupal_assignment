@@ -28,7 +28,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       '#attached' => [
         'library' => [
           $this->getCheckoutKitLibrary(),
-          'alshaya_acm_checkoutcom/alshaya_checkoutcom',
+          'alshaya_acm_checkoutcom/checkoutcom',
           'acq_checkoutcom/checkoutcom.form',
         ],
       ],

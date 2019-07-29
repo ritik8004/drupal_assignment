@@ -278,6 +278,12 @@
     $('.checkout-ajax-progress-throbber').show();
   };
 
+  $.fn.removeCheckoutLoader = function () {
+    if ($('.checkout-ajax-progress-throbber').length > 0) {
+      $('.checkout-ajax-progress-throbber').remove();
+    }
+  };
+
   Drupal.behaviors.fixCheckoutSummaryBlock = {
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');
@@ -323,7 +329,9 @@
    var paymentPageTarget = '.checkout-payment .multistep-checkout .form-actions button.form-submit';
    $(paymentPageTarget).on('click', function () {
      // Check if we are using Cybersource.
-     if (!$('#payment_method_cybersource .payment-plugin-wrapper-div').hasClass('plugin-selected')) {
+     if (!$('#payment_method_cybersource .payment-plugin-wrapper-div').hasClass('plugin-selected')
+       && !$('#payment_method_checkout_com .payment-plugin-wrapper-div').hasClass('plugin-selected')
+     ) {
        // Doing this to prevent race condition in check the `error` class and
        // showing the throbber on click.
        setTimeout(function() {

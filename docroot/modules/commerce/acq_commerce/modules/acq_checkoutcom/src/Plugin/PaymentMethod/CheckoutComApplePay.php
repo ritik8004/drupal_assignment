@@ -60,6 +60,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    * {@inheritdoc}
    */
   public function isVisible() {
+    // @todo: add check for "merchantIdentifier" once we receive in API.
     return $this->apiHelper->getCheckoutcomConfig('applepay_enabled');
   }
 
