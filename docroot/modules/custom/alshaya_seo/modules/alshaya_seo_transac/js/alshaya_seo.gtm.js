@@ -719,6 +719,11 @@
           Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
         }
 
+      // Tracking view of main promotion banner on BBW homepage.
+      $('.paragraph--type--banner').each(function () {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionImpression');
+      });
+
       // Tracking of homepage banner.
       $('.c-content__slider .field--name-field-banner').each(function () {
         $(this).once('js-event').on('click', function () {
