@@ -140,7 +140,7 @@ class PaymentCardsController extends ControllerBase {
     }
     else {
       $options['empty'] = [
-        '#markup' => $this->t('You dont have any saved payment cards.'),
+        '#markup' => $this->t("You don't have any saved payment cards."),
       ];
       $list_class[] = 'empty';
     }
