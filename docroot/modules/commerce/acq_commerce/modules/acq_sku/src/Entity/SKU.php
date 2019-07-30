@@ -130,16 +130,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       if ($update_sku) {
+        $save_sku = TRUE;
         /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
         $lock = \Drupal::service('lock.persistent');
-        // If lock is not available to acquire, means other process is
-        // updating/deleting the sku in product sync. Skip the processing.
-        if (!$lock->lockMayBeAvailable('synchronizeProduct' . $this->getSku())) {
-          \Drupal::logger("acq_sku")->notice('Skipping saving of SKU @sku as seems its already updated/deleted in parallel by another process.', [
-            '@sku' => $this->getSku(),
-          ]);
+        // Allow disabling this through settings.
+        if (Settings::get('sku_avoid_parallel_save', 1)) {
+          // If lock is not available to acquire, means other process is
+          // updating/deleting the sku in product sync. Skip the processing.
+          if (!$lock->lockMayBeAvailable('synchronizeProduct' . $this->getSku())) {
+            \Drupal::logger("acq_sku")->notice('Skipping saving of SKU @sku as seems its already updated/deleted in parallel by another process.', [
+              '@sku' => $this->getSku(),
+            ]);
+            $save_sku = FALSE;
+          }
         }
-        else {
+
+        if ($save_sku) {
           $this->get('media')->setValue(serialize($media_data));
           $this->save();
         }
