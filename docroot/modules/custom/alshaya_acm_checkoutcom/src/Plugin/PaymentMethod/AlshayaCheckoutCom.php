@@ -139,6 +139,8 @@ class AlshayaCheckoutCom extends CheckoutCom {
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_' . $payment_card]['new'], $form_state);
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#prefix'] = $cc_prefix;
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_cvv']['#suffix'] = $cc_suffix;
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_exp_month']['#attributes']['class'][] = 'convert-to-select2';
+              $pane_form['payment_card_details']['payment_card_' . $payment_card]['new']['cc_exp_year']['#attributes']['class'][] = 'convert-to-select2';
             }
           }
         }
@@ -158,6 +160,8 @@ class AlshayaCheckoutCom extends CheckoutCom {
       $pane_form['payment_card_details']['payment_card_new'] += $this->formHelper->newCardInfoForm($pane_form['payment_card_details']['payment_card_new'], $form_state);
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#prefix'] = $cc_prefix;
       $pane_form['payment_card_details']['payment_card_new']['cc_cvv']['#suffix'] = $cc_suffix;
+      $pane_form['payment_card_details']['payment_card_new']['cc_exp_month']['#attributes']['class'][] = 'convert-to-select2';
+      $pane_form['payment_card_details']['payment_card_new']['cc_exp_year']['#attributes']['class'][] = 'convert-to-select2';
     }
     return $pane_form;
   }
