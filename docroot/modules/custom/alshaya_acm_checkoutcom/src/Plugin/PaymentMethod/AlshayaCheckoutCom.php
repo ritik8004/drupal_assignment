@@ -34,7 +34,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       ],
     ];
 
-    $cc_cvv_help = t('This code is a three or four digit number printed on the front or back of the credit card');
+    $cc_cvv_help = $this->t('This code is a three or four digit number printed on the front or back of the credit card');
     $cc_prefix = '<div class="cvv-wrapper">';
     $cc_suffix = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div></div>';
 
@@ -119,7 +119,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [
                 '#type' => 'password',
                 '#maxlength' => 4,
-                '#title' => t('Security code (CVV)'),
+                '#title' => $this->t('Security code (CVV)'),
                 '#default_value' => '',
                 '#attributes' => ['placeholder' => $this->t('Enter CVV')],
                 '#required' => TRUE,
