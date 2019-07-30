@@ -130,7 +130,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       if ($update_sku) {
-        $lock = \Drupal::lock();
+        /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+        $lock = \Drupal::service('lock.persistent');
         // If lock is not available to acquire, means other process is
         // updating/deleting the sku in product sync. Skip the processing.
         if (!$lock->lockMayBeAvailable('synchronizeProduct' . $this->getSku())) {
