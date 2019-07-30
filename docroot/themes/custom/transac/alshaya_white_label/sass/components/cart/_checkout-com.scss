@@ -2,6 +2,8 @@
   float: $left;
   padding-top: 0;
   width: 100%;
+  border-top: none;
+  border-bottom: 1px solid $checkout_payment_option_border;
 
   .form-item-cc-name,
   .form-item-cc-number,
@@ -388,12 +390,6 @@
 
   .payment-plugin-wrapper-div.plugin-selected {
     border-bottom: 1px solid $checkout_payment_option_border;
-  }
-
-  &.pseudo-last-child {
-    #payment_details_checkout_com {
-      border-bottom: 1px solid $checkout_payment_option_border;
-    }
   }
 }
 
