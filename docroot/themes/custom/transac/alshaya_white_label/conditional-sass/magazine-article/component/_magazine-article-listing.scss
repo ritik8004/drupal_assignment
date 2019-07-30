@@ -20,6 +20,10 @@
       padding-bottom: 1.875rem;
       border-bottom: 1px solid $magazine-article-border-color;
       margin-bottom: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -39,6 +43,10 @@
 
   .field--name-field-magazine-date {
     margin-bottom: 2.125rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.9375rem;
+    }
   }
 
   .read-more {
