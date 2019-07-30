@@ -851,12 +851,6 @@ header .region__header {
     @include breakpoint($tablet) {
       max-width: 22rem;
     }
-
-    img {
-      .ie & {
-        width: auto;
-      }
-    }
   }
 }
 

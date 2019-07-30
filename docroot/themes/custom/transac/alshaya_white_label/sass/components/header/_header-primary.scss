@@ -1522,12 +1522,6 @@ header {
     font-size: 2rem;
     max-width: 11.875rem;
 
-    img {
-      .ie & {
-        width: 100%;
-      }
-    }
-
     @include breakpoint($only-tablet) {
       max-width: 13rem;
     }
