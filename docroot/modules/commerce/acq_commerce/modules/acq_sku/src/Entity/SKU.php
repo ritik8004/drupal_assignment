@@ -130,8 +130,18 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       if ($update_sku) {
-        $this->get('media')->setValue(serialize($media_data));
-        $this->save();
+        $lock = \Drupal::lock();
+        // If lock is not available to acquire, means other process is
+        // updating/deleting the sku in product sync. Skip the processing.
+        if (!$lock->lockMayBeAvailable('synchronizeProduct' . $this->getSku())) {
+          \Drupal::logger("acq_sku")->notice('Skipping saving of SKU @sku as seems its already updated/deleted in parallel by another process.', [
+            '@sku' => $this->getSku(),
+          ]);
+        }
+        else {
+          $this->get('media')->setValue(serialize($media_data));
+          $this->save();
+        }
       }
     }
 
