@@ -720,36 +720,22 @@
         }
 
       // Tracking of homepage banner.
-      $('.c-content__slider .field--name-field-banner').each(function () {
-        $(this).once('js-event').on('click', function () {
+      $('.c-content__slider .field--name-field-banner').once('js-event').each(function () {
+        $(this).on('click', function () {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
       });
 
       // Tracking view of homepage banner in body.
-      $('.field--name-body').each(function () {
-        $(this).once('js-event').on('click', function () {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
-        });
-      });
-
-      // Tracking view of promotions.
-      $('.paragraph--type--promo-block').each(function () {
-        $(this).once('js-event').on('click', function () {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
-        });
-      });
-
-      // Tracking click of main promotion banner on homepage.
-      $('.paragraph--type--banner').each(function () {
-        $(this).once('js-event').on('click', function () {
+      $('.field--name-body, .paragraph--type--promo-block, .paragraph--type--banner').once('js-event').each(function () {
+        $(this).on('click', function (e) {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
       });
 
       // Tracking images in rectangle on homepage.
-      $('.field--name-body > div[class^="rectangle"]:visible').each(function () {
-        $(this).once('js-event').on('click', function () {
+      $('.field--name-body > div[class^="rectangle"]:visible').once('js-event').each(function () {
+        $(this).on('click', function () {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
       });
@@ -763,9 +749,9 @@
         }
 
         // Tracking click on promo banner PLP.
-        $('.views-field-field-promotion-banner').each(function () {
+        $('.views-field-field-promotion-banner').once('js-event').each(function () {
           if ($(this).find('a').length > 0) {
-            $(this).once('js-event').on('click', function () {
+            $(this).on('click', function () {
               Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'PLP', 'promotionClick');
             });
           }
