@@ -95,3 +95,7 @@ body {
   // Adding px for IE, top not working as expected.
   margin-top: 15px !important;
 }
+
+.ie .site-brand-home a img {
+  width: auto;
+}
