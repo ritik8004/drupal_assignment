@@ -69,3 +69,5 @@ acq_checkoutcom.submit_payment_form:
     _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutController::submitMakePaymentForm'
   requirements:
     _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'
+  options:
+    no_cache: TRUE
