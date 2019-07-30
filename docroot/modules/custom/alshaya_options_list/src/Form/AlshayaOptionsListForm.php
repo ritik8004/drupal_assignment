@@ -196,8 +196,23 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $config = $this->config('alshaya_options_list.settings');
     $triggering_element = $form_state->getTriggeringElement();
     $key = $triggering_element['#parents'][1];
+
+    // Remove page url from breadcrumb block.
+    $url = $config->get('alshaya_options_pages.' . $key . '.url');
+    $block = Block::load('breadcrumbs');
+    $visibility = $block->getVisibility();
+    if (isset($visibility['request_path']['pages']) && stripos($visibility['request_path']['pages'], PHP_EOL . '/' . $url)) {
+      $pages = explode(PHP_EOL, $visibility['request_path']['pages']);
+      unset($pages[array_search('/' . $url, $pages)]);
+      $visibility['request_path']['pages'] = implode(PHP_EOL, $pages);
+      $block->setVisibilityConfig('request_path', $visibility['request_path']);
+      $block->save();
+    }
+
+    // Delete config.
     $config->clear('alshaya_options_pages.' . $key);
     $config->save();
+
     // Rebuild routes so that routes get deleted.
     $this->routerBuilder->rebuild();
     // Invalidate page cache.
