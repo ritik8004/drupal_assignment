@@ -128,7 +128,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $pane_form['store_finder'] = [
       '#type' => 'container',
-      '#title' => t('store finder'),
+      '#title' => $this->t('store finder'),
       '#tree' => FALSE,
       '#id' => 'store-finder-wrapper',
       '#attributes' => ($store_code) ? ['style' => 'display:none;'] : [],
@@ -157,7 +157,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#type' => 'search',
       '#title' => $this->t('find your closest collection point'),
       '#prefix' => '<div class="label-store-location">' . $this->t('find your closest collection point') . '</div>',
-      '#placeholder' => t('Enter a location'),
+      '#placeholder' => $this->t('Enter a location'),
       '#attributes' => [
         'class' => ['store-location-input'],
       ],
@@ -192,7 +192,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $pane_form['selected_store'] = [
       '#type' => 'container',
-      '#title' => t('selected store'),
+      '#title' => $this->t('selected store'),
       '#tree' => FALSE,
       '#id' => 'selected-store-wrapper',
       '#attributes' => ($store_code) ? [] : ['style' => 'display:none;'],
