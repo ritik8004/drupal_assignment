@@ -13,7 +13,7 @@
   Drupal.behaviors.acqCheckoutComForm = {
     attach: function attach(context) {
 
-      _.each(drupalSettings.checkoutCom.expiredCards, function(data) {
+      $.each(drupalSettings.checkoutCom.expiredCards, function(i, data) {
         $('input[value="' + data + '"').attr('disabled', 'disabled');
       });
 
