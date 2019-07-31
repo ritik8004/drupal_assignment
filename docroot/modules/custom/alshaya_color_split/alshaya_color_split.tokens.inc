@@ -41,8 +41,13 @@ function alshaya_color_split_tokens($type, $tokens, array $data, array $options,
       // Apply this token only in case the SKU has style code attribute.
       if ($sku instanceof SKU && $sku_manager->fetchStyleCode($sku)) {
         $first_child = $sku_manager->getChildSkus($sku, TRUE);
-        if (($first_child instanceof SKU) &&
-          ($first_child->hasField($attribute_code_color_label))) {
+        if (($first_child instanceof SKU) && ($first_child->hasField($attribute_code_color_label))) {
+
+          // We always want English value in URL.
+          if ($first_child->language()->getId() != 'en' && $first_child->hasTranslation('en')) {
+            $first_child = $first_child->getTranslation('en');
+          }
+
           $color_label = $first_child->get($attribute_code_color_label)->getString();
         }
       }
