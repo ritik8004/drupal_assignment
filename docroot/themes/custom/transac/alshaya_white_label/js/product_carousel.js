@@ -18,47 +18,71 @@
       var hp_product_carousel_items = drupalSettings.hp_product_carousel_items;
 
       var optionsBasket = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: basket_carousel_items,
-            nav: true
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        focusOnSelect: false,
+        touchThreshold: 1000,
+        responsive: [
+          {
+            breakpoint: 1025,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3,
+              initialSlide: 1
+            }
           }
-        }
+        ]
       };
 
       var optionsPdp = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: pdp_items_desk,
-            nav: true
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        focusOnSelect: false,
+        touchThreshold: 1000,
+        responsive: [
+          {
+            breakpoint: 1025,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 1
+            }
           }
-        }
+        ]
       };
 
       var optionsPlp = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: dp_product_carousel_items,
-            nav: true
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        focusOnSelect: false,
+        touchThreshold: 1000,
+        responsive: [
+          {
+            breakpoint: 1025,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 1
+            }
           }
-        }
+        ]
       };
 
       var optionshp = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: hp_product_carousel_items,
-            nav: true
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        focusOnSelect: false,
+        touchThreshold: 1000,
+        responsive: [
+          {
+            breakpoint: 1025,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 1
+            }
           }
-        }
+        ]
       };
 
       function applyRtl(ocObject, options) {
@@ -78,31 +102,13 @@
 
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');
-          ocObject.owlCarousel(
+          ocObject.slick(
             $.extend({}, options, {rtl: true})
           );
         }
         else {
-          ocObject.owlCarousel(options);
+          ocObject.slick(options);
         }
-
-        // There is some issue with owl carousel, when we have more then one
-        // carousel on the page it uses responsive settings from last one
-        // always on page resize. We bind change event here and calculate loop
-        // required or not dynamically every-time change is triggered after
-        // page resize.
-        ocObject.once('bind-event').on('change.owl.carousel', function (data) {
-          try {
-            if (data.property.name === 'settings') {
-              var itemsCount = data.item.count;
-              data.property.value.loop = (data.property.value.items < itemsCount);
-            }
-          }
-          catch (e) {
-            // We don't want anything to break because of this.
-            // At max we will see duplicate items in carousel.
-          }
-        });
       }
 
       var plpfeaturedproduct = $('.l-two--sf .paragraph--type--product-carousel-category .product-category-carousel');
