@@ -8,6 +8,20 @@
 use Drupal\block_content\Entity\BlockContent;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Disable lazy loading option for kidzania.
+ */
+function alshaya_kz_transac_lite_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['filter.format.mail_text'],
+    'alshaya_master'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_kz_transac_lite_install() {
