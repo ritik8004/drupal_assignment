@@ -306,6 +306,14 @@
           }
         }
 
+        &.expired {
+          cursor: default;
+
+          &::before {
+            opacity: 0.5;
+          }
+        }
+
         span.new {
           padding-#{$left}: 2rem;
           display: inline-block;
