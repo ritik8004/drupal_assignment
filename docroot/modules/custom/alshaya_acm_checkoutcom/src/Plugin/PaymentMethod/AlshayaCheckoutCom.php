@@ -39,6 +39,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
     $cc_suffix = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div></div>';
 
     $stored_cards_list = [];
+    $expired_cards_list = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load(
@@ -53,6 +54,9 @@ class AlshayaCheckoutCom extends CheckoutCom {
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
+          if ($stored_card['expired']) {
+            $expired_cards_list[] = $stored_card['public_hash'];
+          }
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
 
@@ -88,6 +92,10 @@ class AlshayaCheckoutCom extends CheckoutCom {
             ];
 
             $title_class = ['payment-card-wrapper-div'];
+
+            if (isset($customer_stored_cards[$card_id]['expired'])) {
+              $title_class[] = 'expired';
+            }
 
             if ($card_id == $payment_card) {
               $title_class[] = 'card-selected';
@@ -146,6 +154,10 @@ class AlshayaCheckoutCom extends CheckoutCom {
         }
       }
     }
+
+    $pane_form['payment_card_details']['#attached']['drupalSettings'] = [
+      'checkoutCom' => ['expiredCards' => $expired_cards_list],
+    ];
 
     if ($this->currentUser->isAnonymous() || empty($stored_cards_list)) {
       $pane_form['payment_card_details']['payment_card_new'] = [

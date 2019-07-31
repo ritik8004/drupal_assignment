@@ -149,12 +149,18 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
       if (!empty($customer_stored_cards)) {
         $stored_cards_list = [];
+        $expired_cards_list = [];
         foreach ($customer_stored_cards as $stored_card) {
           $build = [
             '#theme' => 'payment_card_teaser',
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
+
+          if ($stored_card['expired']) {
+            $expired_cards_list[] = $stored_card['public_hash'];
+          }
+
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
       }
@@ -188,6 +194,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'library' => [
           $this->getCheckoutKitLibrary(),
           'acq_checkoutcom/checkoutcom.form',
+        ],
+        'drupalSettings' => [
+          'checkoutCom' => ['expiredCards' => $expired_cards_list],
         ],
       ],
     ];

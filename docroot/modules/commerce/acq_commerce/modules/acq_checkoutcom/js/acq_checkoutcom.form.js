@@ -12,6 +12,11 @@
 
   Drupal.behaviors.acqCheckoutComForm = {
     attach: function attach(context) {
+
+      _.each(drupalSettings.checkoutCom.expiredCards, function(data) {
+        $('input[value="' + data + '"').attr('disabled', 'disabled');
+      });
+
       $('.checkoutcom-credit-card-exp-year-select', context)
         .once('current-year')
         .on('change', function () {
