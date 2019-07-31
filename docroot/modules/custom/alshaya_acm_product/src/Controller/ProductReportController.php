@@ -86,9 +86,9 @@ class ProductReportController extends ControllerBase {
   public function downloadReport() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
     // @codingStandardsIgnoreLine
-    global $acsf_site_name;
+    global $_acsf_site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
-    $filename = 'product-report-' . $acsf_site_name . '-' . $time_format . '.csv';
+    $filename = 'product-report-' . $_acsf_site_name . '-' . $time_format . '.csv';
 
     $fp = fopen($path . '/' . $filename, 'w');
     fwrite($fp, 'SKU, Type, Language, Product ID, Price, Final Price, Special Price, Stock Quantity, Stock Status' . PHP_EOL);
@@ -129,9 +129,9 @@ class ProductReportController extends ControllerBase {
   public function downloadProductReportWithCategory() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
     // @codingStandardsIgnoreLine
-    global $acsf_site_name;
+    global $_acsf_site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
-    $filename = 'product-report-' . $acsf_site_name . '-with-cat-' . $time_format . '.csv';
+    $filename = 'product-report-' . $_acsf_site_name . '-with-cat-' . $time_format . '.csv';
 
     $fp = fopen($path . '/' . $filename, 'w');
     fputcsv($fp, ['SKU', 'Category Id', 'Category Name']);

@@ -178,6 +178,10 @@
       transform: none;
     }
   }
+
+  img {
+    display: block !important;
+  }
 }
 
 .region__post-content {
@@ -205,6 +209,10 @@
         border-bottom: 0;
       }
     }
+  }
+
+  img {
+    display: none;
   }
 }
 

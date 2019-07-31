@@ -27,7 +27,7 @@ if ($settings['env'] === 'local') {
   // For Drush and other CLI commands increase the memory limit to 512 MB.
   // We do this only for local env, for cloud envs it is already done.
   // This is as suggested in https://support.acquia.com/hc/en-us/articles/360004542293-Conditionally-increasing-memory-limits
-  $memory_limit = PHP_SAPI === 'cli' ? '512M' : '128M';
+  $memory_limit = PHP_SAPI === 'cli' ? '576M' : '128M';
   ini_set('memory_limit', $memory_limit);
 
   global $host_site_code;
