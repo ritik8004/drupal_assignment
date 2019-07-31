@@ -1,7 +1,5 @@
 #payment_method_checkout_com {
   #payment_details_checkout_com {
-    border-bottom: none;
-
     > .form-wrapper {
       @include breakpoint($desktop) {
         padding-#{$left}: 1rem;

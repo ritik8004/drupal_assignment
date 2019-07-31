@@ -346,9 +346,8 @@
         padding: 1.5rem 1.375rem;
       }
 
-      border-top: 1px solid $delivery_payment_wrapper_border;
-      border-#{$left}: 1px solid $delivery_payment_wrapper_border;
-      border-#{$right}: 1px solid $delivery_payment_wrapper_border;
+      border-#{$left}: 1px solid $checkout_payment_option_border;
+      border-#{$right}: 1px solid $checkout_payment_option_border;
 
       .payment-method {
         &-name {

@@ -372,6 +372,12 @@
   }
 }
 
+#payment_method_cybersource {
+  .payment-plugin-wrapper-div.plugin-selected {
+    border-bottom: 1px solid $checkout_payment_option_border;
+  }
+}
+
 #payment_method_cashondelivery {
   .method-title,
   .method-sub-title,
@@ -560,4 +566,8 @@
 .cybersource-ajax-progress-throbber .cybersource-throbber {
   background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
   background-size: 5.5rem !important;
+}
+
+#edit-acm-analytics {
+  display: inline;
 }
