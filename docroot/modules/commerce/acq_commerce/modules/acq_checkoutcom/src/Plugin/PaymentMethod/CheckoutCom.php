@@ -68,6 +68,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   protected $formHelper;
 
+  /**
+   * Payment types and associated callbacks.
+   *
+   * @var array
+   */
   protected static $paymentTypes = [
     'new' => 'initiate2dPayment',
     'existing' => 'initiate2dPayment',
@@ -212,6 +217,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#title' => $this->t('Security code (CVV)'),
         '#default_value' => '',
         '#required' => TRUE,
+        '#attributes' => [
+          'pattern' => '^[0-9]{3,4}$',
+        ],
+        '#pattern_error' => $this->t('Please enter numeric values only.'),
       ];
     }
     elseif ($payment_card == 'new') {
