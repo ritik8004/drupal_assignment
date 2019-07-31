@@ -45,7 +45,7 @@
 
       var $menuIn = $('.has-child:not(".max-depth") .menu__link-wrapper', context);
       $menuIn.on('click', function () {
-        $(this).next('.menu__in').next().toggleClass('menu__list--active');
+        $(this).next('.menu__in').next().addClass('menu__list--active');
       });
 
       var $menuInFirst = $('.has-child:not(".max-depth") > .menu__link-wrapper');
@@ -56,7 +56,7 @@
 
       var $menuBack = $('.back--link', context);
       $menuBack.on('click', function () {
-        $(this).parents('.menu__list').first().toggleClass('menu__list--active');
+        $(this).parents('.menu__list').first().removeClass('menu__list--active');
       });
 
       var $menuBackFirst = $('.menu--two__list > .menu__links__wrapper > .back--link');
