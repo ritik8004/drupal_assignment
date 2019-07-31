@@ -12,11 +12,6 @@
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
-      var pdp_items_desk = drupalSettings.pdp_items_desk;
-      var basket_carousel_items = drupalSettings.basket_carousel_items;
-      var dp_product_carousel_items = drupalSettings.dp_product_carousel_items;
-      var hp_product_carousel_items = drupalSettings.hp_product_carousel_items;
-
       var optionsBasket = {
         slidesToShow: 5,
         slidesToScroll: 5,
