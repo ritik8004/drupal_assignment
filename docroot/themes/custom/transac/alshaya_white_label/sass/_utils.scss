@@ -110,8 +110,8 @@ body.modal-overlay {
   &::before {
     content: '';
     position: absolute;
-    top: -10.25rem;
-    bottom: -10rem;
+    top: 0;
+    bottom: 0;
     right: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -121,6 +121,15 @@ body.modal-overlay {
     @include breakpoint($desktop) {
       pointer-events: unset;
       height: 100%;
+    }
+  }
+}
+
+body {
+  &.reduce-zindex {
+    .header--wrapper,
+    .branding__menu {
+      z-index: auto;
     }
   }
 }

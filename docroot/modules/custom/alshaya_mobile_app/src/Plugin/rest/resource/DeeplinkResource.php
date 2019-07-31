@@ -155,6 +155,7 @@ class DeeplinkResource extends ResourceBase {
       $url = $internal_url->getGeneratedUrl();
     }
     else {
+      $alias = $this->mobileAppUtility->getRedirectUrl($alias);
       // Get the internal path of given alias and get route object.
       $internal_path = $this->aliasManager->getPathByAlias(
         '/' . $alias,

@@ -24,3 +24,14 @@ regions:
 libraries:
   - alshaya_white_label/global_styles
   - alshaya_bathbodyworks/global_styles
+
+libraries-override:
+  alshaya_white_label/optionlist_filter:
+    css:
+      theme:
+        css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css: css/conditional-sass/optionlist-filter/optionlist-filter.ltr.css
+
+  alshaya_white_label/optionlist_menu:
+    css:
+      theme:
+        css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css

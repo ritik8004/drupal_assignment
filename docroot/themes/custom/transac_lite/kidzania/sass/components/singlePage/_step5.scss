@@ -201,6 +201,7 @@
 
       &.icon {
         margin-#{$right}: 0.4375rem;
+        display: inline-block;
 
         &-woman {
           @include icon(woman);
@@ -252,7 +253,8 @@
       outline: none;
 
       @include breakpoint($only-mobile) {
-        width: 86%;
+        width: 96%;
+        box-sizing: border-box;
       }
 
       &.formErr {
@@ -280,13 +282,17 @@
           border: 0.0625rem solid $error_form_border;
           left: -0.0625rem;
           border-radius: 50%;
+
+          @include breakpoint($only-mobile) {
+            width: 0.6875rem;
+            height: 0.6875rem;
+          }
         }
       }
     }
 
     select {
       @include breakpoint($only-mobile) {
-        width: 93% !important;
         padding: 0.5rem 0.75rem !important;
       }
     }

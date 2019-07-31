@@ -28,6 +28,7 @@
 
   Drupal.behaviors.mobilenoValidation = {
     attach: function () {
+      $('.local-number').attr('autocomplete', 'off');
       $('#booking-payment-form').on('submit', function () {
         $('.local-number').addClass('required');
       });

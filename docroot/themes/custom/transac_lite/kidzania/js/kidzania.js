@@ -41,7 +41,10 @@
           eleStep3 = $('#step-3'),
           eleStep4 = $('#step-4'),
           eleTotWrapper = $('#totalWrapper'),
-          eleFormErrMsg = $('.formErrMessage');
+          eleFormErrMsg = $('.formErrMessage'),
+          eleLoader = $('.loading-overlay'),
+          eleCartPrice = $('.cart .total-price'),
+          eleCartIcon = $('.sticky-cart .cart-icon');
 
         var genderResponse = [],
           ticketTypes = [],
@@ -49,20 +52,22 @@
 
         var actions = {
           init: function () {
-            this.hideEle(timeEle);
+            eleLoader.addClass('active');
+            this.hideEle([timeEle, errorEle]);
             this.showEle(eleStep0);
             this.getParks();
             this.progressBar(-1);
-            errorEle.hide();
             ticketNextEle.addClass('disable');
+            eleCartPrice.html(0);
           },
           getParks: function () {
             $.get(
               Drupal.url('get-parks'),
               function (data) {
-                if (data) {
+                if (data.getParksResult) {
                   $('.countryBtn .value, .countryDisplay').html(data.getParksResult.Park.Name);
                   this.getGender();
+                  eleLoader.removeClass('active');
                 }
               }.bind(this)
             );
@@ -152,16 +157,17 @@
             if (tCount) {
               isFormValid = true;
               totalEle.addClass('active');
-              $('.sticky-cart .cart-icon').addClass('full');
+              eleCartIcon.addClass('full');
               var html = "<span class='amount'><span id='#'>" + tCount + "</span><span class='icon icon-ticket'></span>KWD <span id='#'>" + tPrice + '</span></span>';
               totalEle.find('.total_price').html(html);
-              $('.cart .total-price, .totalDisplay').html(tPrice);
+              eleCartPrice.html(tPrice);
+              $('.totalDisplay').html(tPrice);
             }
             else {
               isFormValid = false;
               totalEle.removeClass('active');
-              $('.sticky-cart .cart-icon').removeClass('full');
-              $('.cart .total-price').html(0);
+              eleCartIcon.removeClass('full');
+              eleCartPrice.html(0);
             }
           },
           progressBar: function (index) {
@@ -279,7 +285,7 @@
             }
 
             return (
-              "<div class='visitor-tickets clearfix'><input type='hidden' name='visitorID' value='" + id + "'><div class='tbl-content'><span class='icon icon_" + id + "'></span><span>" + name + "</span></div><div class='tbl-content'><input type='text' class='form-control onlyAlpha' name='name' placeholder='visitor Name' maxlenght='40'/></div><div class='tbl-content'><select class='form-control' name='age'><option value=''>Age (" + min + '-' + max + ')</option>' + options + "</select></div><div class='tbl-content'>" + genderHtml + '</div></div>'
+              "<div class='visitor-tickets clearfix'><input type='hidden' name='visitorID' value='" + id + "'><div class='tbl-content'><span class='icon icon_" + id + "'></span><span>" + name + "</span></div><div class='tbl-content'><input type='text' autocomplete='off' class='form-control onlyAlpha' name='name' placeholder='visitor Name' maxlenght='40'/></div><div class='tbl-content'><select class='form-control' name='age'><option value=''>Age (" + min + '-' + max + ')</option>' + options + "</select></div><div class='tbl-content'>" + genderHtml + '</div></div>'
             );
           },
           generateFormUI: function () {
@@ -302,7 +308,9 @@
             actions.hideEle([eleStep3, eleStep4, eleTotWrapper, timeEle]);
             ticketNextEle.addClass('disable');
             $('.dateDisplay').html(val);
-            $('.loading-overlay').addClass('active');
+            eleLoader.addClass('active');
+            eleCartPrice.html(0);
+            eleCartIcon.removeClass('full');
             var call = $.post(Drupal.url('get-shifts'), {
               visit_date: val
             });
@@ -315,17 +323,20 @@
                   .after('<input type="hidden" value="' + val + '" id="book-visit-date">') // store visit date.
                   .after('<input type="hidden" id="book-shifts">'); // store shifts data.
                 $('#book-shifts').val(JSON.stringify(data));
-                $('.loading-overlay').removeClass('active');
+                eleLoader.removeClass('active');
               }
             });
           }
         });
 
         $('.time_block').on('click', 'a', function () {
-          actions.hideEle([eleStep3, eleStep4, eleTotWrapper]);
+          actions.hideEle([eleStep3, eleStep4, eleTotWrapper, errorEle.children(), errorEle]);
           ticketNextEle.addClass('disable');
           book_visit_date = $('#book-visit-date').val();
           book_shifts = $('#book-shifts').val();
+          eleLoader.addClass('active');
+          eleCartPrice.html(0);
+          eleCartIcon.removeClass('full');
           $.post(Drupal.url('get-visitor-types'), {
             visit_date: book_visit_date,
             shifts: book_shifts
@@ -336,6 +347,7 @@
               ticketTypes.sort((a, b) => (a.ID > b.ID ? 1 : -1));
               actions.manualDataChange();
               actions.generateUI();
+              eleLoader.removeClass('active');
             }
           });
         });
@@ -431,7 +443,7 @@
           });
           if (isValid) {
             actions.hideEle(eleFormErrMsg);
-            $('.loading-overlay').addClass('active');
+            eleLoader.addClass('active');
             ticketTypesFinal['visit_date'] = book_visit_date;
             // Pre validate visitors at server level.
             $.post(Drupal.url('validate-visitor-details'), {
@@ -439,7 +451,7 @@
               shifts: book_shifts
             }, function (data) {
               if (data.err) {
-                $('.loading-overlay').removeClass('active');
+                eleLoader.removeClass('active');
                 actions.showEle(eleFormErrMsg);
                 eleFormErrMsg.html(data.message);
               }

@@ -354,39 +354,12 @@ class MobileAppUtility {
         return FALSE;
       }
 
-      $url_to_get_deeplink = $url->toString(TRUE)->getGeneratedUrl();
-      // Get the first occurence of string between '/' and '/'. So If url is
-      // like '/en/abc/def/xyz', it will have 'en'.
-      preg_match('#(?<=/)[^/]+#', $url_to_get_deeplink, $match);
-      $langcode = NULL;
-
-      // If language exists for the given langcode.
-      if (!empty($match) && $this->languageManager->getLanguage($match[0])) {
-        $langcode = $match[0];
-      }
-
-      // If langcode exists in the url string.
-      if ($langcode && strpos($url_to_get_deeplink, '/' . $langcode . '/') !== FALSE) {
-        $url_to_get_deeplink = str_replace('/' . $langcode . '/', '', $url_to_get_deeplink);
-
-        // Checking if redirects already available or not. If yes, then use or
-        // find the redirects.
-        // Populating the redirects array because to skip the infinite
-        // redirection as well as it goes in in infinite redirection if
-        // process/find the redirect for same url more than once in a request.
-        if (empty($this->redirects[$langcode][$url_to_get_deeplink])) {
-          $redirect = $this->redirectRepository->findMatchingRedirect($url_to_get_deeplink, [], $langcode);
-          $url = $redirect ? $redirect->getRedirectUrl() : $url;
-          $this->redirects[$langcode][$url_to_get_deeplink] = $url;
-        }
-        else {
-          $url = $this->redirects[$langcode][$url_to_get_deeplink];
-        }
-      }
+      $deeplink_url = $url->toString(TRUE)->getGeneratedUrl();
+      $deeplink_url = $this->getRedirectUrl($deeplink_url);
 
       return self::ENDPOINT_PREFIX
       . 'deeplink?url='
-      . $url->toString(TRUE)->getGeneratedUrl();
+      . $deeplink_url;
     }
 
     $params = $url->getRouteParameters();
@@ -1045,6 +1018,55 @@ class MobileAppUtility {
       'data' => $response_data,
       'cacheable_metadata' => $cacheable_metadata,
     ];
+  }
+
+  /**
+   * Get redirect url for a given url.
+   *
+   * @param string $url
+   *   Url for which redirect needs to check.
+   *
+   * @return mixed|string
+   *   Redirect url.
+   */
+  public function getRedirectUrl(string $url = '') {
+    if (empty($url)) {
+      return $url;
+    }
+
+    // Get the first occurence of string between '/' and '/'. So If url is
+    // like '/en/abc/def/xyz', it will have 'en'.
+    preg_match('#(?<=/)[^/]+#', $url, $match);
+    $langcode = NULL;
+
+    // If language exists for the given langcode.
+    if (!empty($match) && $this->languageManager->getLanguage($match[0])) {
+      $langcode = $match[0];
+    }
+
+    // If langcode exists in the url string.
+    if ($langcode && strpos($url, '/' . $langcode . '/') !== FALSE) {
+      $url = str_replace('/' . $langcode . '/', '', $url);
+
+      // Checking if redirects already available or not. If yes, then use or
+      // find the redirects.
+      // Populating the redirects array because to skip the infinite
+      // redirection as well as it goes in in infinite redirection if
+      // process/find the redirect for same url more than once in a request.
+      if (empty($this->redirects[$langcode][$url])) {
+        $redirect = $this->redirectRepository->findMatchingRedirect($url, [], $langcode);
+        $redirect_url = $redirect
+          ? $redirect->getRedirectUrl()->toString(TRUE)->getGeneratedUrl()
+          : $url;
+        $this->redirects[$langcode][$url] = $redirect_url;
+        $url = $redirect_url;
+      }
+      else {
+        $url = $this->redirects[$langcode][$url];
+      }
+    }
+
+    return $url;
   }
 
 }

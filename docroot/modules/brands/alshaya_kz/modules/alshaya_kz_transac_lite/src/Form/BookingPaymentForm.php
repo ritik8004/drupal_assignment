@@ -112,6 +112,7 @@ class BookingPaymentForm extends FormBase {
       '#placeholder' => $this->t('Name'),
       '#maxlength' => 50,
       '#required' => TRUE,
+      '#attributes' => ['autocomplete' => 'off'],
     ];
 
     $form['email'] = [
@@ -120,6 +121,7 @@ class BookingPaymentForm extends FormBase {
       '#type' => 'email',
       '#placeholder' => $this->t('Email'),
       '#required' => TRUE,
+      '#attributes' => ['autocomplete' => 'off'],
     ];
 
     $form['mobile'] = [

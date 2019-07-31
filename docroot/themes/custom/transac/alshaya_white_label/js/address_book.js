@@ -16,6 +16,7 @@
       }
 
       $('.address--delete a').click(function () {
+        $('body').addClass('reduce-zindex');
         $('body').addClass('modal-overlay');
 
         $(document).ajaxComplete(function () {
@@ -29,6 +30,15 @@
         // If body has overlay class, remove it.
         if ($('body').hasClass('modal-overlay')) {
           $('body').removeClass('modal-overlay');
+          // We have a menu timer with delay on desktop for body::before
+          // transition, also some regions have differnet z-index.
+          // This class holds the z-index consisitent till all animations are
+          // over. Otherwise we get a step animation, where the opacity for
+          // background closes at different times for differnet regions.
+          // see _utils.scss for classes where this gets applied.
+          setTimeout(function () {
+            $('body').removeClass('reduce-zindex');
+          }, 550);
         }
       });
 
