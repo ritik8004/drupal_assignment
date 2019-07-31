@@ -54,8 +54,9 @@ class AlshayaCheckoutCom extends CheckoutCom {
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
+          // Set expired card's radio button disabled.
           if ($stored_card['expired']) {
-            $expired_cards_list[] = $stored_card['public_hash'];
+            $expired_cards_list[$stored_card['public_hash']] = ['disabled' => 'disabled'];
           }
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
@@ -79,6 +80,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
               'method' => 'replace',
               'effect' => 'fade',
             ],
+            '#options_attributes' => $expired_cards_list,
           ];
 
           $weight = 0;
@@ -93,7 +95,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
 
             $title_class = ['payment-card-wrapper-div'];
 
-            if (isset($customer_stored_cards[$card_id]['expired'])) {
+            if (in_array($card_id, array_keys($expired_cards_list))) {
               $title_class[] = 'expired';
             }
 
@@ -113,7 +115,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
             ];
 
             // Ask for cvv again when using existing card.
-            if ($payment_card && $payment_card != 'new' && !$customer_stored_cards[$payment_card]['expired']) {
+            if ($payment_card && $payment_card != 'new') {
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
                 '#type' => 'hidden',
                 '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
@@ -154,10 +156,6 @@ class AlshayaCheckoutCom extends CheckoutCom {
         }
       }
     }
-
-    $pane_form['payment_card_details']['#attached']['drupalSettings'] = [
-      'checkoutCom' => ['expiredCards' => $expired_cards_list],
-    ];
 
     if ($this->currentUser->isAnonymous() || empty($stored_cards_list)) {
       $pane_form['payment_card_details']['payment_card_new'] = [

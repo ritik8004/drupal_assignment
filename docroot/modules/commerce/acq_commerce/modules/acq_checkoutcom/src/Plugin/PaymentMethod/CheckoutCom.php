@@ -157,8 +157,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             '#user' => $user,
           ];
 
+          // Set expired card's radio button disabled.
           if ($stored_card['expired']) {
-            $expired_cards_list[] = $stored_card['public_hash'];
+            $expired_cards_list[$stored_card['public_hash']] = ['disabled' => 'disabled'];
           }
 
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
@@ -183,6 +184,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             'method' => 'replace',
             'effect' => 'fade',
           ],
+          '#options_attributes' => $expired_cards_list,
         ];
       }
     }
@@ -194,9 +196,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'library' => [
           $this->getCheckoutKitLibrary(),
           'acq_checkoutcom/checkoutcom.form',
-        ],
-        'drupalSettings' => [
-          'checkoutCom' => ['expiredCards' => $expired_cards_list],
         ],
       ],
     ];
