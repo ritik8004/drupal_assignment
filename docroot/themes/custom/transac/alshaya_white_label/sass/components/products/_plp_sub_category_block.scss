@@ -101,3 +101,19 @@
     }
   }
 }
+
+.subcategory-listing-enabled {
+  .filter-fixed-top {
+    .c-products-list {
+      .view-alshaya-product-list {
+        @include breakpoint($desktop) {
+          margin-top: 19rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-top: 15.375rem;
+        }
+      }
+    }
+  }
+}
