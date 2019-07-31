@@ -47,7 +47,7 @@
     // Remove ajax loader when the ajax call does not contain
     // checkoutPaymentSuccess, that means there are some form errors and
     // can not continue with place order.
-    const checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
+    var checkFinalCall = _.where(response, {method: 'checkoutPaymentSuccess'});
     if (checkFinalCall.length < 1) {
       $(this).removeCheckoutLoader();
     }

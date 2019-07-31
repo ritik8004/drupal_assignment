@@ -761,7 +761,8 @@
       float: $left;
       margin: 0;
       padding: 1.5rem 0.5rem;
-      border-top: 1px solid $checkout_payment_option_border;
+      border-top: none;
+      border-bottom: 1px solid $checkout_payment_option_border;
 
       .payment-method {
         &-name {

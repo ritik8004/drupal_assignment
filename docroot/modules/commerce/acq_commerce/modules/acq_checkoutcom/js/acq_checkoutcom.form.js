@@ -92,7 +92,7 @@
           });
         });
 
-      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAlshayaCheckoutCom === 'undefined') {
+      if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAcqCheckoutCom === 'undefined') {
         Drupal.Ajax.prototype.successAcqCheckoutCom = Drupal.Ajax.prototype.success;
 
         // @See docroot/core/misc/ajax.js > Drupal.Ajax.prototype.success()

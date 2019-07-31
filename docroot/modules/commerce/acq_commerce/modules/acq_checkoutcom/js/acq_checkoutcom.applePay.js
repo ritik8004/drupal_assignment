@@ -144,14 +144,6 @@
         $('#payment_method_checkout_com_applepay', context).addClass('supported');
         launchApplePay(applePay);
       }
-      else {
-        // Handle in case apple pay is last payment option, we need someone
-        // to take place of last child for maintaining FE design.
-        if ($('#payment_method_checkout_com_applepay', context).is(':last-child')) {
-          $('#payment_method_checkout_com_applepay', context).prev().addClass('pseudo-last-child')
-        }
-        return false;
-      }
     }
   };
 
