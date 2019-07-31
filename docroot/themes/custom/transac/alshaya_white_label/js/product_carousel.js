@@ -12,9 +12,14 @@
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
+      var pdp_items_desk = drupalSettings.pdp_items_desk;
+      var basket_carousel_items = drupalSettings.basket_carousel_items;
+      var dp_product_carousel_items = drupalSettings.dp_product_carousel_items;
+      var hp_product_carousel_items = drupalSettings.hp_product_carousel_items;
+
       var optionsBasket = {
-        slidesToShow: 5,
-        slidesToScroll: 5,
+        slidesToShow: basket_carousel_items,
+        slidesToScroll: 1,
         focusOnSelect: false,
         touchThreshold: 1000,
         responsive: [
@@ -22,7 +27,7 @@
             breakpoint: 1025,
             settings: {
               slidesToShow: 3,
-              slidesToScroll: 3,
+              slidesToScroll: 1,
               initialSlide: 1
             }
           }
@@ -30,8 +35,8 @@
       };
 
       var optionsPdp = {
-        slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToShow: pdp_items_desk,
+        slidesToScroll: 1,
         focusOnSelect: false,
         touchThreshold: 1000,
         responsive: [
@@ -39,7 +44,7 @@
             breakpoint: 1025,
             settings: {
               slidesToShow: 2,
-              slidesToScroll: 2,
+              slidesToScroll: 1,
               initialSlide: 1
             }
           }
@@ -47,8 +52,8 @@
       };
 
       var optionsPlp = {
-        slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToShow: dp_product_carousel_items,
+        slidesToScroll: 1,
         focusOnSelect: false,
         touchThreshold: 1000,
         responsive: [
@@ -64,7 +69,7 @@
       };
 
       var optionshp = {
-        slidesToShow: 3,
+        slidesToShow: hp_product_carousel_items,
         slidesToScroll: 3,
         focusOnSelect: false,
         touchThreshold: 1000,
