@@ -39,6 +39,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
     $cc_suffix = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div></div>';
 
     $stored_cards_list = [];
+    $expired_cards_list = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load(
@@ -53,6 +54,10 @@ class AlshayaCheckoutCom extends CheckoutCom {
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
+          // Set expired card's radio button disabled.
+          if ($stored_card['expired']) {
+            $expired_cards_list[$stored_card['public_hash']] = ['disabled' => 'disabled'];
+          }
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
 
@@ -75,6 +80,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
               'method' => 'replace',
               'effect' => 'fade',
             ],
+            '#options_attributes' => $expired_cards_list,
           ];
 
           $weight = 0;
@@ -88,6 +94,10 @@ class AlshayaCheckoutCom extends CheckoutCom {
             ];
 
             $title_class = ['payment-card-wrapper-div'];
+
+            if (in_array($card_id, array_keys($expired_cards_list))) {
+              $title_class[] = 'expired';
+            }
 
             if ($card_id == $payment_card) {
               $title_class[] = 'card-selected';

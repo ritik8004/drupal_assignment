@@ -12,7 +12,7 @@
       // using custom markup. Here we update the radio buttons on
       // click of payment method names in custom markup.
       $('#payment_details_checkout_com', context).once('bind-events').each(function () {
-        $('.payment-card-wrapper-div', $(this)).on('click', function () {
+        $('.payment-card-wrapper-div:not(.expired)', $(this)).on('click', function () {
           var selected_option = $(this).data('value');
           // Check if this payment method is already active, if yes return.
           // We don't want to remove payment_details in this case else active payment form is lost.

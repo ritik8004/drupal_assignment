@@ -68,6 +68,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   protected $formHelper;
 
+  /**
+   * Payment types and associated callbacks.
+   *
+   * @var array
+   */
   protected static $paymentTypes = [
     'new' => 'initiate2dPayment',
     'existing' => 'initiate2dPayment',
@@ -144,12 +149,19 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
       if (!empty($customer_stored_cards)) {
         $stored_cards_list = [];
+        $expired_cards_list = [];
         foreach ($customer_stored_cards as $stored_card) {
           $build = [
             '#theme' => 'payment_card_teaser',
             '#card_info' => $stored_card,
             '#user' => $user,
           ];
+
+          // Set expired card's radio button disabled.
+          if ($stored_card['expired']) {
+            $expired_cards_list[$stored_card['public_hash']] = ['disabled' => 'disabled'];
+          }
+
           $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
         }
       }
@@ -172,6 +184,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             'method' => 'replace',
             'effect' => 'fade',
           ],
+          '#options_attributes' => $expired_cards_list,
         ];
       }
     }
@@ -188,7 +201,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     ];
 
     // Ask for cvv again when using existing card.
-    if (!empty($payment_card) && $payment_card != 'new') {
+    if (!empty($payment_card) && $payment_card != 'new' && !$customer_stored_cards[$payment_card]['expired']) {
       $pane_form['payment_card_details']['payment_card_' . $payment_card] = [
         '#type' => 'container',
         '#attributes' => [

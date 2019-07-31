@@ -12,6 +12,7 @@
 
   Drupal.behaviors.acqCheckoutComForm = {
     attach: function attach(context) {
+
       $('.checkoutcom-credit-card-exp-year-select', context)
         .once('current-year')
         .on('change', function () {
