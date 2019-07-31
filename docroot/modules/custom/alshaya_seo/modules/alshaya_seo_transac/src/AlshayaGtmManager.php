@@ -937,7 +937,7 @@ class AlshayaGtmManager {
       'affiliation' => 'Online Store',
       'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
       'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
-      'shippping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
+      'shipping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
