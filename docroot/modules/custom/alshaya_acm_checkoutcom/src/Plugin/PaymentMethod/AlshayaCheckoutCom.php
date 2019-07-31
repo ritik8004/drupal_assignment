@@ -105,7 +105,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
             ];
 
             // Ask for cvv again when using existing card.
-            if ($payment_card && $payment_card != 'new') {
+            if ($payment_card && $payment_card != 'new' && !$customer_stored_cards[$payment_card]['expired']) {
               $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
                 '#type' => 'hidden',
                 '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',

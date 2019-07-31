@@ -68,6 +68,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   protected $formHelper;
 
+  /**
+   * Payment types and associated callbacks.
+   *
+   * @var array
+   */
   protected static $paymentTypes = [
     'new' => 'initiate2dPayment',
     'existing' => 'initiate2dPayment',
@@ -188,7 +193,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     ];
 
     // Ask for cvv again when using existing card.
-    if (!empty($payment_card) && $payment_card != 'new') {
+    if (!empty($payment_card) && $payment_card != 'new' && !$customer_stored_cards[$payment_card]['expired']) {
       $pane_form['payment_card_details']['payment_card_' . $payment_card] = [
         '#type' => 'container',
         '#attributes' => [
