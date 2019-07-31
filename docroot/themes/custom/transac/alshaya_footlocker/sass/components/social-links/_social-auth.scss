@@ -21,3 +21,13 @@
     }
   }
 }
+
+.block-alshaya-signup-signin-buttons {
+  .link-button {
+    span {
+      html[lang=ar] & {
+        margin: 0;
+      }
+    }
+  }
+}
