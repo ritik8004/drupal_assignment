@@ -102,6 +102,12 @@
         }
       }
     }
+
+    &.empty {
+      li {
+        font-size: 0.875rem;
+      }
+    }
   }
 
   .region__content {
