@@ -46,6 +46,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
         $this->currentUser->id()
       );
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
+      $customer_stored_cards = $this->apiHelper->filterExpiredCards($customer_stored_cards);
 
       if (!empty($customer_stored_cards)) {
         foreach ($customer_stored_cards as $stored_card) {

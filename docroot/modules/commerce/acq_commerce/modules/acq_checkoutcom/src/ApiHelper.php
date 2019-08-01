@@ -263,6 +263,21 @@ class ApiHelper {
   }
 
   /**
+   * Filter out expired cards.
+   *
+   * @param array $cards
+   *   Array of card.
+   *
+   * @return array
+   *   Return filtered array of active cards.
+   */
+  public function filterExpiredCards(array $cards): array {
+    return array_filter($cards, function ($card) {
+      return ($card['expired'] == FALSE);
+    });
+  }
+
+  /**
    * Sort cards by last saved dates first.
    *
    * @param array $cards
@@ -271,7 +286,7 @@ class ApiHelper {
    * @return array
    *   Return sorted array of cards.
    */
-  protected function sortCardsByDate(array $cards) {
+  protected function sortCardsByDate(array $cards): array {
     uasort($cards, function ($a, $b) {
       return (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1;
     });
