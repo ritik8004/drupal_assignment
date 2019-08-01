@@ -48,6 +48,17 @@
     }
   }
 
+  .form-item-cc-cvv,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-cvv {
+    @include breakpoint($only-mobile) {
+      width: 9.375rem;
+
+      html[lang=ar] & {
+        width: 12rem;
+      }
+    }
+  }
+
   .form-item-cc-exp-month,
   .form-item-cc-exp-year,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card-details-payment-card-new-cc-exp-month,
@@ -60,6 +71,14 @@
       position: absolute;
       top: -1.35rem;
       #{$left}: 0;
+
+      @include breakpoint($only-mobile) {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: inline;
+        width: 100%;
+        overflow: hidden;
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -190,6 +209,10 @@
           @include breakpoint($only-mobile) {
             top: 1.75rem;
             #{$left}: 10.5rem;
+
+            html[lang=ar] & {
+              right: 12.5rem;
+            }
           }
         }
       }
