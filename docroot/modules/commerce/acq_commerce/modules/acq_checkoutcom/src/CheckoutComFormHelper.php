@@ -226,7 +226,9 @@ class CheckoutComFormHelper {
     $settings = [
       'merchantIdentifier' => $this->apiHelper->getCheckoutcomConfig('applepay_merchant_id'),
       'supportedNetworks' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_networks'),
-      'merchantCapabilities' => $this->apiHelper->getCheckoutcomConfig('applepay_merchant_capabilities'),
+      // Adding supports3DS hardcoded here same as code in Magento plugin from
+      // where we have copied the logic.
+      'merchantCapabilities' => 'supports3DS,' . $this->apiHelper->getCheckoutcomConfig('applepay_merchant_capabilities'),
       'supportedCountries' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_countries'),
     ];
 
