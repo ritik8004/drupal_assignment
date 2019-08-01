@@ -39,26 +39,24 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     $params = [
       'value' => $checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
+      'udf1' => !empty($card_info['mada']) ? 'MADA' : NULL,
     ];
 
     if ($card_info['type'] == 'new') {
       $params += [
         'cardToken' => $card_info['card_token'],
         'udf3' => $card_info['card_save'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : '',
-        'udf1' => $card_info['mada'] ? 'MADA' : NULL,
       ];
     }
     elseif ($card_info['type'] == 'existing') {
       $params += [
         'cardId' => $card_info['card_id'],
-        'cvv' => $card_info['card_cvv'],
       ];
     }
+
     $checkoutComApi->processCardPayment($cart, $params);
   }
   catch (\Exception $e) {
-    // Show generic error message to user and redirect to payment page.
-    $checkoutComApi->setGenericErrorMessage();
     $checkoutComApi->redirectToPayment();
     exit;
   }

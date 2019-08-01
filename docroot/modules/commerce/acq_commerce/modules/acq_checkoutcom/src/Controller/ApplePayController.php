@@ -147,7 +147,21 @@ class ApplePayController implements ContainerInjectionInterface {
       return new JsonResponse(['status' => FALSE]);
     }
 
-    $cart->setPaymentMethod('checkout_com_applepay', $params);
+    // Format data in 1D array.
+    $data = [
+      'data' => $params['paymentData']['data'],
+      'ephemeralPublicKey' => $params['paymentData']['header']['ephemeralPublicKey'],
+      'publicKeyHash' => $params['paymentData']['header']['publicKeyHash'],
+      'transactionId' => $params['paymentData']['header']['transactionId'],
+      'signature' => $params['paymentData']['signature'],
+      'version' => $params['paymentData']['version'],
+      'paymentMethodDisplayName' => $params['paymentMethod']['displayName'],
+      'paymentMethodNetwork' => $params['paymentMethod']['network'],
+      'paymentMethodType' => $params['paymentMethod']['type'],
+      'transactionIdentifier' => $params['transactionIdentifier'],
+    ];
+
+    $cart->setPaymentMethod('checkout_com_applepay', $data);
 
     return new JsonResponse(['status' => TRUE]);
   }

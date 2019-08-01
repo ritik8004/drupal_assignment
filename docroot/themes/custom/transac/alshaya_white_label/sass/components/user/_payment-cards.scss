@@ -115,6 +115,14 @@
   }
 }
 
+.payment-card-delete-form {
+  .form-actions {
+    .ajax-progress-throbber {
+      @include fullPageLoader();
+    }
+  }
+}
+
 .l-two--sf {
   &.c-payment-cards {
     .c-sidebar-first {

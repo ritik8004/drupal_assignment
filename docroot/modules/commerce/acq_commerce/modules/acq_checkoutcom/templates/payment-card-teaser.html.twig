@@ -10,7 +10,12 @@
       <div class="card-expiry-date">{{ card_info.expirationDate }}</div>
     {% else %}
       <div class="label card-expired">{{ "expired"}}</div>
-      <div class="card-delete">{{ link(delete_operation.title, delete_operation.url) }}</div>
     {% endif %}
   </div>
+
+  {% if card_info.expired %}
+    <div class="warning">
+      {{ "You card has expired. Please delete the card from payment cards section in My Account."|t }}
+    </div>
+  {% endif %}
 </div>

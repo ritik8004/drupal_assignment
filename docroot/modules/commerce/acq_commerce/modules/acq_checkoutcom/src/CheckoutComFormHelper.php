@@ -222,12 +222,12 @@ class CheckoutComFormHelper {
    *   Apple pay config.
    */
   public function getApplePayConfig() {
-    // @TODO: Replace it with data from API.
+    // Data from API.
     $settings = [
-      'merchantIdentifier' => 'merchant.com.checkoutmdcdemo.alshaya',
-      'supportedNetworks' => 'visa,masterCard,amex',
-      'merchantCapabilities' => 'supports3DS,supportsCredit,supportsDebit',
-      'supportedCountries' => 'KW',
+      'merchantIdentifier' => $this->apiHelper->getCheckoutcomConfig('applepay_merchant_id'),
+      'supportedNetworks' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_networks'),
+      'merchantCapabilities' => $this->apiHelper->getCheckoutcomConfig('applepay_merchant_capabilities'),
+      'supportedCountries' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_countries'),
     ];
 
     // Add site info from config.

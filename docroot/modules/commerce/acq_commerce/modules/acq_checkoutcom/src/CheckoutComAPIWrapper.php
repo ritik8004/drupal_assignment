@@ -58,6 +58,9 @@ class CheckoutComAPIWrapper {
   // the successful transaction should be stored in the Vault.
   const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
 
+  // Set udf value for tokenised card.
+  const CARD_ID_CHARGE = 'cardIdCharge';
+
   /**
    * Currencies where charge amount is full.
    *
@@ -411,7 +414,6 @@ class CheckoutComAPIWrapper {
 
       // Show generic error message to user and redirect to payment page.
       $this->setGenericErrorMessage();
-      $this->redirectToPayment();
     }
 
     if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL])) {
@@ -437,7 +439,7 @@ class CheckoutComAPIWrapper {
   public function setGenericErrorMessage() {
     // Show generic message to user.
     $this->messenger->addError(
-      $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
+      $this->t('Transaction has been declined. Please try again later.')
     );
   }
 

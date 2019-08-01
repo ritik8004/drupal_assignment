@@ -12,7 +12,6 @@ checkoutcom.form:
   dependencies:
     - core/drupalSettings
     - core/jquery.once
-    - core/underscore
     - acq_checkoutcom/global
 
 sandbox_kit:
