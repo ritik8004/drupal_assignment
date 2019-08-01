@@ -94,11 +94,19 @@ class CheckoutComFormHelper {
       ],
     ] + $states;
 
+    $form['cc_type'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'class' => ['checkoutcom-credit-card-type-input', 'checkoutcom-input'],
+      ],
+    ];
+
     $form['cc_number'] = [
       '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
       '#id' => 'cardNumber',
+      '#maxlength' => 19,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',

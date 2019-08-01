@@ -81,17 +81,26 @@
             // Reset the card type every-time.
             $(this).parent().removeClass('cc-error');
             $(this).removeClass('error');
+            $('.checkoutcom-credit-card-type-input').val('');
 
             // Check if we have card_type.
             if (result.card_type !== null) {
               // Set error class on wrapper if invalid card number.
-              if (!result.valid || !result.length_valid || !result.luhn_valid) {
-                $(this).parent().addClass('cc-error');
-                $(this).addClass('error');
+              // Check if card number is valid.
+              if (result.valid && result.length_valid && result.luhn_valid) {
+                // Set the card type in hidden only if card number is valid.
+                $('.checkoutcom-credit-card-type-input').val(result.card_type.name);
+              }
+              else {
+                Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number.'));
               }
             }
           });
         });
+
+      $('.checkoutcom-input').once('security').on('copy paste', function (event) {
+        event.preventDefault();
+      });
 
       if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAcqCheckoutCom === 'undefined') {
         Drupal.Ajax.prototype.successAcqCheckoutCom = Drupal.Ajax.prototype.success;
@@ -120,6 +129,10 @@
       return;
     }
 
+    if (Drupal.checkoutComvalidateCreditCardFormInfo()) {
+      return false;
+    }
+
     // Remove all error messages displayed right now before validating again.
     $(form).find('.form-item--error-message, label.error').remove();
     $(form).find('.checkoutcom-global-error').remove();
@@ -132,6 +145,48 @@
 
     Drupal.checkoutComValidateBeforeCheckout(form);
   }
+
+  Drupal.checkoutComvalidateCreditCardFormInfo = function () {
+    var formHasErrors = false;
+
+    if ($('.checkoutcom-credit-card-input').length === 0) {
+      return formHasErrors;
+    }
+    // Sanity check of credit card name.
+    var name = $('.checkoutcom-credit-card-name').val().toString().trim();
+    if (isNaN(name) && /\d+/.test(name) === true) {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name.'));
+      formHasErrors = true;
+    }
+
+    // Sanity check of credit card number.
+    var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
+    if (type === '') {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number.'));
+      formHasErrors = true;
+    }
+
+    // Sanity check of cvv number.
+    var cvv = $('.checkoutcom-credit-card-cvv-input').val().toString().trim();
+    if (isNaN(cvv) || cvv.length < 3 || cvv.length > 4) {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-cvv-input'), Drupal.t('Invalid security code (CVV)'));
+      formHasErrors = true;
+    }
+
+    // Sanity check - expiry must be in future.
+    var card_expiry_date_month = $('.checkoutcom-credit-card-exp-month-select option:selected').val().toString().trim();
+    var card_expiry_date_year = $('.checkoutcom-credit-card-exp-year-select option:selected').val().toString().trim();
+
+    var today = new Date();
+    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+
+    if (lastDayOfMonth.getFullYear() === card_expiry_date_year && lastDayOfMonth.getMonth() > card_expiry_date_month) {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-exp-year-select').parent(), Drupal.t('Incorrect credit card expiration date'));
+      formHasErrors = true;
+    }
+
+    return formHasErrors;
+  };
 
   // Handle api error which triggered on card tokenisation fail.
   CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
