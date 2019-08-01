@@ -5,7 +5,6 @@ namespace Drupal\acq_checkoutcom;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Datetime\Time;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -218,6 +217,9 @@ class ApiHelper {
       ? $this->extractCardInfo($response['items'])
       : [];
 
+    // Sort cards by last saved first.
+    $cards = $this->sortCardsByDate($cards);
+
     $this->cache->set(
       $cache_key,
       $cards,
@@ -258,6 +260,22 @@ class ApiHelper {
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
+  }
+
+  /**
+   * Sort cards by last saved dates first.
+   *
+   * @param array $cards
+   *   The array of saved cards.
+   *
+   * @return array
+   *   Return sorted array of cards.
+   */
+  protected function sortCardsByDate(array $cards) {
+    uasort($cards, function ($a, $b) {
+      return (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1;
+    });
+    return $cards;
   }
 
   /**
