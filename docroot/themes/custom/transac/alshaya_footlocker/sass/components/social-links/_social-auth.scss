@@ -24,10 +24,7 @@
 
 .block-alshaya-signup-signin-buttons {
   .link-button {
-    span {
-      html[lang=ar] & {
-        margin: 0;
-      }
-    }
+    min-width: 10.5rem;
+    width: auto;
   }
 }

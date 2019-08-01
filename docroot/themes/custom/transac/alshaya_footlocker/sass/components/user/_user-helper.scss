@@ -11,19 +11,6 @@
       }
     }
   }
-
-  main {
-    .user-register-form {
-      &.user-form {
-        .form-actions {
-          .form-submit {
-            padding-#{$right}: 2rem;
-            padding-#{$left}: 2rem;
-          }
-        }
-      }
-    }
-  }
 }
 
 .c-user-login.user-page {

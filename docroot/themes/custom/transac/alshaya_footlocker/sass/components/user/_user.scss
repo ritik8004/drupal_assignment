@@ -112,13 +112,8 @@
   .user-pass,
   .multistep-checkout {
     .form-submit {
-      padding-#{$left}: 3rem;
-      padding-#{$right}: 3rem;
-
-      html[lang='ar'] & {
-        padding-#{$left}: 2rem;
-        padding-#{$right}: 2rem;
-      }
+      min-width: 11.5rem;
+      width: auto;
     }
   }
 }
