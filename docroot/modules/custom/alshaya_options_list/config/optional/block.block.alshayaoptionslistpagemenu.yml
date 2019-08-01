@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_options_list
   theme:
-    - alshaya_white_label
+    - alshaya_bathbodyworks
 id: alshayaoptionslistpagemenu
-theme: alshaya_white_label
+theme: alshaya_bathbodyworks
 region: menu_secondary
 weight: 100
 provider: null
