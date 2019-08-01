@@ -107,7 +107,7 @@ class AlshayaSeoCommands extends DrushCommands {
    * @param string $file
    *   Path to the csv file.
    *
-   * @throws UserAbortException
+   * @throws \Drush\Exceptions\UserAbortException
    *
    * @command alshaya_seo:bulk-redirect-import
    *

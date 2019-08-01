@@ -12,5 +12,17 @@
  * redundant to custom implementation in alshaya_media module).
  */
 function alshaya_media_alshaya_master_post_drupal_install() {
-  \Drupal::configFactory()->getEditable('media.type.video_file')->delete();
+  $media_video_file_configs_to_delete = [
+    'media.type.video_file',
+    'core.entity_view_display.media.video_file.default',
+    'core.entity_form_display.media.video_file.default',
+    'core.entity_view_display.media.video_file.media_library',
+    'core.entity_view_display.media.video_file.thumbnail',
+    'core.entity_form_display.media.video_file.media_browser',
+    'core.entity_view_display.media.video_file.embedded',
+  ];
+
+  foreach ($media_video_file_configs_to_delete as $config) {
+    \Drupal::configFactory()->getEditable($config)->delete();
+  }
 }
