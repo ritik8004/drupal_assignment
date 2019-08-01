@@ -128,7 +128,7 @@
       return;
     }
 
-    if ($(document).validateCrediCardFormInfo()) {
+    if (Drupal.checkoutComvalidateCreditCardFormInfo()) {
       return false;
     }
 
@@ -145,8 +145,9 @@
     Drupal.checkoutComValidateBeforeCheckout(form);
   }
 
-  $.fn.validateCrediCardFormInfo = function () {
-    var formHasErrors = false
+  Drupal.checkoutComvalidateCreditCardFormInfo = function () {
+    var formHasErrors = false;
+
     if ($('.checkoutcom-credit-card-input').length > 0) {
       // Do sanity check of credit card name.
       var name = $('.checkoutcom-credit-card-name').val().toString().trim();
