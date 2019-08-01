@@ -92,6 +92,27 @@
           });
         });
 
+      // Allow characters only for name.
+      $('#cardName', context).once('bind-input').bind('keydown keyup blur', function(e) {
+        // @todo: Uncomment following line before release.
+        // if (e.ctrlKey || e.altKey) { e.preventDefault(); }
+        var key = e.keyCode;
+        if (!(key == 9 || key == 8 || key == 32 || key == 46 || (key >= 35 && key <= 40) || (key >= 65 && key <= 90))) {
+          e.preventDefault();
+        }
+      });
+
+      // Allow numeric values for card number and cvv.
+      $('#cardNumber, #cardCvv', context).once('bind-input').bind('keydown keyup blur', function(e) {
+        // @todo: Uncomment following line before release.
+        // if (e.ctrlKey || e.altKey) { e.preventDefault(); }
+        var key = e.keyCode;
+        if ( !(key == 9 || key == 8 || key == 86 || (key >= 35 && key <= 40)) && (key < 48 || key > 57)) {
+          e.preventDefault();
+        }
+      });
+
+
       if (typeof Drupal.Ajax !== 'undefined' && typeof Drupal.Ajax.prototype.successAcqCheckoutCom === 'undefined') {
         Drupal.Ajax.prototype.successAcqCheckoutCom = Drupal.Ajax.prototype.success;
 

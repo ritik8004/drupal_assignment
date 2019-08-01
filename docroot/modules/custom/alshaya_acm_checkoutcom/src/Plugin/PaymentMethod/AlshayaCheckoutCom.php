@@ -125,7 +125,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
                   'placeholder' => $this->t('Enter CVV'),
                   'pattern' => '^[0-9]{3,4}$',
                 ],
-                '#pattern_error' => $this->t('Please enter numeric values only.'),
+                '#pattern_error' => $this->t('Please enter a valid number.'),
                 '#required' => TRUE,
                 '#prefix' => $cc_prefix,
                 '#suffix' => $cc_suffix,

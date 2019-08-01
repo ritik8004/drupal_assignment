@@ -93,7 +93,7 @@ class CheckoutComFormHelper {
         'data-checkout' => 'card-name',
         'pattern' => '^([^0-9]*)',
       ],
-      '#pattern_error' => $this->t('Please enter letters only.'),
+      '#pattern_error' => $this->t('Please enter a valid name.'),
     ] + $states;
 
     $form['cc_number'] = [
@@ -106,9 +106,9 @@ class CheckoutComFormHelper {
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',
         'data-checkout' => 'card-number',
-        'pattern' => '^[0-9 ]+$',
+        'pattern' => '^[0-9]+$',
       ],
-      '#pattern_error' => $this->t('Please enter numeric values only.'),
+      '#pattern_error' => $this->t('Please enter a valid number without spaces.'),
     ] + $states;
 
     $form['cc_exp_month'] = [
@@ -175,7 +175,7 @@ class CheckoutComFormHelper {
         'data-checkout' => 'cvv',
         'pattern' => '^[0-9]{3,4}$',
       ],
-      '#pattern_error' => $this->t('Please enter numeric values only.'),
+      '#pattern_error' => $this->t('Please enter a valid number.'),
     ] + $states;
 
     $form['card_bin'] = [
