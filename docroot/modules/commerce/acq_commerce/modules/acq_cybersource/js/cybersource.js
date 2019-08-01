@@ -88,6 +88,7 @@
     }
   };
 
+
   Drupal.finishCybersourcePayment = function () {
     var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
 
