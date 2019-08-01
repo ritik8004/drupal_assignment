@@ -10,18 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * adding weight for alshayasocialloginblock
- * adding weight for alshayasignupsigninbuttonsblock.
- */
-function alshaya_fl_transac_update_8005() {
-  $config_factory = \Drupal::configFactory();
-  $config_factory->getEditable('block.block.alshayasocialloginblock')->set('weight', '54')->save();
-  $config_factory->getEditable('block.block.alshayasignupsigninbuttonsblock')->set('weight', '55')->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {
