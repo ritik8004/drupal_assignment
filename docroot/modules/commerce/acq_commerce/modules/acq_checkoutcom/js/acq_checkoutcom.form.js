@@ -148,49 +148,42 @@
   Drupal.checkoutComvalidateCreditCardFormInfo = function () {
     var formHasErrors = false;
 
-    if ($('.checkoutcom-credit-card-input').length > 0) {
-      // Do sanity check of credit card name.
-      var name = $('.checkoutcom-credit-card-name').val().toString().trim();
-      if (isNaN(name) && /\d+/.test(name) === true) {
-        Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name.'));
-        formHasErrors = true;
-      }
-
-      // Do sanity check of credit card number.
-      var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
-      if (type === '') {
-        Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number.'));
-        formHasErrors = true;
-      }
-
-      // Check cvv.
-      var cvv = $('.checkoutcom-credit-card-cvv-input').val().toString().trim();
-      if (isNaN(cvv) || cvv.length < 3 || cvv.length > 4) {
-        Drupal.checkoutComShowError($('.checkoutcom-credit-card-cvv-input'), Drupal.t('Invalid security code (CVV)'));
-        formHasErrors = true;
-      }
-
-      // Sanity check - expiry must be in future.
-      var card_expiry_date_month = $('.checkoutcom-credit-card-exp-month-select option:selected').val().toString().trim();
-      var card_expiry_date_year = $('.checkoutcom-credit-card-exp-year-select option:selected').val().toString().trim();
-
-      var today = new Date();
-      var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
-
-      if (lastDayOfMonth.getFullYear() === card_expiry_date_year && lastDayOfMonth.getMonth() > card_expiry_date_month) {
-        Drupal.checkoutComShowError($('.checkoutcom-credit-card-exp-year-select').parent(), Drupal.t('Incorrect credit card expiration date'));
-        formHasErrors = true;
-      }
+    if ($('.checkoutcom-credit-card-input').length === 0) {
+      return formHasErrors;
+    }
+    // Sanity check of credit card name.
+    var name = $('.checkoutcom-credit-card-name').val().toString().trim();
+    if (isNaN(name) && /\d+/.test(name) === true) {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name.'));
+      formHasErrors = true;
     }
 
-    // Check cvv for tokenised card.
-    if ($('input[name$="[cc_cvv]"]').length > 0) {
-      var cvv = $('input[name$="[cc_cvv]"]').val().toString().trim();
-      if (isNaN(cvv) || cvv.length < 3 || cvv.length > 4) {
-        Drupal.checkoutComShowError($('.checkoutcom-credit-card-cvv-input'), Drupal.t('Invalid security code (CVV)'));
-        formHasErrors = true;
-      }
+    // Sanity check of credit card number.
+    var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
+    if (type === '') {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number.'));
+      formHasErrors = true;
     }
+
+    // Sanity check of cvv number.
+    var cvv = $('.checkoutcom-credit-card-cvv-input').val().toString().trim();
+    if (isNaN(cvv) || cvv.length < 3 || cvv.length > 4) {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-cvv-input'), Drupal.t('Invalid security code (CVV)'));
+      formHasErrors = true;
+    }
+
+    // Sanity check - expiry must be in future.
+    var card_expiry_date_month = $('.checkoutcom-credit-card-exp-month-select option:selected').val().toString().trim();
+    var card_expiry_date_year = $('.checkoutcom-credit-card-exp-year-select option:selected').val().toString().trim();
+
+    var today = new Date();
+    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+
+    if (lastDayOfMonth.getFullYear() === card_expiry_date_year && lastDayOfMonth.getMonth() > card_expiry_date_month) {
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-exp-year-select').parent(), Drupal.t('Incorrect credit card expiration date'));
+      formHasErrors = true;
+    }
+
     return formHasErrors;
   };
 
