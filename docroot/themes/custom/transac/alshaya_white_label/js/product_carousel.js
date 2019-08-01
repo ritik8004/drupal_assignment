@@ -21,68 +21,28 @@
         slidesToShow: basket_carousel_items,
         slidesToScroll: 1,
         focusOnSelect: false,
-        touchThreshold: 1000,
-        responsive: [
-          {
-            breakpoint: 1025,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-              initialSlide: 1
-            }
-          }
-        ]
+        touchThreshold: 1000
       };
 
       var optionsPdp = {
         slidesToShow: pdp_items_desk,
         slidesToScroll: 1,
         focusOnSelect: false,
-        touchThreshold: 1000,
-        responsive: [
-          {
-            breakpoint: 1025,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              initialSlide: 1
-            }
-          }
-        ]
+        touchThreshold: 1000
       };
 
       var optionsPlp = {
         slidesToShow: dp_product_carousel_items,
         slidesToScroll: 1,
         focusOnSelect: false,
-        touchThreshold: 1000,
-        responsive: [
-          {
-            breakpoint: 1025,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2,
-              initialSlide: 1
-            }
-          }
-        ]
+        touchThreshold: 1000
       };
 
       var optionshp = {
         slidesToShow: hp_product_carousel_items,
-        slidesToScroll: 3,
+        slidesToScroll: 1,
         focusOnSelect: false,
-        touchThreshold: 1000,
-        responsive: [
-          {
-            breakpoint: 1025,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2,
-              initialSlide: 1
-            }
-          }
-        ]
+        touchThreshold: 1000
       };
 
       function applyRtl(ocObject, options) {
