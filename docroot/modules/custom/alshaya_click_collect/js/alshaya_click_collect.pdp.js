@@ -26,7 +26,17 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
-      if (typeof Drupal.geolocation.loadGoogle === 'function') {
+      $('#pdp-stores-container h3').once('bind-js').on('click', function () {
+        if (typeof Drupal.geolocation.loadGoogle !== 'function') {
+          return;
+        }
+
+        if ($(this).hasClass('location-js-initiated')) {
+          return;
+        }
+
+        $(this).addClass('location-js-initiated');
+
         $('.click-collect-form').once('autocomplete-init').each(function () {
           // First load the library from google.
           Drupal.geolocation.loadGoogle(function () {
@@ -34,32 +44,32 @@
             new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
           });
         });
-      }
 
-      // location search google autocomplete fix
-      $(window).on('scroll', function () {
-        $('.pac-container:visible').hide();
-      });
+        // Location search google autocomplete fix.
+        $(window).on('scroll', function () {
+          $('.pac-container:visible').hide();
+        });
 
-      $('#pdp-stores-container', context).once('initiate-stores').each(function () {
-        // Check if we have to show the block as disabled. Since accordion classes
-        // are added in JS, this is handled in JS.
-        if ($(this).data('state') === 'disabled') {
-          $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-        }
-        else {
-          // Get the permission track the user location.
-          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+        $('#pdp-stores-container').once('initiate-stores').each(function () {
+          // Check if we have to show the block as disabled. Since accordion classes
+          // are added in JS, this is handled in JS.
+          if ($(this).data('state') === 'disabled') {
+            $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
+            $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+          }
+          else {
+            // Get the permission track the user location.
+            Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
-          $('#pdp-stores-container').on('click', function () {
-            // Try again if we were not able to get location on page load.
-            if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
-              $('#pdp-stores-container').data('second-try', 'done');
-              Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
-            }
-          });
-        }
+            $('#pdp-stores-container').on('click', function () {
+              // Try again if we were not able to get location on page load.
+              if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
+                $('#pdp-stores-container').data('second-try', 'done');
+                Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+              }
+            });
+          }
+        });
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
