@@ -220,7 +220,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#attributes' => [
           'pattern' => '^[0-9]{3,4}$',
         ],
-        '#pattern_error' => $this->t('Please enter a valid number.'),
+        '#pattern_error' => $this->t('Invalid security code.'),
       ];
     }
     elseif ($payment_card == 'new') {

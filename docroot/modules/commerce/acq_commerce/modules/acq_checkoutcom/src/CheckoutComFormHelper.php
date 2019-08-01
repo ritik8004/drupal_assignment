@@ -108,7 +108,7 @@ class CheckoutComFormHelper {
         'data-checkout' => 'card-number',
         'pattern' => '^[0-9]+$',
       ],
-      '#pattern_error' => $this->t('Please enter a valid number without spaces.'),
+      '#pattern_error' => $this->t('Please enter a valid credit card number.'),
     ] + $states;
 
     $form['cc_exp_month'] = [
@@ -175,7 +175,7 @@ class CheckoutComFormHelper {
         'data-checkout' => 'cvv',
         'pattern' => '^[0-9]{3,4}$',
       ],
-      '#pattern_error' => $this->t('Please enter a valid number.'),
+      '#pattern_error' => $this->t('Invalid security code.'),
     ] + $states;
 
     $form['card_bin'] = [
