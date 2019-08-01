@@ -218,14 +218,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#type' => 'hidden',
         '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
       ];
-
-      $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [
-        '#type' => 'password',
-        '#maxlength' => 4,
-        '#title' => $this->t('Security code (CVV)'),
-        '#default_value' => '',
-        '#required' => TRUE,
-      ];
     }
     elseif ($payment_card == 'new') {
       $pane_form['payment_card_details']['new'] = [
@@ -297,7 +289,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'mada' => $is_mada_card,
         'card_hash' => $payment_card,
         'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_card]['card_id'],
-        'card_cvv' => (int) $payment_method['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'],
       ];
     }
 
@@ -374,8 +365,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       'cardId' => $card['card_id'],
       'value' => $this->checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
-      'cvv' => $card['card_cvv'],
-      'udf2' => 'cardIdCharge',
+      'udf2' => CheckoutComAPIWrapper::CARD_ID_CHARGE,
     ]);
   }
 

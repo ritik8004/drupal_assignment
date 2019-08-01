@@ -39,6 +39,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     $params = [
       'value' => $checkoutComApi->getCheckoutAmount($totals['grand']),
       'email' => $cart->customerEmail(),
+      'udf1' => !empty($card_info['mada']) ? 'MADA' : NULL,
     ];
 
     if ($card_info['type'] == 'new') {
@@ -50,12 +51,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     elseif ($card_info['type'] == 'existing') {
       $params += [
         'cardId' => $card_info['card_id'],
-        'cvv' => $card_info['card_cvv'],
       ];
-    }
-
-    if (!empty($card_info['mada'])) {
-      $params['udf1'] = 'MADA';
     }
 
     $checkoutComApi->processCardPayment($cart, $params);

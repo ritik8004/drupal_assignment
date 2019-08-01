@@ -58,6 +58,9 @@ class CheckoutComAPIWrapper {
   // the successful transaction should be stored in the Vault.
   const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
 
+  // Set udf value for tokenised card.
+  const CARD_ID_CHARGE = 'cardIdCharge';
+
   /**
    * Currencies where charge amount is full.
    *
