@@ -158,7 +158,7 @@ class AlshayaAcmConfigCheck {
       'alshaya_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
-      'google_tag.settings',
+      'google_tag.container.primary',
     ];
 
     $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);
