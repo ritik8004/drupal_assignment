@@ -215,12 +215,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#type' => 'password',
         '#maxlength' => 4,
         '#title' => $this->t('Security code (CVV)'),
-        '#default_value' => '',
-        '#required' => TRUE,
         '#attributes' => [
-          'pattern' => '^[0-9]{3,4}$',
+          'placeholder' => $this->t('Enter CVV'),
+          'class' => ['checkoutcom-credit-card-cvv-input'],
         ],
-        '#pattern_error' => $this->t('Invalid security code.'),
+        '#required' => TRUE,
       ];
     }
     elseif ($payment_card == 'new') {

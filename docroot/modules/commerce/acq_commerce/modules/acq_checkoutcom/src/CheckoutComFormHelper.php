@@ -91,10 +91,15 @@ class CheckoutComFormHelper {
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
         'data-checkout' => 'card-name',
-        'pattern' => '^([^0-9]*)',
       ],
-      '#pattern_error' => $this->t('Please enter a valid name.'),
     ] + $states;
+
+    $form['cc_type'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'class' => ['checkoutcom-credit-card-type-input', 'checkoutcom-input'],
+      ],
+    ];
 
     $form['cc_number'] = [
       '#type' => 'tel',
@@ -106,9 +111,7 @@ class CheckoutComFormHelper {
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',
         'data-checkout' => 'card-number',
-        'pattern' => '^[0-9]+$',
       ],
-      '#pattern_error' => $this->t('Please enter a valid credit card number.'),
     ] + $states;
 
     $form['cc_exp_month'] = [
@@ -173,9 +176,7 @@ class CheckoutComFormHelper {
         ],
         'autocomplete' => 'cc-csc',
         'data-checkout' => 'cvv',
-        'pattern' => '^[0-9]{3,4}$',
       ],
-      '#pattern_error' => $this->t('Invalid security code.'),
     ] + $states;
 
     $form['card_bin'] = [
