@@ -107,9 +107,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function getLabel() {
-    return $this->currentUser->isAuthenticated()
-      ? $this->t('Saved Credit/Debit Cards')
-      : $this->t('Credit/Debit Cards');
+    return $this->t('Credit/Debit Cards');
   }
 
   /**
