@@ -91,6 +91,20 @@
     }
   }
 
+  .slick-slider {
+    .slick-arrow {
+      top: 30%;
+    }
+
+    .slick-prev {
+      #{$left}: -2.8125rem;
+    }
+
+    .slick-next {
+      #{$right}: 0.75rem;
+    }
+  }
+
   .owl-dots {
     position: relative;
     margin-top: 1rem;
