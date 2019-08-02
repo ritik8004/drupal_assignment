@@ -106,13 +106,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLabel() {
-    return $this->t('Credit/Debit Cards');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildPaymentSummary() {
     return $this->t('checkout.com details here.');
   }
