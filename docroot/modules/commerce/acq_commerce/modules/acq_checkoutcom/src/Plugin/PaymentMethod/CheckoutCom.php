@@ -146,27 +146,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         $this->currentUser->id()
       );
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
+      $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
-      if (!empty($customer_stored_cards)) {
-        $stored_cards_list = [];
-        $expired_cards_list = [];
-        foreach ($customer_stored_cards as $stored_card) {
-          $build = [
-            '#theme' => 'payment_card_teaser',
-            '#card_info' => $stored_card,
-            '#user' => $user,
-          ];
-
-          // Set expired card's radio button disabled.
-          if ($stored_card['expired']) {
-            $expired_cards_list[$stored_card['public_hash']] = ['disabled' => 'disabled'];
-          }
-
-          $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
-        }
-      }
-
-      $payment_card = empty($stored_cards_list) ? 'new' : $payment_card;
+      $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
       $values = $form_state->getValue('acm_payment_methods');
       if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
         $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
@@ -184,7 +166,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             'method' => 'replace',
             'effect' => 'fade',
           ],
-          '#options_attributes' => $expired_cards_list,
         ];
       }
     }
@@ -201,7 +182,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     ];
 
     // Ask for cvv again when using existing card.
-    if (!empty($payment_card) && $payment_card != 'new' && !$customer_stored_cards[$payment_card]['expired']) {
+    if (!empty($payment_card) && $payment_card != 'new') {
       $pane_form['payment_card_details']['payment_card_' . $payment_card] = [
         '#type' => 'container',
         '#attributes' => [
@@ -219,7 +200,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
       ];
     }
-    elseif ($payment_card == 'new') {
+    else {
       $pane_form['payment_card_details']['new'] = [
         '#type' => 'container',
         '#tree' => FALSE,
@@ -233,6 +214,29 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     }
 
     return $pane_form;
+  }
+
+  /**
+   * Prepare markup to show for radio options.
+   *
+   * @param array $customer_stored_cards
+   *   The array of stored cards.
+   *
+   * @return array
+   *   Return array of prepared markup.
+   *
+   * @throws \Exception
+   */
+  protected function prepareRadioOptionsMarkup(array $customer_stored_cards): array {
+    $stored_cards_list = [];
+    foreach ($customer_stored_cards as $stored_card) {
+      $build = [
+        '#theme' => 'payment_card_teaser',
+        '#card_info' => $stored_card,
+      ];
+      $stored_cards_list[$stored_card['public_hash']] = $this->renderer->render($build);
+    }
+    return $stored_cards_list;
   }
 
   /**
