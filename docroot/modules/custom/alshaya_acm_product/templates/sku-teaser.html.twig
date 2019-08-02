@@ -28,7 +28,7 @@
     <div class="promotions">
       {% for id, promotion in promotions %}
         <span class="sku-promotion-item">
-          <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+          <a class="sku-promotion-link not-update-href" href="{{ path('entity.node.canonical', {'node': id }) }}">
             {{ promotion.text }}
           </a>
         </span>
@@ -41,7 +41,7 @@
       <div class="swatches">
         {% for key,swatch in swatches %}
           {% if swatch is not empty %}
-            <a href="{{ product_base_url }}?selected={{ key }}" class="swatch-url">
+            <a href="{{ product_base_url }}?selected={{ key }}" class="not-update-href">
               <span class='swatch-block swatch-image'>
                 <img {% if (swatch.product_url) %} data-sku-image = "{{ swatch.product_url }}" {% endif %} src="{{ swatch.url }}" />
               </span>
