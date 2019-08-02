@@ -26,6 +26,9 @@ alshaya_options_list.settings:
           description:
             type: label
             label: 'Description'
+          menu-title:
+            type: label
+            label: 'The title menu link in the header for this options page.'
           attribute_details:
             type: sequence
             label: 'Page attributes'
