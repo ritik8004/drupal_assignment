@@ -146,7 +146,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         $this->currentUser->id()
       );
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
-      $customer_stored_cards = $this->apiHelper->filterExpiredCards($customer_stored_cards);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
       $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
