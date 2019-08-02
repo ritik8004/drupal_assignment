@@ -64,7 +64,7 @@
 
         // Update all href to have selected param.
         selectedUrl += activeSpan.attr('data--id');
-        $(this).parents('article').find('a.add-swatch-selected').attr('href', selectedUrl);
+        $(this).parents('article').find('a.product-selected-url').attr('href', selectedUrl);
       }
     });
 
