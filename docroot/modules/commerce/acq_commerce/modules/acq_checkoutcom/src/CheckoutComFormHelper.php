@@ -103,7 +103,7 @@ class CheckoutComFormHelper {
 
     $form['cc_number'] = [
       '#type' => 'tel',
-      '#title' => $this->t('Credit Card Number'),
+      '#title' => $this->t('Credit card number'),
       '#default_value' => '',
       '#id' => 'cardNumber',
       '#maxlength' => 19,
