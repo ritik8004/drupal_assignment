@@ -126,7 +126,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
     $cart = $this->getCart();
     $payload = $cart->getPaymentMethodData();
 
-    if (empty($payload) || empty($payload['paymentData'])) {
+    if (empty($payload) || empty($payload['publicKeyHash'])) {
       $this->messenger()->addError($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
       $form_state->setError($complete_form['actions']['apple_wrapper']['apple_pay'], $this->t('Payment failed'));
     }
