@@ -13,10 +13,8 @@ Otherwise install it via brew or from java:
 
 
 1. `composer install` :hourglass_flowing_sand:
-2. `cd vendor` :file_folder: 
-3. `npm install --prefix bin chromedriver` :gear:
-4. `cd ..` :file_folder:
-4. `./behat_rework/behat-build.sh` This will generate feature files :rocket:. and 
+2. `npm install --prefix vendor/bin chromedriver` :gear:
+3. `./behat_rework/behat-build.sh --rebuild=TRUE` This will generate feature files :rocket:. and 
   - Also have parameters:
     - `--rebuild` (boolean): `TRUE` to recollect yml files and variables.
       - by default rebuild is false, and it will only regenerate features files
@@ -26,15 +24,18 @@ Otherwise install it via brew or from java:
       - only brand name: `--site=hm,mc`
       - brand + market: `--site=hm-kw,hm-sa`
       - brand + market + env: `--site=hm-kw-uat,hm-sa-uat`
-      - brand + market + env + lang: `--site=hm-kw-uat-en,hm-sa-uat-ar`  
-5. (In a separate terminal window) :computer:
+      - brand + market + env + lang: `--site=hm-kw-uat-en,hm-sa-uat-ar`
+  - :bell: :bell:
+  **NOTE: If you have modified existing features file and modified or placed any new variables
+  you can simply execute `./behat_rework/behat-build.sh`.**  
+4. (In a separate terminal window) :computer:
 ```bash
 java -Dwebdriver.chrome.driver=vendor/bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
 ```
-6. The script that we ran on point 5, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
+5. The script that we ran on point 5, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
 to Run behat test cases for: 
- - any specific site - `vendor/bin/behat --profile=hm-kw-uat-en` :fire:
- - any specific feature for a site - `vendor/bin/behat --profile=hm-kw-uat-en ./behat_rework/build/features/hm-kw-uat-en/breadcrumb.feature` :fire: :fire:
+ - any specific site - `vendor/bin/behat --config ./behat_rework/behat.yml --profile=hm-kw-uat-en` :fire:
+ - any specific feature for a site - `vendor/bin/behat --config ./behat_rework/behat.yml --profile=hm-kw-uat-en ./behat_rework/build/features/hm-kw-uat-en/breadcrumb.feature` :fire: :fire:
 
 
 # Alshaya Behat Architecture
