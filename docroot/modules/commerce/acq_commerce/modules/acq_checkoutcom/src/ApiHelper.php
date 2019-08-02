@@ -243,16 +243,9 @@ class ApiHelper {
       return [];
     }
 
-    $time = $this->time->getRequestTime();
     $card_list = [];
     foreach ($cards as $card) {
       $token_details = Json::decode($card['token_details']);
-      list($expiryMonth, $expiryYear) = explode('/', $token_details['expirationDate']);
-
-      // Set card is expired or not.
-      $current_date = strtotime($this->dateFormatter->format($time, 'custom', 'Y-m'));
-      $card_date = strtotime($expiryYear . '-' . $expiryMonth);
-      $card['expired'] = ($current_date > $card_date);
 
       $card['paymentMethod'] = $this->getCardType($token_details['type']);
       // @todo: Remove if we are already receiving mada:true/false.
@@ -260,21 +253,6 @@ class ApiHelper {
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
-  }
-
-  /**
-   * Filter out expired cards.
-   *
-   * @param array $cards
-   *   Array of card.
-   *
-   * @return array
-   *   Return filtered array of active cards.
-   */
-  public function filterExpiredCards(array $cards): array {
-    return array_filter($cards, function ($card) {
-      return ($card['expired'] == FALSE);
-    });
   }
 
   /**
