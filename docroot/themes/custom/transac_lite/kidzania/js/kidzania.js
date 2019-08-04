@@ -270,8 +270,8 @@
             ticketTypesFinal.total = {count: fCount, price: fPrice};
           },
           prepareForm: function (index, id, name, min, max) {
-            var visitorName = Drupal.t("Visitor Name");
-            var visitorAge = Drupal.t("Age");
+            var visitorName = Drupal.t('Visitor Name');
+            var visitorAge = Drupal.t('Age');
             var options = '';
             min = parseInt(min, 10);
             max = parseInt(max, 10);
