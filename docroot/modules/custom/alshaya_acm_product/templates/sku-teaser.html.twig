@@ -1,4 +1,4 @@
-<a href="{{ product_url }}" data--original-url="{{ product_url }}" class="list-product-gallery">
+<a href="{{ product_url }}" data--original-url="{{ product_url }}" class="list-product-gallery product-selected-url">
   {% if all_galleries is not empty %}
     {% for data in all_galleries %}
       <span class="hidden"
@@ -14,7 +14,7 @@
 </a>
 <div class="product-plp-detail-wrapper">
   <h2 class="field--name-name">
-    <a href="{{ product_url }}">{{ product_label }}</a>
+    <a href="{{ product_url }}" class="product-selected-url">{{ product_label }}</a>
   </h2>
 
   {% block pricePrefix %}
@@ -41,7 +41,7 @@
       <div class="swatches">
         {% for key,swatch in swatches %}
           {% if swatch is not empty %}
-            <a href="{{ product_base_url }}?selected={{ key }}" class="swatch-url">
+            <a href="{{ product_base_url }}?selected={{ key }}">
               <span class='swatch-block swatch-image'>
                 <img {% if (swatch.product_url) %} data-sku-image = "{{ swatch.product_url }}" {% endif %} src="{{ swatch.url }}" />
               </span>
@@ -50,7 +50,7 @@
         {% endfor %}
 
         {% if swatch_more_text %}
-          <a class="swatch-more-link" href="{{ product_url }}">{{ swatch_more_text }}</a>
+          <a class="swatch-more-link product-selected-url" href="{{ product_url }}">{{ swatch_more_text }}</a>
         {% endif %}
       </div>
     {% endif %}
@@ -58,7 +58,7 @@
     {% if swatch_color_count %}
       <div class="swatches">
         <div class="swatch-color-count-wrapper mobile-only-block">
-          <a class="swatch-color-count"
+          <a class="swatch-color-count product-selected-url"
              href="{{ product_url }}">{{ swatch_color_count }}</a>
         </div>
       </div>
