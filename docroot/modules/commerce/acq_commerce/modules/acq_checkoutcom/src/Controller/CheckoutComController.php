@@ -175,16 +175,18 @@ class CheckoutComController implements ContainerInjectionInterface {
     $data = $this->checkoutComApi->getChargesInfo($payment_token);
     unset($data['card']);
     unset($data['shippingDetails']);
+    $cart = $this->cartStorage->getCart(FALSE);
     $this->logger->warning(
-      'transactions failed for order: @order and payment_token: @token. more info available here: @info',
+      'transactions failed for cart: @cart_id, order: @order and payment_token: @token. more info available here: @info',
       [
+        '@cart_id' => $cart->id(),
         '@order' => $data['trackId'],
         '@token' => $payment_token,
         '@info' => Json::encode($data),
       ]
     );
 
-    $this->checkoutComApi->setGenericErrorMessage();
+    $this->checkoutComApi->setGenericError();
     $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
     return new RedirectResponse($url, 302);
   }
