@@ -7,7 +7,6 @@ $time_start = microtime(true);
 
 use Alshaya\BehatBuild\AlshayaFeatureProcess;
 use Alshaya\BehatBuild\AlshayaYamlProcess;
-use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\Output;
 
@@ -15,7 +14,7 @@ define('BEHAT_BIN_PATH', __FILE__);
 define('TEMPLATE_DIR', __DIR__ . "/templates");
 define('BUILD_DIR', __DIR__ . "/build");
 
-require_once getcwd() . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $rebuild = !empty($options['rebuild']) ? $options['rebuild'] : false;
 $specific_site = !empty($options['site']) ? explode(',', $options['site']) : [];

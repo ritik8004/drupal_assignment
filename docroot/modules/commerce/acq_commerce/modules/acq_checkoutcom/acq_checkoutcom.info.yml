@@ -6,4 +6,3 @@ package: Commerce
 dependencies:
   - acq_commerce:acq_payment
   - clientside_validation:clientside_validation_jquery
-  - form_options_attributes:form_options_attributes

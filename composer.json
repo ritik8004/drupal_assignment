@@ -110,7 +110,8 @@
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
-        "drupal/console": "^1.8"
+        "drupal/console": "^1.8",
+        "emuse/behat-html-formatter": "^0.1.0"
     },
     "repositories": {
         "drupal": {
@@ -189,6 +190,12 @@
     "autoload-dev": {
         "psr-4": {
             "Drupal\\Tests\\PHPUnit\\": "tests/phpunit/src/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Alshaya\\BehatContexts\\": "behat_rework/src/bootstrap/Drupal",
+            "Alshaya\\BehatBuild\\": "behat_rework/src/Process"
         }
     },
     "extra": {
