@@ -128,7 +128,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     // Get the default payment card to display form, to enter new card.
     $session = $this->currentRequest->getSession();
-    $payment_card = $session->get('checkout_com_payment_card', 'new');
+    $payment_card = $session->get('checkout_com_payment_card');
 
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
@@ -139,6 +139,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
+      $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
       $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
       $values = $form_state->getValue('acm_payment_methods');
       if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
