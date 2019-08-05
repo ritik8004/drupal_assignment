@@ -346,9 +346,13 @@ class CheckoutComAPIWrapper {
   protected function logInfo($message, array $params) {
     if ($this->configFactory->get('acq_checkoutcom.settings')->get('debug')) {
       $params = array_map(function ($param) {
-        var_dump(is_array($param));
-        unset($param['card'], $param['shippingDetails'], $param['billingDetails']);
-        return is_array($param) ? Json::encode($param) : $param;
+        if (is_array($param)) {
+          unset($param['card'], $param['shippingDetails'], $param['billingDetails']);
+          return Json::encode($param);
+        }
+        else {
+          return $param;
+        }
       }, $params);
       $params['@cart_id'] = $params['@cart_id'] ?? $this->getCart()->id();
       $this->logger->info($message, $params);
