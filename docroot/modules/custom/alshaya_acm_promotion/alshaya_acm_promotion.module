@@ -64,7 +64,8 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
   $items['free_gift_item'] = [
     'variables' => [
       'title' => NULL,
-      'gallery' => NULL,
+      'image' => NULL,
+      'url' => NULL,
     ],
   ];
 
@@ -264,15 +265,11 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
   // For free gift promotions, the promo needs to be rendered in a
   // different way.
   if (!empty($free_gift_promotions)) {
-    foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
-      $free_skus = [];
-      foreach ($free_gift_promotion['skus'] as $free_sku) {
-        $sku_entity = SKU::loadFromSku($free_sku['value']);
+    /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $manager */
+    $manager = \Drupal::service('alshaya_acm_promotion.manager');
 
-        if ($sku_entity instanceof SKUInterface) {
-          $free_skus[] = $sku_entity;
-        }
-      }
+    foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
+      $free_skus = $manager->getFreeGiftSkuEntitiesByPromotionId((int) $promotion_id);
 
       // No free gift available for the promotion, return early.
       if (empty($free_skus)) {
@@ -280,7 +277,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
       }
 
       // More than one available, show list modal.
-      if (count($free_skus) > 0) {
+      if (count($free_skus) > 1) {
         $link = Link::createFromRoute(
           $free_gift_promotion['text'],
           'alshaya_acm_promotion.free_gifts_list',
@@ -384,8 +381,22 @@ function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateIn
     return;
   }
 
+  // Get coupon applied on cart.
+  $cart_storage = \Drupal::service('acq_cart.cart_storage');
+  /** @var \Drupal\acq_cart\Cart $cart */
+  $cart = $cart_storage->getCart(FALSE);
+
+  if (empty($cart)) {
+    return;
+  }
+
+  $coupon_applied_on_cart = $cart->getCoupon();
+
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $manager */
+  $manager = \Drupal::service('alshaya_acm_promotion.manager');
 
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
@@ -396,53 +407,41 @@ function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateIn
 
       // Extract free gift promos.
       $free_gift_promos = [];
-      foreach ($line_item_promotions as $promo) {
-        if (!empty($promo['skus'])) {
-          $free_gift_promos[] = $promo;
+      foreach ($line_item_promotions as $promotion_id => $promotion) {
+        // If promo/free gift coupon is already applied on cart, don't show
+        // it with the item on cart page.
+        if (!empty($coupon_applied_on_cart) && isset($promotion['coupon_code']) && $coupon_applied_on_cart == $promotion['coupon_code']) {
+          continue;
+        }
+        // If it is not free gift promotion, no need to process further.
+        elseif (empty($promotion['skus'])) {
+          continue;
+        }
+
+        $free_gift_promos[$promotion_id] = $promotion;
+
+        $free_skus = $manager->getFreeGiftSkuEntitiesByRuleId($promotion_id);
+
+        if (count($free_skus) > 1) {
+          // @TODO: CORE-10287.
+        }
+        else {
+          $free_sku_entity = reset($free_skus);
+          $free_gift_promos[$promotion_id]['sku_title'] = $free_sku_entity->get('name')->getString();
+          $free_gift_promos[$promotion_id]['sku_entity_id'] = $free_sku_entity->id();
         }
       }
 
-      // Render each free gift promo via a theme function.
       if (empty($free_gift_promos)) {
-        foreach ($free_gift_promos ?? [] as $key => $promotion) {
-          if (!empty($free_gift_promos)) {
-            $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
-
-            // If not sku entity object.
-            if (!$free_sku_entity instanceof SKUInterface) {
-              continue;
-            }
-
-            $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
-            $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
-          }
-        }
-
-        $cart_storage = \Drupal::service('acq_cart.cart_storage');
-        /** @var \Drupal\acq_cart\Cart $cart */
-        $cart = $cart_storage->getCart(FALSE);
-
-        foreach ($free_gift_promos as $key => $promo) {
-          // Get coupon applied on cart.
-          $coupon_applied_on_cart = $cart->getCoupon();
-          // If promo/free gift coupon is already applied on cart, don't show
-          // it with the item on cart page.
-          if (!empty($promo['coupon_code'])) {
-            foreach ($promo['coupon_code'] as $key => $coupon_val) {
-              if ($coupon_val['value'] == $coupon_applied_on_cart) {
-                unset($free_gift_promos[$key]);
-              }
-            }
-          }
-        }
-
-        $form['cart'][$id]['promo_text'] = [
-          '#theme' => "free_gift_cart_label",
-          '#promos' => $free_gift_promos,
-        ];
-
-        $form['cart'][$id]['promo_text']['#wrapper_attributes'] = ['class' => ['free-gifts-wrapper']];
+        continue;
       }
+
+      $form['cart'][$id]['promo_text'] = [
+        '#theme' => 'free_gift_cart_label',
+        '#promos' => $free_gift_promos,
+      ];
+
+      $form['cart'][$id]['promo_text']['#wrapper_attributes'] = ['class' => ['free-gifts-wrapper']];
     }
   }
 }

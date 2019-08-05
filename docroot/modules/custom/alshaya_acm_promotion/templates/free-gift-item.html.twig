@@ -1,8 +1,10 @@
 <div class="free-gift-view">
-  <div class="free-gift-gallery">
-    {{ gallery }}
-  </div>
-  <div class="free-gift-title">
-    {{ title }}
-  </div>
+  <a href="{{ url }}" class="use-ajax" data-dialog-type="modal" data-dialog-options="{'width': 'auto'}">
+    <div class="free-gift-image">
+      {{ image }}
+    </div>
+    <div class="free-gift-title">
+      {{ title }}
+    </div>
+  </a>
 </div>

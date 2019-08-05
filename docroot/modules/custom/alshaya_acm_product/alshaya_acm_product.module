@@ -713,6 +713,27 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
       $build['gallery'] = [];
     }
 
+    if (($promotion_id = \Drupal::request()->get('promotion_id'))) {
+      $build['back_to_collection'] = [
+        '#type' => 'link',
+        '#title' => t('Back to Collection'),
+        '#url' => Url::fromRoute('alshaya_acm_promotion.free_gifts_list',
+          [
+            'node' => $promotion_id,
+            'js' => 'nojs',
+          ],
+          [
+            'attributes' => [
+              'class' => ['use-ajax'],
+            ],
+            'query' => [
+              'replace' => 1,
+            ],
+          ]
+        ),
+      ];
+    }
+
     // Attach libraries.
     $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
 
@@ -725,15 +746,14 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
-      $build['image'] = $skuManager->getSkuImage($sku_media, $entity->label(), '192x168');
+      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $entity->label(), '192x168');
     }
 
     // Add PDP slider position config to variable so it is available in themes.
     $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
-    $pdp_image_slider_position = $skuManager->getImageSliderPosition($entity);
-    $build['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+
     // Add PDP slider position config to drupalSettings so we can use it in JS.
-    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
 
     $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
     $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');

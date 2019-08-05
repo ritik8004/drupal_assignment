@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_acm_promotion;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_promotion\AcqPromotionsManager;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
@@ -277,6 +279,38 @@ class AlshayaPromotionsManager {
     }
 
     return array_filter($promotions);
+  }
+
+  /**
+   * Get free gift sku entities for promotion id.
+   *
+   * @param int $promotion_id
+   *   Promotion node id.
+   *
+   * @return array
+   *   Free gift sku entities.
+   */
+  public function getFreeGiftSkuEntitiesByPromotionId(int $promotion_id) {
+    $free_sku_entities = [];
+
+    $promotion = $this->nodeStorage->load($promotion_id);
+
+    if (!($promotion instanceof NodeInterface)) {
+      return $free_sku_entities;
+    }
+
+    $free_skus = $promotion->get('field_free_gift_skus')->getValue();
+    $free_skus = is_array($free_skus) ? array_column($free_skus, 'value') : [];
+
+    foreach ($free_skus ?? [] as $free_sku) {
+      $sku_entity = SKU::loadFromSku($free_sku);
+
+      if ($sku_entity instanceof SKUInterface) {
+        $free_sku_entities[] = $sku_entity;
+      }
+    }
+
+    return $free_sku_entities;
   }
 
 }

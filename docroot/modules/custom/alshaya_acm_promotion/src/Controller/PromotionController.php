@@ -6,11 +6,15 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PromotionController.
@@ -78,7 +82,7 @@ class PromotionController extends ControllerBase {
   /**
    * Page callback for displaying free gifts list.
    */
-  public function listFreeGiftsBody(NodeInterface $node) {
+  public function listFreeGiftsBody(Request $request, NodeInterface $node) {
     $build = [];
 
     $build['#cache']['tags'] = $node->getCacheTags();
@@ -98,23 +102,52 @@ class PromotionController extends ControllerBase {
 
     /** @var \Drupal\acq_sku\Entity\SKU $free_gift */
     foreach ($free_gifts as $free_gift) {
+      $item = [];
+
+      $item['#title']['#markup'] = $free_gift->label();
+      $item['#url'] = Url::fromRoute(
+        'alshaya_acm_product.sku_modal',
+        ['acq_sku' => $free_gift->id(), 'js' => 'nojs'],
+        ['query' => ['promotion_id' => $node->id()]]
+      );
+
       switch ($free_gift->bundle()) {
         case 'simple':
-          $items[] = [
-            '#theme' => 'free_gift_item',
-            '#title' => [
-              '#markup' => $sku->label(),
-            ],
-            '#gallery' => $this->imagesManager->getGallery($sku, 'teaser', $sku->label()),
-          ];
+          $item['#theme'] = 'free_gift_item';
+
+          $sku_media = $this->imagesManager->getFirstImage($free_gift);
+          if ($sku_media) {
+            $item['#image'] = $this->skuManager->getSkuImage(
+              $sku_media['drupal_uri'],
+              $free_gift->label(),
+              'product_teaser'
+            );
+          }
+
           break;
+
+        case 'configurable':
+          // @TODO: CORE-10288.
+          break;
+
+        default:
+          // We support only specific types for now.
+          continue;
       }
+
+      $items[] = $item;
     }
 
     $build['items'] = [
       '#theme' => 'item_list',
       '#items' => $items,
     ];
+
+    if ($request->query->get('replace')) {
+      $response = new AjaxResponse();
+      $response->addCommand(new HtmlCommand('#drupal-modal', $build));
+      return $response;
+    }
 
     return $build;
   }
