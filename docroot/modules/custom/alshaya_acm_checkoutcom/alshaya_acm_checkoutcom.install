@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_checkoutcom module.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_checkoutcom_install() {
+  // Make checkout.com default payment method for all country except kw.
+  $country_code = mb_strtolower(Settings::get('country_code'));
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com', 'Credit / Debit Card');
+
+  if ($country_code !== 'kw') {
+    if ($current_default = $checkout_options_manager->getDefaultPayment()) {
+      if ($current_default->id() != $checkout_com->id()) {
+        $current_default->get('field_payment_default')->setValue(2);
+        $current_default->save();
+      }
+    }
+    $checkout_com->get('field_payment_default')->setValue(1);
+  }
+  $checkout_com->save();
+
+  if (!$checkout_com->hasTranslation('ar')) {
+    $checkout_com_ar = $checkout_com->addTranslation('ar', []);
+  }
+  else {
+    $checkout_com_ar = $checkout_com->getTranslation('ar');
+  }
+  $checkout_com_ar->setName('بطاقة الائتمان');
+  $checkout_com_ar->save();
+}

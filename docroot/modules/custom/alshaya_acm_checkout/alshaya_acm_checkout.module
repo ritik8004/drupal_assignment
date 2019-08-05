@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -227,11 +228,20 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     $cybersource_ar->save();
 
     // K-Net.
-    $knet = $checkout_options_manager->loadPaymentMethod('knet');
-    $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
-    // Set K-Net to default during install.
-    $knet->get('field_payment_default')->setValue(1);
-    $knet->save();
+    $country_code = mb_strtolower(Settings::get('country_code'));
+    if ($country_code == 'kw') {
+      $knet = $checkout_options_manager->loadPaymentMethod('knet');
+      $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
+      // Set K-Net to default during install.
+      $knet->get('field_payment_default')->setValue(1);
+      $knet->save();
+    }
+    else {
+      $knet = $checkout_options_manager->loadPaymentMethod('checkout_com');
+      // Set K-Net to default during install.
+      $knet->get('field_payment_default')->setValue(1);
+      $knet->save();
+    }
 
     $knet_ar = $knet->addTranslation('ar', []);
     $knet_ar->setName('بطاقة ائتمان k-net');
