@@ -270,6 +270,8 @@
             ticketTypesFinal.total = {count: fCount, price: fPrice};
           },
           prepareForm: function (index, id, name, min, max) {
+            var visitorName = Drupal.t('Visitor Name');
+            var visitorAge = Drupal.t('Age');
             var options = '';
             min = parseInt(min, 10);
             max = parseInt(max, 10);
@@ -285,7 +287,7 @@
             }
 
             return (
-              "<div class='visitor-tickets clearfix'><input type='hidden' name='visitorID' value='" + id + "'><div class='tbl-content'><span class='icon icon_" + id + "'></span><span>" + name + "</span></div><div class='tbl-content'><input type='text' autocomplete='off' class='form-control onlyAlpha' name='name' placeholder='visitor Name' maxlenght='40'/></div><div class='tbl-content'><select class='form-control' name='age'><option value=''>Age (" + min + '-' + max + ')</option>' + options + "</select></div><div class='tbl-content'>" + genderHtml + '</div></div>'
+              "<div class='visitor-tickets clearfix'><input type='hidden' name='visitorID' value='" + id + "'><div class='tbl-content'><span class='icon icon_" + id + "'></span><span>" + name + "</span></div><div class='tbl-content'><input type='text' autocomplete='off' class='form-control onlyAlpha' name='name' placeholder='" + visitorName + "' maxlenght='40'/></div><div class='tbl-content'><select class='form-control' name='age'><option value=''>" + visitorAge + " (" + min + '-' + max + ')</option>' + options + "</select></div><div class='tbl-content'>" + genderHtml + '</div></div>'
             );
           },
           generateFormUI: function () {
