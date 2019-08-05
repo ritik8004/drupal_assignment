@@ -5,6 +5,8 @@ acq_checkoutcom.payment_success:
     _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::success'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: TRUE
 
 acq_checkoutcom.payment_fail:
   path: '/checkoutcom/payment/fail'
@@ -13,6 +15,8 @@ acq_checkoutcom.payment_fail:
     _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::fail'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: TRUE
 
 acq_checkoutcom.payment_cards:
   path: '/user/{user}/payment-cards'
