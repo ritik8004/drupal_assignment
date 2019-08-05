@@ -83,10 +83,10 @@ function alshaya_non_transac_install() {
 
   $modules = [
     // Custom modules.
+    'alshaya_arabic',
     'alshaya_custom',
     'alshaya_advanced_page',
     'alshaya_admin',
-    'alshaya_arabic',
     'alshaya_block',
     'alshaya_captcha',
     'alshaya_config',
