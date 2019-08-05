@@ -92,59 +92,15 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // Fill this variable to override the default mapping.
   $mapping = [
     'hmkw' => [
-      '01dev3' => [
-        'magento' => 'hm_mapp',
-        'conductor' => 'hmkw_mapp',
-      ],
-      '01qa2' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmkw_uat',
-      ],
       '01dev' => [
         'magento' => 'hm_qa',
         'conductor' => 'hmkw_dev',
       ],
     ],
-    'hmsa' => [
-      '01dev3' => [
-        'magento' => 'hm_mapp',
-        'conductor' => 'hmsa_mapp',
-      ],
-      '01qa2' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmsa_uat',
-      ],
-    ],
-    'hmae' => [
-      '01dev3' => [
-        'magento' => 'hm_mapp',
-        'conductor' => 'hmae_mapp',
-      ],
-      '01qa2' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmae_uat',
-      ],
-    ],
-    'flkw' => [
-      '01dev2' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flkw_uat',
-      ],
-    ],
     'flsa' => [
-      '01dev2' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flsa_uat',
-      ],
       '01dev' => [
         'magento' => 'fl_qa',
         'conductor' => 'flsa_dev',
-      ],
-    ],
-    'flae' => [
-      '01dev2' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flae_uat',
       ],
     ],
     'bbwae' => [

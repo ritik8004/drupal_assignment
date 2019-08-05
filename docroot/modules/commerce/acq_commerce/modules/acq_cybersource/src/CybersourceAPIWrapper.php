@@ -12,6 +12,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * CybersourceAPIWrapper class.
@@ -38,13 +39,16 @@ class CybersourceAPIWrapper extends APIWrapper {
    *   I18nHelper object.
    * @param \Drupal\acq_commerce\APIHelper $api_helper
    *   API Helper service object.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactory $logger_factory,
                               I18nHelper $i18n_helper,
-                              APIHelper $api_helper) {
-    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper);
+                              APIHelper $api_helper,
+                              EventDispatcherInterface $dispatcher) {
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper, $dispatcher);
     // To avoid issues in merging ACM code, not changing from private to
     // protected in base class.
     $this->helper = $api_helper;
@@ -116,9 +120,8 @@ class CybersourceAPIWrapper extends APIWrapper {
             continue;
           }
 
-          $plugin_manager = \Drupal::service('plugin.manager.sku');
-          $plugin = $plugin_manager->pluginInstanceFromType($item['product_type']);
           $sku = SKU::loadFromSku($item['sku']);
+          $plugin = $sku->getPluginInstance();
 
           if (empty($sku) || empty($plugin)) {
             $cart->items[$key]['name'] = "";

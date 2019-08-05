@@ -56,6 +56,12 @@
         $('.form-item-quantity .form-select').select2({
           minimumResultsForSearch: -1
         });
+
+        // Checkout.com Month & Year select fields.
+        // TODO: Use this generic approach everywhere and cleanup this file.
+        $('.convert-to-select2.form-select').select2({
+          minimumResultsForSearch: -1
+        });
       }
     }
   };

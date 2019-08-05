@@ -245,7 +245,9 @@
 }
 
 #payment_details_wrapper {
-  padding: 0 1rem;
+  @include breakpoint($tablet) {
+    padding: 0 1rem;
+  }
 
   #payment_method_knet {
     border-top: 1px solid $checkout_payment_option_border;
@@ -263,6 +265,12 @@
       &.plugin-selected {
         .method-title {
           font-weight: normal;
+        }
+      }
+
+      .method-title {
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
         }
       }
     }

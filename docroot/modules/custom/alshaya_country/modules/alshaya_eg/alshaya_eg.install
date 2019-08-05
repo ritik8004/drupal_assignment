@@ -6,9 +6,27 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add iso_currency_code for eg sites.
+ */
+function alshaya_eg_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'EGP')
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_eg_install() {
+  // Add iso_currency_code for eg sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'EGP')
+    ->save();
+
   // Country code and timezone for Saudi Arabia.
   alshaya_country_set_default_regional_info('EG');
 
