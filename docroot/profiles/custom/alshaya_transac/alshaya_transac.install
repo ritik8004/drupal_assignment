@@ -699,6 +699,7 @@ function alshaya_transac_install() {
     'alshaya_static_html',
     'alshaya_product_options',
     'alshaya_image_sitemap',
+    'alshaya_options_list',
   ];
 
   global $_alshaya_modules_installed;
