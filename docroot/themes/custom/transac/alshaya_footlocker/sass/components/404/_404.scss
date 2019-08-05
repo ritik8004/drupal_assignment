@@ -89,6 +89,13 @@
   .maintenance__logo {
     float: none;
     text-align: center;
+    background: $header_bg;
+    padding: 1rem 0;
+    margin: 0;
+
+    &--wrapper {
+      max-width: 100%;
+    }
   }
 
   .not-found {
