@@ -759,22 +759,12 @@
 .address-book-address {
   .form-item.form-type-textfield {
     label:last-of-type {
-      font-size: 1rem;
-      color: $primary_input_label;
-      position: absolute;
-      #{$left}: 0;
-      top: -0.125rem;
-      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-      pointer-events: none;
+      @include placeholder-label;
     }
 
     input:focus ~ label:last-of-type,
     label.active-label:not(.error) {
-      top: -1.25em;
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 1;
-      font-size: 0.75rem;
+      @include placeholder-active;
     }
   }
 

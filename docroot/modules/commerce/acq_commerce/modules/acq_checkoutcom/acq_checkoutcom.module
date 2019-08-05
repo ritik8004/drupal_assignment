@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file
+ * Module file for acq_checkoutcom.
+ */
+
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function acq_checkoutcom_theme() {
+  return [
+    'payment_card_info' => [
+      'variables' => [
+        'card_info' => NULL,
+        'user' => NULL,
+      ],
+    ],
+    'payment_card_teaser' => [
+      'variables' => [
+        'card_info' => NULL,
+        'user' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Preprocess payment_card_info theme.
+ *
+ * @param array $variables
+ *   The array of variables.
+ */
+function template_preprocess_payment_card_info(array &$variables) {
+  acq_checkoutcom_preprocess_card_info($variables);
+}
+
+/**
+ * Preprocess payment_card_teaser theme.
+ *
+ * @param array $variables
+ *   The array of variables.
+ */
+function template_preprocess_payment_card_teaser(array &$variables) {
+  acq_checkoutcom_preprocess_card_info($variables);
+}
+
+/**
+ * Process variable to add required info for card.
+ *
+ * @param array $variables
+ *   The array of variables.
+ */
+function acq_checkoutcom_preprocess_card_info(array &$variables) {
+  // Set the delete link.
+  if ($variables['user'] instanceof UserInterface) {
+    $destination = [];
+    if (\Drupal::routeMatch()->getRouteName() == 'acq_checkout.form') {
+      $destination = [
+        'destination' => Url::fromRoute(
+          'acq_checkout.form',
+          ['step' => 'payment'])->toString(),
+      ];
+    }
+
+    $variables['delete_operation'] = [
+      'title' => t('Delete'),
+      'url' => Url::fromRoute(
+        'acq_checkoutcom.payment_card.remove_card',
+        [
+          'user' => $variables['user']->id(),
+          'public_hash' => $variables['card_info']['public_hash'],
+        ],
+        [
+          'attributes' => [
+            'class' => ['use-ajax'],
+            'data-dialog-type' => "modal",
+            'data-dialog-options' => '{"width":"auto"}',
+          ],
+          'query' => $destination,
+        ]
+      ),
+    ];
+  }
+}

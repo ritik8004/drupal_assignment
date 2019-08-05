@@ -1,4 +1,5 @@
 currency_code: '$'
+iso_currency_code: 'USD'
 currency_code_position: 'before'
 decimal_points: '2'
 langcode: en

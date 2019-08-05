@@ -1,0 +1,29 @@
+services:
+  acq_checkoutcom.checkout_api:
+    class: Drupal\acq_checkoutcom\CheckoutComAPIWrapper
+    arguments:
+      - '@config.factory'
+      - '@http_client_factory'
+      - '@acq_checkoutcom.agent_api'
+      - '@acq_cart.cart_storage'
+      - '@request_stack'
+      - '@messenger'
+      - '@logger.factory'
+
+  acq_checkoutcom.agent_api:
+    class: Drupal\acq_checkoutcom\ApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@config.factory'
+      - '@user.data'
+      - '@logger.factory'
+      - '@cache.data'
+      - '@datetime.time'
+      - '@date.formatter'
+
+  acq_checkoutcom.form_helper:
+    class: Drupal\acq_checkoutcom\CheckoutComFormHelper
+    arguments:
+      - '@config.factory'
+      - '@current_user'
+      - '@acq_checkoutcom.agent_api'
