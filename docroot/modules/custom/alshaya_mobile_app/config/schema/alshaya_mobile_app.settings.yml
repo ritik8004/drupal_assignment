@@ -1,0 +1,7 @@
+alshaya_mobile_app.settings:
+  type: config_object
+  label: 'Alshaya mobile app configuration'
+  mapping:
+    pdp_click_collect_available_in_store:
+      type: label
+      label: 'PDP: Click and Collect available in store'
