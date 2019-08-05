@@ -48,6 +48,10 @@
         width: 100%;
         float: none;
         margin: 0;
+
+        .price {
+          margin-bottom: 0.125rem;
+        }
       }
 
       .content__sidebar {
@@ -409,13 +413,14 @@
       &.product-out-of-stock {
         .basic-details-wrapper {
           min-height: 2.5rem;
+          margin-top: 1.125rem;
 
           span {
             &.out-of-stock {
               position: relative;
               box-shadow: none;
               border: none;
-              height: 2.5rem;
+              height: 3rem;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -433,6 +438,16 @@
 
     .price--discount {
       display: none !important;
+    }
+  }
+
+  .nodetype--acq_product {
+    .product-out-of-stock {
+      span {
+        &.out-of-stock {
+          font-size: 0.875rem;
+        }
+      }
     }
   }
 }
