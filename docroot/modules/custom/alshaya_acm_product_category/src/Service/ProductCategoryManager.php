@@ -233,9 +233,8 @@ class ProductCategoryManager {
 
     $cat_ids = [];
 
-    if ($this->isProductWithSalesOrNewArrival($node, ['attr_is_sale'])) {
-      $cat_ids = array_merge($cat_ids, $categorization_ids['sale']);
-    }
+    $is_sale = $this->isProductWithSalesOrNewArrival($node, ['attr_is_sale']);
+    $cat_ids = array_merge($cat_ids, $categorization_ids['sale']);
 
     // If still its empty, then don't process further. This might be the case
     // for example - when sales category is configured but `is_sale` is false.
@@ -243,7 +242,11 @@ class ProductCategoryManager {
       return FALSE;
     }
 
-    $non_sale_new_arrival_categories = array_intersect($product_category_ids, $cat_ids);
+    // If `is_sale` flag is marked as false, we fetch/get non-sale categories
+    // otherwise we fetch/get only sale categories.
+    $non_sale_new_arrival_categories = $is_sale
+      ? array_intersect($product_category_ids, $cat_ids)
+      : array_diff($product_category_ids, $cat_ids);
 
     // If there is no common term, then don't process further. This might be
     // the case when sale and new arrival is configured at drupal level. At
