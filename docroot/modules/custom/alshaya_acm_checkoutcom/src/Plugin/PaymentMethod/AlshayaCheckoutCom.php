@@ -40,7 +40,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
 
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
-    if ($this->currentUser->isAuthenticated()) {
+    if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
