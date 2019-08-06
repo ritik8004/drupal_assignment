@@ -21,18 +21,18 @@ function alshaya_mobile_app_form_alshaya_click_collect_settings_alter(&$form, Fo
   $default_value = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings')->get('pdp_click_collect_available_in_store');
   $form['pdp_click_collect_available_in_store'] = [
     '#type' => 'textfield',
-    '#title' => t('PDP: Click and Collect available in store'),
+    '#title' => t('PDP: Click and Collect available in store (Mobile App)'),
     '#required' => TRUE,
     '#default_value' => $default_value,
   ];
 
-  $form['#submit'][] = '_alshaya_click_and_collect_submit';
+  $form['#submit'][] = '_alshaya_mobile_app_click_and_collect_submit';
 }
 
 /**
  * Submit handler for the click and collect form.
  */
-function _alshaya_click_and_collect_submit($form, FormStateInterface $form_state) {
+function _alshaya_mobile_app_click_and_collect_submit($form, FormStateInterface $form_state) {
   $default_value = $form_state->getValue('pdp_click_collect_available_in_store');
   \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings')
     ->set('pdp_click_collect_available_in_store', $default_value)
