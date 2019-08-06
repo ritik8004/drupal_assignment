@@ -1,10 +1,6 @@
 dependencies:
   config:
     - field.field.taxonomy_term.sku_product_option.field_options_list_bg
-id: taxonomy_term.sku_product_option.default
-targetEntityType: taxonomy_term
-bundle: sku_product_option
-mode: default
 content:
   field_options_list_bg:
     type: image_image
