@@ -1,0 +1,7 @@
+alshaya_acm_promotion.free_gifts_list:
+  path: '/free-gifts-list/{node}'
+  defaults:
+    _title_callback: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::listFreeGiftsTitle'
+    _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::listFreeGiftsBody'
+  requirements:
+    _permission: 'access content'
