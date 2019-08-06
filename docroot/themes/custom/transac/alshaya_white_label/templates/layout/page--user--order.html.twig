@@ -1,9 +1,11 @@
 {% extends 'page.html.twig' %}
-{% if html_direction == "ltr" %}
-  {{ attach_library('alshaya_white_label/ltr_print_styles') }}
-{% elseif html_direction == "rtl" %}
-  {{ attach_library('alshaya_white_label/rtl_print_styles') }}
-{% endif %}
+{% block attach_custom_library %}
+  {% if html_direction == "ltr" %}
+    {{ attach_library('alshaya_white_label/ltr_print_styles') }}
+  {% elseif html_direction == "rtl" %}
+    {{ attach_library('alshaya_white_label/rtl_print_styles') }}
+  {% endif %}
+{% endblock %}
 {% set attributes = attributes.addClass('l-two--sf order-detail') %}
 {% block after_content %}
     {% if vat_text_footer %}
