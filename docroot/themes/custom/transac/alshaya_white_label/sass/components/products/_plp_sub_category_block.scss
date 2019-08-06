@@ -6,11 +6,19 @@
     padding: 2.5rem 0;
     border-bottom: 1px solid $primary_border;
 
+    @include breakpoint($desktop) {
+      justify-content: center;
+    }
+
     .sub-category {
       display: inline-block;
       margin-#{$right}: 3.375rem;
       min-width: 6.75rem;
       text-align: center;
+
+      &:hover {
+        cursor: pointer;
+      }
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 2.6875rem;
@@ -96,6 +104,22 @@
         @include breakpoint($only-mobile) {
           margin: 0;
           max-width: 6.75rem;
+        }
+      }
+    }
+  }
+}
+
+.subcategory-listing-enabled {
+  .filter-fixed-top {
+    .c-products-list {
+      .view-alshaya-product-list {
+        @include breakpoint($desktop) {
+          margin-top: 19rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-top: 15.375rem;
         }
       }
     }

@@ -434,49 +434,47 @@
             }
           }
 
-          $(window).on('scroll', function(e) {
-            if ($(window).width() < 1024) {
-              if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
-                if (this.oldScroll > this.scrollY) {
-                  // Action to perform when we scrolling up.
-                  if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
-                    $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
-                  }
-                } else {
-                  // Action to perform when we are scrolling down.
-                  if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
-                    $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
-                  }
+          if ($(window).width() < 1024) {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+              if (this.oldScroll > this.scrollY) {
+                // Action to perform when we scrolling up.
+                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+                  $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
                 }
-                this.oldScroll = this.scrollY;
-              }
-              else {
+              } else {
+                // Action to perform when we are scrolling down.
                 if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                   $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
                 }
               }
+              this.oldScroll = this.scrollY;
             }
             else {
-              if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
-                if (this.oldScroll > this.scrollY) {
-                  // Action to perform when we scrolling up.
-                  if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                    $('.sticky-filter-wrapper').addClass('show-sub-category');
-                  }
-                } else {
-                  // Action to perform when we are scrolling down.
-                  if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                    $('.sticky-filter-wrapper').removeClass('show-sub-category');
-                  }
+              if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+                $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
+              }
+            }
+          }
+          else {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+              if (this.oldScroll > this.scrollY) {
+                // Action to perform when we scrolling up.
+                if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                  $('.sticky-filter-wrapper').addClass('show-sub-category');
                 }
-                this.oldScroll = this.scrollY;
               } else {
+                // Action to perform when we are scrolling down.
                 if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                   $('.sticky-filter-wrapper').removeClass('show-sub-category');
                 }
               }
+              this.oldScroll = this.scrollY;
+            } else {
+              if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                $('.sticky-filter-wrapper').removeClass('show-sub-category');
+              }
             }
-          });
+          }
         });
       }
 
