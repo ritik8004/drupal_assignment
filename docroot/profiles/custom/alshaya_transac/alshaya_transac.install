@@ -15,9 +15,10 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Move blocks to current theme.
+ * Enable alshaya options list module.
  */
-function alshaya_transac_update_8124() {
+function alshaya_transac_update_8123() {
+  \Drupal::service('module_installer')->install(['alshaya_options_list']);
   // Get current default theme.
   $current_theme = \Drupal::config('system.theme')->get('default');
 
@@ -25,15 +26,6 @@ function alshaya_transac_update_8124() {
   if (!empty($current_theme)) {
     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
   }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Enable alshaya options list module.
- */
-function alshaya_transac_update_8123() {
-  \Drupal::service('module_installer')->install(['alshaya_options_list']);
 }
 
 /**
