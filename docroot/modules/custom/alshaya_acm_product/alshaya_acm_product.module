@@ -713,27 +713,6 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
       $build['gallery'] = [];
     }
 
-    if (($promotion_id = \Drupal::request()->get('promotion_id'))) {
-      $build['back_to_collection'] = [
-        '#type' => 'link',
-        '#title' => t('Back to Collection'),
-        '#url' => Url::fromRoute('alshaya_acm_promotion.free_gifts_list',
-          [
-            'node' => $promotion_id,
-            'js' => 'nojs',
-          ],
-          [
-            'attributes' => [
-              'class' => ['use-ajax'],
-            ],
-            'query' => [
-              'replace' => 1,
-            ],
-          ]
-        ),
-      ];
-    }
-
     // Attach libraries.
     $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
 

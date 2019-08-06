@@ -12,5 +12,11 @@
         </span>
       </div>
     </div>
+  {% elseif promotion.link is not empty %}
+    <div class="free-gift-promo">
+      <div class="gift-message">
+        {{ promotion.link }}
+      </div>
+    </div>
   {% endif %}
 {% endfor %}
