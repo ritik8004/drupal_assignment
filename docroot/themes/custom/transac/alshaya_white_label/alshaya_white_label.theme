@@ -137,6 +137,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
  * Implements hook_preprocess_page().
  */
 function alshaya_white_label_preprocess_page(&$variables) {
+  $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
+  // Adding a variable for html direction.
+  $variables['html_direction'] = $direction;
+
   // Check if page is panel pages.
   $routematch = \Drupal::routeMatch();
   $route_options = $routematch->getRouteObject()->getOptions();
