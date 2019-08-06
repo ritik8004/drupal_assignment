@@ -114,6 +114,10 @@
     .form-submit {
       min-width: 11.5rem;
       width: auto;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
     }
   }
 }
