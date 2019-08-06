@@ -420,7 +420,7 @@ function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateIn
 
         $free_gift_promos[$promotion_id] = $promotion;
 
-        $free_skus = $manager->getFreeGiftSkuEntitiesByRuleId($promotion_id);
+        $free_skus = $manager->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
 
         if (count($free_skus) > 1) {
           // @TODO: CORE-10287.
