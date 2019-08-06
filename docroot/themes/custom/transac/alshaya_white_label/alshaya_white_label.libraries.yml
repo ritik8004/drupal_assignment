@@ -32,12 +32,20 @@ ltr_styles:
   css:
     theme:
       css/ltr.css: {}
-      css/ltr-print.css: {media: print}
 
 rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+
+ltr_print_styles:
+  css:
+    theme:
+      css/ltr-print.css: {media: print}
+
+rtl_print_styles:
+  css:
+    theme:
       css/rtl-print.css: {media: print}
 
 unmask_password:
