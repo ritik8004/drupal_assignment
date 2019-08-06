@@ -303,6 +303,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
+    // There are cases when upstream systems return different file id
+    // but re-use the file name and this creates issue with CDNs.
+    // So we add value_id as suffix to ensure each image url is unique after
+    // every update.
+    $file_name_array = explode('.', $file_name);
+    $extension = array_pop($file_name_array);
+    $file_name_array[] = $data['value_id'];
+    $file_name_array[] = $extension;
+    $file_name = implode('.', $file_name_array);
+
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
