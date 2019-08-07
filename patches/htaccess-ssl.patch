@@ -8,7 +8,7 @@ index 4716fa1..14014ce 100644
 
 +  # Redirect HTTP to HTTPS for all requests
 +  RewriteCond %{HTTPS} off
-+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
++  RewriteCond %{HTTP:X-Forwarded-Proto} !https [novary]
 +  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 +
    # Redirect common PHP files to their new locations.
