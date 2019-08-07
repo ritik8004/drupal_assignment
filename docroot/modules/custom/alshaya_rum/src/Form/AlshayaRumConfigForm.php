@@ -35,6 +35,7 @@ class AlshayaRumConfigForm extends ConfigFormBase {
     $form['rum_user_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Alshaya RUM user id'),
+      '#description' => $this->t("Add RUM user id to track usage from <a href='https://www.monitis.com/'>https://www.monitis.com/</a>"),
       '#default_value' => $alshaya_rum_config->get('rum_user_id'),
     ];
 
@@ -42,6 +43,7 @@ class AlshayaRumConfigForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('List of pages on which RUM script should load:'),
       '#default_value' => $alshaya_rum_config->get('whitelisted_rum_paths'),
+      '#description' => $this->t("List of pages you want to load RUM script for & measure usage on. Enter relative urls with languagecode e.g., /en/victorias-secret/shop-bras/lining-levels/unlined/ (one per line for mulitple pages). </br> Load on all page by adding `*` to the configuration. Use `&lt;front&gt;` for loading it on Homepage."),
     ];
 
     return parent::buildForm($form, $form_state);

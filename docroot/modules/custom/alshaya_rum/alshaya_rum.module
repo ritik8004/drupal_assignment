@@ -11,18 +11,36 @@ use Drupal\Core\Url;
  * Implements hook_page_attachments().
  */
 function alshaya_rum_page_attachments(array &$page) {
-  $url = Url::fromRoute('<current>');
-  $rum_user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
+  // Avoid loading script on admin pages.
+  if (!(\Drupal::service('router.admin_context')->isAdminRoute())) {
+    $url = Url::fromRoute('<current>')->toString();
+    $rum_user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-  $whitelisted_rum_paths = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
-  $whitelisted_rum_path_array = array_filter(explode('\n', $whitelisted_rum_paths));
+    // Decode special characters from the url in case of non-english language.
+    if ($langcode !== 'en') {
+      $url = urldecode($url);
+    }
 
-  // Load RUM script only on the whitelisted pages or if * is in list of
-  // whitelisted pages.
-  if (($rum_user_id) &&
-    (in_array($url, $whitelisted_rum_path_array) ||
-    (in_array('*', $whitelisted_rum_path_array)))) {
-    $page['#attached']['library'][] = 'alshaya_rum.rum_script';
+    $whitelisted_rum_paths = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
+    $whitelisted_rum_path_array = array_filter(preg_split('/\r\n|\r|\n/', $whitelisted_rum_paths));
+
+    // Load RUM script only on the whitelisted pages or if * is in list of
+    // whitelisted pages.
+    if ($rum_user_id) {
+      // Special handling for '<front>' page.
+      if (\Drupal::service('path.matcher')->isFrontPage() &&
+        (in_array('<front>', $whitelisted_rum_path_array))) {
+        $page['#attached']['library'][] = 'alshaya_rum/rum_script';
+      }
+      elseif (in_array($url, $whitelisted_rum_path_array) ||
+        (in_array('*', $whitelisted_rum_path_array))) {
+        $page['#attached']['library'][] = 'alshaya_rum/rum_script';
+        $page['#cache']['tags'] = [
+          'config:alshaya_rum.settings',
+        ];
+      }
+    }
   }
 }
 
@@ -33,7 +51,7 @@ function alshaya_rum_library_info_build() {
   $rum_user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
 
   return [
-    'alshaya_rum.rum_script' => [
+    'rum_script' => [
       'js' => [
         '//rum.monitis.com/get/jsbenchmark.min.js?id=' . $rum_user_id => [
           'type' => 'external',
