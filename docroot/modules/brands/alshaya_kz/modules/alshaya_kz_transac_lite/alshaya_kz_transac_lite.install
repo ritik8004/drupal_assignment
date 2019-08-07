@@ -8,6 +8,72 @@
 use Drupal\block_content\Entity\BlockContent;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Arabic translation.
+ */
+function alshaya_kz_transac_lite_update_8002() {
+  $strings = [
+    'Infant' => [
+      'ar' => 'الصغار',
+    ],
+    'Please wait a moment' => [
+      'ar' => 'يرجى الانتظار للحظات',
+    ],
+    'Let us Know who is coming to visit' => [
+      'ar' => 'أخبرونا من سيزورنا ',
+    ],
+    'Gender' => [
+      'ar' => 'الجنس',
+    ],
+    'Age' => [
+      'ar' => 'العمر',
+    ],
+    'Visitor Name' => [
+      'ar' => 'اسم الزائر',
+    ],
+    'Continue to payment' => [
+      'ar' => 'المتابعة للدفع',
+    ],
+    'Accept our Terms and Conditions' => [
+      'ar' => 'قبول الشروط والأحكام',
+    ],
+    'Please note we are in the process of adding Credit Card payment option' => [
+      'ar' => 'يرجى العلم أننا سنضيف خيار الدفع بواسطة بطاقة الائتمان قريباً',
+    ],
+    'Proceed to pay' => [
+      'ar' => 'الاستمرار للدفع',
+    ],
+    'Payment Info' => [
+      'ar' => 'معلومات الدفع',
+    ],
+    'Note: Children (age 2-3), should be accompanied by an Adult.' => [
+      'ar' => 'ملاحظة: الأطفال من عمر 2 إلى 3 سنوات يجب أن يكونوا برفقة شخص بالغ',
+    ],
+    'Website is not supported for this version of the browser. Please use any other latest browser.' => [
+      'ar' => 'الموقع لا يعمل بهذا الإصدار من برنامج  التصفح. يرجى استخدام أيّ متصفح آخر.',
+    ],
+  ];
+
+  // Save the translation.
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable lazy loading option for kidzania.
+ */
+function alshaya_kz_transac_lite_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['filter.format.mail_text'],
+    'alshaya_master'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_kz_transac_lite_install() {

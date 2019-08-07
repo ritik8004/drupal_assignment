@@ -1,0 +1,9 @@
+alshaya_options_list.admin:
+  route_name: 'alshaya_options_list.settings'
+  title: 'Settings'
+  base_route: 'alshaya_options_list.settings'
+
+alshaya_options_list.admin_page_settings:
+  route_name: 'alshaya_options_list.page_settings'
+  title: 'Configure page settings'
+  base_route: 'alshaya_options_list.settings'

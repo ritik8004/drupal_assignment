@@ -900,6 +900,10 @@
       &::placeholder {
         color: $pdp_cc_storefinder_input;
       }
+
+      html[lang=ar] & {
+        width: calc(100% - 7.563rem);
+      }
     }
 
     button {

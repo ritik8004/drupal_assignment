@@ -1,0 +1,175 @@
+@include breakpoint($desktop) {
+  .block-alshaya-options-list-menu {
+    float: $right;
+
+    &.alshaya-options-left {
+      float: $left;
+
+      &.alshaya-multiple-links {
+        .alshaya-options-menu {
+          #{$right}: auto;
+          #{$left}: 0;
+        }
+      }
+    }
+
+    .options-page-menu-list {
+      a {
+        color: $option-list-menu-link;
+        font-size: 0.8125rem;
+        font-style: italic;
+        text-transform: capitalize;
+
+        &:hover {
+          color: $option-list-menu-link;
+        }
+      }
+    }
+
+    &.alshaya-single-link {
+      .options-page-menu-title,
+      > h3 {
+        display: none;
+      }
+    }
+
+    &.alshaya-multiple-links {
+      .alshaya-options-menu {
+        position: absolute;
+        #{$right}: 0;
+
+        .options-page-menu-title {
+          color: $options-page-menu-title;
+          display: block;
+          font-size: 0.6875rem;
+          line-height: 1;
+          margin: 0;
+          padding: 0.475rem 0.937rem;
+          cursor: pointer;
+          outline: none;
+
+          @include icon(chevrondown, after) {
+            position: absolute;
+            #{$right}: 0;
+            font-size: 1.875rem;
+            top: 0.75rem;
+            color: $order_summary_dropdown_icon;
+            transform: translateY(-50%);
+          }
+
+          &.ui-accordion-header-active {
+            &::after {
+              transform: translateY(-50%) rotate(180deg);
+            }
+          }
+
+          &:hover {
+            background: $options-page-menu-title-background;
+          }
+        }
+
+        .options-page-menu-list {
+          visibility: hidden;
+          display: block !important;
+
+          &.ui-accordion-content-active {
+            visibility: visible;
+            background: $options-page-menu-title-background;
+          }
+
+          .options-page-menu-link {
+            display: flex;
+            justify-content: center;
+            height: 2rem;
+            align-items: center;
+            border-bottom: 1px solid $option-list-menu-link-border;
+          }
+        }
+      }
+    }
+  }
+
+  body {
+    .header--wrapper {
+      z-index: 7;
+
+      .region__menu-secondary {
+        position: relative;
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    ul {
+      &.menu--one__list.menu__list {
+        background: $option-list-menu-background;
+
+        > li {
+          margin: 0;
+          border: none;
+          background: $options-page-menu-title-background;
+
+          > .menu__link-wrapper {
+            margin: 0 0.625rem;
+            border-bottom: 1px solid #dadada;
+          }
+
+          &.options-list--mobile-link {
+            background: $option-list-menu-background;
+            margin-top: -1px;
+
+            > .menu__link-wrapper {
+              border-bottom: none;
+
+              a {
+                font-size: 0.9375rem;
+                font-weight: normal;
+                font-style: italic;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-options-list-menu {
+    background: $option-list-menu-background;
+
+    > h3 {
+      display: none;
+    }
+
+    .options-page-menu-list {
+      .options-page-menu-link {
+        display: block;
+
+        a {
+          font-size: 0.9375rem;
+          font-weight: normal;
+          font-style: italic;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    .options-page-menu-title {
+      display: none;
+    }
+  }
+
+  .header--wrapper {
+    .c-menu-secondary {
+      background: $option-list-menu-background;
+
+      #block-account-menu {
+        background: $options-page-menu-title-background;
+      }
+    }
+  }
+}

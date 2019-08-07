@@ -379,6 +379,14 @@
       .branding__menu {
         position: relative !important;
       }
+
+      @include breakpoint($only-mobile) {
+        article {
+          > .c-content {
+            margin-top: 3.6rem;
+          }
+        }
+      }
     }
   }
 }

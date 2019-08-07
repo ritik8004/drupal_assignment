@@ -78,17 +78,8 @@
     font-weight: normal;
 
     @include breakpoint($tablet) {
-      #{$left}: 9.75rem;
-
-      html[lang='ar'] & {
-        #{$left}: 10rem;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      html[lang='ar'] & {
-        #{$left}: 10rem;
-      }
+      #{$left}: 12.75rem;
+      bottom: 0.75rem;
     }
   }
 }
@@ -121,12 +112,11 @@
   .user-pass,
   .multistep-checkout {
     .form-submit {
-      padding-#{$left}: 3rem;
-      padding-#{$right}: 3rem;
+      min-width: 11.5rem;
+      width: auto;
 
-      html[lang='ar'] & {
-        padding-#{$left}: 2rem;
-        padding-#{$right}: 2rem;
+      @include breakpoint($only-mobile) {
+        width: 100%;
       }
     }
   }

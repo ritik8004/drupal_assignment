@@ -68,13 +68,7 @@ $query_facets = [
 ];
 
 $query_generate = [
-  ['field_acq_promotion_label'],
-  ['attr_product_brand'],
-  ['attr_product_collection'],
-  ['attr_concept'],
-  ['attr_color'],
   ['field_category_name'],
-  ['attr_color', 'field_category_name'],
 ];
 
 // For backup.

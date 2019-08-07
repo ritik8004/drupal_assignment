@@ -6,9 +6,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
   src: url("#{$base_theme_fonts_directory_path}/roboto-bold.eot");
   src:
     url("#{$base_theme_fonts_directory_path}/roboto-bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Roboto-bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Roboto-Bold.otf") format("opentype"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Roboto-bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Roboto-Bold.ttf") format("truetype"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff"),
     url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2");
   font-weight: normal;
