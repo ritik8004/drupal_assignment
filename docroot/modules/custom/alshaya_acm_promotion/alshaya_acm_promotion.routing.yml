@@ -5,3 +5,13 @@ alshaya_acm_promotion.free_gifts_list:
     _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::listFreeGiftsBody'
   requirements:
     _permission: 'access content'
+
+alshaya_acm_promotion.select_free_gift:
+  path: '/select-free-gift'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::selectFreeGift'
+  options:
+    no_cache: TRUE
+  requirements:
+    _permission: 'access content'

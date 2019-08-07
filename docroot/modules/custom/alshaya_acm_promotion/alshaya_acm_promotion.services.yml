@@ -6,4 +6,5 @@ services:
       - '@logger.factory'
       - '@language_manager'
       - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
       - '@acq_promotion.promotions_manager'

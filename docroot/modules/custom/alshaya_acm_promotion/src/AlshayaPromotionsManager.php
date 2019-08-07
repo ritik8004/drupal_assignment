@@ -5,9 +5,11 @@ namespace Drupal\alshaya_acm_promotion;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Link;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
@@ -63,6 +65,13 @@ class AlshayaPromotionsManager {
   protected $entityRepository;
 
   /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -73,6 +82,8 @@ class AlshayaPromotionsManager {
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The Entity repository service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $acq_promotions_manager
    *   Promotions manager service object from commerce code.
    */
@@ -80,11 +91,13 @@ class AlshayaPromotionsManager {
                               LoggerChannelFactoryInterface $logger,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
+                              SkuManager $sku_manager,
                               AcqPromotionsManager $acq_promotions_manager) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->logger = $logger->get('alshaya_acm_promotion');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->skuManager = $sku_manager;
     $this->acqPromotionsManager = $acq_promotions_manager;
   }
 
@@ -311,6 +324,95 @@ class AlshayaPromotionsManager {
     }
 
     return $free_sku_entities;
+  }
+
+  /**
+   * Get promotions to show for particular sku in cart.
+   *
+   * @param string $sku
+   *   SKU code.
+   * @param string $applied_coupon
+   *   Coupon already applied in cart.
+   *
+   * @return array
+   *   Promotions array.
+   */
+  public function getPromotionsToShowForSkuInCart(string $sku, $applied_coupon = '') {
+    $static = &drupal_static('getPromotionsToShowForSkuInCart', []);
+
+    if (isset($static[$sku][$applied_coupon])) {
+      return $static[$sku][$applied_coupon];
+    }
+
+    // For mobile, render free gift promotion as the last table column.
+    // Get promotions for the SKU.
+    $sku_entity = SKU::loadFromSku($sku);
+    $line_item_promotions = $this->skuManager->getPromotionsFromSkuId($sku_entity, 'default', ['cart']);
+
+    // Extract free gift promos.
+    $free_gift_promos = [];
+    foreach ($line_item_promotions as $promotion_id => $promotion) {
+      $coupons = array_column($promotion['coupon_code'] ?? [], 'value');
+      // If promo/free gift coupon is already applied on cart, don't show
+      // it with the item on cart page.
+      if (!empty($applied_coupon) &&  in_array($applied_coupon, $coupons)) {
+        continue;
+      }
+      // If it is not free gift promotion, no need to process further.
+      elseif (empty($promotion['skus'])) {
+        continue;
+      }
+
+      $free_gift_promos[$promotion_id] = $promotion;
+
+      $free_skus = $this->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
+
+      if (count($free_skus) > 1) {
+        $route_parameters = [
+          'node' => $promotion_id,
+          'js' => 'nojs',
+        ];
+
+        $options = [
+          'attributes' => [
+            'class' => ["use-ajax"],
+            'data-dialog-type' => "modal",
+            'data-dialog-options' => '{"width":"auto"}',
+          ],
+          'query' => [
+            'coupon' => reset($coupons),
+          ],
+        ];
+
+        $link_coupons = Link::createFromRoute(
+          reset($coupons),
+          'alshaya_acm_promotion.free_gifts_list',
+          $route_parameters,
+          $options
+        )->toString();
+
+        $link_collection = Link::createFromRoute(
+          $promotion['text'],
+          'alshaya_acm_promotion.free_gifts_list',
+          $route_parameters,
+          $options
+        )->toString();
+
+        $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click @coupon to get a Free Gift from @collection', [
+          '@coupon' => $link_coupons,
+          '@collection' => $link_collection,
+        ]);
+      }
+      else {
+        $free_sku_entity = reset($free_skus);
+        $free_gift_promos[$promotion_id]['sku_title'] = $free_sku_entity->get('name')->getString();
+        $free_gift_promos[$promotion_id]['sku_entity_id'] = $free_sku_entity->id();
+      }
+    }
+
+    $static[$sku][$applied_coupon] = $free_gift_promos;
+
+    return $free_gift_promos;
   }
 
 }
