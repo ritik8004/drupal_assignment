@@ -347,6 +347,11 @@ class AlshayaPromotionsManager {
     // For mobile, render free gift promotion as the last table column.
     // Get promotions for the SKU.
     $sku_entity = SKU::loadFromSku($sku);
+
+    if (!($sku_entity instanceof SKUInterface)) {
+      return [];
+    }
+
     $line_item_promotions = $this->skuManager->getPromotionsFromSkuId($sku_entity, 'default', ['cart']);
 
     // Extract free gift promos.
