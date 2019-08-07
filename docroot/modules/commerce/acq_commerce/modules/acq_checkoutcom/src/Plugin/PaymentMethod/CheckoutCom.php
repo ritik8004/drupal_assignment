@@ -136,6 +136,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
+      $form_state->addBuildInfo('user', $user);
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
@@ -180,11 +181,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#attributes' => [
           'id' => ['payment_method_' . $payment_card],
         ],
-      ];
-
-      $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
-        '#type' => 'hidden',
-        '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
       ];
 
       $pane_form['payment_card_details']['payment_card_' . $payment_card]['mada'] = [
@@ -284,8 +280,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'type' => 'existing',
         'mada' => $is_mada_card,
         'card_hash' => $payment_card,
-        'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_card]['card_id'],
       ];
+
+      if ($is_mada_card) {
+        $build_info = $form_state->getBuildInfo();
+        $customer_stored_cards = $this->apiHelper->getCustomerCards($build_info['user']);
+        $card['card_id'] = $customer_stored_cards[$payment_card]['gateway_token'];
+      }
     }
 
     $this->selectCheckoutComPayment($card);
