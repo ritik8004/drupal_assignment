@@ -1,0 +1,14 @@
+services:
+  logger.channel.alshaya_feed:
+    parent: logger.channel_base
+    arguments: ['alshaya_feed']
+
+  alshaya_feed.generate:
+    class: Drupal\alshaya_feed\AlshayaFeed
+    arguments:
+      - '@entity_type.manager'
+      - '@file_system'
+      - '@string_translation'
+      - '@language_manager'
+      - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
