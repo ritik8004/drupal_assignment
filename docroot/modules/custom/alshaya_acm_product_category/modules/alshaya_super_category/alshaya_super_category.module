@@ -154,10 +154,10 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $logo_relative_path = DRUPAL_ROOT . $logo_path;
       // Check logo fallback.
       if (file_exists($logo_relative_path . $langcode . '.svg')) {
-        $variables['content']['site_logo']['#uri'] = $logo_path . $langcode . '.svg';
+        $variables['content']['site_logo']['#uri'] = $logo_path . $langcode . '.svg?LdMr5';
       }
       elseif (file_exists($logo_relative_path . '.svg')) {
-        $variables['content']['site_logo']['#uri'] = $logo_path . '.svg';
+        $variables['content']['site_logo']['#uri'] = $logo_path . '.svg?LdMr5';
       }
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt']    = $parent->label();

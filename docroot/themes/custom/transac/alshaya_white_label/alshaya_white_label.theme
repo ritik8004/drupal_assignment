@@ -351,10 +351,6 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if (in_array($variables['plugin_id'], $category_facets)) {
     $variables['attributes']['class'][] = 'category-facet';
   }
-
-  if ($variables['plugin_id'] == 'system_branding_block') {
-    $variables['site_logo'] = theme_get_setting('logo.url') . '?LdMh5';
-  }
 }
 
 /**
