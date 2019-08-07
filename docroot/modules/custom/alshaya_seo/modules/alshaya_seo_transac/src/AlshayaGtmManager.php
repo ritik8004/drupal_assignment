@@ -24,7 +24,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Entity\EntityRepository;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Class AlshayaGtmManager.
@@ -225,7 +225,7 @@ class AlshayaGtmManager {
   /**
    * Entity Repository service object.
    *
-   * @var \Drupal\Core\Entity\EntityRepository
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
 
@@ -262,7 +262,7 @@ class AlshayaGtmManager {
    *   Module Handler service object.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders Manager.
-   * @param \Drupal\Core\Entity\EntityRepository $entityRepository
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository object.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
@@ -280,7 +280,7 @@ class AlshayaGtmManager {
                               SkuManager $skuManager,
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
-                              EntityRepository $entityRepository) {
+                              EntityRepositoryInterface $entityRepository) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
