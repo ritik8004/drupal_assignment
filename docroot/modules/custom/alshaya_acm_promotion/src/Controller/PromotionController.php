@@ -198,8 +198,14 @@ class PromotionController extends ControllerBase {
   public function selectFreeGift(Request $request) {
     $coupon = $request->request->get('coupon') ?? '';
     $sku = SKU::loadFromSku($request->request->get('sku') ?? '');
+    $promotion_id = $request->request->get('promotion_id') ?? '';
 
-    if (empty($coupon) || !($sku instanceof SKUInterface)) {
+    if (empty($coupon) || empty($promotion_id) || !($sku instanceof SKUInterface)) {
+      throw new InvalidArgumentException();
+    }
+
+    $promotion = $this->entityTypeManager()->getStorage('node')->load($promotion_id);
+    if (!($promotion instanceof NodeInterface)) {
       throw new InvalidArgumentException();
     }
 
@@ -222,7 +228,15 @@ class PromotionController extends ControllerBase {
         if ($response_message[1] == 'success') {
           $this->messenger()->addMessage($response_message[0]);
 
-          $updated_cart->addItemToCart($sku->getSku(), 1);
+          $updated_cart->addRawItemToCart([
+            'name' => $sku->label(),
+            'sku' => $sku->getSku(),
+            'qty' => 1,
+            'options' => [
+              'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+            ],
+          ]);
+
           $this->cartStorage->updateCart(FALSE);
         }
         elseif ($response_message[1] == 'error_coupon') {

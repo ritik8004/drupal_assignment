@@ -32,7 +32,9 @@ class SelectFreeGiftForm extends FormBase {
     $storage = $form_state->getStorage();
     $coupon = $storage['coupon'] ?? '';
     $sku = SKU::loadFromSku($storage['sku'] ?? '');
-    if (empty($coupon) || !($sku instanceof SKUInterface)) {
+    $promotion_id = $storage['promotion_id'] ?? '';
+
+    if (empty($coupon) || empty($promotion_id) || !($sku instanceof SKUInterface)) {
       return $form;
     }
 
@@ -44,6 +46,11 @@ class SelectFreeGiftForm extends FormBase {
     $form['sku'] = [
       '#type' => 'hidden',
       '#value' => $sku->getSku(),
+    ];
+
+    $form['promotion_id'] = [
+      '#type' => 'hidden',
+      '#value' => $promotion_id,
     ];
 
     $form['select'] = [
