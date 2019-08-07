@@ -12,13 +12,16 @@ use Drupal\Core\Url;
  */
 function alshaya_rum_page_attachments(array &$page) {
   $url = Url::fromRoute('<current>');
+  $rum_user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
+
   $whitelisted_rum_paths = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
   $whitelisted_rum_path_array = array_filter(explode('\n', $whitelisted_rum_paths));
 
-  // Load RUM script only on the whitelisted pages or if not configuration is
-  // set.
-  if (in_array($url, $whitelisted_rum_path_array) ||
-    (empty($whitelisted_rum_path_array))) {
+  // Load RUM script only on the whitelisted pages or if * is in list of
+  // whitelisted pages.
+  if (($rum_user_id) &&
+    (in_array($url, $whitelisted_rum_path_array) ||
+    (in_array('*', $whitelisted_rum_path_array)))) {
     $page['#attached']['library'][] = 'alshaya_rum.rum_script';
   }
 }

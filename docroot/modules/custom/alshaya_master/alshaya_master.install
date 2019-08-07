@@ -11,6 +11,15 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_rum module.
+ */
+function alshaya_master_update_8050() {
+  \Drupal::service('module_installer')->install(['alshaya_rum']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding arabic translations for - new customer?.
  */
 function alshaya_master_update_8030() {
