@@ -12,8 +12,10 @@
     border: 1px solid $social_auth_login_button_border;
     transition: background-color 0.2s ease-in-out;
 
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 2.8125rem;
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 2.8125rem;
+      }
     }
 
     &:first-child {
@@ -305,13 +307,17 @@
     border: 1px solid $social_auth_login_button_border;
     font-size: 0.875rem;
     height: 2.875rem;
+    line-height: 2.875rem;
     min-width: 9.5rem;
     color: $user_login_link_btn_text;
     font-family: $alshaya-thin;
     transition: background-color 0.2s ease-in-out;
 
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 2.8125rem;
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 2.8125rem;
+        line-height: 1.2;
+      }
     }
 
     @include breakpoint($only-mobile) {
