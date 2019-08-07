@@ -1,0 +1,12 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.sku_product_option.field_options_list_bg
+content:
+  field_options_list_bg:
+    type: image_image
+    weight: 8
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
