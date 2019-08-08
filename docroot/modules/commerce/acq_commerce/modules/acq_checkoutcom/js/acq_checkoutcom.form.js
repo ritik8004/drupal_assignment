@@ -155,14 +155,14 @@
     // Sanity check of credit card name.
     var name = $('.checkoutcom-credit-card-name').val().toString().trim();
     if (isNaN(name) && /\d+/.test(name) === true) {
-      Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name.'));
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name'));
       formHasErrors = true;
     }
 
     // Sanity check of credit card number.
     var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
     if (type === '') {
-      Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number.'));
+      Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number'));
       formHasErrors = true;
     }
 
