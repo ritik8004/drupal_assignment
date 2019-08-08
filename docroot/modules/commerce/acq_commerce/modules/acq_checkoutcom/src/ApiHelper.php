@@ -275,14 +275,27 @@ class ApiHelper {
       $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
       // Encode public hash.
       // https://github.com/acquia-pso/alshaya/pull/13267#discussion_r311886591.
-      $card['public_hash'] = base64_encode($card['public_hash']);
+      $card['public_hash'] = $this->encodePublicHash($card['public_hash']);
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
   }
 
   /**
-   * Get magento public hash.
+   * Encode tokenised card's public hash.
+   *
+   * @param string $public_hash
+   *   The public hash to encode.
+   *
+   * @return string
+   *   The base64_encode public hash.
+   */
+  public function encodePublicHash(string $public_hash) {
+    return base64_encode($public_hash);
+  }
+
+  /**
+   * Decode public hash to get original public hash.
    *
    * @param string $public_hash
    *   The base64_encoded public hash.
@@ -290,7 +303,7 @@ class ApiHelper {
    * @return string
    *   The base64_decoded public hash.
    */
-  public function getPublicHash(string $public_hash) {
+  public function deocodePublicHash(string $public_hash) {
     return base64_decode($public_hash);
   }
 
@@ -323,7 +336,7 @@ class ApiHelper {
    */
   public function deleteCustomerCard(UserInterface $user, string $public_hash) {
     $customer_id = $user->get('acq_customer_id')->getString();
-    $public_hash = $this->getPublicHash($public_hash);
+    $public_hash = $this->deocodePublicHash($public_hash);
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/deleteTokenByCustomerIdAndHash/$public_hash/customerId/$customer_id",
       [],

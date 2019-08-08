@@ -304,7 +304,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     if ($card['type'] == 'existing') {
       $this->getCart()->setPaymentMethod(
         $this->getId() . '_cc_vault',
-        ['public_hash' => $this->apiHelper->getPublicHash($card['card_hash'])]
+        ['public_hash' => $this->apiHelper->deocodePublicHash($card['card_hash'])]
       );
     }
     else {
