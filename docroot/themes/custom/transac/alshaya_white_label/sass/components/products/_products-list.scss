@@ -752,11 +752,6 @@ html[lang=ar] {
   position: relative;
   padding-bottom: 1rem;
 
-  .view-alshaya-product-list {
-    width: 100%;
-    clear: both;
-  }
-
   .js-pager__items.visually-hidden {
     position: static !important;
   }
@@ -785,6 +780,15 @@ html[lang=ar] {
     @include breakpoint($only-mobile) {
       margin-#{$left}: 0;
     }
+  }
+}
+
+// Fix for products misalignment on PLP/Promo Pages & Search.
+.c-products-list {
+  .view-alshaya-product-list,
+  &.view-search {
+    width: 100%;
+    clear: both;
   }
 }
 
