@@ -44,7 +44,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
-      $form_state->addBuildInfo('user', $user);
+      $form_state->set('user', $user->id());
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 

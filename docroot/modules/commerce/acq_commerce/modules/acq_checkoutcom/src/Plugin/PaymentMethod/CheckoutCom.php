@@ -136,7 +136,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $user = $this->entityTypeManager->getStorage('user')->load(
         $this->currentUser->id()
       );
-      $form_state->addBuildInfo('user', $user);
+      $form_state->set('user', $user->id());
       $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
@@ -283,8 +283,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
 
       if ($is_mada_card) {
-        $build_info = $form_state->getBuildInfo();
-        $customer_stored_cards = $this->apiHelper->getCustomerCards($build_info['user']);
+        $user = $this->entityTypeManager->getStorage('user')->load(
+          $form_state->get('user')
+        );
+        $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
         $card['card_id'] = $customer_stored_cards[$payment_card]['gateway_token'];
       }
     }
