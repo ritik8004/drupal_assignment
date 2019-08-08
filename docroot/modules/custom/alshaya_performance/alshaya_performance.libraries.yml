@@ -1,0 +1,7 @@
+sharethis:
+  js:
+    js/sharethis.js: { weight: -3 }
+  dependencies:
+    - core/jquery.ui.dialog
+    - core/drupal.ajax
+    - core/drupalSettings
