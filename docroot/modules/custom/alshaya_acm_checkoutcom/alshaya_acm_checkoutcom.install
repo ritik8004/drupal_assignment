@@ -85,9 +85,6 @@ function alshaya_acm_checkoutcom_install() {
     'An error occurred while placing your order. Please contact our customer service team for assistance.' => [
       'ar' => 'حدث خطأ عند إتمام طلبيتك، يرجى الإتصال بفريق دعم الزبائن للمساعدة',
     ],
-    'Sorry, we are unable to process your payment. Please contact our customer service team for assistance.' => [
-      'ar' => 'عذراً، لم نتمكن من متابعة تنفيذ طلبك، يرجى الإتصال بفريق دعم الزبائن للمساعدة',
-    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
