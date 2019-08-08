@@ -63,6 +63,26 @@
           minimumResultsForSearch: -1
         });
       }
+
+      $('.select2-select').once('bind-refresh').on('refresh', function () {
+        $(this).select2('destroy');
+
+        var options = {
+          minimumResultsForSearch: -1,
+        };
+
+        try {
+          var placeHolder = $(this).find('option[value=""]').text();
+          if (placeHolder.length > 0) {
+            options.placeholder = placeHolder;
+          }
+        }
+        catch (e) {
+          // Do nothing.
+        }
+
+        $(this).select2(options);
+      });
     }
   };
 })(jQuery, Drupal);

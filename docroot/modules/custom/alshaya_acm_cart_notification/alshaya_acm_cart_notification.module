@@ -6,40 +6,18 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
-use Drupal\alshaya_acm_product\Controller\ProductStockController;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  $sku = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
-
-  $form['errors-container'] = [
-    '#type' => 'container',
-    '#weight' => -50,
-    '#attributes' => [
-      'class' => [
-        'errors-container',
-        'error-container-' . strtolower(Html::cleanCssIdentifier($sku->getSku())),
-      ],
-    ],
-  ];
-
-  // Submit to our custom callback which will update ajax response.
-  $form['add_to_cart']['#submit'][] = 'alshaya_acm_cart_notification_form_submit';
-
   // Attach the js file with the add to cart form.
   $form['#attached']['library'][] = 'core/drupal.ajax';
   $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
@@ -50,138 +28,57 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
 }
 
 /**
- * AJAX callback for the add to cart submit button.
+ * Implements hook_alshaya_acm_product_add_to_cart_submit_ajax_response_alter().
  */
-function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $form_state) {
-  $form_state->disableRedirect(TRUE);
+function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_ajax_response_alter(AjaxResponse $response, SKU $sku, array $data) {
+  $current_url = \Drupal::request()->server->get('HTTP_REFERER');
+  $url = Url::fromRoute('acq_cart.cart', [], ['absolute' => TRUE])->toString();
 
-  // First call for main form's submit callback.
-  call_user_func_array($form_state->prepareCallback('::addToCartSubmit'), [&$form, &$form_state]);
-
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $sku_entity = $skuManager->loadSkuById((int) $form_state->getValue('sku_id'));
-
-  // If there are validation failures on the form.
-  if ($form_state->getErrors()) {
-    $errors = $form_state->getErrors();
-    // Render $errors as list so even multiple errors are properly displayed.
-    $error_list = [
-      '#theme' => 'item_list',
-      '#list_type' => 'ul',
-      '#title' => '',
-      '#items' => $errors,
-      '#attributes' => ['class' => 'error-list'],
-      '#wrapper_attributes' => ['class' => 'container'],
-    ];
-
-    $error_html = render($error_list);
-
-    // Use the template to render the error.
-    $output = [
-      '#theme' => 'add_to_cart_error',
-      '#message' => $error_html,
-    ];
-  }
-  // Check if we have an error in Subscriber.
-  elseif (AddToCartErrorEventSubscriber::getErrorStatus()) {
-    $errors = AddToCartErrorEventSubscriber::getErrors();
-
-    // Use the template to render the error.
-    $output = [
-      '#theme' => 'add_to_cart_error',
-      '#message' => reset($errors),
-    ];
-  }
-  // Show success notification of the product.
-  else {
-    // Get product type.
-    $type = $sku_entity->getType();
-
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-
-    $product_name = $productInfoHelper->getTitle($sku_entity, 'basket');
-
-    // Quantity.
-    $quantity = $form_state->getValue('quantity');
-
-    // Generating cart link.
-    $url = Url::fromRoute('acq_cart.cart', [], [
-      'absolute' => TRUE,
-    ])->toString();
-
-    // Include the utility file to get product image.
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-    // Check for product type as they have different data structures.
-    if ($type == 'configurable') {
-      // If we have a child_sku available.
-      $child_sku_entity = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
-      $product_name = $productInfoHelper->getTitle($child_sku_entity, 'basket');
-      $image = alshaya_acm_get_product_display_image($child_sku_entity, 'pdp_gallery_thumbnail', 'cart');
-    }
-    else {
-      $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
-    }
-
-    // Use the template to render the HTML.
-    $output = [
-      '#theme' => 'cart_notification',
-      '#quantity' => $quantity,
-      '#image' => $image,
-      '#product_name' => $product_name,
-      '#link' => $url,
-      '#link_text' => t('view cart'),
-    ];
+  if ($current_url == $url) {
+    $response->addCommand(new RedirectCommand($url));
+    return;
   }
 
-  // Unset all status messages as we already show the message in modal.
-  \Drupal::service('messenger')->deleteByType(MessengerInterface::TYPE_STATUS);
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
 
-  // Get the rendered html to pass into HtmlCommand.
-  $html = render($output);
-  $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku_entity->getSku()));
+  // Include the utility file to get product image.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-  // Get the interval we want to show the message for on our ladda button.
-  $interval = \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
-  $data['interval'] = $interval;
-  // Passing the identifier to quantity field of the SKU so we can pass the
-  // correct form as context.
-  $data['sku_css_id'] = '.quantity-' . $sku_css_id;
-
-  // Prepare the ajax Response.
-  $response = ProductStockController::$response;
-  if (!$response instanceof AjaxResponse) {
-    $response = new AjaxResponse();
-  }
-  $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
-  $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
-
-  if ($output['#theme'] == 'add_to_cart_error') {
-    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, $html));
-    $response->addCommand(new InvokeCommand(NULL, 'cartGenericScroll', ['.error-container-' . $sku_css_id]));
+  // Check for product type as they have different data structures.
+  if ($sku->bundle() == 'configurable') {
+    // If we have a child_sku available.
+    $variant = SKU::loadFromSku($data['selected_variant_sku']);
+    $product_name = $productInfoHelper->getTitle($variant, 'basket');
+    $image = alshaya_acm_get_product_display_image($variant, 'pdp_gallery_thumbnail', 'cart');
   }
   else {
-    $current_url = \Drupal::request()->server->get('HTTP_REFERER');
-
-    // We reload the page if we are already on Basket page.
-    // With AJAX we might need to refresh mini cart, cart form and cross sell
-    // block.
-    if ($current_url == $url) {
-      $response->addCommand(new RedirectCommand($url));
-    }
-    else {
-      // Update mini cart Block.
-      $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
-
-      $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
-      $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
-      $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
-      $response->addCommand(new HtmlCommand('#cart_notification', $html));
-    }
+    $product_name = $productInfoHelper->getTitle($sku, 'basket');
+    $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
   }
-  return $response;
+
+  // Quantity.
+  $quantity = $data['quantity'] ?? 1;
+
+  // Use the template to render the HTML.
+  $output = [
+    '#theme' => 'cart_notification',
+    '#quantity' => $quantity,
+    '#image' => $image,
+    '#product_name' => $product_name,
+    '#link' => $url,
+    '#link_text' => t('view cart'),
+  ];
+
+  // Update mini cart Block.
+  $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
+
+  $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku->getSku()));
+
+  $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
+  $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
+  $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
+  $response->addCommand(new HtmlCommand('#cart_notification', render($output)));
 }
 
 /**
