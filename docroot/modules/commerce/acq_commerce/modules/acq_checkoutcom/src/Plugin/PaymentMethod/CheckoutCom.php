@@ -317,10 +317,16 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   protected function initiate2dPayment(array $card) {
     if ($card['type'] == 'existing') {
-      $this->getCart()->setPaymentMethod($this->getId() . '_cc_vault', ['public_hash' => $card['card_hash']]);
+      $this->getCart()->setPaymentMethod(
+        $this->getId() . '_cc_vault',
+        ['public_hash' => $this->apiHelper->getPublicHash($card['card_hash'])]
+      );
     }
     else {
-      $this->getCart()->setPaymentMethod($this->getId(), ['card_token_id' => $card['card_token']]);
+      $this->getCart()->setPaymentMethod(
+        $this->getId(),
+        ['card_token_id' => $card['card_token']]
+      );
     }
   }
 

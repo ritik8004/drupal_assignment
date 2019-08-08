@@ -250,9 +250,25 @@ class ApiHelper {
       $card['paymentMethod'] = $this->getCardType($token_details['type']);
       // @todo: Remove if we are already receiving mada:true/false.
       $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
+      // Encode public hash.
+      // https://github.com/acquia-pso/alshaya/pull/13267#discussion_r311886591.
+      $card['public_hash'] = base64_encode($card['public_hash']);
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
+  }
+
+  /**
+   * Get magento public hash.
+   *
+   * @param string $public_hash
+   *   The base64_encoded public hash.
+   *
+   * @return string
+   *   The base64_decoded public hash.
+   */
+  public function getPublicHash(string $public_hash) {
+    return base64_decode($public_hash);
   }
 
   /**
