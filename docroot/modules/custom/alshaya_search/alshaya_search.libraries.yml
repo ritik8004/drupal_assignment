@@ -15,3 +15,4 @@ back_to_list:
     js/back_to_list.js: {}
   dependencies:
     - core/jquery
+    - alshaya_master/jquery_is_in_viewport

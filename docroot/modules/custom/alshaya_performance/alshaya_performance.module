@@ -7,7 +7,6 @@
 
 use Drupal\alshaya_performance\Logger\AlshayaPerformanceSysLog;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Site\Settings;
 
@@ -77,19 +76,5 @@ function alshaya_performance_flush_frontend_caches() {
 
   // Wipe the Twig PHP Storage cache.
   \Drupal::service('twig')->invalidate();
-
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function alshaya_performance_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
-  if (!isset($build['sharethis'])) {
-    return;
-  }
-
-  $build['sharethis']['#attached']['library'] = [
-    'alshaya_performance/sharethis',
-  ];
 
 }
