@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
@@ -74,6 +75,13 @@ class ApiHelper {
   protected $cacheTime;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -104,6 +112,8 @@ class ApiHelper {
    *   The time service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date Formatter service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
@@ -112,7 +122,8 @@ class ApiHelper {
     LoggerChannelFactory $logger_factory,
     CacheBackendInterface $cache,
     Time $time,
-    DateFormatterInterface $date_formatter
+    DateFormatterInterface $date_formatter,
+    EntityTypeManagerInterface $entityTypeManager
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
@@ -122,6 +133,7 @@ class ApiHelper {
     $this->cache = $cache;
     $this->time = $time;
     $this->dateFormatter = $date_formatter;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -188,13 +200,20 @@ class ApiHelper {
   /**
    * Get customer stored card.
    *
-   * @param \Drupal\user\UserInterface $user
+   * @param mixed|object $user
    *   The user object.
    *
    * @return array
    *   Return array of customer cards or empty array.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getCustomerCards(UserInterface $user) {
+  public function getCustomerCards($user) {
+    $user = (!$user instanceof UserInterface)
+      ? $this->entityTypeManager->getStorage('user')->load($user)
+      : $user;
+
     $cache_key = 'acq_checkoutcom:payment_cards:' . $user->id();
     $cache = $this->cache->get($cache_key);
     if ($cache) {

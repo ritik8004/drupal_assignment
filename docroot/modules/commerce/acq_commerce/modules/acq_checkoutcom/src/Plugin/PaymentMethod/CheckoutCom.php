@@ -41,13 +41,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $currentUser;
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
@@ -97,7 +90,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
     $this->currentUser = \Drupal::service('current_user');
-    $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $this->currentRequest = \Drupal::service('request_stack')->getCurrentRequest();
     $this->renderer = \Drupal::service('renderer');
     $this->formHelper = \Drupal::service('acq_checkoutcom.form_helper');
@@ -133,10 +125,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
-      $user = $this->entityTypeManager->getStorage('user')->load(
-        $this->currentUser->id()
-      );
-      $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser->id());
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
       $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
@@ -282,10 +271,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
 
       if ($is_mada_card) {
-        $user = $this->entityTypeManager->getStorage('user')->load(
-          $this->currentUser->id()
-        );
-        $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
+        $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser->id());
         $card['card_id'] = $customer_stored_cards[$payment_card]['gateway_token'];
       }
     }
