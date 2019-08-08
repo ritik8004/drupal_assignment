@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
@@ -74,6 +75,13 @@ class ApiHelper {
   protected $cacheTime;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -104,6 +112,8 @@ class ApiHelper {
    *   The time service.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date Formatter service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
@@ -112,7 +122,8 @@ class ApiHelper {
     LoggerChannelFactory $logger_factory,
     CacheBackendInterface $cache,
     Time $time,
-    DateFormatterInterface $date_formatter
+    DateFormatterInterface $date_formatter,
+    EntityTypeManagerInterface $entityTypeManager
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
@@ -122,6 +133,7 @@ class ApiHelper {
     $this->cache = $cache;
     $this->time = $time;
     $this->dateFormatter = $date_formatter;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -188,13 +200,20 @@ class ApiHelper {
   /**
    * Get customer stored card.
    *
-   * @param \Drupal\user\UserInterface $user
+   * @param mixed|object $user
    *   The user object.
    *
    * @return array
    *   Return array of customer cards or empty array.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getCustomerCards(UserInterface $user) {
+  public function getCustomerCards($user) {
+    $user = (!$user instanceof UserInterface)
+      ? $this->entityTypeManager->getStorage('user')->load($user)
+      : $user;
+
     $cache_key = 'acq_checkoutcom:payment_cards:' . $user->id();
     $cache = $this->cache->get($cache_key);
     if ($cache) {
@@ -250,9 +269,38 @@ class ApiHelper {
       $card['paymentMethod'] = $this->getCardType($token_details['type']);
       // @todo: Remove if we are already receiving mada:true/false.
       $token_details['mada'] = isset($token_details['mada']) && $token_details['mada'] == 'Y';
+      // Encode public hash.
+      // https://github.com/acquia-pso/alshaya/pull/13267#discussion_r311886591.
+      $card['public_hash'] = $this->encodePublicHash($card['public_hash']);
       $card_list[$card['public_hash']] = array_merge($card, $token_details);
     }
     return $card_list;
+  }
+
+  /**
+   * Encode tokenised card's public hash.
+   *
+   * @param string $public_hash
+   *   The public hash to encode.
+   *
+   * @return string
+   *   The base64_encode public hash.
+   */
+  public function encodePublicHash(string $public_hash) {
+    return base64_decode($public_hash);
+  }
+
+  /**
+   * Decode public hash to get original public hash.
+   *
+   * @param string $public_hash
+   *   The base64_encoded public hash.
+   *
+   * @return string
+   *   The base64_decoded public hash.
+   */
+  public function deocodePublicHash(string $public_hash) {
+    return base64_decode($public_hash);
   }
 
   /**
@@ -284,6 +332,7 @@ class ApiHelper {
    */
   public function deleteCustomerCard(UserInterface $user, string $public_hash) {
     $customer_id = $user->get('acq_customer_id')->getString();
+    $public_hash = $this->deocodePublicHash($public_hash);
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/deleteTokenByCustomerIdAndHash/$public_hash/customerId/$customer_id",
       [],
