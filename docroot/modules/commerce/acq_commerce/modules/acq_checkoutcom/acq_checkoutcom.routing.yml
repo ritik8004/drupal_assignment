@@ -43,7 +43,6 @@ acq_checkoutcom.payment_card.remove_card:
   requirements:
     _custom_access: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::checkAccess'
     user: \d+
-    public_hash: '^[a-z0-9_-].*?$'
     _csrf_token: 'TRUE'
 
 acq_checkoutcom.apple_pay_validate:
