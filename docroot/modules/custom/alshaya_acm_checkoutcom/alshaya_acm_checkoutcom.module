@@ -51,6 +51,7 @@ function alshaya_acm_checkoutcom_alshaya_acm_checkout_pre_place_order(CartInterf
     elseif ($card_info['type'] == 'existing') {
       $params += [
         'cardId' => $card_info['card_id'],
+        'cvv' => $card_info['card_cvv'],
       ];
     }
 
