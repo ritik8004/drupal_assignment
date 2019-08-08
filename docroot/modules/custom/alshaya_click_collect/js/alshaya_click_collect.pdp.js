@@ -26,6 +26,15 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
+      $('#pdp-stores-container').once('bind-js').each(function () {
+        // Check if we have to show the block as disabled. Since accordion classes
+        // are added in JS, this is handled in JS.
+        if ($(this).data('state') === 'disabled') {
+          $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+        }
+      });
+
       $('#pdp-stores-container h3').once('bind-js').on('click', function () {
         if (typeof Drupal.geolocation.loadGoogle !== 'function') {
           return;
@@ -46,13 +55,8 @@
         });
 
         $('#pdp-stores-container').once('initiate-stores').each(function () {
-          // Check if we have to show the block as disabled. Since accordion classes
-          // are added in JS, this is handled in JS.
-          if ($(this).data('state') === 'disabled') {
-            $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-            $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-          }
-          else {
+          // Check if we have access to click & collect.
+          if ($(this).data('state') !== 'disabled') {
             // Get the permission track the user location.
             Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
