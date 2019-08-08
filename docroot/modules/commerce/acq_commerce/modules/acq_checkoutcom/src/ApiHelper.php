@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 
@@ -200,7 +201,7 @@ class ApiHelper {
   /**
    * Get customer stored card.
    *
-   * @param mixed|object $user
+   * @param \Drupal\user\UserInterface|\Drupal\Core\Session\AccountProxy|string $user
    *   The user object.
    *
    * @return array
@@ -210,9 +211,12 @@ class ApiHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getCustomerCards($user) {
-    $user = (!$user instanceof UserInterface)
-      ? $this->entityTypeManager->getStorage('user')->load($user)
-      : $user;
+    if (!$user instanceof UserInterface) {
+      if ($user instanceof AccountProxyInterface) {
+        $user = $user->id();
+      }
+      $user = $this->entityTypeManager->getStorage('user')->load($user);
+    }
 
     $cache_key = 'acq_checkoutcom:payment_cards:' . $user->id();
     $cache = $this->cache->get($cache_key);
@@ -287,7 +291,7 @@ class ApiHelper {
    *   The base64_encode public hash.
    */
   public function encodePublicHash(string $public_hash) {
-    return base64_decode($public_hash);
+    return base64_encode($public_hash);
   }
 
   /**

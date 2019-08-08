@@ -125,7 +125,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
-      $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser->id());
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
       $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
@@ -271,7 +271,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ];
 
       if ($is_mada_card) {
-        $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser->id());
+        $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
         $card['card_id'] = $customer_stored_cards[$payment_card]['gateway_token'];
       }
     }
