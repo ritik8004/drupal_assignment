@@ -300,6 +300,7 @@ class ApiHelper {
    */
   public function deleteCustomerCard(UserInterface $user, string $public_hash) {
     $customer_id = $user->get('acq_customer_id')->getString();
+    $public_hash = $this->getPublicHash($public_hash);
     $response = $this->apiWrapper->invokeApi(
       "checkoutcom/deleteTokenByCustomerIdAndHash/$public_hash/customerId/$customer_id",
       [],
