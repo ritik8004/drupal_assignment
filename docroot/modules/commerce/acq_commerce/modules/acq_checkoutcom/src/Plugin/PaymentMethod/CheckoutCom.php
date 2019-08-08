@@ -41,13 +41,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $currentUser;
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
@@ -97,7 +90,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
     $this->currentUser = \Drupal::service('current_user');
-    $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $this->currentRequest = \Drupal::service('request_stack')->getCurrentRequest();
     $this->renderer = \Drupal::service('renderer');
     $this->formHelper = \Drupal::service('acq_checkoutcom.form_helper');
@@ -132,11 +124,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
-    if ($this->currentUser->isAuthenticated()) {
-      $user = $this->entityTypeManager->getStorage('user')->load(
-        $this->currentUser->id()
-      );
-      $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
+    if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
       $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
@@ -180,11 +169,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#attributes' => [
           'id' => ['payment_method_' . $payment_card],
         ],
-      ];
-
-      $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
-        '#type' => 'hidden',
-        '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
       ];
 
       $pane_form['payment_card_details']['payment_card_' . $payment_card]['mada'] = [
@@ -284,8 +268,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'type' => 'existing',
         'mada' => $is_mada_card,
         'card_hash' => $payment_card,
-        'card_id' => $payment_method['payment_card_details']['payment_card_' . $payment_card]['card_id'],
       ];
+
+      if ($is_mada_card) {
+        $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
+        $card['card_id'] = $customer_stored_cards[$payment_card]['gateway_token'];
+      }
     }
 
     $this->selectCheckoutComPayment($card);
@@ -314,10 +302,16 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    */
   protected function initiate2dPayment(array $card) {
     if ($card['type'] == 'existing') {
-      $this->getCart()->setPaymentMethod($this->getId() . '_cc_vault', ['public_hash' => $card['card_hash']]);
+      $this->getCart()->setPaymentMethod(
+        $this->getId() . '_cc_vault',
+        ['public_hash' => $this->apiHelper->deocodePublicHash($card['card_hash'])]
+      );
     }
     else {
-      $this->getCart()->setPaymentMethod($this->getId(), ['card_token_id' => $card['card_token']]);
+      $this->getCart()->setPaymentMethod(
+        $this->getId(),
+        ['card_token_id' => $card['card_token']]
+      );
     }
   }
 

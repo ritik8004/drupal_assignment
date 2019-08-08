@@ -40,11 +40,8 @@ class AlshayaCheckoutCom extends CheckoutCom {
 
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
-    if ($this->currentUser->isAuthenticated()) {
-      $user = $this->entityTypeManager->getStorage('user')->load(
-        $this->currentUser->id()
-      );
-      $customer_stored_cards = $this->apiHelper->getCustomerCards($user);
+    if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
+      $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
       $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
@@ -70,39 +67,34 @@ class AlshayaCheckoutCom extends CheckoutCom {
         ];
 
         $weight = 0;
-        foreach ($stored_cards_list as $card_id => $card_info) {
-          $pane_form['payment_card_details']['payment_card_' . $card_id] = [
+        foreach ($stored_cards_list as $card_hash => $card_info) {
+          $pane_form['payment_card_details']['payment_card_' . $card_hash] = [
             '#type' => 'container',
             '#attributes' => [
-              'id' => ['payment_method_' . $card_id],
+              'id' => ['payment_method_' . $card_hash],
             ],
             '#weight' => $weight++,
           ];
 
           $title_class = ['payment-card-wrapper-div'];
 
-          if ($card_id == $payment_card) {
+          if ($card_hash == $payment_card) {
             $title_class[] = 'card-selected';
           }
 
-          $title = '<div id="payment_method_title_' . $card_id . '"';
+          $title = '<div id="payment_method_title_' . $card_hash . '"';
           $title .= ' class="' . implode(' ', $title_class) . '" ';
-          $title .= ' data-value="' . $card_id . '" ';
+          $title .= ' data-value="' . $card_hash . '" ';
           $title .= '>';
           $title .= $card_info;
           $title .= '</div>';
 
-          $pane_form['payment_card_details']['payment_card_' . $card_id]['title'] = [
+          $pane_form['payment_card_details']['payment_card_' . $card_hash]['title'] = [
             '#markup' => $title,
           ];
 
-          // Ask for cvv again when using existing card.
           if ($payment_card && $payment_card != 'new') {
-            $pane_form['payment_card_details']['payment_card_' . $payment_card]['card_id'] = [
-              '#type' => 'hidden',
-              '#value' => $customer_stored_cards[$payment_card]['gateway_token'] ?? '',
-            ];
-
+            // Set mada value for tokenised card.
             $pane_form['payment_card_details']['payment_card_' . $payment_card]['mada'] = [
               '#type' => 'hidden',
               '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
@@ -113,7 +105,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
               '#type' => 'container',
               '#tree' => FALSE,
               '#attributes' => [
-                'id' => ['payment_card_' . $card_id],
+                'id' => ['payment_card_' . $card_hash],
                 'class' => ['payment_card_new'],
               ],
             ];

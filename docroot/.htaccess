@@ -86,7 +86,7 @@ AddEncoding gzip svgz
   RewriteRule ^ - [E=protossl]
   RewriteCond %{HTTPS} on
   RewriteRule ^ - [E=protossl:s]
-  RewriteCond %{HTTP:X-Forwarded-Proto} https
+  RewriteCond %{HTTP:X-Forwarded-Proto} https [novary]
   RewriteRule ^ - [E=protossl:s]
 
   # Make sure Authorization HTTP header is available to PHP
@@ -148,7 +148,7 @@ AddEncoding gzip svgz
 
   # Redirect HTTP to HTTPS for all requests
   RewriteCond %{HTTPS} off
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [novary]
   # Make sure we are not executing this rule after an internal redirection for
   # index.php. Note that variable name is prefixed by Apache when recomputing
   # redirect rules after an internal redirection.

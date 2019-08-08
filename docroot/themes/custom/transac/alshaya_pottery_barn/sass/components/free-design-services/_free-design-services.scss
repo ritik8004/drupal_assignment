@@ -273,12 +273,13 @@
     }
 
     .address-book-address {
-      .form-item-address-dependent-locality {
+      .form-item-address-dependent-locality,
+      .form-item-address-address-line2 {
         width: 47%;
         display: inline-block;
-        margin-#{$right}: 4.5%;
 
-        label[for=edit-address-dependent-locality] {
+        label[for=edit-address-dependent-locality],
+        label[for=edit-address-address-line2] {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -286,9 +287,8 @@
         }
       }
 
-      .form-item-address-address-line2 {
-        width: 47%;
-        display: inline-block;
+      .form-item-address-dependent-locality {
+        margin-#{$right}: 4.5%;
       }
 
       legend {

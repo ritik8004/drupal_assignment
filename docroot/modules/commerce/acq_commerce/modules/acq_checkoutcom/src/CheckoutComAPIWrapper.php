@@ -198,6 +198,59 @@ class CheckoutComAPIWrapper {
   }
 
   /**
+   * Prepare cart items array to send with payment request.
+   *
+   * @return array
+   *   Array of cart items list.
+   */
+  protected function getCartItems() {
+    $items = $this->getCart()->items();
+
+    $products = [];
+    foreach ($items as $line_item) {
+      // Ensure object notation.
+      $line_item = (object) $line_item;
+      $products[] = [
+        'sku' => $line_item->sku,
+        'name' => $line_item->name['#title'],
+        'quantity' => $line_item->qty,
+        'price' => $line_item->price,
+        'description' => NULL,
+      ];
+    }
+    return $products;
+  }
+
+  /**
+   * Get billing or shipping address info.
+   *
+   * @param string $type
+   *   The address type, billing or shipping.
+   *
+   * @return array
+   *   The keyed array of address info as required by checkout.com
+   */
+  protected function getAddressDetails($type = 'billing') {
+    if (!in_array($type, ['billing', 'shipping'])) {
+      return [];
+    }
+
+    $cart = $this->getCart();
+    $address = ($type == 'shipping')
+      ? (array) $cart->getShipping()
+      : (array) $cart->getBilling();
+
+    return [
+      'addressLine1' => $address['street'],
+      'addressLine2' => $address['street2'],
+      'postcode' => NULL,
+      'country' => $address['country_id'],
+      'state' => NULL,
+      'city' => $address['city'],
+    ];
+  }
+
+  /**
    * Is mada bin check enabled.
    *
    * @return bool
@@ -249,6 +302,11 @@ class CheckoutComAPIWrapper {
       return $row[1];
     }, $mada_bin_csv_data);
 
+    $this->logInfo('checkout.com: validated for bin: @bin against @mada_bin_array', [
+      '@bin' => $bin,
+      '@mada_bin_array' => $mada_bin_array,
+    ]);
+
     return in_array($bin, $mada_bin_array);
   }
 
@@ -278,6 +336,30 @@ class CheckoutComAPIWrapper {
   }
 
   /**
+   * Log messages if debug settings is enabled.
+   *
+   * @param string $message
+   *   The message to log.
+   * @param array $params
+   *   The array of parameters to replace.
+   */
+  protected function logInfo($message, array $params) {
+    if ($this->configFactory->get('acq_checkoutcom.settings')->get('debug')) {
+      $params = array_map(function ($param) {
+        if (is_array($param)) {
+          unset($param['card'], $param['shippingDetails'], $param['billingDetails']);
+          return Json::encode($param);
+        }
+        else {
+          return $param;
+        }
+      }, $params);
+      $params['@cart_id'] = $params['@cart_id'] ?? $this->getCart()->id();
+      $this->logger->info($message, $params);
+    }
+  }
+
+  /**
    * Returns transformed amount by the given currency code.
    *
    * @param float $amount
@@ -297,6 +379,25 @@ class CheckoutComAPIWrapper {
     }
 
     return (float) ($amount * self::DIV_100);
+  }
+
+  /**
+   * Display generic message of payment fail.
+   */
+  public function setGenericError() {
+    // Show generic message to user.
+    $this->messenger->addError(
+      $this->t('Transaction has been declined. Please try again later.')
+    );
+  }
+
+  /**
+   * Redirect to payment page.
+   */
+  public function redirectToPayment() {
+    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
+    $response->send();
+    exit;
   }
 
   /**
@@ -348,6 +449,8 @@ class CheckoutComAPIWrapper {
       $result = $doReq($client, [
         'currency' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
       ]);
+
+      $response = Json::decode($result->getBody());
     }
     catch (\Exception $e) {
       $msg = new FormattableMarkup(
@@ -373,7 +476,12 @@ class CheckoutComAPIWrapper {
       }
     }
 
-    return (Json::decode($result->getBody()));
+    $this->logInfo('checkout.com: for cart: @cart_id response for @action is: @response', [
+      '@action' => $action,
+      '@response' => $response,
+    ]);
+
+    return $response;
   }
 
   /**
@@ -394,6 +502,11 @@ class CheckoutComAPIWrapper {
    * @throws \Exception
    */
   protected function request3dSecurePayment(Cart $cart, string $endpoint, array $params, $caller = '') {
+    $this->logInfo('checkout.com: for cart: @cart_id api 3d request parameters are: @request_param', [
+      '@cart_id' => $cart->id(),
+      '@request_param' => $params,
+    ]);
+
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
       $opt = ['json' => $req_param + $params];
       return ($client->post($endpoint, $opt));
@@ -431,78 +544,6 @@ class CheckoutComAPIWrapper {
       $this->setGenericError();
       $this->redirectToPayment();
     }
-  }
-
-  /**
-   * Display generic message of payment fail.
-   */
-  public function setGenericError() {
-    // Show generic message to user.
-    $this->messenger->addError(
-      $this->t('Transaction has been declined. Please try again later.')
-    );
-  }
-
-  /**
-   * Redirect to payment page.
-   */
-  public function redirectToPayment() {
-    $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString());
-    $response->send();
-    exit;
-  }
-
-  /**
-   * Prepare cart items array to send with payment request.
-   *
-   * @return array
-   *   Array of cart items list.
-   */
-  protected function getCartItems() {
-    $items = $this->getCart()->items();
-
-    $products = [];
-    foreach ($items as $line_item) {
-      // Ensure object notation.
-      $line_item = (object) $line_item;
-      $products[] = [
-        'sku' => $line_item->sku,
-        'name' => $line_item->name['#title'],
-        'quantity' => $line_item->qty,
-        'price' => $line_item->price,
-        'description' => NULL,
-      ];
-    }
-    return $products;
-  }
-
-  /**
-   * Get billing or shipping address info.
-   *
-   * @param string $type
-   *   The address type, billing or shipping.
-   *
-   * @return array
-   *   The keyed array of address info as required by checkout.com
-   */
-  protected function getAddressDetails($type = 'billing') {
-    if (!in_array($type, ['billing', 'shipping'])) {
-      return [];
-    }
-
-    $cart = $this->getCart();
-    $address = ($type == 'shipping')
-      ? (array) $cart->getShipping()
-      : (array) $cart->getBilling();
-
-    return [
-      'addressLine1' => $address['street'],
-      'addressLine2' => $address['street2'],
-      'postcode' => NULL,
-      'country' => $address['country_id'],
-      'state' => NULL,
-      'city' => $address['city'],
-    ];
   }
 
   /**
@@ -561,8 +602,12 @@ class CheckoutComAPIWrapper {
     };
 
     $cart = $this->cartStorage->getCart(FALSE);
+    $this->logInfo('checkout.com: for cart: @cart_id, received payment token: @payment_token', [
+      '@cart_id' => $cart->id(),
+      '@payment_token' => $payment_token,
+    ]);
     try {
-      $result = $this->tryCheckoutRequest($doReq, __METHOD__);
+      $response = $this->tryCheckoutRequest($doReq, __METHOD__);
     }
     catch (\UnexpectedValueException $e) {
       $this->logger->error(
@@ -576,7 +621,7 @@ class CheckoutComAPIWrapper {
       );
     }
 
-    return $result;
+    return $response;
   }
 
 }

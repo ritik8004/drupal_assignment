@@ -26,6 +26,13 @@ class CheckoutComController implements ContainerInjectionInterface {
   use StringTranslationTrait;
 
   /**
+   * The config factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * ACM API Version.
    *
    * @var string
@@ -91,6 +98,7 @@ class CheckoutComController implements ContainerInjectionInterface {
     CheckoutComAPIWrapper $checkout_com_Api,
     LoggerInterface $logger
   ) {
+    $this->configFactory = $config_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
@@ -125,6 +133,12 @@ class CheckoutComController implements ContainerInjectionInterface {
   public function success(Request $request) {
     $payment_token = $request->query->get('cko-payment-token');
     $cart = $this->cartStorage->getCart(FALSE);
+
+    // Log payment token response.
+    if ($this->configFactory->get('acq_checkoutcom.settings')->get('debug')) {
+      $this->checkoutComApi->getChargesInfo($payment_token);
+    }
+
     try {
       // Push the additional data to cart.
       $cart->setPaymentMethod(
@@ -173,8 +187,7 @@ class CheckoutComController implements ContainerInjectionInterface {
   public function fail(Request $request) {
     $payment_token = $request->query->get('cko-payment-token');
     $data = $this->checkoutComApi->getChargesInfo($payment_token);
-    unset($data['card']);
-    unset($data['shippingDetails']);
+    unset($data['card'], $data['shippingDetails'], $data['billingDetails']);
     $cart = $this->cartStorage->getCart(FALSE);
     $this->logger->warning(
       'transactions failed for cart: @cart_id, order: @order and payment_token: @token. more info available here: @info',
