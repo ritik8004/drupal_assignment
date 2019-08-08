@@ -33,7 +33,7 @@ class CheckoutComAPIWrapper {
   // Saved card payment endpoint.
   const ENDPOINT_CARD_PAYMENT = 'charges/card';
 
-  // Void payment endpoint.
+  // Get charges info from payment token.
   const ENDPOINT_CHARGES_INFO = 'charges/{payment_token}';
 
   // 3D secure charge mode.
@@ -384,7 +384,7 @@ class CheckoutComAPIWrapper {
   /**
    * Display generic message of payment fail.
    */
-  public function setGenericErrorMessage() {
+  public function setGenericError() {
     // Show generic message to user.
     $this->messenger->addError(
       $this->t('Transaction has been declined. Please try again later.')
@@ -526,7 +526,7 @@ class CheckoutComAPIWrapper {
       );
 
       // Show generic error message to user and redirect to payment page.
-      $this->setGenericErrorMessage();
+      $this->setGenericError();
     }
 
     if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL])) {
@@ -541,7 +541,7 @@ class CheckoutComAPIWrapper {
       );
 
       // Show generic error message to user and redirect to payment page.
-      $this->setGenericErrorMessage();
+      $this->setGenericError();
       $this->redirectToPayment();
     }
   }
