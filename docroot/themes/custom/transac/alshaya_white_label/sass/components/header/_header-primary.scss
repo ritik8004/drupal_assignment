@@ -1666,7 +1666,7 @@ html {
       #{$right}: 1rem;
       padding-top: 0.625rem;
 
-      html[lang=ar] body.safari &{
+      html[lang=ar] body.safari & {
         left: -1rem;
       }
 
