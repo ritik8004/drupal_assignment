@@ -312,4 +312,11 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
     }
   };
+
+  // Update the url in browser, on facet selection.
+  $.fn.updateBrowserFacetUrl = function (url) {
+    // On ajax response
+    window.history.pushState({'facet-url-update': true}, document.title, url);
+  };
+
 })(jQuery);

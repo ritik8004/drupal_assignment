@@ -138,6 +138,9 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
 
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
 
+    $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
+    $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
+
     // Set items per page to current page * items per page.
     $currentPage = intval($request->query->get('page'));
     $query_params['show_on_load'] = ($currentPage + 1) * _alshaya_acm_product_get_items_per_page_on_listing();
