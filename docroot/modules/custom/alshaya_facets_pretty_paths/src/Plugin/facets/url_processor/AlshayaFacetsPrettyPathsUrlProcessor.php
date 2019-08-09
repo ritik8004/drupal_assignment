@@ -90,7 +90,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       // If the value is active, remove the filter string from the parameters.
       if ($result->isActive()) {
         $active_facet = array_map([
-          '\Drupal\facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
+          '\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
           'decodeFacetUrlComponents',
         ], $filters_current_result_array[$filter_key]);
         if (($active_key = array_search($raw_value, $active_facet)) !== FALSE) {
@@ -129,7 +129,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $filters_current_result_string = array_filter($filters_current_result_array);
       array_walk($filters_current_result_string, function (&$el, $key) {
         $el = $key . '-' . implode('-', array_map([
-          '\Drupal\facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
+          '\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
           'encodeFacetUrlComponents',
         ], $el));
       });
@@ -214,7 +214,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $key = $new_parts[0];
       array_shift($new_parts);
       $new_parts = array_map([
-        '\Drupal\facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
+        '\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
         'decodeFacetUrlComponents',
       ], $new_parts);
       $this->activeFilters[$key] = $new_parts;
