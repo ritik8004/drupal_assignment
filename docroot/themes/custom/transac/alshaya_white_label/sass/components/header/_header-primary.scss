@@ -1660,11 +1660,15 @@ html {
       float: $right;
       margin-#{$right}: 1.125rem;
       position: absolute;
-      top: 0.625rem;
+      top: 0.3125rem;
       font-size: 0;
       margin-top: 0;
       #{$right}: 1rem;
       padding-top: 0.625rem;
+
+      html[lang=ar] body.safari &{
+        left: -1rem;
+      }
 
       &::before {
         #{$left}: -0.125rem;
