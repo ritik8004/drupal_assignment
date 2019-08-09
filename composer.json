@@ -191,12 +191,6 @@
             "Drupal\\Tests\\PHPUnit\\": "tests/phpunit/src/"
         }
     },
-    "autoload": {
-        "psr-4": {
-            "Alshaya\\BehatContexts\\": "behat_rework/src/bootstrap/Drupal",
-            "Alshaya\\BehatBuild\\": "behat_rework/src/Process"
-        }
-    },
     "extra": {
         "blt": {
             "update": true
