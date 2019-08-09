@@ -43,3 +43,16 @@ function alshaya_eg_install() {
   // Save the translation.
   alshaya_i18n_save_translations($strings);
 }
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_eg_update_dependencies() {
+  return [
+    'alshaya_eg' => [
+      '8001' => [
+        'acq_commerce' => '8002',
+      ],
+    ],
+  ];
+}
