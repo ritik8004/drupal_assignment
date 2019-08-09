@@ -68,7 +68,7 @@
         $(this).select2('destroy');
 
         var options = {
-          minimumResultsForSearch: -1,
+          minimumResultsForSearch: -1
         };
 
         try {
