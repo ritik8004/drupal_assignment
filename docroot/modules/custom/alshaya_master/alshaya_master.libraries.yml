@@ -41,3 +41,10 @@ cv_ife:
   dependencies:
     - core/jquery
     - core/drupal
+
+jquery_is_in_viewport:
+  version: 1.x
+  js:
+    js/jquery.is_in_viewport.js: {}
+  dependencies:
+    - core/jquery
