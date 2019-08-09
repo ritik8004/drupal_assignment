@@ -47,7 +47,6 @@ sharethis:
   js:
     js/sharethis.js: { weight: -3 }
   dependencies:
-    - core/jquery.ui.dialog
-    - core/drupal.ajax
+    - core/jquery.once
     - core/drupalSettings
     - alshaya_master/jquery_is_in_viewport
