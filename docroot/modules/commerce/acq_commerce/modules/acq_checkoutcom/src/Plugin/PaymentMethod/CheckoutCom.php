@@ -115,25 +115,47 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   }
 
   /**
+   * Return payment card to display by default selected.
+   *
+   * Priorities:
+   * - Display previously saved card as selected by default, if exists.
+   * - Display new card form when no stored card exists.
+   * - Display user selected payment card as selected.
+   *
+   * @param array $customer_stored_cards
+   *   Customer stored cards.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return string
+   *   Return payment card to display as selected.
+   */
+  protected function getDefaultPaymentCard(array $customer_stored_cards, FormStateInterface $form_state) {
+    // Get the default payment card to display as selected from session.
+    $session = $this->currentRequest->getSession();
+    $payment_card = $session->get('checkout_com_payment_card_' . $this->getCart()->id());
+
+    $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
+    $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
+    $values = $form_state->getValue('acm_payment_methods');
+    if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
+      $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+    }
+    return $payment_card;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // Get the default payment card to display form, to enter new card.
-    $session = $this->currentRequest->getSession();
-    $payment_card = $session->get('checkout_com_payment_card');
-
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
     if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
       $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
-      $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
-      $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
-      $values = $form_state->getValue('acm_payment_methods');
-      if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
-        $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
-      }
+      // Get payment card to display by default selected.
+      $payment_card = $this->getDefaultPaymentCard($customer_stored_cards, $form_state);
 
       if (!empty($stored_cards_list)) {
         $pane_form['payment_card'] = [
@@ -228,8 +250,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $values = $form_state->getValue('acm_payment_methods');
     if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
       $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+
+      // Set selected card in session to display as selected when user comes
+      // back the payment page with error or after editing something.
       $session = $this->currentRequest->getSession();
-      $session->set('checkout_com_payment_card', $payment_card);
+      $session->set('checkout_com_payment_card_' . $this->getCart()->id(), $payment_card);
     }
 
     return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_card_details'];
