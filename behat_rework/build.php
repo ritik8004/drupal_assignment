@@ -7,7 +7,6 @@ $time_start = microtime(true);
 
 use Alshaya\BehatBuild\AlshayaFeatureProcess;
 use Alshaya\BehatBuild\AlshayaYamlProcess;
-use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\Output;
 

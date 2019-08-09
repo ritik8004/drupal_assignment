@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Add iso_currency_code for kuwait sites.
+ */
+function alshaya_kw_update_8004() {
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'KWD')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Correct the mapping to handle locality and area parent for KW.
  */
 function alshaya_kw_update_8003() {
@@ -54,6 +66,12 @@ function alshaya_kw_update_8002() {
  * Implements hook_install().
  */
 function alshaya_kw_install() {
+  // Add iso_currency_code for kuwait sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'KWD')
+    ->save();
+
   // Country code and timezone for Kuwait.
   alshaya_country_set_default_regional_info('KW');
 
@@ -102,6 +120,9 @@ function alshaya_kw_update_dependencies() {
     'alshaya_kw' => [
       '8002' => [
         'alshaya_seo_transac' => '8402',
+      ],
+      '8004' => [
+        'acq_commerce' => '8002',
       ],
     ],
   ];

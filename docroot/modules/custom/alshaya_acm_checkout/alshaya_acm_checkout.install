@@ -10,6 +10,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_acm_checkoutcom module.
+ */
+function alshaya_acm_checkout_update_8005() {
+  \Drupal::service('module_installer')->install(['alshaya_acm_checkoutcom']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete default texts for checkout_guest_summary, checkout_guest_email_usage
  * and checkout_guest_login.
  */

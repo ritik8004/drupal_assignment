@@ -1,0 +1,45 @@
+global:
+  js:
+    js/acq_checkoutcom.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+checkoutcom.form:
+  js:
+    js/acq_checkoutcom.form.js: {}
+    js/jquery.creditCardValidator.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery.once
+    - acq_checkoutcom/global
+
+sandbox_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
+
+live_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/js/checkoutkit.js: { type: external }
+
+applepay:
+  css:
+    component:
+      css/applepay.css: {}
+  js:
+    js/acq_checkoutcom.applePay.js: {}
+  dependencies:
+    - core/drupalSettings
+    - acq_checkoutcom/global
