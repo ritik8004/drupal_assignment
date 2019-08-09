@@ -121,6 +121,9 @@ function alshaya_kw_update_dependencies() {
       '8002' => [
         'alshaya_seo_transac' => '8402',
       ],
+      '8004' => [
+        'acq_commerce' => '8002',
+      ],
     ],
   ];
 }

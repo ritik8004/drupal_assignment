@@ -103,3 +103,16 @@ function alshaya_sa_update_8002() {
   // Store finder search placeholder for Saudi Arabia.
   alshaya_country_set_default_store_search_placeholder('e.g. Riyadh', 'مثل الرياض');
 }
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_sa_update_dependencies() {
+  return [
+    'alshaya_sa' => [
+      '8005' => [
+        'acq_commerce' => '8002',
+      ],
+    ],
+  ];
+}
