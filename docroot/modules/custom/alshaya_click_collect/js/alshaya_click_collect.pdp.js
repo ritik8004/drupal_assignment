@@ -54,6 +54,11 @@
           });
         });
 
+        // Location search google autocomplete fix.
+        $(window).on('scroll', function () {
+          $('.pac-container:visible').hide();
+        });
+
         $('#pdp-stores-container').once('initiate-stores').each(function () {
           // Check if we have access to click & collect.
           if ($(this).data('state') !== 'disabled') {

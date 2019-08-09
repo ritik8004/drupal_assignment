@@ -137,6 +137,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
  * Implements hook_preprocess_page().
  */
 function alshaya_white_label_preprocess_page(&$variables) {
+  $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
+  // Adding a variable for html direction.
+  $variables['html_direction'] = $direction;
+
   // Check if page is panel pages.
   $routematch = \Drupal::routeMatch();
   $route_options = $routematch->getRouteObject()->getOptions();
@@ -1566,13 +1570,27 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
  * Implements template_preprocess_image().
  */
 function alshaya_white_label_preprocess_image(&$variables) {
-  $variables['attributes']['class'][] = 'b-lazy';
   $scheme = \Drupal::service('file_system')->uriScheme($variables['uri']);
+
+  // Use lazy load only for public schema and for already relative urls.
   if ($scheme == 'public') {
-    $variables['attributes']['data-src'] = file_create_url($variables['uri']);
+    $variables['attributes']['class'][] = 'b-lazy';
+    // For public scheme, create the url and make it relative.
+    $variables['attributes']['data-src'] = file_url_transform_relative(file_create_url($variables['uri']));
+    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
   }
-  else {
+  elseif ($scheme === FALSE) {
     $variables['attributes']['data-src'] = $variables['uri'];
+    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
   }
-  $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
+}
+
+/**
+ * Implements template_preprocess_image_style().
+ */
+function alshaya_white_label_preprocess_image_style(&$variables) {
+  if (empty($variables['image']['#access'])) {
+    // Ensure we use relative urls everywhere.
+    $variables['image']['#uri'] = file_url_transform_relative($variables['image']['#uri']);
+  }
 }

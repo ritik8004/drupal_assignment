@@ -8,9 +8,9 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-global $acsf_site_name;
-$acsf_site_code = substr($acsf_site_name, 0, -2);
-$country_code = substr($acsf_site_name, -2);
+global $_acsf_site_name;
+$acsf_site_code = substr($_acsf_site_name, 0, -2);
+$country_code = substr($_acsf_site_name, -2);
 
 $home = ($settings['env'] == 'local') ? '/home/vagrant' : $_SERVER['HOME'];
 

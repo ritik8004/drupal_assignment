@@ -1,5 +1,4 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -16,7 +15,7 @@ if (!function_exists('gardens_data_get_sites_from_file')) {
    *
    * @param string $name
    *   The technical ACSF site name to filter on.
-   * @param $reset
+   * @param bool $reset
    *   Whetever to reset APC cache or not.
    *
    * @return array|mixed|null
@@ -55,8 +54,8 @@ if (!function_exists('gardens_data_get_sites_from_file')) {
 // Get all the domains that are defined for the current site.
 $domains = gardens_data_get_sites_from_file($GLOBALS['gardens_site_settings']['conf']['acsf_db_name']);
 // Get the site's name from the first domain.
-global $acsf_site_name;
-$acsf_site_name = explode('.', array_keys($domains)[0])[0];
+global $_acsf_site_name;
+$_acsf_site_name = explode('.', array_keys($domains)[0])[0];
 
 // Support cases like hmkw1 or mckw12.
-$acsf_site_name = preg_replace('/\d/', '', $acsf_site_name);
+$_acsf_site_name = preg_replace('/\d/', '', $_acsf_site_name);

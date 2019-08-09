@@ -63,7 +63,7 @@
       .share-icon {
         @include breakpoint($tablet) {
           top: -2.875rem;
-          #{$left}: 9rem;
+          #{$left}: 10rem;
         }
 
         &::before {

@@ -9,7 +9,7 @@
         "acquia/acsf-tools": "dev-9.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
-        "acquia/lightning": "^3.0.0",
+        "acquia/lightning": "^4.0.0",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
@@ -45,7 +45,6 @@
         "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^2.3",
         "drupal/jquery_minicolors": "^1.2",
-        "drupal/jsonapi": "^1.25",
         "drupal/kashmir": "^1.1",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
@@ -240,22 +239,22 @@
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2018-03-14/views-render_caching_ajax_requests-2500313-44-85x.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
-                "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3-8.6.patch",
-                "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch",
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
                 "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
-                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch",
-                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-28/add_a_new_setting_allow_insecure_derivates-3059836-14.patch",
+                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2019-06-18/views-render_caching_ajax_requests-2500313-49-87x.patch",
+                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-18/add_a_new_setting_allow_insecure_derivates-3059836-12.patch",
+                "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
+                "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
-                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-07-16/password-reset-text-1521996-182.patch"
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -322,10 +321,6 @@
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
-            "drupal/simple_oauth": {
-                "Limit token delete on cron run": "https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch",
-                "oauth2_token entity type & cache tags": "https://www.drupal.org/files/issues/2019-05-10/3051648-9.patch"
-            },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
@@ -348,7 +343,7 @@
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             },
             "drupal/search_api_algolia": {
-                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-06-11/3054878-11.patch"
+                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
             },
             "drupal/acquia_purge": {
                 "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
@@ -420,7 +415,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
             "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
             "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
-            "cd docroot && rm robots.txt"
+            "cd docroot && rm robots.txt",
+            "cd docroot && patch -p1 <../patches/development-services-twig.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
