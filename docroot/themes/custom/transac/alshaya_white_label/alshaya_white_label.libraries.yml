@@ -72,7 +72,7 @@ product_carousel:
   dependencies:
     - core/jquery
     - alshaya_white_label/utils
-    - alshaya_white_label/owlcarousel
+    - alshaya_white_label/slick
 
 autosize_textarea:
   js:
@@ -92,13 +92,6 @@ slick:
       vendor/css/slick.css: {}
   js:
     vendor/js/slick.min.js: {}
-
-owlcarousel:
-  css:
-    theme:
-      vendor/css/owl.carousel.css: {}
-  js:
-    vendor/js/owl.carousel.min.js: {}
 
 select2:
   css:
