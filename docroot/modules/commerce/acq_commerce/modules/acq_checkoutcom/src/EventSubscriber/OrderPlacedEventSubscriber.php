@@ -24,7 +24,7 @@ class OrderPlacedEventSubscriber implements EventSubscriberInterface {
    * OrderPlacedEventSubscriber constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-   *   Used for reading data from and writing data to session.
+   *   The session.
    */
   public function __construct(SessionInterface $session) {
     $this->session = $session;
@@ -48,7 +48,7 @@ class OrderPlacedEventSubscriber implements EventSubscriberInterface {
    * @throws \Exception
    */
   public function onOrderPlaced(OrderPlacedEvent $event) {
-    $this->session->remove('checkout_com_payment_card');
+    $this->session->remove('checkout_com_payment_card_' . $event->getCartId());
   }
 
 }
