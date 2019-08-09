@@ -60,7 +60,8 @@
       return;
     }
 
-    var elementVisible = isElementInViewPort(first_visible_product);
+    var elementVisible = $(first_visible_product).isElementInViewPort($('.branding__menu').height());
+
     // If element is not visible, only then scroll.
     if (elementVisible === false) {
       $('html, body').animate({
@@ -86,25 +87,6 @@
     // so that on next page load, default behavior is used.
     delete storage_value.grid_type;
     localStorage.setItem(window.location.pathname, JSON.stringify(storage_value));
-  }
-
-  /**
-   * Check if element is fully visible in viewport or not.
-   *
-   * @param element
-   *
-   * @returns {boolean}
-   */
-  function isElementInViewPort(element) {
-    // Get element top and bottom.
-    var elementTop = $(element).offset().top - $('.branding__menu').height();
-    var elementBottom = elementTop + $(element).outerHeight();
-
-    // Get window top and bottom.
-    var viewportTop = $(window).scrollTop();
-    var viewportBottom = viewportTop + $(window).height();
-
-    return elementTop >= viewportTop && elementBottom <= viewportBottom;
   }
 
   Drupal.processBackToList = function () {
