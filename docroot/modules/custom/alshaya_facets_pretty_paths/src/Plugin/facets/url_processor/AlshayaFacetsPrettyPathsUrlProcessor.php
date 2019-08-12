@@ -195,7 +195,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     }
 
     elseif (\Drupal::routeMatch()->getRouteName() === 'views.ajax') {
-      $q = \Drupal::request()->query->get('q');
+      $q = \Drupal::request()->query->get('q') ?? \Drupal::request()->query->get('facet_filter_url');
       if ($q) {
         $route_params = Url::fromUserInput($q)->getRouteParameters();
         if (isset($route_params['facets_query'])) {

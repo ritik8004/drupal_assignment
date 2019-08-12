@@ -139,6 +139,10 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
 
     $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
+
+    if (isset($query_params['facet_filter_url'])) {
+      $clean_url = Url::fromUserInput($query_params['facet_filter_url'], [])->toString(FALSE);
+    }
     $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
 
     // Set items per page to current page * items per page.
