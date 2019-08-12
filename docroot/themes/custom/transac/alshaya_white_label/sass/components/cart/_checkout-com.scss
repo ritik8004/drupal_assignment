@@ -329,14 +329,6 @@
           }
         }
 
-        &.expired {
-          cursor: default;
-
-          &::before {
-            opacity: 0.5;
-          }
-        }
-
         span.new {
           padding-#{$left}: 2rem;
           display: inline-block;
@@ -394,23 +386,6 @@
         .actions {
           > div {
             margin-bottom: 0.4375rem;
-          }
-        }
-
-        .warning {
-          clear: both;
-          position: relative;
-          padding-#{$left}: 1.875rem;
-          display: flex;
-          align-items: center;
-          color: $checkout_payment_checkoutcom_saved_card_warning;
-          justify-content: flex-start;
-
-          @include icon('warning', 'before') {
-            font-size: 1.5rem;
-            position: absolute;
-            #{$left}: 0;
-            color: $checkout_payment_checkoutcom_saved_card_warning_icon;
           }
         }
       }
