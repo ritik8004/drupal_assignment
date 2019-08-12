@@ -12,3 +12,4 @@ services:
       - { name: event_subscriber }
   alshaya_facets_pretty_paths.alshaya_facets_pretty_paths_helper:
     class: Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper
+    arguments: ['@current_route_match', '@request_stack']

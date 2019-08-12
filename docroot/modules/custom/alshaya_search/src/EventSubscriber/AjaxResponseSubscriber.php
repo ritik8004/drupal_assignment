@@ -141,7 +141,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
 
     if (isset($query_params['facet_filter_url'])) {
-      $clean_url = Url::fromUserInput($query_params['facet_filter_url'], [])->toString(FALSE);
+      $clean_url = rtrim(Url::fromUserInput($query_params['facet_filter_url'], [])->toString(FALSE), '--');
     }
     $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
 

@@ -55,10 +55,10 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
     }
 
     elseif (!empty($facet_link = $request->query->get('facet_link'))) {
-      if (!strpos($facet_link, '/--')) {
+      if (strpos($facet_link, '/--') !== FALSE) {
         $path_alias = substr($facet_link, 0, strrpos($facet_link, '/--'));
         $term_path = $this->aliasManager->getPathByAlias($path_alias);
-        $query_param = substr($path, strrpos($path, '/--') + 1);
+        $query_param = substr($facet_link, strrpos($facet_link, '/--') + 1);
         $facet_link = $term_path . '/' . $query_param;
         $request->query->set('facet_link', $facet_link);
       }
@@ -84,7 +84,7 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
         // but it is duplicated here to protect any other URL generation code
         // that might call this method separately.
         if (strpos($path, '//') === 0) {
-          $path = '/' . ltrim($path, '/');
+          $path = '/' . ltrim($path, '/') . '/';
         }
       }
     }

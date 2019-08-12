@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_facets_pretty_paths\Plugin\facets\url_processor;
 
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\UrlProcessor\UrlProcessorPluginBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -28,11 +30,32 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected $activeFilters = [];
 
   /**
+   * The pretty path helper service.
+   *
+   * @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper
+   */
+  protected $alshayaPrettyPathHelper;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request, AlshayaFacetsPrettyPathsHelper $pretty_path_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
+    $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->initializeActiveFilters($configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('request_stack')->getMasterRequest(),
+      $container->get('alshaya_facets_pretty_paths.alshaya_facets_pretty_paths_helper')
+    );
   }
 
   /**
@@ -46,27 +69,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     }
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
-    $filters = '';
 
-    if (\Drupal::routeMatch()->getParameter('facets_query')) {
-      $filters = \Drupal::routeMatch()->getParameter('facets_query');
-    }
-
-    elseif (\Drupal::routeMatch()->getRouteName() === 'views.ajax') {
-      $q = \Drupal::request()->query->get('q');
-      if ($q) {
-        $route_params = Url::fromUserInput($q)->getRouteParameters();
-        if (isset($route_params['facets_query'])) {
-          $filters = $route_params['facets_query'];
-        }
-      }
-    }
-
-    elseif (empty($filters) && strpos($current_path, "/--") !== FALSE) {
-      $filters = substr($current_path, strpos($current_path, "/--") + 3);
-    }
-
-    $filters_array = array_filter(explode('--', $filters));
+    $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
 
     /* @var \Drupal\facets\FacetInterface[] $facets */
     $facets = \Drupal::service('facets.manager')->getEnabledFacets();
@@ -189,26 +193,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
    * active values for a specific facet are added to the facet.
    */
   protected function initializeActiveFilters($configuration) {
-    $filters = '';
-    if (\Drupal::routeMatch()->getParameter('facets_query')) {
-      $filters = \Drupal::routeMatch()->getParameter('facets_query');
-    }
-
-    elseif (\Drupal::routeMatch()->getRouteName() === 'views.ajax') {
-      $q = \Drupal::request()->query->get('q') ?? \Drupal::request()->query->get('facet_filter_url');
-      if ($q) {
-        $route_params = Url::fromUserInput($q)->getRouteParameters();
-        if (isset($route_params['facets_query'])) {
-          $filters = $route_params['facets_query'];
-        }
-      }
-    }
-
-    elseif (empty($filters) && strpos($this->request->getPathInfo(), "/--") !== FALSE) {
-      $filters = substr($this->request->getPathInfo(), strpos($this->request->getPathInfo(), "/--") + 3);
-    }
-
-    $parts = array_filter(explode('--', $filters));
+    $parts = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
     foreach ($parts as $part) {
       $new_parts = explode('-', $part);
       $key = $new_parts[0];
