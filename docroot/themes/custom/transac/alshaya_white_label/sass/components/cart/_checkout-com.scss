@@ -144,6 +144,8 @@
           @include breakpoint($only-mobile) {
             top: -0.25rem;
           }
+
+          margin-#{$right}: 0.625rem;
         }
       }
     }
@@ -151,10 +153,10 @@
 
   .cc-save-help-text {
     position: relative;
-    padding-#{$left}: 2rem;
+    padding-#{$left}: 1.75rem;
     max-width: 25.3125rem;
     font-size: 0.875rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     margin-bottom: 1.5rem;
     color: $checkout_payment_checkoutcom_save_card_help;
 
@@ -163,10 +165,10 @@
     }
 
     @include icon('login', 'before') {
-      font-size: 1.75rem;
+      font-size: 2.375rem;
       position: absolute;
-      #{$left}: -0.3125rem;
-      top: -0.4375rem;
+      #{$left}: -0.625rem;
+      top: -0.75rem;
       color: $primary_radiobtn_filled;
     }
   }

@@ -44,7 +44,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       $payment_card = $this->getDefaultPaymentCard($customer_stored_cards, $form_state);
 
       if (!empty($stored_cards_list)) {
-        $stored_cards_list += ['new' => '<span class="new">' . $this->t('New Card') . '</span>'];
+        $stored_cards_list += ['new' => '<span class="new">' . $this->t('New Credit Card') . '</span>'];
         $pane_form['payment_card'] = [
           '#type' => 'radios',
           '#options' => $stored_cards_list,
