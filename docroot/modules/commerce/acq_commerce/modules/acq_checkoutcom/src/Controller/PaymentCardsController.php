@@ -160,7 +160,7 @@ class PaymentCardsController extends ControllerBase {
     ];
 
     $build['expired_cards_removed'] = [
-      '#markup' => $this->t('Your expired cards will be automatically removed from your account.'),
+      '#markup' => '<div class="expired-cards">' . $this->t('Your expired cards will be automatically removed from your account.') . '</div>',
     ];
 
     return $build;
