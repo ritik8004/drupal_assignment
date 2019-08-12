@@ -8,6 +8,16 @@
 }
 
 .magazine-layout-node {
+  .content-sidebar-wrapper {
+    .content__title_wrapper {
+      .promotion-discount-wrapper .promotions {
+        @include breakpoint($desktop) {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+
   .acq-content-product {
     .gallery-wrapper {
       @include breakpoint($tablet) {
