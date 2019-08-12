@@ -11,7 +11,7 @@
   .content-sidebar-wrapper {
     .content__title_wrapper {
       .promotion-discount-wrapper .promotions {
-        @include  breakpoint($desktop) {
+        @include breakpoint($desktop) {
           margin-top: 0.5rem;
         }
       }
