@@ -322,6 +322,7 @@ header {
 
     .store {
       float: $right;
+      width: 3rem;
       margin-#{$right}: 1.5625rem;
       position: absolute;
       top: 0.875rem;
@@ -363,6 +364,7 @@ header {
 
     .mobile-search {
       float: $right;
+      width: 3rem;
       margin-#{$right}: 1.5625rem;
       position: absolute;
       top: 1.125rem;
