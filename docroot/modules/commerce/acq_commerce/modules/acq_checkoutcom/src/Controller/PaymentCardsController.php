@@ -145,7 +145,7 @@ class PaymentCardsController extends ControllerBase {
       $list_class[] = 'empty';
     }
 
-    return [
+    $build['payment_cards_list'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $options,
@@ -158,6 +158,12 @@ class PaymentCardsController extends ControllerBase {
         ],
       ],
     ];
+
+    $build['expired_cards_removed'] = [
+      '#markup' => '<div class="expired-cards">' . $this->t('Your expired cards will be automatically removed from your account.') . '</div>',
+    ];
+
+    return $build;
   }
 
   /**
