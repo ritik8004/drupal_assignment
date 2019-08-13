@@ -9,6 +9,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_commerce_status
     - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
     - field.field.taxonomy_term.acq_product_category.field_icon
     - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
     - field.field.taxonomy_term.acq_product_category.field_image_text_font_color
@@ -21,6 +22,9 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_override_target_link
     - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
     - field.field.taxonomy_term.acq_product_category.field_pdp_layout
+    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc
+    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_img
+    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_title
     - field.field.taxonomy_term.acq_product_category.field_plp_layout
     - field.field.taxonomy_term.acq_product_category.field_plp_menu
     - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
@@ -29,16 +33,13 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
+    - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
     - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
     - field.field.taxonomy_term.acq_product_category.field_target_link
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
-    - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
-    - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
-    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_img
-    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc
   module:
     - entity_browser
     - field_group
@@ -56,11 +57,10 @@ third_party_settings:
     group_plp_content:
       children:
         - field_plp_layout
-        - group_plp_sorting_options
+        - group_group_by_sub_category
         - group_promotion_
         - group_right_side_menu
         - group_videos
-        - group_group_by_sub_category
       parent_name: group_taxonomy_fields
       weight: 4
       format_type: tab
@@ -111,14 +111,14 @@ third_party_settings:
         - name
         - langcode
         - field_commerce_status
+        - field_group_by_sub_category
+        - field_select_subcategories_plp
         - field_pdp_layout
         - description
         - path
         - translation
         - field_meta_tags
         - field_pdp_image_slider_position
-        - field_group_by_sub_category
-        - field_select_subcategories_plp
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -217,7 +217,7 @@ third_party_settings:
         - field_promotion_banner
         - field_promotion_banner_mobile
       parent_name: group_plp_content
-      weight: 20
+      weight: 8
       format_type: details
       format_settings:
         id: ''
@@ -232,7 +232,7 @@ third_party_settings:
         - field_mobile_plp_video_links
         - field_plp_upload_video
       parent_name: group_plp_content
-      weight: 24
+      weight: 10
       format_type: details
       format_settings:
         id: ''
@@ -246,7 +246,7 @@ third_party_settings:
         - field_plp_menu
         - field_plp_menu_icon
       parent_name: group_plp_content
-      weight: 20
+      weight: 9
       format_type: details
       format_settings:
         id: ''
@@ -255,20 +255,6 @@ third_party_settings:
         required_fields: true
       label: 'Right side menu'
       region: content
-    group_group_by_sub_category:
-      children:
-        - field_plp_group_category_desc
-        - field_plp_group_category_img
-      parent_name: group_plp_content
-      weight: 5
-      format_type: details
-      format_settings:
-        id: ''
-        classes: ''
-        open: false
-        required_fields: true
-      label: 'Group by sub-category'
-      region: hidden
     group_link_url:
       children:
         - field_display_as_clickable_link
@@ -301,6 +287,21 @@ third_party_settings:
         required_fields: true
       label: 'Link visibility'
       region: content
+    group_group_by_sub_category:
+      children:
+        - field_plp_group_category_title
+        - field_plp_group_category_desc
+        - field_plp_group_category_img
+      parent_name: group_plp_content
+      weight: 6
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Group by sub-category'
+      region: hidden
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
 bundle: acq_product_category
@@ -308,7 +309,7 @@ mode: default
 content:
   description:
     type: text_textarea
-    weight: 5
+    weight: 7
     settings:
       placeholder: ''
       rows: 5
@@ -339,6 +340,14 @@ content:
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
+  field_plp_group_category_title:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_commerce_status:
     weight: 3
     settings: {  }
@@ -353,7 +362,7 @@ content:
     type: boolean_checkbox
     region: content
   field_group_by_sub_category:
-    weight: 2
+    weight: 4
     settings:
       display_label: true
     third_party_settings: {  }
@@ -466,7 +475,7 @@ content:
       display_label: true
     third_party_settings: {  }
   field_pdp_image_slider_position:
-    weight: 21
+    weight: 11
     settings:
       size: 60
       placeholder: ''
@@ -474,11 +483,33 @@ content:
     region: content
     third_party_settings: {  }
   field_pdp_layout:
-    weight: 4
+    weight: 6
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
+  field_plp_group_category_desc:
+    weight: 6
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textfield
+    region: content
+  field_plp_group_category_img:
+    type: entity_browser_file
+    weight: 7
+    settings:
+      entity_browser: image_browser
+      field_widget_edit: true
+      field_widget_remove: true
+      view_mode: default
+      preview_image_style: thumbnail
+      open: true
+      field_widget_replace: false
+      selection_mode: selection_append
+    region: content
+    third_party_settings: {  }
   field_plp_layout:
     weight: 4
     settings: {  }
@@ -524,7 +555,7 @@ content:
     third_party_settings: {  }
     region: content
   field_plp_upload_video:
-    weight: 26
+    weight: 28
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
@@ -545,7 +576,7 @@ content:
     region: content
   field_promotion_banner:
     type: image_image
-    weight: 23
+    weight: 24
     settings:
       preview_image_style: thumbnail
       progress_indicator: throbber
@@ -553,12 +584,18 @@ content:
     region: content
   field_promotion_banner_mobile:
     type: image_image
-    weight: 24
+    weight: 25
     settings:
       preview_image_style: thumbnail
       progress_indicator: throbber
     region: content
     third_party_settings: {  }
+  field_select_subcategories_plp:
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_show_in_lhn:
     type: boolean_checkbox
     weight: 30
@@ -566,11 +603,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  field_select_subcategories_plp:
-    weight: 3
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
   field_size_guide_anchor:
     type: string_textfield
     weight: 0
@@ -579,28 +611,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_plp_group_category_img:
-    type: entity_browser_file
-    weight: 5
-    settings:
-      entity_browser: image_browser
-      field_widget_edit: true
-      field_widget_remove: true
-      view_mode: default
-      preview_image_style: thumbnail
-      open: true
-      field_widget_replace: false
-      selection_mode: selection_append
-    region: content
-    third_party_settings: {  }
-  field_plp_group_category_desc:
-    weight: 4
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: text_textfield
-    region: content
   field_target_link:
     type: link_default
     weight: 23
@@ -670,7 +680,7 @@ content:
     region: content
   path:
     type: path
-    weight: 7
+    weight: 8
     settings: {  }
     third_party_settings: {  }
     region: content

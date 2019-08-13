@@ -24,10 +24,12 @@ function alshaya_acm_product_category_update_8033() {
     'field.storage.taxonomy_term.field_select_subcategories_plp',
     'field.storage.taxonomy_term.field_plp_group_category_img',
     'field.storage.taxonomy_term.field_plp_group_category_desc',
+    'field.storage.taxonomy_term.field_plp_group_category_title',
     'field.field.taxonomy_term.acq_product_category.field_group_by_sub_category',
     'field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_img',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc',
+    'field.field.taxonomy_term.acq_product_category.field_plp_group_category_title',
   ];
   $manager->updateConfigs(
     $configs,

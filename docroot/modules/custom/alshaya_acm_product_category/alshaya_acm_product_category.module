@@ -339,8 +339,13 @@ function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $def
   }
   if ($term instanceof TermInterface) {
     $child_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term->id());
+    $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
     foreach ($child_terms as $child) {
-      $term_sub_categories[$child->id()] = $child->label();
+      // Get current language translation if available.
+      if ($child->hasTranslation($current_language)) {
+        $child = $child->getTranslation($current_language);
+      }
+      $term_sub_categories[$child->id()] = $child->label('en');
     }
   }
   return $term_sub_categories;
@@ -357,10 +362,10 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
 
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
       $result_row = [];
+      // Get all selected subcategories to be displayed on PLP.
+      $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
       foreach ($view->result as $row) {
         $product_categories = $row->_object->getValue()->get('field_category')->getValue();
-        // Get all selected subcategories to be displayed on PLP.
-        $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
           foreach ($product_categories as $product_category) {
             if ($product_category_tree->checkIfSubCategory($product_category['target_id'], $selected_subcategory['value'])) {
@@ -371,18 +376,32 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
         }
       }
 
-      // Sort the results so that the block categories are in same order.
-      ksort($result_row);
+      // Sort based on weight of taxonomy terms.
+      $child_terms = array_flip(array_keys(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term->id())));
+
+      try {
+        uksort($result_row, function ($a, $b) use ($child_terms) {
+          return $child_terms[$a] - $child_terms[$b] ?: $a - $b;
+        });
+      }
+      catch (Exception $e) {
+        // Do nothing.
+      }
 
       // Empty view results to add new values.
       $view->result = [];
+      $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
       foreach ($result_row as $tid => $grouped_row) {
         $category_term = $taxonomy_storage->load($tid);
+        // Get current language translation if available.
+        if ($category_term->hasTranslation($current_language)) {
+          $category_term = $category_term->getTranslation($current_language);
+        }
 
         if ($category_term instanceof TermInterface) {
           $category_row['group_details'] = [
             'tid' => $tid,
-            'label' => $category_term->label(),
+            'label' => $category_term->get('field_plp_group_category_title')->value ?? $category_term->label(),
             'desc' => $category_term->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '',
           ];
           if ($category_term->get('field_plp_group_category_img')->first()) {

@@ -10,7 +10,7 @@ id: taxonomy_term.acq_product_category.field_plp_group_category_img
 field_name: field_plp_group_category_img
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'PLP group by category image'
+label: 'Image on grouping page'
 description: 'Upload the image that should be displayed when this sub-category is displayed on a PLP grouped by sub-categories.'
 required: false
 translatable: true
