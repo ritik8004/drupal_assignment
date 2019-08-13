@@ -85,6 +85,10 @@
       @include breakpoint($only-mobile) {
         margin-bottom: 0;
       }
+
+      html[lang=ar] & {
+        padding-#{$right}: 1rem;
+      }
     }
   }
 
