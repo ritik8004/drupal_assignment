@@ -2,17 +2,25 @@
 
 namespace Drupal\alshaya_hm_images;
 
-use Detection\MobileDetect;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
+use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
+use GuzzleHttp\Client;
 
 /**
  * SkuAssetManager Class.
@@ -68,11 +76,81 @@ class SkuAssetManager {
   protected $termStorage;
 
   /**
+   * File Storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
    * Module Handler service object.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
+
+  /**
+   * Product Cache Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
+   */
+  protected $productCacheManager;
+
+  /**
+   * PIMS ID <=> FID cache.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cachePimsFiles;
+
+  /**
+   * GuzzleHttp\Client definition.
+   *
+   * @var GuzzleHttp\Client
+   */
+  protected $httpClient;
+
+  /**
+   * Config alshaya_hm_images.settings.
+   *
+   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
+   */
+  protected $hmImageSettings;
+
+  /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
+   * Date Time Service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  private $time;
+
+  /**
+   * File Usage.
+   *
+   * @var \Drupal\file\FileUsage\FileUsageInterface
+   */
+  private $fileUsage;
+
+  /**
+   * Lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  private $lock;
+
+  /**
+   * Cache for media_file_mapping.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  private $cacheMediaFileMapping;
 
   /**
    * SkuAssetManager constructor.
@@ -89,19 +167,347 @@ class SkuAssetManager {
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
+   *   Product Cache Manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_pims_files
+   *   PIMS ID <=> Drupal File URI cache.
+   * @param \GuzzleHttp\Client $http_client
+   *   HTTP Client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Channel Factory.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   Date Time service.
+   * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
+   *   File Usage.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Lock service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_media_file_mapping
+   *   Cache for media_file_mapping.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
                               SKUPluginManager $skuPluginManager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ModuleHandlerInterface $moduleHandler) {
+                              ModuleHandlerInterface $moduleHandler,
+                              ProductCacheManager $product_cache_manager,
+                              CacheBackendInterface $cache_pims_files,
+                              Client $http_client,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              TimeInterface $time,
+                              FileUsageInterface $file_usage,
+                              LockBackendInterface $lock,
+                              CacheBackendInterface $cache_media_file_mapping) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
     $this->skuPluginManager = $skuPluginManager;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->moduleHandler = $moduleHandler;
+    $this->productCacheManager = $product_cache_manager;
+    $this->cachePimsFiles = $cache_pims_files;
+    $this->httpClient = $http_client;
+    $this->logger = $logger_factory->get('SkuAssetManager');
+    $this->time = $time;
+    $this->fileUsage = $file_usage;
+    $this->lock = $lock;
+    $this->cacheMediaFileMapping = $cache_media_file_mapping;
+
+    $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
+  }
+
+  /**
+   * Get assets for SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Get assets for SKU.
+   *
+   * @throws \Exception
+   */
+  public function getAssets(SKU $sku) {
+    $assets = unserialize($sku->get('attr_assets')->getString());
+
+    if (!is_array($assets) || empty($assets)) {
+      return [];
+    }
+
+    $save = FALSE;
+
+    foreach ($assets as $index => &$asset) {
+      // Sanity check, we always need asset id.
+      if (empty($asset['Data']['AssetId'])) {
+        unset($assets[$index]);
+        continue;
+      }
+
+      // Check if we already have fid and drupal_uri in asset data.
+      if (!empty($asset['fid']) && !empty($asset['drupal_uri'])) {
+        $file = $this->fileStorage->load($asset['fid']);
+
+        // Verify file entity exists. We might remove this check in future.
+        if ($file instanceof FileInterface) {
+          continue;
+        }
+
+        $this->logger->warning('Fid @fid available in asset for sku @sku but not available in system. Trying to download again.', [
+          '@fid' => $asset['fid'],
+          '@sku' => $sku->getSku(),
+        ]);
+
+        unset($asset['fid']);
+      }
+
+      // Use pims/asset id for lock key.
+      try {
+        $file = $this->downloadImage($asset, $sku->getSku());
+      }
+      catch (\Exception $e) {
+        watchdog_exception('SkuAssetManager', $e);
+      }
+
+      if ($file instanceof FileInterface) {
+        $this->fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+
+        $asset['drupal_uri'] = $file->getFileUri();
+        $asset['fid'] = $file->id();
+        $save = TRUE;
+      }
+
+      if (empty($asset['fid'])) {
+        unset($assets[$index]);
+      }
+    }
+
+    if ($save) {
+      $sku->get('attr_assets')->setValue(serialize($assets));
+      $sku->save();
+
+      $this->logger->notice('Downloaded new asset images for sku @sku.', [
+        '@sku' => $sku->getSku(),
+      ]);
+    }
+
+    return $assets;
+  }
+
+  /**
+   * Download image for PIMS Data and store in Drupal.
+   *
+   * @param array $data
+   *   PIMS Data.
+   * @param string $sku
+   *   SKU of asset.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File entity if image download successful.
+   */
+  private function downloadPimsImage(array $data, string $sku) {
+    $base_url = $this->hmImageSettings->get('pims_base_url');
+    $pims_directory = $this->hmImageSettings->get('pims_directory');
+
+    $url = implode('/', [
+      trim($base_url, '/'),
+      trim($pims_directory, '/'),
+      trim($data['path'], '/'),
+      trim($data['filename'], '/'),
+    ]);
+
+    // Download the file contents.
+    try {
+      $file_data = $this->httpClient->get($url)->getBody();
+
+      if (empty($file_data)) {
+        throw new \Exception('Failed to download asset file: ' . $url);
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
+        '@sku' => $sku,
+        '@url' => $url,
+        '@message' => $e->getMessage(),
+      ]);
+
+      // Not able to download image, no further processing required.
+      return NULL;
+    }
+
+    // Prepare the directory path.
+    $directory = 'public://assets/' . $sku . '/' . trim($data['path'], '/');
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
+    try {
+      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $file ?? [];
+  }
+
+  /**
+   * Download image from Liquid Pixel to Drupal.
+   *
+   * @param array $asset
+   *   Asset data.
+   * @param string $sku
+   *   SKU of asset.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File entity download successful.
+   */
+  private function downloadLiquidPixelImage(array $asset, string $sku) {
+    $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
+    $cache = $this->cachePimsFiles->get($skipped_key);
+    if (isset($cache, $cache->data)) {
+      return NULL;
+    }
+
+    $url = $this->getSkuAssetUrlLiquidPixel($asset);
+
+    // Download the file contents.
+    try {
+      $file_data = $this->httpClient->get($url)->getBody();
+
+      if (empty($file_data)) {
+        throw new \Exception('Failed to download asset file');
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to download asset file for sku @sku from @url, error: @message', [
+        '@sku' => $sku,
+        '@url' => $url,
+        '@message' => $e->getMessage(),
+      ]);
+
+      // Not able to download image, no further processing required.
+      return NULL;
+    }
+
+    $file_data = (string) $file_data;
+    if (strlen($file_data) <= Settings::get('hm_grey_image_size', 24211)) {
+      $this->logger->error('Skipping grey image. File: @file, Size: @size, Asset id: @id', [
+        '@file' => $url,
+        '@size' => strlen($file_data),
+        '@id' => $asset['Data']['AssetId'],
+      ]);
+
+      // Cache it for a day so we can check for it again after one day.
+      $this->cachePimsFiles->set($skipped_key, $this->time->getCurrentTime() + 86400);
+
+      return NULL;
+    }
+
+    // Prepare the directory path.
+    $directory = 'public://assets-lp/' . $sku . '/' . trim(dirname($asset['Data']['FilePath']), '/');
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
+    try {
+      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file: ' . $url);
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Failed to save asset file for sku @sku at @uri, error: @message', [
+        '@sku' => $sku,
+        '@uri' => $target,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $file ?? NULL;
+  }
+
+  /**
+   * Download Drupal file for Asset.
+   *
+   * @param array $asset
+   *   Asset data.
+   * @param string $sku
+   *   SKU of asset.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File from asset if available.
+   *
+   * @throws \Exception
+   */
+  private function downloadImage(array $asset, string $sku) {
+    $lock_key = '';
+
+    // Allow disabling this through settings.
+    if (Settings::get('media_avoid_parallel_downloads', 1)) {
+
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $lock_key = 'download_image_' . $id;
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+
+          // Check once if downloaded by another process.
+          $cache = $this->cacheMediaFileMapping->get($lock_key);
+          if ($cache && $cache->data) {
+            $file = $this->fileStorage->load($cache->data);
+            if ($file instanceof FileInterface) {
+              return $file;
+            }
+
+            throw new \Exception(sprintf('File id %s mapped for %s in cache invalid, not retrying', $cache->data, $id));
+          }
+        }
+      } while (!$lock_acquired);
+    }
+
+    $file = NULL;
+    if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
+      $file = $this->downloadPimsImage($asset['pims_image'], $sku);
+    }
+    elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
+      $file = $this->downloadLiquidPixelImage($asset, $sku);
+    }
+
+    if ($file instanceof FileInterface) {
+      if ($lock_key) {
+        // Add file id in cache for other processes to be able to use.
+        $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
+      }
+
+      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
+        '@fid' => $file->id(),
+        '@uri' => $file->getFileUri(),
+        '@id' => $id,
+      ]);
+    }
+
+    if ($lock_key) {
+      $this->lock->release($lock_key);
+    }
+
+    return $file;
   }
 
   /**
@@ -111,19 +517,13 @@ class SkuAssetManager {
    *   SKU text or full entity object.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
-   * @param array $location_images
-   *   Location on page e.g., main image, thumbnails etc.
-   * @param string $style
-   *   Style string.
-   * @param bool $first_image_only
-   *   Return only the first image.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE, array $avoid_assets = []) {
+  public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $sku = $skuEntity->getSku();
 
@@ -141,60 +541,34 @@ class SkuAssetManager {
       return [];
     }
 
-    $asset_variant_urls = [];
-    $asset_urls = [];
-    $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
+    $media = $this->getAssets($skuEntity);
 
-    foreach ($location_images as $location_image) {
-      $asset_urls = [];
-      foreach ($assets as $asset) {
-        if (!empty($avoid_assets) && isset($asset['Data']['AssetId']) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
-          continue;
-        }
+    $return = [];
 
-        list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
-
-        $query_options = $this->getAssetQueryString($set, $image_location_identifier);
-
-        $asset_url = [
-          'url' => Url::fromUri($base_url, ['query' => $query_options]),
-          'sortAssetType' => $asset['sortAssetType'],
-          'sortFacingType' => $asset['sortFacingType'],
-          'Data' => $asset['Data'] ?? [],
-        ];
-
-        // Prepare raw url without res and call.
-        unset($set['res']);
-        $raw_query_options = $this->getAssetQueryString($set, $image_location_identifier);
-        unset($raw_query_options['call']);
-        $asset_url['raw_url'] = Url::fromUri($base_url, ['query' => $raw_query_options]);
-
-        $asset_urls[] = $asset_url;
-
-        if ($first_image_only) {
-          return $asset_urls;
-        }
-
-        // Return specific image in case a match has been found for the swatch
-        // type.
-        if (($style) && ($asset['sortAssetType'] === $style)) {
-          $swatch_asset_url[] = $asset_urls[count($asset_urls) - 1];
-          return $swatch_asset_url;
-        }
-
-      }
-      if (!empty($asset_urls)) {
-        $asset_variant_urls[$location_image] = $asset_urls;
+    foreach ($assets as $asset) {
+      $asset_id = $asset['Data']['AssetId'];
+      if (isset($media[$asset_id]) && !in_array($asset_id, $avoid_assets)) {
+        $return[] = $media[$asset_id];
       }
     }
 
-    // If there is only a single location_image, we don't want the results to
-    // be grouped.
-    if (count($location_images) === 1) {
-      return $asset_urls;
-    }
+    return $return;
+  }
 
-    return $asset_variant_urls;
+  /**
+   * Utility function to construct CDN url for the asset.
+   *
+   * @param array $asset
+   *   Asset data.
+   *
+   * @return string
+   *   Asset url.
+   */
+  private function getSkuAssetUrlLiquidPixel(array $asset) {
+    $base_url = $this->hmImageSettings->get('base_url');
+    list($set, $image_location_identifier) = $this->getAssetAttributes($asset, 'pdp_fullscreen');
+    $query_options = $this->getAssetQueryString($set, $image_location_identifier);
+    return Url::fromUri($base_url, ['query' => $query_options])->toString();
   }
 
   /**
@@ -232,21 +606,15 @@ class SkuAssetManager {
   /**
    * Helper function to fetch asset attributes.
    *
-   * @param string $sku
-   *   SKU code for Product we fetching the assets for.
    * @param array $asset
    *   Asset array with all metadata.
-   * @param string $page_type
-   *   Page type on which this asset needs to be rendered.
    * @param string $location_image
    *   Location on page e.g., main image, thumbnails etc.
-   * @param string $style
-   *   CSS style.
    *
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes($sku, array $asset, $page_type, $location_image, $style = '') {
+  public function getAssetAttributes(array $asset, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -262,31 +630,6 @@ class SkuAssetManager {
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
       $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
-      $detect = new MobileDetect();
-      if ($detect->isMobile()) {
-        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] . "]";
-      }
-
-      // Check for overrides for style identifiers & dimensions.
-      $config_overrides = $this->overrideConfig($sku, $page_type);
-
-      // If overrides are available, update style id, width & height in the url.
-      if (!empty($config_overrides)) {
-        if (isset($config_overrides['style_identifiers'][$location_image])) {
-          $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
-        }
-
-        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['desktop'])) {
-          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] . "]";
-        }
-
-        $detect = new MobileDetect();
-        if ($detect->isMobile()) {
-          if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['mobile'])) {
-            $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['mobile'] . "]";
-          }
-        }
-      }
     }
 
     return [$set, $image_location_identifier];
@@ -495,30 +838,18 @@ class SkuAssetManager {
    *   Parent sku for which we pulling child assets.
    * @param string $context
    *   Page on which the asset needs to be rendered.
-   * @param array $locations
-   *   Location on page e.g., main image, thumbnails etc.
-   * @param bool $first_only
-   *   Flag to indicate we need the assets of the first child only.
-   * @param bool $first_image_only
-   *   Return only the first image.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, array $avoid_assets = []) {
-    $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
+  public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
+    $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
+
     $assets = [];
-
-    if (($first_only) && (!empty($child_skus))) {
-      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only, $avoid_assets);
-    }
-
-    if (!empty($child_skus)) {
-      foreach ($child_skus as $child_sku) {
-        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only, $avoid_assets);
-      }
+    foreach ($child_skus ?? [] as $child_sku) {
+      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $avoid_assets);
     }
 
     return $assets;
@@ -567,7 +898,7 @@ class SkuAssetManager {
       return [];
     }
 
-    if ($cache = $this->skuManager->getProductCachedData($sku, 'hm_colors_for_sku')) {
+    if ($cache = $this->productCacheManager->get($sku, 'hm_colors_for_sku')) {
       return $cache;
     }
 
@@ -599,7 +930,7 @@ class SkuAssetManager {
       }
     }
 
-    $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
+    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
 
     return $article_castor_ids;
   }
@@ -611,21 +942,17 @@ class SkuAssetManager {
    *   Parent Sku.
    * @param string $page_type
    *   Type of page.
-   * @param array $image_types
-   *   Type of image.
-   * @param bool $first_image_only
-   *   Return only the first image.
    *
    * @return array|images
    *   Array of images for the SKU.
    */
-  public function getImagesForSku(SKU $sku, $page_type, array $image_types, $first_image_only = TRUE) {
+  public function getImagesForSku(SKU $sku, $page_type) {
     $images = [];
     if ($sku->bundle() == 'simple') {
-      $images = $this->getSkuAssets($sku, $page_type, $image_types, '', $first_image_only);
+      $images = $this->getSkuAssets($sku, $page_type);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $images = $this->getChildSkuAssets($sku, $page_type, $image_types, TRUE, $first_image_only);
+      $images = $this->getChildSkuAssets($sku, $page_type);
     }
     return $images;
   }

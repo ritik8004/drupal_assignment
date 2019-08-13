@@ -202,6 +202,20 @@
           }
         }
       }
+
+      #edit-guest-delivery-home {
+        #selected-address-wrapper {
+          .address--controls {
+            #change-address {
+              overflow: inherit;
+
+              &::after {
+                width: inherit;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -231,7 +245,9 @@
 }
 
 #payment_details_wrapper {
-  padding: 0 1rem;
+  @include breakpoint($tablet) {
+    padding: 0 1rem;
+  }
 
   #payment_method_knet {
     border-top: 1px solid $checkout_payment_option_border;
@@ -249,6 +265,12 @@
       &.plugin-selected {
         .method-title {
           font-weight: normal;
+        }
+      }
+
+      .method-title {
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
         }
       }
     }
@@ -276,3 +298,20 @@
   text-transform: capitalize;
   letter-spacing: normal;
 }
+
+@include breakpoint($only-mobile) {
+  #payment_details_wrapper {
+    #payment_method_title_cybersource {
+      html[lang=ar] & {
+        padding: 1.5rem 0.5rem 2rem;
+      }
+    }
+
+    .card-types-wrapper {
+      html[lang=ar] & {
+        top: 2.75rem;
+      }
+    }
+  }
+}
+

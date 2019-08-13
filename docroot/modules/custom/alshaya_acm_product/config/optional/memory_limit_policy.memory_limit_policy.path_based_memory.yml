@@ -7,4 +7,4 @@ langcode: en
 policy_constraints:
   -
     id: path
-    paths: /skus/list
+    paths: '*skus/list'

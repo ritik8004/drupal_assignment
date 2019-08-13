@@ -72,7 +72,7 @@ class CartHelper {
       return [];
     }
 
-    return $this->getAddressArray($cart->getShipping());
+    return $cart->getAddressArray($cart->getShipping());
   }
 
   /**
@@ -89,7 +89,7 @@ class CartHelper {
       return [];
     }
 
-    return $this->getAddressArray($cart->getBilling());
+    return $cart->getAddressArray($cart->getBilling());
   }
 
   /**
@@ -130,11 +130,11 @@ class CartHelper {
    *   Cleaned cart data as JSON string.
    */
   public function getCleanCartToLog($cart) {
-    $cartData = $cart instanceof Cart ? $cart->getCart() : $cart;
-
-    if (is_object($cartData)) {
-      $cartData = (array) $cartData;
+    if ($cart instanceof Cart) {
+      return $cart->getDataToLog();
     }
+
+    $cartData = is_object($cart) ? (array) $cart : $cart;
 
     $shipping = $this->getAddressArray($cartData['shipping']);
 

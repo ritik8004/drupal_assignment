@@ -71,7 +71,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       return $pane_form;
     }
 
-    // Check if user is changing his mind, if so clear shipping info.
+    // Check if user is changing their mind, if so clear shipping info.
     if ($this->isUserChangingHisMind()) {
       $this->clearShippingInfo();
     }
@@ -139,7 +139,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['store_finder'] = [
       '#type' => 'container',
-      '#title' => t('store finder'),
+      '#title' => $this->t('store finder'),
       '#tree' => FALSE,
       '#id' => 'store-finder-wrapper',
       '#attributes' => ($store_code) ? ['style' => 'display:none;'] : [],
@@ -168,7 +168,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#type' => 'search',
       '#title' => $this->t('find your closest collection point'),
       '#prefix' => '<div class="label-store-location">' . $this->t('find your closest collection point') . '</div>',
-      '#placeholder' => t('Enter a location'),
+      '#placeholder' => $this->t('Enter a location'),
       '#attributes' => [
         'class' => ['store-location-input'],
       ],
@@ -203,7 +203,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['selected_store'] = [
       '#type' => 'container',
-      '#title' => t('selected store'),
+      '#title' => $this->t('selected store'),
       '#tree' => FALSE,
       '#id' => 'selected-store-wrapper',
       '#attributes' => ($store_code) ? [] : ['style' => 'display:none;'],
@@ -228,7 +228,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['elements']['cc_firstname'] = [
       '#type' => 'textfield',
-      '#title' => t('First Name'),
+      '#title' => $this->t('First Name'),
       '#required' => TRUE,
       '#maxlength' => 50,
       '#default_value' => $default_firstname,
@@ -237,7 +237,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['elements']['cc_lastname'] = [
       '#type' => 'textfield',
-      '#title' => t('Last Name'),
+      '#title' => $this->t('Last Name'),
       '#required' => TRUE,
       '#maxlength' => 50,
       '#default_value' => $default_lastname,
@@ -245,7 +245,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['selected_store']['elements']['cc_email'] = [
       '#type' => 'email',
-      '#title' => t('Email'),
+      '#title' => $this->t('Email'),
       '#required' => TRUE,
       '#default_value' => $default_email,
     ];
@@ -256,7 +256,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
-      '#title' => t('Mobile Number'),
+      '#title' => $this->t('Mobile Number'),
       '#verify' => 0,
       '#tfa' => 0,
       '#required' => TRUE,

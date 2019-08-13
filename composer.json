@@ -9,7 +9,7 @@
         "acquia/acsf-tools": "dev-9.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
-        "acquia/lightning": "^3.0.0",
+        "acquia/lightning": "^4.0.0",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
         "claviska/jquery-minicolors": "^2.2",
@@ -22,7 +22,7 @@
         "drupal/amp": "^1.0",
         "drupal/amptheme": "^1.0",
         "drupal/autologout": "^1.0",
-        "drupal/back_to_top": "^1.0@beta",
+        "drupal/back_to_top": "1.x-dev",
         "drupal/better_exposed_filters": "3.x-dev",
         "drupal/block_content_machine_name": "^1.5",
         "drupal/block_field": "^1.0@alpha",
@@ -32,16 +32,19 @@
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
         "drupal/datalayer": "^1.0@beta",
+        "drupal/date_popup": "^1.0",
         "drupal/default_content": "^1.0@alpha",
         "drupal/email_registration": "^1.0",
+        "drupal/endroid_qr_code": "^1.1",
+        "drupal/external_hreflang": "1.x-dev",
         "drupal/facets": "1.0-alpha11",
         "drupal/field_group": "^3.0@beta",
         "drupal/form_options_attributes": "^1.0",
         "drupal/geolocation": "^1.10",
         "drupal/google_tag": "1.x-dev",
+        "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^2.3",
         "drupal/jquery_minicolors": "^1.2",
-        "drupal/jsonapi": "^1.25",
         "drupal/kashmir": "^1.1",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
@@ -70,15 +73,20 @@
         "drupal/restui": "^1.13",
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
-        "drupal/scheduled_updates": "^1.0@alpha",
+        "drupal/search_api_algolia": "1.x-dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
         "drupal/search_api_spellcheck": "dev-8.x-1.x",
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
-        "drupal/simple_sitemap": "2.x-dev",
-        "drupal/social_auth_facebook": "^1.0",
+        "drupal/simple_sitemap": "^3.2",
+        "drupal/sms": "^1.1",
+        "drupal/social_api": "2.x-dev",
+        "drupal/social_auth": "^2.0",
+        "drupal/social_auth_facebook": "^2.0",
+        "drupal/social_auth_google": "^2.0",
+        "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
@@ -91,13 +99,14 @@
         "drupal/webform": "^5.0.0-rc1",
         "drupal/webform_rest": "^2.0",
         "drush/drush": "^9.0.0",
+        "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
-        "drupal/devel": "^1.0.0-alpha1",
+        "drupal/devel": "^2.0.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
@@ -189,7 +198,7 @@
         "enable-patching": true,
         "patches": {
             "acquia/blt": {
-              "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
+                "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
             },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
@@ -221,7 +230,8 @@
                 "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
                 "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
                 "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
-                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch"
+                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch",
+                "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -229,16 +239,22 @@
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2018-03-14/views-render_caching_ajax_requests-2500313-44-85x.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
-                "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch",
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
-                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch"
+                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
+                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2019-06-18/views-render_caching_ajax_requests-2500313-49-87x.patch",
+                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-18/add_a_new_setting_allow_insecure_derivates-3059836-12.patch",
+                "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
+                "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
+                "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch",
+                "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -249,7 +265,7 @@
                 "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             },
             "drupal/simple_sitemap": {
-                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109.patch"
+                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014.patch"
             },
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
@@ -265,7 +281,7 @@
                 "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
             },
             "drupal/recaptcha": {
-                "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
+                "modal support": "https://www.drupal.org/files/issues/2019-04-17/recaptcha-ajax-2493183-172.patch"
             },
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
@@ -277,14 +293,15 @@
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
             },
             "drupal/clientside_validation": {
-                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
+                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2019-05-08/cv-validate-ajax-2952233-12.patch"
             },
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
                 "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
             },
             "drupal/user_registrationpassword": {
-                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
+                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch",
+                "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/seckit": {
                 "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
@@ -304,14 +321,32 @@
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
-            "drupal/simple_oauth": {
-                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
-            },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
+            "drupal/r4032login": {
+                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2019-03-13/2941064-20.patch"
+            },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
+            },
+            "drupal/social_auth": {
+                "Dispatch events for handling authentication errors in provider.": "https://git.drupalcode.org/project/social_auth/commit/27930c3.patch"
+            },
+            "drupal/social_auth_facebook": {
+                "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
+            },
+            "drupal/social_auth_google": {
+                "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
+            },
+            "sensiolabs-de/deprecation-detector": {
+                "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
+            },
+            "drupal/search_api_algolia": {
+                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
+            },
+            "drupal/acquia_purge": {
+                "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
             }
         },
         "installer-paths": {
@@ -371,14 +406,17 @@
         "post-drupal-scaffold-cmd": [
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
             "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
             "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
             "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
             "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
+            "cd docroot && rm robots.txt",
+            "cd docroot && patch -p1 <../patches/development-services-twig.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
@@ -394,6 +432,7 @@
         "platform": {
             "php": "7.2"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "discard-changes": true
     }
 }

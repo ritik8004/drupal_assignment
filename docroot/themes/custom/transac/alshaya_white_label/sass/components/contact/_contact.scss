@@ -109,13 +109,7 @@
   .form-item.form-type-textfield,
   .form-item.form-type-textarea {
     label:last-of-type {
-      font-size: 1rem;
-      color: $formitem_label;
-      position: absolute;
-      #{$left}: 0;
-      top: -0.125rem;
-      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-      pointer-events: none;
+      @include placeholder-label;
     }
 
     input[type="text"]:focus ~ label:last-of-type,

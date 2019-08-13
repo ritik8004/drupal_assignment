@@ -16,5 +16,7 @@ services:
       - '@alshaya_addressbook.manager'
       - '@alshaya_acm_product.skumanager'
       - '@module_handler'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@entity.repository'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]

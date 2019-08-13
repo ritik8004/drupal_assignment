@@ -1,0 +1,6 @@
+allowed_insecure_styles:
+    - 'cart_thumbnail'
+    - 'product_listing'
+    - 'product_zoom_medium_606x504'
+    - 'product_zoom_large_800x800'
+    - 'pdp_gallery_thumbnail'

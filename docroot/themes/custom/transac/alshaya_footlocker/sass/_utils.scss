@@ -32,7 +32,7 @@
   height: 1.5625rem;
   display: inline-block;
   background-size: contain;
-  background-position: center;
+  background-position: $left center;
 
   @include breakpoint($only-mobile) {
     width: 1.875rem;
@@ -75,6 +75,12 @@
       @include pdp_icon_img_styles($height, $width);
     }
   }
+}
+
+@mixin ellipsis-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 $fl_theme_img_directory_path: '/themes/custom/transac/alshaya_footlocker/imgs';

@@ -5,11 +5,7 @@
   }
 
   .block-page-title-block {
-    @include u-visibility(none);
-
     @include breakpoint($only-mobile) {
-      @include u-visibility(block);
-
       padding: 0 0.5rem 0.25rem;
 
       h1 {

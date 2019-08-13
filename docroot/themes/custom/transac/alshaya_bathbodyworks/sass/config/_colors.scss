@@ -116,9 +116,6 @@ $gallery_zoombtn_disabled: $gallary-icon-bg;
 $oos_btn_bg: $error-red;
 $oos_pdp_text: $white;
 
-// VAT text
-$vat: $warm-grey-one;
-
 // Autocomplete
 $autocomplete_border: $warm-grey-two;
 $autocomplete_border_last: $warm-grey-two;
@@ -310,6 +307,14 @@ $plp_item_label: $black;
 $plp_promotion_description: $warm-grey-one;
 $plp_promotion_link: $error-red;
 $plp_facet_filter_count_background: $peacock-blue;
+$plp_grid_active_color: $peacock-blue;
+$plp_all_filter_title: $peacock-blue;
+$plp_clear_all_btn_text: $peacock-blue;
+$plp_clear_all_btn_disabled: $warm-grey-two;
+$plp_clear_all_btn_disabled: $warm-grey-two;
+$plp_all_filter_button_color: $black;
+$plp_filter_icon: $black;
+$plp_filter_active_tick: $peacock-blue;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
@@ -364,6 +369,7 @@ $user_form_layout_divider_color: $warm-grey-one;
 $user_block_link: $peacock-blue;
 $user_sidebar_block_title: $peacock-blue;
 $default_msg_bg: $success-green;
+$user_login_section_title: $black;
 
 // Contact Page
 $webform_contact_legend: $black;
@@ -420,6 +426,7 @@ $checkout_cc_cnc_form_title_border: $warm-grey-one;
 $checkout_cc_list_hours_label: $black;
 $checkout_cc_list_hours_label_icon: $peacock-blue;
 $checkout_cc_list_delivery_time: $warm-grey-one;
+$checkout_cc_list_delivery_time_tablet: $warm-grey-one;
 $checkout_cc_store_address: $warm-grey-one;
 $checkout_cc_list_select_store_btn_txt: $peacock-blue;
 $checkout_cc_list_select_store_btn_border: $peacock-blue;
@@ -430,6 +437,7 @@ $checkout_cc_store_location_input_label_mobile_color: $black;
 $checkout_cc_selected_store_content_bg: $white;
 $checkout_cc_individual_store_hours_label_border: $warm-grey-two;
 $checkout_cc_map_hours_icon: $peacock-blue;
+$checkout_cc_search_icon: $peacock-blue;
 
 // Tables.
 $primary_th_bg: $warm-grey-three;
@@ -472,7 +480,8 @@ $privilege_earn_icon: $peacock-blue;
 $user_order_help_bg: $info-blue;
 $user_order_help_text : $white;
 $user_order_help_text_links: $user_order_help_text;
-$password_tooltip_list: $error-red;
+$password_tooltip_list: $peacock-blue;
+$_password_tooltip_list_error: $error-red;
 
 // Checkout order summary block.
 $checkout_order_summary_title_border: $warm-grey-two;
@@ -542,3 +551,16 @@ $modal_zoom_bg: rgba(242, 242, 242, 0.3);
 
 // Pace progress color
 $progress_loader: $peacock-blue;
+
+// PLP LHN block.
+$lhn_l2: $black;
+$lhn_l3: $warm-grey-one;
+$lhn_l4: $warm-grey-one;
+$l3-link-hover: $peacock-blue;
+
+// Option list filter.
+$option-list-search-icon-color: $peacock-blue;
+
+// Option list menu.
+$option-list-menu-link: $hot-pink;
+$options-page-menu-title: $peacock-blue;

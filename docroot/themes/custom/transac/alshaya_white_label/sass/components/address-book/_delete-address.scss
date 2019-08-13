@@ -11,12 +11,13 @@
     width: 70%;
   }
 
-  .profile-address-book-delete-form {
+  .profile-address-book-delete-form,
+  .payment-card-delete-form {
     color: $black;
     font-size: 0.875rem;
     min-height: 2rem;
 
-    a.dialog-cancel {
+    .dialog-cancel {
       width: auto !important;
       height: 2.5rem !important;
       display: inline-flex !important;
@@ -43,7 +44,8 @@
     }
 
     @include breakpoint($only-mobile) {
-      width: 100% !important;
+      width: calc(100% - 0.5rem) !important;
+      margin: 0 0.25rem;
     }
 
     .ui-dialog-buttonpane {
@@ -82,6 +84,10 @@
 
       @include breakpoint($only-mobile) {
         margin-bottom: 0;
+      }
+
+      html[lang=ar] & {
+        padding-#{$right}: 1rem;
       }
     }
   }

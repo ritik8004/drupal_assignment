@@ -11,6 +11,22 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Save translations for meta tags.
+ */
+function alshaya_bbw_transac_update_8007() {
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'Bath and body works',
+      'ar' => 'باث اند بودي ووركس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable WhatsApp and Email in Sharethis.
  */
 function alshaya_bbw_transac_update_8006() {
@@ -205,4 +221,13 @@ function alshaya_bbw_transac_install() {
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'Bath and body works',
+      'ar' => 'باث اند بودي ووركس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

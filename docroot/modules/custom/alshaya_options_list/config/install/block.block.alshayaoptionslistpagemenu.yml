@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_options_list
+  theme:
+    - alshaya_white_label
+id: alshayaoptionslistpagemenu
+theme: alshaya_white_label
+region: menu_secondary
+weight: 100
+provider: null
+plugin: alshaya_options_list_menu
+settings:
+  id: alshaya_options_list_menu
+  label: 'Alshaya options list page menu'
+  provider: alshaya_options_list
+  label_display: '0'
+  link_title: 'Shop by'
+visibility: {  }

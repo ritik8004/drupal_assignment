@@ -5,8 +5,8 @@
  * Constains hooks and alters for Alshaya Department page.
  */
 
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Cache\Cache;
@@ -15,6 +15,10 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Database;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_acq_sku_sync_categories_delete_alter().
@@ -25,7 +29,7 @@ function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$resu
       // Get all advanced department page.
       $all_dpt_page = alshaya_advanced_page_get_pages();
       // If department page node exists for the given term, don't delete it.
-      if (!empty($dpt_nid = $all_dpt_page[$tid])) {
+      if (isset($all_dpt_page[$tid]) && !empty($dpt_nid = $all_dpt_page[$tid])) {
         $dpt_node = Node::load($dpt_nid);
         if ($dpt_node instanceof Node) {
           unset($result[$tid]);
@@ -405,4 +409,40 @@ function alshaya_advanced_page_node_delete(EntityInterface $node) {
     Cache::invalidateTags(['term:' . $term->id()]);
     \Drupal::cache('data')->delete('advanced_page:terms:nodes');
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_advanced_page_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() != 'advanced_page') {
+    return;
+  }
+
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = _alshaya_advanced_page_get_department_node();
+  if (!($node instanceof NodeInterface) || $entity->id() != $node->id()) {
+    return;
+  }
+
+  $request = \Drupal::requestStack()->getCurrentRequest();
+  $term = $node->get('field_product_category')->entity;
+
+  if (!($term instanceof TermInterface)) {
+    // We couldn't load category term, lets not do any processing further.
+    return;
+  }
+
+  $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
+
+  if ($request->getPathInfo() == $term->url()) {
+    // We are already on term alias, no redirects required.
+    return;
+  }
+
+  // When trying to access advanced page (department page) directly via
+  // node alias we should redirect it to taxonomy term alias.
+  $response = new RedirectResponse($term->url(), 301);
+  $response->send();
+  exit;
 }

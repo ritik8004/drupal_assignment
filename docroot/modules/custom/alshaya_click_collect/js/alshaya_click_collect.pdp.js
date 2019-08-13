@@ -26,7 +26,26 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
-      if (typeof Drupal.geolocation.loadGoogle === 'function') {
+      $('#pdp-stores-container').once('bind-js').each(function () {
+        // Check if we have to show the block as disabled. Since accordion classes
+        // are added in JS, this is handled in JS.
+        if ($(this).data('state') === 'disabled') {
+          $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
+          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
+        }
+      });
+
+      $('#pdp-stores-container h3').once('bind-js').on('click', function () {
+        if (typeof Drupal.geolocation.loadGoogle !== 'function') {
+          return;
+        }
+
+        if ($(this).hasClass('location-js-initiated')) {
+          return;
+        }
+
+        $(this).addClass('location-js-initiated');
+
         $('.click-collect-form').once('autocomplete-init').each(function () {
           // First load the library from google.
           Drupal.geolocation.loadGoogle(function () {
@@ -34,27 +53,27 @@
             new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
           });
         });
-      }
 
-      $('#pdp-stores-container', context).once('initiate-stores').each(function () {
-        // Check if we have to show the block as disabled. Since accordion classes
-        // are added in JS, this is handled in JS.
-        if ($(this).data('state') === 'disabled') {
-          $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-          $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-        }
-        else {
-          // Get the permission track the user location.
-          Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+        // Location search google autocomplete fix.
+        $(window).on('scroll', function () {
+          $('.pac-container:visible').hide();
+        });
 
-          $('#pdp-stores-container').on('click', function () {
-            // Try again if we were not able to get location on page load.
-            if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
-              $('#pdp-stores-container').data('second-try', 'done');
-              Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
-            }
-          });
-        }
+        $('#pdp-stores-container').once('initiate-stores').each(function () {
+          // Check if we have access to click & collect.
+          if ($(this).data('state') !== 'disabled') {
+            // Get the permission track the user location.
+            Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+
+            $('#pdp-stores-container').on('click', function () {
+              // Try again if we were not able to get location on page load.
+              if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
+                $('#pdp-stores-container').data('second-try', 'done');
+                Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+              }
+            });
+          }
+        });
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
@@ -133,18 +152,15 @@
   };
 
   // Error callback.
-  Drupal.pdp.LocationError = function (error) {
+  Drupal.click_collect.LocationAccessError = function (drupalSettings) {
     geoPerm = false;
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
 
   // Success callback.
-  Drupal.pdp.LocationSuccess = function (position) {
-    asCoords = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
+  Drupal.click_collect.LocationAccessSuccess = function (coords) {
+    asCoords = coords;
     geoPerm = true;
     Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
   };

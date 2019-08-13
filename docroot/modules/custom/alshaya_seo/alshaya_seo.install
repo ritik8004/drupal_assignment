@@ -5,6 +5,44 @@
  * Contains install, update, uninstall hooks for alshaya_seo module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable sitemap generation on cron run.
+ */
+function alshaya_seo_update_8009() {
+  $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
+  $config_factory->set('cron_generate', FALSE);
+  $config_factory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Check the rebuild snippets checkbox for GTM.
+ */
+function alshaya_seo_update_8008() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['google_tag.settings'],
+    'google_tag',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable external_hreflang module.
+ */
+function alshaya_seo_update_8005() {
+  \Drupal::service('module_installer')->install(['external_hreflang']);
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -81,9 +119,9 @@ function alshaya_seo_install() {
   $config_factory->set('tags', $tags);
   $config_factory->save();
 
-  // Update sitemap config.
+  // Update simple_sitemap config.
   $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
-  $config_factory->set('cron_generate', TRUE);
+  $config_factory->set('cron_generate', FALSE);
   $config_factory->set('max_links', 20000);
   $config_factory->set('skip_untranslated', TRUE);
   $config_factory->save();

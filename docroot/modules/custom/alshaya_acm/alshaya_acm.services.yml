@@ -41,7 +41,14 @@ services:
 
   alshaya_acm.config_check:
     class: Drupal\alshaya_acm\AlshayaAcmConfigCheck
-    arguments: ['@config.factory', '@module_installer', '@module_handler', '@language_manager', '@datetime.time', '@state']
+    arguments:
+      - '@config.factory'
+      - '@module_installer'
+      - '@module_handler'
+      - '@language_manager'
+      - '@datetime.time'
+      - '@state'
+      - '@alshaya_custom.alshaya_country_manager'
 
   cache.alshaya_api:
     class: Drupal\Core\Cache\CacheBackendInterface
@@ -56,3 +63,16 @@ services:
       - '@http_client_factory'
       - '@config.factory'
       - '@logger.factory'
+
+  alshaya_acm.acq_commerce_agent_api:
+    decorates: acq_commerce.agent_api
+    decoration_priority: 9
+    public: false
+    class: Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper
+    arguments:
+      - '@acq_commerce.client_factory'
+      - '@config.factory'
+      - '@logger.factory'
+      - '@acq_commerce.i18n_helper'
+      - '@acq_commerce.api_helper'
+      - '@event_dispatcher'

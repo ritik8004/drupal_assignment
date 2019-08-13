@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -26,7 +27,7 @@ if ($settings['env'] === 'local') {
   // For Drush and other CLI commands increase the memory limit to 512 MB.
   // We do this only for local env, for cloud envs it is already done.
   // This is as suggested in https://support.acquia.com/hc/en-us/articles/360004542293-Conditionally-increasing-memory-limits
-  $memory_limit = PHP_SAPI === 'cli' ? '512M' : '128M';
+  $memory_limit = PHP_SAPI === 'cli' ? '576M' : '128M';
   ini_set('memory_limit', $memory_limit);
 
   global $host_site_code;
@@ -55,25 +56,62 @@ if ($settings['env'] === 'local') {
   $config['stage_file_proxy.settings']['origin_dir'] = 'files';
 }
 
-switch ($env) {
-  case 'local':
-    $settings['social_auth_facebook.settings']['app_id'] = '2140208022890023';
-    $settings['social_auth_facebook.settings']['app_secret'] = '7cde10657c1866f072c56283af920484';
-    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
-    break;
+// Social app keys for register/login.
+$social_config = [
+  'local' => [
+    'facebook' => [
+      'app_id' => '383866358862411',
+      'app_secret' => '0646a2901853b99062ff2d15127db379',
+    ],
+  ],
+  '01test' => [
+    'facebook' => [
+      'app_id' => '452346355260372',
+      'app_secret' => '466de9be713752a2f19eb566270013ab',
+    ],
+  ],
+  '01dev' => [
+    'facebook' => [
+      'app_id' => '2104286043129625',
+      'app_secret' => '8af1b7ca4f9d21fd02ff626ee8a2a004',
+    ],
+  ],
+  '01pprod' => [
+    'facebook' => [
+      'app_id' => '844066215928270',
+      'app_secret' => '107a72f9b68c6a62baaf917adb1fc9d6',
+    ],
+  ],
+  '01qa2' => [
+    'facebook' => [
+      'app_id' => '2376200055744873',
+      'app_secret' => '1dd9679fcc9ba1ba3bdacb87da115a14',
+    ],
+  ],
+  '01dev2' => [
+    'facebook' => [
+      'app_id' => '615516092244231',
+      'app_secret' => 'f0eaa4fd253010c23efb9cc3802ca5fd',
+    ],
+  ],
+  '01dev3' => [
+    'facebook' => [
+      'app_id' => '357400338223237',
+      'app_secret' => '66354c2dc14b3dbbd9024425148d52b9',
+    ],
+  ],
+  '01uat' => [
+    'facebook' => [
+      'app_id' => '307987113196828',
+      'app_secret' => '019eda6862dd77160f64a681113dfb0f',
+    ],
+  ],
+];
 
-  case '01live':
-    $social_auth_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/01live/social_auth.php';
-    if (file_exists($social_auth_settings_file)) {
-      include_once $social_auth_settings_file;
-    }
-    break;
-
-  default:
-    $settings['social_auth_facebook.settings']['app_id'] = '452346355260372';
-    $settings['social_auth_facebook.settings']['app_secret'] = '466de9be713752a2f19eb566270013ab';
-    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
-    break;
+if (!empty($social_config[$env])) {
+  foreach ($social_config[$env] as $provider => $provider_config) {
+    $settings["social_auth_{$provider}.settings"] = $provider_config;
+  }
 }
 
 // Configure your hash salt here.
@@ -161,6 +199,10 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 switch ($env) {
   case 'local':
   case 'travis':
+    // Requests from local are slow, we can to wait for some more time
+    // while loading linked skus.
+    $settings['linked_skus_timeout'] = 5;
+
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
@@ -190,4 +232,10 @@ switch ($env) {
     // We only debug on ACSF dev/test environments.
     $config['acq_commerce.conductor']['debug'] = TRUE;
     break;
+
+  case '01live':
+    // We want to timeout linked skus API call in 1 second on prod.
+    $settings['linked_skus_timeout'] = 1;
+    break;
+
 }

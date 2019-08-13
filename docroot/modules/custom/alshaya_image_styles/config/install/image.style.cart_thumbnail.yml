@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: cart_thumbnail
+label: 'Cart Thumbnail'
+effects:
+  c5de9a31-cad0-4b2a-88e0-83336c88d87c:
+    uuid: c5de9a31-cad0-4b2a-88e0-83336c88d87c
+    id: image_scale
+    weight: 2
+    data:
+      width: 185
+      height: null
+      upscale: false

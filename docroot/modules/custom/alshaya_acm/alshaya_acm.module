@@ -7,7 +7,6 @@
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -44,11 +43,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cart = $cart_storage->getCart(FALSE);
 
   if ($cart instanceof CartInterface) {
-    // If for any reason user comes back to basket from checkout pages, we clear
-    // API caches.
+    // If for any reason user comes back to basket from checkout pages,
+    // we clear API caches.
     $tags = [
-      'acq_cart_shipping_estimate:' . $cart->id(),
-      'acq_cart_payment_methods:' . $cart->id(),
+      'cart_extra:' . $cart->id(),
     ];
 
     Cache::invalidateTags($tags);
@@ -438,7 +436,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
           ];
 
           \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.array');
-          $form['totals'] = AlshayaArrayUtils::arrayInsert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
+          $form['totals'] = \Drupal::service('alshaya.alshaya_array_utils')->arrayInsert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
           break;
         }
       }
@@ -639,12 +637,11 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
-  \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
+  $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
 
   // Translate currency code in config.
+  $currency_code = \Drupal::service('alshaya_custom.alshaya_country_manager')->getCurrencyCode($country_code, 'ar');
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
-  $country_code = _alshaya_custom_get_site_level_country_code();
-  $currency_code = _alshaya_get_currency_code($country_code, 'ar');
   $config->set('currency_code', $currency_code);
   $config->set('currency_code_position', 'after');
   $config->save();
@@ -704,7 +701,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   else {
     // Get SKU attributes.
     $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
-    $sku_image = alshaya_acm_get_product_display_image($sku_entity, '291x288', 'cart');
+    $sku_image = alshaya_acm_get_product_display_image($sku_entity, 'cart_thumbnail', 'cart');
     $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
 
     // Set the cache.

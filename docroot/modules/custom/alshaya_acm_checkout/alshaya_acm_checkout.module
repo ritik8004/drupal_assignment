@@ -6,11 +6,13 @@
  */
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\alshaya_acm_checkout\Plugin\CheckoutPane\Analytics;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -225,17 +227,27 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     $cybersource_ar->setName('البطاقة الإئتمانية');
     $cybersource_ar->save();
 
+    $country_code = Settings::get('country_code');
     // K-Net.
     $knet = $checkout_options_manager->loadPaymentMethod('knet');
     $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
-    // Set K-Net to default during install.
-    $knet->get('field_payment_default')->setValue(1);
+    if ($country_code == 'KW') {
+      // Set K-Net to default during install.
+      $knet->get('field_payment_default')->setValue(1);
+    }
     $knet->save();
-
     $knet_ar = $knet->addTranslation('ar', []);
     $knet_ar->setName('بطاقة ائتمان k-net');
     $knet_ar->get('description')->setValue('يرجى المتابعة إلى صفحة الدفع عن طريق K-Net  بواسطة الضغط على رابط "سجل الطلبية" أدناه');
     $knet_ar->save();
+
+    // Checkout.com.
+    $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com');
+    // Set checkout.com to default during install.
+    if ($country_code !== 'KW') {
+      $checkout_com->get('field_payment_default')->setValue(1);
+    }
+    $checkout_com->save();
   }
 
   $acq_checkout_settings = \Drupal::config('alshaya_acm_checkout.settings');
@@ -394,6 +406,12 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
     $address = $address_book_manager->getMagentoAddressFromAddressArray($billing['address']['billing']);
     $helper->setBillingInfo(FALSE, $address);
   }
+
+  Analytics::addAnalyticsInfoToCart(
+    $cart,
+    $form_data['ga_client_id'],
+    $form_data['tracking_id']
+  );
 
 }
 

@@ -4,12 +4,10 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
-    js/back_to_top.js: {}
     js/form.js: {}
     js/custom_overrides.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
-    - core/modernizr
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion
@@ -22,10 +20,8 @@ ltr_styles:
   css:
     theme:
       css/ltr.css: {}
-      css/ltr-print.css: {media: print}
 
 rtl_styles:
   css:
     theme:
       css/rtl.css: {}
-      css/rtl-print.css: {media: print}

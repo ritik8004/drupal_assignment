@@ -9,6 +9,51 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
+/**
+ * Implements hook_update_N().
+ *
+ * Update config for showing images of specific color product in listing.
+ * This is done when filtered by color.
+ */
+function alshaya_vs_transac_update_8009() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.display_settings')
+    ->set('show_color_images_on_filter', 1)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Save translations for meta tags.
+ */
+function alshaya_vs_transac_update_8008() {
+  $strings = [
+    'seo_brand_name' => [
+      'en' => "Victoria's Secret",
+      'ar' => 'فيكتوريا سيكريت',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update sort orders for size facet to match order in Magento.
+ */
+function alshaya_vs_transac_update_8007() {
+  $size_facets = [
+    'facets.facet.size',
+    'facets.facet.plp_size',
+    'facets.facet.promo_size',
+  ];
+
+  foreach ($size_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
@@ -169,6 +214,10 @@ function alshaya_vs_transac_install() {
     ],
     'I would like to receive exclusive deals from Victoria\'s Secret' => [
       'ar' => 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت',
+    ],
+    'seo_brand_name' => [
+      'en' => "Victoria's Secret",
+      'ar' => 'فيكتوريا سيكريت',
     ],
   ];
   alshaya_i18n_save_translations($strings);

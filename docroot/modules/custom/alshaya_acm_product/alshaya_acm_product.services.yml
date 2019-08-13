@@ -12,10 +12,20 @@ services:
       - '@path.validator'
       - '@title_resolver'
       - '@request_stack'
+      - '@alshaya_acm_product.category_helper'
   alshaya_acm_product.helper:
     class: Drupal\alshaya_acm_product\ProductHelper
     arguments:
       - '@config.factory'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+  alshaya_acm_product.category_helper:
+    class: Drupal\alshaya_acm_product\ProductCategoryHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@database'
+      - '@language_manager'
+
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
     arguments:
@@ -34,19 +44,23 @@ services:
       - '@cache.product_labels'
       - '@cache.alshaya_product'
       - '@acq_sku.fields_manager'
-      - '@alshaya_acm_product.breadcrumb'
+      - '@alshaya_acm_product.category_helper'
       - '@http_client'
       - '@renderer'
       - '@simple_sitemap.generator'
       - '@acq_sku.product_info_helper'
-
+      - '@alshaya_acm_product.cache_manager'
+      - '@alshaya.alshaya_array_utils'
+  alshaya_acm_product.cache_manager:
+    class: Drupal\alshaya_acm_product\Service\ProductCacheManager
+    arguments:
+      - '@cache.product_processed_data'
   alshaya_acm_product.price_helper:
     class: Drupal\alshaya_acm_product\Service\SkuPriceHelper
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'
       - '@renderer'
-
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
@@ -56,6 +70,7 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@acq_sku.product_info_helper'
       - '@cache.data'
+      - '@alshaya_acm_product.cache_manager'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
@@ -74,6 +89,12 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [alshaya_product]
+  cache.product_processed_data:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [product_processed_data]
   alshaya_acm_product.sku_fields_helper:
     class: Drupal\alshaya_acm_product\SkuFieldsHelper
     arguments:

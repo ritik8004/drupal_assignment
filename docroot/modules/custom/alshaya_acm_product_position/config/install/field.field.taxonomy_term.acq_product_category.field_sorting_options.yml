@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_sorting_options
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - options
+id: taxonomy_term.acq_product_category.field_sorting_options
+field_name: field_sorting_options
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Sorting options'
+description: ''
+required: true
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: inherit_category
+default_value_callback: ''
+settings: {  }
+field_type: list_string

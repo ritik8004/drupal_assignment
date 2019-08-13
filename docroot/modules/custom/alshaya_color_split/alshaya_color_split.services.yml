@@ -1,0 +1,9 @@
+services:
+  cache.alshaya_product_configurations:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [alshaya_product_configurations]
+  alshaya_color_split.manager:
+    class: Drupal\alshaya_color_split\AlshayaColorSplitManager

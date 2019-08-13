@@ -31,6 +31,13 @@ body.ie {
     // Removes the scrollbar which IE adds by default.
     overflow: hidden !important;
   }
+
+  .sticky-filter-wrapper .site-brand-home,
+  .alshaya_search_mainimage {
+    img {
+      flex-shrink: 0;
+    }
+  }
 }
 
 /**
@@ -345,12 +352,6 @@ html[lang="ar"] {
         padding-left: 40px !important;
       }
     }
-
-    #payment_details_wrapper > .form-wrapper .payment-plugin-wrapper-div .payment-method-name {
-      @include breakpoint($tablet) {
-        width: 91.5%;
-      }
-    }
   }
 }
 
@@ -427,4 +428,8 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
 
 #st_gdpr_iframe {
   position: static !important;
+}
+
+.ie .site-brand-home a img {
+  width: 100%;
 }

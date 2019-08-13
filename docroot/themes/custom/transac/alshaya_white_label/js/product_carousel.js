@@ -5,6 +5,8 @@
 
 /* global isRTL */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -16,47 +18,31 @@
       var hp_product_carousel_items = drupalSettings.hp_product_carousel_items;
 
       var optionsBasket = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: basket_carousel_items,
-            nav: true
-          }
-        }
+        slidesToShow: basket_carousel_items,
+        slidesToScroll: 1,
+        focusOnSelect: false,
+        touchThreshold: 1000
       };
 
       var optionsPdp = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: pdp_items_desk,
-            nav: true
-          }
-        }
+        slidesToShow: pdp_items_desk,
+        slidesToScroll: 1,
+        focusOnSelect: false,
+        touchThreshold: 1000
       };
 
       var optionsPlp = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: dp_product_carousel_items,
-            nav: true
-          }
-        }
+        slidesToShow: dp_product_carousel_items,
+        slidesToScroll: 1,
+        focusOnSelect: false,
+        touchThreshold: 1000
       };
 
       var optionshp = {
-        responsiveClass: true,
-        dots: true,
-        responsive: {
-          1025: {
-            items: hp_product_carousel_items,
-            nav: true
-          }
-        }
+        slidesToShow: hp_product_carousel_items,
+        slidesToScroll: 1,
+        focusOnSelect: false,
+        touchThreshold: 1000
       };
 
       function applyRtl(ocObject, options) {
@@ -76,31 +62,13 @@
 
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');
-          ocObject.owlCarousel(
+          ocObject.slick(
             $.extend({}, options, {rtl: true})
           );
         }
         else {
-          ocObject.owlCarousel(options);
+          ocObject.slick(options);
         }
-
-        // There is some issue with owl carousel, when we have more then one
-        // carousel on the page it uses responsive settings from last one
-        // always on page resize. We bind change event here and calculate loop
-        // required or not dynamically every-time change is triggered after
-        // page resize.
-        ocObject.once('bind-event').on('change.owl.carousel', function (data) {
-          try {
-            if (data.property.name === 'settings') {
-              var itemsCount = data.item.count;
-              data.property.value.loop = (data.property.value.items < itemsCount);
-            }
-          }
-          catch (e) {
-            // We don't want anything to break because of this.
-            // At max we will see duplicate items in carousel.
-          }
-        });
       }
 
       var plpfeaturedproduct = $('.l-two--sf .paragraph--type--product-carousel-category .product-category-carousel');
@@ -133,6 +101,16 @@
       relatedSell.each(function () {
         applyRtl($(this), optionsPdp);
       });
+
+      // To fix lazyload for horizontal scroll areas on devices.
+      // We dont use a slider in devices.
+      if ($(window).width() < 1024) {
+        $('.product-category-carousel').on('touchmove', debounce(function () {
+          if (typeof Drupal.blazyRevalidate !== 'undefined') {
+            Drupal.blazyRevalidate();
+          }
+        }, 350));
+      }
     }
   };
 })(jQuery, Drupal);

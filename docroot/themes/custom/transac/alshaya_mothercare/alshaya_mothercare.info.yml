@@ -22,4 +22,15 @@ regions:
   footer_secondary: 'Footer Secondary'
 
 libraries:
-  - alshaya_white_label/global_styles
+  - alshaya_mothercare/global_styles
+
+libraries-override:
+  alshaya_white_label/ltr_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/ltr-print.css
+
+  alshaya_white_label/rtl_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/rtl-print.css

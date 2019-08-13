@@ -1,0 +1,79 @@
+.order-status {
+  margin: 2.5rem auto 0;
+  max-width: 50rem;
+
+  .steps_instruction {
+    font-size: 1.875rem;
+
+    @include breakpoint ($only-mobile) {
+      font-size: 1.625rem;
+    }
+  }
+
+  .payment_option {
+    margin: 1.5625rem 0;
+
+    p {
+      font-family: $open-sans;
+      font-size: 1.125rem;
+
+      @include breakpoint ($only-mobile) {
+        font-size: 1rem;
+      }
+    }
+
+    .reference-number {
+      font-size: 1.2rem;
+    }
+
+    strong {
+      font-family: $ubuntu-sans-bold;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.k-net_container {
+  border: 1px solid $k-net_order_border;
+  padding-#{$left}: 1.25rem;
+
+  h3 {
+    text-align: center;
+  }
+
+  .payment_option {
+    span {
+      font-family: $ubuntu-sans-bold;
+    }
+  }
+}
+
+.failed_action_container {
+  .payment_option {
+    .tryagainBtn,
+    .backtositeBtn {
+      background-color: $nxt_step_btn_bg;
+      color: $nxt_step_btn_text;
+
+      @extend %btn;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    .backtositeBtn {
+      float: $right;
+
+      @include breakpoint($only-mobile) {
+        float: none;
+      }
+    }
+
+    .tryagainBtn {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.25rem;
+      }
+    }
+  }
+}

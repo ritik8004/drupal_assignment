@@ -1,0 +1,321 @@
+.ticketing__steps {
+  &.five {
+    font-family: $ubuntu-sans;
+
+    .steps_count {
+      font-family: $ubuntu-sans-bold;
+    }
+  }
+}
+
+.know_who {
+  color: $visitor_info_text;
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.booking_info {
+  padding: 0.9375rem;
+  margin: 0.9375rem auto;
+  background: $booking_info_text;
+  text-align: center;
+  border-radius: 3.125rem;
+
+  @include breakpoint($only-mobile) {
+    border-radius: 0.3125rem;
+  }
+
+  .booking_row {
+    .booking_col {
+      width: 32%;
+      float: $left;
+      color: $visitor_info_text;
+      font-family: $ubuntu-sans-bold;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        line-height: 1.5;
+      }
+
+      .icon {
+        &.icon-calendar {
+          @include icon(calendar) {
+            margin-#{$right}: 0.4375rem;
+          }
+        }
+
+        &.icon-flag-blank {
+          @include icon(flag-blank) {
+            margin-#{$right}: 0.4375rem;
+          }
+        }
+      }
+
+      .up_row {
+        font-size: 0.9375rem;
+      }
+
+      .below_row {
+        color: $booking_info_with_icon;
+        font-size: 1.375rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.125rem;
+        }
+      }
+    }
+  }
+}
+
+.table_structure {
+  .tbl_header {
+    padding: 0.9375rem 0;
+    background: $tbl_header_bg;
+    color: $tbl_header_text;
+    text-align: center;
+    border-#{$right}: 0.0625rem solid $tbl_header_border;
+    margin-bottom: 0.1875rem;
+    float: $left;
+    font-size: 1.125rem;
+
+    .icon {
+      &.icon-icon-calendar {
+        @include icon(icon-calendar) {
+          margin-#{$right}: 0.4375rem;
+        }
+      }
+
+      &.icon-flag-blank {
+        @include icon(flag-blank) {
+          margin-#{$right}: 0.4375rem;
+        }
+      }
+    }
+
+    &:last-of-type {
+      border-top-#{$right}-radius: 0.625rem;
+      border-#{$right}: 0.0625rem solid $tbl_header_lst_border;
+      width: 25%;
+    }
+
+    &:first-of-type {
+      border-top-#{$left}-radius: 0.625rem;
+      width: 25%;
+    }
+
+    &:nth-of-type(2) {
+      width: 30%;
+    }
+
+    &:nth-of-type(3) {
+      width: 19%;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}
+
+.visitor-tickets {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 0.9375rem;
+  }
+
+  .tbl-content {
+    text-align: center;
+    padding: 0.625rem 0;
+    background: $tbl_content_bg;
+    font-size: 1.125rem;
+    align-items: center;
+    height: 2.25rem;
+    margin-bottom: 0.0625rem;
+    float: $left;
+
+    &:last-of-type {
+      width: 25%;
+
+      .icon {
+        font-size: 1.75rem;
+        color: $tbl_content_icon;
+      }
+    }
+
+    &:first-of-type {
+      width: 23%;
+      padding-#{$left}: 1.25rem;
+      text-align: $left;
+
+      @include breakpoint($only-tablet) {
+        width: 23%;
+        padding-#{$left}: 1.25rem;
+      }
+
+      .icon {
+        color: $step_brand_color_icon;
+        width: auto;
+        font-size: 2.0625rem;
+        vertical-align: middle;
+        margin-right: 0.3125rem;
+      }
+    }
+
+    &:nth-of-type(2) {
+      width: 30%;
+    }
+
+    &:nth-of-type(3) {
+      width: 19%;
+    }
+
+    @include breakpoint($only-mobile) {
+      &:last-of-type,
+      &:first-of-type,
+      &:nth-of-type(2),
+      &:nth-of-type(3) {
+        width: 100%;
+        padding: 0.625rem 0;
+      }
+
+      &:last-of-type {
+        border-bottom-#{$right}-radius: 0.625rem;
+        border-bottom-#{$left}-radius: 0.625rem;
+      }
+
+      &:first-of-type {
+        border-top-#{$right}-radius: 0.625rem;
+        border-top-#{$left}-radius: 0.625rem;
+        background-color: $tbl_content_mobile_bg;
+        color: $tbl_content_mobile_text;
+
+        .icon {
+          color: $step_even_icons;
+        }
+      }
+    }
+
+    .icon {
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0.9375rem;
+      }
+
+      &.icon {
+        margin-#{$right}: 0.4375rem;
+        display: inline-block;
+
+        &-woman {
+          @include icon(woman);
+        }
+
+        &-man {
+          @include icon(man);
+        }
+
+        &-girl {
+          @include icon(girl);
+        }
+
+        &-boy {
+          @include icon(boy);
+        }
+
+        &.icon_4 {
+          @include icon(parents-profile);
+        }
+
+        &.icon_0 {
+          @include icon(baby);
+        }
+
+        &.icon_1 {
+          @include icon(toddler);
+        }
+
+        &.icon_2 {
+          @include icon(kids-day);
+        }
+      }
+    }
+
+    .form-control {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1.42857143;
+      color: $form_input_text;
+      background-color: $form_input_bg;
+      background-image: none;
+      border: 0.0625rem solid $form_input_border;
+      border-radius: 1.25rem;
+      -webkit-appearance: none;
+      box-shadow: none;
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      width: 78%;
+      outline: none;
+
+      @include breakpoint($only-mobile) {
+        width: 96%;
+        box-sizing: border-box;
+      }
+
+      &.formErr {
+        border-color: $error_form_border;
+      }
+    }
+
+    input[type=radio] {
+      margin-top: 0;
+      vertical-align: middle;
+      margin-bottom: 0.9375rem;
+      line-height: normal;
+      box-sizing: border-box;
+      padding: 0;
+
+      &.formErr {
+        border-color: $error_form_border;
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          width: 0.75rem;
+          height: 0.75rem;
+          border: 0.0625rem solid $error_form_border;
+          left: -0.0625rem;
+          border-radius: 50%;
+
+          @include breakpoint($only-mobile) {
+            width: 0.6875rem;
+            height: 0.6875rem;
+          }
+        }
+      }
+    }
+
+    select {
+      @include breakpoint($only-mobile) {
+        padding: 0.5rem 0.75rem !important;
+      }
+    }
+  }
+}
+
+.formErrMessage {
+  display: none;
+  color: $error_form_msg;
+  margin-top: 1.25rem;
+}
+
+.form_submit_block {
+  text-align: center;
+  padding-top: 1.5625rem;
+
+  .continueBtn {
+    font-weight: bold;
+    white-space: nowrap;
+    background-color: $continue_btn_bg;
+    background-image: $btn_active_bg_img_gradient;
+    color: $continue_btn_text;
+
+    @extend %btn;
+  }
+}

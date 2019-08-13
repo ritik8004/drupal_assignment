@@ -3,6 +3,10 @@
   .field--name-field-acq-promotion-description {
     width: 75%;
 
+    p {
+      line-height: 1.29;
+    }
+
     @include breakpoint($upto-desktop) {
       max-width: 100%;
       width: 100%;
@@ -11,17 +15,6 @@
 
   .c-products__item {
     font-size: 0.875rem;
-
-    @include breakpoint($desktop) {
-      width: 31.6%;
-      max-width: 18.1875rem;
-      margin-#{$right}: 2.5%;
-      margin-bottom: 2rem;
-
-      &:nth-child(3n) {
-        margin-#{$right}: 0;
-      }
-    }
 
     @include breakpoint($tablet) {
       article {
@@ -36,9 +29,47 @@
       }
     }
 
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.3125rem);
+      margin-bottom: 2.125rem;
+
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        min-height: 10.875rem;
+        height: 100%;
+      }
+    }
+
     .field--name-name {
       font-family: $alshaya-bold;
       line-height: 1.29;
+
+      @include breakpoint($only-mobile) {
+        padding: 0 0.625rem;
+      }
+
+      a {
+        text-transform: capitalize;
+      }
+    }
+
+    .out-of-stock span {
+      @extend %btn;
+
+      height: 2.5rem;
+      padding-top: 0.75rem;
+      margin-top: 1.25rem;
+
+      html[lang=ar] & {
+        padding-top: 0.3125rem;
+      }
+
+      @include breakpoint($tablet) {
+        min-width: 12.8125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding: 0.75rem 1.25rem;
+      }
     }
   }
 
@@ -53,25 +84,10 @@
 
         li {
           a {
-            font-size: 0.875rem;
-
             span {
               &.facet-item__value {
                 margin-#{$right}: 0;
                 text-transform: capitalize;
-                height: 2.5rem;
-
-                @include breakpoint($tablet) {
-                  line-height: 1.5;
-                }
-              }
-
-              &.js-facet-deactivate {
-                @include icon(close, after) {
-                  top: 5.15%;
-                }
-
-                height: 2.5rem;
               }
             }
           }
@@ -86,14 +102,17 @@
             a {
               font-size: 0.875rem;
               color: $primary_brand_button;
+              letter-spacing: 1px;
             }
 
-            &:hover {
-              opacity: 1;
-              background-color: $primary_brand_button;
+            @include breakpoint($desktop) {
+              &:hover {
+                opacity: 1;
+                background-color: $primary_brand_button;
 
-              a {
-                color: $primary_btn_text;
+                a {
+                  color: $primary_btn_text;
+                }
               }
             }
           }
@@ -107,60 +126,13 @@
       }
     }
 
-    .filter--mobile {
-      @include breakpoint($tablet) {
-        top: auto;
-        margin-top: -3.75rem;
-
-        html[lang=ar] & {
-          top: auto;
-          margin-top: -3.75rem;
-        }
-      }
-
-      .form-type-select {
-        text-transform: initial;
-      }
-
-      .c-facet__blocks__wrapper--mobile {
-        @include breakpoint($only-mobile) {
-          .c-facet__blocks {
-            .filter-menu-label {
-              margin-bottom: 0;
-
-              .label {
-                font-family: $alshaya-thin;
-                text-transform: capitalize;
-                font-size: 0.875rem;
-                height: 2.25rem;
-              }
-            }
-
-            li.clear-all {
-              border: 2px solid $plp_facet_clear_border_mobile;
-              text-transform: uppercase;
-            }
-          }
-
-          .c-facet__label {
-            border-#{$right}: 0;
-            padding: 0 0.625rem;
-            font-size: 0.875rem;
-            line-height: 2.8;
-
-            &.active-filter-count {
-              .filter-count {
-                padding-top: 0.25rem;
-              }
-            }
-          }
-        }
-      }
-    }
-
     .view-header.search-count {
       margin-top: 1.5rem;
       border-bottom-color: $primary_border;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 2.5rem;
+      }
 
       &.only-mobile {
         margin-top: 0;
@@ -169,93 +141,31 @@
       }
     }
   }
-}
 
-.c-facet__blocks__wrapper--mobile {
-  .c-facet__label {
-    height: 2.5rem;
+  ul.js-pager__items {
+    margin-top: 3.5rem;
 
-    @include breakpoint($tablet) {
-      width: 6.812rem;
+    @include breakpoint($only-mobile) {
+      margin-top: 2.3125rem;
     }
 
-    border-#{$right}: 0;
-
-    @include breakpoint($only-tablet) {
-      padding-#{$left}: 0.625rem;
-      font-size: 0.875rem;
-      color: $plp_tile_product_title;
-    }
-
-    &.is-active {
-      padding-#{$left}: 0.6875rem;
-      padding-top: 0.6875rem;
-
-      &::after {
-        border-#{$left}: 0;
-
-        @include breakpoint($only-tablet) {
-          border: none;
-          margin-#{$right}: 0.062rem;
-        }
-      }
-    }
-
-    &::after {
-      color: $plp_facet_dropdown_icon;
-      border: 1px solid $plp_facet_input_border;
-      border-#{$left}: 0;
-      height: 2.5rem;
-      width: 2.5rem;
-      font-size: 2.2rem;
-    }
-  }
-
-  .c-facet__blocks {
-    @include breakpoint($only-tablet) {
-      #{$right}: -10rem;
-      padding: 0 0.625rem !important;
-    }
-
-    .filter-menu-label {
-      .label {
-        font-size: 0.875rem;
-      }
-    }
-  }
-
-  .c-facet:first-child {
-    .c-facet__title {
-      border-top: 1px solid $plp_facet_border;
-
-      @include breakpoint($only-tablet) {
-        border-top: none;
-      }
-    }
-  }
-}
-
-.is-filter {
-  @include breakpoint($only-mobile) {
-    .apply-fake .fake-apply-button {
+    a {
       font-family: $alshaya-thin;
-      text-transform: uppercase;
-      padding-top: 0.7rem;
-    }
-  }
-
-  &.view-filters {
-    label {
-      text-transform: capitalize;
       font-size: 0.875rem;
-      transform: translate(0, -40%);
-    }
+      background-color: $plp_pager_bg;
+      text-transform: uppercase;
+      line-height: 1.4;
+      min-height: 40px;
 
-    html[lang=ar] & {
-      label {
-        font-size: 0.875rem;
-        line-height: 1.5;
-        transform: translate(0, -40%);
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        padding: 0.625rem;
+      }
+
+      @include breakpoint($tablet) {
+        width: 13.125rem;
+        padding-#{$left}: 2.5rem;
+        padding-#{$right}: 2.5rem;
       }
     }
   }

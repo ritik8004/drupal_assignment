@@ -1,0 +1,28 @@
+alshaya_knet.settings:
+  type: config_object
+  label: 'K-Net Settings'
+  mapping:
+    knet_url:
+      type: string
+      label: 'K-Net url'
+    resource_path:
+      type: string
+      label: 'Resource path'
+    use_secure_response_url:
+      type: integer
+      label: 'Use secure response url'
+    alias:
+      type: string
+      label: 'Alias'
+    knet_language_code:
+      type: label
+      label: 'K-Net Language code'
+    knet_currency_code:
+      type: string
+      label: 'K-Net Currency code'
+    langcode:
+      type: string
+      label: 'Language code'
+    knet_udf5_prefix:
+      type: string
+      label: 'UDF5 prefix'

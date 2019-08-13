@@ -39,6 +39,15 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'term_tree' => NULL,
       ],
     ],
+    'alshaya_lhn_tree' => [
+      'template' => 'alshaya-lhn',
+      'variables' => [
+        'lhn_cat_tree' => NULL,
+        'current_term' => NULL,
+        'depth_offset' => NULL,
+        'current_term_parent_id' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -59,7 +68,7 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
     $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
     $hide_for_mobile = $term ? _alshaya_acm_product_category_hide_plp_banner_for_mobile($term) : FALSE;
     if ($hide_for_mobile) {
-      $variables['content']['#attributes']['class'][] = 'hide-on-mobile';
+      $variables['attributes']['class'][] = 'hide-on-mobile';
     }
   }
 }
@@ -204,7 +213,7 @@ function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $
 
   /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
   $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
-  $manager->processSalesCategoryCheckForNode($node);
+  $manager->processCategorizationCheckForNode($node);
 }
 
 /**
@@ -248,10 +257,96 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
 
   /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
   $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
-  $sale_ids = $manager->getSalesCategoryIds();
+  $sale_ids = $manager->getCategorizationIds()['sale'] ?? [];
 
   // Invalidate cache if term or it's parent are part of sales category tree.
   if (array_intersect($sale_ids, $term_ids)) {
-    Cache::invalidateTags([ProductCategoryManager::SALES_CATEGORY_IDS_CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryManager::CATEGORIZATION_IDS_CACHE_TAG]);
   }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $context) {
+  if ($context['module'] != 'taxonomy' || $context['bundle'] != ProductCategoryTree::VOCABULARY_ID) {
+    return;
+  }
+
+  // Return if already modified by alshaya_super_category.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category') && \Drupal::config('alshaya_super_category.settings')->get('status')) {
+    return;
+  }
+
+  // For all the category terms we want shop- prefix for L1 only.
+  $alias = '/shop-' . ltrim($alias, '/');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['field_promotion_banner_mobile']['#states'] = [
+    'invisible' => [
+      'input[name="field_promo_banner_for_mobile[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $form['field_display_as_clickable_link']['widget']['value']['#states'] = [
+    'required' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $form['field_target_link']['#states'] = [
+    'visible' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+  $form['field_target_link']['widget'][0]['uri']['#states'] = [
+    'required' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $form['field_include_in_desktop']['#states'] = [
+    'visible' => [
+      ':input[name="field_category_include_menu[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $form['field_include_in_mobile_tablet']['#states'] = [
+    'visible' => [
+      ':input[name="field_category_include_menu[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $form['path']['widget']['#after_build'][] = 'alshaya_acm_product_category_after_build';
+}
+
+/**
+ * After build callback to uncheck auto generate path auto.
+ *
+ * @param array $element
+ *   Array of current element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
+ *
+ * @return array
+ *   Return element array.
+ */
+function alshaya_acm_product_category_after_build(array $element, FormStateInterface $form_state) {
+  $element[0]['pathauto']['#states'] = [
+    'unchecked' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  $element[0]['alias']['#states'] = [
+    'empty' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
+  return $element;
 }

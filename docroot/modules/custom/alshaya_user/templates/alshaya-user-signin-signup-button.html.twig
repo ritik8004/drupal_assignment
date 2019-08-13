@@ -1,0 +1,9 @@
+{% if sub_text %}
+  <div class="sub-text">
+  {{ sub_text }}
+  </div>
+{% endif %}
+{% if link_text %}
+  <a class="link-button" href=" {{ link_url }} "><span>{{ link_text }} </span></a>
+  <div class="login-separator"><span> {{ 'or'|t }} </span></div>
+{% endif %}

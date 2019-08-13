@@ -1,0 +1,300 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_kz_transac_lite_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['booking_mail'] = [
+    'variables' => [
+      'qr_code' => NULL,
+      'booking_info' => NULL,
+      'visitor_list' => NULL,
+    ],
+  ];
+
+  $items['payment_success'] = [
+    'variables' => [
+      'booking_info' => NULL,
+    ],
+  ];
+
+  $items['payment_failed'] = [
+    'variables' => [
+      'booking_info' => NULL,
+    ],
+  ];
+
+  $items['booking_payment'] = [
+    'render element' => 'form',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_mail().
+ */
+function alshaya_kz_transac_lite_mail($key, &$message, $params) {
+  $options = [
+    'langcode' => $message['langcode'],
+  ];
+
+  switch ($key) {
+    case 'booking_confirm':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('KidZania booking details: Visit date: @visit_date, Ticket count: @ticket_count, Ref Num: @ref_number', [
+        '@visit_date' => $params['visit_date'],
+        '@ticket_count' => $params['ticket_count'],
+        '@ref_number' => $params['ref_number'],
+      ], $options);
+
+      $message['body'][] = $params['message'];
+      break;
+  }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
+  $strings = [
+    'Buy your tickets for KidZania!' => [
+      'ar' => 'اشترِ تذاكر كيدزانيا!',
+    ],
+    'Please follow the instructions to buy your ticket!' => [
+      'ar' => 'يرجى اتباع التعليمات لشراء تذكرتك!',
+    ],
+    'Select your KidZania' => [
+      'ar' => ' اختر كيدزانيا الخاصة بك',
+    ],
+    'Type of ticket' => [
+      'ar' => ' نوع التذاكر',
+    ],
+    'Date and time of visit' => [
+      'ar' => ' تاريخ وموعد الفعالية',
+    ],
+    'Tickets and Visitors' => [
+      'ar' => 'التذاكر والزوار',
+    ],
+    'Visitor details' => [
+      'ar' => 'معلومات الزوار',
+    ],
+    'Purchase Summary' => [
+      'ar' => ' ملخص الشراء',
+    ],
+    'Customer Information' => [
+      'ar' => ' معلومات الزبون',
+    ],
+    'Buy tickets for infants, kids, children and adult. Children under the age of 8 must be accompanied by an adult.' => [
+      'ar' => 'شراء تذاكر الرضع والأطفال والبالغين. يجب أن يرافق الأطفال الأقل من 8 سنوات شخص بالغ.',
+    ],
+    'Kuwait' => [
+      'ar' => 'الكويت',
+    ],
+    'Tickets' => [
+      'ar' => 'تذاكر',
+    ],
+    'Availability' => [
+      'ar' => 'التذاكر المتوفرة',
+    ],
+    'Total' => [
+      'ar' => 'الإجمالي',
+    ],
+    'Visit Date ' => [
+      'ar' => 'تاريخ الزيارة',
+    ],
+    'Facility' => [
+      'ar' => 'المنشأة',
+    ],
+    'Infant' => [
+      'ar' => 'الصغار',
+    ],
+    'Children' => [
+      'ar' => 'الأطفال',
+    ],
+    'Adult' => [
+      'ar' => 'البالغون',
+    ],
+    'Note: Infants must be accompanied by an adult.' => [
+      'ar' => 'ملاحظة: يجب أن يكون الصغار برفقة بالغين.',
+    ],
+    'Note: Adults are allowed entry only if they are accompanying at least 1 child.' => [
+      'ar' => 'ملاحظة: يسمح بدخول البالغين إذا كانوا برفقة طفل واحد على الأقل.',
+    ],
+    'Note: Children under the age of 8, must be accompanied by an Adult.' => [
+      'ar' => 'ملاحظة: يجب أن يرافق الأطفال الأقل من 8 سنوات شخص بالغ.',
+    ],
+    'Visitor Details' => [
+      'ar' => 'تفاصيل خاصة بالزوار',
+    ],
+    'Let us know who’s coming to visit us for a personalised visit' => [
+      'ar' => 'أخبرنا من الذي سيزورنا للحصول على زيارة مخصصة',
+    ],
+    'Continue for Payment' => [
+      'ar' => 'الاستمرار للدفع',
+    ],
+    'Confirm Payment' => [
+      'ar' => 'تأكيد الدفع',
+    ],
+    'Purchase Summary' => [
+      'ar' => 'ملخص الشراء',
+    ],
+    'Purchase Progress' => [
+      'ar' => 'استمرار عملية الشراء',
+    ],
+    'Name' => [
+      'ar' => 'الاسم',
+    ],
+    'Email' => [
+      'ar' => 'البريد الإلكتروني',
+    ],
+    'Mobile Number' => [
+      'ar' => 'رقم الجوال',
+    ],
+    'I accept the Terms and Conditions  ' => [
+      'ar' => 'أوافق على الشروط والأحكام',
+    ],
+    'Next' => [
+      'ar' => 'التالي',
+    ],
+    'Please enter all details for the visitor' => [
+      'ar' => 'يُرجى إدخال كافة تفاصيل الزائر',
+    ],
+    'Follow us on social media' => [
+      'ar' => 'تابعنا على برامج التواصل الاجتماعي',
+    ],
+    'Order Number' => [
+      'ar' => 'رقم الطلب',
+    ],
+    'Reference Number' => [
+      'ar' => 'رقم المرجع',
+    ],
+    'Online Booking Completed Successfully' => [
+      'ar' => 'تم إتمام عملية الحجز عبر الانترنت بنجاح',
+    ],
+    'We’ve sent you an email and SMS with all the details of your Online Ticket Booking. Please print and present your email at KidZania’ s ticketing counters on the day of your visit. Z-U Soon!' => [
+      'ar' => 'لقد أرسلنا لك رسالة الكترونية ورسالة نصية بتفاصيل حجزك عبر الإنترنت. يُرجى طباعة الرسالة وإحضارها معك إلى شباك تذاكر كيدزانيا يوم الزيارة. نراك قريباً.',
+    ],
+    'For safety and liability purposes, all children up to the age of 14 years need to be registered by and adult (18+ Years) at the front desk before they can enter the park.' => [
+      'ar' => 'لأغراض السلامة والأمان، لا بدّ من تسجيل جميع الأطفال حتى سن 14 سنة والبالغين (+18 سنة) لدى المكتب الأمامي قبل دخولهم المدينة الترفيهية.',
+    ],
+    'Online Booking Confirmation' => [
+      'ar' => 'تأكيد الحجز',
+    ],
+    'Kai! Please print and present your email at KidZania ticketing counters on the day of your visit. Z-U Soon!' => [
+      'ar' => 'مرحباً! يُرجى طباعة بريدك الالكتروني وتقديمه عند شباك التذاكر يوم زيارتك لِكدزانيا.  نراكَ قريباً!',
+    ],
+    'Customer Name' => [
+      'ar' => 'اسم الزبون ',
+    ],
+    'Order Date' => [
+      'ar' => 'تاريخ الطلب',
+    ],
+    'Visit Date' => [
+      'ar' => 'تاريخ الزياره',
+    ],
+    'Facility' => [
+      'ar' => 'المنشأة',
+    ],
+    'Payment' => [
+      'ar' => 'طريقة الدفع',
+    ],
+    'Visitor Types' => [
+      'ar' => 'نوع الزيارة',
+    ],
+    'Price' => [
+      'ar' => 'السعر',
+    ],
+    'Ticket Number' => [
+      'ar' => 'رقم التذكرة',
+    ],
+    'KidZania Operations S.A.R.L. © 2019, KidZania, and all related characters and elements are trademarks of KidZania Operations S.A.R.L. All Rights Reserved. Privacy Policy' => [
+      'ar' => 'عمليات KidZania S.A.R.L. © 2019 ، KidZania ، وجميع الشخصيات والعناصر ذات الصلة هي علامات تجارية لشركة KidZania Operations S.A.R.L. كل الحقوق محفوظة. سياسة خاصة',
+    ],
+    'K-Net Payment Details' => [
+      'ar' => 'تفاصيل الدفع عن طريق K-Net',
+    ],
+    'Transaction Id' => [
+      'ar' => 'العملية التجارية',
+    ],
+    'Payment Id' => [
+      'ar' => 'الدفع',
+    ],
+    'Total Payment' => [
+      'ar' => 'المبلغ الإجمالي',
+    ],
+    'Date of Payment' => [
+      'ar' => 'تاريخ الدفع',
+    ],
+    'Status' => [
+      'ar' => 'الحالة',
+    ],
+    'Online Booking Failed' => [
+      'ar' => 'فشل الحجز عبر الإنترنت',
+    ],
+    'You online payment transaction is failed. You may contact your bank for this failed transaction for more details.' => [
+      'ar' => 'لقد فشلت معاملة الدفع عبر الإنترنت. يمكنك الاتصال بالبنك الذي تتعامل معه للحصول على هذه الصفقة الفاشلة للحصول على مزيد من التفاصيل.',
+    ],
+    'Try Again' => [
+      'ar' => 'حاول مرة أخري',
+    ],
+    'Take me to Kidzania Website' => [
+      'ar' => 'خذني إلى موقع كيدزانيا',
+    ],
+    'Online Booking Completed Successfully' => [
+      'ar' => 'تم الحجز عبر الإنترنت بنجاح',
+    ],
+    'Success' => [
+      'ar' => 'نجاح',
+    ],
+    'Failed' => [
+      'ar' => 'فشل',
+    ],
+    'Please wait a moment' => [
+      'ar' => 'يرجى الانتظار للحظات',
+    ],
+    'Let us Know who is coming to visit' => [
+      'ar' => 'أخبرونا من سيزورنا ',
+    ],
+    'Gender' => [
+      'ar' => 'الجنس',
+    ],
+    'Age' => [
+      'ar' => 'العمر',
+    ],
+    'Visitor Name' => [
+      'ar' => 'اسم الزائر',
+    ],
+    'Continue to payment' => [
+      'ar' => 'المتابعة للدفع',
+    ],
+    'Accept our Terms and Conditions' => [
+      'ar' => 'قبول الشروط والأحكام',
+    ],
+    'Please note we are in the process of adding Credit Card payment option' => [
+      'ar' => 'يرجى العلم أننا سنضيف خيار الدفع بواسطة بطاقة الائتمان قريباً',
+    ],
+    'Proceed to pay' => [
+      'ar' => 'الاستمرار للدفع',
+    ],
+    'Payment Info' => [
+      'ar' => 'معلومات الدفع',
+    ],
+    'Note: Children (age 2-3), should be accompanied by an Adult.' => [
+      'ar' => 'ملاحظة: الأطفال من عمر 2 إلى 3 سنوات يجب أن يكونوا برفقة شخص بالغ',
+    ],
+    'Website is not supported for this version of the browser. Please use any other latest browser.' => [
+      'ar' => 'الموقع لا يعمل بهذا الإصدار من برنامج  التصفح. يرجى استخدام أيّ متصفح آخر.',
+    ],
+  ];
+
+  // Save the translation.
+  alshaya_i18n_save_translations($strings);
+}

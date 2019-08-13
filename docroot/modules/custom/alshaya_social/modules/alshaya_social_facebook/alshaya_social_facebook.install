@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_social_facebook.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updates arabic translation strings for social login - Facebook.
+ */
+function alshaya_social_facebook_update_8003() {
+  $strings = [
+    'sign up with Facebook' => [
+      'ar' => 'سجل الاشتراك عن طريق الفيس بوك',
+    ],
+    'sign in with Facebook' => [
+      'ar' => 'تسجيل الدخول عن طريق الفيس بوك',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set default value for social_auth_facebook.
+ */
+function alshaya_social_facebook_update_8002() {
+  $alshaya_social = \Drupal::configFactory()->getEditable('alshaya_social.settings');
+  // Set social auth facebook enabled for sites which has social_login true.
+  $alshaya_social->set('social_networks.social_auth_facebook', $alshaya_social->get('social_login'));
+  $alshaya_social->save();
+
+  $strings = [
+    'sign up with facebook' => [
+      'ar' => 'سجل الاشتراك عن طريق الفيس بوك',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_social_facebook_update_8001() {
+  $strings = [
+    'sign in with facebook' => [
+      'ar' => 'تسجيل الدخول عن طريق الفيس بوك',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_social_facebook_install() {
+  // Configure app_id and app_secret for facebook.
+  $config = \Drupal::configFactory()->getEditable('social_auth_facebook.settings');
+
+  $facebook_settings = Settings::get('social_auth_facebook.settings');
+  if (!empty($facebook_settings)) {
+    foreach ($facebook_settings as $key => $value) {
+      $config->set($key, $value);
+    }
+    $config->set('graph_version', '3.0');
+  }
+  $config->save();
+
+  // Set facebook social auth disable by default.
+  \Drupal::configFactory()->getEditable('alshaya_social.settings')
+    ->set('social_networks.social_auth_facebook', 0)
+    ->save();
+
+  $strings = [
+    'sign in with Facebook' => [
+      'ar' => 'تسجيل الدخول عن طريق الفيس بوك',
+    ],
+    'sign up with Facebook' => [
+      'ar' => 'سجل الاشتراك عن طريق الفيس بوك',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}

@@ -1,0 +1,19 @@
+diff --git a/.htaccess b/.htaccess
+index d20700cc1..f43b97a7c 100644
+--- a/.htaccess
++++ b/.htaccess
+@@ -69,6 +69,14 @@ AddEncoding gzip svgz
+ <IfModule mod_rewrite.c>
+   RewriteEngine on
+ 
++  # Add maintenance page.
++  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/%{HTTP_HOST}/.maintenance -f [OR]
++  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/.maintenance -f
++  RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
++  RewriteCond %{SCRIPT_FILENAME} !maintenance.html
++  RewriteRule ^.*$ /maintenance.html [R=503,L]
++  ErrorDocument 503 /maintenance.html
++
+   # Rewrite rule to remove .html and remove kwt-* from url.
+   RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
+ 

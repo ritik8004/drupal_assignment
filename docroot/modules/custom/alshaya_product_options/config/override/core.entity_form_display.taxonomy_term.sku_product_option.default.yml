@@ -8,6 +8,9 @@ dependencies:
     - field.field.taxonomy_term.sku_product_option.field_sku_attribute_code
     - field.field.taxonomy_term.sku_product_option.field_sku_attribute_id
     - field.field.taxonomy_term.sku_product_option.field_sku_option_id
+    - field.field.taxonomy_term.sku_product_option.field_attribute_size_chart
+    - field.field.taxonomy_term.sku_product_option.field_attribute_size_chart_label
+    - field.field.taxonomy_term.sku_product_option.field_attribute_size_group
     - image.style.thumbnail
     - taxonomy.vocabulary.sku_product_option
   module:
@@ -64,6 +67,30 @@ content:
     region: content
   field_attribute_swatch_value:
     weight: 6
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_attribute_size_chart:
+    weight: 13
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_attribute_size_chart_label:
+    weight: 14
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_attribute_size_group:
+    weight: 15
     settings:
       size: 60
       placeholder: ''

@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -79,6 +80,13 @@ class AlshayaConfigManager {
   protected $moduleHandler;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
    * Constructs a new AlshayaConfigManager object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -89,15 +97,19 @@ class AlshayaConfigManager {
    *   Theme Manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Channel Factory.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               ThemeManagerInterface $theme_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->themeManager = $theme_manager;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger_factory->get('alshaya_config');
   }
 
   /**
@@ -200,7 +212,21 @@ class AlshayaConfigManager {
 
         /** @var \Drupal\image\Entity\ImageStyle $style */
         $style = $this->entityTypeManager->getStorage('image_style')->load($style_id);
-        $style->flush();
+        // Using flush() method of ImageStyle entity takes a lot of time as it
+        // iterates recursively and deletes each file one by one, deleting
+        // the directory using shell cmd is quicker with hook_update.
+        $directory = file_url_transform_relative(file_create_url(file_default_scheme() . '://styles/' . $style->id()));
+        if (file_exists($directory)) {
+          $this->logger->info('Removing style directory: @directory.', [
+            '@directory' => $directory,
+          ]);
+          shell_exec(sprintf('rm -rf %s', escapeshellarg(ltrim($directory, '/'))));
+        }
+        else {
+          $this->logger->info('Could not find style directory: @directory to remove.', [
+            '@directory' => $directory,
+          ]);
+        }
       }
     }
   }
@@ -245,8 +271,8 @@ class AlshayaConfigManager {
       case self::MODE_REPLACE_KEY:
         foreach ($options['replace_keys'] as $replace_key) {
           $existing[$replace_key] = $data[$replace_key];
-          $data = $existing;
         }
+        $data = $existing;
         break;
 
       case self::MODE_RESAVE:
@@ -280,6 +306,36 @@ class AlshayaConfigManager {
   public function getDataFromCode($config_id, $module_name, $path) {
     $file = drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config_id . '.yml';
     return Yaml::parse(file_get_contents($file));
+  }
+
+  /**
+   * Helper function to delete fields.
+   *
+   * @param string $entity_type
+   *   Entity type for which the fields needs to be deleted.
+   * @param array $bundles
+   *   List of bundles from which the fields need to be deleted.
+   * @param array $fields
+   *   List of fields that need to be deleted.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function deleteFields($entity_type, array $bundles, array $fields) {
+    foreach ($bundles as $bundle) {
+      foreach ($fields as $field_name) {
+        $field = FieldConfig::loadByName($entity_type, $bundle, $field_name);
+        if (!empty($field)) {
+          $field->delete();
+        }
+      }
+    }
+
+    foreach ($fields as $field_name) {
+      $field_storage = FieldStorageConfig::loadByName($entity_type, $field_name);
+      if (!empty($field_storage)) {
+        $field_storage->delete();
+      }
+    }
   }
 
 }

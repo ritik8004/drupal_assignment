@@ -5,11 +5,13 @@ namespace Drupal\acq_commerce\Conductor;
 use Drupal\acq_commerce\APIHelper;
 use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_commerce\Connector\CustomerNotFoundException;
+use Drupal\acq_commerce\Event\OrderPlacedEvent;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_sku\Entity\SKU;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * APIWrapper class.
@@ -45,6 +47,13 @@ class APIWrapper implements APIWrapperInterface {
   private $helper;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -57,12 +66,20 @@ class APIWrapper implements APIWrapperInterface {
    *   I18nHelper object.
    * @param \Drupal\acq_commerce\APIHelper $api_helper
    *   API Helper service object.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
-  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18nHelper, APIHelper $api_helper) {
+  public function __construct(ClientFactory $client_factory,
+                              ConfigFactoryInterface $config_factory,
+                              LoggerChannelFactory $logger_factory,
+                              I18nHelper $i18nHelper,
+                              APIHelper $api_helper,
+                              EventDispatcherInterface $dispatcher) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
     $this->helper = $api_helper;
+    $this->dispatcher = $dispatcher;
 
     // We always use the current language id to get store id. If required
     // function calling the api wrapper will pass different store id to
@@ -173,7 +190,7 @@ class APIWrapper implements APIWrapperInterface {
     // But for robustness we go back to the SKU plugin and ask
     // it to return a name as a string only.
     $originalItemsNames = [];
-    $items = $cart->items;
+    $items = $cart->items ?? NULL;
     if ($items) {
       foreach ($items as $key => &$item) {
         $cart->items[$key]['qty'] = (int) $item['qty'];
@@ -271,6 +288,7 @@ class APIWrapper implements APIWrapperInterface {
 
     try {
       $result = $this->tryAgentRequest($doReq, 'placeOrder');
+      $this->dispatcher->dispatch(OrderPlacedEvent::EVENT_NAME, new OrderPlacedEvent($result, $cart_id));
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
@@ -794,14 +812,15 @@ class APIWrapper implements APIWrapperInterface {
 
       return ($client->get($endpoint, $opt));
     };
-    $products = [];
+
     try {
-      $products = $this->tryAgentRequest($doReq, 'getProducts', 'products');
+      return $this->tryAgentRequest($doReq, 'getProducts', 'products', $this->storeId ?? '');
     }
     catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
-    return $products;
+
+    return [];
   }
 
   /**

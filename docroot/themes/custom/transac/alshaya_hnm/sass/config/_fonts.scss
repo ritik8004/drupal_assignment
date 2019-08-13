@@ -14,6 +14,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -27,6 +28,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -40,6 +42,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -53,6 +56,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -67,6 +71,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -81,6 +86,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -95,6 +101,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url("#{$base_theme_fonts_directory_path}/GESSTwoBold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -109,48 +116,50 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
     url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'hnm-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?yy6ec9');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf');
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?yy6ec9#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?yy6ec9') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?yy6ec9') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?yy6ec9#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?k2mqf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?k2mqf') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?k2mqf#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 // H&M specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$hnm-bold: 'Ampersand_bold', 'GESSTwoBold-Bold';
-$hnm-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold';
+$hnm-bold: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
+$hnm-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
 
-$hnm-demibold: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
-$hnm-demibold-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
+$hnm-demibold: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
+$hnm-demibold-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
 
-$hnm-regular: 'Ampersand_regular', 'GESSTwoLight-Light';
-$hnm-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light';
+$hnm-regular: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
+$hnm-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
 
-$hnmpromo-regular: 'Amperserif_regular', 'GEDinarTwo-Medium';
-$hnmpromo-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
+$hnmpromo-regular: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
+$hnmpromo-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$hnm-arabic-bold: 'Ampersand_bold', 'GESSTwoBold-Bold';
-$hnm-arabic-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold';
+$hnm-arabic-bold: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
+$hnm-arabic-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold', 'Arial';
 
-$hnm-arabic-medium: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
-$hnm-arabic-medium-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
+$hnm-arabic-medium: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
+$hnm-arabic-medium-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium', 'Arial';
 
-$hnm-arabic-regular: 'Ampersand_regular', 'GESSTwoLight-Light';
-$hnm-arabic-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light';
+$hnm-arabic-regular: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
+$hnm-arabic-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light', 'Arial';
 
-$hnmpromo-arabic-regular: 'Amperserif_regular', 'GEDinarTwo-Medium';
-$hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
+$hnmpromo-arabic-regular: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
+$hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium', 'Arial';
 
 $hnm-icons: 'hnm-icons';
 $body_font: $hnm-regular;
@@ -176,10 +185,11 @@ $alshaya-arabic-thin: $hnm-arabic-regular;
     url("#{$base_theme_fonts_directory_path}/Sunrise.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
-$campaign-plp-style-1-font: 'Sunrise', 'GESSTwoMedium-Medium';
-$campaign-plp-style-1-arabic-font: 'Sunrise', 'GESSTwoMedium-Medium';
+$campaign-plp-style-1-font: 'Sunrise', 'GESSTwoMedium-Medium', 'Arial';
+$campaign-plp-style-1-arabic-font: 'Sunrise', 'GESSTwoMedium-Medium', 'Arial';
 
 // Icon Fonts
 $icons: (
@@ -231,7 +241,11 @@ $icons: (
   twitter: "\1f425",
   pinterest: "\1f4cc",
   instagram: "\1f305",
-  youtube: "\1f4fa"
+  youtube: "\1f4fa",
+  filter: "\e93c",
+  edit-input: "\e93d",
+  arrow-left: "\e93e",
+  arrow-right: "\e93f"
 );
 
 @mixin iconbase() {

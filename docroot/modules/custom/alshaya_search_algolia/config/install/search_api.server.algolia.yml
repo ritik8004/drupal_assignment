@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_search_algolia
+    - search_api_algolia
+id: algolia
+name: Algolia
+description: ''
+backend: search_api_algolia
+backend_config:
+  application_id: ''
+  api_key: ''

@@ -1,0 +1,65 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.listing
+    - field.field.node.magazine_article.field_magazine_category
+    - field.field.node.magazine_article.field_magazine_date
+    - field.field.node.magazine_article.field_magazine_hero_image
+    - field.field.node.magazine_article.field_magazine_homepage_image
+    - field.field.node.magazine_article.field_magazine_paragraphs
+    - field.field.node.magazine_article.field_magazine_shop_the_story
+    - field.field.node.magazine_article.field_magazine_slogan
+    - field.field.node.magazine_article.field_magazine_weight
+    - image.style.magazine_article_listing
+    - node.type.magazine_article
+  module:
+    - datetime
+    - image
+    - user
+id: node.magazine_article.listing
+targetEntityType: node
+bundle: magazine_article
+mode: listing
+content:
+  field_magazine_category:
+    type: entity_reference_label
+    weight: 2
+    region: content
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+  field_magazine_date:
+    type: datetime_default
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: magazine_date
+    third_party_settings: {  }
+  field_magazine_homepage_image:
+    type: image
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      image_style: magazine_article_listing
+      image_link: ''
+    third_party_settings: {  }
+  field_magazine_slogan:
+    weight: 3
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+hidden:
+  field_magazine_hero_image: true
+  field_magazine_paragraphs: true
+  field_magazine_shop_the_story: true
+  field_magazine_weight: true
+  langcode: true
+  links: true
+  sharethis: true

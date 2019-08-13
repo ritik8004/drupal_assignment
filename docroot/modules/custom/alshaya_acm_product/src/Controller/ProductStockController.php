@@ -7,6 +7,7 @@ use Drupal\acq_sku\Form\AcqSkuFormBuilder;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
@@ -186,6 +187,13 @@ class ProductStockController extends ControllerBase {
     if (empty($commands)) {
       $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
       self::$response->addCommand(new HtmlCommand($wrapper, $html));
+
+      // For server side validations failure we return whole form.
+      // We need to show the form again after replacing.
+      self::$response->addCommand(new InvokeCommand($wrapper . ' form.visually-hidden', 'removeClass', ['visually-hidden']));
+
+      // Remove the loader too.
+      self::$response->addCommand(new InvokeCommand('.ajax-progress.ajax-progress-throbber', 'remove'));
     }
 
     return self::$response;

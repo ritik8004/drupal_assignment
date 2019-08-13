@@ -1,0 +1,12 @@
+checkoutcom:
+  js:
+    js/alshaya_acm_checkoutcom.js: {}
+  dependencies:
+    - alshaya_acm_checkout/checkout_flow
+    - core/underscore
+
+applepay:
+  js:
+    js/alshaya_acm_checkoutcom.applepay.js: {}
+  dependencies:
+    - alshaya_acm_checkout/checkout_flow

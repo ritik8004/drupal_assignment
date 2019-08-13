@@ -52,7 +52,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
             $sku = SKU::loadFromSku($item['sku']);
             if ($sku instanceof SKU) {
               $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-              $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
+              $images = $sku_assets_manager->getImagesForSku($sku, 'pdp');
               if (!empty($images[0]) && isset($images[0]['url'])) {
                 $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
               }
@@ -121,7 +121,7 @@ function alshaya_hm_get_sku_images($sku) {
   $images = [];
   if ($sku instanceof SKU) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main'], FALSE);
+    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp');
   }
   return $images;
 }
@@ -180,7 +180,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $description_value = '';
 
   if ($body = $sku_entity->get('attr_description')->getValue()) {
-    $description_value = $body[0]['value'];
+    $description_value .= $body[0]['value'];
   }
 
   if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
@@ -311,4 +311,26 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
 function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
+  if (isset($product['style_code']) && $sku->hasField('attr_style_code')) {
+    $sku->get('attr_style_code')->setValue($product['style_code']);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_hm_theme($existing, $type, $theme, $path) {
+  return [
+    'color_node_links' => [
+      'variables' => [
+        'color_nodes' => NULL,
+      ],
+    ],
+  ];
 }

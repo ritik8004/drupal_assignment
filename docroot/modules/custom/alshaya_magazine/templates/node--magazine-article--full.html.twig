@@ -1,0 +1,17 @@
+<div class="magazine-page-title">
+  {{ content.magazine_page_title }}
+</div>
+
+<div class="magazine-backfeed mobile-only-block">
+  {{ content.back_to_feed }}
+</div>
+
+<article{{ attributes }}>
+  <div{{ content_attributes }}>
+    {{ content|without('back_to_feed', 'magazine_page_title') }}
+  </div>
+</article>
+
+<div class="magazine-backfeed">
+  {{ content.back_to_feed }}
+</div>

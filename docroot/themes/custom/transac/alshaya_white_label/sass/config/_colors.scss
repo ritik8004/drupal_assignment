@@ -78,6 +78,14 @@ $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
 $_instagram_dots_default: #e3e3e3;
+$_plp_filter_active_drodpwon_item: #f0f7ff;
+$_plp_facet_count_color: #7d7d7d;
+$_plp_sort_by_options: $brownish-grey;
+$_plp_selected_filter_text: #555;
+$_plp_clear_all_btn_disabled: #8d8d8d;
+$light-blue-border: #b3d3f0;
+$_algolia_search_icon_bg: #0072ce;
+$_algolia_suggestion_list_bg: #f7fafe;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -166,7 +174,7 @@ $modal_close_bg: $marine-blue;
 $modal_close_icon: $white-two;
 
 // VAT text
-$vat: $grey-ash;
+$vat: $grey-light;
 $vat_dark: $whisper-light;
 
 /* ------- 3. Secondary color  ----- */
@@ -436,7 +444,6 @@ $checkout_progress_next_txt: $brownish-grey;
 
 /* ------- 7. Pages ----- */
 // Product listing page and search page.
-$plp_search_count: $black;
 $color_facet_active_border: $cerulean-two;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
@@ -460,11 +467,31 @@ $plp_promotion_link: $cherry;
 $plp_facet_filter_count_background: $pumpkin-orange;
 $plp_facet_filter_count_text: $white-five;
 $plp_facet_white_color_attribute: $white;
+$plp-swatch-color-count: $black;
+$plp_mobile_separator: $warm-grey-two;
+$plp_facet_count_number: $_plp_facet_count_color;
+$plp_sort_by_options: $_plp_sort_by_options;
+$plp_selected_filter_label_text: $grey-ash;
+$plp_grid_active_color: $marine-blue-two;
+$plp_all_filter_filter_arrow: $grey-ash;
+$plp_filter_icon: $grey-ash;
+$plp_filter_active_tick: $marine-blue-two;
+
+// PLP All filter colors
+$plp_all_filter_bg: $white-five;
+$plp_all_filter_head_border: $white-two;
+$plp_all_filter_title: $page_title;
+$plp_all_filter_item_border: $white-two;
+$plp_all_filter_button_color: $primary_btn_bg;
+$plp_clear_all_btn_text: $marine-blue-two;
+$plp_all_filter_close_btn: $header_mobile_menu_close;
+$plp_clear_all_btn_disabled: $_plp_clear_all_btn_disabled;
 
 // PLP Filter bar.
 $plp_filterbar_clearall_border: $cerulean-two;
 $plp_filterbar_clearall_text: $cerulean-two;
-$plp_search_count: $black;
+$plp_search_count: $_plp_selected_filter_text;
+$plp_filter_active_item: $_plp_filter_active_drodpwon_item;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
@@ -632,6 +659,12 @@ $checkout_deliver_address_btn_txt: $white-five;
 $checkout_default_address_border: $pumpkin-orange;
 $checkout_default_address_bg: $pumpkin-orange;
 $checkout_address_edit_link: $content_link_color;
+$checkout_guest_button_bg: $white-five;
+$checkout_guest_button_border: $marine-blue-two;
+$checkout_guest_button_txt: $marine-blue-two;
+$checkout_login_separtor: $white;
+$checkout_login_separtor_txt_bg: $white-five;
+$checkout_login_separtor_txt: $grey-ash;
 
 // @todo Variables used in outdated markup, avoid using elsewhere.
 $checkout_out_sec_text: $windows-blue;
@@ -727,6 +760,14 @@ $checkout_payment_method_subtitle: $grey-light;
 $checkout_payment_method_cod_desc: $grey-light;
 $checkout_transaction_type_color: $marine-blue-two;
 $checkout_payment_CVV_tooltip_image_bg: $white;
+$checkout_payment_checkoutcom_border: $_instagram_dots_default;
+$checkout_payment_checkoutcom_card_details: $grey-light;
+$checkout_payment_checkoutcom_card_details_expiry: $black;
+$checkout_payment_checkoutcom_new_option_text: $grey-ash;
+$checkout_payment_checkoutcom_save_card_label: $grey-ash;
+$checkout_payment_checkoutcom_save_card_help: $grey-ash;
+$checkout_payment_checkoutcomcard_expired_label: $formitem_error_label;
+$checkout_payment_checkoutcom_saved_card_warning: $grey-light;
 
 // Checkout Home delivery.
 $checkout_hd_selected_add_wrapper_border: $white;
@@ -813,6 +854,12 @@ $privilege_card_summary_after: $black;
 $privilege_card_form_input: $black;
 $privilege_card_form_input_placeholder: $grey-shade;
 $privilege_card_form_error: $scarlet-two;
+
+// Payment cards.
+$payment_card_border: $warm-grey-two;
+$payment_card_label: $black;
+$payment_card_text: $black;
+$payment_card_error: $red-error;
 
 //Address book
 $address_pp_delete_closebtn: $white;
@@ -925,9 +972,13 @@ $cart-free-gifts-label-background: $marine-blue;
 $progress_loader: $marine-blue;
 
 // Social Auth
-$social-network-text: $white-five;
-$social-auth-facebook-bg: $dark-blue;
-$social-sign-in-option-text: $black;
+$social-network-text: $grey-ash;
+$social-auth-bg: $white-five;
+$social-auth-bg-hover: rgba(51, 51, 51, 0.06);
+$social_auth_login_button_border: $grey-ash;
+$user_login_sub_text: $grey-ash;
+$user_login_link_btn_text: $grey-ash;
+$user_login_section_title: $marine-blue;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $mothercare-black;
@@ -935,6 +986,8 @@ $colour-swatches-simple-effect-bg: $grey-light-two;
 $sizeguide-text: $mothercare-black;
 $magazine-pdp-label: $mothercare-black;
 $magazine-pdp-description: $grey-light;
+$magazine-pdp-description-separator: $grey-light;
+$magazine-pdp-description-first-color: $grey-light;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
@@ -953,3 +1006,70 @@ $sharethis-popup-bg: $white-five;
 $sharethis-icon-bg: $mothercare-black;
 $sharethis-label-color: $mothercare-black;
 $sharethis-social-displaytext-color: rgba(0, 0, 0, 0.87);
+$sharethis-border-color: $warm-grey-two;
+
+// Magazine article feature
+$magazine-textarea-color: $grey-light;
+$magazine-label-color: $matterhorn;
+$magazine-article-title: $black;
+$magazine-article-border-color: $warm-grey-two;
+$magazine-article-read-more-bg-color: $grey-light-two;
+$magazine-article-read-more-icon-color: $mothercare-black;
+$magazine-article-primary-color: $white-five;
+$magazine-article-back-to-feed: $black;
+$magazine-article-title-overflow-shadow: $white-five;
+
+// PLP LHN block.
+$lhn_l2: $marine-blue;
+$lhn_l3: $grey-ash;
+$lhn_l4: $grey-ash;
+$lhn_sticky-filter-background: $white-five;
+$lhn_sticky-header-shadow: rgba(0, 0, 0, 0.24);
+$lhn_sticky-header-desktop-shadow: rgba(26, 26, 26, 0.1);
+
+//Algolia search bar.
+$algolia-input-text: $marine-blue-two;
+$algolia-input-placeholder-text: $grey-ash;
+$algolia-input-border: $white;
+$algolia-trending-title-text: $marine-blue;
+$algolia-suggestion-text: $greyish;
+$algolia-suggestion-border: $white-smoke-light;
+$algolia-suggestion-input-popout-icon: $light-ash;
+$algolia-dropdown-border: $black;
+$algolia-dropdown-background: $white-five;
+$algolia-search-icon: $white-five;
+$algolia_sticky-header-shadow: rgba(0, 0, 0, 0.24);
+$algolia-trending-title-border: $warm-grey-two;
+$algolia-search-bar-background: $white-five;
+$algolia-auto-complete-border: $light-blue-border;
+$algolia-search-icon-background: $_algolia_search_icon_bg;
+$algolia-input-text: $grey-ash;
+$algolia-search-clear-text-icon: $_algolia_search_icon_bg;
+$algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
+
+// Option list filter.
+$options-page-title: $black;
+$options-page-description: $black;
+$divider-text: $black;
+$attribute-description-text: $grey-light;
+$divider-border: $white-two;
+$divider-separator-border: $black;
+$attribute-detail-link-text: $white-five;
+$attribute-detail-link-background: $black;
+$attribute-filter-option-background: $white-five;
+$attribute-filter-block-title: $peacock-blue;
+$attribute-filter-header-container-background: $white-five;
+$attribute-filter-group-heading-background: $white-smoke-light;
+$options-list-autocomplete-form-background: $white-five;
+$options-list-autocomplete-form-border: $warm-grey-two;
+$attribute-filter-name-list-text: $black;
+$attribute-swatch-title-text: $white-five;
+$options-list-heading-group-border: $white-two;
+$option-list-search-icon-color: $marine-blue-two;
+
+// Option list menu.
+$option-list-menu-link: $grey-light;
+$options-page-menu-title: $marine-blue-two;
+$options-page-menu-title-background: $white-five;
+$option-list-menu-link-border: $white;
+$option-list-menu-background: $white-smoke-light;

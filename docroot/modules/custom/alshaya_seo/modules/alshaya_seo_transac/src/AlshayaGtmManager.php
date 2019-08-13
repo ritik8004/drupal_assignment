@@ -3,6 +3,8 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -22,6 +24,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Class AlshayaGtmManager.
@@ -79,7 +82,8 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
-    'alshaya_master.home' => 'home page',
+    'alshaya_master.home' => 'HP-ProductCarrousel',
+    'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
   ];
 
   /**
@@ -212,6 +216,20 @@ class AlshayaGtmManager {
   protected $moduleHandler;
 
   /**
+   * Orders Manager.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
+   * Entity Repository service object.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -242,6 +260,10 @@ class AlshayaGtmManager {
    *   Sku Manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository object.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -256,7 +278,9 @@ class AlshayaGtmManager {
                               Connection $database,
                               AlshayaAddressBookManager $addressBookManager,
                               SkuManager $skuManager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              OrdersManager $orders_manager,
+                              EntityRepositoryInterface $entityRepository) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -271,6 +295,8 @@ class AlshayaGtmManager {
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $module_handler;
+    $this->ordersManager = $orders_manager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -548,7 +574,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -613,6 +644,11 @@ class AlshayaGtmManager {
       }
     }
 
+    // If list cookie is set, set the list variable.
+    if (isset($_COOKIE['product-list'])) {
+      $listValues = Json::decode($_COOKIE['product-list']);
+      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    }
     return $product_details;
   }
 
@@ -634,19 +670,9 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->items();
 
-      $address = $this->cartHelper->getShipping($cart);
-
-      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
-        // For CC we always use step 2.
+      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page' || $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout delivery page') {
+        // For delivery we always use step 2.
         $attributes['step'] = 2;
-      }
-      // We receive address id in case of authenticated users & address as an
-      // extension attribute for anonymous.
-      elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['area']))) &&
-        ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
-        // For HD we use step 3 if we have address saved.
-        $attributes['step'] = 3;
       }
 
       if ($cart_delivery_method = $cart->getShippingMethodAsString()) {
@@ -787,6 +813,14 @@ class AlshayaGtmManager {
    *   Root parent term id.
    */
   public function getRootGroup($tid) {
+    $roots = &drupal_static('alshaya_gtm_manager_get_root_group', []);
+
+    if (isset($roots[$tid])) {
+      return $roots[$tid];
+    }
+
+    $original = $tid;
+
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
       $query = $this->database->select('taxonomy_term__parent', 'tth');
@@ -794,6 +828,7 @@ class AlshayaGtmManager {
       $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
+        $roots[$original] = $tid;
         return $tid;
       }
 
@@ -844,8 +879,6 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchCompletedOrderAttributes(array $order) {
-    $orders = alshaya_acm_customer_get_user_orders($order['email']);
-
     $orderItems = $order['items'];
 
     $dimension7 = '';
@@ -926,13 +959,16 @@ class AlshayaGtmManager {
       $loyalty_card = $order['extension']['loyalty_card'];
     }
 
+    /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
+    $orders_count = $this->ordersManager->getOrdersCount($order['email']);
+
     $generalInfo = [
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
       'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
-      'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
+      'firstTimeTransaction' => $orders_count > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
       'userEmailID' => $order['email'],
       'userName' => $order['firstname'] . ' ' . $order['lastname'],
@@ -950,30 +986,10 @@ class AlshayaGtmManager {
    * Helper function to fetch general datalayer attributes for a page.
    */
   public function fetchGeneralPageAttributes($data_layer) {
-    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-    $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-
-    if ($data_layer['userUid'] !== 0) {
-      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'Repeat Customer' : 'New Customer';
-    }
-    else {
-      $customer_type = 'New Customer';
-    }
-
-    $privilege_customer = 'Regular Customer';
-    if (!empty($current_user->get('field_privilege_card_number')->getString())) {
-      $privilege_customer = 'Privilege Customer';
-    }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->getGtmCurrency(),
-      'userID' => $data_layer['userUid'] ?: '' ,
-      'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
-      'customerType' => $customer_type,
-      'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
-      'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
-      'privilegeCustomer' => $privilege_customer,
     ];
 
     return $data_layer_attributes;
@@ -1011,13 +1027,10 @@ class AlshayaGtmManager {
         $product_terms = $this->fetchProductCategories($node);
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
-        if ($product_media) {
-          $product_media_file = $product_media['file'];
-          $product_media_url = file_create_url($product_media_file->getFileUri());
-        }
-        else {
-          $product_media_url = '';
-        }
+        $product_media_url = !empty($product_media)
+          ? file_create_url($product_media['drupal_uri'])
+          : '';
+
         $oldprice = '';
         if ((float) $sku_entity->get('price')->getString() != (float) $sku_attributes['gtm-price']) {
           $oldprice = (float) $sku_entity->get('price')->getString();
@@ -1058,6 +1071,7 @@ class AlshayaGtmManager {
         $taxonomy_term = $current_route['route_params']['taxonomy_term'];
         $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
         foreach ($taxonomy_parents as $taxonomy_parent) {
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
           $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
 
@@ -1301,13 +1315,11 @@ class AlshayaGtmManager {
       if ($product_node instanceof NodeInterface) {
         $sku_media = alshaya_acm_product_get_product_media($product_node->id(), TRUE) ?: '';
       }
-      if ($sku_media) {
-        $sku_media_file = $sku_media['file'];
-        $sku_media_url = file_create_url($sku_media_file->getFileUri());
-      }
-      else {
-        $sku_media_url = 'image not available';
-      }
+
+      $sku_media_url = empty($sku_media)
+        ? 'image not available'
+        : file_create_url($sku_media['drupal_uri']);
+
       $sku_entity = SKU::loadFromSku($item['sku']);
       if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
         $sku_entity = $sku_entity->getTranslation('en');
@@ -1333,13 +1345,10 @@ class AlshayaGtmManager {
    *   GTM currency code.
    */
   public function getGtmCurrency() {
-    if (!empty($gtm_currency_code = $this->configFactory->get('acq_commerce.currency')
-      ->get('gtm_currency_code'))) {
-      return $gtm_currency_code;
-    }
-
-    return $this->configFactory->get('acq_commerce.currency')
-      ->get('currency_code');
+    $currency_code = $this->configFactory->get('acq_commerce.currency');
+    return !empty($currency_code->get('iso_currency_code'))
+      ? $currency_code->get('iso_currency_code')
+      : $currency_code->get('currency_code');
   }
 
 }

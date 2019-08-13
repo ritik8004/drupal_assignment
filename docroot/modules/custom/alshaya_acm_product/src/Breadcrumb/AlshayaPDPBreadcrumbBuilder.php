@@ -14,8 +14,8 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
  * Class AlshayaPDPBreadcrumbBuilder.
@@ -84,6 +84,13 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   protected $currentRequest;
 
   /**
+   * Product Category Helper service object.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * AlshayaPDPBreadcrumbBuilder constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -102,6 +109,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The Title Resolver.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stock service object.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
+   *   Product Category Helper service object.
    */
   public function __construct(Connection $connection,
                               LanguageManagerInterface $language_manager,
@@ -110,7 +119,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
                               ModuleHandlerInterface $module_handler,
                               PathValidatorInterface $path_validator,
                               TitleResolverInterface $title_resolver,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              ProductCategoryHelper $product_category_helper) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
@@ -119,6 +129,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $this->pathValidator = $path_validator;
     $this->titleResolver = $title_resolver;
     $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->productCategoryHelper = $product_category_helper;
   }
 
   /**
@@ -151,20 +162,24 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       foreach ($term_list as $term) {
         $breadcrumb_cache_tags[] = 'taxonomy_term:' . $term['target_id'];
       }
-
-      $term_list = $this->filterEnabled($term_list);
-      $inner_term = $this->termTreeGroup($term_list);
-
-      if ($inner_term) {
-        $parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
-
+      if ($parents = $this->productCategoryHelper->getBreadcrumbTermList($term_list)) {
         foreach (array_reverse($parents) as $term) {
           $term = $this->entityRepository->getTranslationFromContext($term);
 
           $breadcrumb->addCacheableDependency($term);
 
+          $options = [];
+          if (!$term->get('field_display_as_clickable_link')->getString()) {
+            // Make term link non-clickable.
+            $options = [
+              'attributes' => [
+                'class' => ['no-link'],
+              ],
+            ];
+          }
+
           // Add term to breadcrumb.
-          $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+          $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
         }
       }
     }
@@ -189,129 +204,6 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->addCacheTags($breadcrumb_cache_tags);
 
     return $breadcrumb;
-  }
-
-  /**
-   * Get only enabled terms.
-   *
-   * @param array $terms
-   *   Terms array.
-   *
-   * @return array
-   *   Filtered terms.
-   */
-  protected function filterEnabled(array $terms = []) {
-    // Remove disabled terms.
-    foreach ($terms as $index => $row) {
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($row['target_id']);
-
-      if ($term instanceof TermInterface && $term->get('field_commerce_status')->getString()) {
-        continue;
-      }
-
-      // If term not found or not enabled, we unset it.
-      unset($terms[$index]);
-    }
-
-    return array_values($terms);
-  }
-
-  /**
-   * Get most inner term for the first group.
-   *
-   * @param array $terms
-   *   Terms array.
-   *
-   * @return int
-   *   Term id.
-   */
-  public function termTreeGroup(array $terms = []) {
-    if (!empty($terms)) {
-      $root_group = $this->getRootGroup($terms[0]['target_id']);
-      $root_group_terms = [];
-      foreach ($terms as $term) {
-        $root = $this->getRootGroup($term['target_id']);
-        if ($root == $root_group) {
-          $root_group_terms[] = $term['target_id'];
-        }
-      }
-
-      return $this->getInnerDepthTerm($root_group_terms);
-    }
-
-    return NULL;
-
-  }
-
-  /**
-   * Get the root level parent tid of a given term.
-   *
-   * @param int $tid
-   *   Term id.
-   *
-   * @return int
-   *   Root parent term id.
-   */
-  protected function getRootGroup($tid) {
-    $static = &drupal_static('alshaya_pdp_breadcrumb_builder_get_root_group', []);
-
-    if (isset($static[$tid])) {
-      return $static[$tid];
-    }
-
-    // Recursive call to get parent root parent tid.
-    while ($tid > 0) {
-      $query = $this->connection->select('taxonomy_term__parent', 'tth');
-      $query->fields('tth', ['parent_target_id']);
-      $query->condition('tth.entity_id', $tid);
-      $parent = $query->execute()->fetchField();
-      if ($parent == 0) {
-        $static[$tid] = $tid;
-        return $tid;
-      }
-
-      $tid = $parent;
-    }
-  }
-
-  /**
-   * Get the most inner term term based on the depth.
-   *
-   * @param array $terms
-   *   Array of term ids.
-   *
-   * @return int
-   *   The term id.
-   */
-  protected function getInnerDepthTerm(array $terms = []) {
-    if (empty($terms)) {
-      return NULL;
-    }
-
-    $static = &drupal_static('alshaya_pdp_breadcrumb_builder_get_root_group', []);
-    $term_ids = implode(',', $terms);
-    if (isset($static[$term_ids])) {
-      return $static[$term_ids];
-    }
-
-    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $depths = $this->connection->select('taxonomy_term_field_data', 'ttfd')
-      ->fields('ttfd', ['tid', 'depth_level'])
-      ->condition('ttfd.tid', $terms, 'IN')
-      ->condition('ttfd.langcode', $current_langcode)
-      ->execute()->fetchAllKeyed();
-
-    // Flip key/value.
-    $terms = array_flip($terms);
-    // Merge two array (overriding depth value).
-    $depths = array_replace($terms, $depths);
-    // Get all max values and get first one.
-    $max_depth = array_keys($depths, max($depths));
-    $most_inner_tid = $max_depth[0];
-
-    $static[$term_ids] = $most_inner_tid;
-
-    return $most_inner_tid;
   }
 
 }

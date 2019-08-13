@@ -12,15 +12,18 @@ use Drupal\acq_sku\Entity\SKU;
  */
 function acq_sku_stock_acq_sku_product_sku_alter(SKU $sku, $product) {
   // Update stock info from product.
-  if (isset($product['extension']['stock_item'],
-      $product['extension']['stock_item']['qty'])) {
+  if (isset($product['extension']['stock_item'])) {
 
     /** @var \Drupal\acq_sku\StockManager $manager */
     $manager = \Drupal::service('acq_sku.stock_manager');
 
     $stock = $product['extension']['stock_item'];
-    $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
+
+    $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
+    // Ensure it is a number and not null. For configurable we can get null
+    // from API.
+    $quantity = (float) $quantity;
 
     $changed = $manager->updateStock($product['sku'], $quantity, $stock_status);
 

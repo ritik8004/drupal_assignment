@@ -121,12 +121,11 @@
       /**
        * Helper function to remove classes from body when dailog is closed.
        *
-       * @param {*} className
-       * The classname to be removed from body.
        */
-      function modalCloseBtnEvent(className) {
-        $('.ui-dialog-titlebar-close').on('click', function () {
-          $('body').removeClass(className);
+      function modalCloseBtnEvent() {
+        $('.ui-dialog-titlebar-close').once().on('click', function () {
+          // Remove the last class added for overlay.
+          $('body').removeClass($('body').attr('class').split(' ').pop());
         });
       }
 
@@ -144,9 +143,31 @@
           if (settings.url.indexOf(ajaxString) !== -1) {
             $('body').addClass(className);
           }
-          modalCloseBtnEvent(className);
+          modalCloseBtnEvent();
         });
       }
+
+      // On dialog close.
+      $(window).on('dialog:afterclose', function (e, dialog, $element) {
+        // If body has overlay class, remove it.
+        if ($('body').hasClass('modal-overlay')) {
+          $('body').removeClass('modal-overlay');
+          // We have a menu timer with delay on desktop for body::before
+          // transition, also some regions have differnet z-index.
+          // This class holds the z-index consisitent till all animations are
+          // over. Otherwise we get a step animation, where the opacity for
+          // background closes at different times for differnet regions.
+          // see _utils.scss for classes where this gets applied.
+          setTimeout(function () {
+            $('body').removeClass('reduce-zindex');
+          }, 550);
+        }
+      });
+
+      $('.payment-card--delete a').on('click', function () {
+        $('body').addClass('reduce-zindex');
+        $('body').addClass('modal-overlay');
+      });
 
       $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').on('click', function () {
         modalClasses('product-quick-view', 'pdp-modal-overlay');
@@ -158,10 +179,10 @@
 
       $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
         $('body').addClass('free-gifts-modal-overlay');
-        modalCloseBtnEvent('free-gifts-modal-overlay');
+        modalCloseBtnEvent();
 
         $(document).ajaxComplete(function () {
-          modalCloseBtnEvent('free-gifts-modal-overlay');
+          modalCloseBtnEvent();
         });
       });
 

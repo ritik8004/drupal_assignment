@@ -36,33 +36,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     }
   };
 
-  Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
-    // We apply soft-limit js again after ajax calls here.
-    // Soft limit is feature provided by facets module but it
-    // doesn't support ajax, we add code here to handle that.
-    var alshayaSearchActiveFacet = $('.current-active-facet').attr('data-block-plugin-id');
-    var alshayaSearchShowMoreOpen = $('.current-active-facet .facets-soft-limit-link.open').length;
-
-    if (alshayaSearchActiveFacet) {
-      if (typeof drupalSettings.facets.softLimit !== 'undefined'
-        && typeof drupalSettings.facets.softLimit[alshayaSearchActiveFacet] !== 'undefined') {
-
-        var limit = drupalSettings.facets.softLimit[alshayaSearchActiveFacet];
-        Drupal.facets.applySoftLimit(alshayaSearchActiveFacet, limit);
-      }
-
-      var facetBlock = $('[data-block-plugin-id="' + alshayaSearchActiveFacet + '"]:visible');
-      facetBlock.addClass('facet-active');
-      facetBlock.find('.c-accordion__title').addClass('ui-state-active');
-      facetBlock.find('.facets-soft-limit-link').css('display', 'inline-block');
-
-      if (alshayaSearchShowMoreOpen) {
-        facetBlock.find('li').show();
-        facetBlock.find('.facets-soft-limit-link').addClass('open').text(Drupal.t('Show less'));
-      }
-    }
-  };
-
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
       if ($('.block-facets-ajax').length === 0) {
@@ -77,92 +50,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
           $(data.selector).replaceWith(data.replaceWith);
         }
       };
-
-      Drupal.alshayaSearchActiveFacetResetAfterAjax();
-
-      var facetsDisplayTextbox = settings.alshaya_search_facets_display_textbox;
-      if (facetsDisplayTextbox) {
-        var facetPlugins = Object.keys(facetsDisplayTextbox);
-        $('.block-facets-ajax').each(function () {
-          var blockPluginId = $(this).attr('data-block-plugin-id');
-          if ($.inArray(blockPluginId, facetPlugins !== -1) &&
-            ($(this).find('li.facet-item').length >= facetsDisplayTextbox[blockPluginId]) &&
-            ($(this).find('.facets-search-input').length === 0)) {
-            // Prepend the text field before the checkboxes, if not exists.
-            $(this).find('ul').prepend('<input type="text" placeholder="'
-              + Drupal.t('Enter your filter name')
-              + '" class="facets-search-input">').on('keyup', function () {
-              var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
-              if (facetFilterKeyword) {
-                $(this).find('li').each(function () {
-                  // Hide all facet links.
-                  $(this).hide();
-                  if ($(this).find('.facet-item__value').html().toLowerCase().search(facetFilterKeyword) >= 0) {
-                    $(this).show();
-                  }
-                });
-              }
-              else {
-                // Show all facet items.
-                $(this).find('li:hidden').show();
-                if (settings.facets.softLimit !== undefined) {
-                  // If soft limit is rendered, show the link.
-                  $(this).parent().find('.facets-soft-limit-link').show();
-                  if (!$(this).parent().find('.facets-soft-limit-link').hasClass('open')) {
-                    // Show only soft limit items, if facets were collapsed.
-                    var facetName = $(this).attr('data-drupal-facet-id');
-                    var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
-                    $(this).find('li:gt(' + zeroBasedLimit + ')').hide();
-                  }
-                }
-              }
-            });
-          }
-        });
-      }
-
-      // Only execute if views is not empty.
-      if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
-        // Change the title of facet when open.
-        var priceCurrency = settings.alshaya_search_price_currency;
-        var $finalPriceBlock = $('#block-skusskureferencefinalprice');
-        var finalPriceBlockSearch = $('#block-finalprice');
-        if (priceCurrency) {
-          var initialTitle = $finalPriceBlock.find('h3').html();
-          var initialTitleSearch = finalPriceBlockSearch.find('h3').html();
-          $finalPriceBlock.find('h3').on('click', function () {
-            if ($(this).hasClass('ui-state-active')) {
-              $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
-            }
-            else {
-              $finalPriceBlock.find('h3').html(initialTitle);
-            }
-          });
-
-          finalPriceBlockSearch.find('h3').on('click', function () {
-            if ($(this).hasClass('ui-state-active')) {
-              finalPriceBlockSearch.find('h3').html(initialTitleSearch + ' (' + priceCurrency + ')');
-            }
-            else {
-              finalPriceBlockSearch.find('h3').html(initialTitleSearch);
-            }
-          });
-        }
-        try {
-          // Price facets to respect Soft Limit.
-          var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
-          var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
-          $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
-
-          // Price facets to respect Soft Limit.
-          var facetNameSearch = finalPriceBlockSearch.find('ul').attr('data-drupal-facet-id');
-          var zeroBasedLimitSearch = settings.facets.softLimit[facetNameSearch] - 1;
-          finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
-        }
-        catch (e) {
-          // Do nothing.
-        }
-      }
 
       $('.ui-autocomplete').on("touchend",function (e) {
         if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
@@ -398,7 +285,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {
       if ((ajax_instance) && (ajax_instance.hasOwnProperty('element')) &&
         ($(ajax_instance.element, context).hasClass('c-products-list') ||
-        ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0))) {
+          ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0))) {
         Drupal.ajax.instances[key].progress.type = 'throbber';
       }
     });

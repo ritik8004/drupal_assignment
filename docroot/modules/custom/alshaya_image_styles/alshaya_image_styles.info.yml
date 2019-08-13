@@ -6,8 +6,10 @@ dependencies:
   - alshaya_config:alshaya_config
   - drupal:block
   - drupal:image
-  - imagemagick:imagemagick
+  - drupal:image_style_quality
   - drupal:responsive_image
   - drupal:system
   - drupal:views
+  - imagemagick:imagemagick
+  - memory_limit_policy:memory_limit_policy
 package: Alshaya

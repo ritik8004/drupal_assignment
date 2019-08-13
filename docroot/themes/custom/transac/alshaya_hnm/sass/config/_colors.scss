@@ -60,6 +60,9 @@ $whisper-light-59: rgba(235, 235, 235, 0.59);
 $white-four-70: rgba(247, 247, 247, 0.7);
 $_white-four: #f7f7f7;
 $_grey_11: #f2f2f2;
+$_greenish_1: #a3a1a1;
+$_algolia_suggestion_list_bg: rgba(51, 51, 51, 0.06);
+$_greenish_1: #a3a1a1;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -148,8 +151,10 @@ $accordion_bg: $white-five;
 $btt_bg: $white-three;
 
 // Breadcrumb.
-$breadcrumb_link_light: $greyish;
-$breadcrumb_link: $hnm-black-two;
+$breadcrumb_link_light: $grey8;
+$breadcrumb_link: $hnm-black-three;
+$breadcrumb_region_separator: $grey5;
+$breadcrumb_region_background: $white-five;
 
 // Cloudzoom
 $cloudzoom_hovertext: $hnm-black-two;
@@ -160,7 +165,9 @@ $webform_contact_legend: $hnm-black-two;
 // Facet
 $plp_facet_filter: $black-three;
 $plp_facet_input_placeholder: $hnm-black-two;
-$plp_facet_label: $black-two;
+$plp_facet_label: $grey1;
+$plp_facet_summary_filter_icon: $hnm-black-four;
+$plp_facet_filter_link: $hnm-black-four;
 $category_facet_active_icon: $hnm-black-two;
 $category_facet_active_text: $hnm-black-two;
 $plp_facet_filter_count_background: $hnm-red;
@@ -185,6 +192,13 @@ $oos_pdp_text: $hnm-grey;
 // Social links
 $social_links: $white-five;
 $social_links_hover: $grey5;
+
+// Social login.
+$social-network-text: $hnm-black-two;
+$social_auth_login_button_border: $_greenish_1;
+$user_login_sub_text: $hnm-black-two;
+$user_login_link_btn_text: $hnm-black;
+$user_login_section_title: $hnm-black;
 
 //Address book
 $address_tile_selected_bg: $grey3;
@@ -281,15 +295,13 @@ $header_toggle_sign_default_mobile: $black;
 $header_toggle_sign_default: $hnm-grey;
 $header_toggle_sign_active_tab: $hnm-black-two;
 $header_toggle_sign_active_tab_bg: $white-five;
-$header_branding_shadow: $white;
+$header_branding_shadow: $grey5;
 $highlights_subtitle_hover: $link-hover;
 
 // PLP
 $plp_swatch_more_link: $hnm-black-two;
-$plp_facet_label: $hnm-black-two;
 $plp_facet_clear_border: $hnm-black-two;
-$plp_facet_border: $hnm-black-two;
-$plp_search_count: $grey7;
+$plp_search_count: $grey8;
 $plp_category_desc: $grey7;
 $plp_tile_product_title: $hnm-black-two;
 $plp_tile_product_title_hover: $black;
@@ -297,6 +309,18 @@ $plp_tile_oos_bg: $hnm-red;
 $plp_pager_link: $hnm-black-two;
 $plp_pager_link_border: $hnm-black-two;
 $plp__label_active_bg: $white-five;
+$plp_facet_title: $hnm-black-four;
+$plp_promotion_description: $hnm-black-four;
+$plp_grid_active_color: $hnm-black-four;
+$plp_sort_by_options: $hnm-black-four;
+$plp_all_filter_button_color: $hnm-black-two;
+$plp_clear_all_btn_text: $hnm-black-two;
+$plp_all_filter_filter_arrow: $grey6;
+$plp_filter_icon: $hnm-black-two;
+$plp_filter_active_tick: $hnm-black-two;
+
+// PLP All filter colors
+$plp_all_filter_title: $hnm-black-two;
 
 // PDP
 $pdp_modal_full_prodlink: $hnm-black-two;
@@ -321,6 +345,7 @@ $pdp_color_swatch_mobile_bg: $hnm-grey;
 $pdp_share_this_label_mobile: $hnm-black-two;
 $pdp_description_mobile: $hnm-black-two;
 $pdp_sizeguide_link: $grey7;
+$pdp_sell_title: $hnm-black-two;
 
 // User my account
 $password_tooltip_list: $cerulean-two;
@@ -380,6 +405,9 @@ $order_actions_checkout: $white-five;
 $checkout_login_btn_bg: $primary_btn_bg;
 $checkout_login_btn_txt: $primary_btn_text;
 $checkout_mobile_back_link_icon: $black-two;
+$checkout_guest_button_border: $hnm-black-two;
+$checkout_guest_button_txt: $hnm-black-two;
+$checkout_login_separtor_txt: $hnm-black-two;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-two;
@@ -446,6 +474,11 @@ $checkout_payment_method_bg: $white-five;
 $checkout_payment_method_border: $white;
 $checkout_payment_text: $grey-ash;
 $checkout_payment_help: $grey7;
+$checkout_payment_checkoutcom_card_details: $black-two;
+$checkout_payment_checkoutcom_card_details_expiry: $black-two;
+$checkout_payment_checkoutcom_new_option_text: $black-two;
+$checkout_payment_checkoutcom_save_card_label: $black-two;
+$checkout_payment_checkoutcom_save_card_help: $black-two;
 
 // Checkout Login
 $checkout_guest_summary: $grey-ash;
@@ -491,9 +524,6 @@ $individual_store_open_hours: $grey7;
 $individual_store_address: $grey7;
 $individual_store_hours_label_border: $white;
 
-// VAT text
-$vat: $grey6;
-
 // Homepage Slider
 $hp_slider_dots: $hnm-black-two;
 $hp_slider_arrows_dark: $hnm-black-two;
@@ -525,3 +555,34 @@ $plp-machino-modal-content: $hnm-black-two;
 
 // Magazine-layout
 $magazine-pdp-description: $grey8;
+$magazine-pdp-description-separator: $grey8;
+$magazine-pdp-description-first-color: $hnm-black-four;
+
+// PDP Magazine layout
+$colour-swatches-simple-effect-bg: $grey1;
+
+// Magazine article layout
+$magazine-textarea-color: $hnm-black-three;
+$magazine-label-color: $grey8;
+$magazine-article-title: $hnm-black-four;
+$magazine-article-back-to-feed: $hnm-black-four;
+$magazine-article-title-overflow-shadow: $hnm-black-three;
+
+// PLP LHN block.
+$lhn_l2: $hnm-black-two;
+$lhn_l3: $grey7;
+$lhn_l4: $grey7;
+
+//Algolia search bar.
+$algolia-input-text: $hnm-black-two;
+$algolia-input-placeholder-text: $grey6;
+$algolia-input-border: $white-smoke-border;
+$algolia-suggestion-text: $grey6;
+$algolia-dropdown-border: $grey5;
+$algolia-search-icon: $hnm-black-two;
+$algolia-trending-title-text: $hnm-black-two;
+$algolia-search-clear-text-icon: $hnm-black-two;
+$algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
+
+// Payment cards.
+$payment_card_text: $grey10;

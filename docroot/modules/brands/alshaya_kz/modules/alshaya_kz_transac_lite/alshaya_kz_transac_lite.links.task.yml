@@ -1,0 +1,4 @@
+alshaya_kz_transac_lite.kidzania_settings_form:
+  route_name: alshaya_kz_transac_lite.kidzania_settings_form
+  title: 'Kidzania settings'
+  base_route: alshaya_kz_transac_lite.kidzania_settings_form

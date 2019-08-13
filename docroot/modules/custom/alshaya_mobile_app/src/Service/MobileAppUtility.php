@@ -29,6 +29,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\redirect\RedirectRepository;
 
 /**
  * MobileAppUtility Class.
@@ -155,6 +156,29 @@ class MobileAppUtility {
   protected $renderer;
 
   /**
+   * Listing config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $listingConfig;
+
+  /**
+   * Redirect repository.
+   *
+   * @var \Drupal\redirect\RedirectRepository
+   */
+  protected $redirectRepository;
+
+  /**
+   * Contains array of redirects urls.
+   *
+   * @var array
+   *
+   * @see self::getDeepLinkFromUrl()
+   */
+  protected $redirects = [];
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -183,6 +207,8 @@ class MobileAppUtility {
    *   The ApiWrapper object.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\redirect\RedirectRepository $redirect_repsitory
+   *   Redirect repository.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -196,7 +222,8 @@ class MobileAppUtility {
                               ProductCategoryTreeInterface $product_category_tree,
                               ConfigFactoryInterface $config_factory,
                               APIWrapper $api_wrapper,
-                              RendererInterface $renderer) {
+                              RendererInterface $renderer,
+                              RedirectRepository $redirect_repsitory) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -212,6 +239,7 @@ class MobileAppUtility {
     $this->currencyConfig = $config_factory->get('acq_commerce.currency');
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
+    $this->redirectRepository = $redirect_repsitory;
   }
 
   /**
@@ -322,11 +350,16 @@ class MobileAppUtility {
    */
   public function getDeepLinkFromUrl(Url $url) {
     if (!$url->isRouted()) {
-      return $url->isExternal()
-      ? FALSE
-      : self::ENDPOINT_PREFIX
-        . 'deeplink?url='
-        . $url->toString(TRUE)->getGeneratedUrl();
+      if ($url->isExternal()) {
+        return FALSE;
+      }
+
+      $deeplink_url = $url->toString(TRUE)->getGeneratedUrl();
+      $deeplink_url = $this->getRedirectUrl($deeplink_url);
+
+      return self::ENDPOINT_PREFIX
+      . 'deeplink?url='
+      . $deeplink_url;
     }
 
     $params = $url->getRouteParameters();
@@ -675,7 +708,9 @@ class MobileAppUtility {
       $doc = new \DOMDocument();
       $doc->loadHTML((string) $label['image']);
       $xpath = new \DOMXPath($doc);
-      $label['image'] = Url::fromUserInput($xpath->evaluate("string(//img/@src)"), ['absolute' => TRUE])->toString();
+      // We are using `data-src` attribute as we are using blazy for images.
+      // If blazy is disabled, then we need to revert back to `src` attribute.
+      $label['image'] = $xpath->evaluate("string(//img/@data-src)");
     }
 
     return $labels;
@@ -693,26 +728,26 @@ class MobileAppUtility {
    *   Media Items.
    */
   public function getMedia(SKUInterface $sku, string $context): array {
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $media = $this->skuImagesManager->getProductMedia($sku, $context);
 
-    // Keep schema consistent.
-    if (empty($media)) {
-      return ['images' => [], 'videos' => []];
-    }
-
-    if (!isset($media['images_with_type'])) {
-      $media['images_with_type'] = array_map(function ($image) {
-        return [
-          'url' => $image,
-          'image_type' => 'image',
-        ];
-      }, array_values($media['images']));
-    }
-
-    return [
-      'images' => $media['images_with_type'],
-      'videos' => array_values($media['videos']),
+    $return = [
+      'images' => [],
+      'videos' => [],
     ];
+
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      $return['images'][] = [
+        'url' => file_create_url($media_item['drupal_uri']),
+        'image_type' => $media_item['sortAssetType'] ?? 'image',
+      ];
+    }
+
+    foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+      $return['videos'][] = $media_item['video_url'];
+    }
+
+    return $return;
   }
 
   /**
@@ -734,7 +769,8 @@ class MobileAppUtility {
     }
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-    $color = $node->get('field_product_color')->getString();
+
+    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);
@@ -982,6 +1018,55 @@ class MobileAppUtility {
       'data' => $response_data,
       'cacheable_metadata' => $cacheable_metadata,
     ];
+  }
+
+  /**
+   * Get redirect url for a given url.
+   *
+   * @param string $url
+   *   Url for which redirect needs to check.
+   *
+   * @return mixed|string
+   *   Redirect url.
+   */
+  public function getRedirectUrl(string $url = '') {
+    if (empty($url)) {
+      return $url;
+    }
+
+    // Get the first occurence of string between '/' and '/'. So If url is
+    // like '/en/abc/def/xyz', it will have 'en'.
+    preg_match('#(?<=/)[^/]+#', $url, $match);
+    $langcode = NULL;
+
+    // If language exists for the given langcode.
+    if (!empty($match) && $this->languageManager->getLanguage($match[0])) {
+      $langcode = $match[0];
+    }
+
+    // If langcode exists in the url string.
+    if ($langcode && strpos($url, '/' . $langcode . '/') !== FALSE) {
+      $url = str_replace('/' . $langcode . '/', '', $url);
+
+      // Checking if redirects already available or not. If yes, then use or
+      // find the redirects.
+      // Populating the redirects array because to skip the infinite
+      // redirection as well as it goes in in infinite redirection if
+      // process/find the redirect for same url more than once in a request.
+      if (empty($this->redirects[$langcode][$url])) {
+        $redirect = $this->redirectRepository->findMatchingRedirect($url, [], $langcode);
+        $redirect_url = $redirect
+          ? $redirect->getRedirectUrl()->toString(TRUE)->getGeneratedUrl()
+          : $url;
+        $this->redirects[$langcode][$url] = $redirect_url;
+        $url = $redirect_url;
+      }
+      else {
+        $url = $this->redirects[$langcode][$url];
+      }
+    }
+
+    return $url;
   }
 
 }

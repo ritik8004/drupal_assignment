@@ -1,0 +1,8 @@
+services:
+  alshaya_social_facebook.event_subscriber:
+    class: Drupal\alshaya_social_facebook\EventSubscriber\AlshayaSocialFacebookSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@social_auth_facebook.manager'
+      - '@alshaya_social.helper'

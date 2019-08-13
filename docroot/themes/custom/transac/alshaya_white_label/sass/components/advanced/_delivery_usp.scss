@@ -85,13 +85,9 @@
       }
 
       strong {
-        display: block;
+        display: inline-block;
         font-family: $alshaya-bold;
         padding: 0 0.1875rem;
-
-        @include breakpoint($tablet) {
-          display: inline-block;
-        }
       }
     }
   }

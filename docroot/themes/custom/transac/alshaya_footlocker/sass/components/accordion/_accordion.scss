@@ -1,6 +1,12 @@
 .c-accordion__title {
   text-transform: uppercase;
 
+  @include breakpoint($tablet) {
+    &.c-facet__title {
+      border-color: $plp_facet_filter_border;
+    }
+  }
+
   &.ui-state-active {
     border-bottom: 0;
   }

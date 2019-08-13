@@ -45,7 +45,7 @@
 
       var $menuIn = $('.has-child:not(".max-depth") .menu__link-wrapper', context);
       $menuIn.on('click', function () {
-        $(this).next('.menu__in').next().toggleClass('menu__list--active');
+        $(this).next('.menu__in').next().addClass('menu__list--active');
       });
 
       var $menuInFirst = $('.has-child:not(".max-depth") > .menu__link-wrapper');
@@ -56,7 +56,7 @@
 
       var $menuBack = $('.back--link', context);
       $menuBack.on('click', function () {
-        $(this).parents('.menu__list').first().toggleClass('menu__list--active');
+        $(this).parents('.menu__list').first().removeClass('menu__list--active');
       });
 
       var $menuBackFirst = $('.menu--two__list > .menu__links__wrapper > .back--link');
@@ -121,6 +121,9 @@
       $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
         $('.menu--two__list li:first', this).addClass('first--child_open');
+        if (typeof Drupal.blazy !== 'undefined') {
+          Drupal.blazy.revalidate();
+        }
       }, function () {
         $('body').removeClass('overlay');
         $('.menu--two__list li:first', this).removeClass('first--child_open');
@@ -176,40 +179,38 @@
       /**
        * Add active state to the menu.
        */
-
+      var menuHovered = 0;
       if ($('.block-alshaya-main-menu').length) {
         var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
 
         $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
+          menuHovered = 1;
           $(parent).parent().addClass('active--menu--links');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
           $(parent).parent().removeClass('active--menu--links');
+          menuHovered = 0;
         });
       }
 
-      /**
-       * Make Header sticky on scroll.
-       */
+      $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseenter(function () {
+        if (menuHovered === 1) {
+          $('ul.menu--two__list').css('transition', 'none');
+          $('.menu-backdrop').css('transition', 'none');
+        }
+        else {
+          $('ul.menu--two__list').css('transition', 'all var(--menuTiming) ease-in 300ms');
+          $('.menu-backdrop').css('transition', 'all var(--menuTiming) ease-in 300ms');
+        }
+      });
 
-      if ($('.branding__menu').length) {
-        var position = $('.branding__menu').offset().top;
-        var nav = $('.branding__menu');
-        var topHeader = $('.header--wrapper');
-        $(window, context).once().scroll(function () {
-          if ($(this).scrollTop() > position) {
-            $('body').addClass('header--fixed');
-            nav.addClass('navbar-fixed-top');
-            topHeader.addClass('navbar-fixed-top');
-          }
-          else {
-            nav.removeClass('navbar-fixed-top');
-            topHeader.removeClass('navbar-fixed-top');
-            $('body').removeClass('header--fixed');
-          }
-        });
-      }
+      $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseleave(function () {
+        if (menuHovered === 1) {
+          $('ul.menu--two__list').css('transition', 'all var(--menuTiming) ease-in 300ms');
+          $('.menu-backdrop').css('transition', 'all var(--menuTiming) ease-in 300ms');
+        }
+      });
 
       // Add class for three level navigation.
       $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
@@ -253,6 +254,28 @@
           $(this).parent().removeClass('active--menu--without__child');
         });
       }
+
+      function stickyHeader() {
+        $(window, context).once().on('scroll', function () {
+          var position = $('.region__banner-top').outerHeight();
+
+          if ($(this).scrollTop() > position) {
+            $('.branding__menu').addClass('navbar-fixed-top');
+            $('body').addClass('header--fixed');
+          }
+          else {
+            $('.branding__menu').removeClass('navbar-fixed-top');
+            $('body').removeClass('header--fixed');
+          }
+        });
+      }
+
+      $(window, context).on('load', function () {
+        // Apply the sticky header only on non plp,srp,promo pages.
+        if ($(window).width() < 768 && $('.region__banner-top').length > 0 && $('.c-plp').length < 1) {
+          stickyHeader();
+        }
+      });
     }
   };
 

@@ -17,6 +17,11 @@ use Drupal\node\NodeInterface;
 function alshaya_seo_token_info() {
   $info = [];
 
+  $info['types']['custom_meta'] = [
+    'name' => 'Custom Meta Tokens',
+    'description' => t('Custom tokens for meta tags.'),
+  ];
+
   // Token to return locale for the currently visited page.
   $info['tokens']['site']['locale'] = [
     'name' => 'locale',
@@ -34,9 +39,46 @@ function alshaya_seo_token_info() {
   ];
 
   $info['tokens']['node']['summary_custom'] = [
-    'name' => t("Summary custom"),
+    'name' => t('Summary custom'),
     'description' => t("The summary of the node's main body text with dynamic length."),
     'dynamic' => TRUE,
+  ];
+
+  $info['tokens']['custom_meta']['brand_name'] = [
+    'name' => t('Brand name'),
+    'description' => t('The brand name for the website.'),
+  ];
+
+  $info['tokens']['custom_meta']['city1'] = [
+    'name' => t('City 1'),
+    'description' => t('City for meta data.'),
+  ];
+
+  $info['tokens']['custom_meta']['city2'] = [
+    'name' => t('City 2'),
+    'description' => t('City for meta data.'),
+  ];
+
+  $info['tokens']['custom_meta']['cities'] = [
+    'name' => t('Cities'),
+    'description' => t('Cities for meta data.'),
+  ];
+
+  $info['tokens']['custom_meta']['country'] = [
+    'name' => t('Country'),
+    'description' => t('The website country.'),
+  ];
+
+  $info['tokens']['custom_meta']['usp1'] = [
+    'name' => t('USP1'),
+  ];
+
+  $info['tokens']['custom_meta']['usp2'] = [
+    'name' => t('USP2'),
+  ];
+
+  $info['tokens']['custom_meta']['usp3'] = [
+    'name' => t('USP3'),
   ];
 
   return $info;
@@ -85,7 +127,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
   }
 
-  if ($type == 'node' && !empty($data['node'])) {
+  if ($type == 'node' && !empty($data['node']) && $data['node'] instanceof NodeInterface) {
 
     /** @var \Drupal\node\NodeInterface $node */
     $node = $data['node'];
@@ -131,6 +173,63 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           $output = $item->processed;
         }
         $replacements[$original] = text_summary($output, 'plain_text', $size);
+      }
+    }
+  }
+
+  if ($type == 'custom_meta') {
+    $seo_config = \Drupal::configFactory()->get('alshaya_seo_transac.meta_variables');
+    $brand_name = (string) t('seo_brand_name');
+    $min_amount = $seo_config->get('min_shipping_amount');
+    $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
+
+    // Invoke the alter hook to allow all modules to set brand.
+    \Drupal::moduleHandler()->alter('alshaya_seo_brandname', $brand_name);
+
+    foreach ($tokens as $name => $original) {
+      // Find the desired token by name.
+      switch ($name) {
+        case 'brand_name':
+          $replacements[$original] = $brand_name;
+          break;
+
+        case 'usp1':
+          $replacements[$original] = t('Free Delivery on orders over @currency_code @min_amount', ['@currency_code' => $currency_code, '@min_amount' => $min_amount]);
+          break;
+
+        case 'usp2':
+          $replacements[$original] = $seo_config->get('usp2');
+          break;
+
+        case 'usp3':
+          $replacements[$original] = $seo_config->get('usp3');
+          break;
+
+        case 'country':
+          $replacements[$original] = t('seo_country');
+          break;
+
+        case 'city1':
+          // Show empty string if translation not available.
+          $value = t('seo_city1');
+          $replacements[$original] = $value == 'seo_city1' ? '' : $value;
+          break;
+
+        case 'city2':
+          // Show empty string if translation not available.
+          $value = t('seo_city2');
+          $replacements[$original] = $value == 'seo_city2' ? '' : $value;
+          break;
+
+        case 'cities':
+          $token_service = \Drupal::token();
+          $cities = [
+            $token_service->replace('[custom_meta:city1]'),
+            $token_service->replace('[custom_meta:city2]'),
+          ];
+
+          $replacements[$original] = implode(', ', array_filter($cities));
+          break;
       }
     }
   }

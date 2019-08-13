@@ -35,7 +35,9 @@ class LocalCommand extends BltTasks {
     $this->say('Local: ' . $info['local']['url']);
     $this->say('Remote: ' . $info['remote']['url']);
 
-    if ($mode === 'download') {
+    // If the mode is set to download or archive doesn't exist we download
+    // the dump from cloud.
+    if ($mode === 'download' || !file_exists($info['archive'])) {
       if (!$this->downloadDb($site, $env)) {
         return;
       }
@@ -112,7 +114,7 @@ class LocalCommand extends BltTasks {
       ->run();
 
     // Now the last thing, dev script, I love it :).
-    $dev_script_path = 'scripts/install-site-dev.sh';
+    $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
       $this->_exec('sh ' . $dev_script_path . ' ' . $site);
     }

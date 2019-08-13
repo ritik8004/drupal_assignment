@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - image_style_quality
+name: magazine_article_home
+label: 'Magazine Article Home'
+effects:
+  06e21f57-31cd-447c-a6a4-31eee2901147:
+    uuid: 06e21f57-31cd-447c-a6a4-31eee2901147
+    id: image_scale
+    weight: 1
+    data:
+      width: 304
+      height: null
+      upscale: false
+  4d47d810-2e29-4220-8127-b8a8276cbfab:
+    uuid: 4d47d810-2e29-4220-8127-b8a8276cbfab
+    id: image_style_quality
+    weight: 2
+    data:
+      quality: 75

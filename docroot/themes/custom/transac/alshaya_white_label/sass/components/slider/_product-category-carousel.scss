@@ -65,7 +65,8 @@
 
   .price-wrapper,
   .c-products__item__label,
-  .promotions {
+  .promotions,
+  .price-block {
     line-height: 1.2;
   }
 
@@ -210,7 +211,7 @@
         .views-row {
           width: 37%;
           margin-#{$left}: 0;
-          margin-#{$right}: 0.625rem;
+          margin-#{$right}: 0.1875rem;
         }
       }
     }

@@ -32,6 +32,10 @@
           minimumResultsForSearch: -1
         });
 
+        $('.form-item-preferred-store .form-select').select2({
+          minimumResultsForSearch: -1
+        });
+
         // See https://github.com/select2/select2/pull/5035.
         $('.cybersource-credit-card-exp-month-select').once('manage-disable').on('change', function () {
           setTimeout(function () {
@@ -50,6 +54,12 @@
 
         // PDP page quantity field, also works in crosssell, upsell modal views.
         $('.form-item-quantity .form-select').select2({
+          minimumResultsForSearch: -1
+        });
+
+        // Checkout.com Month & Year select fields.
+        // TODO: Use this generic approach everywhere and cleanup this file.
+        $('.convert-to-select2.form-select').select2({
           minimumResultsForSearch: -1
         });
       }

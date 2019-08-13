@@ -1,0 +1,44 @@
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
+    .block-facet-blockcategory-facet-plp,
+    .block-facet-blockcategory-facet-promo,
+    .block-facet-blockcategory-facet-search {
+      top: 5.5rem;
+    }
+  }
+
+  .c-plp {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      ul {
+        .applied-filter {
+          &.max-height {
+            max-height: 5.625rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .branding__menu {
+    .c-header {
+      position: static;
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        width: 11.0625rem;
+      }
+    }
+  }
+}

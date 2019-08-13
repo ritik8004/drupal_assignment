@@ -44,6 +44,7 @@ $_gray_fourteen: #f3f3f3;
 $_gray_fifteen: #acacac;
 $_grey_sixteen: #696969;
 $_grey_seventeen: #b4b3b3;
+$_grey_eighteen: #4a4a4a;
 
 // Overrides for variables.
 // Global elements.
@@ -66,6 +67,9 @@ $sub_title: $_black_two;
 $user_sidebar_block_title: $_black_two;
 $user_block_link: $PB_confirmation_blue;
 $promo_panel_image_title_subtitle_title_text: $_black_two;
+$user_login_section_title: $_black_two;
+$user_login_link_btn_text: $_black_two;
+$social-network-text: $_black_two;
 
 // Accordions.
 $accordion_title: $PB_grey_one;
@@ -308,9 +312,6 @@ $store_finder_glossary_link: $PB_grey_one;
 $lang_switch: $_black_two;
 $lang_switch_firsttime_bg: $_black_two;
 
-// VAT text
-$vat: $PB_grey_two;
-
 // Product Listing page & Search results page.
 $plp_tile_product_title_hover: $_black_two;
 $plp_category_desc: $_black_two;
@@ -320,7 +321,7 @@ $plp_facet_filter_bg: $PB_grey_one;
 $plp_facet_filter_link: $PB_white;
 $plp_facet_clear_border: $_black_two;
 $plp_facet_clear_bg: $_black_two;
-$plp_facet_clear_text: $white-two;
+$plp_facet_clear_text: $_black_two;
 $plp_facet_label_border_mobile: $_black_two;
 $plp_facet_label_bg_mobile: $white-two;
 $plp_facet_label_text_color: $_black_two;
@@ -330,6 +331,12 @@ $plp_facet_filter_count_background: $PB_confirmation_blue;
 $plp_pager_link: $white-two;
 $plp_pager_btn_bg: $_black_two;
 $plp_promotion_link: $PB_deep_red;
+$plp_grid_active_color: $PB_deep_red;
+$plp_all_filter_title: $_black_two;
+$plp_clear_all_btn_text: $_black_two;
+$plp_all_filter_button_color: $_black_two;
+$plp_filter_icon: $_black_two;
+$plp_filter_active_tick: $PB_deep_red;
 
 // Sharethis
 $sharethis_icon: $_grey_sixteen;
@@ -434,6 +441,8 @@ $checkout_login_tab_border: $_gray_eight;
 $checkout_login_tab_text: $PB_grey_one;
 $checkout_login_tab_border_active: $_black_two;
 $checkout_login_tab_text_active: $PB_black_one;
+$checkout_guest_button_border: $_black_two;
+$checkout_guest_button_txt: $_black_two;
 
 // Checkout click and collect heading cnc form.
 $checkout_cc_cnc_form_title_border: $white;
@@ -473,6 +482,9 @@ $checkout_payment_method_title: $PB_black_one;
 $checkout_payment_method_icon_bg: $_gray_twelve;
 $checkout_payment_method_desc: $PB_grey_one;
 $checkout_payment_option_border: $_gray_eleven;
+
+// Payment Cards.
+$payment_card_label: $PB_black_one;
 
 //Checkout Confirmation
 $checkout_order_print_btn_border: $PB_black_one;
@@ -546,3 +558,22 @@ $department_category_accordion_title_arrow: $_black_two;
 
 // gradient holder
 $gradient-holder: $PB_grey_five;
+
+// free design service form
+$form-middle-seperator: $white;
+$form-field-legend: $_grey_eighteen;
+$form-field-label: $PB_grey_two;
+$form-field-title: $PB_grey_one;
+$form-select-border: $PB_grey_four;
+$form-select-text: $PB_grey_two;
+$form-edit-room-legend: $_grey_eighteen;
+$form-field-textarea-border: $PB_grey_one;
+$mobile-field-placeholder: $white-two;
+
+// Category carousel.
+$_category_carosel_title_color: $PB_black_one;
+
+// PLP LHN block.
+$lhn_l2: $_black_two;
+$lhn_l3: $PB_grey_one;
+$lhn_l4: $PB_grey_one;
