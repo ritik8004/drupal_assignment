@@ -113,6 +113,12 @@
   .region__content {
     position: relative;
   }
+
+  .expired-cards {
+    font-size: 0.875rem;
+    color: $payment_card_expired_notice;
+    margin: 0.75rem 0;
+  }
 }
 
 .payment-card-delete-form {
