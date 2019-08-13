@@ -28,6 +28,11 @@ class MigrateSymmetricToAsymmetric {
    */
   protected $paragraphStorage;
 
+  /**
+   * Static list of fields for migration.
+   *
+   * @var array
+   */
   public static $fields = [
     'paragraph' => [
       'field_1_row_2_col_1',

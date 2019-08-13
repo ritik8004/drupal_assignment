@@ -1,3 +1,9 @@
+{% if html_direction == "ltr" %}
+  {{ attach_library('alshaya_white_label/ltr_print_styles') }}
+{% elseif html_direction == "rtl" %}
+  {{ attach_library('alshaya_white_label/rtl_print_styles') }}
+{% endif %}
+
 {% set attributes = attributes.addClass('user-page', 'l-two--sf', 'checkout-login', 'order-confirmation') %}
 <div>
 

@@ -47,18 +47,6 @@
         }
       }
 
-      &.brand-victoria-sport {
-        &::after {
-          background: url("../imgs/logos/super-category/vsport.svg") no-repeat center;
-          background-size: contain;
-        }
-
-        &:hover::after {
-          background: url("../imgs/logos/super-category/vsport-active.svg") no-repeat center;
-          background-size: contain;
-        }
-      }
-
       &.brand-beauty {
         &::after {
           background: url("../imgs/logos/super-category/beauty.svg") no-repeat center;
@@ -76,11 +64,6 @@
       .brand-victoria-secret::after,
       .brand-victorias-secret::after {
         background: url("../imgs/logos/super-category/vsecret-active.svg") no-repeat center;
-        background-size: contain;
-      }
-
-      .brand-victoria-sport::after {
-        background: url("../imgs/logos/super-category/vsport-active.svg") no-repeat center;
         background-size: contain;
       }
 

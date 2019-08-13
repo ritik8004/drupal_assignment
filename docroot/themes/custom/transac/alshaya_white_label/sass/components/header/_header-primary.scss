@@ -1647,9 +1647,10 @@ html {
 
     .mobile--search {
       float: $right;
+      width: 3rem;
       margin-#{$right}: 1.25rem;
       position: absolute;
-      top: 0.625rem;
+      top: 0.3125rem;
       #{$right}: 3.25rem;
       font-size: 0;
       padding-top: 0.625rem;
@@ -1658,9 +1659,10 @@ html {
 
     .store {
       float: $right;
+      width: 3.5rem;
       margin-#{$right}: 1.125rem;
       position: absolute;
-      top: 0.625rem;
+      top: 0.3125rem;
       font-size: 0;
       margin-top: 0;
       #{$right}: 1rem;
