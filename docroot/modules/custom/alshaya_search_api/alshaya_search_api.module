@@ -11,6 +11,29 @@ use Drupal\views\ViewExecutable;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_search_api_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['all_facets_block'] = [
+    'template' => 'all-facets-block',
+    'variables' => [
+      'facet_blocks' => [],
+      'show_all' => NULL,
+      'class' => NULL,
+    ],
+  ];
+
+  $items['grid_count_block'] = [
+    'template' => 'grid-count-block',
+    'variables' => [],
+  ];
+
+  return $items;
+}
+
+/**
  * Wrapper function, removes a field from Index and trigger re-index.
  *
  * @param string $field_code
@@ -182,4 +205,17 @@ function alshaya_search_api_search_api_query_alter(QueryInterface &$query) {
     $stock_condition->addCondition('stock', 0, '>');
     $query->getConditionGroup()->addConditionGroup($stock_condition);
   }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_search_api_modules_uninstalled($modules) {
+  if (!in_array('alshaya_search_algolia', $modules)) {
+    return;
+  }
+
+  // Reset configs overridden by alshaya_search_algolia module.
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
 }

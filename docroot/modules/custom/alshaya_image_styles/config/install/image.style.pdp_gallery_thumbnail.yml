@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: pdp_gallery_thumbnail
+label: 'PDP Gallery Thumbnail'
+effects:
+  f5de9a31-cad0-4b2a-88e0-83336c88d87c:
+    uuid: f5de9a31-cad0-4b2a-88e0-83336c88d87c
+    id: image_scale
+    weight: 2
+    data:
+      width: null
+      height: 130
+      upscale: false
+  373ba336-9855-4368-be3f-cffac44b8b69:
+    uuid: 373ba336-9855-4368-be3f-cffac44b8b69
+    id: image_style_quality
+    weight: 2
+    data:
+      quality: 80

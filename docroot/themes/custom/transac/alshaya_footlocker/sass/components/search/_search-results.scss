@@ -1,0 +1,11 @@
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page .ui-autocomplete {
+    @include breakpoint($only-mobile) {
+      top: 5.9375rem !important;
+
+      html[lang=ar] & {
+        top: 5.9375rem !important;
+      }
+    }
+  }
+}

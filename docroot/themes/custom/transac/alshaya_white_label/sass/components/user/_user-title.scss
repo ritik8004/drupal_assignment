@@ -37,15 +37,11 @@
 .c-user-login {
   h1 {
     @include breakpoint($tablet) {
-      top: -4.8rem;
+      top: -4.5rem;
 
       html[lang=ar] & {
         width: 100%;
       }
-    }
-
-    @include breakpoint($desktop) {
-      top: -4.5rem;
     }
   }
 
@@ -61,11 +57,7 @@
     top: -3.7rem;
 
     @include breakpoint($tablet) {
-      top: -5.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      top: -0.9rem;
+      top: -4.5rem;
     }
   }
 }
@@ -82,7 +74,8 @@
 .c-user-edit .block-page-title-block,
 .c-order-list .block-page-title-block,
 .c-user--node .block-page-title-block,
-.c-address-book .block-page-title-block {
+.c-address-book .block-page-title-block,
+.c-payment-cards .block-page-title-block {
   position: relative;
   border-bottom: 1px solid $primary_border;
   padding: 0.45rem 0 0.3rem;

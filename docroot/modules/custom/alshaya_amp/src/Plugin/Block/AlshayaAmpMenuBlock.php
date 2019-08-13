@@ -51,6 +51,11 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   protected $routeMatch;
 
+  /**
+   * Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $configFactory;
 
   /**
@@ -120,7 +125,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
       $query->condition('ttrm.langcode', $this->languageManager->getCurrentLanguage()->getId());
     }
 
-    $query->condition('tth.parent', 0);
+    $query->condition('tth.parent_target_id', 0);
     $query->condition('tfd.vid', $this->vid);
     $query->condition('tfd.langcode', $this->languageManager->getCurrentLanguage()->getId());
     $terms = $query->execute()->fetchAll();

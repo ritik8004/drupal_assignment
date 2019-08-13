@@ -5,8 +5,10 @@
     color: $sell_label;
   }
 
-  .owl-carousel .owl-item img {
-    @include breakpoint($only-tablet) {
+  .owl-carousel .slick-slide img {
+    max-width: 9rem;
+
+    @include breakpoint($tablet) {
       object-fit: cover;
     }
 
@@ -15,22 +17,24 @@
     }
   }
 
-  .owl-prev,
-  .owl-next {
+  .slick-prev,
+  .slick-next {
     @include breakpoint($tablet) {
-      top: 32%;
+      top: 32% !important;
     }
   }
 }
 
 .subtitle.crossell-title {
-  @include arabic-letter-spacing;
-
   font-family: $hnm-demibold;
-  letter-spacing: 1px;
 
   @include breakpoint($tablet) {
     margin-bottom: 0.25rem;
+    font-size: 1rem;
+
+    html[lang=ar] & {
+      font-size: 0.875rem;
+    }
   }
 }
 

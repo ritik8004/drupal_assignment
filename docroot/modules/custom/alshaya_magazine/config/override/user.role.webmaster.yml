@@ -1,0 +1,8 @@
+permissions:
+  - 'administer magazine promote to frontend'
+  - 'translate magazine_article node'
+  - 'create magazine_article content'
+  - 'delete any magazine_article content'
+  - 'delete own magazine_article content'
+  - 'edit any magazine_article content'
+  - 'edit own magazine_article content'

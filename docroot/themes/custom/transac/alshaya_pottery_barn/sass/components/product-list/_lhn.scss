@@ -1,0 +1,25 @@
+.block-alshaya-category-lhn-block {
+  // L2.
+  > ul > li {
+    > .lhn-2 {
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  ul {
+    li {
+      a {
+        text-transform: capitalize;
+
+        &.active {
+          font-weight: 700;
+        }
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

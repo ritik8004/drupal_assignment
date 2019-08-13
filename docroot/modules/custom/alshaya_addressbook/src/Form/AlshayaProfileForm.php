@@ -24,7 +24,7 @@ class AlshayaProfileForm extends ProfileForm {
       if (\Drupal::request()->get('from') == 'checkout') {
         $element['cancel_button'] = [
           '#type' => 'link',
-          '#title' => t('Cancel'),
+          '#title' => $this->t('Cancel'),
           '#attributes' => [
             'class' => ['cancel-button', 'button'],
           ],
@@ -37,7 +37,7 @@ class AlshayaProfileForm extends ProfileForm {
       else {
         $element['cancel_button'] = [
           '#type' => 'link',
-          '#title' => t('Cancel'),
+          '#title' => $this->t('Cancel'),
           '#attributes' => [
             'class' => ['cancel-button', 'button'],
           ],

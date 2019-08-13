@@ -31,7 +31,7 @@
     <div class="c-footer-menu">
       {% for key2, column in row %}
         <div class="c-footer-menu__tab">
-          <a class="menu__link menu--one__link c-footer-menu__link {{ column.class }}" href="{{ column.path }}">{{ column.label }}</a>
+          <a class="menu__link menu--one__link c-footer-menu__link {{ column.class|join(' ') }}" href="{{ column.path }}">{{ column.label }}</a>
         </div>
       {% endfor %}
     </div>

@@ -11,6 +11,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
+use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -68,6 +69,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $priceHelper;
 
   /**
+   * Module installer service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  protected $moduleHandler;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -94,6 +102,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Language Manager.
    * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $price_helper
    *   Price Helper.
+   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   *   Module handler service.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -106,13 +116,15 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               SkuImagesManager $skuImagesManager,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
-                              SkuPriceHelper $price_helper) {
+                              SkuPriceHelper $price_helper,
+                              ModuleHandler $module_handler) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->priceHelper = $price_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -154,7 +166,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
-    if ($entity_adapter instanceof EntityAdapter) {
+    if (($entity_adapter instanceof EntityAdapter) &&
+      ($this->skuManager->isListingModeNonAggregated())) {
       $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
 
       /** @var \Drupal\node\NodeInterface $colorNode */
@@ -166,6 +179,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
       $color = $colorNode->get('field_product_color')->getString();
     }
+
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
 
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
@@ -181,23 +196,31 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $product_base_url = $product_url = $node->url();
         $product_label = $node->getTitle();
 
-        try {
-          $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color);
-
-          if (!($sku_for_gallery instanceof SKUInterface)) {
-            $sku_for_gallery = $sku;
-          }
-
-          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
-
-          // Do not add selected param if we are using parent sku itself for
-          // gallery. This is normal for PB, MC, etc.
-          if ($sku_for_gallery->id() != $sku->id()) {
-            $product_url .= '?selected=' . $sku_for_gallery->id();
-          }
+        $all_galleries = [];
+        if (empty($color) && $display_settings->get('show_color_images_on_filter')) {
+          $all_galleries = $this->skuImagesManager->getAllColorGallery($sku);
         }
-        catch (\Exception $e) {
-          $sku_gallery = [];
+
+        if (empty($all_galleries)) {
+          try {
+            $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color);
+
+            if (!($sku_for_gallery instanceof SKUInterface)) {
+              $sku_for_gallery = $sku;
+            }
+
+            $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
+
+            // Do not add selected param if we are using parent sku itself for
+            // gallery. This is normal for PB, MC, etc.
+            if (($sku_for_gallery->id() != $sku->id()) &&
+              (!$this->moduleHandler->moduleExists('alshaya_color_split'))) {
+              $product_url .= '?selected=' . $sku_for_gallery->id();
+            }
+          }
+          catch (\Exception $e) {
+            $sku_gallery = [];
+          }
         }
 
         $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
@@ -211,13 +234,14 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         if (alshaya_acm_product_is_buyable($sku) && !$this->skuManager->isProductInStock($sku)) {
           $stock_placeholder = [
-            '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
+            '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . $this->t('out of stock') . '</span></div>',
           ];
         }
 
         $elements[$delta] = [
           '#theme' => 'sku_teaser',
-          '#gallery' => $sku_gallery,
+          '#gallery' => $sku_gallery ?? [],
+          '#all_galleries' => $all_galleries,
           '#product_url' => $product_url,
           '#product_base_url' => $product_base_url,
           '#product_label' => $product_label,
@@ -236,11 +260,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
 
-        if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
+        if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
+          $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->skuManager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');
         }
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
+        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/show_color_images_on_filter';
       }
     }
 
@@ -257,10 +283,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     foreach ($elements as $delta => $element) {
       // If main image is empty.
-      if (empty($element['#gallery']['#mainImage'])) {
+      if (empty($element['#all_galleries']) && empty($element['#gallery']['#mainImage'])) {
         $default_image = $this->skuImagesManager->getProductDefaultImage();
         if ($default_image) {
-          $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
+          $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', 'product_listing');
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';
         }
@@ -298,7 +324,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
       $container->get('language_manager'),
-      $container->get('alshaya_acm_product.price_helper')
+      $container->get('alshaya_acm_product.price_helper'),
+      $container->get('module_handler')
     );
   }
 

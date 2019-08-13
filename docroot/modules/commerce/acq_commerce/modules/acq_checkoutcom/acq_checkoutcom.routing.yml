@@ -1,0 +1,76 @@
+acq_checkoutcom.payment_success:
+  path: '/checkoutcom/payment/success'
+  defaults:
+    _title: 'Checkout.com status'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::success'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+acq_checkoutcom.payment_fail:
+  path: '/checkoutcom/payment/fail'
+  defaults:
+    _title: 'Checkout.com status'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::fail'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+acq_checkoutcom.payment_cards:
+  path: '/user/{user}/payment-cards'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::listCards'
+    _title: 'Payment Cards'
+  requirements:
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+acq_checkoutcom.payment_card.remove_card:
+  path: '/user/{user}/payment-card/{public_hash}/remove'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::removeCard'
+    _title: 'Remove card'
+  options:
+    parameters:
+      user:
+        type: entity:user
+  requirements:
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\PaymentCardsController::checkAccess'
+    user: \d+
+    _csrf_token: 'TRUE'
+
+acq_checkoutcom.apple_pay_validate:
+  path: '/checkoutcom/applepay/validate'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\acq_checkoutcom\Controller\ApplePayController::validate'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+acq_checkoutcom.apple_pay_save_payment:
+  path: '/checkoutcom/applepay/save-payment'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\acq_checkoutcom\Controller\ApplePayController::savePayment'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+acq_checkoutcom.submit_payment_form:
+  path: '/checkoutcom/submit/payment-form'
+  defaults:
+    _title: 'Validate payment form and save data'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutController::submitMakePaymentForm'
+  requirements:
+    _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'
+  options:
+    no_cache: TRUE

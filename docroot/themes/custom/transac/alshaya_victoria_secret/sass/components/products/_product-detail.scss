@@ -53,6 +53,13 @@
       height: 2.5rem;
       margin-top: 2.125rem;
 
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          margin-right: 0.5rem;
+          font-size: 1rem;
+        }
+      }
+
       .super-category-victorias-secret & {
         font-family: $vs-bentonsanscomp-medium;
         font-size: 1.1875rem;
@@ -516,26 +523,29 @@
   }
 }
 
-html[lang="en"] .super-category-victorias-secret {
-  .acq-content-product,
-  .acq-content-product-modal {
-    .content__title_wrapper {
-      h1,
-      h2 {
-        width: 100%;
+html[lang="en"] {
+  .super-category-victorias-secret,
+  .super-category-beauty {
+    .acq-content-product,
+    .acq-content-product-modal {
+      .content__title_wrapper {
+        h1,
+        h2 {
+          width: 100%;
 
-        .title--main,
-        &.field--name-name {
-          font-size: 1.625rem;
+          .title--main,
+          &.field--name-name {
+            font-size: 1.625rem;
+          }
         }
       }
     }
-  }
 
-  .subtitle {
-    &.crossell-title {
-      font-family: $vs-bentonsans-light;
-      font-size: 1.375rem;
+    .subtitle {
+      &.crossell-title {
+        font-family: $vs-bentonsans-light;
+        font-size: 1.375rem;
+      }
     }
   }
 }

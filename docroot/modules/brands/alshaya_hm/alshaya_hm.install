@@ -13,6 +13,102 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Enable magazine articles feature.
+ */
+function alshaya_hm_update_8037() {
+  \Drupal::service('module_installer')->install(['alshaya_magazine']);
+
+  $strings = [
+    'READ MAGAZINE' => [
+      'en' => 'READ H&M MAGAZINE',
+      'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable color split module.
+ */
+function alshaya_hm_update_8036() {
+  \Drupal::service('module_installer')->install(['alshaya_color_split']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set config values for meta variables.
+ */
+function alshaya_hm_update_8035() {
+  $configFactory = \Drupal::configFactory()->getEditable('alshaya_seo_transac.meta_variables');
+
+  // Set minimum free shipping amount for hmkw.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_kw')) {
+    $configFactory->set('min_shipping_amount', 9);
+  }
+  else {
+    $configFactory->set('min_shipping_amount', 99);
+  }
+
+  // Save the changes.
+  $configFactory->save();
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'H&M',
+      'ar' => 'اتش اند ام',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new config `acq_sku__attributes_skip`.
+ */
+function alshaya_hm_update_8034() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new sku_base_fields config field - display_configurable_for.
+ */
+function alshaya_hm_update_8033() {
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $field = $config->get('color_label');
+  $field['display_configurable_for'] = 'article_castor_id';
+  $config->set('color_label', $field);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add index for attr_style_code in acq_sku_field_data.
+ */
+function alshaya_hm_update_8032() {
+  \Drupal::moduleHandler()->loadInclude('acq_sku', 'install');
+
+  $index = 'acq_sku__attr_style_code';
+  $data = _acq_sku_indexes()[$index];
+  if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
+    \Drupal::database()
+      ->schema()
+      ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Mark all indexed data for re-indexation to get the price data indexed again.
  */
 function alshaya_hm_update_8031() {
@@ -569,11 +665,6 @@ function alshaya_hm_install() {
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
 
-  // Disable loyalty.
-  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
-    ->set('enable_disable_loyalty', FALSE)
-    ->save();
-
   // Set initial translation strings.
   $strings = [
     'view cart' => [
@@ -588,7 +679,16 @@ function alshaya_hm_install() {
       'ar' => 'المفهوم',
       'en' => 'Concept',
     ],
+    'seo_brand_name' => [
+      'en' => 'H&M',
+      'ar' => 'اتش اند ام',
+    ],
+    'READ MAGAZINE' => [
+      'en' => 'READ H&M MAGAZINE',
+      'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
   ];
+
   alshaya_i18n_save_translations($strings);
 
   // Save overridden configs.
@@ -618,6 +718,11 @@ function alshaya_hm_update_dependencies() {
     'alshaya_hm' => [
       '8018' => [
         'alshaya' => '8004',
+      ],
+    ],
+    'alshaya_hm' => [
+      '8034' => [
+        'alshaya_seo_transac' => '8402',
       ],
     ],
   ];

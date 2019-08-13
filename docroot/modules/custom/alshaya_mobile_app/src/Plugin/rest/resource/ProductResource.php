@@ -10,10 +10,10 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -212,6 +212,8 @@ class ProductResource extends ResourceBase {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
     }
 
+    $response->addCacheableDependency($cacheableMetadata);
+
     return $response;
   }
 
@@ -284,7 +286,7 @@ class ProductResource extends ResourceBase {
     foreach ($label_contexts as $key => $context) {
       $data['labels'][] = [
         'context' => $context,
-        'labels' => $this->getLabels($sku, $key),
+        'labels' => $this->mobileAppUtility->getLabels($sku, $key),
       ];
     }
 
@@ -370,50 +372,7 @@ class ProductResource extends ResourceBase {
    *   Media Items.
    */
   private function getMedia(SKUInterface $sku, string $context): array {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $media = $this->skuImagesManager->getProductMedia($sku, $context);
-
-    if (!isset($media['images_with_type'])) {
-      $media['images_with_type'] = array_map(function ($image) {
-        return [
-          'url' => $image,
-          'image_type' => 'image',
-        ];
-      }, array_values($media['images']));
-    }
-
-    return [
-      'images' => $media['images_with_type'],
-      'videos' => array_values($media['videos']),
-    ];
-  }
-
-  /**
-   * Wrapper function get labels and make the urls absolute.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $context
-   *   Context.
-   *
-   * @return array
-   *   Labels data.
-   */
-  private function getLabels(SKUInterface $sku, string $context): array {
-    $labels = $this->skuManager->getLabels($sku, $context);
-
-    if (empty($labels)) {
-      return [];
-    }
-
-    foreach ($labels as &$label) {
-      $doc = new \DOMDocument();
-      $doc->loadHTML((string) $label['image']);
-      $xpath = new \DOMXPath($doc);
-      $label['image'] = Url::fromUserInput($xpath->evaluate("string(//img/@src)"), ['absolute' => TRUE])->toString();
-    }
-
-    return $labels;
+    return $this->mobileAppUtility->getMedia($sku, $context);
   }
 
   /**
@@ -501,8 +460,20 @@ class ProductResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size' && !empty($size_labels[$value])) {
-          $attr_value['label'] = $size_labels[$value];
+        if ($attribute_code == 'size') {
+          if (!empty($size_labels[$value])) {
+            $attr_value['label'] = $size_labels[$value];
+          }
+          elseif (
+            ($term = $this->productOptionsManager->loadProductOptionByOptionId(
+              $attribute_code,
+              $value,
+              $this->mobileAppUtility->currentLanguage())
+            )
+            && $term instanceof TermInterface
+          ) {
+            $attr_value['label'] = $term->label();
+          }
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
@@ -571,7 +542,7 @@ class ProductResource extends ResourceBase {
    */
   private function getPromotions(SKUInterface $sku): array {
     $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
       $promotion_node = $this->nodeStorage->load($nid);

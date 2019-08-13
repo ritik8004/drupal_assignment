@@ -65,7 +65,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 /**
  * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
  */
-function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
+function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStateInterface $form_state, AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
   // Update title of parent product based on selected sku if available.
   if ($selected_sku instanceof SKUInterface) {
     $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($selected_sku);
@@ -185,22 +185,10 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
     $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
     switch ($current_route['route_name']) {
-      case 'entity.node.canonical':
-        if (isset($current_route['route_params'], $current_route['route_params']['node'])) {
-          /** @var \Drupal\node\Entity\Node $node */
-          $node = $current_route['route_params']['node'];
-          if ($node->bundle() === 'acq_product') {
-            $attributes = $gtm_manager->fetchProductGtmAttributes($node, 'full');
-            $processed_attributes = $gtm_manager->processAttributesForPdp($attributes);
-            $data_layer = array_merge($data_layer, $processed_attributes);
-            $data_layer['pageType'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
-          }
-        }
-        break;
-
       case 'acq_checkout.form':
-        if (in_array($current_route['route_params']['step'],
-          ['login', 'delivery', 'payment'], TRUE)) {
+      case 'acq_cart.cart':
+        if ((isset($current_route['route_params']['step']) && in_array($current_route['route_params']['step'],
+          ['delivery', 'payment'], TRUE)) || $current_route['route_name'] == 'acq_cart.cart') {
 
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
@@ -216,30 +204,18 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             $products[] = $product;
           }
 
-          // Set the correct step id.
-          switch ($current_route['route_params']['step']) {
-            case 'login':
-              $step = 1;
-              break;
+          if ($current_route['route_name'] == 'acq_cart.cart') {
+            $step = 1;
+          }
 
+          // Set the correct step id.
+          switch ($current_route['route_params']['step'] ?? '') {
             case 'delivery':
-              if (!empty($data_layer['deliveryArea'])) {
-                $step = 3;
-                $page_type = 'checkout sub-delivery page';
-              }
-              else {
-                // For logged in users, we show delivery methods only when
-                // click on 'Deliver this address' and thus will always be
-                // step 2.
-                if (\Drupal::currentUser()->isAuthenticated()) {
-                  $step = 2;
-                }
-              }
-              $step = !empty($step) ? $step : 2;
+              $step = 2;
               break;
 
             case 'payment':
-              $step = 4;
+              $step = 3;
               break;
           }
 
@@ -454,29 +430,6 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_seo_transac_form_acq_commerce_currency_settings_alter(&$form, FormStateInterface $form_state) {
-  $form['gtm_currency_code'] = [
-    '#type' => 'textfield',
-    '#description' => t('Currency code to be sent to GTM. If this is not set, ISO Currency Code will be used for GTM.'),
-    '#title' => t('GTM Currency Code'),
-    '#required' => FALSE,
-    '#default_value' => \Drupal::configFactory()->get('acq_commerce.currency')->get('gtm_currency_code'),
-  ];
-  $form['#submit'][] = '_alshaya_seo_transac_acq_commerce_currency_settings_submit_handler';
-}
-
-/**
- * Submit handler for acq_commerce_settings form.
- */
-function _alshaya_seo_transac_acq_commerce_currency_settings_submit_handler(array &$form, FormStateInterface $form_state) {
-  \Drupal::configFactory()->getEditable('acq_commerce.currency')
-    ->set('gtm_currency_code', $form_state->getValue('gtm_currency_code'))
-    ->save();
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -500,4 +453,11 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
       }
     }
   }
+}
+
+/**
+ * Implements hook_home_delivery_save_address_alter().
+ */
+function alshaya_seo_transac_home_delivery_save_address_alter(&$response, $plugin_id) {
+  $response->addCommand(new InvokeCommand(NULL, 'triggerDeliveryAddress', []));
 }

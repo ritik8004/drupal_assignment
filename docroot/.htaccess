@@ -45,7 +45,7 @@ AddEncoding gzip svgz
   ExpiresActive On
 
   # Cache all files for 2 weeks after access (A).
-  ExpiresDefault A1209600
+  ExpiresDefault A31557600
 
   <FilesMatch \.php$>
     # Do not allow PHP scripts to be cached unless they explicitly send cache
@@ -69,6 +69,14 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
+  # Add maintenance page.
+  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/%{HTTP_HOST}/.maintenance -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/.maintenance -f
+  RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+  RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+  RewriteRule ^.*$ /maintenance.html [R=503,L]
+  ErrorDocument 503 /maintenance.html
+
   # Rewrite rule to remove .html and remove kwt-* from url.
   RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
 
@@ -78,15 +86,8 @@ AddEncoding gzip svgz
   RewriteRule ^ - [E=protossl]
   RewriteCond %{HTTPS} on
   RewriteRule ^ - [E=protossl:s]
-  RewriteCond %{HTTP:X-Forwarded-Proto} https
+  RewriteCond %{HTTP:X-Forwarded-Proto} https [novary]
   RewriteRule ^ - [E=protossl:s]
-
-  # Remove trailing slash from all URLs (except home which is practically not possible).
-  # We also don't remove it from /forwarded/* URLs as these are redirects from
-  # H&M and we loose access to the HMCORP cookie after redirect.
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
-  RewriteRule ^(.*)/$ http%{ENV:protossl}://%{HTTP_HOST}/$1 [L,R=301]
 
   # Make sure Authorization HTTP header is available to PHP
   # even when running as CGI or FastCGI.
@@ -147,7 +148,7 @@ AddEncoding gzip svgz
 
   # Redirect HTTP to HTTPS for all requests
   RewriteCond %{HTTPS} off
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [novary]
   # Make sure we are not executing this rule after an internal redirection for
   # index.php. Note that variable name is prefixed by Apache when recomputing
   # redirect rules after an internal redirection.

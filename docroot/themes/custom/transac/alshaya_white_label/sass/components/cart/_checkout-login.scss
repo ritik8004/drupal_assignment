@@ -1,9 +1,10 @@
 .user-page.checkout-login {
   border: 0;
   margin: 0 auto 1em;
+  padding: 0.5rem 1rem;
 
   @include breakpoint($tablet) {
-    margin: 1.2rem auto 9.2rem;
+    margin: 1.2rem auto 6.2rem;
   }
 
   @include breakpoint($desktop) {
@@ -21,10 +22,6 @@
       padding-top: 0;
       padding-bottom: 0.6em;
     }
-
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 2rem;
-    }
   }
 
   a.back-link {
@@ -37,16 +34,15 @@
       height: 2.375rem;
       z-index: 1;
 
-      @include icon(arrowup, before) {
+      @include icon(arrow-left, before) {
         position: absolute;
         #{$left}: -0.5rem;
         top: -3px;
         color: $checkout_mobile_back_link_icon;
         font-size: 2.125rem;
-        transform: rotate(270deg);
 
         html[lang=ar] & {
-          transform: rotate(90deg);
+          transform: rotate(180deg);
         }
       }
     }
@@ -110,6 +106,24 @@
 }
 
 .alias--cart-checkout-login {
+  .checkout-login-actions-wrapper {
+    clear: both;
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin-top: 1.0625rem !important;
+    text-decoration: underline;
+    width: auto !important;
+
+    a {
+      font-size: 0.875rem !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none !important;
+    }
+  }
+
   .form-wrapper,
   .form-item {
     @include breakpoint($tablet) {
@@ -122,72 +136,8 @@
   }
 
   .tabs--content {
-    max-width: 65.3125rem;
     margin: 0 auto;
     overflow: hidden;
-  }
-
-  #edit-login-tabs {
-    margin-top: 1rem;
-
-    @include breakpoint($tablet) {
-      display: none;
-    }
-  }
-
-  .tab {
-    padding: 0.5rem 1rem;
-    border: none;
-    display: inline-block;
-    font-size: 0.875rem;
-    width: 100%;
-    height: 2.5rem;
-    text-align: center;
-    background: $checkout_login_btn_bg;
-
-    &.tab-returning-customer {
-      background: $checkout_login_returning_customer_btn_bg;
-
-      span {
-        color: $content_link_color;
-      }
-
-      html[lang=ar] & {
-        line-height: 1.5;
-        vertical-align: middle;
-      }
-    }
-
-    &.tab-separator {
-      background: none;
-      color: $checkout_login_content_mobile;
-      font-size: 1rem;
-    }
-
-    span {
-      color: $checkout_login_btn_txt;
-      font-family: $alshaya-bold;
-      text-transform: lowercase;
-      line-height: 1.8;
-    }
-  }
-
-  .tab-new-customer {
-    margin-#{$right}: 2%;
-    padding: 0;
-
-    @include breakpoint($tablet) {
-      padding: 0.5rem 1rem;
-    }
-
-    a {
-      display: block;
-      padding: 0.5rem 1rem;
-
-      @include breakpoint($tablet) {
-        padding: 0;
-      }
-    }
   }
 
   .tabs--content {
@@ -202,12 +152,40 @@
       }
     }
   }
+
+  .multistep-checkout {
+    #edit-checkout-login {
+      .form-actions {
+        @include breakpoint($only-tablet) {
+          margin-#{$right}: 1rem;
+        }
+      }
+    }
+  }
 }
 
 .multistep-checkout {
+  .alias--cart-checkout-login & {
+    .tabs--content {
+      @include breakpoint($only-mobile) {
+        display: flex;
+        flex-direction: column;
+
+        #edit-checkout-login {
+          order: 4;
+        }
+
+        #edit-checkout-guest {
+          order: 6;
+        }
+      }
+    }
+  }
+
   .tabs--content fieldset {
     width: 100%;
     border: 0;
+    padding: 0;
 
     @include breakpoint($tablet) {
       width: 50%;
@@ -244,10 +222,6 @@
     @include breakpoint($only-tablet) {
       padding: 0;
     }
-
-    @include breakpoint($desktop) {
-      border-#{$right}: 1px solid $checkout_section_title_border;
-    }
   }
 
   fieldset legend {
@@ -269,41 +243,56 @@
   }
 
   #edit-checkout-login {
+    text-align: $left;
+
     @include breakpoint($tablet) {
-      border-#{$left}: 1px solid $checkout_section_title_border;
-      padding-#{$left}: 2.2rem;
+      padding-#{$right}: 2.5rem;
       position: relative;
+
+      &::after {
+        content: '';
+        height: 125%;
+        width: 1px;
+        background: $checkout_section_title_border;
+        position: absolute;
+        top: 0;
+        #{$right}: 0;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      padding-#{$right}: 3.5rem;
     }
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 6.6em;
-      border-#{$left}: 0;
+      padding-#{$right}: 7.4375rem;
     }
 
     .request-password-link {
-      margin-top: 1.6rem;
-      display: block;
-      text-align: center;
       font-weight: bold;
       color: $content_link_color;
-
-      @include breakpoint($tablet) {
-        position: absolute;
-        bottom: 1.5em;
-        #{$left}: 11rem;
-        width: auto;
-        font-size: 0.75rem;
-
-        html[lang=ar] & {
-          #{$left}: 13rem;
-        }
-      }
+      height: 2.875rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      top: 0;
+      float: $left;
+      margin-top: 2.4375rem;
+      font-size: 0.875rem;
 
       @include breakpoint($desktop) {
-        #{$left}: 15rem;
+        #{$left}: 2.4rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0.625rem;
+        #{$left}: 50%;
+        transform: translateX(-50%);
+        text-decoration: underline;
 
         html[lang=ar] & {
-          #{$left}: 17rem;
+          transform: translateX(50%);
         }
       }
     }
@@ -312,7 +301,7 @@
       margin-top: 1.4rem;
 
       @include breakpoint($tablet) {
-        margin-top: 2.2rem;
+        margin-top: 1.5625rem;
       }
     }
 
@@ -331,14 +320,26 @@
   }
 
   #edit-checkout-guest {
+    @include breakpoint($tablet) {
+      padding: 0 2.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 0 7.5rem;
+    }
+
     a {
       @extend %btn;
 
-      background: $primary_btn_bg;
-      display: inline-block;
+      background: $checkout_guest_button_bg;
+      border: 2px solid $checkout_guest_button_border;
+      color: $checkout_guest_button_txt;
       margin: 1em 0;
       margin-bottom: 2rem;
-      padding: 0.625rem 1.5rem;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
 
       @include link-ripple();
 
@@ -371,7 +372,6 @@
       @include breakpoint($desktop) {
         margin-#{$left}: 0;
         margin-top: 1.1rem;
-        width: 94%;
       }
     }
 
@@ -400,11 +400,6 @@
         margin-bottom: 1.4rem;
         font-weight: bold;
         font-size: 0.8125rem;
-        width: 80%;
-      }
-
-      @include breakpoint($desktop) {
-        width: 58%;
       }
 
       @include breakpoint($only-mobile) {
@@ -426,12 +421,7 @@
 
     @include breakpoint($tablet) {
       font-size: 0.8125rem;
-      width: 92%;
       line-height: 1.5;
-    }
-
-    @include breakpoint($desktop) {
-      width: 80%;
     }
   }
 
@@ -484,6 +474,52 @@
 
       p {
         margin-top: 0;
+      }
+    }
+
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-login {
+  .user-page.checkout-login {
+    @include breakpoint($only-mobile) {
+      padding: 0.5rem 1.25rem;
+      margin-bottom: 3.25rem;
+    }
+  }
+
+  .block-page-title-block {
+    @include breakpoint($desktop) {
+      margin-top: 0.75rem;
+
+      h1 {
+        padding-bottom: 0.4375rem !important;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      h1 {
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  #edit-checkout-login {
+    .form-item-checkout-login-name {
+      @include breakpoint($tablet) {
+        margin-top: 2.8125rem;
+      }
+    }
+
+    .form-item-checkout-login-pass {
+      @include breakpoint($tablet) {
+        margin-top: 2.25rem;
       }
     }
   }

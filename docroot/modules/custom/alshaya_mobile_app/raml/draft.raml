@@ -585,6 +585,18 @@ schemas:
           }
         }
       }
+  - CartPromotions: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "description": "Promotions applied on cart.",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The promotion applied on cart.",
+          }
+        }
+      }
   - GetSearch: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -843,6 +855,9 @@ schemas:
                     "type": "string"
                   },
                   "select_option_text": {
+                    "type": "string"
+                  },
+                  "available_in_store": {
                     "type": "string"
                   },
                   "status": {
@@ -1367,6 +1382,18 @@ schemas:
                   "sorting": [],
                   "products": []
                 }
+  /promotion/cart/{cart-id}:
+    uriParameters:
+      cart-id:
+        type: string
+        description: "The cart ID to get the promotions for."
+    get:
+      description: "Get the promotions applicable to cart."
+      responses:
+        200:
+          body:
+            application/json:
+              schema: CartPromotions
   /page/simple:
     get:
       description: "Get a simple page from its url."
@@ -1787,6 +1814,7 @@ schemas:
                         "title_price": 0,
                         "help_text": "<p>This service is <strong>FREE</strong> of charge.</p>\r\n",
                         "select_option_text": "<p><span class=\"highlight\">Select a size</span> to check stock availability near to you</p>\r\n",
+                        "available_in_store": "1-2 days",
                         "status": true
                       }
                     },

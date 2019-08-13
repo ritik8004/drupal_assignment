@@ -8,13 +8,39 @@
 
 #payment_details {
   #payment_method_cybersource & {
-    border: 0;
-    border-bottom: 1px solid $checkout_payment_option_border;
+    border: 1px solid $checkout_payment_option_border;
+    border-top: 0;
+
+    @include breakpoint($only-mobile) {
+      padding: 1rem;
+    }
   }
 }
 
 #edit-checkout-terms {
+  padding: 0.25rem 1.25rem;
+
   @include breakpoint($only-mobile) {
-    padding: 0.25rem 0;
+    padding: 0.25rem 0.5rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    padding: 0.25rem 1.125rem;
+  }
+}
+
+#edit-billing-address {
+  .fieldset-wrapper {
+    font-size: 0.875rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.25rem 0.75rem;
+    }
+  }
+
+  .js-form-type-radio {
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
   }
 }

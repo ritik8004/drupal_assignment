@@ -1,0 +1,51 @@
+alshaya_knet.settings:
+  path: '/admin/config/alshaya/knet-settings'
+  defaults:
+    _form: '\Drupal\alshaya_knet\Form\KnetSettingsForm'
+    _title: 'K-Net settings'
+  requirements:
+    _permission: 'administer knet settings'
+
+alshaya_knet.response:
+  path: '/knet/response'
+  defaults:
+    _controller: '\Drupal\alshaya_knet\Controller\KnetController::response'
+    _title: ''
+    _disable_route_normalizer: 'TRUE'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
+alshaya_knet.success:
+  path: '/knet/success/{state_key}'
+  defaults:
+    _controller: '\Drupal\alshaya_knet\Controller\KnetController::success'
+    _title: ''
+    _disable_route_normalizer: 'TRUE'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
+alshaya_knet.error:
+  path: '/knet/error/{quote_id}'
+  defaults:
+    _controller: '\Drupal\alshaya_knet\Controller\KnetController::error'
+    _title: 'Error'
+    _disable_route_normalizer: 'TRUE'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
+alshaya_knet.failed:
+  path: '/knet/failed/{state_key}'
+  defaults:
+    _controller: '\Drupal\alshaya_knet\Controller\KnetController::failed'
+    _title: 'Failed'
+    _disable_route_normalizer: 'TRUE'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE

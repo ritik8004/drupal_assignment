@@ -1,4 +1,23 @@
+.magazine-layout {
+  .c-pdp.l-one--w {
+    @include breakpoint($desktop) {
+      padding: 0 1.5rem;
+      max-width: 80rem;
+    }
+  }
+}
+
 .magazine-layout-node {
+  .content-sidebar-wrapper {
+    .content__title_wrapper {
+      .promotion-discount-wrapper .promotions {
+        @include breakpoint($desktop) {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+
   .acq-content-product {
     .gallery-wrapper {
       @include breakpoint($tablet) {
@@ -39,6 +58,10 @@
         width: 100%;
         float: none;
         margin: 0;
+
+        .price {
+          margin-bottom: 0.125rem;
+        }
       }
 
       .content__sidebar {
@@ -49,7 +72,7 @@
 
       &.sidebar-fixed {
         position: fixed;
-        top: 5rem;
+        top: 1.25rem;
         width: calc((100vw - 5rem) / 3);
         #{$right}: 1.5rem;
 
@@ -58,6 +81,7 @@
           bottom: 0;
           top: auto;
           #{$right}: 0 !important;
+          width: 100%;
 
           .click-collect-all-stores {
             &.inline-modal-wrapper {
@@ -76,6 +100,7 @@
 
       @include breakpoint($only-mobile) {
         visibility: hidden;
+        margin-bottom: 0;
 
         &.show-sticky-wrapper {
           visibility: visible;
@@ -85,9 +110,10 @@
 
     @include breakpoint($desktop) {
       &.sidebar-fixed {
-        top: 8.125rem;
-        width: calc((30 * 71.5rem) / 100);
-        #{$right}: calc((100vw - 66.375rem) / 2);
+        #{$right}: calc((100vw - 77rem) / 2);
+        max-width: 25rem;
+        width: 100%;
+        top: 1.25rem;
       }
     }
 
@@ -119,6 +145,65 @@
   .content__title_wrapper {
     @include breakpoint($only-mobile) {
       padding: 1rem;
+      display: flex;
+      flex-flow: row wrap;
+
+      .info-wrapper {
+        text-align: $right;
+        width: calc((100% - 1rem) / 2);
+
+        .price-block {
+          .price {
+            margin-bottom: 0;
+          }
+        }
+
+        > div {
+          &:last-child {
+            margin-bottom: 0;
+
+            a {
+              margin-bottom: 0;
+            }
+          }
+        }
+
+        .promotions {
+          a {
+            margin-bottom: 0;
+          }
+        }
+
+        .price-block {
+          .price--discount {
+            display: none;
+          }
+        }
+
+        .promotion-discount-wrapper {
+          > div {
+            display: inline;
+          }
+
+          &.promotions {
+            margin-bottom: 0;
+          }
+
+          .price--discount {
+            font-size: 0.75rem;
+            font-family: $alshaya-thin;
+          }
+        }
+      }
+
+      .basic-details-wrapper {
+        width: 100%;
+      }
+
+      h1 {
+        margin-#{$right}: 1rem;
+        width: calc((100% - 1rem) / 2);
+      }
 
       &.fixed {
         position: fixed;
@@ -126,25 +211,15 @@
         z-index: 9;
         width: 100%;
         background: $primary_bg;
-        box-shadow: 0.0625rem 0.125rem 0.625rem $mothercare-black;
+        box-shadow: 0.0625rem 0.5rem 0.625rem $mothercare-black;
         transition: z-index 0.5s ease-in-out;
-
-        h1 {
-          span {
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-        }
       }
 
-      .price-block,
-      .promotions,
-      .content--item-code,
-      .basic-details-wrapper,
       h1 {
-        grid-column: 1 / -1;
+        span {
+          display: block;
+          font-size: 0.9375rem;
+        }
       }
     }
   }
@@ -158,6 +233,20 @@
 
   .basic-details-wrapper {
     .sku-base-form {
+      button[type="submit"] {
+        @include breakpoint($tablet) {
+          padding-#{$left}: 0;
+          padding-#{$right}: 0;
+        }
+
+        &::before {
+          position: static;
+          vertical-align: text-bottom;
+          padding-#{$right}: 0.25rem;
+          margin: 0 0 0.125rem;
+        }
+      }
+
       @include breakpoint($tablet) {
         display: grid;
         grid-column: 3 / -1;
@@ -167,6 +256,9 @@
         button[type="submit"] {
           width: 100%;
           max-width: 11.125rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           html[lang=ar] & {
             max-width: 13.7rem;
@@ -177,7 +269,7 @@
       @include breakpoint($only-tablet) {
         button[type="submit"] {
           html[lang=ar] & {
-            padding: 0.5rem 1.875rem 0.5rem 0.5rem;
+            padding: 0.5rem 0.4375rem;
             max-width: 11.75rem;
 
             &::before {
@@ -202,10 +294,11 @@
       }
 
       .sku-base-form {
-        display: grid;
-        grid-template-rows: auto;
-        grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
-        grid-gap: 0 1rem;
+        display: flex;
+        flex-flow: row wrap;
+        max-width: 100%;
+        overflow: hidden;
+        margin-top: 1rem;
 
         .js-form-wrapper {
           grid-column: 1 / -1;
@@ -218,12 +311,14 @@
           display: flex;
           justify-content: $left;
           align-items: center;
+          font-size: 0.875rem;
           height: 3rem;
-          border: 2px solid $primary_empty_btn_border;
+          border: 1px solid $primary_empty_btn_border;
           padding: 0.65rem;
           color: $primary_empty_btn;
           cursor: pointer;
-          grid-column: 1 / 2;
+          margin-#{$right}: 1rem;
+          width: calc((100% - 1rem) / 2);
 
           &::after {
             position: absolute;
@@ -233,8 +328,8 @@
             transform: translateY(-50%);
           }
 
-          &.selected-text {
-            justify-content: center;
+          + .edit-add-to-cart {
+            width: calc((100% - 1rem) / 2);
           }
         }
 
@@ -242,7 +337,40 @@
           height: 3rem !important;
           cursor: pointer;
           grid-column: 2 / -1;
+          padding: 0.65rem 0;
+
+          html[lang=ar] & {
+            padding: 0.65rem;
+          }
         }
+      }
+    }
+  }
+
+  .content__title_wrapper {
+    .promotions {
+      a {
+        display: inline-block;
+        font-size: 0.75rem;
+        margin-#{$right}: 0.1875rem;
+
+        &::after {
+          content: ',';
+          width: 0.125rem;
+          height: 0.125rem;
+        }
+
+        &:last-child {
+          margin-#{$right}: 0;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+
+      br {
+        display: none;
       }
     }
   }
@@ -295,18 +423,39 @@
       &.product-out-of-stock {
         .basic-details-wrapper {
           min-height: 2.5rem;
+          margin-top: 1.125rem;
 
           span {
             &.out-of-stock {
               position: relative;
               box-shadow: none;
               border: none;
-              height: 2.5rem;
+              height: 3rem;
               display: flex;
               align-items: center;
               justify-content: center;
             }
           }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .promotion-discount-wrapper {
+    display: inline;
+
+    .price--discount {
+      display: none !important;
+    }
+  }
+
+  .nodetype--acq_product {
+    .product-out-of-stock {
+      span {
+        &.out-of-stock {
+          font-size: 0.875rem;
         }
       }
     }

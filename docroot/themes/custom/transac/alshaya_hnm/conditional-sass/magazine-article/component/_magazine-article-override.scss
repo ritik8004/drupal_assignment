@@ -1,0 +1,97 @@
+.nodetype--magazine_article,
+.path--magazine {
+  .magazine-article-title,
+  h2 a {
+    font-family: $magazine-regular;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+
+  .field--name-field-magazine-slogan {
+    font-family: $magazine-regular;
+    font-weight: 400;
+  }
+}
+
+body {
+  &.nodetype--magazine_article,
+  &.path--magazine {
+    font-family: $magazine-light;
+  }
+}
+
+.block-views-blockmagazine-articles-homepage-block {
+  font-family: $magazine-light;
+
+  > h3,
+  article h3 {
+    font-family: $magazine-regular;
+    font-weight: 400;
+  }
+
+  .more-link {
+    a {
+      font-family: $hnm-bold;
+    }
+  }
+
+  .views-row {
+    h3 {
+      span {
+        font-family: $magazine-text-regular;
+      }
+    }
+
+    .read-more {
+      span {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .field--name-field-magazine-category {
+      font-family: $hnm-regular;
+    }
+  }
+}
+
+.path--magazine {
+  .block-page-title-block {
+    h1 {
+      font-family: $magazine-regular;
+      font-weight: 400;
+    }
+  }
+
+  .read-more {
+    a {
+      font-family: $hnm-bold;
+    }
+  }
+}
+
+.field--name-field-magazine-shop-the-story {
+  .c-products__item__label span,
+  .price-block {
+    font-family: $hnm-regular;
+    font-weight: normal;
+  }
+}
+
+.magazine-back-to-feed {
+  font-family: $hnm-bold;
+}
+
+.nodetype--magazine_article {
+  .field--name-field-magazine-paragraphs {
+    ul {
+      li {
+        font-family: $hnm-regular;
+      }
+    }
+  }
+
+  .magazine-detail-page-title {
+    font-family: $magazine-regular;
+    font-weight: 400;
+  }
+}

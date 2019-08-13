@@ -103,3 +103,5 @@ foreach ($countries as $country_code => $country_name) {
     echo "\n" . $mapping->id;
   }
 }
+
+echo "\n";

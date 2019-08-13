@@ -47,14 +47,14 @@
         }
       }
 
-      &.brand-victoria-sport {
+      &.brand-beauty {
         &::after {
-          background: url("../imgs/logos/super-category/vsport.svg") no-repeat center;
+          background: url("../imgs/logos/super-category/beauty.svg") no-repeat center;
           background-size: contain;
         }
 
         &:hover::after {
-          background: url("../imgs/logos/super-category/vsport-active.svg") no-repeat center;
+          background: url("../imgs/logos/super-category/beauty-active.svg") no-repeat center;
           background-size: contain;
         }
       }
@@ -67,8 +67,8 @@
         background-size: contain;
       }
 
-      .brand-victoria-sport::after {
-        background: url("../imgs/logos/super-category/vsport-active.svg") no-repeat center;
+      .brand-beauty::after {
+        background: url("../imgs/logos/super-category/beauty-active.svg") no-repeat center;
         background-size: contain;
       }
     }
@@ -80,5 +80,54 @@
     @include breakpoint($desktop) {
       display: none;
     }
+  }
+}
+
+.header--wrapper.show-overlay {
+  .menu--mobile-navigation {
+    border-bottom-color: $header_mobile_menu_overlay !important;
+  }
+
+  &::before {
+    z-index: 11 !important;
+  }
+
+  .menu--mobile-navigation,
+  .block-alshaya-super-category-menu {
+    @include breakpoint($only-tablet) {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: $header_mobile_menu_overlay !important;
+        z-index: 1 !important;
+        transition: none !important;
+        opacity: 1 !important;
+      }
+    }
+  }
+}
+
+.branding__menu.show-overlay {
+  .block-cart-mini-block {
+    @include breakpoint($only-tablet) {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: $header_mobile_menu_overlay !important;
+        z-index: 1 !important;
+        transition: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    border-bottom-color: $header_mobile_menu_overlay !important;
   }
 }

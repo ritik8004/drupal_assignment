@@ -24,53 +24,32 @@ use Drupal\user\UserInterface;
  *   Array of orders.
  */
 function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_key = '') {
-  $orders = [];
+  /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
+  $manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+  $orders = $manager->getOrders($email);
 
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-
-  $cid = 'orders_list_' . $langcode . '_' . $email;
-
-  if ($cache = \Drupal::cache('orders')->get($cid)) {
-    $orders = $cache->data;
+  if (empty($orders)) {
+    return [];
   }
-  else {
-    $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($email);
 
-    // Update order items to have unique records only.
-    // For configurable products we get it twice (once for parent and once for
-    // selected variant).
-    foreach ($orders as &$order) {
-      $order_items = [];
-      foreach ($order['items'] as $item) {
-        if (!isset($order_items[$item['sku']])) {
-          $order_items[$item['sku']] = $item;
-        }
-        $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
-        if ($sku_entity instanceof SKUInterface) {
-          /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-          $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-          $order_items[$item['sku']]['name'] = $productInfoHelper->getTitle($sku_entity, 'basket');
-        }
-
+  // Update order items to have unique records only.
+  // For configurable products we get it twice (once for parent and once for
+  // selected variant).
+  foreach ($orders as &$order) {
+    $order_items = [];
+    foreach ($order['items'] as $item) {
+      if (!isset($order_items[$item['sku']])) {
+        $order_items[$item['sku']] = $item;
       }
-      $order['items'] = $order_items;
+      $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
+      if ($sku_entity instanceof SKUInterface) {
+        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+        $order_items[$item['sku']]['name'] = $productInfoHelper->getTitle($sku_entity, 'basket');
+      }
+
     }
-
-    // Sort them by default by date.
-    usort($orders, function ($a, $b) {
-      return $b['created_at'] > $a['created_at'];
-    });
-
-    // Get the cache expiration time based on config value.
-    $cacheTimeLimit = \Drupal::config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
-
-    // We can disable caching via config by setting it to zero.
-    if ($cacheTimeLimit > 0) {
-      $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
-
-      // Store in cache.
-      \Drupal::cache('orders')->set($cid, $orders, $expire);
-    }
+    $order['items'] = $order_items;
   }
 
   // Search by Order ID, SKU, Name.
@@ -324,6 +303,21 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['billing_address'] = render($billing_address);
   }
 
+  if ($order['payment']['method_code'] == 'banktransfer'
+    && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+    $orderDetails['banktransfer_payment_details'] = [
+      '#theme' => 'banktransfer_payment_details',
+      '#account_number' => $order['extension']['bank_transfer_instructions']['account_number'],
+      '#address' => $order['extension']['bank_transfer_instructions']['address'],
+      '#bank_name' => $order['extension']['bank_transfer_instructions']['bank_name'],
+      '#beneficiary_name' => $order['extension']['bank_transfer_instructions']['beneficiary_name'],
+      '#branch' => $order['extension']['bank_transfer_instructions']['branch'],
+      '#iban' => $order['extension']['bank_transfer_instructions']['iban'],
+      '#swift_code' => $order['extension']['bank_transfer_instructions']['swift_code'],
+      '#purpose' => t('Purchase of Goods - @order_id', ['@order_id' => $order['increment_id']]),
+    ];
+  }
+
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
   $orderDetails['payment_method_code'] = $order['payment']['method_code'];
@@ -465,7 +459,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       $product['image'] = '';
 
       // Load the first image.
-      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'order_detail');
+      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
 
       $products[] = $product;
     }

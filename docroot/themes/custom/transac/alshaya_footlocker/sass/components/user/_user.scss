@@ -36,6 +36,12 @@
       font-family: $alshaya-thin;
     }
   }
+
+  #edit-checkout-terms {
+    @include breakpoint($mobile) {
+      margin-top: 0.5rem;
+    }
+  }
 }
 
 #block-youllbeableto-checkout-confirm,
@@ -68,14 +74,12 @@
 
 .user-login-form {
   & > a {
-    @include breakpoint($tablet) {
-      #{$left}: 10rem;
-    }
+    font-size: 0.875rem;
+    font-weight: normal;
 
-    @include breakpoint($desktop) {
-      html[lang='ar'] & {
-        right: 10rem;
-      }
+    @include breakpoint($tablet) {
+      #{$left}: 12.75rem;
+      bottom: 0.75rem;
     }
   }
 }
@@ -100,4 +104,26 @@
       }
     }
   }
+}
+
+.user-page {
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      min-width: 11.5rem;
+      width: auto;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+#unmask_password {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  top: 0.5rem;
 }

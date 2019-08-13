@@ -145,18 +145,18 @@
 
 .c-user-login.user-page {
   @include breakpoint($only-mobile) {
-    margin-top: 2.5rem;
+    margin-top: 3rem;
     padding-top: 1.7rem;
   }
 
   @include breakpoint($tablet) {
-    padding: 1em 0;
-    margin: 4.25em 1.5em 1em;
+    padding: 2.5rem 0;
+    margin: 4.25em 2rem 0;
   }
 
   @include breakpoint($desktop) {
-    padding: 0.7em 0;
-    margin: 4.6rem auto 1em;
+    margin: 4.6rem auto 1rem;
+    max-width: 64.125rem;
   }
 
   .messages__wrapper {
@@ -168,16 +168,6 @@
   }
 
   .user-login-form {
-    @include breakpoint($tablet) {
-      position: relative;
-      top: 0.5em;
-    }
-
-    @include breakpoint($desktop) {
-      max-width: 24.8rem;
-      top: 0.8125rem;
-    }
-
     .form-text,
     .form-email {
       color: $user_form_text;
@@ -199,14 +189,18 @@
     }
 
     .form-item {
-      margin-top: 4.55rem;
+      margin-top: 2.375rem;
 
-      @include breakpoint($only-tablet) {
-        margin-top: 4.6rem;
+      @include breakpoint($only-mobile) {
+        margin-top: 3.9375rem;
       }
 
-      @include breakpoint($desktop) {
-        margin-top: 4.438rem;
+      &.form-type-email {
+        margin-top: 2.5625rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 2.9375rem;
+        }
       }
     }
 
@@ -297,25 +291,25 @@
 
 .c-user-register {
   &.user-page {
-    margin: 4.7em auto 1em;
-    padding: 1em 0;
-
     @include breakpoint($upto-tablet) {
       padding-top: 1.8rem;
     }
 
     @include breakpoint($only-mobile) {
-      margin-bottom: 2.063rem;
-      padding-top: 0.9rem;
-      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      margin-top: 3rem;
+      padding-top: 1.7rem;
     }
 
     @include breakpoint($only-tablet) {
-      margin-top: 4.25rem;
+      padding: 2.5rem 0;
+      margin: 4.25em 2rem 0;
     }
 
     @include breakpoint($desktop) {
-      padding: 1rem 0;
+      margin: 4.6rem auto 1rem;
+      max-width: 64.125rem;
+      padding: 2.5rem 0;
     }
   }
 
@@ -340,11 +334,7 @@
   }
 
   .c-content__region .user-form {
-    margin-top: -0.5rem;
-
-    @include breakpoint($only-mobile) {
-      margin-bottom: 0;
-    }
+    margin-top: 0;
 
     .form-wrapper,
     .form-item {
@@ -388,17 +378,20 @@
         margin-top: 1rem;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 3rem;
+          text-align: center;
         }
       }
 
       p {
-        margin-top: 0.875rem;
+        margin-top: 1.625rem;
         margin-bottom: 1.4rem;
         font-size: 0.75rem;
+        width: 15.9375rem;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 5rem;
+          text-align: center;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         a {
@@ -410,11 +403,28 @@
       label {
         position: static;
         width: 100%;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include breakpoint($only-mobile) {
+          width: 17.9375rem;
+          margin: 0 auto;
+          text-align: $left;
+
+          &::before {
+            margin-#{$right}: 0.875rem;
+          }
+        }
 
         @include breakpoint($tablet) {
-          text-indent: -2rem;
-          padding-#{$left}: 1.9rem;
+          justify-content: flex-start;
+          width: 18.4375rem;
+
+          &::before {
+            font-size: 1.4375rem;
+            top: 0;
+          }
         }
       }
     }
@@ -428,10 +438,6 @@
           top: 25px;
         }
       }
-    }
-
-    @include breakpoint($desktop) {
-      margin-top: -2.65rem;
     }
 
     .form-type-password-confirm {
@@ -715,6 +721,63 @@ main .user-register-form {
       #edit-actions {
         margin-bottom: 1.5rem;
       }
+    }
+  }
+}
+
+.c-user-login,
+.c-user-register {
+  &.user-page {
+    main {
+      @include breakpoint($tablet) {
+        width: 100%;
+
+        .block-system-main-block {
+          width: 50%;
+          float: $left;
+          border-#{$right}: 1px solid $user_form_layout_divider_color;
+          margin-#{$right}: 7.875rem;
+          min-height: 23.4375rem;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        .block-system-main-block {
+          margin-#{$right}: 3.4375rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .region__content {
+          display: flex;
+          flex-direction: column;
+
+          .block-alshaya-social-login {
+            order: 1;
+          }
+
+          .block-alshaya-signup-signin-buttons {
+            order: 2;
+          }
+
+          .block-system-main-block {
+            order: 3;
+          }
+
+          .block-page-title-block {
+            h1 {
+              font-size: 1.25rem;
+              text-align: center;
+              width: 100%;
+              top: -3.6875rem;
+            }
+          }
+        }
+      }
+    }
+
+    .c-sidebar-second {
+      display: none;
     }
   }
 }

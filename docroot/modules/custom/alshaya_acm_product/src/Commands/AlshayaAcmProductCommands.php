@@ -3,10 +3,12 @@
 namespace Drupal\alshaya_acm_product\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;
@@ -292,8 +294,9 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     foreach ($nids as $nid) {
       try {
-        $node = $storage->load($nid);
-        $node->delete();
+        if (($node = $storage->load($nid)) && ($node instanceof NodeInterface)) {
+          $node->delete();
+        }
       }
       catch (\Exception $e) {
         \Drupal::logger('alshaya_acm_product')->error('Error while deleting color node: @nid Message: @message in method: @method', [
@@ -424,6 +427,199 @@ class AlshayaAcmProductCommands extends DrushCommands {
       ->execute();
 
     $this->io()->writeln(dt('Corrupt entries in node_field_data are removed.'));
+  }
+
+  /**
+   * Command to go through all the media items and add file usage for them.
+   *
+   * @param string $field
+   *   Field to find unused media from.
+   * @param array $options
+   *   Command options.
+   *
+   * @command alshaya_acm_product:add-media-file-usage
+   *
+   * @option batch_size
+   *   Batch size.
+   *
+   * @aliases alshaya-add-media-file-usage
+   *
+   * @usage drush alshaya-add-media-file-usage
+   *   Process data from media__value field.
+   * @usage drush alshaya-add-media-file-usage attr_assets
+   *   Process data from attr_assets__value field.
+   */
+  public function addMediaFilesUsage($field = 'media', array $options = ['batch_size' => 100]) {
+    $batch_size = (int) $options['batch_size'];
+
+    $this->logger()->notice('Add file usage for all product media files...');
+
+    $select = $this->connection->select('acq_sku_field_data');
+    $select->fields('acq_sku_field_data', ['sku']);
+    $select->condition('default_langcode', 1);
+    $select->condition($field . '__value', '%fid%', 'LIKE');
+
+    $result = $select->execute()->fetchAll();
+
+    $skus = array_column($result, 'sku');
+
+    // If no sku available, then no need to process further as with empty
+    // array, drush throws error.
+    if (!$skus) {
+      $this->output->writeln(dt('No matched sku found for adding its media files usage.'));
+      return;
+    }
+
+    $batch = [
+      'title' => 'Process skus',
+      'error_message' => 'Error occurred while processing skus, please check logs.',
+    ];
+
+    foreach (array_chunk($skus, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'addMediaFilesUsageChunk'],
+        [$chunk, $field],
+      ];
+    }
+
+    batch_set($batch);
+    drush_backend_batch_process();
+
+    $this->logger()->notice('Added usage for all media files.');
+  }
+
+  /**
+   * Batch callback for addMediaFilesUsage.
+   *
+   * @param array $skus
+   *   SKUs to process.
+   * @param string $field
+   *   Field to find unused media from.
+   */
+  public static function addMediaFilesUsageChunk(array $skus, $field) {
+    /** @var \Drupal\file\FileStorageInterface $fileStorage */
+    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+
+    /** @var \Drupal\file\FileUsage\FileUsageInterface $fileUsage */
+    $fileUsage = \Drupal::service('file.usage');
+
+    $logger = \Drupal::logger('AlshayaAcmProductCommands');
+
+    foreach ($skus as $sku_string) {
+      $sku = SKU::loadFromSku($sku_string);
+      if (!($sku instanceof SKU)) {
+        continue;
+      }
+
+      $assets = unserialize($sku->get($field)->getString());
+
+      foreach ($assets ?? [] as $asset) {
+        if (empty($asset['fid'])) {
+          continue;
+        }
+
+        $file = $fileStorage->load($asset['fid']);
+        if ($file instanceof FileInterface) {
+          try {
+            $fileUsage->add($file, $sku->getEntityTypeId(), $sku->getEntityTypeId(), $sku->id());
+            $logger->notice('Added file usage for fid @fid for sku @sku', [
+              '@fid' => $file->id(),
+              '@sku' => $sku->getSku(),
+            ]);
+          }
+          catch (\Exception $e) {
+            $logger->warning('Failed to add usage for fid @fid for sku @sku, message: @message', [
+              '@fid' => $file->id(),
+              '@sku' => $sku->getSku(),
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Delete unsed media items.
+   *
+   * @param string $prefix
+   *   Prefix to check in media files uri.
+   * @param array $options
+   *   Command options.
+   *
+   * @command alshaya_acm_product:delete-unused-media
+   *
+   * @aliases alshaya-delete-unused-media
+   *
+   * @usage drush alshaya-delete-unused-media media
+   *   Finds unused files .
+   * @usage drush alshaya-delete-unused-media assets
+   *   Print the category menu true for en language.
+   */
+  public function deleteUnusedMediaFiles($prefix = 'media', array $options = ['batch-size' => 50, 'dry-run' => FALSE]) {
+    $dry_run = (bool) $options['dry-run'];
+    $batch_size = (int) $options['batch-size'];
+
+    $query = $this->connection->select('file_managed', 'fm');
+    $query->fields('fm', ['fid']);
+    $query->leftJoin('file_usage', 'fu', 'fm.fid = fu.fid');
+    $query->isNull('fu.fid');
+    $query->condition('fm.uri', 'public://' . $prefix . '%', 'LIKE');
+    $result = $query->execute()->fetchAllKeyed(0, 0);
+
+    if (empty($result)) {
+      $this->logger()->notice('No media files to check.');
+      return;
+    }
+
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Processing all files to check if they are still used...'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Failed to check for unused media files.'),
+    ];
+
+    foreach (array_chunk($result, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'deleteUnusedMediaFilesChunk'],
+        [$chunk, $dry_run],
+      ];
+    }
+
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+  }
+
+  /**
+   * Batch callback for deleteUnusedMediaFiles.
+   *
+   * @param array $files
+   *   Files to process.
+   * @param bool $dry_run
+   *   Dry run flag.
+   */
+  public static function deleteUnusedMediaFilesChunk(array $files, $dry_run) {
+    /** @var \Drupal\file\FileStorageInterface $fileStorage */
+    $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
+
+    $logger = \Drupal::logger('AlshayaAcmProductCommands');
+
+    foreach ($files as $file_id) {
+      $file = $fileStorage->load($file_id);
+
+      if ($file instanceof FileInterface) {
+        $logger->notice('Delete file @fid with uri @uri', [
+          '@fid' => $file->id(),
+          '@uri' => $file->getFileUri(),
+        ]);
+
+        if (!$dry_run) {
+          $file->delete();
+        }
+      }
+    }
   }
 
 }

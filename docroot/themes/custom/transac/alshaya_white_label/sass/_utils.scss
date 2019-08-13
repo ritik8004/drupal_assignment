@@ -86,28 +86,51 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
       bottom: 0;
       right: 0;
       left: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1;
+      background-color: $header_mobile_menu_overlay !important;
+      z-index: 1 !important;
+      transition: none !important;
+      opacity: 1 !important;
     }
   }
 }
 
+.no-animate {
+  &::before {
+    transition: none !important;
+  }
+}
+
 %modal-overlay,
-.modal-overlay {
-  position: fixed;
+.modal-overlay,
+body.modal-overlay {
   height: initial;
   width: 100%;
+  margin-top: 0;
 
   &::before {
     content: '';
     position: absolute;
-    top: -10.25rem;
-    bottom: -10rem;
+    top: 0;
+    bottom: 0;
     right: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 7;
     opacity: 1;
+
+    @include breakpoint($desktop) {
+      pointer-events: unset;
+      height: 100%;
+    }
+  }
+}
+
+body {
+  &.reduce-zindex {
+    .header--wrapper,
+    .branding__menu {
+      z-index: auto;
+    }
   }
 }
 
@@ -243,4 +266,26 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   background-size: 1.5rem;
   padding-left: 0.625rem;
   padding-right: 0.625rem;
+}
+
+// Mixin styles the label input fields.
+// Apply on label inside form elements.
+@mixin placeholder-label() {
+  font-size: 1rem;
+  color: $primary_input_label;
+  position: absolute;
+  #{$left}: 0;
+  top: -0.125rem;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+// To be used with placeholder-label to give transition when input is active.
+// Aplly on imput:foucs, etc.
+@mixin placeholder-active() {
+  top: -1.25em;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
 }

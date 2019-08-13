@@ -24,6 +24,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
+      var cartPage = $('body[gtm-container="cart page"]');
       var orderConfirmationPage = $('body[gtm-container="purchase confirmation page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
@@ -41,27 +42,36 @@
       var promotionImpressionSubnavFired = false;
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
+      var deliveryType = 'Home Delivery';
+      var userDetails = drupalSettings.userDetails;
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
         var md = new MobileDetect(window.navigator.userAgent);
         if (md.tablet() !== null) {
-          dataLayer.push({
-            platformType: 'tablet',
-          });
+            userDetails.platformType = 'tablet';
         }
         else if (md.mobile()) {
-          dataLayer.push({
-            platformType: 'mobile',
-          });
+            userDetails.platformType = 'mobile';
         }
         else {
-          dataLayer.push({
-            platformType: 'desktop',
-          });
+            userDetails.platformType = 'desktop';
         }
 
-        if ($(context).filter('article[data-vmode="modal"]').length === 1
+        // For checkout pages, privilegeCustomer is added in checkout step.
+        if (cartPage.length !== 0 ||
+            cartCheckoutLoginSelector.length !== 0 ||
+            cartCheckoutDeliverySelector.length !== 0 ||
+            cartCheckoutPaymentSelector.length !==0) {
+          delete userDetails.privilegeCustomer;
+        }
+
+        // Push on all pages except confirmation page.
+        if (orderConfirmationPage.length === 0) {
+          dataLayer.push(userDetails);
+        }
+
+          if ($(context).filter('article[data-vmode="modal"]').length === 1
             || $(document).find('article[data-vmode="full"]').length === 1) {
 
           if ($(document).find('article[data-vmode="full"]').length === 1) {
@@ -77,7 +87,6 @@
             product.list = currentListName;
             currentListName = null;
           }
-
           var data = {
             event: 'productDetailView',
             ecommerce: {
@@ -148,17 +157,19 @@
         $('.c-header #edit-keywords').once('internalsearch').each(function () {
           var keyword = Drupal.getQueryVariable('keywords');
           var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
+          noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
 
-          if ((noOfResult === 0) || (isNaN(noOfResult))) {
-            dataLayer.push({
-              event: 'eventTracker',
-              eventCategory: 'Internal Site Search',
-              eventAction: '404 Results',
-              eventLabel: keyword,
-              eventValue: 0,
-              nonInteraction: 0
-            });
-          }
+          var action = noOfResult === 0 ? '404 Results' : 'Successful Search';
+          var interaction = noOfResult === 0 ? noOfResult : 1;
+
+          dataLayer.push({
+            event: 'eventTracker',
+            eventCategory: 'Internal Site Search',
+            eventAction: action,
+            eventLabel: keyword,
+            eventValue: noOfResult,
+            nonInteraction: interaction,
+          });
         });
       }
 
@@ -271,8 +282,29 @@
         }
       }
 
-      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      // CheckoutOption event for delivery page.
+      $('[data-drupal-selector="edit-actions-get-shipping-methods"]').once('js-event').on('mousedown', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
+      });
+
+      $('div.address--deliver-to-this-address.address--controls a').once('js-event').on('click', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
+      });
+
+      $('button.delivery-home-next, [data-drupal-selector="edit-member-delivery-home-address-form-save"]').once('js-event').on('mousedown', function () {
+        if (gtmPageType == 'checkout delivery page') {
+          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery - subdelivery ', 2);
+        }
+      });
+
+      $('[data-drupal-selector="edit-actions-ccnext"]').once('js-event').on('mousedown', function () {
         ccPaymentsClicked = true;
+        Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
+      });
+
+      // Trigger deliveryOption event for click & collect tab click.
+      cartCheckoutDeliverySelector.find('div[gtm-type="checkout-click-collect"] > a').once('delivery-option-event').on('click', function() {
+        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
@@ -416,6 +448,13 @@
           };
 
           if (event === 'removeFromCart') {
+            // Delete list from cookie.
+            var listValues = {};
+            if ($.cookie('product-list') !== undefined) {
+              listValues = JSON.parse($.cookie('product-list'));
+            }
+            delete listValues[product.id];
+            $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
             data.ecommerce.remove = {
               products: [
                 product
@@ -446,7 +485,7 @@
           var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
 
           // Set product quantity to the number of items selected for quantity.
-          product.quantity = $(this).closest('tr').find('td.quantity select').val();
+          product.quantity = parseInt($(this).closest('tr').find('td.quantity select').val());
 
           // Set selected size as dimension6.
           if (!$.inArray('dimension6', settings.gtm.disabled_vars) && removeItem.attr('gtm-size')) {
@@ -475,45 +514,58 @@
       });
 
       /**
+       * Fire checkoutOption on cart page.
+       */
+      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
+        Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
+      }
+
+      /**
        * Tracking New customers.
        */
       cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('checkout as guest');
+        Drupal.alshaya_seo_gtm_push_checkout_option('Guest Login', 1);
       });
 
       /**
        * Tracking Returning customers.
        */
-      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
+        cartCheckoutLoginSelector.find('button[gtm-type="checkout-signin"]').once('js-event').on('mousedown', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
       });
 
       /**
        * Tracking Home Delivery.
        */
-      if ((cartCheckoutDeliverySelector.length !== 0) &&
-        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
+      if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0
+          && cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')
+        ) {
+          deliveryType = 'Home Delivery';
         }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click, mousedown', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
       }
 
-      subDeliveryOptionSelector.find('.form-type-radio').each(function () {
-        // Push default selected sub-delivery option to GTM.
-        if ($(this).find('input[checked="checked"]').length > 0) {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        }
-
-        // Attach change event listener to shipping method radio buttons.
-        $(this).change(function () {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
+      // Trigger deliveryOption event for "home delivery" tab click.
+      $('body[gtm-container="checkout click and collect page"], body[gtm-container="checkout delivery page"]')
+        .find('div[gtm-type="checkout-home-delivery"]:not(.active--tab--head) > a')
+        .once('delivery-option-event')
+        .on('click', function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
         });
-      });
 
       /**
        * GTM virtual page tracking for click & collect journey.
@@ -529,16 +581,19 @@
             body.addClass('virtualpageview-fired');
           }
 
-          if (($('button.cc-action', context).length > 0) && (context === document)) {
-            Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
-          }
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
+          let selectedStore = $(this).parent('.store-actions');
           dataLayer.push({
             event: 'VirtualPageview',
             virtualPageURL: ' /virtualpv/click-and-collect/step2/select-store',
             virtualPageTitle: 'C&C Step 2 – Select Store'
+          },
+          {
+            event: 'storeSelect',
+            storeName: selectedStore.attr('gtm-store-title').replace(/\s+/g,' ').replace(/^\s+|\s+$/g, ''),
+            storeAddress: selectedStore.attr('gtm-store-address').replace(/\s+/g,' ').replace(/^\s+|\s+$/g, ''),
           });
         });
       }
@@ -554,7 +609,9 @@
           if (drupalSettings.path.currentLanguage === 'ar') {
             preselectedMethodLabel = drupalSettings.alshaya_payment_options_translations[preselectedMethodLabel];
           }
-          Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
+          $('[data-drupal-selector="edit-actions-next"]').once('js-event').on('mousedown', function () {
+            Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 3);
+          });
         }
       }
 
@@ -772,7 +829,6 @@
       price: parseFloat(product.attr('gtm-price')),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
-      position: 1,
       dimension2: product.attr('gtm-sku-type'),
       dimension3: product.attr('gtm-dimension3'),
       dimension4: mediaCount
@@ -788,6 +844,14 @@
 
     if (product.attr('gtm-dimension5')) {
       productData.dimension5 = product.attr('gtm-dimension5');
+    }
+
+    // If list variable is set in cookie, retrieve it.
+    if ($.cookie('product-list') !== undefined) {
+      var listValues = JSON.parse($.cookie('product-list'));
+      if (listValues[productData.id]) {
+        productData.list = listValues[productData.id]
+      }
     }
 
     return productData;
@@ -883,7 +947,7 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if (gtmPageType === 'home page') {
+      else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
         if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
@@ -921,6 +985,7 @@
           (fileName.indexOf('oth') === 0)
         )) {
           var promotion = {
+            creative: creative.replace(/\/en\/|\/ar\//, ''),
             id: fileName,
             name: gtmPageType,
             position: 'slot' + position
@@ -987,6 +1052,14 @@
     }
 
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+
+    // On productClick, add list variable to cookie.
+    var listValues = {};
+    if ($.cookie('product-list') !== undefined) {
+      listValues = JSON.parse($.cookie('product-list'));
+    }
+    listValues[product.id] = listName;
+    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
       product.position = position;
@@ -1085,6 +1158,11 @@
         return decodeURIComponent(pair[1]);
       }
     }
+  };
+
+  // Ajax command to push deliveryAddress Event.
+  $.fn.triggerDeliveryAddress = function () {
+    dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
 })(jQuery, Drupal, dataLayer);

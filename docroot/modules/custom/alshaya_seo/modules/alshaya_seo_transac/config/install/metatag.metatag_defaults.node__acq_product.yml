@@ -4,8 +4,9 @@ dependencies: {  }
 id: node__acq_product
 label: 'Content: Product'
 tags:
-  description: '[node:summary_custom:155]'
-  title: '[node:title] | [site:name]'
+  description: 'Buy [node:title] Online from [site:name] in [custom_meta:cities]. Experience online shopping with a wide range of [node:category_names] and Enjoy  ✓ [custom_meta:usp1] ✓ [custom_meta:usp2] ✓ [custom_meta:usp3] [custom_meta:country]'
+  title: 'Shop [node:title] online | [site:name]'
+  keywords: 'Shop [node:title], buy [node:title], [custom_meta:brand_name] [node:title], [node:title] in [custom_meta:city1], [node:title] in [custom_meta:city2], [node:title] in [custom_meta:country],[node:title] online'
   og_description: '[node:summary_custom:155]'
   og_site_name: '[site:name]'
   og_title: '[node:title] | [site:name]'

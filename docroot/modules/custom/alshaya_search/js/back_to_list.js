@@ -41,7 +41,7 @@
    * @returns {null}
    */
   function getStorageValues() {
-    let value = localStorage.getItem(window.location.pathname);
+    var value = localStorage.getItem(window.location.pathname);
     if (typeof value !== 'undefined' && value !== null) {
       return JSON.parse(value);
     }
@@ -60,7 +60,8 @@
       return;
     }
 
-    var elementVisible = isElementInViewPort(first_visible_product);
+    var elementVisible = $(first_visible_product).isElementInViewPort($('.branding__menu').height());
+
     // If element is not visible, only then scroll.
     if (elementVisible === false) {
       $('html, body').animate({
@@ -70,22 +71,22 @@
   }
 
   /**
-   * Check if element is fully visible in viewport or not.
-   *
-   * @param element
-   *
-   * @returns {boolean}
+   * Adjust the grid view when back from PDP to listing page.
    */
-  function isElementInViewPort(element) {
-    // Get element top and bottom.
-    var elementTop = $(element).offset().top - $('.branding__menu').height();
-    var elementBottom = elementTop + $(element).outerHeight();
-
-    // Get window top and bottom.
-    var viewportTop = $(window).scrollTop();
-    var viewportBottom = viewportTop + $(window).height();
-
-    return elementTop >= viewportTop && elementBottom <= viewportBottom;
+  function adjustGridView() {
+    // Get storage values.
+    var storage_value = getStorageValues();
+    // Prepare grid type class as per storage value.
+    var grid_class_remove = storage_value.grid_type == 'small' ? 'large' : 'small';
+    $('.c-products-list').removeClass('product-' + grid_class_remove);
+    $('.c-products-list').addClass('product-' + storage_value.grid_type);
+    $('.c-products-list').addClass('back-to-list');
+    $('.' + grid_class_remove  + '-col-grid').removeClass('active');
+    $('.' + storage_value.grid_type + '-col-grid').addClass('active');
+    // Remove the grid_type property once applied when back from list
+    // so that on next page load, default behavior is used.
+    delete storage_value.grid_type;
+    localStorage.setItem(window.location.pathname, JSON.stringify(storage_value));
   }
 
   Drupal.processBackToList = function () {
@@ -93,6 +94,11 @@
     $('html').once('back-to-list').each(function () {
       var storage_value = getStorageValues();
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
+        // To adjust the grid view mode.
+        if (typeof storage_value.grid_type !== 'undefined') {
+          adjustGridView();
+        }
+
         if (typeof storage_value.nid !== 'undefined') {
           // Set timeout because of conflict.
           setTimeout(function () {
@@ -109,7 +115,8 @@
       $('.views-infinite-scroll-content-wrapper .c-products__item').once('back-to-plp').on('click', function () {
         // Prepare object to store details.
         var storage_details = {
-          nid: $(this).find('article:first').attr('data-nid')
+          nid: $(this).find('article:first').attr('data-nid'),
+          grid_type: $('.c-products-list').hasClass('product-large') ? 'large' : 'small',
         };
 
         // As local storage only supports string key/value pair.

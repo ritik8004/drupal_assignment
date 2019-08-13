@@ -11,6 +11,7 @@ use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\Core\Template\Attribute;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
@@ -123,9 +124,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
 
-  // Mothercare theme inherit everything from alshaya_white_label.
-  $current_theme = $current_theme == 'alshaya_mothercare' ? 'alshaya_white_label' : $current_theme;
-
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
 
   // If loader is enabled for the site, attach PACE library.
@@ -139,6 +137,10 @@ function alshaya_white_label_preprocess_html(&$variables) {
  * Implements hook_preprocess_page().
  */
 function alshaya_white_label_preprocess_page(&$variables) {
+  $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
+  // Adding a variable for html direction.
+  $variables['html_direction'] = $direction;
+
   // Check if page is panel pages.
   $routematch = \Drupal::routeMatch();
   $route_options = $routematch->getRouteObject()->getOptions();
@@ -170,11 +172,24 @@ function alshaya_white_label_preprocess_page(&$variables) {
     '#markup' => \Drupal::config('alshaya_master.settings')->get('js_disable_message'),
   ];
 
+  // Initialising the variable to check the sidebar visibilty.
+  // This will be disable by default.
+  $variables['enable_lhn_tree'] = 0;
+
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+
+      // Taking the sidebar visibility check from config for PLP.
+      $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
+
+      // If LHN config is enabled but the LHN block not rendering due to data.
+      $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('categorylhnblock');
+      if (empty($lhn_block->getPlugin()->build())) {
+        $variables['enable_lhn_tree'] = 0;
+      }
 
       $plp_type = $term->get('field_plp_layout')->value;
       if ($plp_type == ProductCategoryTree::PLP_LAYOUT_1) {
@@ -309,6 +324,36 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if (isset($variables['elements'], $variables['elements']['#id']) && $variables['elements']['#id'] === 'branding') {
     $mobile_logo = alshaya_master_get_mobile_logo();
     $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+  }
+
+  $listing_pages_plugin_id = [
+    'views_block:alshaya_product_list-block_1',
+    'views_block:alshaya_product_list-block_2',
+  ];
+  if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
+    $variables['attributes']['class'][] = 'c-products-list';
+    $variables['attributes']['class'][] = 'product-small';
+  }
+
+  // If `all filters` block of PLP.
+  if ($variables['plugin_id'] == 'alshaya_plp_facets_block_all') {
+    if ($variables['elements']['content']['#class'] == 'empty-category') {
+      $variables['attributes']['class'][] = 'empty-category';
+    }
+  }
+
+  if ($variables['plugin_id'] == 'search_api_algolia_autocomplete_block') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/algolia_search';
+  }
+
+  // Add class for category facet.
+  $category_facets = [
+    'facet_block:category_facet_plp',
+    'facet_block:category_facet_promo',
+    'facet_block:category_facet_search',
+  ];
+  if (in_array($variables['plugin_id'], $category_facets)) {
+    $variables['attributes']['class'][] = 'category-facet';
   }
 }
 
@@ -454,6 +499,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $settings = \Drupal::config('alshaya_acm_product.settings');
 
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
+    $variables['vat_text'] = $settings->get('vat_text');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
     $variables['pdp_layout'] = $settings->get('pdp_layout');
@@ -494,6 +540,17 @@ function alshaya_white_label_preprocess_node(&$variables) {
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
+        }
+      }
+    }
+    elseif ($variables['elements']['#view_mode'] == 'teaser') {
+      $current_route = \Drupal::routeMatch();
+      $variables['modal_link'] = TRUE;
+      if ($current_route->getRouteName() == 'entity.node.canonical') {
+        $node = $current_route->getParameter('node');
+        // Make modal link based on condition.
+        if ($node instanceof NodeInterface && $node->bundle() == 'magazine_article') {
+          $variables['modal_link'] = FALSE;
         }
       }
     }
@@ -637,6 +694,14 @@ function alshaya_white_label_theme() {
         'view_all' => NULL,
       ],
       'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates',
+    ],
+    'alshaya_white_label_picture' => [
+      'variables' => [
+        'desktop_image' => NULL,
+        'mobile_image' => NULL,
+        'default_image' => NULL,
+        'lazy_load_placeholder' => \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder'),
+      ],
     ],
   ];
 }
@@ -1086,10 +1151,13 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['selector_class'] = $style_data['selector_class'];
     }
 
-    if (!empty($default_image)) {
-      $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
-      $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
-      $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
+    if (!empty($default_image) && (!empty($desktop_image) || !empty($mobile_image))) {
+      $variables['promo_block_picture'] = [
+        '#theme' => 'alshaya_white_label_picture',
+        '#desktop_image' => !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image),
+        '#mobile_image' => !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image),
+        '#default_image' => _alshaya_white_label_get_image_url($default_image),
+      ];
     }
   }
 
@@ -1100,10 +1168,13 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     $desktop_banner_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
     $banner_default_image = !empty($desktop_banner_image) ? $desktop_banner_image : $mobile_banner_image;
 
-    if (!empty($banner_default_image)) {
-      $variables['mobile_banner_image'] = !empty($mobile_banner_image) ? _alshaya_white_label_get_image_url($mobile_banner_image) : _alshaya_white_label_get_image_url($desktop_banner_image);
-      $variables['desktop_banner_image'] = !empty($desktop_banner_image) ? _alshaya_white_label_get_image_url($desktop_banner_image) : _alshaya_white_label_get_image_url($mobile_banner_image);
-      $variables['banner_default_image'] = _alshaya_white_label_get_image_url($banner_default_image);
+    if (!empty($banner_default_image) && (!empty($desktop_banner_image) || !empty($mobile_banner_image))) {
+      $variables['promo_block_picture'] = [
+        '#theme' => 'alshaya_white_label_picture',
+        '#desktop_image' => !empty($desktop_banner_image) ? _alshaya_white_label_get_image_url($desktop_banner_image) : _alshaya_white_label_get_image_url($mobile_banner_image),
+        '#mobile_image' => !empty($mobile_banner_image) ? _alshaya_white_label_get_image_url($mobile_banner_image) : _alshaya_white_label_get_image_url($desktop_banner_image),
+        '#default_image' => _alshaya_white_label_get_image_url($banner_default_image),
+      ];
     }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
@@ -1430,5 +1501,97 @@ function alshaya_white_label_preprocess_alshaya_address(&$variables) {
   if (isset($variables['address']['country'])) {
     $variables['address']['country_code'] = $variables['address']['country'];
     unset($variables['address']['country']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_breadcrumb().
+ */
+function alshaya_white_label_preprocess_breadcrumb(&$variables) {
+  $variables['breadcrumb'] = [];
+  /** @var \Drupal\Core\Link $link */
+  foreach ($variables['links'] as $key => $link) {
+    $class = 'brdcrb-nav';
+    if (!empty($attributes = $link->getUrl()->getOption('attributes'))
+      && !empty($attributes['class'])) {
+      $class .= ' ' . implode(' ', $attributes['class']);
+    }
+
+    $variables['breadcrumb'][$key] = [
+      'text' => $link->getText(),
+      'url' => $link->getUrl()->toString(),
+      'class' => $class,
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  // Flag to determine if category facet has active item.
+  $category_active_facet = FALSE;
+
+  // Category facet array.
+  $category_facets = [
+    'category_facet_plp',
+    'category_facet_search',
+    'category_facet_promo',
+  ];
+  // If category facet.
+  $is_category_facet = in_array($variables['attributes']['data-drupal-facet-id'], $category_facets);
+  foreach ($variables['items'] as $key => $item) {
+    if (isset($item['value']['#attributes']['class'])
+      && in_array('is-active', $item['value']['#attributes']['class'])) {
+      if ($variables['items'][$key]['attributes'] instanceof Attribute) {
+        $variables['items'][$key]['attributes']->addClass('is-active');
+
+        // Update flag as there is active category facet.
+        if ($is_category_facet) {
+          $category_active_facet = TRUE;
+        }
+      }
+    }
+  }
+
+  // If its category facet and it has no active item, then mark `All` active.
+  if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0])) {
+    $variables['items'][0]['attributes']->addClass('is-active');
+  }
+
+  if ($is_category_facet) {
+    if (!empty($variables['items'][0]['attributes'])) {
+      $variables['items'][0]['attributes']->addClass('category-all');
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_image().
+ */
+function alshaya_white_label_preprocess_image(&$variables) {
+  $scheme = \Drupal::service('file_system')->uriScheme($variables['uri']);
+
+  // Use lazy load only for public schema and for already relative urls.
+  if ($scheme == 'public') {
+    $variables['attributes']['class'][] = 'b-lazy';
+    // For public scheme, create the url and make it relative.
+    $variables['attributes']['data-src'] = file_url_transform_relative(file_create_url($variables['uri']));
+    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
+  }
+  elseif ($scheme === FALSE) {
+    $variables['attributes']['class'][] = 'b-lazy';
+    $variables['attributes']['data-src'] = $variables['uri'];
+    $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
+  }
+}
+
+/**
+ * Implements template_preprocess_image_style().
+ */
+function alshaya_white_label_preprocess_image_style(&$variables) {
+  if (empty($variables['image']['#access'])) {
+    // Ensure we use relative urls everywhere.
+    $variables['image']['#uri'] = file_url_transform_relative($variables['image']['#uri']);
   }
 }

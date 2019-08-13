@@ -1,4 +1,6 @@
 <?php
+// @codingStandardsIgnoreFile
+
 /**
  * @file
  * This file contains the mapping between environment+site and magento /
@@ -38,6 +40,12 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
     $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
       $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
+    }
+
+    // This is specific to HM right now but since it is tied to Magento env
+    // we set in magento.php and use like this.
+    if (isset($magentos[$env_keys['magento']]['pims_base_url'])) {
+      $settings['alshaya_hm_images.settings']['pims_base_url'] = $magentos[$env_keys['magento']]['pims_base_url'];
     }
   }
 
@@ -84,21 +92,39 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // Fill this variable to override the default mapping.
   $mapping = [
     'hmkw' => [
-      '01dev3' => [
-        'magento' => 'hm_mapp',
-        'conductor' => 'hmkw_mapp',
+      '01dev' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hmkw_dev',
       ],
     ],
-    'hmsa' => [
-      '01dev3' => [
-        'magento' => 'hm_mapp',
-        'conductor' => 'hmsa_mapp',
+    'flsa' => [
+      '01dev' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flsa_dev',
       ],
     ],
-    'hmae' => [
-      '01dev3' => [
-        'magento' => 'hm_mapp',
-        'conductor' => 'hmae_mapp',
+    'bbwae' => [
+      '01dev' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwae_dev',
+      ],
+    ],
+    'mcsa' => [
+      '01dev' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mcsa_dev',
+      ],
+    ],
+    'pbae' => [
+      '01dev' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_dev',
+      ],
+    ],
+    'vsae' => [
+      '01dev' => [
+        'magento' => 'vs_qa',
+        'conductor' => 'vsae_dev',
       ],
     ],
   ];

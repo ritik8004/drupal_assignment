@@ -1,12 +1,19 @@
 services:
- alshaya_advanced_page.breadcrumb:
-   class: Drupal\alshaya_advanced_page\Breadcrumb\AlshayaStaticPageBreadcrumbBuilder
-   arguments: ['@title_resolver', '@request_stack']
-   tags:
-    - { name: breadcrumb_builder, priority: 100 }
+  alshaya_advanced_page.breadcrumb:
+    class: Drupal\alshaya_advanced_page\Breadcrumb\AlshayaStaticPageBreadcrumbBuilder
+    arguments: ['@title_resolver', '@request_stack']
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }
 
- alshaya_advanced_page.event_subscriber:
+  alshaya_advanced_page.event_subscriber:
     class: Drupal\alshaya_advanced_page\EventSubscriber\AlshayaAdvancedPageEventSubscriber
     arguments: ['@current_route_match']
     tags:
-     - { name: event_subscriber }
+      - { name: event_subscriber }
+
+  alshaya_advanced_page.external_hreflang_get_url_event_subscriber:
+    class: Drupal\alshaya_advanced_page\EventSubscriber\ExternalHreflangGetCurrentUrlEventSubscriber
+    arguments:
+      - '@current_route_match'
+    tags:
+      - { name: 'event_subscriber' }

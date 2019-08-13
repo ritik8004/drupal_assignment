@@ -207,7 +207,7 @@
   }
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-number {
-    width: 12.5rem;
+    width: 13.5rem;
 
     label {
       width: 100%;
@@ -275,54 +275,55 @@
       min-width: 10rem;
     }
   }
+}
 
-  .cc_cvv_help_text {
+.cc_cvv_help_text {
+  width: 40%;
+  padding-#{$left}: 4rem;
+  position: absolute;
+  top: 44%;
+  #{$left}: 24%;
+  font-size: 0.625rem;
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    html[lang=ar] & {
+      width: 45%;
+      top: -1.95rem;
+      #{$left}: 54%;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    width: 55%;
+    top: -0.5rem;
+    #{$left}: 49%;
+  }
+
+  @include breakpoint($desktop) {
     width: 40%;
-    padding-#{$left}: 4rem;
+    top: -0.5rem;
+    #{$left}: 25%;
+  }
+
+  &::before {
+    content: "";
+    height: 2rem;
+    width: 3rem;
+    background: $white url(/themes/custom/transac/alshaya_white_label/imgs/cards/back-card.png) no-repeat;
+    background-size: 100%;
+    margin-#{$right}: 0.5rem;
     position: absolute;
-    top: 44%;
-    #{$left}: 24%;
-    font-size: 0.625rem;
-
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        width: 45%;
-        top: -1.95rem;
-        #{$left}: 54%;
-      }
-    }
-
-    @include breakpoint($tablet) {
-      width: 55%;
-      top: -0.5rem;
-      #{$left}: 49%;
-    }
-
-    @include breakpoint($desktop) {
-      width: 40%;
-      top: -0.5rem;
-      #{$left}: 25%;
-    }
-
-    &::before {
-      content: "";
-      height: 2rem;
-      width: 3rem;
-      background: $white url(/themes/custom/transac/alshaya_white_label/imgs/cards/back-card.png) no-repeat;
-      background-size: 100%;
-      margin-#{$right}: 0.5rem;
-      position: absolute;
-      #{$left}: 0;
-      top: 0;
-    }
+    #{$left}: 0;
+    top: 0;
   }
 }
 
-#payment_method_cybersource {
+#payment_method_cybersource,
+#payment_method_checkout_com {
   .card-types-wrapper {
     position: absolute;
     top: 1.25rem;
@@ -335,39 +336,45 @@
 
     .card-type {
       display: inline-block;
-      height: 2rem;
-      width: 3rem;
+      height: 1.75rem;
+      width: 2rem;
       background: $checkout_payment_method_icon_bg;
       margin-#{$left}: 0.5625rem;
+      opacity: 0.3;
 
       &-visa {
-        background: url(#{$base_theme_img_directory_path}/cards/visa-inactive.png) no-repeat;
+        background: url(#{$base_theme_img_directory_path}/cards/card-visa-logo.svg) no-repeat;
         background-size: 100%;
 
         &.active {
-          background-image: url(#{$base_theme_img_directory_path}/cards/visa-active.png);
+          opacity: 1;
         }
       }
 
       &-mastercard {
-        background: url(#{$base_theme_img_directory_path}/cards/mastercard-inactive.png) no-repeat;
+        background: url(#{$base_theme_img_directory_path}/cards/card-mastercard-logo.svg) no-repeat;
         background-size: 100%;
 
         &.active {
-          background-image: url(#{$base_theme_img_directory_path}/cards/mastercard-active.png);
+          opacity: 1;
         }
       }
 
       &-diners-club {
         background: url(#{$base_theme_img_directory_path}/cards/diner-club-active.svg) no-repeat;
         background-size: 100%;
-        opacity: 0.3;
 
         &.active {
           opacity: 1;
         }
       }
     }
+  }
+}
+
+#payment_method_cybersource {
+  .payment-plugin-wrapper-div.plugin-selected {
+    border-bottom: 1px solid $checkout_payment_option_border;
   }
 }
 
@@ -422,7 +429,7 @@
     @include breakpoint($only-mobile) {
       display: block;
       position: absolute;
-      top: 0;
+      top: 0.25rem;
       #{$left}: 11.5rem;
 
       html[lang=ar] & {
@@ -518,7 +525,7 @@
             content: "";
             height: 2rem;
             width: 3rem;
-            background: $checkout_payment_CVV_tooltip_image_bg url(../imgs/cards/back-card.png) no-repeat;
+            background: $checkout_payment_CVV_tooltip_image_bg url(#{$base_theme_img_directory_path}/cards/back-card.png) no-repeat;
             background-size: 100%;
             margin-#{$right}: 0.5rem;
             position: absolute;
@@ -559,4 +566,8 @@
 .cybersource-ajax-progress-throbber .cybersource-throbber {
   background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
   background-size: 5.5rem !important;
+}
+
+#edit-acm-analytics {
+  display: inline;
 }

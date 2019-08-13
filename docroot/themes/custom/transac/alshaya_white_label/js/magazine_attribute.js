@@ -35,7 +35,14 @@
       showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
 
-    if (!$(context).hasClass('modal-content')) {
+    // Adding class when we click on slider item to open the modal.
+    if ($(window).width() > 767) {
+      $('.nodetype--acq_product .view-id-product_slider .use-ajax').once().on('click', function (e) {
+        $('body').addClass('magazine-layout-overlay');
+      });
+    }
+
+    if (!$(context).hasClass('modal-content') && !$('body').hasClass('magazine-layout-overlay')) {
       // JS function to show less/more for colour swatches.
       Drupal.magazine_swatches_count();
     }
@@ -96,9 +103,11 @@
 
     if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
       $('.show-less-color').show();
+      $('.configurable-swatch').addClass('swatch-toggle');
     }
     else if ($('.content__title_wrapper').hasClass('show-less-swatch')) {
       $('.show-more-color').show();
+      $('.configurable-swatch').removeClass('swatch-toggle');
     }
 
     if ($(window).width() > 767) {
@@ -122,6 +131,7 @@
 
       else if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
         $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
       }
 
       else {
@@ -129,7 +139,7 @@
       }
     }
 
-    $('.show-more-color').on('click', function (e) {
+    $('.show-more-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
         $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
@@ -142,7 +152,7 @@
       $('.show-less-color').show();
     });
 
-    $('.show-less-color').on('click', function (e) {
+    $('.show-less-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
         $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
@@ -336,7 +346,7 @@
         // Moving sharethis before description field in mobile.
         var sharethisSection = $('.basic-details-wrapper .modal-share-this').clone();
         if ($('.magazine-product-description .modal-share-this').length < 1) {
-          sharethisSection.once('bind-events').insertBefore('.magazine-swatch-placeholder');
+          sharethisSection.once('bind-events').insertAfter('.magazine-swatch-placeholder');
         }
         $('.basic-details-wrapper .modal-share-this').addClass('visually-hidden');
         if ($('.magazine-product-description .modal-share-this').hasClass('visually-hidden')) {
@@ -387,7 +397,7 @@
       }
       else {
         // JS to make sidebar sticky in desktop.
-        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height() - 20;
+        var topposition = $('.gallery-wrapper').offset().top - 20;
         var mainbottom = $('.gallery-wrapper').offset().top + $('.gallery-wrapper').height();
         $(window).on('scroll', function () {
           if (($(this).scrollTop() > topposition)) {
@@ -401,7 +411,7 @@
             $('.content-sidebar-wrapper').addClass('contain');
           }
 
-          if ($(document).scrollTop() <= $('.content-sidebar-wrapper').offset().top - $('.branding__menu').height() - 16) {
+          if ($(document).scrollTop() <= $('.content-sidebar-wrapper').offset().top - 16) {
             if ($('.content-sidebar-wrapper').hasClass('contain')) {
               $('.content-sidebar-wrapper').removeClass('contain');
             }
@@ -417,6 +427,7 @@
             if ($('body').hasClass('magazine-layout-ajax-throbber')) {
               $('body').removeClass('magazine-layout-ajax-throbber');
             }
+            $('body').removeClass('magazine-layout-overlay');
           });
         }, 10);
       }

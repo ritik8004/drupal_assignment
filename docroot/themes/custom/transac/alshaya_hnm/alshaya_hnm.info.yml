@@ -38,3 +38,23 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/magazine-layout/magazine-layout.ltr.css: css/conditional-sass/magazine-layout/magazine-layout.ltr.css
+
+  alshaya_white_label/magazine_article:
+      css:
+        theme:
+          css/conditional-sass/magazine-article/magazine-article.ltr.css: css/conditional-sass/magazine-article/magazine-article.ltr.css
+
+  alshaya_white_label/algolia_search:
+    css:
+      theme:
+        css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
+
+  alshaya_white_label/ltr_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/ltr-print.css
+
+  alshaya_white_label/rtl_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/rtl-print.css

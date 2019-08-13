@@ -5,7 +5,111 @@
  * Contains install, update, uninstall hooks for alshaya_master module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add string translation for - Forgot password message.
+ */
+function alshaya_master_update_8029() {
+  $strings = [
+    'Further instructions have been sent to your email address.' => [
+      'en' => 'If your account is located, an email will be sent with instructions for resetting your password.',
+      'ar' => 'إذا كان حسابك مغلق، فسيتم إرسال بريد إلكتروني يحتوي على إرشادات لإعادة تعيين كلمة المرور الخاصة بكء',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating mail_text filter config.
+ */
+function alshaya_master_update_8028() {
+  $configs = [
+    'filter.format.mail_text',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_master');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Setting default value for lazy load placeholder.
+ */
+function alshaya_master_update_8027() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshaya_config_manager */
+  $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
+  $alshaya_config_manager->updateConfigs(
+    ['alshaya_master.settings'],
+    'alshaya_master',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update context for strings.
+ */
+function alshaya_master_update_8026() {
+  $strings = [
+    'The password does not satisfy the password policies.' => 'alshaya_static_text|empty_password',
+    'Please enter a valid email address.' => 'alshaya_static_text|invalid_email',
+    'Please enter a valid name.' => 'alshaya_static_text|invalid_name',
+    'Please enter a valid last name.' => 'alshaya_static_text|invalid_last_name',
+    'Please enter an email address.' => 'alshaya_static_text|empty_email',
+    'Please enter a password' => 'alshaya_static_text|empty_password',
+    'The email address could not be found.' => 'alshaya_static_text|email_not_found',
+    'Please enter a valid mobile number.' => 'alshaya_static_text|invalid_mobile',
+    'Please enter a block.' => 'alshaya_static_text|empty_block',
+    'Please enter a street name/number' => 'alshaya_static_text|empty_street',
+    'Please enter a building name/number' => 'alshaya_static_text|empty_building',
+    'Please enter an area' => 'alshaya_static_text|empty_area',
+    'Please enter a valid credit card number.' => 'alshaya_static_text|invalid_cc_number',
+    'Please enter a valid CVC.' => 'alshaya_static_text|invalid_cvv',
+    'Please enter exp month' => 'alshaya_static_text|empty_exp_month',
+    'Please enter exp year' => 'alshaya_static_text|empty_exp_year',
+    'The password does not match this account' => 'alshaya_static_text|wrong_password',
+    'At least 7 characters with one special and one numeric' => 'alshaya_static_text|invalid_format_password',
+    'Password do not match' => 'alshaya_static_text|password_unmatch',
+    'The code you have entered is invalid' => 'alshaya_static_text|invalid_promo_code',
+  ];
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding arabic translations for the LHN.
+ */
+function alshaya_master_update_8025() {
+  $strings = [
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
+    ],
+    'filter & sort' => [
+      'ar' => 'اختر و رتب',
+    ],
+    'apply filter' => [
+      'ar' => 'تفعيل اختياراتك',
+    ],
+    'selected filters' => [
+      'ar' => 'الاختيارات المحددة',
+    ],
+    'All' => [
+      'ar' => 'جميع',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
 
 /**
  * Implements hook_update_N().
@@ -661,12 +765,6 @@ function alshaya_master_install() {
     'checkout as guest' => [
       'ar' => 'إتمام عملية الشراء كزبون زائر',
     ],
-    'Your email will be used only to send you information about your order.' => [
-      'ar' => 'سيتم استخدام عنوان البريد الإلكتروني الخاص بك فقط عند إرسال تفاصيل الطلبية',
-    ],
-    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>' => [
-      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p>',
-    ],
     'Checkout' => [
       'ar' => 'إتمام عملية الشراء',
     ],
@@ -678,9 +776,6 @@ function alshaya_master_install() {
     ],
     'returning customers' => [
       'ar' => 'الزبائن العائدون',
-    ],
-    'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.' => [
-      'ar' => 'يرجى تسجيل الدخول لتسريع عملية الشراء ومراجعة اختياراتك والدخول لسجل عناوينك وإتمام عملية الشراء',
     ],
     'ID, name, SKU' => [
       'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
@@ -1602,6 +1697,32 @@ function alshaya_master_install() {
     'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
       'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
     ],
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
+    ],
+    'filter & sort' => [
+      'ar' => 'اختر و رتب',
+    ],
+    'apply filter' => [
+      'ar' => 'تفعيل اختياراتك',
+    ],
+    'selected filters' => [
+      'ar' => 'الاختيارات المحددة',
+    ],
+    'All' => [
+      'ar' => 'جميع',
+    ],
+    'Search' => [
+      'en' => 'What are you looking for?',
+      'ar' => 'عن ماذا تبحث؟',
+      'context' => 'algolia_search_block_placeholder',
+    ],
+    'sign in with email address' => [
+      'ar' => 'تسجيل الدخول عن طريق البريد الإلكتروني',
+    ],
+    'continue as a guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1730,4 +1851,8 @@ function alshaya_master_install() {
     'seckit',
     'install'
   );
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'back_to_top.settings')
+    ->set('back_to_top_button_text', 'أعلى الصفحة')
+    ->save();
 }

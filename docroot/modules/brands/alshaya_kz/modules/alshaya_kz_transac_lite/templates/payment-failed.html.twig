@@ -1,0 +1,55 @@
+<section class="order-status">
+  <div class="container clearfix">
+    <h2 class="steps_instruction">{{ 'Online Booking Failed'|t }}</h2>
+
+    <div class="payment_option">
+      <p class="ticket_details">{{ 'You online payment transaction is failed. You may contact your bank for this failed transaction for more details.'|t }}</p>
+    </div>
+    <div class="payment_option">
+      <p class="reference-number">
+        {{ 'Reference Number'|t }}:
+        <strong>{{ booking_info.sales_number }}</strong>
+      </p>
+    </div>
+    <div class="k-net_container">
+      <h3 class="knet-pay">{{ 'K-Net Payment Details'|t }}</h3>
+      <div class="payment_option">
+        {% if booking_info.transaction_id %}
+        <p class="reference-number">
+          {{ 'Transaction Id'|t }}:
+          <span>{{booking_info.transaction_id}}</span>
+        </p>
+        {% endif %}
+        {% if booking_info.payment_id %}
+        <p class="reference-number">
+          {{ 'Payment Id'|t }}:
+          <span>{{ booking_info.payment_id }}</span>
+        </p>
+        {% endif %}
+        {% if booking_info.order_total %}
+        <p class="reference-number">
+          {{ 'Total Payment'|t }}:
+          <span>KWD {{ booking_info.order_total }}</span>
+        </p>
+        {% endif %}
+        {% if booking_info.booking_date %}
+        <p class="reference-number">
+          {{ 'Date of Payment'|t }}:
+          <span>{{ booking_info.booking_date }}</span>
+        </p>
+        {% endif %}
+        <p class="reference-number">
+          {{ 'Status'|t }}:
+          <span>{{ 'Failed'|t }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="failed_action_container">
+    	<div class="payment_option">
+        <a class="tryagainBtn" href="{{ url('<front>') }}">{{ 'Try Again'|t }}</a>
+        <a class="backtositeBtn" href='{{ booking_info.kidz_url|slice(0, -8) }}'>{{ 'Take me to Kidzania Website'|t }}</a>
+      </div>
+    </div>
+    
+  </div>
+</section>

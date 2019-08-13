@@ -165,7 +165,7 @@ class CategoryProductListResource extends ResourceBase {
     // Load the term object.
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($id);
     // If given term exists in system.
-    if (!$term instanceof TermInterface) {
+    if (!$term instanceof TermInterface || $term->bundle() != 'acq_product_category') {
       $this->mobileAppUtility->throwException();
     }
 
@@ -200,7 +200,7 @@ class CategoryProductListResource extends ResourceBase {
       'label' => $term->label(),
       'path' => $term_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-      'banner' => $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
+      'banner' => $term->get('field_promo_banner_for_mobile')->value ? [] : $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
       'description' => ($desc = $term->get('description')->getValue()) && !empty($desc[0]['value'])
       ? $desc[0]['value']
       : '',

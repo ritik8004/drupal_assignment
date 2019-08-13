@@ -88,7 +88,7 @@
 
     .c-sidebar-second__region {
       @include breakpoint($desktop) {
-        padding-#{$left}: 6.5em;
+        padding-#{$left}: 6.1875rem;
 
         p {
           line-height: 1.2;
@@ -372,13 +372,7 @@
     .field--name-field-privilege-card-number label:not(.error),
     .form-item-privilege-card-number label:not(.error),
     .form-item-privilege-card-number2 label:not(.error) {
-      font-size: 1rem;
-      color: $primary_input_label;
-      position: absolute;
-      #{$left}: 0;
-      top: -0.125rem;
-      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-      pointer-events: none;
+      @include placeholder-label;
     }
 
     label.option {
@@ -410,12 +404,6 @@
       font-size: 16px;
     }
 
-    @include breakpoint($desktop) {
-      .form-email {
-        //margin-top: 9px;
-      }
-    }
-
     input.error {
       border-color: $primary_input_inline_error;
       border-width: 0 0 2px;
@@ -427,27 +415,48 @@
     }
   }
 
+  .user-login-form {
+    .form-submit {
+      margin-top: 1rem;
+      height: 2.875rem;
+
+      @include breakpoint($tablet) {
+        width: 11.875rem;
+      }
+    }
+  }
+
+  .user-register-form {
+    .form-submit {
+      margin-top: 1rem;
+      height: 2.875rem;
+
+      @include breakpoint($tablet) {
+        width: 14.375rem;
+      }
+    }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      @include breakpoint($desktop) {
+        margin-top: 1.1875rem !important;
+      }
+    }
+  }
+
   .form-item input:focus ~ label:not(.error),
   .form-item input:not(:focus):valid ~ label:not(.error),
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
   .form-item input.error ~ label:not(.error) {
-    top: -1.25em;
-    bottom: 0;
-    #{$left}: 0;
-    opacity: 1;
-    font-size: 0.75rem;
+    @include placeholder-active;
   }
 
   // Separating -webkit-autofill styles to prevent Firefox from applying styles on labels.
   .form-item input:-webkit-autofill ~ label:not(.error),
   .form-item input:-webkit-autofill:hover ~ label:not(.error),
   .form-item input:-webkit-autofill:focus ~ label:not(.error) {
-    top: -1.25em;
-    bottom: 0;
-    #{$left}: 0;
-    opacity: 1;
-    font-size: 0.75rem;
+    @include placeholder-active;
   }
 
   .form-type-checkbox .option {
@@ -482,29 +491,22 @@
   position: relative;
 
   & > a {
-    @include breakpoint($tablet) {
-      #{$left}: 9em;
-      bottom: 0.5em;
+    @include breakpoint($only-tablet) {
+      bottom: 1rem;
       width: auto;
-
-      html[lang='ar'] & {
-        #{$left}: 13em;
-        bottom: 0.75em;
-      }
+      #{$right}: 0;
     }
 
     @include breakpoint($desktop) {
-      bottom: 0.7em;
-
-      html[lang='ar'] & {
-        #{$left}: 12em;
-      }
+      #{$left}: 15.38rem;
+      bottom: 1.05rem;
+      width: auto;
     }
 
     position: absolute;
     bottom: -3.5em;
     text-decoration: none;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: bold;
     z-index: 2;
     width: 100%;
@@ -1278,10 +1280,21 @@
 .alias--user-register {
   @include breakpoint($only-mobile) {
     .user-page {
-      margin-left: 0.5rem;
-      margin-right: 0.5rem;
+      margin-left: 1.25rem;
+      margin-right: 1.25rem;
       padding-left: 0;
       padding-right: 0;
+      margin-bottom: 5rem;
+
+      .captcha {
+        text-align: center;
+
+        .g-recaptcha {
+          > div {
+            width: 100% !important;
+          }
+        }
+      }
     }
   }
 }
@@ -1344,18 +1357,6 @@ input::-webkit-credentials-auto-fill-button {
           }
         }
       }
-    }
-  }
-}
-
-.c-user-register {
-  h1 {
-    @include breakpoint($only-mobile) {
-      top: -2.1875rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      top: -3.125rem;
     }
   }
 }

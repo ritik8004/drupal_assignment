@@ -26,10 +26,6 @@
         #{$left}: 0;
         padding-top: 0.375rem;
         margin-top: -0.1875rem;
-
-        @include breakpoint($tablet) {
-          margin-top: 0;
-        }
       }
     }
   }
@@ -131,39 +127,6 @@
     &::before {
       background: $checkout_payment_method_border url(../imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
-    }
-  }
-}
-
-#payment_method_cybersource {
-  .card-types-wrapper {
-    .card-type {
-      &-visa {
-        background: url('../imgs/cards/visa-inactive.png') no-repeat;
-        background-size: 100%;
-
-        &.active {
-          background-image: url('../imgs/cards/visa-active.png');
-        }
-      }
-
-      &-mastercard {
-        background: url('../imgs/cards/mastercard-inactive.png') no-repeat;
-        background-size: 100%;
-
-        &.active {
-          background-image: url('../imgs/cards/mastercard-active.png');
-        }
-      }
-
-      &-diners-club {
-        background: url('../imgs/cards/dinersclub-inactive.png') no-repeat;
-        background-size: 88%;
-
-        &.active {
-          background-image: url('../imgs/cards/dinersclub-active.png');
-        }
-      }
     }
   }
 }
