@@ -179,15 +179,15 @@ class AlshayaOptionsListHelper {
     $query->fields('tfa', ['field_sku_attribute_code_value']);
     $query->groupBy('tfa.field_sku_attribute_code_value');
     $options = $query->execute()->fetchAllKeyed(0, 0);
-
+    $filtered_options = [];
     // Only show those fields which have a facet.
     $fields = $this->skuFieldsManager->getFieldAdditions();
     foreach ($options as $key => $option) {
-      if (!isset($fields[$option]['facet']) || $fields[$option]['facet'] != 1) {
-        unset($options[$key]);
+      if ($fields[$option]['facet'] == 1) {
+        $filtered_options[$key] = $fields[$option]['label'] ?? $option;
       }
     }
-    return $options;
+    return $filtered_options;
   }
 
   /**
