@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_token_info().
@@ -42,6 +43,10 @@ function alshaya_seo_token_info() {
     'name' => t('Summary custom'),
     'description' => t("The summary of the node's main body text with dynamic length."),
     'dynamic' => TRUE,
+  ];
+
+  $info['tokens']['term']['shopby_subcat'] = [
+    'name' => 'All categories in Shop By',
   ];
 
   $info['tokens']['custom_meta']['brand_name'] = [
@@ -163,13 +168,15 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     //
     // Where the last argument accepted is integer, Which defines the length of
     // the string for the summary.
-    if ($arg_tokens = \Drupal::token()->findWithPrefix($tokens, 'summary_custom')) {
+    if ($arg_tokens = \Drupal::token()
+      ->findWithPrefix($tokens, 'summary_custom')) {
       // Get the dynamic value.
       $size = key($arg_tokens);
       // Get the original token.
       $original = $arg_tokens[$size];
       // Get the translation for the current node.
-      $translation = \Drupal::entityManager()->getTranslationFromContext($node, $langcode, ['operation' => 'node_tokens']);
+      $translation = \Drupal::entityManager()
+        ->getTranslationFromContext($node, $langcode, ['operation' => 'node_tokens']);
       if ($translation->hasField('body') && ($items = $translation->get('body')) && !$items->isEmpty()) {
         $item = $items[0];
         // If the summary was requested and is not empty, use it.
@@ -185,11 +192,37 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
   }
 
+  if ($type == 'term' && !empty($data['term']) && $data['term'] instanceof TermInterface && isset($tokens['shopby_subcat'])) {
+    $term = $data['term'];
+    $parents = array_keys(\Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadAllParents($term->id()));
+    $parent = reset(array_slice($parents, -1, TRUE));
+    $query = \Drupal::database()->select('taxonomy_term_field_data', 'tfd');
+    $query->fields('tfd', ['tid']);
+    $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
+    $query->condition('tth.parent_target_id', $parent);
+    $query->condition('tfd.name', '%' . db_like('Shop By Product') . '%', 'LIKE');
+    $result = $query->execute()->fetchCol();
+    $children = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadChildren(reset($result));
+    $shop_by_array = [];
+    foreach ($children as $child) {
+      $shop_by_array[] = $child->getName();
+    }
+
+    $replacements[$tokens['shopby_subcat']] = implode(', ', $shop_by_array);
+  }
+
   if ($type == 'custom_meta') {
-    $seo_config = \Drupal::configFactory()->get('alshaya_seo_transac.meta_variables');
+    $seo_config = \Drupal::configFactory()
+      ->get('alshaya_seo_transac.meta_variables');
     $brand_name = (string) t('seo_brand_name');
     $min_amount = $seo_config->get('min_shipping_amount');
-    $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
+    $currency_code = \Drupal::configFactory()
+      ->get('acq_commerce.currency')
+      ->get('currency_code');
 
     // Invoke the alter hook to allow all modules to set brand.
     \Drupal::moduleHandler()->alter('alshaya_seo_brandname', $brand_name);
@@ -202,7 +235,10 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'usp1':
-          $replacements[$original] = t('Free Delivery on orders over @currency_code @min_amount', ['@currency_code' => $currency_code, '@min_amount' => $min_amount]);
+          $replacements[$original] = t('Free Delivery on orders over @currency_code @min_amount', [
+            '@currency_code' => $currency_code,
+            '@min_amount' => $min_amount,
+          ]);
           break;
 
         case 'usp2':

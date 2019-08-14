@@ -12,10 +12,10 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Update metatags for categories.
  */
-function alshaya_seo_transac_update_8406() {
+function alshaya_seo_transac_update_8408() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['metatag.metatag_defaults.taxonomy_term__acq_product_category'],
+    ['metatag.metatag_defaults.taxonomy_term__acq_product_category', 'alshaya_seo_transac.meta_variables'],
     'alshaya_seo_transac',
     'install'
   );
