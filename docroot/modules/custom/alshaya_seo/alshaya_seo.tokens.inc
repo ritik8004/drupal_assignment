@@ -194,10 +194,10 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
   if ($type == 'term' && !empty($data['term']) && $data['term'] instanceof TermInterface && isset($tokens['shopby_subcat'])) {
     $term = $data['term'];
-    $parents = array_keys(\Drupal::entityTypeManager()
+    $parents = array_slice(array_keys(\Drupal::entityTypeManager()
       ->getStorage('taxonomy_term')
-      ->loadAllParents($term->id()));
-    $parent = reset(array_slice($parents, -1, TRUE));
+      ->loadAllParents($term->id())), -1, TRUE);
+    $parent = reset($parents);
     $query = \Drupal::database()->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid']);
     $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
