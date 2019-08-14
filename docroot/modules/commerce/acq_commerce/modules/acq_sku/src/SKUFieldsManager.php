@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Psr\Log\LoggerInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Class SKUFieldsManager.
@@ -101,6 +102,28 @@ class SKUFieldsManager {
 
       // Apply entity updates, we will read from config and add/update fields.
       $this->entityDefinitionUpdateManager->applyUpdates();
+
+      $storage_definition = BaseFieldDefinition::create('string')
+        ->setLabel('Color family')
+        ->setDescription('A color family')
+        ->setCardinality(-1)
+        ->setDefaultValue(FALSE)
+        ->setDisplayConfigurable('form', 1)
+        ->setDisplayConfigurable('view', 1);
+
+      $storage_definition->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+        'weight' => 10,
+      ]);
+
+      $storage_definition->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 10,
+      ]);
+
+      \Drupal::entityDefinitionUpdateManager()
+        ->installFieldStorageDefinition('attr_color_family', 'acq_sku', 'acq_sku', $storage_definition);
 
       // Allow other modules to take some action after the fields are added.
       $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
