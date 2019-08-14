@@ -5,6 +5,7 @@ namespace Drupal\alshaya_facets_pretty_paths\Plugin\facets\url_processor;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
+use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets\UrlProcessor\UrlProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,11 +38,19 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected $alshayaPrettyPathHelper;
 
   /**
+   * Tha facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetsManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request, AlshayaFacetsPrettyPathsHelper $pretty_path_helper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request, AlshayaFacetsPrettyPathsHelper $pretty_path_helper, DefaultFacetManager $facets_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
+    $this->facetsManager = $facets_manager;
     $this->initializeActiveFilters($configuration);
   }
 
@@ -54,7 +63,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $plugin_id,
       $plugin_definition,
       $container->get('request_stack')->getMasterRequest(),
-      $container->get('alshaya_facets_pretty_paths.alshaya_facets_pretty_paths_helper')
+      $container->get('alshaya_facets_pretty_paths.pretty_paths_helper'),
+      $container->get('facets.manager')
     );
   }
 
@@ -72,11 +82,14 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
 
-    /* @var \Drupal\facets\FacetInterface[] $facets */
-    $facets = \Drupal::service('facets.manager')->getEnabledFacets();
-    $facet_weights = [];
-    foreach ($facets as $facet_selected) {
-      $facet_weights[] = $facet_selected->getUrlAlias();
+    static $facet_weights;
+
+    if (!isset($facet_weights)) {
+      $facets = $this->facetsManager->getEnabledFacets();
+      $facet_weights = [];
+      foreach ($facets as $facet_selected) {
+        $facet_weights[] = $facet_selected->getUrlAlias();
+      }
     }
 
     /** @var \Drupal\facets\Result\ResultInterface $result */

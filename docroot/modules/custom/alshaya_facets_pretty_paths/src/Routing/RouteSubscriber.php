@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_facets_pretty_paths;
+namespace Drupal\alshaya_facets_pretty_paths\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\Core\Url;

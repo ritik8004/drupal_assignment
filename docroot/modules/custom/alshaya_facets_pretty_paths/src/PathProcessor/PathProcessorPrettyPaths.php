@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_facets_pretty_paths;
+namespace Drupal\alshaya_facets_pretty_paths\PathProcessor;
 
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
 use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
@@ -45,6 +45,9 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
    * {@inheritdoc}
    */
   public function processInbound($path, Request $request) {
+    // We are doing this because alias manager is unable to get the root path.
+    // We remove the facet parameters and then get the term_path
+    // For example: /en/ladies/--color-blue => en/term/10/--color-blue
     if ($this->routeMatch->getRouteName() == 'facets.block.ajax' || stripos($path, '/--', 0) !== FALSE) {
       if (strrpos($path, '/--')) {
         $path_alias = substr($path, 0, strrpos($path, '/--'));
@@ -71,6 +74,7 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
    * {@inheritdoc}
    */
   public function processOutbound($path, &$options = [], Request $request = NULL, BubbleableMetadata $bubbleable_metadata = NULL) {
+    // For example: en/term/10/--color-blue => en/ladies/--color-blue
     if (stripos($path, '/--', 0) !== FALSE && empty($options['alias'])) {
       $original_path = substr($path, 0, strpos($path, '/--'));
       if ($original_path) {
