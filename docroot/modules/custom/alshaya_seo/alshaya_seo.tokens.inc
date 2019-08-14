@@ -81,6 +81,14 @@ function alshaya_seo_token_info() {
     'name' => t('USP3'),
   ];
 
+  $info['tokens']['custom_meta']['usp4'] = [
+    'name' => t('USP4'),
+  ];
+
+  $info['tokens']['custom_meta']['usp5'] = [
+    'name' => t('USP5'),
+  ];
+
   return $info;
 }
 
@@ -203,6 +211,14 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'usp3':
           $replacements[$original] = $seo_config->get('usp3');
+          break;
+
+        case 'usp4':
+          $replacements[$original] = $seo_config->get('usp4');
+          break;
+
+        case 'usp5':
+          $replacements[$original] = $seo_config->get('usp5');
           break;
 
         case 'country':
