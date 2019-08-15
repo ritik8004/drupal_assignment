@@ -305,7 +305,7 @@ header {
       img {
         @include breakpoint($desktop) {
           max-width: 18.75rem;
-          width: 100%;
+          width: auto;
           margin: auto;
           text-align: center;
         }
