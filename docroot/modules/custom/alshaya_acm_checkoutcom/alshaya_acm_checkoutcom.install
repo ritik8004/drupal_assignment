@@ -8,6 +8,21 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Updating translation strings.
+ */
+function alshaya_acm_checkoutcom_update_8001() {
+  $strings = [
+    'New Credit Card' => [
+      'ar' => 'بطاقة ائتمان جديدة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_acm_checkoutcom_install() {
@@ -37,8 +52,8 @@ function alshaya_acm_checkoutcom_install() {
     'This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info' => [
       'ar' => 'سيتم حفظ تفاصيل هذه البطاقة بشكل آمن لتتم عملية الدفع بشكل أسرع. لن يتم حفظ رقم CVV. المزيد من المعلومات.',
     ],
-    'New Card' => [
-      'ar' => 'بطاقة دفع جديدة',
+    'New Credit Card' => [
+      'ar' => 'بطاقة ائتمان جديدة',
     ],
     'You don\'t have any saved payment cards.' => [
       'ar' => 'لا يوجد لديك أي بطاقات محفوظة',
