@@ -88,6 +88,7 @@
             width: 18px;
             height: 24px;
             top: 50%;
+            #{$right}: 0;
             position: absolute;
             transform: translateY(-50%);
             background-color: $payment_card_border;
