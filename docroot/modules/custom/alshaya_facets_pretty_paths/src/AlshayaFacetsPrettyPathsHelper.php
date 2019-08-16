@@ -51,11 +51,12 @@ class AlshayaFacetsPrettyPathsHelper {
   public static function encodeFacetUrlComponents($element) {
     // Convert first letter to lowercase.
     $words = explode(' ', $element);
+    $lc_word = '';
     foreach ($words as $word) {
       $word = ' ' . lcfirst($word);
-      $element .= $word;
+      $lc_word .= $word;
     }
-    $element = ltrim($element);
+    $element = ltrim($lc_word);
 
     // Convert spaces to '_'.
     $element = str_replace(' ', '_', $element);
@@ -113,6 +114,8 @@ class AlshayaFacetsPrettyPathsHelper {
     elseif (strpos($this->currentRequest->getPathInfo(), "/--") !== FALSE) {
       $filters = substr($this->currentRequest->getPathInfo(), strpos($this->currentRequest->getPathInfo(), "/--") + 3);
     }
+
+    $filters = rtrim($filters, '/');
 
     return array_filter(explode('--', $filters));
   }

@@ -139,11 +139,12 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
 
     $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
-
-    if (isset($query_params['facet_filter_url'])) {
+    if (isset($query_string['q'])) {
+      $clean_url = Url::fromUserInput($query_string['q'], [])->toString(FALSE);
+    }
+    elseif (isset($query_params['facet_filter_url'])) {
       $clean_url = Url::fromUserInput($query_params['facet_filter_url'], [])->toString(FALSE);
     }
-    $clean_url = rtrim($clean_url, '--');
     $clean_url .= (substr($clean_url, -1) == '/' ? '' : '/');
     $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
 

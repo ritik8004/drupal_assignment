@@ -48,13 +48,11 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
     // We are doing this because alias manager is unable to get the root path.
     // We remove the facet parameters and then get the term_path.
     // For example: /en/ladies/--color-blue => en/term/10/--color-blue.
-    if ($this->routeMatch->getRouteName() == 'facets.block.ajax' || stripos($path, '/--', 0) !== FALSE) {
-      if (strrpos($path, '/--')) {
-        $path_alias = substr($path, 0, strrpos($path, '/--'));
-        $term_path = $this->aliasManager->getPathByAlias($path_alias);
-        $query_param = substr($path, strrpos($path, '/--') + 1);
-        $path = $term_path . '/' . $query_param;
-      }
+    if (stripos($path, '/--', 0) !== FALSE) {
+      $path_alias = substr($path, 0, strrpos($path, '/--'));
+      $term_path = $this->aliasManager->getPathByAlias($path_alias);
+      $query_param = substr($path, strrpos($path, '/--') + 1);
+      $path = $term_path . '/' . $query_param;
     }
 
     elseif (!empty($facet_link = $request->query->get('facet_link'))) {

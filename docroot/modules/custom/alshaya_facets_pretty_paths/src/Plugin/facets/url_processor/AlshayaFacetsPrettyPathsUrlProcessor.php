@@ -144,20 +144,23 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $filters_current_result_array = array_replace(array_intersect_key(array_flip($facet_weights), $filters_current_result_array), $filters_current_result_array);
       $filters_current_result_string = array_filter($filters_current_result_array);
-      array_walk($filters_current_result_string, function (&$el, $key) {
-        $el = $key . '-' . implode('-', array_map([
-          '\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
-          'encodeFacetUrlComponents',
-        ], $el));
-      });
-      $filters_current_result_string = implode('--', $filters_current_result_string);
-      $path = $facet->getFacetSource()->getPath();
-      if (strpos($current_path, "/--") !== FALSE) {
-        $path = substr($path, 0, strpos($path, '/--'));
-      }
-      $path = rtrim($path, '/');
 
-      $url = Url::fromUri('base:' . $path . '/--' . $filters_current_result_string);
+      if (strpos($current_path, "/--") !== FALSE) {
+        $current_path = substr($current_path, 0, strpos($current_path, '/--'));
+      }
+
+      if (count($filters_current_result_string)) {
+        array_walk($filters_current_result_string, function (&$el, $key) {
+          $el = $key . '-' . implode('-', array_map(['\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper', 'encodeFacetUrlComponents'], $el));
+        });
+        $filters_current_result_string = implode('--', $filters_current_result_string);
+        $current_path = rtrim($current_path, '/');
+
+        $url = Url::fromUri('base:' . $current_path . '/--' . $filters_current_result_string . '/');
+      }
+      else {
+        $url = Url::fromUri('base:' . $current_path . '/');
+      }
 
       if (count($filters_current_result_array, COUNT_RECURSIVE) - count($filters_current_result_array) > 2) {
         $url->setOption('attributes', ['rel' => 'nofollow noindex ']);

@@ -317,7 +317,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   // Update the url in browser, on facet selection.
   $.fn.updateBrowserFacetUrl = function (url) {
     // On ajax response
-    window.history.replaceState({'facet-url-update': url}, document.title, url);
+    window.history.pushState({'facet-url-update': url}, document.title, url);
     $(document).ajaxSend(function (event, jqxhr, settings) {
       if (settings.url.includes('/views/ajax?sort_bef_combine')) {
         settings.url = settings.url + '&facet_filter_url=' + url;
