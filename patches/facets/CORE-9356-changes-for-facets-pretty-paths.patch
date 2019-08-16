@@ -1,0 +1,25 @@
+diff --git a/js/facets-views-ajax.js b/js/facets-views-ajax.js
+index bdfd0b2..c66ef8b 100644
+--- a/js/facets-views-ajax.js
++++ b/js/facets-views-ajax.js
+@@ -77,6 +77,7 @@
+   var updateFacetsView = function (facetLink, facets_blocks, current_dom_id, update_summary_block, settings) {
+     var views_parameters = Drupal.Views.parseQueryString(facetLink.attr('href'));
+     var views_arguments = Drupal.Views.parseViewArgs(facetLink.attr('href'), 'search');
++    views_parameters.q = facetLink.attr('href');
+     var views_settings = $.extend(
+       {},
+       Drupal.views.instances['views_dom_id:' + current_dom_id].settings,
+diff --git a/src/Widget/WidgetPluginBase.php b/src/Widget/WidgetPluginBase.php
+index ee0ac1a..9e70b04 100644
+--- a/src/Widget/WidgetPluginBase.php
++++ b/src/Widget/WidgetPluginBase.php
+@@ -64,7 +64,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
+         $route_params = $url_object->getRouteParameters();
+         $route_name = $url_object->getRouteName();
+         // Additional check needed if facets are tied up with a block on the page.
+-        if ($result->getUrl()->getRouteName() === 'facets.block.ajax') {
++        if ($url_object->getRouteName() === 'facets.block.ajax') {
+           $result->setUrl(new Url($route_name, $route_params, $options));
+         }
+         return $this->buildListItems($facet, $result);
