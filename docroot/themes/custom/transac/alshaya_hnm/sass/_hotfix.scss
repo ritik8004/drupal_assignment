@@ -96,20 +96,11 @@ body {
   margin-top: 15px !important;
 }
 
-.ie .site-brand-home a img {
+.ie .site-brand-home a img,
+.ie .filter-fixed-top .sticky-filter-wrapper .site-brand-home a {
   width: auto;
 }
 
-.ie .filter-fixed-top {
-  .sticky-filter-wrapper {
-    .site-brand-home {
-      a {
-        width: auto;
-
-        img {
-          width: 3rem;
-        }
-      }
-    }
-  }
+.ie .filter-fixed-top .sticky-filter-wrapper .site-brand-home a img {
+  width: 3rem;
 }

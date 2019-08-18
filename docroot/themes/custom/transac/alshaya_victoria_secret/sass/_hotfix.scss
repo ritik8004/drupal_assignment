@@ -25,24 +25,10 @@ body {
   width: 21.875rem;
 }
 
-.ie .super-category-victorias-secret {
-  .branding__menu .c-header__region .block-system-branding-block .site-brand-home img {
-    width: 100%;
-  }
+.ie .super-category-victorias-secret .branding__menu .c-header__region .block-system-branding-block .site-brand-home img {
+  width: 100%;
 }
 
-.super-category-beauty {
-  .filter-fixed-top {
-    .sticky-filter-wrapper {
-      .site-brand-home {
-        a {
-          img {
-            .ie & {
-              width: 100%;
-            }
-          }
-        }
-      }
-    }
-  }
+.ie .super-category-beauty .filter-fixed-top .sticky-filter-wrapper .site-brand-home a img {
+  width: 100%;
 }
