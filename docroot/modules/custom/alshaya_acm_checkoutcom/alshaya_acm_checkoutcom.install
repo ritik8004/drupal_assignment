@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_checkoutcom module.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_checkoutcom_install() {
+  // Make checkout.com default payment method for all country except kw.
+  $country_code = mb_strtolower(Settings::get('country_code'));
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com', 'Credit / Debit Card');
+
+  if ($country_code !== 'kw') {
+    $checkout_com->get('field_payment_default')->setValue(1);
+  }
+  $checkout_com->save();
+
+  if (!$checkout_com->hasTranslation('ar')) {
+    $checkout_com_ar = $checkout_com->addTranslation('ar', []);
+  }
+  else {
+    $checkout_com_ar = $checkout_com->getTranslation('ar');
+  }
+  $checkout_com_ar->setName('بطاقة الائتمان');
+  $checkout_com_ar->save();
+
+  $strings = [
+    'Save card for future use' => [
+      'ar' => 'احفظ تفاصيل بطاقة الدفع لاستخدامها مرة أخرى',
+    ],
+    'This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info' => [
+      'ar' => 'سيتم حفظ تفاصيل هذه البطاقة بشكل آمن لتتم عملية الدفع بشكل أسرع. لن يتم حفظ رقم CVV. المزيد من المعلومات.',
+    ],
+    'New Card' => [
+      'ar' => 'بطاقة دفع جديدة',
+    ],
+    'You don\'t have any saved payment cards.' => [
+      'ar' => 'لا يوجد لديك أي بطاقات محفوظة',
+    ],
+    'Credit card number' => [
+      'ar' => 'البطاقة الإئتمانية',
+    ],
+    'Buy with' => [
+      'ar' => 'اشتر عبر',
+    ],
+    'delete card' => [
+      'ar' => 'احذف البطاقة',
+    ],
+    'Are you sure you want to delete this card?' => [
+      'ar' => 'هل أنت متأكد من حذف هذه البطاقة؟',
+    ],
+    'Yes, delete this card' => [
+      'ar' => 'نعم، احذف هذه البطاقة',
+    ],
+    'No, take me back' => [
+      'ar' => 'لا، الرجوع للصفحة السابقة',
+    ],
+    'Could not delete your card, please try again later.' => [
+      'ar' => 'لم نتكمن من حذف بطاقتك، يرجى المحاولة لاحقاً',
+    ],
+    'Your card has been deleted.' => [
+      'ar' => 'تم حذف بطاقتك',
+    ],
+    'Payment cards' => [
+      'ar' => 'بطاقات الدفع',
+    ],
+    'Transaction has been declined. Please try again later.' => [
+      'ar' => 'تم رفض العملية. يرجى المحاولة لاحقاً.',
+    ],
+    'Please enter a valid name' => [
+      'ar' => 'يرجى إدخال اسم صحيح',
+    ],
+    'Please enter a valid credit card number' => [
+      'ar' => 'يرجى إدخال رقم بطاقة ائتمان صحيح',
+    ],
+    'Invalid security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
+    ],
+    'An error occurred while placing your order. Please contact our customer service team for assistance.' => [
+      'ar' => 'حدث خطأ عند إتمام طلبيتك، يرجى الإتصال بفريق دعم الزبائن للمساعدة',
+    ],
+    'Your expired cards will be automatically removed from your account.' => [
+      'ar' => 'ستتم إزالة البطاقات منتهية الصلاحية تلقائيًا من حسابك.',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}

@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Add iso_currency_code for uae sites.
+ */
+function alshaya_ae_update_8006() {
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'AED')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Save translations for meta tags.
  */
 function alshaya_ae_update_8005() {
@@ -81,6 +93,12 @@ function alshaya_ae_update_8001() {
  * Implements hook_install().
  */
 function alshaya_ae_install() {
+  // Add iso_currency_code for uae sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'AED')
+    ->save();
+
   // Country code and timezone for UAE.
   alshaya_country_set_default_regional_info('AE');
 
@@ -103,4 +121,17 @@ function alshaya_ae_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_ae_update_dependencies() {
+  return [
+    'alshaya_ae' => [
+      '8006' => [
+        'acq_commerce' => '8002',
+      ],
+    ],
+  ];
 }

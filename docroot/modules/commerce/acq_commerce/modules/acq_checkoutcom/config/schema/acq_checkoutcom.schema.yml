@@ -1,0 +1,20 @@
+acq_checkoutcom.settings:
+  type: config_entity
+  label: 'checkout.com config'
+  mapping:
+    debug:
+      type: boolean
+      label: 'Debug mode'
+    api_cache_time:
+      type: integer
+      label: 'api cache time'
+    base_uri:
+      type: mapping
+      label: 'Base uri based on environment to use'
+      mapping:
+        sandbox:
+          type: string
+          label: 'Sandbox base_uri'
+        live:
+          type: string
+          label: 'live base_uri'

@@ -372,13 +372,7 @@
     .field--name-field-privilege-card-number label:not(.error),
     .form-item-privilege-card-number label:not(.error),
     .form-item-privilege-card-number2 label:not(.error) {
-      font-size: 1rem;
-      color: $primary_input_label;
-      position: absolute;
-      #{$left}: 0;
-      top: -0.125rem;
-      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-      pointer-events: none;
+      @include placeholder-label;
     }
 
     label.option {
@@ -408,12 +402,6 @@
       height: 1.563rem;
       outline: transparent;
       font-size: 16px;
-    }
-
-    @include breakpoint($desktop) {
-      .form-email {
-        //margin-top: 9px;
-      }
     }
 
     input.error {
@@ -461,22 +449,14 @@
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
   .form-item input.error ~ label:not(.error) {
-    top: -1.25em;
-    bottom: 0;
-    #{$left}: 0;
-    opacity: 1;
-    font-size: 0.75rem;
+    @include placeholder-active;
   }
 
   // Separating -webkit-autofill styles to prevent Firefox from applying styles on labels.
   .form-item input:-webkit-autofill ~ label:not(.error),
   .form-item input:-webkit-autofill:hover ~ label:not(.error),
   .form-item input:-webkit-autofill:focus ~ label:not(.error) {
-    top: -1.25em;
-    bottom: 0;
-    #{$left}: 0;
-    opacity: 1;
-    font-size: 0.75rem;
+    @include placeholder-active;
   }
 
   .form-type-checkbox .option {

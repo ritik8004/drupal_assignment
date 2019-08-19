@@ -33,3 +33,10 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [cart_history]
+
+  alshaya_acm_checkout.order_placed_event:
+    class: Drupal\alshaya_acm_checkout\EventSubscriber\OrderPlacedEventSubscriber
+    arguments:
+      - '@alshaya_acm_checkout.checkout_helper'
+    tags:
+      - { name: 'event_subscriber' }
