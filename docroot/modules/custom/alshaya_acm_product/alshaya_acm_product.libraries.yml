@@ -7,13 +7,10 @@ product_view:
     - core/jquery.once
     - core/drupal
 
-stock_check:
+product_detail:
   version: 1.x
   js:
-    js/alshaya_acm_stock_check.js: {}
-  css:
-    theme:
-      css/alshaya_acm_product.stock.css: {}
+    js/alshaya_acm_product.detail.js: {}
   dependencies:
     - core/jquery
     - core/drupal.ajax
