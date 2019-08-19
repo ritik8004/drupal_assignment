@@ -101,25 +101,15 @@ class SKUFieldsManager {
         '%fields' => json_encode($fields),
       ]);
 
-      // Apply entity updates, we will read from config and add/update fields.
-      $this->entityDefinitionUpdateManager->applyUpdates();
-
+      // Adding new fields.
       foreach ($fields as $field) {
         $storage_definition = $this->getFieldDefinitionFromInfo($field);
-        // Check if we don't have the field type defined yet.
-        if (empty($field)) {
-          throw new \RuntimeException('Field type not defined yet, please contact TA.');
-        }
-
-        // @codingStandardsIgnoreLine
-        $storage_definition->setLabel(new TranslatableMarkup($field['label']));
-        $storage_definition->setDescription($field['description']);
-        $storage_definition->setCardinality($field['cardinality']);
-        $storage_definition->setDefaultValue(FALSE);
-        $storage_definition->setDisplayConfigurable('form', $field['visible_form']);
-        $storage_definition->setDisplayConfigurable('view', $field['visible_view']);
-        \Drupal::entityDefinitionUpdateManager()
-          ->installFieldStorageDefinition('attr_' . $field['source'], 'acq_sku', 'acq_sku', $storage_definition);
+        $this->entityDefinitionUpdateManager->installFieldStorageDefinition(
+          'attr_' . $field['source'],
+          'acq_sku',
+          'acq_sku',
+          $storage_definition
+        );
       }
       // Allow other modules to take some action after the fields are added.
       $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
@@ -338,15 +328,15 @@ class SKUFieldsManager {
   /**
    * Returns field definition based on its type.
    *
-   * @param mixed $field_info
+   * @param array $field_info
    *   Field Info array.
    * @param int $weight
    *   Default weight of the field.
    *
-   * @return \Drupal\Core\Field\BaseFieldDefinition
+   * @return \Drupal\Core\Field\BaseFieldDefinition|null
    *   Return base field definition.
    */
-  public function getFieldDefinitionFromInfo($field_info, $weight = 10) {
+  public function getFieldDefinitionFromInfo(array $field_info, $weight = 10) {
     $fieldDefinition = NULL;
     switch ($field_info['type']) {
       case 'attribute':
@@ -388,6 +378,31 @@ class SKUFieldsManager {
         }
         break;
     }
+
+    // Check if we don't have the field type defined yet.
+    if (empty($fieldDefinition)) {
+      throw new \RuntimeException('Field type not defined yet, please contact TA.');
+    }
+
+    // @codingStandardsIgnoreLine
+    $fieldDefinition->setLabel(new TranslatableMarkup($field_info['label']));
+
+    // Update cardinality with default value if empty.
+    $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
+    $fieldDefinition->setDescription($field_info['description']);
+
+    $fieldDefinition->setTranslatable(TRUE);
+    if (isset($field_info['translatable']) && $field_info['translatable'] == 0) {
+      $fieldDefinition->setTranslatable(FALSE);
+    }
+
+    // Update cardinality with default value if empty.
+    $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
+    $fieldDefinition->setCardinality($field_info['cardinality']);
+
+    $fieldDefinition->setDisplayConfigurable('form', 1);
+    $fieldDefinition->setDisplayConfigurable('view', 1);
+
     return $fieldDefinition;
   }
 
