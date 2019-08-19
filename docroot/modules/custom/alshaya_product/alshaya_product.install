@@ -13,9 +13,12 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Enable the module.
  * Adding class to product list view.
  */
 function alshaya_product_update_8025() {
+  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths']);
+
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
