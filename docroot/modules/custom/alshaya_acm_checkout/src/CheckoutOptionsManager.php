@@ -267,23 +267,38 @@ class CheckoutOptionsManager {
   }
 
   /**
-   * Function to get default payment method term.
+   * Function to get default/all payment method term.
+   *
+   * @param bool $default_method
+   *   Whether get the default payment term or all.
    *
    * @return \Drupal\taxonomy\Entity\Term
    *   Full loaded term object.
    */
-  public function getDefaultPayment() {
+  public function getDefaultPayment($default_method = TRUE) {
     $query = $this->termStorage->getQuery();
     $query->condition('vid', 'payment_method');
-    $query->condition('field_payment_default', 1);
+
+    if ($default_method) {
+      $query->condition('field_payment_default', 1);
+    }
+
     $result = $query->execute();
 
     if (empty($result)) {
-      return '';
+      if ($default_method) {
+        return '';
+      }
+
+      return [];
     }
 
-    $tid = array_shift($result);
-    return $this->termStorage->load($tid);
+    if ($default_method) {
+      $tid = array_shift($result);
+      return $this->termStorage->load($tid);
+    }
+
+    return $this->termStorage->loadMultiple($result);
   }
 
   /**

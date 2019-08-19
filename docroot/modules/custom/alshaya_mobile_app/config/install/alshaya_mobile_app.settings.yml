@@ -1,2 +1,2 @@
 pdp_click_collect_available_in_store: '1-2 days'
-exclude_payment_methods_mobile: ''
+exclude_payment_methods_mobile: { }

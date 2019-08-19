@@ -4,11 +4,21 @@ namespace Drupal\alshaya_acm_checkout\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class CheckoutSettingsForm.
  */
 class CheckoutSettingsForm extends ConfigFormBase {
+
+  /**
+   * Checkout options manager.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
+   */
+  protected $checkoutOptionManager;
 
   /**
    * {@inheritdoc}
@@ -22,6 +32,30 @@ class CheckoutSettingsForm extends ConfigFormBase {
    */
   public function getEditableConfigNames() {
     return ['alshaya_acm_checkout.settings'];
+  }
+
+  /**
+   * CheckoutSettingsForm constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_option_manager
+   *   Checkout option manager.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, CheckoutOptionsManager $checkout_option_manager) {
+    parent::__construct($config_factory);
+    $this->configFactory = $config_factory;
+    $this->checkoutOptionManager = $checkout_option_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_checkout.options_manager')
+    );
   }
 
   /**
@@ -159,10 +193,21 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('cod_surcharge_tooltip'),
     ];
 
-    $form['exclude_payment_methods'] = [
-      '#type' => 'textfield',
+    $form['payment_methods_exclude'] = [
+      '#type' => 'fieldset',
       '#title' => $this->t('Exclude payment methods'),
-      '#description' => $this->t('Enter the comma separated list of payment method codes which needs to be exclude on payment method screen. Example - "bank_transfer,knet". Do not add space bewteen codes and comma separation.'),
+      '#tree' => FALSE,
+    ];
+    $payment_terms = $this->checkoutOptionManager->getDefaultPayment(FALSE);
+    $options = [];
+    foreach ($payment_terms as $term) {
+      $options[$term->get('field_payment_code')->first()->getString()] = $term->getName();
+    }
+    $form['payment_methods_exclude']['exclude_payment_methods'] = [
+      '#type' => 'checkboxes',
+      '#options' => $options,
+      '#title' => $this->t('Exclude payment methods'),
+      '#description' => $this->t('Select the payment methods which needs to be exclude on payment screen.'),
       '#default_value' => $config->get('exclude_payment_methods'),
     ];
 
