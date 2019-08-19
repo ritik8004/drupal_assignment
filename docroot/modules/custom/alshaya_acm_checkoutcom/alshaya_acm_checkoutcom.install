@@ -43,6 +43,9 @@ function alshaya_acm_checkoutcom_install() {
     'You don\'t have any saved payment cards.' => [
       'ar' => 'لا يوجد لديك أي بطاقات محفوظة',
     ],
+    'Name on card' => [
+      'ar' => 'الاسم على البطاقة',
+    ],
     'Credit card number' => [
       'ar' => 'البطاقة الإئتمانية',
     ],
@@ -67,7 +70,7 @@ function alshaya_acm_checkoutcom_install() {
     'Your card has been deleted.' => [
       'ar' => 'تم حذف بطاقتك',
     ],
-    'Payment cards' => [
+    'Payment Cards' => [
       'ar' => 'بطاقات الدفع',
     ],
     'Transaction has been declined. Please try again later.' => [
