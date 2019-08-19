@@ -67,3 +67,11 @@ fields:
     label: 'Composition'
     description: 'Product Composition.'
     type: 'text_long'
+
+  color_family:
+    label: 'Colour'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+    swatch: 1

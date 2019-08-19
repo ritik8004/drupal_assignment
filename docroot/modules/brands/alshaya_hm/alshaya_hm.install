@@ -9,6 +9,44 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 use Drupal\Component\Utility\Unicode;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add color family field and facets.
+ */
+function alshaya_hm_update_8038() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.sku_base_fields',
+      'alshaya_acm_product.display_settings',
+    ],
+    'alshaya_acm_product'
+  );
+
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->addFields();
+
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+
+  _alshaya_search_api_reindex();
+
+  // Disable earlier colour facet and assign weight to color family.
+  $color_block = Block::load('color');
+  Block::load('colorfamily')->setWeight($color_block->getWeight())->save();
+  $color_block->disable()->save();
+
+  $color_block_promotion = Block::load('promocolor');
+  Block::load('promocolorfamily')->setWeight($color_block_promotion->getWeight())->save();
+  $color_block_promotion->disable()->save();
+
+  $color_block_plp = Block::load('plpcolor');
+  Block::load('plpcolorfamily')->setWeight($color_block_plp->getWeight())->save();
+  $color_block_plp->disable()->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -52,7 +90,6 @@ function alshaya_hm_update_8035() {
   else {
     $configFactory->set('min_shipping_amount', 99);
   }
-
   // Save the changes.
   $configFactory->save();
 
