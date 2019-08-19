@@ -9,7 +9,6 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -718,76 +717,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Check if we have additional fields to be added as base fields.
     if (!empty($additionalFields) && is_array($additionalFields)) {
       foreach ($additionalFields as $machine_name => $field_info) {
-        // Initialise the field variable.
-        $field = NULL;
-
         // Showing the fields at the bottom.
         $weight = $defaultWeightIncrement + count($fields);
 
-        switch ($field_info['type']) {
-          case 'attribute':
-          case 'string':
-            $field = BaseFieldDefinition::create('string');
-
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'above',
-                'type' => 'string',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'string_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-
-          case 'text_long':
-            $field = BaseFieldDefinition::create('text_long');
-
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'hidden',
-                'type' => 'text_default',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'text_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-        }
-
-        // Check if we don't have the field type defined yet.
-        if (empty($field)) {
-          throw new \RuntimeException('Field type not defined yet, please contact TA.');
-        }
-
-        // @codingStandardsIgnoreLine
-        $field->setLabel(new TranslatableMarkup($field_info['label']));
-
-        // Update cardinality with default value if empty.
-        $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
-        $field->setDescription($field_info['description']);
-
-        $field->setTranslatable(TRUE);
-        if (isset($field_info['translatable']) && $field_info['translatable'] == 0) {
-          $field->setTranslatable(FALSE);
-        }
-
-        // Update cardinality with default value if empty.
-        $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
-        $field->setCardinality($field_info['cardinality']);
-
-        $field->setDisplayConfigurable('form', 1);
-        $field->setDisplayConfigurable('view', 1);
+        // Get field definition using basic field info.
+        $field = \Drupal::service('acq_sku.fields_manager')->getFieldDefinitionFromInfo($field_info, $weight);
 
         // We will use attr prefix to avoid conflicts with default base fields.
         $fields['attr_' . $machine_name] = $field;
