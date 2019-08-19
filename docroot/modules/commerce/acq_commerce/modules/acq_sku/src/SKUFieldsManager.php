@@ -103,28 +103,27 @@ class SKUFieldsManager {
       // Apply entity updates, we will read from config and add/update fields.
       $this->entityDefinitionUpdateManager->applyUpdates();
 
-      $storage_definition = BaseFieldDefinition::create('string')
-        ->setLabel('Color family')
-        ->setDescription('A color family')
-        ->setCardinality(-1)
-        ->setDefaultValue(FALSE)
-        ->setDisplayConfigurable('form', 1)
-        ->setDisplayConfigurable('view', 1);
+      foreach ($fields as $field) {
+        $storage_definition = BaseFieldDefinition::create($field['type'])
+          ->setLabel($field['label'])
+          ->setDescription($field['description'])
+          ->setCardinality($field['cardinality'])
+          ->setDefaultValue(FALSE)
+          ->setDisplayConfigurable('form', $field['visible_view'])
+          ->setDisplayConfigurable('view', $field['visible_form']);
 
-      $storage_definition->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => 10,
-      ]);
-
-      $storage_definition->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'weight' => 10,
-      ]);
-
-      \Drupal::entityDefinitionUpdateManager()
-        ->installFieldStorageDefinition('attr_color_family', 'acq_sku', 'acq_sku', $storage_definition);
-
+        $storage_definition->setDisplayOptions('view', [
+          'label' => 'above',
+          'type' => 'string',
+          'weight' => 10,
+        ]);
+        $storage_definition->setDisplayOptions('form', [
+          'type' => 'string_textfield',
+          'weight' => 10,
+        ]);
+        \Drupal::entityDefinitionUpdateManager()
+          ->installFieldStorageDefinition('attr_' . $field['source'], 'acq_sku', 'acq_sku', $storage_definition);
+      }
       // Allow other modules to take some action after the fields are added.
       $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
     }

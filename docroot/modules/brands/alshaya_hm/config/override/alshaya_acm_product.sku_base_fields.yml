@@ -69,7 +69,7 @@ fields:
     type: 'text_long'
 
   color_family:
-    label: 'Color'
+    label: 'Colour'
     type: 'string'
     cardinality: -1
     index: 1
