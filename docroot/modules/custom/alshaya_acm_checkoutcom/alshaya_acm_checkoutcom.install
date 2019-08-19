@@ -34,8 +34,8 @@ function alshaya_acm_checkoutcom_install() {
     'Save card for future use' => [
       'ar' => 'احفظ تفاصيل بطاقة الدفع لاستخدامها مرة أخرى',
     ],
-    'This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info' => [
-      'ar' => 'سيتم حفظ تفاصيل هذه البطاقة بشكل آمن لتتم عملية الدفع بشكل أسرع. لن يتم حفظ رقم CVV. المزيد من المعلومات.',
+    'This card will be securely saved for a faster payment experience. CVV number will not be saved.' => [
+      'ar' => 'سيتم حفظ تفاصيل هذه البطاقة بشكل آمن لتتم عملية الدفع بشكل أسرع. لن يتم حفظ رقم CVV.',
     ],
     'New Card' => [
       'ar' => 'بطاقة دفع جديدة',
