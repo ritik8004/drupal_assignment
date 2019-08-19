@@ -265,7 +265,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
               ],
             ];
 
-            $session->set($cookie_key, 1);
+            $session->set('Drupal_visitor_' . $cookie_key, 1);
           }
         }
         break;

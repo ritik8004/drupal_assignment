@@ -191,7 +191,7 @@
         }
 
         // Fire logout success event on successful sign-in.
-        if (userDetails.userID === 0 && localStorage.getItem('userID') !== userDetails.userID) {
+        if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           localStorage.setItem('userID', userDetails.userID);
         }
