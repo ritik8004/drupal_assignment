@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Psr\Log\LoggerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
@@ -104,23 +105,19 @@ class SKUFieldsManager {
       $this->entityDefinitionUpdateManager->applyUpdates();
 
       foreach ($fields as $field) {
-        $storage_definition = BaseFieldDefinition::create($field['type'])
-          ->setLabel($field['label'])
-          ->setDescription($field['description'])
-          ->setCardinality($field['cardinality'])
-          ->setDefaultValue(FALSE)
-          ->setDisplayConfigurable('form', $field['visible_view'])
-          ->setDisplayConfigurable('view', $field['visible_form']);
+        $storage_definition = $this->getFieldDefinitionFromInfo($field);
+        // Check if we don't have the field type defined yet.
+        if (empty($field)) {
+          throw new \RuntimeException('Field type not defined yet, please contact TA.');
+        }
 
-        $storage_definition->setDisplayOptions('view', [
-          'label' => 'above',
-          'type' => 'string',
-          'weight' => 10,
-        ]);
-        $storage_definition->setDisplayOptions('form', [
-          'type' => 'string_textfield',
-          'weight' => 10,
-        ]);
+        // @codingStandardsIgnoreLine
+        $storage_definition->setLabel(new TranslatableMarkup($field['label']));
+        $storage_definition->setDescription($field['description']);
+        $storage_definition->setCardinality($field['cardinality']);
+        $storage_definition->setDefaultValue(FALSE);
+        $storage_definition->setDisplayConfigurable('form', $field['visible_form']);
+        $storage_definition->setDisplayConfigurable('view', $field['visible_view']);
         \Drupal::entityDefinitionUpdateManager()
           ->installFieldStorageDefinition('attr_' . $field['source'], 'acq_sku', 'acq_sku', $storage_definition);
       }
@@ -336,6 +333,62 @@ class SKUFieldsManager {
     $config->setData($fields);
     $config->save();
     $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
+  }
+
+  /**
+   * Returns field definition based on its type.
+   *
+   * @param mixed $field_info
+   *   Field Info array.
+   * @param int $weight
+   *   Default weight of the field.
+   *
+   * @return \Drupal\Core\Field\BaseFieldDefinition
+   *   Return base field definition.
+   */
+  public function getFieldDefinitionFromInfo($field_info, $weight = 10) {
+    $fieldDefinition = NULL;
+    switch ($field_info['type']) {
+      case 'attribute':
+      case 'string':
+        $fieldDefinition = BaseFieldDefinition::create('string');
+
+        if ($field_info['visible_view']) {
+          $fieldDefinition->setDisplayOptions('view', [
+            'label' => 'above',
+            'type' => 'string',
+            'weight' => $weight,
+          ]);
+        }
+
+        if ($field_info['visible_form']) {
+          $fieldDefinition->setDisplayOptions('form', [
+            'type' => 'string_textfield',
+            'weight' => $weight,
+          ]);
+        }
+        break;
+
+      case 'text_long':
+        $fieldDefinition = BaseFieldDefinition::create('text_long');
+
+        if ($field_info['visible_view']) {
+          $fieldDefinition->setDisplayOptions('view', [
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => $weight,
+          ]);
+        }
+
+        if ($field_info['visible_form']) {
+          $fieldDefinition->setDisplayOptions('form', [
+            'type' => 'text_textfield',
+            'weight' => $weight,
+          ]);
+        }
+        break;
+    }
+    return $fieldDefinition;
   }
 
 }

@@ -724,46 +724,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
         // Showing the fields at the bottom.
         $weight = $defaultWeightIncrement + count($fields);
 
-        switch ($field_info['type']) {
-          case 'attribute':
-          case 'string':
-            $field = BaseFieldDefinition::create('string');
-
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'above',
-                'type' => 'string',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'string_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-
-          case 'text_long':
-            $field = BaseFieldDefinition::create('text_long');
-
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'hidden',
-                'type' => 'text_default',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'text_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-        }
+        // Get field definition using basic field info.
+        $field = \Drupal::service('acq_sku.fields_manager')->getFieldDefinitionFromInfo($field_info, $weight);
 
         // Check if we don't have the field type defined yet.
         if (empty($field)) {
