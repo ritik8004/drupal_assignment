@@ -45,9 +45,14 @@
       var deliveryType = 'Home Delivery';
       var userDetails = drupalSettings.userDetails;
 
+      if (localStorage.getItem('userID') === undefined) {
+        localStorage.setItem('userID', userDetails.userID);
+      }
+
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
         var md = new MobileDetect(window.navigator.userAgent);
+
         if (md.tablet() !== null) {
             userDetails.platformType = 'tablet';
         }
@@ -180,15 +185,15 @@
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
-        if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
+        if (userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
-          $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
+          localStorage.setItem('userID', userDetails.userID);
         }
 
         // Fire logout success event on successful sign-in.
-        if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
+        if (localStorage.getItem('userID') && localStorage.getItem('userID') != userDetails.userID && userDetails.userID === 0) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
-          $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
+          localStorage.setItem('userID', userDetails.userID);
         }
 
         // Fire lead tracking on registration success/ user update.
