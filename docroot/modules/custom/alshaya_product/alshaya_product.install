@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Adding class to product list view.
+ * Update url preprocessor for facets.
  */
 function alshaya_product_update_8025() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
