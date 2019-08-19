@@ -44,3 +44,6 @@ alshaya_acm_checkout.settings:
     cod_surcharge_tooltip:
       type: label
       label: 'COD Surcharge Tooltip'
+    exclude_payment_methods:
+      type: string
+      label: 'Exclude payment methods'
