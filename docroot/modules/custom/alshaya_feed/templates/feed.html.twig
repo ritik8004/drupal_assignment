@@ -1,0 +1,116 @@
+<products>
+  {% for product in products %}
+  <product>
+    <sku>{{ product.sku }}</sku>
+    <name>{{ product.name }}</name>
+    <url>{{ product.url }}</url>
+    <type>{{ product.type_id }}</type>
+    <status>{{ product.status }}</status>
+
+    <meta_description>{{ product.meta_description }}</meta_description>
+    <meta_keyword>{{ product.meta_keyword }}</meta_keyword>
+    <meta_title>{{ product.meta_title }}</meta_title>
+
+    <regular_price>{{ product.price }}</regular_price>
+    <special_price>{{ product.special_price }}</special_price>
+    <final_price>{{ product.final_price }}</final_price>
+
+    <categories>
+      {% for category in product.categoryCollection %}
+      <category>
+        <name><![CDATA[{{ category.name }}]]></name>
+        <id>{{ category.id }}</id>
+        <url>{{ category.url }}</url>
+      </category>
+      {% endfor %}
+    </categories>
+
+    <short_description>{{ product.short_description }}</short_description>
+    <description>{{ product.description }}</description>
+
+    <custom_attributes>
+      <concept></concept>
+      <washing_instructions></washing_instructions>
+      <dry_cleaning_instructions></dry_cleaning_instructions>
+      <composition></composition>
+      <product_collection></product_collection>
+      <product_brand></product_brand>
+      <is_sale></is_sale>
+      <is_new></is_new>
+    </custom_attributes>
+
+    {% if product.type == 'simple' %}
+      <stock>
+        <qty>{{ variant.stock.qty }}</qty>
+        <is_in_stock>{{ variant.stock.status }}</is_in_stock>
+      </stock>
+
+      <images>
+        {% for image in product.images %}
+        <image>
+          <url>{{ image.url }}</url>
+          <label>{{ image.label }}</label>
+        </image>
+        {% endfor %}
+      </images>
+    {% else %}
+      {% for variant in product.variants %}
+        {% if variant.qty > '0' %}
+        <variant>
+          <sku>{{ variant.sku }}</sku>
+          <configurable_attributes>
+            <color>Blue</color>
+            <size>XL</size>
+          </configurable_attributes>
+          <swatch_image>
+            <url>{{ product.swatch_image.url }}</url>
+            <label>{{ product.swatch_image.label }}</label>
+          </swatch_image>
+          <images>
+            {% for image in variant.images %}
+            <image>
+              <url>{{ image.url }}</url>
+              <label>{{ image.label }}</label>
+            </image>
+            {% endfor %}
+          </images>
+          <stock>
+            <qty>{{ variant.stock.qty }}</qty>
+            <is_in_stock>{{ variant.stock.status }}</is_in_stock>
+          </stock>
+        </variant>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <relatedProducts>{{ product.relatedProducts|length }}</relatedProducts>
+    {% if product.relatedProducts %}
+    <related>
+      {% for item in product.relatedProducts %}
+      <item>{{ item }}</item>
+      {% endfor %}
+    </related>
+    {% endif %}
+
+    <crossSellProducts>{{ product.crossSellProducts|length }}
+    </crossSellProducts>
+    {% if product.crossSellProducts %}
+    <cross_sell>
+      {% for item in product.crossSellProducts %}
+      <item>{{ item }}</item>
+      {% endfor %}
+    </cross_sell>
+    {% endif %}
+
+    <upSellProducts>{{ product.upSellProducts|length }}</upSellProducts>
+    {% if product.upSellProducts %}
+    <up_sell>
+      {% for item in product.upSellProducts %}
+      <item>{{ item }}</item>
+      {% endfor %}
+    </up_sell>
+    {% endif %}
+
+  </product>
+  {% endfor %}
+</products>

@@ -164,17 +164,20 @@ class SkuInfoHelper {
     $meta_tags = $this->metaTags($node);
 
     $product = [
-      'title' => $node->label(),
+      'name' => $node->label(),
       'sku' => $sku->getSku(),
+      'type_id' => $sku->bundle(),
       'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
       'description' => !empty($node->get('body')->first()) ? $this->convertRelativeUrlsToAbsolute($node->get('body')->first()->getValue()['value']) : '',
       'images' => $this->getMedia($sku_for_gallery, 'pdp')['images'],
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
       'link' => $this->getEntityUrl($node),
-      'in_stock' => $stockInfo['in_stock'],
-      'stock' => $stockInfo['stock'],
-      'categories' => $this->getCategories($node),
+      'stock' => [
+        'status' => $stockInfo['in_stock'],
+        'qty' => $stockInfo['stock'],
+      ],
+      'categoryCollection' => $this->getCategories($node),
       'meta_description' => $meta_tags['meta_description'] ?? '',
       'meta_keyword' => $meta_tags['meta_keyword'] ?? '',
       'meta_title' => $meta_tags['meta_title'] ?? '',
@@ -195,8 +198,10 @@ class SkuInfoHelper {
           'configurable_attributes' => $this->skuManager->getConfigurableAttributes($child),
           'swatch_image' => $this->skuImagesManager->getPdpSwatchImageUrl($child) ?? [],
           'images' => $this->skuImagesManager->getGalleryMedia($child, FALSE),
-          'in_stock' => $stockInfo['in_stock'],
-          'stock' => $stockInfo['stock'],
+          'stock' => [
+            'status' => $stockInfo['in_stock'],
+            'qty' => $stockInfo['stock'],
+          ],
         ];
         $product['variants'][] = $variant;
       }
@@ -207,6 +212,10 @@ class SkuInfoHelper {
       // Get swatches for this product from media.
       $product['swatches'] = $this->skuImagesManager->getSwatches($sku);
     }
+
+    $product['relatedProducts'] = $this->skuManager->getLinkedSkus($sku, 'related');
+    $product['crossSellProducts'] = $this->skuManager->getLinkedSkus($sku, 'crosssell');
+    $product['upSellProducts'] = $this->skuManager->getLinkedSkus($sku, 'upsell');
 
     // Allow other modules to alter light product data.
     $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $product);

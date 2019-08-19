@@ -152,6 +152,7 @@ class AlshayaFeed {
     if (!isset($context['sandbox']['current'])) {
       $context['sandbox']['count'] = 0;
       $context['sandbox']['current'] = 0;
+      $context['results']['markup'] = '';
     }
 
     $query = $this->getNodes();
@@ -197,6 +198,9 @@ class AlshayaFeed {
    */
   public function process(array $nids, &$context) {
     $updates = 0;
+    // Load the Twig theme engine so we can use twig_render_template().
+    include_once \Drupal::root() . '/core/themes/engines/twig/twig.engine';
+    $context['results']['products'] = [];
     foreach ($nids as $nid) {
       $updates++;
       $product = $this->skuInfoHelper->process($nid);
@@ -205,6 +209,11 @@ class AlshayaFeed {
       }
       $context['results']['products'][] = $product;
     }
+
+    $context['results']['markup'] .= (string) twig_render_template(drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig', [
+      'products' => $context['results']['products'],
+    ]);
+
     return $updates;
   }
 
@@ -215,7 +224,10 @@ class AlshayaFeed {
    *   The batch current context.
    */
   public function dumpXml(&$context) {
-    print_r($context['results']['products']);
+    $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>{$context['results']['markup']}\n</feed>";
+    $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_feed"));
+    $filename = 'feed_en_wip.xml';
+    file_put_contents($path . '/' . $filename, $file_content);
   }
 
   /**
