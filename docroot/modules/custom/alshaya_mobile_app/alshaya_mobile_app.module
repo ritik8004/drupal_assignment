@@ -54,3 +54,42 @@ function alshaya_mobile_app_alshaya_knet_success_route_alter(string &$route, arr
     $route = 'alshaya_mobile_app.mobile_complete';
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_mobile_app_form_checkout_settings_form_alter(&$form, FormStateInterface $form_state) {
+  $default_value = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings')->get('exclude_payment_methods_mobile');
+  $form['exclude_payment_methods_mobile'] = [
+    '#type' => 'textfield',
+    '#title' => t('Exclude payment methods (MAPP)'),
+    '#description' => t('Enter the comma separated list of payment method codes which needs to be exclude on payment method screen. Example - "bank_transfer,knet". Do not add space bewteen codes and comma separation.'),
+    '#default_value' => $default_value,
+  ];
+
+  $form['#submit'][] = '_alshaya_mobile_app_checkout_settings_form_submit';
+}
+
+/**
+ * Submit handler for the checkout settings form.
+ */
+function _alshaya_mobile_app_checkout_settings_form_submit($form, FormStateInterface $form_state) {
+  $default_value = $form_state->getValue('exclude_payment_methods_mobile');
+  \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings')
+    ->set('exclude_payment_methods_mobile', $default_value)
+    ->save();
+}
+
+/**
+ * Implements hook_alshaya_acm_checkout_payment_methods_list_alter().
+ */
+function alshaya_mobile_app_alshaya_acm_checkout_payment_methods_list_alter($context, array &$payment_methods) {
+  if ($context == 'mobile' && !empty($payment_methods)) {
+    if ($mobile_app_settings = \Drupal::config('alshaya_mobile_app.settings')->get('exclude_payment_methods_mobile')) {
+      $method_codes = explode(',', $mobile_app_settings);
+      $payment_methods = array_filter($payment_methods, function ($payment_method) use ($method_codes) {
+        return !in_array($payment_method['id'], $method_codes);
+      });
+    }
+  }
+}

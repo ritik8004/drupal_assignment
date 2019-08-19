@@ -433,3 +433,17 @@ function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInte
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_acm_checkout_payment_methods_list_alter().
+ */
+function alshaya_acm_checkout_alshaya_acm_checkout_payment_methods_list_alter($context, array &$payment_methods) {
+  if ($context == 'web' && !empty($payment_methods)) {
+    if ($checkout_settings = \Drupal::config('alshaya_acm_checkout.settings')->get('exclude_payment_methods')) {
+      $method_codes = explode(',', $checkout_settings);
+      $payment_methods = array_filter($payment_methods, function ($payment_method) use ($method_codes) {
+        return !in_array($payment_method['id'], $method_codes);
+      });
+    }
+  }
+}

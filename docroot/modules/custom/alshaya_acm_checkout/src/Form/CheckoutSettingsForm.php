@@ -41,6 +41,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('cod_surcharge_short_description', $form_state->getValue('cod_surcharge_short_description'));
     $config->set('cod_surcharge_description', $form_state->getValue('cod_surcharge_description'));
     $config->set('cod_surcharge_tooltip', $form_state->getValue('cod_surcharge_tooltip'));
+    $config->set('exclude_payment_methods', $form_state->getValue('exclude_payment_methods'));
 
     $config->save();
 
@@ -156,6 +157,13 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Description to show as tooltip.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cod_surcharge_tooltip'),
+    ];
+
+    $form['exclude_payment_methods'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Exclude payment methods'),
+      '#description' => $this->t('Enter the comma separated list of payment method codes which needs to be exclude on payment method screen. Example - "bank_transfer,knet". Do not add space bewteen codes and comma separation.'),
+      '#default_value' => $config->get('exclude_payment_methods'),
     ];
 
     return $form;

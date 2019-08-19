@@ -23,8 +23,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * Gets all of the payment method plugins available.
    */
   public function getPlugins() {
-    $paymentMethodManager = \Drupal::service('plugin.manager.acq_payment_method');
-    return $paymentMethodManager->getDefinitions();
+    /* @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_option_manager*/
+    $checkout_option_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+    return $checkout_option_manager->getPaymentMethods();
   }
 
   /**
