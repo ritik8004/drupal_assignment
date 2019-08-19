@@ -35,8 +35,17 @@ function alshaya_hm_update_8038() {
   _alshaya_search_api_reindex();
 
   // Disable earlier colour facet and assign weight to color family.
-  Block::load('plpcolorfamily')->setWeight(-15)->save();
-  Block::load('plpcolor')->disable()->save();
+  $color_block = Block::load('color');
+  Block::load('colorfamily')->setWeight($color_block->getWeight())->save();
+  $color_block->disable()->save();
+
+  $color_block_promotion = Block::load('promocolor');
+  Block::load('promocolorfamily')->setWeight($color_block_promotion->getWeight())->save();
+  $color_block_promotion->disable()->save();
+
+  $color_block_plp = Block::load('plpcolor');
+  Block::load('plpcolorfamily')->setWeight($color_block_plp->getWeight())->save();
+  $color_block_plp->disable()->save();
 }
 
 /**
