@@ -325,36 +325,6 @@ function alshaya_seo_user_presave(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_entity_insert().
- */
-function alshaya_seo_entity_insert(EntityInterface $entity) {
-  if ($entity->getEntityTypeId() === 'user') {
-    $path_info = \Drupal::request()->getPathInfo();
-
-    try {
-      if ($entity->get('field_subscribe_newsletter')->getString()) {
-        user_cookie_save(['alshaya_gtm_create_user_lead' => $entity->id()]);
-        user_cookie_save(['alshaya_gtm_create_user_pagename' => $path_info]);
-      }
-    }
-    catch (Exception $e) {
-      \Drupal::logger('alshaya_seo')->warning('Field subscribe newsletter not found.');
-    }
-
-    try {
-      if ($entity->get('field_privilege_card_number')->getString()) {
-        user_cookie_save([
-          'alshaya_gtm_create_user_pc' => $entity->get('field_privilege_card_number')->getString(),
-        ]);
-      }
-    }
-    catch (Exception $e) {
-      // Do nothing, loyalty might by off.
-    }
-  }
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function alshaya_seo_module_implements_alter(&$implementations, $hook) {
