@@ -3028,17 +3028,13 @@ class SkuManager {
       }
       foreach ($nids as $nid) {
         Cache::invalidateTags([
-          'config:node.type.acq_product:' . $nid,
-          'node_type:acq_product:' . $nid,
-          'node_view',
+          'node:' . $nid,
         ]);
       }
     }
     else {
       Cache::invalidateTags([
-        'config:node.type.acq_product',
         'node_type:acq_product',
-        'node_view',
       ]);
     }
   }
