@@ -24,42 +24,66 @@
   Drupal.geolocation = Drupal.geolocation || {};
   Drupal.click_collect = Drupal.click_collect || {};
 
+  // Delete behavior from contrib module loading google map api on page load.
+  delete Drupal.behaviors.geolocationGeocoderGoogleGeocodingApi;
+  $(window).on('load', function () {
+    delete Drupal.behaviors.geolocationGeocoderGoogleGeocodingApi;
+  });
+
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
-      if (typeof Drupal.geolocation.loadGoogle === 'function') {
-        $('.click-collect-form').once('autocomplete-init').each(function () {
-          // First load the library from google.
-          Drupal.geolocation.loadGoogle(function () {
-            var field = $('.click-collect-form').find('input[name="location"]')[0];
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
-          });
-        });
-      }
-
-      // location search google autocomplete fix
-      $(window).on('scroll', function () {
-        $('.pac-container:visible').hide();
-      });
-
-      $('#pdp-stores-container', context).once('initiate-stores').each(function () {
+      $('#pdp-stores-container').once('bind-js').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
         if ($(this).data('state') === 'disabled') {
           $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
           $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
         }
-        else {
-          // Get the permission track the user location.
-          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+      });
 
-          $('#pdp-stores-container').on('click', function () {
-            // Try again if we were not able to get location on page load.
-            if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
-              $('#pdp-stores-container').data('second-try', 'done');
-              Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
-            }
-          });
+      $('#pdp-stores-container h3').once('bind-js').on('click', function () {
+        if (typeof Drupal.geolocation.loadGoogle !== 'function') {
+          return;
         }
+
+        if ($(this).hasClass('location-js-initiated')) {
+          return;
+        }
+
+        $(this).addClass('location-js-initiated');
+
+        // Location search google autocomplete fix.
+        $(window).on('scroll', function () {
+          $('.pac-container:visible').hide();
+        });
+
+        $('#pdp-stores-container').once('initiate-stores').each(function () {
+          // Check if we have access to click & collect.
+          if ($(this).data('state') !== 'disabled') {
+            // Get the permission track the user location.
+            $('#pdp-stores-container').on('click', function () {
+              if ($(this).hasClass('maps-loaded')) {
+                return;
+              }
+
+              $(this).addClass('maps-loaded');
+
+              // First load the library from google.
+              Drupal.geolocation.loadGoogle(function () {
+                var field = $('.click-collect-form').find('input[name="location"]')[0];
+                new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
+
+                Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+
+                // Try again if we were not able to get location on page load.
+                if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
+                  $('#pdp-stores-container').data('second-try', 'done');
+                  Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+                }
+              });
+            });
+          }
+        });
       });
 
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {

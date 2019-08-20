@@ -9,7 +9,6 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -130,8 +129,25 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       if ($update_sku) {
-        $this->get('media')->setValue(serialize($media_data));
-        $this->save();
+        $save_sku = TRUE;
+        // Allow disabling this through settings.
+        if (Settings::get('sku_avoid_parallel_save', 1)) {
+          /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+          $lock = \Drupal::service('lock.persistent');
+          // If lock is not available to acquire, means other process is
+          // updating/deleting the sku in product sync. Skip the processing.
+          if (!$lock->lockMayBeAvailable('synchronizeProduct' . $this->getSku())) {
+            \Drupal::logger("acq_sku")->notice('Skipping saving of SKU @sku as seems its already updated/deleted in parallel by another process.', [
+              '@sku' => $this->getSku(),
+            ]);
+            $save_sku = FALSE;
+          }
+        }
+
+        if ($save_sku) {
+          $this->get('media')->setValue(serialize($media_data));
+          $this->save();
+        }
       }
     }
 
@@ -285,6 +301,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    // There are cases when upstream systems return different file id
+    // but re-use the file name and this creates issue with CDNs.
+    // So we add value_id as suffix to ensure each image url is unique after
+    // every update.
+    $file_name_array = explode('.', $file_name);
+    $extension = array_pop($file_name_array);
+    $file_name_array[] = $data['value_id'];
+    $file_name_array[] = $extension;
+    $file_name = implode('.', $file_name_array);
 
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
@@ -691,76 +717,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Check if we have additional fields to be added as base fields.
     if (!empty($additionalFields) && is_array($additionalFields)) {
       foreach ($additionalFields as $machine_name => $field_info) {
-        // Initialise the field variable.
-        $field = NULL;
-
         // Showing the fields at the bottom.
         $weight = $defaultWeightIncrement + count($fields);
 
-        switch ($field_info['type']) {
-          case 'attribute':
-          case 'string':
-            $field = BaseFieldDefinition::create('string');
-
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'above',
-                'type' => 'string',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'string_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-
-          case 'text_long':
-            $field = BaseFieldDefinition::create('text_long');
-
-            if ($field_info['visible_view']) {
-              $field->setDisplayOptions('view', [
-                'label' => 'hidden',
-                'type' => 'text_default',
-                'weight' => $weight,
-              ]);
-            }
-
-            if ($field_info['visible_form']) {
-              $field->setDisplayOptions('form', [
-                'type' => 'text_textfield',
-                'weight' => $weight,
-              ]);
-            }
-            break;
-        }
-
-        // Check if we don't have the field type defined yet.
-        if (empty($field)) {
-          throw new \RuntimeException('Field type not defined yet, please contact TA.');
-        }
-
-        // @codingStandardsIgnoreLine
-        $field->setLabel(new TranslatableMarkup($field_info['label']));
-
-        // Update cardinality with default value if empty.
-        $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
-        $field->setDescription($field_info['description']);
-
-        $field->setTranslatable(TRUE);
-        if (isset($field_info['translatable']) && $field_info['translatable'] == 0) {
-          $field->setTranslatable(FALSE);
-        }
-
-        // Update cardinality with default value if empty.
-        $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];
-        $field->setCardinality($field_info['cardinality']);
-
-        $field->setDisplayConfigurable('form', 1);
-        $field->setDisplayConfigurable('view', 1);
+        // Get field definition using basic field info.
+        $field = \Drupal::service('acq_sku.fields_manager')->getFieldDefinitionFromInfo($field_info, $weight);
 
         // We will use attr prefix to avoid conflicts with default base fields.
         $fields['attr_' . $machine_name] = $field;

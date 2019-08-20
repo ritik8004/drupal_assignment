@@ -322,6 +322,7 @@ header {
 
     .store {
       float: $right;
+      width: 3rem;
       margin-#{$right}: 1.5625rem;
       position: absolute;
       top: 0.875rem;
@@ -338,11 +339,6 @@ header {
         position: relative;
         top: -0.3125rem;
         #{$left}: -0.375rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        padding-#{$right}: 0;
-        #{$right}: 0.875rem;
       }
     }
 
@@ -363,6 +359,7 @@ header {
 
     .mobile-search {
       float: $right;
+      width: 3rem;
       margin-#{$right}: 1.5625rem;
       position: absolute;
       top: 1.125rem;
@@ -928,10 +925,6 @@ header {
       text-align: center;
       width: 6.063rem;
       height: 3.375rem;
-    }
-
-    .ie & {
-      display: block;
     }
   }
 }

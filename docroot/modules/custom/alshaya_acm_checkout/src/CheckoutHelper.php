@@ -172,70 +172,7 @@ class CheckoutHelper {
 
     try {
       // Place an order.
-      $response = $this->apiWrapper->placeOrder($cart->id());
-
-      // Once we reach here, we clear cart related cache.
-      Cache::invalidateTags(['cart:' . $cart->id()]);
-
-      // @TODO: Remove the fix when we get the full order details.
-      if (isset($response['order_id'])) {
-        $order_id = $response['order_id'];
-      }
-      elseif (isset($response['order']['id'])) {
-        $order_id = str_replace('"', '', $response['order']['id']);
-      }
-      else {
-        throw new \Exception('Place order returned success in response but order id not returned in response.');
-      }
-
-      $session = $this->currentRequest->getSession();
-      $session->set('last_order_id', $order_id);
-
-      $current_user_id = 0;
-
-      // Clear orders list cache if user is logged in.
-      if ($this->currentUser->isAnonymous() || !alshaya_acm_customer_is_customer($this->currentUser)) {
-        // Store the email address of customer in session.
-        $email = $cart->customerEmail();
-        $session->set('email_order_' . $order_id, $email);
-      }
-      else {
-        $email = $this->currentUser->getEmail();
-        $current_user_id = $this->currentUser->id();
-
-        // Update user's mobile number if empty.
-        $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
-
-        if (empty($account->get('field_mobile_number')->getString())) {
-          $billing = $this->cartHelper->getBilling($cart);
-          $account->get('field_mobile_number')->setValue($billing['telephone']);
-          $account->save();
-        }
-      }
-
-      $session->save();
-
-      $this->ordersManager->clearOrderCache($email, $current_user_id);
-      $this->ordersManager->clearLastOrderRelatedProductsCache();
-      $this->clearCartHistory($cart->id());
-
-      // Add success message in logs.
-      $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
-        '@cart_id' => $cart->id(),
-        '@order_id' => $order_id,
-        '@method' => $session->get('selected_payment_method'),
-      ]);
-
-      // While debugging we log the whole cart object.
-      $this->logger->debug('Placed order for cart: @cart', [
-        '@cart' => $this->cartHelper->getCleanCartToLog($cart),
-      ]);
-
-      // Clear the cart in session.
-      $this->cartStorage->clearCart();
-
-      // Clear user's cache.
-      Cache::invalidateTags(['user:' . $this->currentUser->id()]);
+      $this->apiWrapper->placeOrder($cart->id());
     }
     catch (\Exception $e) {
       // Restore the cart.
@@ -250,6 +187,88 @@ class CheckoutHelper {
       // Throw the message for calling function too.
       throw $e;
     }
+  }
+
+  /**
+   * Wrapper function to do all the operations post order placed.
+   *
+   * @param int|string|\Drupal\acq_cart\CartInterface $cart
+   *   Cart object or id.
+   * @param array $response
+   *   API response.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function processPostOrderPlaced($cart, array $response) {
+    if (!($cart instanceof CartInterface)) {
+      $cart = $this->cartStorage->getCart(FALSE);
+    }
+
+    // Once we reach here, we clear cart related cache.
+    Cache::invalidateTags(['cart:' . $cart->id()]);
+
+    // @TODO: Remove the fix when we get the full order details.
+    if (isset($response['order_id'])) {
+      $order_id = $response['order_id'];
+    }
+    elseif (isset($response['order']['id'])) {
+      $order_id = str_replace('"', '', $response['order']['id']);
+    }
+    else {
+      throw new \Exception('Place order returned success in response but order id not returned in response.');
+    }
+
+    $session = $this->currentRequest->getSession();
+    $session->set('last_order_id', $order_id);
+
+    $current_user_id = 0;
+
+    // Clear orders list cache if user is logged in.
+    if ($this->currentUser->isAnonymous() || !alshaya_acm_customer_is_customer($this->currentUser)) {
+      // Store the email address of customer in session.
+      $email = $cart->customerEmail();
+      $session->set('email_order_' . $order_id, $email);
+    }
+    else {
+      $email = $this->currentUser->getEmail();
+      $current_user_id = $this->currentUser->id();
+
+      // Update user's mobile number if empty.
+      $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
+
+      if (empty($account->get('field_mobile_number')->getString())) {
+        $billing = $this->cartHelper->getBilling($cart);
+        $account->get('field_mobile_number')->setValue($billing['telephone']);
+        $account->save();
+      }
+      else {
+        // Clear user's cache.
+        Cache::invalidateTags(['user:' . $current_user_id]);
+      }
+    }
+
+    $session->save();
+
+    $this->ordersManager->clearOrderCache($email, $current_user_id);
+    $this->ordersManager->clearLastOrderRelatedProductsCache();
+    $this->clearCartHistory($cart->id());
+
+    // Add success message in logs.
+    $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
+      '@cart_id' => $cart->id(),
+      '@order_id' => $order_id,
+      '@method' => $session->get('selected_payment_method'),
+    ]);
+
+    // While debugging we log the whole cart object.
+    $this->logger->debug('Placed order for cart: @cart', [
+      '@cart' => $this->cartHelper->getCleanCartToLog($cart),
+    ]);
+
+    // Clear the cart in session.
+    $this->cartStorage->clearCart();
   }
 
   /**

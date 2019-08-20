@@ -807,6 +807,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_acm_product_node_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display) {
+  if (!empty($build['sharethis'])) {
+    $build['sharethis']['#attached']['library'] = [
+      'alshaya_acm_product/sharethis',
+    ];
+  }
+}
+
+/**
  * Get home delivery config.
  *
  * @return array

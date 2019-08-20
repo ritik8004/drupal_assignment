@@ -10,6 +10,19 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Set iso standard currency code.
+ */
+function acq_commerce_update_8002() {
+  // Set iso standard currency code to use internally, i.e. payment methods.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'USD')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new role for sync user.
  */
 function acq_commerce_update_8001() {

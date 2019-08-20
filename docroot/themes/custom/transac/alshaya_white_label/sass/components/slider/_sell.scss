@@ -91,28 +91,17 @@
     }
   }
 
-  .owl-dots {
-    position: relative;
-    margin-top: 1rem;
-    display: table;
-    width: 100%;
-
-    @include breakpoint($tablet) {
-      display: none;
+  .slick-slider {
+    .slick-arrow {
+      top: 30% !important;
     }
 
-    .owl-dot {
-      position: relative;
-      z-index: 1;
-      top: 0;
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      margin: 10px;
-      border-radius: 100%;
-      color: $hp_slider_dots;
-      border: 1px solid currentColor;
-      background: transparent;
+    .slick-prev {
+      left: -1.8125rem !important;
+    }
+
+    .slick-next {
+      right: -2.05rem !important;
     }
   }
 
@@ -142,6 +131,10 @@
     }
   }
 
+  .price-block {
+    font-size: 0;
+  }
+
   .price {
     color: $pdp_product_price;
   }
@@ -157,49 +150,26 @@
     }
   }
 
-  .owl-prev {
-    @include breakpoint($tablet) {
-      left: -2.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      left: -1.875rem;
-    }
-  }
-
-  .owl-next {
-    @include breakpoint($tablet) {
-      right: -2.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      right: -2rem;
-    }
-  }
-
   .owl-prev::before,
   .owl-next::before {
     font-size: 2rem;
   }
 
-  .owl-carousel .owl-item img {
+  .slick-slider .slick-slide {
+    .label {
+      img {
+        max-width: inherit;
+      }
+    }
+  }
+
+  .slick-slider .slick-slide img {
     width: 100%;
     margin: auto;
     max-width: 11.625rem;
 
     @include breakpoint($upto-desktop) {
       object-fit: cover;
-    }
-  }
-
-  .owl-prev,
-  .owl-next {
-    @include breakpoint($tablet) {
-      top: 21.7%;
-    }
-
-    @include breakpoint($tablet) {
-      top: 25%;
     }
   }
 }

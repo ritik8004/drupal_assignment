@@ -96,13 +96,9 @@ class BookingPaymentForm extends FormBase {
    * {@inheritdoc}.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $parks = $this->ticketBooking->getParkData();
     $form['booking_info'] = [
       '#type' => 'hidden',
       '#attributes' => ['id' => ['booking-info']],
-    ];
-    $form['parks'] = [
-      '#markup' => $parks->getParksResult->Park->Name,
     ];
 
     $form['name'] = [
@@ -149,7 +145,7 @@ class BookingPaymentForm extends FormBase {
     $form['payment_option']['cybersource'] = [
       '#type' => 'markup',
       '#markup' => '<div class="payment_option">
-          <p class="future_option">' . $this->t('please note: we are in the process of adding credit card payment option') . '</p>
+          <p class="future_option">' . $this->t('Please note we are in the process of adding Credit Card payment option') . '</p>
           </div>',
     ];
 

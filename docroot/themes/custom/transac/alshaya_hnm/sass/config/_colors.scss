@@ -171,6 +171,7 @@ $plp_facet_filter_link: $hnm-black-four;
 $category_facet_active_icon: $hnm-black-two;
 $category_facet_active_text: $hnm-black-two;
 $plp_facet_filter_count_background: $hnm-red;
+$plp-color-facet-label-color: $hnm-black-four;
 
 // Delivery Menu
 $delivery_color: $link-hover;
@@ -474,6 +475,11 @@ $checkout_payment_method_bg: $white-five;
 $checkout_payment_method_border: $white;
 $checkout_payment_text: $grey-ash;
 $checkout_payment_help: $grey7;
+$checkout_payment_checkoutcom_card_details: $black-two;
+$checkout_payment_checkoutcom_card_details_expiry: $black-two;
+$checkout_payment_checkoutcom_new_option_text: $black-two;
+$checkout_payment_checkoutcom_save_card_label: $black-two;
+$checkout_payment_checkoutcom_save_card_help: $black-two;
 
 // Checkout Login
 $checkout_guest_summary: $grey-ash;
@@ -578,3 +584,6 @@ $algolia-search-icon: $hnm-black-two;
 $algolia-trending-title-text: $hnm-black-two;
 $algolia-search-clear-text-icon: $hnm-black-two;
 $algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
+
+// Payment cards.
+$payment_card_text: $grey10;
