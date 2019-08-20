@@ -227,7 +227,6 @@
       'expiryMonth': $('#cardMonth').val(),
       'expiryYear': $('#cardYear').val(),
       'cvv': $('#cardCvv').val(),
-      'udf3': ($('#saveCard').length > 0 && $('#saveCard').val()) ? 'storeInVaultOnSuccess' : ''
     },function(data){
       if (typeof data.card === 'undefined') {
         Drupal.checkoutComTokenised = false;
