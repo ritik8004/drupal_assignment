@@ -203,7 +203,7 @@ class CheckoutComFormHelper {
 
       $form['cc_save_help_text'] = [
         '#type'  => 'markup',
-        '#markup' => '<div class="cc-save-help-text">' . $this->t('This card will be securely saved for a faster payment experience. CVV number will not be saved. More Info') . '</div>',
+        '#markup' => '<div class="cc-save-help-text">' . $this->t('This card will be securely saved for a faster payment experience. CVV number will not be saved.') . '</div>',
       ];
     }
 

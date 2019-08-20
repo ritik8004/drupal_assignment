@@ -1,5 +1,4 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -15,7 +14,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Update views to change row render style.
  */
-function alshaya_product_update_8025() {
+function alshaya_product_update_8026() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -26,7 +25,24 @@ function alshaya_product_update_8025() {
   );
 }
 
-/*
+/**
+ * Implements hook_update_N().
+ *
+ * Update views to change row render style.
+ */
+function alshaya_product_update_8025() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['facets.facet_source.search_api__views_block__alshaya_product_list__block_1'],
+    'alshaya_product',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding class to product list view.
  */
 function alshaya_product_update_8024() {
@@ -58,7 +74,7 @@ function alshaya_product_update_8023() {
  * Updating database search index to run on cron and content update/create.
  */
 function alshaya_product_update_8022() {
-  /** @var AlshayaConfigManager $alshayaConfigManager */
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
   $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
 }
@@ -78,7 +94,7 @@ function alshaya_product_update_8021() {
  * Re-create promotion facets using label field.
  */
 function alshaya_product_update_8020() {
-  /** @var AlshayaConfigManager $alshayaConfigManager */
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
 
   // Add promotion label to index.
@@ -97,7 +113,7 @@ function alshaya_product_update_8020() {
  * Adding promotion facet to PLP.
  */
 function alshaya_product_update_8019() {
-  /** @var AlshayaConfigManager $alshayaConfigManager */
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
 
   $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);

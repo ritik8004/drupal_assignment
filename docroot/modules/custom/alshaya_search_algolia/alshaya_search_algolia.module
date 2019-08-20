@@ -6,6 +6,7 @@
  */
 
 use Drupal\search_api\IndexInterface;
+use AlgoliaSearch\Client;
 
 /**
  * Implements hook_search_api_algolia_sorts_alter().
@@ -27,4 +28,44 @@ function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, In
 function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $reset[] = 'search_api.server.algolia';
   $reset[] = 'block.block.autocompletewidgetofalgolia';
+}
+
+/**
+ * Implements hook_acq_sku_base_fields_updated().
+ */
+function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
+  $backend_config = \Drupal::configFactory()->get('search_api.server.algolia')->get('backend_config');
+  $client_config = \Drupal::configFactory()->get('search_api.index.acquia_search_index')->get('options');
+  $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+  $index_name = $client_config['algolia_index_name'];
+
+  switch ($op) {
+    case 'add':
+      foreach ($fields as $field_code => $field) {
+        if (empty($field['facet'])) {
+          continue;
+        }
+
+        foreach (\Drupal::languageManager()->getLanguages() as $language) {
+          $index = $client->initIndex($index_name . '_' . $language->getId());
+          $settings = $index->getSettings();
+          $settings['attributesForFaceting'][] = 'attr_' . $field_code;
+          $index->setSettings($settings);
+
+          foreach ($settings['replicas'] as $replica) {
+            $replicaIndex = $client->initIndex($replica);
+            $replicaSettings = $replicaIndex->getSettings();
+            $replicaSettings['attributesForFaceting'][] = 'attr_' . $field_code;
+            $replicaIndex->setSettings($replicaSettings);
+          }
+        }
+      }
+
+      break;
+
+    case 'remove':
+      // @TODO: Add code here to remove facet from Algolia settings.
+      break;
+  }
+
 }
