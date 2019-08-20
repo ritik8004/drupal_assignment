@@ -939,7 +939,7 @@
       else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
         if (typeof imgSrc === 'undefined') {
-          imgSrc = $(highlight).find('img').attr('src');
+          imgSrc = $(highlight).find('img').attr('data-src');
         }
         position = key;
         if (event === 'promotionClick') {
