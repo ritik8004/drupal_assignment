@@ -10,7 +10,6 @@ use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_payment\PaymentMethodManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to get payment methods data.
@@ -54,13 +53,6 @@ class PaymentMethodResource extends ResourceBase {
   protected $paymentMethodManager;
 
   /**
-   * Config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * PaymentMethodResource constructor.
    *
    * @param array $configuration
@@ -79,8 +71,6 @@ class PaymentMethodResource extends ResourceBase {
    *   Checkout option manager.
    * @param \Drupal\acq_payment\PaymentMethodManager $payment_plugins
    *   Payment plugins.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config factory.
    */
   public function __construct(
     array $configuration,
@@ -90,14 +80,12 @@ class PaymentMethodResource extends ResourceBase {
     LoggerInterface $logger,
     EntityRepositoryInterface $entity_repository,
     CheckoutOptionsManager $checkout_option_manager,
-    PaymentMethodManager $payment_plugins,
-    ConfigFactoryInterface $config_factory
+    PaymentMethodManager $payment_plugins
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityRepository = $entity_repository;
     $this->checkoutOptionManager = $checkout_option_manager;
     $this->paymentMethodManager = $payment_plugins;
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -112,8 +100,7 @@ class PaymentMethodResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('entity.repository'),
       $container->get('alshaya_acm_checkout.options_manager'),
-      $container->get('plugin.manager.acq_payment_method'),
-      $container->get('config.factory')
+      $container->get('plugin.manager.acq_payment_method')
     );
   }
 
@@ -128,7 +115,7 @@ class PaymentMethodResource extends ResourceBase {
   public function get() {
     $response_data = [];
 
-    $payment_plugins = $this->checkoutOptionManager->getPaymentMethods('mobile');
+    $payment_plugins = $this->paymentMethodManager->getDefinitions();
     foreach ($payment_plugins as $plugin) {
       $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod(
         $plugin['id'],
@@ -157,11 +144,6 @@ class PaymentMethodResource extends ResourceBase {
 
     $response = new ResourceResponse($response_data);
     $this->addCacheableTermDependency($response);
-
-    // Adding cacheable dependency so that cache invalidates on config change.
-    $response->getCacheableMetadata()
-      ->addCacheTags($this->configFactory->get('alshaya_mobile_app.settings')->getCacheTags());
-
     return $response;
   }
 
