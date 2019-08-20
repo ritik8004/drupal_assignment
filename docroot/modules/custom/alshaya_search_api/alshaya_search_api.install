@@ -8,6 +8,24 @@
 /**
  * Implements hook_update_N().
  *
+ * Delete facet configs if facet is not enabled.
+ */
+function alshaya_search_api_update_8006() {
+  if (!\Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields.product_brand.facet')) {
+    $brand_facets = [
+      'facets.facet.product_brand',
+      'facets.facet.plp_product_brand',
+      'facets.facet.promo_product_brand',
+    ];
+    foreach ($brand_facets as $brand_facet) {
+      \Drupal::configFactory()->getEditable($brand_facet)->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add count_widget_order and remove raw_value_widget_order
  * to product_brand facets.
  */
