@@ -29,9 +29,6 @@ function alshaya_hm_update_8038() {
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->addFields();
 
-  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
-  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
-
   _alshaya_search_api_reindex();
 
   // Disable earlier colour facet and assign weight to color family.
