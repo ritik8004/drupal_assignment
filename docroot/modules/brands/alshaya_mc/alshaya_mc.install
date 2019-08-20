@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable the alshaya facets pretty paths module.
+ */
+function alshaya_mc_update_8316() {
+  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set config values for meta variables.
  */
 function alshaya_mc_update_8315() {
