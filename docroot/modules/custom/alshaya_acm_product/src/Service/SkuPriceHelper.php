@@ -258,7 +258,7 @@ class SkuPriceHelper {
       return $this->getFormattedPrice($min);
     }
 
-    return $this->getFormattedPrice($min) . ' - ' . $this->getFormattedPrice($max, $this->showCurrencyOnSecondPrice);
+    return $this->getFormattedPrice($min) . '<span class="min-max-separator">-</span>' . $this->getFormattedPrice($max, $this->showCurrencyOnSecondPrice);
   }
 
   /**
