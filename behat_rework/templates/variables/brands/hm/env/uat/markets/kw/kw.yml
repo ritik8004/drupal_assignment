@@ -1,4 +1,3 @@
 variables:
   url_product_page: '/node/1074881?selected=5906'
-tests:
-  - 'sign-up'
+
