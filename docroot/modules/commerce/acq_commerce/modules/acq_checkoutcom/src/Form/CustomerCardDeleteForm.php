@@ -211,6 +211,8 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
         );
       }
       Cache::invalidateTags(['user:' . $uid]);
+      $session = $this->request->getSession();
+      $session->remove('checkout_com_payment_card_' . $this->checkoutComApi->getCart()->id());
     }
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
