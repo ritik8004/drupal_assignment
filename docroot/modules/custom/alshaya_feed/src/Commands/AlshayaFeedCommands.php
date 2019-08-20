@@ -152,6 +152,7 @@ class AlshayaFeedCommands extends DrushCommands {
   public static function batchStart(&$context) {
     $context['results']['updates'] = 0;
     $context['results']['products'] = [];
+    $context['results']['markups'] = [];
     \Drupal::service('alshaya_feed.generate')->clear();
   }
 
@@ -174,7 +175,9 @@ class AlshayaFeedCommands extends DrushCommands {
    *   The batch current context.
    */
   public static function batchGenerate(&$context) {
-    \Drupal::service('alshaya_feed.generate')->dumpXml($context);
+    $feed_generate = \Drupal::service('alshaya_feed.generate');
+    $feed_generate->dumpXml($context);
+    $feed_generate->publish();
   }
 
   /**

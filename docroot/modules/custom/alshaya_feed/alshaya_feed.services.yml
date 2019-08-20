@@ -15,6 +15,7 @@ services:
       - '@entity.repository'
       - '@alshaya_acm_product.sku_images_manager'
       - '@alshaya_feed.sku_info'
+      - '@twig'
 
   alshaya_feed.sku_info:
     class: Drupal\alshaya_feed\SkuInfoHelper

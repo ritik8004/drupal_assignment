@@ -53,7 +53,7 @@ class AlshayaFeedController extends ControllerBase {
    */
   public function getFeed(Request $request) {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $file = file_url_transform_relative(file_create_url('public://feed_' . $langcode . '.xml'));
+    $file = file_url_transform_relative(file_create_url(file_default_scheme() . '://feed_' . $langcode . '.xml'));
     $output = file_get_contents(ltrim($file, '/'));
     if (!$output) {
       throw new NotFoundHttpException();

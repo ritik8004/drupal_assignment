@@ -163,62 +163,73 @@ class SkuInfoHelper {
     $stockInfo = $this->stockInfo($sku);
     $meta_tags = $this->metaTags($node);
 
-    $product = [
-      'name' => $node->label(),
-      'sku' => $sku->getSku(),
-      'type_id' => $sku->bundle(),
-      'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
-      'description' => !empty($node->get('body')->first()) ? $this->convertRelativeUrlsToAbsolute($node->get('body')->first()->getValue()['value']) : '',
-      'images' => $this->getMedia($sku_for_gallery, 'pdp')['images'],
-      'original_price' => $this->formatPriceDisplay($prices['price']),
-      'final_price' => $this->formatPriceDisplay($prices['final_price']),
-      'link' => $this->getEntityUrl($node),
-      'stock' => [
-        'status' => $stockInfo['in_stock'],
-        'qty' => $stockInfo['stock'],
-      ],
-      'categoryCollection' => $this->getCategories($node),
-      'meta_description' => $meta_tags['meta_description'] ?? '',
-      'meta_keyword' => $meta_tags['meta_keyword'] ?? '',
-      'meta_title' => $meta_tags['meta_title'] ?? '',
-      'attributes' => $this->getAttributes($sku),
-    ];
-
-    if ($sku->bundle() === 'configurable') {
-      $combinations = $this->skuManager->getConfigurableCombinations($sku);
-
-      foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
-        $child = SKU::loadFromSku($child_sku);
-        if (!$child instanceof SKUInterface) {
-          continue;
-        }
-        $stockInfo = $this->stockInfo($child);
-        $variant = [
-          'sku' => $child->getSku(),
-          'configurable_attributes' => $this->skuManager->getConfigurableAttributes($child),
-          'swatch_image' => $this->skuImagesManager->getPdpSwatchImageUrl($child) ?? [],
-          'images' => $this->skuImagesManager->getGalleryMedia($child, FALSE),
-          'stock' => [
-            'status' => $stockInfo['in_stock'],
-            'qty' => $stockInfo['stock'],
-          ],
-        ];
-        $product['variants'][] = $variant;
+    $product = [];
+    foreach ($this->languageManager->getLanguages() as $lang => $language) {
+      if (($node->language()->getId() !== $lang) && $node->hasTranslation($lang)) {
+        $node = $node->getTranslation($lang);
       }
+
+      if (($node->language()->getId() !== $lang) && $sku->hasTranslation($lang)) {
+        $sku = $sku->getTranslation($lang);
+      }
+
+      $product[$lang] = [
+        'name' => $node->label(),
+        'sku' => $sku->getSku(),
+        'type_id' => $sku->bundle(),
+        'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
+        'description' => !empty($node->get('body')->first()) ? $this->convertRelativeUrlsToAbsolute($node->get('body')->first()->getValue()['value']) : '',
+        'images' => $this->getMedia($sku_for_gallery, 'pdp')['images'],
+        'original_price' => $this->formatPriceDisplay($prices['price']),
+        'final_price' => $this->formatPriceDisplay($prices['final_price']),
+        'link' => $this->getEntityUrl($node),
+        'stock' => [
+          'status' => $stockInfo['in_stock'],
+          'qty' => $stockInfo['stock'],
+        ],
+        'categoryCollection' => $this->getCategories($node, $lang),
+        'meta_description' => $meta_tags['meta_description'] ?? '',
+        'meta_keyword' => $meta_tags['meta_keyword'] ?? '',
+        'meta_title' => $meta_tags['meta_title'] ?? '',
+        'attributes' => $this->getAttributes($sku),
+      ];
+
+      if ($sku->bundle() === 'configurable') {
+        $combinations = $this->skuManager->getConfigurableCombinations($sku);
+
+        foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
+          $child = SKU::loadFromSku($child_sku);
+          if (!$child instanceof SKUInterface) {
+            continue;
+          }
+          $stockInfo = $this->stockInfo($child);
+          $variant = [
+            'sku' => $child->getSku(),
+            'configurable_attributes' => $this->skuManager->getConfigurableAttributes($child),
+            'swatch_image' => $this->skuImagesManager->getPdpSwatchImageUrl($child) ?? [],
+            'images' => $this->skuImagesManager->getGalleryMedia($child, FALSE),
+            'stock' => [
+              'status' => $stockInfo['in_stock'],
+              'qty' => $stockInfo['stock'],
+            ],
+          ];
+          $product[$lang]['variants'][] = $variant;
+        }
+      }
+
+      // Display swatches only if enabled in configuration and not color node.
+      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches') && empty($color)) {
+        // Get swatches for this product from media.
+        $product[$lang]['swatches'] = $this->skuImagesManager->getSwatches($sku);
+      }
+
+      $product[$lang]['relatedProducts'] = $this->skuManager->getLinkedSkus($sku, 'related');
+      $product[$lang]['crossSellProducts'] = $this->skuManager->getLinkedSkus($sku, 'crosssell');
+      $product[$lang]['upSellProducts'] = $this->skuManager->getLinkedSkus($sku, 'upsell');
+
+      // Allow other modules to alter light product data.
+      $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $product[$lang]);
     }
-
-    // Display swatches only if enabled in configuration and not color node.
-    if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches') && empty($color)) {
-      // Get swatches for this product from media.
-      $product['swatches'] = $this->skuImagesManager->getSwatches($sku);
-    }
-
-    $product['relatedProducts'] = $this->skuManager->getLinkedSkus($sku, 'related');
-    $product['crossSellProducts'] = $this->skuManager->getLinkedSkus($sku, 'crosssell');
-    $product['upSellProducts'] = $this->skuManager->getLinkedSkus($sku, 'upsell');
-
-    // Allow other modules to alter light product data.
-    $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $product);
 
     return $product;
   }
@@ -365,15 +376,20 @@ class SkuInfoHelper {
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object.
+   * @param string|null $lang
+   *   The lang code.
    *
    * @return array
    *   The array of terms with name, id and url.
    */
-  public function getCategories(NodeInterface $node) {
+  public function getCategories(NodeInterface $node, $lang = NULL) {
     $categories = $node->get('field_category')->referencedEntities();
     $terms = [];
     if (!empty($categories)) {
       foreach ($categories as $term) {
+        if (!empty($lang) && $term->hasTranslation($lang)) {
+          $term = $term->getTranslation($lang);
+        }
         $terms[] = [
           'name' => $term->label(),
           'id' => $term->id(),

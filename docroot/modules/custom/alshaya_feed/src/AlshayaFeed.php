@@ -11,6 +11,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\Template\TwigEnvironment;
 use Drupal\node\NodeInterface;
 
 /**
@@ -79,6 +80,13 @@ class AlshayaFeed {
   protected $skuInfoHelper;
 
   /**
+   * The Twig template environment.
+   *
+   * @var \Drupal\Core\Template\TwigEnvironment
+   */
+  protected $twig;
+
+  /**
    * AlshayaFeed constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -99,6 +107,8 @@ class AlshayaFeed {
    *   SKU images manager.
    * @param \Drupal\alshaya_feed\SkuInfoHelper $sku_info_helper
    *   The sku info helper service.
+   * @param \Drupal\alshaya_feed\TwigEnvironment $twig_environment
+   *   The Twig template environment.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -109,7 +119,8 @@ class AlshayaFeed {
     ConfigFactory $configFactory,
     EntityRepositoryInterface $entity_repository,
     SkuImagesManager $sku_images_manager,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    TwigEnvironment $twig_environment
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -119,6 +130,7 @@ class AlshayaFeed {
     $this->entityRepository = $entity_repository;
     $this->skuImagesManager = $sku_images_manager;
     $this->skuInfoHelper = $sku_info_helper;
+    $this->twig = $twig_environment;
   }
 
   /**
@@ -152,7 +164,7 @@ class AlshayaFeed {
     if (!isset($context['sandbox']['current'])) {
       $context['sandbox']['count'] = 0;
       $context['sandbox']['current'] = 0;
-      $context['results']['markup'] = '';
+      $context['sandbox']['feed_template'] = drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig';
     }
 
     $query = $this->getNodes();
@@ -198,8 +210,6 @@ class AlshayaFeed {
    */
   public function process(array $nids, &$context) {
     $updates = 0;
-    // Load the Twig theme engine so we can use twig_render_template().
-    include_once \Drupal::root() . '/core/themes/engines/twig/twig.engine';
     $context['results']['products'] = [];
     foreach ($nids as $nid) {
       $updates++;
@@ -207,12 +217,16 @@ class AlshayaFeed {
       if (empty($product)) {
         continue;
       }
-      $context['results']['products'][] = $product;
+      foreach ($product as $lang => $item) {
+        $context['results']['products'][$lang][] = $this->twig
+          ->loadTemplate($context['sandbox']['feed_template'])
+          ->render(['product' => $item]);
+      }
     }
 
-    $context['results']['markup'] .= (string) twig_render_template(drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig', [
-      'products' => $context['results']['products'],
-    ]);
+    foreach ($context['results']['products'] as $lang => $products) {
+      $context['results']['markups'][$lang][] = implode("\n", $products);
+    }
 
     return $updates;
   }
@@ -224,10 +238,12 @@ class AlshayaFeed {
    *   The batch current context.
    */
   public function dumpXml(&$context) {
-    $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>{$context['results']['markup']}\n</feed>";
-    $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_feed"));
-    $filename = 'feed_en_wip.xml';
-    file_put_contents($path . '/' . $filename, $file_content);
+    foreach ($context['results']['markups'] as $lang => $markup) {
+      $markup = implode("\n", $markup);
+      $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>{$markup}\n</products>\n</feed>";
+      $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
+      file_put_contents($path, $file_content);
+    }
   }
 
   /**
@@ -237,7 +253,12 @@ class AlshayaFeed {
    * exists. (For all languages.)
    */
   public function clear() {
-
+    foreach ($this->languageManager->getLanguages() as $lang => $language) {
+      $wip_file = $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml");
+      if (file_exists($wip_file)) {
+        $this->fileSystem->delete($wip_file);
+      }
+    }
   }
 
   /**
@@ -247,7 +268,16 @@ class AlshayaFeed {
    * feed_langcode.xml (For all languages.)
    */
   public function publish() {
-
+    foreach ($this->languageManager->getLanguages() as $lang => $language) {
+      $wip_file = $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml");
+      if (file_exists($wip_file)) {
+        $this->fileSystem->move(
+          $wip_file,
+          $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}.xml"),
+          FileSystemInterface::EXISTS_REPLACE
+        );
+      }
+    }
   }
 
 }
