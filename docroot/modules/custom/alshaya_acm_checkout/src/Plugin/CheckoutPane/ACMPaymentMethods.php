@@ -23,9 +23,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * Gets all of the payment method plugins available.
    */
   public function getPlugins() {
-    /* @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_option_manager*/
-    $checkout_option_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-    return $checkout_option_manager->getPaymentMethods();
+    $paymentMethodManager = \Drupal::service('plugin.manager.acq_payment_method');
+    return $paymentMethodManager->getDefinitions();
   }
 
   /**
@@ -77,6 +76,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // for the user to cancel the last payment method and enter a new one.
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
+
+    // Allow other modules to change the payment methods list.
+    \Drupal::moduleHandler()->alter('alshaya_acm_checkout_payment_methods_list', $plugins);
 
     try {
       // Get available payment methods and compare to enabled payment method

@@ -8,8 +8,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\acq_payment\PaymentMethodManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -57,20 +55,6 @@ class CheckoutOptionsManager {
   protected $languageManager;
 
   /**
-   * Module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * Payment method.
-   *
-   * @var \Drupal\acq_payment\PaymentMethodManager
-   */
-  protected $paymentMethodManager;
-
-  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -85,27 +69,19 @@ class CheckoutOptionsManager {
    *   LoggerFactory object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module handler.
-   * @param \Drupal\acq_payment\PaymentMethodManager $payment_plugins
-   *   Payment plugins.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
                               ApiHelper $api_helper,
                               CartStorageInterface $cart_storage,
                               LoggerChannelFactoryInterface $logger_factory,
-                              LanguageManagerInterface $languageManager,
-                              ModuleHandlerInterface $module_handler,
-                              PaymentMethodManager $payment_plugins) {
+                              LanguageManagerInterface $languageManager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
     $this->apiHelper = $api_helper;
     $this->cartStorage = $cart_storage;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
     $this->languageManager = $languageManager;
-    $this->moduleHandler = $module_handler;
-    $this->paymentMethodManager = $payment_plugins;
   }
 
   /**
@@ -547,24 +523,6 @@ class CheckoutOptionsManager {
     }
 
     return $shipping_method_translations;
-  }
-
-  /**
-   * Get the payment methods list.
-   *
-   * @param string $context
-   *   Context whether request is for web or for mobile app.
-   *
-   * @return mixed
-   *   List of payment methods.
-   */
-  public function getPaymentMethods(string $context = 'web') {
-    $payment_methods = $this->paymentMethodManager->getDefinitions();
-
-    // Allow other modules to alter the payment methods list.
-    $this->moduleHandler->alter('alshaya_acm_checkout_payment_methods_list', $context, $payment_methods);
-
-    return $payment_methods;
   }
 
 }

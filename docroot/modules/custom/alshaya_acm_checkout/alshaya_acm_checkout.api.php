@@ -37,12 +37,10 @@ function hook_home_delivery_save_address_alter($response, $plugin_id) {
 /**
  * Alter the payment methods list.
  *
- * @param string $context
- *   Context to determine if request is for web or for mobile app.
  * @param array $payment_methods
  *   Payment method lists.
  */
-function hook_alshaya_acm_checkout_payment_methods_list_alter(string $context, array &$payment_methods) {
+function hook_alshaya_acm_checkout_payment_methods_list_alter(array &$payment_methods) {
 
 }
 
