@@ -11,7 +11,9 @@
  * Delete facet configs if facet is not enabled.
  * Product brand facet was added through update hooks,
  * even where it wasn't enabled.
- * alshaya_search_api_update_8006 and alshaya_search_api_update_8005.
+ *
+ * @see alshaya_search_api_update_8006
+ * @see alshaya_search_api_update_8005
  */
 function alshaya_search_api_update_8006() {
   if (!\Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields.product_brand.facet')) {
