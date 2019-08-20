@@ -8,21 +8,6 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_N().
- *
- * Updating translation strings.
- */
-function alshaya_acm_checkoutcom_update_8001() {
-  $strings = [
-    'New Credit Card' => [
-      'ar' => 'بطاقة ائتمان جديدة',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_acm_checkoutcom_install() {
