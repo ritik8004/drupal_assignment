@@ -14,13 +14,6 @@
   .l-container {
     @include container(64.35rem);
   }
-
-  .region__footer-secondary {
-    @include breakpoint($tablet) {
-      display: flex;
-      align-items: center;
-    }
-  }
 }
 
 .c-footer-secondary__region {
@@ -38,6 +31,11 @@
 .c-footer__logos {
   line-height: 70px;
 
+  .country-ae & {
+    padding-#{$right}: 0;
+    margin-#{$right}: 0;
+  }
+
   @include breakpoint($tablet) {
     float: $left;
     padding-#{$right}: 1.5rem;
@@ -46,14 +44,6 @@
 
   @include breakpoint($only-mobile) {
     background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-
-    li {
-      margin: 0 0.75rem;
-    }
   }
 
   @include breakpoint($desktop) {
@@ -75,6 +65,8 @@
   }
 
   li:not(:last-child) {
+    margin-#{$right}: 1.5rem;
+
     @include breakpoint($tablet) {
       margin-#{$right}: 1.8rem;
     }
@@ -156,9 +148,23 @@
   color: $copyright_footer_text;
   line-height: 1.5;
 
+  .c-footer-secondary & {
+    .country-ae & {
+      padding: 1.875rem 0;
+      display: inline-block;
+
+      html[lang=ar] & {
+        padding: 0.875rem 0;
+      }
+    }
+  }
+
   @include breakpoint($only-tablet) {
+    max-width: 59%;
+    width: 55%;
+
     .c-footer-secondary & {
-      order: 2;
+      width: auto;
     }
 
     .field--name-body {
@@ -170,12 +176,31 @@
   }
 
   @include breakpoint($tablet) {
+    height: 4.375rem;
+    display: table;
+    float: $right;
     margin-#{$right}: 1rem;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        display: inline-block;
+        float: none;
+        margin: 0 auto;
+        width: 30%;
+      }
+    }
   }
 
   @include breakpoint($only-mobile) {
     padding: 2rem 1.25rem;
     line-height: 1.5;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        padding: 2rem 1.25rem;
+        width: 100%;
+      }
+    }
   }
 
   .field--name-body p {
@@ -198,12 +223,22 @@
     @include breakpoint($tablet) {
       display: table-cell;
       vertical-align: middle;
+
+      .country-ae & {
+        display: inline-block;
+      }
     }
   }
 
   @include breakpoint($desktop) {
-    flex: 1;
-    order: 2;
+    width: 65%;
     margin-#{$right}: 3rem;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        width: 30%;
+        margin: 0 auto;
+      }
+    }
   }
 }
