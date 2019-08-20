@@ -35,5 +35,15 @@ function hook_home_delivery_save_address_alter($response, $plugin_id) {
 }
 
 /**
+ * Alter the payment methods list.
+ *
+ * @param array $payment_methods
+ *   Payment method lists.
+ */
+function hook_alshaya_acm_checkout_payment_methods_list_alter(array &$payment_methods) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

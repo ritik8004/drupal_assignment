@@ -77,6 +77,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
+    // Allow other modules to change the payment methods list.
+    \Drupal::moduleHandler()->alter('alshaya_acm_checkout_payment_methods_list', $plugins);
+
     try {
       // Get available payment methods and compare to enabled payment method
       // plugins.
