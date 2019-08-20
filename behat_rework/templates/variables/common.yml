@@ -1,7 +1,3 @@
 variables:
   url_login: '/user/login'
   url_register: '/user/register'
-tests:
-  - 'login'
-  - 'breadcrumb'
-  - 'add-to-cart-label'
