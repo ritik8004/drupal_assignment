@@ -197,27 +197,15 @@
         }
 
         // Fire lead tracking on registration success/ user update.
-        if ($.cookie('Drupal.visitor.alshaya_gtm_create_user_lead') !== undefined &&
-          $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename') !== undefined) {
-          var leadOriginPath = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pagename');
-
-          if (leadOriginPath === Drupal.url('user/register')) {
-            leadType = 'registration';
-          }
-          else if (leadOriginPath === Drupal.url('cart/checkout/confirmation')) {
-            leadType = 'confirmation';
-          }
-
+        if (drupalSettings.alshaya_gtm_create_user_lead !== undefined &&
+            drupalSettings.alshaya_gtm_create_user_pagename !== undefined) {
+          var leadType = drupalSettings.alshaya_gtm_create_user_pagename;
           if (leadType) {
             dataLayer.push({
               event: 'leads',
               leadType: leadType
             });
           }
-
-          $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_lead', {path: '/'});
-          $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pagename', {path: '/'});
-          $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
         }
         else if ($.cookie('Drupal.visitor.alshaya_gtm_update_user_lead') !== undefined) {
           dataLayer.push({
@@ -228,7 +216,7 @@
           $.removeCookie('Drupal.visitor.alshaya_gtm_update_user_lead', {path: '/'});
         }
 
-        var pcRegistration = $.cookie('Drupal.visitor.alshaya_gtm_create_user_pc');
+        var pcRegistration = drupalSettings.alshaya_gtm_create_user_pc;
 
         if (pcRegistration !== undefined && pcRegistration !== '6362544') {
           dataLayer.push({
@@ -236,8 +224,6 @@
             pcType: 'pc club member'
           });
         }
-
-        $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
       });
 
       /**
