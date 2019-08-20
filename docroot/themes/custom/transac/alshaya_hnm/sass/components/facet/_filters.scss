@@ -123,3 +123,44 @@
     }
   }
 }
+
+.c-facet {
+  &.block-facet--swatch-list {
+    li {
+      a {
+        display: flex;
+        align-items: center;
+        color: $plp-color-facet-label-color;
+
+        &.is-active {
+          .swatch {
+            &::before {
+              top: -0.125rem;
+              bottom: -0.125rem;
+            }
+          }
+        }
+
+        .swatch {
+          top: 0;
+        }
+      }
+    }
+  }
+}
+
+.filters-active {
+  .c-facet {
+    &.block-facet--swatch-list {
+      li {
+        a {
+          line-height: 3rem;
+
+          @include breakpoint($only-mobile) {
+            margin: 0.125rem 0;
+          }
+        }
+      }
+    }
+  }
+}
