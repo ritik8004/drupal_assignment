@@ -15,7 +15,7 @@
             SlugBannerHeight = $('#block-sitewidebanneren').outerHeight();
           }
           $('.toggle--sign, .mobile--close').css('top', $('.block-alshaya-super-category-menu').outerHeight() + SlugBannerHeight);
-          $('.menu--one__list, .c-menu-secondary').css('top', $('.block-alshaya-super-category-menu').outerHeight() + $('.toggle--sign').outerHeight() + SlugBannerHeight);
+          $('.menu--one__list, .c-menu-secondary, .c-my-account-nav').css('top', $('.block-alshaya-super-category-menu').outerHeight() + $('.toggle--sign').outerHeight() + SlugBannerHeight);
         });
       }
     }
