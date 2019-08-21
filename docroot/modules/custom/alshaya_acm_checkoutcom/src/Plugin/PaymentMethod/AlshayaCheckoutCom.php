@@ -91,6 +91,18 @@ class AlshayaCheckoutCom extends CheckoutCom {
             '#type' => 'hidden',
             '#value' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
           ];
+
+          $pane_form['payment_card_details']['payment_card_' . $payment_card]['cc_cvv'] = [
+            '#type' => 'password',
+            '#maxlength' => 4,
+            '#title' => $this->t('Security code (CVV)'),
+            '#default_value' => '',
+            '#attributes' => ['placeholder' => $this->t('CVV')],
+            '#required' => TRUE,
+            '#prefix' => $cc_prefix,
+            '#suffix' => $cc_suffix,
+            '#access' => $customer_stored_cards[$payment_card]['mada'] ?? FALSE,
+          ];
         }
         else {
           $pane_form['payment_card_details']['payment_card_' . $payment_card]['new'] = [
