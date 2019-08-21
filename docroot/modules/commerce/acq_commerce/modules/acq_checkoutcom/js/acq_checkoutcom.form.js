@@ -92,7 +92,7 @@
                 $('.checkoutcom-credit-card-type-input').val(result.card_type.name);
               }
               else {
-                Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number.'));
+                Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number'));
               }
             }
           });
@@ -154,7 +154,7 @@
     }
     // Sanity check of credit card name.
     var name = $('.checkoutcom-credit-card-name').val().toString().trim();
-    if (isNaN(name) && /\d+/.test(name) === true) {
+    if (!isNaN(name) && /\d+/.test(name) === true) {
       Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name'));
       formHasErrors = true;
     }
