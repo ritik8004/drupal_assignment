@@ -13,7 +13,7 @@ use Drupal\Core\Site\Settings;
  * Enable the alshaya facets pretty paths module.
  */
 function alshaya_mc_update_8316() {
-  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths'])->save();
+  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths']);
 }
 
 /**
