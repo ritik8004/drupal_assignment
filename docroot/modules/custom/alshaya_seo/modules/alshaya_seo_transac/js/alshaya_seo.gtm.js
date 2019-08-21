@@ -697,23 +697,19 @@
       });
 
       // If both promo block and body field images exist make sure promotionImpression is fired only once.
-      if ($('.paragraph--type--promo-block').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .field--name-body, .field--name-body > div[class^="rectangle"]:visible'), gtmPageType, 'promotionImpression');
+      // Adding slider promo banner class to track.
+      if ($('.paragraph--type--promo-block, .c-slider-promo').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .c-slider-promo, .field--name-body, .field--name-body > div[class^="rectangle"]:visible'), gtmPageType, 'promotionImpression');
       }
 
-      else if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
+      else if ($('.paragraph--type--promo-block, .c-slider-promo').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .c-slider-promo'), gtmPageType, 'promotionImpression');
         }
 
         // Tracking promotion image view inside body field.
       else if ($('.field--name-body').length > 0 && (context === document)) {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
         }
-
-      // Tracking view of main promotion banner on BBW homepage.
-      $('.paragraph--type--banner').each(function () {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionImpression');
-      });
 
       // Tracking of homepage banner.
       $('.c-content__slider .field--name-field-banner').once('js-event').each(function () {
@@ -937,9 +933,15 @@
         position = 1;
       }
       else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
-        var imgSrc = $(highlight).find('picture img').attr('src');
+        var imgElem = $(highlight).find('picture img');
+        var imgSrc = imgElem.attr('data-src');
+        if (imgElem.length === 0) {
+          imgElem = $(highlight).find('img');
+        }
         if (typeof imgSrc === 'undefined') {
-          imgSrc = $(highlight).find('img').attr('data-src');
+          imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
+            imgElem.attr('src') :
+            imgElem.attr('data-src');
         }
         position = key;
         if (event === 'promotionClick') {
