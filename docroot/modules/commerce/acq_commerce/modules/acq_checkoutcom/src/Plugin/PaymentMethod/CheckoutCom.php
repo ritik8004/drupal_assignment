@@ -135,6 +135,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $session = $this->currentRequest->getSession();
     $payment_card = $session->get('checkout_com_payment_card_' . $this->getCart()->id());
 
+    if (!empty($payment_card) && !in_array($payment_card, array_keys($customer_stored_cards))) {
+      $payment_card = NULL;
+    }
+
     $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
     $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
     $values = $form_state->getValue('acm_payment_methods');
@@ -335,7 +339,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     else {
       $this->getCart()->setPaymentMethod(
         $this->getId(),
-        ['card_token_id' => $card['card_token']]
+        [
+          'card_token_id' => $card['card_token'],
+          'udf3' => $card['card_save'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : NULL,
+        ]
       );
     }
   }
