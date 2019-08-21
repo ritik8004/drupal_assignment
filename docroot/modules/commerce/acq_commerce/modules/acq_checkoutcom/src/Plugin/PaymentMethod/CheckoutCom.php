@@ -131,17 +131,21 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    *   Return payment card to display as selected.
    */
   protected function getDefaultPaymentCard(array $customer_stored_cards, FormStateInterface $form_state) {
+    $customer_stored_cards['new'] = 'new';
     // Get the default payment card to display as selected from session.
     $session = $this->currentRequest->getSession();
-    $payment_card = $session->get('checkout_com_payment_card_' . $this->getCart()->id());
-    $customer_stored_cards['new'] = 'new';
+    $preselected_card = $session->get('checkout_com_payment_card_' . $this->getCart()->id());
 
-    if (!empty($payment_card) && !in_array($payment_card, array_keys($customer_stored_cards))) {
-      $payment_card = NULL;
+    $customer_stored_cards_keys = array_keys($customer_stored_cards);
+
+    if (in_array($preselected_card, $customer_stored_cards_keys)) {
+      $payment_card = $preselected_card;
     }
-
-    if (empty($payment_card) && !empty($customer_stored_cards)) {
-      $payment_card = current(array_keys($customer_stored_cards));
+    elseif (!empty($customer_stored_cards)) {
+      $payment_card = reset($customer_stored_cards_keys);
+    }
+    else {
+      $payment_card = 'new';
     }
 
     $values = $form_state->getValue('acm_payment_methods');
