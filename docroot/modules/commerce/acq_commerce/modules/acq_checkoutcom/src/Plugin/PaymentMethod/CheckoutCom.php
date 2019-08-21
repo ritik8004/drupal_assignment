@@ -339,7 +339,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     else {
       $this->getCart()->setPaymentMethod(
         $this->getId(),
-        ['card_token_id' => $card['card_token']]
+        [
+          'card_token_id' => $card['card_token'],
+          'udf3' => $card['card_save'] ? CheckoutComAPIWrapper::STORE_IN_VAULT_ON_SUCCESS : NULL,
+        ]
       );
     }
   }
