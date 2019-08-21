@@ -35,7 +35,7 @@ class AlshayaRumConfigForm extends ConfigFormBase {
     $form['rum_user_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Alshaya RUM user id'),
-      '#description' => $this->t("Add RUM user id to track usage from <a href='https://www.monitis.com/'>https://www.monitis.com/</a>"),
+      '#description' => $this->t("Add RUM user id to track usage from <a href='https://www.monitis.com/' target='_blank'>https://www.monitis.com/</a>"),
       '#default_value' => $alshaya_rum_config->get('rum_user_id'),
     ];
 

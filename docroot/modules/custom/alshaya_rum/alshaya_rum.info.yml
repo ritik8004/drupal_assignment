@@ -3,3 +3,4 @@ description: The Real User Monitoring (RUM) is WEB service that provides monitor
 package: "Alshaya"
 core: 8.x
 type: module
+configure: alshaya_rum.alshaya_rum_config
