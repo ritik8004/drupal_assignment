@@ -11,9 +11,17 @@ use Drupal\Core\Site\Settings;
  * Implements hook_update_N().
  *
  * Enable the alshaya facets pretty paths module.
+ * Resave plp facets config so that url alias gets updated.
  */
 function alshaya_mc_update_8316() {
-  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths']);
+  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths'])->save();
+
+  $config = \Drupal::configFactory();
+  $config->getEditable('facets.facet.plp_color')->save();
+  $config->getEditable('facets.facet.plp_product_brand')->save();
+  $config->getEditable('facets.facet.plp_product_collection')->save();
+  $config->getEditable('facets.facet.skus_sku_reference_final_price')->save();
+  $config->getEditable('facets.facet.plp_size')->save();
 }
 
 /**
