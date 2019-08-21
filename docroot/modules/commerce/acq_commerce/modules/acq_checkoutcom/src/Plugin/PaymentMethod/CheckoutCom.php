@@ -134,13 +134,16 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     // Get the default payment card to display as selected from session.
     $session = $this->currentRequest->getSession();
     $payment_card = $session->get('checkout_com_payment_card_' . $this->getCart()->id());
+    $customer_stored_cards['new'] = 'new';
 
     if (!empty($payment_card) && !in_array($payment_card, array_keys($customer_stored_cards))) {
       $payment_card = NULL;
     }
 
-    $payment_card = empty($payment_card) && !empty($customer_stored_cards) ? current(array_keys($customer_stored_cards)) : $payment_card;
-    $payment_card = empty($customer_stored_cards) ? 'new' : $payment_card;
+    if (empty($payment_card) && !empty($customer_stored_cards)) {
+      $payment_card = current(array_keys($customer_stored_cards));
+    }
+
     $values = $form_state->getValue('acm_payment_methods');
     if (!empty($values) && !empty($values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
       $payment_card = $values['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
@@ -154,8 +157,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $customer_stored_cards = [];
     // Display tokenised cards for logged in user.
-    if ($this->currentUser->isAuthenticated() && $this->apiHelper->getCheckoutcomConfig('vault_enabled')) {
-      $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser);
+    if ($this->currentUser->isAuthenticated()
+        && $this->apiHelper->getCheckoutcomConfig('vault_enabled')
+        && $customer_stored_cards = $this->apiHelper->getCustomerCards($this->currentUser)
+    ) {
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
 
       // Get payment card to display by default selected.
