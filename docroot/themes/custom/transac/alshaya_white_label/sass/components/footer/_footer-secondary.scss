@@ -122,6 +122,11 @@
   background-repeat: no-repeat;
   width: 4.375rem;
   height: 2.1875rem;
+  display: none;
+
+  body.safari & {
+    display: inline-block;
+  }
 }
 
 .c-footer__logo--visa {
