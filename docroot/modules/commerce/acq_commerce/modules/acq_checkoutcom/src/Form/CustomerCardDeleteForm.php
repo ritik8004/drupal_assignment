@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkoutcom\Form;
 
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -58,6 +59,13 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
   protected $request;
 
   /**
+   * The cart storage.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
+
+  /**
    * CustomerCardDeleteForm constructor.
    *
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
@@ -70,19 +78,23 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    *   The messenger.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request object.
+   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
+   *   The cart storage.
    */
   public function __construct(
     CheckoutComAPIWrapper $checkout_com_Api,
     ApiHelper $api_helper,
     AccountProxyInterface $account_proxy,
     MessengerInterface $messenger,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    CartStorageInterface $cart_storage
   ) {
     $this->checkoutComApi = $checkout_com_Api;
     $this->apiHelper = $api_helper;
     $this->currentUser = $account_proxy;
     $this->messenger = $messenger;
     $this->request = $requestStack->getCurrentRequest();
+    $this->cartStorage = $cart_storage;
   }
 
   /**
@@ -94,7 +106,8 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
       $container->get('acq_checkoutcom.agent_api'),
       $container->get('current_user'),
       $container->get('messenger'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('acq_cart.cart_storage')
     );
   }
 
@@ -211,8 +224,12 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
         );
       }
       Cache::invalidateTags(['user:' . $uid]);
+
+      $cart = $this->cartStorage->getCart(FALSE);
       $session = $this->request->getSession();
-      $session->remove('checkout_com_payment_card_' . $this->checkoutComApi->getCart()->id());
+      if (!empty($cart) && $session->has('checkout_com_payment_card_' . $cart->id())) {
+        $session->remove('checkout_com_payment_card_' . $cart->id());
+      }
     }
     $response = new AjaxResponse();
     $response->addCommand(new CloseModalDialogCommand());
