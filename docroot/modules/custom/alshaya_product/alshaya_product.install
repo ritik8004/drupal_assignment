@@ -13,21 +13,6 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Update url preprocessor for facets.
- */
-function alshaya_product_update_8025() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['facets.facet_source.search_api__views_block__alshaya_product_list__block_1'],
-    'alshaya_product',
-    'install'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Adding class to product list view.
  */
 function alshaya_product_update_8024() {
