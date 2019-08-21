@@ -6,7 +6,9 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -18,6 +20,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * )
  */
 class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
+
+  use LoggerChannelTrait;
 
   /**
    * Checkout.com api wrapper object.
@@ -262,6 +266,28 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     }
 
     return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_card_details'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validatePaymentForm(array &$pane_form,
+                                      FormStateInterface $form_state,
+                                      array &$complete_form) {
+    parent::validatePaymentForm($pane_form, $form_state, $complete_form);
+
+    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'] ?? [];
+
+    // Ensure we have at-least one out of the two possible tokens.
+    // For saved cards we will have payment_card, for new we will
+    // have cko_card_token.
+    if (empty($payment_method['payment_card']) && empty($form_state->getValue('cko_card_token'))) {
+      $form_state->setErrorByName('custom', $this->t('Transaction has been declined. Please try again later.'));
+      $this->messenger()->addError($this->t('Transaction has been declined. Please try again later.'));
+      $this->getLogger('CheckoutComPaymentPlugin')->warning('Payment form was submitted without card info. Form data: @data', [
+        '@data' => Json::encode($form_state->getValues()),
+      ]);
+    }
   }
 
   /**
