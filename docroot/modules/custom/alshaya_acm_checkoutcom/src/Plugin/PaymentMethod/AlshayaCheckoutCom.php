@@ -97,7 +97,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
             '#maxlength' => 4,
             '#title' => $this->t('Security code (CVV)'),
             '#default_value' => '',
-            '#attributes' => ['placeholder' => $this->t('Enter CVV')],
+            '#attributes' => ['placeholder' => $this->t('CVV')],
             '#required' => TRUE,
             '#prefix' => $cc_prefix,
             '#suffix' => $cc_suffix,
