@@ -279,7 +279,7 @@
 
 .cc_cvv_help_text {
   width: 40%;
-  padding-#{$left}: 4rem;
+  padding-#{$left}: 3.8125rem;
   position: absolute;
   top: 44%;
   #{$left}: 24%;
@@ -311,9 +311,9 @@
 
   &::before {
     content: "";
-    height: 2rem;
-    width: 3rem;
-    background: $white url(/themes/custom/transac/alshaya_white_label/imgs/cards/back-card.png) no-repeat;
+    height: 2.125rem;
+    width: 3.25rem;
+    background: url(/themes/custom/transac/alshaya_white_label/imgs/cards/back-card.png) no-repeat;
     background-size: 100%;
     margin-#{$right}: 0.5rem;
     position: absolute;
