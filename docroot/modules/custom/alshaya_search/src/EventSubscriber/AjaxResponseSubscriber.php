@@ -55,6 +55,13 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
   protected $logger;
 
   /**
+   * Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $config;
+
+  /**
    * Constructs a new AjaxResponseSubscriber object.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -74,6 +81,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
                               AlshayaSearchApiHelper $helper,
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->requestStack = $request_stack;
+    $this->config = $config_factory;
     $this->backToListEnabled = (bool) $config_factory->get('alshaya_acm_product.settings')->get('back_to_list');
     $this->languageManager = $language_manager;
     $this->helper = $helper;
@@ -91,6 +99,8 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     if (!$this->backToListEnabled) {
       return;
     }
+
+    $url_processor = '';
 
     $response = $event->getResponse();
 
@@ -115,8 +125,10 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
 
     if ($view->storage->id() === 'search') {
       $view_url = '/' . $view->getPath();
+      $url_processor = $this->config->get('search_api__views_page__search__page')->get('url_processor');
     }
     else {
+      $url_processor = $this->config->get('facets.facet_source.search_api__views_block__alshaya_product_list__' . $view->current_display)->get('url_processor');
       $query_string = [];
       parse_str($request->getQueryString(), $query_string);
 
@@ -138,15 +150,19 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
 
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
 
-    $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
-    if (isset($query_string['q'])) {
-      $clean_url = Url::fromUserInput($query_string['q'], [])->toString(FALSE);
+    if ($url_processor == 'alshaya_facets_pretty_paths') {
+      $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
+      if (isset($query_string['q'])) {
+        $clean_url = Url::fromUserInput($query_string['q'], [])
+          ->toString(FALSE);
+      }
+      elseif (isset($query_params['facet_filter_url'])) {
+        $clean_url = Url::fromUserInput($query_params['facet_filter_url'], [])
+          ->toString(FALSE);
+      }
+      $clean_url .= (substr($clean_url, -1) == '/' ? '' : '/');
+      $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
     }
-    elseif (isset($query_params['facet_filter_url'])) {
-      $clean_url = Url::fromUserInput($query_params['facet_filter_url'], [])->toString(FALSE);
-    }
-    $clean_url .= (substr($clean_url, -1) == '/' ? '' : '/');
-    $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
 
     // Set items per page to current page * items per page.
     $currentPage = intval($request->query->get('page'));
