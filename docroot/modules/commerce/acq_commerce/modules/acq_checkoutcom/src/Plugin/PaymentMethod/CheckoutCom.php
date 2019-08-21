@@ -267,6 +267,25 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   /**
    * {@inheritdoc}
    */
+  public function validatePaymentForm(array &$pane_form,
+                                      FormStateInterface $form_state,
+                                      array &$complete_form) {
+    parent::validatePaymentForm($pane_form, $form_state, $complete_form);
+
+    $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'] ?? [];
+
+    // Ensure we have at-least one out of the two possible tokens.
+    // For saved cards we will have payment_card, for new we will
+    // have cko_card_token.
+    if (empty($payment_method['payment_card']) && empty($form_state->getValue('cko_card_token'))) {
+      $form_state->setErrorByName('custom', $this->t('Transaction has been declined. Please try again later.'));
+      $this->messenger()->addError($this->t('Transaction has been declined. Please try again later.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // cko_card_token is not available in form state values.
     $payment_method = !empty($form_state->getValue($pane_form['#parents'])['payment_details_wrapper'])
