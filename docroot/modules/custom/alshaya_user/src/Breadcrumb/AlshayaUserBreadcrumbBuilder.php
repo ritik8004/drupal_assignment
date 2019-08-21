@@ -111,6 +111,9 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       'change_pwd_page.change_password_form' => [
         'user' => $current_user_id,
       ],
+      'acq_checkoutcom.payment_cards' => [
+        'user' => $current_user_id,
+      ],
     ];
 
     return $routes;
