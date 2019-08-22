@@ -119,7 +119,7 @@ class AcqSkuLinkedSku {
     // Set data in cache if enabled.
     if ($cache_lifetime > 0) {
       $cache_lifetime += \Drupal::time()->getRequestTime();
-      $this->cache->set($cache_key, $data, $cache_lifetime, ['acq_sku:' . $sku->id()]);
+      $this->cache->set($cache_key, $data, $cache_lifetime, $sku->getCacheTags());
     }
 
     return $data;

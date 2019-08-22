@@ -17,6 +17,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -486,7 +487,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
-      $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
 
       if ($view_mode == 'search_result') {
         $build['labels'] = [
@@ -790,7 +791,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         if ($sku_for_gallery instanceof SKUInterface) {
-          $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
+          $pdp_layout = $skuManager->getPdpLayout($entity, $context);
           $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE);
         }
 
@@ -1231,7 +1232,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-  $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
+  $form['#cache']['tags'] = Cache::mergeTags($form['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
   $form['quantity']['#prefix'] = '<span class="quantity-' . $sku_identifier . '">';
