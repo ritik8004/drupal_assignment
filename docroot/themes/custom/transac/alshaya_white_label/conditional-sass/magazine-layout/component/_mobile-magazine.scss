@@ -114,6 +114,10 @@
         max-width: 25rem;
         width: 100%;
         top: 1.25rem;
+
+        .safari & {
+          display: grid;
+        }
       }
     }
 
