@@ -496,9 +496,6 @@ class CheckoutComAPIWrapper {
    * @param string $caller
    *   The caller from where the method is being called.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
-   *   The redirect response to redirect user to fill 3d secure info.
-   *
    * @throws \Exception
    */
   protected function request3dSecurePayment(Cart $cart, string $endpoint, array $params, $caller = '') {
@@ -527,6 +524,7 @@ class CheckoutComAPIWrapper {
 
       // Show generic error message to user and redirect to payment page.
       $this->setGenericError();
+      $this->redirectToPayment();
     }
 
     if (isset($response['responseCode']) && !empty($response[self::REDIRECT_URL])) {
@@ -534,16 +532,16 @@ class CheckoutComAPIWrapper {
       $redirect->send();
       exit;
     }
-    else {
-      $this->logger->warning(
-        'checkout.com card charges request did not process, getting response: @response.',
-        ['@response' => Json::encode($response)]
-      );
 
-      // Show generic error message to user and redirect to payment page.
-      $this->setGenericError();
-      $this->redirectToPayment();
-    }
+    // If we reach here it means something went wrong and we were unable
+    // to redirect to 3D secure page, we log the message and redirect user to
+    // payment page with generic error message.
+    $this->logger->warning('checkout.com card charges request did not process, getting response: @response.', [
+      '@response' => Json::encode($response),
+    ]);
+
+    $this->setGenericError();
+    $this->redirectToPayment();
   }
 
   /**
@@ -572,16 +570,12 @@ class CheckoutComAPIWrapper {
     $params['billingDetails'] = $this->getAddressDetails('billing');
     $params['shippingDetails'] = $this->getAddressDetails('shipping');
 
-    $response = $this->request3dSecurePayment(
+    $this->request3dSecurePayment(
       $cart,
       !empty($params['cardToken']) ? self::ENDPOINT_AUTHORIZE_PAYMENT : self::ENDPOINT_CARD_PAYMENT,
       $params,
       __METHOD__
     );
-    if ($response instanceof RedirectResponse) {
-      $response->send();
-      exit;
-    }
   }
 
   /**
@@ -621,7 +615,7 @@ class CheckoutComAPIWrapper {
       );
     }
 
-    return $response;
+    return $response ?? NULL;
   }
 
 }
