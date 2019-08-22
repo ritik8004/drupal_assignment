@@ -4,5 +4,10 @@
 
   button.apple-pay-button {
     height: 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin: 0.5rem !important;
+      width: calc(100% - 1rem) !important;
+    }
   }
 }
