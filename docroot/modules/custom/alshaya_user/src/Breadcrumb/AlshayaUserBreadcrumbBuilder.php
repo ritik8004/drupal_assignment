@@ -5,6 +5,7 @@ namespace Drupal\alshaya_user\Breadcrumb;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Controller\TitleResolverInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxy;
@@ -40,6 +41,13 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   protected $currentRequest;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaStaticPageBreadcrumbBuilder constructor.
    *
    * @param \Drupal\Core\Session\AccountProxy $current_user
@@ -48,13 +56,17 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The Title Resolver.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stock service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
   public function __construct(AccountProxy $current_user,
                               TitleResolverInterface $title_resolver,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              ModuleHandlerInterface $module_handler) {
     $this->currentUser = $current_user;
     $this->titleResolver = $title_resolver;
     $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -111,11 +123,9 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       'change_pwd_page.change_password_form' => [
         'user' => $current_user_id,
       ],
-      'acq_checkoutcom.payment_cards' => [
-        'user' => $current_user_id,
-      ],
     ];
 
+    $this->moduleHandler->alter('alshaya_user_breadcrumb_routes', $routes);
     return $routes;
   }
 
