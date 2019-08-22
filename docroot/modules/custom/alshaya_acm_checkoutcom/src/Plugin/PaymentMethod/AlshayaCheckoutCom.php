@@ -44,7 +44,7 @@ class AlshayaCheckoutCom extends CheckoutCom {
       $payment_card = $this->getDefaultPaymentCard($customer_stored_cards, $form_state);
 
       $stored_cards_list = $this->prepareRadioOptionsMarkup($customer_stored_cards);
-      $stored_cards_list += ['new' => '<span class="new">' . $this->t('New Credit Card') . '</span>'];
+      $stored_cards_list += ['new' => '<span class="new">' . $this->t('New Card') . '</span>'];
       $pane_form['payment_card'] = [
         '#type' => 'radios',
         '#options' => $stored_cards_list,

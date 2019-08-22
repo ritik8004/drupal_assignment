@@ -14,7 +14,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Update views to change row render style.
  */
-function alshaya_product_update_8026() {
+function alshaya_product_update_8025() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -22,21 +22,6 @@ function alshaya_product_update_8026() {
     'alshaya_product',
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update views to change row render style.
- */
-function alshaya_product_update_8025() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['facets.facet_source.search_api__views_block__alshaya_product_list__block_1'],
-    'alshaya_product',
-    'install'
   );
 }
 
