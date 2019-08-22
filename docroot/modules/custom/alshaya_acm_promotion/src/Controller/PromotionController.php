@@ -10,9 +10,12 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
+use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -71,6 +74,13 @@ class PromotionController extends ControllerBase {
   protected $dispatcher;
 
   /**
+   * Alshaya Promotions Label Manager.
+   *
+   * @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
+   */
+  protected $promoLabelManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -80,7 +90,8 @@ class PromotionController extends ControllerBase {
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('acq_cart.cart_storage'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('alshaya_acm_promotion.label_manager')
     );
   }
 
@@ -99,19 +110,23 @@ class PromotionController extends ControllerBase {
    *   Cart Storage.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher.
+   * @param Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
+   *   Alshaya Promo Label Manager.
    */
   public function __construct(EntityRepositoryInterface $entity_repository,
                               SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
                               AlshayaPromotionsManager $promotions_manager,
                               CartStorageInterface $cart_storage,
-                              EventDispatcherInterface $dispatcher) {
+                              EventDispatcherInterface $dispatcher,
+                              AlshayaPromoLabelManager $alshayaPromoLabelManager) {
     $this->entityRepository = $entity_repository;
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->promotionsManager = $promotions_manager;
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
+    $this->promoLabelManager = $alshayaPromoLabelManager;
   }
 
   /**
@@ -299,6 +314,24 @@ class PromotionController extends ControllerBase {
 
     $response = new AjaxResponse();
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_cart.cart')->toString()));
+    return $response;
+  }
+
+  /**
+   * @param SKUInterface $sku
+   *   Product SKU to get promo label for.
+   *
+   * @return AjaxResponse
+   *   Ajax command to update promo label.
+   */
+  public function getPromotionLabel(SKUInterface $sku) {
+    $label = $this->promoLabelManager->getCurrentSkuPromoLabel($sku, $this->cartStorage, $this->skuManager);
+    $label = '<div>' . $label . '</div>';
+    $response = new AjaxResponse();
+
+    $response->addCommand(new ReplaceCommand('.dynamic-promo-label-ajax div', $label, []));
+    $response->addCommand(new InvokeCommand('.dynamic-promo-label-ajax', 'removeClass', ['hidden']));
+
     return $response;
   }
 

@@ -17,6 +17,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 
 /**
  * Implements hook_views_data_alter().
@@ -223,6 +224,8 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  /** @var \Drupal\alshaya_acm_product\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
 
   $sku = $skuManager->getSkuForNode($entity);
   $sku_entity = SKU::loadFromSku($sku);
@@ -252,10 +255,23 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     }
   }
 
-  if (!empty($generic_promotions)) {
+  if ($promoLabelManager->checkPromoLabelType($sku_entity) === AlshayaPromoLabelManager::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO) {
+    // Add a flag to update promo label dynamically.
     $build['promotions'] = [
-      '#markup' => implode('</br>', $generic_promotions),
+      '#markup' => '<div class="dynamic-promo-label-ajax hidden" data-sku="' . $sku_entity->id() . '"> <div>' . implode('</br>', $generic_promotions) . '</div></div>',
+      '#attached' => [
+        'library' => [
+          'alshaya_acm_promotion/label_manager',
+        ]
+      ]
     ];
+  }
+  else {
+    if (!empty($generic_promotions)) {
+      $build['promotions'] = [
+        '#markup' => implode('</br>', $generic_promotions),
+      ];
+    }
   }
 
   // Process free gift promotions only for full view mode.
