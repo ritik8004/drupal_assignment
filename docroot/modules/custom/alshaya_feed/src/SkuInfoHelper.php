@@ -10,10 +10,8 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -34,13 +32,6 @@ class SkuInfoHelper {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
-  /**
-   * File system object.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
 
   /**
    * The language manager interface.
@@ -89,10 +80,6 @@ class SkuInfoHelper {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager service object.
-   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
-   *   File system object.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The module handler service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -108,8 +95,6 @@ class SkuInfoHelper {
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    FileSystemInterface $fileSystem,
-    TranslationInterface $string_translation,
     LanguageManagerInterface $language_manager,
     SkuManager $sku_manager,
     ConfigFactory $configFactory,
@@ -119,7 +104,6 @@ class SkuInfoHelper {
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
-    $this->fileSystem = $fileSystem;
     $this->skuManager = $sku_manager;
     $this->configFactory = $configFactory;
     $this->entityRepository = $entity_repository;

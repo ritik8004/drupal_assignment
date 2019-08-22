@@ -8,12 +8,8 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@file_system'
-      - '@string_translation'
       - '@language_manager'
-      - '@alshaya_acm_product.skumanager'
-      - '@config.factory'
       - '@entity.repository'
-      - '@alshaya_acm_product.sku_images_manager'
       - '@alshaya_feed.sku_info'
       - '@twig'
 
@@ -21,8 +17,6 @@ services:
     class: Drupal\alshaya_feed\SkuInfoHelper
     arguments:
       - '@entity_type.manager'
-      - '@file_system'
-      - '@string_translation'
       - '@language_manager'
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'

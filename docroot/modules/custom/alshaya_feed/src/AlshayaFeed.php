@@ -2,15 +2,11 @@
 
 namespace Drupal\alshaya_feed;
 
-use Drupal\alshaya_acm_product\SkuImagesManager;
-use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Template\TwigEnvironment;
 use Drupal\node\NodeInterface;
 
@@ -45,32 +41,11 @@ class AlshayaFeed {
   protected $languageManager;
 
   /**
-   * SKU Manager service object.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuManager
-   */
-  protected $skuManager;
-
-  /**
-   * The Config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
-
-  /**
    * Entity repository.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
   protected $entityRepository;
-
-  /**
-   * SKU images manager.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuImagesManager
-   */
-  protected $skuImagesManager;
 
   /**
    * The sku info helper service.
@@ -93,42 +68,27 @@ class AlshayaFeed {
    *   Entity Type Manager service object.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   File system object.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
-   *   The module handler service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
-   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   SKU Manager service object.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   Config Factory service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
-   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
-   *   SKU images manager.
    * @param \Drupal\alshaya_feed\SkuInfoHelper $sku_info_helper
    *   The sku info helper service.
-   * @param \Drupal\alshaya_feed\TwigEnvironment $twig_environment
+   * @param \Drupal\Core\Template\TwigEnvironment $twig_environment
    *   The Twig template environment.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     FileSystemInterface $fileSystem,
-    TranslationInterface $string_translation,
     LanguageManagerInterface $language_manager,
-    SkuManager $sku_manager,
-    ConfigFactory $configFactory,
     EntityRepositoryInterface $entity_repository,
-    SkuImagesManager $sku_images_manager,
     SkuInfoHelper $sku_info_helper,
     TwigEnvironment $twig_environment
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
     $this->fileSystem = $fileSystem;
-    $this->skuManager = $sku_manager;
-    $this->configFactory = $configFactory;
     $this->entityRepository = $entity_repository;
-    $this->skuImagesManager = $sku_images_manager;
     $this->skuInfoHelper = $sku_info_helper;
     $this->twig = $twig_environment;
   }
