@@ -350,7 +350,12 @@ class SwatchesHelper {
 
     // 0 is valid type, chech specifically for empty/null values.
     if ($data['type'] === NULL or $data['type'] === '') {
-      return [];
+      $this->logger->warning('No swatch type found for attribute term id: @id with value: @value', [
+        '@id' => $term->id(),
+        '@value' => $term->label(),
+      ]);
+
+      $data['type'] = self::SWATCH_TYPE_TEXTUAL;
     }
 
     switch ($data['type']) {
