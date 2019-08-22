@@ -8,6 +8,7 @@ use Drupal\acq_commerce\UpdateCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -48,6 +49,13 @@ class PromotionController extends ControllerBase {
   protected $imagesManager;
 
   /**
+   * Promotions Manager.
+   *
+   * @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager
+   */
+  protected $promotionsManager;
+
+  /**
    * Cart Storage.
    *
    * @var \Drupal\acq_cart\CartStorageInterface
@@ -69,6 +77,7 @@ class PromotionController extends ControllerBase {
       $container->get('entity.repository'),
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
+      $container->get('alshaya_acm_promotion.manager'),
       $container->get('acq_cart.cart_storage'),
       $container->get('event_dispatcher')
     );
@@ -83,6 +92,8 @@ class PromotionController extends ControllerBase {
    *   SKU Manager.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $images_manager
    *   Images Manager.
+   * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotions_manager
+   *   Promotions Manager.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
@@ -91,11 +102,13 @@ class PromotionController extends ControllerBase {
   public function __construct(EntityRepositoryInterface $entity_repository,
                               SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
+                              AlshayaPromotionsManager $promotions_manager,
                               CartStorageInterface $cart_storage,
                               EventDispatcherInterface $dispatcher) {
     $this->entityRepository = $entity_repository;
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
+    $this->promotionsManager = $promotions_manager;
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
   }
@@ -135,7 +148,7 @@ class PromotionController extends ControllerBase {
 
       $item['#title']['#markup'] = $free_gift->label();
       $item['#url'] = Url::fromRoute(
-        'alshaya_acm_product.sku_modal',
+        'alshaya_acm_promotion.free_gift_modal',
         ['acq_sku' => $free_gift->id(), 'js' => 'nojs'],
         [
           'query' => [
@@ -145,10 +158,10 @@ class PromotionController extends ControllerBase {
         ]
       );
 
+      $item['#theme'] = 'free_gift_item';
+
       switch ($free_gift->bundle()) {
         case 'simple':
-          $item['#theme'] = 'free_gift_item';
-
           $sku_media = $this->imagesManager->getFirstImage($free_gift);
           if ($sku_media) {
             $item['#image'] = $this->skuManager->getSkuImage(
@@ -161,7 +174,15 @@ class PromotionController extends ControllerBase {
           break;
 
         case 'configurable':
-          // @TODO: CORE-10288.
+          $sku_media = $this->imagesManager->getFirstImage($this->promotionsManager->getSkuForFreeGiftGallery($free_gift));
+          if ($sku_media) {
+            $item['#image'] = $this->skuManager->getSkuImage(
+              $sku_media['drupal_uri'],
+              $free_gift->label(),
+              'product_teaser'
+            );
+          }
+
           break;
 
         default:

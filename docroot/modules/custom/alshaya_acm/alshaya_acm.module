@@ -839,7 +839,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
       $name = [
         '#title' => $sku_entity->get('name')->getString(),
         '#type' => 'link',
-        '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+        '#url' => Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
           [
             'acq_sku' => $sku_entity->id(),
             'js' => 'nojs',
