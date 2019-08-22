@@ -777,12 +777,12 @@
         });
 
         // Track sorts.
-        $('select[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
-          var sortValue = $(this).find('option:selected').text();
+        $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
+          var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
           sortValue.trim();
           var data = {
             event: 'sort',
-            siteSection: section,
+            siteSection: section.trim(),
             sortValue: sortValue
           };
 
