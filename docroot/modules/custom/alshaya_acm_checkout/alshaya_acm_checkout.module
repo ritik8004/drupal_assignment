@@ -386,6 +386,15 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
     }
   }
 
+  // When all other validations pass.
+  if (empty($errors)) {
+    /* @var \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper*/
+    $checkout_helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    if (!$checkout_helper->isReservedOrderSetInCart($cart)) {
+      $errors['global'] = _alshaya_acm_checkout_reserved_order_id_not_set_error();
+    }
+  }
+
   if (!empty($errors)) {
     return;
   }
@@ -444,4 +453,14 @@ function alshaya_acm_checkout_alshaya_acm_checkout_payment_methods_list_alter(ar
       return !in_array($payment_method['id'], $method_codes);
     });
   }
+}
+
+/**
+ * Gets the error message display to end user when reserved order id not set.
+ *
+ * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+ *   Error message.
+ */
+function _alshaya_acm_checkout_reserved_order_id_not_set_error() {
+  return t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.');
 }
