@@ -231,11 +231,12 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
   $sku_entity = SKU::loadFromSku($sku);
 
   $promotion_types = ['cart'];
+  $promotion_nodes = $skuManager->getSkuPromotions($sku_entity, $promotion_types);
 
   $promotion_view_mode = in_array($view_mode, ['modal', 'full']) ? 'full' : NULL;
 
   // Get promotions for the product.
-  $promotions = $skuManager->getPromotionsFromSkuId($sku_entity, 'links', $promotion_types, $promotion_view_mode);
+  $promotions = $skuManager->preparePromotionsDisplay($sku_entity, $promotion_nodes, 'links', $promotion_types, $promotion_view_mode);
 
   // Return early if no promotions found for product in context.
   if (empty($promotions)) {
@@ -255,22 +256,19 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     }
   }
 
-  if ($promoLabelManager->checkPromoLabelType($sku_entity) === AlshayaPromoLabelManager::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO) {
-    // Add a flag to update promo label dynamically.
+  if (!empty($generic_promotions)) {
     $build['promotions'] = [
-      '#markup' => '<div class="dynamic-promo-label-ajax hidden" data-sku="' . $sku_entity->id() . '"> <div>' . implode('</br>', $generic_promotions) . '</div></div>',
-      '#attached' => [
-        'library' => [
-          'alshaya_acm_promotion/label_manager',
-        ]
-      ]
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => implode('</br>', $generic_promotions),
     ];
-  }
-  else {
-    if (!empty($generic_promotions)) {
-      $build['promotions'] = [
-        '#markup' => implode('</br>', $generic_promotions),
-      ];
+
+    // If promotions are eligible for dynamic promo label.
+    if ($promoLabelManager->checkPromoLabelType($promotion_nodes) === AlshayaPromoLabelManager::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO) {
+      $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
+      // Add a flag to update promo label dynamically.
+      $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions']['currentSku'] = $sku_entity->id();
+      $build['promotions']['#attributes']['class'][] = 'hidden';
     }
   }
 

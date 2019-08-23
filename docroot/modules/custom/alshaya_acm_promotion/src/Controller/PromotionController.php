@@ -17,10 +17,12 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\views_ajax_get\CacheableAjaxResponse;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -326,12 +328,22 @@ class PromotionController extends ControllerBase {
    */
   public function getPromotionLabel(SKUInterface $sku) {
     $label = $this->promoLabelManager->getCurrentSkuPromoLabel($sku, $this->cartStorage, $this->skuManager);
-    $label = '<div>' . $label . '</div>';
-    $response = new AjaxResponse();
+    $response = $this->promoLabelManager->prepareResponse($label);
 
-    $response->addCommand(new ReplaceCommand('.dynamic-promo-label-ajax div', $label, []));
-    $response->addCommand(new InvokeCommand('.dynamic-promo-label-ajax', 'removeClass', ['hidden']));
-
+    // Add cache metadata.
+    $cart_id = $this->cartStorage->getCartId(FALSE);
+    $cache_array = [
+      'tags' => [
+        'node_type:acq_promotion',
+      ],
+      'contexts' => [
+        'cookies:Drupal_visitor_acq_cart_id',
+      ]
+    ];
+    if ($cart_id) {
+      $cache_array['tags'][] = 'cart:' . $cart_id;
+    }
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
   }
 

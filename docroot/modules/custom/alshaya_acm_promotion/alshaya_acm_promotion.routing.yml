@@ -25,7 +25,7 @@ alshaya_acm_promotion.free_gift_modal:
     _permission: 'access content'
 
 alshaya_acm_promotion.get_promotion_label:
-  path: '/ajax/get-promotion-label/{sku}'
+  path: '/get-promotion-label/{sku}'
   defaults:
       _title: ''
       _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::getPromotionLabel'

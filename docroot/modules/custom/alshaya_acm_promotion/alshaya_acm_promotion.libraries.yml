@@ -13,3 +13,4 @@ label_manager:
     - core/jquery.once
     - core/drupal
     - core/drupal.ajax
+    - core/drupalSettings

@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Form\AcqSkuFormBuilder;
+use Drupal\alshaya_acm_product\Event\AddToCartSubmitEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -15,6 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -61,6 +63,13 @@ class ProductStockController extends ControllerBase {
   public static $response;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -68,7 +77,8 @@ class ProductStockController extends ControllerBase {
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
       $container->get('acq_sku.form_builder'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -83,15 +93,19 @@ class ProductStockController extends ControllerBase {
    *   ACQ SKU Form builder.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   Event Dispatcher.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
                               AcqSkuFormBuilder $sku_form_builder,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              EventDispatcherInterface $eventDispatcher) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->skuFormBuilder = $sku_form_builder;
     $this->skuManager = $sku_manager;
+    $this->eventDispatcher = $eventDispatcher;
   }
 
   /**
@@ -195,6 +209,10 @@ class ProductStockController extends ControllerBase {
       // Remove the loader too.
       self::$response->addCommand(new InvokeCommand('.ajax-progress.ajax-progress-throbber', 'remove'));
     }
+
+    // Instantiate and Dispatch add_to_cart_submit event.
+    $addToCartSubmitEvent = new AddToCartSubmitEvent($entity, self::$response);
+    $this->eventDispatcher->dispatch(AddToCartSubmitEvent::EVENT_NAME, $addToCartSubmitEvent);
 
     return self::$response;
   }
