@@ -88,7 +88,7 @@ class SelectFreeGiftForm extends FormBase {
     $sku = SKU::loadFromSku($storage['sku'] ?? '');
     $promotion_id = $storage['promotion_id'] ?? '';
 
-    if (empty($coupon) || empty($promotion_id) || !($sku instanceof SKUInterface)) {
+    if (!($sku instanceof SKUInterface)) {
       return $form;
     }
 
@@ -117,6 +117,7 @@ class SelectFreeGiftForm extends FormBase {
       '#attributes' => [
         'class' => ['select-free-gift'],
       ],
+      '#access' => !empty($coupon) && !empty($promotion_id),
     ];
 
     // Required for common js to get applied.
