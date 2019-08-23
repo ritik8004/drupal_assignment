@@ -41,17 +41,28 @@ class AlshayaPromoLabelManager {
   protected $skuManager;
 
   /**
+   * Cart Manager.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartManager;
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type MAanager.
+   *   Entity Type Manager.
+   * @param \Drupal\acq_cart\CartStorageInterface $cartManager
+   *   Cart Manager.
    */
   public function __construct(SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              CartStorageInterface $cartManager) {
     $this->skuManager = $sku_manager;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->cartManager = $cartManager;
   }
 
   /**
@@ -103,21 +114,17 @@ class AlshayaPromoLabelManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
-   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   Cart Session Storage.
-   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
-   *   Sku Manager.
    *
    * @return string
    *   Dynamic Promotion Label.
    */
-  public function getCurrentSkuPromoLabel(SKU $sku, CartStorageInterface $cartStorage, SkuManager $skuManager) {
+  public function getCurrentSkuPromoLabel(SKU $sku) {
     $labels = [];
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
     $eligiblePromotions = $this->filterEligiblePromotions($promotion_nodes);
 
     foreach ($eligiblePromotions as $eligiblePromotion) {
-      $eligiblePromotionLabel = $this->getPromotionLabel($eligiblePromotion, $sku, $cartStorage, $skuManager);
+      $eligiblePromotionLabel = $this->getPromotionLabel($eligiblePromotion, $sku);
       if (!empty($eligiblePromotionLabel)) {
         // Generate Link.
         try {
@@ -144,24 +151,20 @@ class AlshayaPromoLabelManager {
    *   Promotion Node.
    * @param \Drupal\acq_sku\Entity\SKU $currentSKU
    *   Product SKU.
-   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   Cart Session Storage.
-   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
-   *   Sku Manager.
    *
    * @return string|mixed
    *   Return dynamic promo label.
    */
-  private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU, CartStorageInterface $cartStorage, SkuManager $skuManager) {
+  private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
     $label = $promotion->get('field_acq_promotion_label')->getString();
-    $cartSKUs = $cartStorage->getCartSkus();
-    $eligibleSKUs = $skuManager->getSkutextsForPromotion($promotion);
+    $cartSKUs = $this->cartManager->getCartSkus();
+    $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion);
 
     // If cart is not empty and has matching products.
     if (!empty($cartSKUs)
       && in_array($currentSKU->getSku(), $eligibleSKUs)
       && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
-      $this->overridePromotionLabel($label, $promotion, $eligibleSKUs, $cartStorage);
+      $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
     }
     return $label;
   }
@@ -175,13 +178,11 @@ class AlshayaPromoLabelManager {
    *   Promotion Node.
    * @param array|mixed $eligibleSKUs
    *   Eligible SKUs as per promotion.
-   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
-   *   Cart Session Storage.
    */
-  private function overridePromotionLabel(&$label, NodeInterface $promotion, $eligibleSKUs, CartStorageInterface $cartStorage) {
+  private function overridePromotionLabel(&$label, NodeInterface $promotion, $eligibleSKUs) {
     // Calculate cart quantity.
     $eligible_cart_qty = 0;
-    $cart_items = $cartStorage->getCart(FALSE)->items();
+    $cart_items = $this->cartManager->getCart(FALSE)->items();
     foreach ($cart_items as $item) {
       if (in_array($item['sku'], $eligibleSKUs)) {
         $eligible_cart_qty += $item['qty'];

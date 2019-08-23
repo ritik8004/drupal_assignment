@@ -13,11 +13,10 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
+      - '@acq_cart.cart_storage'
   alshaya_acm_promotion.update_promotion:
     class: Drupal\alshaya_acm_promotion\EventSubscriber\UpdatePromotionLabel
     arguments:
-      - '@acq_cart.cart_storage'
       - '@alshaya_acm_promotion.label_manager'
-      - '@alshaya_acm_product.skumanager'
     tags:
       - { name: 'event_subscriber' }

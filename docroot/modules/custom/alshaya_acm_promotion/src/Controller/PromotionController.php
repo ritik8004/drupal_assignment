@@ -326,7 +326,7 @@ class PromotionController extends ControllerBase {
    *   Ajax command to update promo label.
    */
   public function getPromotionLabel(SKUInterface $sku) {
-    $label = $this->promoLabelManager->getCurrentSkuPromoLabel($sku, $this->cartStorage, $this->skuManager);
+    $label = $this->promoLabelManager->getCurrentSkuPromoLabel($sku);
     $response = $this->promoLabelManager->prepareResponse($label);
 
     // Add cache metadata.
