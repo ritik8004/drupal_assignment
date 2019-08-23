@@ -8,23 +8,6 @@
       <div id="product-zoom-container"></div>
     {% endif %}
   </div>
-  {% if content.cross_sell is not empty %}
-    <div class="horizontal-crossell above-mobile-block">
-      {{ content.cross_sell }}
-    </div>
-  {% endif %}
-
-  {% if content.up_sell is not empty %}
-    <div class="horizontal-upell above-mobile-block">
-      {{ content.up_sell }}
-    </div>
-  {% endif %}
-
-  {% if content.related is not empty %}
-    <div class="horizontal-related above-mobile-block">
-      {{ content.related }}
-    </div>
-  {% endif %}
 {% endblock %}
 {% block contentSidebar %}
   <div class="content-sidebar-wrapper">
@@ -152,4 +135,23 @@
       <div class="size-tray-buttons"></div>
     </div>
 </div>
+{% endblock %}
+{% block desktopCS %}
+  {% if content.cross_sell is not empty %}
+    <div class="horizontal-crossell above-mobile-block">
+      {{ content.cross_sell }}
+    </div>
+  {% endif %}
+
+  {% if content.up_sell is not empty %}
+    <div class="horizontal-upell above-mobile-block">
+      {{ content.up_sell }}
+    </div>
+  {% endif %}
+
+  {% if content.related is not empty %}
+    <div class="horizontal-related above-mobile-block">
+      {{ content.related }}
+    </div>
+  {% endif %}
 {% endblock %}
