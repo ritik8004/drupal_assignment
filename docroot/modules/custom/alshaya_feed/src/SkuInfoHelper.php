@@ -185,9 +185,9 @@ class SkuInfoHelper {
           'qty' => $stockInfo['stock'],
         ],
         'categoryCollection' => $this->getCategories($node, $lang),
-        'meta_description' => $meta_tags['meta_description'] ?? '',
-        'meta_keyword' => $meta_tags['meta_keyword'] ?? '',
-        'meta_title' => $meta_tags['meta_title'] ?? '',
+        'meta_description' => $meta_tags['description'] ?? '',
+        'meta_keywords' => $meta_tags['keywords'] ?? '',
+        'meta_title' => $meta_tags['title'] ?? '',
         'attributes' => $this->getAttributes($sku),
       ];
 
@@ -400,11 +400,18 @@ class SkuInfoHelper {
    *   Return the array of metatags.
    */
   public function metaTags(NodeInterface $node) {
-    $metaTags = $node->get('field_meta_tags')->getValue();
+    $tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($node);
+    $required_tags = ['title', 'description', 'keywords'];
+    $tags = array_intersect_key($tags, array_combine($required_tags, $required_tags));
+    $metaTags = \Drupal::service('metatag.manager')->generateRawElements($tags, $node);
+
     $return = [];
     if (!empty($metaTags)) {
-
+      foreach ($metaTags as $key => $tag) {
+        $return[$key] = $tag['#attributes']['content'];
+      }
     }
+
     return $return;
   }
 
