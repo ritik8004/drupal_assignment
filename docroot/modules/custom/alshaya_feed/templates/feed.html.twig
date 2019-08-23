@@ -22,14 +22,11 @@
   <short_description>{{ product.short_description }}</short_description>
   <description>{{ product.description }}</description>
   <custom_attributes>
-    <concept></concept>
-    <washing_instructions></washing_instructions>
-    <dry_cleaning_instructions></dry_cleaning_instructions>
-    <composition></composition>
-    <product_collection></product_collection>
-    <product_brand></product_brand>
-    <is_sale></is_sale>
-    <is_new></is_new>
+    {% if product.attributes|length > 0 %}
+      {% for attribute_key,attribute_value in product.attributes %}
+        <{{ attribute_key }}>{{ attribute_value }}</{{ attribute_key }}>
+      {% endfor %}
+    {% endif %}
   </custom_attributes>
   {% if product.type == 'simple' %}
     <stock>
@@ -50,8 +47,11 @@
       <variant>
         <sku>{{ variant.sku }}</sku>
         <configurable_attributes>
-          <color>Blue</color>
-          <size>XL</size>
+          {% if variant.configurable_attributes|length > 0 %}
+            {% for attributes in variant.configurable_attributes %}
+              <{{ attributes.label }}>{{ attributes.value }}</{{ attributes.label }}>
+            {% endfor %}
+          {% endif %}
         </configurable_attributes>
         <swatch_image>
           <url>{{ product.swatch_image.url }}</url>

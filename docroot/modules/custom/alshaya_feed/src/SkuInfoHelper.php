@@ -4,6 +4,7 @@ namespace Drupal\alshaya_feed;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
@@ -76,6 +77,13 @@ class SkuInfoHelper {
   protected $moduleHandler;
 
   /**
+   * Production Options Manager service object.
+   *
+   * @var \Drupal\acq_sku\ProductOptionsManager
+   */
+  protected $productOptionsManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -92,6 +100,8 @@ class SkuInfoHelper {
    *   SKU images manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Production Options Manager service object.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -100,7 +110,8 @@ class SkuInfoHelper {
     ConfigFactory $configFactory,
     EntityRepositoryInterface $entity_repository,
     SkuImagesManager $sku_images_manager,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    ProductOptionsManager $product_options_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -109,6 +120,7 @@ class SkuInfoHelper {
     $this->entityRepository = $entity_repository;
     $this->skuImagesManager = $sku_images_manager;
     $this->moduleHandler = $module_handler;
+    $this->productOptionsManager = $product_options_manager;
   }
 
   /**
@@ -158,15 +170,16 @@ class SkuInfoHelper {
       }
 
       $product[$lang] = [
-        'name' => $node->label(),
         'sku' => $sku->getSku(),
+        'name' => $node->label(),
         'type_id' => $sku->bundle(),
+        'status' => (bool) $node->isPublished(),
+        'url' => $this->getEntityUrl($node),
         'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
         'description' => !empty($node->get('body')->first()) ? $this->convertRelativeUrlsToAbsolute($node->get('body')->first()->getValue()['value']) : '',
         'images' => $this->getMedia($sku_for_gallery, 'pdp')['images'],
         'original_price' => $this->formatPriceDisplay($prices['price']),
         'final_price' => $this->formatPriceDisplay($prices['final_price']),
-        'link' => $this->getEntityUrl($node),
         'stock' => [
           'status' => $stockInfo['in_stock'],
           'qty' => $stockInfo['stock'],
@@ -189,7 +202,7 @@ class SkuInfoHelper {
           $stockInfo = $this->stockInfo($child);
           $variant = [
             'sku' => $child->getSku(),
-            'configurable_attributes' => $this->skuManager->getConfigurableAttributes($child),
+            'configurable_attributes' => $this->getConfigurableValues($child, $combination),
             'swatch_image' => $this->skuImagesManager->getPdpSwatchImageUrl($child) ?? [],
             'images' => $this->skuImagesManager->getGalleryMedia($child, FALSE),
             'stock' => [
@@ -216,6 +229,88 @@ class SkuInfoHelper {
     }
 
     return $product;
+  }
+
+  /**
+   * Get the size attributes with code and label.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Return the keyed array of size attributes code and label.
+   */
+  private function getSizeLabels(SKUInterface $sku): array {
+    $size_array = &drupal_static(__METHOD__, []);
+
+    if ($sku->bundle() == 'simple') {
+      $plugin = $sku->getPluginInstance();
+      if (($parent = $plugin->getParentSku($sku)) && $parent instanceof SKUInterface) {
+        $sku = $parent;
+      }
+    }
+    $sku_string = $sku->get('sku')->getString();
+
+    if (!isset($size_array[$sku_string])) {
+      $configurables = unserialize(
+        $sku->get('field_configurable_attributes')->getString()
+      );
+
+      if (empty($configurables)) {
+        return [];
+      }
+
+      $size_key = array_search('size', array_column($configurables, 'label'));
+      if (!isset($configurables[$size_key])) {
+        return [];
+      }
+
+      $size_options = [];
+      array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_options) {
+        $size_options[$value['value_id']] = $value['label'];
+      });
+      $size_array[$sku_string] = $size_options;
+    }
+
+    return $size_array[$sku_string];
+  }
+
+  /**
+   * Wrapper function get configurable values.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param array $attributes
+   *   Array of attributes containing attribute code and value.
+   *
+   * @return array
+   *   Configurable Values.
+   */
+  private function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
+    if ($sku->bundle() !== 'simple') {
+      return [];
+    }
+
+    $labels = [
+      'attr_color_label' => 'color',
+      'attr_size' => 'size',
+    ];
+
+    $values = $this->skuManager->getConfigurableValues($sku);
+    foreach ($values as $attribute_code => &$value) {
+      $value['label'] = $labels[$attribute_code] ?? $value['label'];
+      $value['attribute_code'] = $attribute_code;
+
+      if (($attr_value = $attributes[str_replace('attr_', '', $attribute_code)]) && !is_numeric($attr_value)) {
+        $value['value'] = (string) $attr_value;
+      }
+      elseif (str_replace('attr_', '', $attribute_code) == 'size' && is_numeric($values['value'])) {
+        $size_labels = $this->getSizeLabels($sku);
+        $value['value'] = $size_labels[$attributes[str_replace('attr_', '', $attribute_code)]] ?? $attributes[str_replace('attr_', '', $attribute_code)];
+      }
+    }
+
+    return array_values($values);
   }
 
   /**
@@ -257,6 +352,7 @@ class SkuInfoHelper {
       'meta_description',
       'meta_keyword',
       'meta_title',
+      'description',
     ];
 
     $attributes = [];

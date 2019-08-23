@@ -23,3 +23,4 @@ services:
       - '@entity.repository'
       - '@alshaya_acm_product.sku_images_manager'
       - '@module_handler'
+      - '@acq_sku.product_options_manager'
