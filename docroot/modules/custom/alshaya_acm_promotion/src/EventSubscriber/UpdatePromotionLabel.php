@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_promotion\EventSubscriber;
 
 use Drupal\alshaya_acm_product\Event\AddToCartSubmitEvent;
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
