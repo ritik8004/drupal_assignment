@@ -50,9 +50,9 @@ class AlshayaFeed {
   /**
    * The sku info helper service.
    *
-   * @var \Drupal\alshaya_feed\SkuInfoHelper
+   * @var \Drupal\alshaya_feed\AlshayaFeedSkuInfoHelper
    */
-  protected $skuInfoHelper;
+  protected $feedSkuInfoHelper;
 
   /**
    * The Twig template environment.
@@ -72,7 +72,7 @@ class AlshayaFeed {
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
-   * @param \Drupal\alshaya_feed\SkuInfoHelper $sku_info_helper
+   * @param \Drupal\alshaya_feed\AlshayaFeedSkuInfoHelper $sku_info_helper
    *   The sku info helper service.
    * @param \Drupal\Core\Template\TwigEnvironment $twig_environment
    *   The Twig template environment.
@@ -82,14 +82,14 @@ class AlshayaFeed {
     FileSystemInterface $fileSystem,
     LanguageManagerInterface $language_manager,
     EntityRepositoryInterface $entity_repository,
-    SkuInfoHelper $sku_info_helper,
+    AlshayaFeedSkuInfoHelper $sku_info_helper,
     TwigEnvironment $twig_environment
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
     $this->fileSystem = $fileSystem;
     $this->entityRepository = $entity_repository;
-    $this->skuInfoHelper = $sku_info_helper;
+    $this->feedSkuInfoHelper = $sku_info_helper;
     $this->twig = $twig_environment;
   }
 
@@ -119,6 +119,10 @@ class AlshayaFeed {
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   * @throws \Twig_Error_Loader
+   * @throws \Twig_Error_Runtime
+   * @throws \Twig_Error_Syntax
    */
   public function batchProcess($batch_size, &$context) {
     if (!isset($context['sandbox']['current'])) {
@@ -177,7 +181,7 @@ class AlshayaFeed {
     $context['results']['products'] = [];
     foreach ($nids as $nid) {
       $updates++;
-      $product = $this->skuInfoHelper->process($nid);
+      $product = $this->feedSkuInfoHelper->process($nid);
       if (empty($product)) {
         continue;
       }
