@@ -13,16 +13,13 @@ use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\views_ajax_get\CacheableAjaxResponse;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -112,7 +109,7 @@ class PromotionController extends ControllerBase {
    *   Cart Storage.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher.
-   * @param Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
+   * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
    *   Alshaya Promo Label Manager.
    */
   public function __construct(EntityRepositoryInterface $entity_repository,
@@ -320,10 +317,12 @@ class PromotionController extends ControllerBase {
   }
 
   /**
-   * @param SKUInterface $sku
+   * Get Promotion Label.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
    *   Product SKU to get promo label for.
    *
-   * @return AjaxResponse
+   * @return \Drupal\Core\Ajax\AjaxResponse
    *   Ajax command to update promo label.
    */
   public function getPromotionLabel(SKUInterface $sku) {
@@ -338,7 +337,7 @@ class PromotionController extends ControllerBase {
       ],
       'contexts' => [
         'cookies:Drupal_visitor_acq_cart_id',
-      ]
+      ],
     ];
     if ($cart_id) {
       $cache_array['tags'][] = 'cart:' . $cart_id;

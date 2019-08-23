@@ -32,8 +32,10 @@ class AddToCartSubmitEvent extends Event {
   /**
    * AddToCartSubmitEvent constructor.
    *
-   * @param EntityInterface $entity
-   * @param Response $response
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   SKU Entity.
+   * @param \Symfony\Component\HttpFoundation\Response $response
+   *   Response Object.
    */
   public function __construct(EntityInterface $entity, Response $response) {
     $this->sku = $entity;
@@ -59,4 +61,5 @@ class AddToCartSubmitEvent extends Event {
   public function getResponse() {
     return $this->response;
   }
+
 }

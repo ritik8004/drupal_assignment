@@ -10,7 +10,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\views_ajax_get\CacheableAjaxResponse;
 
 /**
@@ -45,6 +45,8 @@ class AlshayaPromoLabelManager {
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type MAanager.
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager) {
@@ -55,13 +57,13 @@ class AlshayaPromoLabelManager {
   /**
    * For a sku, filter dynamic promo label eligible promotions.
    *
-   * @param array|\Drupal\Core\Entity\EntityInterface;[] $promotion_nodes
+   * @param array|\Drupal\Core\Entity\EntityInterface[] $promotionNodes
    *   List of promotion nodes.
    *
    * @return array|mixed
    *   List of Eligible Promotions.
    */
-  private function  filterEligiblePromotions($promotionNodes) {
+  private function filterEligiblePromotions($promotionNodes) {
     // Get SKU Promotions.
     $eligiblePromotions = [];
 
@@ -78,7 +80,7 @@ class AlshayaPromoLabelManager {
   /**
    * Check if dynamic promotion label applies.
    *
-   * @param array|\Drupal\Core\Entity\EntityInterface;[] $promotion_nodes
+   * @param array|\Drupal\Core\Entity\EntityInterface[] $promotionNodes
    *   List of promotion nodes.
    *
    * @return int
@@ -138,7 +140,7 @@ class AlshayaPromoLabelManager {
   /**
    * Get Dynamic Promotion label based on cart status.
    *
-   * @param \Drupal\node\Entity\Node $promotion
+   * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
    * @param \Drupal\acq_sku\Entity\SKU $currentSKU
    *   Product SKU.
@@ -150,12 +152,12 @@ class AlshayaPromoLabelManager {
    * @return string|mixed
    *   Return dynamic promo label.
    */
-  private function getPromotionLabel(Node $promotion, SKU $currentSKU, CartStorageInterface $cartStorage, SkuManager $skuManager) {
+  private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU, CartStorageInterface $cartStorage, SkuManager $skuManager) {
     $label = $promotion->get('field_acq_promotion_label')->getString();
     $cartSKUs = $cartStorage->getCartSkus();
     $eligibleSKUs = $skuManager->getSkutextsForPromotion($promotion);
 
-    // If cart is not empty, current product is eligible and cart has matching products.
+    // If cart is not empty and has matching products.
     if (!empty($cartSKUs)
       && in_array($currentSKU->getSku(), $eligibleSKUs)
       && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
@@ -169,14 +171,14 @@ class AlshayaPromoLabelManager {
    *
    * @param string|mixed $label
    *   Default Label.
-   * @param \Drupal\node\Entity\Node $promotion
+   * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
    * @param array|mixed $eligibleSKUs
    *   Eligible SKUs as per promotion.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
    *   Cart Session Storage.
    */
-  private function overridePromotionLabel(&$label, Node $promotion, $eligibleSKUs, CartStorageInterface $cartStorage) {
+  private function overridePromotionLabel(&$label, NodeInterface $promotion, $eligibleSKUs, CartStorageInterface $cartStorage) {
     // Calculate cart quantity.
     $eligible_cart_qty = 0;
     $cart_items = $cartStorage->getCart(FALSE)->items();
@@ -207,8 +209,10 @@ class AlshayaPromoLabelManager {
    * @param string $label
    *   Label HTML.
    * @param \Drupal\Core\Ajax\AjaxResponse|null $response
-   *   Ajax Response
-   * @return CacheableAjaxResponse
+   *   Ajax Response.
+   *
+   * @return \Drupal\views_ajax_get\CacheableAjaxResponse
+   *   Ajax Response.
    */
   public function prepareResponse($label, $response = NULL) {
     if (empty($response)) {

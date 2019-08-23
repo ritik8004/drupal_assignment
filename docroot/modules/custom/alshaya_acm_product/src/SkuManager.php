@@ -789,15 +789,15 @@ class SkuManager {
   /**
    * Fetch SKU Promotions with field_acq_promotion_label value.
    *
-   * @param SKU $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
    * @param array $types
-   *   Promotion Types
+   *   Promotion Types.
    *
-   * @return array|EntityInterface[]
+   * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   List of Promotion Nodes.
    */
-  public function getSkuPromotions(SKU $sku, $types = ['cart', 'category']) {
+  public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
     $promotion_nodes = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
@@ -827,7 +827,7 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The SKU Entity, for which linked promotions need to be fetched.
-   * @param array|EntityInterface[] $promotion_nodes
+   * @param array|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
    *   List of promotion nodes.
    * @param string $view_mode
    *   View mode around how the promotion needs to be rendered.

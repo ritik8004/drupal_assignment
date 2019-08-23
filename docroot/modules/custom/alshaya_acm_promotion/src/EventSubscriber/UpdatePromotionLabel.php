@@ -1,21 +1,15 @@
 <?php
 
-
 namespace Drupal\alshaya_acm_promotion\EventSubscriber;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_acm_product\Event\AddToCartSubmitEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class UpdatePromotionLabel
+ * Class UpdatePromotionLabel.
  *
  * @package Drupal\alshaya_acm_promotion\EventSubscriber
  */
@@ -59,7 +53,7 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
   }
 
   /**
-   * {@inheritDoc}
+   * Get subscribed events.
    */
   public static function getSubscribedEvents() {
     $events[AddToCartSubmitEvent::EVENT_NAME][] = 'postAddToCartSubmit';
@@ -78,4 +72,5 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
     $label = $this->labelManager->getCurrentSkuPromoLabel($sku, $this->cartStorage, $this->skuManager);
     $this->labelManager->prepareResponse($label, $response);
   }
+
 }
