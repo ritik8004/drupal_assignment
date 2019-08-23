@@ -449,7 +449,7 @@ class AlshayaPromotionsManager {
         $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
 
         // If child not available or is not a free gift, continue.
-        if (!($child instanceof SKU) || !($this->isSkuFreeGift($child))) {
+        if (!($child instanceof SKU) || !($this->skuManager->isSkuFreeGift($child))) {
           continue;
         }
 

@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_commerce\UpdateCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -249,14 +250,36 @@ class PromotionController extends ControllerBase {
         if ($response_message[1] == 'success') {
           $this->messenger()->addMessage($response_message[0]);
 
-          $updated_cart->addRawItemToCart([
-            'name' => $sku->label(),
-            'sku' => $sku->getSku(),
-            'qty' => 1,
-            'options' => [
-              'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
-            ],
-          ]);
+          if ($sku->bundle() == 'configurable') {
+            $tree = Configurable::deriveProductTree($sku);
+            $options = [];
+            foreach ($request->request->get('configurations') as $id => $value) {
+              $options[] = [
+                'option_id' => $tree['configurables'][$id]['attribute_id'],
+                'option_value' => $value,
+              ];
+            }
+
+            $updated_cart->addRawItemToCart([
+              'name' => $sku->label(),
+              'sku' => $sku->getSKU(),
+              'qty' => 1,
+              'options' => [
+                'configurable_item_options' => $options,
+                'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+              ],
+            ]);
+          }
+          else {
+            $updated_cart->addRawItemToCart([
+              'name' => $sku->label(),
+              'sku' => $sku->getSku(),
+              'qty' => 1,
+              'options' => [
+                'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+              ],
+            ]);
+          }
 
           $this->cartStorage->updateCart(FALSE);
         }

@@ -1002,12 +1002,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
-  /** @var \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper */
-  $productOptionsHelper = \Drupal::service('alshaya_product_options.helper');
-
   // Load SKU entity.
   $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
 
@@ -1016,6 +1010,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   }
 
   $form_state->setTemporaryValue('sku', $sku_entity);
+  $form['#attributes']['data-sku'] = $sku_entity->getSku();
 
   $form['#cache']['contexts'][] = 'url.query_args:selected';
 
@@ -1074,8 +1069,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       ['entity' => $sku_entity->id()]
     ),
   ];
-
-  $swatches = $sku_manager->getPdpSwatchAttributes();
 
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
@@ -1159,8 +1152,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $processed[$sku_entity->id()] = $selected;
     $sku_manager->updatedFormSelected($form_state, $selected);
 
-    /** @var \Drupal\alshaya_acm_product\SkuFieldsHelper $skuFieldsHelper */
-    $skuFieldsHelper = \Drupal::service('alshaya_acm_product.sku_fields_helper');
+    /** @var \Drupal\alshaya_acm_product\Service\AddToCartFormHelper $addToCartFormHelper */
+    $addToCartFormHelper = \Drupal::service('alshaya_acm_product.add_to_cart_form_helper');
 
     // We will display only one swatch attribute per product.
     $swatch_processed = FALSE;
@@ -1181,83 +1174,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       // Disable refocus.
       $configurable['#ajax']['disable-refocus'] = TRUE;
-
       unset($configurable['#ajax']['wrapper']);
 
-      $configurable['#options_attributes'] = $configurable['#options_attributes'] ?? [];
-      if (isset($configurable['#type']) && $configurable['#type'] == 'select') {
-        $overridden_label = $skuFieldsHelper->getOverriddenAttributeLabel($key);
-
-        $configurable['#empty_value'] = '';
-        $configurable['#options_attributes']['']['disabled'] = 'disabled';
-        $configurable['#empty_option'] = $overridden_label ?? t('Select @title', ['@title' => $configurable['#title']]);
-        $configurable['#attributes']['data-default-title'] = $overridden_label ?? $configurable['#title'];
-
-        $overridden_selected_label = $skuFieldsHelper->getOverriddenAttributeSelectedLabel($key);
-        $configurable['#attributes']['data-selected-title'] = $overridden_selected_label ?? $configurable['#attributes']['data-default-title'];
-
-        $overridden_error = $skuFieldsHelper->getOverriddenAttributeError($key);
-        if ($overridden_error) {
-          $configurable['#required_error'] = $overridden_error;
-        }
-
-        // Process and remove not required options first.
-        $sku_manager->processAttribute($configurable);
-
-        if (in_array($key, $swatches) && !$swatch_processed) {
-          $swatch_processed = TRUE;
-          $configurable['#attributes']['class'][] = 'form-item-configurable-swatch';
-
-          foreach ($configurable['#options'] as $value => $label) {
-            if (empty($value)) {
-              continue;
-            }
-
-            $swatch_sku = $sku_manager->getChildSkuFromAttribute(
-              $sku_entity,
-              $key,
-              $value
-            );
-
-            if ($swatch_sku instanceof SKU) {
-              $swatch_image_url = $skuImagesManager->getPdpSwatchImageUrl($swatch_sku);
-              if ($swatch_image_url) {
-                $configurable['#options_attributes'][$value]['swatch-image'] = file_url_transform_relative($swatch_image_url);
-              }
-            }
-
-          }
-        }
-        elseif ($alternates = $productOptionsHelper->getSizeGroup($key)) {
-          $configurable['#attributes']['class'][] = 'form-item-configurable-select-group';
-          $combinations = $sku_manager->getConfigurableCombinations($sku_entity);
-          foreach ($configurable['#options'] as $value => $label) {
-            $group_data = [];
-            foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
-              $child_sku = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
-
-              if (!($child_sku instanceof SKU)) {
-                continue;
-              }
-
-              // Get all alternate labels from child sku.
-              foreach ($alternates as $alternate => $alternate_label) {
-                $attribute_code = 'attr_' . $alternate;
-                $group_data[$alternate] = [
-                  'label' => $alternate_label,
-                  'value' => $child_sku->get($attribute_code)->getString(),
-                ];
-              }
-            }
-
-            $configurable['#options_attributes'][$value]['group-data'] = json_encode($group_data);
-          }
-        }
-        else {
-          $configurable['#attributes']['class'][] = 'form-item-configurable-select';
-        }
-      }
-
+      $addToCartFormHelper->alterConfigurableFormItem($sku_entity, $configurable, $swatch_processed);
     }
 
     $variation = NULL;
