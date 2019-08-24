@@ -150,18 +150,38 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
 
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
 
+    $pretty_filters = '';
+
     if ($url_processor == 'alshaya_facets_pretty_paths') {
-      $clean_url = Url::fromUserInput($view_url, [])->toString(FALSE);
+      $pretty_url = Url::fromUserInput($view_url, [])->toString(FALSE);
       if (isset($query_string['q'])) {
-        $clean_url = Url::fromUserInput($query_string['q'], [])
+        $pretty_url = Url::fromUserInput($query_string['q'], [])
           ->toString(FALSE);
       }
       elseif (isset($query_params['facet_filter_url'])) {
-        $clean_url = Url::fromUserInput($query_params['facet_filter_url'], [])
+        $pretty_url = Url::fromUserInput($query_params['facet_filter_url'], [])
           ->toString(FALSE);
       }
-      $clean_url .= (substr($clean_url, -1) == '/' ? '' : '/');
-      $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($clean_url)]));
+      $pretty_url .= (substr($pretty_url, -1) == '/' ? '' : '/');
+      $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($pretty_url)]));
+
+      if (strpos($pretty_url, "/--") !== FALSE) {
+        $pretty_filters = substr($pretty_url, strpos($pretty_url, "/--"));
+      }
+    }
+
+    // Update the link for language switcher.
+    foreach ($this->languageManager->getLanguages() as $language) {
+      if ($language->getId() === $this->languageManager->getCurrentLanguage()->getId()) {
+        continue;
+      }
+
+      $language_switcher_query = http_build_query($this->helper->getParamsInOtherLanguage($language->getId(), $query_params));
+      $response->addCommand(new InvokeCommand(NULL, 'updateLanguageSwitcherLinkQuery', [
+        $language->getId(),
+        $language_switcher_query,
+        $pretty_filters,
+      ]));
     }
 
     // Set items per page to current page * items per page.

@@ -102,8 +102,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $filters_current_result_array[$key] = $array;
       }
 
-      $raw_value = $result->getRawValue();
       $filter_key = $facet->getUrlAlias();
+      $raw_value = $this->alshayaPrettyPathHelper->getTranslatedFilters($facet->id(), $result->getRawValue());
       // If the value is active, remove the filter string from the parameters.
       if ($result->isActive()) {
         $active_facet = array_map([
@@ -196,7 +196,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     if (isset($this->activeFilters[$facet->getUrlAlias()])) {
 
       foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($value, '"'));
+        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->getTranslatedFilters($facet->id(), $value, FALSE), '"'));
       }
     }
   }
@@ -218,6 +218,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         '\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
         'decodeFacetUrlComponents',
       ], $new_parts);
+
       $this->activeFilters[$key] = $new_parts;
     }
   }
