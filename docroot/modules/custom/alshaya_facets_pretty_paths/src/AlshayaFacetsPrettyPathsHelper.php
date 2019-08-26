@@ -122,7 +122,7 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Filter array.
    */
   public function getActiveFacetFilters() {
-    static $alshaya_active_facet_filters;
+    $alshaya_active_facet_filters = &drupal_static(__FUNCTION__);;
 
     if (!empty($alshaya_active_facet_filters)) {
       return $alshaya_active_facet_filters;
@@ -166,7 +166,7 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Processed query params.
    */
   public function getTranslatedFilters(string $attribute_code, string $filter_value, bool $default = TRUE) {
-    static $translated_filter_values;
+    $translated_filter_values = &drupal_static(__FUNCTION__);
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     if ($current_langcode !== 'en') {
       $required_langcode = $default ? 'en' : $current_langcode;
