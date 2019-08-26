@@ -4,6 +4,7 @@ namespace Drupal\alshaya_feed;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
@@ -94,6 +95,13 @@ class AlshayaFeedSkuInfoHelper {
   protected $dateTime;
 
   /**
+   * SKU Fields Manager.
+   *
+   * @var \Drupal\acq_sku\SKUFieldsManager
+   */
+  protected $skuFieldsManager;
+
+  /**
    * Associative array of linked product types.
    *
    * @var array
@@ -127,6 +135,8 @@ class AlshayaFeedSkuInfoHelper {
    *   Cache Backend service.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The date time service.
+   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
+   *   SKU Fields Manager.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -138,7 +148,8 @@ class AlshayaFeedSkuInfoHelper {
     SkuInfoHelper $sku_info_helper,
     ConfigFactoryInterface $config_factory,
     CacheBackendInterface $cache,
-    TimeInterface $date_time
+    TimeInterface $date_time,
+    SKUFieldsManager $sku_fields_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -150,6 +161,7 @@ class AlshayaFeedSkuInfoHelper {
     $this->cacheTime = (int) $config_factory->get('alshaya_feed.settings')->get('cache_time');
     $this->cache = $cache;
     $this->dateTime = $date_time;
+    $this->skuFieldsManager = $sku_fields_manager;
   }
 
   /**
@@ -219,7 +231,7 @@ class AlshayaFeedSkuInfoHelper {
         'meta_description' => $meta_tags['description'] ?? '',
         'meta_keywords' => $meta_tags['keywords'] ?? '',
         'meta_title' => $meta_tags['title'] ?? '',
-        'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description']),
+        'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
 
       if ($sku->bundle() === 'configurable') {
@@ -231,11 +243,12 @@ class AlshayaFeedSkuInfoHelper {
             continue;
           }
           $stockInfo = $this->skuInfoHelper->stockInfo($child);
+
           $variant = [
             'sku' => $child->getSku(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),
-            'swatch_image' => $this->skuImagesManager->getPdpSwatchImageUrl($child) ?? [],
-            'images' => $this->skuImagesManager->getGalleryMedia($child, FALSE),
+            'swatch_image' => $this->getSwatchImages($sku, $combination),
+            'images' => $this->getGalleryMedia($child),
             'stock' => [
               'status' => $stockInfo['in_stock'],
               'qty' => $stockInfo['stock'],
@@ -245,19 +258,10 @@ class AlshayaFeedSkuInfoHelper {
         }
       }
 
-      // Display swatches only if enabled in configuration and not color node.
-      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches') && empty($color)) {
-        // Get swatches for this product from media.
-        $product[$lang]['swatches'] = $this->skuImagesManager->getSwatches($sku);
-      }
-
       foreach ($this->linkedTypes as $linked_type_key => $linked_type) {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $product[$lang][$linked_type_key] = array_keys($linked_skus);
       }
-
-      // Allow other modules to alter light product data.
-      $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $product[$lang]);
     }
 
     // Cache only for XX mins.
@@ -267,6 +271,49 @@ class AlshayaFeedSkuInfoHelper {
     ]);
 
     return $product;
+  }
+
+  /**
+   * Wrapper function get swatch images.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param array $combination
+   *   Array of combination attributes.
+   *
+   * @return array
+   *   An array swatch image with label.
+   */
+  protected function getSwatchImages(SKUInterface $sku, array $combination): array {
+    $swatches = $this->skuImagesManager->getSwatchData($sku);
+    $swatch_image = [];
+    if (!empty($swatches) && isset($combination[$swatches['attribute_code']])) {
+      $swatch_image = $swatches['swatches'][$combination[$swatches['attribute_code']]] ?? [];
+    }
+    return $swatch_image;
+  }
+
+  /**
+   * Wrapper function get gallery images.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Configurable Values.
+   */
+  protected function getGalleryMedia(SKUInterface $sku): array {
+    $media_items = $this->skuImagesManager->getGalleryMedia($sku, FALSE);
+    if (empty($media_items) || empty($media_items['media_items'])) {
+      return [];
+    }
+
+    return array_map(function ($image) {
+      return [
+        'label' => $image['label'],
+        'url' => file_create_url($image['drupal_uri']),
+      ];
+    }, $media_items['media_items']['images']);
   }
 
   /**
@@ -280,31 +327,73 @@ class AlshayaFeedSkuInfoHelper {
    * @return array
    *   Configurable Values.
    */
-  protected function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
+  public function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
     if ($sku->bundle() !== 'simple') {
       return [];
     }
 
-    $labels = [
-      'attr_color_label' => 'color',
-      'attr_size' => 'size',
-    ];
+    $configurableFieldValues = [];
+    $remove_not_required_option = $this->skuManager->isNotRequiredOptionsToBeRemoved();
+    foreach ($attributes as $code => $id) {
+      $fieldKey = 'attr_' . $code;
 
-    $values = $this->skuManager->getConfigurableValues($sku);
-    foreach ($values as $attribute_code => &$value) {
-      $value['label'] = $labels[$attribute_code] ?? $value['label'];
-      $value['attribute_code'] = $attribute_code;
-
-      if (($attr_value = $attributes[str_replace('attr_', '', $attribute_code)]) && !is_numeric($attr_value)) {
-        $value['value'] = (string) $attr_value;
+      if ($sku->hasField($fieldKey)) {
+        $value = $sku->get($fieldKey)->getString();
+        if ($remove_not_required_option && $this->skuManager->isAttributeOptionToExclude($value)) {
+          continue;
+        }
+        $configurableFieldValues[$code] = $value;
       }
-      elseif (str_replace('attr_', '', $attribute_code) == 'size' && is_numeric($values['value'])) {
-        $size_labels = $this->skuInfoHelper->getSizeLabels($sku);
-        $value['value'] = $size_labels[$attributes[str_replace('attr_', '', $attribute_code)]] ?? $attributes[str_replace('attr_', '', $attribute_code)];
+      else {
+        $sku_attributes = $this->getSkuAttributes($sku);
+        if (empty($sku_attributes)
+            || !isset($sku_attributes[$code][$id])
+            || ($remove_not_required_option && $this->skuManager->isAttributeOptionToExclude($sku_attributes[$code][$id]))
+        ) {
+          continue;
+        }
+        $configurableFieldValues[$code] = $sku_attributes[$code][$id];
       }
     }
 
-    return array_values($values);
+    return $configurableFieldValues;
+  }
+
+  /**
+   * Get the attributes of given sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Return array of attributess.
+   */
+  public function getSkuAttributes(SKUInterface $sku): array {
+    $static = &drupal_static(__METHOD__, []);
+
+    $parent = $this->skuManager->getParentSkuBySku($sku, $sku->language()->getId());
+
+    $cid = implode(':', [
+      $parent->getSku(),
+      $parent->language()->getId(),
+    ]);
+
+    // Do not process the same thing again and again.
+    if (isset($static[$cid])) {
+      return $static[$cid];
+    }
+
+    $configurables = unserialize($parent->get('field_configurable_attributes')->getString());
+    if (empty($configurables) || !is_array($configurables)) {
+      return [];
+    }
+    $configurations = [];
+    foreach ($configurables as $configuration) {
+      $configurations[$configuration['code']] = array_combine(array_column($configuration['values'], 'value_id'), array_column($configuration['values'], 'label'));
+    }
+
+    $static[$cid] = $configurations;
+    return $configurations;
   }
 
 }

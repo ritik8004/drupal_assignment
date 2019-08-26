@@ -144,7 +144,7 @@ class AlshayaFeed {
       }
     }
 
-    $query->range(0, $batch_size);
+    $query->range($context['sandbox']['count'], $batch_size);
     $nids = $query->execute();
     $updates = $this->process($nids, $context);
 

@@ -129,47 +129,18 @@ class SkuInfoHelper {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
-   * @param array $extra_unused_options
+   * @param array $unused_options
    *   (Optional) any extra unused options.
    *
    * @return array
    *   Attributes.
    */
-  public function getAttributes(SKUInterface $sku, array $extra_unused_options = []): array {
+  public function getAttributes(SKUInterface $sku, array $unused_options = []): array {
     $skuData = $sku->toArray();
-
-    // @TODO: We should really think of returning what is required instead
-    // of removing stuff. Can be done later when we start developing and testing
-    // for all brands.
-    $unused_options = [
-      'options_container',
-      'required_options',
-      'has_options',
-      'product_activation_date',
-      'url_key',
-      'msrp_display_actual_price_type',
-      'product_state',
-      'tax_class_id',
-      'gift_message_available',
-      'gift_wrapping_available',
-      'is_returnable',
-      'special_from_date',
-      'special_to_date',
-      'custom_design_from',
-      'custom_design_to',
-      'ignore_price_update',
-      'image',
-      'small_image',
-      'thumbnail',
-      'swatch_image',
-      'meta_description',
-      'meta_keyword',
-      'meta_title',
-    ] + $extra_unused_options;
 
     $attributes = [];
     foreach ($skuData['attributes'] as $row) {
-      if (in_array($row['key'], $unused_options)) {
+      if (!empty($unused_options) && in_array($row['key'], $unused_options)) {
         continue;
       }
 

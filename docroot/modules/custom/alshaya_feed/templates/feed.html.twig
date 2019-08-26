@@ -42,20 +42,21 @@
       {% endfor %}
     </images>
   {% else %}
+    <variants>
     {% for variant in product.variants %}
-      {% if variant.qty > '0' %}
+      {% if variant.stock.qty > 0 %}
       <variant>
         <sku>{{ variant.sku }}</sku>
         <configurable_attributes>
           {% if variant.configurable_attributes|length > 0 %}
-            {% for attributes in variant.configurable_attributes %}
-              <{{ attributes.label }}>{{ attributes.value }}</{{ attributes.label }}>
+            {% for label,value in variant.configurable_attributes %}
+              <{{ label }}>{{ value }}</{{ label }}>
             {% endfor %}
           {% endif %}
         </configurable_attributes>
         <swatch_image>
-          <url>{{ product.swatch_image.url }}</url>
-          <label>{{ product.swatch_image.label }}</label>
+          <url>{{ variant.swatch_image.image_url }}</url>
+          <label>{{ variant.swatch_image.display_label }}</label>
         </swatch_image>
         <images>
           {% for image in variant.images %}
@@ -72,6 +73,7 @@
       </variant>
       {% endif %}
     {% endfor %}
+    </variants>
   {% endif %}
   <relatedProducts>{{ product.relatedProducts|length }}</relatedProducts>
   {% if product.relatedProducts %}
