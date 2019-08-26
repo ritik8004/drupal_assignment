@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_promotion\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -14,6 +15,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class FreeGiftController.
@@ -87,6 +89,11 @@ class FreeGiftController extends ControllerBase {
    */
   public function titleCallback($acq_sku) {
     $sku = $this->skuManager->loadSkuById((int) $acq_sku);
+
+    if (!($sku instanceof SKUInterface)) {
+      throw new NotFoundHttpException();
+    }
+
     return $sku->get('name')->getString();
   }
 
@@ -95,6 +102,10 @@ class FreeGiftController extends ControllerBase {
    */
   public function viewProduct(Request $request, $acq_sku, $js) {
     $sku = $this->skuManager->loadSkuById((int) $acq_sku);
+
+    if (!($sku instanceof SKUInterface)) {
+      throw new NotFoundHttpException();
+    }
 
     if ($js === 'ajax') {
       $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());

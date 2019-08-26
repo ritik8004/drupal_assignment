@@ -35,7 +35,6 @@
       });
 
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
-        console.log(12);
         var form = $(this).closest('form');
         var sku = $(form).attr('data-sku');
         var combinations = drupalSettings.configurableCombinations[sku];
@@ -75,7 +74,6 @@
       });
 
       $('.sku-base-form').once('load').each(function () {
-        console.log(56);
         $(this).find('.form-select[data-configurable-code]').val('');
 
         // @TODO: Select based on selected query param or color.
