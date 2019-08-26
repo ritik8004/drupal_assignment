@@ -934,10 +934,10 @@
       }
       else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
         var imgElem = $(highlight).find('picture img');
-        var imgSrc = imgElem.attr('data-src');
         if (imgElem.length === 0) {
           imgElem = $(highlight).find('img');
         }
+        var imgSrc;
         if (typeof imgSrc === 'undefined') {
           imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
             imgElem.attr('src') :
