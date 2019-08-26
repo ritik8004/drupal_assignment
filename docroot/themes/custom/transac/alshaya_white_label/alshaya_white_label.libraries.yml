@@ -4,7 +4,6 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
-    js/back_to_top.js: {}
     js/custom.js: {}
     js/accordion.js: {}
     js/menu.js: {}
@@ -213,3 +212,7 @@ optionlist_menu:
   css:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
+
+back_to_top:
+  js:
+    js/back_to_top.js: {}
