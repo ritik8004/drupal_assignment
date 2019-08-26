@@ -273,6 +273,18 @@ header {
   }
 }
 
+.logged-in {
+  .toggle--sign {
+    .account {
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .c-my-account-nav {
   @include breakpoint($only-mobile) {
     width: calc(100% - 2.8125rem) !important;

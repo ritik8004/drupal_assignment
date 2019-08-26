@@ -24,6 +24,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Class AlshayaGtmManager.
@@ -222,6 +223,13 @@ class AlshayaGtmManager {
   protected $ordersManager;
 
   /**
+   * Entity Repository service object.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -254,6 +262,8 @@ class AlshayaGtmManager {
    *   Module Handler service object.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders Manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository object.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -269,7 +279,8 @@ class AlshayaGtmManager {
                               AlshayaAddressBookManager $addressBookManager,
                               SkuManager $skuManager,
                               ModuleHandlerInterface $module_handler,
-                              OrdersManager $orders_manager) {
+                              OrdersManager $orders_manager,
+                              EntityRepositoryInterface $entityRepository) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -285,6 +296,7 @@ class AlshayaGtmManager {
     $this->skuManager = $skuManager;
     $this->moduleHandler = $module_handler;
     $this->ordersManager = $orders_manager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -1059,6 +1071,7 @@ class AlshayaGtmManager {
         $taxonomy_term = $current_route['route_params']['taxonomy_term'];
         $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
         foreach ($taxonomy_parents as $taxonomy_parent) {
+          $taxonomy_parent = $this->entityRepository->getTranslationFromContext($taxonomy_parent, $this->languageManager->getCurrentLanguage()->getId());
           $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
 
@@ -1332,13 +1345,10 @@ class AlshayaGtmManager {
    *   GTM currency code.
    */
   public function getGtmCurrency() {
-    if (!empty($gtm_currency_code = $this->configFactory->get('acq_commerce.currency')
-      ->get('gtm_currency_code'))) {
-      return $gtm_currency_code;
-    }
-
-    return $this->configFactory->get('acq_commerce.currency')
-      ->get('currency_code');
+    $currency_code = $this->configFactory->get('acq_commerce.currency');
+    return !empty($currency_code->get('iso_currency_code'))
+      ? $currency_code->get('iso_currency_code')
+      : $currency_code->get('currency_code');
   }
 
 }

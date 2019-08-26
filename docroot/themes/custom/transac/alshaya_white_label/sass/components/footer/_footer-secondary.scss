@@ -116,6 +116,19 @@
   height: 2.1875rem;
 }
 
+.c-footer__logo--apple-pay {
+  background-image: url(#{$base_theme_img_directory_path}/cards/apple-pay.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 4.375rem;
+  height: 2.1875rem;
+  display: none;
+
+  body.safari & {
+    display: inline-block;
+  }
+}
+
 .c-footer__logo--visa {
   background-image: url(#{$base_theme_img_directory_path}/cards/card-visa.svg);
   background-size: contain;

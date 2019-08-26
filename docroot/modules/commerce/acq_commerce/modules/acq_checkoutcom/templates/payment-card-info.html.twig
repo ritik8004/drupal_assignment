@@ -1,0 +1,18 @@
+<div class="payment-card">
+  <div class="payment-card--data">
+    <div class="payment-card--type {{ card_info.paymentMethod|lower }}"></div>
+    <div class="payment-card--info">
+      {% if card_info.maskedCC %}
+        <div class="label">{{ "card number"|t }}</div>
+        <div class="payment-card--number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.maskedCC }}</div>
+      {% endif %}
+      {% if card_info.expirationDate %}
+        <div class="label">{{ "expiry"|t }}</div>
+        <div class="payment-card--expiry">{{ card_info.expirationDate }} </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="payment-card--options">
+    <div class="payment-card--delete payment-card--controls">{{ link(delete_operation.title, delete_operation.url) }}</div>
+  </div>
+</div>

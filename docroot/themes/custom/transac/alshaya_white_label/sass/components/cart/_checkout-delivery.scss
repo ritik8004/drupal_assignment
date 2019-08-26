@@ -704,13 +704,12 @@
       &.plugin-selected {
         background-color: $checkout_payment_row_selected;
 
-        .method-description {
+        .method-description:not(:empty) {
           display: block;
         }
 
         .method-knet {
-          background: url(#{$base_theme_img_directory_path}/cards/knet-active.png) no-repeat;
-          background-size: 100%;
+          opacity: 1;
         }
 
         &::before {
@@ -762,7 +761,8 @@
       float: $left;
       margin: 0;
       padding: 1.5rem 0.5rem;
-      border-top: 1px solid $checkout_payment_option_border;
+      border-top: none;
+      border-bottom: 1px solid $checkout_payment_option_border;
 
       .payment-method {
         &-name {
@@ -796,18 +796,17 @@
 
         &-side-info {
           float: $right;
-          height: 2rem;
-          width: 3rem;
-          background: $checkout_payment_method_icon_bg;
-          margin-top: -1.25rem;
         }
 
         &-knet {
-          background: url(#{$base_theme_img_directory_path}/cards/knet-inactive.png) no-repeat;
+          background: url(#{$base_theme_img_directory_path}/cards/knet-active.png) no-repeat;
           background-size: 100%;
           position: absolute;
           #{$right}: 0.8rem;
-          top: 54%;
+          height: 2rem;
+          width: 3rem;
+          top: 1.375rem;
+          opacity: 0.3;
 
           @include breakpoint($desktop) {
             #{$right}: 1.5rem;

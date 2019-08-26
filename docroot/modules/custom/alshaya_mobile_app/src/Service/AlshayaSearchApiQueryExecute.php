@@ -440,8 +440,9 @@ class AlshayaSearchApiQueryExecute {
     // Fill facets with the result data.
     $facet_build = [];
 
-    foreach ($facets as $facet) {
+    $search_api_facets = $results->getExtraData('search_api_facets') ?? [];
 
+    foreach ($facets as $facet) {
       // Show only one price facet - final_price or selling_price.
       if ($facet->id() == $this->getPriceFacetKey() && $this->priceHelper->isPriceModeFromTo()) {
         // Do not show final price if price mode from-to.
@@ -452,9 +453,17 @@ class AlshayaSearchApiQueryExecute {
         continue;
       }
 
-      $facet_result = $results->getExtraData('search_api_facets')[$facet->id()] ?? [];
+      $facet_result = [];
+      if (isset($search_api_facets[$facet->id()])) {
+        $facet_result = $search_api_facets[$facet->id()];
+      }
+      // For Algolia results come with field identifier.
+      elseif ($search_api_facets[$facet->getFieldIdentifier()]) {
+        $facet_result = $search_api_facets[$facet->getFieldIdentifier()];
+      }
+
       $data = [];
-      foreach ($facet_result as $result) {
+      foreach ($facet_result ?? [] as $result) {
         // Prepare the result item object.
         $result['filter'] = trim($result['filter'], '"');
         $result['count'] = trim($result['count'], '"');

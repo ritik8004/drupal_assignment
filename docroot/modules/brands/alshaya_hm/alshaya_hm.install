@@ -9,6 +9,45 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 use Drupal\Component\Utility\Unicode;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add color family field and facets.
+ */
+function alshaya_hm_update_8038() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.sku_base_fields',
+      'alshaya_acm_product.display_settings',
+    ],
+    'alshaya_acm_product'
+  );
+
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->addFields();
+
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
+
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
+
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
+
+    // Keep the block disabled. We will enable when we have data.
+    $new_block->disable();
+
+    $new_block->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
@@ -52,7 +91,6 @@ function alshaya_hm_update_8035() {
   else {
     $configFactory->set('min_shipping_amount', 99);
   }
-
   // Save the changes.
   $configFactory->save();
 
