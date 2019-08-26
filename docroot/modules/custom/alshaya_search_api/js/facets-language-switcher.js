@@ -11,8 +11,8 @@
       var url = $(this).attr('href');
       var url_parts = url.split('?');
       url_parts = url_parts[0].split('/--')[0];
-      url_parts += url_parts.endsWith("/") ? "" : "/"
-      $(this).attr('href', url_parts + pretty_filters + '?' + query);
+      var new_url = url_parts + pretty_filters + '?' + query;
+      $(this).attr('href', new_url.replace(/\/{2,}/g,'/'));
     });
   };
 

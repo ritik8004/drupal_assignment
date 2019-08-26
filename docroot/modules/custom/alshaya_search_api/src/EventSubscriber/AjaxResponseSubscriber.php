@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_search\EventSubscriber;
+namespace Drupal\alshaya_search_api\EventSubscriber;
 
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Ajax\InvokeCommand;
