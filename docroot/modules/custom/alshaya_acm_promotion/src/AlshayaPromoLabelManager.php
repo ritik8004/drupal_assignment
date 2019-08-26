@@ -169,47 +169,49 @@ class AlshayaPromoLabelManager {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   private function preparePromoDisplay(NodeInterface $promotion, SKU $sku, $view_mode) {
-    $promoDisplay = NULL;
+    $promoDisplay = '';
     $promotionLabel = $this->getPromotionLabel($promotion, $sku);
 
-    switch ($view_mode) {
-      case 'links':
-        try {
-          $promoDisplay = $promotion
-            ->toLink($promotionLabel)
-            ->toString()
-            ->getGeneratedLink();
-        }
-        catch (\Exception $exception) {
-          watchdog_exception('alshaya_acm_promotion', $exception);
-        }
-        break;
+    if (!empty($promotionLabel)) {
+      switch ($view_mode) {
+        case 'links':
+          try {
+            $promoDisplay = $promotion
+              ->toLink($promotionLabel)
+              ->toString()
+              ->getGeneratedLink();
+          }
+          catch (\Exception $exception) {
+            watchdog_exception('alshaya_acm_promotion', $exception);
+          }
+          break;
 
-      default:
-        $description = '';
-        $description_item = $promotion->get('field_acq_promotion_description')->first();
-        if ($description_item) {
-          $description = $description_item->getValue();
-        }
+        default:
+          $description = '';
+          $description_item = $promotion->get('field_acq_promotion_description')->first();
+          if ($description_item) {
+            $description = $description_item->getValue();
+          }
 
-        $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
-        $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
+          $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
+          $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
 
-        $promoDisplay = [
-          'text' => $promotionLabel,
-          'description' => $description,
-          'discount_type' => $discount_type,
-          'discount_value' => $discount_value,
-          'rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
-        ];
+          $promoDisplay = [
+            'text' => $promotionLabel,
+            'description' => $description,
+            'discount_type' => $discount_type,
+            'discount_value' => $discount_value,
+            'rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+          ];
 
-        if (!empty($free_gift_skus = $promotion->get('field_free_gift_skus')->getValue())) {
-          $promoDisplay['skus'] = $free_gift_skus;
-        }
+          if (!empty($free_gift_skus = $promotion->get('field_free_gift_skus')->getValue())) {
+            $promoDisplay['skus'] = $free_gift_skus;
+          }
 
-        if (!empty($coupon_code = $promotion->get('field_coupon_code')->getValue())) {
-          $promoDisplay['coupon_code'] = $coupon_code;
-        }
+          if (!empty($coupon_code = $promotion->get('field_coupon_code')->getValue())) {
+            $promoDisplay['coupon_code'] = $coupon_code;
+          }
+      }
     }
 
     return $promoDisplay;
