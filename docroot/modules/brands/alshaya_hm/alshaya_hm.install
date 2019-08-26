@@ -29,20 +29,24 @@ function alshaya_hm_update_8038() {
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->addFields();
 
-  _alshaya_search_api_reindex();
+  $blocks = [
+    'plpcolor' => 'plpcolorfamily',
+    'promocolor' => 'promocolorfamily',
+    'color' => 'colorfamily',
+  ];
 
-  // Disable earlier colour facet and assign weight to color family.
-  $color_block = Block::load('color');
-  Block::load('colorfamily')->setWeight($color_block->getWeight())->save();
-  $color_block->disable()->save();
+  foreach ($blocks as $old_id => $new_id) {
+    $old_block = Block::load($old_id);
+    $new_block = Block::load($new_id);
 
-  $color_block_promotion = Block::load('promocolor');
-  Block::load('promocolorfamily')->setWeight($color_block_promotion->getWeight())->save();
-  $color_block_promotion->disable()->save();
+    // Set weight of new block same as old block.
+    $new_block->setWeight($old_block->getWeight());
 
-  $color_block_plp = Block::load('plpcolor');
-  Block::load('plpcolorfamily')->setWeight($color_block_plp->getWeight())->save();
-  $color_block_plp->disable()->save();
+    // Keep the block disabled. We will enable when we have data.
+    $new_block->disable();
+
+    $new_block->save();
+  }
 }
 
 /**
