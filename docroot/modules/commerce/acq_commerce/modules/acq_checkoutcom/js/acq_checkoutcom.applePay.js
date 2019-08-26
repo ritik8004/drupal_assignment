@@ -73,7 +73,7 @@
     }
 
     // Handle the events.
-    $(button_target, checkoutApplePay.context).click(function (event) {
+    $(button_target, checkoutApplePay.context).once('bind-js').on('click', function (event) {
       event.preventDefault();
       event.stopPropagation();
 
