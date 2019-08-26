@@ -5,12 +5,13 @@ namespace Drupal\alshaya_acm_promotion;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Link;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 
@@ -72,32 +73,39 @@ class AlshayaPromotionsManager {
   protected $skuManager;
 
   /**
+   * Images Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $imagesManager;
+
+  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Entity Manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger service.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The Entity repository service.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $images_manager
+   *   Images Manager.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $acq_promotions_manager
    *   Promotions manager service object from commerce code.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
-                              LoggerChannelFactoryInterface $logger,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               SkuManager $sku_manager,
+                              SkuImagesManager $images_manager,
                               AcqPromotionsManager $acq_promotions_manager) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
-    $this->logger = $logger->get('alshaya_acm_promotion');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->skuManager = $sku_manager;
+    $this->imagesManager = $images_manager;
     $this->acqPromotionsManager = $acq_promotions_manager;
   }
 
@@ -418,6 +426,70 @@ class AlshayaPromotionsManager {
     $static[$sku][$applied_coupon] = $free_gift_promos;
 
     return $free_gift_promos;
+  }
+
+  /**
+   * Helper function to fetch child skus of a configurable Sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   sku text or Sku object.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU[]
+   *   Array of child skus/ Child SKU when loading first child only.
+   */
+  public function getAvailableFreeGiftChildren(SKU $sku) {
+    // Sanity check.
+    if ($sku->getType() != 'configurable') {
+      return [];
+    }
+
+    $children = [];
+    foreach (Configurable::getChildSkus($sku) as $child_sku) {
+      try {
+        $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+
+        // If child not available or is not a free gift, continue.
+        if (!($child instanceof SKU) || !($this->skuManager->isSkuFreeGift($child))) {
+          continue;
+        }
+
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $child->getPluginInstance();
+
+        // We only want in-stock free gifts.
+        if ($plugin->isProductInStock($child)) {
+          $children[] = $child;
+        }
+      }
+      catch (\Exception $e) {
+        continue;
+      }
+    }
+
+    return $children;
+  }
+
+  /**
+   * Get sku to use for gallery.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   SKU Entity for gallery.
+   */
+  public function getSkuForFreeGiftGallery(SKU $sku) {
+    if ($this->imagesManager->hasMedia($sku)) {
+      return $sku;
+    }
+
+    foreach ($this->getAvailableFreeGiftChildren($sku) as $child) {
+      if ($this->imagesManager->hasMedia($child)) {
+        return $child;
+      }
+    }
+
+    return $sku;
   }
 
 }

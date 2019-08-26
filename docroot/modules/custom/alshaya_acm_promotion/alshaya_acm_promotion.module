@@ -327,7 +327,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
         $free_sku_title = $free_sku_image = [
           '#type' => 'link',
-          '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+          '#url' => Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
             [
               'acq_sku' => $free_sku_entity->id(),
               'js' => 'nojs',
@@ -425,7 +425,7 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
                                             EntityInterface $entity,
                                             EntityViewDisplayInterface $display,
                                             $view_mode) {
-  if ($view_mode != 'modal') {
+  if ($view_mode != 'free_gift') {
     return;
   }
 
@@ -433,6 +433,36 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
   if (empty($promotion_id)) {
     return;
   }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotionsManager */
+  $promotionsManager = \Drupal::service('alshaya_acm_promotion.manager');
+
+  $pdp_layout = $skuManager->getPdpLayout($entity, 'modal');
+  try {
+    $skuForGallery = $promotionsManager->getSkuForFreeGiftGallery($entity);
+    $build['gallery'] = $skuImagesManager->getGallery($skuForGallery, $pdp_layout);
+  }
+  catch (\Exception $e) {
+    $build['gallery'] = [];
+  }
+
+  $build['price_block']['#markup'] = '<div class="free-price-markup">' . t('FREE') . '</div>';
+  $build['item_code']['#markup'] = $entity->getSku();
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
+
+  // Add PDP slider position config to drupalSettings so we can use it in JS.
+  $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
+
+  // Add PDP slider position config to variable so it is available in themes.
+  $build['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
 
   $coupon = \Drupal::request()->get('coupon') ?? '';
 
@@ -456,17 +486,15 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     ),
   ];
 
-  if (!empty($coupon)) {
-    $form_state = new FormState();
-    $form_state->setStorage([
-      'coupon' => $coupon,
-      'sku' => $entity->getSku(),
-      'promotion_id' => $promotion_id,
-    ]);
+  $form_state = new FormState();
+  $form_state->setStorage([
+    'coupon' => $coupon ?? '',
+    'sku' => $entity->getSku(),
+    'promotion_id' => $promotion_id ?? '',
+  ]);
 
-    $build['select_free_gift'] = \Drupal::formBuilder()->buildForm(
-      SelectFreeGiftForm::class,
-      $form_state
-    );
-  }
+  $build['select_free_gift'] = \Drupal::formBuilder()->buildForm(
+    SelectFreeGiftForm::class,
+    $form_state
+  );
 }

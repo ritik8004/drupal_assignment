@@ -3,15 +3,12 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -75,40 +72,6 @@ class ProductController extends ControllerBase {
     }
 
     $response = new RedirectResponse(Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString());
-    $response->send();
-    exit;
-
-  }
-
-  /**
-   * Title callback for the modal.
-   */
-  public function skumodalTitle($acq_sku) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-    return $sku->get('name')->getString();
-  }
-
-  /**
-   * Page callback for the modal.
-   */
-  public function skumodalView(Request $request, $acq_sku, $js) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-    if ($js === 'ajax') {
-      $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
-      $build = $view_builder->view($sku, 'modal');
-
-      if ($request->query->get('promotion_id')) {
-        $response = new AjaxResponse();
-        $response->addCommand(new HtmlCommand('#drupal-modal', $build));
-        return $response;
-      }
-      else {
-        return $build;
-      }
-
-    }
-
-    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $sku->id()])->toString());
     $response->send();
     exit;
 
