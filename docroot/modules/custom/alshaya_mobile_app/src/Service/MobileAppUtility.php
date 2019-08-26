@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\SkuInfoHelper;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
@@ -181,7 +181,7 @@ class MobileAppUtility {
   /**
    * Sku info helper.
    *
-   * @var \Drupal\alshaya_acm_product\SkuInfoHelper
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
   protected $skuInfoHelper;
 
@@ -216,7 +216,7 @@ class MobileAppUtility {
    *   The renderer.
    * @param \Drupal\redirect\RedirectRepository $redirect_repsitory
    *   Redirect repository.
-   * @param \Drupal\alshaya_acm_product\SkuInfoHelper $sku_info_helper
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
    */
   public function __construct(CacheBackendInterface $cache,

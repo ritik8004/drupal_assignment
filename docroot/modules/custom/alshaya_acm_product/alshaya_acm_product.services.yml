@@ -127,7 +127,7 @@ services:
     tags:
       - { name: event_subscriber }
   alshaya_acm_product.sku_info:
-    class: Drupal\alshaya_acm_product\SkuInfoHelper
+    class: Drupal\alshaya_acm_product\Service\SkuInfoHelper
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'

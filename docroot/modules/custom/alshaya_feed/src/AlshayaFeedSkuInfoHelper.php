@@ -6,12 +6,15 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
-use Drupal\alshaya_acm_product\SkuInfoHelper;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 
 /**
  * Class SkuInfoHelper.
@@ -65,9 +68,30 @@ class AlshayaFeedSkuInfoHelper {
   /**
    * Sku info helper.
    *
-   * @var \Drupal\alshaya_acm_product\SkuInfoHelper
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
   protected $skuInfoHelper;
+
+  /**
+   * API Helper cache object.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Time to cache the API response.
+   *
+   * @var int
+   */
+  protected $cacheTime;
+
+  /**
+   * The date time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $dateTime;
 
   /**
    * Associative array of linked product types.
@@ -95,8 +119,14 @@ class AlshayaFeedSkuInfoHelper {
    *   SKU images manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\alshaya_acm_product\SkuInfoHelper $sku_info_helper
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   ConfigFactoryInterface object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service.
+   * @param \Drupal\Component\Datetime\TimeInterface $date_time
+   *   The date time service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -105,7 +135,10 @@ class AlshayaFeedSkuInfoHelper {
     ConfigFactory $configFactory,
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    ConfigFactoryInterface $config_factory,
+    CacheBackendInterface $cache,
+    TimeInterface $date_time
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -114,6 +147,9 @@ class AlshayaFeedSkuInfoHelper {
     $this->skuImagesManager = $sku_images_manager;
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
+    $this->cacheTime = (int) $config_factory->get('alshaya_feed.settings')->get('cache_time');
+    $this->cache = $cache;
+    $this->dateTime = $date_time;
   }
 
   /**
@@ -130,36 +166,39 @@ class AlshayaFeedSkuInfoHelper {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function process(int $nid): array {
-    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    $cache_id = 'alshaya_feed_' . $nid;
+    if ($cache = $this->cache->get($cache_id)) {
+      return $cache->data;
+    }
 
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
     if (!$node instanceof NodeInterface) {
       return [];
     }
-    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);
     $sku = SKU::loadFromSku($sku);
-
     if (!$sku instanceof SKU) {
       return [];
     }
-
-    // Get the prices.
-    $prices = $this->skuManager->getMinPrices($sku, $color);
-    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
-
-    $stockInfo = $this->skuInfoHelper->stockInfo($sku);
-    $meta_tags = $this->skuInfoHelper->metaTags($node, [
-      'title',
-      'description',
-      'keywords',
-    ]);
 
     $product = [];
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
       $node = $this->skuInfoHelper->getEntityTranslation($node, $lang);
       $sku = $this->skuInfoHelper->getEntityTranslation($sku, $lang);
+
+      // Get the prices.
+      $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
+      $prices = $this->skuManager->getMinPrices($sku, $color);
+      $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
+
+      $stockInfo = $this->skuInfoHelper->stockInfo($sku);
+      $meta_tags = $this->skuInfoHelper->metaTags($node, [
+        'title',
+        'description',
+        'keywords',
+      ]);
 
       $product[$lang] = [
         'sku' => $sku->getSku(),
@@ -220,6 +259,12 @@ class AlshayaFeedSkuInfoHelper {
       // Allow other modules to alter light product data.
       $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $product[$lang]);
     }
+
+    // Cache only for XX mins.
+    $expire = $this->dateTime->getRequestTime() + $this->cacheTime;
+    $this->cache->set($cache_id, $product, $expire, [
+      'node:' . $nid,
+    ]);
 
     return $product;
   }

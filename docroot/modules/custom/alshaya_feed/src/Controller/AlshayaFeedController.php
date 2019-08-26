@@ -61,7 +61,6 @@ class AlshayaFeedController extends ControllerBase {
 
     return new Response($output, Response::HTTP_OK, [
       'Content-type' => 'application/xml; charset=utf-8',
-      'X-Robots-Tag' => 'noindex, follow',
     ]);
   }
 

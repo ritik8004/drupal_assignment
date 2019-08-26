@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
-use Drupal\alshaya_acm_product\SkuInfoHelper;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -107,7 +107,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The renderer.
    * @param \Drupal\redirect\RedirectRepository $redirect_repository
    *   Redirect repository.
-   * @param \Drupal\alshaya_acm_product\SkuInfoHelper $sku_info_helper
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
    */
   public function __construct(

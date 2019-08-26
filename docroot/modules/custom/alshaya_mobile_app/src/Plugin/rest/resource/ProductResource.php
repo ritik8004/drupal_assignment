@@ -6,7 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
-use Drupal\alshaya_acm_product\SkuInfoHelper;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
@@ -101,7 +101,7 @@ class ProductResource extends ResourceBase {
   /**
    * Sku info helper.
    *
-   * @var \Drupal\alshaya_acm_product\SkuInfoHelper
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
   protected $skuInfoHelper;
 
@@ -132,7 +132,7 @@ class ProductResource extends ResourceBase {
    *   Production Options Manager service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
-   * @param \Drupal\alshaya_acm_product\SkuInfoHelper $sku_info_helper
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
    */
   public function __construct(

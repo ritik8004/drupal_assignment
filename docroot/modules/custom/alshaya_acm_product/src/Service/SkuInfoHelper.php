@@ -1,8 +1,10 @@
 <?php
 
-namespace Drupal\alshaya_acm_product;
+namespace Drupal\alshaya_acm_product\Service;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\metatag\MetatagManager;
@@ -315,7 +317,7 @@ class SkuInfoHelper {
   public function stockInfo(SKUInterface $sku_entity): array {
     return [
       'in_stock' => $this->skuManager->isProductInStock($sku_entity),
-      'stock' => (int) $this->skuManager->getStockQuantity($sku_entity),
+      'stock' => (float) $this->skuManager->getStockQuantity($sku_entity),
     ];
   }
 

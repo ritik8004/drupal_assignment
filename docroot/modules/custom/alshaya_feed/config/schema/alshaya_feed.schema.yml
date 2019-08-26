@@ -3,8 +3,8 @@ alshaya_feed.settings:
   label: 'Alshaya Feed settings'
   mapping:
     cache_time:
-      type: int
-      label: 'Cache time in hrs.'
+      type: integer
+      label: 'Cache time in minutes.'
     batch_size:
-      type: int
+      type: integer
       label: 'batch size to process feeds.'
