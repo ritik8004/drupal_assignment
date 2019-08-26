@@ -32,4 +32,13 @@ function alshaya_facets_pretty_paths_install() {
 function alshaya_facets_pretty_paths_uninstall() {
   // Set the url processor as query string.
   \Drupal::configFactory()->getEditable('facets.facet_source.search_api__views_block__alshaya_product_list__block_1')->set('url_processor', 'query_string')->save();
+
+  // Revert url alias for facets.
+  /* @var \Drupal\facets\FacetInterface[] $facets */
+  $facets = \Drupal::service('facets.manager')->getEnabledFacets();
+  foreach ($facets as $facet) {
+    if ($facet->getFacetSourceId() == 'search_api:views_block__alshaya_product_list__block_1') {
+      \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', $facet->id())->save();
+    }
+  }
 }
