@@ -8,19 +8,27 @@
 
   Drupal.behaviors.backToTop = {
     attach: function () {
-      $('#backtotop').prependTo('.c-footer');
+      var winWidth = $(window).width();
+      var backToTop = $('#backtotop');
+      var cFooter = $('.c-footer');
 
-      $(window).scroll(function () {
-        if ($(window).scrollTop() + $(window).height() < $(document).height() - $('.c-footer').height()) {
-          $('#backtotop').addClass('backtotop-nofooter');
-          $('#backtotop').removeClass('backtotop-withfooter');
-        }
+      backToTop.prependTo(cFooter);
 
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - $('.c-footer').height()) {
-          $('#backtotop').addClass('backtotop-withfooter');
-          $('#backtotop').removeClass('backtotop-nofooter');
-        }
-      });
+      if (winWidth < 768 && cFooter.hasClass('language-switcher-enabled')) {
+        var windowScrollTop = 0;
+        var footerHeight = 0;
+
+        $(window).scroll(function () {
+          windowScrollTop = $(window).scrollTop() + $(window).height();
+          footerHeight = $(document).height() - cFooter.height();
+          if (windowScrollTop < footerHeight) {
+            backToTop.removeClass('backtotop-withfooter').addClass('backtotop-nofooter');
+          }
+          else if (windowScrollTop > footerHeight) {
+            backToTop.removeClass('backtotop-nofooter').addClass('backtotop-withfooter');
+          }
+        });
+      }
     }
   };
 })(jQuery, Drupal);
