@@ -753,15 +753,15 @@ main .user-register-form {
           flex-direction: column;
 
           .block-alshaya-social-login {
-            order: 1;
-          }
-
-          .block-alshaya-signup-signin-buttons {
             order: 2;
           }
 
-          .block-system-main-block {
+          .block-alshaya-signup-signin-buttons {
             order: 3;
+          }
+
+          .block-system-main-block {
+            order: 1;
           }
 
           .block-page-title-block {
@@ -778,6 +778,45 @@ main .user-register-form {
 
     .c-sidebar-second {
       display: none;
+    }
+  }
+}
+
+.c-user-login {
+  &.user-page {
+    main {
+      @include breakpoint($only-mobile) {
+        .region__content {
+          .block-system-main-block {
+            order: 1;
+            padding-bottom: 2.5rem;
+            margin-top: -1.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-register {
+  &.user-page {
+    main {
+      @include breakpoint($only-mobile) {
+        .region__content {
+          .block-alshaya-social-login {
+            order: 1;
+            margin-bottom: 0;
+          }
+
+          .block-alshaya-signup-signin-buttons {
+            order: 3;
+          }
+
+          .block-system-main-block {
+            order: 2;
+          }
+        }
+      }
     }
   }
 }

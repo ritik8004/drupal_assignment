@@ -2,6 +2,7 @@
 {# If there is at-least one social network available.#}
 {% if social_networks is not empty %}
   {{ attach_library('social_auth/auth-icons') }}
+    <div class="login-separator start"><span> {{ 'or'|t }} </span></div>
     {% if section_title %}
       <div class="section-title">{{ section_title }}</div>
     {% endif %}
@@ -21,4 +22,5 @@
         </div>
       {% endif %}
   {% endfor %}
+  <div class="login-separator end"><span> {{ 'or'|t }} </span></div>
 {% endif %}
