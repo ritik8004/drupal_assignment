@@ -11,6 +11,7 @@ services:
       - '@current_user'
       - '@title_resolver'
       - '@request_stack'
+      - '@module_handler'
   alshaya_user.info:
     class: Drupal\alshaya_user\AlshayaUserInfo
     arguments: [ '@current_user', '@entity.repository', '@entity_type.manager' ]

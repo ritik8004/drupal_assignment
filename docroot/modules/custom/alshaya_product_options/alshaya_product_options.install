@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Delete all the caches for product options.
+ */
+function alshaya_product_options_update_8003() {
+  \Drupal::service('cache.product_options')->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config for module settings.
  */
 function alshaya_product_options_update_8002() {
