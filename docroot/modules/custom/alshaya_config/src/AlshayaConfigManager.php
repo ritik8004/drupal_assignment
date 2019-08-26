@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\search_api\Entity\Index;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -227,6 +228,23 @@ class AlshayaConfigManager {
             '@directory' => $directory,
           ]);
         }
+      }
+      elseif (strpos($config_id, 'search_api.index.') === 0) {
+        $index_name = str_replace('search_api.index.', '', $config_id);
+        try {
+          $index = Index::load($index_name);
+
+          // En-sure we save the index after config change to make sure
+          // tables are created properly.
+          $index->save();
+        }
+        catch (\Throwable $e) {
+          watchdog_exception('alshaya_config', $e);
+        }
+
+        $this->logger->info('Re-saved index @index as config saved.', [
+          '@index' => $index_name,
+        ]);
       }
     }
   }
