@@ -656,4 +656,24 @@ class CheckoutHelper {
     $this->cartHelper->updateCartWrapper($function);
   }
 
+  /**
+   * Checks if cart contains the reserved order id or not.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart object.
+   *
+   * @return bool
+   *   If cart has reserve order id.
+   */
+  public function isReservedOrderSetInCart(CartInterface $cart) {
+    if (!$cart->getExtension('real_reserved_order_id')) {
+      $this->logger->error('Reserved order id not set in cart: @cart', [
+        '@cart' => $this->cartHelper->getCleanCartToLog($cart),
+      ]);
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
 }
