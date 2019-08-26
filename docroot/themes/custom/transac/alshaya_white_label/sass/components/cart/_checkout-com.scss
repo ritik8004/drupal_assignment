@@ -176,6 +176,12 @@
       color: $primary_radiobtn_filled;
     }
   }
+
+  #cardMonth-error {
+    &.error {
+      display: none !important;
+    }
+  }
 }
 
 #edit-acm-payment-methods-payment-details-wrapper-payment-method-checkout-com-payment-card {
