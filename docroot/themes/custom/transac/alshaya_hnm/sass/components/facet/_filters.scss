@@ -131,6 +131,7 @@
         display: flex;
         align-items: center;
         color: $plp-color-facet-label-color;
+        text-transform: capitalize;
 
         &.is-active {
           .swatch {
