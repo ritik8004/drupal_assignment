@@ -101,12 +101,9 @@ class AlshayaPromoLabelManager {
     // Get SKU Promotions.
     $eligiblePromotions = $this->filterEligiblePromotions($promotionNodes);
 
-    if (!empty($eligiblePromotions)) {
-      return self::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO;
-    }
-    else {
-      return self::ALSHAYA_PROMOTIONS_STATIC_PROMO;
-    }
+    return !empty($eligiblePromotions)
+      ? self::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO
+      : self::ALSHAYA_PROMOTIONS_STATIC_PROMO;
   }
 
   /**
@@ -161,7 +158,7 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
    * @param string $view_mode
-   *    Links or default.
+   *   Links or default.
    *
    * @return array|string|null
    *   Return render array of Promos.
