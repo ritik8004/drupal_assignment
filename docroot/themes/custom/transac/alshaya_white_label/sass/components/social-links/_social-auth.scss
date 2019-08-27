@@ -293,7 +293,7 @@
   }
 
   .login-separator {
-    &.end {
+    &.bottom {
       display: none;
     }
   }
@@ -301,7 +301,7 @@
 
 .c-user-register {
   .login-separator {
-    &.start {
+    &.top {
       display: none;
     }
   }
