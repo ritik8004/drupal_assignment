@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -270,12 +271,7 @@ class ProductResource extends ResourceBase {
     ];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
 
-    $linked_types = [
-      LINKED_SKU_TYPE_RELATED,
-      LINKED_SKU_TYPE_UPSELL,
-      LINKED_SKU_TYPE_CROSSSELL,
-    ];
-    foreach ($linked_types as $linked_type) {
+    foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [
         'link_type' => $linked_type,
         'skus' => $this->mobileAppUtility->getLinkedSkus($sku, $linked_type),

@@ -3,14 +3,11 @@
 namespace Drupal\alshaya_feed;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -46,13 +43,6 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuManager;
 
   /**
-   * The Config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
-
-  /**
    * SKU images manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuImagesManager
@@ -74,43 +64,11 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuInfoHelper;
 
   /**
-   * API Helper cache object.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
-   * Time to cache the API response.
-   *
-   * @var int
-   */
-  protected $cacheTime;
-
-  /**
-   * The date time service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $dateTime;
-
-  /**
    * SKU Fields Manager.
    *
    * @var \Drupal\acq_sku\SKUFieldsManager
    */
   protected $skuFieldsManager;
-
-  /**
-   * Associative array of linked product types.
-   *
-   * @var array
-   */
-  protected $linkedTypes = [
-    'relatedProducts' => LINKED_SKU_TYPE_RELATED,
-    'crossSellProducts' => LINKED_SKU_TYPE_UPSELL,
-    'upSellProducts' => LINKED_SKU_TYPE_CROSSSELL,
-  ];
 
   /**
    * SkuInfoHelper constructor.
@@ -121,20 +79,12 @@ class AlshayaFeedSkuInfoHelper {
    *   The language manager service.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   Config Factory service.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
    *   SKU images manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   ConfigFactoryInterface object.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend service.
-   * @param \Drupal\Component\Datetime\TimeInterface $date_time
-   *   The date time service.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
    */
@@ -142,25 +92,17 @@ class AlshayaFeedSkuInfoHelper {
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     SkuManager $sku_manager,
-    ConfigFactory $configFactory,
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    ConfigFactoryInterface $config_factory,
-    CacheBackendInterface $cache,
-    TimeInterface $date_time,
     SKUFieldsManager $sku_fields_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
     $this->skuManager = $sku_manager;
-    $this->configFactory = $configFactory;
     $this->skuImagesManager = $sku_images_manager;
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
-    $this->cacheTime = (int) $config_factory->get('alshaya_feed.settings')->get('cache_time');
-    $this->cache = $cache;
-    $this->dateTime = $date_time;
     $this->skuFieldsManager = $sku_fields_manager;
   }
 
@@ -177,12 +119,7 @@ class AlshayaFeedSkuInfoHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  public function process(int $nid): array {
-    $cache_id = 'alshaya_feed_' . $nid;
-    if ($cache = $this->cache->get($cache_id)) {
-      return $cache->data;
-    }
-
+  public function prepareFeedData(int $nid): array {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
     if (!$node instanceof NodeInterface) {
       return [];
@@ -194,6 +131,11 @@ class AlshayaFeedSkuInfoHelper {
     if (!$sku instanceof SKU) {
       return [];
     }
+
+    $linkedTypes = array_combine(
+      ['relatedProducts', 'crossSellProducts', 'upSellProducts'],
+      AcqSkuLinkedSku::LINKED_SKU_TYPES
+    );
 
     $product = [];
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
@@ -258,17 +200,11 @@ class AlshayaFeedSkuInfoHelper {
         }
       }
 
-      foreach ($this->linkedTypes as $linked_type_key => $linked_type) {
+      foreach ($linkedTypes as $linked_type_key => $linked_type) {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $product[$lang][$linked_type_key] = array_keys($linked_skus);
       }
     }
-
-    // Cache only for XX mins.
-    $expire = $this->dateTime->getRequestTime() + $this->cacheTime;
-    $this->cache->set($cache_id, $product, $expire, [
-      'node:' . $nid,
-    ]);
 
     return $product;
   }

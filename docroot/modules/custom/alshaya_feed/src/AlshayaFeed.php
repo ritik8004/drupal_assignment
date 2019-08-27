@@ -9,6 +9,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Template\TwigEnvironment;
 use Drupal\node\NodeInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AlshayaFeed.
@@ -62,6 +63,13 @@ class AlshayaFeed {
   protected $twig;
 
   /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * AlshayaFeed constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -76,6 +84,8 @@ class AlshayaFeed {
    *   The sku info helper service.
    * @param \Drupal\Core\Template\TwigEnvironment $twig_environment
    *   The Twig template environment.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -83,7 +93,8 @@ class AlshayaFeed {
     LanguageManagerInterface $language_manager,
     EntityRepositoryInterface $entity_repository,
     AlshayaFeedSkuInfoHelper $sku_info_helper,
-    TwigEnvironment $twig_environment
+    TwigEnvironment $twig_environment,
+    LoggerInterface $logger
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -91,6 +102,7 @@ class AlshayaFeed {
     $this->entityRepository = $entity_repository;
     $this->feedSkuInfoHelper = $sku_info_helper;
     $this->twig = $twig_environment;
+    $this->logger = $logger;
   }
 
   /**
@@ -102,7 +114,7 @@ class AlshayaFeed {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getNodes() {
+  public function getNodesQuery() {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
     return $query->condition('type', 'acq_product')
       ->condition('status', NodeInterface::PUBLISHED)
@@ -131,7 +143,7 @@ class AlshayaFeed {
       $context['sandbox']['feed_template'] = drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig';
     }
 
-    $query = $this->getNodes();
+    $query = $this->getNodesQuery();
     // Get the total amount of items to process.
     if (!isset($context['sandbox']['total'])) {
       $countQuery = clone $query;
@@ -181,7 +193,7 @@ class AlshayaFeed {
     $context['results']['products'] = [];
     foreach ($nids as $nid) {
       $updates++;
-      $product = $this->feedSkuInfoHelper->process($nid);
+      $product = $this->feedSkuInfoHelper->prepareFeedData($nid);
       if (empty($product)) {
         continue;
       }
@@ -193,7 +205,7 @@ class AlshayaFeed {
     }
 
     foreach ($context['results']['products'] as $lang => $products) {
-      $context['results']['markups'][$lang][] = implode("\n", $products);
+      $context['results']['markups'][$lang][] = implode(PHP_EOL, $products);
     }
 
     return $updates;
@@ -210,7 +222,10 @@ class AlshayaFeed {
       $markup = implode("\n", $markup);
       $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>{$markup}\n</products>\n</feed>";
       $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
-      file_put_contents($path, $file_content);
+      if (!file_put_contents($path, $file_content)) {
+        $this->logger->error('could not create feed file: @file', ['@file' => $path]);
+      }
+
     }
   }
 
@@ -244,6 +259,9 @@ class AlshayaFeed {
           $this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}.xml"),
           FileSystemInterface::EXISTS_REPLACE
         );
+      }
+      else {
+        $this->logger->info('Can not publish a feed file, wip feed file:: @file :: does not exists.', ['@file' => $wip_file]);
       }
     }
   }

@@ -4,7 +4,7 @@ alshaya_feed.settings:
   mapping:
     cache_time:
       type: integer
-      label: 'Cache time in minutes.'
+      label: 'Cache time in seconds.'
     batch_size:
       type: integer
       label: 'batch size to process feeds.'
