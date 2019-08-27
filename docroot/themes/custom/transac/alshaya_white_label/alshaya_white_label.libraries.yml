@@ -11,7 +11,6 @@ global_styles:
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
     js/footer-space-filler.js: {}
-    js/banner_margin_override.js: {}
     vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
@@ -212,6 +211,14 @@ optionlist_menu:
   css:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
+
+promo_blocks:
+  js:
+    js/banner_margin_override.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
 
 back_to_top:
   js:
