@@ -132,11 +132,6 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
-    $linkedTypes = array_combine(
-      ['relatedProducts', 'crossSellProducts', 'upSellProducts'],
-      AcqSkuLinkedSku::LINKED_SKU_TYPES
-    );
-
     $product = [];
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
       $node = $this->skuInfoHelper->getEntityTranslation($node, $lang);
@@ -200,9 +195,10 @@ class AlshayaFeedSkuInfoHelper {
         }
       }
 
-      foreach ($linkedTypes as $linked_type_key => $linked_type) {
+      $product[$lang]['linked_skus'] = [];
+      foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
-        $product[$lang][$linked_type_key] = array_keys($linked_skus);
+        $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
     }
 

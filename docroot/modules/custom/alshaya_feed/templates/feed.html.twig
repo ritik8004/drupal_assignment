@@ -75,28 +75,27 @@
     {% endfor %}
     </variants>
   {% endif %}
-  <relatedProducts>{{ product.relatedProducts|length }}</relatedProducts>
-  {% if product.relatedProducts %}
+  <relatedProducts>{{ product.linked_skus.related|length }}</relatedProducts>
+  {% if product.linked_skus.related %}
   <related>
-    {% for item in product.relatedProducts %}
-    <item>{{ item }}</item>
+    {% for related_item in product.linked_skus.related %}
+    <item>{{ related_item }}</item>
     {% endfor %}
   </related>
   {% endif %}
-  <crossSellProducts>{{ product.crossSellProducts|length }}
-  </crossSellProducts>
-  {% if product.crossSellProducts %}
+  <crossSellProducts>{{ product.linked_skus.crosssell|length }}</crossSellProducts>
+  {% if product.linked_skus.crosssell %}
   <cross_sell>
-    {% for item in product.crossSellProducts %}
-    <item>{{ item }}</item>
+    {% for crosssell_item in product.linked_skus.crosssell %}
+    <item>{{ crosssell_item }}</item>
     {% endfor %}
   </cross_sell>
   {% endif %}
-  <upSellProducts>{{ product.upSellProducts|length }}</upSellProducts>
-  {% if product.upSellProducts %}
+  <upSellProducts>{{ product.linked_skus.upsell|length }}</upSellProducts>
+  {% if product.linked_skus.upsell %}
   <up_sell>
-    {% for item in product.upSellProducts %}
-    <item>{{ item }}</item>
+    {% for upsell_item in product.linked_skus.upsell %}
+    <item>{{ upsell_item }}</item>
     {% endfor %}
   </up_sell>
   {% endif %}
