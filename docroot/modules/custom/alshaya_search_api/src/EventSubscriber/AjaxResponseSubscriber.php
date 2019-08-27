@@ -85,7 +85,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     $this->backToListEnabled = (bool) $config_factory->get('alshaya_acm_product.settings')->get('back_to_list');
     $this->languageManager = $language_manager;
     $this->helper = $helper;
-    $this->logger = $logger_factory->get('alshaya_search');
+    $this->logger = $logger_factory->get('alshaya_search_api');
   }
 
   /**
