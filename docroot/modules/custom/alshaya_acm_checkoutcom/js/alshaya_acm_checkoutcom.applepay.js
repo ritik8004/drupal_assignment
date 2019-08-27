@@ -7,7 +7,7 @@
   'use strict';
 
   // Remove loader to allow user to edit form on error.
-  $(document).on('apple_pay_authorisation_fail apple_pay_cancel', function (e) {
+  $(document).on('apple_pay_authorisation_fail apple_pay_cancel checkoutcom_form_error', function (e) {
     $(this).removeCheckoutLoader();
   });
 

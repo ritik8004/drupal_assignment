@@ -82,14 +82,33 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
 
-    static $facet_weights;
+    $facet_weights = &drupal_static('facetPrettyWeights', []);
 
-    if (!isset($facet_weights)) {
-      $facets = $this->facetsManager->getEnabledFacets();
-      $facet_weights = [];
-      foreach ($facets as $facet_selected) {
-        $facet_weights[] = $facet_selected->getUrlAlias();
+    if (empty($facet_weights)) {
+      // Get all facets of the given source.
+      $block_facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId($facet->getFacetSourceId());
+      $block_ids = [];
+      if (!empty($block_facets)) {
+        foreach ($block_facets as $block_facet) {
+          $block_ids[$block_facet->getUrlAlias()] = str_replace('_', '', $block_facet->id());
+        }
+
+        if (!empty($block_ids)) {
+          /* @var \Drupal\block\Entity\Block[] $block*/
+          $blocks_list = \Drupal::entityTypeManager()->getStorage('block')->loadMultiple($block_ids);
+
+          // Sort the blocks.
+          uasort($block_ids, function ($a, $b) use ($blocks_list) {
+            $a_weight = $blocks_list[$a]->getWeight();
+            $b_weight = $blocks_list[$b]->getWeight();
+            if ($a_weight == $b_weight) {
+              return 0;
+            }
+            return ($a_weight < $b_weight) ? -1 : 1;
+          });
+        }
       }
+      $facet_weights = array_keys($block_ids);
     }
 
     /** @var \Drupal\facets\Result\ResultInterface $result */
@@ -102,8 +121,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $filters_current_result_array[$key] = $array;
       }
 
-      $raw_value = $result->getRawValue();
       $filter_key = $facet->getUrlAlias();
+      $raw_value = $this->alshayaPrettyPathHelper->getTranslatedFilters($facet->id(), $result->getRawValue());
       // If the value is active, remove the filter string from the parameters.
       if ($result->isActive()) {
         $active_facet = array_map([
@@ -196,7 +215,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     if (isset($this->activeFilters[$facet->getUrlAlias()])) {
 
       foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($value, '"'));
+        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->getTranslatedFilters($facet->id(), $value, FALSE), '"'));
       }
     }
   }
@@ -218,6 +237,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         '\Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper',
         'decodeFacetUrlComponents',
       ], $new_parts);
+
       $this->activeFilters[$key] = $new_parts;
     }
   }
