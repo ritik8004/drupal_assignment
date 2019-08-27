@@ -122,32 +122,32 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Filter array.
    */
   public function getActiveFacetFilters() {
-    $alshaya_active_facet_filters = &drupal_static(__FUNCTION__);;
+    $alshaya_active_facet_filters = &drupal_static(__FUNCTION__, []);
 
     if (!empty($alshaya_active_facet_filters)) {
       return $alshaya_active_facet_filters;
     }
 
-    $alshaya_active_facet_filters = '';
+    $alshaya_active_facet_filter_string = '';
     if ($this->routeMatch->getParameter('facets_query')) {
-      $alshaya_active_facet_filters = $this->routeMatch->getParameter('facets_query');
+      $alshaya_active_facet_filter_string = $this->routeMatch->getParameter('facets_query');
     }
     elseif ($this->routeMatch->getRouteName() === 'views.ajax') {
       $q = $this->currentRequest->query->get('q') ?? $this->currentRequest->query->get('facet_filter_url');
       if ($q) {
         $route_params = Url::fromUserInput($q)->getRouteParameters();
         if (isset($route_params['facets_query'])) {
-          $alshaya_active_facet_filters = $route_params['facets_query'];
+          $alshaya_active_facet_filter_string = $route_params['facets_query'];
         }
       }
     }
     elseif (strpos($this->currentRequest->getPathInfo(), "/--") !== FALSE) {
-      $alshaya_active_facet_filters = substr($this->currentRequest->getPathInfo(), strpos($this->currentRequest->getPathInfo(), "/--") + 3);
+      $alshaya_active_facet_filter_string = substr($this->currentRequest->getPathInfo(), strpos($this->currentRequest->getPathInfo(), "/--") + 3);
     }
 
-    $alshaya_active_facet_filters = rtrim($alshaya_active_facet_filters, '/');
+    $alshaya_active_facet_filter_string = rtrim($alshaya_active_facet_filter_string, '/');
 
-    $alshaya_active_facet_filters = array_filter(explode('--', $alshaya_active_facet_filters));
+    $alshaya_active_facet_filters = array_filter(explode('--', $alshaya_active_facet_filter_string));
 
     return $alshaya_active_facet_filters;
   }
@@ -166,9 +166,9 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Processed query params.
    */
   public function getTranslatedFilters(string $attribute_code, string $filter_value, bool $default = TRUE) {
-    $translated_filter_values = &drupal_static(__FUNCTION__);
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     if ($current_langcode !== 'en') {
+      $translated_filter_values = &drupal_static(__FUNCTION__, []);
       $required_langcode = $default ? 'en' : $current_langcode;
       if (isset($translated_filter_values[$filter_value][$required_langcode])) {
         return $translated_filter_values[$filter_value][$required_langcode];
