@@ -43,14 +43,14 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $languageManager;
 
   /**
-   * Replacement characters for space.
+   * Replacement characters for facet values.
    */
-  const SPACE_REPLACEMENT = '__';
-
-  /**
-   * Replacement characters for hyphen.
-   */
-  const HYPHEN_REPLACEMENT = '_';
+  const REPLACEMENTS = [
+    // Convert space to double underscore.
+    ' ' => '__',
+    // Convert hyphen to underscore.
+    '-' => '_',
+  ];
 
   /**
    * UserRecentOrders constructor.
@@ -93,11 +93,9 @@ class AlshayaFacetsPrettyPathsHelper {
     }
     $element = ltrim($lc_word);
 
-    // Convert spaces to '__'.
-    $element = str_replace(' ', self::SPACE_REPLACEMENT, $element);
-
-    // Convert - in the facet value to '_'.
-    $element = str_replace('-', self::HYPHEN_REPLACEMENT, $element);
+    foreach (self::REPLACEMENTS as $key => $value) {
+      $element = str_replace($key, $value, $element);
+    }
 
     return $element;
 
@@ -113,11 +111,9 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Raw element.
    */
   public static function decodeFacetUrlComponents($element) {
-    // Convert __ in the facet value to spaces.
-    $element = str_replace(self::SPACE_REPLACEMENT, ' ', $element);
-
-    // Convert _ to the facet value to '-'.
-    $element = str_replace(self::HYPHEN_REPLACEMENT, '-', $element);
+    foreach (self::REPLACEMENTS as $key => $value) {
+      $element = str_replace($value, $key, $element);
+    }
 
     // Capitalize first letter.
     $element = ucwords($element);
