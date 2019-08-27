@@ -48,7 +48,7 @@ class AlshayaFacetsPrettyPathsHelper {
   const SPACE_REPLACEMENT = '__';
 
   /**
-   * Facet source ID.
+   * Replacement characters for hyphen.
    */
   const HYPHEN_REPLACEMENT = '_';
 
