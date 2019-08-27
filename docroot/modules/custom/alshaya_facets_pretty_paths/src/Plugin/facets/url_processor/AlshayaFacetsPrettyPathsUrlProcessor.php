@@ -86,7 +86,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     if (empty($facet_weights)) {
       // Get all facets of the given source.
-      $block_facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_1');
+      $block_facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId($facet->getFacetSourceId());
       $block_ids = [];
       if (!empty($block_facets)) {
         foreach ($block_facets as $block_facet) {
