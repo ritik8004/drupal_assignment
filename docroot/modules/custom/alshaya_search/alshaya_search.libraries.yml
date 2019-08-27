@@ -9,9 +9,3 @@ alshaya_search:
 disable_keyword_ajax:
   js:
     js/disable_keyword_ajax.js: {}
-
-back_to_list:
-  js:
-    js/back_to_list.js: {}
-  dependencies:
-    - core/jquery

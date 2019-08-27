@@ -170,15 +170,15 @@ class ProductHelper {
         // being shown in gallery on PLP.
         if ($this->productDisplaySettings->get('show_variants_thumbnail_plp_gallery')) {
           $build['#swatch_color_count'] = count($swatches) > 1
-            ? t('@swatch_count colors', ['@swatch_count' => count($swatches)])
-            : t('@swatch_count color', ['@swatch_count' => count($swatches)]);
+            ? $this->t('@swatch_count colors', ['@swatch_count' => count($swatches)])
+            : $this->t('@swatch_count color', ['@swatch_count' => count($swatches)]);
         }
         else {
           // Show only first 'X' swatches as defined in configuration.
           $swatch_plp_limit = $this->productDisplaySettings->get('swatch_plp_limit');
           $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);
           $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
-            ? t('+ @swatch_count colors', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
+            ? $this->t('+ @swatch_count colors', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
             : FALSE;
         }
       }

@@ -6,7 +6,7 @@ index c2b6d95..1dad3c1 100644
    RewriteRule ^ - [E=protossl]
    RewriteCond %{HTTPS} on
    RewriteRule ^ - [E=protossl:s]
-+  RewriteCond %{HTTP:X-Forwarded-Proto} https
++  RewriteCond %{HTTP:X-Forwarded-Proto} https [novary]
 +  RewriteRule ^ - [E=protossl:s]
 
    # Remove trailing slash from all URLs (except home which is practically not possible).

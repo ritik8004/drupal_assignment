@@ -36,6 +36,10 @@
           html[lang=ar] & {
             line-height: 1.2;
           }
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 0.625rem;
+          }
         }
 
         .tooltip--head::after {

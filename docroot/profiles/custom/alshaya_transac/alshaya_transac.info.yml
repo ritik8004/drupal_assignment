@@ -7,7 +7,6 @@ dependencies:
   - drupal:color
   - pcb:pcb_memcache
   - drupal:syslog
-  - alshaya_options_list:alshaya_options_list
 
 themes:
   - alshaya_white_label
@@ -19,8 +18,10 @@ base profile: alshaya
 exclude:
   - help
   - history
-  - lightning_landing_page
   - lightning_layout
+  - lightning_landing_page
+  - lightning_banner_block
+  - lightning_map_block
   - lightning_media_instagram
   - lightning_media_twitter
   - lightning_media_video

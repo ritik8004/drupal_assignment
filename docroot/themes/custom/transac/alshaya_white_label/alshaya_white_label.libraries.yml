@@ -4,7 +4,6 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
-    js/back_to_top.js: {}
     js/custom.js: {}
     js/accordion.js: {}
     js/menu.js: {}
@@ -32,12 +31,20 @@ ltr_styles:
   css:
     theme:
       css/ltr.css: {}
-      css/ltr-print.css: {media: print}
 
 rtl_styles:
   css:
     theme:
       css/rtl.css: {}
+
+ltr_print_styles:
+  css:
+    theme:
+      css/ltr-print.css: {media: print}
+
+rtl_print_styles:
+  css:
+    theme:
       css/rtl-print.css: {media: print}
 
 unmask_password:
@@ -64,7 +71,7 @@ product_carousel:
   dependencies:
     - core/jquery
     - alshaya_white_label/utils
-    - alshaya_white_label/owlcarousel
+    - alshaya_white_label/slick
 
 autosize_textarea:
   js:
@@ -84,13 +91,6 @@ slick:
       vendor/css/slick.css: {}
   js:
     vendor/js/slick.min.js: {}
-
-owlcarousel:
-  css:
-    theme:
-      vendor/css/owl.carousel.css: {}
-  js:
-    vendor/js/owl.carousel.min.js: {}
 
 select2:
   css:
@@ -212,3 +212,7 @@ optionlist_menu:
   css:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
+
+back_to_top:
+  js:
+    js/back_to_top.js: {}

@@ -245,7 +245,9 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
           $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
 
-          $already_visited = (int) \Drupal::request()->cookies->get('Drupal_visitor_' . $cookie_key);
+          $session = \Drupal::request()->getSession();
+
+          $already_visited = (int) $session->get($cookie_key);
 
           // Send order complete confirmation to GTM only once.
           if ($already_visited !== 1) {
@@ -263,7 +265,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
               ],
             ];
 
-            user_cookie_save([$cookie_key => 1]);
+            $session->set($cookie_key, 1);
           }
         }
         break;
@@ -341,7 +343,7 @@ function alshaya_seo_transac_page_attachments(array &$attachments) {
         return;
       }
 
-      $already_visited = (int) \Drupal::request()->cookies->get('Drupal_visitor_' . 'alshaya_gtm_confirmation_visited_' . $order['order_id']);
+      $already_visited = (int) \Drupal::request()->getSession()->get('alshaya_gtm_confirmation_visited_' . $order['order_id']);
       // Send order complete confirmation data only once.
       if ($already_visited !== 1) {
         $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
@@ -427,29 +429,6 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_seo_transac_form_acq_commerce_currency_settings_alter(&$form, FormStateInterface $form_state) {
-  $form['gtm_currency_code'] = [
-    '#type' => 'textfield',
-    '#description' => t('Currency code to be sent to GTM. If this is not set, ISO Currency Code will be used for GTM.'),
-    '#title' => t('GTM Currency Code'),
-    '#required' => FALSE,
-    '#default_value' => \Drupal::configFactory()->get('acq_commerce.currency')->get('gtm_currency_code'),
-  ];
-  $form['#submit'][] = '_alshaya_seo_transac_acq_commerce_currency_settings_submit_handler';
-}
-
-/**
- * Submit handler for acq_commerce_settings form.
- */
-function _alshaya_seo_transac_acq_commerce_currency_settings_submit_handler(array &$form, FormStateInterface $form_state) {
-  \Drupal::configFactory()->getEditable('acq_commerce.currency')
-    ->set('gtm_currency_code', $form_state->getValue('gtm_currency_code'))
-    ->save();
 }
 
 /**

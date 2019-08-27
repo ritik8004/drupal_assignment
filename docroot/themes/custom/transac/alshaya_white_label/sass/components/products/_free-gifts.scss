@@ -254,18 +254,16 @@
           }
         }
 
-        .sku-promotions {
-          @include breakpoint($only-mobile) {
-            display: none;
-          }
-        }
-
         &.free-gifts-wrapper {
           display: none;
 
           @include breakpoint($only-mobile) {
             display: block;
             padding: 0 0 1rem;
+
+            .sku-promotions {
+              display: none;
+            }
           }
         }
       }

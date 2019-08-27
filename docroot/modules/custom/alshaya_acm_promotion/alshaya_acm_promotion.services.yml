@@ -3,7 +3,8 @@ services:
     class: Drupal\alshaya_acm_promotion\AlshayaPromotionsManager
     arguments:
       - '@entity_type.manager'
-      - '@logger.factory'
       - '@language_manager'
       - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
       - '@acq_promotion.promotions_manager'

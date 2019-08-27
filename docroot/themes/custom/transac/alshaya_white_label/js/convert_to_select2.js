@@ -56,7 +56,33 @@
         $('.form-item-quantity .form-select').select2({
           minimumResultsForSearch: -1
         });
+
+        // Checkout.com Month & Year select fields.
+        // TODO: Use this generic approach everywhere and cleanup this file.
+        $('.convert-to-select2.form-select').select2({
+          minimumResultsForSearch: -1
+        });
       }
+
+      $('.select2-select').once('bind-refresh').on('refresh', function () {
+        $(this).select2('destroy');
+
+        var options = {
+          minimumResultsForSearch: -1
+        };
+
+        try {
+          var placeHolder = $(this).find('option[value=""]').text();
+          if (placeHolder.length > 0) {
+            options.placeholder = placeHolder;
+          }
+        }
+        catch (e) {
+          // Do nothing.
+        }
+
+        $(this).select2(options);
+      });
     }
   };
 })(jQuery, Drupal);

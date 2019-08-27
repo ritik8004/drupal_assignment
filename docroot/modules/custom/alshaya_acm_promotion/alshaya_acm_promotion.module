@@ -8,8 +8,10 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_promotion\Form\SelectFreeGiftForm;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -325,7 +327,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
         $free_sku_title = $free_sku_image = [
           '#type' => 'link',
-          '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+          '#url' => Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
             [
               'acq_sku' => $free_sku_entity->id(),
               'js' => 'nojs',
@@ -392,45 +394,15 @@ function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateIn
 
   $coupon_applied_on_cart = $cart->getCoupon();
 
-  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $manager */
   $manager = \Drupal::service('alshaya_acm_promotion.manager');
 
   foreach ($form['cart'] as $id => $item) {
     if (is_array($item) && isset($item['quantity'])) {
-      // For mobile, render free gift promotion as the last table column.
-      // Get promotions for the SKU.
-      $sku_entity = SKU::loadFromSku($item['name']['#item_code']);
-      $line_item_promotions = $sku_manager->getPromotionsFromSkuId($sku_entity, 'default', ['cart']);
-
-      // Extract free gift promos.
-      $free_gift_promos = [];
-      foreach ($line_item_promotions as $promotion_id => $promotion) {
-        // If promo/free gift coupon is already applied on cart, don't show
-        // it with the item on cart page.
-        if (!empty($coupon_applied_on_cart) && isset($promotion['coupon_code']) && $coupon_applied_on_cart == $promotion['coupon_code']) {
-          continue;
-        }
-        // If it is not free gift promotion, no need to process further.
-        elseif (empty($promotion['skus'])) {
-          continue;
-        }
-
-        $free_gift_promos[$promotion_id] = $promotion;
-
-        $free_skus = $manager->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
-
-        if (count($free_skus) > 1) {
-          // @TODO: CORE-10287.
-        }
-        else {
-          $free_sku_entity = reset($free_skus);
-          $free_gift_promos[$promotion_id]['sku_title'] = $free_sku_entity->get('name')->getString();
-          $free_gift_promos[$promotion_id]['sku_entity_id'] = $free_sku_entity->id();
-        }
-      }
+      $free_gift_promos = $manager->getPromotionsToShowForSkuInCart(
+        $item['name']['#item_code'],
+        $coupon_applied_on_cart
+      );
 
       if (empty($free_gift_promos)) {
         continue;
@@ -444,4 +416,85 @@ function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateIn
       $form['cart'][$id]['promo_text']['#wrapper_attributes'] = ['class' => ['free-gifts-wrapper']];
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_acm_promotion_acq_sku_view(array &$build,
+                                            EntityInterface $entity,
+                                            EntityViewDisplayInterface $display,
+                                            $view_mode) {
+  if ($view_mode != 'free_gift') {
+    return;
+  }
+
+  $promotion_id = \Drupal::request()->get('promotion_id') ?? NULL;
+  if (empty($promotion_id)) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotionsManager */
+  $promotionsManager = \Drupal::service('alshaya_acm_promotion.manager');
+
+  $pdp_layout = $skuManager->getPdpLayout($entity, 'modal');
+  try {
+    $skuForGallery = $promotionsManager->getSkuForFreeGiftGallery($entity);
+    $build['gallery'] = $skuImagesManager->getGallery($skuForGallery, $pdp_layout);
+  }
+  catch (\Exception $e) {
+    $build['gallery'] = [];
+  }
+
+  $build['price_block']['#markup'] = '<div class="free-price-markup">' . t('FREE') . '</div>';
+  $build['item_code']['#markup'] = $entity->getSku();
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
+
+  // Add PDP slider position config to drupalSettings so we can use it in JS.
+  $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
+
+  // Add PDP slider position config to variable so it is available in themes.
+  $build['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
+
+  $coupon = \Drupal::request()->get('coupon') ?? '';
+
+  $build['back_to_collection'] = [
+    '#type' => 'link',
+    '#title' => t('Back to Collection'),
+    '#url' => Url::fromRoute('alshaya_acm_promotion.free_gifts_list',
+      [
+        'node' => $promotion_id,
+        'js' => 'nojs',
+      ],
+      [
+        'attributes' => [
+          'class' => ['use-ajax'],
+        ],
+        'query' => [
+          'replace' => 1,
+          'coupon' => $coupon,
+        ],
+      ]
+    ),
+  ];
+
+  $form_state = new FormState();
+  $form_state->setStorage([
+    'coupon' => $coupon ?? '',
+    'sku' => $entity->getSku(),
+    'promotion_id' => $promotion_id ?? '',
+  ]);
+
+  $build['select_free_gift'] = \Drupal::formBuilder()->buildForm(
+    SelectFreeGiftForm::class,
+    $form_state
+  );
 }
