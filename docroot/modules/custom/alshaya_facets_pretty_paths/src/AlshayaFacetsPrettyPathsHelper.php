@@ -83,11 +83,11 @@ class AlshayaFacetsPrettyPathsHelper {
     }
     $element = ltrim($lc_word);
 
-    // Convert spaces to '_'.
-    $element = str_replace(' ', '_', $element);
+    // Convert spaces to '__'.
+    $element = str_replace(' ', '__', $element);
 
-    // Convert - in the facet value to '__'.
-    $element = str_replace('-', '__', $element);
+    // Convert - in the facet value to '_'.
+    $element = str_replace('-', '_', $element);
 
     return $element;
 
@@ -103,11 +103,11 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Raw element.
    */
   public static function decodeFacetUrlComponents($element) {
-    // Convert __ in the facet value to '-'.
-    $element = str_replace('__', '-', $element);
+    // Convert __ in the facet value to spaces.
+    $element = str_replace('__', ' ', $element);
 
-    // Convert _ to spaces.
-    $element = str_replace('_', ' ', $element);
+    // Convert _ to the facet value to '-'.
+    $element = str_replace('_', '-', $element);
 
     // Capitalize first letter.
     $element = ucwords($element);
