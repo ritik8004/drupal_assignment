@@ -122,7 +122,7 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Filter array.
    */
   public function getActiveFacetFilters() {
-    $alshaya_active_facet_filters = &drupal_static(__FUNCTION__, []);
+    $alshaya_active_facet_filters = &drupal_static(__FUNCTION__, NULL);
 
     if (isset($alshaya_active_facet_filters)) {
       return $alshaya_active_facet_filters;
