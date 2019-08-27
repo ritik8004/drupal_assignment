@@ -2,18 +2,18 @@
 
 namespace Drupal\alshaya_acm_product\Event;
 
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\acq_commerce\SKUInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Event that is fired when a add to cart is submitted.
+ * Event that is fired when a add to cart form is submitted.
  *
  * @package Drupal\alshaya_acm_product
  */
-class AddToCartSubmitEvent extends Event {
+class AddToCartFormSubmitEvent extends Event {
 
-  const EVENT_NAME = 'aad_to_cart_submit';
+  const EVENT_NAME = 'add_to_cart_form_submit';
 
   /**
    * SKU Entity.
@@ -30,14 +30,14 @@ class AddToCartSubmitEvent extends Event {
   private $response;
 
   /**
-   * AddToCartSubmitEvent constructor.
+   * AddToCartFormSubmitEvent constructor.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\acq_commerce\SKUInterface $entity
    *   SKU Entity.
    * @param \Symfony\Component\HttpFoundation\Response $response
    *   Response Object.
    */
-  public function __construct(EntityInterface $entity, Response $response) {
+  public function __construct(SKUInterface $entity, Response $response) {
     $this->sku = $entity;
     $this->response = $response;
   }
@@ -45,7 +45,7 @@ class AddToCartSubmitEvent extends Event {
   /**
    * Return SKU Entity.
    *
-   * @return \Drupal\acq_sku\Entity\SKU|EntityInterface
+   * @return \Drupal\acq_commerce\SKUInterface
    *   SKU Entity.
    */
   public function getSku() {

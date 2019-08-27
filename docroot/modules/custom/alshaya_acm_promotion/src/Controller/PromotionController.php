@@ -327,22 +327,27 @@ class PromotionController extends ControllerBase {
    */
   public function getPromotionLabel(SKUInterface $sku) {
     $label = $this->promoLabelManager->getCurrentSkuPromoLabel($sku);
-    $response = $this->promoLabelManager->prepareResponse($label);
 
-    // Add cache metadata.
-    $cart_id = $this->cartStorage->getCartId(FALSE);
-    $cache_array = [
-      'tags' => [
-        'node_type:acq_promotion',
-      ],
-      'contexts' => [
-        'cookies:Drupal_visitor_acq_cart_id',
-      ],
-    ];
-    if ($cart_id) {
-      $cache_array['tags'][] = 'cart:' . $cart_id;
+    $response = [];
+    if (!empty($label)) {
+      $response = $this->promoLabelManager->prepareResponse($label);
+
+      // Add cache metadata.
+      $cache_array = [
+        'tags' => [
+          'node_type:acq_promotion',
+        ],
+        'contexts' => [
+          'cookies:Drupal_visitor_acq_cart_id',
+        ],
+      ];
+      $cart_id = $this->cartStorage->getCartId(FALSE);
+      if ($cart_id) {
+        $cache_array['tags'][] = 'cart:' . $cart_id;
+      }
+      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     }
-    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+
     return $response;
   }
 

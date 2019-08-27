@@ -4,7 +4,7 @@ namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Form\AcqSkuFormBuilder;
-use Drupal\alshaya_acm_product\Event\AddToCartSubmitEvent;
+use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -211,8 +211,8 @@ class ProductStockController extends ControllerBase {
     }
 
     // Instantiate and Dispatch add_to_cart_submit event.
-    $addToCartSubmitEvent = new AddToCartSubmitEvent($entity, self::$response);
-    $this->eventDispatcher->dispatch(AddToCartSubmitEvent::EVENT_NAME, $addToCartSubmitEvent);
+    $addToCartFormSubmitEvent = new AddToCartFormSubmitEvent($entity, self::$response);
+    $this->eventDispatcher->dispatch(AddToCartFormSubmitEvent::EVENT_NAME, $addToCartFormSubmitEvent);
 
     return self::$response;
   }

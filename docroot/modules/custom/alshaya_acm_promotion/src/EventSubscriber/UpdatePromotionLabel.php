@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_acm_promotion\EventSubscriber;
 
-use Drupal\alshaya_acm_product\Event\AddToCartSubmitEvent;
+use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -34,21 +34,25 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
    * Get subscribed events.
    */
   public static function getSubscribedEvents() {
-    $events[AddToCartSubmitEvent::EVENT_NAME][] = 'postAddToCartSubmit';
+    $events[AddToCartFormSubmitEvent::EVENT_NAME][] = 'postAddToCartFormSubmit';
     return $events;
   }
 
   /**
    * Add Promo Label Update Commands.
    *
-   * @param \Drupal\alshaya_acm_product\Event\AddToCartSubmitEvent $addToCartSubmitEvent
+   * @param \Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent $addToCartFormSubmitEvent
    *   Add to Cart Submit Event.
    */
-  public function postAddToCartSubmit(AddToCartSubmitEvent $addToCartSubmitEvent) {
-    $sku = $addToCartSubmitEvent->getSku();
-    $response = $addToCartSubmitEvent->getResponse();
+  public function postAddToCartFormSubmit(AddToCartFormSubmitEvent $addToCartFormSubmitEvent) {
+    $sku = $addToCartFormSubmitEvent->getSku();
+    $response = $addToCartFormSubmitEvent->getResponse();
     $label = $this->labelManager->getCurrentSkuPromoLabel($sku);
-    $this->labelManager->prepareResponse($label, $response);
+
+    // Prepare response if label is present.
+    if (!empty($label)) {
+      $this->labelManager->prepareResponse($label, $response);
+    }
   }
 
 }

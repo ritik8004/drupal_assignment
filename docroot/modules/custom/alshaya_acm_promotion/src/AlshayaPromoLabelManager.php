@@ -11,7 +11,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
-use Drupal\views_ajax_get\CacheableAjaxResponse;
+use Drupal\Core\Cache\CacheableAjaxResponse;
 
 /**
  * Class AlshayaPromoLabelManager.
@@ -113,19 +113,23 @@ class AlshayaPromoLabelManager {
    *   Product SKU.
    *
    * @return string
-   *   Dynamic Promotion Label.
+   *   Dynamic Promotion Label or NULL.
    *
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function getCurrentSkuPromoLabel(SKU $sku) {
+    $labels = NULL;
     $promos = $this->getCurrentSkuPromos($sku, 'links');
-    $promos = implode('<br>', $promos);
-    $promos = '<div>' . $promos . '</div>';
-    return $promos;
+    if (!empty($promos)) {
+      $labels = implode('<br>', $promos);
+      $labels = '<div>' . $labels . '</div>';
+    }
+
+    return $labels;
   }
 
   /**
-   * Fetch current SKU Promos.
+   * Fetch current SKU Dynamic Promos.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
@@ -266,7 +270,7 @@ class AlshayaPromoLabelManager {
       $z = ($discount_step + $discount_amount) - $eligible_cart_qty;
       // Apply z-logic to generate label.
       if ($z >= 1) {
-        $label = $this->t('Add @Z more to get FREE item', ['@Z' => $z]);
+        $label = $this->t('Add @z more to get FREE item', ['@z' => $z]);
       }
       else {
         $label = $this->t('Add more and keep saving');
@@ -282,7 +286,7 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\Core\Ajax\AjaxResponse|null $response
    *   Ajax Response.
    *
-   * @return \Drupal\views_ajax_get\CacheableAjaxResponse
+   * @return \Drupal\Core\Cache\CacheableAjaxResponse
    *   Ajax Response.
    */
   public function prepareResponse($label, $response = NULL) {
