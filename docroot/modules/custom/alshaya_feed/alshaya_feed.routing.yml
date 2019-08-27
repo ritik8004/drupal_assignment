@@ -1,0 +1,6 @@
+alshaya_feed.xml:
+  path: '/feed.xml'
+  defaults:
+    _controller: '\Drupal\alshaya_feed\Controller\AlshayaFeedController::getFeed'
+  requirements:
+    _permission: 'access content'
