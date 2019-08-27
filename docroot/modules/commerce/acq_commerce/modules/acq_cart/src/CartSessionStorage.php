@@ -96,6 +96,8 @@ class CartSessionStorage implements CartStorageInterface {
         $cart = new Cart($cart);
         $this->addCart($cart);
       }
+
+      return TRUE;
     }
     catch (\Exception $e) {
       $this->logger->warning('Error occurred while restoring cart id %cart_id: %message', [
@@ -104,6 +106,8 @@ class CartSessionStorage implements CartStorageInterface {
       ]);
 
       $this->clearCart();
+
+      return FALSE;
     }
   }
 
@@ -182,7 +186,10 @@ class CartSessionStorage implements CartStorageInterface {
     $cart = $this->session->get(self::STORAGE_KEY);
 
     if ($cart_id && empty($cart)) {
-      $this->restoreCart($cart_id);
+      $cart_restored = $this->restoreCart($cart_id);
+      if (!$cart_restored) {
+        throw new \Exception(acq_commerce_api_down_global_error_message());
+      }
     }
 
     // If cart exists, derive update array and update cookie.
