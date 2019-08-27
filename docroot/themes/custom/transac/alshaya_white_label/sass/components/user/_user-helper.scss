@@ -790,10 +790,19 @@ main .user-register-form {
           .block-system-main-block {
             order: 1;
             padding-bottom: 2.5rem;
-            margin-top: -1.5rem;
+          }
+
+          .block-page-title-block {
+            h1 {
+              top: -2rem;
+            }
           }
         }
       }
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
     }
   }
 }
