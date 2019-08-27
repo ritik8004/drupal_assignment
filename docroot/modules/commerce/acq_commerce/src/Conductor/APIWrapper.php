@@ -7,6 +7,7 @@ use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_commerce\Connector\CustomerNotFoundException;
 use Drupal\acq_commerce\Event\OrderPlacedEvent;
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -940,7 +941,7 @@ class APIWrapper implements APIWrapperInterface {
    *
    * @throws \Drupal\acq_commerce\Conductor\RouteException
    */
-  public function getLinkedskus($sku, $type = LINKED_SKU_TYPE_ALL) {
+  public function getLinkedskus($sku, $type = AcqSkuLinkedSku::LINKED_SKU_TYPE_ALL) {
     $sku = urlencode($sku);
     $endpoint = $this->apiVersion . "/agent/product/$sku/related/$type";
 

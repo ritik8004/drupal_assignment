@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\Plugin\Block;
 
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Block\BlockBase;
@@ -111,7 +112,7 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       if (!empty($skus)) {
         foreach ($skus as $sku) {
           if ($sku_entity = SKU::loadFromSku($sku)) {
-            $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
+            $cross_sell_skus += $this->skuManager->getLinkedSkus($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL);
           }
         }
       }
