@@ -82,14 +82,33 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
 
-    static $facet_weights;
+    $facet_weights = &drupal_static('facetPrettyWeights', []);
 
-    if (!isset($facet_weights)) {
-      $facets = $this->facetsManager->getEnabledFacets();
-      $facet_weights = [];
-      foreach ($facets as $facet_selected) {
-        $facet_weights[] = $facet_selected->getUrlAlias();
+    if (empty($facet_weights)) {
+      // Get all facets of the given source.
+      $block_facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId($facet->getFacetSourceId());
+      $block_ids = [];
+      if (!empty($block_facets)) {
+        foreach ($block_facets as $block_facet) {
+          $block_ids[$block_facet->getUrlAlias()] = str_replace('_', '', $block_facet->id());
+        }
+
+        if (!empty($block_ids)) {
+          /* @var \Drupal\block\Entity\Block[] $block*/
+          $blocks_list = \Drupal::entityTypeManager()->getStorage('block')->loadMultiple($block_ids);
+
+          // Sort the blocks.
+          uasort($block_ids, function ($a, $b) use ($blocks_list) {
+            $a_weight = $blocks_list[$a]->getWeight();
+            $b_weight = $blocks_list[$b]->getWeight();
+            if ($a_weight == $b_weight) {
+              return 0;
+            }
+            return ($a_weight < $b_weight) ? -1 : 1;
+          });
+        }
       }
+      $facet_weights = array_keys($block_ids);
     }
 
     /** @var \Drupal\facets\Result\ResultInterface $result */
