@@ -332,7 +332,7 @@
   };
 
   /**
-   * Js to implement mobile magazine layout.
+   * JS to implement Magazine layout - Contains logic for sticky sidebar.
    *
    * @type {{attach: Drupal.behaviors.mobileMagazine.attach}}
    */
@@ -403,6 +403,9 @@
         var galleryWrapper = $('.gallery-wrapper');
         var lastScrollTop = 0;
         var pageScrollDirection;
+        var heightDiff;
+        var initialSidebarTop = sidebarWrapper.offset().top;
+
         $(window).once().on('scroll', function (event) {
           // Figure out scroll direction.
           var currentScrollTop = $(this).scrollTop();
@@ -417,7 +420,7 @@
           // Gallery top.
           var topPosition = galleryWrapper.offset().top - 20;
           // Gallery Bottom.
-          var mainBottom = galleryWrapper.offset().top + galleryWrapper.height();
+          var mainBottom = calculateBottom(galleryWrapper);
 
           // Fixing sidebar when the top part of sidebar touches viewport top.
           if (($(this).scrollTop() > topPosition)) {
@@ -435,17 +438,22 @@
           // sidebar needs to float with gallery.
           if (sidebarWrapper.hasClass('sidebar-fixed')) {
             var contentSidebarTop = sidebarWrapper.offset().top;
-            var contentSidebarBottom = sidebarWrapper.offset().top + sidebarWrapper.height();
-
+            var contentSidebarBottom = calculateBottom(sidebarWrapper);
             if (contentSidebarBottom > mainBottom) {
               if (!sidebarWrapper.hasClass('contain')) {
+                // Calculate the height difference, this gives us the top needed when sidebar is in contain mode.
+                var sideBarTop = initialSidebarTop + sidebarWrapper.height();
+                heightDiff = mainBottom - sideBarTop;
                 sidebarWrapper.addClass('contain');
+                sidebarWrapper.css('top', heightDiff + 'px');
               }
             }
 
             if ($(window).scrollTop() < contentSidebarTop && pageScrollDirection === 'up') {
               if (sidebarWrapper.hasClass('contain')) {
                 sidebarWrapper.removeClass('contain');
+                // Remove top and let fixed work as defined for sticky.
+                sidebarWrapper.css('top', '');
               }
             }
           }
@@ -463,6 +471,19 @@
             $('body').removeClass('magazine-layout-overlay');
           });
         }, 10);
+      }
+
+      /**
+       * Calculates the bottom position of a element.
+       *
+       * @param {*} selector
+       *   HTML Area selector.
+       *
+       * @return {*}
+       *   Bottom position without 'px' suffix.
+       */
+      function calculateBottom(selector) {
+        return selector.offset().top + selector.height();
       }
     }
   };
