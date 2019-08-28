@@ -18,7 +18,7 @@
           element: false,
           base: false,
           progress: {type: 'throbber'},
-          submit: {js:true}
+          submit: {js: true}
         });
 
         getPromoLabel.options.type = 'GET';
