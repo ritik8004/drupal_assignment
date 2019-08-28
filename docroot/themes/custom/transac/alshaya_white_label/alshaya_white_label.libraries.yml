@@ -212,14 +212,6 @@ optionlist_menu:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
 
-promo_blocks:
-  js:
-    js/banner_margin_override.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/jquery.once
-
 back_to_top:
   js:
     js/back_to_top.js: {}
