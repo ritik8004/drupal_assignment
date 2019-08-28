@@ -73,9 +73,7 @@ class RouteSubscriber extends RouteSubscriberBase {
         $sourceRoute = $collection->get($routeName);
 
         if ($sourceRoute) {
-          if (strpos($sourceRoute->getPath(), '{facets_query}') === FALSE) {
-            $sourceRoute->setPath($sourceRoute->getPath() . '/{facets_query}');
-          }
+          $sourceRoute->setPath($sourceRoute->getPath() . '/{facets_query}');
           $sourceRoute->setDefault('facets_query', '');
           $sourceRoute->setRequirement('facets_query', '.*');
 
