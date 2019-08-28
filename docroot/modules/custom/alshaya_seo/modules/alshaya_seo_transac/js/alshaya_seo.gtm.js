@@ -937,12 +937,10 @@
         if (imgElem.length === 0) {
           imgElem = $(highlight).find('img');
         }
-        var imgSrc;
-        if (typeof imgSrc === 'undefined') {
-          imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
+        var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
             imgElem.attr('src') :
             imgElem.attr('data-src');
-        }
+
         position = key;
         if (event === 'promotionClick') {
           position = $(highlight).find('picture img').data('position');
