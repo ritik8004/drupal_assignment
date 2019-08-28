@@ -33,7 +33,7 @@ function alshaya_facets_pretty_paths_install() {
   foreach ($facets as $facet) {
     if ($facet->getFacetSourceId() == 'search_api:views_block__alshaya_product_list__block_1') {
       if ($facet->id() == 'skus_sku_reference_final_price') {
-        \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', 'final_price')->save();
+        \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', 'price')->save();
         continue;
       }
       \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', strtolower(str_replace(' ', '_', $facet->get('name'))))->save();
