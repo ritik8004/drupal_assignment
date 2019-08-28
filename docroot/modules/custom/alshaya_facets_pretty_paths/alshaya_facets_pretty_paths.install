@@ -16,16 +16,18 @@ function alshaya_facets_pretty_paths_install() {
   // Set the url processor as alshaya_pretty_paths for PLP.
   \Drupal::configFactory()->getEditable('facets.facet_source.search_api__views_block__alshaya_product_list__block_1')->set('url_processor', 'alshaya_facets_pretty_paths')->save();
 
-  // Set the facets_summary url processor as alshaya_pretty_paths for PLP.
+  // Set the facets_summary processor as alshaya_reset_facets for PLP.
   $filter_summary_id = 'filter_bar_plp';
   $summary = FacetsSummary::load($filter_summary_id);
-  $summary->addProcessor([
-    'processor_id' => 'alshaya_reset_facets',
-    'weights' => ['build' => 10],
-    'settings' => ['link_text' => 'clear filters'],
-  ]);
-  $summary->removeProcessor('reset_facets');
-  $summary->save();
+  if ($summary instanceof FacetsSummary) {
+    $processor_configs = $summary->getProcessorConfigs();
+    if (isset($processor_configs['reset_facets'])) {
+      $processor_configs['reset_facets']['processor_id'] = 'alshaya_reset_facets';
+      $summary->addProcessor($processor_configs['reset_facets']);
+      $summary->removeProcessor('reset_facets');
+      $summary->save();
+    }
+  }
 
   // Set url alias for facets.
   /* @var \Drupal\facets\FacetInterface[] $facets */
@@ -48,16 +50,18 @@ function alshaya_facets_pretty_paths_uninstall() {
   // Set the url processor as query string.
   \Drupal::configFactory()->getEditable('facets.facet_source.search_api__views_block__alshaya_product_list__block_1')->set('url_processor', 'query_string')->save();
 
-  // Set the facets_summary url processor as alshaya_pretty_paths for PLP.
+  // Set the facets_summary processor as reset_facets for PLP.
   $filter_summary_id = 'filter_bar_plp';
   $summary = FacetsSummary::load($filter_summary_id);
-  $summary->addProcessor([
-    'processor_id' => 'reset_facets',
-    'weights' => ['build' => 10],
-    'settings' => ['link_text' => 'clear filters'],
-  ]);
-  $summary->removeProcessor('alshaya_reset_facets');
-  $summary->save();
+  if ($summary instanceof FacetsSummary) {
+    $processor_configs = $summary->getProcessorConfigs();
+    if (isset($processor_configs['alshaya_reset_facets'])) {
+      $processor_configs['alshaya_reset_facets']['processor_id'] = 'reset_facets';
+      $summary->addProcessor($processor_configs['alshaya_reset_facets']);
+      $summary->removeProcessor('alshaya_reset_facets');
+      $summary->save();
+    }
+  }
 
   // Revert url alias for facets.
   /* @var \Drupal\facets\FacetInterface[] $facets */
