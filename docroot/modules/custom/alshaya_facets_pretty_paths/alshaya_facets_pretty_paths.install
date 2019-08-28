@@ -11,8 +11,8 @@ use Drupal\facets_summary\Entity\FacetsSummary;
  * Implements hook_install().
  */
 function alshaya_facets_pretty_paths_install() {
-  // The url processor for facets and facets_summary
-  // both need to be changed for pretty facets to work properly.
+  // The url processor for facet_source and reset_facets processor
+  // for facets_summary both need to be changed for pretty facets to work.
   // Set the url processor as alshaya_pretty_paths for PLP.
   \Drupal::configFactory()->getEditable('facets.facet_source.search_api__views_block__alshaya_product_list__block_1')->set('url_processor', 'alshaya_facets_pretty_paths')->save();
 
