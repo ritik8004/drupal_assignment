@@ -42,7 +42,9 @@ set classes = [
     {% endif %}
     {{ title_suffix }}
     {% block content %}
-      {{ content }}
+      <form action="">
+        {{ content }}
+      </form>
     {% endblock %}
     <span class="algolia-cleartext-icon"></span>
   </div>

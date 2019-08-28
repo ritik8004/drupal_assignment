@@ -1,0 +1,7 @@
+name: 'Alshaya Feed'
+type: module
+description: 'Alshaya feed.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm_product:alshaya_acm_product
