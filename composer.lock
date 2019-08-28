@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "410df4c7c6f10c0fadc4a35c3474e27e",
+    "content-hash": "039e88c12cff036135d2772b9e4ec8a6",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5221,9 +5221,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "3052959 - Update 8103 does not work with Drupal 8.7": "https://www.drupal.org/files/issues/2019-05-17/3052959-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8137,9 +8134,6 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "2882709 - Misnamed interface causes \"Fatal error: Cannot declare interface Drupal\\libraries\\ExternalLibrary\\Utility\\LibraryAccessorIdInterface\"": "https://www.drupal.org/files/issues/2882709-2-interface-libraryidaccessorinterface-misnamed.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11943,7 +11937,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
+                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-06-11/3054878-11.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13628,8 +13622,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",
-                    "Use static view_dom_id in AJAX Requests for better cache HIT ratio": "https://www.drupal.org/files/issues/2019-07-24/use-static-dom-id-cache-3069857-2.patch"
+                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13646,7 +13639,8 @@
             "homepage": "https://www.drupal.org/project/views_ajax_get",
             "support": {
                 "source": "https://git.drupalcode.org/project/views_ajax_get"
-            }
+            },
+            "time": "2018-09-14T13:01:07+00:00"
         },
         {
             "name": "drupal/views_block_filter_block",

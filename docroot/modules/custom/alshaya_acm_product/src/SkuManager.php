@@ -1253,12 +1253,12 @@ class SkuManager {
       }
     }
     else {
-      $cid = 'promotions_all_sku_' . $promotion->id();
-      if (!empty($this->cache->get($cid))) {
-        $skus_cache = $this->cache->get($cid);
-        $skus = $skus_cache->data;
-      }
-      else {
+//      $cid = 'promotions_all_sku_' . $promotion->id();
+//      if (!empty($this->cache->get($cid))) {
+//        $skus_cache = $this->cache->get($cid);
+//        $skus = $skus_cache->data;
+//      }
+//      else {
         // Fetch corresponding SKUs for promotion.
         $skus = $this->fetchSkuTextsForPromotion($promotion);
         if (!empty($skus)) {
@@ -1270,8 +1270,8 @@ class SkuManager {
           }
         }
 
-        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
-      }
+//        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+//      }
     }
 
     return $skus;
@@ -1287,27 +1287,28 @@ class SkuManager {
    *   Unique list of SKUs.
    */
   public function fetchSkuTextsForPromotion(NodeInterface $promotion) {
-    // Get configurable SKUs.
+    // Get configurable and SKUs.
     $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
     $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
     $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-    $query->condition('asfd.type', 'configurable');
-    $query->fields('asfd', ['id', 'sku']);
+    $query->condition('asfd.type', ['simple', 'configurable'], 'IN');
+    $query->fields('asfd', ['id', 'sku', 'type']);
     $query->distinct();
-    $config_skus = $query->execute()->fetchAllKeyed(0, 1);
+    $results = $query->execute()->fetchAll();
 
-    // We may not have anything in Simple.
-    $skus = $config_skus;
+    $skus = [];
+    $simple_skus = [];
+    foreach ($results as $result) {
+      switch ($result->type) {
+        case 'simple':
+          $simple_skus[$result->id] = $result->sku;
+          break;
 
-    // Get Simple SKUs.
-    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-    $query->condition('asfd.type', 'simple');
-    $query->fields('asfd', ['id', 'sku']);
-    $query->distinct();
-    $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
-
+        case 'configurable':
+          $skus[$result->id] = $result->sku;
+          break;
+      }
+    }
 
     if ($simple_skus) {
       $skus = array_unique(array_merge($skus, $simple_skus));
