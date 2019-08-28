@@ -25,7 +25,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Drupal\pathauto\PathautoState;
@@ -1253,12 +1252,12 @@ class SkuManager {
       }
     }
     else {
-//      $cid = 'promotions_all_sku_' . $promotion->id();
-//      if (!empty($this->cache->get($cid))) {
-//        $skus_cache = $this->cache->get($cid);
-//        $skus = $skus_cache->data;
-//      }
-//      else {
+      $cid = 'promotions_all_sku_' . $promotion->id();
+      if (!empty($this->cache->get($cid))) {
+        $skus_cache = $this->cache->get($cid);
+        $skus = $skus_cache->data;
+      }
+      else {
         // Fetch corresponding SKUs for promotion.
         $skus = $this->fetchSkuTextsForPromotion($promotion);
         if (!empty($skus)) {
@@ -1270,8 +1269,8 @@ class SkuManager {
           }
         }
 
-//        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
-//      }
+        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+      }
     }
 
     return $skus;
@@ -1330,7 +1329,7 @@ class SkuManager {
    * @return array
    *   Unique List of child SKUs.
    */
-  public function fetchChildSkuTexts($skus) {
+  public function fetchChildSkuTexts(array $skus) {
     $childSkus = [];
     foreach ($skus as $sku) {
       foreach ($this->getChildSkus($sku) as $childSku) {
