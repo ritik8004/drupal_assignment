@@ -17,6 +17,38 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class AcqSkuLinkedSku {
 
   /**
+   * For the all.
+   */
+  const LINKED_SKU_TYPE_ALL = 'all';
+
+  /**
+   * For the upsell.
+   */
+  const LINKED_SKU_TYPE_UPSELL = 'upsell';
+
+  /**
+   * For the cross_sell.
+   */
+  const LINKED_SKU_TYPE_CROSSSELL = 'crosssell';
+
+  /**
+   * For the related.
+   */
+  const LINKED_SKU_TYPE_RELATED = 'related';
+
+
+  /**
+   * Associative array of linked product types.
+   *
+   * @var array
+   */
+  const LINKED_SKU_TYPES = [
+    self::LINKED_SKU_TYPE_RELATED,
+    self::LINKED_SKU_TYPE_UPSELL,
+    self::LINKED_SKU_TYPE_CROSSSELL,
+  ];
+
+  /**
    * The conductor api wrapper.
    *
    * @var \Drupal\acq_commerce\Conductor\APIWrapper
@@ -84,7 +116,7 @@ class AcqSkuLinkedSku {
    * @return array
    *   All linked skus of given type.
    */
-  public function getLinkedSkus(SKU $sku, $type = LINKED_SKU_TYPE_ALL) {
+  public function getLinkedSkus(SKU $sku, $type = self::LINKED_SKU_TYPE_ALL) {
     // Cache key is like - 'acq_sku:linked_skus:123:LINKED_SKU_TYPE_ALL'.
     $cache_key = 'acq_sku:linked_skus:' . $sku->id() . ':' . $type;
 
@@ -101,7 +133,7 @@ class AcqSkuLinkedSku {
     try {
       // Get linked skus from API.
       $linked_skus = $this->apiWrapper->getLinkedskus($sku->getSku(), $type);
-      $data = ($type != LINKED_SKU_TYPE_ALL) ? $linked_skus[$type] : $linked_skus;
+      $data = ($type != self::LINKED_SKU_TYPE_ALL) ? $linked_skus[$type] : $linked_skus;
     }
     catch (\Exception $e) {
       // If something bad happens, log the error.

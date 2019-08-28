@@ -14,6 +14,7 @@
         &.swatch-image {
           img {
             border-radius: 1.6px;
+            display: block;
           }
         }
 
@@ -29,10 +30,10 @@
             content: '';
             border: 1px solid $color_facet_active_border;
             position: absolute;
-            top: 2px;
-            bottom: -6px;
-            #{$left}: -2px;
-            #{$right}: -2px;
+            top: -0.125rem;
+            bottom: -0.125rem;
+            #{$left}: -0.125rem;
+            #{$right}: -0.125rem;
             border-radius: 2.6px;
           }
         }

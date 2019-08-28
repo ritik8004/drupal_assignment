@@ -9,3 +9,10 @@ facets_panel:
     js/facets-panel.js: {}
   dependencies:
     - core/jquery
+
+back_to_list:
+  js:
+    js/back_to_list.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_master/jquery_is_in_viewport

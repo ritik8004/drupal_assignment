@@ -944,12 +944,16 @@ class AlshayaGtmManager {
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
 
+    $shipping_value = (isset($order['shipping']['method']['amount_with_tax']))
+      ? $order['shipping']['method']['amount_with_tax']
+      : $order['shipping']['method']['amount'];
+
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
       'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
       'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
-      'shippping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
+      'shipping' => alshaya_master_convert_amount_to_float($shipping_value) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 

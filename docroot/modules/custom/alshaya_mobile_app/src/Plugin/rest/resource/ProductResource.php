@@ -3,9 +3,11 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
@@ -98,6 +100,13 @@ class ProductResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
+   * Sku info helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
+   */
+  protected $skuInfoHelper;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -124,6 +133,8 @@ class ProductResource extends ResourceBase {
    *   Production Options Manager service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
+   *   Sku info helper object.
    */
   public function __construct(
     array $configuration,
@@ -137,7 +148,8 @@ class ProductResource extends ResourceBase {
     EntityTypeManagerInterface $entity_type_manager,
     MobileAppUtility $mobile_app_utility,
     ProductOptionsManager $product_options_manager,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    SkuInfoHelper $sku_info_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -152,6 +164,7 @@ class ProductResource extends ResourceBase {
       'contexts' => [],
     ];
     $this->moduleHandler = $module_handler;
+    $this->skuInfoHelper = $sku_info_helper;
   }
 
   /**
@@ -170,7 +183,8 @@ class ProductResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('acq_sku.product_options_manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_acm_product.sku_info')
     );
   }
 
@@ -245,22 +259,19 @@ class ProductResource extends ResourceBase {
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
     $prices = $this->skuManager->getMinPrices($sku);
-    $data['original_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['price']);
-    $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
-    $data['stock'] = (int) $this->skuManager->getStockQuantity($sku);
-    $data['in_stock'] = $this->skuManager->isProductInStock($sku);
+    $data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']);
+    $data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']);
+
+    $stockInfo = $this->skuInfoHelper->stockInfo($sku);
+    $data['stock'] = $stockInfo['stock'];
+    $data['in_stock'] = $stockInfo['in_stock'];
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
     ];
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
 
-    $linked_types = [
-      LINKED_SKU_TYPE_RELATED,
-      LINKED_SKU_TYPE_UPSELL,
-      LINKED_SKU_TYPE_CROSSSELL,
-    ];
-    foreach ($linked_types as $linked_type) {
+    foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [
         'link_type' => $linked_type,
         'skus' => $this->mobileAppUtility->getLinkedSkus($sku, $linked_type),
@@ -275,7 +286,7 @@ class ProductResource extends ResourceBase {
     foreach ($media_contexts as $key => $context) {
       $data['media'][] = [
         'context' => $context,
-        'media' => $this->getMedia($sku, $key),
+        'media' => $this->skuInfoHelper->getMedia($sku, $key),
       ];
     }
 
@@ -290,7 +301,7 @@ class ProductResource extends ResourceBase {
       ];
     }
 
-    $data['attributes'] = $this->getAttributes($sku);
+    $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
 
     $data['promotions'] = $this->getPromotions($sku);
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
@@ -358,21 +369,6 @@ class ProductResource extends ResourceBase {
         'status' => alshaya_acm_product_available_click_collect($sku),
       ],
     ];
-  }
-
-  /**
-   * Wrapper function to get media items for an SKU.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $context
-   *   Context.
-   *
-   * @return array
-   *   Media Items.
-   */
-  private function getMedia(SKUInterface $sku, string $context): array {
-    return $this->mobileAppUtility->getMedia($sku, $context);
   }
 
   /**
@@ -448,7 +444,7 @@ class ProductResource extends ResourceBase {
       }
     }
 
-    $size_labels = $this->getSizeLabels($sku);
+    $size_labels = $this->skuInfoHelper->getSizeLabels($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -488,50 +484,6 @@ class ProductResource extends ResourceBase {
   }
 
   /**
-   * Get the size attributes with code and label.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Return the keyed array of size attributes code and label.
-   */
-  private function getSizeLabels(SKUInterface $sku): array {
-    $size_array = &drupal_static(__METHOD__, []);
-
-    if ($sku->bundle() == 'simple') {
-      $plugin = $sku->getPluginInstance();
-      if (($parent = $plugin->getParentSku($sku)) && $parent instanceof SKUInterface) {
-        $sku = $parent;
-      }
-    }
-    $sku_string = $sku->get('sku')->getString();
-
-    if (!isset($size_array[$sku_string])) {
-      $configurables = unserialize(
-        $sku->get('field_configurable_attributes')->getString()
-      );
-
-      if (empty($configurables)) {
-        return [];
-      }
-
-      $size_key = array_search('size', array_column($configurables, 'label'));
-      if (!isset($configurables[$size_key])) {
-        return [];
-      }
-
-      $size_options = [];
-      array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_options) {
-        $size_options[$value['value_id']] = $value['label'];
-      });
-      $size_array[$sku_string] = $size_options;
-    }
-
-    return $size_array[$sku_string];
-  }
-
-  /**
    * Wrapper function get promotions.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -552,68 +504,6 @@ class ProductResource extends ResourceBase {
       ];
     }
     return $promotions;
-  }
-
-  /**
-   * Wrapper function get attributes.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Attributes.
-   */
-  private function getAttributes(SKUInterface $sku): array {
-    $skuData = $sku->toArray();
-
-    // @TODO: We should really think of returning what is required instead
-    // of removing stuff. Can be done later when we start developing and testing
-    // for all brands.
-    $unused_options = [
-      'options_container',
-      'required_options',
-      'has_options',
-      'product_activation_date',
-      'url_key',
-      'msrp_display_actual_price_type',
-      'product_state',
-      'tax_class_id',
-      'gift_message_available',
-      'gift_wrapping_available',
-      'is_returnable',
-      'special_from_date',
-      'special_to_date',
-      'custom_design_from',
-      'custom_design_to',
-      'ignore_price_update',
-      'image',
-      'small_image',
-      'thumbnail',
-      'swatch_image',
-      'meta_description',
-      'meta_keyword',
-      'meta_title',
-    ];
-
-    $attributes = [];
-    foreach ($skuData['attributes'] as $row) {
-      if (in_array($row['key'], $unused_options)) {
-        continue;
-      }
-
-      // Can not use data from $skuData['attributes'] as it is key_value
-      // field type, and value is varchar field with limit of 255, Which strips
-      // the text beyond the limit for description, and some of fields have key
-      // stored instead of value, value is saved in it's separate table.
-      if (isset($skuData["attr_{$row['key']}"])) {
-        $row['value'] = $skuData["attr_{$row['key']}"][0]['value'];
-      }
-      // Remove un-wanted description key.
-      unset($row['description']);
-      $attributes[] = $row;
-    };
-
-    return $attributes;
   }
 
 }
