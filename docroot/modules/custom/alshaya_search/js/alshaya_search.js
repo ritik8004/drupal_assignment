@@ -279,7 +279,8 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   };
 
   /**
-   * Helper function to convert full-screen loader to throbber for infinite scroll.
+   * Helper function to convert full-screen loader to throbber for infinite
+   * scroll.
    */
   Drupal.changeProgressBarToThrobber = function (context) {
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {
@@ -312,4 +313,16 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
     }
   };
+
+  // Update the url in browser, on facet selection.
+  $.fn.updateBrowserFacetUrl = function (url) {
+    // On ajax response
+    window.history.pushState({'facet-url-update': url}, document.title, url);
+    $(document).ajaxSend(function (event, jqxhr, settings) {
+      if (settings.url.includes('/views/ajax?sort_bef_combine')) {
+        settings.url = settings.url + '&facet_filter_url=' + url;
+      }
+    });
+  };
+
 })(jQuery);
