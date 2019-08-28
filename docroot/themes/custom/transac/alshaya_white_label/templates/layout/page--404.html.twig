@@ -201,26 +201,26 @@
   {% endif %}
 
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
-  {% block primary_footer %}
-  {% if page.footer_primary %}
-    {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
-    <!-- /footer-primary -->
-  {% endif %}
-  {% endblock %}
+  <footer class="c-footer">
+    {% block primary_footer %}
+    {% if page.footer_primary %}
+      {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
+      <!-- /footer-primary -->
+    {% endif %}
+    {% endblock %}
 
   <!-- ______________________ FOOTER SECONDARY _______________________ -->
 
-  {% if page.footer_secondary %}
-    <div class="c-footer-secondary">
-      <div class="l-container">
-        <div class="c-footer-secondary__region">
-          {{ page.footer_secondary }}
+    {% if page.footer_secondary %}
+      <div class="c-footer-secondary">
+        <div class="l-container">
+          <div class="c-footer-secondary__region">
+            {{ page.footer_secondary }}
+          </div>
         </div>
       </div>
-    </div>
-    <!-- /footer-secondary -->
-  {% endif %}
-
-
+      <!-- /footer-secondary -->
+    {% endif %}
+  </footer>
 </div>
 <!-- /page -->
