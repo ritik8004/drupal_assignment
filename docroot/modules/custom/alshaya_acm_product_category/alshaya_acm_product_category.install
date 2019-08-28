@@ -10,6 +10,34 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update weight of selling price block.
+ */
+function alshaya_acm_product_category_update_8033() {
+  $price_block = Block::load('skusskureferencefinalprice');
+
+  $block_ids = [
+    'plpsellingprice',
+    'promosellingprice',
+    'sellingprice',
+  ];
+
+  if ($price_block instanceof BlockInterface) {
+    foreach ($block_ids as $block_id) {
+      try {
+        Block::load($block_id)->setWeight($price_block->getWeight())->save();
+      }
+      catch (Exception $e) {
+        // Do nothing.
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().
