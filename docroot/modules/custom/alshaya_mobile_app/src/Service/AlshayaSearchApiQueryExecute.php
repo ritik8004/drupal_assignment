@@ -587,6 +587,18 @@ class AlshayaSearchApiQueryExecute {
       $facet_option_data = [];
       foreach ($facet_results as $result) {
         // For storing intermediate temporary data.
+        if ($key === 'plp_color_family') {
+          try {
+            $color_families = $this->entityTypeManager->getStorage('taxonomy_term')
+              ->loadByProperties(['field_sku_option_id' => $result->getDisplayValue()]);
+            foreach ($color_families as $color_family) {
+              $result->setDisplayValue($color_family->getName());
+            }
+          }
+          catch (\Exception $exception) {
+            $this->mobileAppUtility->throwException($exception->getMessage());
+          }
+        }
         $temp_data = [
           'key' => $result->getRawValue(),
           'label' => $result->getDisplayValue(),
