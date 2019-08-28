@@ -1229,56 +1229,117 @@ class SkuManager {
   }
 
   /**
-   * Helper function to do a cheaper call to fetch skus for a promotion.
+   * Helper function to do a cheaper call to fetch SKUs for a promotion.
    *
-   * @param \Drupal\node\Entity\Node $promotion
-   *   Promotion for which we need to fetch skus.
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion for which we need to fetch SKUs.
+   * @param bool $includeChildSkus
+   *   Flag to consider child SKUs while preparing SKU list.
    *
    * @return array
    *   List of skus related with a promotion.
    */
-  public function getSkutextsForPromotion(Node $promotion) {
-    $skus = [];
-
-    $cid = 'promotions_sku_' . $promotion->id();
-    if (!empty($this->cache->get($cid))) {
-      $skus_cache = $this->cache->get($cid);
-      $skus = $skus_cache->data;
+  public function getSkutextsForPromotion(NodeInterface $promotion, $includeChildSkus = FALSE) {
+    if (!$includeChildSkus) {
+      $cid = 'promotions_sku_' . $promotion->id();
+      if (!empty($this->cache->get($cid))) {
+        $skus_cache = $this->cache->get($cid);
+        $skus = $skus_cache->data;
+      }
+      else {
+        // Fetch corresponding SKUs for promotion.
+        $skus = $this->fetchSkuTextsForPromotion($promotion);
+        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+      }
     }
     else {
-      // Get configurable SKUs.
-      $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-      $query->condition('asfd.type', 'configurable');
-      $query->fields('asfd', ['id', 'sku']);
-      $query->distinct();
-      $config_skus = $query->execute()->fetchAllKeyed(0, 1);
-
-      // We may not have anything in Simple.
-      $skus = $config_skus;
-
-      // Get Simple SKUs.
-      $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-      $query->condition('asfd.type', 'simple');
-      $query->fields('asfd', ['id', 'sku']);
-      $query->distinct();
-      $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
-
-      if ($simple_skus) {
-        $skus = array_unique(array_merge($skus, $simple_skus));
-
-        // Get all parent SKUs for simple ones.
-        $parent_skus = $this->getParentSkus($simple_skus);
-        $skus = array_unique(array_merge($skus, $parent_skus));
+      $cid = 'promotions_all_sku_' . $promotion->id();
+      if (!empty($this->cache->get($cid))) {
+        $skus_cache = $this->cache->get($cid);
+        $skus = $skus_cache->data;
       }
+      else {
+        // Fetch corresponding SKUs for promotion.
+        $skus = $this->fetchSkuTextsForPromotion($promotion);
+        if (!empty($skus)) {
+          // Fetch child SKUs based on configurable parent SKUs.
+          $childSkus = $this->fetchChildSkuTexts($skus);
+          if (!empty($childSkus)) {
+            // Merge the list of SKUs.
+            $skus += $childSkus;
+          }
+        }
 
-      $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+      }
     }
 
     return $skus;
+  }
+
+  /**
+   * Prepares list of Promotion SKUs.
+   *
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion for which we need to fetch SKUs.
+   *
+   * @return array
+   *   Unique list of SKUs.
+   */
+  public function fetchSkuTextsForPromotion(NodeInterface $promotion) {
+    // Get configurable SKUs.
+    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+    $query->condition('asfd.type', 'configurable');
+    $query->fields('asfd', ['id', 'sku']);
+    $query->distinct();
+    $config_skus = $query->execute()->fetchAllKeyed(0, 1);
+
+    // We may not have anything in Simple.
+    $skus = $config_skus;
+
+    // Get Simple SKUs.
+    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+    $query->condition('asfd.type', 'simple');
+    $query->fields('asfd', ['id', 'sku']);
+    $query->distinct();
+    $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
+
+
+    if ($simple_skus) {
+      $skus = array_unique(array_merge($skus, $simple_skus));
+
+      // Get all parent SKUs for simple ones.
+      $parent_skus = $this->getParentSkus($simple_skus);
+      $skus = array_unique(array_merge($skus, $parent_skus));
+    }
+
+    return $skus;
+  }
+
+  /**
+   * Prepares unique list of child SKUs based on given configurable SKUs.
+   *
+   * @param array $skus
+   *   List of configurable SKUs.
+   *
+   * @return array
+   *   Unique List of child SKUs.
+   */
+  public function fetchChildSkuTexts($skus) {
+    $childSkus = [];
+    foreach ($skus as $sku) {
+      foreach ($this->getChildSkus($sku) as $childSku) {
+        if ($childSku instanceof SKUInterface) {
+          $childSkus[$childSku->id()] = $childSku->getSku();
+        }
+      }
+    }
+
+    return $childSkus;
   }
 
   /**

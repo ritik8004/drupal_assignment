@@ -261,6 +261,11 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
       '#type' => 'html_tag',
       '#tag' => 'div',
       '#value' => implode('</br>', $generic_promotions),
+      '#attributes' => [
+        'class' => [
+          'promotions-labels',
+        ]
+      ]
     ];
 
     // If promotions are eligible for dynamic promo label.

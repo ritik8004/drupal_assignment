@@ -7,7 +7,7 @@
   'use strict';
 
   function updateAlshayaPromotionsLabel(currentSku, context) {
-    var dynamicPromoLabelHolder = $('.acq-content-product .promotions div', context);
+    var dynamicPromoLabelHolder = $('.acq-content-product .promotions div.promotions-labels', context);
     var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity', context);
 
     // Check if cart is empty.

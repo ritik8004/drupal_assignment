@@ -122,7 +122,6 @@ class AlshayaPromoLabelManager {
     $promos = $this->getCurrentSkuPromos($sku, 'links');
     if (!empty($promos)) {
       $labels = implode('<br>', $promos);
-      $labels = '<div>' . $labels . '</div>';
     }
 
     return $labels;
@@ -142,6 +141,12 @@ class AlshayaPromoLabelManager {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function getCurrentSkuPromos(SKU $sku, $view_mode) {
+    // Fetch parent SKU for the current SKU.
+    $parentSku = $this->skuManager->getParentSkuBySku($sku);
+    if (!empty($parentSku)) {
+      $sku = $parentSku;
+    }
+
     $promos = [];
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
     $eligiblePromotions = $this->filterEligiblePromotions($promotion_nodes);
@@ -232,7 +237,7 @@ class AlshayaPromoLabelManager {
   private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
     $label = $promotion->get('field_acq_promotion_label')->getString();
     $cartSKUs = $this->cartManager->getCartSkus();
-    $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion);
+    $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
 
     // If cart is not empty and has matching products.
     if (!empty($cartSKUs)
@@ -295,8 +300,8 @@ class AlshayaPromoLabelManager {
     }
 
     if ($response instanceof AjaxResponse) {
-      $response->addCommand(new HtmlCommand('.acq-content-product .promotions div', $label));
-      $response->addCommand(new InvokeCommand('.acq-content-product .promotions div', 'removeClass', ['hidden']));
+      $response->addCommand(new HtmlCommand('.acq-content-product .promotions div.promotions-labels', $label));
+      $response->addCommand(new InvokeCommand('.acq-content-product .promotions div.promotions-labels', 'removeClass', ['hidden']));
     }
 
     return $response;
