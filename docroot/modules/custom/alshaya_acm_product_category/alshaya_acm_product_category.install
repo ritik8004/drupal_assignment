@@ -19,16 +19,16 @@ use Drupal\block\BlockInterface;
  * Update weight of selling price block.
  */
 function alshaya_acm_product_category_update_8033() {
-  $price_block = Block::load('skusskureferencefinalprice');
 
   $block_ids = [
-    'plpsellingprice',
-    'promosellingprice',
-    'sellingprice',
+    'skusskureferencefinalprice' => 'plpsellingprice',
+    'promotionpricefacet' => 'promosellingprice',
+    'finalprice' => 'sellingprice',
   ];
 
-  if ($price_block instanceof BlockInterface) {
-    foreach ($block_ids as $block_id) {
+  foreach ($block_ids as $price_block_id => $block_id) {
+    $price_block = Block::load($price_block_id);
+    if ($price_block instanceof BlockInterface) {
       try {
         Block::load($block_id)->setWeight($price_block->getWeight())->save();
       }
