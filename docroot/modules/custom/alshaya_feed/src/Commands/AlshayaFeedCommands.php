@@ -153,6 +153,7 @@ class AlshayaFeedCommands extends DrushCommands {
     $context['results']['updates'] = 0;
     $context['results']['products'] = [];
     $context['results']['markups'] = [];
+    $context['results']['timestart'] = microtime(TRUE);
     \Drupal::service('alshaya_feed.generate')->clear();
   }
 
@@ -193,12 +194,17 @@ class AlshayaFeedCommands extends DrushCommands {
   public static function batchFinish($success, array $results, array $operations) {
     if ($success) {
       if ($results['updates']) {
+        // Display Script End time.
+        $time_end = microtime(TRUE);
+        $execution_time = ($time_end - $results['timestart']) / 60;
+
         \Drupal::service('messenger')->addMessage(
           \Drupal::translation()
             ->formatPlural(
               $results['updates'],
-              'Generated 1 product feed.',
-              'Generated @count products feed.'
+              'Generated 1 product feed in time: @time.',
+              'Generated @count products feed in time: @time.',
+              ['@time' => $execution_time]
             )
         );
       }
