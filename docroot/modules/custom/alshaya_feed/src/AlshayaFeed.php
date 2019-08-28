@@ -163,7 +163,10 @@ class AlshayaFeed {
     $context['sandbox']['count'] += count($nids);
     $context['sandbox']['current'] = !empty($nids) ? current($nids) : 0;
     $context['results']['updates'] += $updates;
-    $context['message'] = $this->t('Updated feeds for @count.', ['@count' => $context['sandbox']['count']]);
+    $context['message'] = $this->t('Updated feeds for @count out of @total.', [
+      '@count' => $context['sandbox']['count'],
+      '@total' => $context['sandbox']['total'],
+    ]);
 
     if ($context['sandbox']['count'] != $context['sandbox']['total']) {
       $context['finished'] = $context['sandbox']['count'] / $context['sandbox']['total'];
