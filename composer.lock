@@ -5221,6 +5221,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3052959 - Update 8103 does not work with Drupal 8.7": "https://www.drupal.org/files/issues/2019-05-17/3052959-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8137,6 +8140,9 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "2882709 - Misnamed interface causes \"Fatal error: Cannot declare interface Drupal\\libraries\\ExternalLibrary\\Utility\\LibraryAccessorIdInterface\"": "https://www.drupal.org/files/issues/2882709-2-interface-libraryidaccessorinterface-misnamed.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8453,7 +8459,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_layout.git",
-                "reference": "bb9fe5b028ef5e73c4ff751a0910011db693ccba"
+                "reference": "9d19ce61c0e1f9eea9480b9df00c228cb1436556"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -8486,8 +8492,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.1+8-dev",
-                    "datestamp": "1564404785",
+                    "version": "8.x-2.1+6-dev",
+                    "datestamp": "1563892385",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -11940,7 +11946,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-06-11/3054878-11.patch"
+                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
