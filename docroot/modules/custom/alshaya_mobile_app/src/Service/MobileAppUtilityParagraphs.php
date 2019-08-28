@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -106,6 +107,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The renderer.
    * @param \Drupal\redirect\RedirectRepository $redirect_repository
    *   Redirect repository.
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
+   *   Sku info helper object.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -124,9 +127,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     ProductCategoryTreeInterface $product_category_tree,
     ConfigFactoryInterface $config_factory,
     APIWrapper $api_wrapper,
-    RedirectRepository $redirect_repository
+    RedirectRepository $redirect_repository,
+    SkuInfoHelper $sku_info_helper
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
@@ -363,7 +367,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function processEntityBundleData($entity) {
     $data = FALSE;
-    $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
+    $entity = $this->skuInfoHelper->getEntityTranslation($entity, $this->currentLanguage);
     $this->cacheableEntities[] = $entity;
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
@@ -536,7 +540,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       if (!$data = $this->processEntityBundleData($entity)) {
         $data = [];
         // Get configured fields of entity, we don't require base fields.
-        $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
+        $entity = $this->skuInfoHelper->getEntityTranslation($entity, $this->currentLanguage);
         $paragraph_fields = $this->getConfiguredFields($entity);
         foreach ($paragraph_fields as $field_name) {
           // We are interested in paragraph types that are stored inside
@@ -566,7 +570,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return data array.
    */
   protected function getRecursiveParagraphData($entity): array {
-    $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
+    $entity = $this->skuInfoHelper->getEntityTranslation($entity, $this->currentLanguage);
     $this->cacheableEntities[] = $entity;
     // Process data for given entity if callback exists.
     if ($result = $this->processEntityBundleData($entity)) {
@@ -723,7 +727,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     if ($data['accordion']) {
       if (empty($data['title'])) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
-        $term = $this->getEntityTranslation($term, $this->currentLanguage);
+        $term = $this->skuInfoHelper->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
       $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
@@ -775,7 +779,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       if ($entity_type == 'block_content') {
         $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
         $block = reset($block);
-        $block = $this->getEntityTranslation($block, $this->currentLanguage);
+        $block = $this->skuInfoHelper->getEntityTranslation($block, $this->currentLanguage);
         $this->cacheTags = array_merge($this->cacheTags, $block->getCacheTags());
 
         return [
