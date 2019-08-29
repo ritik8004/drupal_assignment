@@ -1,0 +1,10 @@
+name: 'Alshaya Facets Pretty Paths'
+type: module
+description: 'Pretty paths for Facets.'
+core: 8.x
+package: Search
+dependencies:
+  - alshaya_product:alshaya_product
+  - alshaya_product_options:alshaya_product_options
+  - alshaya_search_api:alshaya_search_api
+  - alshaya_search:alshaya_search
