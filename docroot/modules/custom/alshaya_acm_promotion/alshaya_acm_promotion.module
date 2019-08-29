@@ -17,6 +17,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 
 /**
  * Implements hook_views_data_alter().
@@ -223,16 +224,19 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  /** @var \Drupal\alshaya_acm_product\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
 
   $sku = $skuManager->getSkuForNode($entity);
   $sku_entity = SKU::loadFromSku($sku);
 
   $promotion_types = ['cart'];
+  $promotion_nodes = $skuManager->getSkuPromotions($sku_entity, $promotion_types);
 
   $promotion_view_mode = in_array($view_mode, ['modal', 'full']) ? 'full' : NULL;
 
   // Get promotions for the product.
-  $promotions = $skuManager->getPromotionsFromSkuId($sku_entity, 'links', $promotion_types, $promotion_view_mode);
+  $promotions = $skuManager->preparePromotionsDisplay($sku_entity, $promotion_nodes, 'links', $promotion_types, $promotion_view_mode);
 
   // Return early if no promotions found for product in context.
   if (empty($promotions)) {
@@ -254,8 +258,20 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
   if (!empty($generic_promotions)) {
     $build['promotions'] = [
-      '#markup' => implode('</br>', $generic_promotions),
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => implode('</br>', $generic_promotions),
     ];
+
+    // If promotions are eligible for dynamic promo label.
+    if (($promoLabelManager->checkPromoLabelType($promotion_nodes) === AlshayaPromoLabelManager::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO)
+      // Consider only full view mode.
+      && ($view_mode === 'full')) {
+      $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
+      // Add a flag to update promo label dynamically.
+      $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions']['currentSku'] = $sku_entity->id();
+      $build['promotions']['#attributes']['class'][] = 'promotions-labels hidden';
+    }
   }
 
   // Process free gift promotions only for full view mode.

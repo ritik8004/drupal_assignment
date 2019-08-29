@@ -255,7 +255,8 @@
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
-                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch"
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch",
+                "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",

@@ -731,9 +731,8 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
 
   $name = [];
 
-  $promotion_types = ['cart'];
-  $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, 'default', $promotion_types);
-
+  // Call AlshayaPromoLabelManager to fetch dynamic promos for current SKU.
+  $promotions = \Drupal::service('alshaya_acm_promotion.label_manager')->getCurrentSkuPromos($sku_entity, 'default');
   // @TODO: Remove this once we have products appearing correclty with cart promotions.
   // Currently the only way to display cart promotion is to check cart_rules
   // applied to the current cart & check if its type is buy_X_get_Y. Use this
