@@ -904,6 +904,10 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
         ];
       }
     }
+
+    if ($route_match->getRouteName() == 'entity.profile.type.user_profile_form') {
+      $variables['#attached']['library'][] = 'alshaya_addressbook/alshaya_myaccount_addressbook';
+    }
   }
 
   $variables['#cache']['contexts'][] = 'route';
