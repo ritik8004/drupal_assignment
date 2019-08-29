@@ -599,7 +599,7 @@ class AlshayaSearchApiQueryExecute {
       $facet_option_data = [];
       foreach ($facet_results as $result) {
         // For storing intermediate temporary data.
-        if (strpos($key, 'color_family')) {
+        if (strpos($key, 'color_family') > -1) {
           $result
             ->setDisplayValue(
               $this
