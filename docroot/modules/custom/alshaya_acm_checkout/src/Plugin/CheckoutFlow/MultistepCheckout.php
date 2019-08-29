@@ -366,7 +366,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         /** @var \Drupal\acq_cart\Cart $cart */
         $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
-      catch (\NeedsRedirectException $e) {
+      catch (NeedsRedirectException $e) {
         // Do nothing, let it redirect.
       }
       catch (\Exception $e) {
