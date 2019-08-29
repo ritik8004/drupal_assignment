@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Mappings for specific listing page type to make updates dynamic.
+ *
+ * @return array
+ *   Mappings.
+ */
+function _alshaya_facets_pretty_paths_get_mappings() {
+  $mappings = [
+    'plp' => [
+      'id' => 'views_block__alshaya_product_list__block_1',
+      'summary' => 'filter_bar_plp',
+      'alias' => [
+        'skus_sku_reference_final_price' => 'price',
+        'plp_selling_price' => 'price_range',
+      ],
+    ],
+    'promo' => [
+      'id' => 'views_block__alshaya_product_list__block_2',
+      'summary' => 'filter_bar_promotions',
+      'alias' => [
+        'promotion_price_facet' => 'price',
+        'promo_selling_price' => 'price_range',
+      ],
+    ],
+    'search' => [
+      'id' => 'views_page__search__page',
+      'summary' => 'filter_bar',
+      'alias' => [
+        'final_price' => 'price',
+        'selling_price' => 'price_range',
+      ],
+    ],
+  ];
+
+  return $mappings;
+}
