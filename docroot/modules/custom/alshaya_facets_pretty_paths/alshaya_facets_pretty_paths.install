@@ -38,6 +38,10 @@ function alshaya_facets_pretty_paths_install() {
         \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', 'price')->save();
         continue;
       }
+      elseif ($facet->id() == 'plp_selling_price') {
+        \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', 'price_range')->save();
+        continue;
+      }
       \Drupal::configFactory()->getEditable('facets.facet.' . $facet->id())->set('url_alias', strtolower(str_replace(' ', '_', $facet->get('name'))))->save();
     }
   }
