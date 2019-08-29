@@ -914,6 +914,7 @@
    */
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
     var promotions = [];
+    var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
 
     highlights.each(function (key, highlight) {
       var position = 1;
@@ -933,22 +934,27 @@
         position = 1;
       }
       else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
-        var imgElem = $(highlight).find('picture img');
-        if (imgElem.length === 0) {
-          imgElem = $(highlight).find('img');
+        if ($(highlight).find(promo_para_elements).length > 0) {
+          return true;
         }
-        var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
+        else {
+          var imgElem = $(highlight).find('picture img');
+          if (imgElem.length === 0) {
+            imgElem = $(highlight).find('img');
+          }
+          var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
             imgElem.attr('src') :
             imgElem.attr('data-src');
 
-        position = key;
-        if (event === 'promotionClick') {
-          position = $(highlight).find('picture img').data('position');
+          position = key;
+          if (event === 'promotionClick') {
+            position = $(highlight).find('picture img').data('position');
+          }
+          else {
+            $(highlight).find('picture img').data('position', key);
+          }
+          creative = Drupal.url(imgSrc);
         }
-        else {
-          $(highlight).find('picture img').data('position', key);
-        }
-        creative = Drupal.url(imgSrc);
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
