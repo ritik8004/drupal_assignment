@@ -12,7 +12,6 @@ module.exports = {
       title: 'Gulp error in ' + err.plugin,
       message: err.message
     })(err);
-    //gutil.beep();
   },
   onDev: function (task, other) {
     'use strict';

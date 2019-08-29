@@ -9,7 +9,7 @@ module.exports = {
       'sass/**/*.ltr.scss',
       'components/**/*.ltr.scss'
     ],
-    destination: 'dist/css/',
+    destination: 'components/dist/css/',
     options: {
       outputStyle: 'expanded',
       includePaths: [

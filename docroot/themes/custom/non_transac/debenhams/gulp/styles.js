@@ -6,7 +6,6 @@ module.exports = function (gulp, config, bs) {
   var sassGlob = require('gulp-sass-glob');
   var postcss = require('gulp-postcss');
   var sourcemaps = require('gulp-sourcemaps');
-  //var gutil = require('gulp-util');
   var parseArgs = require('minimist');
   var argv = parseArgs(process.argv.slice(2));
   var plumber = require('gulp-plumber');
