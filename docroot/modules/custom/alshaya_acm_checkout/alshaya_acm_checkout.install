@@ -10,6 +10,24 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update Knet payment label.
+ */
+function alshaya_acm_checkout_update_8006() {
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['field_payment_code' => 'knet']);
+  foreach ($terms as $term) {
+    $term->set('name', 'K-NET');
+    $translated_term = $term->hasTranslation('ar') ? $term->getTranslation('ar') : '';
+    if (isset($translated_term)) {
+      $translated_term->set('name', 'K-NET');
+    }
+    $term->save();
+    $translated_term->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_acm_checkoutcom module.
  */
 function alshaya_acm_checkout_update_8005() {
