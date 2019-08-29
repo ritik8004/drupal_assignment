@@ -96,9 +96,9 @@
     },
     detach: function (context, settings, trigger) {
       // In the case where the view is removed from the document, remove it's
-      // events. This is important in the case a view being refreshed for a
-      // reason other than a scroll. AJAX filters are a good example of the
-      // event needing to be destroyed earlier than above.
+      // events. This is important in the case a view being refreshed for a reason
+      // other than a scroll. AJAX filters are a good example of the event needing
+      // to be destroyed earlier than above.
       if (trigger === 'unload') {
         if ($(context).find(automaticPagerSelector).removeOnce('infinite-scroll').length) {
           $window.off(scrollEvent);
