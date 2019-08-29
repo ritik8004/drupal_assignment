@@ -61,6 +61,7 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
       'message' => NULL,
       'coupon' => NULL,
       'image' => NULL,
+      'title' => NULL,
     ],
   ];
 
@@ -283,6 +284,9 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
   // For free gift promotions, the promo needs to be rendered in a
   // different way.
   if (!empty($free_gift_promotions)) {
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
     /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $manager */
     $manager = \Drupal::service('alshaya_acm_promotion.manager');
 
@@ -316,12 +320,25 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
           '@link' => $link,
         ]);
 
+        foreach ($free_skus as $free_sku) {
+          if ($skuImagesManager->hasMedia($free_sku)) {
+            $free_sku_media = $skuImagesManager->getFirstImage($free_sku);
+            $free_sku_image = $skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku->label(), '192x168');
+            break;
+          }
+        }
+
         $build['free_gift_promotions'] = [
           '#theme' => 'free_gift_promotion_list',
           '#message' => [
             '#type' => 'markup',
             '#markup' => $message,
           ],
+          '#title' => [
+            '#type' => 'markup',
+            '#markup' => t('Free Gift'),
+          ],
+          '#image' => $free_sku_image ?? NULL,
         ];
 
         if (!empty($free_gift_promotion['coupon_code'])) {
@@ -368,8 +385,6 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
           '#promo_code' => $free_gift_promotion['coupon_code'],
         ];
 
-        /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-        $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
         $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
 
         // If free gift sku has no media, then we check from the default
