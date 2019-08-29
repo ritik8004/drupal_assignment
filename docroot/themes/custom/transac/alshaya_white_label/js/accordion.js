@@ -73,23 +73,6 @@
         });
       }
 
-      /**
-       * Toggles the footer accordions.
-       */
-
-      if ($('.c-footer-is-accordion').length) {
-        var accordionHead = $('.c-footer-is-accordion .is-accordion');
-        var accordionBody = $(accordionHead).nextAll();
-
-        $(accordionBody).addClass('accordion--body');
-        $(accordionHead).once().click(function () {
-          var $ub = $(this).nextAll().stop(true, true).slideToggle();
-          accordionBody.not($ub).slideUp();
-          $ub.parent().toggleClass('open--accordion');
-          accordionBody.not($ub).parent().removeClass('open--accordion');
-        });
-      }
-
       $('#drupal-modal .short-description-wrapper').once('readmore').each(function () {
         $(this).on('click', '.read-more-description-link-gift', function () {
           $(this).parent().toggleClass('show-gift-detail');

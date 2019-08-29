@@ -211,6 +211,11 @@ optionlist_menu:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
 
-back_to_top:
+footer_js:
   js:
     js/back_to_top.js: {}
+    js/footer-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
