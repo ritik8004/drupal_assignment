@@ -278,6 +278,12 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $variables['site_logo'] = theme_get_setting('logo.url');
   $mobile_logo = alshaya_master_get_mobile_logo();
   $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+
+  // Attach the myaccount_backlink.js library on user profile page.
+  $current_path = \Drupal::routeMatch()->getRouteObject()->getPath();
+  if (substr($current_path, 0, 12) === '/user/{user}') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/myaccount_backlink';
+  }
 }
 
 /**
