@@ -169,6 +169,17 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
         $pretty_filters = substr($pretty_url, strpos($pretty_url, "/--"));
       }
     }
+    else {
+      // Set items per page to current page * items per page.
+      $currentPage = intval($request->query->get('page'));
+      $query_params['show_on_load'] = ($currentPage + 1) * _alshaya_acm_product_get_items_per_page_on_listing();
+
+      $url = Url::fromUserInput($view_url, [
+        'query' => $query_params,
+      ])->toString(FALSE);
+
+      $response->addCommand(new InvokeCommand(NULL, 'updateWindowLocation', [$url]));
+    }
 
     // Update the link for language switcher.
     foreach ($this->languageManager->getLanguages() as $language) {
@@ -183,16 +194,6 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
         $pretty_filters,
       ]));
     }
-
-    // Set items per page to current page * items per page.
-    $currentPage = intval($request->query->get('page'));
-    $query_params['show_on_load'] = ($currentPage + 1) * _alshaya_acm_product_get_items_per_page_on_listing();
-
-    $url = Url::fromUserInput($view_url, [
-      'query' => $query_params,
-    ])->toString(FALSE);
-
-    $response->addCommand(new InvokeCommand(NULL, 'updateWindowLocation', [$url]));
   }
 
   /**
