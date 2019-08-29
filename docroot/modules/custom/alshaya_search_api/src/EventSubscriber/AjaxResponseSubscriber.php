@@ -153,20 +153,20 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     $pretty_filters = '';
 
     if ($url_processor == 'alshaya_facets_pretty_paths') {
-      $pretty_url = Url::fromUserInput($view_url, [])->toString(FALSE);
+      $view_url = Url::fromUserInput($view_url, [])->toString(FALSE);
       if (isset($query_string['q'])) {
-        $pretty_url = Url::fromUserInput($query_string['q'], [])
+        $view_url = Url::fromUserInput($query_string['q'], [])
           ->toString(FALSE);
       }
       elseif (isset($query_params['facet_filter_url'])) {
-        $pretty_url = Url::fromUserInput($query_params['facet_filter_url'], [])
+        $view_url = Url::fromUserInput($query_params['facet_filter_url'], [])
           ->toString(FALSE);
       }
-      $pretty_url .= (substr($pretty_url, -1) == '/' ? '' : '/');
-      $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($pretty_url)]));
+      $view_url .= (substr($view_url, -1) == '/' ? '' : '/');
+      $response->addCommand(new InvokeCommand(NULL, 'updateBrowserFacetUrl', [urldecode($view_url)]));
 
-      if (strpos($pretty_url, "/--") !== FALSE) {
-        $pretty_filters = substr($pretty_url, strpos($pretty_url, "/--"));
+      if (strpos($view_url, "/--") !== FALSE) {
+        $pretty_filters = substr($view_url, strpos($view_url, "/--"));
       }
     }
 
