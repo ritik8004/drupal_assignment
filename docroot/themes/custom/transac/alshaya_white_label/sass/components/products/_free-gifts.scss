@@ -90,6 +90,7 @@
   .ui-dialog {
     #drupal-modal {
       overflow: auto !important;
+      //max-width: 964px;
 
       @include breakpoint($only-mobile) {
         padding: 0 !important;
@@ -129,6 +130,16 @@
 
         @include breakpoint($tablet) {
           margin-bottom: 0.75rem;
+        }
+      }
+
+      article {
+        > .ajax-progress-throbber {
+          //position: absolute;
+
+          .throbber {
+            @include throbberLoader();
+          }
         }
       }
     }
@@ -208,7 +219,7 @@
     }
 
     .ajax-progress-throbber {
-      position: absolute;
+      //position: absolute;
 
       .throbber {
         @include throbberLoader();
@@ -316,5 +327,46 @@
         display: none;
       }
     }
+  }
+}
+
+.free-gift-detail-modal {
+  article {
+    > a {
+      font-size: 14px;
+      line-height: 1.29;
+      color: #232323;
+      text-decoration: underline;
+
+      @include icon(chevrondown, after) {
+        font-size: 1.5rem;
+        position: absolute;
+        #{$left}: 0;
+        top: 22px;
+        transform: rotate(90deg);
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  &#drupal-modal {
+    padding-top: 16px;
+  }
+}
+
+.free-gift-listing-modal {
+  display: flex;
+  align-items: center;
+
+  .free-gift-view {
+    display: flex;
+    justify-content: center;
+  }
+
+  .free-gift-image {
+    width: auto;
   }
 }
