@@ -173,7 +173,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $decoded = str_replace($replacement, $original, $decoded);
     }
 
-    $tid = str_replace('/taxonomy/term/', '', $this->aliasManager->getPathByAlias('/' . $value, 'en'));
+    $tid = str_replace('/taxonomy/term/', '', $this->aliasManager->getPathByAlias('/' . $decoded, 'en'));
     if ($tid) {
       $term = $this->termStorage->load($tid);
 
