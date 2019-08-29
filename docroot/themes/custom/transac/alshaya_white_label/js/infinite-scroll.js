@@ -62,11 +62,6 @@
       $(this).hide();
     });
 
-    // Refresh images on Ajax Response.
-    if (typeof Drupal.blazyRevalidate !== 'undefined') {
-      Drupal.blazyRevalidate();
-    }
-
     // Run views and VIS behaviors.
     Drupal.attachBehaviors(view.$view[0]);
   };
