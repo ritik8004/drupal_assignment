@@ -6,3 +6,7 @@ alshaya_addressbook:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+alshaya_myaccount_addressbook:
+  js:
+    js/address_book.js: {}
