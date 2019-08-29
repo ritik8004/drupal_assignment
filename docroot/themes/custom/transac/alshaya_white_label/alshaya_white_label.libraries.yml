@@ -214,7 +214,3 @@ optionlist_menu:
 back_to_top:
   js:
     js/back_to_top.js: {}
-
-myaccount_backlink:
-  js:
-    js/myaccount_backlink.js: {}
