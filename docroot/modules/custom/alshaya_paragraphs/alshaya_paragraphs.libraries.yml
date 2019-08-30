@@ -1,0 +1,8 @@
+paragraphs_js:
+  version: 1.x
+  js:
+    js/banner_margin_override.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once

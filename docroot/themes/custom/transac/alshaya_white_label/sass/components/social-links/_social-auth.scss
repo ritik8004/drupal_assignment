@@ -139,6 +139,10 @@
   #edit-checkout-social-auth {
     @include breakpoint($only-mobile) {
       order: 2;
+
+      .fieldset-legend {
+        display: none;
+      }
     }
   }
 
@@ -256,6 +260,12 @@
       margin-bottom: 1.5625rem;
     }
   }
+
+  .login-separator {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
 }
 
 .c-user-login,
@@ -272,6 +282,36 @@
 
   .block-alshaya-social-login {
     margin-bottom: 2.5rem;
+  }
+}
+
+.c-user-login {
+  .section-title {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  .login-separator {
+    &.bottom {
+      display: none;
+    }
+  }
+}
+
+.c-user-register {
+  .login-separator {
+    &.top {
+      display: none;
+    }
+  }
+
+  #block-alshayasocialloginblock {
+    .section-title {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
   }
 }
 
