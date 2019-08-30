@@ -197,7 +197,7 @@ class AlshayaFeedSkuInfoHelper {
 
       $product[$lang]['linked_skus'] = [];
       foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
+        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type, FALSE);
         $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
     }
