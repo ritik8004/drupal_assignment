@@ -2,7 +2,7 @@ alshaya_search:
   js:
     js/alshaya_search.js: {}
   dependencies:
-    - core/jquery
+    - alshaya_master/common_functions
     - core/drupalSettings
     - alshaya_white_label/slick
 

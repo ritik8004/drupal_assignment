@@ -173,14 +173,13 @@ class AlshayaFacetsPrettyPathsHelper {
       $decoded = str_replace($replacement, $original, $decoded);
     }
 
-    $tid = str_replace('/taxonomy/term/', '', $this->aliasManager->getPathByAlias('/' . $value, 'en'));
+    $tid = str_replace('/taxonomy/term/', '', $this->aliasManager->getPathByAlias('/' . $decoded, 'en'));
     if ($tid) {
       $term = $this->termStorage->load($tid);
 
       if ($term instanceof TermInterface) {
-        $langcode = $this->languageManager->getCurrentLanguage()->getId();
-        if ($term->language()->getId() != $langcode && $term->hasTranslation($langcode)) {
-          $term = $term->getTranslation($langcode);
+        if ($term->language()->getId() != 'en' && $term->hasTranslation('en')) {
+          $term = $term->getTranslation('en');
         }
 
         $decoded = $term->label();
@@ -242,6 +241,10 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Processed query params.
    */
   public function getTranslatedFilters(string $attribute_code, string $filter_value, bool $default = TRUE) {
+    if (is_numeric($filter_value)) {
+      return $filter_value;
+    }
+
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     if ($current_langcode !== 'en') {
       $translated_filter_values = &drupal_static(__FUNCTION__, []);

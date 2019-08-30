@@ -48,3 +48,11 @@ jquery_is_in_viewport:
     js/jquery.is_in_viewport.js: {}
   dependencies:
     - core/jquery
+
+common_functions:
+  version: 1.x
+  js:
+    js/common_functions.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
