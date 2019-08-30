@@ -7,7 +7,7 @@
         <div class="payment-card--number">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {{ card_info.maskedCC }}</div>
       {% endif %}
       {% if card_info.expirationDate %}
-        <div class="label">{{ "expiry date"|t }}</div>
+        <div class="label">{{ "expiry"|t }}</div>
         <div class="payment-card--expiry">{{ card_info.expirationDate }} </div>
       {% endif %}
     </div>
