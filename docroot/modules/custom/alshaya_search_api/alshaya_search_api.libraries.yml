@@ -3,6 +3,7 @@ facets_language_switcher:
     js/facets-language-switcher.js: {}
   dependencies:
     - core/jquery
+    - alshaya_master/common_functions
 
 facets_panel:
   js:
@@ -14,5 +15,5 @@ back_to_list:
   js:
     js/back_to_list.js: {}
   dependencies:
-    - core/jquery
+    - alshaya_master/common_functions
     - alshaya_master/jquery_is_in_viewport
