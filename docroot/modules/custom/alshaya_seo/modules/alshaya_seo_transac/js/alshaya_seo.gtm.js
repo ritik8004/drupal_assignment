@@ -914,6 +914,7 @@
    */
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
     var promotions = [];
+    var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
 
     highlights.each(function (key, highlight) {
       var position = 1;
@@ -933,13 +934,16 @@
         position = 1;
       }
       else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
+        if ($(highlight).find(promo_para_elements).length > 0) {
+          return true;
+        }
         var imgElem = $(highlight).find('picture img');
         if (imgElem.length === 0) {
           imgElem = $(highlight).find('img');
         }
         var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
-            imgElem.attr('src') :
-            imgElem.attr('data-src');
+          imgElem.attr('src') :
+          imgElem.attr('data-src');
 
         position = key;
         if (event === 'promotionClick') {
