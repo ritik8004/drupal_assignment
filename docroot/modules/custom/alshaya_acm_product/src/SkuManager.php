@@ -1265,7 +1265,7 @@ class SkuManager {
           $childSkus = $this->fetchChildSkuTexts($skus);
           if (!empty($childSkus)) {
             // Merge the list of SKUs.
-            $skus += $childSkus;
+            $skus = array_unique(array_merge($skus, $childSkus));
           }
         }
 
@@ -1332,17 +1332,10 @@ class SkuManager {
   public function fetchChildSkuTexts(array $skus) {
     $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
     $query->join('acq_sku_field_data', 'asfd', 'asfd.id = asfcs.entity_id');
-    $query->condition('asfcs.entity_id', array_keys($skus), 'IN');
-    // Re-join asfd table this time for field_configured_skus_value.
-    $query->join('acq_sku_field_data', 'asfdc', 'asfdc.sku = asfcs.field_configured_skus_value');
-    // Should not be a configurable sku.
-    $query->condition('asfdc.type', 'configurable', '!=');
-    // Should not be a free gift.
-    $query->condition('asfdc.price', self::FREE_GIFT_PRICE, '!=');
-    $query->condition('asfdc.final_price', self::FREE_GIFT_PRICE, '!=');
-    $query->fields('asfdc', ['id', 'sku']);
+    $query->condition('asfd.sku', $skus, 'IN');
+    $query->fields('asfcs', ['field_configured_skus_value']);
     $query->distinct();
-    $childSkus = $query->execute()->fetchAllKeyed(0, 1);
+    $childSkus = $query->execute()->fetchCol();
 
     return $childSkus;
   }

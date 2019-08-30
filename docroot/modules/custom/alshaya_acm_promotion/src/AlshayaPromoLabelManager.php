@@ -134,13 +134,15 @@ class AlshayaPromoLabelManager {
    *   Product SKU.
    * @param string $view_mode
    *   Links or default.
+   * @param null|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
+   *   List of promotion nodes.
    *
    * @return array
    *   List of promotions.
    *
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  public function getCurrentSkuPromos(SKU $sku, $view_mode) {
+  public function getCurrentSkuPromos(SKU $sku, $view_mode, $promotion_nodes = NULL) {
     // Fetch parent SKU for the current SKU.
     $parentSku = $this->skuManager->getParentSkuBySku($sku);
     if (!empty($parentSku)) {
@@ -148,7 +150,11 @@ class AlshayaPromoLabelManager {
     }
 
     $promos = [];
-    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
+
+    if (is_null($promotion_nodes)) {
+      $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
+    }
+
     $eligiblePromotions = $this->filterEligiblePromotions($promotion_nodes);
 
     foreach ($eligiblePromotions as $eligiblePromotion) {
