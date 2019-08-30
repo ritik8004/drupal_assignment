@@ -284,6 +284,8 @@
   top: 44%;
   #{$left}: 24%;
   font-size: 0.625rem;
+  color: $checkout_payment_cvv_help_text;
+  line-height: 12px;
 
   @include breakpoint($only-mobile) {
     display: none;
@@ -304,7 +306,7 @@
   }
 
   @include breakpoint($desktop) {
-    width: 40%;
+    width: 28%;
     top: -0.5rem;
     #{$left}: 25%;
   }
