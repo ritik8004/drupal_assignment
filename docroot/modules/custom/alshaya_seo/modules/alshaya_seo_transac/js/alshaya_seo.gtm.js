@@ -937,24 +937,22 @@
         if ($(highlight).find(promo_para_elements).length > 0) {
           return true;
         }
-        else {
-          var imgElem = $(highlight).find('picture img');
-          if (imgElem.length === 0) {
-            imgElem = $(highlight).find('img');
-          }
-          var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
-            imgElem.attr('src') :
-            imgElem.attr('data-src');
-
-          position = key;
-          if (event === 'promotionClick') {
-            position = $(highlight).find('picture img').data('position');
-          }
-          else {
-            $(highlight).find('picture img').data('position', key);
-          }
-          creative = Drupal.url(imgSrc);
+        var imgElem = $(highlight).find('picture img');
+        if (imgElem.length === 0) {
+          imgElem = $(highlight).find('img');
         }
+        var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
+          imgElem.attr('src') :
+          imgElem.attr('data-src');
+
+        position = key;
+        if (event === 'promotionClick') {
+          position = $(highlight).find('picture img').data('position');
+        }
+        else {
+          $(highlight).find('picture img').data('position', key);
+        }
+        creative = Drupal.url(imgSrc);
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
