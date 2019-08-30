@@ -51,7 +51,7 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
 
     // Prepare response if label is present.
     if (!empty($label)) {
-      $this->labelManager->prepareResponse($label, $response);
+      $this->labelManager->prepareResponse($label, $sku->id(), $response);
     }
   }
 

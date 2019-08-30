@@ -270,8 +270,8 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
       && ($view_mode === 'full')) {
       $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
       // Add a flag to update promo label dynamically.
-      $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions']['currentSku'] = $sku_entity->id();
-      $build['promotions']['#attributes']['class'][] = 'promotions-labels hidden';
+      $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions'][$sku_entity->id()] = TRUE;
+      $build['promotions']['#attributes']['class'][] = 'promotions-labels sku-' . $sku_entity->id() . ' hidden';
     }
   }
 

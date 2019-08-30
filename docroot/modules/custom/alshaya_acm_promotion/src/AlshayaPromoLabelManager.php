@@ -288,20 +288,22 @@ class AlshayaPromoLabelManager {
    *
    * @param string $label
    *   Label HTML.
+   * @param string $skuId
+   *   Sku ID.
    * @param \Drupal\Core\Ajax\AjaxResponse|null $response
    *   Ajax Response.
    *
    * @return \Drupal\Core\Cache\CacheableAjaxResponse
    *   Ajax Response.
    */
-  public function prepareResponse($label, $response = NULL) {
+  public function prepareResponse($label, $skuId, $response = NULL) {
     if (empty($response)) {
       $response = new CacheableAjaxResponse();
     }
 
     if ($response instanceof AjaxResponse) {
-      $response->addCommand(new HtmlCommand('.acq-content-product .promotions div.promotions-labels', $label));
-      $response->addCommand(new InvokeCommand('.acq-content-product .promotions div.promotions-labels', 'removeClass', ['hidden']));
+      $response->addCommand(new HtmlCommand('.acq-content-product .promotions .promotions-labels.sku-' . $skuId, $label));
+      $response->addCommand(new InvokeCommand('.acq-content-product .promotions .promotions-labels.sku-' . $skuId, 'removeClass', ['hidden']));
     }
 
     return $response;
