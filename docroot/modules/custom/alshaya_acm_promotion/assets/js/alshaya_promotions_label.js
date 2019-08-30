@@ -6,27 +6,29 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  function updateAlshayaPromotionsLabel(currentSku, context) {
-    var dynamicPromoLabelHolder = $('.acq-content-product .promotions div.promotions-labels', context);
-    var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity', context);
+  function updateAlshayaPromotionsLabel(alshayaAcmPromotions, context) {
+    for (var dynamicPromotionSku in alshayaAcmPromotions) {
+      if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
+        var dynamicPromoLabelHolders = $('.acq-content-product .promotions .promotions-labels', context);
+        var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity', context);
 
-    // Check if cart is empty.
-    if (cartQuantity.length) {
-      if (currentSku  !== undefined) {
-        var getPromoLabel = new Drupal.ajax({
-          url: Drupal.url('get-promotion-label/' + currentSku),
-          element: false,
-          base: false,
-          progress: {type: 'throbber'},
-          submit: {js: true}
-        });
+        // If cart is not empty.
+        if (cartQuantity.length) {
+          var getPromoLabel = new Drupal.ajax({
+            url: Drupal.url('get-promotion-label/' + dynamicPromotionSku),
+            element: false,
+            base: false,
+            progress: {type: 'throbber'},
+            submit: {js: true}
+          });
 
-        getPromoLabel.options.type = 'GET';
-        getPromoLabel.execute();
+          getPromoLabel.options.type = 'GET';
+          getPromoLabel.execute();
+        }
+        else {
+          dynamicPromoLabelHolders.removeClass('hidden');
+        }
       }
-    }
-    else {
-      dynamicPromoLabelHolder.removeClass('hidden');
     }
   }
 
@@ -36,9 +38,8 @@
 
       if (alshayaAcmPromotions !== undefined) {
         // Go ahead and display dynamic promotions.
-        var currentSku = alshayaAcmPromotions.currentSku;
         $('.acq-content-product .promotions div', context).once('update-promo-label-pdp').each(function () {
-          updateAlshayaPromotionsLabel(currentSku, context);
+          updateAlshayaPromotionsLabel(alshayaAcmPromotions, context);
         });
       }
     }

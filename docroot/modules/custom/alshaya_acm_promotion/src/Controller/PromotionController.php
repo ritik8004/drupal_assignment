@@ -330,7 +330,7 @@ class PromotionController extends ControllerBase {
 
     $response = [];
     if (!empty($label)) {
-      $response = $this->promoLabelManager->prepareResponse($label);
+      $response = $this->promoLabelManager->prepareResponse($label, $sku->id());
 
       // Add cache metadata.
       $cache_array = [

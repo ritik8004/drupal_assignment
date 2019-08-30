@@ -1265,7 +1265,7 @@ class SkuManager {
           $childSkus = $this->fetchChildSkuTexts($skus);
           if (!empty($childSkus)) {
             // Merge the list of SKUs.
-            $skus += $childSkus;
+            $skus = array_unique(array_merge($skus, $childSkus));
           }
         }
 
@@ -1330,14 +1330,12 @@ class SkuManager {
    *   Unique List of child SKUs.
    */
   public function fetchChildSkuTexts(array $skus) {
-    $childSkus = [];
-    foreach ($skus as $sku) {
-      foreach ($this->getChildSkus($sku) as $childSku) {
-        if ($childSku instanceof SKUInterface) {
-          $childSkus[$childSku->id()] = $childSku->getSku();
-        }
-      }
-    }
+    $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = asfcs.entity_id');
+    $query->condition('asfd.sku', $skus, 'IN');
+    $query->fields('asfcs', ['field_configured_skus_value']);
+    $query->distinct();
+    $childSkus = $query->execute()->fetchCol();
 
     return $childSkus;
   }
