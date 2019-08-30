@@ -800,6 +800,15 @@ class SkuManager {
     $promotion_nodes = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
+    if (empty($promotion) && $sku->bundle() == 'simple') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
+      if ($parent instanceof SKUInterface) {
+        $promotion = $parent->get('field_acq_sku_promotions')->getValue();
+      }
+    }
+
     $promotion_nids = [];
     foreach ($promotion as $promo) {
       $promotion_nids[] = $promo['target_id'];

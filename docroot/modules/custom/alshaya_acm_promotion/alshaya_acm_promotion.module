@@ -468,11 +468,6 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     return;
   }
 
-  $promotion_id = \Drupal::request()->get('promotion_id') ?? NULL;
-  if (empty($promotion_id)) {
-    return;
-  }
-
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -502,6 +497,11 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
 
   // Add PDP slider position config to variable so it is available in themes.
   $build['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
+
+  $promotion_id = \Drupal::request()->get('promotion_id') ?? NULL;
+  if (empty($promotion_id)) {
+    return;
+  }
 
   $coupon = \Drupal::request()->get('coupon') ?? '';
 
