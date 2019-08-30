@@ -8,42 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Delete unused image styles.
- */
-function alshaya_config_update_8602() {
-  alshaya_config_delete_configs(
-    [
-      'image.style.137x144',
-      'image.style.255x202',
-      'image.style.304x144',
-      'image.style.420x192',
-      'image.style.449x288',
-      'image.style.472x202',
-      'image.style.606x288',
-      'image.style.923x288',
-      'image.style.348x202',
-      'image.style.348x428',
-      'image.style.checkout_summary_block_thumbnail',
-      'image.style.product_zoom_small_81x72',
-      'responsive_image.styles.291x288',
-      'responsive_image.styles.921x168',
-      'responsive_image.styles.1026x288',
-      'responsive_image.styles.w449',
-      'responsive_image.styles.w501',
-      'responsive_image.styles.w606',
-      'image.style.224x216',
-      'image.style.304x132',
-      'image.style.702x202',
-      'image.style.w349',
-      'image.style.w472',
-      'image.style.w501',
-    ]
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Creates config for `alshaya_config` module.
  */
 function alshaya_config_update_8601() {
