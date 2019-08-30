@@ -141,6 +141,7 @@ class AlshayaFeed {
       $context['sandbox']['count'] = 0;
       $context['sandbox']['current'] = 0;
       $context['sandbox']['feed_template'] = drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig';
+      $context['results']['files'] = [];
     }
 
     $query = $this->getNodesQuery();
@@ -193,22 +194,29 @@ class AlshayaFeed {
    */
   public function process(array $nids, &$context) {
     $updates = 0;
-    $context['results']['products'] = [];
+
     foreach ($nids as $nid) {
       $updates++;
       $product = $this->feedSkuInfoHelper->prepareFeedData($nid);
       if (empty($product)) {
         continue;
       }
+
       foreach ($product as $lang => $item) {
-        $context['results']['products'][$lang][] = $this->twig
+        $file_content = PHP_EOL;
+        if (!isset($context['results']['files'][$lang])) {
+          $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>" . PHP_EOL;
+          $context['results']['files'][$lang] = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
+        }
+
+        $file_content .= $this->twig
           ->loadTemplate($context['sandbox']['feed_template'])
           ->render(['product' => $item]);
-      }
-    }
 
-    foreach ($context['results']['products'] as $lang => $products) {
-      $context['results']['markups'][$lang][] = implode(PHP_EOL, $products);
+        if (!file_put_contents($context['results']['files'][$lang], $file_content, FILE_APPEND)) {
+          $this->logger->error('could not create feed file: @file', ['@file' => $context['results']['files'][$lang]]);
+        }
+      }
     }
 
     return $updates;
@@ -221,14 +229,11 @@ class AlshayaFeed {
    *   The batch current context.
    */
   public function dumpXml(&$context) {
-    foreach ($context['results']['markups'] as $lang => $markup) {
-      $markup = implode("\n", $markup);
-      $file_content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<feed>\n<products>{$markup}\n</products>\n</feed>";
-      $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://feed_{$lang}_wip.xml"));
-      if (!file_put_contents($path, $file_content)) {
+    foreach ($context['results']['files'] as $path) {
+      $file_content = "</products>\n</feed>";
+      if (!file_put_contents($path, $file_content, FILE_APPEND)) {
         $this->logger->error('could not create feed file: @file', ['@file' => $path]);
       }
-
     }
   }
 
