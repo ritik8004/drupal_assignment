@@ -14,6 +14,10 @@
   &.status-returned {
     text-transform: uppercase;
     padding-top: 0.125rem;
+    display: flex;
+    align-items: center;
+    line-height: normal;
+    justify-content: center;
 
     @include breakpoint($tablet) {
       padding-top: 0.1875rem;
