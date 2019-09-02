@@ -12,7 +12,7 @@
   // Display errors for form fields.
   $.fn.checkoutPaymentError = function (formErrors) {
     Drupal.checkoutComProcessed = false;
-    for (const errorFieldName in formErrors) {
+    for (var errorFieldName in formErrors) {
       Drupal.checkoutComShowError($('[name="'+ errorFieldName +'"]'), formErrors[errorFieldName]);
     }
     $(document).trigger('checkoutcom_form_error');
