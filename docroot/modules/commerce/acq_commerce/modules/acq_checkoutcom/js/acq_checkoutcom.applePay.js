@@ -8,13 +8,10 @@
 
   var applePaySessionObject;
 
-  class CheckoutComApplePay {
-    constructor(settings, context) {
-      this.context = context;
-      this.settings = settings;
-    }
-
-    performValidation (valURL) {
+  function CheckoutComApplePay(settings, context){
+    this.context = context;
+    this.settings = settings;
+    this.performValidation = function (valURL) {
       var controllerUrl = Drupal.url('checkoutcom/applepay/validate');
       var validationUrl = controllerUrl + '?u=' + valURL;
 
@@ -28,9 +25,9 @@
         xhr.open('GET', validationUrl);
         xhr.send();
       });
-    }
+    };
 
-    sendChargeRequest (paymentData) {
+    this.sendChargeRequest = function (paymentData) {
       return new Promise(function(resolve, reject) {
         $.ajax({
           url: Drupal.url('checkoutcom/applepay/save-payment'),
@@ -49,10 +46,6 @@
           }
         });
       });
-    }
-
-    getLineItems () {
-      return [];
     };
   }
 
