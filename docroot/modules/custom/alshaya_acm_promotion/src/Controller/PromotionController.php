@@ -169,6 +169,7 @@ class PromotionController extends ControllerBase {
           'query' => [
             'promotion_id' => $node->id(),
             'coupon' => $request->query->get('coupon'),
+            'back' => 1,
           ],
         ]
       );

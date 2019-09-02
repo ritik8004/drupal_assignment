@@ -500,7 +500,8 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
 
   $coupon = \Drupal::request()->get('coupon') ?? '';
   $promotion_id = \Drupal::request()->get('promotion_id') ?? NULL;
-  if (!empty($promotion_id)) {
+  $back = \Drupal::request()->get('back') ?? NULL;
+  if (!empty($back)) {
     $build['back_to_collection'] = [
       '#type' => 'link',
       '#title' => t('Back to Collection'),
