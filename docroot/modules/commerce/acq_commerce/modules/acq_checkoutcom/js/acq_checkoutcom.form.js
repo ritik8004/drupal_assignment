@@ -251,17 +251,15 @@
     };
 
     // Wait for tokenisation before submitting form.
-    new Promise(function (resolve, reject) {
-      $(this).showCheckoutLoader();
-      var wait_for_tokenisation = setInterval(function () {
-        if (Drupal.checkoutComTokenisationProcessed === true) {
-          clearInterval(wait_for_tokenisation);
-          (Drupal.checkoutComTokenised === true)
-            ? resolve()
-            : reject(new Error("checkout.com tokenisation failed."));
-        }
-      }, 100);
-    }).then(promiseResolve);
+    $(this).showCheckoutLoader();
+    var wait_for_tokenisation = setInterval(function () {
+      if (Drupal.checkoutComTokenisationProcessed === true) {
+        clearInterval(wait_for_tokenisation);
+        (Drupal.checkoutComTokenised === true)
+          ? promiseResolve()
+          : console.error('checkout.com tokenisation failed.');
+      }
+    }, 100);
   };
 
 })(jQuery, Drupal, drupalSettings);
