@@ -140,9 +140,7 @@ class AlshayaFeedSkuInfoHelper {
       // Get the prices.
       $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
       $prices = $this->skuManager->getMinPrices($sku, $color);
-      $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
 
-      $stockInfo = $this->skuInfoHelper->stockInfo($sku);
       $meta_tags = $this->skuInfoHelper->metaTags($node, [
         'title',
         'description',
@@ -157,19 +155,23 @@ class AlshayaFeedSkuInfoHelper {
         'url' => $this->skuInfoHelper->getEntityUrl($node),
         'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
         'description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['value'] : '',
-        'images' => $this->skuInfoHelper->getMedia($sku_for_gallery, 'pdp')['images'],
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
-        'stock' => [
-          'status' => $stockInfo['in_stock'],
-          'qty' => $stockInfo['stock'],
-        ],
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
         'meta_description' => $meta_tags['description'] ?? '',
         'meta_keywords' => $meta_tags['keywords'] ?? '',
         'meta_title' => $meta_tags['title'] ?? '',
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
+
+      if ($sku->bundle() == 'simple') {
+        $stockInfo = $this->skuInfoHelper->stockInfo($sku);
+        $product[$lang]['stock'] = [
+          'status' => $stockInfo['in_stock'],
+          'qty' => $stockInfo['stock'],
+        ];
+        $product[$lang]['images'] = $this->getGalleryMedia($sku);
+      }
 
       if ($sku->bundle() === 'configurable') {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
@@ -197,7 +199,7 @@ class AlshayaFeedSkuInfoHelper {
 
       $product[$lang]['linked_skus'] = [];
       foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
+        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type, FALSE);
         $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
     }
@@ -235,7 +237,7 @@ class AlshayaFeedSkuInfoHelper {
    *   Configurable Values.
    */
   protected function getGalleryMedia(SKUInterface $sku): array {
-    $media_items = $this->skuImagesManager->getGalleryMedia($sku, FALSE);
+    $media_items = $this->skuImagesManager->getProductMedia($sku, 'pdp');
     if (empty($media_items) || empty($media_items['media_items'])) {
       return [];
     }
