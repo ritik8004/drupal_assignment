@@ -137,7 +137,7 @@ class SelectFreeGiftForm extends FormBase {
         '#tree' => TRUE,
       ];
 
-      $attributes = $this->skuManager->getConfigurableAttributes($sku);
+      $attributes = array_keys($configurables);
       $children = $this->promotionsManager->getAvailableFreeGiftChildren($sku);
 
       $combinations = [];
