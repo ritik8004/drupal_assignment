@@ -24,4 +24,6 @@ dependencies:
   - drupal:views
   - views_infinite_scroll:views_infinite_scroll
   - alshaya_acm_promotion:alshaya_acm_promotion
+  - alshaya_search:alshaya_search
+  - alshaya_facets_pretty_paths:alshaya_facets_pretty_paths
 package: Alshaya

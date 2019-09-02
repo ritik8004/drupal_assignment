@@ -94,6 +94,7 @@ class AlshayaSearchApiFacetsManager {
    */
   public function createFacet($field_key, $facet_source_id, $filter_bar_id, $prefix = '', array $overrides = []) {
     $template_id = 'facets.facet.' . $field_key;
+    $source = \Drupal::configFactory()->getEditable($facet_source_id);
 
     $id = $prefix ? $prefix . '_' . $field_key : $field_key;
     $facet_id = 'facets.facet.' . $id;
@@ -104,9 +105,11 @@ class AlshayaSearchApiFacetsManager {
       return;
     }
 
+    if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
+      $data['url_alias'] = $field_key;
+    }
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
-    $data['url_alias'] = $field_key;
     $data['field_identifier'] = $data['field_identifier'] ?? 'attr_' . $field_key;
     $data = array_replace_recursive($data, $overrides);
     $this->configFactory->getEditable($facet_id)->setData($data)->save();
