@@ -219,3 +219,11 @@ footer_js:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+cart_js:
+  js:
+    js/cart-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
