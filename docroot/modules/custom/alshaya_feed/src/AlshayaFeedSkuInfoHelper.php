@@ -170,7 +170,7 @@ class AlshayaFeedSkuInfoHelper {
           'status' => $stockInfo['in_stock'],
           'qty' => $stockInfo['stock'],
         ];
-        $product[$lang]['images'] = $this->skuInfoHelper->getMedia($sku, 'pdp')['images'];
+        $product[$lang]['images'] = $this->getGalleryMedia($sku);
       }
 
       if ($sku->bundle() === 'configurable') {
