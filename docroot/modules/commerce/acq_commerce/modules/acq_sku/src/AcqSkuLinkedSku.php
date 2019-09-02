@@ -112,11 +112,13 @@ class AcqSkuLinkedSku {
    *   The sku entity.
    * @param string $type
    *   The linked type. Like - related/crosssell/upsell.
+   * @param bool $api_call
+   *   True to make api call to get linked sku, false to get from cache only.
    *
    * @return array
    *   All linked skus of given type.
    */
-  public function getLinkedSkus(SKU $sku, $type = self::LINKED_SKU_TYPE_ALL) {
+  public function getLinkedSkus(SKU $sku, $type = self::LINKED_SKU_TYPE_ALL, $api_call = TRUE) {
     // Cache key is like - 'acq_sku:linked_skus:123:LINKED_SKU_TYPE_ALL'.
     $cache_key = 'acq_sku:linked_skus:' . $sku->id() . ':' . $type;
 
@@ -126,6 +128,10 @@ class AcqSkuLinkedSku {
     // If already cached.
     if ($cache) {
       return $cache->data;
+    }
+
+    if (!$api_call) {
+      return [];
     }
 
     $data = [];

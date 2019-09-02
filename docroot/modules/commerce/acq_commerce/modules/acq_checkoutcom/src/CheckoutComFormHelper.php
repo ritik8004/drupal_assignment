@@ -84,16 +84,6 @@ class CheckoutComFormHelper {
       ],
     ];
 
-    $form['cc_name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Name on card'),
-      '#id' => 'cardName',
-      '#attributes' => [
-        'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
-        'data-checkout' => 'card-name',
-      ],
-    ] + $states;
-
     $form['cc_type'] = [
       '#type' => 'hidden',
       '#attributes' => [
