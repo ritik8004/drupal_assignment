@@ -237,7 +237,7 @@ class AlshayaFeedSkuInfoHelper {
    *   Configurable Values.
    */
   protected function getGalleryMedia(SKUInterface $sku): array {
-    $media_items = $this->skuImagesManager->getGalleryMedia($sku, FALSE);
+    $media_items = $this->skuImagesManager->getProductMedia($sku, 'pdp');
     if (empty($media_items) || empty($media_items['media_items'])) {
       return [];
     }
