@@ -308,7 +308,7 @@ class AlshayaPromotionsManager {
    * @param int $promotion_id
    *   Promotion node id.
    *
-   * @return array
+   * @return \Drupal\acq_sku\Entity\SKU[]
    *   Free gift sku entities.
    */
   public function getFreeGiftSkuEntitiesByPromotionId(int $promotion_id) {
@@ -380,23 +380,24 @@ class AlshayaPromotionsManager {
 
       $free_skus = $this->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
 
+      $route_parameters = [
+        'node' => $promotion_id,
+        'js' => 'nojs',
+      ];
+
+      $options = [
+        'attributes' => [
+          'class' => ['use-ajax'],
+          'data-dialog-type' => 'modal',
+          'data-dialog-options' => '{"width":"auto"}',
+        ],
+        'query' => [
+          'coupon' => reset($coupons),
+        ],
+      ];
+
       if (count($free_skus) > 1) {
-        $route_parameters = [
-          'node' => $promotion_id,
-          'js' => 'nojs',
-        ];
-
-        $options = [
-          'attributes' => [
-            'class' => ["use-ajax"],
-            'data-dialog-type' => "modal",
-            'data-dialog-options' => '{"width":"auto"}',
-          ],
-          'query' => [
-            'coupon' => reset($coupons),
-          ],
-        ];
-
+        $route_parameters['node'] = $promotion_id;
         $link_coupons = Link::createFromRoute(
           reset($coupons),
           'alshaya_acm_promotion.free_gifts_list',
@@ -418,8 +419,26 @@ class AlshayaPromotionsManager {
       }
       else {
         $free_sku_entity = reset($free_skus);
-        $free_gift_promos[$promotion_id]['sku_title'] = $free_sku_entity->get('name')->getString();
-        $free_gift_promos[$promotion_id]['sku_entity_id'] = $free_sku_entity->id();
+        if ($free_sku_entity->bundle() == 'simple') {
+          $free_gift_promos[$promotion_id]['sku_title'] = $free_sku_entity->get('name')->getString();
+          $free_gift_promos[$promotion_id]['sku_entity_id'] = $free_sku_entity->id();
+        }
+        else {
+          $route_parameters['acq_sku'] = $free_sku_entity->id();
+          $options['query']['promotion_id'] = $promotion_id;
+          $link = Link::createFromRoute(
+            $promotion['text'],
+            'alshaya_acm_promotion.free_gift_modal',
+            $route_parameters,
+            $options
+          )->toString();
+
+          $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click @coupon to get a Free Gift @title', [
+            '@coupon' => $link,
+            '@title' => $free_sku_entity->label(),
+          ]);
+        }
+
       }
     }
 

@@ -155,11 +155,9 @@ class AlshayaPromoLabelManager {
       $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
     }
 
-    $eligiblePromotions = $this->filterEligiblePromotions($promotion_nodes);
-
-    foreach ($eligiblePromotions as $eligiblePromotion) {
+    foreach ($promotion_nodes as $promotion_node) {
       // Generate Link.
-      $promos[] = $this->preparePromoDisplay($eligiblePromotion, $sku, $view_mode);
+      $promos[] = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
     }
 
     return $promos;

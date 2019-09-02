@@ -468,11 +468,6 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     return;
   }
 
-  $promotion_id = \Drupal::request()->get('promotion_id') ?? NULL;
-  if (empty($promotion_id)) {
-    return;
-  }
-
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -504,26 +499,29 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
   $build['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
 
   $coupon = \Drupal::request()->get('coupon') ?? '';
-
-  $build['back_to_collection'] = [
-    '#type' => 'link',
-    '#title' => t('Back to Collection'),
-    '#url' => Url::fromRoute('alshaya_acm_promotion.free_gifts_list',
-      [
-        'node' => $promotion_id,
-        'js' => 'nojs',
-      ],
-      [
-        'attributes' => [
-          'class' => ['use-ajax'],
+  $promotion_id = \Drupal::request()->get('promotion_id') ?? NULL;
+  $back = \Drupal::request()->get('back') ?? NULL;
+  if (!empty($back)) {
+    $build['back_to_collection'] = [
+      '#type' => 'link',
+      '#title' => t('Back to Collection'),
+      '#url' => Url::fromRoute('alshaya_acm_promotion.free_gifts_list',
+        [
+          'node' => $promotion_id,
+          'js' => 'nojs',
         ],
-        'query' => [
-          'replace' => 1,
-          'coupon' => $coupon,
-        ],
-      ]
-    ),
-  ];
+        [
+          'attributes' => [
+            'class' => ['use-ajax'],
+          ],
+          'query' => [
+            'replace' => 1,
+            'coupon' => $coupon,
+          ],
+        ]
+      ),
+    ];
+  }
 
   $form_state = new FormState();
   $form_state->setStorage([
