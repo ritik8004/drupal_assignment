@@ -28,10 +28,10 @@
       {% endfor %}
     {% endif %}
   </custom_attributes>
-  {% if product.type == 'simple' %}
+  {% if product.type_id == 'simple' %}
     <stock>
-      <qty>{{ variant.stock.qty }}</qty>
-      <is_in_stock>{{ variant.stock.status }}</is_in_stock>
+      <qty>{{ product.stock.qty }}</qty>
+      <is_in_stock>{{ product.stock.status }}</is_in_stock>
     </stock>
     <images>
       {% for image in product.images %}
@@ -55,7 +55,7 @@
           {% endif %}
         </configurable_attributes>
         <swatch_image>
-          <url>{{ variant.swatch_image.image_url }}</url>
+          <url>{{ variant.swatch_image.display_value }}</url>
           <label>{{ variant.swatch_image.display_label }}</label>
         </swatch_image>
         <images>
