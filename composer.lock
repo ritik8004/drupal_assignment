@@ -6898,7 +6898,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1561765981",
+                    "datestamp": "1562161679",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8582,7 +8582,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
             },
-            "time": "2019-07-23T20:40:13+00:00"
+            "time": "2019-07-29T12:50:22+00:00"
         },
         {
             "name": "drupal/lightning_media",
@@ -12682,7 +12682,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.2",
-                    "datestamp": "1563488885",
+                    "datestamp": "1559004185",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13619,8 +13619,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+2-dev",
-                    "datestamp": "1538223484",
+                    "version": "8.x-1.0-rc1+1-dev",
+                    "datestamp": "1537865580",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
