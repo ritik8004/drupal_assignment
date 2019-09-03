@@ -41,6 +41,17 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('mobile_main_menu_max_depth'),
     ];
 
+    $form['desktop_main_menu_layout'] = [
+      '#type' => 'select',
+      '#options' => [
+        'default' => 'default',
+        'menu_inline_display' => 'inline menu display',
+      ],
+      '#default_value' => $config->get('desktop_main_menu_layout'),
+      '#title' => $this->t('Main menu display on desktop.'),
+      '#description' => $this->t('Select inline menu display option to display the l3 option inline to l2 otherwise it will follow the core.'),
+    ];
+
     return $form;
   }
 

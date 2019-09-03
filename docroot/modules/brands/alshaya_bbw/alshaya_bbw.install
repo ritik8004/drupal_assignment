@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Update desktop_main_menu_layout value to menu_inline_display.
+ */
+function alshaya_bbw_update_8106() {
+  \Drupal::configFactory()->getEditable('alshaya_main_menu.settings')
+    ->set('desktop_main_menu_layout', 'menu_inline_display')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new string translations.
  */
 function alshaya_bbw_update_8105() {
