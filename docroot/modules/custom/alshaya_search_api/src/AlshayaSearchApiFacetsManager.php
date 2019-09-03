@@ -105,13 +105,14 @@ class AlshayaSearchApiFacetsManager {
       return;
     }
 
-    if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
-      $data['url_alias'] = $field_key;
-    }
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
     $data['field_identifier'] = $data['field_identifier'] ?? 'attr_' . $field_key;
     $data = array_replace_recursive($data, $overrides);
+    $data['url_alias'] = strtolower(str_replace(' ', '_', $data->get('name')));
+    if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
+      $data['url_alias'] = $field_key;
+    }
     $this->configFactory->getEditable($facet_id)->setData($data)->save();
 
     // Update the filter bar (summary).
