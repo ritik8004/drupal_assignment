@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "039e88c12cff036135d2772b9e4ec8a6",
+    "content-hash": "ec0e083a27349f4ac02d155b8b836c77",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -6899,7 +6899,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1562161679",
+                    "datestamp": "1561765981",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8583,7 +8583,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
             },
-            "time": "2019-07-29T12:50:22+00:00"
+            "time": "2019-07-23T20:40:13+00:00"
         },
         {
             "name": "drupal/lightning_media",
@@ -12683,7 +12683,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.2",
-                    "datestamp": "1559004185",
+                    "datestamp": "1563488885",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
