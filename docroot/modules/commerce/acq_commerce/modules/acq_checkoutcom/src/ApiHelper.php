@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 
@@ -20,8 +19,6 @@ use Drupal\user\UserInterface;
  * Class ApiHelper.
  */
 class ApiHelper {
-
-  use StringTranslationTrait;
 
   /**
    * Alshaya API Wrapper service object.
@@ -253,9 +250,7 @@ class ApiHelper {
 
     if (!empty($response) && isset($response['message'])) {
       $this->logger->error(strtr($response['message'], $response['parameters'] ?? []));
-      $this->messenger->addError(
-        $this->t('Something went wrong, please try again later.')
-      );
+      $this->messenger->addError(acq_commerce_api_down_global_error_message());
       return [];
     }
 
