@@ -5,8 +5,10 @@ namespace Drupal\alshaya_facets_pretty_paths;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -43,6 +45,20 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $languageManager;
 
   /**
+   * The path alias manager.
+   *
+   * @var \Drupal\Core\Path\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
+   * Facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetManager;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [
@@ -63,62 +79,115 @@ class AlshayaFacetsPrettyPathsHelper {
    *   The entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   *   The path alias manager.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
+   *   Facet manager.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              AliasManagerInterface $alias_manager,
+                              DefaultFacetManager $facets_manager) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
+    $this->aliasManager = $alias_manager;
+    $this->facetManager = $facets_manager;
   }
 
   /**
    * Encode url components according to given rules.
    *
-   * @param string $element
+   * @param string $source
+   *   Facet source.
+   * @param string $alias
+   *   Facet alias.
+   * @param string $value
    *   Raw element value.
    *
    * @return string
    *   Encoded element.
    */
-  public static function encodeFacetUrlComponents($element) {
-    // Convert first letter to lowercase.
-    $words = explode(' ', $element);
-    $lc_word = '';
-    foreach ($words as $word) {
-      $word = ' ' . lcfirst($word);
-      $lc_word .= $word;
-    }
-    $element = ltrim($lc_word);
-
-    foreach (self::REPLACEMENTS as $key => $value) {
-      $element = str_replace($key, $value, $element);
+  public function encodeFacetUrlComponents(string $source, string $alias, string $value) {
+    if (is_numeric($value)) {
+      return $value;
     }
 
-    return $element;
+    $static = &drupal_static(__FUNCTION__, []);
+    if (isset($static[$alias][$value])) {
+      return $static[$alias][$value];
+    }
 
+    $encoded = $value;
+    $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
+
+    $query = $this->termStorage->getQuery();
+    $query->condition('name', $value);
+    $query->condition('field_sku_attribute_code', $attribute_code);
+    $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+    $tids = $query->execute();
+    foreach ($tids ?? [] as $tid) {
+      $term = $this->termStorage->load($tid);
+      if ($term instanceof TermInterface) {
+        if ($term->language()->getId() != 'en' && $term->hasTranslation('en')) {
+          $term = $term->getTranslation('en');
+        }
+
+        $encoded = str_replace('en/', '', trim($term->toUrl()->toString(), '/'));
+        break;
+      }
+    }
+
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $encoded = str_replace($original, $replacement, $encoded);
+    }
+
+    $static[$alias][$value] = $encoded;
+    return $encoded;
   }
 
   /**
    * Decode url components according to given rules.
    *
-   * @param string $element
+   * @param string $value
    *   Encoded element value.
    *
    * @return string
    *   Raw element.
    */
-  public static function decodeFacetUrlComponents($element) {
-    foreach (self::REPLACEMENTS as $key => $value) {
-      $element = str_replace($value, $key, $element);
+  public function decodeFacetUrlComponents(string $value) {
+    if (is_numeric($value)) {
+      return $value;
     }
 
-    // Capitalize first letter.
-    $element = ucwords($element);
+    $static = &drupal_static(__FUNCTION__, []);
+    if (isset($static[$value])) {
+      return $static[$value];
+    }
 
-    return $element;
+    $decoded = $value;
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $decoded = str_replace($replacement, $original, $decoded);
+    }
+
+    $tid = str_replace('/taxonomy/term/', '', $this->aliasManager->getPathByAlias('/' . $decoded, 'en'));
+    if ($tid) {
+      $term = $this->termStorage->load($tid);
+
+      if ($term instanceof TermInterface) {
+        if ($term->language()->getId() != 'en' && $term->hasTranslation('en')) {
+          $term = $term->getTranslation('en');
+        }
+
+        $decoded = $term->label();
+      }
+    }
+
+    $static[$value] = $decoded;
+    return $decoded;
   }
 
   /**
@@ -172,6 +241,10 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Processed query params.
    */
   public function getTranslatedFilters(string $attribute_code, string $filter_value, bool $default = TRUE) {
+    if (is_numeric($filter_value)) {
+      return $filter_value;
+    }
+
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     if ($current_langcode !== 'en') {
       $translated_filter_values = &drupal_static(__FUNCTION__, []);
@@ -197,6 +270,33 @@ class AlshayaFacetsPrettyPathsHelper {
       }
     }
     return $filter_value;
+  }
+
+  /**
+   * Get alias <=> field mapping for facets.
+   *
+   * @param string $source
+   *   Facet Source.
+   *
+   * @return array
+   *   Mapping with alias as key and field as value.
+   */
+  public function getFacetAliasFieldMapping(string $source) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$source])) {
+      return $static[$source];
+    }
+
+    $static[$source] = [];
+
+    // Get all facets of the given source.
+    $facets = $this->facetManager->getFacetsByFacetSourceId($source);
+    foreach ($facets ?? [] as $facet) {
+      $static[$source][$facet->getUrlAlias()] = str_replace('attr_', '', $facet->getFieldIdentifier());
+    }
+
+    return $static[$source];
   }
 
 }

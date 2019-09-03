@@ -152,12 +152,6 @@
     if ($('.checkoutcom-credit-card-input').length === 0) {
       return formHasErrors;
     }
-    // Sanity check of credit card name.
-    var name = $('.checkoutcom-credit-card-name').val().toString().trim();
-    if (!isNaN(name) && /\d+/.test(name) === true) {
-      Drupal.checkoutComShowError($('.checkoutcom-credit-card-name'), Drupal.t('Please enter a valid name'));
-      formHasErrors = true;
-    }
 
     // Sanity check of credit card number.
     var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
@@ -222,7 +216,6 @@
     }
 
     CheckoutKit.createCardToken({
-      'name': $('#cardName').val(),
       'number': $('#cardNumber').val(),
       'expiryMonth': $('#cardMonth').val(),
       'expiryYear': $('#cardYear').val(),
@@ -258,17 +251,15 @@
     };
 
     // Wait for tokenisation before submitting form.
-    new Promise(function (resolve, reject) {
-      $(this).showCheckoutLoader();
-      var wait_for_tokenisation = setInterval(function () {
-        if (Drupal.checkoutComTokenisationProcessed === true) {
-          clearInterval(wait_for_tokenisation);
-          (Drupal.checkoutComTokenised === true)
-            ? resolve()
-            : reject(new Error("checkout.com tokenisation failed."));
-        }
-      }, 100);
-    }).then(promiseResolve);
+    $(this).showCheckoutLoader();
+    var wait_for_tokenisation = setInterval(function () {
+      if (Drupal.checkoutComTokenisationProcessed === true) {
+        clearInterval(wait_for_tokenisation);
+        (Drupal.checkoutComTokenised === true)
+          ? promiseResolve()
+          : console.error('checkout.com tokenisation failed.');
+      }
+    }, 100);
   };
 
 })(jQuery, Drupal, drupalSettings);
