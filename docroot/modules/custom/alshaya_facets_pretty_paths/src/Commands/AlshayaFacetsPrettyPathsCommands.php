@@ -61,17 +61,19 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function prettyPathsToggle(array $options = ['action' => NULL, 'page' => NULL]) {
+  public function prettyPathsToggle(array $options = [
+    'action' => NULL,
+    'page' => NULL,
+  ]) {
     if ($options['action'] == 'en' && $options['page']) {
       $this->enablePrettyPaths($options['page']);
-      $this->output()->writeln('Successfully enabled alshaya_facets_pretty_paths on ' . $options['page']);
     }
     elseif ($options['action'] == 'dis' && $options['page']) {
       $this->disablePrettyPaths($options['page']);
-      $this->output()->writeln('Successfully disabled alshaya_facets_pretty_paths on ' . $options['page']);
     }
     else {
-      $this->output()->writeln('Please specify action (en/dis) and page(plp/promo/search).');
+      $this->output()
+        ->writeln('Please specify action (en/dis) and page(plp/promo/search).');
     }
 
   }
@@ -90,20 +92,24 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
     /* @var \Drupal\facets\FacetInterface[] $facets */
     $facets = $this->facetManager->getEnabledFacets();
 
+    $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
+
+    if ($source->get('url_processor') == 'alshaya_facets_pretty_paths') {
+      $this->output()->writeln('alshaya_facets_pretty_paths already enabled on ' . $type);
+      return;
+    }
+
     // The url processor for facet_source and reset_facets processor
     // for facets_summary both need to be changed for pretty facets to work.
     // Set the url processor as alshaya_pretty_paths for PLP.
-    $this->configFactory
-      ->getEditable('facets.facet_source.search_api__' . $mapping['id'])
-      ->set('url_processor', 'alshaya_facets_pretty_paths')
-      ->save();
+    $source->set('url_processor', 'alshaya_facets_pretty_paths')->save();
 
     // Set url alias for facets.
     foreach ($facets as $facet) {
       if ($facet->getFacetSourceId() == 'search_api:' . $mapping['id']) {
         // Get the current pretty alias if already set or available in mapping.
         $alias = ($facet->getThirdPartySetting('alshaya_facets_pretty_paths', 'pretty_url_alias') ??
-          $mapping['alias'][$facet->id()]) ??
+            $mapping['alias'][$facet->id()]) ??
           strtolower(str_replace(' ', '_', $facet->get('name')));
         $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'pretty_url_alias', $alias);
         $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->getUrlAlias());
@@ -125,6 +131,8 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
         $summary->save();
       }
     }
+
+    $this->output()->writeln('Successfully enabled alshaya_facets_pretty_paths on ' . $type);
   }
 
   /**
@@ -136,43 +144,43 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function disablePrettyPaths(string $type) {
-    $mappings = _alshaya_facets_pretty_paths_get_mappings();
+    $mapping = _alshaya_facets_pretty_paths_get_mappings()[$type];
 
     /* @var \Drupal\facets\FacetInterface[] $facets */
     $facets = $this->facetManager->getEnabledFacets();
 
-    foreach ($mappings as $mapping) {
-      $source = $this->configFactory
-        ->getEditable('facets.facet_source.search_api__' . $mapping['id']);
-      if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
-        continue;
-      }
+    $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
+    if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
+      $this->output()->writeln('Could not disable, alshaya_facets_pretty_paths is not enabled on ' . $type);
+      return;
+    }
 
-      // Revert url processor.
-      $source->set('url_processor', 'query_string');
-      $source->save();
+    // Revert url processor.
+    $source->set('url_processor', 'query_string');
+    $source->save();
 
-      // Revert url alias for facets.
-      foreach ($facets as $facet) {
-        if ($facet->getFacetSourceId() == 'search_api:' . $mapping['id']) {
-          $alias = $facet->getThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->getUrlAlias());
-          $facet->setUrlAlias($alias);
-          $facet->save();
-        }
-      }
-
-      // Set the facets_summary processor back to reset_facets.
-      $summary = FacetsSummary::load($mapping['summary']);
-      if ($summary instanceof FacetsSummary) {
-        $processor_configs = $summary->getProcessorConfigs();
-        if (isset($processor_configs['alshaya_reset_facets'])) {
-          $processor_configs['alshaya_reset_facets']['processor_id'] = 'reset_facets';
-          $summary->addProcessor($processor_configs['alshaya_reset_facets']);
-          $summary->removeProcessor('alshaya_reset_facets');
-          $summary->save();
-        }
+    // Revert url alias for facets.
+    foreach ($facets as $facet) {
+      if ($facet->getFacetSourceId() == 'search_api:' . $mapping['id']) {
+        $alias = $facet->getThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->id());
+        $facet->setUrlAlias($alias);
+        $facet->save();
       }
     }
+
+    // Set the facets_summary processor back to reset_facets.
+    $summary = FacetsSummary::load($mapping['summary']);
+    if ($summary instanceof FacetsSummary) {
+      $processor_configs = $summary->getProcessorConfigs();
+      if (isset($processor_configs['alshaya_reset_facets'])) {
+        $processor_configs['alshaya_reset_facets']['processor_id'] = 'reset_facets';
+        $summary->addProcessor($processor_configs['alshaya_reset_facets']);
+        $summary->removeProcessor('alshaya_reset_facets');
+        $summary->save();
+      }
+    }
+
+    $this->output()->writeln('Successfully disabled alshaya_facets_pretty_paths on ' . $type);
   }
 
 }
