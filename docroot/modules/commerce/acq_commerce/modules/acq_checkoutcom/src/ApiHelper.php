@@ -218,6 +218,10 @@ class ApiHelper {
       $user = $this->entityTypeManager->getStorage('user')->load($user);
     }
 
+    if (!alshaya_acm_customer_is_customer($user)) {
+      return [];
+    }
+
     $cache_key = 'acq_checkoutcom:payment_cards:' . $user->id();
     $cache = $this->cache->get($cache_key);
     if ($cache) {
