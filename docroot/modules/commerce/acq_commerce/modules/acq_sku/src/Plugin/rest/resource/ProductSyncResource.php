@@ -396,6 +396,7 @@ class ProductSyncResource extends ResourceBase {
             // Check if this was the last simple SKU in its parent. If that's
             // the case, un-publish the node too.
             if ($parent_sku instanceof SKU) {
+              $this->acquireLock($parent_sku->getSku());
               $child_skus = $this->getChildSkus($parent_sku->id());
 
               // In case of no child SKU, un-publish the configurable
@@ -406,13 +407,13 @@ class ProductSyncResource extends ResourceBase {
                   '@parent' => $parent_sku->getSku(),
                 ]);
 
-                $this->acquireLock($parent_sku->getSku());
                 if (($node = $parent_sku->getPluginInstance()->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
                   $node->setPublished(FALSE);
                   $node->save();
                 }
-                $this->releaseLock($parent_sku->getSku());
               }
+
+              $this->releaseLock($parent_sku->getSku());
             }
 
             $deleted++;
