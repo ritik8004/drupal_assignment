@@ -16,6 +16,13 @@ use Drupal\Core\Site\Settings;
 class AlshayaAcmApiWrapper extends APIWrapper {
 
   /**
+   * Flag to allow disabling API calls.
+   *
+   * @var bool
+   */
+  public static $invokeApi = TRUE;
+
+  /**
    * Get linked skus for a given sku by linked type.
    *
    * @param string $sku
@@ -29,6 +36,11 @@ class AlshayaAcmApiWrapper extends APIWrapper {
    * @throws \Drupal\acq_commerce\Conductor\RouteException
    */
   public function getLinkedskus($sku, $type = AcqSkuLinkedSku::LINKED_SKU_TYPE_ALL) {
+    // We allow disabling api calls for some cases.
+    if (empty(static::$invokeApi)) {
+      return [];
+    }
+
     $sku = urlencode($sku);
     $endpoint = $this->apiVersion . "/agent/product/$sku/related/$type";
 
