@@ -111,7 +111,7 @@ class AlshayaOptionsListHelper {
     $query->condition('tfd.langcode', $langcode);
     if ($showImages) {
       $query->addField('tfs', 'field_options_list_bg_target_id', 'image');
-      $query->leftJoin('taxonomy_term__field_options_list_bg', 'tfs', 'tfa.entity_id = tfs.entity_id');
+      $query->innerJoin('taxonomy_term__field_options_list_bg', 'tfs', 'tfa.entity_id = tfs.entity_id');
     }
     if ($group) {
       $query->orderBy('tfd.name');
