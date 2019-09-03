@@ -145,6 +145,9 @@ class AlshayaSearchApiFacetsManager {
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
+
+    // Set weight of selling price facet as per the final price facet
+    // to maintain facet sequence on listing pages.
     if (strpos($field_key, 'selling_price') > -1) {
       switch ($prefix) {
         case 'plp':
