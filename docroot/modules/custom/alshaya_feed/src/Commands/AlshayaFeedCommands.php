@@ -2,13 +2,7 @@
 
 namespace Drupal\alshaya_feed\Commands;
 
-use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_feed\AlshayaFeed;
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -17,48 +11,6 @@ use Drush\Commands\DrushCommands;
  * @package Drupal\alshaya_feed\Commands
  */
 class AlshayaFeedCommands extends DrushCommands {
-
-  /**
-   * Database Connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  private $connection;
-
-  /**
-   * The date time service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  private $dateTime;
-
-  /**
-   * SKU Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuManager
-   */
-  private $skuManager;
-
-  /**
-   * Entity Type Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  private $entityTypeManager;
-
-  /**
-   * Alshaya feed service object.
-   *
-   * @var \Drupal\alshaya_feed\AlshayaFeed
-   */
-  protected $alshayaFeed;
-
-  /**
-   * Static reference to logger object.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected static $loggerStatic;
 
   /**
    * Config factory.
@@ -70,37 +22,12 @@ class AlshayaFeedCommands extends DrushCommands {
   /**
    * AlshayaFeedCommands constructor.
    *
-   * @param \Drupal\Core\Database\Connection $connection
-   *   Database Connection.
-   * @param \Drupal\Component\Datetime\TimeInterface $date_time
-   *   The Date Time service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   Logger.
-   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   SKU Manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
-   * @param \Drupal\alshaya_feed\AlshayaFeed $alshaya_feed
-   *   Alshaya feed service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
    */
   public function __construct(
-    Connection $connection,
-    TimeInterface $date_time,
-    LoggerChannelInterface $logger,
-    SkuManager $sku_manager,
-    EntityTypeManagerInterface $entity_type_manager,
-    AlshayaFeed $alshaya_feed,
     ConfigFactoryInterface $configFactory
   ) {
-    $this->connection = $connection;
-    $this->dateTime = $date_time;
-    $this->setLogger($logger);
-    self::$loggerStatic = $logger;
-    $this->skuManager = $sku_manager;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->alshayaFeed = $alshaya_feed;
     $this->configFactory = $configFactory->get('alshaya_feed.settings');
   }
 
