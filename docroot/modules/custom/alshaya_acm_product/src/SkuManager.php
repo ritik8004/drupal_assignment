@@ -1380,14 +1380,12 @@ class SkuManager {
    *   SKU full entity object.
    * @param string $type
    *   Type of Linked SKUs to return related/upsell.
-   * @param bool $api_call
-   *   True to make api call to get linked sku, false to get from cache only.
    *
    * @return array
    *   Linked SKUs for requested type.
    */
-  public function getLinkedSkus(SKU $sku, $type, $api_call = TRUE) {
-    $linked_skus = $this->linkedSkus->getLinkedSkus($sku, $type, $api_call);
+  public function getLinkedSkus(SKU $sku, $type) {
+    $linked_skus = $this->linkedSkus->getLinkedSkus($sku);
 
     $linked_skus_requested = [];
 

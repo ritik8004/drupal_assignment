@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -198,10 +199,18 @@ class AlshayaFeedSkuInfoHelper {
       }
 
       $product[$lang]['linked_skus'] = [];
+
+      // Disable API calls.
+      $invoke_api = AlshayaAcmApiWrapper::$invokeApi;
+      AlshayaAcmApiWrapper::$invokeApi = FALSE;
+
       foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type, FALSE);
+        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
+
+      // Revert to old state.
+      AlshayaAcmApiWrapper::$invokeApi = $invoke_api;
     }
 
     return $product;
