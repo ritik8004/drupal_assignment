@@ -52,7 +52,7 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
    *
    * @option action Enable or Disable.
    * @option page The page where pretty paths needs to be enabled or
-   *   disabled.
+   *   disabled - plp/promo/search.
    *
    * @aliases pretty-paths-toggle
    *
@@ -71,7 +71,7 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
       $this->output()->writeln('Successfully disabled alshaya_facets_pretty_paths on ' . $options['page']);
     }
     else {
-      $this->output()->writeln('Please specify action and page.');
+      $this->output()->writeln('Please specify action (en/dis) and page(plp/promo/search).');
     }
 
   }
