@@ -4,12 +4,15 @@ namespace Drupal\alshaya_options_list;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
+use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\search_api\ParseMode\ParseModePluginManager;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Helper functions for alshaya_options_list.
@@ -58,6 +61,20 @@ class AlshayaOptionsListHelper {
   protected $skuFieldsManager;
 
   /**
+   * Parse mode plugin manager.
+   *
+   * @var \Drupal\search_api\ParseMode\ParseModePluginManager
+   */
+  protected $parseModeManager;
+
+  /**
+   * Facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetManager;
+
+  /**
    * AlshayaOptionsListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -70,6 +87,10 @@ class AlshayaOptionsListHelper {
    *   The config factory.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\search_api\ParseMode\ParseModePluginManager $parse_mode_manager
+   *   Parse mode plugin manager.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
+   *   Facet manager.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -78,12 +99,16 @@ class AlshayaOptionsListHelper {
                               LanguageManagerInterface $language_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              ParseModePluginManager $parse_mode_manager,
+                              DefaultFacetManager $facet_manager) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->parseModeManager = $parse_mode_manager;
+    $this->facetManager = $facet_manager;
   }
 
   /**
@@ -103,6 +128,7 @@ class AlshayaOptionsListHelper {
    */
   public function fetchAllTermsForAttribute($attributeCode, $showImages = FALSE, $group = FALSE, $searchString = '') {
     $return = [];
+    $facet_results = &drupal_static('allRequiredFacetResults', []);
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['name', 'tid']);
@@ -127,24 +153,34 @@ class AlshayaOptionsListHelper {
 
     foreach ($options as $option) {
       if (!empty($option->name)) {
-        $list_object = [];
-        $list_object['title'] = $option->name;
-        $url = [
-          'query' => [
-            'f[0]' => $attributeCode . ':' . $option->name,
-            'sort_bef_combine' => 'search_api_relevance DESC',
-          ],
-        ];
-        $list_object['url'] = Url::fromUri('internal:/search', $url);
-        if ($showImages) {
-          if (!empty($option->image)) {
-            $file = $this->fileStorage->load($option->image);
-            if ($file instanceof File) {
-              $list_object['image_url'] = $file->getFileUri();
-            }
+        $results_present = FALSE;
+        foreach ($facet_results[$attributeCode] as $facet_value) {
+          // If facet value has results process the option.
+          if (trim($option->name, '"') == trim($facet_value['filter'], '"')) {
+            $results_present = TRUE;
+            break;
           }
         }
-        $return[] = $list_object;
+        if ($results_present) {
+          $list_object = [];
+          $list_object['title'] = $option->name;
+          $url = [
+            'query' => [
+              'f[0]' => $attributeCode . ':' . $option->name,
+              'sort_bef_combine' => 'search_api_relevance DESC',
+            ],
+          ];
+          $list_object['url'] = Url::fromUri('internal:/search', $url);
+          if ($showImages) {
+            if (!empty($option->image)) {
+              $file = $this->fileStorage->load($option->image);
+              if ($file instanceof File) {
+                $list_object['image_url'] = $file->getFileUri();
+              }
+            }
+          }
+          $return[] = $list_object;
+        }
       }
     }
     return $return;
@@ -224,6 +260,57 @@ class AlshayaOptionsListHelper {
       }
     }
     return $links;
+  }
+
+  /**
+   * Set all required facet results in static.
+   *
+   * @param array $attribute_codes
+   *   List of all attributes that are selected.
+   *
+   * @throws \Drupal\search_api\SearchApiException
+   */
+  public function allRequiredFacetResults(array $attribute_codes) {
+    $facet_results = &drupal_static('allRequiredFacetResults', []);
+    if (!empty($facet_results)) {
+      return;
+    }
+
+    $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_page__search__page');
+    $index = Index::load('acquia_search_index');
+    $query = $index->query();
+    // Change the parse mode for the search.
+    $parse_mode = $this->parseModeManager->createInstance('terms');
+    $parse_mode->setConjunction('OR');
+    $query->setParseMode($parse_mode);
+    $query->setLanguages([
+      $this->languageManager->getCurrentLanguage()
+        ->getId(),
+    ]);
+    $query->keys('');
+    $query->setFulltextFields($index->getFulltextFields());
+    $server = $index->getServerInstance();
+    if ($server->supportsFeature('search_api_facets')) {
+      $facet_data = [];
+      foreach ($facets as $facet) {
+        if (in_array($facet->id(), $attribute_codes)) {
+          $facet_data[$facet->id()] = [
+            'field' => $facet->getFieldIdentifier(),
+            'limit' => $facet->getHardLimit(),
+            'operator' => $facet->getQueryOperator(),
+            'min_count' => $facet->getMinCount(),
+            'missing' => FALSE,
+          ];
+        }
+      }
+      $query->setOption('search_api_facets', $facet_data);
+    }
+
+    // Execute the search.
+    $results = $query->execute();
+
+    // Set the facet results data in static.
+    $facet_results = $results->getExtraData('search_api_facets');
   }
 
 }

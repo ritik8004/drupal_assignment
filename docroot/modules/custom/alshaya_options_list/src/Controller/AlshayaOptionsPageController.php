@@ -111,6 +111,7 @@ class AlshayaOptionsPageController extends ControllerBase {
         }
       }
       else {
+        $this->alshayaOptionsService->allRequiredFacetResults($attributeCodes);
         $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
         $this->cache->set($cid, $option['terms'], Cache::PERMANENT, [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
       }
