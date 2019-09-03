@@ -6899,7 +6899,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1561765981",
+                    "datestamp": "1562161679",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8583,7 +8583,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
             },
-            "time": "2019-07-23T20:40:13+00:00"
+            "time": "2019-07-29T12:50:22+00:00"
         },
         {
             "name": "drupal/lightning_media",
@@ -12683,7 +12683,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.2",
-                    "datestamp": "1563488885",
+                    "datestamp": "1559004185",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13628,7 +13628,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
+                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",
+                    "Use static view_dom_id in AJAX Requests for better cache HIT ratio": "https://www.drupal.org/files/issues/2019-07-24/use-static-dom-id-cache-3069857-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
