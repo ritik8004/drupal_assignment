@@ -101,6 +101,11 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
     // Set url alias for facets.
     foreach ($facets as $facet) {
       if ($facet->getFacetSourceId() == 'search_api:' . $mapping['id']) {
+        // Get the current pretty alias if already set or available in mapping.
+        $alias = ($facet->getThirdPartySetting('alshaya_facets_pretty_paths', 'pretty_url_alias') ??
+          $mapping['alias'][$facet->id()]) ??
+          strtolower(str_replace(' ', '_', $facet->get('name')));
+        $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'pretty_url_alias', $alias);
         $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->getUrlAlias());
         $alias = $mapping['alias'][$facet->id()] ?? strtolower(str_replace(' ', '_', $facet->get('name')));
         $facet->setUrlAlias($alias);

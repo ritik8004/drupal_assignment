@@ -94,7 +94,7 @@ class AlshayaSearchApiFacetsManager {
    */
   public function createFacet($field_key, $facet_source_id, $filter_bar_id, $prefix = '', array $overrides = []) {
     $template_id = 'facets.facet.' . $field_key;
-    $source = \Drupal::configFactory()->getEditable($facet_source_id);
+    $source = $this->configFactoryalshaya->getEditable($facet_source_id);
 
     $id = $prefix ? $prefix . '_' . $field_key : $field_key;
     $facet_id = 'facets.facet.' . $id;
