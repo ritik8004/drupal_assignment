@@ -299,14 +299,12 @@ class SkuInfoHelper {
    *   SKU Entity.
    * @param string $linked_type
    *   Linked type.
-   * @param bool $api_call
-   *   True to make api call to get linked sku, false to get from cache only.
    *
    * @return array
    *   Linked SKUs.
    */
-  public function getLinkedSkus(SKUInterface $sku, string $linked_type, $api_call = TRUE) {
-    $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type, $api_call);
+  public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
+    $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type);
     $linkedSkus = $this->skuManager->filterRelatedSkus($linkedSkus);
 
     return $linkedSkus;
