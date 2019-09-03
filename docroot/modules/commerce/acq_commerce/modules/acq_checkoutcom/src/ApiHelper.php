@@ -10,7 +10,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 
@@ -18,6 +20,8 @@ use Drupal\user\UserInterface;
  * Class ApiHelper.
  */
 class ApiHelper {
+
+  use StringTranslationTrait;
 
   /**
    * Alshaya API Wrapper service object.
@@ -83,6 +87,13 @@ class ApiHelper {
   protected $entityTypeManager;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -115,6 +126,8 @@ class ApiHelper {
    *   The date Formatter service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
@@ -124,7 +137,8 @@ class ApiHelper {
     CacheBackendInterface $cache,
     Time $time,
     DateFormatterInterface $date_formatter,
-    EntityTypeManagerInterface $entityTypeManager
+    EntityTypeManagerInterface $entityTypeManager,
+    MessengerInterface $messenger
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
@@ -135,6 +149,7 @@ class ApiHelper {
     $this->time = $time;
     $this->dateFormatter = $date_formatter;
     $this->entityTypeManager = $entityTypeManager;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -238,6 +253,9 @@ class ApiHelper {
 
     if (!empty($response) && isset($response['message'])) {
       $this->logger->error(strtr($response['message'], $response['parameters'] ?? []));
+      $this->messenger->addError(
+        $this->t('Something went wrong, please try again later.')
+      );
       return [];
     }
 
