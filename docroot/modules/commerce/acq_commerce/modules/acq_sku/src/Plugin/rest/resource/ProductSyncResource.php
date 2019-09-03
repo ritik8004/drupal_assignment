@@ -104,6 +104,13 @@ class ProductSyncResource extends ResourceBase {
   private $database;
 
   /**
+   * Private variable to store acquired locks.
+   *
+   * @var array
+   */
+  private $acquiredLocks;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -184,6 +191,50 @@ class ProductSyncResource extends ResourceBase {
   }
 
   /**
+   * Get Lock Manager.
+   *
+   * @return \Drupal\Core\Lock\LockBackendInterface
+   *   Lock Manager.
+   */
+  protected function getLockManager() {
+    return \Drupal::service('lock.persistent');
+  }
+
+  /**
+   * Wrapper function to acquire lock.
+   *
+   * @param string $sku
+   *   SKU.
+   */
+  protected function acquireLock(string $sku) {
+    $lock_key = 'synchronizeProduct' . $sku;
+
+    do {
+      $lock_acquired = $this->getLockManager()->acquire($lock_key);
+
+      // Sleep for half a second before trying again.
+      if (!$lock_acquired) {
+        usleep(500000);
+      }
+    } while (!$lock_acquired);
+
+    $this->acquiredLocks[$sku] = $lock_key;
+  }
+
+  /**
+   * Wrapper function to release acquired lock.
+   *
+   * @param string $sku
+   *   SKU.
+   */
+  protected function releaseLock(string $sku) {
+    if (isset($this->acquiredLocks[$sku])) {
+      $this->getLockManager()->release($this->acquiredLocks[$sku]);
+      unset($this->acquiredLocks[$sku]);
+    }
+  }
+
+  /**
    * Post.
    *
    * Handle Conductor posting an array of product / SKU data for update.
@@ -195,9 +246,6 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products) {
-    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-    $lock = \Drupal::service('lock.persistent');
-
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
@@ -300,17 +348,8 @@ class ProductSyncResource extends ResourceBase {
           ]);
         }
 
-        $lock_key = 'synchronizeProduct' . $product['sku'];
-
         // Acquire lock to ensure parallel processes are executed one by one.
-        do {
-          $lock_acquired = $lock->acquire($lock_key);
-
-          // Sleep for half a second before trying again.
-          if (!$lock_acquired) {
-            usleep(500000);
-          }
-        } while (!$lock_acquired);
+        $this->acquireLock($product['sku']);
 
         $skuData = [];
         if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
@@ -359,22 +398,28 @@ class ProductSyncResource extends ResourceBase {
             if ($parent_sku instanceof SKU) {
               $child_skus = $this->getChildSkus($parent_sku->id());
 
+              // In case of no child SKU, un-publish the configurable
+              // product node.
               if (empty($child_skus)) {
-                // In case of no child SKU, un-publish the configurable product
-                // node.
-                $parent_plugin = $parent_sku->getPluginInstance();
+                $this->logger->info('Un-publishing parent node as no other child available now. Child updated: @child, Parent sku: @parent', [
+                  '@child' => $sku->getSku(),
+                  '@parent' => $parent_sku->getSku(),
+                ]);
 
+                $this->acquireLock($parent_sku->getSku());
+                $parent_plugin = $parent_sku->getPluginInstance();
                 if (($node = $parent_plugin->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
                   $node->setPublished(FALSE);
                   $node->save();
                 }
+                $this->releaseLock($parent_sku->getSku());
               }
             }
 
             $deleted++;
 
             // Release the lock.
-            $lock->release($lock_key);
+            $this->releaseLock($product['sku']);
 
             $this->logger->info('Deleted SKU @sku for @langcode', [
               '@sku' => $sku->getSku(),
@@ -392,7 +437,7 @@ class ProductSyncResource extends ResourceBase {
             $ignored++;
 
             // Release the lock.
-            $lock->release($lock_key);
+            $this->releaseLock($product['sku']);
 
             continue;
           }
@@ -518,13 +563,25 @@ class ProductSyncResource extends ResourceBase {
         }
         // If importing a simple SKU, make sure product node for its
         // configurable SKU is published.
-        elseif ($product['status'] == 1 && $product['visibility'] != 1 &&
-          $product['type'] === 'simple' &&
-          $sku instanceof SKU &&
-          ($node = $plugin->getDisplayNode($sku)) &&
-          !$node->isPublished()) {
-          $node->setPublished(TRUE);
-          $node->save();
+        elseif ($product['status'] == 1 && $product['visibility'] != 1
+          && $product['type'] === 'simple' && $sku instanceof SKU) {
+
+          // Publish display node if we are creating new variant for the parent.
+          $parent = $sku->getPluginInstance()->getParentSku($sku);
+          if (($parent instanceof SKU)
+            && ($node = $parent->getPluginInstance()->getDisplayNode($parent, FALSE))
+            && (!$node->isPublished())) {
+
+            $this->logger->info('Publishing display node as creating child for it. Child: @child, Parent: @parent', [
+              '@child' => $sku->getSku(),
+              '@parent' => $parent->getSku(),
+            ]);
+
+            $this->acquireLock($parent->getSku());
+            $node->setPublished(TRUE);
+            $node->save();
+            $this->releaseLock($parent->getSku());
+          }
         }
         else {
           try {
@@ -556,16 +613,7 @@ class ProductSyncResource extends ResourceBase {
         $failed++;
       }
       finally {
-        // Release the lock if acquired.
-        if (!empty($lock_key) && !empty($lock_acquired)) {
-          $lock->release($lock_key);
-
-          // We will come here again for next loop item and we might face
-          // exception before we reach the code that sets $lock_key.
-          // To ensure we don't keep releasing the lock again and again
-          // we set it to NULL here.
-          $lock_key = NULL;
-        }
+        $this->releaseLock($product['sku']);
       }
     }
 
