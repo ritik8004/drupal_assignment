@@ -91,6 +91,12 @@ function alshaya_acm_checkoutcom_install() {
     'Your expired cards will be automatically removed from your account.' => [
       'ar' => 'ستتم إزالة البطاقات منتهية الصلاحية تلقائيًا من حسابك.',
     ],
+    'expiry date' => [
+      'ar' => 'تاريخ انتهاء البطاقة',
+    ],
+    'card number' => [
+      'ar' => 'رقم البطاقة',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
