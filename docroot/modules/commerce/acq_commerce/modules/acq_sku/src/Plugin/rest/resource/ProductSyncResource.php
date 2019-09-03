@@ -407,8 +407,7 @@ class ProductSyncResource extends ResourceBase {
                 ]);
 
                 $this->acquireLock($parent_sku->getSku());
-                $parent_plugin = $parent_sku->getPluginInstance();
-                if (($node = $parent_plugin->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
+                if (($node = $parent_sku->getPluginInstance()->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
                   $node->setPublished(FALSE);
                   $node->save();
                 }
@@ -568,18 +567,20 @@ class ProductSyncResource extends ResourceBase {
 
           // Publish display node if we are creating new variant for the parent.
           $parent = $sku->getPluginInstance()->getParentSku($sku);
-          if (($parent instanceof SKU)
-            && ($node = $parent->getPluginInstance()->getDisplayNode($parent, FALSE))
-            && (!$node->isPublished())) {
-
-            $this->logger->info('Publishing display node as creating child for it. Child: @child, Parent: @parent', [
-              '@child' => $sku->getSku(),
-              '@parent' => $parent->getSku(),
-            ]);
-
+          if (($parent instanceof SKU)) {
             $this->acquireLock($parent->getSku());
-            $node->setPublished(TRUE);
-            $node->save();
+
+            if (($node = $parent->getPluginInstance()->getDisplayNode($parent, FALSE))
+              && (!$node->isPublished())) {
+              $this->logger->info('Publishing display node as creating child for it. Child: @child, Parent: @parent', [
+                '@child' => $sku->getSku(),
+                '@parent' => $parent->getSku(),
+              ]);
+
+              $node->setPublished(TRUE);
+              $node->save();
+            }
+
             $this->releaseLock($parent->getSku());
           }
         }
