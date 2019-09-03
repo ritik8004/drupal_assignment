@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "039e88c12cff036135d2772b9e4ec8a6",
+    "content-hash": "ec0e083a27349f4ac02d155b8b836c77",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -13628,7 +13628,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
+                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",
+                    "Use static view_dom_id in AJAX Requests for better cache HIT ratio": "https://www.drupal.org/files/issues/2019-07-24/use-static-dom-id-cache-3069857-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
