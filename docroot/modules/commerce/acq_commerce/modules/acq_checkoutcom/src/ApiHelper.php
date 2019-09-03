@@ -233,7 +233,8 @@ class ApiHelper {
     $response = Json::decode($response);
 
     if (!empty($response) && isset($response['message'])) {
-      return strtr($response['message'], $response['parameters'] ?? []);
+      $this->logger->error(strtr($response['message'], $response['parameters'] ?? []));
+      return [];
     }
 
     $cards = !empty($response['items'])
