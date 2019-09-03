@@ -165,6 +165,9 @@ class AlshayaFeedSkuInfoHelper {
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
 
+      // Disable image download.
+      $download_image = SKU::$downloadImage;
+      SKU::$downloadImage = FALSE;
       if ($sku->bundle() == 'simple') {
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
         $product[$lang]['stock'] = [
@@ -197,13 +200,14 @@ class AlshayaFeedSkuInfoHelper {
           $product[$lang]['variants'][] = $variant;
         }
       }
-
-      $product[$lang]['linked_skus'] = [];
+      // Reset image download to old state.
+      SKU::$downloadImage = $download_image;
 
       // Disable API calls.
       $invoke_api = AlshayaAcmApiWrapper::$invokeApi;
       AlshayaAcmApiWrapper::$invokeApi = FALSE;
 
+      $product[$lang]['linked_skus'] = [];
       foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
@@ -247,7 +251,7 @@ class AlshayaFeedSkuInfoHelper {
    */
   protected function getGalleryMedia(SKUInterface $sku): array {
     $media_items = $this->skuImagesManager->getProductMedia($sku, 'pdp');
-    if (empty($media_items) || empty($media_items['media_items'])) {
+    if (empty($media_items) || empty($media_items['media_items']) || empty($media_items['media_items']['images'])) {
       return [];
     }
 
