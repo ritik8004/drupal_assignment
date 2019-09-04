@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_facets_pretty_paths;
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
@@ -59,6 +60,13 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $facetManager;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [
@@ -83,19 +91,23 @@ class AlshayaFacetsPrettyPathsHelper {
    *   The path alias manager.
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
    *   Facet manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
                               AliasManagerInterface $alias_manager,
-                              DefaultFacetManager $facets_manager) {
+                              DefaultFacetManager $facets_manager,
+                              ConfigFactoryInterface $config_factory) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->facetManager = $facets_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -136,7 +148,12 @@ class AlshayaFacetsPrettyPathsHelper {
           $term = $term->getTranslation('en');
         }
 
-        $encoded = str_replace('en/', '', trim($term->toUrl()->toString(), '/'));
+        $encoded = str_replace(
+          'en/' . $this->getProductOptionAliasPrefix() . '/',
+          '',
+          trim($term->toUrl()->toString(), '/')
+        );
+
         break;
       }
     }
@@ -173,7 +190,12 @@ class AlshayaFacetsPrettyPathsHelper {
       $decoded = str_replace($replacement, $original, $decoded);
     }
 
-    $tid = str_replace('/taxonomy/term/', '', $this->aliasManager->getPathByAlias('/' . $decoded, 'en'));
+    $tid = str_replace(
+      '/taxonomy/term/',
+      '',
+      $this->aliasManager->getPathByAlias('/' . $this->getProductOptionAliasPrefix() . '/' . $decoded, 'en')
+    );
+
     if ($tid) {
       $term = $this->termStorage->load($tid);
 
@@ -297,6 +319,23 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     return $static[$source];
+  }
+
+  /**
+   * Get the product options taxonomy path alias prefix.
+   *
+   * @return string
+   *   Prefix.
+   */
+  public function getProductOptionAliasPrefix() {
+    static $prefix = NULL;
+
+    if (!isset($prefix)) {
+      $pattern = $this->configFactory->get('pathauto.pattern.sku_product_option')->get('pattern');
+      $prefix = str_replace('/[term:name]', '', $pattern);
+    }
+
+    return $prefix;
   }
 
 }
