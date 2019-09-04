@@ -14,7 +14,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Update views to change row render style.
  */
-function alshaya_product_update_8025() {
+function alshaya_product_update_8026() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -23,6 +23,67 @@ function alshaya_product_update_8025() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Cleanup corrupt search api tables.
+ */
+function alshaya_product_update_8025() {
+  $connection = \Drupal::database();
+  $search_api_db_product_tables = $connection->schema()->findTables('search_api_db_product_%');
+  $search_api_db_product_columns = $connection->query('describe search_api_db_product')->fetchAllKeyed();
+  $deleted_table_names = $deleted_column_names = [];
+
+  // Delete all search api product index tables with integer as a suffix.
+  foreach ($search_api_db_product_tables as $table_name) {
+    // Delete the table if the table name ends with an integer.
+    if (is_numeric(substr($table_name, -1))) {
+      $deleted_table_names[] = $table_name;
+      $connection->schema()->dropTable($table_name);
+
+      // Delete original table as well.
+      $table_name = preg_replace('/_[0-9]*$/', '', $table_name);
+      $connection->schema()->dropTable($table_name);
+    }
+  }
+
+  // Find columns in the base entity table with integer suffixes & delete them.
+  foreach ($search_api_db_product_columns as $column_name => $column_type) {
+    // Delete the column if  the column name ends with an integer.
+    if (is_numeric(substr($column_name, -1))) {
+      $deleted_column_names[] = $column_name;
+      $connection->schema()->dropField('search_api_db_product', $column_name);
+
+      // Remove fields from index. We need to remove fields from index & add
+      // them back to ensure new tables are created correctly.
+      $column_name = preg_replace('/_[0-9]*$/', '', $column_name);
+      $connection->schema()->dropField('search_api_db_product', $column_name);
+      _alshaya_search_api_remove_field_from_indexes($column_name, 'product');
+    }
+  }
+
+  // Resave index config to add back fields.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  // Re-index all product nodes to DB backend.
+  _alshaya_search_api_reindex(['product']);
+
+  // Log list of deleted columns & tables.
+  if (!empty($deleted_column_names) || !empty($deleted_table_names)) {
+    \Drupal::logger('alshaya_product')->notice('Cleaned up tables @tables & columns @columns for search api product index.', [
+      '@tables' => implode(',', $deleted_table_names),
+      '@columns' => implode(',', $deleted_column_names),
+    ]);
+  }
 }
 
 /**

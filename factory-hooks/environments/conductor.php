@@ -9,6 +9,10 @@ global $conductors;
 
 $conductors = [
   // Mothercare KW.
+  'mckw_dev' => [
+    'hmac_id' => '1c981b44daae428fae5fb6b2a3812214',
+    'hmac_secret' => 'N2Y0MDEzMWEtZGE4Ny00',
+  ],
   'mckw_qa' => [
     'hmac_id' => 'a4288d2bc3a14db08f790ce7842cb6b1',
     'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',

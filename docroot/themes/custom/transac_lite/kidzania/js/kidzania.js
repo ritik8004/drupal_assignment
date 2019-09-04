@@ -239,6 +239,10 @@
               }
             }
 
+            if (!entryBaby && !entryTodd && !entryKid && !entryAdult) {
+              isFormValid = false;
+            }
+
             if (isFormValid) {
               ticketNextEle.removeClass('disable');
             }

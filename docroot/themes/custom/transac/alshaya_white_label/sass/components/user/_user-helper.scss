@@ -798,6 +798,12 @@ main .user-register-form {
             }
           }
         }
+
+        #block-content {
+          + #block-alshayasignupsigninbuttonsblock {
+            margin-top: 1.5rem;
+          }
+        }
       }
     }
 

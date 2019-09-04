@@ -13,7 +13,7 @@ third_party_settings:
     display_textbox_item_count: '1'
 id: product_brand
 name: Brand
-url_alias: product_brand
+url_alias: brand
 weight: 0
 min_count: 1
 show_only_one_result: false

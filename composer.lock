@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c916e6e85685ec5753b16a9f81a32ab5",
+    "content-hash": "8e207ef53ce820f3201ccae2840644f9",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -8583,7 +8583,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
             },
-            "time": "2019-07-29T12:50:22+00:00"
+            "time": "2019-07-23T20:40:13+00:00"
         },
         {
             "name": "drupal/lightning_media",
@@ -13628,7 +13628,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
+                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",
+                    "Use static view_dom_id in AJAX Requests for better cache HIT ratio": "https://www.drupal.org/files/issues/2019-07-24/use-static-dom-id-cache-3069857-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
