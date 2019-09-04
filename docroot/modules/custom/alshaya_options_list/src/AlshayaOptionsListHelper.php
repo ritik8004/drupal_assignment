@@ -116,6 +116,8 @@ class AlshayaOptionsListHelper {
    *
    * @param string $attributeCode
    *   Attribute code.
+   * @param array $facet_results
+   *   Array containing all facet results.
    * @param bool $showImages
    *   Whether images should be shown with the attribute.
    * @param bool $group
@@ -126,13 +128,12 @@ class AlshayaOptionsListHelper {
    * @return array
    *   All term names array.
    */
-  public function fetchAllTermsForAttribute($attributeCode, $showImages = FALSE, $group = FALSE, $searchString = '') {
+  public function fetchAllTermsForAttribute($attributeCode, array $facet_results, $showImages = FALSE, $group = FALSE, $searchString = '') {
     $return = [];
-    $facet_results = &drupal_static('allRequiredFacetResults', []);
 
-    // If by some chance static cache is reset.
+    // If there are no results for attribute.
     if (empty($facet_results[$attributeCode])) {
-      $facet_results = $this->loadFacetsData([$attributeCode]);
+      return [];
     }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
@@ -157,34 +158,19 @@ class AlshayaOptionsListHelper {
     }
 
     foreach ($options as $option) {
-      if (!empty($option->name)) {
-        $results_present = FALSE;
-        foreach ($facet_results[$attributeCode] as $facet_value) {
-          // If facet value has results process the option.
-          if (trim($option->name, '"') == trim($facet_value['filter'], '"')) {
-            $results_present = TRUE;
-            break;
-          }
-        }
-        if ($results_present) {
-          $list_object = [];
-          $list_object['title'] = $option->name;
-          $url = [
-            'query' => [
-              'f[0]' => $attributeCode . ':' . $option->name,
-            ],
-          ];
-          $list_object['url'] = Url::fromUri('internal:/search', $url);
-          if ($showImages) {
-            if (!empty($option->image)) {
-              $file = $this->fileStorage->load($option->image);
-              if ($file instanceof File) {
-                $list_object['image_url'] = $file->getFileUri();
-              }
+      if (!empty($option->name) && in_array($option->name, $facet_results[$attributeCode])) {
+        $list_array = [];
+        $list_array['title'] = $option->name;
+        $list_array['url'] = $this->getAttributeUrl($attributeCode, $option->name);
+        if ($showImages) {
+          if (!empty($option->image)) {
+            $file = $this->fileStorage->load($option->image);
+            if ($file instanceof File) {
+              $list_array['image_url'] = $file->getFileUri();
             }
           }
-          $return[] = $list_object;
         }
+        $return[] = $list_array;
       }
     }
     return $return;
@@ -267,10 +253,13 @@ class AlshayaOptionsListHelper {
   }
 
   /**
-   * Set all required facet results in static.
+   * Return all required facet results.
    *
    * @param array $attribute_codes
    *   List of all attributes that are selected.
+   *
+   * @return array
+   *   Array of all facets data.
    *
    * @throws \Drupal\search_api\SearchApiException
    */
@@ -301,6 +290,7 @@ class AlshayaOptionsListHelper {
           $facet_data[$facet->id()] = [
             'field' => $facet->getFieldIdentifier(),
             'operator' => $facet->getQueryOperator(),
+            'limit' => $facet->getHardLimit(),
             'min_count' => $facet->getMinCount(),
             'missing' => FALSE,
           ];
@@ -313,9 +303,37 @@ class AlshayaOptionsListHelper {
     $results = $query->execute();
 
     // Set the facet results data in static.
-    $facet_results = $results->getExtraData('search_api_facets');
+    $raw_facet_results = $results->getExtraData('search_api_facets');
+
+    foreach ($raw_facet_results as $attribute_code => $results) {
+      foreach ($results as $filter) {
+        $facet_results[$attribute_code][] = trim($filter['filter'], '"');
+      }
+    }
 
     return $facet_results;
+  }
+
+  /**
+   * Return links of all options pages that have been created.
+   *
+   * @param string $attributeCode
+   *   Attribute code.
+   * @param string $value
+   *   Value for the facet.
+   *
+   * @return \Drupal\Core\Url
+   *   The url for the attribute.
+   *
+   * @todo When DLP is enabled on search, add condition to generate pretty url.
+   */
+  public function getAttributeUrl($attributeCode, $value) {
+    $url_options = [
+      'query' => [
+        'f[0]' => $attributeCode . ':' . $value,
+      ],
+    ];
+    return Url::fromUri('internal:/search', $url_options);
   }
 
 }

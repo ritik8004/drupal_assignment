@@ -114,7 +114,8 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
     $attribute_options = $config->get('alshaya_options_pages');
     $group = $attribute_options[$page_code]['attribute_details'][$attribute_code]['group'];
     $show_images = $attribute_options[$page_code]['attribute_details'][$attribute_code]['show-images'];
-    $options_list['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attribute_code, $show_images, $group, $search_string) ?? NULL;
+    $facet_results = $this->alshayaOptionsService->loadFacetsData([$attribute_code]);
+    $options_list['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attribute_code, $facet_results, $show_images, $group, $search_string) ?? NULL;
     if (empty($options_list['terms'])) {
       $options_list['no_results'] = $this->t('No results found...');
     }
