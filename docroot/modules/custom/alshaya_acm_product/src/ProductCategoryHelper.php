@@ -82,11 +82,17 @@ class ProductCategoryHelper {
    * @param array $terms
    *   Terms array.
    *
-   * @return int
+   * @return int|null
    *   Term id.
    */
   public function termTreeGroup(array $terms = []) {
     if (!empty($terms)) {
+      $terms = $this->filterEnabled($terms);
+
+      if (empty($terms)) {
+        return NULL;
+      }
+
       $root_group = $this->getRootGroup($terms[0]['target_id']);
       $root_group_terms = [];
       foreach ($terms as $term) {
@@ -184,8 +190,7 @@ class ProductCategoryHelper {
    */
   public function getBreadcrumbTermList(array $terms = []) {
     if (!empty($terms)) {
-      $term_list = $this->filterEnabled($terms);
-      $inner_term = $this->termTreeGroup($term_list);
+      $inner_term = $this->termTreeGroup($terms);
       if ($inner_term) {
         return $this->termStorage->loadAllParents($inner_term);
       }
