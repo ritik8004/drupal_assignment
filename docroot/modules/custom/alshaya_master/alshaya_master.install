@@ -11,6 +11,30 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_rum module.
+ */
+function alshaya_master_update_8031() {
+  \Drupal::service('module_installer')->install(['alshaya_rum']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding arabic translations for - new customer?.
+ */
+function alshaya_master_update_8030() {
+  $strings = [
+    'new customer?' => [
+      'ar' => 'عميل جديد؟',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - Forgot password message.
  */
 function alshaya_master_update_8029() {
@@ -761,6 +785,9 @@ function alshaya_master_install() {
     ],
     'new customers' => [
       'ar' => 'زبائن جدد',
+    ],
+    'new customer?' => [
+      'ar' => 'عميل جديد؟',
     ],
     'checkout as guest' => [
       'ar' => 'إتمام عملية الشراء كزبون زائر',

@@ -2499,28 +2499,51 @@ class SkuManager {
     if ($entity instanceof SKUInterface) {
       $entity = $this->getDisplayNode($entity);
     }
-    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+
+    $static = &drupal_static(__FUNCTION__, []);
+
+    // Load default from config.
+    if (!isset($static['default'])) {
+      $static['default'] = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    }
+
+    // If we don't have product node, let's just return default.
+    if (!($entity instanceof NodeInterface) || $entity->bundle() !== 'acq_product') {
+      return $this->getContextFromLayoutKey($context, $static['default']);
+    }
+
+    // Return from static cache if we already have it processed once.
+    if (isset($static[$entity->id()])) {
+      return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
+    }
+
+    // Set default in static, we will override below if we have something
+    // available from terms.
+    $static[$entity->id()] = $static['default'];
+
+    if (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
-        if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
-          $pdp_layout = $term->get('field_pdp_layout')->getString();
+        if ($term instanceof TermInterface) {
+          $pdp_layout = $term->get('field_pdp_layout')->getString() ?? NULL;
           if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
             $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
             foreach ($taxonomy_parents as $taxonomy_parent) {
               $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
               if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
-                return $this->getContextFromLayoutKey($context, $pdp_layout);
+                $static[$entity->id()] = $pdp_layout;
+                break;
               }
             }
           }
           else {
-            return $this->getContextFromLayoutKey($context, $pdp_layout);
+            $static[$entity->id()] = $pdp_layout;
           }
         }
       }
     }
-    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
-    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+
+    return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
   }
 
   /**

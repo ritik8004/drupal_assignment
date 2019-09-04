@@ -8,7 +8,7 @@ dependencies:
     - search_api
 id: promotion_price_facet
 name: 'Promotion price facet'
-url_alias: skus_sku_reference_final_price_promotions
+url_alias: price
 weight: 0
 min_count: 1
 show_only_one_result: false

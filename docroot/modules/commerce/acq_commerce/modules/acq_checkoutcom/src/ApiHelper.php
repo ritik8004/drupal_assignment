@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
@@ -83,6 +84,13 @@ class ApiHelper {
   protected $entityTypeManager;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Credit card type map.
    *
    * @var array
@@ -115,6 +123,8 @@ class ApiHelper {
    *   The date Formatter service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
@@ -124,7 +134,8 @@ class ApiHelper {
     CacheBackendInterface $cache,
     Time $time,
     DateFormatterInterface $date_formatter,
-    EntityTypeManagerInterface $entityTypeManager
+    EntityTypeManagerInterface $entityTypeManager,
+    MessengerInterface $messenger
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
@@ -135,6 +146,7 @@ class ApiHelper {
     $this->time = $time;
     $this->dateFormatter = $date_formatter;
     $this->entityTypeManager = $entityTypeManager;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -218,6 +230,10 @@ class ApiHelper {
       $user = $this->entityTypeManager->getStorage('user')->load($user);
     }
 
+    if (!alshaya_acm_customer_is_customer($user)) {
+      return [];
+    }
+
     $cache_key = 'acq_checkoutcom:payment_cards:' . $user->id();
     $cache = $this->cache->get($cache_key);
     if ($cache) {
@@ -233,7 +249,9 @@ class ApiHelper {
     $response = Json::decode($response);
 
     if (!empty($response) && isset($response['message'])) {
-      return strtr($response['message'], $response['parameters'] ?? []);
+      $this->logger->error(strtr($response['message'], $response['parameters'] ?? []));
+      $this->messenger->addError(acq_commerce_api_down_global_error_message());
+      return [];
     }
 
     $cards = !empty($response['items'])

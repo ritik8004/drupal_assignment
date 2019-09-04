@@ -1,0 +1,8 @@
+services:
+  alshaya_facets_pretty_paths.commands:
+    class: Drupal\alshaya_facets_pretty_paths\Commands\AlshayaFacetsPrettyPathsCommands
+    arguments:
+      - '@facets.manager'
+      - '@config.factory'
+    tags:
+      - { name: drush.command }
