@@ -9,7 +9,6 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\block\BlockInterface;
 use Symfony\Component\Yaml\Yaml;
-use Drupal\block\Entity\Block;
 
 /**
  * Class AlshayaSearchApiFacetsManager.
@@ -149,34 +148,6 @@ class AlshayaSearchApiFacetsManager {
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
-
-    /*
-     * Set weight of selling price facet as per the final price facet
-     * to maintain facet sequence on listing pages.
-     */
-    if (strpos($field_key, 'selling_price') > -1) {
-      switch ($prefix) {
-        case 'plp':
-          $final_price_block_id = 'skusskureferencefinalprice';
-          break;
-
-        case 'promo':
-          $final_price_block_id = 'promotionpricefacet';
-          break;
-
-        default:
-          $final_price_block_id = 'finalprice';
-      }
-      try {
-        $price_block = Block::load($final_price_block_id);
-        if ($price_block instanceof BlockInterface) {
-          $block_data['weight'] = $price_block->getWeight();
-        }
-      }
-      catch (\Exception $e) {
-        // Do nothing.
-      }
-    }
 
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
 
