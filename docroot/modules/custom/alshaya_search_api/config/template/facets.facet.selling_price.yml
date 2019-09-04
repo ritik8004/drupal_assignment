@@ -13,7 +13,7 @@ third_party_settings:
     display_textbox_item_count: ''
 id: selling_price
 name: 'Price'
-url_alias: selling_price
+url_alias: price_range
 weight: 0
 min_count: 1
 show_only_one_result: false

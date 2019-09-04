@@ -13,7 +13,7 @@ third_party_settings:
     display_textbox_item_count: '1'
 id: product_collection
 name: Collection
-url_alias: product_collection
+url_alias: collection
 weight: 0
 min_count: 1
 show_only_one_result: false
