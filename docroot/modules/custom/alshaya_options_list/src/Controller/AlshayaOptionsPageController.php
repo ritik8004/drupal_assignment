@@ -90,6 +90,7 @@ class AlshayaOptionsPageController extends ControllerBase {
     }
     $config = $this->config('alshaya_options_list.settings');
     $options_list = [];
+    $libraries = ['alshaya_white_label/optionlist_filter', 'alshaya_options_list/alshaya_options_list_search'];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get current request uri.
     $request = $this->requestStack->getCurrentRequest()->getRequestUri();
@@ -99,47 +100,64 @@ class AlshayaOptionsPageController extends ControllerBase {
     $request = str_replace('/' . $langcode . '/', '', $request[0]);
     $attribute_options = $config->get('alshaya_options_pages');
     $attributeCodes = array_filter($attribute_options[$request]['attributes']);
-    foreach ($attributeCodes as $attributeCode) {
-      $option = [];
-      // Check for cache first.
-      $cid = 'alshaya_options_page:' . $attributeCode . ':' . $langcode;
-      if ($cache = $this->cache->get($cid)) {
-        $data = $cache->data;
-        // If cache hit.
-        if (!empty($data)) {
-          $option['terms'] = $data;
+    // Check for cache first.
+    $cid = 'alshaya_options_page:' . $request . ':' . $langcode;
+    if ($cache = $this->cache->get($cid)) {
+      $data = $cache->data;
+      // If cache hit.
+      if (!empty($data)) {
+        $options_list = $data;
+      }
+    }
+    else {
+      foreach ($attributeCodes as $attributeCode) {
+        $option = [];
+        $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
+        if ($attribute_options[$request]['attribute_details'][$attributeCode]['show-search']) {
+          $option['search'] = $options_list[$attributeCode]['search'] = TRUE;
+          $options_list[$attributeCode]['search_placeholder'] = $attribute_options[$request]['attribute_details'][$attributeCode]['search-placeholder'];
+        }
+
+        if ($attribute_options[$request]['attribute_details'][$attributeCode]['group']) {
+          $option['group'] = $options_list[$attributeCode]['group'] = TRUE;
+          $option['terms'] = $this->alshayaOptionsService->groupAlphabetically($option['terms']);
+        }
+
+        $options_list[$attributeCode]['options_markup'] = [
+          '#theme' => 'alshaya_options_attribute',
+          '#option' => $option,
+          '#attribute_code' => $attributeCode,
+        ];
+
+        $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
+        $options_list[$attributeCode]['description'] = $attribute_options[$request]['attribute_details'][$attributeCode]['description'];
+
+        if ($attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title_toggle']) {
+          $options_list[$attributeCode]['mobile_title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title'];
         }
       }
+      $this->cache->set($cid, $options_list, Cache::PERMANENT, [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
+    }
+
+    // Only show those facets that have values.
+    $facet_results = $this->alshayaOptionsService->loadFacetsData($attributeCodes);
+    foreach ($options_list as $attribute_key => $attribute_details) {
+      if (isset($attribute_details['group'])) {
+        foreach ($attribute_details['options_markup']['#option']['terms'] as $group_key => $grouped_term) {
+          foreach ($grouped_term as $group_term_key => $grouped_term_value) {
+            if (!in_array($grouped_term_value['title'], $facet_results[$attribute_key])) {
+              unset($options_list[$attribute_key]['options_markup']['#option']['terms'][$group_key][$group_term_key]);
+            }
+          }
+        }
+        $options_list[$attribute_key]['options_markup']['#option']['terms'] = array_filter($options_list[$attribute_key]['options_markup']['#option']['terms']);
+      }
       else {
-        $facet_results = $this->alshayaOptionsService->loadFacetsData($attributeCodes);
-        $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $facet_results, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
-        $this->cache->set($cid, $option['terms'], Cache::PERMANENT, [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
-      }
-      if ($attribute_options[$request]['attribute_details'][$attributeCode]['show-search']) {
-        $search_form = $this->formBuilder()
-          ->getForm('\Drupal\alshaya_options_list\Form\AlshayaOptionsListAutocompleteForm', [
-            'page_code' => $request,
-            'attribute_code' => $attributeCode,
-          ]);
-        $options_list[$attributeCode]['search_form'] = $search_form;
-      }
-
-      if ($attribute_options[$request]['attribute_details'][$attributeCode]['group']) {
-        $option['group'] = TRUE;
-        $option['terms'] = $this->alshayaOptionsService->groupAlphabetically($option['terms']);
-      }
-
-      $options_list[$attributeCode]['options_markup'] = [
-        '#theme' => 'alshaya_options_attribute',
-        '#option' => $option,
-        '#attribute_code' => $attributeCode,
-      ];
-
-      $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
-      $options_list[$attributeCode]['description'] = $attribute_options[$request]['attribute_details'][$attributeCode]['description'];
-
-      if ($attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title_toggle']) {
-        $options_list[$attributeCode]['mobile_title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title'];
+        foreach ($attribute_details['options_markup']['#option']['terms'] as $term_key => $term) {
+          if (!in_array($term['title'], $facet_results[$attribute_key])) {
+            unset($options_list[$attribute_key]['options_markup']['#option']['terms'][$term_key]);
+          }
+        }
       }
     }
 
@@ -149,9 +167,7 @@ class AlshayaOptionsPageController extends ControllerBase {
       '#page_title' => $attribute_options[$request]['title'],
       '#description' => $attribute_options[$request]['description'],
       '#attached' => [
-        'library' => [
-          'alshaya_white_label/optionlist_filter',
-        ],
+        'library' => $libraries,
       ],
     ];
 

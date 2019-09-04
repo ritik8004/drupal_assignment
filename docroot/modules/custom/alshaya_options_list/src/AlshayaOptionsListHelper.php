@@ -116,8 +116,6 @@ class AlshayaOptionsListHelper {
    *
    * @param string $attributeCode
    *   Attribute code.
-   * @param array $facet_results
-   *   Array containing all facet results.
    * @param bool $showImages
    *   Whether images should be shown with the attribute.
    * @param bool $group
@@ -128,13 +126,8 @@ class AlshayaOptionsListHelper {
    * @return array
    *   All term names array.
    */
-  public function fetchAllTermsForAttribute($attributeCode, array $facet_results, $showImages = FALSE, $group = FALSE, $searchString = '') {
+  public function fetchAllTermsForAttribute($attributeCode, $showImages = FALSE, $group = FALSE, $searchString = '') {
     $return = [];
-
-    // If there are no results for attribute.
-    if (empty($facet_results[$attributeCode])) {
-      return [];
-    }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['name', 'tid']);
@@ -158,7 +151,7 @@ class AlshayaOptionsListHelper {
     }
 
     foreach ($options as $option) {
-      if (!empty($option->name) && in_array($option->name, $facet_results[$attributeCode])) {
+      if (!empty($option->name)) {
         $list_array = [];
         $list_array['title'] = $option->name;
         $list_array['url'] = $this->getAttributeUrl($attributeCode, $option->name);
@@ -264,11 +257,7 @@ class AlshayaOptionsListHelper {
    * @throws \Drupal\search_api\SearchApiException
    */
   public function loadFacetsData(array $attribute_codes) {
-    $facet_results = &drupal_static('allRequiredFacetResults', []);
-    if (!empty($facet_results)) {
-      return $facet_results;
-    }
-
+    $facet_results = [];
     $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_page__search__page');
     $index = Index::load('acquia_search_index');
     $query = $index->query();
