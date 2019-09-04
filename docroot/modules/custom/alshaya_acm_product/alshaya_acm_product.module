@@ -2294,10 +2294,11 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
     foreach ($facet_blocks as $blck_id => $facet_block) {
       $old_weight = ++$weight;
       $final_price_block_id = '';
+
       /*
-       * Set weight of selling price facet as per the final price facet
-       * to maintain facet sequence on listing pages.
-       */
+      * Set weight of selling price facet as per the final price facet
+      * to maintain facet sequence on listing pages.
+      */
       switch ($blck_id) {
         case 'plpsellingprice':
           $final_price_block_id = 'skusskureferencefinalprice';
