@@ -195,6 +195,7 @@
   #payment_method_cybersource & {
     background: $checkout_payment_row_default;
     border-top: 1px solid $checkout_payment_option_border;
+    border-bottom: 1px solid $checkout_payment_option_border;
 
     @include breakpoint($mobile) {
       padding: 1rem 0;
