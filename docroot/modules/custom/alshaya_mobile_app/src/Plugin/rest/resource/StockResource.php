@@ -5,7 +5,6 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
-use Drupal\Core\Cache\Cache;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
@@ -24,12 +23,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * )
  */
 class StockResource extends ResourceBase {
-  /**
-   * Store cache tags and contexts to be added in response.
-   *
-   * @var array
-   */
-  private $cache;
 
   /**
    * Sku info helper.
@@ -63,10 +56,6 @@ class StockResource extends ResourceBase {
     SkuInfoHelper $sku_info_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->cache = [
-      'tags' => [],
-      'contexts' => [],
-    ];
     $this->skuInfoHelper = $sku_info_helper;
   }
 
@@ -103,21 +92,12 @@ class StockResource extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
 
-    // Get cache tags and context for sku.
-    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $skuEntity->getCacheTags());
-    $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $skuEntity->getCacheContexts());
-
     $response = new ResourceResponse($data);
+
+    // Add sku cache tags to response.
     $cacheableMetadata = $response->getCacheableMetadata();
-
-    if (!empty($this->cache['contexts'])) {
-      $cacheableMetadata->addCacheContexts($this->cache['contexts']);
-    }
-
-    if (!empty($this->cache['tags'])) {
-      $cacheableMetadata->addCacheTags($this->cache['tags']);
-    }
-
+    $cacheableMetadata->addCacheContexts($skuEntity->getCacheContexts());
+    $cacheableMetadata->addCacheTags($skuEntity->getCacheTags());
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;

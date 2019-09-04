@@ -22,6 +22,21 @@ securitySchemes:
         authorizationGrants: [ authorization_code, password ]
 mediaType: application/json
 schemas:
+  - StockData: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "stock": {
+            "type": "integer",
+            "description": "The stock quantity."
+          },
+          "in_stock": {
+            "type": "string",
+            "description": "Product is in stock or not"
+          }
+        }
+      }
   - GetImage: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -1947,6 +1962,17 @@ schemas:
                     "cart_combinations": {},
                     "variants": []
                   }
+  /stock:
+    /{sku}:
+      get:
+        description: "Get stock by SKU."
+        responses:
+          200:
+            body:
+              application/json:
+                schema: StockData
+                example: |
+                  {"stock":20,"in_stock":true}
   /knet:
     /init:
       /{cart_id}:
