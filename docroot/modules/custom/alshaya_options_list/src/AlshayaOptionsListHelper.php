@@ -129,6 +129,11 @@ class AlshayaOptionsListHelper {
   public function fetchAllTermsForAttribute($attributeCode, $showImages = FALSE, $group = FALSE, $searchString = '') {
     $return = [];
     $facet_results = &drupal_static('allRequiredFacetResults', []);
+
+    // If by some chance static cache is reset.
+    if (empty($facet_results[$attributeCode])) {
+      $facet_results = $this->loadFacetsData([$attributeCode]);
+    }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['name', 'tid']);
@@ -167,7 +172,6 @@ class AlshayaOptionsListHelper {
           $url = [
             'query' => [
               'f[0]' => $attributeCode . ':' . $option->name,
-              'sort_bef_combine' => 'search_api_relevance DESC',
             ],
           ];
           $list_object['url'] = Url::fromUri('internal:/search', $url);
@@ -270,7 +274,7 @@ class AlshayaOptionsListHelper {
    *
    * @throws \Drupal\search_api\SearchApiException
    */
-  public function allRequiredFacetResults(array $attribute_codes) {
+  public function loadFacetsData(array $attribute_codes) {
     $facet_results = &drupal_static('allRequiredFacetResults', []);
     if (!empty($facet_results)) {
       return;
@@ -296,7 +300,6 @@ class AlshayaOptionsListHelper {
         if (in_array($facet->id(), $attribute_codes)) {
           $facet_data[$facet->id()] = [
             'field' => $facet->getFieldIdentifier(),
-            'limit' => $facet->getHardLimit(),
             'operator' => $facet->getQueryOperator(),
             'min_count' => $facet->getMinCount(),
             'missing' => FALSE,
@@ -311,6 +314,8 @@ class AlshayaOptionsListHelper {
 
     // Set the facet results data in static.
     $facet_results = $results->getExtraData('search_api_facets');
+
+    return $facet_results;
   }
 
 }
