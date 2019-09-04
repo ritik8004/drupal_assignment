@@ -279,7 +279,7 @@ class AlshayaOptionsListHelper {
           $facet_data[$facet->id()] = [
             'field' => $facet->getFieldIdentifier(),
             'operator' => $facet->getQueryOperator(),
-            'limit' => $facet->getHardLimit(),
+            'limit' => 0,
             'min_count' => $facet->getMinCount(),
             'missing' => FALSE,
           ];
