@@ -2,12 +2,6 @@ services:
   alshaya_feed.commands:
     class: Drupal\alshaya_feed\Commands\AlshayaFeedCommands
     arguments:
-      - '@database'
-      - '@datetime.time'
-      - '@logger.channel.alshaya_feed'
-      - '@alshaya_acm_product.skumanager'
-      - '@entity_type.manager'
-      - '@alshaya_feed.generate'
       - '@config.factory'
     tags:
       - { name: drush.command }

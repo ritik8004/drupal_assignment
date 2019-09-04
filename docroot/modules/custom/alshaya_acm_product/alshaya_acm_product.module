@@ -636,6 +636,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Process price block and gallery for modal and full view mode.
       if (in_array($view_mode, ['modal', 'full'])) {
+        $pdp_layout = $skuManager->getPdpLayout($entity, $context);
+
         // Get the gallery for selected SKU if selected sku id available in
         // query params, else show it from main parent sku itself.
         $sku_for_gallery = $sku_entity;
@@ -662,7 +664,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         if ($sku_for_gallery instanceof SKUInterface) {
-          $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
           $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE);
         }
 
@@ -712,6 +713,7 @@ function alshaya_acm_product_get_home_delivery_config() {
 function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
@@ -1295,6 +1297,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   $selected = $selected ?? [];
+  $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
+  $pdp_layout = $skuManager->getPdpLayout($sku, $context);
 
   // Calculate available config options based on the attribute value selected,
   // in case of multiple config attributes with a product.
@@ -1334,8 +1338,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
-    $pdp_layout = $skuManager->getPdpLayout($tree_pointer, $context);
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, $pdp_layout, '', FALSE);
 
     if (isset($build['gallery'])) {
@@ -1505,10 +1507,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-
-    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
-    $pdp_layout = $skuManager->getPdpLayout($sku, $context);
-
     if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);

@@ -261,6 +261,11 @@ class SkuAssetManager {
         unset($asset['fid']);
       }
 
+      if (empty(SKU::$downloadImage)) {
+        unset($assets[$index]);
+        continue;
+      }
+
       // Use pims/asset id for lock key.
       try {
         $file = $this->downloadImage($asset, $sku->getSku());
