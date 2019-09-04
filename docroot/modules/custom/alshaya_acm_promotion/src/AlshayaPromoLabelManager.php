@@ -273,9 +273,9 @@ class AlshayaPromoLabelManager {
     }
     // Calculate X and Y.
     $promotion_data = unserialize($promotion->get('field_acq_promotion_data')->getString());
-    if (isset($promotion_data['discount_step']) && isset($promotion_data['discount_amount'])) {
-      $discount_step = $promotion_data['discount_step'];
-      $discount_amount = $promotion_data['discount_amount'];
+    if (isset($promotion_data['step']) && isset($promotion_data['discount'])) {
+      $discount_step = $promotion_data['step'];
+      $discount_amount = $promotion_data['discount'];
       $z = ($discount_step + $discount_amount) - $eligible_cart_qty;
       // Apply z-logic to generate label.
       if ($z >= 1) {
