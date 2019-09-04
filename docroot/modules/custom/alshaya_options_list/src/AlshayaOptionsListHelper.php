@@ -277,7 +277,7 @@ class AlshayaOptionsListHelper {
   public function loadFacetsData(array $attribute_codes) {
     $facet_results = &drupal_static('allRequiredFacetResults', []);
     if (!empty($facet_results)) {
-      return;
+      return $facet_results;
     }
 
     $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_page__search__page');
