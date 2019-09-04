@@ -14,15 +14,15 @@
           </div>
         </div>
       </div>
-      {% if option.search_form %}
+      {% if option.search %}
         <div class='attribute-search-form'>
-          {{ option.search_form }}
+          <input type='text' id='alshaya-options-list-autocomplete-form' value='' placeholder="{{ option.search_placeholder }}">
         </div>
       {% endif %}
       <div class='attribute-description'> {{ option.description }} </div>
         {{ option.options_markup }}
     </div>
-    {% if option.search_form %}
+    {% if option.search %}
       <div class="mobile-only-block">
         <div class='attribute-option {{ key }}'>
           <div class='attribute-title'> {{ option.title }} </div>
