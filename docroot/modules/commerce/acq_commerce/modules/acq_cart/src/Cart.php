@@ -272,6 +272,10 @@ class Cart implements CartInterface {
     $items[] = $item;
 
     $this->cart->items = $items;
+
+    // We changed items in cart, lets ask user to go through the checkout flow
+    // again to ensure everything is updated properly.
+    $this->setCheckoutStep('');
   }
 
   /**
