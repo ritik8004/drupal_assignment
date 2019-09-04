@@ -2249,6 +2249,29 @@ function _alshaya_acm_product_adjust_facet_block() {
   foreach ($fct_block_data as $type => $facet_blck_source) {
     _alshaya_acm_product_adjust_block_weight($type, key($facet_blck_source), $facet_blck_source[key($facet_blck_source)]);
   }
+
+  /*
+   * Set weight of selling price facet as per the final price facet
+   * to maintain facet sequence on listing pages.
+   */
+
+  $block_ids = [
+    'skusskureferencefinalprice' => 'plpsellingprice',
+    'promotionpricefacet' => 'promosellingprice',
+    'finalprice' => 'sellingprice',
+  ];
+
+  foreach ($block_ids as $price_block_id => $block_id) {
+    $price_block = Block::load($price_block_id);
+    if ($price_block instanceof BlockInterface) {
+      try {
+        Block::load($block_id)->setWeight($price_block->getWeight())->save();
+      }
+      catch (Exception $e) {
+        // Do nothing.
+      }
+    }
+  }
 }
 
 /**
