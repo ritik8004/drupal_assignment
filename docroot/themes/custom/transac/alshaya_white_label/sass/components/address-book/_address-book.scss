@@ -650,15 +650,73 @@
   }
 }
 
-select {
-  @include select-style(24.75rem);
+.address-book-address .form-type-select {
+  @include select-wrapper(100%);
+
+  label {
+    top: -1.1375rem;
+    font-size: 0.75rem;
+
+    &.error {
+      top: 2rem;
+    }
+  }
+
+  select.select2-select.form-select {
+    font-size: 1rem;
+    box-sizing: border-box;
+
+    @include select-style(100%);
+  }
+
+  .select2-selection {
+    font-family: $alshaya-thin;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    border-radius: 0;
+    height: 2.188rem !important;
+    border-color: $white-two;
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.1875rem;
+    background: $primary_dropdown_arrow_bg;
+
+    &::after {
+      font-size: 1.7rem;
+      top: 12%;
+      #{$left}: 11%;
+    }
+  }
+
+  .select2-container {
+    width: 100% !important;
+  }
+
+  .select2-selection__rendered {
+    font-family: $arial;
+    line-height: 1.188rem !important;
+    color: $black;
+    padding: 0.25rem !important;
+  }
 }
 
 .form-type-select {
-  @include select-wrapper(24.75rem);
+  .select2-selection__arrow {
+    @include icon(chevrondown, after) {
+      font-size: 1.5rem;
+      position: absolute;
+      top: 9%;
+      #{$left}: 10%;
+    }
 
-  @include breakpoint($desktop) {
-    @include select2-style(24.75rem);
+    b {
+      display: none;
+    }
   }
 }
 
