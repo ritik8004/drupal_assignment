@@ -235,3 +235,7 @@ pdp_js:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+order_confirmation_js:
+  js:
+    js/order-confirmation.js: {}

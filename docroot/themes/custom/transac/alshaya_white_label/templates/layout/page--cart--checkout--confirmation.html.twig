@@ -3,6 +3,7 @@
 {% elseif html_direction == "rtl" %}
   {{ attach_library('alshaya_white_label/rtl_print_styles') }}
 {% endif %}
+{{ attach_library('alshaya_white_label/order_confirmation_js') }}
 
 {% set attributes = attributes.addClass('user-page', 'l-two--sf', 'checkout-login', 'order-confirmation') %}
 <div>
