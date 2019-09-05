@@ -706,20 +706,26 @@ class SkuManager {
    *   Parent sku to get children of.
    * @param bool $first_only
    *   Flag to specify only first is required or all.
+   * @param string $product_color
+   *   Product color.
    *
    * @return \Drupal\acq_sku\Entity\SKU|\Drupal\acq_sku\Entity\SKU[]|null
    *   First sku if first_only true or array of skus.
    */
-  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE) {
+  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE, $product_color = '') {
     $childSkus = [];
 
     $langcode = $sku->language()->getId();
     $combinations = $this->getConfigurableCombinations($sku);
+    $configurable_attributes = $this->getConfigurableAttributes($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $children) {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $langcode);
-
+          $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
+          if ($product_color == $child_color) {
+            return $child;
+          }
           if (!($child instanceof SKUInterface)) {
             continue;
           }
@@ -2931,7 +2937,7 @@ class SkuManager {
 
     $data = [];
     $has_color_data = FALSE;
-    $children = $this->getAvailableChildren($sku) ?? [];
+    $children = $this->getAvailableChildren($sku, FALSE, $product_color) ?? [];
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
     // Gather data from children to set in parent.
