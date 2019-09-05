@@ -34,7 +34,7 @@
     attach: function (context, settings) {
       $('article.entity--type-node').once('click-collect').on('combination-changed', function (event, variant) {
         var sku = $(this).attr('data-sku');
-        var variantInfo = drupalSettings.variantsInfo[sku][variant];
+        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 
         if (variantInfo.click_collect) {
           $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', false);

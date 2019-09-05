@@ -380,14 +380,13 @@ class SkuInfoHelper {
           'status' => $stockInfo['in_stock'],
           'qty' => $stockInfo['stock'],
         ],
-        'layout' => $pdp_layout,
       ];
 
       $price = $this->priceHelper->getPriceBlockForSku($child);
       $variant['price'] = $this->renderer->renderPlain($price);
 
       $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $sku->label(), FALSE);
-      $variant['gallery'] = $this->renderer->renderPlain($gallery);
+      $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
 
       $this->moduleHandler->alter('sku_variant_info', $variant, $child, $sku);
 

@@ -13,6 +13,7 @@ product_detail:
     js/alshaya_acm_product.detail.js: {}
   dependencies:
     - core/jquery
+    - core/drupalSettings
     - core/drupal.ajax
     - core/drupal.dialog.ajax
     - core/drupal.form

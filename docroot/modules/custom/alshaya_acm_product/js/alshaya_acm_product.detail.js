@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   /**
@@ -95,23 +95,12 @@
       });
 
       $('article.entity--type-node').once('load').each(function () {
+        var sku = $(this).attr('data-sku');
+        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
         $(this).find('#configurable_ajax .form-select').val('');
-
-        $(this).on('combination-changed', function (event, variant) {
-          var sku = $(this).attr('data-sku');
-          var variantInfo = drupalSettings.variantsInfo[sku][variant];
-
-          $(this).find('.gallery-wrapper').replaceWith(variantInfo.gallery);
-          $(this).find('.price-block').html(variantInfo.price);
-
-          // @TODO: Update quantity dropdown.
-          if (variantInfo.layout === 'magazine') {
-            Drupal.behaviors.magazine_gallery.attach($(this));
-          }
-          else {
-            Drupal.behaviors.alshaya_product_zoom.attach($(this));
-          }
-        });
 
         // @TODO: Select based on selected query param or color.
         $(this).find('#configurable_ajax .form-select:first')
@@ -119,10 +108,55 @@
           .prop('selected', true)
           .attr('selected', 'selected')
           .trigger('change');
+
+        Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+
+        $(this).on('combination-changed', function (event, variant) {
+          var sku = $(this).attr('data-sku');
+          var selected = $('[name="selected_variant_sku"]', $(this)).val();
+          var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+          $(this).find('.price-block').html(variantInfo.price);
+
+          if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
+            Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+          }
+          else {
+            Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+          }
+
+          // @TODO: Update quantity dropdown.
+        });
+
+        $(this).on('variant-selected', function (event, variant) {
+          var sku = $(this).attr('data-sku');
+          var selected = $('[name="selected_variant_sku"]', $(this)).val();
+          var variantInfo = drupalSettings.productInfo[sku]['variants'][selected];
+          Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+        });
       });
     }
   };
 
+  Drupal.updateGallery = function (product, layout, gallery) {
+    if (gallery === '' || gallery === null) {
+      return;
+    }
+
+    if ($(product).find('.gallery-wrapper').length > 0) {
+      $(product).find('.gallery-wrapper').replaceWith(gallery);
+    }
+    else {
+      $(product).find('#product-zoom-container').replaceWith(gallery);
+    }
+
+    if (layout === 'magazine') {
+      Drupal.behaviors.magazine_gallery.attach(product);
+    }
+    else {
+      Drupal.behaviors.alshaya_product_zoom.attach(product);
+    }
+  }
   Drupal.getSelectedCombination = function (form) {
     var selectedCombination = '';
     $('[data-configurable-code]', form).each(function () {
@@ -178,4 +212,4 @@
     $('.ajax-progress, .ajax-progress-throbber').remove();
   }
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
