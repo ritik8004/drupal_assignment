@@ -11,6 +11,7 @@ use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -150,7 +151,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $storage = $this->nodeStorage;
       $query = $storage->getQuery();
       $query->condition('type', 'acq_promotion');
-      $query->condition('status', '1');
+      $query->condition('status', NodeInterface::PUBLISHED);
       $query->condition($attribute_code, $value);
     }
     else {
