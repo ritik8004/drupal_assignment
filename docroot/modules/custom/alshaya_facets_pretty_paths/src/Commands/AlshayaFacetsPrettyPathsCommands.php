@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_facets_pretty_paths\Commands;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets_summary\Entity\FacetsSummary;
 use Drush\Commands\DrushCommands;
@@ -29,17 +30,28 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
   protected $configFactory;
 
   /**
+   * The router builder.
+   *
+   * @var \Drupal\Core\Routing\RouteBuilderInterface
+   */
+  protected $routerBuilder;
+
+  /**
    * AlshayaFacetsPrettyPathsCommands constructor.
    *
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
    *   Facet manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
+   *   The router builder service.
    */
   public function __construct(DefaultFacetManager $facets_manager,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              RouteBuilderInterface $router_builder) {
     $this->facetManager = $facets_manager;
     $this->configFactory = $config_factory;
+    $this->routerBuilder = $router_builder;
   }
 
   /**
@@ -132,6 +144,9 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
       }
     }
 
+    // Rebuild routes.
+    $this->routerBuilder->rebuild();
+
     $this->output()->writeln('Successfully enabled alshaya_facets_pretty_paths on ' . $type);
   }
 
@@ -179,6 +194,9 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
         $summary->save();
       }
     }
+
+    // Rebuild routes.
+    $this->routerBuilder->rebuild();
 
     $this->output()->writeln('Successfully disabled alshaya_facets_pretty_paths on ' . $type);
   }
