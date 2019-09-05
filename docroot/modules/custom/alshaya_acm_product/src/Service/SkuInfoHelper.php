@@ -153,7 +153,7 @@ class SkuInfoHelper {
       }
       // Remove un-wanted description key.
       unset($row['description']);
-      $attributes[$row['key']] = $row['value'];
+      $attributes[] = $row;
     };
 
     return $attributes;
