@@ -3,10 +3,13 @@
 namespace Drupal\alshaya_acm_product\Service;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\metatag\MetatagManager;
 use Drupal\node\NodeInterface;
 
@@ -39,6 +42,27 @@ class SkuInfoHelper {
   protected $metatagManager;
 
   /**
+   * Price Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+   */
+  protected $priceHelper;
+
+  /**
+   * Renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -47,15 +71,27 @@ class SkuInfoHelper {
    *   SKU images manager.
    * @param \Drupal\metatag\MetatagManager $metatagManager
    *   The metatag manager object.
+   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $price_helper
+   *   Price Helper.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(
     SkuManager $sku_manager,
     SkuImagesManager $sku_images_manager,
-    MetatagManager $metatagManager
+    MetatagManager $metatagManager,
+    SkuPriceHelper $price_helper,
+    RendererInterface $renderer,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
     $this->metatagManager = $metatagManager;
+    $this->priceHelper = $price_helper;
+    $this->renderer = $renderer;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -308,6 +344,57 @@ class SkuInfoHelper {
     $linkedSkus = $this->skuManager->filterRelatedSkus($linkedSkus);
 
     return $linkedSkus;
+  }
+
+  /**
+   * Get variants data for configurable product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Data for all variants.
+   */
+  public function getConfigurableProductData(SKUInterface $sku, string $context) {
+    if ($sku->bundle() !== 'configurable') {
+      return [];
+    }
+
+    $variants = [];
+
+    $pdp_layout = $this->skuManager->getPdpLayout($sku, $context);
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
+      $child = SKU::loadFromSku($child_sku);
+      if (!$child instanceof SKUInterface) {
+        continue;
+      }
+      $stockInfo = $this->stockInfo($child);
+
+      $variant = [
+        'id' => $child->id(),
+        'sku' => $child->getSku(),
+        'stock' => [
+          'status' => $stockInfo['in_stock'],
+          'qty' => $stockInfo['stock'],
+        ],
+        'layout' => $pdp_layout,
+      ];
+
+      $price = $this->priceHelper->getPriceBlockForSku($child);
+      $variant['price'] = $this->renderer->renderPlain($price);
+
+      $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $sku->label(), FALSE);
+      $variant['gallery'] = $this->renderer->renderPlain($gallery);
+
+      $this->moduleHandler->alter('sku_variant_info', $variant, $child, $sku);
+
+      $variants[$child->getSku()] = $variant;
+    }
+
+    return $variants;
   }
 
 }
