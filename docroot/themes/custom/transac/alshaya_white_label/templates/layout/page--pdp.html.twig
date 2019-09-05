@@ -4,65 +4,65 @@
 {% set attributes = attributes.addClass('c-pdp', 'l-one--w') %}
 <div>
   <!-- ______________________ MENU SECONDARY _______________________ -->
-  {% block header_precontent %}
-    <!-- ______________________ Banner Top _______________________ -->
-    {% if page.banner_top %}
-      {{ page.banner_top }}
-    {% endif %}
-    <!-- /Banner Top -->
+{% block header_precontent %}
+  <!-- ______________________ Banner Top _______________________ -->
+  {% if page.banner_top %}
+    {{ page.banner_top }}
+  {% endif %}
+  <!-- /Banner Top -->
 
-    <div class="header--wrapper">
-      {% if page.menu_secondary %}
-        <div class="c-menu-secondary">
-          <div class="l-container">
-            <div class="c-menu-secondary__region">
-              {{ page.menu_secondary }}
-            </div>
+  <div class="header--wrapper">
+    {% if page.menu_secondary %}
+      <div class="c-menu-secondary">
+        <div class="l-container">
+          <div class="c-menu-secondary__region">
+            {{ page.menu_secondary }}
           </div>
         </div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
+  </div>
     <!-- /menu-secondary -->
 
     <!-- ______________________ HEADER _______________________ -->
-    <div class="branding__menu">
-      {% include directory ~ '/../alshaya_white_label/templates/partial/nojs.html.twig' %}
+  <div class="branding__menu">
+    {% include directory ~ '/../alshaya_white_label/templates/partial/nojs.html.twig' %}
 
-      {% if page.header %}
-        <header class="c-header">
-          <div class="l-container">
-            <div class="c-header__region">
-              {{ page.header }}
-            </div>
-          </div>
-        </header>
-      {% endif %}
-      <!-- /header -->
-
-      <!-- ______________________ MENU PRIMARY _______________________ -->
-
-      {% if page.menu_primary %}
-        <div class="c-menu-primary">
-          <div class="l-container">
-            <div id="c-menu-primary__region">
-              {{ page.menu_primary }}
-            </div>
+    {% if page.header %}
+      <header class="c-header">
+        <div class="l-container">
+          <div class="c-header__region">
+            {{ page.header }}
           </div>
         </div>
-      {% endif %}
-      <!-- /menu-primary -->
+      </header>
+    {% endif %}
+    <!-- /header -->
 
-      <!-- ______________________ Pre content _______________________ -->
-      {% if page.pre_content %}
-        <div class="c-pre-content">
-          <div class="l-container">
-            <div class="c-pre-content__region">
-              {{ page.pre_content }}
-            </div>
+    <!-- ______________________ MENU PRIMARY _______________________ -->
+
+    {% if page.menu_primary %}
+      <div class="c-menu-primary">
+        <div class="l-container">
+          <div id="c-menu-primary__region">
+            {{ page.menu_primary }}
           </div>
         </div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
+    <!-- /menu-primary -->
+
+    <!-- ______________________ Pre content _______________________ -->
+    {% if page.pre_content %}
+      <div class="c-pre-content">
+        <div class="l-container">
+          <div class="c-pre-content__region">
+            {{ page.pre_content }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
   {% endblock %}
 
   <!-- ______________________ BREADCRUMB _______________________ -->
@@ -94,7 +94,7 @@
   <!-- ______________________ MAIN _______________________ -->
 
   <div class="clearfix page-wrapper">
-    <div{{ attributes.addclass('l-container') }}>
+    <div{{ attributes.addClass('l-container') }}>
 
       <main>
 
@@ -162,7 +162,7 @@
   <footer class="c-footer">
     {% if vat_text_footer %}
       <div class="vat-container">
-        <div class='vat-text-footer'>
+        <div class = 'vat-text-footer'>
           {{ vat_text_footer }}
         </div>
       </div>
@@ -171,7 +171,7 @@
     {% if page.footer_primary %}
       {% block primary_footer %}
         {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
-        <!-- /footer-primary -->
+      <!-- /footer-primary -->
       {% endblock %}
     {% endif %}
 
@@ -188,6 +188,7 @@
       <!-- /footer-secondary -->
     {% endif %}
   </footer>
+
 
 </div>
 <!-- /page -->
