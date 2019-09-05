@@ -4,5 +4,6 @@ services:
     arguments:
       - '@facets.manager'
       - '@config.factory'
+      - '@router.builder'
     tags:
       - { name: drush.command }
