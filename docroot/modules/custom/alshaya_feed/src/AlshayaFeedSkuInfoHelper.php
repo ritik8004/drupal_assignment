@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -164,6 +165,9 @@ class AlshayaFeedSkuInfoHelper {
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
 
+      // Disable image download.
+      $download_image = SKU::$downloadImage;
+      SKU::$downloadImage = FALSE;
       if ($sku->bundle() == 'simple') {
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
         $product[$lang]['stock'] = [
@@ -176,6 +180,7 @@ class AlshayaFeedSkuInfoHelper {
       if ($sku->bundle() === 'configurable') {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
 
+        $swatches = $this->skuImagesManager->getSwatchData($sku);
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
           $child = SKU::loadFromSku($child_sku);
           if (!$child instanceof SKUInterface) {
@@ -186,7 +191,7 @@ class AlshayaFeedSkuInfoHelper {
           $variant = [
             'sku' => $child->getSku(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),
-            'swatch_image' => $this->getSwatchImages($sku, $combination),
+            'swatch_image' => $this->getSwatchImages($child, $combination, $swatches),
             'images' => $this->getGalleryMedia($child),
             'stock' => [
               'status' => $stockInfo['in_stock'],
@@ -196,12 +201,21 @@ class AlshayaFeedSkuInfoHelper {
           $product[$lang]['variants'][] = $variant;
         }
       }
+      // Reset image download to old state.
+      SKU::$downloadImage = $download_image;
+
+      // Disable API calls.
+      $invoke_api = AlshayaAcmApiWrapper::$invokeApi;
+      AlshayaAcmApiWrapper::$invokeApi = FALSE;
 
       $product[$lang]['linked_skus'] = [];
       foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type, FALSE);
+        $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
+
+      // Revert to old state.
+      AlshayaAcmApiWrapper::$invokeApi = $invoke_api;
     }
 
     return $product;
@@ -214,16 +228,22 @@ class AlshayaFeedSkuInfoHelper {
    *   SKU Entity.
    * @param array $combination
    *   Array of combination attributes.
+   * @param array $swatches
+   *   Array of swatches.
    *
    * @return array
    *   An array swatch image with label.
    */
-  protected function getSwatchImages(SKUInterface $sku, array $combination): array {
-    $swatches = $this->skuImagesManager->getSwatchData($sku);
+  protected function getSwatchImages(SKUInterface $sku, array $combination, array $swatches): array {
     $swatch_image = [];
-    if (!empty($swatches) && isset($combination[$swatches['attribute_code']])) {
+
+    if (!empty($swatches['swatches']) && !empty($swatches['attribute_code']) && !empty($combination[$swatches['attribute_code']])) {
       $swatch_image = $swatches['swatches'][$combination[$swatches['attribute_code']]] ?? [];
+      if (empty($swatch_image['display_value']) && !empty($swatch_image['image_url'])) {
+        $swatch_image['display_value'] = $swatch_image['image_url'];
+      }
     }
+
     return $swatch_image;
   }
 
@@ -238,16 +258,20 @@ class AlshayaFeedSkuInfoHelper {
    */
   protected function getGalleryMedia(SKUInterface $sku): array {
     $media_items = $this->skuImagesManager->getProductMedia($sku, 'pdp');
-    if (empty($media_items) || empty($media_items['media_items'])) {
+    if (empty($media_items) || empty($media_items['media_items']) || !is_array($media_items['media_items']['images'])) {
       return [];
     }
 
-    return array_map(function ($image) {
-      return [
-        'label' => $image['label'],
-        'url' => file_create_url($image['drupal_uri']),
-      ];
+    $images = array_map(function ($image) {
+      if (!empty($image['drupal_uri'])) {
+        return [
+          'label' => $image['label'],
+          'url' => file_create_url($image['drupal_uri']),
+        ];
+      }
     }, $media_items['media_items']['images']);
+
+    return array_filter($images);
   }
 
   /**
@@ -271,8 +295,7 @@ class AlshayaFeedSkuInfoHelper {
     foreach ($attributes as $code => $id) {
       $fieldKey = 'attr_' . $code;
 
-      if ($sku->hasField($fieldKey)) {
-        $value = $sku->get($fieldKey)->getString();
+      if ($sku->hasField($fieldKey) && $value = $sku->get($fieldKey)->getString()) {
         if ($remove_not_required_option && $this->skuManager->isAttributeOptionToExclude($value)) {
           continue;
         }

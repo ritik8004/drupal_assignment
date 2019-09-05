@@ -19,3 +19,4 @@ services:
       - '@language_manager'
       - '@path.alias_manager'
       - '@facets.manager'
+      - '@config.factory'
