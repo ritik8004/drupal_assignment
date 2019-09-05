@@ -4,6 +4,7 @@ namespace Drupal\alshaya_facets_pretty_paths;
 
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
@@ -37,6 +38,13 @@ class AlshayaFacetsPrettyPathsHelper {
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $termStorage;
+
+  /**
+   * Node Storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
 
   /**
    * Language Manager.
@@ -104,6 +112,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->facetManager = $facets_manager;
@@ -136,22 +145,32 @@ class AlshayaFacetsPrettyPathsHelper {
     $encoded = $value;
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
 
-    $query = $this->termStorage->getQuery();
-    $query->condition('name', $value);
-    $query->condition('field_sku_attribute_code', $attribute_code);
-    $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
-    $tids = $query->execute();
-    foreach ($tids ?? [] as $tid) {
-      $term = $this->termStorage->load($tid);
-      if ($term instanceof TermInterface) {
-        if ($term->language()->getId() != 'en' && $term->hasTranslation('en')) {
-          $term = $term->getTranslation('en');
+    $storage = $this->termStorage;
+    if ($attribute_code == 'field_acq_promotion_label') {
+      $storage = $this->nodeStorage;
+      $query = $storage->getQuery();
+      $query->condition('type', 'acq_promotion');
+      $query->condition('status', '1');
+      $query->condition($attribute_code, $value);
+    }
+    else {
+      $query = $storage->getQuery();
+      $query->condition('name', $value);
+      $query->condition('field_sku_attribute_code', $attribute_code);
+      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+    }
+    $ids = $query->execute();
+    foreach ($ids ?? [] as $id) {
+      $entity = $storage->load($id);
+      if ($entity instanceof EntityInterface) {
+        if ($entity->language()->getId() != 'en' && $entity->hasTranslation('en')) {
+          $entity = $entity->getTranslation('en');
         }
 
         $encoded = str_replace(
-          'en/' . $this->getProductOptionAliasPrefix() . '/',
+          $entity instanceof TermInterface ? 'en/' . $this->getProductOptionAliasPrefix() . '/' : 'en/',
           '',
-          trim($term->toUrl()->toString(), '/')
+          trim($entity->toUrl()->toString(), '/')
         );
 
         break;
@@ -169,13 +188,15 @@ class AlshayaFacetsPrettyPathsHelper {
   /**
    * Decode url components according to given rules.
    *
+   * @param string $alias
+   *   Facet alias.
    * @param string $value
    *   Encoded element value.
    *
    * @return string
    *   Raw element.
    */
-  public function decodeFacetUrlComponents(string $value) {
+  public function decodeFacetUrlComponents(string $alias, string $value) {
     if (is_numeric($value)) {
       return $value;
     }
@@ -190,21 +211,31 @@ class AlshayaFacetsPrettyPathsHelper {
       $decoded = str_replace($replacement, $original, $decoded);
     }
 
-    $tid = str_replace(
-      '/taxonomy/term/',
+    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $type = 'term';
+    $storage = $this->termStorage;
+
+    if ($alias == 'promotions') {
+      $type = 'node';
+      $storage = $this->nodeStorage;
+    }
+
+    $id = str_replace(
+      $type == 'term' ? '/taxonomy/term/' : '/node/',
       '',
-      $this->aliasManager->getPathByAlias('/' . $this->getProductOptionAliasPrefix() . '/' . $decoded, 'en')
+      $this->aliasManager->getPathByAlias($type == 'term' ? '/' . $this->getProductOptionAliasPrefix() . '/' . $decoded : '/' . $decoded, $current_langcode)
     );
 
-    if ($tid) {
-      $term = $this->termStorage->load($tid);
+    if ($id) {
+      $entity = $storage->load($id);
 
-      if ($term instanceof TermInterface) {
-        if ($term->language()->getId() != 'en' && $term->hasTranslation('en')) {
-          $term = $term->getTranslation('en');
+      if ($entity instanceof EntityInterface) {
+        if ($entity->language()->getId() != $current_langcode && $entity->hasTranslation($current_langcode)) {
+          $entity = $entity->getTranslation($current_langcode);
         }
 
-        $decoded = $term->label();
+        $decoded = $type == 'term' ? $entity->label() : $entity->get('field_acq_promotion_label')->getString();
       }
     }
 
@@ -247,51 +278,6 @@ class AlshayaFacetsPrettyPathsHelper {
     $alshaya_active_facet_filters = array_filter(explode('--', $alshaya_active_facet_filter_string));
 
     return $alshaya_active_facet_filters;
-  }
-
-  /**
-   * Change language of params to other language.
-   *
-   * @param string $attribute_code
-   *   Target Language Code.
-   * @param string $filter_value
-   *   Target Language Code.
-   * @param bool $default
-   *   Whether to translate to default langague or not.
-   *
-   * @return string
-   *   Processed query params.
-   */
-  public function getTranslatedFilters(string $attribute_code, string $filter_value, bool $default = TRUE) {
-    if (is_numeric($filter_value)) {
-      return $filter_value;
-    }
-
-    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-    if ($current_langcode !== 'en') {
-      $translated_filter_values = &drupal_static(__FUNCTION__, []);
-      $required_langcode = $default ? 'en' : $current_langcode;
-      if (isset($translated_filter_values[$filter_value][$required_langcode])) {
-        return $translated_filter_values[$filter_value][$required_langcode];
-      }
-      $attribute_code = str_replace('plp_', '', $attribute_code);
-      $attribute_code = str_replace('promo_', '', $attribute_code);
-      $query = $this->termStorage->getQuery();
-      $query->condition('field_sku_attribute_code', $attribute_code);
-      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
-      $query->condition('name', $filter_value);
-      $tids = $query->execute();
-      if (!empty($tids)) {
-        $tid = reset($tids);
-        $term = $this->termStorage->load($tid);
-        if ($term instanceof TermInterface && $term->hasTranslation($required_langcode)) {
-          $term = $term->getTranslation($required_langcode);
-          $translated_filter_values[$filter_value][$required_langcode] = $term->label();
-          return $term->label();
-        }
-      }
-    }
-    return $filter_value;
   }
 
   /**
