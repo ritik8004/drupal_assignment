@@ -23,8 +23,8 @@
   <description>{{ product.description }}</description>
   <custom_attributes>
     {% if product.attributes|length > 0 %}
-      {% for attribute_key,attribute_value in product.attributes %}
-        <{{ attribute_key }}>{{ attribute_value }}</{{ attribute_key }}>
+      {% for product_attribute in product.attributes %}
+        <{{ product_attribute.key }}>{{ product_attribute.value }}</{{ product_attribute.key }}>
       {% endfor %}
     {% endif %}
   </custom_attributes>
