@@ -8,9 +8,6 @@
 
   Drupal.behaviors.accordionOrderConfirmation = {
     attach: function () {
-      /**
-       * Toggles the Order confirmation table.
-       */
       if ($('.multistep-checkout .user__order--detail').length) {
         $('.collapse-row').fadeOut();
         $('.product--count').on('click', function () {
