@@ -22,6 +22,7 @@
   Drupal.checkoutComShowError = function (element, error) {
     var errorDiv = $('<div class="form-item--error-message" />');
     errorDiv.html(error);
+    element.addClass('error');
     element.parent().find('.form-item--error-message').remove();
     element.parent().append(errorDiv);
   };
