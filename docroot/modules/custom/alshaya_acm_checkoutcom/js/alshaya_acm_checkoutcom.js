@@ -54,6 +54,7 @@
   // Remove loader to allow user to edit form on form error.
   $(document).on('checkoutcom_form_error', function (e) {
     $(this).removeCheckoutLoader();
+    Drupal.setFocusToFirstError($('form.multistep-checkout'));
   });
 
   $(document).on('checkoutcom_form_ajax', function(e, response) {
