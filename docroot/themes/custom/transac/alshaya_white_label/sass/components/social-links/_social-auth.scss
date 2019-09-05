@@ -139,6 +139,10 @@
   #edit-checkout-social-auth {
     @include breakpoint($only-mobile) {
       order: 2;
+
+      .fieldset-legend {
+        display: none;
+      }
     }
   }
 
@@ -238,7 +242,7 @@
 
     @include breakpoint($only-mobile) {
       legend {
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
       }
     }
   }
@@ -253,7 +257,46 @@
 
   .block-page-title-block {
     @include breakpoint($only-mobile) {
-      margin-bottom: 1.5625rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .login-separator {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .alshaya-social {
+      margin-top: 1rem;
+
+      .auth-link {
+        margin-top: 1rem;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .login-separator {
+      + .alshaya-social {
+        margin-top: 0;
+      }
+    }
+
+    .checkout-login-separator,
+    .login-separator {
+      margin: 0;
+    }
+
+    .multistep-checkout {
+      #edit-checkout-login {
+        .form-actions {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
@@ -272,6 +315,36 @@
 
   .block-alshaya-social-login {
     margin-bottom: 2.5rem;
+  }
+}
+
+.c-user-login {
+  .section-title {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  .login-separator {
+    &.bottom {
+      display: none;
+    }
+  }
+}
+
+.c-user-register {
+  .login-separator {
+    &.top {
+      display: none;
+    }
+  }
+
+  #block-alshayasocialloginblock {
+    .section-title {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
   }
 }
 

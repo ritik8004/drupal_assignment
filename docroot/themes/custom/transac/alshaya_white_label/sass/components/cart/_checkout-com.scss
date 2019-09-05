@@ -213,7 +213,7 @@
           @include breakpoint($only-tablet) {
             top: 1.5rem;
             #{$left}: 53%;
-            width: 49%;
+            width: 42%;
           }
         }
 
@@ -416,7 +416,7 @@
   #payment_method_title_checkout_com {
     &.plugin-selected {
       ~ .card-types-wrapper {
-        .card-type {
+        .card-type.active {
           opacity: 1;
         }
       }

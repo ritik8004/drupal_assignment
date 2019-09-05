@@ -402,6 +402,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
       if ($next_step_id == 'confirmation') {
         try {
+          // Validate if reserve order id is not set in cart.
+          if (!$this->getCheckoutHelper()->isReservedOrderSetInCart($cart)) {
+            throw new \Exception(acq_commerce_api_down_global_error_message());
+          }
           // Invoke hook to allow other modules to process before order is
           // finally placed.
           \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);

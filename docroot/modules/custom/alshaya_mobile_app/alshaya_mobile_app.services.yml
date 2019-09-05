@@ -16,6 +16,7 @@ services:
       - '@acq_commerce.api'
       - '@renderer'
       - '@redirect.repository'
+      - '@alshaya_acm_product.sku_info'
   alshaya_mobile_app.utility.paragraphs:
     class: Drupal\alshaya_mobile_app\Service\MobileAppUtilityParagraphs
     decorates: alshaya_mobile_app.utility
@@ -39,6 +40,7 @@ services:
       - '@config.factory'
       - '@acq_commerce.api'
       - '@redirect.repository'
+      - '@alshaya_acm_product.sku_info'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
     arguments:
@@ -53,6 +55,7 @@ services:
       - '@alshaya_acm_product_position.sort_options'
       - '@alshaya_acm_product_position.sort_labels'
       - '@alshaya_acm_product.price_helper'
+      - '@alshaya_product_options.swatches'
   alshaya_mobile_app.stdclass_normalizer:
     class: Drupal\alshaya_mobile_app\Normalizer\StdClassNormalizer
     arguments: ['\stdClass']

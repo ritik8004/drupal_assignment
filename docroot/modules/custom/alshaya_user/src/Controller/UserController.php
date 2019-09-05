@@ -82,6 +82,17 @@ class UserController extends ControllerBase {
     $build['#markup'] = str_replace('[email]', $account->getEmail(), $text);
 
     $build['#cache'] = ['max-age' => 0];
+    if ($account->get('field_subscribe_newsletter')->getString()) {
+      $build['#attached']['drupalSettings']['alshaya_gtm_create_user_lead'] = $account->id();
+      $build['#attached']['drupalSettings']['alshaya_gtm_create_user_pagename'] = 'registration';
+      if (stripos($this->currentRequest->server->get('HTTP_REFERER'), '/cart/checkout/confirmation') !== FALSE) {
+        $build['#attached']['drupalSettings']['alshaya_gtm_create_user_pagename'] = 'confirmation';
+      }
+    }
+
+    if ($account->get('field_privilege_card_number')->getString()) {
+      $build['#attached']['drupalSettings']['alshaya_gtm_create_user_pc'] = $account->get('field_privilege_card_number')->getString();
+    }
 
     return $build;
   }

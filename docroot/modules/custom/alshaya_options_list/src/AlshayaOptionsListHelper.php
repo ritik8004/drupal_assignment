@@ -4,12 +4,15 @@ namespace Drupal\alshaya_options_list;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
+use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\search_api\ParseMode\ParseModePluginManager;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Helper functions for alshaya_options_list.
@@ -58,6 +61,20 @@ class AlshayaOptionsListHelper {
   protected $skuFieldsManager;
 
   /**
+   * Parse mode plugin manager.
+   *
+   * @var \Drupal\search_api\ParseMode\ParseModePluginManager
+   */
+  protected $parseModeManager;
+
+  /**
+   * Facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetManager;
+
+  /**
    * AlshayaOptionsListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -70,6 +87,10 @@ class AlshayaOptionsListHelper {
    *   The config factory.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\search_api\ParseMode\ParseModePluginManager $parse_mode_manager
+   *   Parse mode plugin manager.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
+   *   Facet manager.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -78,12 +99,16 @@ class AlshayaOptionsListHelper {
                               LanguageManagerInterface $language_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              ParseModePluginManager $parse_mode_manager,
+                              DefaultFacetManager $facet_manager) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->parseModeManager = $parse_mode_manager;
+    $this->facetManager = $facet_manager;
   }
 
   /**
@@ -111,7 +136,7 @@ class AlshayaOptionsListHelper {
     $query->condition('tfd.langcode', $langcode);
     if ($showImages) {
       $query->addField('tfs', 'field_options_list_bg_target_id', 'image');
-      $query->leftJoin('taxonomy_term__field_options_list_bg', 'tfs', 'tfa.entity_id = tfs.entity_id');
+      $query->innerJoin('taxonomy_term__field_options_list_bg', 'tfs', 'tfa.entity_id = tfs.entity_id');
     }
     if ($group) {
       $query->orderBy('tfd.name');
@@ -127,24 +152,18 @@ class AlshayaOptionsListHelper {
 
     foreach ($options as $option) {
       if (!empty($option->name)) {
-        $list_object = [];
-        $list_object['title'] = $option->name;
-        $url = [
-          'query' => [
-            'f[0]' => $attributeCode . ':' . $option->name,
-            'sort_bef_combine' => 'search_api_relevance DESC',
-          ],
-        ];
-        $list_object['url'] = Url::fromUri('internal:/search', $url);
+        $list_array = [];
+        $list_array['title'] = $option->name;
+        $list_array['url'] = $this->getAttributeUrl($attributeCode, $option->name);
         if ($showImages) {
           if (!empty($option->image)) {
             $file = $this->fileStorage->load($option->image);
             if ($file instanceof File) {
-              $list_object['image_url'] = $file->getFileUri();
+              $list_array['image_url'] = $file->getFileUri();
             }
           }
         }
-        $return[] = $list_object;
+        $return[] = $list_array;
       }
     }
     return $return;
@@ -224,6 +243,86 @@ class AlshayaOptionsListHelper {
       }
     }
     return $links;
+  }
+
+  /**
+   * Return all required facet results.
+   *
+   * @param array $attribute_codes
+   *   List of all attributes that are selected.
+   *
+   * @return array
+   *   Array of all facets data.
+   *
+   * @throws \Drupal\search_api\SearchApiException
+   */
+  public function loadFacetsData(array $attribute_codes) {
+    $facet_results = [];
+    $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_page__search__page');
+    $index = Index::load('acquia_search_index');
+    $query = $index->query();
+    // Change the parse mode for the search.
+    $parse_mode = $this->parseModeManager->createInstance('terms');
+    $parse_mode->setConjunction('OR');
+    $query->setParseMode($parse_mode);
+    $query->setLanguages([
+      $this->languageManager->getCurrentLanguage()
+        ->getId(),
+    ]);
+    $query->keys('');
+    $query->setFulltextFields($index->getFulltextFields());
+    $server = $index->getServerInstance();
+    if ($server->supportsFeature('search_api_facets')) {
+      $facet_data = [];
+      foreach ($facets as $facet) {
+        if (in_array($facet->id(), $attribute_codes)) {
+          $facet_data[$facet->id()] = [
+            'field' => $facet->getFieldIdentifier(),
+            'operator' => $facet->getQueryOperator(),
+            'limit' => 0,
+            'min_count' => $facet->getMinCount(),
+            'missing' => FALSE,
+          ];
+        }
+      }
+      $query->setOption('search_api_facets', $facet_data);
+    }
+
+    // Execute the search.
+    $results = $query->execute();
+
+    // Set the facet results data in static.
+    $raw_facet_results = $results->getExtraData('search_api_facets');
+
+    foreach ($raw_facet_results as $attribute_code => $results) {
+      foreach ($results as $filter) {
+        $facet_results[$attribute_code][] = trim($filter['filter'], '"');
+      }
+    }
+
+    return $facet_results;
+  }
+
+  /**
+   * Return links of all options pages that have been created.
+   *
+   * @param string $attributeCode
+   *   Attribute code.
+   * @param string $value
+   *   Value for the facet.
+   *
+   * @return \Drupal\Core\Url
+   *   The url for the attribute.
+   *
+   * @todo When DLP is enabled on search, add condition to generate pretty url.
+   */
+  public function getAttributeUrl($attributeCode, $value) {
+    $url_options = [
+      'query' => [
+        'f[0]' => $attributeCode . ':' . $value,
+      ],
+    ];
+    return Url::fromUri('internal:/search', $url_options);
   }
 
 }

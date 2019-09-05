@@ -195,6 +195,7 @@
   #payment_method_cybersource & {
     background: $checkout_payment_row_default;
     border-top: 1px solid $checkout_payment_option_border;
+    border-bottom: 1px solid $checkout_payment_option_border;
 
     @include breakpoint($mobile) {
       padding: 1rem 0;
@@ -284,6 +285,8 @@
   top: 44%;
   #{$left}: 24%;
   font-size: 0.625rem;
+  color: $checkout_payment_cvv_help_text;
+  line-height: 12px;
 
   @include breakpoint($only-mobile) {
     display: none;
@@ -304,7 +307,7 @@
   }
 
   @include breakpoint($desktop) {
-    width: 40%;
+    width: 28%;
     top: -0.5rem;
     #{$left}: 25%;
   }
