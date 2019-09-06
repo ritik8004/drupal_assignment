@@ -131,3 +131,16 @@
     border-bottom-color: $header_mobile_menu_overlay !important;
   }
 }
+
+.super-category-beauty {
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .site-brand-home {
+        a {
+          width: 5rem;
+          margin-top: 0.3125rem;
+        }
+      }
+    }
+  }
+}
