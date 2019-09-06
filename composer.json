@@ -402,7 +402,10 @@
             "npm-asset",
             "bower-asset",
             "npm-asset"
-        ]
+        ],
+        "patchLevel": {
+            "drupal/core": "-p2"
+        }
     },
     "scripts": {
         "blt-alias": "blt blt:init:shell-alias -y --ansi",
