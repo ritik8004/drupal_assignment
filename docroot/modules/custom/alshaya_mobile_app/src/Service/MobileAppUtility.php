@@ -360,24 +360,17 @@ class MobileAppUtility {
    *   Return deeplink url.
    */
   public function getDeepLinkFromUrl(Url $url) {
-    if (!$url->isRouted()) {
-      if ($url->isExternal()) {
-        return FALSE;
-      }
-
-      $deeplink_url = $url->toString(TRUE)->getGeneratedUrl();
-      $deeplink_url = $this->getRedirectUrl($deeplink_url);
-
-      return self::ENDPOINT_PREFIX
-      . 'deeplink?url='
-      . $deeplink_url;
+    if ($url->isExternal()) {
+      return FALSE;
     }
-
-    $params = $url->getRouteParameters();
+    $deeplink_url = $url->toString(TRUE)->getGeneratedUrl();
+    $deeplink_url = $this->getRedirectUrl($deeplink_url);
+    $params = !empty($url->isRouted()) ? $url->getRouteParameters() : NULL;
     if (empty($params)) {
-      return '';
+      return self::ENDPOINT_PREFIX
+        . 'deeplink?url='
+        . $deeplink_url;
     }
-
     if (isset($params['taxonomy_term'])) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
     }
