@@ -16,7 +16,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 
 // Set FALSE to avoid execution of hooks.
-$GLOBALS['execute_alshaya_color_split_hooks'] = TRUE;
+$GLOBALS['_alshaya_color_split_merge_children'] = TRUE;
 
 /**
  * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
@@ -69,7 +69,8 @@ function alshaya_color_split_alshaya_acm_product_add_to_cart_ajax_response_alter
  * Implements hook_acq_sku_configurable_product_configurations_alter().
  */
 function alshaya_color_split_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
-  if (!$GLOBALS['execute_alshaya_color_split_hooks']) {
+  global $_alshaya_color_split_merge_children;
+  if (!$_alshaya_color_split_merge_children) {
     return;
   }
   $color_split_settings = \Drupal::config('alshaya_color_split.settings');
@@ -182,7 +183,8 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
  * Implements hook_acq_sku_configurable_variants_alter().
  */
 function alshaya_color_split_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
-  if (!$GLOBALS['execute_alshaya_color_split_hooks']) {
+  global $_alshaya_color_split_merge_children;
+  if (!$_alshaya_color_split_merge_children) {
     return;
   }
   $color_split_settings = \Drupal::config('alshaya_color_split.settings');
