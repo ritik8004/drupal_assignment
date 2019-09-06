@@ -690,7 +690,8 @@ header {
 
           .highlights {
             img {
-              display: block;
+              opacity: 1;
+              transition: all 300ms ease-in 0.3s;
             }
           }
         }
@@ -733,7 +734,8 @@ header {
 
         .highlights {
           img {
-            display: none;
+            opacity: 0;
+            transition: all 300ms ease-in 0.3s;
           }
         }
       }
