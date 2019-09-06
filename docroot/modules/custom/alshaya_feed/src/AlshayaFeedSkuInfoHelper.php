@@ -142,12 +142,6 @@ class AlshayaFeedSkuInfoHelper {
       $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
       $prices = $this->skuManager->getMinPrices($sku, $color);
 
-      $meta_tags = $this->skuInfoHelper->metaTags($node, [
-        'title',
-        'description',
-        'keywords',
-      ]);
-
       $product[$lang] = [
         'sku' => $sku->getSku(),
         'name' => $node->label(),
@@ -159,9 +153,6 @@ class AlshayaFeedSkuInfoHelper {
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
-        'meta_description' => $meta_tags['description'] ?? '',
-        'meta_keywords' => $meta_tags['keywords'] ?? '',
-        'meta_title' => $meta_tags['title'] ?? '',
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
 
