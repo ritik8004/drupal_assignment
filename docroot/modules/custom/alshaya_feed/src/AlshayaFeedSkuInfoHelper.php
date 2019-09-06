@@ -133,6 +133,8 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
+    $GLOBALS['execute_alshaya_color_split_hooks'] = FALSE;
+
     $product = [];
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
       $node = $this->skuInfoHelper->getEntityTranslation($node, $lang);
@@ -208,6 +210,7 @@ class AlshayaFeedSkuInfoHelper {
       // Revert to old state.
       AlshayaAcmApiWrapper::$invokeApi = $invoke_api;
     }
+    $GLOBALS['execute_alshaya_color_split_hooks'] = TRUE;
 
     return $product;
   }
