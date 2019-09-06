@@ -32,6 +32,25 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
+      $('article.entity--type-node').once('click-collect').on('combination-changed', function (event, variant) {
+        var sku = $(this).attr('data-sku');
+        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+        if (variantInfo.click_collect) {
+          $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', false);
+          $('#pdp-stores-container.click-collect .c-accordion_content', $(this)).removeClass('hidden-important');
+        }
+        else {
+          $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', true);
+          $('#pdp-stores-container.click-collect .c-accordion_content', $(this)).addClass('hidden-important');
+        }
+      });
+
+      $('article.entity--type-node').once('click-collect').on('variant-selected', function (event, variant) {
+        // @TODO: Allow click and collect stores display now that all
+        // options are selected.
+      });
+
       $('#pdp-stores-container').once('bind-js').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.

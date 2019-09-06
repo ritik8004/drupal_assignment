@@ -296,3 +296,32 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
     }
   }
 }
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+
+  if ($skuManager->fetchStyleCode($parent)) {
+    $parent_sku = $skuManager->getParentSkuBySku($child);
+    $variant['parent_sku'] = $parent_sku->getSku();
+    $variant['title'] = $productInfoHelper->getTitle($parent_sku, 'pdp');
+
+    // Add language for all urls for language switcher block.
+    $node = $skuManager->getDisplayNode($parent_sku, FALSE);
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      $variant['url'][$language->getId()] = $node->toUrl('canonical', [
+        'absolute' => FALSE,
+        'language' => $language,
+      ])->toString();
+    }
+
+    $variant['color_attribute'] = \Drupal::config('alshaya_color_split.settings')->get('attribute_code_color_id');
+    $variant['color_value'] = $node->get('field_product_color')->getString();
+  }
+}

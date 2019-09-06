@@ -73,5 +73,20 @@ function hook_alshaya_acm_product_media_items_alter(array $media, SKUInterface $
 }
 
 /**
+ * Allow other modules to add/alter variant info.
+ *
+ * @param array $variant
+ *   Variant data.
+ * @param \Drupal\acq_commerce\SKUInterface $child
+ *   Variant SKU Entity.
+ * @param \Drupal\acq_commerce\SKUInterface $parent
+ *   Parent SKU Entity.
+ */
+function hook_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  $variant['click_collect'] = alshaya_acm_product_available_click_collect($child);
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

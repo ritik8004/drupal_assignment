@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   /**
@@ -45,27 +45,48 @@
 
         if (typeof combinations['bySku'][code] !== 'undefined') {
           for (var i in combinations['bySku'][code][selected]) {
-            $('[data-configurable-code="' + i + '"]', form).val('');
-            $('[data-configurable-code="' + i + '"]', form)
-              .find('option')
+            var select = $('[data-configurable-code="' + i + '"]', form);
+
+            select.val('');
+            select.find('option')
               .prop('disabled', true)
-              .attr('disabled', 'disabled');
+              .attr('disabled', 'disabled')
+              .removeProp('selected')
+              .removeAttr('selected');
 
             for (var j in combinations['bySku'][code][selected][i]) {
-              $('[data-configurable-code="' + i + '"]', form)
-                .find('option[value="' + combinations['bySku'][code][selected][i][j] + '"]')
+              select.find('option[value="' + combinations['bySku'][code][selected][i][j] + '"]')
                 .removeProp('disabled')
                 .removeAttr('disabled');
             }
 
-            $('[data-configurable-code="' + i + '"]', form).trigger('refresh');
+            // If there is only one option left, select it by default.
+            var availableOptions = select.find('option:not([disabled])');
+            if (availableOptions.length === 1) {
+              var option = $(availableOptions).first();
+              $(option).attr('selected', 'selected');
+              select.val($(option).val());
+            }
+
+            select.trigger('refresh');
           }
         }
 
         var selectedCombination = Drupal.getSelectedCombination(form);
+        var firstPossibleCombination = selectedCombination;
 
         if (typeof combinations['byAttribute'][selectedCombination] !== 'undefined') {
           $('[name="selected_variant_sku"]', form).val(combinations['byAttribute'][selectedCombination]);
+        }
+        else {
+          firstPossibleCombination = Drupal.getFirstPossibleCombination(form, combinations['bySku']);
+        }
+
+        if (form.attr('selected-combination') != firstPossibleCombination) {
+           if (typeof combinations['byAttribute'][firstPossibleCombination] !== 'undefined') {
+             form.attr('selected-combination', firstPossibleCombination);
+             $(this).parents('article.entity--type-node:first').trigger('combination-changed', combinations['byAttribute'][firstPossibleCombination]);
+           }
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
@@ -74,6 +95,11 @@
       });
 
       $('article.entity--type-node').once('load').each(function () {
+        var sku = $(this).attr('data-sku');
+        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
         $(this).find('#configurable_ajax .form-select').val('');
 
         // @TODO: Select based on selected query param or color.
@@ -82,10 +108,55 @@
           .prop('selected', true)
           .attr('selected', 'selected')
           .trigger('change');
+
+        Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+
+        $(this).on('combination-changed', function (event, variant) {
+          var sku = $(this).attr('data-sku');
+          var selected = $('[name="selected_variant_sku"]', $(this)).val();
+          var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+          $(this).find('.price-block').html(variantInfo.price);
+
+          if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
+            Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+          }
+          else {
+            Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+          }
+
+          // @TODO: Update quantity dropdown.
+        });
+
+        $(this).on('variant-selected', function (event, variant) {
+          var sku = $(this).attr('data-sku');
+          var selected = $('[name="selected_variant_sku"]', $(this)).val();
+          var variantInfo = drupalSettings.productInfo[sku]['variants'][selected];
+          Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+        });
       });
     }
   };
 
+  Drupal.updateGallery = function (product, layout, gallery) {
+    if (gallery === '' || gallery === null) {
+      return;
+    }
+
+    if ($(product).find('.gallery-wrapper').length > 0) {
+      $(product).find('.gallery-wrapper').replaceWith(gallery);
+    }
+    else {
+      $(product).find('#product-zoom-container').replaceWith(gallery);
+    }
+
+    if (layout === 'magazine') {
+      Drupal.behaviors.magazine_gallery.attach(product);
+    }
+    else {
+      Drupal.behaviors.alshaya_product_zoom.attach(product);
+    }
+  }
   Drupal.getSelectedCombination = function (form) {
     var selectedCombination = '';
     $('[data-configurable-code]', form).each(function () {
@@ -102,6 +173,26 @@
     }, selectedCombination);
 
     return selectedCombination;
+  };
+
+  Drupal.getFirstPossibleCombination = function (form, combinations) {
+    var firstPossibleCombination = '';
+    $('[data-configurable-code]', form).each(function () {
+      var selectedVal = $(this).val();
+      var attributeCode = $(this).attr('data-configurable-code');
+      if (selectedVal === '' || selectedVal === null || typeof selectedVal === 'undefined') {
+        selectedVal = Object.values(combinations[attributeCode])[0];
+
+        if (typeof selectedVal != 'string' && typeof selectedVal != 'number') {
+          selectedVal = Object.keys(combinations[attributeCode])[0];
+        }
+      }
+
+      firstPossibleCombination += attributeCode + '|' + selectedVal + '||';
+      combinations = combinations[attributeCode][selectedVal];
+    }, firstPossibleCombination);
+
+    return firstPossibleCombination;
   };
 
   $(window).on('load', function () {
@@ -121,4 +212,4 @@
     $('.ajax-progress, .ajax-progress-throbber').remove();
   }
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
