@@ -134,7 +134,8 @@ class AlshayaFeedSkuInfoHelper {
     }
 
     // Disable alshaya_color_split hook calls.
-    $GLOBALS['_alshaya_color_split_merge_children'] = FALSE;
+    global $_alshaya_color_split_merge_children;
+    $_alshaya_color_split_merge_children = FALSE;
     // Disable image download.
     SKU::$downloadImage = FALSE;
     // Disable API calls.
