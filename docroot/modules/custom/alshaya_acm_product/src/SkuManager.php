@@ -714,7 +714,7 @@ class SkuManager {
    */
   public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE, $product_color = '') {
     $childSkus = [];
-
+    $child_color = '';
     $langcode = $sku->language()->getId();
     $combinations = $this->getConfigurableCombinations($sku);
     $configurable_attributes = $this->getConfigurableAttributes($sku);
@@ -722,10 +722,16 @@ class SkuManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $langcode);
-          $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
-          if ($product_color == $child_color) {
+          if ($child instanceof SKU) {
+            $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
+          }
+          if ($product_color != $child_color) {
+            continue;
+          }
+          else {
             return $child;
           }
+
           if (!($child instanceof SKUInterface)) {
             continue;
           }
