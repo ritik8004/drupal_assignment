@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_user
+  theme:
+    - justice
+id: alshaya_jus_join_the_club
+theme: justice
+region: footer
+weight: -5
+provider: null
+plugin: join_the_club
+settings:
+  id: join_the_club
+  label: 'Join the club'
+  provider: alshaya_loyalty
+  label_display: visible
+visibility: {  }
