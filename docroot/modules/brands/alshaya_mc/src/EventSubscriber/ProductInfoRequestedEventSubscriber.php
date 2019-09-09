@@ -86,7 +86,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $this->processDescription($event);
         break;
 
-      case 'short_desc':
+      case 'short_description':
         $this->processShortDescription($event);
         break;
     }

@@ -5,7 +5,6 @@ namespace Drupal\alshaya_feed;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -74,13 +73,6 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuFieldsManager;
 
   /**
-   * Product Info Helper.
-   *
-   * @var \Drupal\acq_sku\ProductInfoHelper
-   */
-  protected $productInfoHelper;
-
-  /**
    * The renderer.
    *
    * @var \Drupal\Core\Render\RendererInterface
@@ -104,8 +96,6 @@ class AlshayaFeedSkuInfoHelper {
    *   Sku info helper object.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
-   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
-   *   Product Info Helper.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    */
@@ -117,7 +107,6 @@ class AlshayaFeedSkuInfoHelper {
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
     SKUFieldsManager $sku_fields_manager,
-    ProductInfoHelper $product_info_helper,
     RendererInterface $renderer
   ) {
     $this->entityTypeManager = $entity_type_manager;
@@ -127,7 +116,6 @@ class AlshayaFeedSkuInfoHelper {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->skuFieldsManager = $sku_fields_manager;
-    $this->productInfoHelper = $product_info_helper;
     $this->renderer = $renderer;
   }
 
@@ -166,8 +154,8 @@ class AlshayaFeedSkuInfoHelper {
       $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
       $prices = $this->skuManager->getMinPrices($sku, $color);
 
-      $short_desc = $this->productInfoHelper->getValue($sku, 'short_desc', 'full', '');
-      $description = $this->productInfoHelper->getValue($sku, 'description', 'full', '');
+      $short_desc = $this->skuManager->getShortDescription($sku, 'full');
+      $description = $this->skuManager->getDescription($sku, 'full');
 
       $product[$lang] = [
         'sku' => $sku->getSku(),
