@@ -3,14 +3,20 @@
  */
 
 (function ($, Drupal) {
-  'use strict';
-var products = document.querySelectorAll('.lazyload-product');
+  var products = $('.lazyload-product');
 
-products.forEach(function(product) {
-  var product_details = $(this).find('.placeholder-lazyload-product');
-  var product_nid = product_details.attr('data-id');
-  console.log(product_nid);
-  product.innerHTML = '<div>Empty test</div>';
-});
+  $.each(products, function(key, product) {
+    var product_nid = $(product).find('.placeholder-lazyload-product').attr('data-id');
+    var productRequest = $.ajax({
+      url: "/product_listing/" + product_nid,
+      method: "GET",
+      dataType: "html",
+      cache: "TRUE",
+    });
+    productRequest.done(function( productDetails ) {
+      product.innerHTML = productDetails;
+      blazy.revalidate();
+    });
+  });
 
 })(jQuery, Drupal);
