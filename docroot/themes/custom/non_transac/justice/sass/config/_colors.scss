@@ -1,0 +1,35 @@
+// Define theme colors here.
+$white-smoke: #f3f3f3;
+$black-smoke: #333;
+$dark-pink: #eb008b;
+$white: #fff;
+$black: #000;
+$deepskyblue: #00adee;
+
+//global button
+$primary_btn_bg: $dark-pink;
+$primary_btn_text: $white;
+
+// store finder
+$store_finder_search_bg: $white-smoke;
+$store_finder_current_loc_text: $white;
+$store_finder_current_loc_bg: $dark-pink;
+$store_finder_search_text: rgba(0, 0, 0, 0.5);
+$store_finder_views_border: $white;
+$store_finder_views_text: $black;
+$store_finder_views_icon: $dark-pink;
+$store_finder_list_title: rgba(243, 243, 243, 0.5);
+$store_finder_list_alphabet: $deepskyblue;
+$store_finder_list_bg: rgba(243, 243, 243, 0.5);
+$store_finder_list_locator_bg: $white-smoke;
+$store-finder_list_alphabet_item: $black-smoke;
+$store-finder_store_row_counter: $dark-pink;
+$store_finder_store_row_text: $black-smoke;
+$store_finder_store_row_border: $white;
+$store_finder_hours_label: $black-smoke;
+$store_finder_icon: $dark-pink;
+$store_finder_direction: $black-smoke;
+$store_finder_search_icon: $white;
+$store_finder_search_icon_bg: $dark-pink;
+$store_finder_list_mobile_icon: rgba(0, 0, 0, 0.5);
+$store_finder_mobile_backline_icon: rgba(0, 0, 0, 0.5);
