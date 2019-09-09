@@ -714,7 +714,7 @@ class MobileAppUtility {
       $xpath = new \DOMXPath($doc);
       // We are using `data-src` attribute as we are using blazy for images.
       // If blazy is disabled, then we need to revert back to `src` attribute.
-      $label['image'] = $xpath->evaluate("string(//img/@data-src)");
+      $label['image'] = $this->requestStack->getSchemeAndHttpHost() . $xpath->evaluate("string(//img/@data-src)");
     }
 
     return $labels;
