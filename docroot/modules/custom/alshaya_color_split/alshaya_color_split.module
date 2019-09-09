@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_color_split\AlshayaColorSplitManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
@@ -66,6 +67,10 @@ function alshaya_color_split_alshaya_acm_product_add_to_cart_ajax_response_alter
  * Implements hook_acq_sku_configurable_product_configurations_alter().
  */
 function alshaya_color_split_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
+  if (!SkuManager::$colorSplitMergeChildren) {
+    return;
+  }
+
   $color_split_settings = \Drupal::config('alshaya_color_split.settings');
   $attribute_code_color_id = $color_split_settings->get('attribute_code_color_id');
   $attribute_code_color_label = $color_split_settings->get('attribute_code_color_label');
@@ -176,6 +181,10 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
  * Implements hook_acq_sku_configurable_variants_alter().
  */
 function alshaya_color_split_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
+  if (!SkuManager::$colorSplitMergeChildren) {
+    return;
+  }
+
   $color_split_settings = \Drupal::config('alshaya_color_split.settings');
   $attribute_code_color_id = $color_split_settings->get('attribute_code_color_id');
   // If we do not have any value for style code we do no further processing.
