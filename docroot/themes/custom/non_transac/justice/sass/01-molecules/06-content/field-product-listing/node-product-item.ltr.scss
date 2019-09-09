@@ -1,0 +1,45 @@
+@import '../../../config/_config.scss';
+
+.view-product-item__meta {
+  color: $plp_product_title_text;
+
+  @include breakpoint($upto-palm) {
+    font-size: 0.875rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-top: 0.625rem;
+  }
+}
+
+.view-product-item__share--label {
+  background: transparent;
+  font-size: 0;
+
+  @include breakpoint($above-palm) {
+    bottom: unset;
+    top: 0;
+  }
+
+  @include breakpoint($upto-palm) {
+    text-align: $right;
+    position: absolute;
+    top: 0;
+  }
+
+  @include breakpoint($desk) {
+    padding: 0;
+  }
+
+  &::after {
+    content: '';
+    background-repeat: no-repeat;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-size: contain;
+    background-position: center;
+    display: inline-block;
+    vertical-align: -1rem;
+    background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-share.svg');
+  }
+}
