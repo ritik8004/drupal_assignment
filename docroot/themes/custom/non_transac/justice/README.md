@@ -29,18 +29,6 @@
     - `drush dl twig_tweak`
 
 
-#### Setup sub-theme
-- Install kashmir
-  - `composer require drupal/kashmir`
-  - `drush dl kashmir`
-- Enable kashmir
-  - `drush en kashmir`
-- Generate a sub-theme
-  - `drush kashmir sub_theme_name`
-- Configure settings
-  - Update settings in `gulp/_config.js` for Browsersync and Source for scripts and styles.
-
-
 #### Usage
 - Dev Environment
   - Build assets by running: `gulp`.

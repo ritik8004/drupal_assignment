@@ -2,7 +2,7 @@
 
 /**
  * @file
- * File to create default content for victoria's secret.
+ * File to create default content for justice.
  */
 
 use Drupal\block_content\Entity\BlockContent;
