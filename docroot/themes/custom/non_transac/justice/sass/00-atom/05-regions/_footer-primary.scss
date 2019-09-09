@@ -1,0 +1,35 @@
+.region-footer-primary__wrapper {
+  background: $footer_primary_bg;
+  position: relative;
+
+  .region-footer-primary {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+
+  .region__wrapper {
+    display: flex;
+
+    @include breakpoint($upto-lap) {
+      flex-flow: wrap;
+      padding: 0 1rem;
+      justify-content: center;
+    }
+  }
+}
+
+.webform-confirmation {
+  text-align: center;
+
+  .webform-confirmation__message {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .webform-confirmation__back {
+    a {
+      color: $dark-pink;
+      text-decoration: none;
+    }
+  }
+}
