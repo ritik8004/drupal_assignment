@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_jus_install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_jus_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_jus', 'inc', 'alshaya_jus.content');
+
+  // Enable and set justice as default theme.
+  \Drupal::service('theme_handler')->install(['justice'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('justice');
+
+  // Change region for main navigation block.
+  alshaya_block_move_blocks(['main_navigation' => 'header']);
+
+  // Create default content for the site.
+  alshaya_jus_create_default_content();
+
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
