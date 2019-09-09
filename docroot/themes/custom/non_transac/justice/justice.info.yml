@@ -1,0 +1,93 @@
+name: Justice
+description: Theme for Justice.
+type: theme
+core: 8.x
+base theme: whitelabel
+alshaya_theme_type: non_transac
+
+regions:
+  admin_content: 'Admin Content'
+  header_secondary: 'Header Secondary'
+  header: Header
+  header_primary: 'Header Primary'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - whitelabel/global
+  - justice/global
+
+libraries-extend:
+  whitelabel/menu-logo-navigation:
+    - justice/menu-logo-navigation
+  whitelabel/item-list-application-links:
+    - justice/item-list-application-links
+  whitelabel/block-join-the-club:
+    - justice/block-join-the-club
+  whitelabel/block-footer-language:
+    - justice/block-footer-language
+  whitelabel/block-social-links:
+    - justice/block-social-links
+  whitelabel/block-footer-store:
+    - justice/block-footer-store
+  whitelabel/block-header-language:
+    - justice/block-header-language
+  whitelabel/block-copyright:
+    - justice/block-copyright
+  whitelabel/block-terms-conditions:
+    - justice/block-terms-conditions
+  whitelabel/block-header-store:
+    - justice/block-header-store
+  whitelabel/block-store-finder-form:
+    - justice/block-store-finder-form
+  whitelabel/block-header-sign-up:
+    - justice/block-header-sign-up
+  whitelabel/views-store-finder-glossary:
+    - justice/views-store-finder-glossary
+  whitelabel/view-store-list-locator:
+    - justice/view-store-list-locator
+  whitelabel/view-store-finder-list:
+    - justice/view-store-finder-list
+  whitelabel/field-store-open-hours:
+    - justice/field-store-open-hours
+  whitelabel/node-individual-store:
+    - justice/node-individual-store
+  whitelabel/form-element-textual:
+    - justice/form-element-textual
+  whitelabel/field-product-listing:
+    - justice/field-product-listing
+  whitelabel/views-unformatted-product-list:
+    - justice/views-unformatted-product-list
+  whitelabel/node-product-item:
+    - justice/node-product-item
+  whitelabel/field-promo-block:
+    - justice/field-promo-block
+  whitelabel/block-application-links:
+    - justice/block-application-links
+  whitelabel/modal-email-signup:
+    - justice/modal-email-signup
+
+libraries-override:
+  whitelabel/form-element-textual:
+    js:
+      js/form-element-textual.js: js/form-element-textual.js
+
+component-libraries:
+  atoms:
+    paths:
+      - components/_patterns/00-atoms
+  molecules:
+    paths:
+      - components/_patterns/01-molecules
+  organisms:
+    paths:
+      - components/_patterns/02-organisms
+  templates:
+    paths:
+      - components/_patterns/03-templates
+  pages:
+    paths:
+      - components/_patterns/04-pages
