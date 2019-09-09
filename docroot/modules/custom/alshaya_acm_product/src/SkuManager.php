@@ -3004,8 +3004,7 @@ class SkuManager {
    *   Description of the product.
    */
   public function getDescription(SKUInterface $sku, $context) {
-    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context);
-    return $prod_description;
+    return $this->productInfoHelper->getValue($sku, 'description', $context);
   }
 
   /**
