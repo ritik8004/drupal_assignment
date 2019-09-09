@@ -3,8 +3,11 @@
 namespace Drupal\alshaya_pb_transac\EventSubscriber;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
+use Drupal\alshaya_acm_product\ProductHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,13 +28,37 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $skuImagesManager;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductHelper
+   */
+  protected $productHelper;
+
+  /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
    *   SKU Manager.
+   * @param \Drupal\alshaya_acm_product\ProductHelper $product_helper
+   *   Product Info Helper.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
    */
-  public function __construct(SkuImagesManager $sku_images_manager) {
+  public function __construct(
+    SkuImagesManager $sku_images_manager,
+    ProductHelper $product_helper,
+    SkuManager $sku_manager
+  ) {
     $this->skuImagesManager = $sku_images_manager;
+    $this->productHelper = $product_helper;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -64,6 +91,14 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     switch ($event->getFieldCode()) {
       case 'title':
         $this->processTitle($event);
+        break;
+
+      case 'description':
+        $this->processDescription($event);
+        break;
+
+      case 'short_description':
+        $this->processShortDescription($event);
         break;
     }
   }
@@ -127,6 +162,74 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $event->setValue($media);
+  }
+
+  /**
+   * Process description for SKU.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processDescription(ProductInfoRequestedEvent $event) {
+    $sku_entity = $event->getSku();
+    $prod_description = $this->getDescription($sku_entity);
+    $event->setValue($prod_description['description']);
+  }
+
+  /**
+   * Process short descriptions for SKU.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processShortDescription(ProductInfoRequestedEvent $event) {
+    $sku_entity = $event->getSku();
+
+    $prod_description = $this->getDescription($sku_entity);
+    if ($event->getContext() == 'full') {
+      if (!empty($prod_description['description'][0])) {
+        $description = $prod_description['description'][0]['value']['#markup'];
+        $short_desc = $this->productHelper->createShortDescription($description);
+
+        $return['short_desc'] = [
+          'value' => [
+            '#markup' => $short_desc['html'],
+          ],
+        ];
+      }
+      $event->setValue($return['short_desc']);
+    }
+  }
+
+  /**
+   * Prepare description and short description array for given sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   The sku entity.
+   *
+   * @return array
+   *   Return array of description and short description.
+   */
+  protected function getDescription(SKU $sku_entity) {
+    $static = drupal_static(__METHOD__, []);
+
+    if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
+      return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
+    }
+
+    $node = $this->skuManager->getDisplayNode($sku_entity);
+
+    $return['description'] = [];
+    $return['short_desc'] = NULL;
+    if ($body = $node->get('body')->getValue()) {
+      $description['value'] = [
+        '#markup' => $body[0]['value'],
+      ];
+      $return['description'][] = $description;
+    }
+
+    $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
+    return $return;
   }
 
 }
