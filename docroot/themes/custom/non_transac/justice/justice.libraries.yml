@@ -1,9 +1,3 @@
-field-product-listing:
-  version: VERSION
-  css:
-    theme:
-      dist/css/01-molecules/06-content/field-product-listing/field-product-listing.ltr.css: {}
-
 views-unformatted-product-list:
   version: VERSION
   css:
