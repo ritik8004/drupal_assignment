@@ -11,7 +11,7 @@
 function alshaya_jus_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_jus', 'inc', 'alshaya_jus.content');
 
-  // Enable and set victoria_secret as default theme.
+  // Enable and set justice as default theme.
   \Drupal::service('theme_handler')->install(['justice'], TRUE);
   \Drupal::service('theme_handler')->setDefault('justice');
 
