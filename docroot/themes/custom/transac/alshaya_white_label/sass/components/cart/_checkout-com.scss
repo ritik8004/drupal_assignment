@@ -141,6 +141,7 @@
     label {
       top: 0;
       font-size: 0.875rem;
+      line-height: 1.29;
       color: $checkout_payment_checkoutcom_save_card_label;
 
       &.option {
@@ -158,8 +159,9 @@
   .cc-save-help-text {
     position: relative;
     padding-#{$left}: 1.75rem;
-    max-width: 25.3125rem;
+    max-width: 27.0625rem;
     font-size: 0.875rem;
+    line-height: 1.29;
     margin-top: 1rem;
     margin-bottom: 1.5rem;
     color: $checkout_payment_checkoutcom_save_card_help;
