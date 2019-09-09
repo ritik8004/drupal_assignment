@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Implementation of ACSF pre-settings-php hook.
@@ -7,4 +8,4 @@
  */
 
 // Set google map api key.
-$settings['geolocation.settings']['google_map_api_key'] = 'AIzaSyCx3OwGGlm7KqnrbZQIQ3FQLJgWKb3p5LI';
+$settings['geolocation.settings']['google_map_api_key'] = 'AIzaSyB7aeOgTLzW0zyn3kYWLfWsBB6t2AOvBWE';
