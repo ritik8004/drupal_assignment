@@ -604,7 +604,7 @@ class AlshayaSearchApiQueryExecute {
             ->setDisplayValue(
               $this
                 ->swatchesHelper
-                ->getSwatch('color_family', $result->getDisplayValue())
+                ->getSwatch('color_family', $result->getDisplayValue())['name']
             );
         }
         $temp_data = [
