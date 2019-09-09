@@ -1,0 +1,41 @@
+name: Justice
+description: Theme for Justice.
+type: theme
+core: 8.x
+base theme: whitelabel
+alshaya_theme_type: non_transac
+
+regions:
+  admin_content: 'Admin Content'
+  header_secondary: 'Header Secondary'
+  header: Header
+  header_primary: 'Header Primary'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - whitelabel/global
+  - justice/global
+
+libraries-extend:
+  whitelabel/item-list-application-links:
+    - justice/item-list-application-links
+  whitelabel/block-join-the-club:
+    - justice/block-join-the-club
+  whitelabel/block-footer-language:
+    - justice/block-footer-language
+  whitelabel/block-social-links:
+    - justice/block-social-links
+  whitelabel/block-footer-store:
+    - justice/block-footer-store
+  whitelabel/block-header-language:
+    - justice/block-header-language
+  whitelabel/block-copyright:
+    - justice/block-copyright
+  whitelabel/block-terms-conditions:
+    - justice/block-terms-conditions
+  whitelabel/block-application-links:
+    - justice/block-application-links
