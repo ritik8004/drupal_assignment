@@ -116,10 +116,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     if ($event->getContext() == 'full') {
       $short_desc = $this->productHelper->createShortDescription($description['short_desc']['value']['#markup']);
-      // If there is 'readmore' available only then process.
-      if (!empty($short_desc['read_more'])) {
-        $short_desc['html'] = $this->productHelper->processShortDescEllipsis($short_desc['html']);
-      }
       $description['short_desc']['value']['#markup'] = $short_desc['html'];
       $event->setValue($description['short_desc']);
     }
