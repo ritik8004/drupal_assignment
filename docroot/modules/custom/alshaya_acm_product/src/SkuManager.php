@@ -59,6 +59,13 @@ class SkuManager {
   const NON_AGGREGATED_LISTING = 'non_aggregated';
 
   /**
+   * Flag to allow merge children in alshaya_color_split.
+   *
+   * @var bool
+   */
+  public static $colorSplitMergeChildren = TRUE;
+
+  /**
    * Store selected variant id.
    *
    * @var int
