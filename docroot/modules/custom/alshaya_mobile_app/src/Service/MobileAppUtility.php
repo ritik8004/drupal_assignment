@@ -716,6 +716,9 @@ class MobileAppUtility {
       // We are using `data-src` attribute as we are using blazy for images.
       // If blazy is disabled, then we need to revert back to `src` attribute.
       $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
+
+      // Checking if the image path is relative or absolute. If image path is
+      // absolute, we are using the same path.
       $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
         ? $promo_image_path
         : $this->requestStack->getSchemeAndHttpHost() . $promo_image_path;
