@@ -4,6 +4,7 @@ namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
@@ -715,7 +716,7 @@ class MobileAppUtility {
       // We are using `data-src` attribute as we are using blazy for images.
       // If blazy is disabled, then we need to revert back to `src` attribute.
       $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
-      $label['image'] = (strpos($promo_image_path, $this->requestStack->getSchemeAndHttpHost()) === 0)
+      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
         ? $promo_image_path
         : $this->requestStack->getSchemeAndHttpHost() . $promo_image_path;
     }
