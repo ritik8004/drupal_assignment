@@ -50,3 +50,11 @@ sharethis:
     - core/jquery.once
     - core/drupalSettings
     - alshaya_master/jquery_is_in_viewport
+
+product_lazyload:
+  js:
+    js/alshaya_acm_product_lazyload.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal

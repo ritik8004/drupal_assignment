@@ -275,7 +275,7 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
   }
 
   // Get all selected subcategories to be displayed on PLP.
-  if ($selected_subcategories = $term->get('field_select_subcategories_plp')->getValue()) {
+  if ($selected_subcategories = $term->get('field_group_by_sub_categories')->getValue()) {
     $children = array_keys(alshaya_acm_product_category_term_subcategories(NULL, $term));
     foreach ($selected_subcategories as $key => $subcategory) {
       if (!in_array($subcategory['value'], $children)) {
@@ -283,7 +283,7 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
       }
     }
     try {
-      $term->get('field_select_subcategories_plp')->setValue($selected_subcategories);
+      $term->get('field_group_by_sub_categories')->setValue($selected_subcategories);
     }
     catch (Exception $e) {
       // Do nothing.
@@ -292,21 +292,21 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
 
   // Check if the term is referenced as a subcategory for grouping.
   $connection = \Drupal::service('database');
-  $query = $connection->select('taxonomy_term__field_select_subcategories_plp', 'sc');
-  $query->fields('sc', ['entity_id', 'field_select_subcategories_plp_value ']);
+  $query = $connection->select('taxonomy_term__field_group_by_sub_categories', 'sc');
+  $query->fields('sc', ['entity_id', 'field_group_by_sub_categories_value ']);
   $result = $query->execute()->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
 
   foreach ($result as $row) {
-    if ($term->id() == $row['field_select_subcategories_plp_value'] && !array_key_exists($row['entity_id'], $parents)) {
+    if ($term->id() == $row['field_group_by_sub_categories_value'] && !array_key_exists($row['entity_id'], $parents)) {
       $parent_term = Term::load($row['entity_id']);
-      $selected_subcategories = $parent_term->get('field_select_subcategories_plp')->getValue();
+      $selected_subcategories = $parent_term->get('field_group_by_sub_categories')->getValue();
       foreach ($selected_subcategories as $key => $subcategory) {
         if ($subcategory['value'] == $term->id()) {
           unset($selected_subcategories[$key]);
         }
       }
       try {
-        $term->get('field_select_subcategories_plp')->setValue($selected_subcategories);
+        $term->get('field_group_by_sub_categories')->setValue($selected_subcategories);
       }
       catch (Exception $e) {
         // Do nothing.
@@ -360,10 +360,10 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
     $term = $product_category_tree->getCategoryTermFromRoute();
 
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
       $result_row = [];
       // Get all selected subcategories to be displayed on PLP.
-      $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
+      $selected_subcategories = $term->get('field_group_by_sub_categories')->getValue();
       foreach ($view->result as $row) {
         $product_categories = $row->_object->getValue()->get('field_category')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {

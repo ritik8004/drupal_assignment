@@ -2,10 +2,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_group_by_sub_category
+    - field.storage.taxonomy_term.field_group_by_sub_categories
     - taxonomy.vocabulary.acq_product_category
-id: taxonomy_term.acq_product_category.field_group_by_sub_category
-field_name: field_group_by_sub_category
+id: taxonomy_term.acq_product_category.field_group_by_sub_categories
+field_name: field_group_by_sub_categories
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Group by sub-category'

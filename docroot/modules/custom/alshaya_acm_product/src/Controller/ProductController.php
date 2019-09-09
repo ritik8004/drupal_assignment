@@ -10,6 +10,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ProductController.
@@ -52,6 +53,20 @@ class ProductController extends ControllerBase {
   public function __construct(SkuManager $sku_manager, RequestStack $request_stack) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
+  }
+
+  /**
+   * Title callback for the modal.
+   */
+  public function listingView(string $nid) {
+    $view_builder = $this->entityTypeManager()->getViewBuilder('node');
+    $storage = $this->entityTypeManager()->getStorage('node');
+    $entity = $storage->load($nid);
+    $html = $view_builder->view($entity, 'search_result');
+    $html = render($html);
+    $response = new Response();
+    $response->setContent($html);
+    return $response;
   }
 
   /**

@@ -69,7 +69,7 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
 
     // If group by sub-category is selected, disable pager.
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
       $view->setItemsPerPage(0);
     }
   }

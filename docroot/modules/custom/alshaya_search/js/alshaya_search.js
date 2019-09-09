@@ -9,6 +9,23 @@
 
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
+      var products = $('.lazyload-product');
+
+      $.each(products, function(key, product) {
+        var product_nid = $(product).find('.placeholder-lazyload-product').attr('data-id');
+        var productRequest = $.ajax({
+          url: "/product_listing/" + product_nid,
+          method: "GET",
+          dataType: "html",
+          cache: "TRUE",
+        });
+        productRequest.done(function( productDetails ) {
+          product.innerHTML = productDetails;
+          blazy.revalidate();
+        });
+      });
+
+
       // Hide the sort drop down and filters text, if no results.
       if ($('.view-id-search .view-empty').length !== 0) {
         $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();
@@ -76,6 +93,9 @@
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings.url.indexOf('/views/ajax') !== -1) {
+
+        }
         Drupal.addLeafClassToPlpLeafItems();
 
         if ($(window).width() < 768) {
