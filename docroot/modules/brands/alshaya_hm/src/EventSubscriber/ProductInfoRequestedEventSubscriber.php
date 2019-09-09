@@ -93,7 +93,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Process title for SKU based on brand specific rules.
+   * Process description for SKU.
    *
    * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
    *   Event object.
