@@ -4,8 +4,8 @@ namespace Drupal\alshaya_vs_transac\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
-use Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedBaseEventSubscriber;
 use Drupal\alshaya_acm_product\ProductHelper;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -13,7 +13,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Drupal\alshaya_vs_transac\EventSubscriber
  */
-class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventSubscriber implements EventSubscriberInterface {
+class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Product helper service object.
@@ -110,7 +112,13 @@ class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventS
    * @return array
    *   Return array of description and short description.
    */
-  protected function prepareDescription(SKU $sku_entity) {
+  private function getDescription(SKU $sku_entity) {
+    $static = &drupal_static(__METHOD__, []);
+
+    if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
+      return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
+    }
+
     $return['description'] = [];
     $body = $sku_entity->get('attr_description')->getValue();
     if (is_array($body) && !empty($body[0]['value'])) {
@@ -120,6 +128,8 @@ class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventS
         ],
       ];
     }
+
+    $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
   }
 

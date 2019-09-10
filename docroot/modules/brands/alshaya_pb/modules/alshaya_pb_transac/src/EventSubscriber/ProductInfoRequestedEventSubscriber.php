@@ -5,10 +5,10 @@ namespace Drupal\alshaya_pb_transac\EventSubscriber;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
-use Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedBaseEventSubscriber;
 use Drupal\alshaya_acm_product\ProductHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -16,7 +16,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Drupal\alshaya_pb_transac\EventSubscriber
  */
-class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventSubscriber implements EventSubscriberInterface {
+class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * SKU Manager.
@@ -208,7 +210,13 @@ class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventS
    * @return array
    *   Return array of description and short description.
    */
-  protected function prepareDescription(SKU $sku_entity) {
+  protected function getDescription(SKU $sku_entity) {
+    $static = &drupal_static(__METHOD__, []);
+
+    if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
+      return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
+    }
+
     $node = $this->skuManager->getDisplayNode($sku_entity);
 
     $return['description'] = [];
@@ -219,6 +227,7 @@ class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventS
       $return['description'][] = $description;
     }
 
+    $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
   }
 

@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */
-class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventSubscriber implements EventSubscriberInterface {
+class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
