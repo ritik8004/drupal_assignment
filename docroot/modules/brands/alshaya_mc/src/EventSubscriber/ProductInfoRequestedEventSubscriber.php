@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\alshaya_hm\EventSubscriber;
+namespace Drupal\alshaya_mc\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
+use Drupal\alshaya_acm_product\ProductHelper;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,7 +13,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 /**
  * Class ProductInfoRequestedEventSubscriber.
  *
- * @package Drupal\alshaya_hm\EventSubscriber
+ * @package Drupal\alshaya_mc\EventSubscriber
  */
 class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
@@ -34,11 +34,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $configFactory;
 
   /**
-   * The renderer.
+   * Product helper service object.
    *
-   * @var \Drupal\Core\Render\RendererInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $renderer;
+  private $productHelper;
 
   /**
    * ProductInfoRequestedEventSubscriber constructor.
@@ -47,17 +47,17 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    *   SKU Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The renderer.
+   * @param \Drupal\alshaya_acm_product\ProductHelper $product_helper
+   *   Product helper service object.
    */
   public function __construct(
     SkuManager $sku_manager,
     ConfigFactoryInterface $config_factory,
-    RendererInterface $renderer
+    ProductHelper $product_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->configFactory = $config_factory;
-    $this->renderer = $renderer;
+    $this->productHelper = $product_helper;
   }
 
   /**
@@ -100,8 +100,8 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    */
   public function processDescription(ProductInfoRequestedEvent $event) {
     $sku_entity = $event->getSku();
-    $prod_description = $this->getDescription($sku_entity);
-    $event->setValue($prod_description['description']);
+    $description = $this->getDescription($sku_entity);
+    $event->setValue($description['description']);
   }
 
   /**
@@ -112,8 +112,16 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    */
   public function processShortDescription(ProductInfoRequestedEvent $event) {
     $sku_entity = $event->getSku();
-    $prod_description = $this->getDescription($sku_entity);
-    $event->getValue($prod_description['short_desc']);
+    $description = $this->getDescription($sku_entity);
+
+    if ($event->getContext() == 'full') {
+      $short_desc = $this->productHelper->createShortDescription($description['short_desc']['value']['#markup']);
+      $description['short_desc']['value']['#markup'] = $short_desc['html'];
+      $event->setValue($description['short_desc']);
+    }
+    else {
+      $event->setValue($description['short_desc']);
+    }
   }
 
   /**
@@ -125,86 +133,41 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @return array
    *   Return array of description and short description.
    */
-  protected function getDescription(SKU $sku_entity) {
+  private function getDescription(SKU $sku_entity) {
     $static = &drupal_static(__METHOD__, []);
 
     if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
       return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
     }
 
-    $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
+    if ($attr_at_glance = $sku_entity->get('attr_at_glance')->getString()) {
+      $description[] = [
+        'label' => ['#markup' => $this->t('At a glance')],
+        'value' => ['#markup' => $attr_at_glance],
+      ];
+    }
 
+    // Prepare $description variable.
     $description_value = '';
     if ($body = $sku_entity->get('attr_description')->getValue()) {
-      $description_value = '<div class="description-first">';
-      $description_value .= $body[0]['value'];
+      $description_value = $body[0]['value'];
+    }
+
+    if ($bullet_points = $sku_entity->get('attr_bullet_points')->getString()) {
+      $description_value .= '<div class="bullet-points-wrapper">';
+      $description_value .= $bullet_points;
       $description_value .= '</div>';
     }
 
-    $description_value .= '<div class="description-details">';
-    if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
-      $concepts_markup = [
-        '#theme' => 'product_concept_markup',
-        '#concepts' => $concepts,
-      ];
-      $description_value .= $this->renderer->renderPlain($concepts_markup);
-    }
-
-    // Render the wrapper div for composition always so that the same can be
-    // filled with data on variant selection.
-    // Prepare the description variable.
-    $composition = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
-
-    if (!empty($composition)) {
-      $composition_markup = [
-        '#theme' => 'product_composition_markup',
-        '#composition' => ['#markup' => $composition],
-      ];
-      $description_value .= $this->renderer->renderPlain($composition_markup);
-    }
-
-    $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
-    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
-    if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
-      $description_value .= '<div class="care-instructions-wrapper">';
-      $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions') . '</div>';
-      if (!empty($washing_instructions)) {
-        $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
-      }
-      if (!empty($dry_cleaning_instructions)) {
-        $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
-      }
-      $description_value .= '</div>';
-    }
-
-    // Render the wrapper div for article warning always so that the same
-    // can be filled with data on variant selection.
-    $warning = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
-
-    if (!empty($warning)) {
-      $warning_markup = [
-        '#theme' => 'product_article_warning_markup',
-        '#warning' => ['#markup' => $warning],
-      ];
-      $description_value .= $this->renderer->renderPlain($warning_markup);
-    }
-
-    $description_value .= '</div>';
-
-    $description['value'] = [
-      '#markup' => $description_value,
+    $description[] = [
+      'label' => ['#markup' => $this->t('Features and benefits')],
+      'value' => ['#markup' => $description_value],
     ];
-
-    // Add all variables to $build in the sequence in
-    // which they should be displayed.
-    $prod_description[] = $description;
 
     // If specifications are enabled, prepare the specification variable.
     if ($this->configFactory->get('alshaya_acm.settings')->get('pdp_show_specifications')) {
       $specifications = [
-        'label' => [
-          '#markup' => $this->t('Specifications'),
-        ],
+        'label' => ['#markup' => $this->t('Specifications')],
         'value' => [
           "#theme" => 'item_list',
           '#items' => [],
@@ -234,18 +197,24 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
           '@value' => $attr_brand,
         ]);
       }
+      $description[] = $specifications;
+    }
 
-      $prod_description[] = $specifications;
+    if ($in_box = $sku_entity->get('attr_whats_in_the_box')->getString()) {
+      $description[] = [
+        'label' => ['#markup' => $this->t("What's In The Box")],
+        'value' => ['#markup' => $in_box],
+      ];
     }
 
     // Add all variables to $build in the sequence in
     // which they should be displayed.
     // Check comments in MMCPA-218 for sequence requirements.
-    $return['description'] = $prod_description;
+    $return['description'] = $description;
 
     // $short_desc contains the description that should be
     // displayed before 'Read More'.
-    $short_desc = $prod_description[0];
+    $short_desc = $description[0];
     // If short description not available, check other consecutive fields.
     if (empty($short_desc['value']['#markup'])) {
       foreach ($description as $short_description) {

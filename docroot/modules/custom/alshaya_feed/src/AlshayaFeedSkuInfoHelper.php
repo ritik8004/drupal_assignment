@@ -12,6 +12,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 
@@ -72,6 +73,13 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuFieldsManager;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -88,6 +96,8 @@ class AlshayaFeedSkuInfoHelper {
    *   Sku info helper object.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -96,7 +106,8 @@ class AlshayaFeedSkuInfoHelper {
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    SKUFieldsManager $sku_fields_manager
+    SKUFieldsManager $sku_fields_manager,
+    RendererInterface $renderer
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -105,6 +116,7 @@ class AlshayaFeedSkuInfoHelper {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -149,14 +161,17 @@ class AlshayaFeedSkuInfoHelper {
       $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
       $prices = $this->skuManager->getMinPrices($sku, $color);
 
+      $short_desc = $this->skuManager->getShortDescription($sku, 'full');
+      $description = $this->skuManager->getDescription($sku, 'full');
+
       $product[$lang] = [
         'sku' => $sku->getSku(),
         'name' => $node->label(),
         'type_id' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
         'url' => $this->skuInfoHelper->getEntityUrl($node),
-        'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
-        'description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['value'] : '',
+        'short_description' => $short_desc['value']['#markup'] ?? '',
+        'description' => !empty($description) ? $this->renderer->renderPlain($description) : '',
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
