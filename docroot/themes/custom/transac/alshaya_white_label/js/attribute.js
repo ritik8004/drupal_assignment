@@ -12,7 +12,7 @@
 
   Drupal.select2OptionConvert = function () {
     // Process configurable attributes which need to be shown as grouped.
-    $('.form-item-configurable-select-group').once('bind-js').each(function () {
+    $('.form-item-configurable-select-group').once('select-2-option').each(function () {
       // Add class to parent for styling.
       $(this).closest('.form-type-select').addClass('form-type-configurable-select-group');
       var that = $(this);
