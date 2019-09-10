@@ -14,6 +14,7 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
       - '@acq_cart.cart_storage'
+      - '@config.factory'
   alshaya_acm_promotion.update_promotion:
     class: Drupal\alshaya_acm_promotion\EventSubscriber\UpdatePromotionLabel
     arguments:
