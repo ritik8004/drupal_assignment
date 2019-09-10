@@ -8,6 +8,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
@@ -48,6 +49,13 @@ class AlshayaPromoLabelManager {
   protected $cartManager;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -56,13 +64,17 @@ class AlshayaPromoLabelManager {
    *   Entity Type Manager.
    * @param \Drupal\acq_cart\CartStorageInterface $cartManager
    *   Cart Manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config Factory.
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              CartStorageInterface $cartManager) {
+                              CartStorageInterface $cartManager,
+                              ConfigFactoryInterface $configFactory) {
     $this->skuManager = $sku_manager;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->cartManager = $cartManager;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -240,15 +252,19 @@ class AlshayaPromoLabelManager {
    */
   private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
     $label = $promotion->get('field_acq_promotion_label')->getString();
-    $cartSKUs = $this->cartManager->getCartSkus();
-    $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
+    $config = $this->configFactory->get('alshaya_acm_promotion.settings');
+    if (!empty($config->get('dynamic_labels'))) {
+      $cartSKUs = $this->cartManager->getCartSkus();
+      $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
 
-    // If cart is not empty and has matching products.
-    if (!empty($cartSKUs)
-      && in_array($currentSKU->getSku(), $eligibleSKUs)
-      && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
-      $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
+      // If cart is not empty and has matching products.
+      if (!empty($cartSKUs)
+        && in_array($currentSKU->getSku(), $eligibleSKUs)
+        && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
+        $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
+      }
     }
+
     return $label;
   }
 
