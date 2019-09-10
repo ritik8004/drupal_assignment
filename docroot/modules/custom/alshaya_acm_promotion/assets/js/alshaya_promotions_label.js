@@ -38,7 +38,7 @@
 
       if (alshayaAcmPromotions !== undefined) {
         // Go ahead and display dynamic promotions.
-        $('.acq-content-product .promotions div', context).once('update-promo-label-pdp').each(function () {
+        $('.acq-content-product .content__title_wrapper .promotions div', context).once('update-promo-label-pdp').each(function () {
           updateAlshayaPromotionsLabel(alshayaAcmPromotions, context);
         });
       }
