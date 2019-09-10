@@ -1324,26 +1324,20 @@ class SkuManager {
         '@sku' => $sku,
         '@function' => 'SkuManager::getDisplayNode()',
       ]);
-
       return NULL;
     }
 
-    $langcode = $sku_entity->language()->getId();
-    $sku_string = $sku_entity->getSku();
-
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
-
     $node = $plugin->getDisplayNode($sku_entity, $check_parent);
 
     if (!($node instanceof NodeInterface)) {
       if ($check_parent) {
         $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-          '@langcode' => $langcode,
-          '@sku' => $sku_string,
+          '@langcode' => $sku_entity->language()->getId(),
+          '@sku' => $sku_entity->getSku(),
         ]);
       }
-
       return NULL;
     }
 
@@ -3033,15 +3027,22 @@ class SkuManager {
    *   Description of the product.
    */
   public function getDescription(SKUInterface $sku, $context) {
-    $prod_description = [];
-    if ($body = $sku->get('attr_description')->getValue()) {
-      $prod_description['description'] = [
-        '#markup' => $body[0]['value'],
-      ];
-    }
-    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
+    return $this->productInfoHelper->getValue($sku, 'description', $context);
+  }
 
-    return $prod_description;
+  /**
+   * Get description for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Description of the product.
+   */
+  public function getShortDescription(SKUInterface $sku, $context) {
+    return $this->productInfoHelper->getValue($sku, 'short_description', $context);
   }
 
   /**
