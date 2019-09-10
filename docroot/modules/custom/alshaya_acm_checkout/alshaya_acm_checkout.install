@@ -17,24 +17,17 @@ function alshaya_acm_checkout_update_8006() {
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['field_payment_code' => 'knet']);
   foreach ($terms as $term) {
     if ($term instanceof Term) {
-      $term_lang_code = $term->language()->getId();
-      if ($term_lang_code === 'en') {
-        $term_value = 'K-NET';
-        $translated_lang_code = 'ar';
-        $translated_term_value = 'K-NET';
+      $titles = [
+        'en' => 'K-NET',
+        'ar' => 'K-NET',
+      ];
+      foreach ($titles as $langcode => $title) {
+        $translated_term = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : '';
+        if (isset($translated_term)) {
+          $translated_term->set('name', $title);
+          $translated_term->save();
+        }
       }
-      else {
-        $term_value = 'K-NET';
-        $translated_lang_code = 'en';
-        $translated_term_value = 'K-NET';
-      }
-      $term->set('name', $term_value);
-      $translated_term = $term->hasTranslation($translated_lang_code) ? $term->getTranslation($translated_lang_code) : '';
-      if (isset($translated_term)) {
-        $translated_term->set('name', $translated_term_value);
-      }
-      $term->save();
-      $translated_term->save();
     }
   }
 }
