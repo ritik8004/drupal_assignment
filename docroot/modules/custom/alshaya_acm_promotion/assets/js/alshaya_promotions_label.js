@@ -9,13 +9,12 @@
   function updateAlshayaPromotionsLabel(alshayaAcmPromotions, context) {
     for (var dynamicPromotionSku in alshayaAcmPromotions) {
       if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
-        var dynamicPromoLabelHolders = $('.acq-content-product .promotions .promotions-labels', context);
         var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity', context);
 
         // If cart is not empty.
         if (cartQuantity.length) {
           var getPromoLabel = new Drupal.ajax({
-            url: Drupal.url('get-promotion-label/' + dynamicPromotionSku),
+            url: Drupal.url('get-promotion-dynamic-label/' + dynamicPromotionSku),
             element: false,
             base: false,
             progress: {type: 'throbber'},
@@ -24,9 +23,6 @@
 
           getPromoLabel.options.type = 'GET';
           getPromoLabel.execute();
-        }
-        else {
-          dynamicPromoLabelHolders.removeClass('hidden');
         }
       }
     }
@@ -38,7 +34,7 @@
 
       if (alshayaAcmPromotions !== undefined) {
         // Go ahead and display dynamic promotions.
-        $('.acq-content-product .content__title_wrapper .promotions div', context).once('update-promo-label-pdp').each(function () {
+        $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
           updateAlshayaPromotionsLabel(alshayaAcmPromotions, context);
         });
       }

@@ -48,7 +48,7 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
     if ($this->labelManager->isDynamicLabelsEnabled()) {
       $sku = $addToCartFormSubmitEvent->getSku();
       $response = $addToCartFormSubmitEvent->getResponse();
-      $label = $this->labelManager->getCurrentSkuPromoLabel($sku);
+      $label = $this->labelManager->getSkuPromoDynamicLabel($sku);
 
       // Prepare response if label is present.
       if (!empty($label)) {

@@ -326,8 +326,8 @@ class PromotionController extends ControllerBase {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Ajax command to update promo label.
    */
-  public function getPromotionLabel(SKUInterface $sku) {
-    $label = $this->promoLabelManager->getCurrentSkuPromoLabel($sku);
+  public function getPromotionDynamicLabel(SKUInterface $sku) {
+    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
 
     $response = [];
     if (!empty($label)) {
