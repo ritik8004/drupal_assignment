@@ -4,9 +4,9 @@ namespace Drupal\alshaya_mc\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
+use Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedBaseEventSubscriber;
 use Drupal\alshaya_acm_product\ProductHelper;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -15,9 +15,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  *
  * @package Drupal\alshaya_mc\EventSubscriber
  */
-class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventSubscriber implements EventSubscriberInterface {
 
   /**
    * SKU Manager.
@@ -133,13 +131,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @return array
    *   Return array of description and short description.
    */
-  private function getDescription(SKU $sku_entity) {
-    $static = &drupal_static(__METHOD__, []);
-
-    if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
-      return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
-    }
-
+  protected function prepareDescription(SKU $sku_entity) {
     if ($attr_at_glance = $sku_entity->get('attr_at_glance')->getString()) {
       $description[] = [
         'label' => ['#markup' => $this->t('At a glance')],
@@ -227,8 +219,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       }
     }
     $return['short_desc'] = $short_desc;
-
-    $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
   }
 

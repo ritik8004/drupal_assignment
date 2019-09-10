@@ -4,9 +4,9 @@ namespace Drupal\alshaya_bbw_transac\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
+use Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedBaseEventSubscriber;
 use Drupal\alshaya_acm_product\ProductHelper;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -15,9 +15,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  *
  * @package Drupal\alshaya_bbw_transac\EventSubscriber
  */
-class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventSubscriber implements EventSubscriberInterface {
 
   /**
    * SKU Manager.
@@ -125,13 +123,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @return array
    *   Return array of description and short description.
    */
-  private function getDescription(SKU $sku_entity) {
-    $static = &drupal_static(__METHOD__, []);
-
-    if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
-      return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
-    }
-
+  protected function prepareDescription(SKU $sku_entity) {
     $return = [];
     if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
       $return['description'][] = [
@@ -176,8 +168,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       }
     }
     $return['short_desc'] = $short_desc;
-
-    $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
   }
 
