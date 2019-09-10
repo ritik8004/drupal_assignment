@@ -78,6 +78,16 @@ class AlshayaPromoLabelManager {
   }
 
   /**
+   * Check if dynamic_labels functionality is enabled.
+   *
+   * @return array|mixed|null
+   *   Flag to check dynamic_labels config is enabled or not.
+   */
+  public function isDynamicLabelsEnabled() {
+    return $this->configFactory->get('alshaya_acm_promotions')->get('dynamic_labels');
+  }
+
+  /**
    * For a sku, filter dynamic promo label eligible promotions.
    *
    * @param array|\Drupal\Core\Entity\EntityInterface[] $promotionNodes
@@ -252,8 +262,7 @@ class AlshayaPromoLabelManager {
    */
   private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
     $label = $promotion->get('field_acq_promotion_label')->getString();
-    $config = $this->configFactory->get('alshaya_acm_promotion.settings');
-    if (!empty($config->get('dynamic_labels'))) {
+    if (!empty($this->isDynamicLabelsEnabled())) {
       $cartSKUs = $this->cartManager->getCartSkus();
       $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
 

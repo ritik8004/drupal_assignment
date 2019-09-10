@@ -265,7 +265,8 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     ];
 
     // If promotions are eligible for dynamic promo label.
-    if ($promoLabelManager->checkPromoLabelType($promotion_nodes) === AlshayaPromoLabelManager::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO) {
+    if ($promoLabelManager->isDynamicLabelsEnabled()
+      && $promoLabelManager->checkPromoLabelType($promotion_nodes) === AlshayaPromoLabelManager::ALSHAYA_PROMOTIONS_DYNAMIC_PROMO) {
       switch ($view_mode) {
         case 'full':
           // Add a flag to update promo label dynamically.

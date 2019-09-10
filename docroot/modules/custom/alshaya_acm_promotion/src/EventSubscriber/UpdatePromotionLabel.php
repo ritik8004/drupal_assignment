@@ -45,13 +45,15 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
    *   Add to Cart Submit Event.
    */
   public function postAddToCartFormSubmit(AddToCartFormSubmitEvent $addToCartFormSubmitEvent) {
-    $sku = $addToCartFormSubmitEvent->getSku();
-    $response = $addToCartFormSubmitEvent->getResponse();
-    $label = $this->labelManager->getCurrentSkuPromoLabel($sku);
+    if ($this->labelManager->isDynamicLabelsEnabled()) {
+      $sku = $addToCartFormSubmitEvent->getSku();
+      $response = $addToCartFormSubmitEvent->getResponse();
+      $label = $this->labelManager->getCurrentSkuPromoLabel($sku);
 
-    // Prepare response if label is present.
-    if (!empty($label)) {
-      $this->labelManager->prepareResponse($label, $sku->id(), $response);
+      // Prepare response if label is present.
+      if (!empty($label)) {
+        $this->labelManager->prepareResponse($label, $sku->id(), $response);
+      }
     }
   }
 
