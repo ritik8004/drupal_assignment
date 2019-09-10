@@ -725,18 +725,16 @@ class SkuManager {
           if ($child instanceof SKU) {
             $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
           }
-          if ($product_color != $child_color) {
-            continue;
-          }
-          else {
-            return $child;
-          }
 
           if (!($child instanceof SKUInterface)) {
             continue;
           }
 
           if ($first_only) {
+            return $child;
+          }
+
+          if ($product_color == $child_color) {
             return $child;
           }
 
@@ -2943,7 +2941,10 @@ class SkuManager {
 
     $data = [];
     $has_color_data = FALSE;
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $children = $this->getAvailableChildren($sku, FALSE, $product_color) ?? [];
+
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
     // Gather data from children to set in parent.
