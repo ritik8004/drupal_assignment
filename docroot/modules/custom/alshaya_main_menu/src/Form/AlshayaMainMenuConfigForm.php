@@ -44,8 +44,8 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $form['desktop_main_menu_layout'] = [
       '#type' => 'select',
       '#options' => [
-        'default' => 'default',
-        'menu_inline_display' => 'inline menu display',
+        'default' => $this->t('default'),
+        'menu_inline_display' => $this->t('inline menu display'),
       ],
       '#default_value' => $config->get('desktop_main_menu_layout'),
       '#title' => $this->t('Main menu display on desktop.'),
@@ -61,6 +61,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_main_menu.settings');
     $config->set('mobile_main_menu_max_depth', $form_state->getValue('mobile_main_menu_max_depth'));
+    $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
     $config->save();
     Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
 
