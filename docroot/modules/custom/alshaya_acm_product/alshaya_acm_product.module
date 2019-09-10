@@ -1409,7 +1409,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $promotion_links = implode('</br>', $promotions);
     }
 
-    $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
+    $response->addCommand(new HtmlCommand('.promotions .promotion-labels', $promotion_links));
 
     // Update the article class to include out of stock class if not in stock.
     // Remove the class if in stock.

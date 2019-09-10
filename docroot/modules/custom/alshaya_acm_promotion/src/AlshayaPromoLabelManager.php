@@ -157,7 +157,7 @@ class AlshayaPromoLabelManager {
 
     foreach ($promotion_nodes as $promotion_node) {
       // Generate Link.
-      $promos[] = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
+      $promos[$promotion_node->id()] = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
     }
 
     return $promos;
