@@ -13,5 +13,5 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function alshaya_jus_non_transac_form_webform_submission_alshaya_email_signup_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['elements']['exclusive_deals']['#suffix'] = '';
-  $form['actions']['submit']['#value'] = t("Subscribe");
+  $form['actions']['submit']['#value'] = t('Subscribe');
 }
