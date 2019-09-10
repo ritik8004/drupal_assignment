@@ -1,0 +1,27 @@
+name: Justice
+description: Theme for Justice.
+type: theme
+core: 8.x
+base theme: whitelabel
+alshaya_theme_type: non_transac
+
+regions:
+  admin_content: 'Admin Content'
+  header_secondary: 'Header Secondary'
+  header: Header
+  header_primary: 'Header Primary'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - whitelabel/global
+  - justice/global
+
+libraries-extend:
+  whitelabel/form-element-textual:
+    - justice/form-element-textual
+  whitelabel/modal-email-signup:
+    - justice/modal-email-signup
