@@ -6,6 +6,7 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_update_N().
@@ -15,13 +16,26 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 function alshaya_acm_checkout_update_8006() {
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['field_payment_code' => 'knet']);
   foreach ($terms as $term) {
-    $term->set('name', 'K-NET');
-    $translated_term = $term->hasTranslation('ar') ? $term->getTranslation('ar') : '';
-    if (isset($translated_term)) {
-      $translated_term->set('name', 'K-NET');
+    if ($term instanceof Term) {
+      $term_lang_code = $term->language()->getId();
+      if ($term_lang_code === 'en') {
+        $term_value = 'K-NET';
+        $translated_lang_code = 'ar';
+        $translated_term_value = 'K-NET';
+      }
+      else {
+        $term_value = 'K-NET';
+        $translated_lang_code = 'en';
+        $translated_term_value = 'K-NET';
+      }
+      $term->set('name', $term_value);
+      $translated_term = $term->hasTranslation($translated_lang_code) ? $term->getTranslation($translated_lang_code) : '';
+      if (isset($translated_term)) {
+        $translated_term->set('name', $translated_term_value);
+      }
+      $term->save();
+      $translated_term->save();
     }
-    $term->save();
-    $translated_term->save();
   }
 }
 
