@@ -706,35 +706,24 @@ class SkuManager {
    *   Parent sku to get children of.
    * @param bool $first_only
    *   Flag to specify only first is required or all.
-   * @param string $product_color
-   *   Product color.
    *
    * @return \Drupal\acq_sku\Entity\SKU|\Drupal\acq_sku\Entity\SKU[]|null
    *   First sku if first_only true or array of skus.
    */
-  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE, $product_color = '') {
+  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE) {
     $childSkus = [];
-    $child_color = '';
     $langcode = $sku->language()->getId();
     $combinations = $this->getConfigurableCombinations($sku);
-    $configurable_attributes = $this->getConfigurableAttributes($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $children) {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $langcode);
-          if ($child instanceof SKU) {
-            $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
-          }
 
           if (!($child instanceof SKUInterface)) {
             continue;
           }
 
           if ($first_only) {
-            return $child;
-          }
-
-          if ($product_color == $child_color) {
             return $child;
           }
 
@@ -2823,6 +2812,8 @@ class SkuManager {
    * @throws \Exception
    */
   public function processIndexItem(NodeInterface $node, ItemInterface $item) {
+
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $langcode = $node->language()->getId();
 
     $sku_string = $this->getSkuForNode($node);
@@ -2943,7 +2934,7 @@ class SkuManager {
     $has_color_data = FALSE;
     // Disable alshaya_color_split hook calls.
     SkuManager::$colorSplitMergeChildren = FALSE;
-    $children = $this->getAvailableChildren($sku, FALSE, $product_color) ?? [];
+    $children = $this->getAvailableChildren($sku) ?? [];
 
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
