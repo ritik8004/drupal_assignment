@@ -712,6 +712,7 @@ class SkuManager {
    */
   public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE) {
     $childSkus = [];
+
     $langcode = $sku->language()->getId();
     $combinations = $this->getConfigurableCombinations($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $children) {
@@ -2812,7 +2813,7 @@ class SkuManager {
    * @throws \Exception
    */
   public function processIndexItem(NodeInterface $node, ItemInterface $item) {
-
+    // Disable alshaya_color_split hook calls.
     SkuManager::$colorSplitMergeChildren = FALSE;
     $langcode = $node->language()->getId();
 
@@ -2932,8 +2933,6 @@ class SkuManager {
 
     $data = [];
     $has_color_data = FALSE;
-    // Disable alshaya_color_split hook calls.
-    SkuManager::$colorSplitMergeChildren = FALSE;
     $children = $this->getAvailableChildren($sku) ?? [];
 
     $configurable_attributes = $this->getConfigurableAttributes($sku);
