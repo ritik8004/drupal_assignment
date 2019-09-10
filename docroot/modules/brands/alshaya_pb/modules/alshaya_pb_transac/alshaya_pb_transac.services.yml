@@ -3,5 +3,7 @@ services:
     class: Drupal\alshaya_pb_transac\EventSubscriber\ProductInfoRequestedEventSubscriber
     arguments:
       - '@alshaya_acm_product.sku_images_manager'
+      - '@alshaya_acm_product.helper'
+      - '@alshaya_acm_product.skumanager'
     tags:
       - { name: 'event_subscriber' }
