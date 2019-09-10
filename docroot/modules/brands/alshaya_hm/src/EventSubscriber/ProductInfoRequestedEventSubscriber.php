@@ -4,9 +4,9 @@ namespace Drupal\alshaya_hm\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
+use Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedBaseEventSubscriber;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -15,9 +15,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  *
  * @package Drupal\alshaya_hm\EventSubscriber
  */
-class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class ProductInfoRequestedEventSubscriber extends ProductInfoRequestedBaseEventSubscriber implements EventSubscriberInterface {
 
   /**
    * SKU Manager.
@@ -125,13 +123,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @return array
    *   Return array of description and short description.
    */
-  protected function getDescription(SKU $sku_entity) {
-    $static = &drupal_static(__METHOD__, []);
-
-    if (!empty($static[$sku_entity->language()->getId()][$sku_entity->getSku()])) {
-      return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
-    }
-
+  protected function prepareDescription(SKU $sku_entity) {
     $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
 
     $description_value = '';
@@ -258,8 +250,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       }
     }
     $return['short_desc'] = $short_desc;
-
-    $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
   }
 
