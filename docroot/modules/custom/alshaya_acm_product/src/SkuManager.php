@@ -2933,6 +2933,8 @@ class SkuManager {
    * @throws \Exception
    */
   public function processIndexItem(NodeInterface $node, ItemInterface $item) {
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $langcode = $node->language()->getId();
 
     $sku_string = $this->getSkuForNode($node);
@@ -3052,6 +3054,7 @@ class SkuManager {
     $data = [];
     $has_color_data = FALSE;
     $children = $this->getAvailableChildren($sku) ?? [];
+
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
     // Gather data from children to set in parent.
