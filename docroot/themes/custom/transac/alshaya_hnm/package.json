@@ -9,6 +9,8 @@
   "devDependencies": {
     "breakpoint-sass": "2.7.0",
     "browser-sync": "2.17.x",
+    "browserslist": "^4.5.5",
+    "caniuse-lite": "^1.0.30000963",
     "del": "2.2.x",
     "gulp": "3.9.x",
     "gulp-autoprefixer": "6.0.0",

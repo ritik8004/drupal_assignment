@@ -1,12 +1,9 @@
 <product>
   <sku>{{ product.sku }}</sku>
-  <name>{{ product.name }}</name>
+  <name><![CDATA[{{ product.name }}]]></name>
   <url>{{ product.url }}</url>
   <type>{{ product.type_id }}</type>
   <status>{{ product.status }}</status>
-  <meta_description>{{ product.meta_description }}</meta_description>
-  <meta_keyword>{{ product.meta_keywords }}</meta_keyword>
-  <meta_title>{{ product.meta_title }}</meta_title>
   <regular_price>{{ product.original_price }}</regular_price>
   <special_price>{{ product.special_price }}</special_price>
   <final_price>{{ product.final_price }}</final_price>
@@ -19,12 +16,20 @@
     </category>
     {% endfor %}
   </categories>
-  <short_description>{{ product.short_description }}</short_description>
-  <description>{{ product.description }}</description>
+  <short_description>
+    {% if product.short_description is not empty %}
+      <![CDATA[{{ product.short_description }}]]>
+    {% endif %}
+  </short_description>
+  <description>
+    {% if product.description is not empty %}
+      <![CDATA[{{ product.description }}]]>
+    {% endif %}
+  </description>
   <custom_attributes>
     {% if product.attributes|length > 0 %}
-      {% for attribute_key,attribute_value in product.attributes %}
-        <{{ attribute_key }}>{{ attribute_value }}</{{ attribute_key }}>
+      {% for product_attribute in product.attributes %}
+        <{{ product_attribute.key }}>{{ product_attribute.value }}</{{ product_attribute.key }}>
       {% endfor %}
     {% endif %}
   </custom_attributes>

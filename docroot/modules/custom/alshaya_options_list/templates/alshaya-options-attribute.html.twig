@@ -1,12 +1,12 @@
 <div class = {{ "ajax-#{attribute_code}" }} >
-  {% if option.no_results %}
-    <ul class='attribute-filter-name-list no-result-container'>
+  {% if option.search %}
+    <ul class='attribute-filter-name-list no-result-container hidden'>
       <div class='no-results'>
-        {{ option.no_results }}
+        {{ 'No results found...' | t }}
       </div>
-  {% else %}
-    <ul class='attribute-filter-name-list'>
+    </ul>
   {% endif %}
+    <ul class='attribute-filter-name-list'>
   {% if option.group %}
     {% for key,array_terms in option.terms %}
       {% if key|trim|length > 0 %}
