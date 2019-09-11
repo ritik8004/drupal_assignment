@@ -44,12 +44,6 @@
         .each(function () {
           var form = $(this).closest('form');
 
-          // Remove the name attributes to ensure it is not posted to server even by mistake.
-          $(this).find('.payment_card_new').find('input:text, input:password, select').each(function () {
-            $(this).data('name', $(this).attr('name'));
-            $(this).removeAttr('name');
-          });
-
           $(form).once('bind-client-side').each(function () {
             try {
               // Update the validate settings to use custom submit handler.
@@ -125,6 +119,7 @@
 
     // Submit form if card is tokenised and there are no form errors.
     if (Drupal.checkoutComTokenised === true && Drupal.checkoutComProcessed === true) {
+      Drupal.checkoutComRemoveNameAttribute(form);
       form.submit();
       return;
     }
