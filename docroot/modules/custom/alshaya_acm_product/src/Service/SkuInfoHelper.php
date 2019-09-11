@@ -374,11 +374,11 @@ class SkuInfoHelper {
       $stockInfo = $this->stockInfo($child);
 
       $variant = [
-        'id' => $child->id(),
-        'sku' => $child->getSku(),
+        'id' => (int) $child->id(),
+        'sku' => (string) $child->getSku(),
         'stock' => [
-          'status' => $stockInfo['in_stock'],
-          'qty' => $stockInfo['stock'],
+          'status' => (int) $stockInfo['in_stock'],
+          'qty' => (float) $stockInfo['stock'],
         ],
       ];
 

@@ -46,7 +46,7 @@
         }
       });
 
-      $('article.entity--type-node').once('click-collect').on('variant-selected', function (event, variant) {
+      $('article.entity--type-node').once('click-collect').on('variant-selected', function (event, variant, code) {
         // @TODO: Allow click and collect stores display now that all
         // options are selected.
       });

@@ -97,23 +97,7 @@
         }
       });
 
-      var that = $(this).parent();
-
-      $('select', that).select2Option();
-      $('.select2Option', that).find('.list-title .selected-text').html('');
-
-      var clickedOption = $('select option:selected', that);
-      if (!clickedOption.is(':disabled')) {
-        if ($(this).parent().hasClass('form-item-configurables-article-castor-id')) {
-          Drupal.alshaya_color_swatch_update_selected_label();
-        }
-        else {
-          var selectedText = clickedOption.attr('selected-text')
-            ? clickedOption.attr('selected-text')
-            : clickedOption.text();
-          $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
-        }
-      }
+      $(this).trigger('refresh');
     });
   };
 
