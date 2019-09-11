@@ -43,8 +43,8 @@
         var currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
         $('[name="selected_variant_sku"]', form).val('');
 
-        if (typeof combinations['bySku'][code] !== 'undefined') {
-          for (var i in combinations['bySku'][code][selected]) {
+        if (typeof combinations['combinations'][code] !== 'undefined') {
+          for (var i in combinations['combinations'][code][selected]) {
             var select = $('[data-configurable-code="' + i + '"]', form);
 
             select.val('');
@@ -54,21 +54,17 @@
               .removeProp('selected')
               .removeAttr('selected');
 
-            for (var j in combinations['bySku'][code][selected][i]) {
-              select.find('option[value="' + combinations['bySku'][code][selected][i][j] + '"]')
+            for (var j in combinations['combinations'][code][selected][i]) {
+              select.find('option[value="' + combinations['combinations'][code][selected][i][j] + '"]')
                 .removeProp('disabled')
                 .removeAttr('disabled');
             }
 
-            // If there is only one option left, select it by default.
-            var availableOptions = select.find('option:not([disabled])');
-            if (availableOptions.length === 1) {
-              var option = $(availableOptions).first();
-              $(option).attr('selected', 'selected');
-              select.val($(option).val());
-            }
-
-            select.trigger('refresh');
+            // Select first available.
+            select.find('option:not([disabled]):first')
+              .prop('selected', true)
+              .attr('selected', 'selected')
+              .trigger('change');
           }
         }
 
@@ -79,7 +75,7 @@
           $('[name="selected_variant_sku"]', form).val(combinations['byAttribute'][selectedCombination]);
         }
         else {
-          firstPossibleCombination = Drupal.getFirstPossibleCombination(form, combinations['bySku']);
+          firstPossibleCombination = Drupal.getFirstPossibleCombination(form, combinations['combinations']);
         }
 
         if (form.attr('selected-combination') != firstPossibleCombination) {
@@ -96,7 +92,13 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          $(this).parents('article.entity--type-node:first').trigger('variant-selected');
+          $(this).parents('article.entity--type-node:first').trigger(
+            'variant-selected',
+            [
+              combinations['byAttribute'][firstPossibleCombination],
+              code
+            ]
+          );
         }
       });
 
@@ -105,17 +107,6 @@
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
-
-        $(this).find('#configurable_ajax .form-select').val('');
-
-        // @TODO: Select based on selected query param or color.
-        $(this).find('#configurable_ajax .form-select:first')
-          .find('option:not([disabled]):first')
-          .prop('selected', true)
-          .attr('selected', 'selected')
-          .trigger('change');
-
-        Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
 
         $(this).on('combination-changed', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
@@ -134,12 +125,41 @@
           // @TODO: Update quantity dropdown.
         });
 
-        $(this).on('variant-selected', function (event, variant) {
+        $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings.productInfo[sku]['variants'][selected];
           Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
         });
+
+        var variants = drupalSettings.productInfo[sku]['variants'];
+        var selectedSku = Object.keys(variants)[0];
+        var selected = parseInt(Drupal.getQueryVariable('selected'));
+
+        if (selected > 0) {
+          for (var i in variants) {
+            if (variants[i]['id'] === selected) {
+              selectedSku = variants[i]['sku'];
+              break;
+            }
+          }
+        }
+        else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
+          // Try to get first child with parent sku matching. This could go
+          // in color split but is generic enough so added here.
+          for (var i in variants) {
+            if (variants[i]['parent_sku'] === sku) {
+              selectedSku = variants[i]['sku'];
+              break;
+            }
+          }
+        }
+
+        var firstAttribute = $('#configurable_ajax .form-select:first', this);;
+        var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
+        $(firstAttribute).removeProp('selected').removeAttr('selected');
+        $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
+        $(firstAttribute).val(firstAttributeValue).trigger('change');
       });
     }
   };
@@ -162,7 +182,8 @@
     else {
       Drupal.behaviors.alshaya_product_zoom.attach(product);
     }
-  }
+  };
+
   Drupal.getSelectedCombination = function (form) {
     var selectedCombination = '';
     $('[data-configurable-code]', form).each(function () {
@@ -209,13 +230,5 @@
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
     }
   });
-
-  $.fn.reloadPage = function () {
-    window.location.reload();
-  };
-
-  $.fn.hideLoader = function () {
-    $('.ajax-progress, .ajax-progress-throbber').remove();
-  }
 
 })(jQuery, Drupal, drupalSettings);

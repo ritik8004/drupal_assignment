@@ -11,15 +11,14 @@
    */
   Drupal.behaviors.alshayaColorSplitPdp = {
     attach: function (context, settings) {
-      $('article.entity--type-node').once('alshaya-color-split').on('combination-changed', function (event, variant, code) {
+      $('article.entity--type-node').once('alshaya-color-split').on('combination-changed variant-selected', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
-
-        if (typeof variantInfo['color_attribute'] === 'undefined' || variantInfo['color_attribute'] !== code) {
+        if ($(this).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
         }
 

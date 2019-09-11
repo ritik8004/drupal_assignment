@@ -1154,24 +1154,6 @@
     return selectedMethodLabel;
   };
 
-  /**
-   * Helper function to fetch value for a query string.
-   *
-   * @param variable
-   *
-   * @returns {string}
-   */
-  Drupal.getQueryVariable = function (variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split('=');
-      if (decodeURIComponent(pair[0]) === variable) {
-        return decodeURIComponent(pair[1]);
-      }
-    }
-  };
-
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {
     dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
