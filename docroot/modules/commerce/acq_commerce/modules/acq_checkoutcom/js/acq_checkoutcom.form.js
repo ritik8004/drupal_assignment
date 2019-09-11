@@ -85,9 +85,6 @@
                 // Set the card type in hidden only if card number is valid.
                 $('.checkoutcom-credit-card-type-input').val(result.card_type.name);
               }
-              else {
-                Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number'));
-              }
             }
           });
         });
@@ -150,7 +147,7 @@
 
     // Sanity check of credit card number.
     var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
-    if (type === '') {
+    if (type === '' && $('.checkoutcom-credit-card-input').val().trim().length > 0) {
       Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number'));
       formHasErrors = true;
     }
