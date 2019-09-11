@@ -20,7 +20,19 @@ function alshaya_acm_checkoutcom_update_8001() {
     'card number' => [
       'ar' => 'رقم البطاقة',
     ],
+    'Apple Pay' => [
+      'ar' => 'الدفع عن طريق أبل باي',
+    ],
+    'expires on' => [
+      'ar' => 'تنتهي في',
+    ],
   ];
+
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $checkout_com_ar = $checkout_options_manager->loadPaymentMethod('checkout_com', 'البطاقة الائتمانية / البطاقة المصرفية', 'ar');
+  $checkout_com_ar->setName('البطاقة الائتمانية / البطاقة المصرفية');
+  $checkout_com_ar->save();
 
   alshaya_i18n_save_translations($strings);
 }
@@ -45,7 +57,7 @@ function alshaya_acm_checkoutcom_install() {
   else {
     $checkout_com_ar = $checkout_com->getTranslation('ar');
   }
-  $checkout_com_ar->setName('بطاقة الائتمان');
+  $checkout_com_ar->setName('البطاقة الائتمانية / البطاقة المصرفية');
   $checkout_com_ar->save();
 
   $strings = [
@@ -53,7 +65,7 @@ function alshaya_acm_checkoutcom_install() {
       'ar' => 'احفظ تفاصيل بطاقة الدفع لاستخدامها مرة أخرى',
     ],
     'This card will be securely saved for a faster payment experience. CVV number will not be saved.' => [
-      'ar' => 'سيتم حفظ تفاصيل هذه البطاقة بشكل آمن لتتم عملية الدفع بشكل أسرع. لن يتم حفظ رقم CVV.',
+      'ar' => 'سيتم حفظ بيانات هذه البطاقة بشكل آمن لتحصل على تجربة دفع أسرع. لن يتم حفظ الرقم السري للبطاقة CVV.',
     ],
     'New Card' => [
       'ar' => 'بطاقة دفع جديدة',
@@ -115,6 +127,13 @@ function alshaya_acm_checkoutcom_install() {
     'card number' => [
       'ar' => 'رقم البطاقة',
     ],
+    'Apple Pay' => [
+      'ar' => 'الدفع عن طريق أبل باي',
+    ],
+    'expires on' => [
+      'ar' => 'تنتهي في',
+    ],
   ];
+
   alshaya_i18n_save_translations($strings);
 }
