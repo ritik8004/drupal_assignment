@@ -155,6 +155,9 @@ class AlshayaFeedSkuInfoHelper {
     $product = [];
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
       $node = $this->skuInfoHelper->getEntityTranslation($node, $lang);
+      if ($node->language()->getId() !== $lang) {
+        continue;
+      }
       $sku = $this->skuInfoHelper->getEntityTranslation($sku, $lang);
 
       // Get the prices.
