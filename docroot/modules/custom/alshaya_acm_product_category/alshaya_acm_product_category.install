@@ -16,6 +16,30 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Adding new field `move to right`.
+ */
+function alshaya_acm_product_category_update_8034() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // Add new field `move to right` to the `acq_product_category`.
+  $fields = [
+    'field.storage.taxonomy_term.field_move_to_right',
+    'field.field.taxonomy_term.acq_product_category.field_move_to_right',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $fields,
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update weight of selling price block.
  */
 function alshaya_acm_product_category_update_8033() {

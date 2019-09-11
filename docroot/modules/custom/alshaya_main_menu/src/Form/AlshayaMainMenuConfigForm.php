@@ -13,6 +13,16 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 class AlshayaMainMenuConfigForm extends ConfigFormBase {
 
   /**
+   * Default main menu layout.
+   */
+  const MAIN_MENU_DEFAULT_LAYOUT = 'default';
+
+  /**
+   * Inline main menu layout.
+   */
+  const MAIN_MENU_INLINE_LAYOUT = 'menu_inline_display';
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -44,8 +54,8 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $form['desktop_main_menu_layout'] = [
       '#type' => 'select',
       '#options' => [
-        'default' => $this->t('default'),
-        'menu_inline_display' => $this->t('inline menu display'),
+        self::MAIN_MENU_DEFAULT_LAYOUT => $this->t('Default menu display'),
+        self::MAIN_MENU_INLINE_LAYOUT => $this->t('Inline menu display'),
       ],
       '#default_value' => $config->get('desktop_main_menu_layout'),
       '#title' => $this->t('Main menu display on desktop.'),

@@ -17,6 +17,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
 
 /**
@@ -280,7 +281,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
 
   $mega_menu_display = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
-  if ($mega_menu_display === 'menu_inline_display') {
+  if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
     $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_inline_layout';
   }
 }
