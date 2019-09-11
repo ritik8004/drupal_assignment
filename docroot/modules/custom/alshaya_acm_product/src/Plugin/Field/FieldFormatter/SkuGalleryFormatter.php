@@ -156,6 +156,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       return [];
     }
 
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $context = 'search';
     $skus = [];
 
