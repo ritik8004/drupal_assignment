@@ -32,7 +32,7 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
-      $('article.entity--type-node').once('click-collect').on('combination-changed', function (event, variant) {
+      $('article.entity--type-node').once('click-collect').on('combination-changed', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 

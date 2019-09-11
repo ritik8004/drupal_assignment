@@ -9,7 +9,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Js for product detail page.
    */
-  Drupal.behaviors.alshayaStockCheck = {
+  Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
 
       // Disable shareing and deliver blocks for OOS.
@@ -85,7 +85,13 @@
         if (form.attr('selected-combination') != firstPossibleCombination) {
            if (typeof combinations['byAttribute'][firstPossibleCombination] !== 'undefined') {
              form.attr('selected-combination', firstPossibleCombination);
-             $(this).parents('article.entity--type-node:first').trigger('combination-changed', combinations['byAttribute'][firstPossibleCombination]);
+             $(this).parents('article.entity--type-node:first').trigger(
+               'combination-changed',
+               [
+                 combinations['byAttribute'][firstPossibleCombination],
+                 code
+               ]
+             );
            }
         }
 
@@ -111,7 +117,7 @@
 
         Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
 
-        $(this).on('combination-changed', function (event, variant) {
+        $(this).on('combination-changed', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];

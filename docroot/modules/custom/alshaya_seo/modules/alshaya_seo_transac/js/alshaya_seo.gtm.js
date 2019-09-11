@@ -12,6 +12,19 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
+      $('article.entity--type-node').once('alshaya-seo-gtm').on('combination-changed', function (event, variant, code) {
+        var sku = $(this).attr('data-sku');
+        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
+        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+        $('article[gtm-type="gtm-product-link"]')
+          .attr('gtm-product-sku', variant)
+          .attr('gtm-price', variantInfo['gtm_price']);
+      });
+
       // Global variables & selectors.
       var impressions = [];
       var body = $('body');
