@@ -84,7 +84,7 @@ class AlshayaPromoLabelManager {
    *   Flag to check dynamic_labels config is enabled or not.
    */
   public function isDynamicLabelsEnabled() {
-    return $this->configFactory->get('alshaya_acm_promotions')->get('dynamic_labels');
+    return $this->configFactory->get('alshaya_acm_promotion.settings')->get('dynamic_labels');
   }
 
   /**
@@ -129,19 +129,19 @@ class AlshayaPromoLabelManager {
   }
 
   /**
-   * Fetch Promotions and corresponding labels.
+   * Fetch promotion dynamic label.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
+   * @param null|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
+   *   List of promotion nodes.
    *
    * @return string
    *   Dynamic Promotion Label or NULL.
-   *
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  public function getCurrentSkuPromoLabel(SKU $sku) {
+  public function getSkuPromoDynamicLabel(SKU $sku, $promotion_nodes = NULL) {
     $labels = NULL;
-    $promos = $this->getCurrentSkuPromos($sku, 'links');
+    $promos = $this->getCurrentSkuPromos($sku, 'links', $promotion_nodes);
     if (!empty($promos)) {
       $labels = implode('<br>', $promos);
     }
@@ -161,8 +161,6 @@ class AlshayaPromoLabelManager {
    *
    * @return array
    *   List of promotions.
-   *
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function getCurrentSkuPromos(SKU $sku, $view_mode, $promotion_nodes = NULL) {
     // Fetch parent SKU for the current SKU.
@@ -178,8 +176,10 @@ class AlshayaPromoLabelManager {
     }
 
     foreach ($promotion_nodes as $promotion_node) {
-      // Generate Link.
-      $promos[$promotion_node->id()] = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
+      $promoDisplay = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
+      if ($promoDisplay) {
+        $promos[$promotion_node->id()] = $promoDisplay;
+      }
     }
 
     return $promos;
@@ -197,21 +197,26 @@ class AlshayaPromoLabelManager {
    *
    * @return array|string|null
    *   Return render array of Promos.
-   *
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   private function preparePromoDisplay(NodeInterface $promotion, SKU $sku, $view_mode) {
-    $promoDisplay = '';
+    $promoDisplay = FALSE;
     $promotionLabel = $this->getPromotionLabel($promotion, $sku);
 
     if (!empty($promotionLabel)) {
       switch ($view_mode) {
         case 'links':
+          // In case of links just send dynamic label.
           try {
-            $promoDisplay = $promotion
-              ->toLink($promotionLabel)
-              ->toString()
-              ->getGeneratedLink();
+            if (!empty($promotionLabel['dynamic_label'])) {
+              $promoDisplay = $promotion
+                ->toLink(
+                  $promotionLabel['dynamic_label'],
+                  'canonical',
+                  ['attributes' => ['class' => 'sku-dynamic-promotion-link']]
+                )
+                ->toString()
+                ->getGeneratedLink();
+            }
           }
           catch (\Exception $exception) {
             watchdog_exception('alshaya_acm_promotion', $exception);
@@ -228,13 +233,21 @@ class AlshayaPromoLabelManager {
           $discount_type = $promotion->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion->get('field_acq_promotion_discount')->getString();
 
-          $promoDisplay = [
-            'text' => $promotionLabel,
-            'description' => $description,
-            'discount_type' => $discount_type,
-            'discount_value' => $discount_value,
-            'rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
-          ];
+          if (!empty($promotionLabel['original_label'])) {
+            $promoDisplay = [
+              'text' => $promotionLabel['original_label'],
+              'description' => $description,
+              'discount_type' => $discount_type,
+              'discount_value' => $discount_value,
+              'rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+            ];
+
+            if (!empty($promotionLabel['dynamic_label'])) {
+              $promoDisplay['dynamic_label'] = [
+                'text' => $promotionLabel['dynamic_label'],
+              ];
+            }
+          }
 
           if (!empty($free_gift_skus = $promotion->get('field_free_gift_skus')->getValue())) {
             $promoDisplay['skus'] = $free_gift_skus;
@@ -257,11 +270,14 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\acq_sku\Entity\SKU $currentSKU
    *   Product SKU.
    *
-   * @return string|mixed
-   *   Return dynamic promo label.
+   * @return array|mixed
+   *   Return original and dynamic promo label.
    */
   private function getPromotionLabel(NodeInterface $promotion, SKU $currentSKU) {
-    $label = $promotion->get('field_acq_promotion_label')->getString();
+    $label = [
+      'original_label' => $promotion->get('field_acq_promotion_label')->getString(),
+      'dynamic_label' => '',
+    ];
     if (!empty($this->isDynamicLabelsEnabled())) {
       $cartSKUs = $this->cartManager->getCartSkus();
       $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
@@ -304,10 +320,10 @@ class AlshayaPromoLabelManager {
       $z = ($discount_step + $discount_amount) - $eligible_cart_qty;
       // Apply z-logic to generate label.
       if ($z >= 1) {
-        $label = $this->t('Add @z more to get FREE item', ['@z' => $z]);
+        $label['dynamic_label'] = $this->t('Add @z more to get FREE item', ['@z' => $z]);
       }
       else {
-        $label = $this->t('Add more and keep saving');
+        $label['dynamic_label'] = $this->t('Add more and keep saving');
       }
     }
   }
@@ -331,8 +347,8 @@ class AlshayaPromoLabelManager {
     }
 
     if ($response instanceof AjaxResponse) {
-      $response->addCommand(new HtmlCommand('.acq-content-product .promotions .promotions-labels.sku-' . $skuId, $label));
-      $response->addCommand(new InvokeCommand('.acq-content-product .promotions .promotions-labels.sku-' . $skuId, 'removeClass', ['hidden']));
+      $response->addCommand(new HtmlCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, $label));
+      $response->addCommand(new InvokeCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, 'removeClass', ['hidden']));
     }
 
     return $response;

@@ -225,7 +225,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  /** @var \Drupal\alshaya_acm_product\AlshayaPromoLabelManager $promoLabelManager */
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
 
   $sku = $skuManager->getSkuForNode($entity);
@@ -259,9 +259,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
   if (!empty($generic_promotions)) {
     $build['promotions'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => implode('</br>', $generic_promotions),
+      '#markup' => implode('</br>', $generic_promotions),
     ];
 
     // If promotions are eligible for dynamic promo label.
@@ -272,13 +270,29 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
           // Add a flag to update promo label dynamically.
           $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
           $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions'][$sku_entity->id()] = TRUE;
-          $build['promotions']['#attributes']['class'][] = 'promotions-labels sku-' . $sku_entity->id() . ' hidden';
+
+          // Add container for dynamic promotion display.
+          $build['promotions']['dynamic_label'] = [
+            '#type' => 'html_tag',
+            '#tag' => 'div',
+            '#value' => '',
+          ];
+          $build['promotions']['dynamic_label']['#attributes']['class'][] = 'promotions-dynamic-label sku-' . $sku_entity->id() . ' hidden';
           break;
 
         case 'modal':
-          // Directly override the promotions to get dynamic promotion labels.
-          $promoLinks = $promoLabelManager->getCurrentSkuPromos($sku_entity, 'links', $promotion_nodes);
-          $build['promotions']['#value'] = implode('</br>', $promoLinks);
+          // Directly add dynamic promotion labels.
+          $promoDynamicLabels = $promoLabelManager->getSkuPromoDynamicLabel($sku_entity, $promotion_nodes);
+          if (!empty($promoDynamicLabels)) {
+            $build['promotions']['dynamic_label'] = [
+              '#type' => 'html_tag',
+              '#tag' => 'div',
+              '#value' => $promoDynamicLabels,
+              '#attributes' => [
+                'class' => 'promotions-dynamic-label sku-' . $sku_entity->id(),
+              ],
+            ];
+          }
           break;
       }
     }
