@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -120,28 +119,4 @@ function alshaya_pb_transac_alshaya_search_facet_price_alter($range, &$displayVa
 
   // Remove decimal points from price block filter.
   $displayValue = str_replace('.' . str_repeat('0', $config->get('decimal_points')), '', $displayValue);
-}
-
-/**
- * Implements hook_metatags_alter().
- */
-function alshaya_pb_transac_metatags_alter(array &$metatags, array &$context) {
-  if ($context['entity'] instanceof Term) {
-    // Getting topmost parent of the category.
-    $topmost_parent = array_slice(\Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->loadAllParents($context['entity']->id()), -1)[0];
-
-    // Getting 'en' name of the parent.
-    $translated_term = \Drupal::service('entity.repository')->getTranslationFromContext($topmost_parent, 'en');
-    $parent_term_name = $translated_term->getName();
-
-    // Matching if the name is Sale change the metadata of the page.
-    if ($parent_term_name === 'Sale') {
-      $meta_variables = \Drupal::configFactory()->get('alshaya_seo_transac.meta_variables');
-      $metatags['title'] = $meta_variables->get('sale_pb_title');
-      $metatags['description'] = $meta_variables->get('sale_pb_description');
-      $metatags['keywords'] = $meta_variables->get('sale_pb_keywords');
-    }
-  }
 }

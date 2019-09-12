@@ -18,7 +18,7 @@ function alshaya_pb_transac_update_8014() {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs([
       'metatag.metatag_defaults.taxonomy_term__acq_product_category',
-      'alshaya_seo_transac.meta_variables',
+      'metatag.metatag_defaults.node__advanced_page',
     ], 'alshaya_seo_transac');
 }
 
