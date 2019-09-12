@@ -1,0 +1,14 @@
+.region-top-header {
+  @include breakpoint($above-palm) {
+    background: $header_bg;
+  }
+}
+
+header[role="banner"] {
+  position: fixed;
+  background: $header_bg;
+  width: 100%;
+  top: 0;
+  z-index: $z-60;
+  border-bottom: 0.0625rem solid $header_border;
+}

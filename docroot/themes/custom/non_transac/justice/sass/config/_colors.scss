@@ -1,0 +1,39 @@
+// Define theme colors here.
+$white-smoke: #f3f3f3;
+$black-smoke: #333;
+$dark-pink: #eb008b;
+$white: #fff;
+$black: #000;
+
+//border
+$primary_border: $white-smoke;
+
+//links
+$primary_link: $white-smoke;
+$secondary_link: $dark-pink;
+
+// header
+$header_bg: $white;
+$header_text: $black;
+$header_border: $primary_border;
+
+//header menu
+$header_menu_bg: $white-smoke;
+$header_menu_mobile_bg: $white;
+$header_menu_text: $black-smoke;
+$header_menu_text_hover: $secondary_link;
+$burger_menu_icon: $dark-pink;
+$burger_menu_icon_bg: $white;
+$burger_menu_link: $black-smoke;
+$burger_menu_arrow: rgba(0, 0, 0, 0.5);
+
+// store finder
+$store_finder_icon: $dark-pink;
+$store_header_link: $black;
+
+//language_switcher
+$language_switcher_text: $black;
+
+//signup block
+$signup_text: $black;
+$signup_bg: $white;
