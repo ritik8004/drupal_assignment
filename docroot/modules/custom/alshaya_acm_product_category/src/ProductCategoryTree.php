@@ -243,6 +243,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         // @see alshaya_main_menu_alshaya_main_menu_links_alter().
         'depth' => (int) $term->depth_level,
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
+        'move_to_right' => !is_null($term->field_move_to_right_value) ? (bool) $term->field_move_to_right_value : FALSE,
       ];
 
       if (!$term->display_in_desktop) {
@@ -504,6 +505,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // For the lhn.
     $query->leftJoin('taxonomy_term__field_show_in_lhn', 'tlhn', 'tlhn.entity_id = tfd.tid');
     $query->fields('tlhn', ['field_show_in_lhn_value']);
+
+    // For the `move to right`.
+    $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
+    $query->fields('mtr', ['field_move_to_right_value']);
 
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent_target_id', $parent_tid);

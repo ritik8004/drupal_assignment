@@ -18,6 +18,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_meta_tags
     - field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
     - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
+    - field.field.taxonomy_term.acq_product_category.field_move_to_right
     - field.field.taxonomy_term.acq_product_category.field_override_target_link
     - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
     - field.field.taxonomy_term.acq_product_category.field_pdp_layout
@@ -270,6 +271,7 @@ third_party_settings:
         - field_include_in_desktop
         - field_include_in_mobile_tablet
         - field_show_in_lhn
+        - field_move_to_right
       parent_name: group_mega_menu_content
       weight: 21
       format_type: details
@@ -429,6 +431,13 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
+  field_move_to_right:
+    weight: 31
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
     region: content
   field_override_target_link:
     type: boolean_checkbox
