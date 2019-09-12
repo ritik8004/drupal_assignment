@@ -1,0 +1,32 @@
+@import '../../../config/_config.scss';
+
+.block-sign-up-desktop {
+  color: $signup_text;
+  width: 19%;
+  text-align: $left;
+
+  &::after {
+    content: '';
+    background-repeat: no-repeat;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-size: contain;
+    background-position: center;
+    display: inline-block;
+    vertical-align: -1rem;
+    background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-email.svg');
+
+    @include breakpoint($upto-lap) {
+      vertical-align: -1.5rem;
+    }
+  }
+
+  @include breakpoint($above-palm) {
+    background-color: $signup_bg;
+  }
+
+  a {
+    color: $signup_text;
+    font-size: 0.9375rem;
+  }
+}

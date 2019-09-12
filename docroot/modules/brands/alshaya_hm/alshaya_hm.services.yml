@@ -4,5 +4,6 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'
+      - '@renderer'
     tags:
       - { name: 'event_subscriber' }

@@ -141,9 +141,11 @@
   }
 
   @include breakpoint($tablet) {
-    .checkout-login-actions-wrapper {
-      &.form-actions {
-        float: none;
+    .social-signin-enabled {
+      .checkout-login-actions-wrapper {
+        &.form-actions {
+          float: none;
+        }
       }
     }
   }

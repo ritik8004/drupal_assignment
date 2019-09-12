@@ -292,12 +292,22 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
                                       array &$complete_form) {
     parent::validatePaymentForm($pane_form, $form_state, $complete_form);
 
+    if ($form_state->getTriggeringElement()['#parents'][0] != 'actions') {
+      return;
+    }
+
+    $cko_card_token = $form_state->getValue('cko_card_token') ?? '';
+
     $payment_method = $form_state->getValue($pane_form['#parents'])['payment_details_wrapper']['payment_method_checkout_com'] ?? [];
+    $payment_card = $payment_method['payment_card'] ?? '';
+    if ($payment_card == 'new') {
+      $payment_card = '';
+    }
 
     // Ensure we have at-least one out of the two possible tokens.
     // For saved cards we will have payment_card, for new we will
     // have cko_card_token.
-    if (empty($payment_method['payment_card']) && empty($form_state->getValue('cko_card_token'))) {
+    if (empty($payment_card) && empty($cko_card_token)) {
       $form_state->setErrorByName('custom', $this->t('Transaction has been declined. Please try again later.'));
       $this->messenger()->addError($this->t('Transaction has been declined. Please try again later.'));
       $this->getLogger('CheckoutComPaymentPlugin')->warning('Payment form was submitted without card info. Form data: @data', [

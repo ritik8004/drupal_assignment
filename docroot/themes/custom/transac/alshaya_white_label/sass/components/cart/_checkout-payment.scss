@@ -309,6 +309,7 @@
 
   @include breakpoint($desktop) {
     width: 28%;
+    max-width: 12.3125rem;
     top: -0.5rem;
     #{$left}: 25%;
   }
