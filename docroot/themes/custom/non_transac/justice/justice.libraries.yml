@@ -3,34 +3,15 @@ global:
   css:
     theme:
       dist/css/global.ltr.css: {}
-
-block-logo-navigation:
+      
+form-element-textual:
   version: VERSION
   css:
     theme:
-      dist/css/01-molecules/00-header-primary/block-logo-navigation/block-logo-navigation.ltr.css: {}
+      dist/css/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
 
-menu-logo-navigation:
+modal-email-signup:
   version: VERSION
   css:
     theme:
-      dist/css/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
-
-block-header-language:
-  version: VERSION
-  css:
-    theme:
-      dist/css/01-molecules/01-header-secondary/block-header-language/block-header-language.ltr.css: {}
-      dist/css/01-molecules/01-header-secondary/block-header-language/language-switcher.ltr.css: {}
-
-block-header-store:
-  version: VERSION
-  css:
-    theme:
-      dist/css/01-molecules/01-header-secondary/block-header-store/block-header-store.ltr.css: {}
-
-block-header-sign-up:
-  version: VERSION
-  css:
-    theme:
-      dist/css/01-molecules/01-header-secondary/block-header-sign-up/block-header-sign-up.ltr.css: {}
+      dist/css/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}

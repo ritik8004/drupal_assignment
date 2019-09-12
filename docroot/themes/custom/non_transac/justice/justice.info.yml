@@ -21,30 +21,7 @@ libraries:
   - justice/global
 
 libraries-extend:
-  whitelabel/menu-logo-navigation:
-    - justice/menu-logo-navigation
-  whitelabel/block-logo-navigation:
-    - justice/block-logo-navigation
-  whitelabel/block-header-language:
-    - justice/block-header-language
-  whitelabel/block-header-store:
-    - justice/block-header-store
-  whitelabel/block-header-sign-up:
-    - justice/block-header-sign-up
-
-component-libraries:
-  atoms:
-    paths:
-      - components/_patterns/00-atoms
-  molecules:
-    paths:
-      - components/_patterns/01-molecules
-  organisms:
-    paths:
-      - components/_patterns/02-organisms
-  templates:
-    paths:
-      - components/_patterns/03-templates
-  pages:
-    paths:
-      - components/_patterns/04-pages
+  whitelabel/form-element-textual:
+    - justice/form-element-textual
+  whitelabel/modal-email-signup:
+    - justice/modal-email-signup
