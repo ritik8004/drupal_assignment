@@ -1,5 +1,0 @@
-field-promo-block:
-  version: VERSION
-  css:
-    theme:
-      dist/css/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
