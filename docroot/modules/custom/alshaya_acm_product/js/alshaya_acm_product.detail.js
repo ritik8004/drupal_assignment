@@ -122,7 +122,19 @@
             Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
           }
 
-          // @TODO: Update quantity dropdown.
+          // Update quantity dropdown based on stock available for the variant.
+          $('select[name="quantity"] option', this).each(function () {
+            if ($(this).val() > variantInfo.stock.qty) {
+              if ($(this).is(':selected')) {
+                $('select[name="quantity"] option:first').attr('selected', 'selected').prop('selected', true);
+              }
+
+              $(this).attr('disabled', 'disabled').prop('disabled', true);
+            }
+            else {
+              $(this).removeAttr('disabled').removeProp('disabled');
+            }
+          });
         });
 
         $(this).on('variant-selected', function (event, variant, code) {
