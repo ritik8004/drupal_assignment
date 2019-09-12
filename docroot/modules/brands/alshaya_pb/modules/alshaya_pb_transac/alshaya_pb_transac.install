@@ -14,7 +14,7 @@ use Drupal\Core\Site\Settings;
  *
  * Updating metatag configs.
  */
-function alshaya_pb_transac_update_8014() {
+function alshaya_pb_transac_update_8016() {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs([
       'metatag.metatag_defaults.taxonomy_term__acq_product_category',
