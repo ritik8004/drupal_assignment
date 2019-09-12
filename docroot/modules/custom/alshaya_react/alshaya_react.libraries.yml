@@ -1,0 +1,11 @@
+react:
+  version: 1.y
+  header: true
+  js:
+    https://unpkg.com/react@16/umd/react.production.min.js: { external: true, minified: false, crossorigin: true }
+    https://unpkg.com/react-dom@16/umd/react-dom.production.min.js: { external: true, minified: false, crossorigin: true }
+    https://unpkg.com/babel-standalone@6.15.0/babel.min.js: { external: true, minified: true }
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/drupal

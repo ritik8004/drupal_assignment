@@ -1,0 +1,4 @@
+name: Alshaya React Test
+type: module
+description: 'Example react app for Alshaya.'
+core: 8.x

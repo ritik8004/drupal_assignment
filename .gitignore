@@ -149,3 +149,6 @@ alshaya_behat/vendor
 alshaya_behat/media
 
 scripts/integration/includes/global-api-settings.inc.sh
+
+# node_modules
+node_modules/

@@ -1,0 +1,4 @@
+name: Alshaya React
+type: module
+description: 'Implement react app for Alshaya.'
+core: 8.x
