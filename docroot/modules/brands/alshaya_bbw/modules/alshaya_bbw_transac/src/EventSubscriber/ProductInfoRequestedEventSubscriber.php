@@ -135,28 +135,52 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $return = [];
     if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
       $return['description'][] = [
-        'label' => ['#markup' => $this->t('Fragrance Description')],
+        'label' => [
+          '#markup' => $this->t(
+            'Fragrance Description',
+            [],
+            ['langcode' => $sku_entity->language()->getId()]
+          ),
+        ],
         'value' => ['#markup' => $fragrance_description],
       ];
     }
 
     if ($overview = $sku_entity->get('attr_description')->getValue()) {
       $return['description'][] = [
-        'label' => ['#markup' => $this->t('Overview')],
+        'label' => [
+          '#markup' => $this->t(
+            'Overview',
+            [],
+            ['langcode' => $sku_entity->language()->getId()]
+          ),
+        ],
         'value' => ['#markup' => $overview[0]['value']],
       ];
     }
 
     if ($usage = $sku_entity->get('attr_usage')->getString()) {
       $return['description'][] = [
-        'label' => ['#markup' => $this->t('Usage')],
+        'label' => [
+          '#markup' => $this->t(
+            'Usage',
+            [],
+            ['langcode' => $sku_entity->language()->getId()]
+          ),
+        ],
         'value' => ['#markup' => $usage],
       ];
     }
 
     if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
       $return['description'][] = [
-        'label' => ['#markup' => $this->t('More info')],
+        'label' => [
+          '#markup' => $this->t(
+            'More info',
+            [],
+            ['langcode' => $sku_entity->language()->getId()]
+          ),
+        ],
         'value' => ['#markup' => $more_info],
       ];
     }
