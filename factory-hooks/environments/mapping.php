@@ -109,6 +109,12 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'bbwae_dev',
       ],
     ],
+    'mckw' => [
+      '01dev' => [
+        'magento' => 'mc_upgrade',
+        'conductor' => 'mckw_dev',
+      ],
+    ],
     'mcsa' => [
       '01dev' => [
         'magento' => 'mc_qa',

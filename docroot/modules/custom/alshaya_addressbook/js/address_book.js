@@ -8,7 +8,6 @@
 
   Drupal.behaviors.address = {
     attach: function (context, settings) {
-
       function toggleOverlay(button, className) {
         $(button).click(function () {
           $('body').removeClass(className);
@@ -23,14 +22,6 @@
           toggleOverlay('.ui-dialog-titlebar-close', 'modal-overlay');
           toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
         });
-      });
-
-      $(window).on('resize', function (e) {
-        if ($(window).width() > 768) {
-          $('.back-link').click(function (event) {
-            event.preventDefault();
-          });
-        }
       });
     }
   };

@@ -27,8 +27,8 @@ $magentos = [
       'store_id' => ['en' => 7, 'ar' => 6],
     ],
   ],
-  'mc_checkout' => [
-    'url' => 'http://checkoutcom-6htgp7i-z3gmkbwmwrl4g.eu.magentosite.cloud',
+  'mc_upgrade' => [
+    'url' => 'http://magento-upgrade-kb5pcqa-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
       'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
