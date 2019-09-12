@@ -1,3 +1,9 @@
+global:
+  version: VERSION
+  css:
+    theme:
+      dist/css/global.ltr.css: {}
+      
 form-element-textual:
   version: VERSION
   css:
