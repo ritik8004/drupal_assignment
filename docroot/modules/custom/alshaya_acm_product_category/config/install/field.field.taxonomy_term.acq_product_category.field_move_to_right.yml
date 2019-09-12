@@ -11,7 +11,7 @@ bundle: acq_product_category
 label: 'Move to right in mega menu'
 description: 'This will move the category and all the direct children of this category to the right side in the mega menu. This only works with the L2 terms only.'
 required: false
-translatable: true
+translatable: false
 skip_translation_check: 0
 default_value:
   -
