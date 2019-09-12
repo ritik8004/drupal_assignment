@@ -12,19 +12,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Updating metatag configs.
- */
-function alshaya_pb_transac_update_8016() {
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs([
-      'metatag.metatag_defaults.taxonomy_term__acq_product_category',
-      'metatag.metatag_defaults.node__advanced_page',
-    ], 'alshaya_seo_transac');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable free design services module.
  */
 function alshaya_pb_transac_update_8013() {
