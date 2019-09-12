@@ -43,6 +43,7 @@
         .once('process-validation')
         .each(function () {
           var form = $(this).closest('form');
+          Drupal.checkoutComRemoveNameAttribute(form);
 
           $(form).once('bind-client-side').each(function () {
             try {
@@ -116,7 +117,6 @@
 
     // Submit form if card is tokenised and there are no form errors.
     if (Drupal.checkoutComTokenised === true && Drupal.checkoutComProcessed === true) {
-      Drupal.checkoutComRemoveNameAttribute(form);
       form.submit();
       return;
     }
@@ -187,7 +187,7 @@
 
   // Try to create card token for checkout.com if it's not already generated.
   $.fn.checkoutComCreateCardToken = function() {
-    if ($('#cardNumber').length === 0) {
+    if (!$('#cardNumber').is(':visible') || $('#cardToken').length === 0) {
       // When using tokenised card, we don't need to check for validations.
       Drupal.checkoutComTokenisationProcessed = true;
       Drupal.checkoutComTokenised = true;
