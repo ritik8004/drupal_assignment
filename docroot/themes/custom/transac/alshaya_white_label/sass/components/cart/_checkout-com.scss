@@ -221,7 +221,7 @@
 
         .cvv-help-text-wrapper {
           @include breakpoint($only-mobile) {
-            top: 1.75rem;
+            top: 2.1875rem;
             #{$left}: 10.5rem;
 
             html[lang=ar] & {
