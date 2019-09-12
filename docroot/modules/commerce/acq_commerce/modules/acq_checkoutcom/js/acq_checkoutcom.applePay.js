@@ -140,25 +140,6 @@
     });
   }
 
-  Drupal.behaviors.acqCheckoutComApplePay = {
-    attach: function (context, settings) {
-      // Proceed if ApplePay is supported.
-      $(document).once('apple-pay').each(function () {
-        if (window.ApplePaySession) {
-          // Show Apple pay at once, we will hide again quickly if something
-          // goes wrong.
-          $('#payment_method_checkout_com_applepay', context).addClass('supported');
-
-          // Do next check only if user has selected apple pay.
-          if ($('#ckoApplePayButton').length > 0) {
-            let applePay = new CheckoutComApplePay(settings, context);
-            launchApplePay(applePay);
-          }
-        }
-      });
-    }
-  };
-
   /**
    * Get supported version in specific device / browser.
    *
@@ -185,5 +166,17 @@
     // Begin session
     applePaySessionObject.begin();
   };
+
+  if (window.ApplePaySession) {
+    // Show Apple pay at once, we will hide again quickly if something
+    // goes wrong.
+    $('#payment_method_checkout_com_applepay').addClass('supported');
+
+    // Do next check only if user has selected apple pay.
+    if ($('#ckoApplePayButton').length > 0) {
+      let applePay = new CheckoutComApplePay(drupalSettings, $(document));
+      launchApplePay(applePay);
+    }
+  }
 
 })(jQuery, Drupal, drupalSettings);
