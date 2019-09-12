@@ -10,12 +10,12 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Update metatags for categories.
+ * Add gtm block config.
  */
-function alshaya_seo_transac_update_8408() {
+function alshaya_seo_transac_update_8406() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['metatag.metatag_defaults.taxonomy_term__acq_product_category', 'alshaya_seo_transac.meta_variables'],
+    ['block.block.gtmuserdata'],
     'alshaya_seo_transac',
     'install'
   );
