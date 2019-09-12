@@ -1,0 +1,23 @@
+.page-generic {
+  padding-top: 8.5rem;
+
+  @include breakpoint($upto-lap) {
+    padding-top: 5rem;
+  }
+
+  @include breakpoint($upto-palm) {
+    padding-top: 3rem;
+  }
+}
+
+.region-content {
+  @include breakpoint($upto-palm) {
+    padding-#{$left}: 1rem;
+    padding-#{$right}: 1rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 64rem;
+    padding: 0;
+  }
+}

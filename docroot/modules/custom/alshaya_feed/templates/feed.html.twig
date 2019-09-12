@@ -1,6 +1,6 @@
 <product>
   <sku>{{ product.sku }}</sku>
-  <name>{{ product.name }}</name>
+  <name><![CDATA[{{ product.name }}]]></name>
   <url>{{ product.url }}</url>
   <type>{{ product.type_id }}</type>
   <status>{{ product.status }}</status>
@@ -16,8 +16,16 @@
     </category>
     {% endfor %}
   </categories>
-  <short_description>{{ product.short_description }}</short_description>
-  <description>{{ product.description }}</description>
+  <short_description>
+    {% if product.short_description is not empty %}
+      <![CDATA[{{ product.short_description }}]]>
+    {% endif %}
+  </short_description>
+  <description>
+    {% if product.description is not empty %}
+      <![CDATA[{{ product.description }}]]>
+    {% endif %}
+  </description>
   <custom_attributes>
     {% if product.attributes|length > 0 %}
       {% for product_attribute in product.attributes %}
