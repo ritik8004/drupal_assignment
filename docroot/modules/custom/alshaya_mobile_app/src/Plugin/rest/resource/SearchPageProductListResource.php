@@ -204,7 +204,7 @@ class SearchPageProductListResource extends ResourceBase {
     $query->setOption('search_api_spellcheck', TRUE);
 
     // Prepare and execute query and pass result set.
-    return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query);
+    return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, $keyword);
   }
 
   /**

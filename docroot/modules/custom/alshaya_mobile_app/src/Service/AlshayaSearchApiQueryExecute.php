@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -10,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Entity\Index;
+use Drupal\search_api\Query\ResultSet;
 use Drupal\views\Views;
 use Drupal\facets\Result\Result;
 use Drupal\facets\QueryType\QueryTypePluginManager;
@@ -207,6 +209,13 @@ class AlshayaSearchApiQueryExecute {
   private $swatchesHelper;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -233,6 +242,8 @@ class AlshayaSearchApiQueryExecute {
    *   SKU Price Helper.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
    *   Swatches helper service object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(
     RequestStack $requestStack,
@@ -246,7 +257,8 @@ class AlshayaSearchApiQueryExecute {
     AlshayaPlpSortOptionsService $sort_option_service,
     AlshayaPlpSortLabelsService $sort_labels_service,
     SkuPriceHelper $price_helper,
-    SwatchesHelper $swatches_helper
+    SwatchesHelper $swatches_helper,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->swatchesHelper = $swatches_helper;
     $this->currentRequest = $requestStack->getCurrentRequest();
@@ -260,6 +272,7 @@ class AlshayaSearchApiQueryExecute {
     $this->plpSortOptions = $sort_option_service;
     $this->plpSortLabels = $sort_labels_service;
     $this->priceHelper = $price_helper;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -267,11 +280,13 @@ class AlshayaSearchApiQueryExecute {
    *
    * @param \Drupal\search_api\Query\QueryInterface $query
    *   Search api query object.
+   * @param string|null $keyword
+   *   Search keyword.
    *
    * @return array
    *   Query results.
    */
-  public function prepareExecuteQuery(QueryInterface $query) {
+  public function prepareExecuteQuery(QueryInterface $query, ?string $keyword = '') {
     // Get all facets for the given facet source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($this->getFacetSourceId());
 
@@ -439,7 +454,12 @@ class AlshayaSearchApiQueryExecute {
     }
 
     // Execute the search.
-    $results = $query->execute();
+    if (empty($keyword) || strlen($keyword) >= $this->getMinSearchKeyCount()) {
+      $results = $query->execute();
+    }
+    else {
+      $results = new ResultSet($query);
+    }
 
     // Process all facets in advance, instead of doing it on build.
     // We are updating facet results, in below foreach. So, we want to
@@ -1091,6 +1111,17 @@ class AlshayaSearchApiQueryExecute {
   public function setResultTotalCount(int $count) {
     $this->resultTotalCount = $count;
     return $this;
+  }
+
+  /**
+   * Get minimum length for search keywords.
+   *
+   * @return int
+   *   Minimum length.
+   */
+  private function getMinSearchKeyCount() {
+    $config = $this->configFactory->get('views.view.search');
+    return (int) ($config->get('display.default.display_options.filters.search_api_fulltext.min_length'));
   }
 
 }
