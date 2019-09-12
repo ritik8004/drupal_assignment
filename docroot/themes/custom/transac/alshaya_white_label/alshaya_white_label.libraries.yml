@@ -214,3 +214,10 @@ optionlist_menu:
 back_to_top:
   js:
     js/back_to_top.js: {}
+
+megamenu_inline_layout:
+  js:
+    conditional-sass/megamenu-inline-layout/js/megamenu-inline-layout.js: {}
+  css:
+    theme:
+      css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css: {}
