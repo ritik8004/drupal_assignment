@@ -309,20 +309,3 @@ function alshaya_seo_user_presave(EntityInterface $entity) {
     \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
   }
 }
-
-/**
- * Implements hook_module_implements_alter().
- */
-function alshaya_seo_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'robotstxt') {
-    if (isset($implementations['simple_sitemap'])) {
-      // Remove hook_robotstxt() implementation of the simple_sitemap module.
-      unset($implementations['simple_sitemap']);
-    }
-  }
-  if ($hook == 'tokens') {
-    $group = $implementations['alshaya_seo'];
-    unset($implementations['alshaya_seo']);
-    $implementations['alshaya_seo'] = $group;
-  }
-}
