@@ -15,11 +15,34 @@ use Drupal\Core\Site\Settings;
  * Update meta variables.
  */
 function alshaya_pb_transac_update_8014() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_seo_transac.meta_variables'],
-    'alshaya_seo_transac'
-  );
+  $strings = [
+    'title_prefix' => [
+      'en' => '',
+      'ar' => 'اتش اند ام',
+    ],
+    'desc_start' => [
+      'en' => 'Get [custom_meta:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [custom_meta:year] luxury and high-quality [term:name] collection sale and offers',
+      'ar' => 'كويت سيتي',
+    ],
+    'desc_start_not_sale' => [
+      'en' => 'Shop luxury and high-quality [term:name]',
+      'ar' => 'كويت سيتي',
+    ],
+    'sno_suffix' => [
+      'en' => '- [term:name] -',
+      'ar' => '- [term:name] -',
+    ],
+    'sale_suffix' => [
+      'en' => '- [term:parent]',
+      'ar' => '- [term:parent]',
+    ],
+    'title_suffix' => [
+      'en' => '[custom_meta:year] Sale [custom_meta:sale_suffix]',
+      'ar' => '[custom_meta:year] Sale [custom_meta:sale_suffix]',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

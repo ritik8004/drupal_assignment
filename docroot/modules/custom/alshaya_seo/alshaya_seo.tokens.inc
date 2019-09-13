@@ -270,13 +270,22 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'title_prefix':
-          $replacements[$original] = isset($sale) ? $token_service->replace($seo_config->get('title_prefix'), ['term' => $category_term]) : t('Shop');
+          $value = t('title_prefix');
+          $replacements[$original] = isset($sale)
+            ? $value == 'title_prefix'
+            ? '' : $token_service->replace($seo_config->get('title_prefix'), ['term' => $category_term])
+            : t('Shop');
           break;
 
         case  'title_suffix':
-          $replacements[$original] = isset($sale)
-            ? $token_service->replace('[custom_meta:year] Sale [custom_meta:sale_suffix]', ['term' => $category_term])
-            : $token_service->replace($seo_config->get('title_suffix_not_sale'), ['term' => $category_term]);
+          if (isset($sale)) {
+            $value = t('title_suffix');
+            $replacements[$original] = $value == 'title_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $value = t('title_suffix_not_sale');
+            $replacements[$original] = $value == 'title_suffix_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
           break;
 
         case 'text_before_cod':
