@@ -16,7 +16,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use http\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -332,7 +331,7 @@ class CartHelper {
     $quantity = (int) $quantity;
 
     if (empty($quantity)) {
-      throw new InvalidArgumentException();
+      throw new \InvalidArgumentException();
     }
 
     switch ($sku->bundle()) {
@@ -341,7 +340,7 @@ class CartHelper {
         $selected_variant_sku = $data['selected_variant_sku'] ?? '';
         $variant = SKU::loadFromSku($selected_variant_sku);
         if (!($variant instanceof SKUInterface)) {
-          throw new InvalidArgumentException();
+          throw new \InvalidArgumentException();
         }
 
         if ($cart->hasItem($variant->getSku())) {
