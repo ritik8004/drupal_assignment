@@ -5,6 +5,4 @@ react:
     https://unpkg.com/react@16/umd/react.production.min.js: { external: true, minified: false, crossorigin: true }
     https://unpkg.com/react-dom@16/umd/react-dom.production.min.js: { external: true, minified: false, crossorigin: true }
   dependencies:
-    - core/jquery
     - core/drupalSettings
-    - core/drupal
