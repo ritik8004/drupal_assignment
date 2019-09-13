@@ -7,7 +7,7 @@ modules.
 # Prerequisite :bell:
 - You have already setup vagrant
 - `vagrant ssh`
-- Execute `npm install` / `yarn install` on the alshaya root directory. :see_no_evil: 
+- From Alshaya root directory, Execute `npm install` / `yarn install`. :see_no_evil: 
 
 # Usage :hammer_and_wrench:
 - Example module created: `./modules/alshaya_react_test` :file_folder:
@@ -15,11 +15,11 @@ modules.
     -  `package.json`: Contains `scripts` to execute command from module directory.
     -  `.babelrc`: Contains babel related configs. we are using babel-loader with webapck.
     - `webpack.config.js`: We are using webpack to transpile js files
-    - `gulpfile.js`: (optional) :see_no_evil:
-        > To transpile *.js files, you won't require gulpfile.js But in case if 
+    - (optional) `gulpfile.js`: :see_no_evil:
+        > :exclamation: To transpile *.js files, you won't require gulpfile.js But in case if 
         you want to use gulpfile with webpack, the examples are added in the 
         file. (ref: https://www.npmjs.com/package/gulp-webpack)
 - Transpile your module's react/js files. :gear:
-    > Execute these commands from your module directory only.
+    > :sparkles: Execute these commands from your module directory only.
     - `npm run build` :speedboat:
     - `npm run watch` :rowboat:
