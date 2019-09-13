@@ -167,7 +167,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
     if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
       $description_value .= '<div class="care-instructions-wrapper">';
-      $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions') . '</div>';
+      $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions', [], ['langcode' => $sku_entity->language()->getId()]) . '</div>';
       if (!empty($washing_instructions)) {
         $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
       }
@@ -203,7 +203,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if ($this->configFactory->get('alshaya_acm.settings')->get('pdp_show_specifications')) {
       $specifications = [
         'label' => [
-          '#markup' => $this->t('Specifications'),
+          '#markup' => $this->t('Specifications', [], ['langcode' => $sku_entity->language()->getId()]),
         ],
         'value' => [
           "#theme" => 'item_list',
@@ -214,25 +214,25 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
         $specifications['value']['#items'][] = $this->t('Style Code: @value', [
           '@value' => $attr_style_code,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       if ($attr_color = $sku_entity->get('attr_color')->getString()) {
         $specifications['value']['#items'][] = $this->t('Color: @value', [
           '@value' => $attr_color,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       if ($attr_season = $sku_entity->get('attr_season')->getString()) {
         $specifications['value']['#items'][] = $this->t('Season: @value', [
           '@value' => $attr_season,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
         $specifications['value']['#items'][] = $this->t('Product brand: @value', [
           '@value' => $attr_brand,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       $prod_description[] = $specifications;

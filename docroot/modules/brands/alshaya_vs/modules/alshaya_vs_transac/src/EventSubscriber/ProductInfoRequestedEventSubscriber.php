@@ -93,7 +93,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $desc = $this->productHelper->createShortDescription($description['description'][0]['value']['#markup']);
       $short_desc = [
         'label' => [
-          '#markup' => $this->t('Short Description'),
+          '#markup' => $this->t('Short Description', [], ['langcode' => $sku_entity->language()->getId()]),
         ],
         'value' => [
           '#markup' => $desc['html'],
