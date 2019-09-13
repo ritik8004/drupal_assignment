@@ -193,8 +193,7 @@ class AlshayaFeedSkuInfoHelper {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
         $swatches = $this->skuImagesManager->getSwatchData($sku);
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
-          $child = SKU::loadFromSku($child_sku);
-          $child = $this->skuInfoHelper->getEntityTranslation($child, $lang);
+          $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
             continue;
           }
