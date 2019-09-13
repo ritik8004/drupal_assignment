@@ -93,7 +93,7 @@ function alshaya_seo_token_info() {
     'name' => t('Start text in description.'),
   ];
 
-  $info['tokens']['alshaya_seo']['sale_suffix'] = [
+  $info['tokens']['alshaya_seo']['title_sub_suffix'] = [
     'name' => t('Text after sale in title.'),
   ];
 
@@ -271,8 +271,8 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'title_prefix':
           if (isset($sale)) {
-            $value = t('title_prefix');
-            $replacements[$original] = $value == 'title_prefix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_title_prefix');
+            $replacements[$original] = $value == 'alshaya_seo_sale_title_prefix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
             $replacements[$original] = t('Shop');
@@ -281,56 +281,56 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case  'title_suffix':
           if (isset($sale)) {
-            $value = t('title_suffix');
-            $replacements[$original] = $value == 'title_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_title_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_sale_title_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $value = t('title_suffix_not_sale');
-            $replacements[$original] = $value == 'title_suffix_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_title_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_title_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
 
         case 'text_before_cod':
           if (isset($sale)) {
-            $value = t('text_before_cod');
-            $replacements[$original] = $value == 'text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_text_before_cod');
+            $replacements[$original] = $value == 'alshaya_seo_sale_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $value = t('text_before_cod_not_sale');
-            $replacements[$original] = $value == 'text_before_cod_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_text_before_cod');
+            $replacements[$original] = $value == 'alshaya_seo_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
 
         case 'sno_suffix':
           if (isset($sale)) {
-            $value = t('sno_suffix');
-            $replacements[$original] = $value == 'sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_sno_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_sale_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $value = t('sno_suffix_not_sale');
-            $replacements[$original] = $value == 'sno_suffix_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_sno_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_sale_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
 
         case 'desc_start':
           if (isset($sale)) {
-            $value = t('desc_start');
-            $replacements[$original] = $value == 'desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_desc_start');
+            $replacements[$original] = $value == 'alshaya_seo_sale_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $value = t('desc_start_not_sale');
-            $replacements[$original] = $value == 'desc_start_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_desc_start');
+            $replacements[$original] = $value == 'alshaya_seo_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
 
-        case 'sale_suffix':
+        case 'title_sub_suffix':
           if (isset($sale)) {
-            $value = t('sale_suffix');
-            $replacements[$original] = $value == 'sale_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sale_title_sub_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_sale_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $value = t('sale_suffix_not_sale');
-            $replacements[$original] = $value == 'sale_suffix_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_title_sub_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
 

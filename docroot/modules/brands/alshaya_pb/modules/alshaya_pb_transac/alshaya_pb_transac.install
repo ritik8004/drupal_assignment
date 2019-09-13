@@ -16,47 +16,47 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_pb_transac_update_8015() {
   $strings = [
-    'title_prefix' => [
+    'alshaya_seo_sale_title_prefix' => [
       'en' => '',
       'ar' => 'اتش اند ام',
     ],
-    'title_suffix' => [
-      'en' => '[alshaya_seo:year] Sale [alshaya_seo:sale_suffix]',
-      'ar' => '[alshaya_seo:year] Sale [alshaya_seo:sale_suffix]',
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
+      'ar' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
     ],
-    'title_suffix_not_sale' => [
+    'alshaya_seo_title_suffix' => [
       'en' => 'Collection Online',
       'ar' => 'Collection Online',
     ],
-    'text_before_cod' => [
+    'alshaya_seo_sale_text_before_cod' => [
       'en' => '',
       'ar' => '',
     ],
-    'text_before_cod_not_sale' => [
+    'alshaya_seo_text_before_cod' => [
       'en' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of %sub_categories seperated by comma% %sub_cat1%, %sub_cat2%, %Sub_cat3, and Sub_cat4&.',
       'ar' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of %sub_categories seperated by comma% %sub_cat1%, %sub_cat2%, %Sub_cat3, and Sub_cat4&.',
     ],
-    'sno_suffix' => [
+    'alshaya_seo_sale_sno_suffix' => [
       'en' => '- [term:name] -',
       'ar' => '- [term:name] -',
     ],
-    'sno_suffix_not_sale' => [
+    'alshaya_seo_sno_suffix' => [
       'en' => '- [term:name] -',
       'ar' => '- [term:name] -',
     ],
-    'desc_start' => [
+    'alshaya_seo_sale_desc_start' => [
       'en' => 'Get [alshaya_seo:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [alshaya_seo:year] luxury and high-quality [term:name] collection sale and offers',
       'ar' => '',
     ],
-    'desc_start_not_sale' => [
+    'alshaya_seo_desc_start' => [
       'en' => 'Shop luxury and high-quality [term:name]',
       'ar' => '',
     ],
-    'sale_suffix' => [
+    'alshaya_seo_sale_title_sub_suffix' => [
       'en' => '- [term:parent]',
       'ar' => '- [term:parent]',
     ],
-    'sale_suffix_not_sale' => [
+    'alshaya_seo_title_sub_suffix' => [
       'en' => '- [term:parent]',
       'ar' => '- [term:parent]',
     ],
