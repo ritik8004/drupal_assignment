@@ -1,8 +1,0 @@
-text_before_cod: ''
-sno_suffix: ''
-desc_start: 'Get [custom_meta:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [custom_meta:year] [term:name] luxury and high-quality [term:name] for [term:parent:name] offers'
-desc_start_not_sale: 'Shop exclusive and luxury [custom_meta:brand_name] [term:name] for [term:parent:name]'
-sale_suffix: ''
-year: '2019'
-title_prefix: '[term:parent:name]'
-title_suffix: 'Collection for [term:parent] Online'
