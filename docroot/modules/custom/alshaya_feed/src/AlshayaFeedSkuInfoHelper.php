@@ -173,7 +173,7 @@ class AlshayaFeedSkuInfoHelper {
         'type_id' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
         'url' => $this->skuInfoHelper->getEntityUrl($node),
-        'short_description' => $short_desc['value']['#markup'] ?? '',
+        'short_description' => !empty($short_desc['value']) ? $this->renderer->renderPlain($short_desc['value']) : '',
         'description' => !empty($description) ? $this->renderer->renderPlain($description) : '',
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
@@ -193,7 +193,7 @@ class AlshayaFeedSkuInfoHelper {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
         $swatches = $this->skuImagesManager->getSwatchData($sku);
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
-          $child = SKU::loadFromSku($child_sku);
+          $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
             continue;
           }
