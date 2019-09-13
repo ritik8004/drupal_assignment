@@ -145,6 +145,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
       $concepts_markup = [
         '#theme' => 'product_concept_markup',
+        '#title' => $this->t('concept', [], ['langcode' => $sku_entity->language()->getId()]),
         '#concepts' => $concepts,
       ];
       $description_value .= $this->renderer->renderPlain($concepts_markup);
@@ -158,6 +159,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if (!empty($composition)) {
       $composition_markup = [
         '#theme' => 'product_composition_markup',
+        '#title' => $this->t('composition', [], ['langcode' => $sku_entity->language()->getId()]),
         '#composition' => ['#markup' => $composition],
       ];
       $description_value .= $this->renderer->renderPlain($composition_markup);
@@ -184,6 +186,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if (!empty($warning)) {
       $warning_markup = [
         '#theme' => 'product_article_warning_markup',
+        '#title' => $this->t('safety warning', [], ['langcode' => $sku_entity->language()->getId()]),
         '#warning' => ['#markup' => $warning],
       ];
       $description_value .= $this->renderer->renderPlain($warning_markup);

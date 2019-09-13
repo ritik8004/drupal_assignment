@@ -295,24 +295,28 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
 
   $items['product_composition_markup'] = [
     'variables' => [
+      'title' => NULL,
       'composition' => NULL,
     ],
   ];
 
   $items['product_article_warning_markup'] = [
     'variables' => [
+      'title' => NULL,
       'warning' => NULL,
     ],
   ];
 
   $items['product_concept_markup'] = [
     'variables' => [
+      'title' => NULL,
       'concepts' => NULL,
     ],
   ];
 
   $items['product_material_markup'] = [
     'variables' => [
+      'title' => NULL,
       'material' => NULL,
     ],
   ];
@@ -1688,6 +1692,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
       $composition_markup = [
         '#theme' => 'product_composition_markup',
+        '#title' => t('composition'),
       ];
 
       if (!empty($composition)) {
@@ -1702,6 +1707,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
       $warning_markup = [
         '#theme' => 'product_article_warning_markup',
+        '#title' => t('safety warning'),
       ];
 
       if (!empty($warning)) {
