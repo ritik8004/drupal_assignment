@@ -1,0 +1,20 @@
+@import '../../../config/_config.scss';
+
+.menu-terms-conditions {
+  @include breakpoint($desk) {
+    padding-#{$left}: 1.125rem;
+  }
+
+  li {
+    border-#{direction(right)}: 0;
+  }
+
+  a {
+    color: $footer_terms_condition;
+    text-decoration: underline;
+
+    &:hover {
+      color: $footer_terms_condition_hover;
+    }
+  }
+}

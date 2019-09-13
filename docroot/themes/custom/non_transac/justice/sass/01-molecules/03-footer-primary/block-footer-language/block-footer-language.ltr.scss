@@ -1,0 +1,51 @@
+@import '../../../config/_config.scss';
+
+.block-language-switcher__cookies {
+  background-color: $language_switcher_bg;
+  #{$left}: 0;
+
+  li {
+    .language-link {
+      padding: 1rem 2.6875rem;
+      border-radius: 0.3125rem;
+      background: $language_switcher_btn_bg;
+      color: $language_switcher-btn_text;
+      font-size: 1.125rem;
+      font-family: $jus_bold;
+
+      &.is-active {
+        background: $language_switcher_active_btn_bg;
+      }
+    }
+
+    a[hreflang="ar"] {
+      font-family: $jus_arabic_regular;
+      font-size: 0.9375rem;
+      font-weight: bold;
+      padding: 0;
+      padding: 0.875rem 3.125rem 0.75rem;
+    }
+
+    &:first-child::after {
+      display: none;
+    }
+  }
+}
+
+.block-language-switcher--cookies--content {
+  text-align: $left;
+
+  .language-switcher-close {
+    background: $language_switcher-close-btn_bg;
+    color: $language_switcher-close-btn_text;
+    top: 0.625rem;
+    #{$right}: 0.75rem;
+
+    &::before {
+      font-size: 3rem;
+      font-weight: bold;
+      vertical-align: -0.375rem;
+      padding: 0 0.1875rem;
+    }
+  }
+}
