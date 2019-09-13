@@ -16,9 +16,12 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Clear all cachetags related to oauth2_token.
+ * Delete unused image styles.
+ * Clear all cache tags related to oauth2_token.
  */
-function alshaya_acm_update_8013() {
+function alshaya_acm_update_8012() {
+  alshaya_config_delete_configs(['image.style.checkout_summary_block_thumbnail']);
+
   /** @var \Drupal\Core\Database\Connection $connection */
   $connection = \Drupal::service('database');
 
@@ -28,19 +31,6 @@ function alshaya_acm_update_8013() {
   $connection->delete('cachetags')
     ->condition('tag', 'oauth2_token:%', 'LIKE')
     ->execute();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Delete unused image styles.
- */
-function alshaya_acm_update_8012() {
-  alshaya_config_delete_configs(
-    [
-      'image.style.checkout_summary_block_thumbnail',
-    ]
-  );
 }
 
 /**
