@@ -1,0 +1,9 @@
+@import '../../../config/_config.scss';
+
+.field-promo-block {
+  & > .field__item {
+    @include breakpoint($above-palm) {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
