@@ -1,7 +1,1 @@
 min_shipping_amount: 99
-text_before_cod: '. Compare the latest [custom_meta:year] - [term:name] - packages at the best prices'
-sno_suffix: '- [term:name]'
-desc_start_sale: 'Get exclusive and delightful sale and offers'
-desc_start_not_sale: 'Shop exclusive and delightful [term:name] products'
-sale_suffix: ''
-year: '2019'

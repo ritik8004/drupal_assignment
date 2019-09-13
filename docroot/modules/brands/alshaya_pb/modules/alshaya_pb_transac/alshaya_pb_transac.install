@@ -14,31 +14,51 @@ use Drupal\Core\Site\Settings;
  *
  * Update meta variables.
  */
-function alshaya_pb_transac_update_8014() {
+function alshaya_pb_transac_update_8015() {
   $strings = [
     'title_prefix' => [
       'en' => '',
       'ar' => 'اتش اند ام',
     ],
-    'desc_start' => [
-      'en' => 'Get [custom_meta:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [custom_meta:year] luxury and high-quality [term:name] collection sale and offers',
-      'ar' => 'كويت سيتي',
+    'title_suffix' => [
+      'en' => '[alshaya_seo:year] Sale [alshaya_seo:sale_suffix]',
+      'ar' => '[alshaya_seo:year] Sale [alshaya_seo:sale_suffix]',
     ],
-    'desc_start_not_sale' => [
-      'en' => 'Shop luxury and high-quality [term:name]',
-      'ar' => 'كويت سيتي',
+    'title_suffix_not_sale' => [
+      'en' => 'Collection Online',
+      'ar' => 'Collection Online',
+    ],
+    'text_before_cod' => [
+      'en' => '',
+      'ar' => '',
+    ],
+    'text_before_cod_not_sale' => [
+      'en' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of %sub_categories seperated by comma% %sub_cat1%, %sub_cat2%, %Sub_cat3, and Sub_cat4&.',
+      'ar' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of %sub_categories seperated by comma% %sub_cat1%, %sub_cat2%, %Sub_cat3, and Sub_cat4&.',
     ],
     'sno_suffix' => [
       'en' => '- [term:name] -',
       'ar' => '- [term:name] -',
     ],
+    'sno_suffix_not_sale' => [
+      'en' => '- [term:name] -',
+      'ar' => '- [term:name] -',
+    ],
+    'desc_start' => [
+      'en' => 'Get [alshaya_seo:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [alshaya_seo:year] luxury and high-quality [term:name] collection sale and offers',
+      'ar' => '',
+    ],
+    'desc_start_not_sale' => [
+      'en' => 'Shop luxury and high-quality [term:name]',
+      'ar' => '',
+    ],
     'sale_suffix' => [
       'en' => '- [term:parent]',
       'ar' => '- [term:parent]',
     ],
-    'title_suffix' => [
-      'en' => '[custom_meta:year] Sale [custom_meta:sale_suffix]',
-      'ar' => '[custom_meta:year] Sale [custom_meta:sale_suffix]',
+    'sale_suffix_not_sale' => [
+      'en' => '- [term:parent]',
+      'ar' => '- [term:parent]',
     ],
   ];
 

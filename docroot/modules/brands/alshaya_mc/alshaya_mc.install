@@ -10,19 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Update meta variables.
- */
-function alshaya_mc_update_8318() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_seo_transac.meta_variables'],
-    'alshaya_seo_transac'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable alshaya_mobile_app module.
  */
 function alshaya_mc_update_8317() {

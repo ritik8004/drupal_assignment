@@ -17,8 +17,8 @@ use Drupal\node\NodeInterface;
 function alshaya_seo_token_info() {
   $info = [];
 
-  $info['types']['custom_meta'] = [
-    'name' => 'Custom Meta Tokens',
+  $info['types']['alshaya_seo'] = [
+    'name' => 'Alshaya SEO Tokens',
     'description' => t('Custom tokens for meta tags.'),
   ];
 
@@ -44,72 +44,72 @@ function alshaya_seo_token_info() {
     'dynamic' => TRUE,
   ];
 
-  $info['tokens']['custom_meta']['brand_name'] = [
+  $info['tokens']['alshaya_seo']['brand_name'] = [
     'name' => t('Brand name'),
     'description' => t('The brand name for the website.'),
   ];
 
-  $info['tokens']['custom_meta']['city1'] = [
+  $info['tokens']['alshaya_seo']['city1'] = [
     'name' => t('City 1'),
     'description' => t('City for meta data.'),
   ];
 
-  $info['tokens']['custom_meta']['city2'] = [
+  $info['tokens']['alshaya_seo']['city2'] = [
     'name' => t('City 2'),
     'description' => t('City for meta data.'),
   ];
 
-  $info['tokens']['custom_meta']['cities'] = [
+  $info['tokens']['alshaya_seo']['cities'] = [
     'name' => t('Cities'),
     'description' => t('Cities for meta data.'),
   ];
 
-  $info['tokens']['custom_meta']['country'] = [
+  $info['tokens']['alshaya_seo']['country'] = [
     'name' => t('Country'),
     'description' => t('The website country.'),
   ];
 
-  $info['tokens']['custom_meta']['usp1'] = [
+  $info['tokens']['alshaya_seo']['usp1'] = [
     'name' => t('USP1'),
   ];
 
-  $info['tokens']['custom_meta']['usp2'] = [
+  $info['tokens']['alshaya_seo']['usp2'] = [
     'name' => t('USP2'),
   ];
 
-  $info['tokens']['custom_meta']['usp3'] = [
+  $info['tokens']['alshaya_seo']['usp3'] = [
     'name' => t('USP3'),
   ];
 
-  $info['tokens']['custom_meta']['text_before_cod'] = [
+  $info['tokens']['alshaya_seo']['text_before_cod'] = [
     'name' => t('Text before COD.'),
   ];
 
-  $info['tokens']['custom_meta']['sno_suffix'] = [
+  $info['tokens']['alshaya_seo']['sno_suffix'] = [
     'name' => t('Sale and offers suffix.'),
   ];
 
-  $info['tokens']['custom_meta']['desc_start'] = [
+  $info['tokens']['alshaya_seo']['desc_start'] = [
     'name' => t('Start text in description.'),
   ];
 
-  $info['tokens']['custom_meta']['sale_suffix'] = [
+  $info['tokens']['alshaya_seo']['sale_suffix'] = [
     'name' => t('Text after sale in title.'),
   ];
 
-  $info['tokens']['custom_meta']['gender'] = [
+  $info['tokens']['alshaya_seo']['gender'] = [
     'name' => t('Gender category.'),
   ];
 
-  $info['tokens']['custom_meta']['year'] = [
+  $info['tokens']['alshaya_seo']['year'] = [
     'name' => t('Current year.'),
   ];
 
-  $info['tokens']['custom_meta']['title_prefix'] = [
+  $info['tokens']['alshaya_seo']['title_prefix'] = [
     'name' => t('Title Prefix.'),
   ];
 
-  $info['tokens']['custom_meta']['title_suffix'] = [
+  $info['tokens']['alshaya_seo']['title_suffix'] = [
     'name' => t('Title Suffix.'),
   ];
 
@@ -209,7 +209,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
   }
 
-  if ($type == 'custom_meta') {
+  if ($type == 'alshaya_seo') {
     $seo_config = \Drupal::configFactory()->get('alshaya_seo_transac.meta_variables');
     $brand_name = (string) t('seo_brand_name');
     $min_amount = $seo_config->get('min_shipping_amount');
@@ -262,19 +262,21 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'cities':
           $cities = [
-            $token_service->replace('[custom_meta:city1]'),
-            $token_service->replace('[custom_meta:city2]'),
+            $token_service->replace('[alshaya_seo:city1]'),
+            $token_service->replace('[alshaya_seo:city2]'),
           ];
 
           $replacements[$original] = implode(', ', array_filter($cities));
           break;
 
         case 'title_prefix':
-          $value = t('title_prefix');
-          $replacements[$original] = isset($sale)
-            ? $value == 'title_prefix'
-            ? '' : $token_service->replace($seo_config->get('title_prefix'), ['term' => $category_term])
-            : t('Shop');
+          if (isset($sale)) {
+            $value = t('title_prefix');
+            $replacements[$original] = $value == 'title_prefix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $replacements[$original] = t('Shop');
+          }
           break;
 
         case  'title_suffix':
@@ -289,25 +291,52 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'text_before_cod':
-          $replacements[$original] = $token_service->replace($seo_config->get('text_before_cod'), ['term' => $category_term]);
+          if (isset($sale)) {
+            $value = t('text_before_cod');
+            $replacements[$original] = $value == 'text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $value = t('text_before_cod_not_sale');
+            $replacements[$original] = $value == 'text_before_cod_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
           break;
 
         case 'sno_suffix':
-          $replacements[$original] = $token_service->replace($seo_config->get('sno_suffix'), ['term' => $category_term]);
+          if (isset($sale)) {
+            $value = t('sno_suffix');
+            $replacements[$original] = $value == 'sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $value = t('sno_suffix_not_sale');
+            $replacements[$original] = $value == 'sno_suffix_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
           break;
 
         case 'desc_start':
-          $replacements[$original] = isset($sale)
-            ? $token_service->replace($seo_config->get('desc_start'), ['term' => $category_term])
-            : $token_service->replace($seo_config->get('desc_start_not_sale'), ['term' => $category_term]);
+          if (isset($sale)) {
+            $value = t('desc_start');
+            $replacements[$original] = $value == 'desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $value = t('desc_start_not_sale');
+            $replacements[$original] = $value == 'desc_start_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
           break;
 
         case 'sale_suffix':
-          $replacements[$original] = $token_service->replace($seo_config->get('sale_suffix'), ['term' => $category_term]);
+          if (isset($sale)) {
+            $value = t('sale_suffix');
+            $replacements[$original] = $value == 'sale_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $value = t('sale_suffix_not_sale');
+            $replacements[$original] = $value == 'sale_suffix_not_sale' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
           break;
 
         case 'year':
-          $replacements[$original] = $token_service->replace($seo_config->get('year'));
+          $value = t('year');
+          $replacements[$original] = $value == 'year' ? '' : $value;
           break;
       }
     }
