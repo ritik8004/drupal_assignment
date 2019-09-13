@@ -81,6 +81,38 @@ function alshaya_seo_token_info() {
     'name' => t('USP3'),
   ];
 
+  $info['tokens']['custom_meta']['text_before_cod'] = [
+    'name' => t('Text before COD.'),
+  ];
+
+  $info['tokens']['custom_meta']['sno_suffix'] = [
+    'name' => t('Sale and offers suffix.'),
+  ];
+
+  $info['tokens']['custom_meta']['desc_start'] = [
+    'name' => t('Start text in description.'),
+  ];
+
+  $info['tokens']['custom_meta']['sale_suffix'] = [
+    'name' => t('Text after sale in title.'),
+  ];
+
+  $info['tokens']['custom_meta']['gender'] = [
+    'name' => t('Gender category.'),
+  ];
+
+  $info['tokens']['custom_meta']['year'] = [
+    'name' => t('Current year.'),
+  ];
+
+  $info['tokens']['custom_meta']['title_prefix'] = [
+    'name' => t('Title Prefix.'),
+  ];
+
+  $info['tokens']['custom_meta']['title_suffix'] = [
+    'name' => t('Title Suffix.'),
+  ];
+
   return $info;
 }
 
@@ -185,7 +217,14 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
     // Invoke the alter hook to allow all modules to set brand.
     \Drupal::moduleHandler()->alter('alshaya_seo_brandname', $brand_name);
+    $token_service = \Drupal::token();
 
+    $current_path = \Drupal::service('path.current')->getPath();
+    $sale = explode('/', \Drupal::service('path.alias_manager')->getAliasByPath($current_path))[1] == 'shop-sale'
+      ? TRUE
+      : NULL;
+
+    $category_term = isset($data['taxonomy_term']) ? $data['taxonomy_term'] : $data['term'];
     foreach ($tokens as $name => $original) {
       // Find the desired token by name.
       switch ($name) {
@@ -222,13 +261,44 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'cities':
-          $token_service = \Drupal::token();
           $cities = [
             $token_service->replace('[custom_meta:city1]'),
             $token_service->replace('[custom_meta:city2]'),
           ];
 
           $replacements[$original] = implode(', ', array_filter($cities));
+          break;
+
+        case 'title_prefix':
+          $replacements[$original] = isset($sale) ? $token_service->replace($seo_config->get('title_prefix'), ['term' => $category_term]) : t('Shop');
+          break;
+
+        case  'title_suffix':
+          $replacements[$original] = isset($sale)
+            ? $token_service->replace('[custom_meta:year] Sale [custom_meta:sale_suffix]', ['term' => $category_term])
+            : $token_service->replace($seo_config->get('title_suffix_not_sale'), ['term' => $category_term]);
+          break;
+
+        case 'text_before_cod':
+          $replacements[$original] = $token_service->replace($seo_config->get('text_before_cod'), ['term' => $category_term]);
+          break;
+
+        case 'sno_suffix':
+          $replacements[$original] = $token_service->replace($seo_config->get('sno_suffix'), ['term' => $category_term]);
+          break;
+
+        case 'desc_start':
+          $replacements[$original] = isset($sale)
+            ? $token_service->replace($seo_config->get('desc_start'), ['term' => $category_term])
+            : $token_service->replace($seo_config->get('desc_start_not_sale'), ['term' => $category_term]);
+          break;
+
+        case 'sale_suffix':
+          $replacements[$original] = $token_service->replace($seo_config->get('sale_suffix'), ['term' => $category_term]);
+          break;
+
+        case 'year':
+          $replacements[$original] = $token_service->replace($seo_config->get('year'));
           break;
       }
     }
@@ -247,8 +317,8 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 function alshaya_seo_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
   // Alter [current-page:url:absolute] token for canonical meta tag for
   // department page.
+  $token_service = \Drupal::token();
   if ($context['type'] == 'current-page') {
-    $token_service = \Drupal::token();
     if ($value_tokens = $token_service->findWithPrefix($context['tokens'], 'url')) {
       if (!empty($value_tokens['absolute'])) {
         if ($node = \Drupal::routeMatch()->getParameter('node')) {

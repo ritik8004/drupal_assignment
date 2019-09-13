@@ -1,1 +1,7 @@
 min_shipping_amount: 99
+text_before_cod: ''
+sno_suffix: '-[term:name] -'
+desc_start: 'Get [custom_meta:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [custom_meta:year] luxury and high-quality [term:name] collection sale and offers'
+desc_start_not_sale: 'Shop luxury and high-quality [term:name]'
+sale_suffix: '- [term:parent]'
+year: ''

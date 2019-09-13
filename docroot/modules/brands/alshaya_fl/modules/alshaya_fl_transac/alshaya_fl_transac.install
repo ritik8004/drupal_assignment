@@ -10,6 +10,19 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_fl_transac_update_8004() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_seo_transac.meta_variables'],
+    'alshaya_seo_transac'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {

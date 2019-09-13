@@ -320,4 +320,9 @@ function alshaya_seo_module_implements_alter(&$implementations, $hook) {
       unset($implementations['simple_sitemap']);
     }
   }
+  if ($hook == 'tokens') {
+    $group = $implementations['alshaya_seo'];
+    unset($implementations['alshaya_seo']);
+    $implementations['alshaya_seo'] = $group;
+  }
 }
