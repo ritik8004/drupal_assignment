@@ -132,3 +132,5 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
       - '@metatag.manager'
+      - '@database'
+      - '@acq_sku.stock_manager'

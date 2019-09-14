@@ -12,6 +12,7 @@ global $_acsf_site_name;
 
 // Ensure we never connect to Index of another ENV.
 $config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $settings['env'] . '_' . $_acsf_site_name;
+$config['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $settings['env'] . '_' . $_acsf_site_name;
 $config['block.block.autocompletewidgetofalgolia']['settings']['index'] = $settings['env'] . '_' . $_acsf_site_name;
 
 // Values for developer machine here. This will need to be overridden in brand

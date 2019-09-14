@@ -2924,8 +2924,46 @@ class SkuManager {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   private function processIndexItemConfigurable(SKUInterface $sku, ItemInterface $item, $product_color) {
-    $mode = $this->getListingDisplayMode();
+    $attributes = $this->getConfigurableAttributesData($sku, $product_color);
 
+    // Load all item fields.
+    $itemFields = $item->getFields();
+
+    // Set gathered data into parent.
+    foreach ($attributes['data'] as $key => $values) {
+      $field_key = 'attr_' . $key;
+
+      // There is an issue with color field in indexes.
+      // It is color in solr and attr_color in database index.
+      // For all other fields it is attr_field in both indexes.
+      if (isset($itemFields[$field_key])) {
+        $item->getField($field_key)->setValues(array_keys($values));
+      }
+      elseif (isset($itemFields[$key])) {
+        $item->getField($key)->setValues(array_keys($values));
+      }
+    }
+  }
+
+  /**
+   * Helper method to get attributes for configurable product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $product_color
+   *   Product color.
+   *
+   * @return array
+   *   Return associative array with attributes data.
+   *   keys:
+   *   - is_product_in_stock: Is product in stock status.
+   *   - has_color_data: Has sku color data.
+   *   - data: Associative array contains configurable attributes with array of
+   *     labels.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function getConfigurableAttributesData(SKUInterface $sku, $product_color) {
     $is_product_in_stock = $this->isProductInStock($sku);
 
     if (!$is_product_in_stock && $product_color) {
@@ -2975,29 +3013,18 @@ class SkuManager {
       throw new \Exception('No valid children found for color ' . $product_color);
     }
 
-    // Load all item fields.
-    $itemFields = $item->getFields();
-
     // Do not index main parent if product is in stock and has color data.
+    $mode = $this->getListingDisplayMode();
     if ($mode === self::NON_AGGREGATED_LISTING && $is_product_in_stock && empty($product_color) && $has_color_data) {
       // We use the code 200 as it is normal with the configuration.
       throw new \Exception('Product has color, we do not index main node when doing group by color', 200);
     }
 
-    // Set gathered data into parent.
-    foreach ($data as $key => $values) {
-      $field_key = 'attr_' . $key;
-
-      // There is an issue with color field in indexes.
-      // It is color in solr and attr_color in database index.
-      // For all other fields it is attr_field in both indexes.
-      if (isset($itemFields[$field_key])) {
-        $item->getField($field_key)->setValues(array_keys($values));
-      }
-      elseif (isset($itemFields[$key])) {
-        $item->getField($key)->setValues(array_keys($values));
-      }
-    }
+    return [
+      'is_product_in_stock' => $is_product_in_stock,
+      'has_color_data' => $has_color_data,
+      'data' => $data,
+    ];
   }
 
   /**
