@@ -2,11 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_category
     - field.storage.node.body
+    - field.storage.node.field_category
+    - field.storage.node.field_skus
     - search_api.server.algolia
   module:
     - node
+    - acq_sku
     - search_api
     - alshaya_acm_product
     - alshaya_product
@@ -39,6 +41,17 @@ field_settings:
     dependencies:
       module:
         - node
+  sku:
+    label: SKU
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:sku'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+        - acq_sku
   title:
     label: Title
     datasource_id: 'entity:node'
@@ -65,12 +78,15 @@ processor_settings:
       field_category: taxonomy_term-parent
     weights:
       preprocess_index: -45
+  price_from_to_facets_processor:
+    weights:
+      postprocess_query: 100
   rendered_item: {  }
   stock_quantity: {  }
 tracker_settings:
   default:
     indexing_order: fifo
 options:
-  index_directly: false
+  index_directly: true
   cron_limit: 0
 server: algolia
