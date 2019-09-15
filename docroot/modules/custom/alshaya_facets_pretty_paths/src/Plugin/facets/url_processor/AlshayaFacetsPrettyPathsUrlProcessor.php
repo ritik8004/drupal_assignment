@@ -121,13 +121,13 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       }
 
       $filter_key = $facet->getUrlAlias();
-      $raw_value = $this->alshayaPrettyPathHelper->getTranslatedFilters($facet->id(), $result->getRawValue());
+      $raw_value = $result->getRawValue();
       // If the value is active, remove the filter string from the parameters.
       if ($result->isActive()) {
         $active_facet = [];
 
         foreach ($filters_current_result_array[$filter_key] as $value) {
-          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($value);
+          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getUrlAlias(), $value);
         }
 
         if (($active_key = array_search($raw_value, $active_facet)) !== FALSE) {
@@ -221,7 +221,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     if (isset($this->activeFilters[$facet->getUrlAlias()])) {
 
       foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->getTranslatedFilters($facet->id(), $value, FALSE), '"'));
+        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getUrlAlias(), $value), '"'));
       }
     }
   }
@@ -245,11 +245,6 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $facet = $configuration['facet'];
       if ($facet->getUrlAlias() != $key) {
         continue;
-      }
-
-      // Decode values url alias to original values.
-      foreach ($new_parts as $index => $value) {
-        $new_parts[$index] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($value);
       }
 
       $this->activeFilters[$key] = $new_parts;

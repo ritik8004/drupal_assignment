@@ -235,3 +235,10 @@ pdp_js:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+megamenu_inline_layout:
+  js:
+    conditional-sass/megamenu-inline-layout/js/megamenu-inline-layout.js: {}
+  css:
+    theme:
+      css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css: {}
