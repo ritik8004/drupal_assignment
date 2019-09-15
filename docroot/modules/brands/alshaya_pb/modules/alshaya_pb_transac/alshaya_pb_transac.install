@@ -14,43 +14,15 @@ use Drupal\Core\Site\Settings;
  *
  * Update meta variables.
  */
-function alshaya_pb_transac_update_8015() {
+function alshaya_pb_transac_update_8014() {
   $strings = [
-    'alshaya_seo_sale_title_prefix' => [
-      'en' => '',
-      'ar' => 'اتش اند ام',
-    ],
-    'alshaya_seo_sale_title_suffix' => [
-      'en' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
-      'ar' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
-    ],
-    'alshaya_seo_title_suffix' => [
-      'en' => 'Collection Online',
-      'ar' => 'Collection Online',
-    ],
-    'alshaya_seo_sale_text_before_cod' => [
-      'en' => '',
-      'ar' => '',
-    ],
-    'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of %sub_categories seperated by comma% %sub_cat1%, %sub_cat2%, %Sub_cat3, and Sub_cat4&.',
-      'ar' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of %sub_categories seperated by comma% %sub_cat1%, %sub_cat2%, %Sub_cat3, and Sub_cat4&.',
-    ],
-    'alshaya_seo_sale_sno_suffix' => [
-      'en' => '- [term:name] -',
-      'ar' => '- [term:name] -',
-    ],
-    'alshaya_seo_sno_suffix' => [
-      'en' => '- [term:name] -',
-      'ar' => '- [term:name] -',
-    ],
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get [alshaya_seo:year] [term:parent:name] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [alshaya_seo:year] luxury and high-quality [term:name] collection sale and offers',
-      'ar' => '',
+      'en' => 'Get [alshaya_seo:year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [alshaya_seo:year] luxury and high-quality [term:name] collection',
+      'ar' => 'احصل على عروض [alshaya_seo:year] على [term:name] من [site:name]. اكتشف عروض التصفية على مجموعاتنا الفاخرة وعالية الجودة [term:name]',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop luxury and high-quality [term:name]',
-      'ar' => '',
+      'ar' => 'شراء رفاهية عالية الجودة [term:name] جمع',
     ],
     'alshaya_seo_sale_title_sub_suffix' => [
       'en' => '- [term:parent]',
@@ -59,6 +31,14 @@ function alshaya_pb_transac_update_8015() {
     'alshaya_seo_title_sub_suffix' => [
       'en' => '- [term:parent]',
       'ar' => '- [term:parent]',
+    ],
+    'alshaya_seo_year' => [
+      'en' => '2019',
+      'ar' => '2019',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => ' Sale [alshaya_seo:title_sub_suffix]',
+      'ar' => ' Sale [alshaya_seo:title_sub_suffix]',
     ],
   ];
 

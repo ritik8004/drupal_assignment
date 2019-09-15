@@ -113,6 +113,18 @@ function alshaya_seo_token_info() {
     'name' => t('Title Suffix.'),
   ];
 
+  $info['tokens']['alshaya_seo']['sub_categories'] = [
+    'name' => t('Title Suffix.'),
+  ];
+
+  $info['tokens']['alshaya_seo']['gender'] = [
+    'name' => t('Gender Token'),
+  ];
+
+  $info['tokens']['alshaya_seo']['desc_free_delivery_n_cod'] = [
+    'name' => t('Description free delivery and COD.'),
+  ];
+
   return $info;
 }
 
@@ -219,12 +231,15 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     \Drupal::moduleHandler()->alter('alshaya_seo_brandname', $brand_name);
     $token_service = \Drupal::token();
 
-    $current_path = \Drupal::service('path.current')->getPath();
-    $sale = explode('/', \Drupal::service('path.alias_manager')->getAliasByPath($current_path))[1] == 'shop-sale'
-      ? TRUE
-      : NULL;
-
     $category_term = isset($data['taxonomy_term']) ? $data['taxonomy_term'] : $data['term'];
+    $term_id = $category_term->get('tid')->getValue()[0]['value'];
+    $sale_ids = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds();
+    if (isset($sale_ids['sale']) && array_search($term_id, $sale_ids['sale'])) {
+      $sale = TRUE;
+    }
+    elseif (isset($sale_ids) && array_search($term_id, $sale_ids)) {
+      $sale = TRUE;
+    }
     foreach ($tokens as $name => $original) {
       // Find the desired token by name.
       switch ($name) {
@@ -307,8 +322,8 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $replacements[$original] = $value == 'alshaya_seo_sale_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $value = t('alshaya_seo_sale_sno_suffix');
-            $replacements[$original] = $value == 'alshaya_seo_sale_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $value = t('alshaya_seo_sno_suffix');
+            $replacements[$original] = $value == 'alshaya_seo_sno_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
 
@@ -335,8 +350,31 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'year':
-          $value = t('year');
-          $replacements[$original] = $value == 'year' ? '' : $value;
+          $value = t('alshaya_seo_year');
+          $replacements[$original] = $value == 'alshaya_seo_year' ? '' : $value;
+          break;
+
+        case 'sub_categories':
+          $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term_id);
+          if (!empty($children)) {
+            foreach ($children as $child) {
+              $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($child, $current_langcode);
+              $sub_categories[] = $taxonomy_term_trans->name->value;
+            }
+          }
+          $replacements[$original] = (isset($sub_categories))
+            ? implode(', ', $sub_categories)
+            : \Drupal::service('entity.repository')->getTranslationFromContext($category_term, $current_langcode)->name->value;
+          break;
+
+        case 'gender':
+          $value = t('alshaya_seo_gender');
+          $replacements[$original] = $value == 'alshaya_seo_gender' ? '' : $value;
+          break;
+
+        case 'desc_free_delivery_n_cod':
+          $value = t('alshaya_seo_desc_free_delivery_n_cod');
+          $replacements[$original] = $value == 'alshaya_seo_desc_free_delivery_n_cod' ? '' : $value;
           break;
       }
     }

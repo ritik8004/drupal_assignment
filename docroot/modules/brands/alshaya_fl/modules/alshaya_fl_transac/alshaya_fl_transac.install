@@ -10,6 +10,42 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_fl_transac_update_8004() {
+  $strings = [
+    'alshaya_seo_sale_title_prefix' => [
+      'en' => '[term:parent:name]\'s',
+      'ar' => '[term:parent:name]',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
+      'ar' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Get [term:parent:name]\'s [term:name] Sale from [site:name]. Explore our [alshaya_seo:year] [term:name] luxury and high-quality [term:name] for [term:parent:name] offers',
+      'ar' => 'احصل على [term:parent:name] [term:name] عروض من [site:name]. اكتشف [alshaya_seo:year] اختيارات مجموعة فاخرة وعالية الجودة من [term:parent:name] [term:name]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop luxury and high-quality [alshaya_seo:brand_name] [term:name] for [term:parent:name]',
+      'ar' => 'شراء خزانة القدم [term:parent:name]\'s [term:name]  ',
+    ],
+    'alshaya_seo_sale_title_sub_suffix' => [
+      'en' => '- Online Offers',
+      'ar' => '- Online Offers',
+    ],
+    'alshaya_seo_year' => [
+      'en' => '2019',
+      'ar' => '2019',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {

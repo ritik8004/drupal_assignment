@@ -10,6 +10,38 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_mc_update_8318() {
+  $strings = [
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[alshaya_seo:year] Sale',
+      'ar' => 'عروض [alshaya_seo:year]',
+    ],
+    'alshaya_seo_sale_text_before_cod' => [
+      'en' => 'Explore [alshaya_seo:year] [term:name] collections and get the best prices in [alshaya_seo:country].',
+      'ar' => 'اكتشف مجموعات [term:name] واحصل على أفضل الأسعار في [alshaya_seo:country].',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Buy mothercare - [term:name] - [alshaya_seo:year] sale and offers',
+      'ar' => 'عروض وخصومات الرعاية الأم - [term:name] - [alshaya_seo:year]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop [alshaya_seo:brand_name] [term:name]',
+      'ar' => 'شراء [term:name] من [alshaya_seo:brand_name]',
+    ],
+    'alshaya_seo_year' => [
+      'en' => '2019',
+      'ar' => '2019',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_mobile_app module.
  */
 function alshaya_mc_update_8317() {

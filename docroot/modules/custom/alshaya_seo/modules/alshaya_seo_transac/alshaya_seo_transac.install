@@ -20,6 +20,28 @@ function alshaya_seo_transac_update_8407() {
     ],
     'alshaya_seo_transac'
   );
+
+  $strings = [
+    'alshaya_seo_title_suffix' => [
+      'en' => 'Collection Online',
+      'ar' => 'مجموعة على الانترنت',
+    ],
+    'alshaya_seo_text_before_cod' => [
+      'en' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of [alshaya_seo:sub_categories] and more.',
+      'ar' => 'قارن مواصفات وأسعار [alshaya_seo:year] [term:name] [alshaya_seo:sub_categories] وأكثر من ذلك.',
+    ],
+    'alshaya_seo_desc_free_delivery_n_cod' => [
+      'en' => 'Enjoy Free Returns and Cash on Delivery!',
+      'ar' => 'استمتع بعوائد مجانية ونقداعند التسليم!',
+    ],
+    'Shop' => [
+      'en' => 'Shop',
+      'ar' => 'تسوق',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
 }
 
 /**

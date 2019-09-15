@@ -14,6 +14,38 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_hm_update_8039() {
+  $strings = [
+    'alshaya_seo_sale_title_prefix' => [
+      'en' => '[term:parent:name]',
+      'ar' => '[term:parent:name]',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[alshaya_seo:year] Sale',
+      'ar' => '[alshaya_seo:year] البيع',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Shop [term:parent:name] [term:name] [alshaya_seo:year] sale from [site:name]. Explore our [alshaya_seo:year] luxury and high-quality [term:name] for [term:parent:name] offers',
+      'ar' => 'اكتشف عروض البيع [alshaya_seo:year] للرفاهية والجودة العالية [term:parent:name] [term:name] مجموعة',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] for [term:parent:name]',
+      'ar' => 'تسوق نطاق حصري وفاخر [term:name] لـ [term:parent:name] من [alshaya_seo:brand_name]',
+    ],
+    'alshaya_seo_year' => [
+      'en' => '2019',
+      'ar' => '2019',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add color family field and facets.
  */
 function alshaya_hm_update_8038() {

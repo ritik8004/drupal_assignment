@@ -11,6 +11,46 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_bbw_transac_update_8008() {
+  $strings = [
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => ' - [alshaya_seo:year] Sale',
+      'ar' => '  - عروض [alshaya_seo:year]',
+    ],
+    'alshaya_seo_sale_text_before_cod' => [
+      'en' => '. Compare the latest [alshaya_seo:year] - [term:name] - packages at the best prices.',
+      'ar' => '. مقارنة - [term:name] - المجموعات الأكثر سعرا.',
+    ],
+    'alshaya_seo_sale_sno_suffix' => [
+      'en' => '- [term:name] -',
+      'ar' => '- [term:name] -',
+    ],
+    'alshaya_seo_sno_suffix' => [
+      'en' => '- [term:name] -',
+      'ar' => '- [term:name] -',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Get exclusive and delightful [alshaya_seo:year] sale and offers',
+      'ar' => 'احصل على عروض [alshaya_seo:year] على المنتجات الحصرية',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop exclusive and delightful [term:name] products',
+      'ar' => 'شراء المنتجات الحصرية [term:name]',
+    ],
+    'alshaya_seo_year' => [
+      'en' => '2019',
+      'ar' => '2019',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Save translations for meta tags.
  */
 function alshaya_bbw_transac_update_8007() {
