@@ -114,7 +114,7 @@ function alshaya_seo_token_info() {
   ];
 
   $info['tokens']['alshaya_seo']['sub_categories'] = [
-    'name' => t('Title Suffix.'),
+    'name' => t('Subcategories.'),
   ];
 
   $info['tokens']['alshaya_seo']['gender'] = [
@@ -123,6 +123,14 @@ function alshaya_seo_token_info() {
 
   $info['tokens']['alshaya_seo']['desc_free_delivery_n_cod'] = [
     'name' => t('Description free delivery and COD.'),
+  ];
+
+  $info['tokens']['alshaya_seo']['top_category'] = [
+    'name' => t('Holder for top category.'),
+  ];
+
+  $info['tokens']['alshaya_seo']['keywords'] = [
+    'name' => t('Keywords.'),
   ];
 
   return $info;
@@ -355,16 +363,18 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'sub_categories':
-          $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term_id);
-          if (!empty($children)) {
-            foreach ($children as $child) {
-              $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($child, $current_langcode);
-              $sub_categories[] = $taxonomy_term_trans->name->value;
-            }
+          $parent_id = $category_term->get('parent')->getValue()[0]['target_id'];
+          if (!empty($parent_id)) {
+            $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($parent_id);
           }
-          $replacements[$original] = (isset($sub_categories))
-            ? implode(', ', $sub_categories)
-            : \Drupal::service('entity.repository')->getTranslationFromContext($category_term, $current_langcode)->name->value;
+          else {
+            $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term_id);
+          }
+          foreach ($children as $child) {
+            $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($child, $current_langcode);
+            $sub_categories[] = $taxonomy_term_trans->name->value;
+          }
+          $replacements[$original] = implode(', ', $sub_categories);
           break;
 
         case 'gender':
@@ -375,6 +385,22 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
         case 'desc_free_delivery_n_cod':
           $value = t('alshaya_seo_desc_free_delivery_n_cod');
           $replacements[$original] = $value == 'alshaya_seo_desc_free_delivery_n_cod' ? '' : $value;
+          break;
+
+        case 'top_category':
+          $value = t('alshaya_seo_top_category');
+          $replacements[$original] = $value == 'alshaya_seo_top_category' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          break;
+
+        case 'keywords':
+          if (isset($sale)) {
+            $value = t('alshaya_seo_sale_keywords');
+            $replacements[$original] = $value == 'alshaya_seo_sale_keywords' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
+          else {
+            $value = t('alshaya_seo_keywords');
+            $replacements[$original] = $value == 'alshaya_seo_keywords' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          }
           break;
       }
     }

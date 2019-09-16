@@ -34,6 +34,32 @@ function alshaya_mc_update_8318() {
       'en' => '2019',
       'ar' => '2019',
     ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], 
+      [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], 
+      [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, 
+      [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, 
+      [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , 
+      [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, 
+      [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], 
+      [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, 
+      [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, 
+      [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+      'ar' => '[term:name] sale, [term:name] promotions, [term:name], 
+      [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], 
+      [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, 
+      [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, 
+      [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , 
+      [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, 
+      [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], 
+      [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, 
+      [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, 
+      [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] Collection Online, Shop Newborn [term:name], Shop [term:name] for [English], Shop %Gender% [term:name], Shop [term:name] in [alshaya_seo:country], Buy %brand% [term:name] online, Shop [term:name] in city1, Shop [term:name] in city2',
+      'ar' => 'تسوق تشكيلة [term:name] اون لاين, تسوق [term:name] term:parents:first من[alshaya_seo:brand_name], اشتري [term:name] من[alshaya_seo:brand_name], اشتري [term:name]  من[alshaya_seo:brand_name], تسوق [term:name] اون لاين في [alshaya_seo:city1], تسوق [term:name] اون لاين في [alshaya_seo:city2], تسوق [term:name] اون لاين في [alshaya_seo:country]',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
