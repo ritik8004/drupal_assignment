@@ -59,7 +59,7 @@ class AlshayaAlgoliaProductIndexEvent extends Event {
    * @return \Drupal\acq_sku\Entity\SKU
    *   SKU Entity.
    */
-  public function getSku(): SKU {
+  public function getSkuEntity(): SKU {
     return $this->sku;
   }
 
@@ -69,7 +69,7 @@ class AlshayaAlgoliaProductIndexEvent extends Event {
    * @return \Drupal\node\NodeInterface
    *   The node object.
    */
-  public function getNode(): NodeInterface {
+  public function getNodeEntity(): NodeInterface {
     return $this->node;
   }
 

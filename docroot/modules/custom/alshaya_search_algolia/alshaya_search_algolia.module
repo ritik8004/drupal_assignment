@@ -40,7 +40,7 @@ function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(arra
  */
 function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
   $backend_config = \Drupal::configFactory()->get('search_api.server.algolia')->get('backend_config');
-  $client_config = \Drupal::configFactory()->get('search_api.index.acquia_search_index')->get('options');
+  $client_config = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options');
   $client = new Client($backend_config['application_id'], $backend_config['api_key']);
   $index_name = $client_config['algolia_index_name'];
 
@@ -157,6 +157,18 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     $swatches = $skuImagesManager->getSwatchData($sku);
     if (isset($swatches['swatches'])) {
       $object['swatches'] = array_values($swatches['swatches']);
+    }
+
+    if ($produuct_collection = $sku->get('attr_product_collection')->getString()) {
+      $object['attr_product_collection'] = $produuct_collection;
+    }
+
+    if ($attr_at_glance = $sku->get('attr_at_glance')->getString()) {
+      $object['attr_at_glance'] = $attr_at_glance;
+    }
+
+    if ($attr_style = $sku->get('attr_style')->getString()) {
+      $object['attr_at_glance'] = $attr_style;
     }
 
     // Update stock info for product.
