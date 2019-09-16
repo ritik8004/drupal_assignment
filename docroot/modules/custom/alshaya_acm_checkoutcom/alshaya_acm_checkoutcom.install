@@ -26,13 +26,28 @@ function alshaya_acm_checkoutcom_update_8001() {
     'expires on' => [
       'ar' => 'تنتهي في',
     ],
+    '@card_type card ending in @ending' => [
+      'ar' => '@card_type الذي ينتهي بالرقم @ending',
+    ],
+    'Visa' => [
+      'ar' => 'الفيزا',
+    ],
+    'Master' => [
+      'ar' => 'الماستر',
+    ],
   ];
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $checkout_com_ar = $checkout_options_manager->loadPaymentMethod('checkout_com', 'البطاقة الائتمانية / البطاقة المصرفية', 'ar');
-  $checkout_com_ar->setName('البطاقة الائتمانية / البطاقة المصرفية');
-  $checkout_com_ar->save();
+  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com');
+  if ($checkout_com->hasTranslation('ar')) {
+    $checkout_com = $checkout_com->getTranslation('ar');
+  }
+  else {
+    $checkout_com = $checkout_com->addTranslation('ar', []);
+  }
+  $checkout_com->setName('البطاقة الائتمانية / البطاقة المصرفية');
+  $checkout_com->save();
 
   alshaya_i18n_save_translations($strings);
 }
@@ -132,6 +147,15 @@ function alshaya_acm_checkoutcom_install() {
     ],
     'expires on' => [
       'ar' => 'تنتهي في',
+    ],
+    '@card_type card ending in @ending' => [
+      'ar' => '@card_type الذي ينتهي بالرقم @ending',
+    ],
+    'Visa' => [
+      'ar' => 'الفيزا',
+    ],
+    'Master' => [
+      'ar' => 'الماستر',
     ],
   ];
 
