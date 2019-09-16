@@ -5,40 +5,48 @@
  * Contains all hook implementations related to Drupal.
  */
 
-use Drupal\Core\Url;
-
 /**
  * Implements hook_page_attachments().
  */
 function alshaya_rum_page_attachments(array &$page) {
   // Avoid loading script on admin pages.
   if (!(\Drupal::service('router.admin_context')->isAdminRoute())) {
-    $url = Url::fromRoute('<current>')->toString();
     $rum_user_id = \Drupal::config('alshaya_rum.settings')->get('rum_user_id');
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-
-    // Decode special characters from the url in case of non-english language.
-    if ($langcode !== 'en') {
-      $url = urldecode($url);
-    }
-
-    $whitelisted_rum_paths = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
-    $whitelisted_rum_path_array = array_filter(preg_split('/\r\n|\r|\n/', $whitelisted_rum_paths));
 
     // Load RUM script only on the whitelisted pages or if * is in list of
     // whitelisted pages.
     if ($rum_user_id) {
+      $request = \Drupal::requestStack()->getCurrentRequest();
+      $path = \Drupal::service('path.current')->getPath($request);
+      $path_alias = mb_strtolower(\Drupal::service('path.alias_manager')->getAliasByPath($path));
+
+      // In case of PLP pages, requires trailing slash in the url.
+      $path_alias = (strpos($path, '/taxonomy/term') === FALSE)
+        ? $path_alias
+        : rtrim($path_alias, '/') . '/';
+      $path_matcher = \Drupal::service('path.matcher');
+
+      $pages = \Drupal::config('alshaya_rum.settings')->get('whitelisted_rum_paths');
+      $whitelisted_rum_path_array = array_filter(preg_split('/\r\n|\r|\n/', $pages));
+
+      $attach_rum = FALSE;
+
       // Special handling for '<front>' page.
-      if (\Drupal::service('path.matcher')->isFrontPage() &&
+      if ($path_matcher->isFrontPage() &&
         (in_array('<front>', $whitelisted_rum_path_array))) {
-        $page['#attached']['library'][] = 'alshaya_rum/rum_script';
+        $attach_rum = TRUE;
       }
-      elseif (in_array($url, $whitelisted_rum_path_array) ||
-        (in_array('*', $whitelisted_rum_path_array))) {
+      elseif ((in_array('*', $whitelisted_rum_path_array))) {
+        $attach_rum = TRUE;
+      }
+      elseif ($path_matcher->matchPath($path_alias, $pages)) {
+        $attach_rum = TRUE;
+      }
+
+      // Attach the RUM script.
+      if ($attach_rum) {
         $page['#attached']['library'][] = 'alshaya_rum/rum_script';
-        $page['#cache']['tags'] = [
-          'config:alshaya_rum.settings',
-        ];
+        $page['#cache']['tags'][] = 'config:alshaya_rum.settings';
       }
     }
   }
