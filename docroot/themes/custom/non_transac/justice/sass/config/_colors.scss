@@ -6,6 +6,7 @@ $white: #fff;
 $black: #000;
 $deepskyblue: #00adee;
 $error: #d0011b;
+$dark-grey: #949494;
 
 //border
 $primary_border: $white-smoke;
@@ -32,11 +33,19 @@ $header_menu_bg: $white-smoke;
 $header_menu_mobile_bg: $white;
 $header_menu_text: $black-smoke;
 $header_menu_text_hover: $secondary_link;
+$header_menu_level2_bg: $dark-grey;
+$header_menu_level2_mobile_bg: $white;
+$header_menu_level2_link: $white;
+$header_menu_level2_hover_bg: $dark-pink;
 $header_menu_mobile_bg: $white;
 $burger_menu_icon: $dark-pink;
 $burger_menu_icon_bg: $white;
 $burger_menu_link: $black-smoke;
 $burger_menu_arrow: rgba(0, 0, 0, 0.5);
+$burger_menu_active_border: $primary_border;
+$burger_menu_active_text: $dark-pink;
+$burger_menu_active_bg: $white;
+$burger_menu_level2_bg: $white;
 
 //footer
 $footer_bg: rgba(243, 243, 243, 0.5);
