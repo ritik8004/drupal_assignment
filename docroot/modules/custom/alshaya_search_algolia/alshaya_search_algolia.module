@@ -88,6 +88,7 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 
   $skuInfoHelper = \Drupal::service('alshaya_acm_product.sku_info');
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
   foreach ($objects as $id => &$object) {
     $node = $items[$id]->getOriginalObject()->getValue();
 
@@ -109,11 +110,6 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
       throw new \Exception('SKU not available for language of Node');
     }
 
-    // $gallery = [];
-    // if ($gallery = $skuInfoHelper->getAllGallery($sku, 'search', $color)) {
-    // $gallery[] = $gallery;
-    // }
-    // $object['product_images'] = $gallery;
     $prices = $skuManager->getMinPrices($sku, $product_color);
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
@@ -131,17 +127,19 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
       }
     }
 
-    $configured_skus = $sku->get('field_configured_skus')->getValue();
-    $object['field_configured_skus'] = array_map(function ($item) {
-      return $item['value'];
-    }, $configured_skus);
+    if ($sku->bundle() == 'configurable') {
+      $configured_skus = $sku->get('field_configured_skus')->getValue();
+      $object['field_configured_skus'] = array_map(function ($item) {
+        return $item['value'];
+      }, $configured_skus);
+    }
 
     $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
 
     // Set color / size and other configurable attributes data.
     $attributes = $skuManager->getConfigurableAttributesData($sku, $product_color);
     foreach ($attributes['data'] as $key => $values) {
-      $object['attr_' . $key] = $values;
+      $object['attr_' . $key] = array_values($values);
     }
 
     // $object['attr_color_family'] =
@@ -152,6 +150,14 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     }, $promotions);
 
     $object['promotions'] = $promotions;
+
+    $sku_for_gallery = $skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
+    $object['media'] = $skuInfoHelper->getMedia($sku_for_gallery, 'search')['images'];
+
+    $swatches = $skuImagesManager->getSwatchData($sku);
+    if (isset($swatches['swatches'])) {
+      $object['swatches'] = array_values($swatches['swatches']);
+    }
 
     // Update stock info for product.
     $object['stock_quantity'] = $skuInfoHelper->calculateStock($sku);
