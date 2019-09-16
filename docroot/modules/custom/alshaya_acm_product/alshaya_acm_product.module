@@ -287,24 +287,28 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
 
   $items['product_composition_markup'] = [
     'variables' => [
+      'title' => NULL,
       'composition' => NULL,
     ],
   ];
 
   $items['product_article_warning_markup'] = [
     'variables' => [
+      'title' => NULL,
       'warning' => NULL,
     ],
   ];
 
   $items['product_concept_markup'] = [
     'variables' => [
+      'title' => NULL,
       'concepts' => NULL,
     ],
   ];
 
   $items['product_material_markup'] = [
     'variables' => [
+      'title' => NULL,
       'material' => NULL,
     ],
   ];
