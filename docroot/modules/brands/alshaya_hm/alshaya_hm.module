@@ -186,6 +186,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
     $concepts_markup = [
       '#theme' => 'product_concept_markup',
+      '#title' => t('concept'),
       '#concepts' => $concepts,
     ];
 
@@ -198,6 +199,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
   $composition_markup = [
     '#theme' => 'product_composition_markup',
+    '#title' => t('composition'),
   ];
 
   if (!empty($composition)) {
@@ -227,6 +229,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
   $warning_markup = [
     '#theme' => 'product_article_warning_markup',
+    '#title' => t('safety warning'),
   ];
 
   if (!empty($warning)) {
