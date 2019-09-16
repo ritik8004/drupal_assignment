@@ -1,5 +1,5 @@
 test:
   js:
-    js/dist/test.js: {}
+    dist/test.js: {}
   dependencies:
     - alshaya_react/react

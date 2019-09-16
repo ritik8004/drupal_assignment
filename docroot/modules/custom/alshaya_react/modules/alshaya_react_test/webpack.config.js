@@ -6,7 +6,7 @@ module.exports = {
     custom: './js/custom',
   },
   output: {
-    path: path.resolve(__dirname, 'js/dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     publicPath: '/'
   },
