@@ -915,7 +915,7 @@
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
     var promotions = [];
     var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
-
+    var promotion_counter = 0;
     highlights.each(function (key, highlight) {
       var position = 1;
       var creative = '';
@@ -933,7 +933,8 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
+      // adding or condition for advanced page pageType.
+      else if (gtmPageType === 'home page' || gtmPageType === 'department page' || gtmPageType === 'advanced page') {
         if ($(highlight).find(promo_para_elements).length > 0) {
           return true;
         }
@@ -945,14 +946,17 @@
           imgElem.attr('src') :
           imgElem.attr('data-src');
 
-        position = key;
-        if (event === 'promotionClick') {
-          position = $(highlight).find('picture img').data('position');
+        // add position value only if image is there.
+        if (typeof imgSrc !== 'undefined') {
+          position = promotion_counter;
+          if (event === 'promotionClick') {
+            position = $(highlight).find('picture img').data('position');
+          }
+          else {
+            $(highlight).find('picture img').data('position', promotion_counter);
+          }
+          creative = Drupal.url(imgSrc);
         }
-        else {
-          $(highlight).find('picture img').data('position', key);
-        }
-        creative = Drupal.url(imgSrc);
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
@@ -989,7 +993,10 @@
             name: gtmPageType,
             position: 'slot' + position
           };
-          promotions.push(promotion);
+          if (typeof promotion !== 'undefined') {
+            promotion_counter++;
+            promotions.push(promotion);
+          }
         }
       }
     });
