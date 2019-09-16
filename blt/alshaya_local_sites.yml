@@ -90,3 +90,15 @@ sites:
     module: alshaya_kz
     type: alshaya_transac_lite
     country: kw
+  wekw:
+    module: alshaya_we
+    type: alshaya_transac
+    country: kw
+  wesa:
+    module: alshaya_we
+    type: alshaya_transac
+    country: sa
+  weae:
+    module: alshaya_we
+    type: alshaya_transac
+    country: ae
