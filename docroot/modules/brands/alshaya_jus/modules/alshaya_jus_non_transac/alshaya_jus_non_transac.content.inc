@@ -53,7 +53,7 @@ function alshaya_jus_non_transac_create_latest_fashion_update_block_content() {
                   <a href='/email-sign-up' class='button--primary'>سجلي الآن</a>
                   </div>
                   </div>",
-      'format' => 'mail_text',
+      'format' => 'full_text',
     ],
   ]);
   $ar_block_content->save();
