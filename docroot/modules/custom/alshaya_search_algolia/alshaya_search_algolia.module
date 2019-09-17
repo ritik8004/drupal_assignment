@@ -110,6 +110,8 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
       throw new \Exception('SKU not available for language of Node');
     }
 
+    $object['field_category_name'] = _alshaya_search_algolia_category_hierarchy($node);
+
     $prices = $skuManager->getMinPrices($sku, $product_color);
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
@@ -217,4 +219,96 @@ function update_stock_for_index(SKUInterface $sku, array &$item) {
   }
 
   $item['stock'] = $in_stock;
+}
+
+/**
+ * Create term hierarchy to index for algolia.
+ *
+ * Prepares the array structure as shown bleow.
+ * @code
+ * [
+ *   [
+ *     "lvl0": "Books",
+ *     "lvl1": ["Books > Science Fiction", "Books > Literature & Fiction"],
+ *     "lvl2": [
+ *       "Books > Science Fiction > Time Travel",
+ *       "Books > Literature & Fiction > Modernism "
+ *     ],
+ *   ],
+ *   [
+ *     "lvl0": "Movie",
+ *     "lvl1": "Movie > Science Fiction",
+ *     "lvl2": "Movie > Science Fiction > Time Travel"],
+ *   ],
+ * ]
+ * @endcode
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The node object for which we need to prepare hierarchy.
+ *
+ * @return array
+ *   The array of hierarchy.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _alshaya_search_algolia_category_hierarchy(NodeInterface $node): array {
+  $categories = $node->get('field_category')->referencedEntities();
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  $list = [];
+  foreach ($categories as $category) {
+    // Skip the term which is disabled.
+    if ($category->get('field_commerce_status')->getString() !== '1') {
+      continue;
+    }
+    $parents = array_reverse($termStorage->loadAllParents($category->id()));
+    $temp_list = [];
+    $i = 0;
+    $parent_key = NULL;
+    foreach ($parents as $term) {
+      if (empty($parent_key)) {
+        $parent_key = $term->id();
+      }
+
+      // Break the loop if any level of term is disabled.
+      if ($term->get('field_commerce_status')->getString() !== '1') {
+        // Remove the parent hierarchy, If the hierarchy initiated for this
+        // specific loop.
+        if (empty($list[$parent_key]["lvl{$i}"])) {
+          $previous = $i - 1;
+          if (is_string($list[$parent_key]["lvl{$previous}"])) {
+            unset($list[$parent_key]["lvl{$previous}"]);
+            if (empty($list[$parent_key])) {
+              unset($list[$parent_key]);
+            }
+          }
+        }
+        break;
+      }
+
+      $temp_list[] = $term->label();
+      $current_value = implode(' > ', $temp_list);
+
+      if (empty($list[$parent_key]["lvl{$i}"])) {
+        $list[$parent_key]["lvl{$i}"] = $current_value;
+      }
+      elseif (is_string($list[$parent_key]["lvl{$i}"]) && $list[$parent_key]["lvl{$i}"] !== $current_value) {
+        $list[$parent_key]["lvl{$i}"] = array_merge([$list[$parent_key]["lvl{$i}"]], [$current_value]);
+      }
+      elseif (is_array($list[$parent_key]["lvl{$i}"])) {
+        if (!in_array($current_value, $list[$parent_key]["lvl{$i}"])) {
+          $list[$parent_key]["lvl{$i}"][] = $current_value;
+        }
+      }
+      $i++;
+    }
+  }
+
+  $new_list = [];
+  foreach ($list as $item) {
+    $new_list[] = $item;
+  }
+
+  return $new_list;
 }
