@@ -358,7 +358,8 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'year':
-          $replacements[$original] = $token_service->replace('[current-date:html_year]');
+          $value = t('alshaya_seo_year');
+          $replacements[$original] = $value == 'alshaya_seo_year' ? '' : $value;
           break;
 
         case 'sub_categories':
