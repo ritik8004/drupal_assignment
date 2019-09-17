@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_we_transac.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_we_transac_install() {
+  // Enable and set alshaya_westelm as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_westelm');
+
+  // Set store id - EN.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['en'])
+    ->save();
+
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  // Save language prefix - EN.
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+    ->save();
+
+  // Save language prefix - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+    ->save();
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_we_transac');
+  }
+
+  // Add string translations.
+  $strings = [
+    'our company' => [
+      'ar' => 'شركتنا',
+    ],
+    'Connect with us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'I would like to receive exclusive deals from West elm.' => [
+      'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
+    ],
+    '@group_name/@sku_name' => [
+      'ar' => '@sku_name/@group_name',
+    ],
+    'seo_brand_name' => [
+      'en' => 'West elm',
+      'ar' => 'بوتري بارن',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  // Disable shop by block.
+  alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_we_transac', 'optional');
+}
