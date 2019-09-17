@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --mode=development",
+    "start": "../../../node_modules/.bin/webpack-dev-server --mode=development",
     "build": "../../../node_modules/.bin/webpack",
     "watch": "../../../node_modules/.bin/webpack --watch",
     "gulp:build": "../../../node_modules/gulp/bin/gulp.js",

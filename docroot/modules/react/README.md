@@ -7,14 +7,19 @@ modules.
 # Prerequisite :bell:
 - You have already setup vagrant
 - `vagrant ssh`
-- From Alshaya root directory, Execute `npm install` / `yarn install`. :see_no_evil: 
+- From `docroot/modules/react` directory, Execute `npm install` / `yarn install`. :see_no_evil:
 
 # Usage :hammer_and_wrench:
-- Example module created: `./modules/alshaya_react_test` :file_folder:
+- Example module created: `./alshaya_react/modules/alshaya_react_test` :file_folder:
 - Copy files in your custom module to use the existing packages: :clipboard:
     -  `package.json`: Contains `scripts` to execute command from module directory.
     -  `.babelrc`: Contains babel related configs. we are using babel-loader with webapck.
     - `webpack.config.js`: We are using webpack to transpile js files
+        - The Component and js files vary based on your module, hence you will
+         have to update values for `entry` key.
+        - For product purpose it would be nice to have single transpiled file, and
+         to do that, For `entry` key; pass the array without any key like: 
+        `['./js/test', './js/custom']` and that will create single `main.js` file.
     - (optional) `gulpfile.js`: :see_no_evil:
         > :exclamation: To transpile *.js files, you won't require gulpfile.js But in case if 
         you want to use gulpfile with webpack, the examples are added in the 
