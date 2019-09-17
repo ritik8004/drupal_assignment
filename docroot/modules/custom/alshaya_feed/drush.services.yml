@@ -1,0 +1,7 @@
+services:
+  alshaya_feed.commands:
+    class: Drupal\alshaya_feed\Commands\AlshayaFeedCommands
+    arguments:
+      - '@config.factory'
+    tags:
+      - { name: drush.command }

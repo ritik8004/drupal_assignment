@@ -245,7 +245,9 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
           $cookie_key = 'alshaya_gtm_confirmation_visited_' . $order['order_id'];
 
-          $already_visited = (int) \Drupal::request()->cookies->get('Drupal_visitor_' . $cookie_key);
+          $session = \Drupal::request()->getSession();
+
+          $already_visited = (int) $session->get($cookie_key);
 
           // Send order complete confirmation to GTM only once.
           if ($already_visited !== 1) {
@@ -263,7 +265,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
               ],
             ];
 
-            user_cookie_save([$cookie_key => 1]);
+            $session->set($cookie_key, 1);
           }
         }
         break;
@@ -341,7 +343,7 @@ function alshaya_seo_transac_page_attachments(array &$attachments) {
         return;
       }
 
-      $already_visited = (int) \Drupal::request()->cookies->get('Drupal_visitor_' . 'alshaya_gtm_confirmation_visited_' . $order['order_id']);
+      $already_visited = (int) \Drupal::request()->getSession()->get('alshaya_gtm_confirmation_visited_' . $order['order_id']);
       // Send order complete confirmation data only once.
       if ($already_visited !== 1) {
         $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);

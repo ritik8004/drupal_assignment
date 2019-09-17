@@ -18,6 +18,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_product_options\SwatchesHelper;
 
 /**
  * Class AlshayaSearchApiQueryExecute.
@@ -199,6 +200,13 @@ class AlshayaSearchApiQueryExecute {
   private $priceHelper;
 
   /**
+   * Swatch Helper service object.
+   *
+   * @var \Drupal\alshaya_product_options\SwatchesHelper
+   */
+  private $swatchesHelper;
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -223,6 +231,8 @@ class AlshayaSearchApiQueryExecute {
    *   Plp Sort labels service.
    * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $price_helper
    *   SKU Price Helper.
+   * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
+   *   Swatches helper service object.
    */
   public function __construct(
     RequestStack $requestStack,
@@ -235,8 +245,10 @@ class AlshayaSearchApiQueryExecute {
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaPlpSortOptionsService $sort_option_service,
     AlshayaPlpSortLabelsService $sort_labels_service,
-    SkuPriceHelper $price_helper
+    SkuPriceHelper $price_helper,
+    SwatchesHelper $swatches_helper
   ) {
+    $this->swatchesHelper = $swatches_helper;
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->facetManager = $facet_manager;
     $this->languageManager = $language_manager;
@@ -587,6 +599,14 @@ class AlshayaSearchApiQueryExecute {
       $facet_option_data = [];
       foreach ($facet_results as $result) {
         // For storing intermediate temporary data.
+        if (strpos($key, 'color_family') > -1) {
+          $result
+            ->setDisplayValue(
+              $this
+                ->swatchesHelper
+                ->getSwatch('color_family', $result->getDisplayValue())['name']
+            );
+        }
         $temp_data = [
           'key' => $result->getRawValue(),
           'label' => $result->getDisplayValue(),

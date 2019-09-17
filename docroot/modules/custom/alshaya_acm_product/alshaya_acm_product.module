@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Controller\ProductStockController;
@@ -294,24 +295,28 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
 
   $items['product_composition_markup'] = [
     'variables' => [
+      'title' => NULL,
       'composition' => NULL,
     ],
   ];
 
   $items['product_article_warning_markup'] = [
     'variables' => [
+      'title' => NULL,
       'warning' => NULL,
     ],
   ];
 
   $items['product_concept_markup'] = [
     'variables' => [
+      'title' => NULL,
       'concepts' => NULL,
     ],
   ];
 
   $items['product_material_markup'] = [
     'variables' => [
+      'title' => NULL,
       'material' => NULL,
     ],
   ];
@@ -529,7 +534,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Get cross-sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
-          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
+          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
             $build['cross_sell'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
@@ -543,7 +548,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_UPSELL))) {
+        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL))) {
           $build['up_sell'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
@@ -555,7 +560,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['up_sell']['#weight'] = 10;
         }
 
-        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_RELATED))) {
+        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED))) {
           $build['related'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
@@ -1687,6 +1692,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
       $composition_markup = [
         '#theme' => 'product_composition_markup',
+        '#title' => t('composition'),
       ];
 
       if (!empty($composition)) {
@@ -1701,6 +1707,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
       $warning_markup = [
         '#theme' => 'product_article_warning_markup',
+        '#title' => t('safety warning'),
       ];
 
       if (!empty($warning)) {
@@ -1719,7 +1726,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         '#views_display_id' => 'block_product_slider',
       ];
 
-      if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL))) {
+      if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
         $cross_sell_markup['#data'] = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
       }
 

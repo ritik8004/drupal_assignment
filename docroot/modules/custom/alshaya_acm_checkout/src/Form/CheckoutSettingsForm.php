@@ -94,7 +94,6 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('Checkout as guest summary'),
-      '#required' => TRUE,
       '#default_value' => $config->get('checkout_guest_summary.value'),
     ];
 
@@ -102,7 +101,6 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('Guest email usage description'),
-      '#required' => TRUE,
       '#default_value' => $config->get('checkout_guest_email_usage.value'),
     ];
 
@@ -110,7 +108,6 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('Checkout login help'),
-      '#required' => TRUE,
       '#default_value' => $config->get('checkout_guest_login.value'),
     ];
 

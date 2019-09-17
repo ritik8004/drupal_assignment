@@ -386,6 +386,15 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
     }
   }
 
+  // When all other validations pass.
+  if (empty($errors)) {
+    /* @var \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper*/
+    $checkout_helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    if (!$checkout_helper->isReservedOrderSetInCart($cart)) {
+      $errors['global'] = acq_commerce_api_down_global_error_message();
+    }
+  }
+
   if (!empty($errors)) {
     return;
   }
