@@ -1,0 +1,13 @@
+{
+  "name": "alshaya_algolia",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "../node_modules/.bin/webpack-dev-server",
+    "build": "../node_modules/.bin/webpack",
+    "build:dev": "../node_modules/.bin/webpack --mode=development",
+    "watch": "../node_modules/.bin/webpack --watch",
+    "gulp:build": "../node_modules/gulp/bin/gulp.js",
+    "gulp:watch": "../node_modules/gulp/bin/gulp.js watch"
+  }
+}

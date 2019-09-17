@@ -1,0 +1,18 @@
+test:
+  js:
+    dist/algolia.js: {}
+  dependencies:
+    - alshaya_algolia/vendor
+
+#vendor:
+#  js:
+#    https://cdn.jsdelivr.net/npm/algoliasearch@3.34.0/dist/algoliasearchLite.min.js: {type: external, crossorigin: true, minified: true}
+#    https://cdn.jsdelivr.net/npm/react-instantsearch-dom@5.7.0/dist/umd/ReactInstantSearchDOM.min.js: {type: external, crossorigin: true, minified: true}
+#  dependencies:
+#    - alshaya_react/react
+
+vendor:
+  js:
+    dist/algolia.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
