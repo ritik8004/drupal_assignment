@@ -1,0 +1,63 @@
+@import '../../../config/_config.scss';
+
+.block-content--latest-fashion-update {
+  width: 100%;
+  background: $newsletter_block_bg;
+  padding-bottom: 0.9375rem;
+
+  .latest-update {
+    display: flex;
+    justify-content: center;
+
+    .fashion-news {
+      padding-#{$right}: 2.25rem;
+
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h2 {
+        font-family: $jus_bold;
+        font-size: 1.125rem;
+        display: block;
+
+        &::before {
+          content: '';
+          background-repeat: no-repeat;
+          width: 2.75rem;
+          height: 2.75rem;
+          background-position: center;
+          display: inline-block;
+          top: 1.6875rem;
+          position: relative;
+          background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-email.svg');
+        }
+      }
+
+      p {
+        font-size: 0.875rem;
+        padding-#{$left}: 2.6875rem;
+      }
+    }
+
+    .latest-update-link {
+      padding-top: 1rem;
+
+      a {
+        font-size: 1.125rem;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.region-footer-primary__wrapper {
+  .block-content--latest-fashion-update {
+    padding-bottom: 0;
+
+    .latest-update {
+      justify-content: $left;
+    }
+  }
+}
