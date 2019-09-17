@@ -4,7 +4,7 @@ const webpack = require('webpack-stream');
 gulp.task('default', function() {
   return gulp.src('js/*.js')
     .pipe(webpack( require('./webpack.config.js') ))
-    .pipe(gulp.dest('js/dist/'));
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('watch', function () {
@@ -13,5 +13,5 @@ gulp.task('watch', function () {
       config : require('./webpack.config.js'),
       watch: true,
     }))
-    .pipe(gulp.dest('js/dist/'));
+    .pipe(gulp.dest('dist/'));
 });
