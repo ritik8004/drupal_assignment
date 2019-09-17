@@ -800,8 +800,8 @@ function _alshaya_hm_get_metatag_translations() {
       'ar' => 'تسوق نطاق حصري وفاخر [term:name] لـ [term:parents:first] من [alshaya_seo:brand_name]',
     ],
     'alshaya_seo_year' => [
-      'en' => '2019',
-      'ar' => '2019',
+      'en' => '[current-date:html_year]',
+      'ar' => '[current-date:html_year]',
     ],
     'alshaya_seo_top_category' => [
       'en' => 'for [term:parents:first]',

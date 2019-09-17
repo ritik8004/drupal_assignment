@@ -384,8 +384,8 @@ function _alshaya_pb_transac_get_metatag_translations() {
       'ar' => '- [term:parent]',
     ],
     'alshaya_seo_year' => [
-      'en' => '2019',
-      'ar' => '2019',
+      'en' => '[current-date:html_year]',
+      'ar' => '[current-date:html_year]',
     ],
     'alshaya_seo_sale_title_suffix' => [
       'en' => ' Sale [alshaya_seo:title_sub_suffix]',
