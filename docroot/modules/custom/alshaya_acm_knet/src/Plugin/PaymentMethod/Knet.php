@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ACQPaymentMethod(
  *   id = "knet",
- *   label = @Translation("K-Net Debit Card"),
+ *   label = @Translation("K-NET"),
  * )
  */
 class Knet extends PaymentMethodBase implements PaymentMethodInterface {

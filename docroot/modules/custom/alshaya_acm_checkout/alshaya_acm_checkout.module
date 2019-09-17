@@ -237,7 +237,7 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     }
     $knet->save();
     $knet_ar = $knet->addTranslation('ar', []);
-    $knet_ar->setName('بطاقة ائتمان k-net');
+    $knet_ar->setName('كي-نت');
     $knet_ar->get('description')->setValue('يرجى المتابعة إلى صفحة الدفع عن طريق K-Net  بواسطة الضغط على رابط "سجل الطلبية" أدناه');
     $knet_ar->save();
 

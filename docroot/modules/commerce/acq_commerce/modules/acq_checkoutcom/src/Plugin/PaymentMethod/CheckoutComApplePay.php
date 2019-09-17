@@ -53,7 +53,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    * {@inheritdoc}
    */
   public function getLabel() {
-    return $this->t('Apple pay');
+    return $this->t('Apple Pay');
   }
 
   /**
