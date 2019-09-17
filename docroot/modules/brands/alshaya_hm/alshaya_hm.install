@@ -799,10 +799,6 @@ function _alshaya_hm_get_metatag_translations() {
       'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] for [term:parents:first]',
       'ar' => 'تسوق نطاق حصري وفاخر [term:name] لـ [term:parents:first] من [alshaya_seo:brand_name]',
     ],
-    'alshaya_seo_year' => [
-      'en' => '2019',
-      'ar' => '2019',
-    ],
     'alshaya_seo_top_category' => [
       'en' => 'for [term:parents:first]',
       'ar' => 'for [term:parents:first]',
