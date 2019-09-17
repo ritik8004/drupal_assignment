@@ -1248,6 +1248,15 @@ body.alias--cart {
 
 body.path--cart .c-content__region {
   position: relative;
+
+  #edit-billing-address {
+    .address-container-inline {
+      > .form-item {
+        width: calc((100% - 0.875rem) / 2);
+        max-width: none;
+      }
+    }
+  }
 }
 
 html[lang=ar] {
