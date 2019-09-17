@@ -63,7 +63,7 @@
   @include breakpoint($upto-lap) {
     width: 87%;
     position: fixed;
-    z-index: $z-90;
+    z-index: $z-80;
     background: $header_menu_mobile_bg;
     height: 100%;
     transform: translateX(-100%);
@@ -129,7 +129,7 @@
 }
 
 .menu-close {
-  z-index: $z-100;
+  z-index: $z-90;
 }
 
 .region-primary-header .show-menu-button {
@@ -233,7 +233,7 @@ html[dir=rtl] {
         top: 1rem;
         #{$left}: 1rem;
         height: 100%;
-        z-index: 101;
+        z-index: $z-90;
         animation: slideIn 0.25s;
         clear: both;
         background: $burger_menu_level2_bg;
