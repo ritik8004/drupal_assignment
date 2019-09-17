@@ -419,8 +419,8 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 function alshaya_seo_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
   // Alter [current-page:url:absolute] token for canonical meta tag for
   // department page.
-  $token_service = \Drupal::token();
   if ($context['type'] == 'current-page') {
+    $token_service = \Drupal::token();
     if ($value_tokens = $token_service->findWithPrefix($context['tokens'], 'url')) {
       if (!empty($value_tokens['absolute'])) {
         if ($node = \Drupal::routeMatch()->getParameter('node')) {
