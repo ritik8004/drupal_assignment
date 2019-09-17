@@ -250,11 +250,11 @@ function alshaya_bbw_transac_install() {
 function _alshaya_bbw_transac_get_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_title_suffix' => [
-      'en' => ' - [alshaya_seo:year] Sale',
-      'ar' => '  - عروض [alshaya_seo:year]',
+      'en' => ' - [current-date:html_year] Sale',
+      'ar' => '  - عروض [current-date:html_year]',
     ],
     'alshaya_seo_sale_text_before_cod' => [
-      'en' => '. Compare the latest [alshaya_seo:year] - [term:name] - packages at the best prices.',
+      'en' => '. Compare the latest [current-date:html_year] - [term:name] - packages at the best prices.',
       'ar' => '. مقارنة - [term:name] - المجموعات الأكثر سعرا.',
     ],
     'alshaya_seo_sale_sno_suffix' => [
@@ -266,16 +266,12 @@ function _alshaya_bbw_transac_get_metatag_translations() {
       'ar' => '- [term:name] -',
     ],
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get exclusive and delightful [alshaya_seo:year] sale and offers',
-      'ar' => 'احصل على عروض [alshaya_seo:year] على المنتجات الحصرية',
+      'en' => 'Get exclusive and delightful [current-date:html_year] sale and offers',
+      'ar' => 'احصل على عروض [current-date:html_year] على المنتجات الحصرية',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop exclusive and delightful [term:name] products',
       'ar' => 'شراء المنتجات الحصرية [term:name]',
-    ],
-    'alshaya_seo_year' => [
-      'en' => '[current-date:html_year]',
-      'ar' => '[current-date:html_year]',
     ],
     'alshaya_seo_sale_keywords' => [
       'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale',

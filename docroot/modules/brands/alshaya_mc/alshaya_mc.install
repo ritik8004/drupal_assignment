@@ -403,24 +403,20 @@ function alshaya_mc_update_dependencies() {
 function _alshaya_mc_get_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_title_suffix' => [
-      'en' => '[alshaya_seo:year] Sale',
-      'ar' => 'عروض [alshaya_seo:year]',
+      'en' => '[current-date:html_year] Sale',
+      'ar' => 'عروض [current-date:html_year]',
     ],
     'alshaya_seo_sale_text_before_cod' => [
-      'en' => 'Explore [alshaya_seo:year] [term:name] collections and get the best prices in [alshaya_seo:country].',
+      'en' => 'Explore [current-date:html_year] [term:name] collections and get the best prices in [alshaya_seo:country].',
       'ar' => 'اكتشف مجموعات [term:name] واحصل على أفضل الأسعار في [alshaya_seo:country].',
     ],
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Buy mothercare - [term:name] - [alshaya_seo:year] sale and offers',
-      'ar' => 'عروض وخصومات الرعاية الأم - [term:name] - [alshaya_seo:year]',
+      'en' => 'Buy mothercare - [term:name] - [current-date:html_year] sale and offers',
+      'ar' => 'عروض وخصومات الرعاية الأم - [term:name] - [current-date:html_year]',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop [alshaya_seo:brand_name] [term:name]',
       'ar' => 'شراء [term:name] من [alshaya_seo:brand_name]',
-    ],
-    'alshaya_seo_year' => [
-      'en' => '[current-date:html_year]',
-      'ar' => '[current-date:html_year]',
     ],
     'alshaya_seo_sale_keywords' => [
       'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',

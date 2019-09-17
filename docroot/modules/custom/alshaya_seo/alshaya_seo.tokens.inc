@@ -101,10 +101,6 @@ function alshaya_seo_token_info() {
     'name' => t('Gender category.'),
   ];
 
-  $info['tokens']['alshaya_seo']['year'] = [
-    'name' => t('Current year.'),
-  ];
-
   $info['tokens']['alshaya_seo']['title_prefix'] = [
     'name' => t('Title Prefix.'),
   ];
@@ -355,11 +351,6 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $value = t('alshaya_seo_title_sub_suffix');
             $replacements[$original] = $value == 'alshaya_seo_title_sub_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
-          break;
-
-        case 'year':
-          $value = t('alshaya_seo_year');
-          $replacements[$original] = $value == 'alshaya_seo_year' ? '' : $token_service->replace($value);
           break;
 
         case 'sub_categories':

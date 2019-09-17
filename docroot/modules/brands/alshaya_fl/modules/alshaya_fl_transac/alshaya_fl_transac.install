@@ -126,12 +126,12 @@ function _alshaya_fl_transac_get_metatag_translations() {
       'ar' => '[term:parent:name]',
     ],
     'alshaya_seo_sale_title_suffix' => [
-      'en' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
-      'ar' => '[alshaya_seo:year] Sale [alshaya_seo:title_sub_suffix]',
+      'en' => '[current-date:html_year] Sale [alshaya_seo:title_sub_suffix]',
+      'ar' => '[current-date:html_year] Sale [alshaya_seo:title_sub_suffix]',
     ],
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get [term:parent:name]\'s [term:name] Sale from [site:name]. Explore our [alshaya_seo:year] [term:name] luxury and high-quality [term:name] for [term:parent:name] offers',
-      'ar' => 'احصل على [term:parent:name] [term:name] عروض من [site:name]. اكتشف [alshaya_seo:year] اختيارات مجموعة فاخرة وعالية الجودة من [term:parent:name] [term:name]',
+      'en' => 'Get [term:parent:name]\'s [term:name] Sale from [site:name]. Explore our [current-date:html_year] [term:name] luxury and high-quality [term:name] for [term:parent:name] offers',
+      'ar' => 'احصل على [term:parent:name] [term:name] عروض من [site:name]. اكتشف [current-date:html_year] اختيارات مجموعة فاخرة وعالية الجودة من [term:parent:name] [term:name]',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop luxury and high-quality [alshaya_seo:brand_name] [term:name] for [term:parent:name]',
@@ -140,10 +140,6 @@ function _alshaya_fl_transac_get_metatag_translations() {
     'alshaya_seo_sale_title_sub_suffix' => [
       'en' => '- Online Offers',
       'ar' => '- Online Offers',
-    ],
-    'alshaya_seo_year' => [
-      'en' => '2019',
-      'ar' => '2019',
     ],
     'alshaya_seo_sale_keywords' => [
       'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',

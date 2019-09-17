@@ -788,20 +788,16 @@ function _alshaya_hm_get_metatag_translations() {
       'ar' => '[term:parent:name]',
     ],
     'alshaya_seo_sale_title_suffix' => [
-      'en' => '[alshaya_seo:year] Sale',
-      'ar' => '[alshaya_seo:year] البيع',
+      'en' => '[current-date:html_year] Sale',
+      'ar' => '[current-date:html_year] البيع',
     ],
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Shop [term:parent:name] [term:name] [alshaya_seo:year] sale from [site:name]. Explore our [alshaya_seo:year] luxury and high-quality [term:name] for [term:parent:name] offers',
-      'ar' => 'اكتشف عروض البيع [alshaya_seo:year] للرفاهية والجودة العالية [term:parent:name] [term:name] مجموعة',
+      'en' => 'Shop [term:parent:name] [term:name] [current-date:html_year] sale from [site:name]. Explore our [current-date:html_year] luxury and high-quality [term:name] for [term:parent:name] offers',
+      'ar' => 'اكتشف عروض البيع [current-date:html_year] للرفاهية والجودة العالية [term:parent:name] [term:name] مجموعة',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] for [term:parents:first]',
       'ar' => 'تسوق نطاق حصري وفاخر [term:name] لـ [term:parents:first] من [alshaya_seo:brand_name]',
-    ],
-    'alshaya_seo_year' => [
-      'en' => '[current-date:html_year]',
-      'ar' => '[current-date:html_year]',
     ],
     'alshaya_seo_top_category' => [
       'en' => 'for [term:parents:first]',

@@ -368,8 +368,8 @@ function alshaya_pb_transac_update_dependencies() {
 function _alshaya_pb_transac_get_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get [alshaya_seo:year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [alshaya_seo:year] luxury and high-quality [term:name] collection',
-      'ar' => 'احصل على عروض [alshaya_seo:year] على [term:name] من [site:name]. اكتشف عروض التصفية على مجموعاتنا الفاخرة وعالية الجودة [term:name]',
+      'en' => 'Get [current-date:html_year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [current-date:html_year] luxury and high-quality [term:name] collection',
+      'ar' => 'احصل على عروض [current-date:html_year] على [term:name] من [site:name]. اكتشف عروض التصفية على مجموعاتنا الفاخرة وعالية الجودة [term:name]',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop luxury and high-quality [term:name]',
@@ -382,10 +382,6 @@ function _alshaya_pb_transac_get_metatag_translations() {
     'alshaya_seo_title_sub_suffix' => [
       'en' => '- [term:parent]',
       'ar' => '- [term:parent]',
-    ],
-    'alshaya_seo_year' => [
-      'en' => '[current-date:html_year]',
-      'ar' => '[current-date:html_year]',
     ],
     'alshaya_seo_sale_title_suffix' => [
       'en' => ' Sale [alshaya_seo:title_sub_suffix]',

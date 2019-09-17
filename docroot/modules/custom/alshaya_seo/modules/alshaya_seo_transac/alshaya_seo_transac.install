@@ -150,8 +150,8 @@ function _alshaya_seo_transac_get_metatag_translations() {
       'ar' => 'مجموعة على الانترنت',
     ],
     'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [alshaya_seo:year] [term:name] collection specs and prices of [alshaya_seo:sub_categories] and more.',
-      'ar' => 'قارن مواصفات وأسعار [alshaya_seo:year] [term:name] [alshaya_seo:sub_categories] وأكثر من ذلك.',
+      'en' => 'Compare [current-date:html_year] [term:name] collection specs and prices of [alshaya_seo:sub_categories] and more.',
+      'ar' => 'قارن مواصفات وأسعار [current-date:html_year] [term:name] [alshaya_seo:sub_categories] وأكثر من ذلك.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
       'en' => 'Enjoy Free Returns and Cash on Delivery!',
