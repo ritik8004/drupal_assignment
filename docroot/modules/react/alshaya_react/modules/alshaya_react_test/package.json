@@ -8,7 +8,5 @@
     "watch": "../../../node_modules/.bin/webpack --watch",
     "gulp:build": "../../../node_modules/gulp/bin/gulp.js",
     "gulp:watch": "../../../node_modules/gulp/bin/gulp.js watch"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }
