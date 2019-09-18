@@ -12,6 +12,22 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Add gtm block config.
  */
+function alshaya_seo_transac_update_8409() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+    ],
+    'alshaya_seo_transac'
+  );
+  _alshaya_seo_transac_get_metatag_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add gtm block config.
+ */
 function alshaya_seo_transac_update_8406() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -119,4 +135,33 @@ function alshaya_seo_transac_install() {
   ];
   $config->set('tags', $tags);
   $config->save();
+
+  // Install metatag transalations.
+  _alshaya_seo_transac_get_metatag_translations();
+}
+
+/**
+ * Get metatag translations.
+ */
+function _alshaya_seo_transac_get_metatag_translations() {
+  $strings = [
+    'alshaya_seo_title_suffix' => [
+      'en' => 'Collection [alshaya_seo:top_category] Online',
+      'ar' => 'مجموعة على الانترنت',
+    ],
+    'alshaya_seo_text_before_cod' => [
+      'en' => 'Compare [current-date:html_year] [term:name] collection specs and prices of [alshaya_seo:sub_categories] and more.',
+      'ar' => 'قارن مواصفات وأسعار [current-date:html_year] [term:name] [alshaya_seo:sub_categories] وأكثر من ذلك.',
+    ],
+    'alshaya_seo_desc_free_delivery_n_cod' => [
+      'en' => 'Enjoy Free Returns and Cash on Delivery!',
+      'ar' => 'استمتع بعوائد مجانية ونقداعند التسليم!',
+    ],
+    'Shop' => [
+      'en' => 'Shop',
+      'ar' => 'تسوق',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
