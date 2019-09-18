@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\AcquiaCommerce;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 
@@ -104,6 +105,19 @@ interface SKUPluginInterface {
   public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE);
 
   /**
+   * Returns the SKU's display node id.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   The object of product.
+   * @param bool $check_parent
+   *   Flag to check for parent sku or not (for configurable products).
+   *
+   * @return int|string|null
+   *   Return node id if found or null.
+   */
+  public function getDisplayNodeId(SKU $sku, $check_parent = TRUE);
+
+  /**
    * Check if product is in stock.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -132,4 +146,40 @@ interface SKUPluginInterface {
    *   SKU Entity.
    */
   public function refreshStock(SKU $sku);
+
+  /**
+   * Get parent of current product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Current product.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|null
+   *   First Parent sku entity if found or null.
+   */
+  public function getParentSku(SKU $sku);
+
+  /**
+   * Get all parent skus.
+   *
+   * @param string $sku
+   *   SKU as string.
+   *
+   * @return array
+   *   Array containing parent entity id as key and sku as value for all
+   *   parent sku found for the given sku.
+   */
+  public function getAllParentIds(string $sku): array;
+
+  /**
+   * Get all available children ids.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU as string.
+   *
+   * @return array
+   *   Array containing child entity id as key and sku as value for all
+   *   children found for the given sku.
+   */
+  public function getAvailableChildrenIds(SKUInterface $sku);
+
 }
