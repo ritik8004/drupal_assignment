@@ -2885,15 +2885,9 @@ class SkuManager {
     // We will use node.sticky to map stock status in index.
     // For stock index, we use only in stock (1) or out of stock (0).
     // We will use 1 for not-buyable products too.
-    $in_stock = 0;
+    $in_stock = $this->getStockStatusForIndex($sku);
 
-    if (!alshaya_acm_product_is_buyable($sku)) {
-      $in_stock = 2;
-    }
-    elseif ($this->isProductInStock($sku)) {
-      $in_stock = 2;
-    }
-    else {
+    if ($in_stock === 0) {
       // If product is not in stock, remove all attributes data.
       // Get indexed fields.
       $fields = $item->getFields();
@@ -2909,6 +2903,25 @@ class SkuManager {
     }
 
     $item->getField('stock')->setValues([$in_stock]);
+  }
+
+  /**
+   * Helper function to get stock status for index item.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   *
+   * @return int
+   *   Return 2 if product is buyable or in-stock else 0.
+   */
+  public function getStockStatusForIndex(SKUInterface $sku) {
+    if (!alshaya_acm_product_is_buyable($sku)) {
+      return 2;
+    }
+    elseif ($this->isProductInStock($sku)) {
+      return 2;
+    }
+    return 0;
   }
 
   /**

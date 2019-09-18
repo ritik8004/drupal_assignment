@@ -176,7 +176,10 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 
     // Update stock info for product.
     $object['stock_quantity'] = $skuInfoHelper->calculateStock($sku);
-    update_stock_for_index($sku, $object);
+    $object['stock'] = $skuManager->getStockStatusForIndex($sku);
+    if ($object['stock'] === 0) {
+      _alshaya_search_algolia_remove_attributes_from_index($object);
+    }
 
     // Dispatches AlshayaAlgoliaProductIndexEvent::PRODUCT_INDEX, so that other
     // modules can update this array before an item is indexed.
@@ -189,37 +192,20 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 /**
  * Wrapper function to update stock data for index item.
  *
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   SKU entity.
  * @param array $item
  *   Index item.
  *
  * @see SkuManager::updateStockForIndex()
  */
-function update_stock_for_index(SKUInterface $sku, array &$item) {
-  // We will use node.sticky to map stock status in index.
-  // For stock index, we use only in stock (1) or out of stock (0).
-  // We will use 1 for not-buyable products too.
-  $in_stock = 0;
-
-  if (!alshaya_acm_product_is_buyable($sku)) {
-    $in_stock = 2;
-  }
-  elseif (\Drupal::service('alshaya_acm_product.skumanager')->isProductInStock($sku)) {
-    $in_stock = 2;
-  }
-  else {
-    // If product is not in stock, remove all attributes data.
-    foreach ($item as $field_key => $field_val) {
-      // Only unset/remove of attribute fields or this will remove the
-      // SKU from the indexing on default listing (without any filter).
-      if (strpos($field_key, 'attr_') !== FALSE) {
-        unset($item[$field_key]);
-      }
+function _alshaya_search_algolia_remove_attributes_from_index(array &$item) {
+  // If product is not in stock, remove all attributes data.
+  foreach ($item as $field_key => $field_val) {
+    // Only unset/remove of attribute fields or this will remove the
+    // SKU from the indexing on default listing (without any filter).
+    if (strpos($field_key, 'attr_') !== FALSE) {
+      unset($item[$field_key]);
     }
   }
-
-  $item['stock'] = $in_stock;
 }
 
 /**
