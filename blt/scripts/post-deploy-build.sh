@@ -9,7 +9,7 @@ uname_string=`uname`
 
 # Built css files are ignored in the repository. We need to remove these from
 # .gitignore for the css files to be pushed to ACSF.
-for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
+for dir in $(find $deployDir/docroot/themes/custom -mindepth 1 -maxdepth 1 -type d)
 do
   theme_type_dir=${dir##*/}
 
@@ -18,12 +18,17 @@ do
     continue
   fi
 
-  for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
+  for subdir in $(find $deployDir/docroot/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
   do
     theme_dir=${subdir##*/}
 
     if [ $theme_dir == 'node_modules' ]
     then
+      continue
+    fi
+
+    # Skip directories without gitignore file.
+    if [ ! -f $deployDir/docroot/themes/custom/$theme_type_dir/$theme_dir/.gitignore ]; then
       continue
     fi
 
