@@ -697,12 +697,13 @@
       });
 
       // If both promo block and body field images exist make sure promotionImpression is fired only once.
-      if ($('.paragraph--type--promo-block').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .field--name-body, .field--name-body > div[class^="rectangle"]:visible'), gtmPageType, 'promotionImpression');
+      // Adding slider promo banner class to track.
+      if ($('.paragraph--type--promo-block, .c-slider-promo').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .c-slider-promo, .field--name-body, .field--name-body > div[class^="rectangle"]:visible'), gtmPageType, 'promotionImpression');
       }
 
-      else if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
+      else if ($('.paragraph--type--promo-block, .c-slider-promo').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .c-slider-promo'), gtmPageType, 'promotionImpression');
         }
 
         // Tracking promotion image view inside body field.
@@ -777,12 +778,12 @@
         });
 
         // Track sorts.
-        $('select[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
-          var sortValue = $(this).find('option:selected').text();
+        $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
+          var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
           sortValue.trim();
           var data = {
             event: 'sort',
-            siteSection: section,
+            siteSection: section.trim(),
             sortValue: sortValue
           };
 
@@ -913,7 +914,8 @@
    */
   Drupal.alshaya_seo_gtm_push_promotion_impressions = function (highlights, gtmPageType, event) {
     var promotions = [];
-
+    var promo_para_elements = '.paragraph--type--promo-block, .c-slider-promo, .field--name-body > div[class^="rectangle"]:visible';
+    var promotion_counter = 0;
     highlights.each(function (key, highlight) {
       var position = 1;
       var creative = '';
@@ -931,19 +933,30 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
-        var imgSrc = $(highlight).find('picture img').attr('src');
-        if (typeof imgSrc === 'undefined') {
-          imgSrc = $(highlight).find('img').attr('src');
+      // adding or condition for advanced page pageType.
+      else if (gtmPageType === 'home page' || gtmPageType === 'department page' || gtmPageType === 'advanced page') {
+        if ($(highlight).find(promo_para_elements).length > 0) {
+          return true;
         }
-        position = key;
-        if (event === 'promotionClick') {
-          position = $(highlight).find('picture img').data('position');
+        var imgElem = $(highlight).find('picture img');
+        if (imgElem.length === 0) {
+          imgElem = $(highlight).find('img');
         }
-        else {
-          $(highlight).find('picture img').data('position', key);
+        var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
+          imgElem.attr('src') :
+          imgElem.attr('data-src');
+
+        // add position value only if image is there.
+        if (typeof imgSrc !== 'undefined') {
+          position = promotion_counter;
+          if (event === 'promotionClick') {
+            position = $(highlight).find('picture img').data('position');
+          }
+          else {
+            $(highlight).find('picture img').data('position', promotion_counter);
+          }
+          creative = Drupal.url(imgSrc);
         }
-        creative = Drupal.url(imgSrc);
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
@@ -980,7 +993,10 @@
             name: gtmPageType,
             position: 'slot' + position
           };
-          promotions.push(promotion);
+          if (typeof promotion !== 'undefined') {
+            promotion_counter++;
+            promotions.push(promotion);
+          }
         }
       }
     });

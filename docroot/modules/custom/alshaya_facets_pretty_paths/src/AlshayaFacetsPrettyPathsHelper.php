@@ -3,10 +3,15 @@
 namespace Drupal\alshaya_facets_pretty_paths;
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\facets\FacetManager\DefaultFacetManager;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -36,11 +41,49 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $termStorage;
 
   /**
+   * Node Storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
    * Language Manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
+
+  /**
+   * The path alias manager.
+   *
+   * @var \Drupal\Core\Path\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
+   * Facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetManager;
+
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Replacement characters for facet values.
+   */
+  const REPLACEMENTS = [
+    // Convert space to double underscore.
+    ' ' => '__',
+    // Convert hyphen to underscore.
+    '-' => '_',
+  ];
 
   /**
    * UserRecentOrders constructor.
@@ -53,66 +96,152 @@ class AlshayaFacetsPrettyPathsHelper {
    *   The entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   *   The path alias manager.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
+   *   Facet manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              AliasManagerInterface $alias_manager,
+                              DefaultFacetManager $facets_manager,
+                              ConfigFactoryInterface $config_factory) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
+    $this->aliasManager = $alias_manager;
+    $this->facetManager = $facets_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
    * Encode url components according to given rules.
    *
-   * @param string $element
+   * @param string $source
+   *   Facet source.
+   * @param string $alias
+   *   Facet alias.
+   * @param string $value
    *   Raw element value.
    *
    * @return string
    *   Encoded element.
    */
-  public static function encodeFacetUrlComponents($element) {
-    // Convert first letter to lowercase.
-    $words = explode(' ', $element);
-    $lc_word = '';
-    foreach ($words as $word) {
-      $word = ' ' . lcfirst($word);
-      $lc_word .= $word;
+  public function encodeFacetUrlComponents(string $source, string $alias, string $value) {
+    if (is_numeric($value)) {
+      return $value;
     }
-    $element = ltrim($lc_word);
 
-    // Convert spaces to '_'.
-    $element = str_replace(' ', '_', $element);
+    $static = &drupal_static(__FUNCTION__, []);
+    if (isset($static[$alias][$value])) {
+      return $static[$alias][$value];
+    }
 
-    // Convert - in the facet value to '__'.
-    $element = str_replace('-', '__', $element);
+    $encoded = $value;
+    $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
 
-    return $element;
+    $storage = $this->termStorage;
+    if ($attribute_code == 'field_acq_promotion_label') {
+      $storage = $this->nodeStorage;
+      $query = $storage->getQuery();
+      $query->condition('type', 'acq_promotion');
+      $query->condition('status', NodeInterface::PUBLISHED);
+      $query->condition($attribute_code, $value);
+    }
+    else {
+      $query = $storage->getQuery();
+      $query->condition('name', $value);
+      $query->condition('field_sku_attribute_code', $attribute_code);
+      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+    }
+    $ids = $query->execute();
+    foreach ($ids ?? [] as $id) {
+      $entity = $storage->load($id);
+      if ($entity instanceof EntityInterface) {
+        if ($entity->language()->getId() != 'en' && $entity->hasTranslation('en')) {
+          $entity = $entity->getTranslation('en');
+        }
 
+        $encoded = str_replace(
+          $entity instanceof TermInterface ? 'en/' . $this->getProductOptionAliasPrefix() . '/' : 'en/',
+          '',
+          trim($entity->toUrl()->toString(), '/')
+        );
+
+        break;
+      }
+    }
+
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $encoded = str_replace($original, $replacement, $encoded);
+    }
+
+    $static[$alias][$value] = $encoded;
+    return $encoded;
   }
 
   /**
    * Decode url components according to given rules.
    *
-   * @param string $element
+   * @param string $alias
+   *   Facet alias.
+   * @param string $value
    *   Encoded element value.
    *
    * @return string
    *   Raw element.
    */
-  public static function decodeFacetUrlComponents($element) {
-    // Convert __ in the facet value to '-'.
-    $element = str_replace('__', '-', $element);
+  public function decodeFacetUrlComponents(string $alias, string $value) {
+    if (is_numeric($value)) {
+      return $value;
+    }
 
-    // Convert _ to spaces.
-    $element = str_replace('_', ' ', $element);
+    $static = &drupal_static(__FUNCTION__, []);
+    if (isset($static[$value])) {
+      return $static[$value];
+    }
 
-    // Capitalize first letter.
-    $element = ucwords($element);
+    $decoded = $value;
+    foreach (self::REPLACEMENTS as $original => $replacement) {
+      $decoded = str_replace($replacement, $original, $decoded);
+    }
 
-    return $element;
+    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $type = 'term';
+    $storage = $this->termStorage;
+
+    if ($alias == 'promotions') {
+      $type = 'node';
+      $storage = $this->nodeStorage;
+    }
+
+    $id = str_replace(
+      $type == 'term' ? '/taxonomy/term/' : '/node/',
+      '',
+      $this->aliasManager->getPathByAlias($type == 'term' ? '/' . $this->getProductOptionAliasPrefix() . '/' . $decoded : '/' . $decoded, $current_langcode)
+    );
+
+    if ($id) {
+      $entity = $storage->load($id);
+
+      if ($entity instanceof EntityInterface) {
+        if ($entity->language()->getId() != $current_langcode && $entity->hasTranslation($current_langcode)) {
+          $entity = $entity->getTranslation($current_langcode);
+        }
+
+        $decoded = $type == 'term' ? $entity->label() : $entity->get('field_acq_promotion_label')->getString();
+      }
+    }
+
+    $static[$value] = $decoded;
+    return $decoded;
   }
 
   /**
@@ -153,44 +282,47 @@ class AlshayaFacetsPrettyPathsHelper {
   }
 
   /**
-   * Change language of params to other language.
+   * Get alias <=> field mapping for facets.
    *
-   * @param string $attribute_code
-   *   Target Language Code.
-   * @param string $filter_value
-   *   Target Language Code.
-   * @param bool $default
-   *   Whether to translate to default langague or not.
+   * @param string $source
+   *   Facet Source.
+   *
+   * @return array
+   *   Mapping with alias as key and field as value.
+   */
+  public function getFacetAliasFieldMapping(string $source) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$source])) {
+      return $static[$source];
+    }
+
+    $static[$source] = [];
+
+    // Get all facets of the given source.
+    $facets = $this->facetManager->getFacetsByFacetSourceId($source);
+    foreach ($facets ?? [] as $facet) {
+      $static[$source][$facet->getUrlAlias()] = str_replace('attr_', '', $facet->getFieldIdentifier());
+    }
+
+    return $static[$source];
+  }
+
+  /**
+   * Get the product options taxonomy path alias prefix.
    *
    * @return string
-   *   Processed query params.
+   *   Prefix.
    */
-  public function getTranslatedFilters(string $attribute_code, string $filter_value, bool $default = TRUE) {
-    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-    if ($current_langcode !== 'en') {
-      $translated_filter_values = &drupal_static(__FUNCTION__, []);
-      $required_langcode = $default ? 'en' : $current_langcode;
-      if (isset($translated_filter_values[$filter_value][$required_langcode])) {
-        return $translated_filter_values[$filter_value][$required_langcode];
-      }
-      $attribute_code = str_replace('plp_', '', $attribute_code);
-      $attribute_code = str_replace('promo_', '', $attribute_code);
-      $query = $this->termStorage->getQuery();
-      $query->condition('field_sku_attribute_code', $attribute_code);
-      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
-      $query->condition('name', $filter_value);
-      $tids = $query->execute();
-      if (!empty($tids)) {
-        $tid = reset($tids);
-        $term = $this->termStorage->load($tid);
-        if ($term instanceof TermInterface && $term->hasTranslation($required_langcode)) {
-          $term = $term->getTranslation($required_langcode);
-          $translated_filter_values[$filter_value][$required_langcode] = $term->label();
-          return $term->label();
-        }
-      }
+  public function getProductOptionAliasPrefix() {
+    static $prefix = NULL;
+
+    if (!isset($prefix)) {
+      $pattern = $this->configFactory->get('pathauto.pattern.sku_product_option')->get('pattern');
+      $prefix = str_replace('/[term:name]', '', $pattern);
     }
-    return $filter_value;
+
+    return $prefix;
   }
 
 }

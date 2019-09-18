@@ -385,7 +385,7 @@
       p {
         margin-top: 1.625rem;
         margin-bottom: 1.4rem;
-        font-size: 0.75rem;
+        font-size: 0.875rem !important;
         width: 15.9375rem;
 
         @include breakpoint($only-mobile) {
@@ -406,6 +406,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 0.875rem !important;
 
         @include breakpoint($only-mobile) {
           width: 17.9375rem;
@@ -796,6 +797,12 @@ main .user-register-form {
             h1 {
               top: -2rem;
             }
+          }
+        }
+
+        #block-content {
+          + #block-alshayasignupsigninbuttonsblock {
+            margin-top: 1.5rem;
           }
         }
       }

@@ -3,6 +3,8 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
@@ -25,7 +27,6 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
@@ -179,6 +180,13 @@ class MobileAppUtility {
   protected $redirects = [];
 
   /**
+   * Sku info helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
+   */
+  protected $skuInfoHelper;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -209,6 +217,8 @@ class MobileAppUtility {
    *   The renderer.
    * @param \Drupal\redirect\RedirectRepository $redirect_repsitory
    *   Redirect repository.
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
+   *   Sku info helper object.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -223,7 +233,8 @@ class MobileAppUtility {
                               ConfigFactoryInterface $config_factory,
                               APIWrapper $api_wrapper,
                               RendererInterface $renderer,
-                              RedirectRepository $redirect_repsitory) {
+                              RedirectRepository $redirect_repsitory,
+                              SkuInfoHelper $sku_info_helper) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -240,6 +251,7 @@ class MobileAppUtility {
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
     $this->redirectRepository = $redirect_repsitory;
+    $this->skuInfoHelper = $sku_info_helper;
   }
 
   /**
@@ -349,24 +361,17 @@ class MobileAppUtility {
    *   Return deeplink url.
    */
   public function getDeepLinkFromUrl(Url $url) {
-    if (!$url->isRouted()) {
-      if ($url->isExternal()) {
-        return FALSE;
-      }
-
-      $deeplink_url = $url->toString(TRUE)->getGeneratedUrl();
-      $deeplink_url = $this->getRedirectUrl($deeplink_url);
-
-      return self::ENDPOINT_PREFIX
-      . 'deeplink?url='
-      . $deeplink_url;
+    if ($url->isExternal()) {
+      return FALSE;
     }
-
-    $params = $url->getRouteParameters();
+    $deeplink_url = $url->toString(TRUE)->getGeneratedUrl();
+    $deeplink_url = $this->getRedirectUrl($deeplink_url);
+    $params = !empty($url->isRouted()) ? $url->getRouteParameters() : NULL;
     if (empty($params)) {
-      return '';
+      return self::ENDPOINT_PREFIX
+        . 'deeplink?url='
+        . $deeplink_url;
     }
-
     if (isset($params['taxonomy_term'])) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
     }
@@ -446,7 +451,7 @@ class MobileAppUtility {
       return FALSE;
     }
 
-    return $this->getEntityTranslation($node, $this->currentLanguage);
+    return $this->skuInfoHelper->getEntityTranslation($node, $this->currentLanguage);
   }
 
   /**
@@ -710,44 +715,16 @@ class MobileAppUtility {
       $xpath = new \DOMXPath($doc);
       // We are using `data-src` attribute as we are using blazy for images.
       // If blazy is disabled, then we need to revert back to `src` attribute.
-      $label['image'] = $xpath->evaluate("string(//img/@data-src)");
+      $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
+
+      // Checking if the image path is relative or absolute. If image path is
+      // absolute, we are using the same path.
+      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
+        ? $promo_image_path
+        : $this->requestStack->getSchemeAndHttpHost() . $promo_image_path;
     }
 
     return $labels;
-  }
-
-  /**
-   * Wrapper function to get media items for an SKU.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $context
-   *   Context.
-   *
-   * @return array
-   *   Media Items.
-   */
-  public function getMedia(SKUInterface $sku, string $context): array {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $media = $this->skuImagesManager->getProductMedia($sku, $context);
-
-    $return = [
-      'images' => [],
-      'videos' => [],
-    ];
-
-    foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      $return['images'][] = [
-        'url' => file_create_url($media_item['drupal_uri']),
-        'image_type' => $media_item['sortAssetType'] ?? 'image',
-      ];
-    }
-
-    foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-      $return['videos'][] = $media_item['video_url'];
-    }
-
-    return $return;
   }
 
   /**
@@ -818,20 +795,16 @@ class MobileAppUtility {
 
     // Get media (images/video) for the SKU.
     $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
-    $images = $this->getMedia($sku_for_gallery, 'search');
-
-    $link = $node->toUrl('canonical', ['absolute' => TRUE])
-      ->toString(TRUE)
-      ->getGeneratedUrl();
+    $images = $this->skuInfoHelper->getMedia($sku_for_gallery, 'search');
 
     $data = [
       'id' => (int) $sku->id(),
       'title' => $sku->label(),
       'sku' => $sku->getSku(),
       'deeplink' => $this->getDeepLink($sku),
-      'link' => $link,
-      'original_price' => $this->formatPriceDisplay($prices['price']),
-      'final_price' => $this->formatPriceDisplay($prices['final_price']),
+      'link' => $this->skuInfoHelper->getEntityUrl($node),
+      'original_price' => $this->skuInfoHelper->formatPriceDisplay($prices['price']),
+      'final_price' => $this->skuInfoHelper->formatPriceDisplay($prices['final_price']),
       'in_stock' => $this->skuManager->isProductInStock($sku),
       'promo' => $promotions,
       'medias' => $images,
@@ -862,8 +835,7 @@ class MobileAppUtility {
    */
   public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
     $return = [];
-    $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type);
-    $linkedSkus = $this->skuManager->filterRelatedSkus($linkedSkus);
+    $linkedSkus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
 
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
@@ -873,41 +845,6 @@ class MobileAppUtility {
     }
 
     return $return;
-  }
-
-  /**
-   * Get translation of given entity for given langcode.
-   *
-   * @param object $entity
-   *   The entity object.
-   * @param string $langcode
-   *   The language code.
-   *
-   * @return object
-   *   Return entity object with translation if exists otherwise as is.
-   */
-  public function getEntityTranslation($entity, $langcode) {
-    if (($entity instanceof ContentEntityInterface
-      || $entity instanceof ConfigEntityInterface)
-      && $entity->language()->getId() != $langcode
-      && $entity->hasTranslation($langcode)
-    ) {
-      $entity = $entity->getTranslation($langcode);
-    }
-    return $entity;
-  }
-
-  /**
-   * Return formatted price.
-   *
-   * @param float $price
-   *   The price.
-   *
-   * @return string
-   *   Return string price upto configured decimal points.
-   */
-  public function formatPriceDisplay(float $price): string {
-    return (string) _alshaya_acm_format_price_with_decimal($price);
   }
 
   /**

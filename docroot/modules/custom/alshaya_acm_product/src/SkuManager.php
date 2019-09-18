@@ -25,7 +25,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Drupal\pathauto\PathautoState;
@@ -57,6 +56,13 @@ class SkuManager {
   const AGGREGATED_LISTING = 'aggregated';
 
   const NON_AGGREGATED_LISTING = 'non_aggregated';
+
+  /**
+   * Flag to allow merge children in alshaya_color_split.
+   *
+   * @var bool
+   */
+  public static $colorSplitMergeChildren = TRUE;
 
   /**
    * Store selected variant id.
@@ -787,36 +793,30 @@ class SkuManager {
   }
 
   /**
-   * Get Promotion node object(s) related to provided SKU.
+   * Fetch SKU Promotions with field_acq_promotion_label value.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   The SKU Entity, for which linked promotions need to be fetched.
-   * @param string $view_mode
-   *   View mode around how the promotion needs to be rendered.
+   *   Product SKU.
    * @param array $types
-   *   Type of promotion to filter on.
-   * @param string $product_view_mode
-   *   Product view mode for which promotion is being rendered.
-   * @param bool $check_parent
-   *   Flag to specify if we should check parent sku or not.
+   *   Promotion Types.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
-   *   blank array, if no promotions found, else Array of promotion entities.
+   *   List of Promotion Nodes.
    */
-  public function getPromotionsFromSkuId(SKU $sku,
-                                         string $view_mode,
-                                         array $types = ['cart', 'category'],
-                                         $product_view_mode = NULL,
-                                         $check_parent = TRUE) {
-
-    $promos = [];
-    $promotion_nids = [];
-
+  public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
+    $promotion_nodes = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
-    // Preserve the original view mode passed to this function, since we are
-    // altering this one in case of free gifts.
-    $view_mode_original = $view_mode;
+    if (empty($promotion) && $sku->bundle() == 'simple') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
+      if ($parent instanceof SKUInterface) {
+        $promotion = $parent->get('field_acq_sku_promotions')->getValue();
+      }
+    }
+
+    $promotion_nids = [];
     foreach ($promotion as $promo) {
       $promotion_nids[] = $promo['target_id'];
     }
@@ -832,68 +832,103 @@ class SkuManager {
       $nids = $query->execute();
 
       $promotion_nodes = $this->nodeStorage->loadMultiple($nids);
+    }
 
-      /* @var \Drupal\node\Entity\Node $promotion_node */
-      foreach ($promotion_nodes as $promotion_node) {
-        // Get the promotion with language fallback, if it did not have a
-        // translation for $langcode.
-        $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
-        $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
+    return $promotion_nodes;
+  }
 
-        $description = '';
-        $description_item = $promotion_node->get('field_acq_promotion_description')->first();
-        if ($description_item) {
-          $description = $description_item->getValue();
-        }
+  /**
+   * Prepare display for Promotions of a SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   The SKU Entity, for which linked promotions need to be fetched.
+   * @param array|\Drupal\Core\Entity\EntityInterface[] $promotion_nodes
+   *   List of promotion nodes.
+   * @param string $view_mode
+   *   View mode around how the promotion needs to be rendered.
+   * @param array $types
+   *   Type of promotion to filter on.
+   * @param string $product_view_mode
+   *   Product view mode for which promotion is being rendered.
+   * @param bool $check_parent
+   *   Flag to specify if we should check parent sku or not.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface[]
+   *   blank array, if no promotions found, else Array of promotion entities.
+   */
+  public function preparePromotionsDisplay(SKU $sku,
+                                           $promotion_nodes,
+                                           $view_mode,
+                                           array $types = ['cart', 'category'],
+                                           $product_view_mode = NULL,
+                                           $check_parent = TRUE) {
+    $promos = [];
+    $view_mode_original = $view_mode;
 
-        $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
-        $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
-        $free_gift_skus = [];
+    foreach ($promotion_nodes as $promotion_node) {
+      // Get the promotion with language fallback, if it did not have a
+      // translation for $langcode.
+      $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
+      $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
 
-        // Alter view mode while rendering a promotion with free skus on PDP.
-        if (($product_view_mode == 'full') && !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
-          $view_mode = 'free_gift';
-        }
-        else {
-          $view_mode = $view_mode_original;
-        }
+      $description = '';
+      $description_item = $promotion_node->get('field_acq_promotion_description')->first();
+      if ($description_item) {
+        $description = $description_item->getValue();
+      }
 
-        switch ($view_mode) {
-          case 'links':
+      $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
+      $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
+      $free_gift_skus = [];
+
+      // Alter view mode while rendering a promotion with free skus on PDP.
+      if (($product_view_mode == 'full') && !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+        $view_mode = 'free_gift';
+      }
+      else {
+        $view_mode = $view_mode_original;
+      }
+
+      switch ($view_mode) {
+        case 'links':
+          try {
             $promos[$promotion_node->id()] = $promotion_node
               ->toLink($promotion_text)
               ->toString()
               ->getGeneratedLink();
-            break;
+          }
+          catch (\Exception $exception) {
+            watchdog_exception('alshaya_acm_promotion', $exception);
+          }
+          break;
 
-          case 'free_gift':
-            $promos[$promotion_node->id()] = [];
-            $promos[$promotion_node->id()]['text'] = $promotion_text;
-            $promos[$promotion_node->id()]['description'] = $description;
-            $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
-            foreach ($free_gift_skus as $free_gift_sku) {
-              $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
-            }
-            break;
+        case 'free_gift':
+          $promos[$promotion_node->id()] = [];
+          $promos[$promotion_node->id()]['text'] = $promotion_text;
+          $promos[$promotion_node->id()]['description'] = $description;
+          $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
+          foreach ($free_gift_skus as $free_gift_sku) {
+            $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
+          }
+          break;
 
-          default:
-            $promos[$promotion_node->id()] = [
-              'text' => $promotion_text,
-              'description' => $description,
-              'discount_type' => $discount_type,
-              'discount_value' => $discount_value,
-              'rule_id' => $promotion_node->get('field_acq_promotion_rule_id')->getString(),
-            ];
+        default:
+          $promos[$promotion_node->id()] = [
+            'text' => $promotion_text,
+            'description' => $description,
+            'discount_type' => $discount_type,
+            'discount_value' => $discount_value,
+            'rule_id' => $promotion_node->get('field_acq_promotion_rule_id')->getString(),
+          ];
 
-            if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
-              $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
-            }
+          if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+            $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
+          }
 
-            if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
-              $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
-            }
-            break;
-        }
+          if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
+            $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
+          }
+          break;
       }
     }
 
@@ -911,6 +946,37 @@ class SkuManager {
           return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode, FALSE);
         }
       }
+    }
+
+    return $promos;
+  }
+
+  /**
+   * Get Promotion node object(s) related to provided SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   The SKU Entity, for which linked promotions need to be fetched.
+   * @param string $view_mode
+   *   View mode around how the promotion needs to be rendered.
+   * @param array $types
+   *   Type of promotion to filter on.
+   * @param string $product_view_mode
+   *   Product view mode for which promotion is being rendered.
+   * @param bool $check_parent
+   *   Flag to specify if we should check parent sku or not.
+   *
+   * @return array|\Drupal\Core\Entity\EntityInterface[]
+   *   blank array, if no promotions found, else Array of promotion entities.
+   */
+  public function getPromotionsFromSkuId(SKU $sku,
+                                         $view_mode,
+                                         array $types = ['cart', 'category'],
+                                         $product_view_mode = NULL,
+                                         $check_parent = TRUE) {
+    $promos = [];
+    $promotion_nodes = $this->getSkuPromotions($sku, $types);
+    if (!empty($promotion_nodes)) {
+      $promos = $this->preparePromotionsDisplay($sku, $promotion_nodes, $view_mode, $types, $product_view_mode, $check_parent);
     }
 
     return $promos;
@@ -1178,56 +1244,116 @@ class SkuManager {
   }
 
   /**
-   * Helper function to do a cheaper call to fetch skus for a promotion.
+   * Helper function to do a cheaper call to fetch SKUs for a promotion.
    *
-   * @param \Drupal\node\Entity\Node $promotion
-   *   Promotion for which we need to fetch skus.
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion for which we need to fetch SKUs.
+   * @param bool $includeChildSkus
+   *   Flag to consider child SKUs while preparing SKU list.
    *
    * @return array
    *   List of skus related with a promotion.
    */
-  public function getSkutextsForPromotion(Node $promotion) {
-    $skus = [];
-
-    $cid = 'promotions_sku_' . $promotion->id();
-    if (!empty($this->cache->get($cid))) {
-      $skus_cache = $this->cache->get($cid);
-      $skus = $skus_cache->data;
+  public function getSkutextsForPromotion(NodeInterface $promotion, $includeChildSkus = FALSE) {
+    if (!$includeChildSkus) {
+      $cid = 'promotions_sku_' . $promotion->id();
+      if (!empty($this->cache->get($cid))) {
+        $skus_cache = $this->cache->get($cid);
+        $skus = $skus_cache->data;
+      }
+      else {
+        // Fetch corresponding SKUs for promotion.
+        $skus = $this->fetchSkuTextsForPromotion($promotion);
+        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+      }
     }
     else {
-      // Get configurable SKUs.
-      $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-      $query->condition('asfd.type', 'configurable');
-      $query->fields('asfd', ['id', 'sku']);
-      $query->distinct();
-      $config_skus = $query->execute()->fetchAllKeyed(0, 1);
-
-      // We may not have anything in Simple.
-      $skus = $config_skus;
-
-      // Get Simple SKUs.
-      $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
-      $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-      $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
-      $query->condition('asfd.type', 'simple');
-      $query->fields('asfd', ['id', 'sku']);
-      $query->distinct();
-      $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
-
-      if ($simple_skus) {
-        $skus = array_unique(array_merge($skus, $simple_skus));
-
-        // Get all parent SKUs for simple ones.
-        $parent_skus = $this->getParentSkus($simple_skus);
-        $skus = array_unique(array_merge($skus, $parent_skus));
+      $cid = 'promotions_all_sku_' . $promotion->id();
+      if (!empty($this->cache->get($cid))) {
+        $skus_cache = $this->cache->get($cid);
+        $skus = $skus_cache->data;
       }
+      else {
+        // Fetch corresponding SKUs for promotion.
+        $skus = $this->fetchSkuTextsForPromotion($promotion);
+        if (!empty($skus)) {
+          // Fetch child SKUs based on configurable parent SKUs.
+          $childSkus = $this->fetchChildSkuTexts($skus);
+          if (!empty($childSkus)) {
+            // Merge the list of SKUs.
+            $skus = array_unique(array_merge($skus, $childSkus));
+          }
+        }
 
-      $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+      }
     }
 
     return $skus;
+  }
+
+  /**
+   * Prepares list of Promotion SKUs.
+   *
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion for which we need to fetch SKUs.
+   *
+   * @return array
+   *   Unique list of SKUs.
+   */
+  public function fetchSkuTextsForPromotion(NodeInterface $promotion) {
+    // Get configurable and SKUs.
+    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+    $query->condition('asfd.type', ['simple', 'configurable'], 'IN');
+    $query->fields('asfd', ['id', 'sku', 'type']);
+    $query->distinct();
+    $results = $query->execute()->fetchAll();
+
+    $skus = [];
+    $simple_skus = [];
+    foreach ($results as $result) {
+      switch ($result->type) {
+        case 'simple':
+          $simple_skus[$result->id] = $result->sku;
+          break;
+
+        case 'configurable':
+          $skus[$result->id] = $result->sku;
+          break;
+      }
+    }
+
+    if ($simple_skus) {
+      $skus = array_unique(array_merge($skus, $simple_skus));
+
+      // Get all parent SKUs for simple ones.
+      $parent_skus = $this->getParentSkus($simple_skus);
+      $skus = array_unique(array_merge($skus, $parent_skus));
+    }
+
+    return $skus;
+  }
+
+  /**
+   * Prepares unique list of child SKUs based on given configurable SKUs.
+   *
+   * @param array $skus
+   *   List of configurable SKUs.
+   *
+   * @return array
+   *   Unique List of child SKUs.
+   */
+  public function fetchChildSkuTexts(array $skus) {
+    $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = asfcs.entity_id');
+    $query->condition('asfd.sku', $skus, 'IN');
+    $query->fields('asfcs', ['field_configured_skus_value']);
+    $query->distinct();
+    $childSkus = $query->execute()->fetchCol();
+
+    return $childSkus;
   }
 
   /**
@@ -1317,26 +1443,20 @@ class SkuManager {
         '@sku' => $sku,
         '@function' => 'SkuManager::getDisplayNode()',
       ]);
-
       return NULL;
     }
 
-    $langcode = $sku_entity->language()->getId();
-    $sku_string = $sku_entity->getSku();
-
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
-
     $node = $plugin->getDisplayNode($sku_entity, $check_parent);
 
     if (!($node instanceof NodeInterface)) {
       if ($check_parent) {
         $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-          '@langcode' => $langcode,
-          '@sku' => $sku_string,
+          '@langcode' => $sku_entity->language()->getId(),
+          '@sku' => $sku_entity->getSku(),
         ]);
       }
-
       return NULL;
     }
 
@@ -2499,28 +2619,51 @@ class SkuManager {
     if ($entity instanceof SKUInterface) {
       $entity = $this->getDisplayNode($entity);
     }
-    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+
+    $static = &drupal_static(__FUNCTION__, []);
+
+    // Load default from config.
+    if (!isset($static['default'])) {
+      $static['default'] = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    }
+
+    // If we don't have product node, let's just return default.
+    if (!($entity instanceof NodeInterface) || $entity->bundle() !== 'acq_product') {
+      return $this->getContextFromLayoutKey($context, $static['default']);
+    }
+
+    // Return from static cache if we already have it processed once.
+    if (isset($static[$entity->id()])) {
+      return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
+    }
+
+    // Set default in static, we will override below if we have something
+    // available from terms.
+    $static[$entity->id()] = $static['default'];
+
+    if (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
-        if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
-          $pdp_layout = $term->get('field_pdp_layout')->getString();
+        if ($term instanceof TermInterface) {
+          $pdp_layout = $term->get('field_pdp_layout')->getString() ?? NULL;
           if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
             $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
             foreach ($taxonomy_parents as $taxonomy_parent) {
               $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
               if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
-                return $this->getContextFromLayoutKey($context, $pdp_layout);
+                $static[$entity->id()] = $pdp_layout;
+                break;
               }
             }
           }
           else {
-            return $this->getContextFromLayoutKey($context, $pdp_layout);
+            $static[$entity->id()] = $pdp_layout;
           }
         }
       }
     }
-    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
-    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+
+    return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
   }
 
   /**
@@ -2790,6 +2933,8 @@ class SkuManager {
    * @throws \Exception
    */
   public function processIndexItem(NodeInterface $node, ItemInterface $item) {
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $langcode = $node->language()->getId();
 
     $sku_string = $this->getSkuForNode($node);
@@ -2909,6 +3054,7 @@ class SkuManager {
     $data = [];
     $has_color_data = FALSE;
     $children = $this->getAvailableChildren($sku) ?? [];
+
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
     // Gather data from children to set in parent.
@@ -3003,15 +3149,22 @@ class SkuManager {
    *   Description of the product.
    */
   public function getDescription(SKUInterface $sku, $context) {
-    $prod_description = [];
-    if ($body = $sku->get('attr_description')->getValue()) {
-      $prod_description['description'] = [
-        '#markup' => $body[0]['value'],
-      ];
-    }
-    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
+    return $this->productInfoHelper->getValue($sku, 'description', $context);
+  }
 
-    return $prod_description;
+  /**
+   * Get description for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Description of the product.
+   */
+  public function getShortDescription(SKUInterface $sku, $context) {
+    return $this->productInfoHelper->getValue($sku, 'short_description', $context);
   }
 
   /**

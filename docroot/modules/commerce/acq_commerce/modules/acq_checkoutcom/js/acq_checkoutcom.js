@@ -12,7 +12,7 @@
   // Display errors for form fields.
   $.fn.checkoutPaymentError = function (formErrors) {
     Drupal.checkoutComProcessed = false;
-    for (const errorFieldName in formErrors) {
+    for (var errorFieldName in formErrors) {
       Drupal.checkoutComShowError($('[name="'+ errorFieldName +'"]'), formErrors[errorFieldName]);
     }
     $(document).trigger('checkoutcom_form_error');
@@ -22,6 +22,7 @@
   Drupal.checkoutComShowError = function (element, error) {
     var errorDiv = $('<div class="form-item--error-message" />');
     errorDiv.html(error);
+    element.addClass('error');
     element.parent().find('.form-item--error-message').remove();
     element.parent().append(errorDiv);
   };
@@ -37,10 +38,20 @@
     window.scrollTo(0, 0);
   };
 
+  // Helper method to remove the name attributes to ensure it is not posted to server even by mistake.
+  Drupal.checkoutComRemoveNameAttribute = function (form) {
+    $(form).find('.payment_card_new').find('input:text, input[type="tel"], input:password, select').each(function () {
+      $(this).data('name', $(this).attr('name'));
+      $(this).removeAttr('name');
+    });
+  };
+
   Drupal.checkoutComValidateBeforeCheckout = function (form) {
     if (!$(form).valid()) {
       return;
     }
+
+    Drupal.checkoutComRemoveNameAttribute(form);
 
     // Collect data to be processed.
     var formData = $(form).find('input:not(.checkoutcom-input), select:not(.checkoutcom-input)').serialize();
@@ -62,6 +73,6 @@
         type: 'POST',
       }).execute();
     }
-  }
+  };
 
 })(jQuery, Drupal);

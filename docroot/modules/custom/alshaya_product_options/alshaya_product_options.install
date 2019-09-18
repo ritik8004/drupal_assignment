@@ -8,6 +8,36 @@
 /**
  * Implements hook_update_N().
  *
+ * Update alias pattern for sku_product_option vocabulary.
+ */
+function alshaya_product_options_update_8005() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['pathauto.pattern.sku_product_option'],
+    'alshaya_product_options'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable aliases for sku_product_option vocabulary.
+ */
+function alshaya_product_options_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['pathauto.pattern.sku_product_option'],
+    'alshaya_product_options'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete all the caches for product options.
  */
 function alshaya_product_options_update_8003() {

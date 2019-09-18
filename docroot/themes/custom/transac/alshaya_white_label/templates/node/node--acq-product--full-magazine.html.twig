@@ -8,9 +8,6 @@
       <div id="product-zoom-container"></div>
     {% endif %}
   </div>
-
-  {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
-
 {% endblock %}
 {% block contentSidebar %}
   <div class="content-sidebar-wrapper">
@@ -118,4 +115,8 @@
       <div class="size-tray-buttons"></div>
     </div>
 </div>
+{% endblock %}
+
+{% block desktopCS %}
+  {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
 {% endblock %}

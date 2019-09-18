@@ -1,0 +1,135 @@
+@include breakpoint($desktop) {
+  .menu--one__list-item {
+    .menu--two__list {
+      .menu__links__wrapper {
+        position: relative;
+
+        .menu--two__list-item {
+          &:not(.move-to-right) {
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            padding-#{$left}: 0;
+            margin-bottom: 0.875rem;
+
+            &::before {
+              content: "";
+              width: 0;
+              height: 2.25rem;
+              margin-#{$right}: 1.25rem;
+              background-color: $megamenu-inline-layout-active-border-color;
+            }
+
+            @include icon(chevron#{$right}, after) {
+              margin-#{$left}: -1.875rem;
+              font-size: 1.125rem;
+              transition: none;
+            }
+
+            .menu--three__list {
+              position: absolute !important;
+              #{$left}: 95%;
+              opacity: 0;
+              visibility: hidden;
+              transition: none;
+              margin-#{$left}: 1.5rem;
+            }
+
+            &.active {
+              > .menu__link-wrapper a {
+                color: $megamenu-inline-layout-active-border-color !important;
+              }
+
+              .menu--three__list {
+                visibility: visible;
+                #{$left}: 100%;
+                opacity: 1;
+                pointer-events: auto;
+                column-fill: auto;
+                transition: all 0.5s ease-out;
+                width: auto;
+              }
+
+              &::before {
+                width: 0.25rem;
+                transition: all 0.3s ease-out;
+              }
+
+              &::after {
+                margin-#{$left}: -1.25rem;
+                transition: $right 0.3s ease-out;
+                color: $megamenu-inline-layout-active-border-color;
+              }
+            }
+
+            > .menu__link-wrapper {
+              margin: 0.125rem 0 0;
+              max-width: none;
+
+              &:hover {
+                cursor: pointer;
+              }
+            }
+
+            &.last-element {
+              margin-#{$left}: 1.25rem;
+
+              &::after,
+              &::before {
+                display: none;
+              }
+            }
+          }
+
+          .menu--three__list {
+            li {
+              height: auto;
+              min-height: 2.5625rem;
+              display: flex;
+              align-items: center;
+              margin-#{$right}: 0;
+            }
+          }
+
+          &.move-to-right {
+            position: absolute;
+            top: 0;
+            #{$left}: 28.875rem;
+            padding-#{$left}: 1.875rem;
+
+            &::before {
+              content: '';
+              width: 1px;
+              height: 24.5625rem;
+              position: absolute;
+              #{$left}: 0;
+              background-color: $megamenu-inline-layout-right-category-seperator;
+            }
+
+            &.move-to-left {
+              #{$left}: 15.25rem;
+              transition: $left 0.3s ease-out;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .block-alshaya-main-menu li.menu--one__list-item.active {
+    .menu__links__wrapper {
+      .menu--two__list-item:not(.move-to-right) {
+        &.active {
+          .menu--three__list {
+            visibility: visible;
+            #{$left}: 100%;
+            opacity: 1;
+            pointer-events: auto;
+            column-fill: auto;
+            transition: all 0.8s ease-out;
+          }
+        }
+      }
+    }
+  }
+}

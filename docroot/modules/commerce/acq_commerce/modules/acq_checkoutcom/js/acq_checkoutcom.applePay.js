@@ -8,13 +8,10 @@
 
   var applePaySessionObject;
 
-  class CheckoutComApplePay {
-    constructor(settings, context) {
-      this.context = context;
-      this.settings = settings;
-    }
-
-    performValidation (valURL) {
+  function CheckoutComApplePay(settings, context){
+    this.context = context;
+    this.settings = settings;
+    this.performValidation = function (valURL) {
       var controllerUrl = Drupal.url('checkoutcom/applepay/validate');
       var validationUrl = controllerUrl + '?u=' + valURL;
 
@@ -28,9 +25,9 @@
         xhr.open('GET', validationUrl);
         xhr.send();
       });
-    }
+    };
 
-    sendChargeRequest (paymentData) {
+    this.sendChargeRequest = function (paymentData) {
       return new Promise(function(resolve, reject) {
         $.ajax({
           url: Drupal.url('checkoutcom/applepay/save-payment'),
@@ -49,10 +46,6 @@
           }
         });
       });
-    }
-
-    getLineItems () {
-      return [];
     };
   }
 
@@ -80,6 +73,18 @@
       Drupal.checkoutComProcessed = false;
       Drupal.checkoutComValidateBeforeCheckout($(this).closest('form'));
 
+      // Some features are not supported in some versions, this is browser
+      // specific so done in JS.
+      var version = Drupal.getApplePaySupportedVersion();
+
+      // Mada is supported only from version 5 onwards.
+      var networks = drupalSettings.checkoutCom.supportedNetworks.split(',');
+      if (version < 5) {
+        networks = networks.filter(function (element) {
+          return element !== 'mada';
+        });
+      }
+
       // Prepare the parameters.
       var paymentRequest = {
         merchantIdentifier: drupalSettings.checkoutCom.merchantIdentifier,
@@ -89,9 +94,8 @@
           label: drupalSettings.checkoutCom.storeName,
           amount: drupalSettings.checkoutCom.runningTotal
         },
-        supportedNetworks: drupalSettings.checkoutCom.supportedNetworks.split(','),
-        merchantCapabilities: drupalSettings.checkoutCom.merchantCapabilities.split(','),
-        supportedCountries: drupalSettings.checkoutCom.supportedCountries.split(',')
+        supportedNetworks: networks,
+        merchantCapabilities: drupalSettings.checkoutCom.merchantCapabilities.split(',')
       };
 
       // Start the payment session.
@@ -136,15 +140,25 @@
     });
   }
 
-  Drupal.behaviors.acqCheckoutComApplePay = {
-    attach: function (context, settings) {
-      // Proceed if ApplePay is supported.
-      if (window.ApplePaySession) {
-        let applePay = new CheckoutComApplePay(settings, context);
-        $('#payment_method_checkout_com_applepay', context).addClass('supported');
-        launchApplePay(applePay);
+  /**
+   * Get supported version in specific device / browser.
+   *
+   * @returns {number}
+   *   Supported version.
+   *
+   * @see https://developer.apple.com/documentation/apple_pay_on_the_web/applepaysession/1778014-supportsversion
+   */
+  Drupal.getApplePaySupportedVersion = function () {
+    // When this code is written max version supported is 6. We would need
+    // to test new versions whenever required to upgrade so not making it a
+    // config. Same for minimum version.
+    for (var i = 6; i > 1; i--) {
+      if (ApplePaySession.supportsVersion(i)) {
+        break;
       }
     }
+
+    return i;
   };
 
   // Submit form on success.
@@ -152,5 +166,17 @@
     // Begin session
     applePaySessionObject.begin();
   };
+
+  if (window.ApplePaySession) {
+    // Show Apple pay at once, we will hide again quickly if something
+    // goes wrong.
+    $('#payment_method_checkout_com_applepay').addClass('supported');
+
+    // Do next check only if user has selected apple pay.
+    if ($('#ckoApplePayButton').length > 0) {
+      let applePay = new CheckoutComApplePay(drupalSettings, $(document));
+      launchApplePay(applePay);
+    }
+  }
 
 })(jQuery, Drupal, drupalSettings);

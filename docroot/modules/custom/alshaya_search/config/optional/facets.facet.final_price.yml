@@ -13,7 +13,7 @@ third_party_settings:
     display_textbox_item_count: ''
 id: final_price
 name: 'Final Price'
-url_alias: final_price
+url_alias: price
 weight: 0
 min_count: 1
 show_only_one_result: false

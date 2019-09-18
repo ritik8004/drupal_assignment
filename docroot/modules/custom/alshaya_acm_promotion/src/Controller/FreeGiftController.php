@@ -111,7 +111,7 @@ class FreeGiftController extends ControllerBase {
       $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
       $build = $view_builder->view($sku, 'free_gift');
 
-      if ($request->query->get('promotion_id')) {
+      if ($request->query->get('back')) {
         $response = new AjaxResponse();
         $response->addCommand(new HtmlCommand('#drupal-modal', $build));
         return $response;

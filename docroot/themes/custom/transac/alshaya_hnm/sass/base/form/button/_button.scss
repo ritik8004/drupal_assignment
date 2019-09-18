@@ -24,10 +24,6 @@
     font-family: $hnm-bold;
     font-weight: normal;
     text-transform: uppercase;
-
-    @include breakpoint($desktop) {
-      line-height: 1.4375rem;
-    }
   }
 }
 

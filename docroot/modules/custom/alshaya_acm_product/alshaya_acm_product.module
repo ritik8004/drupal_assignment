@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Controller\ProductStockController;
@@ -294,24 +295,28 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
 
   $items['product_composition_markup'] = [
     'variables' => [
+      'title' => NULL,
       'composition' => NULL,
     ],
   ];
 
   $items['product_article_warning_markup'] = [
     'variables' => [
+      'title' => NULL,
       'warning' => NULL,
     ],
   ];
 
   $items['product_concept_markup'] = [
     'variables' => [
+      'title' => NULL,
       'concepts' => NULL,
     ],
   ];
 
   $items['product_material_markup'] = [
     'variables' => [
+      'title' => NULL,
       'material' => NULL,
     ],
   ];
@@ -512,7 +517,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Get cross-sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
-          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
+          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
             $build['cross_sell'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
@@ -526,7 +531,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_UPSELL))) {
+        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL))) {
           $build['up_sell'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
@@ -538,7 +543,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['up_sell']['#weight'] = 10;
         }
 
-        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_RELATED))) {
+        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED))) {
           $build['related'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
@@ -635,6 +640,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Process price block and gallery for modal and full view mode.
       if (in_array($view_mode, ['modal', 'full'])) {
+        $pdp_layout = $skuManager->getPdpLayout($entity, $context);
+
         // Get the gallery for selected SKU if selected sku id available in
         // query params, else show it from main parent sku itself.
         $sku_for_gallery = $sku_entity;
@@ -661,7 +668,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         if ($sku_for_gallery instanceof SKUInterface) {
-          $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
           $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE);
         }
 
@@ -711,6 +717,7 @@ function alshaya_acm_product_get_home_delivery_config() {
 function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
@@ -1294,6 +1301,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   $selected = $selected ?? [];
+  $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
+  $pdp_layout = $skuManager->getPdpLayout($sku, $context);
 
   // Calculate available config options based on the attribute value selected,
   // in case of multiple config attributes with a product.
@@ -1333,8 +1342,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
-    $pdp_layout = $skuManager->getPdpLayout($tree_pointer, $context);
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, $pdp_layout, '', FALSE);
 
     if (isset($build['gallery'])) {
@@ -1406,7 +1413,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $promotion_links = implode('</br>', $promotions);
     }
 
-    $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
+    $response->addCommand(new HtmlCommand('.promotions .promotion-labels', $promotion_links));
 
     // Update the article class to include out of stock class if not in stock.
     // Remove the class if in stock.
@@ -1418,6 +1425,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
       $composition_markup = [
         '#theme' => 'product_composition_markup',
+        '#title' => t('composition'),
       ];
 
       if (!empty($composition)) {
@@ -1432,6 +1440,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
       $warning_markup = [
         '#theme' => 'product_article_warning_markup',
+        '#title' => t('safety warning'),
       ];
 
       if (!empty($warning)) {
@@ -1450,7 +1459,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         '#views_display_id' => 'block_product_slider',
       ];
 
-      if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL))) {
+      if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
         $cross_sell_markup['#data'] = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
       }
 
@@ -1504,10 +1513,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-
-    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
-    $pdp_layout = $skuManager->getPdpLayout($sku, $context);
-
     if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
@@ -1978,6 +1983,26 @@ function _alshaya_acm_product_adjust_facet_block() {
 
   foreach ($fct_block_data as $type => $facet_blck_source) {
     _alshaya_acm_product_adjust_block_weight($type, key($facet_blck_source), $facet_blck_source[key($facet_blck_source)]);
+  }
+
+  // Set weight of selling price facet as per the final price facet
+  // to maintain facet sequence on listing pages.
+  $block_ids = [
+    'skusskureferencefinalprice' => 'plpsellingprice',
+    'promotionpricefacet' => 'promosellingprice',
+    'finalprice' => 'sellingprice',
+  ];
+
+  foreach ($block_ids as $price_block_id => $block_id) {
+    $price_block = Block::load($price_block_id);
+    if ($price_block instanceof BlockInterface) {
+      try {
+        Block::load($block_id)->setWeight($price_block->getWeight())->save();
+      }
+      catch (Exception $e) {
+        // Do nothing.
+      }
+    }
   }
 }
 

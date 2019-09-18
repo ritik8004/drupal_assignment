@@ -8,7 +8,7 @@ dependencies:
     - search_api
 id: skus_sku_reference_final_price
 name: 'SKUs » SKU Reference » Final Price'
-url_alias: skus_sku_reference_final_price
+url_alias: price
 weight: 0
 min_count: 1
 show_only_one_result: false

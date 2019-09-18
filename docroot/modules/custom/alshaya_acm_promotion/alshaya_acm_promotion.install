@@ -13,6 +13,24 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Add new setting 'dynamic_labels'.
+ */
+function alshaya_acm_promotion_update_8017() {
+  alshaya_config_install_configs(['alshaya_acm_promotion.settings'], 'alshaya_acm_promotion');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add Translations for Dynamic Promo Labels.
+ */
+function alshaya_acm_promotion_update_8016() {
+  _alshaya_acm_promotion_add_promotions_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Making promotion coupon field cardinality unlimited.
  */
 function alshaya_acm_promotion_update_8015() {
@@ -202,4 +220,28 @@ function alshaya_acm_promotion_update_dependencies() {
     'alshaya_acm_promotion' => 8014,
   ];
   return $dependencies;
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_promotion_install() {
+  // Add Translations for Dynamic Promo Labels.
+  _alshaya_acm_promotion_add_promotions_translations();
+}
+
+/**
+ * Add Translations for Dynamic Promo Labels.
+ */
+function _alshaya_acm_promotion_add_promotions_translations() {
+  // Add Translations.
+  $strings = [
+    'Add @z more to get FREE item' => [
+      'ar' => 'أضف @z واحصل على قطعة مجاناً',
+    ],
+    'Add more and keep saving' => [
+      'ar' => 'أضف أكثر ووفر أكثر',
+    ]
+  ];
+  alshaya_i18n_save_translations($strings);
 }

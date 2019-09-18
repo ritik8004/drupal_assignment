@@ -73,7 +73,6 @@ function alshaya_product_zoom_preprocess_alshaya_magazine(&$vars) {
     // Get parent sku.
     $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
     $sku_for_description = $parent_sku instanceof SKUInterface ? $parent_sku : $vars['sku'];
-    $prod_description = $skuManager->getDescription($sku_for_description, SkuManager::PDP_LAYOUT_MAGAZINE);
-    $vars['description'] = $prod_description['description'];
+    $vars['description'] = $skuManager->getDescription($sku_for_description, SkuManager::PDP_LAYOUT_MAGAZINE);
   }
 }

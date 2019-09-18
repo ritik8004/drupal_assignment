@@ -1,0 +1,27 @@
+services:
+  logger.channel.alshaya_feed:
+    parent: logger.channel_base
+    arguments: ['alshaya_feed']
+
+  alshaya_feed.generate:
+    class: Drupal\alshaya_feed\AlshayaFeed
+    arguments:
+      - '@entity_type.manager'
+      - '@file_system'
+      - '@language_manager'
+      - '@entity.repository'
+      - '@alshaya_feed.sku_info'
+      - '@twig'
+      - '@logger.channel.alshaya_feed'
+
+  alshaya_feed.sku_info:
+    class: Drupal\alshaya_feed\AlshayaFeedSkuInfoHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@language_manager'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@module_handler'
+      - '@alshaya_acm_product.sku_info'
+      - '@acq_sku.fields_manager'
+      - '@renderer'

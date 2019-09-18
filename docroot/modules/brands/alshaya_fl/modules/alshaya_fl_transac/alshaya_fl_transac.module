@@ -43,6 +43,7 @@ function alshaya_fl_transac_node_view(array &$build, EntityInterface $entity, En
       if (!empty($material)) {
         $build['materials'] = [
           '#theme' => 'product_material_markup',
+          '#title' => t('material'),
           '#material' => [
             '#markup' => $material,
           ],
