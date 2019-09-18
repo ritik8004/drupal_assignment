@@ -16,4 +16,158 @@ function alshaya_jus_non_transac_install() {
 
   // Create default content for the site.
   alshaya_jus_non_transac_create_default_content();
+
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'Find a store' => [
+      'ar' => 'العثور على المحل',
+    ],
+    'Don’t miss the news' => [
+      'ar' => 'لا تفوت الأخبار',
+    ],
+    'New arrivals' => [
+      'ar' => 'وصل حديثاُ',
+    ],
+    'Style Studio' => [
+      'ar' => 'تصاميم عصرية',
+    ],
+    'Exclusive Active Wear' => [
+      'ar' => 'ملابس رياضية حصرية',
+    ],
+    'Middle East Exclusives' => [
+      'ar' => 'حصرياً للشرق الأوسط',
+    ],
+    'Collections' => [
+      'ar' => 'التشكيلات',
+    ],
+    'Tops' => [
+      'ar' => 'البلوزات',
+    ],
+    'Bottoms' => [
+      'ar' => 'البنطلونات',
+    ],
+    'Active Wear' => [
+      'ar' => 'ملابس رياضية',
+    ],
+    'Outerwear' => [
+      'ar' => 'الجاكيتات',
+    ],
+    'Sleep shop' => [
+      'ar' => 'قسم ملابس النوم',
+    ],
+    'Bags' => [
+      'ar' => 'الحقائب',
+    ],
+    'Your space' => [
+      'ar' => 'نسق كما تحب',
+    ],
+    'School shop' => [
+      'ar' => 'قسم المدارس',
+    ],
+    'Get the latest updates from Justice' => [
+      'ar' => 'احصل على أحدث العروض عبر موقع جستيس',
+    ],
+    'Legal terms' => [
+      'ar' => 'البنود القانونية',
+    ],
+    'about us' => [
+      'ar' => 'نبذة عنا',
+    ],
+    'contact us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Join the club' => [
+      'ar' => 'انضم الينا',
+    ],
+    'Win exciting prizes' => [
+      'ar' => 'اربح جوائز قيمة',
+    ],
+    'Unlock exclusive rewards' => [
+      'ar' => 'اكتشف الجوائز الحصرية',
+    ],
+    'Be the first to know' => [
+      'ar' => 'كن أول من يعلم',
+    ],
+    'Learn more' => [
+      'ar' => 'تعرف على المزيد',
+    ],
+    'GET IT ON (Google Play)' => [
+      'ar' => 'حمل من متجر جوجل بلاي',
+    ],
+    'Available on the (App Store)' => [
+      'ar' => 'متوفر على متجر أبل',
+    ],
+    'We value your feedback' => [
+      'ar' => 'نقدر رأيك',
+    ],
+    'Let us know what you think' => [
+      'ar' => 'اخبرنا برأيك',
+    ],
+    'Select the type of enquiry' => [
+      'ar' => 'حدد نوع الاستفسار',
+    ],
+    'First name' => [
+      'ar' => 'الاسم الأول',
+    ],
+    'Last name' => [
+      'ar' => 'الاسم الأخير',
+    ],
+    'Mobile Number' => [
+      'ar' => 'رقم الهاتف',
+    ],
+    'Email' => [
+      'ar' => 'البريد الإلكتروني',
+    ],
+    'Message' => [
+      'ar' => 'الرسالة',
+    ],
+    'Full name' => [
+      'ar' => 'الاسم بالكامل',
+    ],
+    'I agree that I am 18+ and would like to receive messages about advertisements, promotions, campaigns etc. through email' => [
+      'ar' => 'أوافق على أنني أكبر من 18 سنة، وارغب باستلام رسائل نصية عن الإعلانات، والعروض، والخصومات، من خلال بريدي الإلكتروني',
+    ],
+    'The destination for fashion aware teens' => [
+      'ar' => 'المكان المفضل للفتيات المهتمين في الموضة',
+    ],
+    'In 2002, Alshaya Group set up the first Justice store in the Middle East and since then Justice has helped many Middle Eastern tween girls to express their self-confidence through fashion.' => [
+      'ar' => 'في عام 2002، قامت مجموعة الشايع بافتتاح أول محل للعلامة التجارية "جستيس" في الشرق الأوسط، ومنذ ذلك الحين أصبحت "جستيس" وجهة لفتيات الشرق الأوسط للتعبير عن ثقتهم بأنفسهم من خلال الموضة.',
+    ],
+    'Known as the destination for fashion aware teens, we provide fashion merchandise and accessories for tween girls, ages 6-16. We also celebrate tween girls through an extra ordinary experience of fashion and fun in an everything-for-her destination.' => [
+      'ar' => 'أفضل وجهة للفتيات المهتمين في الموضة، نحن في "جستيس" نوفر المنتجات والإكسسوارت التي تواكب خطوط الموضة للفتيات من عمر 6 سنوات حتى 16 سنة. ونقوم بتوفير تجربة تسوق فريدة لا مثيل لها مليئة بالمرح والمتعة.',
+    ],
+    'The mission of Justice is to enhance a tween girl’s self-esteem by providing her the most recent fashion and lifestyle products, in a unique, fun, interactive, environment, all at a great value for mom.' => [
+      'ar' => 'نحن نعمل في "جستيس" على تعزيز احترام الذات للفتيات من خلال تزويدهن بأحدث صيحات الأزياء والموضة، وبأسلوب حياة فريد وممتع لكل من البنت والأم.',
+    ],
+    'Justice stores are the global destination of choice for tween girls, and with good reason. ' => [
+      'ar' => 'محلات "جستيس" هي الوجهة العالمية الأولى المفضلة للفتيات.',
+    ],
+    'We have stores across Middle East in the Kingdom of Saudi Arabia, United Arab Emirates, Kuwait, Qatar, Bahrain, Jordan and Oman. For more information on stores, visit our Store locator page.' => [
+      'ar' => 'سوف تجدون محلاتنا في الشرق الأوسط: المملكة العربية السعودية، الإمارات العربية المتحدة، ودولة الكويت، وقطر، والبحرين، والأردن، وعمان. للمزيد من المعلومات عن المحلات، قم بزيارة صفحة البحث عن محلاتنا',
+    ],
+    'Page not found' => [
+      'ar' => 'لم يتم العثور على الصفحة',
+    ],
+    'Please use the main navigation to find what you are looking for.' => [
+      'ar' => 'يرجى استخدام محرك البحث للعثور على ما تبحثون عنه',
+    ],
+    'Related to the Brand' => [
+      'ar' => 'المتعلقة بالعلامة التجارية',
+    ],
+    'The quality of customer service' => [
+      'ar' => 'جودة خدمة العملاء',
+    ],
+    'Information on Product Range ' => [
+      'ar' => 'معلومات عن نطاق المنتج',
+    ],
+    'Store Details' => [
+      'ar' => 'تفاصيل المتجر',
+    ],
+    'Other' => [
+      'ar' => 'آخر',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
