@@ -76,7 +76,7 @@
    *   The HTML element inside which we want to convert select list into unformatted list.
    */
   Drupal.convertSelectListtoUnformattedList = function (element) {
-    element.once('bind-events').each(function () {
+    element.once('convert-select-list-to-unformatted-list').each(function () {
       $(this).on('refresh', function () {
         var that = $(this).parent();
 
@@ -175,7 +175,7 @@
 
       if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
         $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
-          $(this).closest('.sku-base-form').find('div.error, label.error, span.error').remove();
+          $(this).closest('form').find('div.error, label.error, span.error').remove();
         });
       }
     }
