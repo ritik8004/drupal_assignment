@@ -320,12 +320,7 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
-    $new_list = [];
-    foreach ($list as $item) {
-      $new_list[] = $item;
-    }
-
-    return $new_list;
+    return array_values($list);
   }
 
 }
