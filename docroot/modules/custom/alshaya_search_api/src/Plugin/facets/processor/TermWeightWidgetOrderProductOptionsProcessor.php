@@ -68,15 +68,15 @@ class TermWeightWidgetOrderProductOptionsProcessor extends SortProcessorPluginBa
     $query = db_select('taxonomy_term_field_data', 'td');
     $query->join('taxonomy_term__field_sku_attribute_code', 'sac', 'td.tid = sac.entity_id');
     $result = $query
-      ->fields('td', array('name', 'weight'))
+      ->fields('td', ['name', 'weight'])
       ->condition('td.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY, '=')
-      ->condition('td.name', [$a->getRawValue(), $b->getRawValue()], 'IN', array(':sizea' => $a->getRawValue(), ':sizeb' => $b->getRawValue()))
+      ->condition('td.name', [$a->getRawValue(), $b->getRawValue()], 'IN', [':sizea' => $a->getRawValue(), ':sizeb' => $b->getRawValue()])
       ->condition('sac.field_sku_attribute_code_value', 'size_textile_eu')
       ->condition('td.langcode', $langcode)
       ->execute()
       ->fetchAllKeyed();
     // Incase if any of the arguments don't have raw value.
-    if(count($result) < 2) {
+    if (count($result) < 2) {
       return 0;
     }
 
