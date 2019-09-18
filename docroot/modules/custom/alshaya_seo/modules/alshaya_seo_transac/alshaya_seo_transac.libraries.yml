@@ -6,3 +6,4 @@ gtm:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - alshaya_master/common_functions
