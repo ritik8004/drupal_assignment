@@ -64,7 +64,7 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
  * Implements hook_search_api_index_items_alter().
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
-  if ($index->getServerId() !== 'acquia_search_server') {
+  if (!in_array($index->getServerId(), ['database', 'acquia_search_server'])) {
     return;
   }
 
