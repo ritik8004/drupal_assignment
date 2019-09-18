@@ -19,8 +19,6 @@ function alshaya_search_algolia_update_8001() {
 
   // Mark everything for reindexation for algolia search index.
   _alshaya_search_api_reindex(['alshaya_algolia_index']);
-  // Reset acquia_search_index to work with solr.
-  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 }
 
 /**
