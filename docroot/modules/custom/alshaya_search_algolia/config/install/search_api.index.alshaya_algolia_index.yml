@@ -1,38 +1,20 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - field.storage.node.body
-    - field.storage.node.field_category
-    - field.storage.node.field_skus
-    - search_api.server.algolia
   module:
     - node
     - acq_sku
     - search_api
     - alshaya_acm_product
     - alshaya_product
+  config:
+    - field.storage.node.field_skus
+    - search_api.server.algolia
 id: alshaya_algolia_index
 name: 'Alshaya Algolia Index'
 description: ''
 read_only: false
 field_settings:
-  body:
-    label: 'Marketing Text'
-    datasource_id: 'entity:node'
-    property_path: body
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.body
-  field_category:
-    label: Category
-    datasource_id: 'entity:node'
-    property_path: field_category
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_category
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -73,11 +55,6 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  hierarchy:
-    fields:
-      field_category: taxonomy_term-parent
-    weights:
-      preprocess_index: -45
   price_from_to_facets_processor:
     weights:
       postprocess_query: 100
