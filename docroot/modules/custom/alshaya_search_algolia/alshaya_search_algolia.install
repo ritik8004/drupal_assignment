@@ -16,6 +16,11 @@ function alshaya_search_algolia_update_8001() {
     'alshaya_search_algolia',
     'install'
   );
+
+  // Mark everything for reindexation for algolia search index.
+  _alshaya_search_api_reindex(['alshaya_algolia_index']);
+  // Reset acquia_search_index to work with solr.
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 }
 
 /**
@@ -42,7 +47,7 @@ function alshaya_search_algolia_install() {
   $config_check->checkConfig(TRUE, 'block.block.autocompletewidgetofalgolia');
 
   // Mark everything for reindexation for search index.
-  _alshaya_search_api_reindex(['acquia_search_index']);
+  _alshaya_search_api_reindex(['alshaya_algolia_index']);
 
   $strings = [
     'Search' => [
