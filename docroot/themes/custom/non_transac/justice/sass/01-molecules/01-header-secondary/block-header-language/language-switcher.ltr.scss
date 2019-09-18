@@ -5,8 +5,14 @@
     color: $language_switcher_text;
   }
 
-  li [hreflang="ar"] {
-    font-family: $jus_arabic_regular;
-    font-size: 0.9375rem;
+  li {
+    @include breakpoint($desk) {
+      padding: 0.25rem 0.875rem;
+    }
+
+    & [hreflang="ar"] {
+      font-family: $jus_arabic_regular;
+      font-size: 0.9375rem;
+    }
   }
 }
