@@ -712,7 +712,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     ];
 
     // Set the cache.
-    \Drupal::cache()->set($sku_cart_data_cid, $data, Cache::PERMANENT, ['acq_sku:' . $sku_entity->id()]);
+    \Drupal::cache()->set($sku_cart_data_cid, $data, Cache::PERMANENT, $sku_entity->getCacheTags());
   }
 
   $name = [];
@@ -891,7 +891,6 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   // If item is not available in stock.
   if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
     if ($selected_quantity > $quantity) {
-      Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
       $item_stock_error = t('This product is not available in the selected quantity. Please adjust the quantity to proceed.');
 

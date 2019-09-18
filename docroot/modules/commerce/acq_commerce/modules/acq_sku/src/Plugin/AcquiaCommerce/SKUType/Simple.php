@@ -36,7 +36,7 @@ class Simple extends SKUPluginBase {
     ];
 
     $form['quantity'] = [
-      '#title' => t('Quantity'),
+      '#title' => $this->t('Quantity'),
       '#type' => 'number',
       '#default_value' => 1,
       '#required' => TRUE,
@@ -46,7 +46,7 @@ class Simple extends SKUPluginBase {
 
     $form['add_to_cart'] = [
       '#type' => 'submit',
-      '#value' => t('Add to cart'),
+      '#value' => $this->t('Add to cart'),
     ];
 
     return $form;
@@ -75,8 +75,8 @@ class Simple extends SKUPluginBase {
     $sku = $sku_entity->getSku();
     $quantity = $form_state->getValue('quantity');
 
-    drupal_set_message(
-      t('Added @quantity of @name to the cart.',
+    $this->messenger->addStatus(
+      $this->t('Added @quantity of @name to the cart.',
       [
         '@quantity' => $quantity,
         '@name' => $sku_entity->name->value,
@@ -96,6 +96,57 @@ class Simple extends SKUPluginBase {
       $event = new AddToCartErrorEvent($e);
       $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getParentSku(SKU $sku) {
+    $sku_string = $sku->getSku();
+    $parents = $this->getAllParentIds($sku_string);
+
+    foreach ($parents as $parent_sku) {
+      $parent = SKU::loadFromSku($parent_sku, $sku->language()->getId());
+      if ($parent instanceof SKU) {
+        if ($this->getDisplayNodeId($parent)) {
+          return $parent;
+        }
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAllParentIds(string $sku): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$sku])) {
+      return $static[$sku];
+    }
+
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'id');
+    $query->addField('acq_sku', 'sku');
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', $sku);
+    $parents = $query->execute()->fetchAllKeyed();
+
+    if (count($parents) > 1) {
+      \Drupal::logger('acq_sku')->warning(
+        'Multiple parents found for SKU: @sku, parents: @parents',
+        [
+          '@parents' => implode(',', $parents),
+          '@sku' => $sku,
+        ]
+      );
+    }
+
+    $static[$sku] = $parents ?? [];
+
+    return $static[$sku];
   }
 
 }
