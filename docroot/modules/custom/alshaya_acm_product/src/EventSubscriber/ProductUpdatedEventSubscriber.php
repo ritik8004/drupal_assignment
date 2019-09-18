@@ -4,7 +4,6 @@ namespace Drupal\alshaya_acm_product\EventSubscriber;
 
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -49,43 +48,8 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdated(ProductUpdatedEvent $event) {
-    $entity = $event->getSku();
-
     // Reset all static caches.
     drupal_static_reset();
-
-    // Get all parent skus this sku.
-    $parent_skus = $this->skuManager->getParentSkus([$entity->getSku()]);
-
-    $cache_tags = [];
-
-    // If there any parent sku available.
-    if (!empty($parent_skus)) {
-      foreach ($parent_skus as $sku_id => $parent_sku) {
-        // Invalidate caches for all parent skus here.
-        $cache_tags = Cache::mergeTags($cache_tags, ['acq_sku:' . $sku_id]);
-        // We also invalidate caches for node here.
-        $node = $this->skuManager->getDisplayNode($parent_sku);
-        if ($node instanceof NodeInterface) {
-          $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
-        }
-      }
-    }
-    else {
-      // If no parent sku, means this will either be a configurable sku or just
-      // a simple sku directly attached to node. Just invalidate the display
-      // node cache in this case.
-      $node = $this->skuManager->getDisplayNode($entity);
-      if ($node instanceof NodeInterface) {
-        $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
-      }
-    }
-
-    // Invalidate cache.
-    if (!empty($cache_tags)) {
-      Cache::invalidateTags($cache_tags);
-    }
-
   }
 
   /**

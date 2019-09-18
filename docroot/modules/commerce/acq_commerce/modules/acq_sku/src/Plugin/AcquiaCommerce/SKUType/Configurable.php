@@ -147,7 +147,7 @@ class Configurable extends SKUPluginBase {
     ];
 
     $form['quantity'] = [
-      '#title' => t('Quantity'),
+      '#title' => $this->t('Quantity'),
       '#type' => 'number',
       '#default_value' => 1,
       '#access' => $helper->showQuantity(),
@@ -157,7 +157,7 @@ class Configurable extends SKUPluginBase {
 
     $form['add_to_cart'] = [
       '#type' => 'submit',
-      '#value' => t('Add to cart'),
+      '#value' => $this->t('Add to cart'),
     ];
 
     return $form;
@@ -296,8 +296,8 @@ class Configurable extends SKUPluginBase {
         implode(', ', $label_parts)
       );
 
-      drupal_set_message(
-        t('Added @quantity of @name to the cart.',
+      $this->messenger->addStatus(
+        $this->t('Added @quantity of @name to the cart.',
           [
             '@quantity' => $quantity,
             '@name' => $label,
@@ -340,7 +340,7 @@ class Configurable extends SKUPluginBase {
       }
     }
     else {
-      $message = t('The current selection does not appear to be valid.');
+      $message = $this->t('The current selection does not appear to be valid.');
       drupal_set_message($message);
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');
@@ -359,38 +359,10 @@ class Configurable extends SKUPluginBase {
 
     $skus = [];
 
-    $price = NULL;
-    $max_price = 0;
-    $min_price = NULL;
-
     foreach ($product['extension']['configurable_product_links'] as $product) {
-      $sku_name = $product['sku'];
-
-      $skus[] = ['value' => $sku_name];
-
-      if (empty($sku_entity)) {
-        continue;
-      }
-
-      $price = (float) $sku_entity->price->first()->value;
-
-      if ($price < $min_price || $min_price === NULL) {
-        $min_price = $price;
-      }
-
-      if ($price > $max_price) {
-        $max_price = $price;
-      }
+      $skus[] = ['value' => $product['sku']];
     }
 
-    if ($max_price != $min_price) {
-      $price = t('From @min to @max');
-    }
-    else {
-      $price = $max_price;
-    }
-
-    $sku->price->value = $price;
     $sku->get('field_configured_skus')->setValue($skus);
   }
 
@@ -687,6 +659,25 @@ class Configurable extends SKUPluginBase {
    */
   public static function getChildSkus(SKU $sku) {
     return array_filter(array_map('trim', explode(',', $sku->get('field_configured_skus')->getString())));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAvailableChildrenIds(SKUInterface $sku) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$sku->getSku()])) {
+      return $static[$sku->getSku()];
+    }
+
+    $children = self::getChildSkus($sku);
+    $query = \Drupal::database()->select($sku->getEntityTypeId() . '_field_data', 'entity');
+    $query->addField('entity', 'id');
+    $query->addField('entity', 'sku');
+    $query->condition('entity.sku', $children, 'IN');
+    $static[$sku->getSku()] = $query->execute()->fetchAllKeyed();
+    return $static[$sku->getSku()];
   }
 
 }
