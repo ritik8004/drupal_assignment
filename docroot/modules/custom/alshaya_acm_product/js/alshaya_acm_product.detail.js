@@ -45,6 +45,10 @@
 
         if (typeof combinations['combinations'][code] !== 'undefined') {
           for (var i in combinations['combinations'][code][selected]) {
+            if (i === code) {
+              continue;
+            }
+
             var select = $('[data-configurable-code="' + i + '"]', form);
 
             select.val('');
@@ -64,7 +68,7 @@
             select.find('option:not([disabled]):first')
               .prop('selected', true)
               .attr('selected', 'selected')
-              .trigger('change');
+              .trigger('refresh');
           }
         }
 
@@ -135,6 +139,7 @@
               $(this).removeAttr('disabled').removeProp('disabled');
             }
           });
+          $('select[name="quantity"]', this).trigger('refresh');
         });
 
         $(this).on('variant-selected', function (event, variant, code) {
