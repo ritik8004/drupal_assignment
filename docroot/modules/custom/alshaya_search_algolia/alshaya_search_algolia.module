@@ -89,6 +89,7 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
   $skuInfoHelper = \Drupal::service('alshaya_acm_product.sku_info');
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+  $renderer = \Drupal::service('renderer');
   foreach ($objects as $id => &$object) {
     $node = $items[$id]->getOriginalObject()->getValue();
 
@@ -109,6 +110,10 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     elseif ($sku->language()->getId() != $node->language()->getId()) {
       throw new \Exception('SKU not available for language of Node');
     }
+
+    // Description.
+    $description = $skuManager->getDescription($sku, 'full');
+    $object['body'] = $renderer->renderPlain($description);
 
     $object['field_category_name'] = _alshaya_search_algolia_category_hierarchy($node);
 
@@ -144,33 +149,29 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
       $object['attr_' . $key] = array_values($values);
     }
 
-    // $object['attr_color_family'] =
-    // Promotions
+    // Promotions.
     $promotions = $skuManager->getPromotionsForSearchViewFromSkuId($sku);
     $object['field_acq_promotion_label'] = array_map(function ($promotion) {
       return $promotion['text'];
     }, $promotions);
-
     $object['promotions'] = $promotions;
 
+    // Product Images.
     $sku_for_gallery = $skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
     $object['media'] = $skuInfoHelper->getMedia($sku_for_gallery, 'search')['images'];
 
+    // Product Swatches.
     $swatches = $skuImagesManager->getSwatchData($sku);
     if (isset($swatches['swatches'])) {
       $object['swatches'] = array_values($swatches['swatches']);
     }
 
-    if ($produuct_collection = $sku->get('attr_product_collection')->getString()) {
-      $object['attr_product_collection'] = $produuct_collection;
-    }
-
-    if ($attr_at_glance = $sku->get('attr_at_glance')->getString()) {
-      $object['attr_at_glance'] = $attr_at_glance;
+    if ($product_collection = $sku->get('attr_product_collection')->getString()) {
+      $object['attr_product_collection'] = $product_collection;
     }
 
     if ($attr_style = $sku->get('attr_style')->getString()) {
-      $object['attr_at_glance'] = $attr_style;
+      $object['attr_style'] = $attr_style;
     }
 
     // Update stock info for product.
@@ -222,9 +223,9 @@ function update_stock_for_index(SKUInterface $sku, array &$item) {
 }
 
 /**
- * Create term hierarchy to index for algolia.
+ * Create term hierarchy to index for Algolia.
  *
- * Prepares the array structure as shown bleow.
+ * Prepares the array structure as shown below.
  * @code
  * [
  *   [
@@ -265,6 +266,7 @@ function _alshaya_search_algolia_category_hierarchy(NodeInterface $node): array 
     $parents = array_reverse($termStorage->loadAllParents($category->id()));
     $temp_list = [];
     $i = 0;
+    // Top parent term id.
     $parent_key = NULL;
     foreach ($parents as $term) {
       if (empty($parent_key)) {
