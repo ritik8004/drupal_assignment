@@ -11,20 +11,9 @@
 function alshaya_jus_non_transac_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_jus_non_transac', 'inc', 'alshaya_jus_non_transac.content');
 
-  // Enable and set justice as default theme.
-  \Drupal::service('theme_handler')->install(['justice'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('justice');
+  // Change region for main navigation block.
+  alshaya_block_move_blocks(['main_navigation' => 'header']);
 
   // Create default content for the site.
   alshaya_jus_non_transac_create_default_content();
-
-  // Set initial translation string for en language.
-  // Array of language translation strings.
-  $strings = [
-    'Find a store' => [
-      'ar' => 'العثور على المحل',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
 }

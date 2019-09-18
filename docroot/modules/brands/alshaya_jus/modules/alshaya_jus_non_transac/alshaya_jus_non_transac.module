@@ -5,7 +5,6 @@
  * Alshaya email signup module file.
  */
 
-use Drupal\block_content\Entity\BlockContent;
 use Drupal\Core\Form\FormStateInterface;
 
 /**

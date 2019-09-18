@@ -15,9 +15,6 @@ function alshaya_jus_install() {
   \Drupal::service('theme_handler')->install(['justice'], TRUE);
   \Drupal::service('theme_handler')->setDefault('justice');
 
-  // Change region for main navigation block.
-  alshaya_block_move_blocks(['main_navigation' => 'header']);
-
   // Create default content for the site.
   alshaya_jus_create_default_content();
 
