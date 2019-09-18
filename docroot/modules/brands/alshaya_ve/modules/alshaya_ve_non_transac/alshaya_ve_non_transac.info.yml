@@ -1,0 +1,7 @@
+name: 'Alshaya Vision Express (Non-Transac)'
+type: module
+description: 'The dedicated module for vision express non-transac brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_ve:alshaya_ve
