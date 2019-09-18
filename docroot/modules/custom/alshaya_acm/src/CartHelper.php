@@ -389,7 +389,7 @@ class CartHelper {
       $plugin->refreshStock($sku);
 
       // Dispatch event so action can be taken.
-      $this->dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, AddToCartErrorEvent($e));
+      $this->dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, new AddToCartErrorEvent($e));
       return $e->getMessage();
     }
 
