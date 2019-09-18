@@ -6,8 +6,14 @@
   padding-bottom: 0.9375rem;
 
   .latest-update {
-    display: flex;
-    justify-content: center;
+    @include breakpoint($above-palm) {
+      display: flex;
+      justify-content: center;
+    }
+
+    @include breakpoint($upto-palm) {
+      text-align: center;
+    }
 
     .fashion-news {
       padding-#{$right}: 2.25rem;
@@ -32,6 +38,10 @@
           top: 1.6875rem;
           position: relative;
           background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-email.svg');
+
+          @include breakpoint($upto-palm) {
+            top: 1rem;
+          }
         }
       }
 
@@ -52,12 +62,20 @@
   }
 }
 
-.region-footer-primary__wrapper {
+.region-footer-primary {
   .block-content--latest-fashion-update {
     padding-bottom: 0;
 
+    @include breakpoint($upto-lap) {
+      padding-bottom: 1.5rem;
+    }
+
     .latest-update {
       justify-content: $left;
+
+      @include breakpoint($upto-lap) {
+        justify-content: center;
+      }
     }
   }
 }

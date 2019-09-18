@@ -1,10 +1,6 @@
 @import '../../../config/_config.scss';
 
 .menu-terms-conditions {
-  @include breakpoint($desk) {
-    padding-#{$left}: 1.125rem;
-  }
-
   li {
     border-#{direction(right)}: 0;
   }
