@@ -2943,7 +2943,7 @@ class SkuManager {
     $itemFields = $item->getFields();
 
     // Set gathered data into parent.
-    foreach ($attributes['data'] as $key => $values) {
+    foreach ($attributes as $key => $values) {
       $field_key = 'attr_' . $key;
 
       // There is an issue with color field in indexes.
@@ -3033,11 +3033,7 @@ class SkuManager {
       throw new \Exception('Product has color, we do not index main node when doing group by color', 200);
     }
 
-    return [
-      'is_product_in_stock' => $is_product_in_stock,
-      'has_color_data' => $has_color_data,
-      'data' => $data,
-    ];
+    return $data;
   }
 
   /**

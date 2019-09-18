@@ -5,10 +5,7 @@
  * Module file.
  */
 
-use Drupal\acq_commerce\SKUInterface;
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_search_algolia\Event\AlshayaAlgoliaProductIndexEvent;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use AlgoliaSearch\Client;
@@ -79,17 +76,15 @@ function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op =
  * Implements hook_search_api_algolia_objects_alter().
  */
 function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  if ($index->getServerId() !== 'algolia') {
+  if ($index->id() !== 'alshaya_algolia_index') {
     return;
   }
 
   // Disable alshaya_color_split hook calls.
   SkuManager::$colorSplitMergeChildren = FALSE;
 
-  $skuInfoHelper = \Drupal::service('alshaya_acm_product.sku_info');
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-  $renderer = \Drupal::service('renderer');
+  $logger = \Drupal::logger('alshaya_search_algolia');
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
   foreach ($objects as $id => &$object) {
     $node = $items[$id]->getOriginalObject()->getValue();
 
@@ -97,206 +92,17 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
       continue;
     }
 
-    $product_color = '';
-    if ($skuManager->isListingModeNonAggregated()) {
-      $product_color = $node->get('field_product_color')->getString();
+    try {
+      $algolia_index->processIndexItem($object, $node);
     }
-
-    $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
-
-    if (!($sku instanceof SKUInterface)) {
-      throw new \Exception('Not able to load sku from node.');
-    }
-    elseif ($sku->language()->getId() != $node->language()->getId()) {
-      throw new \Exception('SKU not available for language of Node');
-    }
-
-    // Description.
-    $description = $skuManager->getDescription($sku, 'full');
-    $object['body'] = $renderer->renderPlain($description);
-
-    $object['field_category_name'] = _alshaya_search_algolia_category_hierarchy($node);
-
-    $prices = $skuManager->getMinPrices($sku, $product_color);
-    $object['price'] = (float) $prices['price'];
-    $object['final_price'] = (float) $prices['final_price'];
-
-    // Use max of selling prices for price in configurable products.
-    if (!empty($prices['children'])) {
-      $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
-      $object['price'] = max($selling_prices);
-
-      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
-      $object['attr_selling_price'] = $selling_prices;
-
-      if ($skuManager->isPriceModeFromTo()) {
-        $object['final_price'] = min($selling_prices);
+    catch (\Throwable $e) {
+      if ($e->getCode() != 200) {
+        $logger->warning('Indexing failed for the node:@nid message:@message', [
+          '@nid' => $object->id(),
+          '@message' => $e->getMessage(),
+        ]);
       }
-    }
-
-    if ($sku->bundle() == 'configurable') {
-      $configured_skus = $sku->get('field_configured_skus')->getValue();
-      $object['field_configured_skus'] = array_map(function ($item) {
-        return $item['value'];
-      }, $configured_skus);
-    }
-
-    $object['attr_product_brand'] = $sku->get('attr_product_brand')->getString();
-
-    // Set color / size and other configurable attributes data.
-    $attributes = $skuManager->getConfigurableAttributesData($sku, $product_color);
-    foreach ($attributes['data'] as $key => $values) {
-      $object['attr_' . $key] = array_values($values);
-    }
-
-    // Promotions.
-    $promotions = $skuManager->getPromotionsForSearchViewFromSkuId($sku);
-    $object['field_acq_promotion_label'] = array_map(function ($promotion) {
-      return $promotion['text'];
-    }, $promotions);
-    $object['promotions'] = $promotions;
-
-    // Product Images.
-    $sku_for_gallery = $skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
-    $object['media'] = $skuInfoHelper->getMedia($sku_for_gallery, 'search')['images'];
-
-    // Product Swatches.
-    $swatches = $skuImagesManager->getSwatchData($sku);
-    if (isset($swatches['swatches'])) {
-      $object['swatches'] = array_values($swatches['swatches']);
-    }
-
-    if ($product_collection = $sku->get('attr_product_collection')->getString()) {
-      $object['attr_product_collection'] = $product_collection;
-    }
-
-    if ($attr_style = $sku->get('attr_style')->getString()) {
-      $object['attr_style'] = $attr_style;
-    }
-
-    // Update stock info for product.
-    $object['stock_quantity'] = $skuInfoHelper->calculateStock($sku);
-    $object['stock'] = $skuManager->getStockStatusForIndex($sku);
-    if ($object['stock'] === 0) {
-      _alshaya_search_algolia_remove_attributes_from_index($object);
-    }
-
-    // Dispatches AlshayaAlgoliaProductIndexEvent::PRODUCT_INDEX, so that other
-    // modules can update this array before an item is indexed.
-    $event = new AlshayaAlgoliaProductIndexEvent($sku, $node, $object);
-    \Drupal::service('event_dispatcher')->dispatch(AlshayaAlgoliaProductIndexEvent::PRODUCT_INDEX, $event);
-    $object = $event->getItem();
-  }
-}
-
-/**
- * Wrapper function to update stock data for index item.
- *
- * @param array $item
- *   Index item.
- *
- * @see SkuManager::updateStockForIndex()
- */
-function _alshaya_search_algolia_remove_attributes_from_index(array &$item) {
-  // If product is not in stock, remove all attributes data.
-  foreach ($item as $field_key => $field_val) {
-    // Only unset/remove of attribute fields or this will remove the
-    // SKU from the indexing on default listing (without any filter).
-    if (strpos($field_key, 'attr_') !== FALSE) {
-      unset($item[$field_key]);
+      unset($objects[$id]);
     }
   }
-}
-
-/**
- * Create term hierarchy to index for Algolia.
- *
- * Prepares the array structure as shown below.
- * @code
- * [
- *   [
- *     "lvl0": "Books",
- *     "lvl1": ["Books > Science Fiction", "Books > Literature & Fiction"],
- *     "lvl2": [
- *       "Books > Science Fiction > Time Travel",
- *       "Books > Literature & Fiction > Modernism "
- *     ],
- *   ],
- *   [
- *     "lvl0": "Movie",
- *     "lvl1": "Movie > Science Fiction",
- *     "lvl2": "Movie > Science Fiction > Time Travel"],
- *   ],
- * ]
- * @endcode
- *
- * @param \Drupal\node\NodeInterface $node
- *   The node object for which we need to prepare hierarchy.
- *
- * @return array
- *   The array of hierarchy.
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
- */
-function _alshaya_search_algolia_category_hierarchy(NodeInterface $node): array {
-  $categories = $node->get('field_category')->referencedEntities();
-  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-
-  $list = [];
-  foreach ($categories as $category) {
-    // Skip the term which is disabled.
-    if ($category->get('field_commerce_status')->getString() !== '1') {
-      continue;
-    }
-    $parents = array_reverse($termStorage->loadAllParents($category->id()));
-    $temp_list = [];
-    $i = 0;
-    // Top parent term id.
-    $parent_key = NULL;
-    foreach ($parents as $term) {
-      if (empty($parent_key)) {
-        $parent_key = $term->id();
-      }
-
-      // Break the loop if any level of term is disabled.
-      if ($term->get('field_commerce_status')->getString() !== '1') {
-        // Remove the parent hierarchy, If the hierarchy initiated for this
-        // specific loop.
-        if (empty($list[$parent_key]["lvl{$i}"])) {
-          $previous = $i - 1;
-          if (is_string($list[$parent_key]["lvl{$previous}"])) {
-            unset($list[$parent_key]["lvl{$previous}"]);
-            if (empty($list[$parent_key])) {
-              unset($list[$parent_key]);
-            }
-          }
-        }
-        break;
-      }
-
-      $temp_list[] = $term->label();
-      $current_value = implode(' > ', $temp_list);
-
-      if (empty($list[$parent_key]["lvl{$i}"])) {
-        $list[$parent_key]["lvl{$i}"] = $current_value;
-      }
-      elseif (is_string($list[$parent_key]["lvl{$i}"]) && $list[$parent_key]["lvl{$i}"] !== $current_value) {
-        $list[$parent_key]["lvl{$i}"] = array_merge([$list[$parent_key]["lvl{$i}"]], [$current_value]);
-      }
-      elseif (is_array($list[$parent_key]["lvl{$i}"])) {
-        if (!in_array($current_value, $list[$parent_key]["lvl{$i}"])) {
-          $list[$parent_key]["lvl{$i}"][] = $current_value;
-        }
-      }
-      $i++;
-    }
-  }
-
-  $new_list = [];
-  foreach ($list as $item) {
-    $new_list[] = $item;
-  }
-
-  return $new_list;
 }
