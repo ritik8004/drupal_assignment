@@ -211,30 +211,9 @@ optionlist_menu:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
 
-footer_js:
+back_to_top:
   js:
     js/back_to_top.js: {}
-    js/footer-accordion.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
-
-cart_js:
-  js:
-    js/cart-accordion.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
-
-pdp_js:
-  js:
-    js/pdp.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
 
 megamenu_inline_layout:
   js:
