@@ -170,14 +170,8 @@
       .field--name-field-subscribe-newsletter {
         label {
           @include breakpoint($tablet) {
-            padding-#{$left}: 2.125rem;
-            text-indent: -2.8rem;
+            margin-#{$left}: -0.875rem;
           }
-        }
-
-        p {
-          font-size: 0.875rem;
-          padding-#{$left}: 2.125rem;
         }
       }
     }
