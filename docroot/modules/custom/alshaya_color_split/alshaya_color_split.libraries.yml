@@ -1,0 +1,4 @@
+product_detail:
+  version: 1.x
+  js:
+    js/alshaya_color_split.pdp.js: {}
