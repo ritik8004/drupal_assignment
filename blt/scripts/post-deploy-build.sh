@@ -5,52 +5,35 @@ set -e
 
 deployDir="$1"
 
+uname_string=`uname`
+
 # Built css files are ignored in the repository. We need to remove these from
 # .gitignore for the css files to be pushed to ACSF.
-transac=( "alshaya_white_label" "alshaya_mothercare" "alshaya_hnm" "pottery_barn_non_trans" "alshaya_pottery_barn" "alshaya_victoria_secret" "alshaya_bathbodyworks" )
-non_transac=( "debenhams" "whitelabel" "whitelabel_non_transac" "victoria_secret" "bath_body_works" "bouchon_bakery" )
-amp=( "alshaya_amp_white_label" )
-
-for i in "${transac[@]}"
+for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
 do
-  if [ -f $deployDir/docroot/themes/custom/transac/$i/.gitignore ]
+  theme_type_dir=${dir##*/}
+
+  if [ $theme_type_dir == 'node_modules' ]
   then
-    uname_string=`uname`
+    continue
+  fi
+
+  for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
+  do
+    theme_dir=${subdir##*/}
+
+    if [ $theme_dir == 'node_modules' ]
+    then
+      continue
+    fi
+
     if [ $uname_string == 'Darwin' ]
     then
-      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/transac/$i/.gitignore
+      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/$theme_type_dir/$theme_dir/.gitignore
     else
-      sed -i '/dist/d' $deployDir/docroot/themes/custom/transac/$i/.gitignore
+      sed -i '/dist/d' $deployDir/docroot/themes/custom/$theme_type_dir/$theme_dir/.gitignore
     fi
-  fi
-done
-
-for i in "${non_transac[@]}"
-do
-  if [ -f $deployDir/docroot/themes/custom/non_transac/$i/.gitignore ]
-  then
-    uname_string=`uname`
-    if [ $uname_string == 'Darwin' ]
-    then
-      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/non_transac/$i/.gitignore
-    else
-      sed -i '/dist/d' $deployDir/docroot/themes/custom/non_transac/$i/.gitignore
-    fi
-  fi
-done
-
-for i in "${amp[@]}"
-do
-  if [ -f $deployDir/docroot/themes/custom/amp/$i/.gitignore ]
-  then
-    uname_string=`uname`
-    if [ $uname_string == 'Darwin' ]
-    then
-      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/amp/$i/.gitignore
-    else
-      sed -i '/dist/d' $deployDir/docroot/themes/custom/amp/$i/.gitignore
-    fi
-  fi
+  done
 done
 
 # Delete devel from code base.
