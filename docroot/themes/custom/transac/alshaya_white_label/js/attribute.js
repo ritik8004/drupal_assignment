@@ -12,7 +12,7 @@
 
   Drupal.select2OptionConvert = function () {
     // Process configurable attributes which need to be shown as grouped.
-    $('.form-item-configurable-select-group').once('bind-js').each(function () {
+    $('.form-item-configurable-select-group').once('select-2-option').each(function () {
       // Add class to parent for styling.
       $(this).closest('.form-type-select').addClass('form-type-configurable-select-group');
       var that = $(this);
@@ -77,23 +77,27 @@
    */
   Drupal.convertSelectListtoUnformattedList = function (element) {
     element.once('bind-events').each(function () {
-      var that = $(this).parent();
-      $('select', that).select2Option();
+      $(this).on('refresh', function () {
+        var that = $(this).parent();
 
-      $('.select2Option', that).find('.list-title .selected-text').html('');
+        $(this).select2Option();
+        $(this).find('.list-title .selected-text').html('');
 
-      var clickedOption = $('select option:selected', that);
-      if (!clickedOption.is(':disabled')) {
-        if ($(this).parent().hasClass('form-item-configurables-article-castor-id')) {
-          Drupal.alshaya_color_swatch_update_selected_label();
+        var clickedOption = $('option:selected', this);
+        if (!clickedOption.is(':disabled')) {
+          if ($(this).parent().hasClass('form-item-configurables-article-castor-id')) {
+            Drupal.alshaya_color_swatch_update_selected_label();
+          }
+          else {
+            var selectedText = clickedOption.attr('selected-text')
+              ? clickedOption.attr('selected-text')
+              : clickedOption.text();
+            $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
+          }
         }
-        else {
-          var selectedText = clickedOption.attr('selected-text')
-            ? clickedOption.attr('selected-text')
-            : clickedOption.text();
-          $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
-        }
-      }
+      });
+
+      $(this).trigger('refresh');
     });
   };
 

@@ -10,58 +10,8 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_color_split\AlshayaColorSplitManager;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
-
-/**
- * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
- */
-function alshaya_color_split_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStateInterface $form_state, AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
-  $color_split_settings = \Drupal::config('alshaya_color_split.settings');
-  $attribute_code_color_id = $color_split_settings->get('attribute_code_color_id');
-
-  // List of attributes selected by end-users on the form.
-  $selected = $form_state->getValue('configurables');
-
-  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  // Update PDP Url when switching color if the SKU has style code attribute.
-  if (($sku_manager->fetchStyleCode($sku)) &&
-    !empty($selected[$attribute_code_color_id])) {
-    $product_tree = Configurable::deriveProductTree($sku);
-
-    // If we have options for article castor id, compare it with the one
-    // selected, load the right child SKU, fetch the color node & update url in
-    // AJAX response.
-    if (!empty($product_tree['combinations']['attribute_sku'][$attribute_code_color_id][$selected[$attribute_code_color_id]])) {
-      $color_child_sku_code = $product_tree['combinations']['attribute_sku'][$attribute_code_color_id][$selected[$attribute_code_color_id]][0];
-
-      if (($color_child_sku = SKU::loadFromSku($color_child_sku_code)) &&
-        ($color_child_sku instanceof SKU)) {
-        $parent_sku = $sku_manager->getParentSkuBySku($color_child_sku);
-
-        // Update Item code when switching the color.
-        $item_code['#markup'] = $parent_sku instanceof SKU ? $parent_sku->getSku() : '';
-        $item_code['#prefix'] = '<span class="field__value">';
-        $item_code['#suffix'] = '</span>';
-
-        $response->addCommand(new ReplaceCommand('article[data-sku="' . $sku->getSku() . '"] .content--item-code .field__value', $item_code));
-
-        // Fetch display node based on the castor Id selected.
-        $display_node = $sku_manager->getDisplayNode($color_child_sku);
-        $data['display_node_url'] = $display_node->toUrl()->toString();
-        $data['display_node_title'] = $display_node->getTitle();
-        $data['parent_sku_id'] = $sku->id();
-
-        $response->addCommand(new InvokeCommand('', 'updatePdpUrl', [$data]));
-      }
-    }
-  }
-}
 
 /**
  * Implements hook_acq_sku_configurable_product_configurations_alter().
@@ -303,5 +253,43 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+
+  if ($skuManager->fetchStyleCode($parent)) {
+    $parent_sku = $skuManager->getParentSkuBySku($child);
+    $variant['parent_sku'] = $parent_sku->getSku();
+    $variant['title'] = $productInfoHelper->getTitle($parent_sku, 'pdp');
+
+    // Add language for all urls for language switcher block.
+    $node = $skuManager->getDisplayNode($parent_sku, FALSE);
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      $variant['url'][$language->getId()] = $node->toUrl('canonical', [
+        'absolute' => FALSE,
+        'language' => $language,
+      ])->toString();
+    }
+
+    $variant['color_attribute'] = \Drupal::config('alshaya_color_split.settings')->get('attribute_code_color_id');
+    $variant['color_value'] = $node->get('field_product_color')->getString();
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_color_split_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'alshaya_acm_product' && isset($libraries['product_detail'])) {
+    $libraries['product_detail']['dependencies'][] = 'alshaya_color_split/product_detail';
   }
 }
