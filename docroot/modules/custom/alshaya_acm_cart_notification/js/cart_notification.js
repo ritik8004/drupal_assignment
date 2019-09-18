@@ -67,11 +67,6 @@
         }
       });
 
-      $('#configurable_ajax .form-select').once('bind-spinner-js').on('change', function () {
-        // Start loading.
-        spinner_start();
-      });
-
       $(document).ajaxComplete(function (event, xhr, settings) {
         if ((settings.hasOwnProperty('extraData')) &&
           ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
