@@ -44,7 +44,7 @@ class ProductInfoHelper {
    * @return mixed
    *   Processed value.
    */
-  public function getValue(SKUInterface $sku, string $field_code, string $context, $value) {
+  public function getValue(SKUInterface $sku, string $field_code, string $context, $value = '') {
     $event = new ProductInfoRequestedEvent($sku, $field_code, $context, $value);
     $this->eventDispatcher->dispatch(ProductInfoRequestedEvent::EVENT_NAME, $event);
     return $event->getValue();

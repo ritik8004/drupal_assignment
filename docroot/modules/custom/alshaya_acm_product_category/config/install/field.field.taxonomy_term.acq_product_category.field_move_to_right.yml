@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_move_to_right
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_move_to_right
+field_name: field_move_to_right
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Move to right in mega menu'
+description: 'This will move the category and all the direct children of this category to the right side in the mega menu. This only works with the L2 terms only.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

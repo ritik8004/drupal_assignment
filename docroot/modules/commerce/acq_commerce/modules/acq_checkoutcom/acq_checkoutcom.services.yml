@@ -21,6 +21,7 @@ services:
       - '@datetime.time'
       - '@date.formatter'
       - '@entity_type.manager'
+      - '@messenger'
 
   acq_checkoutcom.form_helper:
     class: Drupal\acq_checkoutcom\CheckoutComFormHelper

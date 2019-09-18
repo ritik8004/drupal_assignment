@@ -25,6 +25,19 @@
           $(this).showCheckoutLoader();
         });
       });
+
+      // Bind this only once after every ajax call.
+      $('.checkoutcom-credit-card-input')
+        .once('validate-cc')
+        .each(function () {
+          $(this).validateCreditCard(function (result) {
+            $('#payment_method_checkout_com').find('.card-type').removeClass('active');
+
+            if (result.card_type !== null) {
+              $('#payment_method_checkout_com').find('.card-type.card-type-' + result.card_type.name).addClass('active');
+            }
+          });
+        });
     }
   };
 
@@ -41,6 +54,7 @@
   // Remove loader to allow user to edit form on form error.
   $(document).on('checkoutcom_form_error', function (e) {
     $(this).removeCheckoutLoader();
+    Drupal.setFocusToFirstError($('form.multistep-checkout'));
   });
 
   $(document).on('checkoutcom_form_ajax', function(e, response) {

@@ -385,7 +385,7 @@
       p {
         margin-top: 1.625rem;
         margin-bottom: 1.4rem;
-        font-size: 0.75rem;
+        font-size: 0.875rem !important;
         width: 15.9375rem;
 
         @include breakpoint($only-mobile) {
@@ -406,6 +406,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 0.875rem !important;
 
         @include breakpoint($only-mobile) {
           width: 17.9375rem;
@@ -753,15 +754,15 @@ main .user-register-form {
           flex-direction: column;
 
           .block-alshaya-social-login {
-            order: 1;
-          }
-
-          .block-alshaya-signup-signin-buttons {
             order: 2;
           }
 
-          .block-system-main-block {
+          .block-alshaya-signup-signin-buttons {
             order: 3;
+          }
+
+          .block-system-main-block {
+            order: 1;
           }
 
           .block-page-title-block {
@@ -778,6 +779,60 @@ main .user-register-form {
 
     .c-sidebar-second {
       display: none;
+    }
+  }
+}
+
+.c-user-login {
+  &.user-page {
+    main {
+      @include breakpoint($only-mobile) {
+        .region__content {
+          .block-system-main-block {
+            order: 1;
+            padding-bottom: 2.5rem;
+          }
+
+          .block-page-title-block {
+            h1 {
+              top: -2rem;
+            }
+          }
+        }
+
+        #block-content {
+          + #block-alshayasignupsigninbuttonsblock {
+            margin-top: 1.5rem;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
+    }
+  }
+}
+
+.c-user-register {
+  &.user-page {
+    main {
+      @include breakpoint($only-mobile) {
+        .region__content {
+          .block-alshaya-social-login {
+            order: 1;
+            margin-bottom: 0;
+          }
+
+          .block-alshaya-signup-signin-buttons {
+            order: 3;
+          }
+
+          .block-system-main-block {
+            order: 2;
+          }
+        }
+      }
     }
   }
 }

@@ -62,12 +62,12 @@
 
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');
-          ocObject.slick(
+          ocObject.once().slick(
             $.extend({}, options, {rtl: true})
           );
         }
         else {
-          ocObject.slick(options);
+          ocObject.once().slick(options);
         }
       }
 

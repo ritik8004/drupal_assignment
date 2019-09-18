@@ -94,6 +94,7 @@ class AlshayaSearchApiFacetsManager {
    */
   public function createFacet($field_key, $facet_source_id, $filter_bar_id, $prefix = '', array $overrides = []) {
     $template_id = 'facets.facet.' . $field_key;
+    $source = $this->configFactory->getEditable($facet_source_id);
 
     $id = $prefix ? $prefix . '_' . $field_key : $field_key;
     $facet_id = 'facets.facet.' . $id;
@@ -106,9 +107,12 @@ class AlshayaSearchApiFacetsManager {
 
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
-    $data['url_alias'] = $field_key;
     $data['field_identifier'] = $data['field_identifier'] ?? 'attr_' . $field_key;
     $data = array_replace_recursive($data, $overrides);
+    $data['url_alias'] = strtolower(str_replace(' ', '_', $data['name']));
+    if ($source->get('url_processor') != 'alshaya_facets_pretty_paths') {
+      $data['url_alias'] = $field_key;
+    }
     $this->configFactory->getEditable($facet_id)->setData($data)->save();
 
     // Update the filter bar (summary).
@@ -121,6 +125,7 @@ class AlshayaSearchApiFacetsManager {
       'show_count' => 1,
       'weight' => 0,
     ];
+
     $filter_bar->set('facets', $facets);
     $filter_bar->save();
 
@@ -143,6 +148,7 @@ class AlshayaSearchApiFacetsManager {
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
+
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
 
     // Translate facet block titles.

@@ -2,10 +2,10 @@
  * @file
  */
 
-var alshayaSearchActiveFacetAfterAjaxTimer = null;
-
 (function ($) {
   'use strict';
+
+  var browserFacetUrl = null;
 
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
@@ -279,7 +279,8 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   };
 
   /**
-   * Helper function to convert full-screen loader to throbber for infinite scroll.
+   * Helper function to convert full-screen loader to throbber for infinite
+   * scroll.
    */
   Drupal.changeProgressBarToThrobber = function (context) {
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {
@@ -312,4 +313,25 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
     }
   };
+
+  // Update the url in browser, on facet selection.
+  $.fn.updateBrowserFacetUrl = function (url) {
+    browserFacetUrl = Drupal.removeURLParameter(url, 'facet_filter_url');
+    window.history.pushState({'facet-url-update': url}, document.title, browserFacetUrl);
+  };
+
+  $(document).ajaxSend(function (event, jqxhr, settings) {
+    // Add facet_filter_url to ajax calls as we need the facets in new format
+    // in code when sorting / paginating.
+    if (browserFacetUrl !== null && settings.url.includes('/views/ajax')) {
+      settings.url = Drupal.removeURLParameter(settings.url, 'facet_filter_url');
+      if (settings.url.includes('?')) {
+        settings.url = settings.url + '&facet_filter_url=' + browserFacetUrl;
+      }
+      else {
+        settings.url = settings.url + '?facet_filter_url=' + browserFacetUrl;
+      }
+    }
+  });
+
 })(jQuery);

@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
 use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * )
  */
 class MultistepCheckout extends CheckoutFlowWithPanesBase {
+  use LoggerChannelTrait;
 
   use RedirectDestinationTrait;
 
@@ -346,6 +348,16 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       try {
 
         if ($next_step_id == 'confirmation') {
+          $method = $cart->getShippingMethodAsString();
+
+          if (empty($method)) {
+            $this->getLogger('alshaya_acm_checkout')->error('User tried to place order with empty delivery method: @data', [
+              '@data' => $cart->getDataToLog(),
+            ]);
+
+            return $this->redirectToStep('delivery');
+          }
+
           // User has pressed "place order" button.
           // Set the attempted payment flag and push to Magento.
           $cart->setExtension('attempted_payment', 1);
@@ -354,8 +366,11 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         /** @var \Drupal\acq_cart\Cart $cart */
         $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
+      catch (NeedsRedirectException $e) {
+        // Do nothing, let it redirect.
+      }
       catch (\Exception $e) {
-        \Drupal::logger('alshaya_acm_checkout')->error('Error while updating cart in @step: @message', [
+        $this->getLogger('alshaya_acm_checkout')->error('Error while updating cart in @step: @message', [
           '@step' => $this->stepId,
           '@message' => $e->getMessage(),
         ]);
@@ -387,6 +402,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
       if ($next_step_id == 'confirmation') {
         try {
+          // Validate if reserve order id is not set in cart.
+          if (!$this->getCheckoutHelper()->isReservedOrderSetInCart($cart)) {
+            throw new \Exception(acq_commerce_api_down_global_error_message());
+          }
           // Invoke hook to allow other modules to process before order is
           // finally placed.
           \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);

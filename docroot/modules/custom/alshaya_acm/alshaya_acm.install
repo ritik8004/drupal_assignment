@@ -14,6 +14,26 @@ use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Delete unused image styles.
+ * Clear all cache tags related to oauth2_token.
+ */
+function alshaya_acm_update_8012() {
+  alshaya_config_delete_configs(['image.style.checkout_summary_block_thumbnail']);
+
+  /** @var \Drupal\Core\Database\Connection $connection */
+  $connection = \Drupal::service('database');
+
+  // Clearing this will expire all caches for oauth2_token entities, which is
+  // expected. New oauth2_token entities & cache refresh for the older ones will
+  // use a common cache tag: oauth2_token.
+  $connection->delete('cachetags')
+    ->condition('tag', 'oauth2_token:%', 'LIKE')
+    ->execute();
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function alshaya_acm_update_dependencies() {

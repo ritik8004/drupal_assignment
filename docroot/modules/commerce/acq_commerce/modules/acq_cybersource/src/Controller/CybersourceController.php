@@ -165,6 +165,9 @@ class CybersourceController implements ContainerInjectionInterface {
     $this->moduleHandler->alter('acq_cybersource_before_get_token_cart', $cart, $form_data, $errors);
 
     if ($errors) {
+      if (!empty($errors['global'])) {
+        $errors['global'] = $this->getGlobalErrorMarkup($errors['global']);
+      }
       $response->setContent(json_encode(['errors' => $errors]));
       return $response;
     }

@@ -7,8 +7,26 @@
 
 use Drupal\alshaya_performance\Logger\AlshayaPerformanceSysLog;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_views_plugins_cache_alter().
+ */
+function alshaya_performance_views_plugins_cache_alter(array &$plugins) {
+  // Use custom alshaya cache plugin to avoid adding list cache tag.
+  if (isset($plugins['tag']) && isset($plugins['alshaya_tag'])) {
+    $plugins['tag']['class'] = $plugins['alshaya_tag']['class'];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function alshaya_performance_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  $build['#cache']['tags'][] = 'node_type:' . $entity->bundle();
+}
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -77,4 +95,28 @@ function alshaya_performance_flush_frontend_caches() {
   // Wipe the Twig PHP Storage cache.
   \Drupal::service('twig')->invalidate();
 
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_performance_page_attachments_alter(array &$attachments) {
+  $preload = [];
+
+  \Drupal::moduleHandler()->alter('alshaya_performance_preload', $preload);
+  \Drupal::theme()->alter('alshaya_performance_preload', $preload);
+
+  foreach ($preload ?? [] as $index => $item) {
+    $attachments['#attached']['html_head'][$item] = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'preload',
+          'href' => $item,
+        ],
+      ],
+      'alshaya_performance_preload_' . $index,
+    ];
+  }
 }

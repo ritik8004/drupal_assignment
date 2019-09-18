@@ -24,6 +24,12 @@
   Drupal.geolocation = Drupal.geolocation || {};
   Drupal.click_collect = Drupal.click_collect || {};
 
+  // Delete behavior from contrib module loading google map api on page load.
+  delete Drupal.behaviors.geolocationGeocoderGoogleGeocodingApi;
+  $(window).on('load', function () {
+    delete Drupal.behaviors.geolocationGeocoderGoogleGeocodingApi;
+  });
+
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
       $('#pdp-stores-container').once('bind-js').each(function () {
@@ -46,14 +52,6 @@
 
         $(this).addClass('location-js-initiated');
 
-        $('.click-collect-form').once('autocomplete-init').each(function () {
-          // First load the library from google.
-          Drupal.geolocation.loadGoogle(function () {
-            var field = $('.click-collect-form').find('input[name="location"]')[0];
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
-          });
-        });
-
         // Location search google autocomplete fix.
         $(window).on('scroll', function () {
           $('.pac-container:visible').hide();
@@ -63,14 +61,26 @@
           // Check if we have access to click & collect.
           if ($(this).data('state') !== 'disabled') {
             // Get the permission track the user location.
-            Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
-
             $('#pdp-stores-container').on('click', function () {
-              // Try again if we were not able to get location on page load.
-              if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
-                $('#pdp-stores-container').data('second-try', 'done');
-                Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+              if ($(this).hasClass('maps-loaded')) {
+                return;
               }
+
+              $(this).addClass('maps-loaded');
+
+              // First load the library from google.
+              Drupal.geolocation.loadGoogle(function () {
+                var field = $('.click-collect-form').find('input[name="location"]')[0];
+                new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
+
+                Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+
+                // Try again if we were not able to get location on page load.
+                if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
+                  $('#pdp-stores-container').data('second-try', 'done');
+                  Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
+                }
+              });
             });
           }
         });

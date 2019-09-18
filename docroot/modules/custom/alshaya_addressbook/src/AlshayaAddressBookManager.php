@@ -395,8 +395,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $entity_address = $entity->get('field_address')->first()->getValue();
 
     $entity_address['mobile_number'] = '';
-    if ($phone = $entity->get('field_mobile_number')->first()->getValue()) {
-      $entity_address['mobile_number'] = $phone['value'];
+    // Get the value from mobile number field only when the field has value.
+    if (($mobile_number = $entity->get('field_mobile_number')) && !$mobile_number->isEmpty()) {
+      $entity_address['mobile_number'] = $mobile_number->first()->getValue();
     }
 
     $address = $this->getMagentoAddressFromAddressArray($entity_address);

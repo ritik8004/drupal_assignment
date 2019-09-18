@@ -14,7 +14,7 @@ use Drupal\Core\Url;
  *
  * @ACQCheckoutPane(
  *   id = "checkout_guest",
- *   label = @Translation("continue as a guest"),
+ *   label = @Translation("new customer?"),
  *   defaultStep = "login",
  *   wrapperElement = "fieldset",
  * )

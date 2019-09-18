@@ -80,6 +80,15 @@ function alshaya_acm_checkoutcom_alshaya_my_account_links_alter(array &$links) {
 }
 
 /**
+ * Implements hook_alshaya_user_breadcrumb_routes_alter().
+ */
+function alshaya_acm_checkoutcom_alshaya_user_breadcrumb_routes_alter(array &$routes) {
+  $routes['acq_checkoutcom.payment_cards'] = [
+    'user' => \Drupal::currentUser()->id(),
+  ];
+}
+
+/**
  * Implements hook_acq_payment_method_info_alter().
  */
 function alshaya_acm_checkoutcom_acq_payment_method_info_alter(array &$definitions) {

@@ -59,6 +59,13 @@ class SkuManager {
   const NON_AGGREGATED_LISTING = 'non_aggregated';
 
   /**
+   * Flag to allow merge children in alshaya_color_split.
+   *
+   * @var bool
+   */
+  public static $colorSplitMergeChildren = TRUE;
+
+  /**
    * Store selected variant id.
    *
    * @var int
@@ -1317,26 +1324,20 @@ class SkuManager {
         '@sku' => $sku,
         '@function' => 'SkuManager::getDisplayNode()',
       ]);
-
       return NULL;
     }
 
-    $langcode = $sku_entity->language()->getId();
-    $sku_string = $sku_entity->getSku();
-
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
-
     $node = $plugin->getDisplayNode($sku_entity, $check_parent);
 
     if (!($node instanceof NodeInterface)) {
       if ($check_parent) {
         $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-          '@langcode' => $langcode,
-          '@sku' => $sku_string,
+          '@langcode' => $sku_entity->language()->getId(),
+          '@sku' => $sku_entity->getSku(),
         ]);
       }
-
       return NULL;
     }
 
@@ -2499,28 +2500,51 @@ class SkuManager {
     if ($entity instanceof SKUInterface) {
       $entity = $this->getDisplayNode($entity);
     }
-    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+
+    $static = &drupal_static(__FUNCTION__, []);
+
+    // Load default from config.
+    if (!isset($static['default'])) {
+      $static['default'] = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    }
+
+    // If we don't have product node, let's just return default.
+    if (!($entity instanceof NodeInterface) || $entity->bundle() !== 'acq_product') {
+      return $this->getContextFromLayoutKey($context, $static['default']);
+    }
+
+    // Return from static cache if we already have it processed once.
+    if (isset($static[$entity->id()])) {
+      return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
+    }
+
+    // Set default in static, we will override below if we have something
+    // available from terms.
+    $static[$entity->id()] = $static['default'];
+
+    if (($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
-        if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
-          $pdp_layout = $term->get('field_pdp_layout')->getString();
+        if ($term instanceof TermInterface) {
+          $pdp_layout = $term->get('field_pdp_layout')->getString() ?? NULL;
           if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
             $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
             foreach ($taxonomy_parents as $taxonomy_parent) {
               $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
               if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
-                return $this->getContextFromLayoutKey($context, $pdp_layout);
+                $static[$entity->id()] = $pdp_layout;
+                break;
               }
             }
           }
           else {
-            return $this->getContextFromLayoutKey($context, $pdp_layout);
+            $static[$entity->id()] = $pdp_layout;
           }
         }
       }
     }
-    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
-    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+
+    return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
   }
 
   /**
@@ -2790,6 +2814,8 @@ class SkuManager {
    * @throws \Exception
    */
   public function processIndexItem(NodeInterface $node, ItemInterface $item) {
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $langcode = $node->language()->getId();
 
     $sku_string = $this->getSkuForNode($node);
@@ -2909,6 +2935,7 @@ class SkuManager {
     $data = [];
     $has_color_data = FALSE;
     $children = $this->getAvailableChildren($sku) ?? [];
+
     $configurable_attributes = $this->getConfigurableAttributes($sku);
 
     // Gather data from children to set in parent.
@@ -3003,15 +3030,22 @@ class SkuManager {
    *   Description of the product.
    */
   public function getDescription(SKUInterface $sku, $context) {
-    $prod_description = [];
-    if ($body = $sku->get('attr_description')->getValue()) {
-      $prod_description['description'] = [
-        '#markup' => $body[0]['value'],
-      ];
-    }
-    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
+    return $this->productInfoHelper->getValue($sku, 'description', $context);
+  }
 
-    return $prod_description;
+  /**
+   * Get description for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Description of the product.
+   */
+  public function getShortDescription(SKUInterface $sku, $context) {
+    return $this->productInfoHelper->getValue($sku, 'short_description', $context);
   }
 
   /**
@@ -3028,17 +3062,13 @@ class SkuManager {
       }
       foreach ($nids as $nid) {
         Cache::invalidateTags([
-          'config:node.type.acq_product:' . $nid,
-          'node_type:acq_product:' . $nid,
-          'node_view',
+          'node:' . $nid,
         ]);
       }
     }
     else {
       Cache::invalidateTags([
-        'config:node.type.acq_product',
         'node_type:acq_product',
-        'node_view',
       ]);
     }
   }

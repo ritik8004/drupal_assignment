@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - ctools
+    - taxonomy
+id: sku_product_option
+label: 'SKU Product Option'
+type: 'canonical_entities:taxonomy_term'
+pattern: 'product-option/[term:name]'
+selection_criteria:
+  5cea1512-f2dd-49fb-84ae-d3575c0d3e45:
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      sku_product_option: sku_product_option
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    uuid: 5cea1512-f2dd-49fb-84ae-d3575c0d3e45
+selection_logic: and
+weight: -5
+relationships: {  }

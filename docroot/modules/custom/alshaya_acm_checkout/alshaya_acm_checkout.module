@@ -237,7 +237,7 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     }
     $knet->save();
     $knet_ar = $knet->addTranslation('ar', []);
-    $knet_ar->setName('بطاقة ائتمان k-net');
+    $knet_ar->setName('كي-نت');
     $knet_ar->get('description')->setValue('يرجى المتابعة إلى صفحة الدفع عن طريق K-Net  بواسطة الضغط على رابط "سجل الطلبية" أدناه');
     $knet_ar->save();
 
@@ -383,6 +383,15 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
       foreach ($violations as $field => $message) {
         $errors['billing_address[address][billing][' . $field . ']'] = $message;
       }
+    }
+  }
+
+  // When all other validations pass.
+  if (empty($errors)) {
+    /* @var \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper*/
+    $checkout_helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    if (!$checkout_helper->isReservedOrderSetInCart($cart)) {
+      $errors['global'] = acq_commerce_api_down_global_error_message();
     }
   }
 

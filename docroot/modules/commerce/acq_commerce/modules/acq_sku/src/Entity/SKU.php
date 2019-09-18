@@ -60,6 +60,13 @@ use GuzzleHttp\Exception\RequestException;
 class SKU extends ContentEntityBase implements SKUInterface {
 
   /**
+   * Flag to avoid downloading image.
+   *
+   * @var bool
+   */
+  public static $downloadImage = TRUE;
+
+  /**
    * Processed media array.
    *
    * @var array
@@ -240,7 +247,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           }
         }
       }
-      elseif ($download) {
+      elseif ($download && self::$downloadImage) {
         try {
           // Prepare the File object when we access it the first time.
           $file = $this->downloadMediaImage($data);

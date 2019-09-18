@@ -18,6 +18,9 @@ interface CartStorageInterface {
    * @param int $cart_id
    *   Cart Id to restore. We don't rely on other functions as cart is already
    *   corrupt when we call this function.
+   *
+   * @return bool
+   *   Whether cart restore successfull or not.
    */
   public function restoreCart($cart_id);
 
