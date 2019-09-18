@@ -1,4 +1,5 @@
 var path  = require("path");
+const webpack = require('webpack');
 
 var config = {
   entry: {
@@ -23,10 +24,6 @@ var config = {
       }
     ]
   },
-  externals : {
-    'react': "React",
-    'react-dom': "ReactDOM",
-  },
   optimization: {
     splitChunks: {
       name: true,
@@ -38,7 +35,13 @@ var config = {
         }
       }
     }
-  }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      "React": "react",
+      "ReactDOM": "react-dom",
+    }),
+  ],
 };
 
 module.exports = (env, argv) => {

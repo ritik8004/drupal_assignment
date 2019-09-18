@@ -18,6 +18,9 @@ class AlshayaAlgoliaController extends ControllerBase {
    *   Return array of markup with react lib attached.
    */
   public function testPage() {
+    $config = \Drupal::configFactory()->get('search_api.server.algolia')->get('backend_config');
+    $index = \Drupal::configFactory()->get('search_api.index.acquia_search_index')->get('options');
+    $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-search"></div>',
@@ -25,6 +28,16 @@ class AlshayaAlgoliaController extends ControllerBase {
         'library' => [
           'alshaya_algolia/test',
         ],
+        'drupalSettings' => [
+          'algoliaSearch' => [
+            'application_id' => $config['application_id'],
+            'api_key' => $config['api_key'],
+            'indexName' => $index['algolia_index_name'] . "_{$lang}",
+          ],
+        ],
+      ],
+      '#cache' => [
+        'contexts' => [ 'languages' ],
       ],
     ];
   }
