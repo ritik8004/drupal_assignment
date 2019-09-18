@@ -1,0 +1,7 @@
+alshaya_acm_promotion.settings:
+  type: config_object
+  label: 'Alshaya ACM Promotion settings'
+  mapping:
+    dynamic_labels:
+      type: integer
+      label: 'Flag to toggle dynamic promotion label functionality'

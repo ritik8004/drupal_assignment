@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
@@ -14,6 +15,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Renderer;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -45,13 +47,21 @@ class ProductStockController extends ControllerBase {
   protected $cartHelper;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('renderer'),
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('alshaya_acm.cart_helper')
+      $container->get('alshaya_acm.cart_helper'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -64,13 +74,17 @@ class ProductStockController extends ControllerBase {
    *   SKU Manager.
    * @param \Drupal\alshaya_acm\CartHelper $cart_helper
    *   Cart Helper.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   Event Dispatcher.
    */
   public function __construct(Renderer $renderer,
                               SkuManager $sku_manager,
-                              CartHelper $cart_helper) {
+                              CartHelper $cart_helper,
+                              EventDispatcherInterface $eventDispatcher) {
     $this->renderer = $renderer;
     $this->skuManager = $sku_manager;
     $this->cartHelper = $cart_helper;
+    $this->eventDispatcher = $eventDispatcher;
   }
 
   /**
@@ -90,7 +104,6 @@ class ProductStockController extends ControllerBase {
     }
 
     $data = $request->request->all();
-
     $return = new AjaxResponse();
     $response = $this->cartHelper->addItemToCart(
       $entity,
@@ -105,6 +118,12 @@ class ProductStockController extends ControllerBase {
       $class = 'error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
       $return->addCommand(new HtmlCommand($class, $response));
     }
+
+    // Instantiate and Dispatch add_to_cart_submit event.
+    $this->eventDispatcher->dispatch(
+      AddToCartFormSubmitEvent::EVENT_NAME,
+      new AddToCartFormSubmitEvent($entity, $return)
+    );
 
     return $return;
   }

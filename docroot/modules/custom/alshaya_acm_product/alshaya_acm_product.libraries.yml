@@ -49,3 +49,12 @@ sharethis:
     - core/jquery.once
     - core/drupalSettings
     - alshaya_master/jquery_is_in_viewport
+
+add_to_cart_form:
+  version: 1.x
+  js:
+    js/add_to_cart_form.js: {}
+  dependencies:
+    - core/jquery.once
+    - core/drupal
+    - alshaya_white_label/attribute
