@@ -90,7 +90,7 @@ sites:
     module: alshaya_kz
     type: alshaya_transac_lite
     country: kw
-  veme:
+  venontransacme:
     module: alshaya_ve
-    type: alshaya_transac
+    type: alshaya_non_transac
     country: kw
