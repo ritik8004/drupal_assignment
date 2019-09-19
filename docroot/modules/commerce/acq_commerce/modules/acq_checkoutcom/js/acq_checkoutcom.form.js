@@ -117,6 +117,8 @@
 
     // Submit form if card is tokenised and there are no form errors.
     if (Drupal.checkoutComTokenised === true && Drupal.checkoutComProcessed === true) {
+      // Hide the payment button now to avoid double click from user.
+      $(form).find('.form-submit').hide();
       form.submit();
       return;
     }
