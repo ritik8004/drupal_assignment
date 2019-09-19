@@ -22,7 +22,6 @@ class AlshayaAlgoliaProductIndexEvent extends Event {
    */
   private $sku;
 
-
   /**
    * The node object.
    *
