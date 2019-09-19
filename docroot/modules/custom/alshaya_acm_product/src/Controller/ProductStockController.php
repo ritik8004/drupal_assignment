@@ -9,7 +9,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Renderer;
@@ -112,10 +111,9 @@ class ProductStockController extends ControllerBase {
 
     if ($response === TRUE) {
       $this->moduleHandler()->alter('alshaya_acm_product_add_to_cart_submit_ajax_response', $return, $entity, $data);
-      $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
     }
     else {
-      $class = 'error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
+      $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
       $return->addCommand(new HtmlCommand($class, $response));
     }
 

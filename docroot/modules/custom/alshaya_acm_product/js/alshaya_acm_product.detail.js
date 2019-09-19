@@ -108,7 +108,7 @@
 
       $('article.entity--type-node').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
