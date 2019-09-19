@@ -1,0 +1,15 @@
+mini_cart:
+  version: 1.x
+  footer: true
+  js:
+    dist/minicart.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
+cart:
+  version: 1.x
+  footer: true
+  js:
+    dist/cart.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
