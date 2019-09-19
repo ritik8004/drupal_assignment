@@ -21,9 +21,4 @@
     }
   };
 
-  $.fn.showDynamicPromotionLabel = function (data) {
-    // console.log(data);
-    $(data.selector).slideDown('slow');
-  };
-
 })(jQuery, Drupal);
