@@ -169,16 +169,26 @@
     applePaySessionObject.begin();
   };
 
-  if (window.ApplePaySession) {
-    // Show Apple pay at once, we will hide again quickly if something
-    // goes wrong.
-    $('#payment_method_checkout_com_applepay').addClass('supported');
+  try {
+    // If config says we don't show apple pay on anywhere, don't do anything.
+    if (window.ApplePaySession && drupalSettings.checkoutCom.applePayAllowedIn != 'none') {
+      var isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
 
-    // Do next check only if user has selected apple pay.
-    if ($('#ckoApplePayButton').length > 0) {
-      let applePay = new CheckoutComApplePay(drupalSettings, $(document));
-      launchApplePay(applePay);
+      // Show only in mobile if config says to show only in mobile.
+      if (drupalSettings.checkoutCom.applePayAllowedIn == 'all' || isMobile)
+      // Show Apple pay at once, we will hide again quickly if something
+      // goes wrong.
+        $('#payment_method_checkout_com_applepay').addClass('supported');
+
+      // Do next check only if user has selected apple pay.
+      if ($('#ckoApplePayButton').length > 0) {
+        let applePay = new CheckoutComApplePay(drupalSettings, $(document));
+        launchApplePay(applePay);
+      }
     }
+  }
+  catch (e) {
+    // Do nothing as something wrong in JS. We will simply not show apple pay.
   }
 
 })(jQuery, Drupal, drupalSettings);
