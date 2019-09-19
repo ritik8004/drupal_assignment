@@ -8,16 +8,16 @@
 
   Drupal.behaviors.menuItemsLength = {
     attach: function (context, settings) {
-      var $mainNavigationBlock = $('.block-logo-navigation');
-      var $subNavigationBlock = $('.block-sub-navigation');
-      var $subNavigationMenu = $('.navigation__sub-menu');
-      var $subNavigationItems = $subNavigationMenu.find('li');
-      var $body = $('body');
+      var mainNavigationBlock = $('.block-logo-navigation');
+      var subNavigationBlock = $('.block-sub-navigation');
+      var subNavigationMenu = $('.navigation__sub-menu');
+      var subNavigationItems = subNavigationMenu.find('li');
+      var body = $('body');
 
-      if ($subNavigationItems.length > 2) {
-        $mainNavigationBlock.addClass('show-menu-button');
-        $subNavigationBlock.addClass('vertical-layout');
-        $body.addClass('has-burger-menu');
+      if (subNavigationItems.length > 2) {
+        mainNavigationBlock.addClass('show-menu-button');
+        subNavigationBlock.addClass('vertical-layout');
+        body.addClass('has-burger-menu');
       }
     }
   };
