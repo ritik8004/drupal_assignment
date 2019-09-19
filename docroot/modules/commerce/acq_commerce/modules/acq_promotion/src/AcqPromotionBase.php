@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_promotion;
 
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 
 /**
@@ -9,7 +10,7 @@ use Drupal\Core\Plugin\PluginBase;
  *
  * @package Drupal\acq_promotion
  */
-abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterface {
+abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterface, ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}

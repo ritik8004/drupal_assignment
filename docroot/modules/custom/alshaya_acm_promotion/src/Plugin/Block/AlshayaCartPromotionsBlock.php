@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_promotion\AcqPromotionPluginManager;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -38,6 +39,13 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   protected $cartStorage;
 
   /**
+   * ACQ Promotion Plugin Manager.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $acqPromotionPluginManager;
+
+  /**
    * Constructs a new AlshayaCartPromotionsBlock object.
    *
    * @param array $configuration
@@ -50,17 +58,20 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    *   The alshaya promotion manager service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartSessionStorage
    *   The cart storage service.
+   * @param \Drupal\acq_promotion\AcqPromotionPluginManager $pluginManager
+   *   ACQ Promotion Plugin Manager.
    */
   public function __construct(
         array $configuration,
         $plugin_id,
         $plugin_definition,
         AlshayaPromotionsManager $alshaya_acm_promotion_manager,
-        CartStorageInterface $cartSessionStorage
-  ) {
+        CartStorageInterface $cartSessionStorage,
+        AcqPromotionPluginManager $pluginManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->cartStorage = $cartSessionStorage;
+    $this->acqPromotionPluginManager = $pluginManager;
   }
 
   /**
@@ -72,7 +83,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_promotion.manager'),
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('plugin.manager.acq_promotion')
     );
   }
 
@@ -81,6 +93,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function defaultConfiguration() {
     return [
+      'source' => 'static',
       'promotions' => [],
     ] + parent::defaultConfiguration();
 
@@ -103,6 +116,16 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       }
     }
 
+    $form['source'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Select Promotions Source'),
+      '#options' => [
+        'static' => $this->t('Static'),
+        'dynamic' => $this->t('Dynamic'),
+      ],
+      '#weight' => -1,
+    ];
+
     $form['promotions'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Promotions'),
@@ -119,6 +142,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['source'] = $form_state->getValue('source');
     $this->configuration['promotions'] = $form_state->getValue('promotions');
   }
 
@@ -128,11 +152,29 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function build() {
-    $free_shipping = [];
     $build = [
       // We need empty markup to ensure wrapper div is always available.
       '#markup' => '',
     ];
+
+    if ($this->configuration['source'] === 'static') {
+      $this->getStaticBuild($build);
+    }
+    else {
+      $this->getDynamicBuild($build);
+    }
+
+    return $build;
+  }
+
+  /**
+   * Builds static promotions.
+   *
+   * @param array $build
+   *   Render Array.
+   */
+  protected function getStaticBuild(array &$build) {
+    $free_shipping = [];
 
     // This is for R1 and all promotions except for the three types for which
     // we check for conditions below.
@@ -150,8 +192,15 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         '#free_shipping' => $free_shipping,
       ];
     }
+  }
 
-    return $build;
+  /**
+   * Build dynamic promotions.
+   *
+   * @param array $build
+   *   Render Array.
+   */
+  protected function getDynamicBuild(array &$build) {
   }
 
   /**

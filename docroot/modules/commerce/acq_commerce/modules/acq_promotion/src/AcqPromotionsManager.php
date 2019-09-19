@@ -23,6 +23,8 @@ use Drupal\node\NodeInterface;
  */
 class AcqPromotionsManager {
 
+  const ACQ_PROMOTIONS_BUNDLE = 'acq_promotion';
+
   use StringTranslationTrait;
 
   /**
