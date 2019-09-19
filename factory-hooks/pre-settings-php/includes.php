@@ -188,8 +188,8 @@ $settings['views_to_disable'] = [
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
 
-// Set page cache duration to 30 minutes by default.
-$config['system.performance']['cache']['page']['max_age'] = 1800;
+// Set page cache duration to 4hr by default.
+$config['system.performance']['cache']['page']['max_age'] = 14400;
 
 // ################################################################
 // This switch/case is ONLY for per environment settings. If any of these
