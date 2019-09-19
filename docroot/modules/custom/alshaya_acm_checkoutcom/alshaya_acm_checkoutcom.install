@@ -10,6 +10,18 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_n().
  *
+ * Set the config to allow apple pay not on desktop for now.
+ */
+function alshaya_acm_checkoutcom_update_8003() {
+  \Drupal::configFactory()
+    ->getEditable('acq_checkoutcom.settings')
+    ->set('apple_pay_allowed_in', 'mobile')
+    ->save();
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Update translations of checkout.com related strings.
  */
 function alshaya_acm_checkoutcom_update_8002() {

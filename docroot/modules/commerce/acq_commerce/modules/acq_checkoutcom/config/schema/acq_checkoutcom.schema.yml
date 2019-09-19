@@ -8,6 +8,9 @@ acq_checkoutcom.settings:
     api_cache_time:
       type: integer
       label: 'api cache time'
+    apple_pay_allowed_in:
+      type: string
+      label: 'Apple Pay allowed in'
     base_uri:
       type: mapping
       label: 'Base uri based on environment to use'
