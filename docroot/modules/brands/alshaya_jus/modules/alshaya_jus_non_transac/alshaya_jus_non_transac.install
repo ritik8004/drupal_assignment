@@ -26,72 +26,6 @@ function alshaya_jus_non_transac_install() {
     'Don’t miss the news' => [
       'ar' => 'لا تفوت الأخبار',
     ],
-    'New arrivals' => [
-      'ar' => 'وصل حديثاُ',
-    ],
-    'Style Studio' => [
-      'ar' => 'تصاميم عصرية',
-    ],
-    'Exclusive Active Wear' => [
-      'ar' => 'ملابس رياضية حصرية',
-    ],
-    'Middle East Exclusives' => [
-      'ar' => 'حصرياً للشرق الأوسط',
-    ],
-    'Collections' => [
-      'ar' => 'التشكيلات',
-    ],
-    'Tops' => [
-      'ar' => 'البلوزات',
-    ],
-    'Bottoms' => [
-      'ar' => 'البنطلونات',
-    ],
-    'Active Wear' => [
-      'ar' => 'ملابس رياضية',
-    ],
-    'Outerwear' => [
-      'ar' => 'الجاكيتات',
-    ],
-    'Sleep shop' => [
-      'ar' => 'قسم ملابس النوم',
-    ],
-    'Bags' => [
-      'ar' => 'الحقائب',
-    ],
-    'Your space' => [
-      'ar' => 'نسق كما تحب',
-    ],
-    'School shop' => [
-      'ar' => 'قسم المدارس',
-    ],
-    'Get the latest updates from Justice' => [
-      'ar' => 'احصل على أحدث العروض عبر موقع جستيس',
-    ],
-    'Legal terms' => [
-      'ar' => 'البنود القانونية',
-    ],
-    'about us' => [
-      'ar' => 'نبذة عنا',
-    ],
-    'contact us' => [
-      'ar' => 'اتصل بنا',
-    ],
-    'Join the club' => [
-      'ar' => 'انضم الينا',
-    ],
-    'Win exciting prizes' => [
-      'ar' => 'اربح جوائز قيمة',
-    ],
-    'Unlock exclusive rewards' => [
-      'ar' => 'اكتشف الجوائز الحصرية',
-    ],
-    'Be the first to know' => [
-      'ar' => 'كن أول من يعلم',
-    ],
-    'Learn more' => [
-      'ar' => 'تعرف على المزيد',
-    ],
     'GET IT ON (Google Play)' => [
       'ar' => 'حمل من متجر جوجل بلاي',
     ],
@@ -140,7 +74,7 @@ function alshaya_jus_non_transac_install() {
     'The mission of Justice is to enhance a tween girl’s self-esteem by providing her the most recent fashion and lifestyle products, in a unique, fun, interactive, environment, all at a great value for mom.' => [
       'ar' => 'نحن نعمل في "جستيس" على تعزيز احترام الذات للفتيات من خلال تزويدهن بأحدث صيحات الأزياء والموضة، وبأسلوب حياة فريد وممتع لكل من البنت والأم.',
     ],
-    'Justice stores are the global destination of choice for tween girls, and with good reason. ' => [
+    'Justice stores are the global destination of choice for tween girls, and with good reason.' => [
       'ar' => 'محلات "جستيس" هي الوجهة العالمية الأولى المفضلة للفتيات.',
     ],
     'We have stores across Middle East in the Kingdom of Saudi Arabia, United Arab Emirates, Kuwait, Qatar, Bahrain, Jordan and Oman. For more information on stores, visit our Store locator page.' => [
@@ -158,7 +92,7 @@ function alshaya_jus_non_transac_install() {
     'The quality of customer service' => [
       'ar' => 'جودة خدمة العملاء',
     ],
-    'Information on Product Range ' => [
+    'Information on Product Range' => [
       'ar' => 'معلومات عن نطاق المنتج',
     ],
     'Store Details' => [
