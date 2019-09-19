@@ -147,10 +147,10 @@ function _alshaya_seo_transac_get_metatag_translations() {
   $strings = [
     'alshaya_seo_title_suffix' => [
       'en' => 'Collection [alshaya_seo:top_category] Online',
-      'ar' => 'مجموعة على الانترنت',
+      'ar' => 'مجموعة [alshaya_seo:top_category] على الانترنت',
     ],
     'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [current-date:html_year] [term:name] collection specs and prices of [alshaya_seo:sub_categories] and more.',
+      'en' => 'Compare [current-date:html_year] [term:name] collection at the best specs and prices of [alshaya_seo:sub_categories] and more.',
       'ar' => 'قارن مواصفات وأسعار [current-date:html_year] [term:name] [alshaya_seo:sub_categories] وأكثر من ذلك.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
