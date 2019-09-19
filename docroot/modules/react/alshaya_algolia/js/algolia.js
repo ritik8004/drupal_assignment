@@ -9,11 +9,7 @@ import {
   RefinementList
 } from 'react-instantsearch-dom';
 import PropTypes from 'prop-types';
-
-const searchClient = algoliasearch(
-  drupalSettings.algoliaSearch.application_id,
-  drupalSettings.algoliaSearch.api_key
-);
+import {searchClient} from './Config/SearchClient'
 
 class App extends React.Component {
   render() {

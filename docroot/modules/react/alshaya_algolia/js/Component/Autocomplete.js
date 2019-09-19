@@ -1,14 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
-import { InstantSearch, connectAutoComplete } from 'react-instantsearch-dom';
+import CustomHighlight from './ConnectHighlight';
 
-class Example extends React.Component {
+class Autocomplete extends React.Component {
   state = {
     value: this.props.currentRefinement,
   };
 
   onChange = (event, { newValue }) => {
+    if (!newValue) {
+      this.props.onSuggestionCleared();
+    }
+
     this.setState({
       value: newValue,
     });
@@ -23,27 +27,32 @@ class Example extends React.Component {
   };
 
   getSuggestionValue(hit) {
-    return hit.name;
+    return hit.query;
+  }
+
+  suggestionTemplate(suggestion) {
+    return `<span className="suggested-text">${suggestion._highlightResult.query.value}</span><span className="populate-input">&#8598;</span>s`
   }
 
   renderSuggestion(hit) {
-    return <Highlight attribute="name" hit={hit} tagName="mark" />;
-  }
+    console.log(hit)
+    // const [category] = hit.instant_search.facets.exact_matches.categories;
 
-  renderSectionTitle(section) {
-    return section.index;
-  }
+    return (<CustomHighlight attribute="query" hit={hit} />)
 
-  getSectionSuggestions(section) {
-    return section.hits;
+    // return (
+    //   <span>
+    //     <Highlight attribute="query" hit={hit} tagName="mark" />
+    //   </span>
+    // );
   }
 
   render() {
-    const { hits } = this.props;
+    const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
 
     const inputProps = {
-      placeholder: 'Search for a product...',
+      placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,
       value,
     };
@@ -51,32 +60,16 @@ class Example extends React.Component {
     return (
       <Autosuggest
         suggestions={hits}
-        multiSection={true}
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+        onSuggestionSelected={onSuggestionSelected}
         getSuggestionValue={this.getSuggestionValue}
+        renderSuggestionsContainer={renderSuggestionsContainer}
         renderSuggestion={this.renderSuggestion}
         inputProps={inputProps}
-        renderSectionTitle={this.renderSectionTitle}
-        getSectionSuggestions={this.getSectionSuggestions}
       />
     );
   }
 }
 
-const AutoComplete = connectAutoComplete(Example);
-
-class App extends React.Component {
-  render() {
-    return (
-      <InstantSearch
-        indexName={drupalSettings.algoliaSearch.indexName}
-        appId={drupalSettings.algoliaSearch.application_id}
-        apiKey={drupalSettings.algoliaSearch.api_key}>
-        <AutoComplete />
-      </InstantSearch>
-    );
-  }
-}
-
-export default App
+export default connectAutoComplete(Autocomplete);
