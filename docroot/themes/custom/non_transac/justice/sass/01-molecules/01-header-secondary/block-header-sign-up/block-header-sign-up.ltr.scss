@@ -1,11 +1,12 @@
 @import '../../../config/_config.scss';
 
-.block-sign-up-desktop {
+.ic-email-sign-up {
   color: $signup_text;
-  width: 19%;
   text-align: $left;
+  text-decoration: none;
+  font-size: 0.9375rem;
 
-  &::after {
+  &::before {
     content: '';
     background-repeat: no-repeat;
     width: 2.75rem;
@@ -21,12 +22,7 @@
     }
   }
 
-  @include breakpoint($above-palm) {
-    background-color: $signup_bg;
-  }
-
-  a {
-    color: $signup_text;
-    font-size: 0.9375rem;
+  @include breakpoint($upto-lap) {
+    display: none;
   }
 }
