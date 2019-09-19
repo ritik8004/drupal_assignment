@@ -139,8 +139,6 @@ node-product-item:
   css:
     theme:
       dist/css/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
-  js:
-    dist/js/01-molecules/06-content/field-product-listing/node-product-item.js: {}
 
 field-promo-block:
   version: VERSION
