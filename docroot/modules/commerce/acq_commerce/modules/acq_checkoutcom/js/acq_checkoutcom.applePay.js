@@ -123,6 +123,8 @@
           applePaySessionObject.completePayment(status);
 
           if (success) {
+            // Hide the payment button now to avoid double click from user.
+            $('#ckoApplePayButton').closest('form').find('.form-submit').hide();
             $('#ckoApplePayButton').closest('form').submit();
           }
           else {
