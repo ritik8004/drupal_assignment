@@ -236,9 +236,9 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     $token_service = \Drupal::token();
 
     $category_term = isset($data['taxonomy_term']) ? $data['taxonomy_term'] : $data['term'];
-    $term_id = $category_term->get('tid')->getValue()[0]['value'];
+    $term_id = (int) $category_term->get('tid')->getValue()[0]['value'];
     $sale_ids = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds();
-    if (isset($sale_ids['sale']) && array_search($term_id, $sale_ids['sale'])) {
+    if (isset($sale_ids['sale']) && in_array($term_id, $sale_ids['sale'])) {
       $sale = TRUE;
     }
     elseif (isset($sale_ids) && array_search($term_id, $sale_ids)) {
@@ -365,7 +365,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($child, $current_langcode);
             $sub_categories[] = $taxonomy_term_trans->name->value;
           }
-          $replacements[$original] = implode(', ', $sub_categories);
+          $replacements[$original] = isset($sub_categories) ? implode(', ', $sub_categories) : '';
           break;
 
         case 'gender':
