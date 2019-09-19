@@ -157,7 +157,7 @@ class ApiHelper {
    * @return \Drupal\Core\Config\ImmutableConfig
    *   Checkout.com settings.
    */
-  private function getConfig() {
+  protected function getConfig() {
     return $this->configFactory->get('acq_checkoutcom.settings');
   }
 
