@@ -41,19 +41,16 @@ function alshaya_jus_non_transac_install() {
     'Select the type of enquiry' => [
       'ar' => 'حدد نوع الاستفسار',
     ],
-    'First name' => [
-      'ar' => 'الاسم الأول',
-    ],
-    'Last name' => [
-      'ar' => 'الاسم الأخير',
-    ],
-    'Mobile Number' => [
-      'ar' => 'رقم الهاتف',
-    ],
     'Email' => [
       'ar' => 'البريد الإلكتروني',
     ],
+    'email' => [
+      'ar' => 'البريد الإلكتروني',
+    ],
     'Message' => [
+      'ar' => 'الرسالة',
+    ],
+    'message' => [
       'ar' => 'الرسالة',
     ],
     'Full name' => [
