@@ -1,9 +1,9 @@
 var path  = require("path");
-const webpack = require('webpack');
 
 var config = {
   entry: {
     algolia: './js/algolia',
+    autocomplete: './js/algoliaAutocomplete',
   },
   mode: 'production',
   output: {
@@ -32,16 +32,15 @@ var config = {
           test: /[\\/]node_modules[\\/](algoliasearch|react-instantsearch-dom)[\\/]/,
           name: 'algolia.bundle',
           chunks: 'all',
+        },
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: 'react.bundle',
+          chunks: 'all',
         }
       }
     }
-  },
-  plugins: [
-    new webpack.ProvidePlugin({
-      "React": "react",
-      "ReactDOM": "react-dom",
-    }),
-  ],
+  }
 };
 
 module.exports = (env, argv) => {
