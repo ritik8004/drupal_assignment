@@ -5,6 +5,8 @@
  * Module file.
  */
 
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use AlgoliaSearch\Client;
 
@@ -35,7 +37,7 @@ function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(arra
  */
 function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
   $backend_config = \Drupal::configFactory()->get('search_api.server.algolia')->get('backend_config');
-  $client_config = \Drupal::configFactory()->get('search_api.index.acquia_search_index')->get('options');
+  $client_config = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options');
   $client = new Client($backend_config['application_id'], $backend_config['api_key']);
   $index_name = $client_config['algolia_index_name'];
 
@@ -68,4 +70,39 @@ function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op =
       break;
   }
 
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  // Disable alshaya_color_split hook calls.
+  SkuManager::$colorSplitMergeChildren = FALSE;
+
+  $logger = \Drupal::logger('alshaya_search_algolia');
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+  foreach ($objects as $id => &$object) {
+    $node = $items[$id]->getOriginalObject()->getValue();
+
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
+      continue;
+    }
+
+    try {
+      $algolia_index->processIndexItem($object, $node);
+    }
+    catch (\Throwable $e) {
+      if ($e->getCode() != 200) {
+        $logger->warning('Indexing failed for the node:@nid message:@message', [
+          '@nid' => $object->id(),
+          '@message' => $e->getMessage(),
+        ]);
+      }
+      unset($objects[$id]);
+    }
+  }
 }

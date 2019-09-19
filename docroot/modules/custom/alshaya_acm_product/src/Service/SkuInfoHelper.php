@@ -4,9 +4,11 @@ namespace Drupal\alshaya_acm_product\Service;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -63,6 +65,20 @@ class SkuInfoHelper {
   protected $moduleHandler;
 
   /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * Stock manager.
+   *
+   * @var \Drupal\acq_sku\StockManager
+   */
+  protected $acqSkuStockManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -77,6 +93,10 @@ class SkuInfoHelper {
    *   Renderer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database object.
+   * @param \Drupal\acq_sku\StockManager $acq_stock_manager
+   *   The stock manager.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -84,7 +104,9 @@ class SkuInfoHelper {
     MetatagManager $metatagManager,
     SkuPriceHelper $price_helper,
     RendererInterface $renderer,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    Connection $database,
+    StockManager $acq_stock_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -92,6 +114,8 @@ class SkuInfoHelper {
     $this->priceHelper = $price_helper;
     $this->renderer = $renderer;
     $this->moduleHandler = $module_handler;
+    $this->database = $database;
+    $this->acqSkuStockManager = $acq_stock_manager;
   }
 
   /**
@@ -394,6 +418,39 @@ class SkuInfoHelper {
     }
 
     return $variants;
+  }
+
+  /**
+   * Return stock for given sku entity.
+   */
+  public function calculateStock(SKU $sku) {
+    $sku_string = $sku->getSku();
+
+    $static = &drupal_static(__METHOD__, []);
+    if (isset($static[$sku_string])) {
+      return $static[$sku_string];
+    }
+
+    // Return quantity of given SKU.
+    switch ($sku->bundle()) {
+      case 'configurable':
+        $configured_skus = $sku->get('field_configured_skus')->getValue();
+        $child_skus = array_map(function ($item) {
+          return $item['value'];
+        }, $configured_skus);
+
+        $query = $this->database->select('acq_sku_stock', 'stock');
+        $query->addExpression('SUM(stock.quantity)', 'final_quantity');
+        $query->condition('stock.sku', $child_skus, 'IN');
+        $query->condition('stock.status', 1);
+        $static[$sku_string] = $query->execute()->fetchField();
+        break;
+
+      case 'simple':
+        $static[$sku_string] = $this->acqSkuStockManager->getStockQuantity($sku->getSku());
+        break;
+    }
+    return $static[$sku_string];
   }
 
 }
