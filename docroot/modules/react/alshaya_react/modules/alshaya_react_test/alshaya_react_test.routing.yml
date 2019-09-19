@@ -1,0 +1,6 @@
+alshaya_react_test.test:
+  path: '/react-simple/test'
+  defaults:
+    _controller: \Drupal\alshaya_react_test\Controller\AlshayaReactTestController::testPage
+  requirements:
+    _permission: 'access content'

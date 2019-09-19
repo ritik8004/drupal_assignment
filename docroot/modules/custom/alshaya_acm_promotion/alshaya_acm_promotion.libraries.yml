@@ -1,0 +1,16 @@
+free_gift:
+  version: 1.x
+  js:
+    js/alshaya_acm_promotion.free_gift.js: {}
+  dependencies:
+    - alshaya_acm_product/add_to_cart_form
+label_manager:
+  version: 1.x
+  js:
+    assets/js/alshaya_promotions_label.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupal.ajax
+    - core/drupalSettings

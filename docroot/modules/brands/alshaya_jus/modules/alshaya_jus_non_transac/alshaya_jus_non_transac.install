@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_jus_install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_jus_non_transac_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_jus_non_transac', 'inc', 'alshaya_jus_non_transac.content');
+
+  // Change region for main navigation block.
+  alshaya_block_move_blocks(['main_navigation' => 'header']);
+
+  // Create default content for the site.
+  alshaya_jus_non_transac_create_default_content();
+}
