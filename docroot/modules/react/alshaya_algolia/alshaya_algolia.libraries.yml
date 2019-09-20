@@ -7,5 +7,6 @@ autocomplete:
 vendor:
   js:
     dist/algolia.bundle.js: {}
+    dist/promise.js: {}
   dependencies:
     - alshaya_react/react
