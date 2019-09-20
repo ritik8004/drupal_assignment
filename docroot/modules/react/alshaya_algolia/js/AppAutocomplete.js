@@ -1,26 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  InstantSearch,
-  Configure,
-  Hits,
-  connectAutoComplete,
-  connectRefinementList,
-  Highlight,
-} from 'react-instantsearch-dom';
-import {searchClient} from './Config/SearchClient'
-import AutoComplete from './Component/Autocomplete'
+import AutoComplete from './Components/Autocomplete';
+import SearchResults from './Components/SearchResults';
+import InstantSearchComponent from './Components/InstantSearchComponent';
 
 class AppAutocomplete extends React.Component {
   state = {
     query: ''
-  }
+  };
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.setState({
       query: suggestion.query,
     });
-  };
+  }
 
   onSuggestionCleared = () => {
     this.setState({
@@ -28,29 +21,34 @@ class AppAutocomplete extends React.Component {
     });
   }
 
+  onChange = (newValue) => {
+    this.setState({
+      query: newValue,
+    });
+  };
+
   renderSuggestionsContainer = ({ containerProps, children, query }) => (
     <div {...containerProps}>
+      {<span className="trending-title">Trending searches</span>}
       {children}
-      {
-        <div className="footer">
-          Press Enter to search <strong>{query}</strong>
-        </div>
-      }
     </div>
-  );
-
+  )
 
   render() {
+    const { query, categories } = this.state;
+
     return (
-      <InstantSearch
-        searchClient={searchClient}
-        indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }>
-        <AutoComplete
-          onSuggestionSelected={this.onSuggestionSelected}
-          onSuggestionCleared={this.onSuggestionCleared}
-          renderSuggestionsContainer={this.renderSuggestionsContainer}
-        />
-      </InstantSearch>
+      <div>
+        <InstantSearchComponent indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }>
+          <AutoComplete
+            onSuggestionSelected={this.onSuggestionSelected}
+            onSuggestionCleared={this.onSuggestionCleared}
+            renderSuggestionsContainer={this.renderSuggestionsContainer}
+            onChange={this.onChange}
+          />
+        </InstantSearchComponent>
+        <SearchResults query={query} />
+      </div>
     );
   }
 }

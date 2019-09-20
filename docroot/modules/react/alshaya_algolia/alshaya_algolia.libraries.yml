@@ -1,9 +1,3 @@
-test:
-  js:
-    dist/algolia.js: {}
-  dependencies:
-    - alshaya_algolia/vendor
-
 autocomplete:
   js:
     dist/autocomplete.js: {}
@@ -14,8 +8,4 @@ vendor:
   js:
     dist/algolia.bundle.js: {}
   dependencies:
-    - alshaya_algolia/react
-
-react:
-  js:
-    dist/react.bundle.js: {}
+    - alshaya_react/react

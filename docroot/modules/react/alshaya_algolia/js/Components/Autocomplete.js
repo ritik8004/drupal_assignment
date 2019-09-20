@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
-import CustomHighlight from './ConnectHighlight';
+import CustomHighlight from './CustomHighlight';
 
 class Autocomplete extends React.Component {
   state = {
@@ -12,6 +12,7 @@ class Autocomplete extends React.Component {
     if (!newValue) {
       this.props.onSuggestionCleared();
     }
+    this.props.onChange(newValue);
 
     this.setState({
       value: newValue,
@@ -35,16 +36,11 @@ class Autocomplete extends React.Component {
   }
 
   renderSuggestion(hit) {
-    console.log(hit)
-    // const [category] = hit.instant_search.facets.exact_matches.categories;
-
     return (<CustomHighlight attribute="query" hit={hit} />)
+  }
 
-    // return (
-    //   <span>
-    //     <Highlight attribute="query" hit={hit} tagName="mark" />
-    //   </span>
-    // );
+  shouldRenderSuggestions(value) {
+    return true;
   }
 
   render() {
@@ -66,6 +62,7 @@ class Autocomplete extends React.Component {
         getSuggestionValue={this.getSuggestionValue}
         renderSuggestionsContainer={renderSuggestionsContainer}
         renderSuggestion={this.renderSuggestion}
+        shouldRenderSuggestions={this.shouldRenderSuggestions}
         inputProps={inputProps}
       />
     );
