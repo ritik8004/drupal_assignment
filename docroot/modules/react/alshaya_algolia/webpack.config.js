@@ -2,7 +2,6 @@ var path  = require("path");
 
 var config = {
   entry: {
-    algolia: './js/algolia',
     autocomplete: './js/AppAutocomplete',
   },
   mode: 'production',
