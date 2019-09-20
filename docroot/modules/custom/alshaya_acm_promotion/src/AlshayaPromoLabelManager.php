@@ -347,8 +347,9 @@ class AlshayaPromoLabelManager {
     }
 
     if ($response instanceof AjaxResponse) {
-      $response->addCommand(new HtmlCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, $label));
-      $response->addCommand(new InvokeCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, 'removeClass', ['hidden']));
+      $dynamic_label_selector = '.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId;
+      $response->addCommand(new HtmlCommand($dynamic_label_selector, $label));
+      $response->addCommand(new InvokeCommand($dynamic_label_selector, 'showDynamicPromotionLabel', [$dynamic_label_selector]));
     }
 
     return $response;

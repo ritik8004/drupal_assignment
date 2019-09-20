@@ -41,4 +41,11 @@
     }
   };
 
+  $.fn.showDynamicPromotionLabel = function (data) {
+    // Slide down the dynamic label.
+    $('.promotions-dynamic-label').on('cart:notification:animation:complete', function() {
+      $(data).slideDown('slow');
+    });
+  };
+
 })(jQuery, Drupal, drupalSettings);
