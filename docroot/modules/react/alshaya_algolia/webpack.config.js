@@ -14,6 +14,10 @@ var config = {
     contentBase: './',
     publicPath: '/'
   },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM'
+  },
   module: {
     rules: [
       {
@@ -32,11 +36,6 @@ var config = {
           name: 'algolia.bundle',
           chunks: 'all',
         },
-        react: {
-          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-          name: 'react.bundle',
-          chunks: 'all',
-        }
       }
     }
   }
