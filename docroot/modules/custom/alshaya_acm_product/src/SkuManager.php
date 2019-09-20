@@ -787,7 +787,11 @@ class SkuManager {
 
     if (!is_array($promos)) {
       $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
-      $this->productCacheManager->set($sku, $cache_key, $promos);
+      $tags = [];
+      foreach (array_keys($promos) as $id) {
+        $tags[] = 'node:' . $id;
+      }
+      $this->productCacheManager->set($sku, $cache_key, $promos, $tags);
     }
 
     return $promos ?? [];
