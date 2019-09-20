@@ -14,16 +14,21 @@
 
             &::before {
               content: "";
-              width: 0;
+              display: block;
+              width: 0.25rem;
               height: 2.25rem;
-              margin-#{$right}: 1.25rem;
-              background-color: $megamenu-inline-layout-active-border-color;
+              margin-#{$right}: 0;
             }
 
             @include icon(chevron#{$right}, after) {
-              margin-#{$left}: -1.875rem;
               font-size: 1.125rem;
               transition: none;
+              position: absolute;
+              #{$right}: 0.7rem;
+
+              .ie & {
+                line-height: 0.375rem;
+              }
             }
 
             .menu--three__list {
@@ -36,8 +41,10 @@
             }
 
             &.active {
-              > .menu__link-wrapper a {
-                color: $megamenu-inline-layout-active-border-color !important;
+              > .menu__link-wrapper {
+                .menu__link {
+                  color: $megamenu-inline-layout-active-border-color !important;
+                }
               }
 
               .menu--three__list {
@@ -51,12 +58,12 @@
               }
 
               &::before {
-                width: 0.25rem;
                 transition: all 0.3s ease-out;
+                background-color: $megamenu-inline-layout-active-border-color;
               }
 
               &::after {
-                margin-#{$left}: -1.25rem;
+                #{$right}: 0;
                 transition: $right 0.3s ease-out;
                 color: $megamenu-inline-layout-active-border-color;
               }
@@ -65,6 +72,11 @@
             > .menu__link-wrapper {
               margin: 0.125rem 0 0;
               max-width: none;
+              margin-#{$left}: 1.25rem;
+
+              &.menu-two__link-wrapper {
+                z-index: auto;
+              }
 
               &:hover {
                 cursor: pointer;
@@ -72,7 +84,9 @@
             }
 
             &.last-element {
-              margin-#{$left}: 1.25rem;
+              .menu__link-wrapper {
+                margin-#{$left}: 1.5rem;
+              }
 
               &::after,
               &::before {
@@ -88,6 +102,10 @@
               display: flex;
               align-items: center;
               margin-#{$right}: 0;
+
+              .ie & {
+                line-height: 2.4;
+              }
             }
           }
 
