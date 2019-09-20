@@ -18,14 +18,14 @@
     });
 
     // On hove of L1 item make first L2 item active by default.
-    $(parent).hover(function () {
+    $(parent).once().on().hover(function () {
       $(parent).removeClass('active');
       $(this).addClass('active');
       $(this).find('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right):first').addClass('active');
     });
 
     // On hover of l2 item add active class.
-    $('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right)').hover(function () {
+    $('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right)').once().on().hover(function () {
       $('.menu--two__list-item').removeClass('active');
       $(this).addClass('active');
 
