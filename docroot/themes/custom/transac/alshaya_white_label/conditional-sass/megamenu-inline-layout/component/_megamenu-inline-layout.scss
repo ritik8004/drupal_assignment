@@ -1,8 +1,11 @@
 @include breakpoint($desktop) {
   .menu--one__list-item {
     .menu--two__list {
+      height: auto !important;
+
       .menu__links__wrapper {
         position: relative;
+        column-width: auto !important;
 
         .menu--two__list-item {
           &:not(.move-to-right) {
@@ -131,6 +134,12 @@
           }
         }
       }
+    }
+  }
+
+  .menu--one__list {
+    > .menu-backdrop {
+      height: auto !important;
     }
   }
 
