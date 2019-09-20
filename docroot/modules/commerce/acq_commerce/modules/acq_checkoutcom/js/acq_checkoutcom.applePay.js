@@ -175,15 +175,17 @@
       var isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
 
       // Show only in mobile if config says to show only in mobile.
-      if (drupalSettings.checkoutCom.applePayAllowedIn == 'all' || isMobile)
-      // Show Apple pay at once, we will hide again quickly if something
-      // goes wrong.
+      if (drupalSettings.checkoutCom.applePayAllowedIn == 'all' || isMobile) {
+        // Show Apple pay at once, we will hide again quickly if something
+        // goes wrong.
         $('#payment_method_checkout_com_applepay').addClass('supported');
 
-      // Do next check only if user has selected apple pay.
-      if ($('#ckoApplePayButton').length > 0) {
-        let applePay = new CheckoutComApplePay(drupalSettings, $(document));
-        launchApplePay(applePay);
+
+        // Do next check only if user has selected apple pay.
+        if ($('#ckoApplePayButton').length > 0) {
+          let applePay = new CheckoutComApplePay(drupalSettings, $(document));
+          launchApplePay(applePay);
+        }
       }
     }
   }
