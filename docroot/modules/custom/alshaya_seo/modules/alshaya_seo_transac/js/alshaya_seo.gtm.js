@@ -56,10 +56,20 @@
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
       var deliveryType = 'Home Delivery';
-      var userDetails = drupalSettings.userDetails;
+      var userDetails = '';
+      var userId = '';
+      if (typeof drupalSettings.userDetails === 'undefined') {
+        userDetails = drupalSettings.user;
+        userId = userDetails.uid;
+      }
+      // userDetails is set in case of google/facebook login.
+      else  {
+        userDetails = drupalSettings.userDetails;
+        userId = userDetails.userId;
+      }
 
       if (localStorage.getItem('userID') === undefined) {
-        localStorage.setItem('userID', userDetails.userID);
+        localStorage.setItem('userID', userId);
       }
 
       // Set platformType.
