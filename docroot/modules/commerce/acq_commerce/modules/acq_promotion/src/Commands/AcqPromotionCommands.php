@@ -100,11 +100,11 @@ class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwar
 
     /** @var \Consolidation\SiteProcess\SiteProcess $attach */
     $attach = $this->processManager()->drush($selfRecord, 'queue-run', ['acq_promotion_attach_queue'], []);
-    $attach->run($attach->showRealtime());
+    $attach->start($attach->showRealtime());
 
     /** @var \Consolidation\SiteProcess\SiteProcess $detach */
     $detach = $this->processManager()->drush($selfRecord, 'queue-run', ['acq_promotion_detach_queue'], []);
-    $detach->run($detach->showRealtime());
+    $detach->start($detach->showRealtime());
 
     $this->logger->notice(dt('Promotions synced and queue-run executed.'));
   }
