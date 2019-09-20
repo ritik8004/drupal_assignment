@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_algolia
+  theme:
+    - alshaya_white_label
+id: alshayaalgoliaautocomplete
+theme: alshaya_white_label
+region: header
+weight: -50
+provider: alshaya_algolia
+plugin: alshaya_algolia_autocomplete_block
+settings:
+  id: alshaya_algolia_autocomplete_block
+  label: 'Alshaya Algolia Autocomplete'
+  provider: alshaya_algolia
+  label_display: '0'
+visibility: {  }
