@@ -279,7 +279,7 @@ function _alshaya_bbw_transac_get_metatag_translations() {
     ],
     'alshaya_seo_keywords' => [
       'en' => 'Shop [term:name] Products Online, Shop [term:name] Online, Shop [term:name] Products in [alshaya_seo:country], Shop [term:name] Collection, Shop [term:name] Products in [alshaya_seo:city1], Shop [term:name] Products in [alshaya_seo:city2]',
-      'ar' => 'تسوق منتجات [term:name] اون لاين, تسوق مستلزمات [term:name] اون لاين, اشتري مستلزمات [term:name] من [alshaya_seo:brand_name], تسوق منتجات [term:name] اون لاين في [alshaya_seo:city1], تسوق منتجات [term:name] اون لاين في [alshaya_seo:city2], %, تسوق منتجات [term:name] اون لاين [alshaya_seo:country]',
+      'ar' => 'تسوق منتجات [term:name] اون لاين, تسوق مستلزمات [term:name] اون لاين, اشتري مستلزمات [term:name] من [alshaya_seo:brand_name], تسوق منتجات [term:name] اون لاين في [alshaya_seo:city1], تسوق منتجات [term:name] اون لاين في [alshaya_seo:city2], تسوق منتجات [term:name] اون لاين [alshaya_seo:country]',
     ],
   ];
 

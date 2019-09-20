@@ -134,8 +134,8 @@ function _alshaya_fl_transac_get_metatag_translations() {
       'ar' => 'احصل على [term:parent:name] [term:name] عروض من [site:name]. اكتشف [current-date:html_year] اختيارات مجموعة فاخرة وعالية الجودة من [term:parent:name] [term:name]',
     ],
     'alshaya_seo_desc_start' => [
-      'en' => 'Shop luxury and high-quality [alshaya_seo:brand_name] [term:name] for [term:parent:name]',
-      'ar' => 'شراء خزانة القدم [term:parent:name]\'s [term:name]  ',
+      'en' => 'Shop luxury and high-quality [alshaya_seo:brand_name] [term:name] for [term:parents:first]',
+      'ar' => 'شراء خزانة القدم [term:parents:first]\'s [term:name]  ',
     ],
     'alshaya_seo_sale_title_sub_suffix' => [
       'en' => '- Online Offers',

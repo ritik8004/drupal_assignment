@@ -17,6 +17,7 @@ function alshaya_seo_transac_update_8407() {
   $manager->updateConfigs(
     [
       'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+      'metatag.metatag_defaults.node__acq_product',
     ],
     'alshaya_seo_transac'
   );
