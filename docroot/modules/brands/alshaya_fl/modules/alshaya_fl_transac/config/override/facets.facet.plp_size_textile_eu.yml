@@ -10,11 +10,3 @@ processor_configs:
       sort: 60
     settings:
       sort: ASC
-  url_processor_handler:
-    processor_id: url_processor_handler
-    weights:
-      pre_query: -10
-      build: -10
-    settings: {  }
-empty_behavior:
-  behavior: none
