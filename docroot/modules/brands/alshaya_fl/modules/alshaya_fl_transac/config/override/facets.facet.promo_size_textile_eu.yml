@@ -1,0 +1,12 @@
+processor_configs:
+  clean_active_facets_processor:
+    processor_id: clean_active_facets_processor
+    weights:
+      build: 10
+    settings: {  }
+  term_weight_by_name_widget_order:
+    processor_id: term_weight_by_name_widget_order
+    weights:
+      sort: 60
+    settings:
+      sort: ASC
