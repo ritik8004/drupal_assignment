@@ -2,11 +2,7 @@
   padding-top: 8.5rem;
 
   @include breakpoint($upto-lap) {
-    padding-top: 5rem;
-  }
-
-  @include breakpoint($upto-palm) {
-    padding-top: 3rem;
+    padding-top: 3.5rem;
   }
 }
 
