@@ -1,0 +1,8 @@
+react:
+  version: 1.x
+  header: true
+  js:
+    js/react.production.min.js: { }
+    js/react-dom.production.min.js: { }
+  dependencies:
+    - core/drupalSettings

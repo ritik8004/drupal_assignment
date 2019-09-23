@@ -70,13 +70,6 @@ class ApiHelper {
   protected $dateFormatter;
 
   /**
-   * Api cache times.
-   *
-   * @var int
-   */
-  protected $cacheTime;
-
-  /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityManagerInterface
@@ -139,7 +132,6 @@ class ApiHelper {
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
-    $this->cacheTime = (int) $config_factory->get('acq_checkoutcom.settings')->get('api_cache_time');
     $this->userData = $user_data;
     $this->logger = $logger_factory->get('acq_checkoutcom');
     $this->cache = $cache;
@@ -147,6 +139,41 @@ class ApiHelper {
     $this->dateFormatter = $date_formatter;
     $this->entityTypeManager = $entityTypeManager;
     $this->messenger = $messenger;
+  }
+
+  /**
+   * Get the API Cache Time from config.
+   *
+   * @return int
+   *   API Cache Time.
+   */
+  protected function getCacheTime() {
+    return (int) $this->getConfig()->get('api_cache_time') ?? 0;
+  }
+
+  /**
+   * Get checkout.com settings.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Checkout.com settings.
+   */
+  protected function getConfig() {
+    return $this->configFactory->get('acq_checkoutcom.settings');
+  }
+
+  /**
+   * Get config to know Apple Pay is allowed in.
+   *
+   * @return string
+   *   Apple Pay Allowed IN - all / mobile / none.
+   */
+  public function getApplePayAllowedIn() {
+    $allowed_in = $this->getConfig()->get('apple_pay_allowed_in') ?? 'all';
+    $possible_values = ['all', 'mobile', 'none'];
+    if (!in_array($allowed_in, $possible_values)) {
+      $allowed_in = 'all';
+    }
+    return $allowed_in;
   }
 
   /**
@@ -264,7 +291,7 @@ class ApiHelper {
     $this->cache->set(
       $cache_key,
       $cards,
-      $this->time->getRequestTime() + $this->cacheTime,
+      $this->time->getRequestTime() + $this->getCacheTime(),
       ['user:' . $user->id()]
     );
     return $cards;

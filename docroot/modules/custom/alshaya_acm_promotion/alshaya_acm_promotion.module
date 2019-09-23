@@ -269,6 +269,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
         case 'full':
           // Add a flag to update promo label dynamically.
           $build['promotions']['#attached']['library'][] = 'alshaya_acm_promotion/label_manager';
+          $build['promotions']['#attached']['library'][] = 'alshaya_white_label/dynamic-promotions';
           $build['promotions']['#attached']['drupalSettings']['alshayaAcmPromotions'][$sku_entity->id()] = TRUE;
 
           // Add container for dynamic promotion display.

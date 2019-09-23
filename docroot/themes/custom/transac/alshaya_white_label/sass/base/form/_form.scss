@@ -57,5 +57,6 @@ form {
 
   input[type=checkbox].error {
     display: block;
+    visibility: hidden;
   }
 }

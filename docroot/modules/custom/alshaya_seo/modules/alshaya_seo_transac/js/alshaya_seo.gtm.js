@@ -12,6 +12,19 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
+      $('article.entity--type-node').once('alshaya-seo-gtm').on('combination-changed', function (event, variant, code) {
+        var sku = $(this).attr('data-sku');
+        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
+        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+        $('article[gtm-type="gtm-product-link"]')
+          .attr('gtm-product-sku', variant)
+          .attr('gtm-price', variantInfo['gtm_price']);
+      });
+
       // Global variables & selectors.
       var impressions = [];
       var body = $('body');
@@ -43,10 +56,20 @@
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
       var deliveryType = 'Home Delivery';
-      var userDetails = drupalSettings.userDetails;
+      var userDetails = '';
+      var userId = '';
+      if (typeof drupalSettings.userDetails === 'undefined') {
+        userDetails = drupalSettings.user;
+        userId = userDetails.uid;
+      }
+      // userDetails is set in case of google/facebook login.
+      else  {
+        userDetails = drupalSettings.userDetails;
+        userId = userDetails.userId;
+      }
 
       if (localStorage.getItem('userID') === undefined) {
-        localStorage.setItem('userID', userDetails.userID);
+        localStorage.setItem('userID', userId);
       }
 
       // Set platformType.
@@ -1146,24 +1169,6 @@
     }
 
     return selectedMethodLabel;
-  };
-
-  /**
-   * Helper function to fetch value for a query string.
-   *
-   * @param variable
-   *
-   * @returns {string}
-   */
-  Drupal.getQueryVariable = function (variable) {
-    var query = window.location.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split('=');
-      if (decodeURIComponent(pair[0]) === variable) {
-        return decodeURIComponent(pair[1]);
-      }
-    }
   };
 
   // Ajax command to push deliveryAddress Event.
