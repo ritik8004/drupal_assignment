@@ -87,16 +87,16 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    */
   public function sortResults(Result $a, Result $b) {
     $config = $this->configFactory->get('alshaya_acm_product.settings');
+    if ($attributeCodeValue = $config->get('facet_sort_attribute_code_value')) {
+      return 0;
+    }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'td');
     $query->join('taxonomy_term__field_sku_attribute_code', 'sac', 'td.tid = sac.entity_id');
     $query->fields('td', ['name', 'weight']);
     $query->condition('td.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY, '=');
     $query->condition('td.name', [$a->getRawValue(), $b->getRawValue()], 'IN');
-    // Apply this condition if it's value availabe in configuration.
-    if($attributeCodeValue = $config->get('attribute_code_option_value')) {
-      $query->condition('sac.field_sku_attribute_code_value', $attributeCodeValue);
-    }
+    $query->condition('sac.field_sku_attribute_code_value', $attributeCodeValue);
     $query->condition('td.langcode', $langcode);
     $result = $query->execute()
       ->fetchAllKeyed();
