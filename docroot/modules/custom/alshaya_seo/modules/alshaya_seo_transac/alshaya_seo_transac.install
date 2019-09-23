@@ -10,13 +10,14 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Add gtm block config.
+ * Update metatag configurations.
  */
-function alshaya_seo_transac_update_8409() {
+function alshaya_seo_transac_update_8407() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
       'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+      'metatag.metatag_defaults.node__acq_product',
     ],
     'alshaya_seo_transac'
   );
@@ -147,10 +148,10 @@ function _alshaya_seo_transac_get_metatag_translations() {
   $strings = [
     'alshaya_seo_title_suffix' => [
       'en' => 'Collection [alshaya_seo:top_category] Online',
-      'ar' => 'مجموعة على الانترنت',
+      'ar' => 'مجموعة [alshaya_seo:top_category] على الانترنت',
     ],
     'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [current-date:html_year] [term:name] collection specs and prices of [alshaya_seo:sub_categories] and more.',
+      'en' => 'Compare [current-date:html_year] [term:name] collection at the best specs and prices of [alshaya_seo:sub_categories] and more.',
       'ar' => 'قارن مواصفات وأسعار [current-date:html_year] [term:name] [alshaya_seo:sub_categories] وأكثر من ذلك.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
