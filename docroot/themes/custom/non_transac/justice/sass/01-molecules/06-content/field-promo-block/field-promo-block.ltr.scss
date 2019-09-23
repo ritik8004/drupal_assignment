@@ -7,3 +7,17 @@
     }
   }
 }
+
+.field__wrapper {
+  &.field-promotion-image-mobile {
+    @include breakpoint($above-palm) {
+      display: none;
+    }
+  }
+
+  &.field-banner {
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
+}
