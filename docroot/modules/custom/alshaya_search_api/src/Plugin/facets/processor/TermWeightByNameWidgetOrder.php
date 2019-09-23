@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * A processor that orders the terms by their weight using term name.
@@ -36,7 +37,14 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    *
    * @var \Drupal\Core\Database\Connection
    */
-  private $connection;
+  protected $connection;
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * Constructs a new object.
@@ -52,11 +60,12 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, Connection $connection) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, Connection $connection, ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->languageManager = $language_manager;
     $this->connection = $connection;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -68,7 +77,8 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('config.factory')
     );
   }
 
@@ -76,16 +86,19 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    * {@inheritdoc}
    */
   public function sortResults(Result $a, Result $b) {
+    $config = $this->configFactory->get('alshaya_acm_product.settings');
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'td');
     $query->join('taxonomy_term__field_sku_attribute_code', 'sac', 'td.tid = sac.entity_id');
-    $result = $query
-      ->fields('td', ['name', 'weight'])
-      ->condition('td.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY, '=')
-      ->condition('td.name', [$a->getRawValue(), $b->getRawValue()], 'IN', [':sizea' => $a->getRawValue(), ':sizeb' => $b->getRawValue()])
-      ->condition('sac.field_sku_attribute_code_value', 'size_textile_eu')
-      ->condition('td.langcode', $langcode)
-      ->execute()
+    $query->fields('td', ['name', 'weight']);
+    $query->condition('td.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY, '=');
+    $query->condition('td.name', [$a->getRawValue(), $b->getRawValue()], 'IN');
+    // Apply this condition if it's value availabe in configuration.
+    if($attributeCodeValue = $config->get('attribute_code_option_value')) {
+      $query->condition('sac.field_sku_attribute_code_value', $attributeCodeValue);
+    }
+    $query->condition('td.langcode', $langcode);
+    $result = $query->execute()
       ->fetchAllKeyed();
     // Incase if any of the arguments don't have raw value.
     if (count($result) < 2) {

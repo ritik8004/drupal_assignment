@@ -4,3 +4,4 @@ cross_up_sell_items_settings:
 pdp_slider_items_settings:
   pdp_slider_items_number_cs_us: 4
 excluded_attribute_options: ['One Size', 'مقاس موحد']
+attribute_code_option_value: 'size_textile_eu'
