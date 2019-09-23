@@ -8,3 +8,11 @@
 footer[role="contentinfo"] {
   background: $footer_bg;
 }
+
+#backtotop {
+  width: 3.125rem;
+  height: 3.125rem;
+  border-radius: 50%;
+  background-size: contain;
+  bottom: 3.75rem;
+}
