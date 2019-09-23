@@ -7,6 +7,7 @@ import {
 } from 'react-instantsearch-dom';
 import InstantSearchComponent from './InstantSearchComponent';
 
+// Search result div wrapper to render results.
 const searchResultDiv = document.getElementById('alshaya-algolia-search');
 
 // Create a dummy search box to generate result.

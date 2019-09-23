@@ -37,6 +37,10 @@ class AppAutocomplete extends React.Component {
   render() {
     const { query, categories } = this.state;
 
+    // Display search results when wrapper is present on page.
+    const searchWrapper = document.getElementById('alshaya-algolia-search');
+    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) ? (<SearchResults query={query} />) : '';
+
     return (
       <div>
         <InstantSearchComponent indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }>
@@ -47,7 +51,7 @@ class AppAutocomplete extends React.Component {
             onChange={this.onChange}
           />
         </InstantSearchComponent>
-        <SearchResults query={query} />
+        {searchResultsDiv}
       </div>
     );
   }
