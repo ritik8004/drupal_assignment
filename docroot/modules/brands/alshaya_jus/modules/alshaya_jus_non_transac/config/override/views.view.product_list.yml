@@ -1,7 +1,7 @@
 display:
-  block_1:
+  banner:
     display_plugin: block
-    id: block_1
+    id: banner
     display_title: banner
     position: 5
     display_options:
@@ -214,9 +214,9 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
-  page_1:
+  product_list:
     display_plugin: page
-    id: page_1
+    id: product_list
     display_title: 'Product list'
     position: 2
     display_options:

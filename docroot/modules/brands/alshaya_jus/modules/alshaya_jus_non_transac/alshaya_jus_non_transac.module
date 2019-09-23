@@ -20,10 +20,16 @@ function alshaya_jus_non_transac_form_webform_submission_alshaya_email_signup_ad
  * Implements hook_views_pre_view().
  */
 function alshaya_jus_non_transac_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
-  if ($view->id() == 'product_list' && ($display_id === 'page_1')) {
+
+  if ($view->id() == 'product_list') {
     $parameters = \Drupal::routeMatch()->getParameters()->get('arg_0');
-    $header_text = '';
-    $header_text = '<strong>' . $parameters . '</strong><br />' . t('@total items');
-    $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
+    if ($display_id === 'product_list') {
+      $header_text = '';
+      $header_text = '<strong>' . $parameters . '</strong><br />' . t('@total items');
+      $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
+    }
+    if ($display_id === 'banner') {
+      $view->args[0] = $parameters;
+    }
   }
 }
