@@ -15,7 +15,7 @@ use Drupal\Component\Utility\Unicode;
  * Update meta variables.
  */
 function alshaya_vs_transac_update_8010() {
-  _alshaya_vs_transac_get_metatag_translations();
+  _alshaya_vs_transac_save_metatag_translations();
 }
 
 /**
@@ -266,13 +266,13 @@ function alshaya_vs_transac_install() {
   $configFactory->save();
 
   // Install metatag translations.
-  _alshaya_vs_transac_get_metatag_translations();
+  _alshaya_vs_transac_save_metatag_translations();
 }
 
 /**
  * Get translations of metatag.
  */
-function _alshaya_vs_transac_get_metatag_translations() {
+function _alshaya_vs_transac_save_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_title_prefix' => [
       'en' => '[alshaya_seo:super_category]',
