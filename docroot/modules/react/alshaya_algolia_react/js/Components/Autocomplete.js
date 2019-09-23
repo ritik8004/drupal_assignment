@@ -4,9 +4,17 @@ import Autosuggest from 'react-autosuggest';
 import CustomHighlight from './CustomHighlight';
 
 class Autocomplete extends React.Component {
-  state = {
-    value: this.props.currentRefinement,
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.currentValue !== null && props.currentValue !== '' ? props.currentValue : this.props.currentRefinement,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ value: nextProps.currentValue });
+  }
 
   onChange = (event, { newValue }) => {
     if (!newValue) {
@@ -42,7 +50,6 @@ class Autocomplete extends React.Component {
   render() {
     const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
-
     const inputProps = {
       placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,

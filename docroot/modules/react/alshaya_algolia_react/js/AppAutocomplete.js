@@ -3,28 +3,49 @@ import ReactDOM from 'react-dom';
 import AutoComplete from './Components/Autocomplete';
 import SearchResults from './Components/SearchResults';
 import InstantSearchComponent from './Components/InstantSearchComponent';
+import { createBrowserHistory } from 'history';
+import queryString from 'query-string'
+
+const history = createBrowserHistory();
 
 class AppAutocomplete extends React.Component {
-  state = {
-    query: ''
-  };
+
+  constructor(props) {
+    super(props);
+    const parsedHash = queryString.parse(location.hash);
+    this.state = {
+      query: parsedHash && parsedHash.q ? parsedHash.q : ''
+    };
+    this.updateQueryValue = this.updateQueryValue.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener("hashchange", this.updateQueryValue, false);
+  }
+
+  updateQueryValue() {
+    const parsedHash = queryString.parse(location.hash);
+    if (parsedHash && parsedHash.q) {
+      this.setQueryValue(parsedHash.q);
+    }
+  }
+
+  setQueryValue(queryValue) {
+    this.setState({query: queryValue});
+    // Push query to browser histroy to ga back and see previous results.
+    history.push({hash: `q=${queryValue}`});
+  }
 
   onSuggestionSelected = (event, { suggestion }) => {
-    this.setState({
-      query: suggestion.query,
-    });
+    this.setQueryValue(suggestion.query);
   }
 
   onSuggestionCleared = () => {
-    this.setState({
-      query: '',
-    });
+    this.setQueryValue('');
   }
 
   onChange = (newValue) => {
-    this.setState({
-      query: newValue,
-    });
+    this.setQueryValue(newValue);
   };
 
   renderSuggestionsContainer = ({ containerProps, children, query }) => (
@@ -36,7 +57,6 @@ class AppAutocomplete extends React.Component {
 
   render() {
     const { query, categories } = this.state;
-
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) ? (<SearchResults query={query} />) : '';
@@ -49,6 +69,7 @@ class AppAutocomplete extends React.Component {
             onSuggestionCleared={this.onSuggestionCleared}
             renderSuggestionsContainer={this.renderSuggestionsContainer}
             onChange={this.onChange}
+            currentValue={query}
           />
         </InstantSearchComponent>
         {searchResultsDiv}
