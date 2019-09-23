@@ -368,7 +368,7 @@ function alshaya_pb_transac_update_dependencies() {
 function _alshaya_pb_transac_get_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get [current-date:html_year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent] sale for our [current-date:html_year] luxury and high-quality [term:name] collection',
+      'en' => 'Get [current-date:html_year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent:name] sale for our [current-date:html_year] luxury and high-quality [term:name] collection',
       'ar' => 'احصل على عروض [current-date:html_year] على [term:name] من [site:name]. اكتشف عروض التصفية على مجموعاتنا الفاخرة وعالية الجودة [term:name]',
     ],
     'alshaya_seo_desc_start' => [
@@ -376,12 +376,12 @@ function _alshaya_pb_transac_get_metatag_translations() {
       'ar' => 'شراء رفاهية عالية الجودة [term:name] جمع',
     ],
     'alshaya_seo_sale_title_sub_suffix' => [
-      'en' => '- [term:parent]',
-      'ar' => '- [term:parent]',
+      'en' => '- [term:parent:name]',
+      'ar' => '- [term:parent:name]',
     ],
     'alshaya_seo_title_sub_suffix' => [
-      'en' => '- [term:parent]',
-      'ar' => '- [term:parent]',
+      'en' => '- [term:parent:name]',
+      'ar' => '- [term:parent:name]',
     ],
     'alshaya_seo_sale_title_suffix' => [
       'en' => ' Sale [alshaya_seo:title_sub_suffix]',
