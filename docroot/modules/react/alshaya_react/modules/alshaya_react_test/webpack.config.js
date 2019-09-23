@@ -23,4 +23,9 @@ module.exports = {
       }
     ]
   },
+  // Don't follow/bundle these modules, these are added in the *.libraries.yml.
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM'
+  },
 };
