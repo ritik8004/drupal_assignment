@@ -73,7 +73,7 @@
           $(this).cartladdastop(this.element);
           // Invoke the original function.
           this.PrivilegeCarderror(xmlhttprequest, uri, customMessage);
-          $('.alias--cart #details-privilege-card-wrapper').each(function () {
+          $('.alias--cart #details-privilege-card-wrapper').once('privilege-card').each(function () {
             $(this).accordion({
               header: '.card__header',
               collapsible: true
@@ -86,17 +86,25 @@
           // Invoke the original function.
           this.PrivilegeCardsuccess(response, status);
 
-          $('.coupon-code-wrapper, .alias--cart #details-privilege-card-wrapper').each(function () {
+          $('.coupon-code-wrapper, .alias--cart #details-privilege-card-wrapper').once('privilege-card').each(function () {
             $(this).accordion({
               header: '.card__header',
               collapsible: true
             });
           });
 
-          $('.alias--user-register #details-privilege-card-wrapper').each(function () {
+          $('.alias--user-register #details-privilege-card-wrapper, .path--user #details-privilege-card-wrapper').once('privilege-card').each(function () {
+            if (context === document) {
+              var error = $(this).find('.form-item--error-message');
+              var active = false;
+              if (error.length > 0) {
+                active = 0;
+              }
+
             $(this).accordion({
               header: '.privilege-card-wrapper-title',
-              collapsible: true
+              collapsible: true,
+              active: active
             });
           });
         };

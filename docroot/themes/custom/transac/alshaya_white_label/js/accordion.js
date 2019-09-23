@@ -6,43 +6,6 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.privilegeCardAccordion = {
-    attach: function (context, settings) {
-
-      $('.alias--user-register #details-privilege-card-wrapper').each(function () {
-        if (context === document) {
-          var error = $(this).find('.form-item--error-message');
-          var active = false;
-          if (error.length > 0) {
-            active = 0;
-          }
-
-          $(this).accordion({
-            header: '.privilege-card-wrapper-title',
-            collapsible: true,
-            active: active
-          });
-        }
-      });
-
-      $('.path--user #details-privilege-card-wrapper').each(function () {
-        if (context === document) {
-          var error = $(this).find('.form-item--error-message');
-          var active = false;
-          if (error.length > 0) {
-            active = 0;
-          }
-
-          $(this).accordion({
-            header: '.privilege-card-wrapper-title',
-            collapsible: true,
-            active: active
-          });
-        }
-      });
-    }
-  };
-
   Drupal.behaviors.accordion = {
     attach: function (context, settings) {
 
