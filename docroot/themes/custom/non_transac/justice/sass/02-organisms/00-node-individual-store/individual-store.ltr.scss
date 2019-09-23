@@ -4,6 +4,10 @@
 .individual--store {
   .individual-store--detail {
     width: 34%;
+
+    @include breakpoint($upto-palm) {
+      width: 100%;
+    }
   }
 }
 

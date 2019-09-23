@@ -96,6 +96,10 @@
   a {
     @include icon(map, after) {
       color: $store_finder_icon;
+
+      @include breakpoint($upto-palm) {
+        #{$right}: 0;
+      }
     }
   }
 }
