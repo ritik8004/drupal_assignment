@@ -2,8 +2,9 @@
 
 .menu-logo-navigation {
   background: $header_menu_bg;
-  max-width: 67rem;
+  max-width: 69rem;
   margin: 0 auto;
+  padding-#{$left}: 0;
 
   a {
     font-family: $jus_bold;
