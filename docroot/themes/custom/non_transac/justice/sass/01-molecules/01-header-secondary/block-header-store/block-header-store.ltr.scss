@@ -32,6 +32,10 @@
       width: 18%;
     }
 
+    @include breakpoint($upto-lap) {
+      padding-#{$right}: 0;
+    }
+
     a {
       color: $store_header_link;
     }
