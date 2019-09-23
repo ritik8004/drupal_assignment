@@ -13,6 +13,16 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 class AlshayaMainMenuConfigForm extends ConfigFormBase {
 
   /**
+   * Default main menu layout.
+   */
+  const MAIN_MENU_DEFAULT_LAYOUT = 'default';
+
+  /**
+   * Inline main menu layout.
+   */
+  const MAIN_MENU_INLINE_LAYOUT = 'menu_inline_display';
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -41,6 +51,17 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('mobile_main_menu_max_depth'),
     ];
 
+    $form['desktop_main_menu_layout'] = [
+      '#type' => 'select',
+      '#options' => [
+        self::MAIN_MENU_DEFAULT_LAYOUT => $this->t('Default menu display'),
+        self::MAIN_MENU_INLINE_LAYOUT => $this->t('Inline menu display'),
+      ],
+      '#default_value' => $config->get('desktop_main_menu_layout'),
+      '#title' => $this->t('Main menu display on desktop.'),
+      '#description' => $this->t('Select inline menu display option to display the l3 option inline to l2 otherwise it will follow the core.'),
+    ];
+
     return $form;
   }
 
@@ -50,6 +71,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_main_menu.settings');
     $config->set('mobile_main_menu_max_depth', $form_state->getValue('mobile_main_menu_max_depth'));
+    $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
     $config->save();
     Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
 

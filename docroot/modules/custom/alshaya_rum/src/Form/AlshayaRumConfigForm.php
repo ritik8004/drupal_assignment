@@ -43,7 +43,7 @@ class AlshayaRumConfigForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('List of pages on which RUM script should load:'),
       '#default_value' => $alshaya_rum_config->get('whitelisted_rum_paths'),
-      '#description' => $this->t("List of pages you want to load RUM script for & measure usage on. Enter relative urls with languagecode e.g., /en/victorias-secret/shop-bras/lining-levels/unlined/ (one per line for mulitple pages). </br> Load on all page by adding `*` to the configuration. Use `&lt;front&gt;` for loading it on Homepage."),
+      '#description' => $this->t("List of pages you want to load RUM script for & measure usage on. Enter relative urls e.g.- /shop-body-care (one per line for mulitple pages). </br> Load on all page by adding `*` to the configuration. Use `&lt;front&gt;` for loading it on Homepage. For multiple urls in same pattern like `/shop-hand-soaps` and `/shop-body-care/moisturizers/all-moisturizers`, add `/shop-body-care/*`"),
     ];
 
     return parent::buildForm($form, $form_state);

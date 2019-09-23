@@ -156,6 +156,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       return [];
     }
 
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
     $context = 'search';
     $skus = [];
 
@@ -257,8 +259,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
-
-        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
 
         if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';

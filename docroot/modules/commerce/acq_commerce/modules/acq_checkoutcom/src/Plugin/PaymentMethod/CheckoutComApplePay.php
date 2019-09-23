@@ -53,7 +53,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
    * {@inheritdoc}
    */
   public function getLabel() {
-    return $this->t('Apple pay');
+    return $this->t('Apple Pay');
   }
 
   /**
@@ -77,6 +77,7 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $settings = $this->formHelper->getApplePayConfig();
     $settings['runningTotal'] = $this->getCart()->totals()['grand'];
+    $settings['applePayAllowedIn'] = $this->apiHelper->getApplePayAllowedIn();
 
     $complete_form['actions']['apple_wrapper'] = [
       '#type' => 'container',

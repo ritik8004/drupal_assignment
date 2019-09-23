@@ -12,6 +12,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 
@@ -72,6 +73,13 @@ class AlshayaFeedSkuInfoHelper {
   protected $skuFieldsManager;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -88,6 +96,8 @@ class AlshayaFeedSkuInfoHelper {
    *   Sku info helper object.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -96,7 +106,8 @@ class AlshayaFeedSkuInfoHelper {
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    SKUFieldsManager $sku_fields_manager
+    SKUFieldsManager $sku_fields_manager,
+    RendererInterface $renderer
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -105,6 +116,7 @@ class AlshayaFeedSkuInfoHelper {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -133,20 +145,27 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
+    // Disable alshaya_color_split hook calls.
+    SkuManager::$colorSplitMergeChildren = FALSE;
+    // Disable image download.
+    SKU::$downloadImage = FALSE;
+    // Disable API calls.
+    AlshayaAcmApiWrapper::$invokeApi = FALSE;
+
     $product = [];
     foreach ($this->languageManager->getLanguages() as $lang => $language) {
       $node = $this->skuInfoHelper->getEntityTranslation($node, $lang);
+      if ($node->language()->getId() !== $lang) {
+        continue;
+      }
       $sku = $this->skuInfoHelper->getEntityTranslation($sku, $lang);
 
       // Get the prices.
       $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
       $prices = $this->skuManager->getMinPrices($sku, $color);
 
-      $meta_tags = $this->skuInfoHelper->metaTags($node, [
-        'title',
-        'description',
-        'keywords',
-      ]);
+      $short_desc = $this->skuManager->getShortDescription($sku, 'full');
+      $description = $this->skuManager->getDescription($sku, 'full');
 
       $product[$lang] = [
         'sku' => $sku->getSku(),
@@ -154,20 +173,14 @@ class AlshayaFeedSkuInfoHelper {
         'type_id' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
         'url' => $this->skuInfoHelper->getEntityUrl($node),
-        'short_description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['summary'] : '',
-        'description' => !empty($node->get('body')->first()) ? $node->get('body')->first()->getValue()['value'] : '',
+        'short_description' => !empty($short_desc['value']) ? $this->renderer->renderPlain($short_desc['value']) : '',
+        'description' => !empty($description) ? $this->renderer->renderPlain($description) : '',
         'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
         'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
-        'meta_description' => $meta_tags['description'] ?? '',
-        'meta_keywords' => $meta_tags['keywords'] ?? '',
-        'meta_title' => $meta_tags['title'] ?? '',
         'attributes' => $this->skuInfoHelper->getAttributes($sku, ['description', 'short_description']),
       ];
 
-      // Disable image download.
-      $download_image = SKU::$downloadImage;
-      SKU::$downloadImage = FALSE;
       if ($sku->bundle() == 'simple') {
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
         $product[$lang]['stock'] = [
@@ -176,13 +189,11 @@ class AlshayaFeedSkuInfoHelper {
         ];
         $product[$lang]['images'] = $this->getGalleryMedia($sku);
       }
-
-      if ($sku->bundle() === 'configurable') {
+      elseif ($sku->bundle() === 'configurable') {
         $combinations = $this->skuManager->getConfigurableCombinations($sku);
-
         $swatches = $this->skuImagesManager->getSwatchData($sku);
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
-          $child = SKU::loadFromSku($child_sku);
+          $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
             continue;
           }
@@ -201,21 +212,12 @@ class AlshayaFeedSkuInfoHelper {
           $product[$lang]['variants'][] = $variant;
         }
       }
-      // Reset image download to old state.
-      SKU::$downloadImage = $download_image;
-
-      // Disable API calls.
-      $invoke_api = AlshayaAcmApiWrapper::$invokeApi;
-      AlshayaAcmApiWrapper::$invokeApi = FALSE;
 
       $product[$lang]['linked_skus'] = [];
       foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $product[$lang]['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
-
-      // Revert to old state.
-      AlshayaAcmApiWrapper::$invokeApi = $invoke_api;
     }
 
     return $product;

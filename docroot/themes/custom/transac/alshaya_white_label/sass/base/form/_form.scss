@@ -47,10 +47,16 @@ form {
     font-size: 0.75rem;
     color: $primary_input_inline_error;
     padding-top: 0.3125rem;
+    display: block;
 
     strong {
       font-weight: 400;
       font-family: $arial;
     }
+  }
+
+  input[type=checkbox].error {
+    display: block;
+    visibility: hidden;
   }
 }

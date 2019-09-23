@@ -1,8 +1,6 @@
 {% if concepts is not empty %}
   <div class="concept-wrapper">
-    <div class="concept-label">
-      {% trans %} concept {% endtrans %}
-    </div>
+    <div class="concept-label">{{ title }}</div>
     <div class="concept-value">
       <ul>
         {% for key,concept in concepts %}

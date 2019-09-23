@@ -86,6 +86,15 @@ To prepare your local env:
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
 
+### React Modules.
+
+#### Build React files for local.
+if someone wants to just rebuild the files to use in local `blt react-build` can be used.
+For 
+
+#### React module development.
+Go through the [README file](./docroot/modules/react/README.md) to start with react module development. 
+
 ### Running behat tests with headless Chrome locally on MacOS
 This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.
 You **do not** need Java/Selenium/BLT/drupalvm installed for this.

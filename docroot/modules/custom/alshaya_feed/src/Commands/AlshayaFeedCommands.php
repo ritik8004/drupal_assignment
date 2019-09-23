@@ -60,10 +60,10 @@ class AlshayaFeedCommands extends DrushCommands {
         [[__CLASS__, 'batchGenerate'], []],
       ],
       'finished' => [__CLASS__, 'batchFinish'],
-      'title' => $this->output->writeln(dt('Generating product feed')),
-      'init_message' => $this->output->writeln(dt('Starting feed creation...')),
+      'title' => dt('Generating product feed'),
+      'init_message' => dt('Starting feed creation...'),
       'progress_message' => '',
-      'error_message' => $this->output->writeln(dt('encountered error while generating feed.')),
+      'error_message' => dt('encountered error while generating feed.'),
     ];
 
     batch_set($batch);

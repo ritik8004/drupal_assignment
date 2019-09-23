@@ -3,7 +3,6 @@
     attach: function (context, settings) {
       $("#alshaya-options-list-autocomplete-form").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        console.log(value);
         $('.attribute-filter-name-list .title').filter(function() {
           var parent = $(this).parents('li.level-1');
           var noResults = $('.attribute-filter-name-list.no-result-container');

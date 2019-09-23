@@ -43,12 +43,7 @@
         .once('process-validation')
         .each(function () {
           var form = $(this).closest('form');
-
-          // Remove the name attributes to ensure it is not posted to server even by mistake.
-          $(this).find('.payment_card_new').find('input:text, input:password, select').each(function () {
-            $(this).data('name', $(this).attr('name'));
-            $(this).removeAttr('name');
-          });
+          Drupal.checkoutComRemoveNameAttribute(form);
 
           $(form).once('bind-client-side').each(function () {
             try {
@@ -91,9 +86,6 @@
                 // Set the card type in hidden only if card number is valid.
                 $('.checkoutcom-credit-card-type-input').val(result.card_type.name);
               }
-              else {
-                Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number'));
-              }
             }
           });
         });
@@ -125,6 +117,8 @@
 
     // Submit form if card is tokenised and there are no form errors.
     if (Drupal.checkoutComTokenised === true && Drupal.checkoutComProcessed === true) {
+      // Hide the payment button now to avoid double click from user.
+      $(form).find('.form-submit').hide();
       form.submit();
       return;
     }
@@ -155,7 +149,7 @@
 
     // Sanity check of credit card number.
     var type = $('.checkoutcom-credit-card-type-input').val().toString().trim();
-    if (type === '') {
+    if (type === '' && $('.checkoutcom-credit-card-input').val().trim().length > 0) {
       Drupal.checkoutComShowError($('.checkoutcom-credit-card-input'), Drupal.t('Please enter a valid credit card number'));
       formHasErrors = true;
     }
@@ -195,7 +189,7 @@
 
   // Try to create card token for checkout.com if it's not already generated.
   $.fn.checkoutComCreateCardToken = function() {
-    if ($('#cardNumber').length === 0) {
+    if (!$('#cardNumber').is(':visible') || $('#cardToken').length === 0) {
       // When using tokenised card, we don't need to check for validations.
       Drupal.checkoutComTokenisationProcessed = true;
       Drupal.checkoutComTokenised = true;
