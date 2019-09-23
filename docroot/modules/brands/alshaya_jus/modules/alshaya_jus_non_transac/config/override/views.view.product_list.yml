@@ -19,6 +19,7 @@ display:
         fields: false
         header: false
         pager: false
+        css_class: false
       style:
         type: default
         options: {  }
@@ -205,6 +206,7 @@ display:
         options:
           items_per_page: 1
           offset: 0
+      css_class: plp-product-banner
     cache_metadata:
       max-age: -1
       contexts:
