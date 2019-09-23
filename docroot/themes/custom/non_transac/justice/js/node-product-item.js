@@ -5,7 +5,6 @@
     var bodyEle = $('body');
     var shareIconEle = $('div.view-product-item__share--label');
     var productEle = $('.view-product-item__inner-container');
-    // var productEleOverlay = $('div.view-product-item__inner-container.share-overlay');
     var overlayClass = 'share-overlay';
 
     bodyEle.on('click', function (event) {
