@@ -59,6 +59,8 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    *   Language manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, Connection $connection, ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
