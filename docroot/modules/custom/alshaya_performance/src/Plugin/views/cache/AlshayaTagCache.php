@@ -29,6 +29,11 @@ class AlshayaTagCache extends Tag {
    * {@inheritdoc}
    */
   public function getCacheTags() {
+    // Add list tag still for empty result views.
+    if (empty($this->view->total_rows)) {
+      return parent::getCacheTags();
+    }
+
     $tags = $this->view->storage->getCacheTags();
     $tags = Cache::mergeTags($tags, $this->view->getQuery()->getCacheTags());
     return $tags;
