@@ -4,14 +4,8 @@ import {
 } from 'react-instantsearch-dom';
 import {searchClient} from '../Config/SearchClient';
 
-class InstantSearchComponent extends React.Component {
-  render() {
-    return (
-      <InstantSearch searchClient={searchClient} indexName={this.props.indexName}>
-        {this.props.children}
-      </InstantSearch>
-    );
-  }
-}
+const InstantSearchComponent = ({ children, indexName}) => (
+  <InstantSearch searchClient={searchClient} indexName={indexName}>{children}</InstantSearch>
+);
 
 export default InstantSearchComponent;
