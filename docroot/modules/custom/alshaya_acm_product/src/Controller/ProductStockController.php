@@ -123,6 +123,8 @@ class ProductStockController extends ControllerBase {
       new AddToCartFormSubmitEvent($entity, $return)
     );
 
+    $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
+
     return $return;
   }
 
