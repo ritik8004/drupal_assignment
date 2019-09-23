@@ -1,0 +1,21 @@
+name: Vision Express
+description: Theme for Vision Express.
+type: theme
+core: 8.x
+base theme: whitelabel
+alshaya_theme_type: non_transac
+
+regions:
+  admin_content: 'Admin Content'
+  header_secondary: 'Header Secondary'
+  header: Header
+  header_primary: 'Header Primary'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - whitelabel/global
+  - vision_express/global
