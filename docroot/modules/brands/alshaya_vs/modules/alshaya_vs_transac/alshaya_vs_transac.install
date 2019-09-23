@@ -275,32 +275,32 @@ function alshaya_vs_transac_install() {
 function _alshaya_vs_transac_get_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_title_prefix' => [
-      'en' => '[term:parent:name]',
-      'ar' => '[term:parent:name]',
+      'en' => '[alshaya_seo:super_category]',
+      'ar' => '[alshaya_seo:super_category]',
     ],
     'alshaya_seo_sale_title_suffix' => [
       'en' => 'Sale and Offers',
       'ar' => 'العروض والخصومات',
     ],
     'alshaya_seo_sale_text_before_cod' => [
-      'en' => '. Get the best prices',
-      'ar' => '. احصل على أفضل الأسعار في [alshaya_seo:country]',
+      'en' => 'Get the best prices.',
+      'ar' => 'الحصول على أفضل الأسعار في [alshaya_seo:country].',
     ],
     'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get cool and comfortable Victorias Secret [term:parents:first] sale and offers',
-      'ar' => 'الحصول على فيكتوريا سيكريت [term:parents:first] صفقات على الانترنت والخصومات ',
+      'en' => 'Get cool and comfortable Victorias Secret [alshaya_seo:super_category] sale and offers',
+      'ar' => 'الحصول على فيكتوريا سيكريت [alshaya_seo:super_category] صفقات على الانترنت والخصومات ',
     ],
     'alshaya_seo_desc_start' => [
-      'en' => 'Shop cool and comfortable Victorias Secret [term:parents:first] [term:name] products',
+      'en' => 'Shop cool and comfortable Victorias Secret [alshaya_seo:super_category] [term:name] products',
       'ar' => 'شراء مجموعة كبيرة ومريحة ',
     ],
     'alshaya_seo_sale_keywords' => [
-      'en' => 'Shop [term:parents:first] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [term:parents:first] [term:name] sale Collection',
-      'ar' => 'Shop [term:parents:first] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [term:parents:first] [term:name] sale Collection',
+      'en' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
+      'ar' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:parents:first] [term:name] Online, Shop [term:name] in [alshaya_seo:country], Shop [term:parents:first] [term:name] Collection, Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
-      'ar' => 'متجر [term:parent:name][term:name] [alshaya_seo:brand_name]، متجر [alshaya_seo:brand_name] من [term:name] على الانترنت، متجر [term:name] من [alshaya_seo:brand_name]، وشراء [term:parent:name] مجموعة [term:name] على الانترنت، متجر [term:parent:name] على الانترنت[term:name] على الانترنت في [alshaya_seo:city1]، متجر [term:parent:name] [term:name] على الانترنت في [alshaya_seo:city2]، متجر [term:parents:name] [term:name] على الانترنت في [alshaya_seo:country]',
+      'en' => 'Shop [alshaya_seo:super_category] [term:name] Online, Shop [term:name] in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] Collection, Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
+      'ar' => 'متجر [term:parent:name][term:name] [alshaya_seo:brand_name]، متجر [alshaya_seo:brand_name] من [term:name] على الانترنت، متجر [term:name] من [alshaya_seo:brand_name]، وشراء [term:parent:name] مجموعة [term:name] على الانترنت، متجر [term:parent:name] على الانترنت[term:name] على الانترنت في [alshaya_seo:city1]، متجر [term:parent:name] [term:name] على الانترنت في [alshaya_seo:city2]، متجر [alshaya_seo:super_category] [term:name] على الانترنت في [alshaya_seo:country]',
     ],
   ];
 
