@@ -32,6 +32,25 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
+      $('article.entity--type-node').once('click-collect').on('combination-changed', function (event, variant, code) {
+        var sku = $(this).attr('data-sku');
+        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        $('#pdp-stores-container', this).data('sku', variant);
+
+        if (variantInfo.click_collect) {
+          $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', false);
+          $('#pdp-stores-container.click-collect .c-accordion_content', $(this)).removeClass('hidden-important');
+
+          if ($('.search-stores-button', this).is(':visible')) {
+            Drupal.pdp.storesDisplay();
+          }
+        }
+        else {
+          $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', true);
+          $('#pdp-stores-container.click-collect .c-accordion_content', $(this)).addClass('hidden-important');
+        }
+      });
+
       $('#pdp-stores-container').once('bind-js').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
@@ -255,94 +274,90 @@
 
   // Make Ajax call to get stores and render html.
   Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger) {
-    new Promise(function (resolve, reject) {
-      var wait_for_maps_api = setInterval(function () {
-        if (Drupal.geolocation.maps_api_loading === false) {
-          clearInterval(wait_for_maps_api);
-          resolve();
+    var wait_for_maps_api = setInterval(function () {
+      if (Drupal.geolocation.maps_api_loading === false) {
+        clearInterval(wait_for_maps_api);
+        if (coords) {
+          asCoords = coords;
         }
-      }, 100);
-    }).then(function () {
-      if (coords) {
-        asCoords = coords;
-      }
-      if (!$.isEmptyObject(asCoords)) {
-        // Get the Product info.
-        var productInfo = Drupal.pdp.getProductInfo();
-        var sku = '';
-        if (productInfo) {
-          sku = productInfo.sku;
-          if (productInfo.type === 'configurable') {
-            if (typeof productInfo.selectedVariant !== 'undefined' && productInfo.selectedVariant !== null) {
-              $('.click-collect-empty-selection').hide();
-              sku = productInfo.selectedVariant;
-            }
-            else {
-              $('.click-collect-empty-selection').show();
-              $('.click-collect-form').hide();
-              return;
-            }
-          }
-
-          if (asCoords !== null) {
-            var checkLocation = true;
-            if (lastCoords !== null) {
-              checkLocation = (lastCoords.lat !== asCoords.lat || lastCoords.lng !== asCoords.lng);
+        if (!$.isEmptyObject(asCoords)) {
+          // Get the Product info.
+          var productInfo = Drupal.pdp.getProductInfo();
+          var sku = '';
+          if (productInfo) {
+            sku = productInfo.sku;
+            if (productInfo.type === 'configurable') {
+              if (typeof productInfo.selectedVariant !== 'undefined' && productInfo.selectedVariant !== null) {
+                $('.click-collect-empty-selection').hide();
+                sku = productInfo.selectedVariant;
+              }
+              else {
+                $('.click-collect-empty-selection').show();
+                $('.click-collect-form').hide();
+                return;
+              }
             }
 
-            if ((lastSku === null || lastSku !== sku) || checkLocation) {
-              lastSku = sku;
-              lastCoords = asCoords;
-
-              if (typeof $trigger === 'undefined' || $trigger == null) {
-                $trigger = $('.click-collect-form');
+            if (asCoords !== null) {
+              var checkLocation = true;
+              if (lastCoords !== null) {
+                checkLocation = (lastCoords.lat !== asCoords.lat || lastCoords.lng !== asCoords.lng);
               }
 
-              // Add formatted address based on lat/lng before ajax for top three stores.
-              Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'), 'html');
-              // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
-              if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
-                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
-              }
+              if ((lastSku === null || lastSku !== sku) || checkLocation) {
+                lastSku = sku;
+                lastCoords = asCoords;
 
-              var storeDisplayAjax = Drupal.ajax({
-                url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
-                element: $trigger.get(0),
-                base: false,
-                progress: {type: 'throbber'},
-                submit: {js: true}
-              });
-
-              // Custom command function to render map and map markers.
-              storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
-                if ($('body').hasClass('magazine-layout-ajax-throbber')) {
-                  $('body').removeClass('magazine-layout-ajax-throbber');
+                if (typeof $trigger === 'undefined' || $trigger == null) {
+                  $trigger = $('.click-collect-form');
                 }
 
-                if (status === 'success') {
-                  if (response.data.alshaya_click_collect.pdp.top_three) {
-                    // Show formatted address after ajax for all stores, once we have html elements.
-                    Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
-                    displaySearchForm = false;
-                    records = true;
-                  }
-                  else {
-                    displaySearchForm = true;
-                  }
+                // Add formatted address based on lat/lng before ajax for top three stores.
+                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'), 'html');
+                // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
+                if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
+                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
                 }
-              };
 
-              // When sidebar is sticky for magazine layout.
-              if ($('.content-sidebar-wrapper').hasClass('sidebar-fixed')) {
-                $('body').addClass('magazine-layout-ajax-throbber');
+                var storeDisplayAjax = Drupal.ajax({
+                  url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
+                  element: $trigger.get(0),
+                  base: false,
+                  progress: {type: 'throbber'},
+                  submit: {js: true}
+                });
+
+                // Custom command function to render map and map markers.
+                storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
+                  if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+                    $('body').removeClass('magazine-layout-ajax-throbber');
+                  }
+
+                  if (status === 'success') {
+                    if (response.data.alshaya_click_collect.pdp.top_three) {
+                      // Show formatted address after ajax for all stores, once we have html elements.
+                      Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
+                      displaySearchForm = false;
+                      records = true;
+                    }
+                    else {
+                      displaySearchForm = true;
+                    }
+                  }
+                };
+
+                // When sidebar is sticky for magazine layout.
+                if ($('.content-sidebar-wrapper').hasClass('sidebar-fixed')) {
+                  $('body').addClass('magazine-layout-ajax-throbber');
+                }
+
+                storeDisplayAjax.execute();
               }
-
-              storeDisplayAjax.execute();
             }
           }
         }
       }
-    });
+    }, 100);
   };
 
   // Make autocomplete field in search form in the all stores.
@@ -379,41 +394,6 @@
       validate = (settings.alshaya_acm.product_sku === productInfo.sku);
     }
     return validate;
-  };
-
-  /**
-   * Update click and collect on size change ajax call.
-   *
-   * We don't want to call this function for each size change call. we
-   * want to call this function for pdp page only. so, there are some
-   * variables which are accessible to javascript only. that's why we
-   * are writing this function here instead of writing in AjaxResponse
-   * of size change.
-   *
-   * @param {Drupal.Ajax} [ajax]
-   *   The Drupal Ajax object.
-   * @param {object} response
-   *   Object holding the server response.
-   * @param {object} [response.settings]
-   *   An array of settings that will be used.
-   * @param {number} [status]
-   *   The XMLHttpRequest status.
-   */
-  Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
-    if (Drupal.pdp.validateCurrentProduct(response.data)) {
-      $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-
-      if (response.data.alshaya_acm.storeFinder) {
-        $('#pdp-stores-container.click-collect').accordion('option', 'disabled', false);
-        $('#pdp-stores-container.click-collect .c-accordion_content').removeClass('hidden-important');
-
-        Drupal.pdp.storesDisplay();
-      }
-      else {
-        $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-        $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-      }
-    }
   };
 
   // Command to display error message and rebind autocomplete to main input.

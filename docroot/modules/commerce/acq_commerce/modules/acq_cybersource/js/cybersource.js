@@ -111,6 +111,9 @@
     // Update the JS to ensure we don't submit to cybersource again.
     Drupal.cybersourceProcessed = true;
 
+    // Hide the payment button now to avoid double click from user.
+    $('[data-drupal-selector="edit-actions-next"]').closest('form').find('.form-submit').hide();
+
     // Proceed with payment now.
     $('[data-drupal-selector="edit-actions-next"]').trigger('click');
   };

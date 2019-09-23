@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Entity;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
@@ -83,6 +84,51 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $values += [
       'user_id' => \Drupal::currentUser()->id(),
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate() {
+    $tags = [];
+
+    if ($this->isNew()) {
+      // Only for new simple sku we want to invalidate parent sku cache.
+      if ($this->bundle() == 'simple') {
+        $plugin = $this->getPluginInstance();
+
+        $parents = array_keys($plugin->getAllParentIds($this->getSku()));
+        foreach ($parents as $id) {
+          $tags[] = $this->entityTypeId . ':' . $id;
+        }
+      }
+    }
+    else {
+      $tags[] = $this->entityTypeId . ':' . $this->id();
+    }
+
+    return $tags;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $tags = $this->getCacheTagsToInvalidate();
+
+    if ($this->cacheTags) {
+      $tags = Cache::mergeTags($tags, $this->cacheTags);
+    }
+
+    if ($this->bundle() == 'configurable') {
+      $children = array_keys($this->getPluginInstance()->getAvailableChildrenIds($this));
+      // Load all children and add them to tags.
+      foreach ($children as $id) {
+        $tags[] = $this->entityTypeId . ':' . $id;
+      }
+    }
+
+    return $tags;
   }
 
   /**
@@ -366,7 +412,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
   /**
    * Get plugin instance for current object.
    *
-   * @return null|object
+   * @return null|\Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface
    *   Returns a plugin instance if one exists.
    */
   public function getPluginInstance() {
@@ -764,15 +810,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Reset static cache after saving any SKU.
     // This is done by default when using entity storage.
     // We don't use entity storage and use custom code for static cache.
-    drupal_static_reset('loadFromSku');
-    drupal_static_reset('getParentSku');
+    drupal_static_reset('getParentSkuIds');
+    drupal_static_reset('getAvailableChildrenIds');
   }
 
   /**
    * {@inheritdoc}
    */
   public function refreshStock() {
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $this->getPluginInstance();
     $plugin->refreshStock($this);
   }

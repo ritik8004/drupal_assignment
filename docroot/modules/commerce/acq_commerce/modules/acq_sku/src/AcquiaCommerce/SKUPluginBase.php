@@ -2,9 +2,12 @@
 
 namespace Drupal\acq_sku\AcquiaCommerce;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Link;
 
@@ -12,6 +15,9 @@ use Drupal\Core\Link;
  * Defines a base SKU Plugin. Can be used as a template for a new SKU type.
  */
 abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
+
+  use MessengerTrait;
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -136,123 +142,43 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   }
 
   /**
-   * Get parent of current product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Current product.
-   * @param bool $load
-   *   Whether return the fully loaded sku or not.
-   *
-   * @return \Drupal\acq_sku\Entity\SKU|null
-   *   Parent product or null if not found.
+   * {@inheritdoc}
    */
-  public function getParentSku(SKU $sku, bool $load = TRUE) {
-    $static = &drupal_static(__FUNCTION__, []);
+  public function getParentSku(SKU $sku) {
+    return NULL;
+  }
 
-    $langcode = $sku->language()->getId();
-    $sku_string = $sku->getSku();
+  /**
+   * {@inheritdoc}
+   */
+  public function getAllParentIds(string $sku): array {
+    return [];
+  }
 
-    $load_sku = (int) $load;
-    if (isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$load_sku])) {
-      return $static[$langcode][$sku_string][$load_sku];
-    }
-
-    // Initialise with empty value.
-    $static[$langcode][$sku_string][$load_sku] = NULL;
-
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
-    $query->addField('acq_sku', 'id');
-    $query->addField('acq_sku', 'sku');
-    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
-    $query->condition('child_sku.field_configured_skus_value', $sku_string);
-
-    $parent_skus = $query->execute()->fetchAllKeyed();
-
-    // If don't want fully loaded object, this returns an array having sku id
-    // as key and sku as the value.
-    if (!$load) {
-      $static[$langcode][$sku_string][$load_sku] = $parent_skus;
-      return $parent_skus;
-    }
-
-    if (empty($parent_skus)) {
-      return NULL;
-    }
-
-    if (count($parent_skus) > 1) {
-      \Drupal::logger('acq_sku')->warning(
-        'Multiple parents found for SKU: @sku, parents: @parents',
-        [
-          '@parents' => implode(',', $parent_skus),
-          '@sku' => $sku_string,
-        ]
-      );
-    }
-
-    foreach ($parent_skus as $parent_sku) {
-      $parent = SKU::loadFromSku($parent_sku, $langcode);
-      if ($parent instanceof SKU) {
-        $node = $this->getDisplayNode($parent, FALSE, FALSE);
-
-        if ($node instanceof Node) {
-          $static[$langcode][$sku_string][$load_sku] = $parent;
-          break;
-        }
-      }
-    }
-
-    return $static[$langcode][$sku_string][$load_sku];
+  /**
+   * {@inheritdoc}
+   */
+  public function getAvailableChildrenIds(SKUInterface $sku) {
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE) {
-    $static = &drupal_static(__FUNCTION__, []);
-
-    $langcode = $sku->language()->getId();
-    $sku_string = $sku->getSku();
-
-    // Key to fetch display node of the sku from static cache based on whether
-    // parent sku needs to consider or not.
-    $check_parent_key = (int) $check_parent;
-
-    // Do not use static cache during sync when create translation flag is set
-    // to true.
-    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$check_parent_key])) {
-      return $static[$langcode][$sku_string][$check_parent_key];
-    }
-
-    // Initialise with empty value.
-    $static[$langcode][$sku_string][$check_parent_key] = NULL;
-
-    if ($check_parent) {
-      if ($parent_sku = $this->getParentSku($sku)) {
-        $sku = $parent_sku;
-      }
-    }
-
-    $query = \Drupal::entityQuery('node');
-    $query->condition('type', 'acq_product');
-    $query->condition('field_skus', $sku->getSku());
-    $query->addTag('get_display_node_for_sku');
-
-    $query->range(0, 1);
-
-    $result = $query->execute();
-
-    if (empty($result)) {
+    $nid = $this->getDisplayNodeId($sku, $check_parent);
+    if (empty($nid)) {
       return NULL;
     }
 
-    $nid = reset($result);
     $node = Node::load($nid);
+    $langcode = $sku->language()->getId();
 
     // Check language checks if site is in multilingual mode.
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
       if ($node->language()->getId() == $langcode) {
-        // Do nothing as we just using the same node object for static cache.
+        // Do nothing, we want this exact object.
       }
       elseif ($node->hasTranslation($langcode)) {
         // If node has translation, we return the translation.
@@ -272,9 +198,54 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       }
     }
 
-    $static[$langcode][$sku_string][$check_parent_key] = $node;
-
     return $node;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDisplayNodeId(SKU $sku, $check_parent = TRUE) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $sku_string = $sku->getSku();
+
+    // No need to check parent at all for configurable ones.
+    if ($sku->bundle() == 'configurable') {
+      $check_parent = FALSE;
+    }
+
+    // Key to fetch display node of the sku from static cache based on whether
+    // parent sku needs to consider or not.
+    $check_parent_key = (int) $check_parent;
+
+    if (isset($static[$sku_string], $static[$sku_string][$check_parent_key])) {
+      return $static[$sku_string][$check_parent_key];
+    }
+
+    if ($check_parent) {
+      if ($parent_sku = $this->getParentSku($sku)) {
+        // For parent we will always have it in 0.
+        if (isset($static[$parent_sku->getSku()][0])) {
+          return $static[$parent_sku->getSku()][0];
+        }
+
+        $sku = $parent_sku;
+      }
+    }
+
+    $query = \Drupal::entityQuery('node');
+    $query->condition('type', 'acq_product');
+    $query->condition('field_skus', $sku->getSku());
+    $query->addTag('get_display_node_for_sku');
+    $query->range(0, 1);
+    $result = $query->execute();
+
+    if (empty($result)) {
+      return NULL;
+    }
+
+    $static[$sku_string][$check_parent_key] = reset($result);
+    return $static[$sku_string][$check_parent_key];
   }
 
   /**
