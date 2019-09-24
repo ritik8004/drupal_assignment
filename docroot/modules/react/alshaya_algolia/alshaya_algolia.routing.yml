@@ -1,6 +1,0 @@
-alshaya_algolia.test:
-  path: '/algolia/test'
-  defaults:
-    _controller: \Drupal\alshaya_algolia\Controller\AlshayaAlgoliaController::testPage
-  requirements:
-    _permission: 'access content'

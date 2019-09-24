@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_algolia\Plugin\Block;
+namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -9,14 +9,14 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a block to display 'custom link' elements.
+ * Provides a block to display 'autocomplete block' for mobile.
  *
  * @Block(
- *   id = "alshaya_algolia_autocomplete_block",
+ *   id = "alshaya_algolia_react_autocomplete",
  *   admin_label = @Translation("Alshaya Algolia Autocomplete")
  * )
  */
-class AlshayaAlgoliaAutocompleteBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The config factory service.
@@ -33,7 +33,7 @@ class AlshayaAlgoliaAutocompleteBlock extends BlockBase implements ContainerFact
   protected $languageManager;
 
   /**
-   * AlshayaAlgoliaAutocompleteBlock constructor.
+   * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -88,7 +88,7 @@ class AlshayaAlgoliaAutocompleteBlock extends BlockBase implements ContainerFact
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
       '#attached' => [
         'library' => [
-          'alshaya_algolia/autocomplete',
+          'alshaya_algolia_react/autocomplete',
         ],
         'drupalSettings' => [
           'algoliaSearch' => [

@@ -2,7 +2,7 @@ autocomplete:
   js:
     dist/autocomplete.js: {}
   dependencies:
-    - alshaya_algolia/vendor
+    - alshaya_algolia_react/vendor
 
 vendor:
   js:

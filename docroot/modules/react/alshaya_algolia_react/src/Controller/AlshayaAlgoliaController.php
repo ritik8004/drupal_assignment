@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_algolia\Controller;
+namespace Drupal\alshaya_algolia_react\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 
