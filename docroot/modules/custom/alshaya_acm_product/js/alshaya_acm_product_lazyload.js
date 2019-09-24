@@ -7,22 +7,21 @@
 
   Drupal.behaviors.alshayaAcmProductLazyLoad = {
     attach: function (context, settings) {
-      $('.lazyload-product').once('alshayaAcmProductLazyLoad').each(products, function (key, product) {
-        var product_nid = $(product).find('.placeholder-lazyload-product').attr('data-id');
-        $.ajax({
-          url: Drupal.url('/product-list-view/' + product_nid),
-          method: 'GET',
-          dataType: 'HTML',
-          cache: true,
-          async: true,
-          success: function (data) {
-            $(product).html(data);
+      $('.lazyload-product').once('alshayaAcmProductLazyLoad').each(function () {
+        var that = $(this);
+        var product_nid = that.find('.placeholder-lazyload-product').attr('data-id');
 
-            if (typeof Drupal.blazy !== 'undefined') {
-              Drupal.blazy.revalidate();
-            }
-          }
+        var loadProduct = new Drupal.ajax({
+          url: Drupal.url('product-list-view/' + product_nid),
+          element: false,
+          base: false,
+          progress: {type: 'none'},
+          submit: {js: true}
         });
+
+        loadProduct.options.type = 'GET';
+        loadProduct.options.async = true;
+        loadProduct.execute();
       });
     }
   };

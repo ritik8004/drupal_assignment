@@ -9,6 +9,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\MemoryCache\MemoryCacheInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Extension\ModuleHandler;
@@ -76,6 +77,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $moduleHandler;
 
   /**
+   * The memory cache.
+   *
+   * @var \Drupal\Core\Cache\MemoryCache\MemoryCacheInterface
+   */
+  protected $memoryCache;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -104,6 +112,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Price Helper.
    * @param \Drupal\Core\Extension\ModuleHandler $module_handler
    *   Module handler service.
+   * @param \Drupal\Core\Cache\MemoryCache\MemoryCacheInterface $memory_cache
+   *   The memory cache.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -117,7 +127,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               SkuPriceHelper $price_helper,
-                              ModuleHandler $module_handler) {
+                              ModuleHandler $module_handler,
+                              MemoryCacheInterface $memory_cache) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
@@ -125,6 +136,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     $this->languageManager = $language_manager;
     $this->priceHelper = $price_helper;
     $this->moduleHandler = $module_handler;
+    $this->memoryCache = $memory_cache;
   }
 
   /**
@@ -259,14 +271,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
-
-        if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
-          $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
-          $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->skuManager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');
-        }
-
-        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
-        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/show_color_images_on_filter';
       }
     }
 
@@ -292,6 +296,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         }
       }
     }
+
+    $this->releaseMemory();
 
     return $elements;
   }
@@ -325,8 +331,17 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('config.factory'),
       $container->get('language_manager'),
       $container->get('alshaya_acm_product.price_helper'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity.memory_cache')
     );
+  }
+
+  /**
+   * Wrapper function to release memory.
+   */
+  protected function releaseMemory() {
+    $this->memoryCache->deleteAll();
+    drupal_static_reset();
   }
 
 }

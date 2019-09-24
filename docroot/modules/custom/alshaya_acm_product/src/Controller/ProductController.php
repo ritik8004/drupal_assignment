@@ -3,6 +3,8 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Cache\CacheableAjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
@@ -60,12 +62,15 @@ class ProductController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityInterface $node
    *   Node object.
    *
-   * @return array
+   * @return \Drupal\Core\Cache\CacheableAjaxResponse
    *   A render array for the entity.
    */
   public function listView(EntityInterface $node) {
     $view_builder = $this->entityTypeManager()->getViewBuilder('node');
-    return $view_builder->view($node, 'search_result');
+    $view = $view_builder->view($node, 'search_result');
+    $response = new CacheableAjaxResponse();
+    $response->addCommand(new ReplaceCommand('.placeholder-lazyload-product[data-id="' . $node->id() . '"]', $view));
+    return $response;
   }
 
   /**

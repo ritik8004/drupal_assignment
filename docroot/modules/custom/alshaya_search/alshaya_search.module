@@ -65,13 +65,6 @@ function alshaya_search_views_pre_build(ViewExecutable $view) {
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
     $view->display_handler->display['cache_metadata']['contexts'][] = 'facets';
     $view->element['#cache']['contexts'][] = 'facets';
-
-    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-
-    // If group by sub-category is selected, disable pager.
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
-      $view->setItemsPerPage(0);
-    }
   }
 
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
