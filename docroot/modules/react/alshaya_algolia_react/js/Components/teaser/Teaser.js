@@ -1,6 +1,6 @@
 import React from 'react';
 import Gallery from '../gallery/Gallery';
-import Price from '../price/Price';
+// import Price from '../price/Price';
 import Promotion from '../Promotions/Promotion';
 
 class Teaser extends React.Component {
@@ -20,13 +20,13 @@ class Teaser extends React.Component {
                 href={hit.url}
                 data--original-url={hit.url}
                 className="list-product-gallery product-selected-url">
-                <Gallery images={hit.media} />
+                <Gallery media={hit.media} title={hit.title} />
               </a>
               <div className="product-plp-detail-wrapper">
                 <h2 className="field--name-name">
                   <a href={hit.url} className="product-selected-url">{hit.title}</a>
                 </h2>
-                <Price />
+                {/* <Price price={hit.price} final_price={hit.final_price}/> */}
                 {promotions}
                 {swatches}
               </div>

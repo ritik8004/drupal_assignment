@@ -44,12 +44,7 @@ class SearchResults extends React.Component {
    *  The properties we get for hitComponent callback; hit object.
    */
   hitDetail(props) {
-    return (
-      <div>
-        <div className="title">{props.hit.title}</div>
-        <Teaser hit={props.hit} />
-      </div>
-    );
+    return (<Teaser hit={props.hit} />);
   }
 
   render() {

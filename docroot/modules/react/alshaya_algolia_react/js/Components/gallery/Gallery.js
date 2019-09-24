@@ -1,18 +1,14 @@
 import React from 'react';
-import ImageElement from './ImageElement';
+import AssetGallery from './variants/AssetGallery';
+import SearchGallery from './variants/SearchGallery';
 
-const Gallery = ({media}) => {
-
-  return (
-    <div className="alshaya_search_gallery">
-      <div className="alshaya_search_mainimage">
-        <ImageElement />
-      </div>
-      <div className="alshaya_search_hoverimage">
-        <ImageElement />
-      </div>
-    </div>
-  );
+const Gallery = (props) => {
+  if (drupalSettings.reactTeaserView.gallery.showHoverImage) {
+    return (<AssetGallery {...props}/>);
+  }
+  else {
+    return (<SearchGallery {...props}/>);
+  }
 };
 
 export default Gallery;
