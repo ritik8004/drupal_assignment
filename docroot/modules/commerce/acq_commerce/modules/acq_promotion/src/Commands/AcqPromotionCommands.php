@@ -98,15 +98,17 @@ class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwar
     $acspm = $this->processManager()->drush($selfRecord, 'acspm', [], $options);
     $acspm->run($acspm->showRealtime());
 
+    $command = sprintf('screen -dm bash -c "cd %s; drush --uri=%s queue-run acq_promotion_attach_queue"', $selfRecord->get('root'), $selfRecord->get('uri'));
     /** @var \Consolidation\SiteProcess\SiteProcess $attach */
-    $attach = $this->processManager()->drush($selfRecord, 'queue-run', ['acq_promotion_attach_queue'], []);
-    $attach->start($attach->showRealtime());
+    $attach = $this->processManager()->process($command);
+    $attach->run($attach->showRealtime());
 
+    $command = sprintf('screen -dm bash -c "cd %s; drush --uri=%s queue-run acq_promotion_detach_queue"', $selfRecord->get('root'), $selfRecord->get('uri'));
     /** @var \Consolidation\SiteProcess\SiteProcess $detach */
-    $detach = $this->processManager()->drush($selfRecord, 'queue-run', ['acq_promotion_detach_queue'], []);
-    $detach->start($detach->showRealtime());
+    $detach = $this->processManager()->process($command);
+    $detach->run($detach->showRealtime());
 
-    $this->logger->notice(dt('Promotions synced and queue-run executed.'));
+    $this->logger->notice(dt('Promotions synced and queue-run started in screens.'));
   }
 
 }
