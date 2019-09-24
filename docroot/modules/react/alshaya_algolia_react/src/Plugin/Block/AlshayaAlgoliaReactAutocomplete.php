@@ -2,10 +2,13 @@
 
 namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -33,6 +36,13 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
   protected $languageManager;
 
   /**
+   * SKU Images Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -45,17 +55,21 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
    *   The config factory.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU Images Manager.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    SkuImagesManager $sku_images_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
+    $this->skuImagesManager = $sku_images_manager;
   }
 
   /**
@@ -72,7 +86,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_acm_product.sku_images_manager')
     );
   }
 
@@ -80,9 +95,15 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
    * {@inheritdoc}
    */
   public function build() {
-    $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
-    $index = $this->configFactory->get('search_api.index.acquia_search_index')->get('options');
     $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $index = $this->configFactory->get('search_api.index.acquia_search_index')->get('options');
+
+    if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
+      $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
+    }
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
@@ -95,6 +116,19 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'application_id' => $algolia_config['application_id'],
             'api_key' => $algolia_config['api_key'],
             'indexName' => $index['algolia_index_name'] . "_{$lang}",
+          ],
+          'reactTeaserView' => [
+            'priceDisplayMode' => $display_settings->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
+            'gallery' => [
+              'showHoverImage' => $display_settings->get('gallery_show_hover_image'),
+              'showThumbnails' => $display_settings->get('gallery_show_hover_image') ? FALSE : $display_settings->get('image_thumb_gallery'),
+              'defaultImage' => $default_image ?? FALSE,
+            ],
+            'swatches' => [
+              'showColorImages' => $display_settings->get('show_color_images_on_filter'),
+              'showProductImage' => $display_settings->get('color_swatches_show_product_image'),
+              'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
+            ],
           ],
         ],
       ],
