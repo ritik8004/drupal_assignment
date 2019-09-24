@@ -9,6 +9,10 @@
 
 .paragraph-t-1-row-1-col {
   margin-top: 0.5rem;
+
+  @include breakpoint($upto-palm) {
+    margin-top: 1.125rem;
+  }
 }
 
 .field-promo-block {

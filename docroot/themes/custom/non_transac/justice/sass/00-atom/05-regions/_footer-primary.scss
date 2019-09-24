@@ -15,5 +15,9 @@
       padding: 0 1rem;
       justify-content: center;
     }
+
+    @include breakpoint($upto-palm) {
+      padding: 0 1.25rem;
+    }
   }
 }
