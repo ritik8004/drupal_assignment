@@ -13,8 +13,9 @@
     }
 
     a {
+      display: unset;
+
       @include breakpoint($upto-lap) {
-        display: unset;
         width: 4.5rem;
       }
     }
