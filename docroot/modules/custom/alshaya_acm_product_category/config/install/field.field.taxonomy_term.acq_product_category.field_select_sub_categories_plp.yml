@@ -2,12 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_group_by_sub_categories
+    - field.storage.taxonomy_term.field_select_sub_categories_plp
     - taxonomy.vocabulary.acq_product_category
   module:
     - options
-id: taxonomy_term.acq_product_category.field_group_by_sub_categories
-field_name: field_group_by_sub_categories
+id: taxonomy_term.acq_product_category.field_select_sub_categories_plp
+field_name: field_select_sub_categories_plp
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Select sub-categories to display on PLP'

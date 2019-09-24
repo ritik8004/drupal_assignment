@@ -28,7 +28,7 @@ function alshaya_acm_product_category_update_8035() {
     'field.storage.taxonomy_term.field_plp_group_category_desc',
     'field.storage.taxonomy_term.field_plp_group_category_title',
     'field.field.taxonomy_term.acq_product_category.field_group_by_sub_categories',
-    'field.field.taxonomy_term.acq_product_category.field_group_by_sub_categories',
+    'field.field.taxonomy_term.acq_product_category.field_select_sub_categories_plp',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_img',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_title',
@@ -126,8 +126,7 @@ function alshaya_acm_product_category_update_8032() {
     'field.field.taxonomy_term.acq_product_category.field_include_in_mobile_tablet',
   ];
 
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs($configs, 'alshaya_acm_product_category');
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product_category');
 }
 
 /**
@@ -238,10 +237,7 @@ function alshaya_acm_product_category_update_8028() {
   ];
 
   foreach ($block_configs as $block) {
-    \Drupal::configFactory()
-      ->getEditable($block)
-      ->clear('visibility.hide_facet_condition_moschino')
-      ->save();
+    \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')->save();
   }
 }
 
@@ -312,8 +308,7 @@ function alshaya_acm_product_category_update_8026() {
   // Ensure field_category_original is populated for original content.
   // Direct DB query here is fine as we don't use it anywhere except
   // during sync.
-  \Drupal::database()
-    ->query('INSERT INTO node__field_category_original (SELECT * FROM node__field_category)');
+  \Drupal::database()->query('INSERT INTO node__field_category_original (SELECT * FROM node__field_category)');
 }
 
 /**
@@ -576,8 +571,7 @@ function alshaya_acm_product_category_update_8014() {
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
   ];
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs($configs, 'alshaya_acm_product_category');
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product_category');
 
   // Update value of existing taxonomy terms.
   $query = \Drupal::entityQuery('taxonomy_term');
@@ -799,8 +793,7 @@ function alshaya_acm_product_category_update_8002() {
  * Enable translation for promotional banner field in acq_product_category.
  */
 function alshaya_acm_product_category_update_8001() {
-  $config = \Drupal::configFactory()
-    ->getEditable('field.field.taxonomy_term.acq_product_category.field_promotion_banner');
+  $config = \Drupal::configFactory()->getEditable('field.field.taxonomy_term.acq_product_category.field_promotion_banner');
   $config->set('translatable', TRUE);
   $config->save();
 

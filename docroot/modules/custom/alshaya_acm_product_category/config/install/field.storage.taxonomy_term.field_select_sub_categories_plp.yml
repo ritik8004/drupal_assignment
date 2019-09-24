@@ -4,8 +4,8 @@ dependencies:
   module:
     - options
     - taxonomy
-id: taxonomy_term.field_group_by_sub_categories
-field_name: field_group_by_sub_categories
+id: taxonomy_term.field_select_sub_categories_plp
+field_name: field_select_sub_categories_plp
 entity_type: taxonomy_term
 type: list_string
 settings:

@@ -76,9 +76,6 @@
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if (settings.url.indexOf('/views/ajax') !== -1) {
-
-        }
         Drupal.addLeafClassToPlpLeafItems();
 
         if ($(window).width() < 768) {
