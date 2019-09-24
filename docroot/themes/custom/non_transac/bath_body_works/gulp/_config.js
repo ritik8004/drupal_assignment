@@ -64,14 +64,13 @@ module.exports = {
     }
   },
   babel: {
-    presets: [
-      'es2015',
-      ['env', {
+    presets: [[
+      'env', {
         targets: {
           browsers: ['last 2 versions']
         }
-      }]
-    ]
+      }
+    ]]
   },
   browserSync: {
     proxy: 'https://local.non-transac.com',

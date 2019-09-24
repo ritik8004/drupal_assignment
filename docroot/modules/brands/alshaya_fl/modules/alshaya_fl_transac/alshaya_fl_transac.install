@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_fl_transac_update_8004() {
+  _alshaya_fl_transac_get_metatag_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {
@@ -102,4 +111,52 @@ function alshaya_fl_transac_install() {
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
+
+  // Install metatag translations.
+  _alshaya_fl_transac_get_metatag_translations();
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_fl_transac_get_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_title_prefix' => [
+      'en' => '[term:parent:name]\'s',
+      'ar' => '[term:parent:name]',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[current-date:html_year] Sale [alshaya_seo:title_sub_suffix]',
+      'ar' => '[current-date:html_year] Sale [alshaya_seo:title_sub_suffix]',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Get [term:parent:name]\'s [term:name] Sale from [site:name]. Explore our [current-date:html_year] luxury and high-quality [term:name] for [term:parent:name] offers',
+      'ar' => 'احصل على [term:parent:name] [term:name] عروض من [site:name]. اكتشف [current-date:html_year] اختيارات مجموعة فاخرة وعالية الجودة من [term:parent:name] [term:name]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop luxury and high-quality [alshaya_seo:brand_name] [term:name] for [term:parents:first]',
+      'ar' => 'شراء خزانة القدم [term:parents:first]\'s [term:name]  ',
+    ],
+    'alshaya_seo_sale_title_sub_suffix' => [
+      'en' => '- Online Offers',
+      'ar' => '- Online Offers',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+      'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] for [term:parents:first], Shop [term:parents:first] [term:name], Shop [alshaya_seo:brand_name] [term:name], Shop [term:name] Collection for [term:parents:first], Shop [term:name] in [alshaya_seo:country], Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
+      'ar' => 'متجر [term:name] مجموعة ل [term:parents:first] على الانترنت, تسوق [term:name] [alshaya_seo:brand_name], شراء [alshaya_seo:sub_categories] [alshaya_seo:brand_name]، شراء [alshaya_seo:sub_categories] شراء [alshaya_seo:sub_categories] على الانترنت، متجر [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:city1], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:city2], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:country]',
+    ],
+    'alshaya_seo_top_category' => [
+      'en' => 'for [term:parent:name]',
+      'ar' => 'for [term:parent:name]',
+    ],
+    'seo_brand_name' => [
+      'ar' => 'Footlocker',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

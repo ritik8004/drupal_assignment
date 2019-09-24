@@ -125,6 +125,10 @@
     padding-#{$left}: 7.875rem;
     text-align: $left;
 
+    @include breakpoint($tablet) {
+      float: $right;
+    }
+
     @include breakpoint($only-tablet) {
       padding: 0;
       padding-#{$left}: 4rem;
@@ -133,6 +137,16 @@
     @include breakpoint($only-mobile) {
       padding: 0;
       text-align: center;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .social-signin-enabled {
+      .checkout-login-actions-wrapper {
+        &.form-actions {
+          float: none;
+        }
+      }
     }
   }
 
@@ -181,6 +195,14 @@
 
       @include breakpoint($only-mobile) {
         width: 100%;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 10.9375rem;
+
+        html[lang=ar] & {
+          width: 9.25rem;
+        }
       }
     }
 

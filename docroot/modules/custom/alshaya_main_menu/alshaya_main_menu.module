@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\taxonomy\TermInterface;
 use Drupal\taxonomy\Entity\Term;
 
@@ -171,6 +172,12 @@ function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$
         $form['field_main_menu_highlight']['#access'] = FALSE;
       }
     }
+  }
+
+  $main_menu_config = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
+  // Hide the `move to right` checkbox if default layout is set in BE.
+  if (!$main_menu_config || $main_menu_config == AlshayaMainMenuConfigForm::MAIN_MENU_DEFAULT_LAYOUT) {
+    $form['field_move_to_right']['#access'] = FALSE;
   }
 }
 

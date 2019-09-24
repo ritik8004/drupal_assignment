@@ -10,7 +10,6 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ProductController.
@@ -56,17 +55,17 @@ class ProductController extends ControllerBase {
   }
 
   /**
-   * Title callback for the modal.
+   * Page callback for list view.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $node
+   *   Node object.
+   *
+   * @return array
+   *   A render array for the entity.
    */
-  public function listingView(string $nid) {
+  public function listView(EntityInterface $node) {
     $view_builder = $this->entityTypeManager()->getViewBuilder('node');
-    $storage = $this->entityTypeManager()->getStorage('node');
-    $entity = $storage->load($nid);
-    $html = $view_builder->view($entity, 'search_result');
-    $html = render($html);
-    $response = new Response();
-    $response->setContent($html);
-    return $response;
+    return $view_builder->view($node, 'search_result');
   }
 
   /**
@@ -87,31 +86,6 @@ class ProductController extends ControllerBase {
     }
 
     $response = new RedirectResponse(Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString());
-    $response->send();
-    exit;
-
-  }
-
-  /**
-   * Title callback for the modal.
-   */
-  public function skumodalTitle($acq_sku) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-    return $sku->get('name')->getString();
-  }
-
-  /**
-   * Page callback for the modal.
-   */
-  public function skumodalView($acq_sku, $js) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-    if ($js === 'ajax') {
-      $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
-      $build = $view_builder->view($sku, 'modal');
-      return $build;
-    }
-
-    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $sku->id()])->toString());
     $response->send();
     exit;
 

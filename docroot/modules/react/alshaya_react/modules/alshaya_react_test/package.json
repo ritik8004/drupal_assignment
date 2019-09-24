@@ -1,0 +1,12 @@
+{
+  "name": "alshaya_react",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "../../../node_modules/.bin/webpack-dev-server --mode=development",
+    "build": "../../../node_modules/.bin/webpack",
+    "watch": "../../../node_modules/.bin/webpack --watch",
+    "gulp:build": "../../../node_modules/gulp/bin/gulp.js",
+    "gulp:watch": "../../../node_modules/gulp/bin/gulp.js watch"
+  }
+}
