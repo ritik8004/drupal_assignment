@@ -53,6 +53,11 @@
   .input--checkbox__container {
     margin-bottom: -0.5rem;
 
+    html[lang=ar] & {
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
     label:not(.error) {
       top: -0.6875rem;
       padding-bottom: 0;
