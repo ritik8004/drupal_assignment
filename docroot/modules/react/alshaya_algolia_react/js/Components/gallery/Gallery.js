@@ -1,7 +1,8 @@
 import React from 'react';
 import ImageElement from './ImageElement';
 
-const Gallery = (props) => {
+const Gallery = ({media}) => {
+
   return (
     <div className="alshaya_search_gallery">
       <div className="alshaya_search_mainimage">

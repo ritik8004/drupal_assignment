@@ -203,6 +203,9 @@ class AlshayaAlgoliaIndexHelper {
       $object['attr_style'] = $attr_style;
     }
 
+    $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
+    $object['product_labels'] = $this->skuManager->getLabels($sku, 'plp');
+
     // Update stock info for product.
     $object['stock_quantity'] = $this->skuInfoHelper->calculateStock($sku);
     $object['stock'] = $this->skuManager->getStockStatusForIndex($sku);
@@ -232,7 +235,8 @@ class AlshayaAlgoliaIndexHelper {
    */
   public function getMediaItems(SKU $sku, $product_color = NULL): array {
     $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
-    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search');
+    // @see \Drupal\alshaya_acm_product\SkuImagesManager::getGallery.
+    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search', FALSE);
     $images = [];
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
