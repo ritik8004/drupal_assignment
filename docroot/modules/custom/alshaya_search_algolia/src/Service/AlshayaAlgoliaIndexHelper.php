@@ -11,6 +11,7 @@ use Drupal\alshaya_search_algolia\Event\AlshayaAlgoliaProductIndexEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -186,8 +187,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['promotions'] = $promotions;
 
     // Product Images.
-    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
-    $object['media'] = $this->skuInfoHelper->getMedia($sku_for_gallery, 'search')['images'];
+    $object['media'] = $this->getMediaItems($sku, $product_color);
 
     // Product Swatches.
     $swatches = $this->skuImagesManager->getSwatchData($sku);
@@ -215,6 +215,33 @@ class AlshayaAlgoliaIndexHelper {
     $event = new AlshayaAlgoliaProductIndexEvent($sku, $node, $object);
     $this->dispatcher->dispatch(AlshayaAlgoliaProductIndexEvent::PRODUCT_INDEX, $event);
     $object = $event->getItem();
+  }
+
+  /**
+   * Prepare images with image style link to index.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   * @param string|null $product_color
+   *   Color value.
+   *
+   * @return array
+   *   Return array of images with url and image_type.
+   *
+   * @throws \Exception
+   */
+  public function getMediaItems(SKU $sku, $product_color = NULL): array {
+    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
+    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search');
+    $images = [];
+
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      $images[] = [
+        'url' => ImageStyle::load('product_listing')->buildUrl($media_item['drupal_uri']),
+        'image_type' => $media_item['sortAssetType'] ?? 'image',
+      ];
+    }
+    return $images;
   }
 
   /**
