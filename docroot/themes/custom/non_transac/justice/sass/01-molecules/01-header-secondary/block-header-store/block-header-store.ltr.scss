@@ -33,7 +33,7 @@
     }
 
     @include breakpoint($upto-lap) {
-      padding-#{$right}: 0;
+      padding-#{$right}: 0.75rem;
     }
 
     a {

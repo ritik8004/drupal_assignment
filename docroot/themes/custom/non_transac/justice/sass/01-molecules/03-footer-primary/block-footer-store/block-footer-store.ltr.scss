@@ -29,6 +29,10 @@
     margin-#{$right}: 0;
     margin-#{$left}: 2rem;
 
+    @include breakpoint($upto-palm) {
+      text-transform: none;
+    }
+
     &::before {
       display: none;
     }
