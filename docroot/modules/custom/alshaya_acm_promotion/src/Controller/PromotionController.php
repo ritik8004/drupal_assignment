@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -346,7 +347,9 @@ class PromotionController extends ControllerBase {
       if ($cart_id) {
         $cache_array['tags'][] = 'cart:' . $cart_id;
       }
+      $promotionLabel = '.promotions-dynamic-label';
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+      $response->addCommand(new InvokeCommand($promotionLabel, 'triggerDynamicPromotionLabelAJAXComplete', [$promotionLabel]));
     }
 
     return $response;
