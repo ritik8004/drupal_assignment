@@ -31,10 +31,6 @@ class Autocomplete extends React.Component {
     return hit.query;
   }
 
-  suggestionTemplate(suggestion) {
-    return `<span className="suggested-text">${suggestion._highlightResult.query.value}</span><span className="populate-input">&#8598;</span>s`
-  }
-
   renderSuggestion(hit) {
     return (<CustomHighlight attribute="query" hit={hit} />)
   }
