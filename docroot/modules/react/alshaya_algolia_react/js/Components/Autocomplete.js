@@ -12,10 +12,12 @@ class Autocomplete extends React.Component {
     };
   }
 
+  // To update component when property change.
   componentWillReceiveProps(nextProps) {
     this.setState({ value: nextProps.currentValue });
   }
 
+  // On change send value to parent component to update search results.
   onChange = (event, { newValue }) => {
     if (!newValue) {
       this.props.onSuggestionCleared();
@@ -44,7 +46,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    return true;
+    return false;
   }
 
   render() {

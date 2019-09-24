@@ -6,6 +6,7 @@ import {
   connectSearchBox
 } from 'react-instantsearch-dom';
 import InstantSearchComponent from './InstantSearchComponent';
+import Teaser from './teaser/Teaser';
 
 // Search result div wrapper to render results.
 const searchResultDiv = document.getElementById('alshaya-algolia-search');
@@ -46,6 +47,7 @@ class SearchResults extends React.Component {
     return (
       <div>
         <div className="title">{props.hit.title}</div>
+        <Teaser hit={props.hit} />
       </div>
     );
   }
