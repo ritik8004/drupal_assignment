@@ -19,6 +19,8 @@ function _alshaya_facets_pretty_paths_get_mappings() {
       'alias' => [
         'skus_sku_reference_final_price' => 'price',
         'plp_selling_price' => 'price_range',
+        'plp_actual_color_label_code' => 'color_family',
+        'plp_color_family' => 'color_family',
       ],
     ],
     'promo' => [
@@ -27,6 +29,8 @@ function _alshaya_facets_pretty_paths_get_mappings() {
       'alias' => [
         'promotion_price_facet' => 'price',
         'promo_selling_price' => 'price_range',
+        'promo_actual_color_label_code' => 'color_family',
+        'promo_color_family' => 'color_family',
       ],
     ],
     'search' => [
@@ -35,6 +39,8 @@ function _alshaya_facets_pretty_paths_get_mappings() {
       'alias' => [
         'final_price' => 'price',
         'selling_price' => 'price_range',
+        'actual_color_label_code' => 'color_family',
+        'color_family' => 'color_family',
       ],
     ],
   ];
