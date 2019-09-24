@@ -24,7 +24,7 @@ function alshaya_jus_non_transac_views_pre_view(ViewExecutable $view, $display_i
   if ($view->id() == 'product_list') {
     $parameters = \Drupal::routeMatch()->getParameters()->get('arg_0');
     if ($display_id === 'product_list') {
-      $header_text = '<div class="product-info"><p>' . $parameters . '</p><p>' . t('@total products') . '</p></div>';
+      $header_text = '<div class="product-info"><p>' . $parameters . '</p><p> @total ' . t('products') . '</p></div>';
       $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
     }
   }
