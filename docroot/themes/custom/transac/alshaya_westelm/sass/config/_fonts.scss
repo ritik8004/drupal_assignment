@@ -1,0 +1,82 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_westelm/fonts';
+
+@font-face {
+  font-family: "GTEestiDisplay-Light";
+  src: url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GTEestiDisplay-Medium";
+  src: url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GTEestiDisplay-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GEDinarTwoMedium";
+  src: url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GEDinarOneMedium";
+  src: url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarOneMedium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Font Family
+$we-bold: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
+$we-bold-nodir: 'GTEestiDisplay-Medium', 'GEDinarTwoMedium', 'Arial';
+
+$we-thin: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
+$we-thin-nodir: 'GTEestiDisplay-Light', 'GEDinarOneMedium', 'Arial';
+
+$we-arabic-bold: 'GEDinarTwoMedium', 'GTEestiDisplay-Medium', 'Arial';
+$we-arabic-bold-nodir: 'GEDinarTwoMedium', 'GTEestiDisplay-Medium', 'Arial';
+
+$we-arabic-thin: 'GEDinarOneMedium', 'GTEestiDisplay-Light', 'Arial';
+$we-arabic-thin-nodir: 'GEDinarOneMedium', 'GTEestiDisplay-Light', 'Arial';
+
+$arial: $we-thin;
+$arial-nodir: $we-thin-nodir;
+$alshaya-bold: $we-bold;
+$alshaya-arabic-bold: $we-arabic-bold;
+$alshaya-thin: $we-thin;
+$alshaya-arabic-thin: $we-arabic-thin;
