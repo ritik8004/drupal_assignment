@@ -127,7 +127,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $active_facet = [];
 
         foreach ($filters_current_result_array[$filter_key] as $value) {
-          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getUrlAlias(), $value);
+          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value);
         }
 
         if (($active_key = array_search($raw_value, $active_facet)) !== FALSE) {
@@ -221,9 +221,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   public function setActiveItems(FacetInterface $facet) {
     // Get the filter key of the facet.
     if (isset($this->activeFilters[$facet->getUrlAlias()])) {
-
       foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getUrlAlias(), $value), '"'));
+        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value), '"'));
       }
     }
   }
