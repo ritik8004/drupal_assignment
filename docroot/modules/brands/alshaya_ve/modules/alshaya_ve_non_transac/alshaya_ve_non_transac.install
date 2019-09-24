@@ -4,7 +4,14 @@
  * @file
  * Install, uninstall, update function for alshaya_ve_non_transac.
  */
-
+/**
+ * Implements hook_update_N().
+ *
+ * Webform Newsletter Signup
+ */
+function alshaya_ve_non_transac_update_8086() {
+ \Drupal::configFactory()->getEditable('webform.webform.newsletter_signup')->save();  
+}
 /**
  * Implements hook_install().
  */
