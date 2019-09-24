@@ -27,7 +27,7 @@ function alshaya_jus_non_transac_views_pre_view(ViewExecutable $view, $display_i
       $header_text = '<div class="product-info"><p>' . $parameters . '</p><p>' . t('@total products') . '</p></div>';
       $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
     }
-    if ($display_id === 'banner') {
+    elseif ($display_id === 'banner') {
       $view->args[0] = $parameters;
     }
   }
