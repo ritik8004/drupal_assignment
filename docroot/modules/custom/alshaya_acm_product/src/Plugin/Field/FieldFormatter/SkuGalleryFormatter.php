@@ -171,11 +171,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     // Disable alshaya_color_split hook calls.
     SkuManager::$colorSplitMergeChildren = FALSE;
     $context = 'search';
+
     $skus = [];
-
     $elements = [];
-    $product_url = $product_base_url = $product_label = '';
-
     $color = '';
 
     // Fetch Product in which this sku is referenced.

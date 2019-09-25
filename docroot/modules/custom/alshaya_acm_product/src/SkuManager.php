@@ -462,17 +462,12 @@ class SkuManager {
    *   Minimum final price and associated initial price.
    */
   public function getMinPrices(SKU $sku_entity, string $color = '') {
-    $static = &drupal_static(__METHOD__, []);
-
-    $cid = implode(':', [
-      $sku_entity->language()->getId(),
-      $sku_entity->getSku(),
-      $color,
-    ]);
+    $cache_key = implode(':', array_filter(['product_price', $color]));
+    $cache = $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
-    if (isset($static[$cid])) {
-      return $static[$cid];
+    if (is_array($cache)) {
+      return $cache;
     }
 
     $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
@@ -485,14 +480,13 @@ class SkuManager {
       $final_price = $price;
     }
 
-    $static[$cid] = [
+    $prices = [
       'price' => $price,
       'final_price' => $final_price,
     ];
 
-    $prices = &$static[$cid];
-
     if ($sku_entity->bundle() != 'configurable') {
+      $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
 
@@ -561,6 +555,7 @@ class SkuManager {
       }
     }
 
+    $this->productCacheManager->set($sku_entity, $cache_key, $prices);
     return $prices;
   }
 
@@ -2457,12 +2452,60 @@ class SkuManager {
     $in_stock = $plugin->isProductInStock($sku);
 
     if ($in_stock && $sku->bundle() == 'configurable') {
+      $children = $this->getInStockNonFreeGiftChildren($sku);
+
       // Check if there are in-stock children available.
       // (Excluding free gifts and OOS).
-      $in_stock = (count(Configurable::getChildren($sku)) > 0);
+      $in_stock = (count($children) > 0);
     }
 
     return $in_stock;
+  }
+
+  /**
+   * Get in-stock non free gift variants for particular sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Array of variant skus.
+   */
+  public function getInStockNonFreeGiftChildren(SKUInterface $sku) {
+    $static = &drupal_static(__METHOD__, []);
+
+    if (!isset($static[$sku->id()])) {
+      $children = Configurable::getChildSkus($sku);
+
+      // Avoid fatal error because fo faulty data.
+      if (empty($children)) {
+        return [];
+      }
+
+      $query = $this->connection->select('acq_sku_field_data', 'asfd');
+
+      // Check only for children of current parent.
+      $query->condition('asfd.sku', Configurable::getChildSkus($sku), 'IN');
+
+      // Restrict to one/default language records.
+      $query->condition('asfd.default_langcode', 1);
+
+      // Non-free gift.
+      $query->condition('asfd.price', static::FREE_GIFT_PRICE, '!=');
+      $query->condition('asfd.final_price', static::FREE_GIFT_PRICE, '!=');
+
+      // In stock.
+      $query->innerJoin('acq_sku_stock', 'stock', 'asfd.sku = stock.sku');
+      $query->condition('stock.quantity', 0, '>');
+      $query->condition('stock.status', 0, '>');
+
+      // Select the sku.
+      $query->fields('asfd', ['sku']);
+
+      $static[$sku->id()] = $query->execute()->fetchAllKeyed(0, 0);
+    }
+
+    return $static[$sku->id()];
   }
 
   /**
