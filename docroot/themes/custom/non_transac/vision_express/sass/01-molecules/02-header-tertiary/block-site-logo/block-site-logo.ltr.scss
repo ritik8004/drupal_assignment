@@ -1,0 +1,29 @@
+@import '../../../config/_config.scss';
+
+.site__logo {
+  margin: 0;
+  display: inline-block;
+  height: auto;
+
+  @include breakpoint($upto-palm) {
+    width: 50%;
+    float: #{$right};
+    padding-top: 0.625rem;
+  }
+
+  @include breakpoint($lap) {
+    width: 30%;
+    margin-top: 0.3125rem;
+    padding: 1.5625rem 0.9375rem 1.25rem;
+  }
+
+  @include breakpoint($desk) {
+    width: 16.9375rem;
+    padding: 1.875rem 1.7rem 1.375rem;
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
