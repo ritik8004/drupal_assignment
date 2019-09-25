@@ -74,6 +74,9 @@ libraries-override:
   whitelabel/menu-logo-navigation:
     js:
       components/js/burger-menu.js: dist/js/burger-menu.js
+  whitelabel/node-product-item:
+    js:
+      components/dist/js/01-molecules/06-content/field-product-listing/node-product-item.js: dist/js/node-product-item.js
 
 component-libraries:
   atoms:
