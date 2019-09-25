@@ -1,6 +1,6 @@
 import React from 'react';
 import Gallery from '../gallery/Gallery';
-// import Price from '../price/Price';
+import PriceBlockWrapper from '../price/PriceBlockWrapper';
 import Promotion from '../Promotions/Promotion';
 
 class Teaser extends React.Component {
@@ -26,7 +26,7 @@ class Teaser extends React.Component {
                 <h2 className="field--name-name">
                   <a href={hit.url} className="product-selected-url">{hit.title}</a>
                 </h2>
-                {/* <Price price={hit.price} final_price={hit.final_price}/> */}
+                <PriceBlockWrapper price={hit.original_price} final_price={hit.final_price}/>
                 {promotions}
                 {swatches}
               </div>

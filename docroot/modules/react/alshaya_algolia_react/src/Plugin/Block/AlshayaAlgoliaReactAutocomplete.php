@@ -104,6 +104,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
     }
 
+    $currency = $this->configFactory->get('acq_commerce.currency');
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
@@ -120,7 +122,12 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
           ],
           'reactTeaserView' => [
-            'priceDisplayMode' => $display_settings->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
+            'price' => [
+              'currency' => $currency->get('currency_code'),
+              'currencyPosition' => $currency->get('currency_code_position'),
+              'decimalPoints' => $currency->get('decimal_points'),
+              'priceDisplayMode' => $display_settings->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
+            ],
             'gallery' => [
               'showHoverImage' => $display_settings->get('gallery_show_hover_image'),
               'showThumbnails' => $display_settings->get('gallery_show_hover_image') ? FALSE : $display_settings->get('image_thumb_gallery'),

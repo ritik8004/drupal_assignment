@@ -1,17 +1,17 @@
 import React from 'react';
 
 const PriceElement = (props) => {
+  const priceParts = [
+    (<span className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>),
+    (<span className="price-amount">{props.amount.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}</span>)
+  ];
+
   return (
-    <div className="price-type__wrapper">
+    <span className="price-wrapper">
       <div className="price">
-        <span className="price-wrapper">
-          <div className="price">
-            <span className="price-currency suffix">KWD</span>
-            <span className="price-amount">{props.amount}</span>
-          </div>
-        </span>
+        {drupalSettings.reactTeaserView.price.currencyPosition == 'before' ? priceParts.map(item => item) : priceParts.reverse().map(item => item)}
       </div>
-    </div>
+    </span>
   );
 };
 

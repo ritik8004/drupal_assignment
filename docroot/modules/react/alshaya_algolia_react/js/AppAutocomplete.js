@@ -53,7 +53,7 @@ class AppAutocomplete extends React.Component {
       {<span className="trending-title">Trending searches</span>}
       {children}
     </div>
-  )
+  );
 
   render() {
     const { query, categories } = this.state;

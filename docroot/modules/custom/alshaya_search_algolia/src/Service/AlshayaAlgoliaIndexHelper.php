@@ -143,6 +143,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['field_category_name'] = $this->getCategoryHierarchy($node);
 
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
+    $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
 
