@@ -359,16 +359,19 @@ display:
         options:
           perm: 'access content'
       header:
-        result:
-          id: result
+        area:
+          id: area
           table: views
-          field: result
+          field: area
           relationship: none
           group_type: group
           admin_label: ''
           empty: false
-          content: '@total items'
-          plugin_id: result
+          tokenize: true
+          content:
+            value: "{{ arguments.name|t }}\r\n[view:total-rows] {{ 'products'|t }}"
+            format: full_text
+          plugin_id: text
       pager:
         type: infinite_scroll
         options:
