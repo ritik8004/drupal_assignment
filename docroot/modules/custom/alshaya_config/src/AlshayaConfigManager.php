@@ -259,7 +259,15 @@ class AlshayaConfigManager {
         ]);
       }
 
-      $this->updateConfigTranslations($config_id, $module_name, $path);
+      // Add all translations.
+      foreach ($this->languageManager->getLanguages() as $language) {
+        // Do not translate for default language.
+        if ($language->isDefault()) {
+          continue;
+        }
+
+        $this->updateConfigTranslations($config_id, $language->getId(), $module_name, $path);
+      }
     }
   }
 
@@ -350,13 +358,15 @@ class AlshayaConfigManager {
    *
    * @param string $config_id
    *   The name of config to import.
+   * @param string $langcode
+   *   Language code.
    * @param string $module
    *   Name of the module, where files resides.
    * @param string|null $path
    *   Path where configs reside. Defaults to install.
    */
-  public function updateConfigTranslations(string $config_id, string $module, ?string $path = 'install') {
-    $path = 'ar/' . $path;
+  public function updateConfigTranslations(string $config_id, string $langcode, string $module, ?string $path = 'install') {
+    $path = $langcode . '/' . $path;
 
     $data = $this->getDataFromCode($config_id, $module, $path);
     if (empty($data)) {
