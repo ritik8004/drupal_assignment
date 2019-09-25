@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -332,6 +333,8 @@ class PromotionController extends ControllerBase {
     $response = [];
     if (!empty($label)) {
       $response = $this->promoLabelManager->prepareResponse($label, $sku->id());
+      $promotionLabel = '.promotions-dynamic-label';
+      $response->addCommand(new InvokeCommand($promotionLabel, 'trigger', ['dynamic:promotion:label:ajax:complete']));
 
       // Add cache metadata.
       $cache_array = [
