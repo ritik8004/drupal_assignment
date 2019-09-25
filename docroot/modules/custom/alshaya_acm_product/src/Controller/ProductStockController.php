@@ -115,7 +115,11 @@ class ProductStockController extends ControllerBase {
     }
     else {
       $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
-      $return->addCommand(new HtmlCommand($class, $response));
+      $error = [
+        '#message' => $response,
+        '#theme' => 'global_error',
+      ];
+      $return->addCommand(new HtmlCommand($class, $error));
     }
 
     // Instantiate and Dispatch add_to_cart_submit event.
