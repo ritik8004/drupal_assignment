@@ -349,4 +349,8 @@
     $('.checkout-ajax-progress-throbber').remove();
   });
 
+  $(window).on('beforeunload unload', function (event) {
+    $(window).showCheckoutLoader();
+  });
+
 })(jQuery, Drupal);
