@@ -1,0 +1,14 @@
+@import '../../../config/_config.scss';
+
+.block-copyright {
+  color: $black;
+  text-align: $left;
+
+  @include breakpoint($upto-lap) {
+    padding-top: 0.5rem;
+  }
+
+  @include breakpoint($desk) {
+    padding-#{$left}: 2rem;
+  }
+}
