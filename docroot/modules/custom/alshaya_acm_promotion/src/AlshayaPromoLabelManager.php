@@ -7,7 +7,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -347,8 +346,8 @@ class AlshayaPromoLabelManager {
     }
 
     if ($response instanceof AjaxResponse) {
-      $response->addCommand(new HtmlCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, $label));
-      $response->addCommand(new InvokeCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, 'removeClass', ['hidden']));
+      $dynamic_label_selector = '.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId;
+      $response->addCommand(new HtmlCommand($dynamic_label_selector, $label));
     }
 
     return $response;
