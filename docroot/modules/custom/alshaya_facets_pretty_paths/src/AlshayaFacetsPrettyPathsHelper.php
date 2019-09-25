@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_facets_pretty_paths;
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -76,6 +77,13 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $configFactory;
 
   /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [
@@ -102,6 +110,8 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Facet manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
@@ -109,7 +119,8 @@ class AlshayaFacetsPrettyPathsHelper {
                               LanguageManagerInterface $language_manager,
                               AliasManagerInterface $alias_manager,
                               DefaultFacetManager $facets_manager,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              SkuManager $sku_manager) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
@@ -118,6 +129,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $this->aliasManager = $alias_manager;
     $this->facetManager = $facets_manager;
     $this->configFactory = $config_factory;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -134,17 +146,19 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Encoded element.
    */
   public function encodeFacetUrlComponents(string $source, string $alias, string $value) {
-    if (is_numeric($value)) {
-      return $value;
-    }
-
     $static = &drupal_static(__FUNCTION__, []);
     if (isset($static[$alias][$value])) {
       return $static[$alias][$value];
     }
 
-    $encoded = $value;
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
+    $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
+    if (is_numeric($value) && !$is_swatch) {
+      $static[$alias][$value] = $value;
+      return $value;
+    }
+
+    $encoded = $value;
 
     $storage = $this->termStorage;
     if ($attribute_code == 'field_acq_promotion_label') {
@@ -153,6 +167,12 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('type', 'acq_promotion');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->condition($attribute_code, $value);
+    }
+    elseif ($is_swatch) {
+      $query = $storage->getQuery();
+      $query->condition('field_sku_option_id', $value);
+      $query->condition('field_sku_attribute_code', $attribute_code);
+      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
     else {
       $query = $storage->getQuery();
@@ -189,6 +209,8 @@ class AlshayaFacetsPrettyPathsHelper {
   /**
    * Decode url components according to given rules.
    *
+   * @param string $source
+   *   Facet source.
    * @param string $alias
    *   Facet alias.
    * @param string $value
@@ -197,14 +219,17 @@ class AlshayaFacetsPrettyPathsHelper {
    * @return string
    *   Raw element.
    */
-  public function decodeFacetUrlComponents(string $alias, string $value) {
-    if (is_numeric($value)) {
-      return $value;
-    }
-
+  public function decodeFacetUrlComponents(string $source, string $alias, string $value) {
     $static = &drupal_static(__FUNCTION__, []);
     if (isset($static[$value])) {
       return $static[$value];
+    }
+
+    $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
+    $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
+    if (is_numeric($value) && !$is_swatch) {
+      $static[$value] = $value;
+      return $value;
     }
 
     $decoded = $value;
@@ -236,7 +261,12 @@ class AlshayaFacetsPrettyPathsHelper {
           $entity = $entity->getTranslation($current_langcode);
         }
 
-        $decoded = $type == 'term' ? $entity->label() : $entity->get('field_acq_promotion_label')->getString();
+        if ($type === 'term') {
+          $decoded = $is_swatch ? $entity->get('field_sku_option_id')->getString() : $entity->label();
+        }
+        else {
+          $decoded = $entity->get('field_acq_promotion_label')->getString();
+        }
       }
     }
 
