@@ -11,7 +11,7 @@ id: newsletter_signup
 title: 'Newsletter signup'
 description: ''
 category: ''
-elements: "let_us_know_what_you_think:\n  '#type': label\n  '#title': 'Let us know what you think'\n  '#attributes': null\nfull_name:\n  '#title': 'Full Name'\n  '#type': textfield\n  '#required': true\nemail:\n  '#title': 'Email Address'\n  '#type': email\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nexclusive_deals:\n  '#type': checkbox\n  '#title': 'I would like to receive messages about advertisements, promotions, campaigns etc. through email'\n  '#default_value': true\nhttp_referer:\n  '#type': hidden\n  '#value': '[server:HTTP_REFERER]'"
+elements: "let_us_know_what_you_think:\n  '#type': label\n  '#title': 'Let us know what you think'\n  '#attributes': null\nfull_name:\n  '#title': 'Full Name'\n  '#type': textfield\n  '#required': true\nemail:\n  '#title': 'Email Address'\n  '#type': email\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nexclusive_deals:\n  '#type': checkbox\n  '#title': 'I agree to receive messages about advertisements, promotions, campaigns etc. through email'\n  '#default_value': true\n  '#required': true\nhttp_referer:\n  '#type': hidden\n  '#value': '[server:HTTP_REFERER]'"
 css: ''
 javascript: ''
 settings:
