@@ -6,16 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Webform Newsletter Signup and Contact information.
- */
-function alshaya_ve_non_transac_update_8080() {
-  \Drupal::configFactory()->getEditable('webform.webform.newsletter_signup')->save();
-  \Drupal::configFactory()->getEditable('webform.webform.contact_information_')->save();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_ve_non_transac_install() {
@@ -25,4 +15,7 @@ function alshaya_ve_non_transac_install() {
 
   // Enable the Policies block.
   alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_ve_non_transac', 'optional');
+
+  // Create webform - Contact information.
+  \Drupal::configFactory()->getEditable('webform.webform.contact_information_')->save();
 }
