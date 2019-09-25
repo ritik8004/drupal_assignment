@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:8ff46bb2-3402-4d06-a9c4-0183e9dc4f67'
+  module:
+    - block_content
+  theme:
+    - justice
+id: latestfashionupdate
+theme: justice
+region: footer_primary
+weight: 0
+provider: null
+plugin: 'block_content:8ff46bb2-3402-4d06-a9c4-0183e9dc4f67'
+settings:
+  id: 'block_content:8ff46bb2-3402-4d06-a9c4-0183e9dc4f67'
+  label: 'Latest Fashion Update'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

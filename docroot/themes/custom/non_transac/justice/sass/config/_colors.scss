@@ -1,0 +1,118 @@
+// Define theme colors here.
+$white-smoke: #f3f3f3;
+$black-smoke: #333;
+$dark-pink: #eb008b;
+$white: #fff;
+$black: #000;
+$deepskyblue: #00adee;
+$error: #d0011b;
+$dark-grey: #949494;
+
+//border
+$primary_border: $white-smoke;
+
+//links
+$primary_link: $white-smoke;
+$secondary_link: $dark-pink;
+
+//global button
+$primary_btn_bg: $dark-pink;
+$primary_btn_text: $white;
+
+//checkbox
+$checkbox_border: $dark-pink;
+$checkbox_tick_mark: $dark-pink;
+
+// $header
+$header_bg: $white;
+$header_text: $black;
+$header_border: $primary_border;
+
+//header menu
+$header_menu_bg: $white-smoke;
+$header_menu_mobile_bg: $white;
+$header_menu_text: $black-smoke;
+$header_menu_text_hover: $secondary_link;
+$header_menu_level2_bg: $dark-grey;
+$header_menu_level2_mobile_bg: $white;
+$header_menu_level2_link: $white;
+$header_menu_level2_hover_bg: $dark-pink;
+$header_menu_mobile_bg: $white;
+$burger_menu_icon: $dark-pink;
+$burger_menu_icon_bg: $white;
+$burger_menu_link: $black-smoke;
+$burger_menu_arrow: rgba(0, 0, 0, 0.5);
+$burger_menu_active_border: $primary_border;
+$burger_menu_active_text: $dark-pink;
+$burger_menu_active_bg: $white;
+$burger_menu_level2_bg: $white;
+$email_signup_link: $black;
+$newsletter_block_bg: $white-smoke;
+
+//footer
+$footer_bg: rgba(243, 243, 243, 0.5);
+$footer_primary_bg: $white-smoke;
+$footer_secondary_bg: $white;
+$footer_terms_condition: $black;
+$footer_terms_condition_hover: $dark-pink;
+$newsletter_btn_bg: $dark-pink;
+$email_icon_col: $dark-pink;
+$signup_text: $black;
+$signup_bg: $dark-pink;
+
+// store finder
+$store_finder_icon: $dark-pink;
+$store_header_link: $black;
+$store_finder_search_bg: $white-smoke;
+$store_finder_current_loc_text: $white;
+$store_finder_current_loc_bg: $dark-pink;
+$store_finder_search_text: rgba(0, 0, 0, 0.5);
+$store_finder_views_border: $white;
+$store_finder_views_text: $black;
+$store_finder_views_icon: $dark-pink;
+$store_finder_list_title: rgba(243, 243, 243, 0.5);
+$store_finder_list_alphabet: $deepskyblue;
+$store_finder_list_bg: rgba(243, 243, 243, 0.5);
+$store_finder_list_locator_bg: $white-smoke;
+$store-finder_list_alphabet_item: $black-smoke;
+$store-finder_store_row_counter: $dark-pink;
+$store_finder_store_row_text: $black-smoke;
+$store_finder_store_row_border: $white;
+$store_finder_hours_label: $black-smoke;
+$store_finder_icon: $dark-pink;
+$store_finder_direction: $black-smoke;
+$store_finder_search_icon: $white;
+$store_finder_search_icon_bg: $dark-pink;
+$store_finder_list_mobile_icon: rgba(0, 0, 0, 0.5);
+$store_finder_mobile_backline_icon: rgba(0, 0, 0, 0.5);
+
+// product list page
+$plp_load_more_text: $white;
+$plp_load_more_bg: $dark-pink;
+$plp_product_title_text: $black;
+
+// loader
+$ajax_loader: $dark-pink;
+
+//newsletter block
+$newsletter_block_bg: $white-smoke;
+
+//language switcher
+$language_switcher_bg: $white-smoke;
+$language_switcher_active_btn_bg: $dark-pink;
+$language_switcher_btn_bg: $black-smoke;
+$language_switcher-btn_text: $white;
+$language_switcher-close-btn_bg: $white;
+$language_switcher-close-btn_text: $dark-pink;
+$language_switcher_text: $black;
+
+//form
+$form_dropdown_icon: $dark-pink;
+$form_tnc_text: $black-smoke;
+$form_input_text: rgba(0, 0, 0, 0.3);
+$form_input_bg: $white-smoke;
+$form_error_msg: $error;
+$form_feedback_subtitle: $dark-pink;
+
+// static-content
+$static_page_text: $black-smoke;
