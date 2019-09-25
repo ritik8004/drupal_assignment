@@ -54,7 +54,7 @@ class SearchResults extends React.Component {
 
     return  ReactDOM.createPortal(
       <InstantSearchComponent indexName={drupalSettings.algoliaSearch.indexName}>
-        <Configure hitsPerPage={16} numericFilters={stockFilter}/>
+        <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} numericFilters={stockFilter}/>
         <VirtualSearchBox defaultRefinement={query} />
         <Hits hitComponent={this.hitDetail} />
       </InstantSearchComponent>,

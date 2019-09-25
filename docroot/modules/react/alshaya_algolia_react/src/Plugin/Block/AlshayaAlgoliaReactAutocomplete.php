@@ -117,6 +117,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'api_key' => $algolia_config['api_key'],
             'indexName' => $index['algolia_index_name'] . "_{$lang}",
             'filterOos' => $listing->get('filter_oos_product'),
+            'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
           ],
           'reactTeaserView' => [
             'priceDisplayMode' => $display_settings->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
