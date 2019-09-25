@@ -128,6 +128,11 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
       return [
         '#theme' => 'alshaya_subcategory_block',
         '#subcategories' => $subcategories,
+        '#attached' => [
+          'library' => [
+            'alshaya_acm_product_category/alshaya_subcategory_scroll',
+          ],
+        ],
       ];
     }
   }

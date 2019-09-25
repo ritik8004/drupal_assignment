@@ -1,6 +1,3 @@
-{{ attach_library('alshaya_acm_product_category/alshaya_subcategory_scroll') }}
-{{ attach_library('alshaya_acm_product/product_lazyload') }}
-
 <div class="plp-subcategory-block">
   {% for term in subcategories %}
     <a href="#{{ term.title|clean_class }}">

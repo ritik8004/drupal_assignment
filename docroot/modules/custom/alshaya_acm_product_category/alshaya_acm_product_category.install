@@ -19,6 +19,7 @@ use Drupal\block\BlockInterface;
  * Add fields for group by subcategory.
  */
 function alshaya_acm_product_category_update_8035() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
   $configs = [
@@ -32,29 +33,14 @@ function alshaya_acm_product_category_update_8035() {
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_img',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc',
     'field.field.taxonomy_term.acq_product_category.field_plp_group_category_title',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
   ];
 
   $manager->updateConfigs(
     $configs,
     'alshaya_acm_product_category',
     'install'
-  );
-
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    [
-      'core.entity_form_display.taxonomy_term.acq_product_category.default',
-      'core.entity_view_display.taxonomy_term.acq_product_category.default',
-    ],
-    'alshaya_acm_product_category',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
-    ['views.view.alshaya_product_list'],
-    'alshaya_product',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
   );
 
   // Place block.
