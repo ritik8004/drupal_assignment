@@ -1,24 +1,35 @@
 import React from 'react';
-import ImageElement from '../ImageElement';
+import { ImageWrapper } from '../imageHelper/ImageWrapper';
+import ImageElement from '../imageHelper/ImageElement';
 
-const SearchGallery = (props) => {
-  const mainImage = props.media.length > 0 ? props.media[0] : {};
+function thumbnailsHtml(images, title) {
+  if (images.length > 0) {
+    const thumbnails = [];
+    images.forEach((element, index) => {
+      thumbnails.push(<li key={index}><ImageElement src={element.url} title={title} /></li>)
+    });
 
-  const thumbnails = [];
-  for (const [index, value] of props.media.shift()) {
-    thumbnails.push(<li key={index} data-sku-id="{{ key }}"><ImageElement src={value.url} title={props.title} /></li>)
-  }
-
-  return (
-    <div className="alshaya_search_gallery">
-      <div className="alshaya_search_mainimage" data-sku-image={ mainImage.url }>
-        <ImageElement src={ mainImage.url } title={props.title} />
-      </div>
+    return (
       <div className="alshaya_search_slider">
         <ul className="search-lightSlider">
           {thumbnails}
         </ul>
       </div>
+    );
+  }
+  return (<div className="alshaya_search_slider"></div>);
+}
+
+const SearchGallery = ({media, title}) => {
+
+  const mainImage = media.length > 0 ? media.shift() : {};
+  const mainImageWrapper = ImageWrapper(mainImage, title, "alshaya_search_mainimage", true);
+  const thumbnails = thumbnailsHtml(media, title);
+
+  return (
+    <div className="alshaya_search_gallery">
+      {mainImageWrapper}
+      {thumbnails}
     </div>
   );
 }
