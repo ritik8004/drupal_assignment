@@ -21,6 +21,7 @@ function alshaya_jus_non_transac_form_webform_submission_alshaya_email_signup_ad
  */
 function alshaya_jus_non_transac_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
 
+  // To override the header text to display the title as per menu name.
   if ($view->id() == 'product_list') {
     $parameters = \Drupal::routeMatch()->getParameters()->get('arg_0');
     if ($display_id === 'product_list') {
