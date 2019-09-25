@@ -13,6 +13,12 @@ function alshaya_ve_non_transac_install() {
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('vision_express');
 
-  // Enable the Policies block.
-  alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_ve_non_transac', 'optional');
+  // Create secondary menu.
+  alshaya_config_install_configs(['system.menu.secondary-menu'], 'alshaya_ve_non_transac');
+
+  $config_factory = \Drupal::configFactory();
+  $config_factory->getEditable('block.block.main_navigation')->set('region', 'header_primary')->save();
+  $config_factory->getEditable('block.block.language_switcher')->set('region', 'header_primary')->save();
+  $config_factory->getEditable('block.block.alshaya_email_signup_link')->set('status', FALSE)->save();
+  $config_factory->getEditable('block.block.alshaya_stores_finder_header')->set('status', FALSE)->save();
 }
