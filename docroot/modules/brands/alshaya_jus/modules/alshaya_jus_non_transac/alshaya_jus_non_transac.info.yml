@@ -1,0 +1,7 @@
+name: 'Alshaya Justice Non Transac'
+type: module
+description: 'The dedicated module for Justice brand for non transac profile.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_jus:alshaya_jus

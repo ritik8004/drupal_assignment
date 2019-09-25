@@ -1,0 +1,42 @@
+@import '../../config/_config.scss';
+
+.list-store--detail {
+  width: 34%;
+
+  .list-view-locator {
+    background-color: $store_finder_list_locator_bg;
+  }
+}
+
+.list-view-locator {
+  color: $store_finder_store_row_text;
+  border-top: 0;
+  border-bottom: 0;
+
+  .row-title {
+    color: $store_finder_store_row_text;
+    font-family: $jus_bold;
+    font-weight: normal;
+    font-size: 1.125rem;
+  }
+
+  .views-field-field-store-address {
+    border-bottom: 0.125rem solid $store_finder_store_row_border;
+    margin-#{$left}: 1.5rem;
+    margin-#{$right}: 1rem;
+
+    .field-content {
+      padding-#{$left}: 2rem;
+
+      @include breakpoint($lap) {
+        padding-#{direction(left)}: 1.75rem;
+      }
+    }
+  }
+}
+
+.store--map {
+  @include breakpoint($desk) {
+    width: 65%;
+  }
+}
