@@ -333,6 +333,8 @@ class PromotionController extends ControllerBase {
     $response = [];
     if (!empty($label)) {
       $response = $this->promoLabelManager->prepareResponse($label, $sku->id());
+      $promotionLabel = '.promotions-dynamic-label';
+      $response->addCommand(new InvokeCommand($promotionLabel, 'trigger', ['dynamic:promotion:label:ajax:complete']));
 
       // Add cache metadata.
       $cache_array = [
@@ -347,9 +349,7 @@ class PromotionController extends ControllerBase {
       if ($cart_id) {
         $cache_array['tags'][] = 'cart:' . $cart_id;
       }
-      $promotionLabel = '.promotions-dynamic-label';
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
-      $response->addCommand(new InvokeCommand($promotionLabel, 'triggerDynamicPromotionLabelAJAXComplete', [$promotionLabel]));
     }
 
     return $response;

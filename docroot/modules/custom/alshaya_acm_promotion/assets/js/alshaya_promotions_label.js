@@ -45,9 +45,4 @@
     }
   };
 
-  // Trigger dynamic:promotion:label:ajax:complete on promotions-dynamic-label.
-  $.fn.triggerDynamicPromotionLabelAJAXComplete = function (promotionLabel) {
-    $(promotionLabel).trigger('dynamic:promotion:label:ajax:complete');
-  };
-
 })(jQuery, Drupal, drupalSettings);
