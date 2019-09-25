@@ -49,10 +49,12 @@ class SearchResults extends React.Component {
 
   render() {
     const { query } = this.props;
+    // Filter out of stock products.
+    const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? ['stock > 0'] : [];
 
     return  ReactDOM.createPortal(
       <InstantSearchComponent indexName={drupalSettings.algoliaSearch.indexName}>
-        <Configure hitsPerPage={16} />
+        <Configure hitsPerPage={16} numericFilters={stockFilter}/>
         <VirtualSearchBox defaultRefinement={query} />
         <Hits hitComponent={this.hitDetail} />
       </InstantSearchComponent>,

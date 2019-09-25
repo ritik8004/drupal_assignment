@@ -99,7 +99,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     $index = $this->configFactory->get('search_api.index.acquia_search_index')->get('options');
-
+    $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
     }
@@ -116,6 +116,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'application_id' => $algolia_config['application_id'],
             'api_key' => $algolia_config['api_key'],
             'indexName' => $index['algolia_index_name'] . "_{$lang}",
+            'filterOos' => $listing->get('filter_oos_product'),
           ],
           'reactTeaserView' => [
             'priceDisplayMode' => $display_settings->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
