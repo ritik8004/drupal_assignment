@@ -49,12 +49,12 @@
 
       &.brand-beauty {
         &::after {
-          background: url("../imgs/logos/super-category/beauty.svg") no-repeat center;
+          background: url("../imgs/logos/super-category/beauty.svg?hzyOhx") no-repeat center;
           background-size: contain;
         }
 
         &:hover::after {
-          background: url("../imgs/logos/super-category/beauty-active.svg") no-repeat center;
+          background: url("../imgs/logos/super-category/beauty-active.svg?4nGDK4") no-repeat center;
           background-size: contain;
         }
       }
@@ -68,7 +68,7 @@
       }
 
       .brand-beauty::after {
-        background: url("../imgs/logos/super-category/beauty-active.svg") no-repeat center;
+        background: url("../imgs/logos/super-category/beauty-active.svg?4nGDK4") no-repeat center;
         background-size: contain;
       }
     }

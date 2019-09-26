@@ -33,19 +33,16 @@
       var alshayaAcmPromotions = drupalSettings.alshayaAcmPromotions;
 
       if (alshayaAcmPromotions !== undefined) {
+        // Slide down the dynamic label.
+        $('.promotions-dynamic-label', context).on('cart:notification:animation:complete dynamic:promotion:label:ajax:complete', function() {
+          $(this).slideDown('slow');
+        });
         // Go ahead and display dynamic promotions.
         $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
           updateAlshayaPromotionsLabel(alshayaAcmPromotions, context);
         });
       }
     }
-  };
-
-  $.fn.showDynamicPromotionLabel = function (data) {
-    // Slide down the dynamic label.
-    $('.promotions-dynamic-label').on('cart:notification:animation:complete', function() {
-      $(data).slideDown('slow');
-    });
   };
 
 })(jQuery, Drupal, drupalSettings);

@@ -1,0 +1,7 @@
+@import '../../../config/_config.scss';
+
+.block-application-links {
+  @include breakpoint($desk) {
+    margin-top: 1rem;
+  }
+}
