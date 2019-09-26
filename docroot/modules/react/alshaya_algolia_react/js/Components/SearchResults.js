@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   Configure,
-  Hits,
+  connectHits,
   connectSearchBox
 } from 'react-instantsearch-dom';
 import InstantSearchComponent from './InstantSearchComponent';
@@ -13,6 +13,11 @@ const searchResultDiv = document.getElementById('alshaya-algolia-search');
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => null);
+
+const SearchResultHits = connectHits(({ hits }) => {
+  const hs = hits.map(hit => <Teaser key={hit.objectID} hit={hit} />);
+  return <div id="hits" className="c-products-list product-small view-search">{hs}</div>;
+});
 
 /**
  * Render search results elements facets, filters and sorting etc...
@@ -56,7 +61,7 @@ class SearchResults extends React.Component {
       <InstantSearchComponent indexName={drupalSettings.algoliaSearch.indexName}>
         <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} numericFilters={stockFilter}/>
         <VirtualSearchBox defaultRefinement={query} />
-        <Hits hitComponent={this.hitDetail} />
+        <SearchResultHits />
       </InstantSearchComponent>,
       this.el
     );
