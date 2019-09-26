@@ -1,5 +1,5 @@
 .page-generic {
-  padding-top: 8.5rem;
+  padding-top: 9.5rem;
 
   @include breakpoint($upto-lap) {
     padding-top: 3.5rem;
@@ -20,6 +20,10 @@
 
 .page-home .promo-container,
 .node-advanced-page .promo-container {
+  @include breakpoint($desk) {
+    max-width: 64rem;
+  }
+
   @include breakpoint($upto-palm) {
     padding-#{$left}: 1.25rem;
     padding-#{$right}: 1.25rem;

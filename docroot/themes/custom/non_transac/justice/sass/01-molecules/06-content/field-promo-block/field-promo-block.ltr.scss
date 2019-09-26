@@ -3,7 +3,7 @@
 .field-promo-block {
   & > .field__item {
     @include breakpoint($above-palm) {
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
     }
   }
 }
