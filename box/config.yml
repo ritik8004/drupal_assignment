@@ -218,6 +218,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-venontransacme.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-wekw.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -331,6 +335,10 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
+  - name: drupal_alshaya_venontransacme
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+    
   - name: drupal_alshaya_wesa
     encoding: utf8mb4
     collation: utf8mb4_general_ci
