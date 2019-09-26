@@ -11,18 +11,19 @@
    */
   Drupal.behaviors.alshayaColorSplitPdp = {
     attach: function (context, settings) {
-      $('article.entity--type-node').once('alshaya-color-split').on('combination-changed variant-selected', function (event, variant, code) {
+      $('.sku-base-form').once('alshaya-color-split').on('variant-selected', function (event, variant, code) {
+        var node = $(this).parents('article.entity--type-node:first');
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
-        if ($(this).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
+        if ($(node).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
         }
 
-        if ($(this).attr('data-vmode') === 'full') {
+        if ($(node).attr('data-vmode') === 'full') {
           window.history.pushState(variantInfo, variantInfo.title, variantInfo.url[$('html').attr('lang')]);
 
           $('.language-switcher-language-url .language-link').each(function () {
@@ -30,7 +31,7 @@
           });
         }
 
-        $(this).find('.content--item-code .field__value').html(variantInfo.parent_sku);
+        $(node).find('.content--item-code .field__value').html(variantInfo.parent_sku);
       });
     }
   };

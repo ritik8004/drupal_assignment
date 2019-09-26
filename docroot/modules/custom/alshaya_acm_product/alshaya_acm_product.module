@@ -14,6 +14,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
@@ -1104,18 +1105,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $empty_selected);
 
     $combinations = [];
+
     foreach ($product_tree['combinations']['by_sku'] as $options) {
-      foreach ($options as $code => $value) {
-        foreach ($options as $code2 => $value2) {
-          if ($code == $code2) {
-            continue;
-          }
-
-          $combinations[$code][$value][$code2][] = $value2;
-        }
-
-        unset($options[$code]);
-      }
+      $combinations = NestedArray::mergeDeepArray([$combinations, $sku_manager->getCombinationArray($options)], TRUE);
     }
 
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
