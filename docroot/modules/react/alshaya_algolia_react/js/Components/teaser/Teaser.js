@@ -1,6 +1,6 @@
 import React from 'react';
 import Gallery from '../gallery/Gallery';
-import PriceBlockWrapper from '../price/PriceBlockWrapper';
+import PriceContainer from '../price/PriceContainer';
 import PromotionWrapper from '../Promotions/PromotionWrapper';
 
 const Teaser = ({hit}) => {
@@ -21,7 +21,7 @@ const Teaser = ({hit}) => {
             <h2 className="field--name-name">
               <a href={hit.url} className="product-selected-url">{hit.title}</a>
             </h2>
-            <PriceBlockWrapper price={hit.original_price} final_price={hit.final_price}/>
+            <PriceContainer price={hit.original_price} final_price={hit.final_price}/>
             <PromotionWrapper promotions={hit.promotions}/>
             {swatches}
           </div>

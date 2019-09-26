@@ -3,7 +3,7 @@ import PriceBlock from './PriceBlock';
 import PriceElement from './PriceElement';
 import {calculateDiscount} from './PriceHelper';
 
-const PriceBlockWrapper = ({price, final_price}) => {
+const PriceContainer = ({price, final_price}) => {
   if (price > 0 && final_price > 0 &&  final_price < price) {
     const discount = calculateDiscount(price, final_price);
     const discountTxt = (discount > 0)
@@ -29,4 +29,4 @@ const PriceBlockWrapper = ({price, final_price}) => {
   return <PriceBlock amount={price} />;
 }
 
-export default PriceBlockWrapper;
+export default PriceContainer;
