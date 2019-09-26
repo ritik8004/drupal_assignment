@@ -94,3 +94,15 @@ sites:
     module: alshaya_ve
     type: alshaya_non_transac
     country: kw
+  wekw:
+    module: alshaya_we
+    type: alshaya_transac
+    country: kw
+  wesa:
+    module: alshaya_we
+    type: alshaya_transac
+    country: sa
+  weae:
+    module: alshaya_we
+    type: alshaya_transac
+    country: ae
