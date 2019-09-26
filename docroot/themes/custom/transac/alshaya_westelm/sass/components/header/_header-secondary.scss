@@ -1,0 +1,38 @@
+.c-menu-secondary {
+  text-transform: capitalize;
+
+  li {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        &::after {
+          #{$right}: -0.1875rem;
+        }
+      }
+    }
+  }
+
+  a {
+    line-height: 2;
+
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+
+  [role="navigation"] {
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+    }
+  }
+}
+
+.header--wrapper.navbar-fixed-top {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+}
