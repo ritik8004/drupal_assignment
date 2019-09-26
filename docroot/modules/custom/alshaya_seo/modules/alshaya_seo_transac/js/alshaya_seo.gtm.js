@@ -12,7 +12,7 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('article.entity--type-node').once('alshaya-seo-gtm').on('combination-changed', function (event, variant, code) {
+      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
