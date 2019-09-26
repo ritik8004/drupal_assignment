@@ -4,8 +4,7 @@ import PriceContainer from '../price/PriceContainer';
 import PromotionsContainer from '../Promotions/PromotionsContainer';
 
 const Teaser = ({hit}) => {
-
-  const swatches = '';
+  const swatches = (null);
 
   return (
     <article data-sku={hit.sku} gtm-view-mode="search_result">
