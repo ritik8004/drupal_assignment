@@ -20,11 +20,15 @@
 
 .page-home .promo-container,
 .node-advanced-page .promo-container {
+  @include breakpoint($lap) {
+    width: 100%;
+  }
+
   @include breakpoint($desk) {
     max-width: 64rem;
   }
 
-  @include breakpoint($upto-palm) {
+  @include breakpoint($upto-lap) {
     padding-#{$left}: 1.25rem;
     padding-#{$right}: 1.25rem;
   }
