@@ -11,6 +11,7 @@ use Drupal\alshaya_search_algolia\Event\AlshayaAlgoliaProductIndexEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -182,10 +183,12 @@ class AlshayaAlgoliaIndexHelper {
 
     // Promotions.
     $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
-    $object['field_acq_promotion_label'] = array_map(function ($promotion) {
-      return $promotion['text'];
-    }, $promotions);
-    $object['promotions'] = $promotions;
+    array_walk($promotions, function (&$promotion, $nid) {
+      $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+    });
+
+    $object['field_acq_promotion_label'] = array_column($promotions, 'text');
+    $object['promotions'] = array_values($promotions);
 
     // Product Images.
     $object['media'] = $this->getMediaItems($sku, $product_color);

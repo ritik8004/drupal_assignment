@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Promotion = (props) => {
+const Promotion = ({promotion}) => {
   return (
     <span className="sku-promotion-item">
-      <a className="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
-        {props.promotion.text}
+      <a className="sku-promotion-link" href={promotion.url}>
+        {promotion.text}
       </a>
     </span>
   );
