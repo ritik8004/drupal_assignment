@@ -120,7 +120,7 @@ input[type="search"] {
   padding-#{$left}: 0.625rem;
 
   &::placeholder {
-    color: $form_input_text;
+    color: $form_input_placeholder_text;
   }
 }
 
