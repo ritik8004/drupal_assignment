@@ -804,20 +804,22 @@ class SkuManager {
    */
   public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
     $promotion_nodes = [];
+    $promotion_nids = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
+    foreach ($promotion ?? [] as $promo) {
+      $promotion_nids[] = $promo['target_id'];
+    }
 
-    if (empty($promotion) && $sku->bundle() == 'simple') {
+    if ($sku->bundle() == 'simple') {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
       $parent = $plugin->getParentSku($sku);
       if ($parent instanceof SKUInterface) {
         $promotion = $parent->get('field_acq_sku_promotions')->getValue();
+        foreach ($promotion ?? [] as $promo) {
+          $promotion_nids[] = $promo['target_id'];
+        }
       }
-    }
-
-    $promotion_nids = [];
-    foreach ($promotion as $promo) {
-      $promotion_nids[] = $promo['target_id'];
     }
 
     if (!empty($promotion_nids)) {
