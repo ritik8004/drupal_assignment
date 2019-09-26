@@ -18,5 +18,5 @@ export function ImageWrapper(imageObj, title, classname, showDefaultImage = fals
     );
   }
 
-  return '';
+  return (null);
 };
