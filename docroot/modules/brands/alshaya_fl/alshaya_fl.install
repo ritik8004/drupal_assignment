@@ -59,7 +59,6 @@ function alshaya_fl_install() {
     ],
     'seo_brand_name' => [
       'en' => 'Footlocker',
-      'ar' => 'Footlocker',
     ],
   ];
 
