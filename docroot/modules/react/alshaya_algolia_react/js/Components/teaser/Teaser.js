@@ -1,7 +1,7 @@
 import React from 'react';
 import Gallery from '../gallery/Gallery';
 import PriceContainer from '../price/PriceContainer';
-import PromotionWrapper from '../Promotions/PromotionWrapper';
+import PromotionsContainer from '../Promotions/PromotionsContainer';
 
 const Teaser = ({hit}) => {
 
@@ -22,7 +22,7 @@ const Teaser = ({hit}) => {
               <a href={hit.url} className="product-selected-url">{hit.title}</a>
             </h2>
             <PriceContainer price={hit.original_price} final_price={hit.final_price}/>
-            <PromotionWrapper promotions={hit.promotions}/>
+            <PromotionsContainer promotions={hit.promotions}/>
             {swatches}
           </div>
         </div>
