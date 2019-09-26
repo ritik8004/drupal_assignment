@@ -113,6 +113,10 @@ function alshaya_seo_token_info() {
     'name' => t('Subcategories.'),
   ];
 
+  $info['tokens']['alshaya_seo']['gender'] = [
+    'name' => t('Gender Token'),
+  ];
+
   $info['tokens']['alshaya_seo']['desc_free_delivery_n_cod'] = [
     'name' => t('Description free delivery and COD.'),
   ];
@@ -123,10 +127,6 @@ function alshaya_seo_token_info() {
 
   $info['tokens']['alshaya_seo']['keywords'] = [
     'name' => t('Keywords.'),
-  ];
-
-  $info['tokens']['alshaya_seo']['super_category'] = [
-    'name' => t('Super Category.'),
   ];
 
   return $info;
@@ -236,12 +236,12 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     $token_service = \Drupal::token();
 
     $category_term = isset($data['taxonomy_term']) ? $data['taxonomy_term'] : $data['term'];
-    $term_id = isset($category_term) ? $category_term->get('tid')->getValue()[0]['value'] : '';
+    $term_id = $category_term->get('tid')->getValue()[0]['value'];
     $sale_ids = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds();
-    if (isset($sale_ids['sale']) && in_array($term_id, $sale_ids['sale'])) {
+    if (isset($sale_ids['sale']) && array_search($term_id, $sale_ids['sale'])) {
       $sale = TRUE;
     }
-    elseif (isset($sale_ids) && in_array($term_id, $sale_ids)) {
+    elseif (isset($sale_ids) && array_search($term_id, $sale_ids)) {
       $sale = TRUE;
     }
     foreach ($tokens as $name => $original) {
@@ -294,7 +294,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $replacements[$original] = $value == 'alshaya_seo_sale_title_prefix' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           else {
-            $replacements[$original] = $token_service->replace('Shop [alshaya_seo:super_category]', ['term' => $category_term]);
+            $replacements[$original] = t('Shop');
           }
           break;
 
@@ -365,7 +365,12 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($child, $current_langcode);
             $sub_categories[] = $taxonomy_term_trans->name->value;
           }
-          $replacements[$original] = isset($sub_categories) ? implode(', ', $sub_categories) : '';
+          $replacements[$original] = implode(', ', $sub_categories);
+          break;
+
+        case 'gender':
+          $value = t('alshaya_seo_gender');
+          $replacements[$original] = $value == 'alshaya_seo_gender' ? '' : $value;
           break;
 
         case 'desc_free_delivery_n_cod':
@@ -387,11 +392,6 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
             $value = t('alshaya_seo_keywords');
             $replacements[$original] = $value == 'alshaya_seo_keywords' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
-          break;
-
-        case 'super_category':
-          $super_category = _alshaya_super_category_get_super_category_for_term();
-          $replacements[$original] = isset($super_category) ? $super_category->label() : '';
           break;
       }
     }
@@ -424,30 +424,6 @@ function alshaya_seo_tokens_alter(array &$replacements, array $context, Bubbleab
               $replacements[$value_tokens['absolute']] = $category_alias;
             }
           }
-        }
-      }
-    }
-  }
-  if ($context['type'] == 'term') {
-
-    // This fix is done to put empty strings whenever parent tokens are called
-    // for categories which dont have parents.
-    $token_service = \Drupal::token();
-    $value_tokens = '';
-    $prefix_list = [
-      'parent',
-      'parents',
-    ];
-    foreach ($prefix_list as $prefix) {
-      if (empty($value_tokens)) {
-        $value_tokens = $token_service->findWithPrefix($context['tokens'], $prefix);
-      }
-    }
-    if (!empty($value_tokens)) {
-      $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($context['data']['term']->get('tid')->getValue()[0]['value']);
-      if (empty($parents)) {
-        foreach ($value_tokens as $value_token) {
-          $replacements[$value_token] = '';
         }
       }
     }
