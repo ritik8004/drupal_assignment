@@ -32,22 +32,23 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
-      $('article.entity--type-node').once('click-collect').on('combination-changed', function (event, variant, code) {
+      $('.sku-base-form').once('click-collect').on('variant-selected', function (event, variant, code) {
+        var node = $(this).parents('article.entity--type-node:first');
         var sku = $(this).attr('data-sku');
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
-        $('#pdp-stores-container', this).data('sku', variant);
+        $('#pdp-stores-container', node).data('sku', variant);
 
         if (variantInfo.click_collect) {
-          $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', false);
-          $('#pdp-stores-container.click-collect .c-accordion_content', $(this)).removeClass('hidden-important');
+          $('#pdp-stores-container.click-collect', node).accordion('option', 'disabled', false);
+          $('#pdp-stores-container.click-collect .c-accordion_content', node).removeClass('hidden-important');
 
-          if ($('.search-stores-button', this).is(':visible')) {
+          if ($('.search-stores-button', node).is(':visible')) {
             Drupal.pdp.storesDisplay();
           }
         }
         else {
-          $('#pdp-stores-container.click-collect', $(this)).accordion('option', 'disabled', true);
-          $('#pdp-stores-container.click-collect .c-accordion_content', $(this)).addClass('hidden-important');
+          $('#pdp-stores-container.click-collect', node).accordion('option', 'disabled', true);
+          $('#pdp-stores-container.click-collect .c-accordion_content', node).addClass('hidden-important');
         }
       });
 
