@@ -11,15 +11,6 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Update meta variables.
- */
-function alshaya_bbw_transac_update_8008() {
-  _alshaya_bbw_transac_get_metatag_translations();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Save translations for meta tags.
  */
 function alshaya_bbw_transac_update_8007() {
@@ -235,51 +226,6 @@ function alshaya_bbw_transac_install() {
     'seo_brand_name' => [
       'en' => 'Bath and body works',
       'ar' => 'باث اند بودي ووركس',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-
-  // Install metatag translations.
-  _alshaya_bbw_transac_get_metatag_translations();
-}
-
-/**
- * Get translations of metatag.
- */
-function _alshaya_bbw_transac_get_metatag_translations() {
-  $strings = [
-    'alshaya_seo_sale_title_suffix' => [
-      'en' => ' - [current-date:html_year] Sale',
-      'ar' => '  - عروض [current-date:html_year]',
-    ],
-    'alshaya_seo_sale_text_before_cod' => [
-      'en' => '. Compare the latest [current-date:html_year] - [term:name] - packages at the best prices.',
-      'ar' => '. مقارنة - [term:name] - المجموعات الأكثر سعرا.',
-    ],
-    'alshaya_seo_sale_sno_suffix' => [
-      'en' => '- [term:name] -',
-      'ar' => '- [term:name] -',
-    ],
-    'alshaya_seo_sno_suffix' => [
-      'en' => '- [term:name] -',
-      'ar' => '- [term:name] -',
-    ],
-    'alshaya_seo_sale_desc_start' => [
-      'en' => 'Get exclusive and delightful [current-date:html_year] sale and offers',
-      'ar' => 'احصل على عروض [current-date:html_year] على المنتجات الحصرية',
-    ],
-    'alshaya_seo_desc_start' => [
-      'en' => 'Shop exclusive and delightful [term:name] products',
-      'ar' => 'شراء المنتجات الحصرية [term:name]',
-    ],
-    'alshaya_seo_sale_keywords' => [
-      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale',
-      'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale',
-    ],
-    'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] for [term:parents:first], Shop [term:parents:first] [term:name], Shop [alshaya_seo:brand_name] [term:name], Shop [term:name] Collection for [term:parents:first], Shop [term:name] in [alshaya_seo:country], Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
-      'ar' => 'متجر [term:name] مجموعة ل [term:parents:first] على الانترنت, تسوق [term:name] [alshaya_seo:brand_name], شراء [alshaya_seo:sub_categories] [alshaya_seo:brand_name]، شراء [alshaya_seo:sub_categories] شراء [alshaya_seo:sub_categories] على الانترنت، متجر [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:city1], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:city2], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:country]',
     ],
   ];
 
