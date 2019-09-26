@@ -103,7 +103,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
 
     if ($term instanceof TermInterface) {
       // Get all selected subcategories to be displayed on PLP.
-      $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
+      $selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue();
 
       foreach ($selected_subcategories as $selected_subcategory) {
         $subcategory = $this->termStorage->load($selected_subcategory['value']);
@@ -128,6 +128,11 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
       return [
         '#theme' => 'alshaya_subcategory_block',
         '#subcategories' => $subcategories,
+        '#attached' => [
+          'library' => [
+            'alshaya_acm_product_category/alshaya_subcategory_scroll',
+          ],
+        ],
       ];
     }
   }
@@ -138,10 +143,10 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
   protected function blockAccess(AccountInterface $account) {
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')) {
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')) {
       $cachetags[] = 'taxonomy_term:' . $term->id();
-      if ($term->get('field_group_by_sub_category')->value) {
-        $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
+      if ($term->get('field_group_by_sub_categories')->getString()) {
+        $selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
           $cachetags[] = 'taxonomy_term:' . $selected_subcategory['value'];
         }
