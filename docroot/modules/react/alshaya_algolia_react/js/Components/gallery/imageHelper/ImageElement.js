@@ -1,11 +1,11 @@
 import React from 'react';
 
-const ImageElement = ({src, title}) => {
+const ImageElement = ({src, title, alt}) => {
   return (
     <img
       src={src}
-      alt={title}
-      title={title}
+      alt={alt || title}
+      title={title || ''}
       className="b-lazy b-loaded"
     />
   );

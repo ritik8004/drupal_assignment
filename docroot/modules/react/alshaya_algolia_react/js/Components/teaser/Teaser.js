@@ -2,6 +2,7 @@ import React from 'react';
 import Gallery from '../gallery/Gallery';
 import PriceContainer from '../price/PriceContainer';
 import PromotionsContainer from '../Promotions/PromotionsContainer';
+import LabelsContainer from '../Labels/LabelsContainer';
 
 const Teaser = ({hit}) => {
   const swatches = (null);
@@ -25,8 +26,7 @@ const Teaser = ({hit}) => {
             {swatches}
           </div>
         </div>
-        <div className="labels-container" data-type="plp" data-sku={hit.sku} data-main-sku={hit.sku}>
-        </div>
+        <LabelsContainer labels={hit.product_labels} sku={hit.sku} />
       </div>
     </article>
   );

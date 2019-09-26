@@ -208,7 +208,7 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
-    $object['product_labels'] = $this->skuManager->getLabels($sku, 'plp');
+    $object['product_labels'] = $this->skuManager->getLabelsData($sku, 'plp');
 
     // Update stock info for product.
     $object['stock_quantity'] = $this->skuInfoHelper->calculateStock($sku);
