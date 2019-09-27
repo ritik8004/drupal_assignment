@@ -12,7 +12,7 @@
   Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
 
-      // Disable shareing and deliver blocks for OOS.
+      // Disable sharing and deliver blocks for OOS.
       $('.product-out-of-stock').once('page-load').each(function () {
         $(this).find('.sharethis-wrapper').addClass('out-of-stock');
         $(this).find('.c-accordion-delivery-options').each(function () {
@@ -34,96 +34,60 @@
         }
       });
 
-      $('#configurable_ajax .form-select').once('bind-js').on('change', function () {
+      $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
         var form = $(this).closest('form');
-        var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
+        var sku = $(form).attr('data-sku');
         var combinations = drupalSettings.configurableCombinations[sku];
         var code = $(this).attr('data-configurable-code');
         var selected = $(this).val();
+
+        Drupal.refreshConfigurables(form, code, selected);
+
         var currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
         $('[name="selected_variant_sku"]', form).val('');
 
-        if (typeof combinations['combinations'][code] !== 'undefined') {
-          for (var i in combinations['combinations'][code][selected]) {
-            if (i === code) {
-              continue;
-            }
-
-            var select = $('[data-configurable-code="' + i + '"]', form);
-
-            select.val('');
-            select.find('option')
-              .prop('disabled', true)
-              .attr('disabled', 'disabled')
-              .removeProp('selected')
-              .removeAttr('selected');
-
-            for (var j in combinations['combinations'][code][selected][i]) {
-              select.find('option[value="' + combinations['combinations'][code][selected][i][j] + '"]')
-                .removeProp('disabled')
-                .removeAttr('disabled');
-            }
-
-            // Select first available.
-            select.find('option:not([disabled]):first')
-              .prop('selected', true)
-              .attr('selected', 'selected')
-              .trigger('refresh');
-          }
-        }
-
         var selectedCombination = Drupal.getSelectedCombination(form);
-        var firstPossibleCombination = selectedCombination;
 
         if (typeof combinations['byAttribute'][selectedCombination] !== 'undefined') {
           $('[name="selected_variant_sku"]', form).val(combinations['byAttribute'][selectedCombination]);
         }
-        else {
-          firstPossibleCombination = Drupal.getFirstPossibleCombination(form, combinations['combinations']);
-        }
-
-        if (form.attr('selected-combination') != firstPossibleCombination) {
-           if (typeof combinations['byAttribute'][firstPossibleCombination] !== 'undefined') {
-             form.attr('selected-combination', firstPossibleCombination);
-             $(this).parents('article.entity--type-node:first').trigger(
-               'combination-changed',
-               [
-                 combinations['byAttribute'][firstPossibleCombination],
-                 code
-               ]
-             );
-           }
-        }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          $(this).parents('article.entity--type-node:first').trigger(
+          $(this).closest('.sku-base-form').trigger(
             'variant-selected',
             [
-              combinations['byAttribute'][firstPossibleCombination],
+              combinations['byAttribute'][selectedCombination],
               code
             ]
           );
         }
       });
 
-      $('article.entity--type-node').once('load').each(function () {
+      $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
-        $(this).on('combination-changed', function (event, variant, code) {
+        var node = $(this).parents('article.entity--type-node:first');
+        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+
+        $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 
-          $(this).find('.price-block').html(variantInfo.price);
+          if (typeof variantInfo === 'undefined') {
+            return;
+          }
+
+          $(node).find('.price-block').html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+            Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
           }
           else {
-            Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+            Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
           }
 
           // Update quantity dropdown based on stock available for the variant.
@@ -139,14 +103,8 @@
               $(this).removeAttr('disabled').removeProp('disabled');
             }
           });
-          $('select[name="quantity"]', this).trigger('refresh');
-        });
 
-        $(this).on('variant-selected', function (event, variant, code) {
-          var sku = $(this).attr('data-sku');
-          var selected = $('[name="selected_variant_sku"]', $(this)).val();
-          var variantInfo = drupalSettings.productInfo[sku]['variants'][selected];
-          Drupal.updateGallery(this, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+          $('select[name="quantity"]', this).trigger('refresh');
         });
 
         var variants = drupalSettings.productInfo[sku]['variants'];
@@ -172,11 +130,11 @@
           }
         }
 
-        var firstAttribute = $('#configurable_ajax .form-select:first', this);;
+        var firstAttribute = $('.form-select[data-configurable-code]:first', this);
         var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
         $(firstAttribute).removeProp('selected').removeAttr('selected');
         $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
-        $(firstAttribute).val(firstAttributeValue).trigger('change');
+        $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
       });
     }
   };
@@ -201,42 +159,78 @@
     }
   };
 
-  Drupal.getSelectedCombination = function (form) {
-    var selectedCombination = '';
-    $('[data-configurable-code]', form).each(function () {
-      var selectedVal = $(this).val();
-      if (selectedVal === '' || selectedVal === null || typeof selectedVal === 'undefined') {
-        if ($(this).find('option:not([disabled])').length === 1) {
-          $(this).find('option:not([disabled])').prop('selected', true).attr('selected', 'selected').trigger('change');
-          return;
-        }
-      }
-      else {
-        selectedCombination += $(this).attr('data-configurable-code') + '|' + selectedVal + '||';
-      }
-    }, selectedCombination);
+  Drupal.refreshConfigurables = function (form, selectedCode, selectedValue) {
+    var sku = $(form).parents('article.entity--type-node:first').attr('data-sku');
+    var combinations = drupalSettings.configurableCombinations[sku]['combinations'];
 
-    return selectedCombination;
+    var selectedValues = Drupal.getSelectedValues(form);
+    for (var code in selectedValues) {
+      if (code == selectedCode) {
+        break;
+      }
+
+      combinations = combinations[code][selectedValues[code]];
+    }
+
+    if (typeof combinations[selectedCode] === 'undefined') {
+      return;
+    }
+
+    if (combinations[selectedCode][selectedValue] === 1) {
+      return;
+    }
+    var nextCode = Object.keys(combinations[selectedCode][selectedValue])[0];
+    var nextValues = Object.keys(combinations[selectedCode][selectedValue][nextCode]);
+    Drupal.alshayaAcmProductSelectConfiguration(form, nextCode, nextValues);
+
+    var select = $('[data-configurable-code="' + nextCode + '"]', form);
+    Drupal.refreshConfigurables(form, nextCode, select.val());
   };
 
-  Drupal.getFirstPossibleCombination = function (form, combinations) {
-    var firstPossibleCombination = '';
+  Drupal.alshayaAcmProductSelectConfiguration = function (form, selectedCode, possibleValues) {
+    var select = $('[data-configurable-code="' + selectedCode + '"]', form);
+
+    select.val('');
+
+    select.find('option')
+      .prop('disabled', true)
+      .attr('disabled', 'disabled')
+      .removeProp('selected')
+      .removeAttr('selected');
+
+    for (var i in possibleValues) {
+      select.find('option[value="' + possibleValues[i] + '"]')
+        .removeProp('disabled')
+        .removeAttr('disabled');
+    }
+
+    select.find('option:not([disabled]):first')
+      .prop('selected', true)
+      .attr('selected', 'selected')
+      .trigger('refresh');
+  };
+
+  Drupal.getSelectedValues = function (form) {
+    var selectedValues = {};
     $('[data-configurable-code]', form).each(function () {
       var selectedVal = $(this).val();
-      var attributeCode = $(this).attr('data-configurable-code');
-      if (selectedVal === '' || selectedVal === null || typeof selectedVal === 'undefined') {
-        selectedVal = Object.values(combinations[attributeCode])[0];
-
-        if (typeof selectedVal != 'string' && typeof selectedVal != 'number') {
-          selectedVal = Object.keys(combinations[attributeCode])[0];
-        }
+      if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
+        selectedValues[$(this).attr('data-configurable-code')] = selectedVal;
       }
+    }, selectedValues);
 
-      firstPossibleCombination += attributeCode + '|' + selectedVal + '||';
-      combinations = combinations[attributeCode][selectedVal];
-    }, firstPossibleCombination);
+    return selectedValues;
+  };
 
-    return firstPossibleCombination;
+  Drupal.getSelectedCombination = function (form) {
+    var selectedValues = Drupal.getSelectedValues(form);
+    var selectedCombination = '';
+
+    for (var code in selectedValues) {
+      selectedCombination += code + '|' + selectedValues[code] + '||';
+    }
+
+    return selectedCombination;
   };
 
   $(window).on('load', function () {

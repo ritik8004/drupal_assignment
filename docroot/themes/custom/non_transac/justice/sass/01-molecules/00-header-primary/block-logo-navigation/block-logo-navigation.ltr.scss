@@ -1,0 +1,9 @@
+@import '../../../config/_config.scss';
+
+.region__wrapper {
+  .block-logo-navigation {
+    @include breakpoint($above-palm) {
+      background-color: $header_menu_bg;
+    }
+  }
+}

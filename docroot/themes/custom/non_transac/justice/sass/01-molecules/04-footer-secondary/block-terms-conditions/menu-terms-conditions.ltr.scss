@@ -1,0 +1,16 @@
+@import '../../../config/_config.scss';
+
+.menu-terms-conditions {
+  li {
+    border-#{direction(right)}: 0;
+  }
+
+  a {
+    color: $footer_terms_condition;
+    text-decoration: underline;
+
+    &:hover {
+      color: $footer_terms_condition_hover;
+    }
+  }
+}

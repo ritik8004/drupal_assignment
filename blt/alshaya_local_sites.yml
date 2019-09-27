@@ -106,3 +106,15 @@ sites:
     module: alshaya_we
     type: alshaya_transac
     country: ae
+  jusnontransackw:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: kw
+  jusnontransacae:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: ae
+  jusnontransacsa:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: sa
