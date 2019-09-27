@@ -1,0 +1,3 @@
+// Define theme variables here.
+$jus_regular: if-ltr($jus_regular, $jus_arabic_regular);
+$jus_bold: if-ltr($jus_bold, $jus_arabic_bold);

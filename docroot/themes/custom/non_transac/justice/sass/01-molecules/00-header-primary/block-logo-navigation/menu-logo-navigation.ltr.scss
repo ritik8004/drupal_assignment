@@ -1,0 +1,304 @@
+@import '../../../config/_config.scss';
+
+.menu-logo-navigation {
+  background: $header_menu_bg;
+  max-width: 69rem;
+  margin: 0 auto;
+  padding-#{$left}: 0;
+
+  a {
+    font-family: $jus_bold;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    color: $header_menu_text;
+
+    @include breakpoint($above-palm) {
+      padding: 0.75rem 2.4375rem;
+    }
+
+    &::after {
+      display: inline-block;
+      vertical-align: middle;
+      width: auto;
+    }
+
+    &:hover {
+      color: $header_menu_text_hover;
+      background: $header_menu_bg;
+    }
+  }
+}
+
+.burger {
+  &::before {
+    font-size: 2.25rem;
+    font-weight: bold;
+    color: $burger_menu_icon;
+
+    @include breakpoint($lap) {
+      position: absolute;
+      top: -2.0625rem;
+    }
+  }
+}
+
+.menu-close {
+  color: $header_menu_text_hover;
+  #{direction(right)}: 0;
+  #{$left}: 85%;
+  top: 0;
+  width: 3.75rem;
+  height: 3.75rem;
+
+  @include breakpoint($lap) {
+    #{$left}: 93%;
+  }
+
+  &::before {
+    font-size: 3.75rem;
+    line-height: 3.75rem;
+  }
+}
+
+.vertical-layout .menu-logo-navigation.navigation__sub-menu {
+  @include breakpoint($upto-lap) {
+    width: 87%;
+    position: fixed;
+    z-index: $z-80;
+    background: $header_menu_mobile_bg;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-in-out;
+    clear: both;
+    will-change: transform;
+    margin-top: 0;
+    top: 0;
+    overflow: scroll;
+    padding: 1rem;
+
+    html[lang=ar] & {
+      transform: translateX(100%);
+    }
+
+    li {
+      width: 100%;
+      float: direction(left);
+      text-align: direction(left);
+      border-bottom: 0.0625rem solid transparent;
+      margin-bottom: 1rem;
+      background: $header_menu_bg;
+
+      .ajax-progress-throbber {
+        display: none;
+      }
+
+      a {
+        font-size: 1rem;
+        margin-#{direction(right)}: 0;
+        padding: 2.1875rem 1rem;
+        color: $burger_menu_link;
+
+        @include icon(chevronright, after) {
+          font-size: 2.875rem;
+          position: absolute;
+          #{direction(right)}: 0.75rem;
+          margin-top: -1.375rem;
+          color: $burger_menu_arrow;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($lap) {
+    width: 93%;
+  }
+}
+
+.show-menu-button {
+  .menu-logo-navigation {
+    display: block;
+    background: $header_menu_bg;
+    padding: 0;
+  }
+
+  .burger {
+    @include breakpoint($upto-lap) {
+      font-size: 0;
+      padding-top: 0.6875rem;
+      padding-#{$left}: 1rem;
+      height: 0;
+      z-index: $z-80;
+      display: block;
+    }
+
+    @include breakpoint($upto-palm) {
+      height: 3.25rem;
+    }
+  }
+}
+
+.menu-close {
+  z-index: $z-90;
+}
+
+.region-primary-header .show-menu-button {
+  @include breakpoint($upto-lap) {
+    .burger {
+      display: block;
+      width: 3.25rem;
+      height: 3.25rem;
+      position: relative;
+      padding-top: 0;
+      padding-#{direction(left)}: 0;
+      background: $burger_menu_icon_bg;
+
+      &::before {
+        line-height: 3.25rem;
+      }
+    }
+  }
+
+  .menu-logo-navigation {
+    display: block;
+    background: $burger_menu_icon_bg;
+    padding-bottom: 0.625rem;
+
+    @include breakpoint($upto-palm) {
+      width: 84.7%;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+html[dir=rtl] {
+  .vertical-layout .navigation__sub-menu {
+    @include breakpoint($upto-lap) {
+      #{$left}: -7%;
+      #{$right}: 0;
+    }
+
+    @include breakpoint($upto-palm) {
+      #{$left}: -13%;
+    }
+  }
+}
+
+// level2 menu
+
+.block-logo-navigation {
+  li {
+    display: inline-block;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  ul li {
+    &:hover > ul,
+    ul:hover {
+      visibility: visible;
+      opacity: 1;
+      width: 14%;
+    }
+
+    ul {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      margin-top: 0;
+      padding-#{$left}: 0;
+      background-color: $header_menu_level2_bg;
+
+      @include breakpoint($upto-palm) {
+        #{$left}: -100%;
+        background-color: $header_menu_level2_mobile_bg;
+      }
+
+      li {
+        clear: both;
+        display: block;
+
+        a {
+          color: $header_menu_level2_link;
+
+          &:hover {
+            background-color: $header_menu_level2_hover_bg;
+            color: $header_menu_level2_link;
+          }
+        }
+      }
+    }
+  }
+}
+
+.block-logo-navigation {
+  .menu-logo-navigation {
+    > li.active {
+      @include breakpoint($upto-palm) {
+        position: absolute;
+        width: calc(100% - 2rem);
+        top: 1rem;
+        #{$left}: 1rem;
+        height: 100%;
+        z-index: $z-90;
+        animation: slideIn 0.25s;
+        clear: both;
+        background: $burger_menu_level2_bg;
+        overflow: auto;
+      }
+
+      > a {
+        @include breakpoint($upto-palm) {
+          background-color: $burger_menu_active_bg;
+          color: $burger_menu_active_text;
+          border: 3px solid $burger_menu_active_border;
+          padding-#{$left}: 3.25rem;
+        }
+
+        @include icon(chevronleft, before) {
+          @include breakpoint($upto-palm) {
+            font-size: 2.875rem;
+            position: absolute;
+            #{$left}: 0;
+            margin-top: -1.375rem;
+            color: $burger_menu_arrow;
+          }
+        }
+
+        &::after {
+          @include breakpoint($upto-palm) {
+            display: none;
+          }
+        }
+      }
+
+      @keyframes slideIn {
+        0% {
+          margin-#{$left}: -100%;
+        }
+
+        40% {
+          margin-#{$left}: -60%;
+        }
+
+        60% {
+          margin-#{$left}: -40%;
+        }
+
+        100% {
+          margin-#{$left}: 0%;
+        }
+      }
+    }
+
+    ul.active {
+      @include breakpoint($upto-palm) {
+        width: 100%;
+        #{$left}: 0;
+        margin-top: 1rem;
+      }
+    }
+  }
+}
