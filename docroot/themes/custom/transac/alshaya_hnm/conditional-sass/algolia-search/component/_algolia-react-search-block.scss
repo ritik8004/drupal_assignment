@@ -1,0 +1,36 @@
+.block-alshaya-algolia-react-autocomplete {
+  #alshaya-algolia-autocomplete {
+    .react-autosuggest__container {
+      max-width: 13.5rem;
+
+      &::before {
+        display: none;
+      }
+
+      &::after {
+        #{$right}: 0;
+      }
+
+      .react-autosuggest__input {
+        border-radius: 0;
+        border: none;
+        padding-#{$left}: 0 !important;
+
+        &::placeholder {
+          line-height: 1.0625rem;
+          text-transform: initial;
+
+          @include breakpoint($only-mobile) {
+            html[lang=ar] & {
+              line-height: 1.0625rem;
+            }
+          }
+        }
+
+        @include breakpoint($tablet) {
+          border-bottom: 1px solid $algolia-input-border;
+        }
+      }
+    }
+  }
+}
