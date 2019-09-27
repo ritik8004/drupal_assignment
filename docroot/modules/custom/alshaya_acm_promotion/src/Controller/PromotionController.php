@@ -282,7 +282,9 @@ class PromotionController extends ControllerBase {
               'qty' => 1,
               'options' => [
                 'configurable_item_options' => $options,
-                'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+              ],
+              'extension_attributes' => [
+                'promo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
               ],
             ]);
           }
@@ -291,8 +293,8 @@ class PromotionController extends ControllerBase {
               'name' => $sku->label(),
               'sku' => $sku->getSku(),
               'qty' => 1,
-              'options' => [
-                'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+              'extension_attributes' => [
+                'promo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
               ],
             ]);
           }
