@@ -1,12 +1,14 @@
 import React from 'react';
 
-const ImageElement = ({src, title, alt}) => {
+const ImageElement = (props) => {
+  const {src, title, alt, ...otherProps} = props;
+
   return (
     <img
       src={src}
       alt={alt || title}
       title={title || ''}
-      className="b-lazy b-loaded"
+      {...otherProps}
     />
   );
 };

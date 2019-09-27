@@ -112,6 +112,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       '#attached' => [
         'library' => [
           'alshaya_algolia_react/autocomplete',
+          'alshaya_white_label/slick_css',
         ],
         'drupalSettings' => [
           'algoliaSearch' => [
@@ -132,6 +133,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
               'showHoverImage' => $display_settings->get('gallery_show_hover_image'),
               'showThumbnails' => $display_settings->get('gallery_show_hover_image') ? FALSE : $display_settings->get('image_thumb_gallery'),
               'defaultImage' => $default_image ?? FALSE,
+              'plp_slider' => $display_settings->get('plp_slider'),
             ],
             'swatches' => [
               'showColorImages' => $display_settings->get('show_color_images_on_filter'),
