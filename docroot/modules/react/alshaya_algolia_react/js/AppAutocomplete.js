@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AutoComplete from './Components/Autocomplete';
-import SearchResults from './Components/SearchResults';
-import InstantSearchComponent from './Components/InstantSearchComponent';
+import AutoComplete from './components/Autocomplete';
+import SearchResults from './components/SearchResults';
+import InstantSearchComponent from './components/InstantSearchComponent';
 import { createBrowserHistory } from 'history';
 import queryString from 'query-string'
 
