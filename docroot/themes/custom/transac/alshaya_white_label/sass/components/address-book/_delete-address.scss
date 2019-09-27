@@ -146,6 +146,14 @@
     background: #fff;
     border: none;
   }
+
+  &.address--delete-popup {
+    .ui-dialog {
+      @include breakpoint($only-mobile) {
+        z-index: 11;
+      }
+    }
+  }
 }
 
 .path--user {
