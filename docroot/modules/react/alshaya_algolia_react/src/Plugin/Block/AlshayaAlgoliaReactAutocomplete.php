@@ -6,6 +6,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\image\Entity\ImageStyle;
@@ -106,6 +107,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
 
     $currency = $this->configFactory->get('acq_commerce.currency');
 
+    $configuration = $this->getConfiguration();
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
@@ -121,6 +124,10 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'indexName' => $index['algolia_index_name'] . "_{$lang}",
             'filterOos' => $listing->get('filter_oos_product'),
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
+          ],
+          'autocomplete' => [
+            'hits' => $configuration['hits'],
+            'topResults' => $configuration['top_results'],
           ],
           'reactTeaserView' => [
             'price' => [
@@ -147,6 +154,48 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
         'contexts' => ['languages'],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $config = $this->getConfiguration();
+    $form = parent::buildConfigurationForm($form, $form_state);
+
+    $form['hits'] = [
+      '#type' => 'number',
+      '#min' => 1,
+      '#step' => 1,
+      '#max' => 100,
+      '#title' => $this->t('Number of results to show'),
+      '#default_value' => $config['hits'] ?? 10,
+    ];
+
+    $form['top_results'] = [
+      '#type' => 'number',
+      '#min' => 1,
+      '#step' => 1,
+      '#max' => 100,
+      '#title' => $this->t('Number of top results to show for autocomplete'),
+      '#default_value' => $config['top_results'] ?? 10,
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getErrors()) {
+      return;
+    }
+
+    $this->configuration['hits'] = $form_state->getValue('hits');
+    $this->configuration['top_results'] = $form_state->getValue('top_results');
+
+    parent::submitConfigurationForm($form, $form_state);
   }
 
 }
