@@ -1,8 +1,8 @@
 import React from 'react';
 import Gallery from '../gallery/Gallery';
 import PriceContainer from '../price/PriceContainer';
-import PromotionsContainer from '../Promotions/PromotionsContainer';
-import LabelsContainer from '../Labels/LabelsContainer';
+import PromotionsContainer from '../promotions/PromotionsContainer';
+import LabelsContainer from '../labels/LabelsContainer';
 
 const Teaser = ({hit}) => {
   const swatches = (null);

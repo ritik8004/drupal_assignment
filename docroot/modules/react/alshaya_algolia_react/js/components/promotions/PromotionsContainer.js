@@ -1,5 +1,5 @@
 import React from 'react';
-import Promotion from '../Promotions/Promotion';
+import Promotion from '../promotions/Promotion';
 
 const PromotionsContainer = ({promotions}) => {
   const promotionList = (promotions) ? promotions.map(promotion => <Promotion promotion={promotion} />) : '';
