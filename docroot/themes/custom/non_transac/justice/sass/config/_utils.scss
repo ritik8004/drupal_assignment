@@ -1,0 +1,16 @@
+// Define theme utils here.
+.mobile-only-block {
+  display: none;
+
+  @include breakpoint($upto-palm) {
+    display: block;
+  }
+}
+
+.above-mobile-block {
+  display: none;
+
+  @include breakpoint($above-palm) {
+    display: block;
+  }
+}

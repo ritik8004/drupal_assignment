@@ -1,0 +1,38 @@
+@import '../../../config/_config.scss';
+
+.region-secondary-header {
+  .block-language-switcher--desktop {
+    background-color: transparent;
+    color: $language_switcher_text;
+
+    @include breakpoint($upto-lap) {
+      display: block;
+      position: absolute;
+      bottom: -4.375rem;
+      #{$right}: 1.125rem;
+      border-bottom: 0;
+    }
+
+    @include breakpoint($above-palm) {
+      background-color: transparent;
+      width: 7%;
+      text-align: $left;
+    }
+  }
+}
+
+.region-top-header {
+  .region-secondary-header {
+    .block-language-switcher--desktop {
+      @include breakpoint($upto-lap) {
+        display: none;
+      }
+    }
+  }
+}
+
+.device__mobile {
+  .block-store-link {
+    display: none;
+  }
+}
