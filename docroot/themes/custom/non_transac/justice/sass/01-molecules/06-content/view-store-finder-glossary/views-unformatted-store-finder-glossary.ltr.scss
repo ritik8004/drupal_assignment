@@ -1,0 +1,33 @@
+@import '../../../config/_config.scss';
+
+.view-store-finder--list__alphabet {
+  h3 {
+    font-size: 2.125rem;
+    color: $store_finder_list_alphabet;
+    font-family: $jus_bold;
+    margin-top: 0;
+    padding-#{direction(left)}: 1.5rem;
+  }
+
+  .views-view-unformatted__rows {
+    @include breakpoint($above-palm) {
+      width: 100%;
+      padding-#{$left}: 1.5rem;
+    }
+  }
+}
+
+.view-store-finder--list__alphabet__item {
+  @include breakpoint($upto-palm) {
+    border-bottom: 0.125rem solid $store_finder_store_row_border;
+  }
+
+  &::before {
+    font-size: 2.75rem;
+    color: $store_finder_list_mobile_icon;
+  }
+
+  a {
+    color: $store-finder_list_alphabet_item;
+  }
+}

@@ -90,6 +90,10 @@ sites:
     module: alshaya_kz
     type: alshaya_transac_lite
     country: kw
+  venontransacme:
+    module: alshaya_ve
+    type: alshaya_non_transac
+    country: kw
   wekw:
     module: alshaya_we
     type: alshaya_transac
@@ -102,3 +106,15 @@ sites:
     module: alshaya_we
     type: alshaya_transac
     country: ae
+  jusnontransackw:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: kw
+  jusnontransacae:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: ae
+  jusnontransacsa:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: sa
