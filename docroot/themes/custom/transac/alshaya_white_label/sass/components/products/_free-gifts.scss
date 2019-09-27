@@ -41,12 +41,38 @@
       width: calc(100% - (5.4375rem));
     }
 
-    .label {
+    .label,
+    .free-gift-title {
       font-size: 0.875rem;
       line-height: 1.29;
       color: $free-gifts-label;
       text-transform: capitalize;
       margin: 0.625rem 0 0.5rem;
+    }
+
+    &.free-gift-promo-list {
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+
+      .free-gift-wrapper {
+        width: calc(100% - (5.6875rem));
+
+        @include breakpoint($only-mobile) {
+          width: calc(100% - (5.4375rem));
+        }
+      }
+
+      .free-gift-title {
+        color: $free-gifts-coupon-code-text;
+        margin-top: 0;
+      }
+
+      .free-gift-message {
+        a {
+          text-decoration: underline;
+        }
+      }
     }
   }
 
@@ -150,6 +176,9 @@
         position: absolute;
         color: #000;
         z-index: 1;
+        #{$left}: 24px;
+        top: 24px;
+        text-transform: capitalize;
       }
     }
   }
@@ -213,9 +242,31 @@
   }
 
   .item-list {
+    width: 100%;
+
     ul {
       list-style: none;
       padding: 0;
+
+      @include breakpoint($upto-desktop) {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-bottom: 1.5rem;
+      }
+    }
+
+    li {
+      @include breakpoint($upto-desktop) {
+        display: inline-block;
+        white-space: normal;
+        vertical-align: top;
+        position: relative;
+        width: 144px;
+        margin-#{$right}: 10px;
+      }
     }
 
     .ajax-progress-throbber {
@@ -224,6 +275,12 @@
       .throbber {
         @include throbberLoader();
       }
+    }
+
+    .free-gift-title {
+      margin-top: 10px;
+      color: #232323;
+      font-size: 14px;
     }
   }
 }
@@ -299,6 +356,54 @@
 
     &:empty {
       display: none;
+    }
+  }
+
+  .free-gift-promo-list {
+    .coupon-code {
+      display: inline-flex;
+
+      @include breakpoint($tablet) {
+        margin: 0 3px;
+      }
+
+      a {
+        color: $free-gifts-coupon-code-text !important;
+        text-transform: uppercase;
+      }
+    }
+
+    .gift-message {
+      > a {
+        display: inline !important;
+        text-decoration: underline;
+      }
+
+      .label {
+        color: $free-gifts-coupon-code-text;
+      }
+    }
+  }
+
+  #table-cart-items {
+    tr {
+      td {
+        .free-gift-promo-list {
+          a {
+            font-size: 12px;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          position: relative;
+
+          .sku-promotions {
+            position: absolute;
+            bottom: 0;
+            width: 33%;
+          }
+        }
+      }
     }
   }
 }

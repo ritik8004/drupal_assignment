@@ -177,7 +177,7 @@
         modalClasses('size-guide', 'sizeguide-modal-overlay');
       });
 
-      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
+      $('.free-gift-title a, .free-gift-message a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
         $('body').addClass('free-gifts-modal-overlay');
         modalCloseBtnEvent();
 

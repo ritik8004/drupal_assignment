@@ -60,12 +60,13 @@
       //     applyRtl($(this), optionsShopByStory);
       //   });
       // }
-
-      setTimeout(function () {
-        shopByStory.each(function () {
-          applyRtl($(this), optionFreeGifts);
-        });
-      }, 5);
+      if ($(window).width() > 767) {
+        setTimeout(function () {
+          shopByStory.each(function () {
+            applyRtl($(this), optionFreeGifts);
+          });
+        }, 5);
+      }
 
       /**
        * Helper function to remove classes from body when dailog is closed.
