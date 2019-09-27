@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
   Configure,
@@ -15,8 +15,27 @@ const searchResultDiv = document.getElementById('alshaya-algolia-search');
 const VirtualSearchBox = connectSearchBox(() => null);
 
 const SearchResultHits = connectHits(({ hits }) => {
+  // Create ref to get element after it gets rendered.
+  const teaserRef = React.createRef();
+
+  // Get height of each article and set the max height to all article tags.
+  useEffect(() => {
+    var elements = teaserRef.current.getElementsByTagName('article');
+    if (elements.length > 0) {
+      var heights = [];
+      Array.prototype.forEach.call(elements, element => heights.push(element.parentElement.offsetHeight));
+      var maxheight = Math.max(...heights);
+
+      if (maxheight > 0) {
+        Array.prototype.forEach.call(elements, element => {
+          element.parentElement.style.height = maxheight + 'px'; //= maxheight;
+        });
+      }
+    }
+  });
+
   const hs = hits.map(hit => <Teaser key={hit.objectID} hit={hit} />);
-  return <div id="hits" className="c-products-list product-small view-search">{hs}</div>;
+  return <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>{hs}</div>;
 });
 
 /**
