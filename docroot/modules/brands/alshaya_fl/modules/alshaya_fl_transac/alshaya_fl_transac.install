@@ -13,9 +13,7 @@ use Drupal\Core\Site\Settings;
  * Update Size clothing facet configuration for PLP, Promotions & Search.
  * Update sorting options
  * from "Sort by taxonomy term weight" to
- * "Sort by taxonomy term weight according to term name"
- *
- * @see alshaya_search_api_update_8005
+ * "Sort by taxonomy term weight according to term name".
  */
 function alshaya_fl_transac_update_8005() {
   $termWeightByNameWidgetOrderSettings['term_weight_by_name_widget_order'] = [
@@ -25,8 +23,10 @@ function alshaya_fl_transac_update_8005() {
     ],
     'settings' => [
       'sort' => ASC,
+      'attribute_id' => 'size_textile_eu',
     ],
   ];
+
   \Drupal::configFactory()->getEditable('facets.facet.plp_size_textile_eu')->set('processor_configs', $termWeightByNameWidgetOrderSettings)->save();
   \Drupal::configFactory()->getEditable('facets.facet.promo_size_textile_eu')->set('processor_configs', $termWeightByNameWidgetOrderSettings)->save();
   \Drupal::configFactory()->getEditable('facets.facet.size_textile_eu')->set('processor_configs', $termWeightByNameWidgetOrderSettings)->save();

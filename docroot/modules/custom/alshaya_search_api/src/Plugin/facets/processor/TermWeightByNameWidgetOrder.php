@@ -2,14 +2,15 @@
 
 namespace Drupal\alshaya_search_api\Plugin\facets\processor;
 
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\facets\Processor\SortProcessorPluginBase;
-use Drupal\facets\Result\Result;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\facets\Processor\SortProcessorPluginBase;
+use Drupal\facets\Result\Result;
+use Drupal\facets\FacetInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A processor that orders the terms by their weight using term name.
@@ -40,13 +41,6 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
   protected $connection;
 
   /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * Constructs a new object.
    *
    * @param array $configuration
@@ -59,15 +53,12 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    *   Language manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, Connection $connection, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, Connection $connection) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->languageManager = $language_manager;
     $this->connection = $connection;
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -79,8 +70,7 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('database'),
-      $container->get('config.factory')
+      $container->get('database')
     );
   }
 
@@ -88,26 +78,42 @@ class TermWeightByNameWidgetOrder extends SortProcessorPluginBase implements Con
    * {@inheritdoc}
    */
   public function sortResults(Result $a, Result $b) {
-    $config = $this->configFactory->get('alshaya_acm_product.settings');
-    if ($attributeCodeValue = $config->get('facet_sort_attribute_code_value')) {
+    if (empty($this->getConfiguration()['attribute_id'])) {
       return 0;
     }
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
     $query = $this->connection->select('taxonomy_term_field_data', 'td');
     $query->join('taxonomy_term__field_sku_attribute_code', 'sac', 'td.tid = sac.entity_id');
     $query->fields('td', ['name', 'weight']);
     $query->condition('td.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY, '=');
     $query->condition('td.name', [$a->getRawValue(), $b->getRawValue()], 'IN');
-    $query->condition('sac.field_sku_attribute_code_value', $attributeCodeValue);
-    $query->condition('td.langcode', $langcode);
-    $result = $query->execute()
-      ->fetchAllKeyed();
+    $query->condition('sac.field_sku_attribute_code_value', $this->getConfiguration()['attribute_id']);
+    $query->condition('td.langcode', $this->languageManager->getCurrentLanguage()->getId());
+    $result = $query->execute()->fetchAllKeyed();
+
     // Incase if any of the arguments don't have raw value.
     if (count($result) < 2) {
       return 0;
     }
 
     return ($result[$a->getRawValue()] < $result[$b->getRawValue()]) ? -1 : 1;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
+    $build = parent::buildConfigurationForm($form, $form_state, $facet);
+
+    $build['attribute_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Attribute ID'),
+      '#required' => TRUE,
+      '#default_value' => $this->getConfiguration()['attribute_id'] ?? '',
+      '#description' => $this->t('This should contain the attribute id name which is being used for this facet.'),
+    ];
+
+    return $build;
   }
 
 }
