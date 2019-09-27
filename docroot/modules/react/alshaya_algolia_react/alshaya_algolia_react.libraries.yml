@@ -1,0 +1,12 @@
+autocomplete:
+  js:
+    dist/autocomplete.js: {}
+  dependencies:
+    - alshaya_algolia_react/vendor
+
+vendor:
+  js:
+    dist/algolia.bundle.js: {}
+    dist/promise.js: {}
+  dependencies:
+    - alshaya_react/react

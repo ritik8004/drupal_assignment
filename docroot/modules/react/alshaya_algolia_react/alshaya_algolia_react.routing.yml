@@ -1,0 +1,6 @@
+alshaya_algolia_react.test:
+  path: '/algolia/test'
+  defaults:
+    _controller: \Drupal\alshaya_algolia_react\Controller\AlshayaAlgoliaController::testPage
+  requirements:
+    _permission: 'access content'
