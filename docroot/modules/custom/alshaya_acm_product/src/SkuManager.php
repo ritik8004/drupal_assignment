@@ -3317,37 +3317,6 @@ class SkuManager {
   }
 
   /**
-   * Cheaper function to fetch the node id of the parent node for a SKU.
-   *
-   * @param string $sku
-   *   Sku for which we need to determine the parent's nid.
-   *
-   * @return string
-   *   Node id for the parent node for the SKU.
-   */
-  public function getDisplayNodeId($sku) {
-    // Fetch parent SKU for this SKU, if exists.
-    $query = $this->connection->select('acq_sku_field_data', 'asfd');
-    $query->fields('asfd', ['sku']);
-    $query->join('acq_sku__field_configured_skus', 'fcs', "fcs.entity_id = asfd.id");
-    $parent_sku = $query->condition('fcs.field_configured_skus_value', $sku)
-      ->execute()->fetchField();
-
-    // If parent exists, use the parent to pull up the node id, else the SKU
-    // passed.
-    if ($parent_sku) {
-      $sku = $parent_sku;
-    }
-
-    $parent_nid = $this->connection->select('node__field_skus', 'nfs')
-      ->fields('nfs', ['entity_id'])
-      ->condition('nfs.field_skus_value', $sku)
-      ->execute()->fetchField();
-
-    return $parent_nid;
-  }
-
-  /**
    * Recursive helper function to get combination array.
    *
    * It converts ['color' => 'Black', 'size' => 'X', 'material' => 'Leather']
