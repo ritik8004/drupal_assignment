@@ -46,7 +46,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    return false;
+    return (window.innerWidth < 768);
   }
 
   render() {
