@@ -4,8 +4,13 @@
   li {
     &::after {
       @include breakpoint($upto-desktop) {
-        &::after {
-          #{$right}: -0.1875rem;
+        @include mm-mob-arrow;
+
+        #{$right}: 0.5rem;
+        margin-top: -1.875rem;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
         }
       }
     }
@@ -16,6 +21,7 @@
 
     @include breakpoint($upto-desktop) {
       text-transform: uppercase;
+      font-size: 0.9375rem;
     }
 
     &::before {
