@@ -271,18 +271,12 @@ body {
 }
 
 .menu__in {
-  &::after {
-    @include breakpoint($upto-desktop) {
-      @include mm-mob-arrow;
-
+  @include breakpoint($upto-desktop) {
+    @include mm-mob-arrow(after) {
       top: 0.5rem;
       #{$right}: 0.5rem;
       font-size: 0;
       position: absolute;
-
-      html[lang=ar] & {
-        transform: rotate(180deg);
-      }
     }
   }
 }

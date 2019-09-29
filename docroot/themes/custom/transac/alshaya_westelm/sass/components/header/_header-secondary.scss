@@ -2,16 +2,10 @@
   text-transform: capitalize;
 
   li {
-    &::after {
-      @include breakpoint($upto-desktop) {
-        @include mm-mob-arrow;
-
+    @include breakpoint($upto-desktop) {
+      @include mm-mob-arrow(after) {
         #{$right}: 0.5rem;
         margin-top: -1.875rem;
-
-        html[lang=ar] & {
-          transform: rotate(180deg);
-        }
       }
     }
   }

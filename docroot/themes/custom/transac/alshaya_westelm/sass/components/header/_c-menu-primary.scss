@@ -116,12 +116,9 @@
   }
 
   li {
-    &::after {
-      @include mm-mob-arrow;
-
-      html[lang=ar] & {
-        transform: rotate(180deg);
-      }
+    @include mm-mob-arrow(after) {
+      top: 2.25rem;
+      #{$right}: 0.5rem;
     }
   }
 }
@@ -178,15 +175,11 @@
     }
   }
 
-  &::before {
-    @include breakpoint($upto-desktop) {
-      @include mm-mob-arrow;
-
-      transform: rotate(180deg);
+  @include breakpoint($upto-desktop) {
+    @include mm-mob-arrow(before) {
       top: 1.25rem;
 
       html[lang=ar] & {
-        transform: rotate(0deg);
         top: 1rem;
       }
     }
