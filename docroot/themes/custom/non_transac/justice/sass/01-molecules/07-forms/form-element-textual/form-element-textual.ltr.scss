@@ -1,0 +1,243 @@
+@import '../../../config/_config.scss';
+
+input[type="search"] {
+  box-sizing: border-box;
+}
+
+.webform-submission-alshaya-contact-form {
+  max-width: 32rem;
+  margin: 0 auto;
+
+  .form-item-first-name,
+  .form-item-last-name {
+    float: $left;
+    max-width: 16rem;
+    width: calc(50% - 0.5rem);
+  }
+
+  .form-item-first-name {
+    margin-#{$right}: 1rem;
+  }
+
+  .feedback-title {
+    display: block;
+    font-family: $jus_bold;
+    color: $form_feedback_subtitle;
+    text-align: center;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.input--textual__container {
+  margin-bottom: 0.625rem;
+
+  label.error {
+    position: unset;
+  }
+}
+
+.form-item--error-message {
+  margin-bottom: 0.5rem;
+
+  html[lang=ar] & {
+    margin-top: 0.5rem;
+  }
+}
+
+.input--textual__container input,
+.mobile-number-field .local-number {
+  border-bottom: 0;
+  background: $form_input_bg;
+  height: 2.8125rem;
+  padding-#{$left}: 0.625rem;
+  color: $form_input_text;
+}
+
+.mobile-number-field .local-number {
+  z-index: 0;
+
+  html[lang=ar] & {
+    padding-left: 0.625rem;
+  }
+}
+
+.input__label label {
+  padding-#{$left}: 0.625rem;
+}
+
+.mobile-input--wrapper {
+  display: flex;
+}
+
+.mobile-number-field {
+  width: 100%;
+
+  .country-select {
+    border-bottom: 0;
+    background: $form_input_bg;
+    margin-right: 0.625rem;
+    height: 2.8125rem;
+
+    .prefix {
+      line-height: 3;
+      padding-left: 0.625rem;
+      min-width: 5.5rem;
+    }
+
+    .arrow {
+      position: absolute;
+      border-width: 0.3125rem;
+      top: 22%;
+    }
+  }
+
+  .mobile-number-flag {
+    display: none;
+  }
+
+  .mobile-input--wrapper .form-item-mobile-number-mobile {
+    width: 100%;
+  }
+}
+
+.mobile-input--wrapper .form-item-mobile-number-mobile label {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.input--textual__container textarea,
+.input--textual__container select {
+  border: none;
+  border-radius: 0;
+  line-height: 1.625rem;
+  background: $form_input_bg;
+  font-size: 1rem;
+  color: $form_input_text;
+  width: 100%;
+  -webkit-appearance: none;
+  padding: 0;
+  padding-#{$left}: 0.625rem;
+
+  &::placeholder {
+    color: $form_input_text;
+  }
+}
+
+.input--textual__container textarea {
+  resize: none;
+  min-height: 10.375rem;
+}
+
+.input--textual__container select {
+  height: 2.8125rem;
+  color: $form_input_text;
+  appearance: none;
+}
+
+.form-item-we-value-your-feedback, {
+  .input__inner-container {
+    position: relative;
+
+    @include icon(chevrondown, after) {
+      position: absolute;
+      top: 0.125rem;
+      #{$right}: 0.5rem;
+      pointer-events: none;
+      font-size: 2.75rem;
+      color: $form_dropdown_icon;
+    }
+  }
+}
+
+.text-count-wrapper,
+.input__label,
+.input__line {
+  display: none;
+}
+
+.input--checkbox__container {
+  margin-bottom: 0.5rem;
+  color: $form_input_text;
+
+  input[type=checkbox] {
+    opacity: 0;
+
+    + label:not(.error) {
+      &::after {
+        content: none;
+      }
+    }
+
+    &:checked {
+      + label:not(.error) {
+        &::after {
+          content: "";
+        }
+      }
+    }
+  }
+
+  label {
+    &.error {
+      color: $form_error_msg;
+      font-size: 0.75rem;
+      margin-top: 0.3125rem;
+      position: absolute;
+      bottom: 0.3725rem;
+      #{$left}: 0;
+
+      html[lang=ar] & {
+        bottom: -0.0625rem;
+      }
+    }
+
+    &:not(.error) {
+      position: relative;
+      display: inline-block;
+      padding-#{$left}: 1.875rem;
+      top: -1.125rem;
+      padding-bottom: 0.625rem;
+
+      html[lang=ar] & {
+        top: -0.5rem;
+      }
+
+      &::before,
+      &::after {
+        position: absolute;
+        content: "";
+        display: inline-block;
+      }
+
+      &::before {
+        height: 1.3125rem;
+        width: 1.3125rem;
+        border: 0.125rem solid $checkbox_border;
+        #{$left}: 0;
+        top: 0;
+        border-radius: 0.25rem;
+      }
+
+      &::after {
+        height: 0.375rem;
+        width: 0.625rem;
+        border-#{$left}: 0.125rem solid $checkbox_border;
+        border-bottom: 0.125rem solid $checkbox_border;
+        transform: rotate(-45deg);
+        #{$left}: 0.375rem;
+        top: 0.4375rem;
+
+        html[lang=ar] & {
+          transform: rotate(45deg);
+        }
+      }
+    }
+  }
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: $form_input_text;
+}
