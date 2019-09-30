@@ -63,7 +63,13 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function getCart(Request $request) {
     try {
-      $cart_id = 648;
+      $cart_id = $request->cookies->get('Drupal_visitor_acq_cart_id');
+
+      // If no cart id available, don't process further.
+      if (!$cart_id) {
+        return new JsonResponse([]);
+      }
+
       $cart = $this->spcApiWrapper->getCart($cart_id);
       $cart = $this->spcApiWrapper->prepareCartResponse($cart);
     }

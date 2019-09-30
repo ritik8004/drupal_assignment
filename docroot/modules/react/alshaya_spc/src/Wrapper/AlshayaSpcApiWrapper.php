@@ -13,7 +13,7 @@ class AlshayaSpcApiWrapper {
   /**
    * MDC native endpoint for getting cart.
    */
-  const CART_GET_MDC_ENDPOINT = 'carts/%d';
+  const CART_GET_MDC_ENDPOINT = 'carts/%d/getCart';
 
   /**
    * Alshaya api wrapper.
@@ -42,7 +42,10 @@ class AlshayaSpcApiWrapper {
    *   Data array.
    */
   public function prepareCartResponse(array $data = []) {
-    if (empty($data)) {
+    if (!empty($data)) {
+      $data['items_qty'] = $data['cart']['items_qty'];
+      $data['total'] = $data['totals']['base_grand_total'];
+      $data['items'] = [];
       return $data;
     }
 

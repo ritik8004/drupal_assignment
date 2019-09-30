@@ -1,7 +1,8 @@
 import React from 'react';
 
 import 'promise-polyfill/src/polyfill';
-import {getCartCookie, cartAvailableInStorage, fetchCartData} from '../../../utilities/get_cart.js';
+import {getCartCookie, cartAvailableInStorage, fetchCartData} from '../../../utilities/get_cart';
+import {addInfoInStorage} from '../../../utilities/storage';
 import EmptyMiniCart from '../empty-mini-cart';
 import Price from '../../../utilities/price';
 
@@ -24,8 +25,11 @@ export default class MiniCart extends React.Component {
             this.setState({
             wait: false,
             qty: result.items_qty,
-            amount: 10
-          })
+            amount: result.total
+          });
+
+          // Store info in storage.
+          addInfoInStorage(result);
         });
       }
     } catch (error) {
