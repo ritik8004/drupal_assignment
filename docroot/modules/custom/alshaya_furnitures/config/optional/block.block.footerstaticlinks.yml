@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - alshaya_westelm
+    - alshaya_pottery_barn
 id: footerstaticlinks
-theme: alshaya_westelm
+theme: alshaya_pottery_barn
 region: footer_primary
 weight: -46
 provider: null
