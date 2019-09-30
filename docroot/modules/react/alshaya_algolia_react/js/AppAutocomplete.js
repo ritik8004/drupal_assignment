@@ -20,7 +20,7 @@ class AppAutocomplete extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener("hashchange", this.updateQueryValue, false);
+    window.addEventListener('hashchange', this.updateQueryValue, false);
   }
 
   updateQueryValue() {
