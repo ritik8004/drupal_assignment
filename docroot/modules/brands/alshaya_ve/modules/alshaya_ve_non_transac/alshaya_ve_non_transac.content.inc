@@ -30,7 +30,7 @@ function alshaya_ve_non_transac_create_customer_subscribe_block_content() {
     'body' => [
       'value' => "<div class='block-subscribe'>
                   <h3 class='title icon-email'>Don’t miss the news</h3>
-                  <div class='button'><a class='btn' href='/email-sign-up'>SUBSCRIBE</a></div>
+                  <div class='button'><a class='btn' href='/en/email-sign-up'>SUBSCRIBE</a></div>
                   </div>",
       'format' => 'full_text',
     ],
