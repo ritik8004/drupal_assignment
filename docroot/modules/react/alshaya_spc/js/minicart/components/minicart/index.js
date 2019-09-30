@@ -33,7 +33,6 @@ export default class MiniCart extends React.Component {
         });
       }
     } catch (error) {
-      console.log(error)
       // In case of error, do nothing.
     }
   }
