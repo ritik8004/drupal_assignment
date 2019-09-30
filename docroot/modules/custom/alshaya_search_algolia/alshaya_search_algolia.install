@@ -16,6 +16,9 @@ function alshaya_search_algolia_update_8001() {
     'alshaya_search_algolia',
     'install'
   );
+
+  // Remove unnecessary autocomplete block.
+  alshaya_block_delete_blocks(['autocompletewidgetofalgolia']);
 }
 
 /**
