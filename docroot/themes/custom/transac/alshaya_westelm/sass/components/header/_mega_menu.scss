@@ -2,7 +2,7 @@
   ul.menu--one__list {
     @include breakpoint($desktop) {
       background: $pre_content_region_bg;
-      padding: 0 calc((100% - 1080px) / 2);
+      padding: 0 calc((100% - 67.5rem) / 2);
     }
   }
 

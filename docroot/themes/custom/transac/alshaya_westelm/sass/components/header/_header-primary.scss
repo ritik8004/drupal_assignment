@@ -188,8 +188,10 @@ header {
 
       .block-system-branding-block .site-brand-home {
         @include breakpoint($only-tablet) {
+          max-width: 17.5625rem;
+
           img {
-            width: 17.5625rem;
+            width: 100%;
           }
         }
       }
