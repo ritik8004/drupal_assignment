@@ -838,10 +838,9 @@ class SkuManager {
       $query->exists('field_acq_promotion_label');
       $nids = $query->execute();
 
-      $promotion_nodes = $this->nodeStorage->loadMultiple($nids);
-
       /* @var \Drupal\node\Entity\Node $promotion_node */
-      foreach ($promotion_nodes as $promotion_node) {
+      foreach ($nids as $nid) {
+        $promotion_node = $this->nodeStorage->load($nid);
         // Get the promotion with language fallback, if it did not have a
         // translation for $langcode.
         $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
