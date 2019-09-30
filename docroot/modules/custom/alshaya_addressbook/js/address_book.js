@@ -20,7 +20,7 @@
 
           $(document).ajaxComplete(function () {
             toggleOverlay('.ui-dialog-titlebar-close', 'mobile--overlay address--delete-popup');
-            toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'mobile--overlay address--delete-popup');
+            toggleOverlay('.address--delete-popup .dialog-cancel', 'mobile--overlay address--delete-popup');
           });
         }
 
