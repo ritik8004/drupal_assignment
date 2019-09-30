@@ -55,7 +55,7 @@ export const fetchCartData = function () {
       return response.data
   })
   .catch(error => {
-    console.log(error);
+    // Processing of error here.
   });
 
 }
