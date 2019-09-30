@@ -1,0 +1,5 @@
+services:
+  alshaya_spc.api_wrapper:
+    class: Drupal\alshaya_spc\Wrapper\AlshayaSpcApiWrapper
+    arguments:
+      - '@alshaya_api.api'
