@@ -48,17 +48,22 @@ function alshaya_options_list_theme($existing, $type, $theme, $path) {
  * Implements hook_alshaya_main_menu_links_alter().
  */
 function alshaya_options_list_alshaya_main_menu_links_alter(array &$term_data, $parent_id, array $context) {
-  $links = \Drupal::service('alshaya_options_list.alshaya_options_service')->getOptionsPagesLinks();
-  if (!empty($links)) {
-    foreach ($links as $link) {
-      $item = [
-        'label' => $link->getText(),
-        'path' => $link->getUrl()->toString(),
-        'class' => 'options-list--mobile-link hide-on-desktop',
-        'clickable' => 1,
-      ];
-      $term_data[] = $item;
-    }
+  /** @var \Drupal\alshaya_options_list\AlshayaOptionsListHelper $service */
+  $service = \Drupal::service('alshaya_options_list.alshaya_options_service');
+
+  if (!$service->optionsPageEnabled()) {
+    return;
+  }
+
+  foreach ($service->getOptionsPagesLinks() ?? [] as $link) {
+    $item = [
+      'label' => $link->getText(),
+      'path' => $link->getUrl()->toString(),
+      'class' => 'options-list--mobile-link hide-on-desktop',
+      'clickable' => 1,
+    ];
+
+    $term_data[] = $item;
   }
 }
 
