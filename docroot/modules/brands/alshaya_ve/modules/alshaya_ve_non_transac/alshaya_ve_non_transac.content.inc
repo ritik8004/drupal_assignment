@@ -32,7 +32,7 @@ function alshaya_ve_non_transac_create_customer_subscribe_block_content() {
                   <h3 class='title icon-email'>Don’t miss the news</h3>
                   <div class='button'><a class='btn' href='/email-sign-up'>SUBSCRIBE</a></div>
                   </div>",
-      'format' => 'mail_text',
+      'format' => 'full_text',
     ],
     'type' => 'basic',
     'langcode' => 'en',
@@ -44,9 +44,9 @@ function alshaya_ve_non_transac_create_customer_subscribe_block_content() {
     'body' => [
       'value' => "<div class='block-subscribe'>
                   <h3 class='title icon-email'>لا تفوت الأخبار</h3>
-                  <div class='button'><a class='btn' href='/email-sign-up'>الإشتراك</a></div>
+                  <div class='button'><a class='btn' href='/ar/email-sign-up'>الإشتراك</a></div>
                   </div>",
-      'format' => 'mail_text',
+      'format' => 'full_text',
     ],
   ]);
   $ar_block_content->save();
@@ -66,7 +66,7 @@ function alshaya_ve_non_transac_create_customer_support_block_content() {
                   <h3>Customer Support</h3>
                   <p>+965 182 12 12</p>
                   </div>",
-      'format' => 'mail_text',
+      'format' => 'full_text',
     ],
     'type' => 'basic',
     'langcode' => 'en',
@@ -80,7 +80,7 @@ function alshaya_ve_non_transac_create_customer_support_block_content() {
                   <h3>دعم العملاء</h3>
                   <p>+965 182 12 12</p>
                   </div>",
-      'format' => 'mail_text',
+      'format' => 'full_text',
     ],
   ]);
   $ar_block_content->save();
