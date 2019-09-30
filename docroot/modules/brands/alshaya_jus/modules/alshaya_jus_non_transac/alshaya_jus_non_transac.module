@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -14,19 +13,4 @@ use Drupal\views\ViewExecutable;
 function alshaya_jus_non_transac_form_webform_submission_alshaya_email_signup_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['elements']['exclusive_deals']['#suffix'] = '';
   $form['actions']['submit']['#value'] = t('Subscribe');
-}
-
-/**
- * Implements hook_views_pre_view().
- */
-function alshaya_jus_non_transac_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
-
-  // To override the header text to display the title as per menu name.
-  if ($view->id() == 'product_list') {
-    $parameters = \Drupal::routeMatch()->getParameters()->get('arg_0');
-    if ($display_id === 'product_list') {
-      $header_text = '<div class="product-info"><p>' . $parameters . '</p><p> @total ' . t('products') . '</p></div>';
-      $view->setHandlerOption($display_id, 'header', 'result', 'content', $header_text);
-    }
-  }
 }
