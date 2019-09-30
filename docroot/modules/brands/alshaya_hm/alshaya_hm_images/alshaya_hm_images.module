@@ -9,6 +9,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
@@ -384,8 +385,10 @@ function alshaya_hm_images_alshaya_acm_switch_magento_configs_alter(array &$conf
 }
 
 /**
- * Implements hook_page_attachments_alter().
+ * Implements hook_block_view_alter().
  */
-function alshaya_hm_images_page_attachments_alter(array &$attachments) {
-  $attachments['#attached']['library'][] = 'alshaya_hm_images/hm_images';
+function alshaya_hm_images_block_view_alter(array &$build, BlockPluginInterface $block) {
+  if ($build['#configuration']['id'] == 'alshaya_algolia_react_autocomplete') {
+    $build['#attached']['library'][] = 'alshaya_hm_images/hm_images';
+  }
 }
