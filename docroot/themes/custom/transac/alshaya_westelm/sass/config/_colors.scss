@@ -1,1 +1,145 @@
 /* Color palette from WE */
+
+$WE_black_one: #000;
+$WE_black_two: #212121;
+$WE_grey_one: #d8d8d8;
+$WE_grey_two: #777;
+$WE_grey_three: #333;
+$WE_grey_four: #363636;
+$WE_gray_five: #dadada;
+$WE_gray_six: #f2f2f2;
+$WE_gray_seven: #565458;
+$WE_gray_eight: #b3b3b3;
+$WE_gray_nine: #eaeaea;
+$WE_gray_ten: #a0a0a0;
+$WE_white: #fff;
+$WE_white_two: #f9f9f9;
+$WE_white_three: #f7f7f7;
+$WE_white_four: rgba(51, 51, 51, 0.06);
+$WE_white_five: #e2e2e2;
+$WE_dark_wood: #81644b;
+$WE_alshaya_priv: #ac8e54;
+$WE_message_green: #39b54a;
+$medium-green: #1da545;
+$WE_deep_red: #b61935;
+$WE_light_red: rgba(182, 25, 53, 0.15);
+$WE_warning_red: #cc0;
+$WE_tint_red: #f65044;
+$tomato: #e6591b;
+$WE_deep_blue: #4285f4;
+$roman_coffee: #81644b;
+
+// Overrides for variables.
+// Global elements.
+$content_link_color: $WE_grey_two;
+$primary_link: $WE_grey_three;
+$primary_input_focus_border: $WE_grey_four;
+$secondary_link: $WE_grey_two;
+
+// Errors.
+$content_error_msg_bg: $WE_warning_red;
+$content_error_msg_text: $WE_white;
+$basket_header_oos_txt: $WE_white;
+$basket_header_oos_bg: $WE_warning_red;
+
+// Titles.
+$page_title: $WE_grey_three;
+$block_title: $WE_grey_three;
+$title: $WE_grey_three;
+$sub_title: $WE_grey_three;
+$user_sidebar_block_title: $WE_grey_three;
+$user_block_link: $WE_grey_two;
+$promo_panel_image_title_subtitle_title_text: $WE_grey_three;
+$user_login_section_title: $WE_grey_three;
+$user_login_link_btn_text: $WE_grey_three;
+$social-network-text: $WE_grey_three;
+
+// Messages
+$default_msg_bg: $WE_message_green;
+$default_msg_text: $WE_white;
+
+//Buttons.
+$primary_brand_button: $WE_grey_three;
+
+// Language Switcher
+$lang_switch: $WE_grey_three;
+$lang_switch_firsttime_bg: $WE_grey_three;
+
+// Header - Top header.
+$header_secondary_bg: $WE_gray_six;
+$header_secondary_bg_upto_desk: $WE_white;
+$header_secondary_menu_link_mobile: $WE_grey_three;
+$header_secondary_menu_link: $WE_grey_three;
+$header_secondary_menu_link_hover_bg: $WE_white_two;
+
+// Header tablet and mobile.
+$header_c_menu_text: $WE_grey_three;
+$header_c_menu_icon_color: $WE_grey_three;
+$header_toggle_sign_active_tab: $WE_grey_three;
+$header_mobile_menu_arrow: $WE_grey_three;
+$header_search_border_mobile: $WE_grey_three;
+$header_search_active_text: $WE_grey_three;
+$header_my_account_icon: $WE_grey_three;
+$header_border: $WE_white_three;
+$header_c_menu_search_active_icon: $WE_grey_three;
+$header_c_menu_store_active_icon: $WE_grey_three;
+$header_c_menu_search_icon: $WE_grey_three;
+
+// Header - Search.
+$primary_search_btn: $WE_grey_three;
+$primary_search_bg: $WE_white;
+$primary_search_btn_icon: transparent;
+$primary_search_input: $WE_grey_three;
+$primary_search_input_placeholder: $WE_grey_two;
+$primary_search_border: $WE_gray_five;
+
+// Header - welcome user.
+$header_my_account_h3_title: $WE_grey_three;
+
+// Mega menu.
+$pre_content_region_bg: $WE_white;
+$mm_l1_link: $WE_grey_three;
+$mm_l1_border: $WE_white_three;
+$mm_l1_link_active: $WE_grey_three;
+$mm_l1_link_active_bg: $WE_white;
+$mm_l1_link_active_shadow: $WE_grey_three;
+$mm_l2_link: $WE_grey_three;
+$mm_l2_link_mobile_menu: $WE_grey_three;
+$mm_l3_link: $WE_grey_two;
+$mm_mob_l3_link: $WE_grey_three;
+$mm_l3_link_hover: $roman_coffee;
+$mm_highlight_label: $WE_grey_three;
+$mm_highlight_title: $WE_grey_three;
+$mm_l1_link_hover: $WE_white;
+$highlights_subtitle_hover: $WE_grey_three;
+$menu_toggle_sign: $WE_grey_three;
+$mm_mob_arrow_icon: $WE_black_one;
+
+// Footer Primary.
+$footer_bg: $WE_gray_six;
+$footer_title_h3: $WE_grey_three;
+$footer_link: $WE_grey_two;
+$footer_link_hover: $WE_grey_three;
+$_footer_mobile_accordion_border: $WE_white;
+
+// Our Brands.
+$our_brands_footer_separator: $WE_grey_three;
+$our_brand_section_title: $WE_grey_three;
+
+// Copyright Footer.
+$copyright_footer_bg: $WE_white;
+$copyright_footer_text: $WE_grey_three;
+$checkout_footer_copyright_mobile_bg: $WE_white;
+
+// Footer social icons.
+$social_links: $WE_grey_three;
+$social_links_hover: $WE_grey_two;
+
+//7. Newsletter-signup
+$newsletter_title_h3: $WE_white;
+$newsletter_block_text: $WE_white;
+$newsletter_input_placeholder: $WE_grey_two;
+$newsletter_input_bg: transparent;
+$newsletter_input_border: $WE_grey_two;
+$newsletter_submit_btn: $WE_grey_three;
+$newsletter_submit_btn_text: $WE_white;
