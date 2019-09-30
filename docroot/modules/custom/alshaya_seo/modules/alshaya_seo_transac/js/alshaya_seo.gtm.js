@@ -12,7 +12,7 @@
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('article.entity--type-node').once('alshaya-seo-gtm').on('combination-changed', function (event, variant, code) {
+      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
@@ -961,24 +961,25 @@
         if ($(highlight).find(promo_para_elements).length > 0) {
           return true;
         }
-        var imgElem = $(highlight).find('picture img');
-        if (imgElem.length === 0) {
-          imgElem = $(highlight).find('img');
-        }
-        var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
-          imgElem.attr('src') :
-          imgElem.attr('data-src');
+        if ($(highlight).find('img').is(':visible')) {
+          var imgElem = $(highlight).find('picture img');
+          if (imgElem.length === 0) {
+            imgElem = $(highlight).find('img');
+          }
+          var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
+            imgElem.attr('src') :
+            imgElem.attr('data-src');
 
-        // add position value only if image is there.
-        if (typeof imgSrc !== 'undefined') {
-          position = promotion_counter;
-          if (event === 'promotionClick') {
-            position = $(highlight).find('picture img').data('position');
+          // add position value only if image is there.
+          if (typeof imgSrc !== 'undefined') {
+            position = promotion_counter;
+            if (event === 'promotionClick') {
+              position = $(highlight).find('picture img').data('position');
+            } else {
+              $(highlight).find('picture img').data('position', promotion_counter);
+            }
+            creative = Drupal.url(imgSrc);
           }
-          else {
-            $(highlight).find('picture img').data('position', promotion_counter);
-          }
-          creative = Drupal.url(imgSrc);
         }
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {

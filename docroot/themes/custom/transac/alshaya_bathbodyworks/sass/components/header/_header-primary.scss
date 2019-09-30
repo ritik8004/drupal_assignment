@@ -395,6 +395,7 @@ header .block-views-exposed-filter-blocksearch-page {
             margin-top: 0.375rem;
             position: absolute;
             #{$left}: 0;
+            bottom: 0.125rem;
 
             html[lang='ar'] & {
               margin-top: 0.5625rem;
@@ -428,7 +429,6 @@ header .block-views-exposed-filter-blocksearch-page {
       &:hover {
         & > ul.menu--two__list {
           border-bottom: 2px solid $mm_l1_border;
-          border-top: none;
           transform: none;
 
           &::after {
@@ -449,6 +449,7 @@ header .block-views-exposed-filter-blocksearch-page {
         overflow: hidden;
         transform: none;
         border-top: none;
+        border-top: 0.125rem solid $header_c_menu_border;
       }
     }
 
@@ -932,5 +933,11 @@ header .region__header {
         }
       }
     }
+  }
+}
+
+@include breakpoint($desktop) {
+  .region__pre-content {
+    border-bottom: 0.125rem solid $header_c_menu_border;
   }
 }

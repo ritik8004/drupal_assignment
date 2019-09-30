@@ -809,20 +809,22 @@ class SkuManager {
    */
   public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
     $promotion_nodes = [];
+    $promotion_nids = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
+    foreach ($promotion ?? [] as $promo) {
+      $promotion_nids[] = $promo['target_id'];
+    }
 
-    if (empty($promotion) && $sku->bundle() == 'simple') {
+    if ($sku->bundle() == 'simple') {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
       $parent = $plugin->getParentSku($sku);
       if ($parent instanceof SKUInterface) {
         $promotion = $parent->get('field_acq_sku_promotions')->getValue();
+        foreach ($promotion ?? [] as $promo) {
+          $promotion_nids[] = $promo['target_id'];
+        }
       }
-    }
-
-    $promotion_nids = [];
-    foreach ($promotion as $promo) {
-      $promotion_nids[] = $promo['target_id'];
     }
 
     if (!empty($promotion_nids)) {
@@ -1704,10 +1706,21 @@ class SkuManager {
     foreach ($combinations['by_sku'] ?? [] as $combination) {
       foreach ($all_combinations as $possible_combination) {
         $combination_string = '';
+
         foreach ($possible_combination as $code) {
+          if (!isset($combination[$code])) {
+            $combination_string = '';
+            break;
+          }
+
           $combination_string .= $code . '|' . $combination[$code] . '||';
           $combinations['by_attribute'][$combination_string] = 1;
         }
+
+        if (empty($combination_string)) {
+          continue;
+        }
+
         $combinations['by_attribute'][$combination_string] = 1;
       }
     }
@@ -3289,6 +3302,33 @@ class SkuManager {
       ->execute()->fetchField();
 
     return $parent_nid;
+  }
+
+  /**
+   * Recursive helper function to get combination array.
+   *
+   * It converts ['color' => 'Black', 'size' => 'X', 'material' => 'Leather']
+   * to ['color']['Black']['size']['X']['material']['Leather'] = 1.
+   *
+   * @param array $options
+   *   One dimensional array.
+   *
+   * @return array
+   *   Multi dimensional array.
+   */
+  public function getCombinationArray(array $options) {
+    $combination = [];
+    foreach ($options as $code => $value) {
+      unset($options[$code]);
+
+      $combination[$code][$value] = count($options) > 0
+        ? $this->getCombinationArray($options)
+        : 1;
+
+      break;
+    }
+
+    return $combination;
   }
 
 }

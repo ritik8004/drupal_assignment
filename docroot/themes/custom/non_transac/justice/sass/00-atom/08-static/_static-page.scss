@@ -1,0 +1,73 @@
+.static-content {
+  max-width: 41.25rem;
+  margin: 0 auto;
+  text-align: center;
+  color: $static_page_text;
+  line-height: 1.8;
+
+  h3 {
+    font-size: 1.5rem;
+    font-family: $jus_bold;
+  }
+}
+
+// 404 and maintanence page
+.page-not-found,
+.maintanence-page {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  height: 40.3125rem;
+}
+
+.page-not-found {
+  h1 {
+    font-size: 2rem;
+    font-family: $jus_bold;
+    margin: 0;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: $static_page_text;
+  }
+}
+
+.maintanence-page {
+  p {
+    margin: 0;
+  }
+
+  .ar-msg {
+    h1 {
+      font-size: 2rem;
+      font-family: $jus_arabic_bold;
+    }
+
+    p {
+      font-size: 1.3125rem;
+      font-family: $jus_arabic_regular;
+      color: $static_page_text;
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+  }
+
+  .en-msg {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 1.875rem;
+      font-family: $jus_bold;
+    }
+
+    p {
+      font-size: 1.125rem;
+      color: $static_page_text;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
