@@ -383,6 +383,10 @@
         color: $free-gifts-coupon-code-text;
       }
     }
+
+    .ajax-progress-throbber {
+      display: block !important;
+    }
   }
 
   #table-cart-items {
