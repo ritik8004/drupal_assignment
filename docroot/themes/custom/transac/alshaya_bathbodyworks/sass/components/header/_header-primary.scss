@@ -936,6 +936,8 @@ header .region__header {
   }
 }
 
-.region__pre-content {
-  border-bottom: 0.125rem solid $header_c_menu_border;
+@include breakpoint($desktop) {
+  .region__pre-content {
+    border-bottom: 0.125rem solid $header_c_menu_border;
+  }
 }
