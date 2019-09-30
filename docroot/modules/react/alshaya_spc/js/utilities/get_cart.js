@@ -37,6 +37,16 @@ export const cartAvailableInStorage = function () {
 }
 
 export const fetchCartData = function () {
+  var cart_cookie = getCartCookie();
+  if (cart_cookie === false) {
+    return null;
+  }
+
+  // Check if cart available in storage.
+  var cart = cartAvailableInStorage();
+  if (cart !== false) {
+    return Promise.resolve(cart);
+  }
   // Prepare api url.
   var api_url = window.drupalSettings.mini_cart.base_url + '/' + window.drupalSettings.mini_cart.langcode;
 
