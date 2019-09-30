@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 import {
   Configure,
   connectHits,
-  connectSearchBox
+  connectSearchBox,
+  HierarchicalMenu,
+  Panel,
+  RefinementList,
+  SortBy,
 } from 'react-instantsearch-dom';
 import InstantSearchComponent from './InstantSearchComponent';
 import Teaser from './teaser/Teaser';
@@ -79,11 +83,48 @@ class SearchResults extends React.Component {
     // Filter out of stock products.
     const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? ['stock > 0'] : [];
 
-    return  ReactDOM.createPortal(
+    return ReactDOM.createPortal(
       <InstantSearchComponent indexName={drupalSettings.algoliaSearch.indexName}>
         <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} numericFilters={stockFilter}/>
         <VirtualSearchBox defaultRefinement={query} />
-        <SearchResultHits />
+        <div className="container-wrapper">
+          <section className="sticky-filter-wrapper">
+            <div class="site-brand-home">
+              <a href="/en/" title="H&amp;M Kuwait" rel="home" class="logo">
+                <img src="/themes/custom/transac/alshaya_hnm/site-logo.svg?sjhgdf7v" alt="H&M Kuwait" />
+              </a>
+            </div>
+            <div className="container-without-product">
+              <Panel header="Category">
+                <HierarchicalMenu
+                  attributes={[
+                    'field_category_name.lvl0',
+                    'field_category_name.lvl1',
+                  ]}
+                />
+              </Panel>
+              <Panel header="Brands">
+                <RefinementList
+                  attribute="attr_product_brand"
+                  searchable={true}
+                  translations={{
+                    placeholder: 'Search for brands...',
+                  }}
+                />
+              </Panel>
+              <Panel header="Colour">
+                <RefinementList
+                  attribute="attr_color_family"
+                  searchable={true}
+                  translations={{
+                    placeholder: 'Search for color...',
+                  }}
+                />
+              </Panel>
+            </div>
+          </section>
+          <SearchResultHits />
+        </div>
       </InstantSearchComponent>,
       this.el
     );
