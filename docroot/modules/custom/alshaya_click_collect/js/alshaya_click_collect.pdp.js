@@ -255,94 +255,90 @@
 
   // Make Ajax call to get stores and render html.
   Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger) {
-    new Promise(function (resolve, reject) {
-      var wait_for_maps_api = setInterval(function () {
-        if (Drupal.geolocation.maps_api_loading === false) {
-          clearInterval(wait_for_maps_api);
-          resolve();
+    var wait_for_maps_api = setInterval(function () {
+      if (Drupal.geolocation.maps_api_loading === false) {
+        clearInterval(wait_for_maps_api);
+        if (coords) {
+          asCoords = coords;
         }
-      }, 100);
-    }).then(function () {
-      if (coords) {
-        asCoords = coords;
-      }
-      if (!$.isEmptyObject(asCoords)) {
-        // Get the Product info.
-        var productInfo = Drupal.pdp.getProductInfo();
-        var sku = '';
-        if (productInfo) {
-          sku = productInfo.sku;
-          if (productInfo.type === 'configurable') {
-            if (typeof productInfo.selectedVariant !== 'undefined' && productInfo.selectedVariant !== null) {
-              $('.click-collect-empty-selection').hide();
-              sku = productInfo.selectedVariant;
-            }
-            else {
-              $('.click-collect-empty-selection').show();
-              $('.click-collect-form').hide();
-              return;
-            }
-          }
-
-          if (asCoords !== null) {
-            var checkLocation = true;
-            if (lastCoords !== null) {
-              checkLocation = (lastCoords.lat !== asCoords.lat || lastCoords.lng !== asCoords.lng);
+        if (!$.isEmptyObject(asCoords)) {
+          // Get the Product info.
+          var productInfo = Drupal.pdp.getProductInfo();
+          var sku = '';
+          if (productInfo) {
+            sku = productInfo.sku;
+            if (productInfo.type === 'configurable') {
+              if (typeof productInfo.selectedVariant !== 'undefined' && productInfo.selectedVariant !== null) {
+                $('.click-collect-empty-selection').hide();
+                sku = productInfo.selectedVariant;
+              }
+              else {
+                $('.click-collect-empty-selection').show();
+                $('.click-collect-form').hide();
+                return;
+              }
             }
 
-            if ((lastSku === null || lastSku !== sku) || checkLocation) {
-              lastSku = sku;
-              lastCoords = asCoords;
-
-              if (typeof $trigger === 'undefined' || $trigger == null) {
-                $trigger = $('.click-collect-form');
+            if (asCoords !== null) {
+              var checkLocation = true;
+              if (lastCoords !== null) {
+                checkLocation = (lastCoords.lat !== asCoords.lat || lastCoords.lng !== asCoords.lng);
               }
 
-              // Add formatted address based on lat/lng before ajax for top three stores.
-              Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'), 'html');
-              // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
-              if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
-                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
-              }
+              if ((lastSku === null || lastSku !== sku) || checkLocation) {
+                lastSku = sku;
+                lastCoords = asCoords;
 
-              var storeDisplayAjax = Drupal.ajax({
-                url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
-                element: $trigger.get(0),
-                base: false,
-                progress: {type: 'throbber'},
-                submit: {js: true}
-              });
-
-              // Custom command function to render map and map markers.
-              storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
-                if ($('body').hasClass('magazine-layout-ajax-throbber')) {
-                  $('body').removeClass('magazine-layout-ajax-throbber');
+                if (typeof $trigger === 'undefined' || $trigger == null) {
+                  $trigger = $('.click-collect-form');
                 }
 
-                if (status === 'success') {
-                  if (response.data.alshaya_click_collect.pdp.top_three) {
-                    // Show formatted address after ajax for all stores, once we have html elements.
-                    Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
-                    displaySearchForm = false;
-                    records = true;
-                  }
-                  else {
-                    displaySearchForm = true;
-                  }
+                // Add formatted address based on lat/lng before ajax for top three stores.
+                Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'), 'html');
+                // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
+                if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
+                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
                 }
-              };
 
-              // When sidebar is sticky for magazine layout.
-              if ($('.content-sidebar-wrapper').hasClass('sidebar-fixed')) {
-                $('body').addClass('magazine-layout-ajax-throbber');
+                var storeDisplayAjax = Drupal.ajax({
+                  url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
+                  element: $trigger.get(0),
+                  base: false,
+                  progress: {type: 'throbber'},
+                  submit: {js: true}
+                });
+
+                // Custom command function to render map and map markers.
+                storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
+                  if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+                    $('body').removeClass('magazine-layout-ajax-throbber');
+                  }
+
+                  if (status === 'success') {
+                    if (response.data.alshaya_click_collect.pdp.top_three) {
+                      // Show formatted address after ajax for all stores, once we have html elements.
+                      Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
+                      displaySearchForm = false;
+                      records = true;
+                    }
+                    else {
+                      displaySearchForm = true;
+                    }
+                  }
+                };
+
+                // When sidebar is sticky for magazine layout.
+                if ($('.content-sidebar-wrapper').hasClass('sidebar-fixed')) {
+                  $('body').addClass('magazine-layout-ajax-throbber');
+                }
+
+                storeDisplayAjax.execute();
               }
-
-              storeDisplayAjax.execute();
             }
           }
         }
       }
-    });
+    }, 100);
   };
 
   // Make autocomplete field in search form in the all stores.

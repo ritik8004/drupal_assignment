@@ -10,6 +10,56 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_n().
  *
+ * Update translations of checkout.com related strings.
+ * Set the config to allow apple pay not on desktop for now.
+ */
+function alshaya_acm_checkoutcom_update_8002() {
+  $strings = [
+    'Apple Pay' => [
+      'ar' => 'الدفع عن طريق أبل باي',
+    ],
+    'expires on' => [
+      'ar' => 'تنتهي في',
+    ],
+    '@card_type card ending in @ending' => [
+      'ar' => '@card_type الذي ينتهي بالرقم @ending',
+    ],
+    'Visa' => [
+      'ar' => 'الفيزا',
+    ],
+    'Master' => [
+      'ar' => 'الماستر',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com');
+  $checkout_com = $checkout_com->hasTranslation('ar')
+    ? $checkout_com->getTranslation('ar')
+    : $checkout_com->addTranslation('ar', []);
+  $checkout_com->setName('البطاقة الائتمانية / البطاقة المصرفية');
+  $checkout_com->save();
+
+  $apple_pay = $checkout_options_manager->loadPaymentMethod('checkout_com_applepay', 'Apple Pay');
+  $apple_pay = $apple_pay->hasTranslation('ar')
+    ? $apple_pay->getTranslation('ar')
+    : $apple_pay->addTranslation('ar', []);
+  $apple_pay->setName('الدفع عن طريق أبل باي');
+  $apple_pay->save();
+
+  \Drupal::configFactory()
+    ->getEditable('acq_checkoutcom.settings')
+    ->set('apple_pay_allowed_in', 'mobile')
+    ->save();
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Update translation of saved card labels.
  */
 function alshaya_acm_checkoutcom_update_8001() {
@@ -39,21 +89,27 @@ function alshaya_acm_checkoutcom_install() {
   }
   $checkout_com->save();
 
-  if (!$checkout_com->hasTranslation('ar')) {
-    $checkout_com_ar = $checkout_com->addTranslation('ar', []);
-  }
-  else {
-    $checkout_com_ar = $checkout_com->getTranslation('ar');
-  }
-  $checkout_com_ar->setName('بطاقة الائتمان');
+  $checkout_com_ar = $checkout_com->hasTranslation('ar')
+    ? $checkout_com->getTranslation('ar')
+    : $checkout_com->addTranslation('ar', []);
+  $checkout_com_ar->setName('البطاقة الائتمانية / البطاقة المصرفية');
   $checkout_com_ar->save();
+
+  $apple_pay = $checkout_options_manager->loadPaymentMethod('checkout_com_applepay', 'Apple Pay');
+  $apple_pay->save();
+
+  $apple_pay_ar = $apple_pay->hasTranslation('ar')
+    ? $apple_pay->getTranslation('ar')
+    : $apple_pay->addTranslation('ar', []);
+  $apple_pay_ar->setName('الدفع عن طريق أبل باي');
+  $apple_pay_ar->save();
 
   $strings = [
     'Save card for future use' => [
       'ar' => 'احفظ تفاصيل بطاقة الدفع لاستخدامها مرة أخرى',
     ],
     'This card will be securely saved for a faster payment experience. CVV number will not be saved.' => [
-      'ar' => 'سيتم حفظ تفاصيل هذه البطاقة بشكل آمن لتتم عملية الدفع بشكل أسرع. لن يتم حفظ رقم CVV.',
+      'ar' => 'سيتم حفظ بيانات هذه البطاقة بشكل آمن لتحصل على تجربة دفع أسرع. لن يتم حفظ الرقم السري للبطاقة CVV.',
     ],
     'New Card' => [
       'ar' => 'بطاقة دفع جديدة',
@@ -115,6 +171,22 @@ function alshaya_acm_checkoutcom_install() {
     'card number' => [
       'ar' => 'رقم البطاقة',
     ],
+    'Apple Pay' => [
+      'ar' => 'الدفع عن طريق أبل باي',
+    ],
+    'expires on' => [
+      'ar' => 'تنتهي في',
+    ],
+    '@card_type card ending in @ending' => [
+      'ar' => '@card_type الذي ينتهي بالرقم @ending',
+    ],
+    'Visa' => [
+      'ar' => 'الفيزا',
+    ],
+    'Master' => [
+      'ar' => 'الماستر',
+    ],
   ];
+
   alshaya_i18n_save_translations($strings);
 }

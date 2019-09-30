@@ -106,6 +106,10 @@
       &.sidebar-fixed {
         #{$right}: calc((100vw - 77rem) / 2);
         width: 24.1rem;
+
+        .ie & {
+          #{$right}: calc((100vw - 78rem) / 2);
+        }
       }
 
       &.contain {
