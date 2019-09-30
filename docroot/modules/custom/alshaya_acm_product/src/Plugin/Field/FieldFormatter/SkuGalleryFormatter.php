@@ -205,6 +205,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           continue;
         }
 
+        $cache_tags = ['node:' . $node->id()];
         $product_base_url = $product_url = $node->url();
         $product_label = $node->getTitle();
 
@@ -236,14 +237,11 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         }
 
         $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
-
-        $promotion_cache_tags = [];
         foreach ($promotions as $key => $promotion) {
-          $promotion_cache_tags[] = 'node:' . $key;
+          $cache_tags[] = 'node:' . $key;
         }
 
         $stock_placeholder = NULL;
-
         if (alshaya_acm_product_is_buyable($sku) && !$this->skuManager->isProductInStock($sku)) {
           $stock_placeholder = [
             '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . $this->t('out of stock') . '</span></div>',
@@ -260,7 +258,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           '#promotions' => $promotions,
           '#stock_placeholder' => $stock_placeholder,
           '#cache' => [
-            'tags' => array_merge($promotion_cache_tags, $sku->getCacheTags()),
+            'tags' => $cache_tags,
           ],
           '#color' => $color,
         ];
