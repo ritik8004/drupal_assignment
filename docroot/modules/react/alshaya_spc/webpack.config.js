@@ -14,6 +14,10 @@ module.exports = {
     contentBase: './',
     publicPath: '/dist/'
   },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM'
+  },
   module: {
     rules: [
       {
