@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from "react-slick";
 import { ImageWrapper } from '../imageHelper/ImageWrapper';
+import ImageLazyLoad from '../imageHelper/ImageLazyLoad';
 import ImageElement from '../imageHelper/ImageElement';
 
 const SliderElement = props => {
@@ -9,7 +10,7 @@ const SliderElement = props => {
       onMouseEnter={props.mouseenter.bind(this)}
       onMouseOut={props.mouseout.bind(this)}
     >
-      <ImageElement
+      <ImageLazyLoad
         src={props.src}
         title={props.title}
         className="b-lazy b-loaded"
