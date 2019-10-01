@@ -8,7 +8,7 @@ import {
   CurrentRefinements
 } from 'react-instantsearch-dom';
 import { formatPrice } from '../components/price/PriceHelper';
-import AlshayaRefinementList from '../widgets/AlshayaRefinementList';
+import ColorFilter from '../widgets/ColorFilter';
 
 export default ({indexName}) => (
   <div className="container-without-product">
@@ -39,12 +39,14 @@ export default ({indexName}) => (
         searchable={false}
       />
     </Panel>
-    <Panel header="Colour" className="c-facet c-accordion">
-      <RefinementList
-        attribute="attr_color_family"
+
+    <Panel header="Colour" className="c-facet c-accordion block-facet--swatch-list">
+      <ColorFilter
+        attribute="attr_color_family.label"
         searchable={false}
       />
     </Panel>
+
     <Panel header="Price" className="c-facet c-accordion">
       <NumericMenu
         attribute="final_price"

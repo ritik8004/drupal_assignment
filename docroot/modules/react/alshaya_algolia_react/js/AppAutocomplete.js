@@ -4,12 +4,12 @@ import { createBrowserHistory } from 'history';
 import { Configure } from "react-instantsearch-dom";
 import queryString from 'query-string'
 import AutoComplete from './blocks/Autocomplete';
-import SearchResults from './blocks/SearchResults';
+import SearchResults from './blocks/searchresults/SearchResults';
 import InstantSearchComponent from './components/InstantSearchComponent';
 import {
   showSearchResultContainer,
   hideSearchResultContainer
-} from './utilities/SearchUtility';
+} from './blocks/searchresults/SearchUtility';
 
 const history = createBrowserHistory();
 
