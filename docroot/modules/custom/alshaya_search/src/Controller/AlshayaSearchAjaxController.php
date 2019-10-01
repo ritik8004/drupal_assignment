@@ -108,6 +108,10 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   Ajax processing for exposed forms on search & PLP pages.
    */
   public function ajaxFacetBlockView(Request $request) {
+    // Decode the url once to support special characters like 1½.
+    $params = $request->getMethod() == 'GET' ? $request->query : $request->request;
+    $params->set('facet_link', urldecode($params->get('facet_link')));
+
     $response = parent::ajaxFacetBlockView($request);
     $is_plp_page = FALSE;
     $is_promo_page = FALSE;
