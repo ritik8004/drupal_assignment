@@ -60,32 +60,38 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
     // Delete the user if already available so we can create again.
     $admin_user = user_load_by_mail('user3+admin@example.com');
     if ($admin_user instanceof UserInterface) {
-      $admin_user->delete();
+      // Set expiration to not-expired.
+      $admin_user->set('field_password_expiration', '0');
+    }
+    else {
+      // Create default administrator user.
+      $admin_user = User::create();
+      $admin_user->enforceIsNew();
+      $admin_user->setUsername('admin1');
+      $admin_user->setEmail('user3+admin@example.com');
+      $admin_user->addRole('administrator');
     }
 
-    // Create default administrator user.
-    $admin_user = User::create();
     $admin_user->setPassword('AlShAyAU1admin');
-    $admin_user->enforceIsNew();
-    $admin_user->setUsername('admin1');
-    $admin_user->setEmail('user3+admin@example.com');
-    $admin_user->addRole('administrator');
     $admin_user->activate();
     $admin_user->save();
 
     // Delete the user if already available so we can create again.
     $webmaster_user = user_load_by_mail('user3+webmaster@example.com');
     if ($webmaster_user instanceof UserInterface) {
-      $webmaster_user->delete();
+      // Set expiration to not-expired.
+      $webmaster_user->set('field_password_expiration', '0');
+    }
+    else {
+      // Create default webmaster user.
+      $webmaster_user = User::create();
+      $webmaster_user->enforceIsNew();
+      $webmaster_user->setEmail('user3+webmaster@example.com');
+      $webmaster_user->setUsername('webmaster_acq');
+      $webmaster_user->addRole('webmaster');
     }
 
-    // Create default webmaster user.
-    $webmaster_user = User::create();
     $webmaster_user->setPassword('AlShAyAU1webmaster');
-    $webmaster_user->enforceIsNew();
-    $webmaster_user->setEmail('user3+webmaster@example.com');
-    $webmaster_user->setUsername('webmaster_acq');
-    $webmaster_user->addRole('webmaster');
     $webmaster_user->activate();
     $webmaster_user->save();
   }
