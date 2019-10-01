@@ -63,10 +63,14 @@ class ProductCacheManager {
    *   Cache Key.
    * @param mixed $data
    *   Data to set in cache.
+   * @param array|null $tags
+   *   Additional cache tags.
    */
-  public function set(SKU $sku, string $key, $data) {
+  public function set(SKU $sku, string $key, $data, ?array $tags = []) {
     $cid = $this->getSkuCacheId($sku, $key);
-    $this->cache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
+
+    $tags = is_array($tags) ? Cache::mergeTags($tags, $sku->getCacheTags()) : $sku->getCacheTags();
+    $this->cache->set($cid, $data, Cache::PERMANENT, $tags);
 
     $static = &drupal_static('alshaya_product_processed_cached', []);
     $static[$cid] = $data;

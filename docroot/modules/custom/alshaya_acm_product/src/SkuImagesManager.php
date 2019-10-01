@@ -498,11 +498,13 @@ class SkuImagesManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity.
+   * @param string $context
+   *   Gallery context.
    *
    * @return array
    *   Galleries for all color as array.
    */
-  public function getAllColorGallery(SKU $sku) {
+  public function getAllColorGallery(SKU $sku, $context = 'search') {
     $listing_swatch_attributes = $this->skuManager->getProductListingSwatchAttributes();
     if (empty($listing_swatch_attributes)) {
       return [];
@@ -529,7 +531,7 @@ class SkuImagesManager {
     foreach ($combinations['attribute_sku'][$color_attribute] as $variants) {
       foreach ($variants as $variant_sku) {
         $variant = SKU::loadFromSku($variant_sku);
-        $gallery = $this->getGallery($variant);
+        $gallery = $this->getGallery($variant, $context);
 
         if (!empty($gallery) && !empty($gallery['#mainImage'])) {
           $color = $variant->get('attr_' . $listing_swatch_attribute)->getString();

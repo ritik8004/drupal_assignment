@@ -2,8 +2,10 @@
 
 namespace Drupal\alshaya_api;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\File\FileSystemInterface;
@@ -265,6 +267,20 @@ class AlshayaApiWrapper {
 
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
+
+      try {
+        $json = Json::decode($result);
+        if (is_array($json) && !empty($json['message']) && count($json) === 1) {
+          throw new \Exception($json['message'], APIWrapper::API_DOWN_ERROR_CODE);
+        }
+      }
+      catch (\Exception $e) {
+        // Let the outer catch handle logging of error and handling response.
+        // We avoid other exceptions related to JSON parsing here.
+        if ($e->getCode() === APIWrapper::API_DOWN_ERROR_CODE) {
+          throw $e;
+        }
+      }
     }
     catch (\Exception $e) {
       $result = NULL;

@@ -78,31 +78,6 @@ class ProductController extends ControllerBase {
   }
 
   /**
-   * Title callback for the modal.
-   */
-  public function skumodalTitle($acq_sku) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-    return $sku->get('name')->getString();
-  }
-
-  /**
-   * Page callback for the modal.
-   */
-  public function skumodalView($acq_sku, $js) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-    if ($js === 'ajax') {
-      $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
-      $build = $view_builder->view($sku, 'modal');
-      return $build;
-    }
-
-    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $sku->id()])->toString());
-    $response->send();
-    exit;
-
-  }
-
-  /**
    * Page callback for modal content.
    */
   public function pdpModalLinkView($type = 'size-guide') {
