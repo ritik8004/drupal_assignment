@@ -73,19 +73,22 @@ class AlgoliaIndexEventSubscriber implements EventSubscriberInterface {
     if (!empty($item['attr_color_family'])) {
       foreach ($item['attr_color_family'] as $key => $value) {
         $swatch = $this->swatchesHelper->getSwatch('color_family', $value, $item['search_api_language']);
-        $swatch_data = ['value' => $swatch['name']];
+        $swatch_data = ['value' => $swatch['name'], 'label' => $swatch['name']];
         if ($swatch) {
           switch ($swatch['type']) {
             case SwatchesHelper::SWATCH_TYPE_TEXTUAL:
               $swatch_data['swatch_text'] = $swatch['swatch'];
+              $swatch_data['label'] .= ', swatch_text:' . $swatch['swatch'];
               break;
 
             case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
               $swatch_data['swatch_color'] = $swatch['swatch'];
+              $swatch_data['label'] .= ', swatch_color:' . $swatch['swatch'];
               break;
 
             case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
               $swatch_data['swatch_image'] = $swatch['swatch'];
+              $swatch_data['label'] .= ', swatch_image:' . $swatch['swatch'];
               break;
 
             default:
