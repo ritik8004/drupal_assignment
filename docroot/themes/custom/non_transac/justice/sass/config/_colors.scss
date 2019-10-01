@@ -109,10 +109,14 @@ $language_switcher_text: $black;
 //form
 $form_dropdown_icon: $dark-pink;
 $form_tnc_text: $black-smoke;
-$form_input_text: rgba(0, 0, 0, 0.3);
+$form_input_placeholder_text: rgba(0, 0, 0, 0.3);
+$form_input_text: $black-smoke;
 $form_input_bg: $white-smoke;
 $form_error_msg: $error;
 $form_feedback_subtitle: $dark-pink;
 
 // static-content
 $static_page_text: $black-smoke;
+
+// popup modal
+$popup_modal_icon: $dark-pink;
