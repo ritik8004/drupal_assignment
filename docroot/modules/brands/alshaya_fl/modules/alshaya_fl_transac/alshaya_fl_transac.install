@@ -10,6 +10,32 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update Size clothing facet configuration for PLP, Promotions & Search.
+ * Update sorting options
+ * from "Sort by taxonomy term weight" to
+ * "Sort by taxonomy term weight according to term name".
+ */
+function alshaya_fl_transac_update_8004() {
+  $termWeightByNameWidgetOrderSettings['term_weight_by_name_widget_order'] = [
+    'processor_id' => 'term_weight_by_name_widget_order',
+    'weight' => [
+      'sort' => 60,
+    ],
+    'settings' => [
+      'sort' => ASC,
+      'attribute_id' => 'size_textile_eu',
+    ],
+  ];
+
+  \Drupal::configFactory()->getEditable('facets.facet.plp_size_textile_eu')->set('processor_configs', $termWeightByNameWidgetOrderSettings)->save();
+  \Drupal::configFactory()->getEditable('facets.facet.promo_size_textile_eu')->set('processor_configs', $termWeightByNameWidgetOrderSettings)->save();
+  \Drupal::configFactory()->getEditable('facets.facet.size_textile_eu')->set('processor_configs', $termWeightByNameWidgetOrderSettings)->save();
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {
