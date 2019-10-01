@@ -6,6 +6,10 @@ import queryString from 'query-string'
 import AutoComplete from './blocks/Autocomplete';
 import SearchResults from './blocks/SearchResults';
 import InstantSearchComponent from './components/InstantSearchComponent';
+import {
+  showSearchResultContainer,
+  hideSearchResultContainer
+} from './utilities/SearchUtility';
 
 const history = createBrowserHistory();
 
@@ -17,6 +21,7 @@ class AppAutocomplete extends React.Component {
     this.state = {
       query: parsedHash && parsedHash.q ? parsedHash.q : ''
     };
+    (this.state.query == '') ? hideSearchResultContainer() : showSearchResultContainer();
     this.updateQueryValue = this.updateQueryValue.bind(this);
   };
 
@@ -35,6 +40,7 @@ class AppAutocomplete extends React.Component {
     this.setState({query: queryValue});
     // Push query to browser histroy to ga back and see previous results.
     history.push({hash: `q=${queryValue}`});
+    (queryValue == '') ? hideSearchResultContainer() : showSearchResultContainer();
   };
 
   onSuggestionSelected = (event, { suggestion }) => {

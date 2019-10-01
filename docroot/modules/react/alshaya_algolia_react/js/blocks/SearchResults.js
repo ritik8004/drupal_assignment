@@ -11,10 +11,7 @@ import InstantSearchComponent from '../components/InstantSearchComponent';
 import Teaser from '../components/teaser/Teaser';
 import Filters from './Filters';
 import CustomCurrentRefinements from './CustomCurrentRefinements';
-
-
-// Search result div wrapper to render results.
-const searchResultDiv = document.getElementById('alshaya-algolia-search');
+import { searchResultDiv } from '../utilities/SearchUtility';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => null);
