@@ -138,8 +138,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
               'priceDisplayMode' => $display_settings->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
             ],
             'gallery' => [
-              'showHoverImage' => $display_settings->get('gallery_show_hover_image'),
-              'showThumbnails' => $display_settings->get('gallery_show_hover_image') ? FALSE : $display_settings->get('image_thumb_gallery'),
+              'showHoverImage' => (bool) $display_settings->get('gallery_show_hover_image'),
+              'showThumbnails' => ($display_settings->get('gallery_show_hover_image') === TRUE) ? FALSE : $display_settings->get('image_thumb_gallery'),
               'defaultImage' => $default_image ?? FALSE,
               'plp_slider' => $display_settings->get('plp_slider'),
             ],
