@@ -100,6 +100,14 @@ class AlshayaPromoLabelManager {
     $eligiblePromotions = [];
 
     foreach ($promotionNodes as $promotionNode) {
+      if (is_int($promotionNode)) {
+        $promotionNode = $this->nodeStorage->load($promotionNode);
+      }
+
+      if (!($promotionNode instanceof NodeInterface)) {
+        continue;
+      }
+
       $promotion_action = $promotionNode->get('field_acq_promotion_action')->getString();
       if (in_array($promotion_action, self::DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS)) {
         $eligiblePromotions[] = $promotionNode;
@@ -175,6 +183,14 @@ class AlshayaPromoLabelManager {
     }
 
     foreach ($promotion_nodes as $promotion_node) {
+      if (is_int($promotion_node)) {
+        $promotion_node = $this->nodeStorage->load($promotion_node);
+      }
+
+      if (!($promotion_node instanceof NodeInterface)) {
+        continue;
+      }
+
       $promoDisplay = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
       if ($promoDisplay) {
         $promos[$promotion_node->id()] = $promoDisplay;
