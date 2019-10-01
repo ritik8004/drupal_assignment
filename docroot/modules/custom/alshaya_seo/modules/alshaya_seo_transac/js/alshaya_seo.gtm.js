@@ -348,7 +348,7 @@
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
           if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
             // Check whether the product is in US or CS region & update list accordingly.
-            if (listName.includes('placeholder')) {
+            if (listName.indexOf('placeholder') > -1) {
               if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
                 pdpListName = listName.replace('placeholder', 'CS');
               }
@@ -660,7 +660,7 @@
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
           var position = '';
-          if (listName.includes('placeholder')) {
+          if (listName.indexOf('placeholder') > -1) {
             if (that.closest('.horizontal-crossell').length > 0) {
               subListName = listName.replace('placeholder', 'CS');
             }
