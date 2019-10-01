@@ -31,7 +31,7 @@ function alshaya_jus_non_transac_create_latest_fashion_update_block_content() {
                   <p>Get the latest updates from Justice</p>
                   </div>
                   <div class='latest-update-link'>
-                  <a href='/email-sign-up' class='button--primary'>sign up</a>
+                  <a href='/email-sign-up' class='use-ajax button--primary' data-dialog-type='modal'>sign up</a>
                   </div>
                   </div>",
       'format' => 'full_text',
@@ -50,7 +50,7 @@ function alshaya_jus_non_transac_create_latest_fashion_update_block_content() {
                   <p>احصل على أحدث العروض عبر موقع جستس</p>
                   </div>
                   <div class='latest-update-link'>
-                  <a href='/email-sign-up' class='button--primary'>سجلي الآن</a>
+                  <a href='/email-sign-up' class='use-ajax button--primary' data-dialog-type='modal'>سجلي الآن</a>
                   </div>
                   </div>",
       'format' => 'full_text',
