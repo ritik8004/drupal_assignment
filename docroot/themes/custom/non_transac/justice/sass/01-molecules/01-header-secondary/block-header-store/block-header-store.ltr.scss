@@ -29,7 +29,7 @@
     text-align: $right;
 
     @include breakpoint($above-palm) {
-      width: 18%;
+      width: 25%;
     }
 
     @include breakpoint($upto-lap) {

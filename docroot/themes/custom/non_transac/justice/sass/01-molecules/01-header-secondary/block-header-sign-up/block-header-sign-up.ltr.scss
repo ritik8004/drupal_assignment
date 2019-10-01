@@ -29,4 +29,8 @@
 
 #block-headerlinks {
   min-width: 14.375rem;
+
+  ul {
+    text-align: $left;
+  }
 }
