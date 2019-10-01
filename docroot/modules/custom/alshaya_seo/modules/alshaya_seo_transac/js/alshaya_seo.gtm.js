@@ -939,10 +939,15 @@
           return true;
         }
         if ($(highlight).find('img').is(':visible')) {
-          var imgElem = $(highlight).find('picture img');
+          var imgElem = $(highlight).find('picture:first img');
           if (imgElem.length === 0) {
-            imgElem = $(highlight).find('img');
+            imgElem = $(highlight).find('img:first');
           }
+
+          if (imgElem.length === 0) {
+            return true;
+          }
+
           var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
             imgElem.attr('src') :
             imgElem.attr('data-src');
@@ -951,9 +956,14 @@
           if (typeof imgSrc !== 'undefined') {
             position = promotion_counter;
             if (event === 'promotionClick') {
-              position = $(highlight).find('picture img').data('position');
+              position = imgElem.data('position');
             } else {
-              $(highlight).find('picture img').data('position', promotion_counter);
+              // Skip already processed images.
+              if (typeof imgElem.data('position') !== 'undefined' || imgElem.data('position') > -1) {
+                return true;
+              }
+
+              imgElem.data('position', promotion_counter);
             }
             creative = Drupal.url(imgSrc);
           }
