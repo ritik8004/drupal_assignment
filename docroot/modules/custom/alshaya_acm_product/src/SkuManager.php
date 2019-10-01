@@ -865,7 +865,7 @@ class SkuManager {
     $view_mode_original = $view_mode;
 
     foreach ($promotion_nodes as $promotion_node) {
-      if (is_int($promotion_node)) {
+      if (is_numeric($promotion_node)) {
         $promotion_node = $this->nodeStorage->load($promotion_node);
       }
 
