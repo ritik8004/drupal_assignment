@@ -323,7 +323,11 @@ class SkuAssetManager {
 
     // Download the file contents.
     try {
-      $file_data = $this->httpClient->get($url)->getBody();
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 3),
+      ];
+
+      $file_data = $this->httpClient->get($url, $options)->getBody();
 
       if (empty($file_data)) {
         throw new \Exception('Failed to download asset file: ' . $url);
