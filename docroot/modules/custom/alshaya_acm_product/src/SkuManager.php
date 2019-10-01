@@ -24,6 +24,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
@@ -1145,7 +1146,11 @@ class SkuManager {
 
     // Download the file contents.
     try {
-      $file_data = $this->httpClient->get($data[$file_key])->getBody();
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 3),
+      ];
+
+      $file_data = $this->httpClient->get($data[$file_key], $options)->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_acm_product', $e);
