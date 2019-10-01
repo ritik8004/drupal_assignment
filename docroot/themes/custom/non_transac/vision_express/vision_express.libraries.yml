@@ -3,3 +3,33 @@ global:
   css:
     theme:
       dist/css/global.ltr.css: {}
+
+block-footer-store:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-footer-store/block-footer-store.ltr.css: {}
+
+block-social-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-social-links/block-social-links.ltr.css: {}
+
+menu-social-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-social-links/menu-social-links.ltr.css: {}
+
+block-footer-language:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+
+menu-terms-conditions:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/04-footer-secondary/block-terms-conditions/menu-terms-conditions.ltr.css: {}

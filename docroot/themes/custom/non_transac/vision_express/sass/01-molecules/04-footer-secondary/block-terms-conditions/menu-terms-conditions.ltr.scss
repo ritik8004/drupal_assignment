@@ -1,0 +1,11 @@
+@import '../../../config/_config.scss';
+
+.menu-terms-conditions {
+  text-align: $left;
+
+  a {
+    color: $link;
+    text-decoration: underline;
+    font-size: 0.875rem;
+  }
+}
