@@ -374,7 +374,7 @@ class AlshayaConfigManager {
     }
 
     /** @var \Drupal\language\Config\LanguageConfigOverride $config */
-    $config = $this->languageManager->getLanguageConfigOverride('ar', $config_id);
+    $config = $this->languageManager->getLanguageConfigOverride($langcode, $config_id);
     foreach ($data as $key => $value) {
       if (is_array($value)) {
         $existing = $config->get($key) ?? [];
@@ -386,7 +386,10 @@ class AlshayaConfigManager {
     }
 
     $config->save();
-    $this->logger->notice('Saved config translations for @config', ['@config' => $config_id]);
+    $this->logger->notice('Saved config translation for language @langcode of @config', [
+      '@langcode' => $langcode,
+      '@config' => $config_id,
+    ]);
   }
 
   /**
