@@ -10,4 +10,16 @@ function calculateDiscount(price, final_price) {
   return parseFloat(Math.round((discount * 100) / floatPrice));
 }
 
-export {calculateDiscount};
+
+function formatPrice(price) {
+  const priceParts = [
+    drupalSettings.reactTeaserView.price.currency,
+    price.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)
+  ];
+
+  return drupalSettings.reactTeaserView.price.currencyPosition == 'before'
+    ? priceParts.map(item => item).join(' ')
+    : priceParts.reverse().map(item => item).join(' ');
+}
+
+export { calculateDiscount, formatPrice };

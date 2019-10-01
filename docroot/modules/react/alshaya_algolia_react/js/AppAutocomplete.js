@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Configure } from "react-instantsearch-dom";
-import AutoComplete from './components/Autocomplete';
-import SearchResults from './components/SearchResults';
-import InstantSearchComponent from './components/InstantSearchComponent';
 import { createBrowserHistory } from 'history';
+import { Configure } from "react-instantsearch-dom";
 import queryString from 'query-string'
+import AutoComplete from './blocks/Autocomplete';
+import SearchResults from './blocks/SearchResults';
+import InstantSearchComponent from './components/InstantSearchComponent';
 
 const history = createBrowserHistory();
 

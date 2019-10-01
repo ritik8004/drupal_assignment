@@ -4,13 +4,14 @@ import {
   Configure,
   connectHits,
   connectSearchBox,
-  HierarchicalMenu,
-  Panel,
-  RefinementList,
-  SortBy,
+  CurrentRefinements
 } from 'react-instantsearch-dom';
-import InstantSearchComponent from './InstantSearchComponent';
-import Teaser from './teaser/Teaser';
+import { connectNumericMenu } from 'react-instantsearch-core';
+import InstantSearchComponent from '../components/InstantSearchComponent';
+import Teaser from '../components/teaser/Teaser';
+import Filters from './Filters';
+import CustomCurrentRefinements from './CustomCurrentRefinements';
+
 
 // Search result div wrapper to render results.
 const searchResultDiv = document.getElementById('alshaya-algolia-search');
@@ -25,25 +26,31 @@ const SearchResultHits = connectHits(({ hits }) => {
   // Get height of each article and set the max height to all article tags.
   useEffect(
     () => {
-      var elements = teaserRef.current.getElementsByTagName('article');
-      if (elements.length > 0) {
-        var heights = [];
-        Array.prototype.forEach.call(elements, element => heights.push(element.parentElement.offsetHeight));
-        var maxheight = Math.max(...heights);
-
-        if (maxheight > 0) {
+      setTimeout(() => {
+        var elements = teaserRef.current.getElementsByTagName('article');
+        if (elements.length > 0) {
           Array.prototype.forEach.call(elements, element => {
-            element.parentElement.style.height = maxheight + 'px'; //= maxheight;
+            element.parentElement.style.height = '';
           });
+
+          var heights = [];
+          Array.prototype.forEach.call(elements, element => heights.push(element.parentElement.offsetHeight));
+          var maxheight = Math.max(...heights);
+
+          if (maxheight > 0) {
+            Array.prototype.forEach.call(elements, element => {
+              element.parentElement.style.height = maxheight + 'px'; //= maxheight;
+            });
+          }
         }
-      }
-    },
-    [hits]
+      }, 500);
+    }
   );
 
   const hs = hits.map(hit => <Teaser key={hit.objectID} hit={hit} />);
   return <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>{hs}</div>;
 });
+
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -80,12 +87,13 @@ class SearchResults extends React.Component {
 
   render() {
     const { query } = this.props;
-    // Filter out of stock products.
-    const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? ['stock > 0'] : [];
+    // Do not show out of stock products.
+    const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
+    const indexName = drupalSettings.algoliaSearch.indexName;
 
     return ReactDOM.createPortal(
-      <InstantSearchComponent indexName={drupalSettings.algoliaSearch.indexName}>
-        <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} numericFilters={stockFilter}/>
+      <InstantSearchComponent indexName={indexName}>
+        <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter}/>
         <VirtualSearchBox defaultRefinement={query} />
         <div className="container-wrapper">
           <section className="sticky-filter-wrapper">
@@ -94,35 +102,11 @@ class SearchResults extends React.Component {
                 <img src="/themes/custom/transac/alshaya_hnm/site-logo.svg?sjhgdf7v" alt="H&M Kuwait" />
               </a>
             </div>
-            <div className="container-without-product">
-              <Panel header="Category">
-                <HierarchicalMenu
-                  attributes={[
-                    'field_category_name.lvl0',
-                    'field_category_name.lvl1',
-                  ]}
-                />
-              </Panel>
-              <Panel header="Brands">
-                <RefinementList
-                  attribute="attr_product_brand"
-                  searchable={true}
-                  translations={{
-                    placeholder: 'Search for brands...',
-                  }}
-                />
-              </Panel>
-              <Panel header="Colour">
-                <RefinementList
-                  attribute="attr_color_family"
-                  searchable={true}
-                  translations={{
-                    placeholder: 'Search for color...',
-                  }}
-                />
-              </Panel>
-            </div>
+            <Filters indexName={indexName} />
           </section>
+          <div>
+            <CustomCurrentRefinements />
+          </div>
           <SearchResultHits />
         </div>
       </InstantSearchComponent>,

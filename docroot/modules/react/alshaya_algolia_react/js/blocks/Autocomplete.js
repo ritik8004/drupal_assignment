@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
-import CustomHighlight from './CustomHighlight';
+import CustomHighlight from '../components/CustomHighlight';
 
 class Autocomplete extends React.Component {
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
