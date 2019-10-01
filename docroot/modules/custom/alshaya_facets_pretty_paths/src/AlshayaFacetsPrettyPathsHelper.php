@@ -188,11 +188,18 @@ class AlshayaFacetsPrettyPathsHelper {
           $entity = $entity->getTranslation('en');
         }
 
-        $encoded = str_replace(
-          $entity instanceof TermInterface ? 'en/' . $this->getProductOptionAliasPrefix() . '/' : 'en/',
-          '',
-          trim($entity->toUrl()->toString(), '/')
-        );
+        $alias = trim($entity->toUrl()->toString(), '/');
+
+        // Use the alias only if we have proper alias available.
+        if ($entity instanceof TermInterface && strpos($alias, 'taxonomy/term') === FALSE) {
+          $encoded = str_replace('en/' . $this->getProductOptionAliasPrefix() . '/', '', $alias);
+        }
+        elseif ($entity instanceof NodeInterface && strpos($alias, 'node/') === FALSE) {
+          $encoded = str_replace('en/', '', $alias);
+        }
+
+        // Decode it once, it will be encoded again later.
+        $encoded = urldecode($encoded);
 
         break;
       }

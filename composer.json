@@ -238,6 +238,7 @@
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
             },
             "drupal/core": {
+                "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2019-09-28/3084138-87x-9.patch",
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",

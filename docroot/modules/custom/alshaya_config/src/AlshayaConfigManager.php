@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
@@ -60,6 +61,13 @@ class AlshayaConfigManager {
   protected $configFactory;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Entity Type Manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -92,6 +100,8 @@ class AlshayaConfigManager {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config storage object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
    * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
@@ -102,11 +112,13 @@ class AlshayaConfigManager {
    *   Logger Channel Factory.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
+                              LanguageManagerInterface $language_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ThemeManagerInterface $theme_manager,
                               ModuleHandlerInterface $module_handler,
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->configFactory = $config_factory;
+    $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->themeManager = $theme_manager;
     $this->moduleHandler = $module_handler;
@@ -246,6 +258,16 @@ class AlshayaConfigManager {
           '@index' => $index_name,
         ]);
       }
+
+      // Add all translations.
+      foreach ($this->languageManager->getLanguages() as $language) {
+        // Do not translate for default language.
+        if ($language->isDefault()) {
+          continue;
+        }
+
+        $this->updateConfigTranslations($config_id, $language->getId(), $module_name, $path);
+      }
     }
   }
 
@@ -323,7 +345,51 @@ class AlshayaConfigManager {
    */
   public function getDataFromCode($config_id, $module_name, $path) {
     $file = drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config_id . '.yml';
+
+    if (!file_exists($file)) {
+      return '';
+    }
+
     return Yaml::parse(file_get_contents($file));
+  }
+
+  /**
+   * Update Config Translations from code to active storage.
+   *
+   * @param string $config_id
+   *   The name of config to import.
+   * @param string $langcode
+   *   Language code.
+   * @param string $module
+   *   Name of the module, where files resides.
+   * @param string|null $path
+   *   Path where configs reside. Defaults to install.
+   */
+  public function updateConfigTranslations(string $config_id, string $langcode, string $module, ?string $path = 'install') {
+    $path = $langcode . '/' . $path;
+
+    $data = $this->getDataFromCode($config_id, $module, $path);
+    if (empty($data)) {
+      return;
+    }
+
+    /** @var \Drupal\language\Config\LanguageConfigOverride $config */
+    $config = $this->languageManager->getLanguageConfigOverride($langcode, $config_id);
+    foreach ($data as $key => $value) {
+      if (is_array($value)) {
+        $existing = $config->get($key) ?? [];
+        $config->set($key, NestedArray::mergeDeepArray([$existing, $value], TRUE));
+      }
+      else {
+        $config->set($key, $value);
+      }
+    }
+
+    $config->save();
+    $this->logger->notice('Saved config translation for language @langcode of @config', [
+      '@langcode' => $langcode,
+      '@config' => $config_id,
+    ]);
   }
 
   /**

@@ -326,7 +326,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Download the file contents.
     try {
-      $file_data = \Drupal::httpClient()->get($data['file'])->getBody();
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 3),
+      ];
+
+      $file_data = \Drupal::httpClient()->get($data['file'], $options)->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('acq_commerce', $e);

@@ -323,9 +323,9 @@
   $(document).ajaxSend(function (event, jqxhr, settings) {
     // Add facet_filter_url to ajax calls as we need the facets in new format
     // in code when sorting / paginating.
-    if (browserFacetUrl !== null && settings.url.includes('/views/ajax')) {
+    if (browserFacetUrl !== null && settings.url.indexOf('/views/ajax') > -1) {
       settings.url = Drupal.removeURLParameter(settings.url, 'facet_filter_url');
-      if (settings.url.includes('?')) {
+      if (settings.url.indexOf('?') > -1) {
         settings.url = settings.url + '&facet_filter_url=' + browserFacetUrl;
       }
       else {
