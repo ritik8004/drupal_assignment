@@ -14,6 +14,15 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_hm_update_8039() {
+  _alshaya_hm_get_metatag_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add color family field and facets.
  */
 function alshaya_hm_update_8038() {
@@ -744,6 +753,9 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('pdp_slider_items_settings.pdp_slider_items_number', 3)
     ->save();
+
+  // Install metatag transalations.
+  _alshaya_hm_get_metatag_translations();
 }
 
 /**
@@ -764,4 +776,42 @@ function alshaya_hm_update_dependencies() {
       ],
     ],
   ];
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_hm_get_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_title_prefix' => [
+      'en' => '[term:parent:name]',
+      'ar' => '[term:parent:name]',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[current-date:html_year] Sale',
+      'ar' => '[current-date:html_year] البيع',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Shop [term:parent:name] [term:name] [current-date:html_year] sale from [site:name]. Explore our [current-date:html_year] luxury and high-quality [term:name] for [term:parent:name] offers',
+      'ar' => 'اكتشف عروض البيع [current-date:html_year] للرفاهية والجودة العالية [term:parent:name] [term:name] مجموعة',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] for [term:parents:first]',
+      'ar' => 'تسوق نطاق حصري وفاخر [term:name] لـ [term:parents:first] من [alshaya_seo:brand_name]',
+    ],
+    'alshaya_seo_top_category' => [
+      'en' => 'for [term:parents:first]',
+      'ar' => 'for [term:parents:first]',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for [term:parents:first], [alshaya_seo:brand_name] [term:name] sale for [term:parents:first]',
+      'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [term:name] sale in [alshaya_seo:city1], [term:name] sale in [alshaya_seo:city2], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for [term:parents:first], [alshaya_seo:brand_name] [term:name] sale for [term:parents:first]',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] for [term:parents:first], Shop [term:parents:first] [term:name], Shop [alshaya_seo:brand_name] [term:name], Shop [term:name] Collection for [term:parents:first], Shop [term:name] in [alshaya_seo:country], Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
+      'ar' => 'متجر [term:name] مجموعة ل [term:parents:first] على الانترنت, تسوق [term:name] [alshaya_seo:brand_name], شراء [alshaya_seo:sub_categories] [alshaya_seo:brand_name]، شراء [alshaya_seo:sub_categories] شراء [alshaya_seo:sub_categories] على الانترنت، متجر [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:city1], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:city2], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:country]',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
