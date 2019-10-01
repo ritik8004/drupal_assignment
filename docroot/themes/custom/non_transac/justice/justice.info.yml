@@ -69,6 +69,8 @@ libraries-extend:
     - justice/block-application-links
   whitelabel/modal-email-signup:
     - justice/modal-email-signup
+  whitelabel/modal-generic:
+    - justice/modal-generic
 
 libraries-override:
   whitelabel/menu-logo-navigation:
