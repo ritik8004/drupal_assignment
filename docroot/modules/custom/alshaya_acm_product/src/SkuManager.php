@@ -804,11 +804,10 @@ class SkuManager {
    * @param array $types
    *   Promotion Types.
    *
-   * @return array|\Drupal\Core\Entity\EntityInterface[]
+   * @return array
    *   List of Promotion Nodes.
    */
   public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
-    $promotion_nodes = [];
     $promotion_nids = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
     foreach ($promotion ?? [] as $promo) {
@@ -835,12 +834,10 @@ class SkuManager {
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->exists('field_acq_promotion_label');
-      $nids = $query->execute();
-
-      $promotion_nodes = $this->nodeStorage->loadMultiple($nids);
+      return $query->execute();
     }
 
-    return $promotion_nodes;
+    return [];
   }
 
   /**
@@ -863,7 +860,7 @@ class SkuManager {
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function preparePromotionsDisplay(SKU $sku,
-                                           $promotion_nodes,
+                                           array $promotion_nodes,
                                            $view_mode,
                                            array $types = ['cart', 'category'],
                                            $product_view_mode = NULL,
@@ -872,6 +869,14 @@ class SkuManager {
     $view_mode_original = $view_mode;
 
     foreach ($promotion_nodes as $promotion_node) {
+      if (is_int($promotion_node)) {
+        $promotion_node = $this->nodeStorage->load($promotion_node);
+      }
+
+      if (!($promotion_node instanceof NodeInterface)) {
+        continue;
+      }
+
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
       $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
