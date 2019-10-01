@@ -1,10 +1,25 @@
 @import '../../../config/_config.scss';
 
+.region-page-header {
+  @include breakpoint($desk) {
+    background: $header_menu_bg;
+  }
+
+  .region__wrapper {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+}
+
 .menu-logo-navigation {
   background: $header_menu_bg;
-  max-width: 69rem;
-  margin: 0 auto;
   padding-#{$left}: 0;
+
+  @include breakpoint($desk) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   a {
     font-family: $jus_bold;
@@ -13,7 +28,7 @@
     color: $header_menu_text;
 
     @include breakpoint($above-palm) {
-      padding: 0.75rem 2.4375rem;
+      padding: 0.75rem 2.1875rem;
     }
 
     &::after {
@@ -116,9 +131,15 @@
 
 .show-menu-button {
   .menu-logo-navigation {
-    display: block;
     background: $header_menu_bg;
     padding: 0;
+    display: block;
+
+    @include breakpoint($desk) {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   .burger {
@@ -200,7 +221,7 @@ html[dir=rtl] {
     ul:hover {
       visibility: visible;
       opacity: 1;
-      width: 14%;
+      min-width: 18%;
     }
 
     ul {
