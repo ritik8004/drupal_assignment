@@ -274,7 +274,7 @@ body {
 
 .menu__in {
   @include breakpoint($upto-desktop) {
-    @include mm-mob-arrow(after) {
+    @include mm-mob-arrow(after, false) {
       top: 0.5rem;
       #{$right}: 0.5rem;
       font-size: 0;

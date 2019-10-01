@@ -8,7 +8,7 @@
   margin-top: 0;
 }
 
-@mixin mm-mob-arrow ($position) {
+@mixin mm-mob-arrow ($position, $direction: false) {
   &:#{$position} {
     content: '';
     width: 0;
@@ -17,19 +17,31 @@
     border-width: 0.3125rem 0 0.3125rem 0.5rem;
     border-color: transparent transparent transparent $mm_mob_arrow_icon;
 
-    @if $position == after {
-      transform: rotate(0deg);
+    @if $direction == false {
+      @if $position == after {
+        transform: rotate(0deg);
 
-      html[lang=ar] & {
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+
+      @if $position == before {
         transform: rotate(180deg);
+
+        html[lang=ar] & {
+          transform: rotate(0deg);
+        }
       }
     }
 
-    @if $position == before {
-      transform: rotate(180deg);
+    @else {
+      @if $direction == up {
+        transform: rotate(270deg);
+      }
 
-      html[lang=ar] & {
-        transform: rotate(0deg);
+      @if $direction == down {
+        transform: rotate(90deg);
       }
     }
 

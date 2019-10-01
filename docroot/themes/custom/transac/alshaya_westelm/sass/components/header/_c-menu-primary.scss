@@ -116,7 +116,7 @@
   }
 
   li {
-    @include mm-mob-arrow(after) {
+    @include mm-mob-arrow(after, false) {
       top: 2.25rem;
       #{$right}: 0.5rem;
     }
@@ -176,7 +176,7 @@
   }
 
   @include breakpoint($upto-desktop) {
-    @include mm-mob-arrow(before) {
+    @include mm-mob-arrow(before, false) {
       top: 1.25rem;
 
       html[lang=ar] & {

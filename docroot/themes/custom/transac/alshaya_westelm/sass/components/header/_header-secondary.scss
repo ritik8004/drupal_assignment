@@ -3,7 +3,7 @@
 
   li {
     @include breakpoint($upto-desktop) {
-      @include mm-mob-arrow(after) {
+      @include mm-mob-arrow(after, false) {
         #{$right}: 0.5rem;
         margin-top: -1.875rem;
       }
