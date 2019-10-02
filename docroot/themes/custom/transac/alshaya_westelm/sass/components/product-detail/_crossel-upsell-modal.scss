@@ -2,7 +2,7 @@
 .subtitle {
   &.crossell-title {
     font-size: 1.125rem;
-    font-weight: 300;
+    font-weight: bold;
     text-align: $left;
     margin-bottom: 0.3rem;
 
@@ -53,7 +53,7 @@
 .nodetype--acq_product {
   .ui-dialog {
     @include breakpoint($tablet) {
-      padding: calc((100vh - 43rem) / 2) calc((100vw - 64.13rem) / 2);
+      padding: calc((100vh - 43rem) / 2) calc((100vw - 64.125rem) / 2);
     }
 
     .cloudzoom__image {
