@@ -86,6 +86,7 @@
         "drupal/social_auth": "^2.0",
         "drupal/social_auth_facebook": "^2.0",
         "drupal/social_auth_google": "^2.0",
+        "drupal/stage_file_proxy": "^1.0@RC",
         "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
@@ -108,7 +109,6 @@
     "require-dev": {
         "drupal/devel": "^2.0.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
         "drupal/console": "^1.8"
     },
