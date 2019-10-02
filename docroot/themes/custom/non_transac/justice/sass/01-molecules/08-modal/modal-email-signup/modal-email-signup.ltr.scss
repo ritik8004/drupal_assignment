@@ -37,6 +37,10 @@
     padding: 0.8125rem 1.875rem;
     width: auto;
     height: auto;
+
+    @include breakpoint($upto-palm) {
+      width: 100%;
+    }
   }
 }
 
