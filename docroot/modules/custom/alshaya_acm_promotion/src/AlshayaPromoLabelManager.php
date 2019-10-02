@@ -100,7 +100,7 @@ class AlshayaPromoLabelManager {
     $eligiblePromotions = [];
 
     foreach ($promotionNodes as $promotionNode) {
-      if (is_int($promotionNode)) {
+      if (is_numeric($promotionNode)) {
         $promotionNode = $this->nodeStorage->load($promotionNode);
       }
 
@@ -183,7 +183,7 @@ class AlshayaPromoLabelManager {
     }
 
     foreach ($promotion_nodes as $promotion_node) {
-      if (is_int($promotion_node)) {
+      if (is_numeric($promotion_node)) {
         $promotion_node = $this->nodeStorage->load($promotion_node);
       }
 

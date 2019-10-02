@@ -6,7 +6,7 @@
     width: 100%;
 
     &::placeholder {
-      color: $form_input_text;
+      color: $form_input_placeholder_text;
     }
   }
 
@@ -37,6 +37,10 @@
     padding: 0.8125rem 1.875rem;
     width: auto;
     height: auto;
+
+    @include breakpoint($upto-palm) {
+      width: 100%;
+    }
   }
 }
 
