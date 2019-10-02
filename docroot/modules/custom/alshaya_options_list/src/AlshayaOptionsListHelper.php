@@ -202,7 +202,7 @@ class AlshayaOptionsListHelper {
     // Only show those fields which have a facet.
     $fields = $this->skuFieldsManager->getFieldAdditions();
     foreach ($options as $key => $option) {
-      if ($fields[$option]['facet'] == 1) {
+      if (isset($fields[$option], $fields[$option]['facet']) && $fields[$option]['facet'] == 1) {
         $filtered_options[$key] = $fields[$option]['label'] ?? $option;
       }
     }
@@ -227,6 +227,10 @@ class AlshayaOptionsListHelper {
    *   The links array.
    */
   public function getOptionsPagesLinks() {
+    if (!$this->optionsPageEnabled()) {
+      return [];
+    }
+
     static $links;
 
     if (!isset($links)) {

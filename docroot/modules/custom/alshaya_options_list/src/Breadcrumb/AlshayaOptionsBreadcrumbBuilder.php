@@ -85,8 +85,7 @@ class AlshayaOptionsBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     // This breadcrumb builder is based on a route parameter 'title',
     // hence it depends on the 'route' cache context.
     $breadcrumb->addCacheContexts(['route']);
-
-    $breadcrumb->addCacheTags[AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG];
+    $breadcrumb->addCacheTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
 
     return $breadcrumb;
   }
