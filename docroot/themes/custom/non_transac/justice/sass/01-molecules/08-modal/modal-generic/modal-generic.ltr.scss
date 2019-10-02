@@ -1,0 +1,66 @@
+@import '../../../config/_config.scss';
+@import '../../../00-atom/02-buttons/_buttons.scss';
+
+.ui-dialog {
+  padding: 2.5rem 0 1.875rem;
+
+  @include breakpoint($lap) {
+    width: 35rem !important;
+  }
+
+  @include breakpoint($desk) {
+    width: 35rem !important;
+  }
+
+  .ui-dialog-buttonpane {
+    margin-top: 0;
+    padding-#{$left}: 1.25rem;
+  }
+
+  .ui-button-icon-only {
+    @include breakpoint($lap) {
+      background: transparent;
+    }
+
+    @include breakpoint($desk) {
+      background: transparent;
+    }
+  }
+}
+
+.ui-dialog .ui-dialog-title {
+  text-align: center;
+  width: 100%;
+  border-bottom: 0;
+}
+
+.ui-state-default,
+.ui-dialog-titlebar-close {
+  html[lang=ar] & {
+    left: 0.5rem;
+  }
+
+  .ui-icon {
+    @include icon(close, before) {
+      font-size: 2.875rem;
+      #{$right}: 1rem;
+
+      @include breakpoint($lap) {
+        color: $popup_modal_icon;
+      }
+
+      @include breakpoint($desk) {
+        color: $popup_modal_icon;
+      }
+    }
+  }
+}
+
+.ui-dialog-buttonset.form-actions {
+  button {
+    width: auto;
+    height: auto;
+
+    @extend %btn;
+  }
+}

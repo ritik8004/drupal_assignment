@@ -12,6 +12,15 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Update meta variables.
+ */
+function alshaya_vs_transac_update_8010() {
+  _alshaya_vs_transac_save_metatag_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update config for showing images of specific color product in listing.
  * This is done when filtered by color.
  */
@@ -255,4 +264,45 @@ function alshaya_vs_transac_install() {
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
+
+  // Install metatag translations.
+  _alshaya_vs_transac_save_metatag_translations();
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_vs_transac_save_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_title_prefix' => [
+      'en' => '[alshaya_seo:super_category]',
+      'ar' => '[alshaya_seo:super_category]',
+    ],
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => 'Sale and Offers',
+      'ar' => 'العروض والخصومات',
+    ],
+    'alshaya_seo_sale_text_before_cod' => [
+      'en' => 'Get the best prices.',
+      'ar' => 'الحصول على أفضل الأسعار في [alshaya_seo:country].',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Get cool and comfortable Victorias Secret [alshaya_seo:super_category] sale and offers',
+      'ar' => 'الحصول على فيكتوريا سيكريت [alshaya_seo:super_category] صفقات على الانترنت والخصومات ',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop cool and comfortable Victorias Secret [alshaya_seo:super_category] [term:name] products',
+      'ar' => 'شراء مجموعة كبيرة ومريحة ',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
+      'ar' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [alshaya_seo:super_category] [term:name] Online, Shop [term:name] in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] Collection, Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
+      'ar' => 'متجر [term:parent:name][term:name] [alshaya_seo:brand_name]، متجر [alshaya_seo:brand_name] من [term:name] على الانترنت، متجر [term:name] من [alshaya_seo:brand_name]، وشراء [term:parent:name] مجموعة [term:name] على الانترنت، متجر [term:parent:name] على الانترنت[term:name] على الانترنت في [alshaya_seo:city1]، متجر [term:parent:name] [term:name] على الانترنت في [alshaya_seo:city2]، متجر [alshaya_seo:super_category] [term:name] على الانترنت في [alshaya_seo:country]',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
