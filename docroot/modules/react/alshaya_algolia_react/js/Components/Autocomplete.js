@@ -8,6 +8,26 @@ class Autocomplete extends React.Component {
     value: this.props.currentRefinement,
   };
 
+  onFocusIn = () => {
+    let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
+    reactSearchBlock[0].classList.add('focused');
+  };
+
+  onFocusOut = () => {
+    let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
+    reactSearchBlock[0].classList.remove('focused');
+  };
+
+  onKeyUp = () => {
+    let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
+    if (this.state.value.length < 1) {
+      reactSearchBlock[0].classList.remove('clear-icon');
+    }
+    else {
+      reactSearchBlock[0].classList.add('clear-icon');
+    }
+  };
+
   onChange = (event, { newValue }) => {
     if (!newValue) {
       this.props.onSuggestionCleared();
@@ -46,6 +66,9 @@ class Autocomplete extends React.Component {
     const inputProps = {
       placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,
+      onFocus: this.onFocusIn,
+      onBlur: this.onFocusOut,
+      onKeyUp: this.onKeyUp,
       value,
     };
 

@@ -11,6 +11,16 @@
     width: 2.25rem;
     height: 2.25rem;
     z-index: 4;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s;
+  }
+
+  &.clear-icon {
+    .algolia-search-cleartext-icon {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 
   @include breakpoint($only-tablet) {
@@ -222,6 +232,7 @@
     padding: 0.34375rem 0;
     height: 2.75rem;
     width: 100%;
+    transition: padding-#{$left} 0.2s;
 
     &::placeholder {
       font-family: $alshaya-thin;
@@ -311,10 +322,24 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        z-index: 4;
+        color: $algolia-search-clear-text-icon;
+        opacity: 0;
+        transition: opacity 0.2s;
 
         @include icon(arrow-#{$left}) {
           font-size: 2.25rem;
           #{$left}: 0;
+        }
+      }
+
+      &.focused {
+        .algolia-search-back-icon {
+          opacity: 1;
+        }
+
+        .react-autosuggest__input {
+          padding-#{$left}: 2.3125rem !important;
         }
       }
     }

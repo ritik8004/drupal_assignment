@@ -168,6 +168,8 @@
             transform: translateY(-50%);
             #{$right}: unset;
             #{$left}: 0.25rem;
+            opacity: 1;
+            transition: opacity 0.2s;
           }
 
           .react-autosuggest__input {
@@ -180,6 +182,16 @@
             overflow-y: auto;
             box-shadow: none;
             margin-top: 1px;
+          }
+        }
+      }
+
+      &.focused {
+        #alshaya-algolia-autocomplete {
+          .react-autosuggest__container {
+            &::after {
+              opacity: 0;
+            }
           }
         }
       }
