@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca14daa6209d3877918779035529cea5",
+    "content-hash": "ccc93a1740073681934b3b5e8a217bf5",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11093,7 +11093,7 @@
             "description": "Processes the queue every time cron runs, recommended for most configurations.",
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
-                "source": "https://git.drupalcode.org/project/purge"
+                "source": "http://cgit.drupalcode.org/purge"
             }
         },
         {
@@ -11138,7 +11138,7 @@
             "description": "Process the queue on every request, this is only recommended on high latency configurations.",
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
-                "source": "https://git.drupalcode.org/project/purge"
+                "source": "http://cgit.drupalcode.org/purge"
             }
         },
         {
@@ -11183,7 +11183,7 @@
             "description": "Queues every tag that Drupal invalidates internally.",
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
-                "source": "https://git.drupalcode.org/project/purge"
+                "source": "http://cgit.drupalcode.org/purge"
             }
         },
         {
@@ -13039,7 +13039,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-beta6",
-                    "datestamp": "1552443188",
+                    "datestamp": "1562986384",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -13648,7 +13648,7 @@
             "description": "Overrides Views Ajax to work with GET instead of POST",
             "homepage": "https://www.drupal.org/project/views_ajax_get",
             "support": {
-                "source": "http://cgit.drupalcode.org/views_ajax_get"
+                "source": "https://git.drupalcode.org/project/views_ajax_get"
             },
             "time": "2018-09-14T13:01:07+00:00"
         },
