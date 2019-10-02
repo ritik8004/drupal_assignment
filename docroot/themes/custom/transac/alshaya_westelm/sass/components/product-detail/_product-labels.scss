@@ -1,0 +1,25 @@
+.labels-container {
+  .label {
+    &.top {
+      &-left {
+        top: 0;
+        left: 0;
+      }
+
+      &-right {
+        top: 0;
+        right: 0;
+      }
+    }
+
+    &.bottom {
+      &-left {
+        left: 0;
+      }
+
+      &-right {
+        right: 0;
+      }
+    }
+  }
+}

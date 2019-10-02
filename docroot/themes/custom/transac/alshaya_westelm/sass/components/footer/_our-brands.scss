@@ -1,5 +1,6 @@
 .c-our-brands {
   border-width: 2px;
+
   @include breakpoint($desktop) {
     .section-title {
       font-size: 0.75rem;

@@ -59,7 +59,15 @@ $default_msg_bg: $WE_message_green;
 $default_msg_text: $WE_white;
 
 //Buttons.
+$primary_btn_bg: $WE_grey_three;
+$primary_btn_text: $WE_white;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $WE_grey_one;
+$complete_btn_bg: $medium-green;
+$primary_brand_button_text: $WE_white;
+$secondary_brand_button_text: $WE_white_five;
 $primary_brand_button: $WE_grey_three;
+$secondary_submit_button_text: $WE_white_three;
 
 // Language Switcher
 $lang_switch: $WE_grey_three;
@@ -143,3 +151,44 @@ $newsletter_input_bg: transparent;
 $newsletter_input_border: $WE_grey_two;
 $newsletter_submit_btn: $WE_grey_three;
 $newsletter_submit_btn_text: $WE_white;
+
+// gradient holder
+$gradient-holder: $WE_gray_nine;
+
+// Sharethis
+$sharethis_icon: $WE_gray_seven;
+
+// Product Detail Page.
+$pdp_sidebar_label: $WE_grey_three;
+$pdp_desc_wrapper: $WE_gray_nine;
+$pdp_desc_wrapper_close_icon: $WE_grey_three;
+$pdp_desc_wrapper_close_bg: $WE_grey_one;
+$pdp_sidebar_desc_overlay_section_border: $WE_grey_one;
+$pdp_delivery_options_subtitle: $WE_grey_two;
+$pdp_cc_form_highlight_txt: $WE_black_one;
+$pdp_cc_top_stores_list_border: $WE_grey_three;
+$pdp_cc_top_stores_list_counter: $WE_grey_three;
+$pdp_cc_btn_bg: $WE_grey_three;
+$pdp_cc_btn_text: $WE_white;
+$modal_close_icon: $WE_grey_three;
+$modal_close_bg: $WE_grey_one;
+$pdp_size_option_bg: $WE_white;
+$pdp_size_option_border: $WE_grey_three;
+$pdp_size_option_text: $WE_grey_three;
+$pdp_size_option_selected_text: $WE_white;
+$pdp_size_option_selected_bg: $WE_grey_three;
+$pdp_size_option_text_hover : $WE_white;
+$pdp_size_option_bg_hover: $WE_grey_three;
+$pdp_sizeguide_link: $WE_deep_blue;
+$pdp_swatch_disabled: $WE_grey_one;
+$pdp_white_color_attribute: $WE_white;
+$pdp_white_color_attribute_hover_border: $WE_grey_three;
+$pdp_white_color_attribute_border: $WE_grey_three;
+$pdp_product_special_price_text: $WE_deep_red;
+$pdp_product_special_price: $WE_deep_red;
+$pdp_product_discount_price: $WE_deep_red;
+$pdp_product_discount_text: $WE_deep_red;
+
+// PDP CS/US
+$pdp_modal_full_prodlink: $WE_grey_one;
+$pdp_modal_full_prodlink_icon: $WE_grey_three;
