@@ -50,17 +50,21 @@ class Autocomplete extends React.Component {
     };
 
     return (
-      <Autosuggest
-        suggestions={hits}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        onSuggestionSelected={onSuggestionSelected}
-        getSuggestionValue={this.getSuggestionValue}
-        renderSuggestionsContainer={renderSuggestionsContainer}
-        renderSuggestion={this.renderSuggestion}
-        shouldRenderSuggestions={this.shouldRenderSuggestions}
-        inputProps={inputProps}
-      />
+      <React.Fragment>
+        <span className="algolia-search-back-icon"></span>
+        <Autosuggest
+          suggestions={hits}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          onSuggestionSelected={onSuggestionSelected}
+          getSuggestionValue={this.getSuggestionValue}
+          renderSuggestionsContainer={renderSuggestionsContainer}
+          renderSuggestion={this.renderSuggestion}
+          shouldRenderSuggestions={this.shouldRenderSuggestions}
+          inputProps={inputProps}
+        />
+        <span className="algolia-search-cleartext-icon"></span>
+      </React.Fragment>
     );
   }
 }
