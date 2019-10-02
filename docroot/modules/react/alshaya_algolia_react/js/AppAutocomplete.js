@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
 import { Configure } from "react-instantsearch-dom";
 import queryString from 'query-string'
-import AutoComplete from './blocks/Autocomplete';
-import SearchResults from './blocks/searchresults/SearchResults';
-import InstantSearchComponent from './components/InstantSearchComponent';
+import AutoComplete from './Autocomplete';
+import SearchResults from './searchresults/SearchResults';
+import InstantSearchComponent from './components/algolia/InstantSearchComponent';
 import {
   showSearchResultContainer,
   hideSearchResultContainer
-} from './blocks/searchresults/SearchUtility';
+} from './searchresults/SearchUtility';
 
 const history = createBrowserHistory();
 

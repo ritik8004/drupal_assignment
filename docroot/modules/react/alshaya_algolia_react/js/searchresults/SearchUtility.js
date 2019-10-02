@@ -1,4 +1,4 @@
-var contentDiv = document.getElementById('block-content');
+var contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
 var searchResultDiv = document.createElement('div');
 
@@ -13,6 +13,9 @@ function showSearchResultContainer() {
 }
 
 function hideSearchResultContainer() {
+  if (typeof Drupal.blazy !== 'undefined') {
+    Drupal.blazy.revalidate();
+  }
   contentDiv.style.display = 'block';
   searchResultDiv.style.display = 'none';
 }

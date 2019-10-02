@@ -7,10 +7,10 @@ import {
   CurrentRefinements
 } from 'react-instantsearch-dom';
 import { connectNumericMenu } from 'react-instantsearch-core';
-import InstantSearchComponent from '../../components/InstantSearchComponent';
-import Teaser from '../../components/teaser/Teaser';
-import Filters from '../Filters';
-import CustomCurrentRefinements from '../CustomCurrentRefinements';
+import InstantSearchComponent from '../components/algolia/InstantSearchComponent';
+import Teaser from '../components/teaser/Teaser';
+import Filters from './filters/Filters';
+import SelectedFilters from './filters/selectedfilters/SelectedFilters';
 import { searchResultDiv } from './SearchUtility';
 
 // Create a dummy search box to generate result.
@@ -56,10 +56,24 @@ const SearchResultHits = connectHits(({ hits }) => {
 class SearchResults extends React.Component {
   constructor(props) {
     super(props);
-    // Create a div that we'll render the modal into. Because each
+    // Create a div that we'll render the search results into. Because each
     // Modal component has its own element, we can render multiple
     // modal components into the modal container.
     this.el = document.createElement('div');
+  }
+
+  openFilters() {
+    document.body.classList.add('filtering');
+    window.scrollTo(0, 0);
+    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('click', onClick);
+  }
+
+  closeFilters() {
+    document.body.classList.remove('filtering');
+    containerRef.current.scrollIntoView();
+    window.removeEventListener('keyup', onKeyUp);
+    window.removeEventListener('click', onClick);
   }
 
   componentDidMount() {
@@ -102,11 +116,23 @@ class SearchResults extends React.Component {
             </div>
             <Filters indexName={indexName} />
           </section>
-          <div>
-            <CustomCurrentRefinements />
+          <div id="block-filterbar" className="block block-facets-summary block-facets-summary-blockfilter-bar">
+            <span class="filter-list-label">selected filters</span>
+            <SelectedFilters />
           </div>
           <SearchResultHits />
         </div>
+
+        <aside data-layout="mobile">
+          <button
+            className="filters-button"
+            data-action="open-overlay"
+            onClick={this.openFilters}
+          >
+            Filters
+          </button>
+        </aside>
+
       </InstantSearchComponent>,
       this.el
     );

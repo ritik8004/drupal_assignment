@@ -1,5 +1,5 @@
 import React from 'react';
-import ImageElement from '../components/gallery/imageHelper/ImageElement';
+import ImageElement from '../../../components/gallery/imageHelper/ImageElement';
 
 export default function Swatch({ swatch, label }) {
   if (typeof swatch == 'undefined') {

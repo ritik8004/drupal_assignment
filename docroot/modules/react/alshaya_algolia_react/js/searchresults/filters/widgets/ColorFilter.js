@@ -1,6 +1,6 @@
 import React from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
-import Swatch from '../widgets/Swatch';
+import Swatch from './Swatch';
 
 const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL }) => {
   var searchForm = (null);
