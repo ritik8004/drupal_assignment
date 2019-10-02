@@ -14,6 +14,7 @@ function alshaya_fl_update_8001() {
   $strings = [
     'seo_brand_name' => [
       'en' => 'Footlocker',
+      'ar' => 'فوت لوكر',
     ],
   ];
 
@@ -59,7 +60,7 @@ function alshaya_fl_install() {
     ],
     'seo_brand_name' => [
       'en' => 'Footlocker',
-      'ar' => 'Footlocker',
+      'ar' => 'فوت لوكر',
     ],
   ];
 

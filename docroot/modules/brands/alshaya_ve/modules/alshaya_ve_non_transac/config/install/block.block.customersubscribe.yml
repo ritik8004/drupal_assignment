@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies: {  }
+id: customersubscribe
+theme: vision_express
+region: footer
+weight: 0
+provider: null
+plugin: 'block_content:5c3f6d2c-6191-462d-91a4-2d9b0bb80afc'
+settings:
+  id: 'block_content:5c3f6d2c-6191-462d-91a4-2d9b0bb80afc'
+  label: 'Customer Subscribe'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

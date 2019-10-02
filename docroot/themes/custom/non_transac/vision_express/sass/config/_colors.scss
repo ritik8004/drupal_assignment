@@ -3,17 +3,17 @@ $black: #333;
 $brand: #ec1d24;
 $white: #fff;
 $white-smoke: #f2f2f2;
+$grey: #777;
 
 // Primary Color.
 $primary-border: $white-smoke;
 $icon: $brand;
+$link: $black;
+$content-text: $black;
 
 // Button.
 $btn-bg: $brand;
 $btn: $white;
-
-// Secondary menu.
-$link: $black;
 
 // Header
 $header-bg: $white-smoke;
@@ -21,3 +21,10 @@ $header-bg: $white-smoke;
 // Main navigation.
 $menu-bg: $white;
 $link-border: $black;
+
+// footer-primary
+$footer-primary-bg: $white-smoke;
+
+// footer-tertiary
+$footer-tertiary-bg: $grey;
+$footer-text: $white;

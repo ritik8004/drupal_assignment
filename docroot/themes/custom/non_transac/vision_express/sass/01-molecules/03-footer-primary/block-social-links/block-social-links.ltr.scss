@@ -1,0 +1,15 @@
+@import '../../../config/_config.scss';
+
+.block-social-link {
+  background-color: transparent;
+  padding: 0;
+  color: $link;
+  width: 50%;
+  text-align: $left;
+  display: inline-block;
+
+  @include breakpoint ($upto-palm) {
+    width: 100%;
+    text-align: center;
+  }
+}

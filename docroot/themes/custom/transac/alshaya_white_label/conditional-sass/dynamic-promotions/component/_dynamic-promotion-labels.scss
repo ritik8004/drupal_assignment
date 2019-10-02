@@ -1,0 +1,20 @@
+.promotions-dynamic-label {
+  a.sku-dynamic-promotion-link {
+    background: $promo_dynamic_label_bg;
+    color: $content_link_color !important;
+    text-decoration: none !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-#{$left}: 1rem;
+    padding-#{$right}: 1.5rem;
+    position: relative;
+
+    @include icon('chevron#{$right}', 'after') {
+      font-size: 1.375rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      #{$right}: 0;
+    }
+  }
+}

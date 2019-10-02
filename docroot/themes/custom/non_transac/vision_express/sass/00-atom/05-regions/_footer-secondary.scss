@@ -1,0 +1,24 @@
+@import '../../config/_config.scss';
+
+.region-footer-secondary {
+  margin: 0;
+
+  .region__wrapper {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1rem 0.9375rem;
+    position: relative;
+
+    @include breakpoint ($above-palm) {
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+.block-terms-conditions,
+.block-copyright {
+  width: 100%;
+}

@@ -1,0 +1,45 @@
+@import '../../../config/_config.scss';
+
+.block-language-switcher__tablet {
+  display: block;
+  background-color: transparent;
+  color: $link;
+  position: static;
+  width: 100%;
+  text-align: $right;
+
+  @include breakpoint ($upto-palm) {
+    position: absolute;
+    top: 0.9375rem;
+    #{$right}: 1.125rem;
+    #{$left}: inherit;
+  }
+}
+
+.menu-language-switcher--desktop {
+  li {
+    padding: 0;
+
+    &::after {
+      display: none !important;
+    }
+
+    &.is-hidden {
+      display: none !important;
+    }
+  }
+
+  a {
+    color: $link;
+    font-size: 0.9375rem;
+    line-height: 1;
+
+    &[hreflang="ar"] {
+      font-family: $arabic_regular;
+    }
+
+    &[hreflang="en"] {
+      font-family: $helvetica-neue;
+    }
+  }
+}

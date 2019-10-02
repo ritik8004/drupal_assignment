@@ -31,6 +31,16 @@ libraries-extend:
     - vision_express/block-header-language
   whitelabel/header-language-switcher:
     - vision_express/header-language-switcher
+  whitelabel/block-footer-store:
+    - vision_express/block-footer-store
+  whitelabel/block-social-links:
+    - vision_express/block-social-links
+  whitelabel/menu-social-links:
+    - vision_express/menu-social-links
+  whitelabel/block-footer-language:
+    - vision_express/block-footer-language
+  whitelabel/menu-terms-conditions:
+    - vision_express/menu-terms-conditions
 
 component-libraries:
   atoms:

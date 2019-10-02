@@ -4,10 +4,10 @@ dependencies: {  }
 id: node__acq_product
 label: 'Content: Product'
 tags:
-  description: 'Buy [node:title] Online from [site:name] in [alshaya_seo:cities]. Experience online shopping with a wide range of [node:category_names] and Enjoy  ✓ [alshaya_seo:usp1] ✓ [alshaya_seo:usp2] ✓ [alshaya_seo:usp3] [alshaya_seo:country]'
   title: 'Shop [node:title] online | [site:name]'
-  keywords: 'Shop [node:title], buy [node:title], [alshaya_seo:brand_name] [node:title], [node:title] in [alshaya_seo:city1], [node:title] in [alshaya_seo:city2], [node:title] in [alshaya_seo:country],[node:title] online'
-  og_description: '[node:summary_custom:155]'
+  og_title: 'Shop [node:title] online | [site:name]'
+  description: 'Buy [alshaya_seo:brand_name] [node:title] Online from [site:name] in [alshaya_seo:cities]. Experience online shopping with a wide range of [node:category_names] and Enjoy ✓ [alshaya_seo:usp1] ✓ [alshaya_seo:usp2] ✓ [alshaya_seo:usp3] [alshaya_seo:country]'
+  og_description: 'Buy [alshaya_seo:brand_name] [node:title] Online from [site:name] in [alshaya_seo:cities]. Experience online shopping with a wide range of [node:category_names] and Enjoy ✓ [alshaya_seo:usp1] ✓ [alshaya_seo:usp2] ✓ [alshaya_seo:usp3] [alshaya_seo:country]'
+  keywords: 'Shop [node:title], buy [node:title], [alshaya_seo:brand_name] [node:title], [alshaya_seo:city1_keyword] [alshaya_seo:city2_keyword] [node:title] in [alshaya_seo:country], [node:title] online'
   og_site_name: '[site:name]'
-  og_title: '[node:title] | [site:name]'
   og_locale_alternative: '[node:locale:alternate]'

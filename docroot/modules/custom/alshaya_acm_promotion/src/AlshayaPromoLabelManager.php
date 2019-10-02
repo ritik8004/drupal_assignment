@@ -7,7 +7,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -101,6 +100,14 @@ class AlshayaPromoLabelManager {
     $eligiblePromotions = [];
 
     foreach ($promotionNodes as $promotionNode) {
+      if (is_numeric($promotionNode)) {
+        $promotionNode = $this->nodeStorage->load($promotionNode);
+      }
+
+      if (!($promotionNode instanceof NodeInterface)) {
+        continue;
+      }
+
       $promotion_action = $promotionNode->get('field_acq_promotion_action')->getString();
       if (in_array($promotion_action, self::DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS)) {
         $eligiblePromotions[] = $promotionNode;
@@ -176,6 +183,14 @@ class AlshayaPromoLabelManager {
     }
 
     foreach ($promotion_nodes as $promotion_node) {
+      if (is_numeric($promotion_node)) {
+        $promotion_node = $this->nodeStorage->load($promotion_node);
+      }
+
+      if (!($promotion_node instanceof NodeInterface)) {
+        continue;
+      }
+
       $promoDisplay = $this->preparePromoDisplay($promotion_node, $sku, $view_mode);
       if ($promoDisplay) {
         $promos[$promotion_node->id()] = $promoDisplay;
@@ -347,8 +362,8 @@ class AlshayaPromoLabelManager {
     }
 
     if ($response instanceof AjaxResponse) {
-      $response->addCommand(new HtmlCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, $label));
-      $response->addCommand(new InvokeCommand('.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId, 'removeClass', ['hidden']));
+      $dynamic_label_selector = '.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId;
+      $response->addCommand(new HtmlCommand($dynamic_label_selector, $label));
     }
 
     return $response;

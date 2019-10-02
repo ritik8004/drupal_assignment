@@ -424,7 +424,7 @@ function _alshaya_mc_get_metatag_translations() {
     ],
     'alshaya_seo_keywords' => [
       'en' => 'Shop [term:name] Collection Online, Shop Newborn [term:name], Shop [term:name] for [term:parent:name], Shop [term:parent:name] [term:name], Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
-      'ar' => 'تسوق تشكيلة [term:name] اون لاين, تسوق [term:name] [term:parent:name] من [alshaya_seo:brand_name], اشتري [term:name] من [alshaya_seo:brand_name], اشتري [term:name] [term:parent:name] من[alshaya_seo:brand_name], تسوق [term:name] اون لاين في [alshaya_seo:city1], تسوق [term:name] اون لاين في [alshaya_seo:city2], تسوق [term:name] اون لاين في [alshaya_seo:country]',
+      'ar' => 'تسوق تشكيلة [term:name] اون لاين, تسوق [term:name] [term:parent:name] من [alshaya_seo:brand_name], اشتري [term:name] من [alshaya_seo:brand_name], اشتري [term:name] [term:parent:name] من [alshaya_seo:brand_name], تسوق [term:name] اون لاين في [alshaya_seo:city1], تسوق [term:name] اون لاين في [alshaya_seo:city2], تسوق [term:name] اون لاين في [alshaya_seo:country]',
     ],
   ];
 

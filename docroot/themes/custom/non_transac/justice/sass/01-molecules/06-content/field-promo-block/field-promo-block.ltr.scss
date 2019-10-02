@@ -1,0 +1,23 @@
+@import '../../../config/_config.scss';
+
+.field-promo-block {
+  & > .field__item {
+    @include breakpoint($above-palm) {
+      margin-bottom: 1.25rem;
+    }
+  }
+}
+
+.field__wrapper {
+  &.field-promotion-image-mobile {
+    @include breakpoint($above-palm) {
+      display: none;
+    }
+  }
+
+  &.field-banner {
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
+}

@@ -24,6 +24,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
@@ -786,7 +787,11 @@ class SkuManager {
 
     if (!is_array($promos)) {
       $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
-      $this->productCacheManager->set($sku, $cache_key, $promos);
+      $tags = [];
+      foreach (array_keys($promos) as $id) {
+        $tags[] = 'node:' . $id;
+      }
+      $this->productCacheManager->set($sku, $cache_key, $promos, $tags);
     }
 
     return $promos ?? [];
@@ -800,25 +805,26 @@ class SkuManager {
    * @param array $types
    *   Promotion Types.
    *
-   * @return array|\Drupal\Core\Entity\EntityInterface[]
+   * @return array
    *   List of Promotion Nodes.
    */
   public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
-    $promotion_nodes = [];
+    $promotion_nids = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
+    foreach ($promotion ?? [] as $promo) {
+      $promotion_nids[] = $promo['target_id'];
+    }
 
-    if (empty($promotion) && $sku->bundle() == 'simple') {
+    if ($sku->bundle() == 'simple') {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
       $parent = $plugin->getParentSku($sku);
       if ($parent instanceof SKUInterface) {
         $promotion = $parent->get('field_acq_sku_promotions')->getValue();
+        foreach ($promotion ?? [] as $promo) {
+          $promotion_nids[] = $promo['target_id'];
+        }
       }
-    }
-
-    $promotion_nids = [];
-    foreach ($promotion as $promo) {
-      $promotion_nids[] = $promo['target_id'];
     }
 
     if (!empty($promotion_nids)) {
@@ -829,12 +835,10 @@ class SkuManager {
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->exists('field_acq_promotion_label');
-      $nids = $query->execute();
-
-      $promotion_nodes = $this->nodeStorage->loadMultiple($nids);
+      return $query->execute();
     }
 
-    return $promotion_nodes;
+    return [];
   }
 
   /**
@@ -857,7 +861,7 @@ class SkuManager {
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function preparePromotionsDisplay(SKU $sku,
-                                           $promotion_nodes,
+                                           array $promotion_nodes,
                                            $view_mode,
                                            array $types = ['cart', 'category'],
                                            $product_view_mode = NULL,
@@ -866,6 +870,14 @@ class SkuManager {
     $view_mode_original = $view_mode;
 
     foreach ($promotion_nodes as $promotion_node) {
+      if (is_numeric($promotion_node)) {
+        $promotion_node = $this->nodeStorage->load($promotion_node);
+      }
+
+      if (!($promotion_node instanceof NodeInterface)) {
+        continue;
+      }
+
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
       $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
@@ -1134,7 +1146,11 @@ class SkuManager {
 
     // Download the file contents.
     try {
-      $file_data = $this->httpClient->get($data[$file_key])->getBody();
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 3),
+      ];
+
+      $file_data = $this->httpClient->get($data[$file_key], $options)->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_acm_product', $e);
@@ -1700,10 +1716,21 @@ class SkuManager {
     foreach ($combinations['by_sku'] ?? [] as $combination) {
       foreach ($all_combinations as $possible_combination) {
         $combination_string = '';
+
         foreach ($possible_combination as $code) {
+          if (!isset($combination[$code])) {
+            $combination_string = '';
+            break;
+          }
+
           $combination_string .= $code . '|' . $combination[$code] . '||';
           $combinations['by_attribute'][$combination_string] = 1;
         }
+
+        if (empty($combination_string)) {
+          continue;
+        }
+
         $combinations['by_attribute'][$combination_string] = 1;
       }
     }
@@ -3285,6 +3312,33 @@ class SkuManager {
       ->execute()->fetchField();
 
     return $parent_nid;
+  }
+
+  /**
+   * Recursive helper function to get combination array.
+   *
+   * It converts ['color' => 'Black', 'size' => 'X', 'material' => 'Leather']
+   * to ['color']['Black']['size']['X']['material']['Leather'] = 1.
+   *
+   * @param array $options
+   *   One dimensional array.
+   *
+   * @return array
+   *   Multi dimensional array.
+   */
+  public function getCombinationArray(array $options) {
+    $combination = [];
+    foreach ($options as $code => $value) {
+      unset($options[$code]);
+
+      $combination[$code][$value] = count($options) > 0
+        ? $this->getCombinationArray($options)
+        : 1;
+
+      break;
+    }
+
+    return $combination;
   }
 
 }

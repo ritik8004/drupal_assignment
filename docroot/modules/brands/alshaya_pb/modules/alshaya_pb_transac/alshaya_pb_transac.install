@@ -15,7 +15,7 @@ use Drupal\Core\Site\Settings;
  * Update meta variables.
  */
 function alshaya_pb_transac_update_8014() {
-  _alshaya_pb_transac_get_metatag_translations();
+  _alshaya_pb_transac_save_metatag_translations();
 }
 
 /**
@@ -345,7 +345,7 @@ function alshaya_pb_transac_install() {
   alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_pb_transac', 'optional');
 
   // Get metatag translations on install.
-  _alshaya_pb_transac_get_metatag_translations();
+  _alshaya_pb_transac_save_metatag_translations();
 }
 
 /**
@@ -365,7 +365,7 @@ function alshaya_pb_transac_update_dependencies() {
 /**
  * Get translations of metatag.
  */
-function _alshaya_pb_transac_get_metatag_translations() {
+function _alshaya_pb_transac_save_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_desc_start' => [
       'en' => 'Get [current-date:html_year] [alshaya_seo:gender] [term:name] Sale from [site:name]. Explore our [term:parent:name] sale for our [current-date:html_year] luxury and high-quality [term:name] collection',
