@@ -14,6 +14,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s;
+    cursor: pointer;
   }
 
   &.clear-icon {
@@ -325,7 +326,9 @@
         z-index: 4;
         color: $algolia-search-clear-text-icon;
         opacity: 0;
+        cursor: pointer;
         transition: opacity 0.2s;
+        visibility: hidden;
 
         @include icon(arrow-#{$left}) {
           font-size: 2.25rem;
@@ -336,6 +339,7 @@
       &.focused {
         .algolia-search-back-icon {
           opacity: 1;
+          visibility: visible;
         }
 
         .react-autosuggest__input {

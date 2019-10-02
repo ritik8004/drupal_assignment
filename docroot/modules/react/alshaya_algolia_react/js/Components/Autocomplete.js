@@ -9,11 +9,13 @@ class Autocomplete extends React.Component {
   };
 
   onFocusIn = () => {
+    // Add a class on block so we can show back and clear icons.
     let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
     reactSearchBlock[0].classList.add('focused');
   };
 
   onFocusOut = () => {
+    // On focus out, remove the class.
     let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
     reactSearchBlock[0].classList.remove('focused');
   };
@@ -59,6 +61,14 @@ class Autocomplete extends React.Component {
     return true;
   }
 
+  clearSearchFieldInput = (element) => {
+    // Empty State & Input.
+    this.setState({value: ''});
+    let searchInput = document.getElementsByClassName('react-autosuggest__input');
+    // Keep focus.
+    searchInput[0].focus();
+  };
+
   render() {
     const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
@@ -86,7 +96,7 @@ class Autocomplete extends React.Component {
           shouldRenderSuggestions={this.shouldRenderSuggestions}
           inputProps={inputProps}
         />
-        <span className="algolia-search-cleartext-icon"></span>
+        <span className="algolia-search-cleartext-icon" onClick={this.clearSearchFieldInput}></span>
       </React.Fragment>
     );
   }
