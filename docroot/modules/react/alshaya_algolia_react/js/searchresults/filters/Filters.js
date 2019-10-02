@@ -4,11 +4,12 @@ import {
   Panel,
   RefinementList,
   SortBy,
-  NumericMenu,
-  CurrentRefinements
+  NumericMenu
 } from 'react-instantsearch-dom';
 import { formatPrice } from '../../components/price/PriceHelper';
 import ColorFilter from './widgets/ColorFilter';
+import CommonRefinementList from './widgets/CommonRefinementList';
+import AlshayaNumericWidget from './widgets/AlshayaNumericWidget';
 
 export default ({indexName}) => (
   <div className="container-without-product">
@@ -25,7 +26,7 @@ export default ({indexName}) => (
         ]}
       />
     </Panel>
-    <Panel header="Category" className="c-facet c-accordion">
+    {/* <Panel header="Category" className="c-facet c-accordion">
       <HierarchicalMenu
         attributes={[
           'field_category_name.lvl0',
@@ -33,9 +34,9 @@ export default ({indexName}) => (
           'field_category_name.lvl2',
         ]}
       />
-    </Panel>
+    </Panel> */}
     <Panel header="Brands" className="c-facet c-accordion">
-      <RefinementList
+      <CommonRefinementList
         attribute="attr_product_brand"
         searchable={false}
       />
@@ -47,7 +48,7 @@ export default ({indexName}) => (
       />
     </Panel>
     <Panel header="Price" className="c-facet c-accordion">
-      <NumericMenu
+      <AlshayaNumericWidget
         attribute="final_price"
         createURL={() => '#'}
         refine={() => null}
@@ -61,7 +62,7 @@ export default ({indexName}) => (
       />
     </Panel>
     <Panel header="Size" className="c-facet c-accordion">
-      <RefinementList
+      <CommonRefinementList
         attribute="attr_size"
         searchable={false}
       />

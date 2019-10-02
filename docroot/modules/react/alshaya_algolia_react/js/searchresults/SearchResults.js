@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom';
 import {
   Configure,
   connectHits,
-  connectSearchBox,
-  CurrentRefinements
+  connectSearchBox
 } from 'react-instantsearch-dom';
-import { connectNumericMenu } from 'react-instantsearch-core';
 import InstantSearchComponent from '../components/algolia/InstantSearchComponent';
 import Teaser from '../components/teaser/Teaser';
 import Filters from './filters/Filters';
@@ -62,20 +60,6 @@ class SearchResults extends React.Component {
     this.el = document.createElement('div');
   }
 
-  openFilters() {
-    document.body.classList.add('filtering');
-    window.scrollTo(0, 0);
-    window.addEventListener('keyup', onKeyUp);
-    window.addEventListener('click', onClick);
-  }
-
-  closeFilters() {
-    document.body.classList.remove('filtering');
-    containerRef.current.scrollIntoView();
-    window.removeEventListener('keyup', onKeyUp);
-    window.removeEventListener('click', onClick);
-  }
-
   componentDidMount() {
     // Append the element into the DOM on mount. We'll render
     // into the modal container element (see the HTML tab).
@@ -104,7 +88,7 @@ class SearchResults extends React.Component {
     const indexName = drupalSettings.algoliaSearch.indexName;
 
     return ReactDOM.createPortal(
-      <InstantSearchComponent indexName={indexName}>
+      <InstantSearchComponent indexName={indexName} createURL={this.props.createURL}>
         <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter}/>
         <VirtualSearchBox defaultRefinement={query} />
         <div className="container-wrapper">
@@ -122,17 +106,6 @@ class SearchResults extends React.Component {
           </div>
           <SearchResultHits />
         </div>
-
-        <aside data-layout="mobile">
-          <button
-            className="filters-button"
-            data-action="open-overlay"
-            onClick={this.openFilters}
-          >
-            Filters
-          </button>
-        </aside>
-
       </InstantSearchComponent>,
       this.el
     );
