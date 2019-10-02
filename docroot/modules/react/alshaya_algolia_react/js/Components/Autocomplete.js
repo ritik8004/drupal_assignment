@@ -8,16 +8,10 @@ class Autocomplete extends React.Component {
     value: this.props.currentRefinement,
   };
 
-  onFocusIn = () => {
-    // Add a class on block so we can show back and clear icons.
-    let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
-    reactSearchBlock[0].classList.add('focused');
-  };
+  reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
 
-  onFocusOut = () => {
-    // On focus out, remove the class.
-    let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
-    reactSearchBlock[0].classList.remove('focused');
+  toggleFocus = (action) => {
+    this.reactSearchBlock[0].classList[action]('focused');
   };
 
   onKeyUp = () => {
@@ -76,8 +70,8 @@ class Autocomplete extends React.Component {
     const inputProps = {
       placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,
-      onFocus: this.onFocusIn,
-      onBlur: this.onFocusOut,
+      onFocus: () => this.toggleFocus('add'),
+      onBlur: () => this.toggleFocus('remove'),
       onKeyUp: this.onKeyUp,
       value,
     };

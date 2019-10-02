@@ -5,9 +5,7 @@ import {
 import {searchClient} from '../Config/SearchClient';
 
 const InstantSearchComponent = ({ children, indexName}) => (
-  <InstantSearch searchClient={searchClient} indexName={indexName}>
-    {children}
-  </InstantSearch>
+  <InstantSearch searchClient={searchClient} indexName={indexName}>{children}</InstantSearch>
 );
 
 export default InstantSearchComponent;
