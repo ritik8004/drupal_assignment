@@ -15,12 +15,11 @@ class Autocomplete extends React.Component {
   };
 
   onKeyUp = () => {
-    let reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
     if (this.state.value.length < 1) {
-      reactSearchBlock[0].classList.remove('clear-icon');
+      this.reactSearchBlock[0].classList.remove('clear-icon');
     }
     else {
-      reactSearchBlock[0].classList.add('clear-icon');
+      this.reactSearchBlock[0].classList.add('clear-icon');
     }
   };
 
