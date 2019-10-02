@@ -187,7 +187,7 @@ class AlshayaAlgoliaIndexHelper {
       $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
     });
 
-    $object['field_acq_promotion_label'] = array_column($promotions, 'text');
+    // Removed 'field_acq_promotion_label' in favour of 'promotions'.
     $object['promotions'] = array_values($promotions);
 
     // Product Images.
