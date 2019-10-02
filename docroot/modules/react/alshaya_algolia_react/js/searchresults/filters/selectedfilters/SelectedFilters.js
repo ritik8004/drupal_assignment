@@ -3,7 +3,6 @@ import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import FiltersLabels from './FiltersLabels';
 
 const CurrentFilters = ({ items, refine, createURL }) => {
-  console.log(items);
   return(
     <ul>
       {
