@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   Configure,
   Hits,
-  connectSearchBox, InstantSearch
+  connectSearchBox
 } from 'react-instantsearch-dom';
 import InstantSearchComponent from './InstantSearchComponent';
 

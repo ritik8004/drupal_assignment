@@ -61,7 +61,7 @@ class Autocomplete extends React.Component {
     return true;
   }
 
-  clearSearchFieldInput = (element) => {
+  clearSearchFieldInput = () => {
     // Empty State & Input.
     this.setState({value: ''});
     let searchInput = document.getElementsByClassName('react-autosuggest__input');
