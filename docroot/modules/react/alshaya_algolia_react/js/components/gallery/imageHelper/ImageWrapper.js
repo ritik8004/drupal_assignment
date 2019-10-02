@@ -2,14 +2,18 @@ import React from 'react';
 import ImageElement from './ImageElement';
 import ImageLazyLoad from './ImageLazyLoad';
 
-export function ImageWrapper(imageObj, title, classname, showDefaultImage = false) {
-  let imageTag = '';
-  if (typeof imageObj != 'undefined' && typeof imageObj.url != 'undefined') {
-    imageTag = <ImageLazyLoad src={ imageObj.url } title={title} />;
+export function ImageWrapper({src, title, className, showDefaultImage = false}) {
+  let imageSrc = '';
+  if (typeof src != 'undefined' && src != '') {
+    imageSrc = src;
   }
   else if (showDefaultImage && drupalSettings.reactTeaserView.gallery.defaultImage) {
-    imageTag = <ImageLazyLoad src={ drupalSettings.reactTeaserView.gallery.defaultImage } title={title} />;
+    imageSrc = drupalSettings.reactTeaserView.gallery.defaultImage;
   }
 
-  return (<div className={classname}>{imageTag}</div>);
+  return (
+    <div className={className}>
+      <ImageLazyLoad src={imageSrc} title={title} />
+    </div>
+  );
 };

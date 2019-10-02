@@ -75,7 +75,12 @@ class SearchGallery extends React.Component {
 
     return (
       <div className="alshaya_search_gallery">
-        {mainImageWrapper}
+        <ImageWrapper
+          src={typeof this.state.mainImage.url != 'undefined' ? this.state.mainImage.url : ''}
+          title={title}
+          className='alshaya_search_mainimage'
+          showDefaultImage={true}
+        />
         <div class="alshaya_search_slider">
           <Slider {...this.settings} className="search-lightSlider">
             {thumbnails}

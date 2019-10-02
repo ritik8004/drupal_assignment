@@ -5,17 +5,19 @@ const ImageElement = lazy(() => import('./ImageElement'));
 const ImageLazyLoad = (props) => {
   const {src, title, alt, ...otherProps} = props;
 
+  if (src == '') {
+    return (null);
+  }
+
   return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ImageElement
-          src={src}
-          alt={alt || title}
-          title={title || ''}
-          {...otherProps}
-        />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <ImageElement
+        src={src}
+        alt={alt || title}
+        title={title || ''}
+        {...otherProps}
+      />
+    </Suspense>
   );
 };
 
