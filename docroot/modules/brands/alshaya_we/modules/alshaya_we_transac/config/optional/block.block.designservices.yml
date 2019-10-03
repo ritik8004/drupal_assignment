@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - alshaya_pottery_barn
+    - alshaya_westelm
 id: designservices
-theme: alshaya_pottery_barn
+theme: alshaya_westelm
 region: menu_secondary
 weight: -43
 provider: null
