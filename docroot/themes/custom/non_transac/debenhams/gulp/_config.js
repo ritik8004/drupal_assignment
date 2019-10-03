@@ -23,9 +23,10 @@ module.exports = {
   scripts: {
     source: [
       'js/**/*.js',
+      'components/js/**/*.js',
       'components/_patterns/**/*.js'
     ],
-    destination: 'dist/js/'
+    destination: 'components/dist/js/'
   },
   svg: {
     source: 'images/icons/svg/**/*.svg',
