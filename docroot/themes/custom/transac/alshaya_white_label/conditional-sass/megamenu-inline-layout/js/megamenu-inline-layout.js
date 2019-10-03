@@ -17,7 +17,7 @@
       $('.move-to-right').removeClass('move-to-left');
     });
 
-    // On hove of L1 item make first L2 item active by default.
+    // On hover of L1 item make first L2 item active by default.
     $(parent).once().on().hover(function () {
       $(parent).removeClass('active');
       $(this).addClass('active');
