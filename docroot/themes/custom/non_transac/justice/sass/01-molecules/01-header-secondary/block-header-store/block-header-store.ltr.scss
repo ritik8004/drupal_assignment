@@ -29,7 +29,11 @@
     text-align: $right;
 
     @include breakpoint($above-palm) {
-      width: 25%;
+      width: 27%;
+
+      html[lang=ar] & {
+        width: 29%;
+      }
     }
 
     @include breakpoint($upto-lap) {

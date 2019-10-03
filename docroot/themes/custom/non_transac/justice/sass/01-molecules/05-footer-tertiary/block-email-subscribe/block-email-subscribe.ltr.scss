@@ -65,6 +65,10 @@
       a {
         font-size: 1.125rem;
         text-decoration: none;
+
+        html[lang=ar] & {
+          font-size: 0.75rem;
+        }
       }
     }
   }
