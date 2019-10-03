@@ -11,6 +11,7 @@ use Drupal\alshaya_search_algolia\Event\AlshayaAlgoliaProductIndexEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -143,6 +144,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['field_category_name'] = $this->getCategoryHierarchy($node);
 
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
+    $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
 
@@ -181,10 +183,12 @@ class AlshayaAlgoliaIndexHelper {
 
     // Promotions.
     $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
-    $object['field_acq_promotion_label'] = array_map(function ($promotion) {
-      return $promotion['text'];
-    }, $promotions);
-    $object['promotions'] = $promotions;
+    array_walk($promotions, function (&$promotion, $nid) {
+      $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+    });
+
+    // Removed 'field_acq_promotion_label' in favour of 'promotions'.
+    $object['promotions'] = array_values($promotions);
 
     // Product Images.
     $object['media'] = $this->getMediaItems($sku, $product_color);
@@ -202,6 +206,9 @@ class AlshayaAlgoliaIndexHelper {
     if ($attr_style = $sku->get('attr_style')->getString()) {
       $object['attr_style'] = $attr_style;
     }
+
+    $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
+    $object['product_labels'] = $this->skuManager->getLabelsData($sku, 'plp');
 
     // Update stock info for product.
     $object['stock_quantity'] = $this->skuInfoHelper->calculateStock($sku);
@@ -232,7 +239,8 @@ class AlshayaAlgoliaIndexHelper {
    */
   public function getMediaItems(SKU $sku, $product_color = NULL): array {
     $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
-    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search');
+    // @see \Drupal\alshaya_acm_product\SkuImagesManager::getGallery.
+    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search', FALSE);
     $images = [];
 
     foreach ($media['media_items']['images'] ?? [] as $media_item) {

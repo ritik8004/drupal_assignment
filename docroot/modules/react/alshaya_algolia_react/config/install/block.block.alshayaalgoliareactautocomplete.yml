@@ -16,4 +16,6 @@ settings:
   label: 'Alshaya Algolia Autocomplete'
   provider: alshaya_algolia_react
   label_display: '0'
+  hits: '4'
+  top_results: '4'
 visibility: {  }

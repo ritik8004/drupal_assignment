@@ -1007,6 +1007,104 @@ class SkuManager {
    * @return array
    *   Array of media files.
    */
+  public function getLabelsData(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+    static $static_labels_cache = [];
+
+    $sku = $sku_entity->getSku();
+
+    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
+      return $static_labels_cache[$sku][$type];
+    }
+
+    $static_labels_cache[$sku][$type] = [];
+
+    $labels_data = $this->getSkuLabel($sku_entity);
+
+    if (empty($labels_data)) {
+      return [];
+    }
+    else {
+      $image_key = $type . '_image';
+      $text_key = $type . '_image_text';
+      $position_key = $type . '_position';
+
+      foreach ($labels_data as &$data) {
+        $row = [];
+
+        // Check if label is available for desired type.
+        if (empty($data[$image_key])) {
+          continue;
+        }
+
+        // Check if label is currently active.
+        $from = strtotime($data['from']);
+        $to = strtotime($data['to']);
+
+        // First check if we have date filter.
+        if ($from > 0 && $to > 0) {
+          $now = REQUEST_TIME;
+
+          // Now, check if current date lies between from and to dates.
+          if ($from > $now || $to < $now) {
+            continue;
+          }
+        }
+
+        $fid = $this->productLabelsCache->get($data[$image_key]);
+
+        if (empty($fid)) {
+          try {
+            // Prepare the File object when we access it the first time.
+            $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+            $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
+          }
+          catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            continue;
+          }
+        }
+        else {
+          $fid = $fid->data;
+        }
+
+        $image_file = $this->fileStorage->load($fid);
+        $uri = $image_file->getFileUri();
+
+        $row['image'] = [
+          'uri' => $uri,
+          'url' => file_create_url($uri),
+          'title' => $data[$text_key],
+          'alt' => $data[$text_key],
+        ];
+        $row['position'] = $data[$position_key];
+
+        $static_labels_cache[$sku][$type][] = $row;
+
+        // Disable subsequent images if flag is true.
+        if ($data['disable_subsequents']) {
+          break;
+        }
+      }
+    }
+
+    return $static_labels_cache[$sku][$type];
+  }
+
+  /**
+   * Function to return labels files for a SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Sku Entity.
+   * @param string $type
+   *   Type of image required - plp or pdp.
+   * @param bool $reset
+   *   Flag to reset cache and generate array again from serialized string.
+   *
+   * @return array
+   *   Array of media files.
+   *
+   * @todo: Use self::getLabelsData() to get data and prepare images.
+   */
   public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     static $static_labels_cache = [];
 

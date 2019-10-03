@@ -4,11 +4,19 @@ import Autosuggest from 'react-autosuggest';
 import CustomHighlight from './CustomHighlight';
 
 class Autocomplete extends React.Component {
-  state = {
-    value: this.props.currentRefinement,
-  };
-
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.currentValue !== null && props.currentValue !== '' ? props.currentValue : this.props.currentRefinement,
+    };
+  }
+
+  // To update component when property change.
+  componentWillReceiveProps(nextProps) {
+    this.setState({ value: nextProps.currentValue });
+  }
 
   toggleFocus = (action) => {
     this.reactSearchBlock[0].classList[action]('focused');
@@ -23,6 +31,7 @@ class Autocomplete extends React.Component {
     }
   };
 
+  // On change send value to parent component to update search results.
   onChange = (event, { newValue }) => {
     if (!newValue) {
       this.props.onSuggestionCleared();
@@ -51,7 +60,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    return true;
+    return (window.innerWidth < 768);
   }
 
   clearSearchFieldInput = () => {
@@ -65,7 +74,6 @@ class Autocomplete extends React.Component {
   render() {
     const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
-
     const inputProps = {
       placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,

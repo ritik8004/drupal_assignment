@@ -20,7 +20,7 @@ class AlshayaAlgoliaController extends ControllerBase {
   public function testPage() {
     return [
       '#type' => 'markup',
-      '#markup' => '<div id="alshaya-algolia-search"></div>',
+      '#markup' => '<div id="alshaya-algolia-search" class="c-plp c-plp-only l-one--w lhn-without-sidebar"></div>',
       '#cache' => [
         'contexts' => ['languages'],
       ],

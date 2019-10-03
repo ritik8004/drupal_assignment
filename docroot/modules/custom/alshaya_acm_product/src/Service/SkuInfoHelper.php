@@ -326,12 +326,14 @@ class SkuInfoHelper {
    *
    * @param object $entity
    *   The entity object.
+   * @param bool $absolute
+   *   (Optional) true to get absolute url, otherwise false.
    *
    * @return mixed
    *   Return the generate url of the entity.
    */
-  public function getEntityUrl($entity) {
-    return $entity->toUrl('canonical', ['absolute' => TRUE])
+  public function getEntityUrl($entity, $absolute = TRUE) {
+    return $entity->toUrl('canonical', ['absolute' => $absolute])
       ->toString(TRUE)
       ->getGeneratedUrl();
   }

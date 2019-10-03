@@ -1,0 +1,88 @@
+import React from 'react';
+import Slider from "react-slick";
+import { ImageWrapper } from '../imageHelper/ImageWrapper';
+import ImageElement from '../imageHelper/ImageElement';
+
+const SliderElement = props => {
+  return(
+    <div
+      onMouseEnter={props.mouseenter.bind(this)}
+      onMouseOut={props.mouseout.bind(this)}
+    >
+      <ImageElement
+        src={props.src}
+        title={props.title}
+        className="b-lazy b-loaded"
+      />
+    </div>
+  );
+};
+
+class SearchGallery extends React.Component {
+  constructor(props) {
+    super(props);
+    this.mainImage = props.media.length > 0 ? props.media[0] : {};
+    this.state = {
+      mainImage: this.mainImage
+    };
+    this.setTimeoutConst = null;
+
+    this.settings = {
+      dots: false,
+      infinite: false,
+      speed: 500,
+      slidesToShow: drupalSettings.reactTeaserView.gallery.plp_slider.item,
+      slidesToScroll: 1,
+      vertical: false,
+      arrows: true,
+      touchThreshold: 1000,
+      variableWidth: true,
+    };
+  }
+
+  changeImg = event => {
+    clearTimeout(this.setTimeoutConst);
+    if (event.target.hasAttribute("src") && event.target.getAttribute("src").length > 0) {
+      this.setState({ mainImage: {url: event.target.getAttribute("src")} });
+    }
+  };
+
+  resetImg = event => {
+    const obj = this;
+    this.setTimeoutConst = setTimeout(function() {
+      obj.setState({ mainImage: obj.mainImage });
+    }, 500);
+  };
+
+  render() {
+    const { media, title } = this.props;
+
+    const mainImageWrapper = ImageWrapper(this.state.mainImage, title, "alshaya_search_mainimage", true);
+
+    const origObj = this;
+    const thumbnails = [];
+    media.forEach((element, index) => {
+      thumbnails.push((
+        <SliderElement
+          src={element.url}
+          title={title}
+          mouseenter={origObj.changeImg}
+          mouseout={origObj.resetImg}
+        />
+      ));
+    });
+
+    return (
+      <div className="alshaya_search_gallery">
+        {mainImageWrapper}
+        <div class="alshaya_search_slider">
+          <Slider {...this.settings} className="search-lightSlider">
+            {thumbnails}
+          </Slider>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default SearchGallery;

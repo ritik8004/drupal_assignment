@@ -98,7 +98,7 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     catch (\Throwable $e) {
       if ($e->getCode() != 200) {
         $logger->warning('Indexing failed for the node:@nid message:@message', [
-          '@nid' => $object->id(),
+          '@nid' => $object['nid'],
           '@message' => $e->getMessage(),
         ]);
       }
