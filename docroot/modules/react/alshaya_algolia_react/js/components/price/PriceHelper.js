@@ -10,7 +10,6 @@ function calculateDiscount(price, final_price) {
   return parseFloat(Math.round((discount * 100) / floatPrice));
 }
 
-
 function formatPrice(price) {
   const priceParts = [
     drupalSettings.reactTeaserView.price.currency,

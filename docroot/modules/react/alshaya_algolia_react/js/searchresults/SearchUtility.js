@@ -20,4 +20,11 @@ function hideSearchResultContainer() {
   searchResultDiv.style.display = 'none';
 }
 
-export {contentDiv, searchResultDiv, showSearchResultContainer, hideSearchResultContainer};
+function toggleSearchResultsContainer(query) {
+  (typeof query === 'uundefined' || query == '')
+    ? hideSearchResultContainer()
+    : showSearchResultContainer();
+}
+
+
+export {contentDiv, searchResultDiv, toggleSearchResultsContainer};

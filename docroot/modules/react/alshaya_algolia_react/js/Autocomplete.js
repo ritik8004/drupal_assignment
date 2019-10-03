@@ -36,8 +36,8 @@ class Autocomplete extends React.Component {
     if (!newValue) {
       this.props.onSuggestionCleared();
     }
+    this.props.refine(newValue);
     this.props.onChange(newValue);
-
     this.setState({
       value: newValue,
     });
@@ -74,6 +74,7 @@ class Autocomplete extends React.Component {
   render() {
     const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
+
     const inputProps = {
       placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,

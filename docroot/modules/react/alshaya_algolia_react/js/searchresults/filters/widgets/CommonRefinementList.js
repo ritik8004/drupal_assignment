@@ -7,7 +7,7 @@ function CommonRefinement({ items, isFromSearch, refine, searchForItems, createU
       {items.map(item => (
         <li key={item.label}>
           <a
-            href={createURL(item.value)}
+            href="#"
             style={{ fontWeight: item.isRefined ? 'bold' : '' }}
             onClick={event => {
               event.preventDefault();

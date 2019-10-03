@@ -9,7 +9,6 @@ import {
 import { formatPrice } from '../../components/price/PriceHelper';
 import ColorFilter from './widgets/ColorFilter';
 import CommonRefinementList from './widgets/CommonRefinementList';
-import AlshayaNumericWidget from './widgets/AlshayaNumericWidget';
 
 export default ({indexName}) => (
   <div className="container-without-product">
@@ -48,7 +47,7 @@ export default ({indexName}) => (
       />
     </Panel>
     <Panel header="Price" className="c-facet c-accordion">
-      <AlshayaNumericWidget
+      <NumericMenu
         attribute="final_price"
         createURL={() => '#'}
         refine={() => null}
