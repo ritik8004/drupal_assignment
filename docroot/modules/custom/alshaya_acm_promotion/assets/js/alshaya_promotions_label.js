@@ -6,10 +6,10 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  function updateAlshayaPromotionsLabel(alshayaAcmPromotions, context) {
+  function updateAlshayaPromotionsLabel(alshayaAcmPromotions) {
     for (var dynamicPromotionSku in alshayaAcmPromotions) {
       if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
-        var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity', context);
+        var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity');
 
         // If cart is not empty.
         if (cartQuantity.length) {
@@ -39,7 +39,7 @@
         });
         // Go ahead and display dynamic promotions.
         $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
-          updateAlshayaPromotionsLabel(alshayaAcmPromotions, context);
+          updateAlshayaPromotionsLabel(alshayaAcmPromotions);
         });
       }
     }
