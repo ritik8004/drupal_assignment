@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Configure } from "react-instantsearch-dom";
 import AutoComplete from './components/Autocomplete';
 import SearchResults from './components/SearchResults';
 import InstantSearchComponent from './components/InstantSearchComponent';
@@ -17,32 +18,32 @@ class AppAutocomplete extends React.Component {
       query: parsedHash && parsedHash.q ? parsedHash.q : ''
     };
     this.updateQueryValue = this.updateQueryValue.bind(this);
-  }
+  };
 
   componentDidMount() {
     window.addEventListener('hashchange', this.updateQueryValue, false);
-  }
+  };
 
   updateQueryValue() {
     const parsedHash = queryString.parse(location.hash);
     if (parsedHash && parsedHash.q) {
       this.setQueryValue(parsedHash.q);
     }
-  }
+  };
 
   setQueryValue(queryValue) {
     this.setState({query: queryValue});
     // Push query to browser histroy to ga back and see previous results.
     history.push({hash: `q=${queryValue}`});
-  }
+  };
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.setQueryValue(suggestion.query);
-  }
+  };
 
   onSuggestionCleared = () => {
     this.setQueryValue('');
-  }
+  };
 
   onChange = (newValue) => {
     this.setQueryValue(newValue);
@@ -66,6 +67,7 @@ class AppAutocomplete extends React.Component {
     return (
       <div>
         <InstantSearchComponent indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }>
+          <Configure hitsPerPage="6"/>
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
