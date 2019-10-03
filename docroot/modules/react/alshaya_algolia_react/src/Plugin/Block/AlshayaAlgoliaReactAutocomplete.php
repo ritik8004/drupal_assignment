@@ -99,7 +99,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $lang = $this->languageManager->getCurrentLanguage()->getId();
     $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
-    $index = $this->configFactory->get('search_api.index.acquia_search_index')->get('options');
+    $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
