@@ -8,30 +8,30 @@
 (function ($, Drupal) {
   'use strict';
 
+  function applyRtl(ocObject, options) {
+    if (isRTL()) {
+      ocObject.attr('dir', 'rtl');
+      ocObject.once().slick(
+        $.extend({}, options, {rtl: true})
+      );
+    }
+    else {
+      ocObject.once().slick(options);
+    }
+  }
+
+  var optionFreeGifts = {
+    arrows: true,
+    useTransform: false,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    focusOnSelect: false,
+    touchThreshold: 1000,
+    infinite: false
+  };
+
   Drupal.behaviors.freeGiftsSlider = {
     attach: function (context, settings) {
-      var optionFreeGifts = {
-        arrows: true,
-        useTransform: false,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        focusOnSelect: false,
-        touchThreshold: 1000,
-        infinite: false
-      };
-
-      function applyRtl(ocObject, options) {
-        if (isRTL()) {
-          ocObject.attr('dir', 'rtl');
-          ocObject.once().slick(
-            $.extend({}, options, {rtl: true})
-          );
-        }
-        else {
-          ocObject.once().slick(options);
-        }
-      }
-
       var shopByStory = $('#drupal-modal .item-list ul');
 
       if ($(window).width() > 767) {
@@ -61,6 +61,7 @@
         $('body').addClass('free-gifts-modal-overlay');
       });
 
+      // On close button there is already an event getting triggered.
       setTimeout(function () {
         $('.free-gifts-modal-overlay .ui-dialog-titlebar-close').once().on('click', function () {
           if ($('body').hasClass('free-gift-promo-list-overlay')) {
