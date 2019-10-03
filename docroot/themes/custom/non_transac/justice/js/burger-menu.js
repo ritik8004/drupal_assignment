@@ -42,7 +42,7 @@
       menuButton.once().on('click', toggleMenu);
       closeButton.once().on('click', toggleMenu);
 
-      if ($(window).width() < 768) {
+      if ($(window).width() < 1025) {
         menuContent.on('click', 'a', function (e) {
           var $this = $(this);
           if ($this.next().length > 0) {
