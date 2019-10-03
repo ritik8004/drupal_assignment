@@ -152,10 +152,15 @@
     }
 
     if (layout === 'magazine') {
-      Drupal.behaviors.magazine_gallery.attach(product);
+      // Set timeout so that original behavior attachment is not affected.
+      setTimeout(function () {
+        Drupal.behaviors.magazine_gallery.attach(product);
+      }, 1);
     }
     else {
-      Drupal.behaviors.alshaya_product_zoom.attach(product);
+      setTimeout(function () {
+        Drupal.behaviors.alshaya_product_zoom.attach(product);
+      }, 1);
     }
   };
 
