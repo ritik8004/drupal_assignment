@@ -21,15 +21,17 @@
     justify-content: space-between;
   }
 
+  li.active-trail a {
+    @include breakpoint($desk) {
+      background: transparent;
+    }
+  }
+
   a {
     font-family: $jus_bold;
     font-size: 0.9375rem;
     text-decoration: none;
     color: $header_menu_text;
-
-    @include breakpoint($above-palm) {
-      padding: 0.75rem 2.1875rem;
-    }
 
     &::after {
       display: inline-block;
@@ -195,12 +197,8 @@
 html[dir=rtl] {
   .vertical-layout .navigation__sub-menu {
     @include breakpoint($upto-lap) {
-      #{$left}: -7%;
+      #{$left}: 0;
       #{$right}: 0;
-    }
-
-    @include breakpoint($upto-palm) {
-      #{$left}: -13%;
     }
   }
 }
@@ -232,7 +230,7 @@ html[dir=rtl] {
       padding-#{$left}: 0;
       background-color: $header_menu_level2_bg;
 
-      @include breakpoint($upto-palm) {
+      @include breakpoint($upto-lap) {
         #{$left}: -100%;
         background-color: $header_menu_level2_mobile_bg;
       }
@@ -257,7 +255,7 @@ html[dir=rtl] {
 .block-logo-navigation {
   .menu-logo-navigation {
     > li.active {
-      @include breakpoint($upto-palm) {
+      @include breakpoint($upto-lap) {
         position: absolute;
         width: calc(100% - 2rem);
         top: 1rem;
@@ -271,7 +269,7 @@ html[dir=rtl] {
       }
 
       > a {
-        @include breakpoint($upto-palm) {
+        @include breakpoint($upto-lap) {
           background-color: $burger_menu_active_bg;
           color: $burger_menu_active_text;
           border: 3px solid $burger_menu_active_border;
@@ -279,7 +277,7 @@ html[dir=rtl] {
         }
 
         @include icon(chevronleft, before) {
-          @include breakpoint($upto-palm) {
+          @include breakpoint($upto-lap) {
             font-size: 2.875rem;
             position: absolute;
             #{$left}: 0;
@@ -289,7 +287,7 @@ html[dir=rtl] {
         }
 
         &::after {
-          @include breakpoint($upto-palm) {
+          @include breakpoint($upto-lap) {
             display: none;
           }
         }
@@ -315,7 +313,7 @@ html[dir=rtl] {
     }
 
     ul.active {
-      @include breakpoint($upto-palm) {
+      @include breakpoint($upto-lap) {
         width: 100%;
         #{$left}: 0;
         margin-top: 1rem;
