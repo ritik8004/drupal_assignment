@@ -14,4 +14,11 @@ function alshaya_algolia_react_install() {
     \Drupal::service('theme_handler')->getDefault(),
     'alshaya_white_label'
   );
+
+  // Update block weight of search bar to match what was there for existing
+  // keywords exposed form block.
+  $existing = \Drupal::configFactory()->get('block.block.keywordsearchblock');
+  $new = \Drupal::configFactory()->getEditable('block.block.alshayaalgoliareactautocomplete');
+  $new->set('weight', $existing->get('weight'));
+  $new->save();
 }
