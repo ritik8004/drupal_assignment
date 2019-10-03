@@ -2,15 +2,28 @@
 #
 # This script manually stages given sites from production to given environment.
 #
-# ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae,vsae,vskw,bbwae" "01dev3"
+# ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae,vsae,vskw,bbwae" 01dev3
+# ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae" 01dev3 reset
+# ./manual-stage.sh "hmkw,hmae,pbae" 01dev3 iso
 
-sites=$1
+sites="$1"
 target_env="$2"
 
 # Normalize the target environment.
 if [ ${target_env:0:2} != "01" ]; then
   target_env="01$target_env"
 fi
+
+type="$3"
+if [[ -z "$type" ]]; then
+  type="iso"
+fi
+
+if [[ ! "$type" == "reset" && ! "$type" == "iso" ]]; then
+  echo "3rd parameter is either 'iso' or 'reset'"
+  exit
+fi
+
 
 echo "Preparing list of sites to stage..."
 cd /var/www/html/${AH_SITE_NAME}/docroot
@@ -83,6 +96,8 @@ echo "Syncing files with target env"
 for current_site in $(echo ${valid_sites:1} | tr "," "\n")
 do
   echo $current_site
+  uri=`drush sa @$current_site.$target_env | grep uri | cut -d" " -f 4`
+  siteUri=`drush sa @$current_site.01live | grep uri | cut -d" " -f 4`
   site_files=`drush acsf-tools-info | grep $current_site | cut -d"	" -f3`
   files_folder="sites/g/files/$site_files/files"
   target_files_folder="/var/www/html/alshaya.$target_env/docroot/$files_folder"
@@ -93,5 +108,12 @@ do
   rsync -va $files_folder/maintenance_mode_image $remote_user@$remote_host:$target_files_folder
   rsync -va $files_folder/media-icons $remote_user@$remote_host:$target_files_folder
   rsync -vt $files_folder/* $remote_user@$remote_host:$target_files_folder
+
+  if [[ "$type" == "iso" ]]; then
+    ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri pm:enable stage_file_proxy"
+    ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin $siteUri -y"
+    ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin_dir $files_folder -y"
+  fi
 done
 ssh $remote_user@$remote_host 'rm -rf /tmp/manual-stage'
+
