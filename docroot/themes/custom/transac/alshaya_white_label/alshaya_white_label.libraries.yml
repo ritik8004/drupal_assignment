@@ -233,4 +233,3 @@ free_gifts:
   dependencies:
     - core/jquery
     - alshaya_white_label/slick
-

@@ -160,7 +160,6 @@
 
       article {
         > .ajax-progress-throbber {
-
           .throbber {
             @include throbberLoader();
           }
@@ -476,7 +475,7 @@
 
     .list-title {
       span {
-        font-size: .75rem;
+        font-size: 0.75rem;
         line-height: 1.33;
         color: $free-gifts-title-text;
         text-transform: capitalize;
