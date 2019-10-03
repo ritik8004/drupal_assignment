@@ -24,6 +24,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
@@ -804,11 +805,10 @@ class SkuManager {
    * @param array $types
    *   Promotion Types.
    *
-   * @return array|\Drupal\Core\Entity\EntityInterface[]
+   * @return array
    *   List of Promotion Nodes.
    */
   public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
-    $promotion_nodes = [];
     $promotion_nids = [];
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
     foreach ($promotion ?? [] as $promo) {
@@ -835,12 +835,10 @@ class SkuManager {
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->exists('field_acq_promotion_label');
-      $nids = $query->execute();
-
-      $promotion_nodes = $this->nodeStorage->loadMultiple($nids);
+      return $query->execute();
     }
 
-    return $promotion_nodes;
+    return [];
   }
 
   /**
@@ -863,7 +861,7 @@ class SkuManager {
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function preparePromotionsDisplay(SKU $sku,
-                                           $promotion_nodes,
+                                           array $promotion_nodes,
                                            $view_mode,
                                            array $types = ['cart', 'category'],
                                            $product_view_mode = NULL,
@@ -872,6 +870,14 @@ class SkuManager {
     $view_mode_original = $view_mode;
 
     foreach ($promotion_nodes as $promotion_node) {
+      if (is_numeric($promotion_node)) {
+        $promotion_node = $this->nodeStorage->load($promotion_node);
+      }
+
+      if (!($promotion_node instanceof NodeInterface)) {
+        continue;
+      }
+
       // Get the promotion with language fallback, if it did not have a
       // translation for $langcode.
       $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node);
@@ -1140,7 +1146,11 @@ class SkuManager {
 
     // Download the file contents.
     try {
-      $file_data = $this->httpClient->get($data[$file_key])->getBody();
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 3),
+      ];
+
+      $file_data = $this->httpClient->get($data[$file_key], $options)->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_acm_product', $e);

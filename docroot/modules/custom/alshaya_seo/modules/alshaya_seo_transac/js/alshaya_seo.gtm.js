@@ -348,7 +348,7 @@
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
           if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
             // Check whether the product is in US or CS region & update list accordingly.
-            if (listName.includes('placeholder')) {
+            if (listName.indexOf('placeholder') > -1) {
               if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
                 pdpListName = listName.replace('placeholder', 'CS');
               }
@@ -660,7 +660,7 @@
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
           var position = '';
-          if (listName.includes('placeholder')) {
+          if (listName.indexOf('placeholder') > -1) {
             if (that.closest('.horizontal-crossell').length > 0) {
               subListName = listName.replace('placeholder', 'CS');
             }
@@ -962,10 +962,15 @@
           return true;
         }
         if ($(highlight).find('img').is(':visible')) {
-          var imgElem = $(highlight).find('picture img');
+          var imgElem = $(highlight).find('picture:first img');
           if (imgElem.length === 0) {
-            imgElem = $(highlight).find('img');
+            imgElem = $(highlight).find('img:first');
           }
+
+          if (imgElem.length === 0) {
+            return true;
+          }
+
           var imgSrc = (typeof imgElem.attr('data-src') === 'undefined') ?
             imgElem.attr('src') :
             imgElem.attr('data-src');
@@ -974,9 +979,14 @@
           if (typeof imgSrc !== 'undefined') {
             position = promotion_counter;
             if (event === 'promotionClick') {
-              position = $(highlight).find('picture img').data('position');
+              position = imgElem.data('position');
             } else {
-              $(highlight).find('picture img').data('position', promotion_counter);
+              // Skip already processed images.
+              if (typeof imgElem.data('position') !== 'undefined' || imgElem.data('position') > -1) {
+                return true;
+              }
+
+              imgElem.data('position', promotion_counter);
             }
             creative = Drupal.url(imgSrc);
           }

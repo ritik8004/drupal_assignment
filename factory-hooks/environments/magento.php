@@ -360,7 +360,7 @@ $magentos = [
   ],
   // Westelm.
   'we_qa' => [
-    'url' => 'https://integration-5ojmyuq-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
+    'url' => 'https://qa-dc3i3ua-xj72gv64n7kci.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'sujo9buytcm8lf20dl446lw7qbv2ahc3',
       'consumer_secret' => 'lpfw5yjr37hmvlp49c6871fgwa6uu8am',

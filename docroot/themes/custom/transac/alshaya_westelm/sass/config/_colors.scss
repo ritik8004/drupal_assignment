@@ -12,6 +12,7 @@ $WE_gray_seven: #565458;
 $WE_gray_eight: #b3b3b3;
 $WE_gray_nine: #eaeaea;
 $WE_gray_ten: #a0a0a0;
+$WE_gray_eleven: #f0f0f0;
 $WE_white: #fff;
 $WE_white_two: #f9f9f9;
 $WE_white_three: #f7f7f7;
@@ -27,6 +28,7 @@ $WE_warning_red: #cc0;
 $WE_tint_red: #f65044;
 $tomato: #e6591b;
 $WE_deep_blue: #4285f4;
+$WE_light_blue: #e0eaf2;
 $roman_coffee: #81644b;
 
 // Overrides for variables.
@@ -57,6 +59,46 @@ $social-network-text: $WE_grey_three;
 // Messages
 $default_msg_bg: $WE_message_green;
 $default_msg_text: $WE_white;
+
+//Buttons.
+$primary_btn_bg: $WE_grey_three;
+$primary_btn_text: $WE_white;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $WE_grey_one;
+$complete_btn_bg: $medium-green;
+$primary_brand_button_text: $WE_white;
+$secondary_brand_button_text: $WE_white_five;
+$primary_brand_button: $WE_grey_three;
+$secondary_submit_button_text: $WE_white_three;
+
+// Messages
+$default_msg_bg: $WE_message_green;
+$default_msg_text: $WE_white_three;
+
+// Dropdown.
+$primary_dropdown_bg: $WE_white;
+$primary_dropdown_arrow_bg: $WE_white;
+$primary_dropdown_arrow_icon: $WE_grey_three;
+$primary_dropdown_arrow_left_border: $WE_white;
+$primary_dropdown_text: $WE_grey_three;
+$primary_dropdown_border: $WE_gray_five;
+$primary_dropdown_option_hover: $WE_gray_five;
+$primary_dropdown_option_border: $WE_gray_five;
+$primary_dropdown_option_disbled: $WE_grey_two;
+$primary_dropdown_focus: $WE_gray_five;
+
+// Radio Buttons.
+$primary_radiobtn_filled: $WE_deep_blue;
+$primary_radiobtn_empty: $WE_black_one;
+
+// Tables.
+$primary_th_bg: $WE_gray_eleven;
+$primary_td_highlight3: $WE_white_three;
+$primary_tr_hover: $WE_white_three;
+
+// Language Switcher
+$lang_switch: $WE_grey_three;
+$lang_switch_firsttime_bg: $WE_grey_three;
 
 // Header - Top header.
 $header_secondary_bg: $WE_gray_six;
@@ -107,3 +149,243 @@ $mm_l1_link_hover: $WE_white;
 $highlights_subtitle_hover: $WE_grey_three;
 $menu_toggle_sign: $WE_grey_three;
 $mm_mob_arrow_icon: $WE_black_one;
+
+// Footer Primary.
+$footer_bg: $WE_gray_six;
+$footer_title_h3: $WE_grey_three;
+$footer_link: $WE_grey_two;
+$footer_link_hover: $WE_grey_three;
+$_footer_mobile_accordion_border: $WE_white;
+
+// Our Brands.
+$our_brands_footer_separator: $WE_grey_three;
+$our_brand_section_title: $WE_grey_three;
+
+// Copyright Footer.
+$copyright_footer_bg: $WE_white;
+$copyright_footer_text: $WE_grey_three;
+$checkout_footer_copyright_mobile_bg: $WE_white;
+
+// Footer social icons.
+$social_links: $WE_grey_three;
+$social_links_hover: $WE_grey_two;
+
+//7. Newsletter-signup
+$newsletter_title_h3: $WE_white;
+$newsletter_block_text: $WE_white;
+$newsletter_input_placeholder: $WE_grey_two;
+$newsletter_input_bg: transparent;
+$newsletter_input_border: $WE_grey_two;
+$newsletter_submit_btn: $WE_grey_three;
+$newsletter_submit_btn_text: $WE_white;
+
+// gradient holder
+$gradient-holder: $WE_gray_nine;
+
+// Sharethis
+$sharethis_icon: $WE_gray_seven;
+
+// Product Detail Page.
+$pdp_sidebar_label: $WE_grey_three;
+$pdp_desc_wrapper: $WE_gray_nine;
+$pdp_desc_wrapper_close_icon: $WE_grey_three;
+$pdp_desc_wrapper_close_bg: $WE_grey_one;
+$pdp_sidebar_desc_overlay_section_border: $WE_grey_one;
+$pdp_delivery_options_subtitle: $WE_grey_two;
+$pdp_cc_form_highlight_txt: $WE_black_one;
+$pdp_cc_top_stores_list_border: $WE_grey_three;
+$pdp_cc_top_stores_list_counter: $WE_grey_three;
+$pdp_cc_btn_bg: $WE_grey_three;
+$pdp_cc_btn_text: $WE_white;
+$modal_close_icon: $WE_grey_three;
+$modal_close_bg: $WE_grey_one;
+$pdp_size_option_bg: $WE_white;
+$pdp_size_option_border: $WE_grey_three;
+$pdp_size_option_text: $WE_grey_three;
+$pdp_size_option_selected_text: $WE_white;
+$pdp_size_option_selected_bg: $WE_grey_three;
+$pdp_size_option_text_hover : $WE_white;
+$pdp_size_option_bg_hover: $WE_grey_three;
+$pdp_sizeguide_link: $WE_deep_blue;
+$pdp_swatch_disabled: $WE_grey_one;
+$pdp_white_color_attribute: $WE_white;
+$pdp_white_color_attribute_hover_border: $WE_grey_three;
+$pdp_white_color_attribute_border: $WE_grey_three;
+$pdp_product_special_price_text: $WE_deep_red;
+$pdp_product_special_price: $WE_deep_red;
+$pdp_product_discount_price: $WE_deep_red;
+$pdp_product_discount_text: $WE_deep_red;
+
+// PDP CS/US
+$pdp_modal_full_prodlink: $WE_grey_one;
+$pdp_modal_full_prodlink_icon: $WE_grey_three;
+
+// Mini cart.
+$primary_minicart_quantity_bg: $WE_deep_red;
+$primary_minicart_quantity_text: $WE_white;
+$minicart_notification_border: $WE_grey_three;
+$minicart_notification_bg: $WE_white;
+$minicart_notification_border: $WE_grey_three;
+$minicart_notification_shadow: transparent;
+$minicart_notification_text: $WE_grey_three;
+$minicart_notification_btn_bg: $WE_grey_three;
+$minicart_notification_btn_text: $WE_white;
+$minicart_notification_label: $WE_grey_two;
+$mobile_continue_shopping_btn_text: $WE_white;
+$mobile_continue_shopping_btn_bg: $WE_grey_three;
+$mobile_continue_shopping_btn_border: $WE_grey_three;
+$desktop_continue_shopping_btn_text: $WE_white;
+$desktop_continue_shopping_btn_bg: $WE_grey_three;
+$desktop_continue_shopping_btn_border: $WE_grey_three;
+
+// Basket table.
+$basket_th_4th_child: $WE_gray_nine;
+$basket_th_text: $WE_black_one;
+$basket_tr: $WE_white_three;
+$basket_tr_hover: $WE_gray_six;
+$primary_td_bg_highlight: $WE_gray_six;
+$basket_content_link_color: $WE_deep_blue;
+$basket_tooltip_not_available: $WE_white_five;
+$basket_total_label_text: $WE_black_one;
+$basket_total_label_text_subtitle: $WE_grey_two;
+$basket_table_th_and_tr_last_border: $WE_white_two;
+$basket_continue_shopping_link: $WE_black_one;
+$basket_header_promo_bg: $WE_deep_blue;
+$basket_empty_message: $WE_black_one;
+
+// Totals.
+$total_td_2nd_child_bg: $WE_white_two;
+
+// Tooltip
+$tooltip_bg: $WE_white_two;
+$tooltip_text: $WE_black_one;
+$tooltip_border: $WE_black_one;
+$tooltip_border_2: $WE_white_two;
+$tooltip_icon: $WE_deep_blue;
+$tooltip_link: $WE_deep_blue;
+
+// Checkout securely block.
+$checkout_securely_txt: $WE_grey_three;
+$checkout_securely_icon_bg: $WE_grey_three;
+$checkout_securely_icon_mobile_txt: $WE_grey_three;
+$checkout_securely_icon_txt: $WE_white_two;
+
+// Basket.
+$basket_page_title: $WE_grey_three;
+
+// Checkout Global.
+$checkout_section_titles: $WE_black_one;
+$checkout_footer_title: $WE_grey_three;
+$checkout_footer_bg: $WE_gray_nine;
+$checkout_footer_border-top: $WE_gray_nine;
+$checkout_footer_txt: $WE_grey_three;
+$checkout_footer_light_txt: $WE_grey_two;
+$checkout_login_guest_email_text_mobile: $WE_black_one;
+$checkout_login_guest_email_text: $WE_black_one;
+$checkout_header_border-bottom: $WE_black_one;
+$checkout_header_border-top: $WE_white_five;
+$checkout_delivery_shipping_row_border: $WE_gray_five;
+$checkout_login_btn_bg: $WE_grey_three;
+$checkout_transaction_type_color: $WE_grey_three;
+$checkout_method_choice_tab_title_active: $WE_grey_three;
+$checkout_tab_active_border_mobile: $WE_grey_three;
+
+// Checkout home delivery.
+$checkout_default_address_border: $WE_grey_three;
+$checkout_default_address_bg: $WE_grey_three;
+$checkout_deliver_address_btn_txt: $WE_white;
+$address_button_text: $WE_black_one;
+$address_button_border: $WE_black_one;
+
+// Counters.
+$primary_counter_bg: $WE_grey_three;
+$primary_counter_text: $WE_white;
+
+// Checkout tabs.
+$checkout_tab_active_hr: $WE_grey_three;
+$checkout_tab_default_border: $WE_gray_nine;
+$checkout_tab_default_title: $WE_grey_two;
+$checkout_tab_active_title: $WE_black_one;
+$checkout_tab_active_description: $WE_grey_three;
+$checkout_tab_separator: $WE_black_one;
+
+// Checkout progress.
+$checkout_progress_bg: $WE_white;
+$checkout_progress_complete_text: $WE_grey_two;
+
+// Order summary block.
+$order_summary_caption_bg: $WE_white_three;
+$order_summary_content_bg: $WE_white_three;
+$order_summary_totals_bg: $WE_white_three;
+$order_summary_delivery_type_bg: $WE_white_three;
+$order_summary_address_bg: $WE_white_three;
+
+// Checkout login.
+$checkout_login_tab_border: $WE_grey_one;
+$checkout_login_tab_text: $WE_grey_two;
+$checkout_login_tab_border_active: $WE_grey_three;
+$checkout_login_tab_text_active: $WE_black_one;
+$checkout_guest_button_border: $WE_grey_three;
+$checkout_guest_button_txt: $WE_grey_three;
+
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $WE_white_five;
+$checkout_cc_near_me_border: $WE_grey_three;
+$checkout_cc_location_result_label: $WE_grey_three;
+$checkout_cc_location_result_label_selected_location: $WE_black_one;
+
+// Checkout Click & collect.
+$checkout_cc_list_map_link_default: $WE_black_one;
+$checkout_cc_list_map_link_active: $WE_grey_three;
+$checkout_cc_store_name: $WE_black_one;
+$checkout_cc_store_address: $WE_grey_two;
+$checkout_cc_list_hours_label: $WE_black_one;
+$checkout_cc_list_hours_label_icon: $WE_black_one;
+$checkout_cc_list_hours_content: $WE_grey_two;
+$checkout_cc_list_hours_content_tablet: $WE_grey_two;
+$checkout_cc_list_select_store_btn_bg: $WE_white;
+$checkout_cc_list_select_store_btn_border: $WE_black_one;
+$checkout_cc_list_select_store_btn_txt: $WE_black_one;
+$checkout_cc_list_change_store_btn_bg: $WE_grey_three;
+$checkout_cc_list_change_store_btn_txt: $WE_white;
+$checkout_cc_list_select_store_btn_border: $WE_grey_three;
+$checkout_cc_list_select_store_btn_border: $WE_grey_three;
+$checkout_cc_list_delivery_time_label: $WE_black_one;
+$checkout_cc_list_delivery_time: $WE_grey_three;
+$checkout_cc_list_delivery_time_tablet: $WE_black_one;
+$checkout_cc_selected_store_content_border: $WE_gray_five;
+$checkout_cc_selected_store_content_bg: $WE_white;
+$checkout_cc_help_text: $WE_black_one;
+$checkout_cc_help_text_content: $WE_grey_two;
+$checkout_cc_store_location_input_label_mobile_color: $WE_grey_three;
+
+// Checkout payment.
+$checkout_payment_row_selected: $WE_white_three;
+$checkout_payment_row_default: $WE_white;
+$checkout_payment_row_hover: $WE_white_three;
+$checkout_payment_method_title: $WE_black_one;
+$checkout_payment_method_icon_bg: $WE_white_three;
+$checkout_payment_method_desc: $WE_grey_two;
+$checkout_payment_option_border: $WE_gray_five;
+
+// Payment Cards.
+$payment_card_label: $WE_black_one;
+
+//Checkout Confirmation
+$checkout_order_print_btn_border: $WE_black_one;
+$checkout_order_print_btn_text: $WE_black_one;
+$checkout_confirm_continue_shopping_border: $WE_black_one;
+$checkout_confirmation_detail_bg: $WE_white;
+$checkout_confirmation_detail_product_count: $WE_gray_six;
+$checkout_confirmation_detail_primary_text: $WE_grey_three;
+$checkout_confirmation_detail_secondary_text: $WE_grey_two;
+$checkout_confirmation_detail_dark_text: $WE_grey_three;
+$checkout_confirmation_detail_light_text: $WE_gray_ten;
+$checkout_confirm_order_summary_row: $WE_light_blue;
+$checkout_confirm_order_summary_row_text: $WE_deep_blue;
+$order_detail_order_details_row: $WE_light_blue;
+$order_detail_order_details_row_td_blend: $WE_light_blue;
+$checkout_order_details_label: $WE_deep_blue;
+$checkout_confirm_order_item_bg: $WE_white;
+$checkout_confirm_order_item_bg_blend: $WE_gray_six;
+$checkout_confirmation_detail_amount: $WE_black_one;

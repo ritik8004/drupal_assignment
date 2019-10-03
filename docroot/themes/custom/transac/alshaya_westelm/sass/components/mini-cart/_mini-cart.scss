@@ -1,0 +1,100 @@
+header .block-cart-mini-block {
+  .quantity {
+    bottom: 1rem;
+    #{$left}: 1.25rem;
+    width: 1.1875rem;
+    height: 1.1875rem;
+    font-size: 0.625rem;
+    line-height: 1.5 !important;
+
+    html[lang=ar] & {
+      right: -0.3125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      bottom: 1.125rem;
+      #{$left}: 1.1875rem;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      bottom: 0.9375rem;
+      #{$left}: 1.25rem;
+    }
+  }
+
+  .cart-link-total {
+    @include breakpoint($only-tablet) {
+      margin-top: 1.25rem !important;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1.25rem;
+      padding-#{$right}: 0.65625rem;
+    }
+
+    .price-amount {
+      font-weight: bold;
+    }
+  }
+
+  #cart_notification {
+    html[lang=ar] & {
+      left: 0.1875rem;
+    }
+
+    @include breakpoint($tablet) {
+      #{$right}: -0.8125rem;
+      top: 3.25rem;
+
+      html[lang=ar] & {
+        left: -0.4375rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 2.5rem;
+
+      html[lang=ar] & {
+        top: 3.125rem;
+      }
+    }
+
+    &.has--notification::before {
+      @include breakpoint($only-mobile) {
+        #{$right}: 0.625rem;
+      }
+    }
+
+    .notification {
+      .col-1 {
+        color: $minicart_notification_label;
+
+        .qty {
+          font-weight: 600;
+        }
+      }
+
+      .col-2 {
+        font-weight: 600;
+
+        .name {
+          font-weight: 300;
+        }
+
+        a {
+          text-transform: uppercase;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .price-amount,
+    .quantity {
+      font-family: $body_font;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.c-our-brands {
+  border-width: 0.125rem;
+
+  @include breakpoint($desktop) {
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+}

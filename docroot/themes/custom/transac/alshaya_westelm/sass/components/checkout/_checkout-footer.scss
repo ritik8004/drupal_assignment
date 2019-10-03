@@ -1,0 +1,29 @@
+.block-customer-service-block {
+  text-transform: none;
+
+  h3 {
+    font-weight: bold;
+    color: $checkout_footer_title;
+  }
+
+  p {
+    font-weight: 600;
+
+    .light,
+    &:last-child .light {
+      font-weight: normal;
+      color: $checkout_footer_light_txt;
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-login,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
+  .block-content--copyright {
+    @include breakpoint($only-mobile) {
+      background: $checkout_footer_copyright_mobile_bg;
+    }
+  }
+}

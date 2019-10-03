@@ -1,0 +1,98 @@
+.c-footer-primary {
+  border-top: none;
+
+  .footer--static-links {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 11.4%;
+      width: 28%;
+    }
+
+    .c-footer-menu {
+      width: 100%;
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $right;
+      margin-#{$left}: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      float: none;
+      margin-bottom: 2.25em;
+    }
+  }
+
+  .c-footer-menu--help {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+  }
+
+  .c-footer-menu--about,
+  .c-footer-menu--help,
+  .block-alshaya-newsletter,
+  .c-footer-menu--static-links {
+    h3 {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+  }
+
+  .c-footer-menu {
+    a {
+      text-transform: none;
+      font-size: 0.9375rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        line-height: 1.2;
+        margin: 0.4375rem 0;
+      }
+    }
+  }
+
+  .c-footer-primary__region {
+    min-height: 14.25rem;
+
+    @include breakpoint($only-tablet) {
+      .footer--menu {
+        width: 58%;
+      }
+
+      .footer--abouthelp,
+      .footer--static-links {
+        width: 45%;
+      }
+
+      .footer--static-links {
+        margin: 0 1.25rem;
+      }
+    }
+  }
+
+  .primary--footer--right {
+    @include breakpoint($desktop) {
+      width: 26.5%;
+    }
+
+    @include breakpoint($only-tablet) {
+      overflow: hidden;
+      width: 41.4%;
+
+      .newsletter-block-label {
+        width: 88%;
+      }
+    }
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($desktop) {
+      width: 54.7%;
+    }
+  }
+}

@@ -36,7 +36,7 @@ header {
 
       @include breakpoint($desktop) {
         #{$left}: -1rem;
-        top: -0.25rem;
+        top: 0;
       }
 
       @include breakpoint($only-tablet) {
@@ -64,12 +64,12 @@ header {
         margin-top: 0.625rem;
 
         @include breakpoint($only-tablet) {
-          background-size: 2.25rem;
+          background-size: 1.75rem;
         }
 
         @include breakpoint($only-mobile) {
           position: relative;
-          background-size: 2.25rem;
+          background-size: 2rem;
           margin-bottom: 0;
           margin-top: 0.75rem;
           height: 1.75rem;
@@ -77,6 +77,7 @@ header {
 
           html[lang=ar] & {
             top: 0;
+            width: 2.5rem;
           }
         }
       }
@@ -173,7 +174,7 @@ header {
 
     .c-header__region {
       @include breakpoint($desktop) {
-        padding-bottom: 1.125rem;
+        padding-bottom: 2rem;
         padding-top: 2rem;
       }
 

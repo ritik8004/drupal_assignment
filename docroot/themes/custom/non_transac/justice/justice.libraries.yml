@@ -151,3 +151,9 @@ modal-email-signup:
   css:
     theme:
       dist/css/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
+modal-generic:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/08-modal/modal-generic/modal-generic.ltr.css: {}

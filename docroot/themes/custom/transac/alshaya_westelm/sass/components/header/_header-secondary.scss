@@ -10,6 +10,12 @@
     }
   }
 
+  .block-language-blocklanguage-interface {
+    .en a::after {
+      display: none;
+    }
+  }
+
   a {
     line-height: 2;
 
