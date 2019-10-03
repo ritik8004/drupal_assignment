@@ -1,2 +1,51 @@
 // Stylesheet mixins.
 $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_westelm/imgs/icons/WE-loader.svg';
+
+@mixin mm-l1-highlight {
+  background: $mm_l1_link_active_bg;
+  border-top: none;
+  color: $mm_l1_link_active;
+  box-shadow: inset 0 -0.1875rem 0 0 $mm_l1_link_active_shadow;
+  margin-top: 0;
+}
+
+@mixin mm-mob-arrow ($position, $direction: false) {
+  &:#{$position} {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0.3125rem 0 0.3125rem 0.5rem;
+    border-color: transparent transparent transparent $mm_mob_arrow_icon;
+
+    @if $direction == false {
+      @if $position == after {
+        transform: rotate(0deg);
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+
+      @if $position == before {
+        transform: rotate(180deg);
+
+        html[lang=ar] & {
+          transform: rotate(0deg);
+        }
+      }
+    }
+
+    @else {
+      @if $direction == up {
+        transform: rotate(270deg);
+      }
+
+      @if $direction == down {
+        transform: rotate(90deg);
+      }
+    }
+
+    @content;
+  }
+}
