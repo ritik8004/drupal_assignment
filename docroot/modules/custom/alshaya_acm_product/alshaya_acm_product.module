@@ -849,12 +849,8 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // Initialise pager.
     $view->getPager();
 
-    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
-
-    // If group by sub-category is selected, disable pager.
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
-      $view->getPager();
-      $view->setItemsPerPage(0);
+    // If we want to show all items, we don't process per page below.
+    if ($view->getItemsPerPage() === 0) {
       return;
     }
 

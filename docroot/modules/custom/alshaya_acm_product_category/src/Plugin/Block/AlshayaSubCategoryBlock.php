@@ -103,26 +103,37 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
 
     if ($term instanceof TermInterface) {
       // Get all selected subcategories to be displayed on PLP.
-      $selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue();
+      $selected_subcategories = array_column($term->get('field_select_sub_categories_plp')->getValue(), 'value');
 
       foreach ($selected_subcategories as $selected_subcategory) {
-        $subcategory = $this->termStorage->load($selected_subcategory['value']);
+        $subcategory = $this->termStorage->load($selected_subcategory);
+
+        if (!($subcategory instanceof TermInterface)) {
+          continue;
+        }
+
         // Get current language translation if available.
         if ($subcategory->hasTranslation($current_language)) {
           $subcategory = $subcategory->getTranslation($current_language);
         }
-        if ($subcategory instanceof TermInterface) {
-          $subcategories[$subcategory->id()]['title'] = $subcategory->get('field_plp_group_category_title')->value ?? $subcategory->label();
-          $subcategories[$subcategory->id()]['tid'] = $subcategory->id();
-          if ($subcategory->get('field_plp_group_category_img')->first()) {
-            $file_value = $subcategory->get('field_plp_group_category_img')->first()->getValue();
-            $image = $this->fileStorage->load($file_value['target_id']);
-            if ($image instanceof FileInterface) {
-              $subcategories[$subcategory->id()]['image'] = file_url_transform_relative(file_create_url($image->getFileUri()));
-            }
-          }
-          $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_plp_group_category_desc')->value;
+
+        $data = [];
+        $data['tid'] = $subcategory->id();
+
+        $data['title'] = $subcategory->get('field_plp_group_category_title')->getString();
+        if (empty($data['title'])) {
+          $data['title'] = $subcategory->label();
         }
+
+        $data['description'] = $subcategory->get('field_plp_group_category_desc')->value ?? '';
+
+        $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
+        if (!empty($value) && ($image = $this->fileStorage->load($value['target_id'])) instanceof FileInterface) {
+          $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+          $data['image']['alt'] = $value['alt'];
+        }
+
+        $subcategories[$subcategory->id()] = $data;
       }
 
       return [

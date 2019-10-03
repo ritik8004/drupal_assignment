@@ -352,24 +352,51 @@ function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $def
 }
 
 /**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
+  // Alter number of items per page for PLP / Search pages.
+  if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
+    // Initialise pager.
+    $view->getPager();
+
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+
+    // If group by sub-category is selected, disable pager.
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      $view->getPager();
+      $view->setItemsPerPage(0);
+
+      // Remove show_on_load to avoid any extra processing.
+      unset($_GET['show_on_load']);
+      \Drupal::request()->query->remove('show_on_load');
+    }
+  }
+}
+
+/**
  * Implements hook_views_pre_render().
  */
 function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'alshaya_product_list' && $view->current_display === 'block_1') {
     $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
     $term = $product_category_tree->getCategoryTermFromRoute();
 
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
       $result_row = [];
       // Get all selected subcategories to be displayed on PLP.
-      $selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue();
+      $selected_subcategories = array_column($term->get('field_select_sub_categories_plp')->getValue(), 'value') ?? [];
+
       foreach ($view->result as $row) {
-        $product_categories = $row->_object->getValue()->get('field_category')->getValue();
+        $product_categories = array_column($row->_object->getValue()->get('field_category')->getValue(), 'target_id') ?? [];
+
         foreach ($selected_subcategories as $selected_subcategory) {
           foreach ($product_categories as $product_category) {
-            if ($product_category_tree->checkIfSubCategory($product_category['target_id'], $selected_subcategory['value'])) {
-              $result_row[$selected_subcategory['value']][] = $row;
+            if ($product_category_tree->checkIfSubCategory($product_category, $selected_subcategory)) {
+              $result_row[$selected_subcategory][] = $row;
               break;
             }
           }
