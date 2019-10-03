@@ -23,7 +23,7 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL })
         return (
           <li key={item.label}>
             <a
-              href={createURL(item.value)}
+              href="#"
               style={{ fontWeight: item.isRefined ? 'bold' : '' }}
               onClick={(event) => {
                 event.preventDefault();

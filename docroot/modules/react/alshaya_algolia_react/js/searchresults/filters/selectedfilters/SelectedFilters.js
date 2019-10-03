@@ -2,7 +2,7 @@ import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import FiltersLabels from './FiltersLabels';
 
-const CurrentFilters = ({ items, refine, createURL }) => {
+const CurrentFilters = ({ items, refine }) => {
   return(
     <ul>
       {
@@ -16,7 +16,7 @@ const CurrentFilters = ({ items, refine, createURL }) => {
                         return (
                           <li key={nested.label}>
                             <a
-                              href={createURL(nested.value)}
+                              href="#"
                               onClick={event => {
                                 event.preventDefault();
                                 refine(nested.value);
@@ -32,7 +32,7 @@ const CurrentFilters = ({ items, refine, createURL }) => {
               ) : (
                 <li>
                   <a
-                    href={createURL(item.value)}
+                    href="#"
                     onClick={event => {
                       event.preventDefault();
                       refine(item.value);

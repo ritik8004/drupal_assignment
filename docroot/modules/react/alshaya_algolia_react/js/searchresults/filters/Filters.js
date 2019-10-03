@@ -9,11 +9,14 @@ import {
 import { formatPrice } from '../../components/price/PriceHelper';
 import ColorFilter from './widgets/ColorFilter';
 import CommonRefinementList from './widgets/CommonRefinementList';
+import AlshayaNumericWidget from './widgets/AlshayaNumericWidget';
+import FilterPanel from './FilterPanel';
+import SortByList from '../SortByList';
 
 export default ({indexName}) => (
   <div className="container-without-product">
-    <Panel header="Sort By" className="c-facet c-accordion">
-      <SortBy
+    <FilterPanel header="Sort By">
+      <SortByList
         defaultRefinement={indexName}
         items={[
           { value: indexName, label: 'Featured' },
@@ -24,7 +27,7 @@ export default ({indexName}) => (
           { value: indexName + '_final_price_asc', label: 'Price Low to High.' },
         ]}
       />
-    </Panel>
+    </FilterPanel>
     {/* <Panel header="Category" className="c-facet c-accordion">
       <HierarchicalMenu
         attributes={[
@@ -34,20 +37,20 @@ export default ({indexName}) => (
         ]}
       />
     </Panel> */}
-    <Panel header="Brands" className="c-facet c-accordion">
+    <FilterPanel header="Brands">
       <CommonRefinementList
         attribute="attr_product_brand"
         searchable={false}
       />
-    </Panel>
-    <Panel header="Colour" className="c-facet c-accordion block-facet--swatch-list">
+    </FilterPanel>
+    <FilterPanel header="Colour" className="block-facet--swatch-list">
       <ColorFilter
         attribute="attr_color_family.label"
         searchable={false}
       />
-    </Panel>
-    <Panel header="Price" className="c-facet c-accordion">
-      <NumericMenu
+    </FilterPanel>
+    <FilterPanel header="Price">
+      <AlshayaNumericWidget
         attribute="final_price"
         createURL={() => '#'}
         refine={() => null}
@@ -59,12 +62,12 @@ export default ({indexName}) => (
         ]}
         canRefine={true}
       />
-    </Panel>
-    <Panel header="Size" className="c-facet c-accordion">
+    </FilterPanel>
+    <FilterPanel header="Size">
       <CommonRefinementList
         attribute="attr_size"
         searchable={false}
       />
-    </Panel>
+    </FilterPanel>
   </div>
 );
