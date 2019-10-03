@@ -127,7 +127,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $active_facet = [];
 
         foreach ($filters_current_result_array[$filter_key] as $value) {
-          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getUrlAlias(), $value);
+          $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value);
         }
 
         if (($active_key = array_search($raw_value, $active_facet)) !== FALSE) {
@@ -169,13 +169,11 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $current_path = substr($current_path, 0, strpos($current_path, '/--'));
       }
 
-      $filters_count = 0;
       if (count($filters_current_result_array)) {
         foreach ($filters_current_result_array as $key => $values) {
           $encoded = [];
           foreach ($values as $value) {
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);
-            $filters_count++;
           }
           $filters_current_result_array[$key] = $key . '-' . implode('-', $encoded);
         }
@@ -189,7 +187,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url = Url::fromUri('base:' . $current_path . '/');
       }
 
-      if ($filters_count > 2) {
+      if (count($filters_current_result_array, COUNT_RECURSIVE) - count($filters_current_result_array) > 2) {
         $url->setOption('attributes', ['rel' => 'nofollow noindex ']);
       }
       else {
@@ -221,9 +219,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   public function setActiveItems(FacetInterface $facet) {
     // Get the filter key of the facet.
     if (isset($this->activeFilters[$facet->getUrlAlias()])) {
-
       foreach ($this->activeFilters[$facet->getUrlAlias()] as $value) {
-        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getUrlAlias(), $value), '"'));
+        $facet->setActiveItem(trim($this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value), '"'));
       }
     }
   }

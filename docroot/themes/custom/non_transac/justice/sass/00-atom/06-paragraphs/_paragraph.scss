@@ -1,0 +1,100 @@
+// Paragraph: Promo blocks.
+.paragraph-vm-default {
+  max-width: 100%;
+
+  img {
+    width: 100%;
+  }
+
+  @include breakpoint($desk) {
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+  }
+}
+
+.paragraph-t-1-row-1-col {
+  margin-top: 0.5rem;
+
+  @include breakpoint($upto-palm) {
+    margin-top: 1.125rem;
+  }
+}
+
+.field-promo-block {
+  & > .field__item {
+    @include breakpoint($above-palm) {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+// @TODO: Move to single class.
+.paragraph-t-1-row-2-col-dept,
+.paragraph-t-1-row-2-col {
+  .field__item {
+    @include breakpoint($upto-palm) {
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .field__wrapper {
+    @include breakpoint($upto-palm) {
+      margin-top: 0.75rem;
+
+      &.field-sub-title {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+.paragraph-t-1-row-2-col-dept,
+.field-1-row-2-col {
+  @include u-clearfix;
+
+  & > .field__wrapper {
+    @include breakpoint($above-palm) {
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 48.33%;
+    }
+
+    @include breakpoint($desk) {
+      width: 48.83%;
+    }
+
+    &:first-child {
+      @include breakpoint($lap) {
+        margin-#{right}: 1.666%;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{right}: 1.169%;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint($lap) {
+        margin-#{left}: 1.666%;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{left}: 1.169%;
+      }
+    }
+  }
+
+  .field__item {
+    &:first-child {
+      @include breakpoint($lap) {
+        margin-bottom: 1.125rem;
+      }
+
+      @include breakpoint($desk) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}

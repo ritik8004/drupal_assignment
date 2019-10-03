@@ -1,0 +1,75 @@
+@import '../../../config/_config.scss';
+@import '../../../00-atom/02-buttons/_buttons.scss';
+
+.modal-form-elements-wrapper {
+  .mobile-number-field .local-number {
+    width: 100%;
+
+    &::placeholder {
+      color: $form_input_placeholder_text;
+    }
+  }
+
+  .form__form-fields {
+    width: auto;
+  }
+
+  .country-select {
+    .arrow {
+      display: block;
+    }
+  }
+
+  .input--inner__container .option {
+    font-size: 0.875rem;
+    color: $form_tnc_text;
+  }
+}
+
+.webform-submission-form {
+  .form-actions {
+    margin-top: 1.75rem;
+  }
+
+  .webform-button--submit {
+    @extend %btn;
+
+    padding: 0.8125rem 1.875rem;
+    width: auto;
+    height: auto;
+
+    @include breakpoint($upto-palm) {
+      width: 100%;
+    }
+  }
+}
+
+.webform-submission-alshaya-email-signup-form {
+  max-width: 32rem;
+  margin: 0 auto;
+
+  .input__container--half {
+    @include breakpoint($upto-palm) {
+      width: 100%;
+    }
+  }
+
+  .input--checkbox__container {
+    margin-bottom: -0.5rem;
+
+    html[lang=ar] & {
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    label:not(.error) {
+      top: -0.6875rem;
+      padding-bottom: 0;
+      position: relative;
+    }
+  }
+
+  .input--textual__container {
+    margin-bottom: 0.5rem;
+  }
+}

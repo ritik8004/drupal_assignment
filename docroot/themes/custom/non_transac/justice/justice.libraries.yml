@@ -1,0 +1,159 @@
+global:
+  version: VERSION
+  css:
+    theme:
+      dist/css/global.ltr.css: {}
+
+menu-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
+
+item-list-application-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/05-footer-tertiary/block-application-links/item-list-application-links.ltr.css: {}
+
+block-application-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/05-footer-tertiary/block-application-links/block-application-links.ltr.css: {}
+
+block-join-the-club:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/05-footer-tertiary/block-join-the-club/block-join-the-club.ltr.css: {}
+
+block-footer-language:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+
+block-social-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-social-links/menu-social-links.ltr.css: {}
+      dist/css/01-molecules/03-footer-primary/block-social-links/block-social-links.ltr.css: {}
+
+block-footer-store:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-footer-store/block-footer-store.ltr.css: {}
+
+block-header-language:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-language/block-header-language.ltr.css: {}
+      dist/css/01-molecules/01-header-secondary/block-header-language/language-switcher.ltr.css: {}
+
+block-terms-conditions:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/04-footer-secondary/block-terms-conditions/block-terms-conditions.ltr.css: {}
+      dist/css/01-molecules/04-footer-secondary/block-terms-conditions/menu-terms-conditions.ltr.css: {}
+
+block-copyright:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/04-footer-secondary/block-copyright/block-copyright.ltr.css: {}
+
+block-header-store:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-store/block-header-store.ltr.css: {}
+
+block-header-sign-up:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-sign-up/block-header-sign-up.ltr.css: {}
+
+block-store-finder-form:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/block-store-finder-form/block-store-finder-form.ltr.css: {}
+
+views-store-finder-glossary:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/view-store-finder-glossary/view-store-finder-glossary.ltr.css: {}
+      dist/css/01-molecules/06-content/view-store-finder-glossary/views-unformatted-store-finder-glossary.ltr.css: {}
+
+view-store-finder-list:
+  version: VERSION
+  css:
+    theme:
+      dist/css/02-organisms/01-view-store-finder-list/views-store-finder-list.ltr.css: {}
+
+view-store-list-locator:
+  version: VERSION
+  css:
+    theme:
+      dist/css/02-organisms/01-view-store-finder-list/views-store-list-locator.ltr.css: {}
+
+field-store-open-hours:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-store-open-hours/field-store-open-hours.ltr.css: {}
+
+node-individual-store:
+  version: VERSION
+  css:
+    theme:
+      dist/css/02-organisms/00-node-individual-store/individual-store.ltr.css: {}
+
+form-element-textual:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+
+field-product-listing:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-product-listing/field-product-listing.ltr.css: {}
+
+views-unformatted-product-list:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-product-listing/views-unformatted-product-list.ltr.css: {}
+
+node-product-item:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
+
+field-promo-block:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
+
+modal-email-signup:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
+modal-generic:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/08-modal/modal-generic/modal-generic.ltr.css: {}

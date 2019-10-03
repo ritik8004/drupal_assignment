@@ -1,0 +1,44 @@
+@import '../../../config/_config.scss';
+
+.region-secondary-header {
+  .site__logo {
+    width: 44%;
+    padding: 0.5rem;
+
+    @include breakpoint($upto-lap) {
+      display: table;
+      top: -0.25rem;
+      position: absolute;
+      width: 100%;
+    }
+
+    a {
+      display: unset;
+
+      @include breakpoint($upto-lap) {
+        width: 4.5rem;
+      }
+    }
+
+    img {
+      @include breakpoint($upto-lap) {
+        width: 4.5rem;
+      }
+
+      @include breakpoint($desk) {
+        max-height: 3.6875rem;
+        max-width: 10rem;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.region-footer-primary__wrapper {
+  @include breakpoint($upto-lap) {
+    .block-sign-up-desktop,
+    .site__logo {
+      display: none !important;
+    }
+  }
+}

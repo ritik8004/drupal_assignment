@@ -1,0 +1,124 @@
+@import '../../../config/_config.scss';
+
+.joinclub {
+  @include breakpoint($upto-lap) {
+    width: 58%;
+    text-align: $left;
+  }
+}
+
+.block-join-the-club__image-wrapper {
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
+  @include breakpoint($desk) {
+    width: 20%;
+  }
+
+  @include breakpoint($upto-lap) {
+    width: 40%;
+  }
+}
+
+.block-join-the-club__title-link,
+.block-join-the-club {
+  font-size: 0.875rem;
+}
+
+.block-join-the-club {
+  @include breakpoint($desk) {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  a {
+    color: $black-smoke;
+    font-weight: bold;
+  }
+}
+
+.block-join-the-club {
+  color: $black-smoke;
+
+  @include breakpoint($upto-palm) {
+    font-size: 0.875rem;
+    text-align: center;
+    padding-#{direction(left)}: 0.625rem;
+
+    html[lang=ar] & {
+      padding-right: 0;
+    }
+  }
+
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
+  @include breakpoint($lap) {
+    width: 52.721%;
+    padding-#{direction(left)}: 6%;
+    position: relative;
+    top: 1.625rem;
+  }
+
+  @include breakpoint($upto-lap) {
+    display: flex;
+  }
+
+  @include breakpoint($desk) {
+    width: 71%;
+  }
+
+  h2 {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: $dark-sand;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+    display: inline-block;
+    padding-#{direction(right)}: 0.4375rem;
+
+    html[lang=ar] & {
+      line-height: 1.3;
+    }
+
+    @include breakpoint($above-palm) {
+      margin-bottom: 0;
+
+      html[lang=ar] & {
+        line-height: 1.4;
+      }
+    }
+  }
+
+  span {
+    font-size: 1.125rem;
+    padding-#{direction(right)}: 0.4375rem;
+
+    &::before {
+      position: relative;
+      top: 0.125rem;
+      color: $dark-sand;
+    }
+  }
+}
+
+.block-application-links {
+  @include breakpoint($desk) {
+    width: 29%;
+  }
+
+  a {
+    &::before {
+      @include breakpoint($desk) {
+        margin-#{$left}: 0;
+        margin-#{$right}: 0;
+      }
+    }
+  }
+}

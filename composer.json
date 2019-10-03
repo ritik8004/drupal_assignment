@@ -86,6 +86,7 @@
         "drupal/social_auth": "^2.0",
         "drupal/social_auth_facebook": "^2.0",
         "drupal/social_auth_google": "^2.0",
+        "drupal/stage_file_proxy": "^1.0@RC",
         "drupal/svg_image": "^1.9",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
@@ -108,7 +109,6 @@
     "require-dev": {
         "drupal/devel": "^2.0.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
         "drupal/console": "^1.8"
     },
@@ -238,6 +238,7 @@
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
             },
             "drupal/core": {
+                "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2019-09-28/3084138-87x-9.patch",
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",

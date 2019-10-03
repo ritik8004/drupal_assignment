@@ -14,7 +14,7 @@ use Drupal\search_api\Entity\Index;
  * Update meta variables.
  */
 function alshaya_bbw_transac_update_8008() {
-  _alshaya_bbw_transac_get_metatag_translations();
+  _alshaya_bbw_transac_save_metatag_translations();
 }
 
 /**
@@ -241,13 +241,13 @@ function alshaya_bbw_transac_install() {
   alshaya_i18n_save_translations($strings);
 
   // Install metatag translations.
-  _alshaya_bbw_transac_get_metatag_translations();
+  _alshaya_bbw_transac_save_metatag_translations();
 }
 
 /**
  * Get translations of metatag.
  */
-function _alshaya_bbw_transac_get_metatag_translations() {
+function _alshaya_bbw_transac_save_metatag_translations() {
   $strings = [
     'alshaya_seo_sale_title_suffix' => [
       'en' => ' - [current-date:html_year] Sale',

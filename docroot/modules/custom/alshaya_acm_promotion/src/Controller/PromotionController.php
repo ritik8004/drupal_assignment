@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -281,7 +282,9 @@ class PromotionController extends ControllerBase {
               'qty' => 1,
               'options' => [
                 'configurable_item_options' => $options,
-                'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+              ],
+              'extension_attributes' => [
+                'promo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
               ],
             ]);
           }
@@ -290,8 +293,8 @@ class PromotionController extends ControllerBase {
               'name' => $sku->label(),
               'sku' => $sku->getSku(),
               'qty' => 1,
-              'options' => [
-                'ampromo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
+              'extension_attributes' => [
+                'promo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),
               ],
             ]);
           }
@@ -332,6 +335,8 @@ class PromotionController extends ControllerBase {
     $response = [];
     if (!empty($label)) {
       $response = $this->promoLabelManager->prepareResponse($label, $sku->id());
+      $promotionLabel = '.promotions-dynamic-label';
+      $response->addCommand(new InvokeCommand($promotionLabel, 'trigger', ['dynamic:promotion:label:ajax:complete']));
 
       // Add cache metadata.
       $cache_array = [

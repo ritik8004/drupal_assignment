@@ -242,3 +242,8 @@ megamenu_inline_layout:
   css:
     theme:
       css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css: {}
+
+dynamic-promotions:
+  css:
+    theme:
+      css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css: {}
