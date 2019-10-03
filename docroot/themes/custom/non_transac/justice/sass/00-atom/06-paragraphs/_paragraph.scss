@@ -5,6 +5,11 @@
   img {
     width: 100%;
   }
+
+  @include breakpoint($desk) {
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+  }
 }
 
 .paragraph-t-1-row-1-col {

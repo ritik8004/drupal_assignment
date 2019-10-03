@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import AutoComplete from './Components/Autocomplete';
 import SearchResults from './Components/SearchResults';
 import InstantSearchComponent from './Components/InstantSearchComponent';
+import { Configure } from "react-instantsearch-dom";
 
 class AppAutocomplete extends React.Component {
   state = {
@@ -13,13 +14,13 @@ class AppAutocomplete extends React.Component {
     this.setState({
       query: suggestion.query,
     });
-  }
+  };
 
   onSuggestionCleared = () => {
     this.setState({
       query: '',
     });
-  }
+  };
 
   onChange = (newValue) => {
     this.setState({
@@ -32,7 +33,7 @@ class AppAutocomplete extends React.Component {
       {<span className="trending-title">Trending searches</span>}
       {children}
     </div>
-  )
+  );
 
   render() {
     const { query, categories } = this.state;
@@ -44,6 +45,7 @@ class AppAutocomplete extends React.Component {
     return (
       <div>
         <InstantSearchComponent indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }>
+          <Configure hitsPerPage="6"/>
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}

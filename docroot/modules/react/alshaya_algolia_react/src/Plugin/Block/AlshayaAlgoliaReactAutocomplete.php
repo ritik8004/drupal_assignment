@@ -89,6 +89,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       '#attached' => [
         'library' => [
           'alshaya_algolia_react/autocomplete',
+          'alshaya_white_label/algolia_search',
         ],
         'drupalSettings' => [
           'algoliaSearch' => [
