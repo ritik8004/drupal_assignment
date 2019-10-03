@@ -20,7 +20,7 @@ header .block-cart-mini-block {
 
     @include breakpoint($only-mobile) {
       bottom: 0.9375rem;
-      #{$left}: 1.25rem;
+      #{$left}: 2.25rem;
     }
   }
 
