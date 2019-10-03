@@ -1,15 +1,13 @@
 import React from 'react';
 import { connectNumericMenu } from 'react-instantsearch-dom';
 
-function AlshayaNumericWidget({ items, refine, createURL }) {
-  console.log(items);
-  console.log(createURL);
+function AlshayaNumericWidget({ items, refine }) {
   return (
     <ul>
       {items.map(item => (
         <li key={item.value}>
           <a
-            href={createURL(item.value)}
+            href="#"
             style={{ fontWeight: item.isRefined ? 'bold' : '' }}
             onClick={event => {
               event.preventDefault();
