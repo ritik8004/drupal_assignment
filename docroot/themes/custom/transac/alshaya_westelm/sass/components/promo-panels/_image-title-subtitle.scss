@@ -1,0 +1,45 @@
+.paragraph--type--image-title-subtitle {
+  .field--name-field-title,
+  .field--name-field-subtitle {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .field--name-field-title {
+    font-size: 1.375rem;
+    font-weight: normal;
+    margin-top: 1.5rem;
+    color: $promo_panel_image_title_subtitle_title_text;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.9375rem;
+      margin-top: 1.3rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0.7rem;
+      font-size: 0.75rem;
+      padding-bottom: 0;
+      letter-spacing: 0.6px;
+    }
+  }
+
+  .field--name-field-sub-title {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-top: 0.5625rem;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.6875rem;
+      margin-top: 2px;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.5625rem;
+      letter-spacing: 0.6px;
+      margin-top: -0.25rem;
+    }
+  }
+}
