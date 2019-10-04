@@ -12,6 +12,7 @@ use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
@@ -69,6 +70,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $entityFieldManager;
+
+  /**
+   * Advanced page node object.
+   *
+   * @var \Drupal\node\NodeInterface|null
+   */
+  protected $advancedPageNode = NULL;
 
   /**
    * Utility constructor.
@@ -791,9 +799,43 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           'image' => $this->getImages($block, 'field_image'),
         ];
       }
+      elseif ($item['plugin_id'] == 'alshaya_dp_navigation_link') {
+        return $this->prepareAppNavigationLinks($item);
+      }
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Get the app navigation links.
+   *
+   * @param array $item
+   *   Settings array.
+   *
+   * @return array
+   *   Block data.
+   */
+  public function prepareAppNavigationLinks(array $item) {
+    $data = [];
+    $block_manager = \Drupal::service('plugin.manager.block');
+
+    if (($node = $this->getAdvancedPageNode()) instanceof NodeInterface) {
+      $item['settings']['advanced_page_node'] = $node;
+
+      /** @var \Drupal\Core\Block\BlockPluginInterface $block_instance */
+      $block_instance = $block_manager->createInstance($item['plugin_id'], $item['settings']);
+      if (!empty($block_data = $block_instance->build())) {
+        $data = [
+          'label' => $item['settings']['label'],
+          'label_display' => (bool) $item['settings']['label_display'],
+          'l2' => $block_data['l2'] ?? [],
+          'l3' => $block_data['l3'] ?? [],
+        ];
+      }
+    }
+
+    return $data;
   }
 
   /**
@@ -804,6 +846,30 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function getBlockCacheTags(): array {
     return $this->cacheTags;
+  }
+
+  /**
+   * Get advanced page node object.
+   *
+   * @return \Drupal\node\NodeInterface|null
+   *   Advanced page node object.
+   */
+  public function getAdvancedPageNode() {
+    return $this->advancedPageNode;
+  }
+
+  /**
+   * Set advanced page node object.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Advanced page node object.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setAdvancedPageNode(NodeInterface $node) {
+    $this->advancedPageNode = $node;
+    return $this;
   }
 
 }

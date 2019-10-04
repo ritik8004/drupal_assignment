@@ -64,8 +64,16 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
   public function build() {
     $data = [];
 
+    // @see MobileAppUtilityParagraphs::prepareAppNavigationLinks().
+    if (isset($this->configuration['advanced_page_node'])) {
+      $node = $this->configuration['advanced_page_node'];
+    }
+    else {
+      $node = _alshaya_advanced_page_get_department_node();
+    }
+
     // If department page, only then process further.
-    if (($node = _alshaya_advanced_page_get_department_node()) instanceof NodeInterface) {
+    if ($node instanceof NodeInterface) {
       // If term id is attached with node.
       if ($tid = $node->get('field_product_category')->first()->getString()) {
         // Get category tree data.
@@ -85,6 +93,10 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
             }
           }
         }
+      }
+
+      if (!empty($this->configuration['advanced_page_node'])) {
+        return $data;
       }
     }
 
