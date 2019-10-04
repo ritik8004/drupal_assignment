@@ -61,7 +61,8 @@
         $('body').addClass('free-gifts-modal-overlay');
       });
 
-      // On close button there is already an event getting triggered.
+      // Adding a delay here to make sure this gets called once modal is closed also multiple.
+      // click event on modal close button so to make sure this gets called last.
       setTimeout(function () {
         $('.free-gifts-modal-overlay .ui-dialog-titlebar-close').once().on('click', function () {
           if ($('body').hasClass('free-gift-promo-list-overlay')) {
@@ -71,18 +72,15 @@
         });
       }, 3);
 
-      $('.free-gift-view a').once().on('click', function () {
-        // hide title on details page modal.
-        $(document).ajaxComplete(function () {
-          $('.ui-dialog-title').hide();
-        });
-      });
-
-      $('.free-gifts-modal-overlay #drupal-modal article > a').once().on('click', function () {
-        // show title when back to promo list page.
-        $(document).ajaxComplete(function () {
-          $('.ui-dialog-title').show();
-        });
+      $(document).ajaxComplete(function (event, xhr, settings) {
+        if ($('.free-gifts-modal-overlay').length > 0) {
+          if (settings.url.indexOf('back') !== -1) {
+            $('.ui-dialog-title').hide();
+          }
+          else if (settings.url.indexOf('replace') !== -1) {
+            $('.ui-dialog-title').show();
+          }
+        }
       });
     }
   };

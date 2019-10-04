@@ -168,6 +168,13 @@
     }
   }
 
+  .item-list {
+    .slick-track {
+      display: flex;
+      flex-flow: row wrap;
+    }
+  }
+
   @include breakpoint ($only-mobile) {
     .acq-content-product-modal {
       display: flex;
