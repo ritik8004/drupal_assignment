@@ -337,3 +337,49 @@ function alshaya_hm_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
+  $composition_markup = '';
+  if (!empty($composition)) {
+    $markup = [
+      '#theme' => 'product_composition_markup',
+      '#title' => t('composition'),
+      '#composition' => [
+        '#markup' => $composition,
+      ],
+    ];
+
+    $composition_markup = render($markup);
+  }
+
+  $variant['description'][] = [
+    'selector' => '.composition-wrapper',
+    'markup' => $composition_markup,
+  ];
+
+  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', 'self');
+  $warning_markup = '';
+  if (!empty($warning)) {
+    $markup = [
+      '#theme' => 'product_article_warning_markup',
+      '#title' => t('safety warning'),
+      '#composition' => [
+        '#markup' => $warning,
+      ],
+    ];
+
+    $warning_markup = render($markup);
+  }
+
+  $variant['description'][] = [
+    'selector' => '.warning-wrapper',
+    'markup' => $warning_markup,
+  ];
+}

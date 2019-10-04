@@ -636,8 +636,7 @@ class Configurable extends SKUPluginBase {
 
     foreach (self::getChildSkus($sku) as $child) {
       $child_sku = SKU::loadFromSku($child);
-      if ($child_sku instanceof SKU
-        && $child_sku->language()->getId() == $langcode) {
+      if ($child_sku instanceof SKU) {
         $children[$child_sku->getSku()] = $child_sku;
       }
     }
