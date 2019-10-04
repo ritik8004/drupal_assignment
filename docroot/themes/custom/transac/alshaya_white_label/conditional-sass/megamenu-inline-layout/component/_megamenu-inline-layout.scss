@@ -41,6 +41,7 @@
               visibility: hidden;
               transition: none;
               margin-#{$left}: 1.5rem;
+              margin-top: 0.25rem;
             }
 
             &.active {
@@ -114,22 +115,23 @@
 
           &.move-to-right {
             position: absolute;
-            top: 0;
+            top: 0.875rem;
             #{$left}: 28.875rem;
             padding-#{$left}: 1.875rem;
+            transition: $left 0.3s ease-out;
 
             &::before {
               content: '';
               width: 1px;
-              height: 24.5625rem;
+              height: 22.9375rem;
               position: absolute;
               #{$left}: 0;
+              top: -0.875rem;
               background-color: $megamenu-inline-layout-right-category-seperator;
             }
 
             &.move-to-left {
-              #{$left}: 15.25rem;
-              transition: $left 0.3s ease-out;
+              #{$left}: 16.4375rem;
             }
           }
         }
