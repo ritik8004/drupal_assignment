@@ -58,6 +58,12 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'subcategories' => NULL,
       ],
     ],
+    'alshaya_app_navigation_links' => [
+      'template' => 'alshaya-app-navigation-links',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
   ];
 }
 
