@@ -31,6 +31,8 @@ const withURLSync = SearchResults =>
     }
 
     onSearchStateChange = searchState => {
+      searchState.query = searchState.configure.query;
+      delete searchState.configure;
       // We do want to clear the filters and do not want to show querystring
       // in addressbar, when there are no search query.
       if (searchState.query === '') {

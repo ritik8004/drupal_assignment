@@ -15,10 +15,7 @@ import withURLSync from '../URLSync';
 import GridButtons from './GridButtons';
 
 // Create a dummy search box to generate result.
-const VirtualSearchBox = connectSearchBox(props => {
-  props.refine(props.currentRefinement);
-  return (null);
-});
+const VirtualSearchBox = connectSearchBox(() => (null));
 
 const SearchResultHits = connectHits(({ hits }) => {
   // Create ref to get element after it gets rendered.
@@ -64,7 +61,6 @@ const SearchResults = props => {
   const indexName = drupalSettings.algoliaSearch.indexName;
 
   const onSearchStateChange = searchState => {
-    searchState.query = query;
     props.onSearchStateChange(searchState);
   };
 
@@ -77,8 +73,8 @@ const SearchResults = props => {
       createURL={props.createURL}
       onSearchStateChange={onSearchStateChange}
     >
-      <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter}/>
-      <VirtualSearchBox defaultRefinement={query} currentRefinement={query} />
+      <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
+      <VirtualSearchBox currentRefinement={query}  />
       <div className="container-wrapper">
         <div class="views-exposed-form bef-exposed-form block block-views block-views-exposed-filter-blocksearch-page" data-bef-auto-submit-full-form="" data-drupal-selector="views-exposed-form-search-page" data-msg-required="Please enter your This field." id="block-exposedformsearchpage-3" data-block-plugin-id="views_exposed_filter_block:search-page">
           <Filters indexName={indexName} />
