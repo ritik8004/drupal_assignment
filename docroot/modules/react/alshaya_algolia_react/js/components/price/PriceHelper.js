@@ -12,7 +12,7 @@ function calculateDiscount(price, final_price) {
 
 function formatPrice(price) {
   const priceParts = [
-    drupalSettings.reactTeaserView.price.currency,
+    drupalSettings.reactTeaserView.price.currency.toUpperCase(),
     price.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)
   ];
 

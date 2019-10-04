@@ -9,7 +9,7 @@ import {
 import { formatPrice } from '../../components/price/PriceHelper';
 import ColorFilter from './widgets/ColorFilter';
 import CommonRefinementList from './widgets/CommonRefinementList';
-import AlshayaNumericWidget from './widgets/AlshayaNumericWidget';
+import PriceFilter from './widgets/PriceFilter';
 import FilterPanel from './FilterPanel';
 import SortByList from '../SortByList';
 
@@ -50,7 +50,7 @@ export default ({indexName}) => (
       />
     </FilterPanel>
     <FilterPanel header="Price">
-      <AlshayaNumericWidget
+      <PriceFilter
         attribute="final_price"
         createURL={() => '#'}
         refine={() => null}

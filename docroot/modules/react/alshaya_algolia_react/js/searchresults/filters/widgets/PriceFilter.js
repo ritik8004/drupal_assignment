@@ -1,7 +1,9 @@
 import React from 'react';
 import { connectNumericMenu } from 'react-instantsearch-dom';
 
-function AlshayaNumericWidget({ items, refine }) {
+function PriceFilter(props) {
+  const { items, refine } = props;
+
   return (
     <ul>
       {items.map(item => (
@@ -22,4 +24,4 @@ function AlshayaNumericWidget({ items, refine }) {
   );
  }
 
-export default connectNumericMenu(AlshayaNumericWidget);
+export default connectNumericMenu(PriceFilter);
