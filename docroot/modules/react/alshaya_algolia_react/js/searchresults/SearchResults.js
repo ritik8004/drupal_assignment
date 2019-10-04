@@ -1,10 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import {
   Configure,
-  connectHits,
+  connectInfiniteHits,
   connectSearchBox,
   InstantSearch,
-  Pagination,
   Stats
 } from 'react-instantsearch-dom';
 import { searchClient } from '../config/SearchClient';
@@ -17,7 +16,8 @@ import GridButtons from './GridButtons';
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
 
-const SearchResultHits = connectHits(({ hits }) => {
+const SearchResultHits = connectInfiniteHits(props => {
+  const { hits, hasMore, refineNext } = props;
   // Create ref to get element after it gets rendered.
   const teaserRef = useRef();
 
@@ -44,11 +44,28 @@ const SearchResultHits = connectHits(({ hits }) => {
           }
         }, 500);
       }
-    }
+    }, [hits]
   );
 
   const hs = hits.map(hit => <Teaser key={hit.objectID} hit={hit} />);
-  return <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>{hs}</div>;
+  return (
+    <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>
+      <div className="view-content">{hs}</div>
+      <ul class="js-pager__items pager">
+        <li class="pager__item">
+          <button
+            class="button"
+            title="Load morer products"
+            rel="next"
+            onClick={refineNext}
+            disabled={!hasMore}
+          >
+            Load more products
+          </button>
+        </li>
+      </ul>
+    </div>
+  );
 });
 
 /**
@@ -82,13 +99,13 @@ const SearchResults = props => {
         <div class="block block-alshaya-search-api block-alshaya-grid-count-block">
           <div class="total-result-count">
             <div class="view-header search-count tablet">
-            <Stats
-              translations={{
-                stats(nbHits, timeSpentMS) {
-                  return `${nbHits} items`;
-                },
-              }}
-            />
+              <Stats
+                translations={{
+                  stats(nbHits, timeSpentMS) {
+                    return `${nbHits} items`;
+                  },
+                }}
+              />
             </div>
           </div>
           <GridButtons />
@@ -98,27 +115,7 @@ const SearchResults = props => {
           <span class="filter-list-label">selected filters</span>
           <SelectedFilters />
         </div>
-
-
         <SearchResultHits />
-        {/* <Pagination
-          translations={{
-            previous: '‹',
-            next: '›',
-            first: '«',
-            last: '»',
-            page(currentRefinement) {
-              return currentRefinement;
-            },
-            ariaPrevious: 'Previous page',
-            ariaNext: 'Next page',
-            ariaFirst: 'First page',
-            ariaLast: 'Last page',
-            ariaPage(currentRefinement) {
-              return `Page ${currentRefinement}`;
-            },
-          }}
-        /> */}
       </div>
     </InstantSearch>
   );

@@ -10,8 +10,10 @@ const withURLSync = SearchResults =>
   class WithURLSync extends Component {
     constructor(props) {
       super(props);
+      let searchState = getCurrentSearchQueryString();
+      delete searchState.page;
       this.state = {
-        searchState: getCurrentSearchQueryString(),
+        searchState: searchState,
       };
     }
 
@@ -32,6 +34,8 @@ const withURLSync = SearchResults =>
 
     onSearchStateChange = searchState => {
       searchState.query = searchState.configure.query;
+      // Configure contains internal settings like oos filter, results per
+      // page etc.. we don't want to pass it in query string.
       delete searchState.configure;
       // We do want to clear the filters and do not want to show querystring
       // in addressbar, when there are no search query.
