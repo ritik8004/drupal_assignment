@@ -64,12 +64,10 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
   public function build() {
     $data = [];
 
-    // Get the advanced page node.
-    $node = _alshaya_advanced_page_get_department_node();
     // If department page, only then process further.
-    if ($node instanceof NodeInterface) {
-      $tid = $node->get('field_product_category')->first()->getString();
-      if ($tid) {
+    if (($node = _alshaya_advanced_page_get_department_node()) instanceof NodeInterface) {
+      // If term id is attached with node.
+      if ($tid = $node->get('field_product_category')->first()->getString()) {
         // Get category tree data.
         $category_tree = $this->categoryTree->getCategoryTreeCached();
         if (isset($category_tree[$tid])) {
@@ -79,7 +77,7 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
               $data['l2'][$l2_child['id']] = $l2_child['label'];
             }
 
-            // Prepare L3 data.
+            // Prepare L3 data from L2.
             foreach ($l2_child['child'] ?? [] as $l3_child) {
               if ($l3_child['app_navigation_link']) {
                 $data['l3'][$l3_child['id']] = $l3_child['label'];
