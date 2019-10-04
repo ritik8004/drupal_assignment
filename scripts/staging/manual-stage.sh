@@ -79,6 +79,7 @@ echo "Importing the dumps on target env..."
 ssh $remote_user@$remote_host 'gunzip /tmp/manual-stage/*.gz'
 for current_site in $(echo ${valid_sites:1} | tr "," "\n")
 do
+  echo
   echo $current_site
   uri=`drush sa @$current_site.$target_env | grep uri | cut -d" " -f 4`
 
@@ -88,6 +89,12 @@ do
   site_db=`drush acsf-tools-info | grep $current_site | cut -d"	" -f3`
   ssh $remote_user@$remote_host "php -f /var/www/html/alshaya.$target_env/hooks/common/post-db-copy/000-acquia_required_scrub.php alshaya $target_env $site_db"
   ssh $remote_user@$remote_host "php -f /var/www/html/alshaya.$target_env/hooks/common/post-db-copy/0000-clear_cache_tables.php alshaya $target_env $site_db"
+
+  if [[ "$type" == "reset" ]]; then
+    echo
+    echo "Initiating reset post staging activity on $current_site using screen."
+    ssh $remote_user@$remote_host "screen -dm bash -c \"cd /var/www/html/alshaya.$target_env/docroot; ../scripts/staging/reset-individual-site-post-stage.sh '$target_env' '$current_site'\""
+  fi
 done
 
 
