@@ -5,7 +5,6 @@ namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,11 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Language manager.
+   * Category tree.
    *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
-  protected $languageManager;
+  protected $categoryTree;
 
   /**
    * AlshayaDpNavigationLinks constructor.
@@ -36,15 +35,15 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
    *   Plugin id.
    * @param mixed $plugin_definition
    *   Plugin definition.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $category_tree
+   *   Category tree.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              LanguageManagerInterface $language_manager) {
+                              ProductCategoryTree $category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->languageManager = $language_manager;
+    $this->categoryTree = $category_tree;
   }
 
   /**
@@ -55,7 +54,7 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('language_manager')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
@@ -65,19 +64,27 @@ class AlshayaDpNavigationLinks extends BlockBase implements ContainerFactoryPlug
   public function build() {
     $data = [];
 
-    // Get if advanced page node.
+    // Get the advanced page node.
     $node = _alshaya_advanced_page_get_department_node();
     // If department page, only then process further.
     if ($node instanceof NodeInterface) {
       $tid = $node->get('field_product_category')->first()->getString();
       if ($tid) {
-        $l2_terms = _alshaya_acm_product_category_get_navigation_link_terms([$tid], 2, $this->languageManager->getCurrentLanguage()->getId());
-        // If L2 terms are available, we fetch L3 terms for these L2 terms.
-        if (!empty($l2_terms)) {
-          $data['l2'] = $l2_terms;
-          $l3_terms = _alshaya_acm_product_category_get_navigation_link_terms(array_keys($l2_terms), 3, $this->languageManager->getCurrentLanguage()->getId());
-          if (!empty($l3_terms)) {
-            $data['l3'] = $l3_terms;
+        // Get category tree data.
+        $category_tree = $this->categoryTree->getCategoryTreeCached();
+        if (isset($category_tree[$tid])) {
+          // Prepare the L2 data.
+          foreach ($category_tree[$tid]['child'] ?? [] as $l2_child) {
+            if ($l2_child['app_navigation_link']) {
+              $data['l2'][$l2_child['id']] = $l2_child['label'];
+            }
+
+            // Prepare L3 data.
+            foreach ($l2_child['child'] ?? [] as $l3_child) {
+              if ($l3_child['app_navigation_link']) {
+                $data['l3'][$l3_child['id']] = $l3_child['label'];
+              }
+            }
           }
         }
       }
