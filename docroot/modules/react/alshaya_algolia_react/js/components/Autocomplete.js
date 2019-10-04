@@ -60,7 +60,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    return (window.innerWidth < 768);
+    return (value === '') || (window.innerWidth < 768);
   }
 
   clearSearchFieldInput = () => {
