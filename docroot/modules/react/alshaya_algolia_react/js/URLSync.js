@@ -3,7 +3,7 @@ import qs from 'qs'
 import { updateAfter, getCurrentSearchQueryString, updateSearchQuery } from './utils/utils';
 
 const searchStateToURL = searchState => {
-  return searchState ? qs.stringify(searchState) : '';
+  return searchState.query ? qs.stringify(searchState) : '';
 }
 
 const withURLSync = SearchResults =>
@@ -31,6 +31,12 @@ const withURLSync = SearchResults =>
     }
 
     onSearchStateChange = searchState => {
+      // We do want to clear the filters and do not want to show querystring
+      // in addressbar, when there are no search query.
+      if (searchState.query === '') {
+        searchState = {};
+      }
+
       clearTimeout(this.debouncedSetState);
       this.debouncedSetState = setTimeout(() => {
         updateSearchQuery(searchStateToURL(searchState));
