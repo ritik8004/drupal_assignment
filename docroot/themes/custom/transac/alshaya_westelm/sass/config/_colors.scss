@@ -36,7 +36,7 @@ $roman_coffee: #81644b;
 $content_link_color: $WE_grey_two;
 $primary_link: $WE_grey_three;
 $primary_input_focus_border: $WE_grey_four;
-$secondary_link: $WE_grey_two;
+$secondary_link: $WE_grey_three;
 
 // Errors.
 $content_error_msg_bg: $WE_warning_red;
@@ -55,10 +55,6 @@ $promo_panel_image_title_subtitle_title_text: $WE_grey_three;
 $user_login_section_title: $WE_grey_three;
 $user_login_link_btn_text: $WE_grey_three;
 $social-network-text: $WE_grey_three;
-
-// Messages
-$default_msg_bg: $WE_message_green;
-$default_msg_text: $WE_white;
 
 //Buttons.
 $primary_btn_bg: $WE_grey_three;
@@ -389,3 +385,52 @@ $checkout_order_details_label: $WE_deep_blue;
 $checkout_confirm_order_item_bg: $WE_white;
 $checkout_confirm_order_item_bg_blend: $WE_gray_six;
 $checkout_confirmation_detail_amount: $WE_black_one;
+
+// Breadcrumb.
+$breadcrumb_bg: $WE_white_three;
+$breadcrumb_bg_tablet: $WE_gray_five;
+$breadcrumb_link: $WE_grey_three;
+$breadcrumb_link_hover: $WE_grey_two;
+$breadcrumb_link_active: $WE_grey_three;
+// Pace progress color
+$progress_loader: $WE_grey_three;
+
+// Department page
+$department_category_list_hover: $WE_grey_three;
+$department_category_accordion_title: $WE_grey_three;
+$department_category_accordion_title_arrow: $WE_grey_three;
+
+// free design service form
+$form-middle-seperator: $WE_gray_five;
+$form-field-legend: $WE_grey_four;
+$form-field-label: $WE_gray_eight;
+$form-field-title: $WE_grey_two;
+$form-select-border: $WE_white_five;
+$form-select-text: $WE_gray_eight;
+$form-edit-room-legend: $WE_grey_four;
+$form-field-textarea-border: $WE_grey_two;
+$mobile-field-placeholder: $WE_white;
+
+// Category carousel.
+$_category_carosel_title_color: $WE_black_one;
+
+// Promo Panel - Today's Offer / Featured Savings.
+$promo_panel_label: $WE_white;
+$promo_panel_mobile_label: $WE_white;
+$promo_panel_label_bg: rgba(0, 0, 0, 0.9);
+$promo_panel_label_bg_active: $WE_black_one;
+$_promo_panel_CTA_border: $WE_grey_three;
+$_promo_panel_CTA_text: $WE_grey_three;
+
+// Home page - slider.
+$gallery_arrows_bg: $WE_grey_three;
+$hp_slider_dots: $WE_grey_three;
+$slider_arrow_bg: rgba(255, 255, 255, 0.5);
+
+// Delivery banner.
+// Delivery tabs.
+$deliverybanner_title: $WE_grey_three;
+$deliverybanner_subtitle: $WE_grey_two;
+$deliverybanner_border: $WE_black_one;
+$deliverybanner_shadow: rgba(236, 236, 236, 0.5);
+$deliverybanner_link: $WE_grey_three;
