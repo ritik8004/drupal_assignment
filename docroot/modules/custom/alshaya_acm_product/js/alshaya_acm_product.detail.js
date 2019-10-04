@@ -105,6 +105,12 @@
           });
 
           $('select[name="quantity"]', this).trigger('refresh');
+
+          if (typeof variantInfo['description'] !== 'undefined') {
+            for (var i in variantInfo['description']) {
+              $(variantInfo['description'][i]['selector'], node).html(variantInfo['description'][i]['markup']);
+            }
+          }
         });
 
         var variants = drupalSettings.productInfo[sku]['variants'];
