@@ -1,0 +1,127 @@
+.block-alshaya-sub-category-block {
+  .plp-subcategory-block {
+    display: flex;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid $primary_border;
+
+    @include breakpoint($desktop) {
+      justify-content: center;
+    }
+
+    .sub-category {
+      display: inline-block;
+      margin-#{$right}: 3.375rem;
+      min-width: 6.75rem;
+      text-align: center;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 2.6875rem;
+        min-width: 5.3125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0.25rem;
+        min-width: 5.625rem;
+      }
+
+      &:hover {
+        color: $plp_sub_cat_block_cat_title_hover;
+      }
+
+      .sub-category-title {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: $plp_sub_cat_block_cat_title;
+        white-space: normal;
+
+        @include breakpoint($only-tablet) {
+          font-size: 0.75rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.6875rem;
+        }
+      }
+    }
+  }
+}
+
+.c-plp {
+  .c-products-list {
+    .term-header {
+      width: 100%;
+      clear: both;
+      margin: 1.875rem 0;
+      text-align: center;
+      display: block;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin: 0.75rem 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin: 1.25rem 0;
+      }
+
+      .term-title {
+        font-size: 2.5rem;
+        letter-spacing: 0.79px;
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.4375rem;
+          letter-spacing: 0.45px;
+        }
+      }
+
+      .term-desc {
+        font-size: 1.1875rem;
+        letter-spacing: 0.8px;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+          letter-spacing: 0.59px;
+        }
+      }
+
+      .term-image {
+        @include breakpoint($tablet) {
+          display: none;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin: 0;
+          max-width: 6.75rem;
+        }
+      }
+    }
+  }
+}
+
+.subcategory-listing-enabled {
+  .filter-fixed-top {
+    .c-products-list {
+      .view-alshaya-product-list {
+        @include breakpoint($desktop) {
+          margin-top: 19rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-top: 15.375rem;
+        }
+      }
+    }
+  }
+}
