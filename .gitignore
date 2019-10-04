@@ -24,6 +24,11 @@ docroot/profiles/contrib
 docroot/libraries
 drush/Commands
 
+# Ignore custom module build artifacts
+docroot/modules/react/node_modules
+docroot/modules/react/*/node_modules
+docroot/modules/react/*/dist
+
 # Ignore custom theme build artifacts
 docroot/themes/custom/*/node_modules
 docroot/themes/custom/*/css

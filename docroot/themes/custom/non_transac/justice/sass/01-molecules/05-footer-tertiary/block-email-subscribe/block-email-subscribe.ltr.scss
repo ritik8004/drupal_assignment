@@ -1,0 +1,93 @@
+@import '../../../config/_config.scss';
+
+.block-content--latest-fashion-update {
+  width: 100%;
+  background: $newsletter_block_bg;
+  padding-bottom: 0.9375rem;
+
+  .latest-update {
+    @include breakpoint($above-palm) {
+      display: flex;
+      justify-content: center;
+    }
+
+    @include breakpoint($upto-palm) {
+      text-align: center;
+    }
+
+    .fashion-news {
+      padding-#{$right}: 2.25rem;
+
+      @include breakpoint($upto-palm) {
+        padding-#{$right}: 0;
+      }
+
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h2 {
+        font-family: $jus_bold;
+        font-size: 1.125rem;
+        display: block;
+
+        &::before {
+          content: '';
+          background-repeat: no-repeat;
+          width: 2.75rem;
+          height: 2.75rem;
+          background-position: center;
+          display: inline-block;
+          top: 1.6875rem;
+          position: relative;
+          background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-email.svg');
+
+          @include breakpoint($upto-palm) {
+            top: 1rem;
+          }
+        }
+      }
+
+      p {
+        font-size: 0.875rem;
+        padding-#{$left}: 2.6875rem;
+
+        @include breakpoint($upto-palm) {
+          padding-#{$left}: 0;
+        }
+      }
+    }
+
+    .latest-update-link {
+      padding-top: 1rem;
+
+      a {
+        font-size: 1.125rem;
+        text-decoration: none;
+
+        html[lang=ar] & {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+.region-footer-primary {
+  .block-content--latest-fashion-update {
+    padding-bottom: 0;
+
+    @include breakpoint($upto-lap) {
+      padding-bottom: 1.5rem;
+    }
+
+    .latest-update {
+      justify-content: $left;
+
+      @include breakpoint($upto-lap) {
+        justify-content: center;
+      }
+    }
+  }
+}

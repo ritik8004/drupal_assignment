@@ -1,11 +1,21 @@
 <?php
+
 namespace Drupal\acq_promotion\Commands;
 
+use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
+use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
-class AcqPromotionCommands extends DrushCommands {
+/**
+ * Class AcqPromotionCommands.
+ *
+ * @package Drupal\acq_promotion\Commands
+ */
+class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwareInterface {
+
+  use SiteAliasManagerAwareTrait;
 
   /**
    * Acq Promotions Manager.
@@ -16,6 +26,7 @@ class AcqPromotionCommands extends DrushCommands {
 
   /**
    * AcqPromotionCommands constructor.
+   *
    * @param \Drupal\acq_promotion\AcqPromotionsManager $acqPromotionsManager
    *   Acq Promotion Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
@@ -30,6 +41,9 @@ class AcqPromotionCommands extends DrushCommands {
   /**
    * Run a full synchronization of all commerce promotion records.
    *
+   * @param array $options
+   *   Command options.
+   *
    * @command acq_promotion:sync-promotions
    *
    * @option types Type of promotions that need to be synced.
@@ -42,9 +56,8 @@ class AcqPromotionCommands extends DrushCommands {
    *   Run a full synchronization of all available promotions.
    * @usage drush acspm --types=cart
    *   Run a full synchronization of all available cart promotions.
-   * @param array $options
    */
-  public function syncPromotions($options = ['types' => NULL]) {
+  public function syncPromotions(array $options = ['types' => NULL]) {
     if ($types = $options['types']) {
       $this->logger->notice(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
       $types = explode(',', $types);
@@ -57,6 +70,45 @@ class AcqPromotionCommands extends DrushCommands {
     }
 
     $this->logger->notice(dt('Promotion sync completed.'));
+  }
+
+  /**
+   * Run a full sync of all commerce promotion records and process queues.
+   *
+   * @param array $options
+   *   Command options.
+   *
+   * @command acq_promotion:sync-and-process-promotions
+   *
+   * @option types Type of promotions that need to be synced.
+   *
+   * @validate-module-enabled acq_promotion
+   *
+   * @aliases sync-and-process-promotions
+   *
+   * @usage drush sync-and-process-promotions
+   *   Run a full synchronization of all available promotions.
+   * @usage drush sync-and-process-promotions --types=cart
+   *   Run a full synchronization of all available cart promotions.
+   */
+  public function syncPromotionsAndRunQueues(array $options = ['types' => NULL]) {
+    $selfRecord = $this->siteAliasManager()->getSelf();
+    $options = array_filter($options);
+    /** @var \Consolidation\SiteProcess\SiteProcess $acspm */
+    $acspm = $this->processManager()->drush($selfRecord, 'acspm', [], $options);
+    $acspm->run($acspm->showRealtime());
+
+    $command = sprintf('screen -dm bash -c "cd %s; drush --uri=%s queue-run acq_promotion_attach_queue"', $selfRecord->get('root'), $selfRecord->get('uri'));
+    /** @var \Consolidation\SiteProcess\SiteProcess $attach */
+    $attach = $this->processManager()->process($command);
+    $attach->run($attach->showRealtime());
+
+    $command = sprintf('screen -dm bash -c "cd %s; drush --uri=%s queue-run acq_promotion_detach_queue"', $selfRecord->get('root'), $selfRecord->get('uri'));
+    /** @var \Consolidation\SiteProcess\SiteProcess $detach */
+    $detach = $this->processManager()->process($command);
+    $detach->run($detach->showRealtime());
+
+    $this->logger->notice(dt('Promotions synced and queue-run started in screens.'));
   }
 
 }

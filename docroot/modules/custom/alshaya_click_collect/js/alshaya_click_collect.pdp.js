@@ -32,6 +32,26 @@
 
   Drupal.behaviors.pdpClickCollect = {
     attach: function (context, settings) {
+      $('.sku-base-form').once('click-collect').on('variant-selected', function (event, variant, code) {
+        var node = $(this).parents('article.entity--type-node:first');
+        var sku = $(this).attr('data-sku');
+        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        $('#pdp-stores-container', node).data('sku', variant);
+
+        if (variantInfo.click_collect) {
+          $('#pdp-stores-container.click-collect', node).accordion('option', 'disabled', false);
+          $('#pdp-stores-container.click-collect .c-accordion_content', node).removeClass('hidden-important');
+
+          if ($('.search-stores-button', node).is(':visible')) {
+            Drupal.pdp.storesDisplay();
+          }
+        }
+        else {
+          $('#pdp-stores-container.click-collect', node).accordion('option', 'disabled', true);
+          $('#pdp-stores-container.click-collect .c-accordion_content', node).addClass('hidden-important');
+        }
+      });
+
       $('#pdp-stores-container').once('bind-js').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
@@ -375,41 +395,6 @@
       validate = (settings.alshaya_acm.product_sku === productInfo.sku);
     }
     return validate;
-  };
-
-  /**
-   * Update click and collect on size change ajax call.
-   *
-   * We don't want to call this function for each size change call. we
-   * want to call this function for pdp page only. so, there are some
-   * variables which are accessible to javascript only. that's why we
-   * are writing this function here instead of writing in AjaxResponse
-   * of size change.
-   *
-   * @param {Drupal.Ajax} [ajax]
-   *   The Drupal Ajax object.
-   * @param {object} response
-   *   Object holding the server response.
-   * @param {object} [response.settings]
-   *   An array of settings that will be used.
-   * @param {number} [status]
-   *   The XMLHttpRequest status.
-   */
-  Drupal.AjaxCommands.prototype.updatePDPClickCollect = function (ajax, response, status) {
-    if (Drupal.pdp.validateCurrentProduct(response.data)) {
-      $('#pdp-stores-container.click-collect > h3 > .subtitle').text(response.data.alshaya_acm.subtitle_txt);
-
-      if (response.data.alshaya_acm.storeFinder) {
-        $('#pdp-stores-container.click-collect').accordion('option', 'disabled', false);
-        $('#pdp-stores-container.click-collect .c-accordion_content').removeClass('hidden-important');
-
-        Drupal.pdp.storesDisplay();
-      }
-      else {
-        $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
-        $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
-      }
-    }
   };
 
   // Command to display error message and rebind autocomplete to main input.

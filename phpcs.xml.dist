@@ -28,6 +28,7 @@
 
   <file>blt/src</file>
   <file>docroot/modules/custom</file>
+  <file>docroot/modules/react</file>
   <file>docroot/themes/custom</file>
   <file>tests</file>
 

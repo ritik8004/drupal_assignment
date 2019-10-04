@@ -37,6 +37,8 @@ services:
     class: Drupal\alshaya_acm\CartHelper
     arguments:
       - '@acq_cart.cart_storage'
+      - '@event_dispatcher'
+      - '@module_handler'
       - '@logger.factory'
 
   alshaya_acm.config_check:

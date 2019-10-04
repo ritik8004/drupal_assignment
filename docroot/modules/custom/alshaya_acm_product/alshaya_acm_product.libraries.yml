@@ -7,23 +7,23 @@ product_view:
     - core/jquery.once
     - core/drupal
 
-stock_check:
+product_detail:
   version: 1.x
   js:
-    js/alshaya_acm_stock_check.js: {}
-  css:
-    theme:
-      css/alshaya_acm_product.stock.css: {}
+    js/alshaya_acm_product.detail.js: {}
   dependencies:
     - core/jquery
+    - core/drupalSettings
     - core/drupal.ajax
     - core/drupal.dialog.ajax
     - core/drupal.form
     - clientside_validation_jquery/cv.jquery.validate
     - alshaya_master/ladda
+    - alshaya_master/common_functions
     - alshaya_acm_product/product_view
     - alshaya_acm_cart_notification/cart_notification_js
     - alshaya_white_label/jquery_mobile_touch_swipe
+    - alshaya_white_label/attribute
 
 sku_gallery_format:
   version: 1.x

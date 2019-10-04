@@ -260,8 +260,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
-        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
-
         if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
           $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->skuManager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');

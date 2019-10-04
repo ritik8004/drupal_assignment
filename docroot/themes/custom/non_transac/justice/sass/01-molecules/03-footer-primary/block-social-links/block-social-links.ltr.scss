@@ -1,0 +1,56 @@
+@import '../../../config/_config.scss';
+
+.block-social-link {
+  background-color: transparent;
+
+  @include breakpoint($above-palm) {
+    background-color: transparent;
+  }
+
+  @include breakpoint($lap) {
+    padding: 0;
+  }
+
+  @include breakpoint($desk) {
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+    width: 25%;
+    text-align: center;
+
+    html[lang=ar] & {
+      width: 17%;
+    }
+  }
+
+  @include breakpoint($upto-palm) {
+    width: 50%;
+  }
+}
+
+.device__mobile {
+  display: block;
+
+  .region-secondary-header {
+    height: 0;
+  }
+
+  .block-sign-up-desktop,
+  .region-secondary-header .site__logo,
+  .block-store-link {
+    display: none;
+  }
+
+  .region-secondary-header .block-language-switcher--desktop {
+    @include breakpoint($desk) {
+      position: absolute;
+      #{$right}: 16.5%;
+      bottom: -3.4375rem;
+    }
+
+    html[lang=ar] & {
+      @include breakpoint($lap) {
+        left: 1.625rem;
+      }
+    }
+  }
+}
