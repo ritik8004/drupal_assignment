@@ -60,7 +60,9 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    return (window.innerWidth < 768);
+    // Display trending searches for desktop on when searchbox is emty.
+    // otherwise show it only for mobile always.
+    return (value === '') || (window.innerWidth < 768);
   }
 
   clearSearchFieldInput = () => {
