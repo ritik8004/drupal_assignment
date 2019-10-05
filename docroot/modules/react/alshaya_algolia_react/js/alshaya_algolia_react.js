@@ -102,7 +102,6 @@
       };
       stickyfacetfilter();
 
-
       /**
        * Wrapping all the filters inside a div to make it sticky.
        */
@@ -119,9 +118,7 @@
           }
         }
       }
-
       stickyfacetwrapper();
-
     }
   }
 
