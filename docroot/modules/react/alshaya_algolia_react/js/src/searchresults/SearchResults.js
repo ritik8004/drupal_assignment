@@ -4,7 +4,8 @@ import {
   connectInfiniteHits,
   connectSearchBox,
   InstantSearch,
-  Stats
+  Stats,
+  connectStats
 } from 'react-instantsearch-dom';
 import { searchClient } from '../config/SearchClient';
 import Teaser from '../components/teaser/Teaser';
@@ -15,6 +16,13 @@ import GridButtons from './GridButtons';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
+
+// Stats with pagination.
+const PaginationStats = connectStats(({nbHits, currentResults}) => {
+  return (
+    <span class="ais-Stats-text">{`showing ${currentResults} of ${nbHits} items`}</span>
+  );
+});
 
 const SearchResultHits = connectInfiniteHits(props => {
   const { hits, hasMore, refineNext } = props;
@@ -52,6 +60,9 @@ const SearchResultHits = connectInfiniteHits(props => {
     <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>
       <div className="view-content">{hs}</div>
       <ul className="js-pager__items pager">
+        <li className="pager__item">
+          <PaginationStats currentResults={hits.length} />
+        </li>
         <li className="pager__item">
           <button
             className="button"
