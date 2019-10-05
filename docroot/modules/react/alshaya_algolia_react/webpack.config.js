@@ -3,7 +3,7 @@ var path  = require("path");
 var config = {
   entry: {
     promise: ["core-js/modules/es.promise", "core-js/modules/es.array.iterator"],
-    autocomplete: './js/AppAutocomplete',
+    autocomplete: './js/src/AppAutocomplete',
   },
   mode: 'production',
   output: {
