@@ -21,10 +21,9 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL })
       {items.map(item => {
         const [label, swatch_info] = item.label.split(',');
         return (
-          <li key={item.label}>
+          <li key={item.label} className={"facet-item " + (item.isRefined ? 'is-active' : '')}>
             <a
               href="#"
-              style={{ fontWeight: item.isRefined ? 'bold' : '' }}
               onClick={(event) => {
                 event.preventDefault();
                 refine(item.value);

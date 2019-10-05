@@ -1,26 +1,24 @@
 import React from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
 
-function CommonRefinement({ items, isFromSearch, refine, searchForItems, createURL }) {
+function CommonRefinement(props) {
+  const { items, attribute, refine } = props;
+
   return (
     <ul>
       {items.map(item => (
-        <li key={item.label}>
-          <a
-            href="#"
-            style={{ fontWeight: item.isRefined ? 'bold' : '' }}
+        <li key={item.label} className={"facet-item " + (item.isRefined ? 'is-active' : '')}>
+            {/* <label for={`${attribute}-${item.label}`}> */}
+          <span
+            className="facet-item__value"
             onClick={event => {
               event.preventDefault();
               refine(item.value);
             }}
           >
-            <label for="size-0-2M">
-              <span className="facet-item__value">
-                {item.label}
-                <span className="facet-item__count">({item.count})</span>
-              </span>
-            </label>
-          </a>
+            {item.label}
+            <span className="facet-item__count">({item.count})</span>
+          </span>
         </li>
       ))}
     </ul>

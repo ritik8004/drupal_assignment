@@ -28,6 +28,44 @@ export default ({indexName}) => (
         ]}
       />
     </FilterPanel>
+    <FilterPanel header="Price">
+      <PriceFilter
+        attribute="final_price"
+        createURL={() => '#'}
+        refine={() => null}
+        items={[
+          { label: 'Under ' + formatPrice(10), end: 10, noRefinement: true },
+          { label: formatPrice(10) + ' - ' + formatPrice(100), start: 10, end: 100, noRefinement: true },
+          { label: formatPrice(100) + ' - ' + formatPrice(500), start: 100, end: 500, noRefinement: true },
+          { label: 'Above ' + formatPrice(500), start: 500, noRefinement: true },
+        ]}
+        canRefine={true}
+      />
+    </FilterPanel>
+    <FilterPanel header="Colour" className="block-facet--swatch-list">
+      <ColorFilter
+        attribute="attr_color_family.label"
+        searchable={false}
+      />
+    </FilterPanel>
+    <FilterPanel header="Brands">
+      <CommonRefinementList
+        attribute="attr_product_brand"
+        searchable={false}
+      />
+    </FilterPanel>
+    <FilterPanel header="Collection">
+      <CommonRefinementList
+        attribute="attr_collection"
+        searchable={false}
+      />
+    </FilterPanel>
+    <FilterPanel header="Size">
+      <CommonRefinementList
+        attribute="attr_size"
+        searchable={false}
+      />
+    </FilterPanel>
     {/* <Panel header="Category" className="c-facet c-accordion">
       <HierarchicalMenu
         attributes={[
@@ -37,37 +75,9 @@ export default ({indexName}) => (
         ]}
       />
     </Panel> */}
-    <FilterPanel header="Brands">
-      <CommonRefinementList
-        attribute="attr_product_brand"
-        searchable={false}
-      />
-    </FilterPanel>
-    <FilterPanel header="Colour" className="block-facet--swatch-list">
-      <ColorFilter
-        attribute="attr_color_family.label"
-        searchable={false}
-      />
-    </FilterPanel>
-    <FilterPanel header="Price">
-      <PriceFilter
-        attribute="final_price"
-        createURL={() => '#'}
-        refine={() => null}
-        items={[
-          { label: '<=' + formatPrice(10), end: 10, noRefinement: true },
-          { label: formatPrice(10) + ' - ' + formatPrice(100), start: 10, end: 100, noRefinement: true },
-          { label: formatPrice(100) + ' - ' + formatPrice(500), start: 100, end: 500, noRefinement: true },
-          { label: '>= ' + formatPrice(500), start: 500, noRefinement: true },
-        ]}
-        canRefine={true}
-      />
-    </FilterPanel>
-    <FilterPanel header="Size">
-      <CommonRefinementList
-        attribute="attr_size"
-        searchable={false}
-      />
-    </FilterPanel>
+    <div className="show-all-filters">
+      <span className="desktop">all filters</span>
+      <span className="upto-desktop">filter &amp; sort</span>
+    </div>
   </div>
 );

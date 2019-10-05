@@ -7,17 +7,17 @@ function PriceFilter(props) {
   return (
     <ul>
       {items.map(item => (
-        <li key={item.value}>
-          <a
-            href="#"
-            style={{ fontWeight: item.isRefined ? 'bold' : '' }}
+        <li key={item.value} className={"facet-item " + (item.isRefined ? 'is-active' : '')}>
+          <span
+            className="facet-item__value"
             onClick={event => {
               event.preventDefault();
               refine(item.value);
             }}
           >
             {item.label}
-          </a>
+            <span className="facet-item__count"></span>
+          </span>
         </li>
       ))}
     </ul>
