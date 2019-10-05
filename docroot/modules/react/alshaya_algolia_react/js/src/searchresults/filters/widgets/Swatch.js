@@ -9,12 +9,12 @@ export default function Swatch({ swatch, label }) {
 
   switch(swatch_type) {
     case 'swatch_color':
-      return (<span class={`swatch swatch-color swatch-color-${swatch_data.substr(1)}`} style={{ backgroundColor: swatch_data}}></span>);
+      return (<span className={`swatch swatch-color swatch-color-${swatch_data.substr(1)}`} style={{ backgroundColor: swatch_data}}></span>);
       break;
 
     case 'swatch_image':
       return (
-        <span class="swatch swatch-image">
+        <span className="swatch swatch-image">
           <ImageElement src={swatch_data} title={label} />
         </span>
       );
@@ -22,7 +22,7 @@ export default function Swatch({ swatch, label }) {
 
     case 'swatch_text':
       return (
-        <span class="swatch swatch-text">{swatch_data}</span>
+        <span className="swatch swatch-text">{swatch_data}</span>
       );
       break;
   }

@@ -24,8 +24,8 @@ export default function FiltersLabels({ attribute, value }) {
 
   return (
     <React.Fragment>
-      <span class="facet-item__status js-facet-deactivate">(-)</span>
-      <span class="facet-item__value">{label}</span>
+      <span className="facet-item__status js-facet-deactivate">(-)</span>
+      <span className="facet-item__value">{label}</span>
     </React.Fragment>
   );
 }

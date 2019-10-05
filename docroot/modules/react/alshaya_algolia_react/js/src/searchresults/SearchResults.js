@@ -51,10 +51,10 @@ const SearchResultHits = connectInfiniteHits(props => {
   return (
     <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>
       <div className="view-content">{hs}</div>
-      <ul class="js-pager__items pager">
-        <li class="pager__item">
+      <ul className="js-pager__items pager">
+        <li className="pager__item">
           <button
-            class="button"
+            className="button"
             title="Load morer products"
             rel="next"
             onClick={refineNext}
@@ -112,7 +112,7 @@ const SearchResults = props => {
         </div>
 
         <div id="block-filterbar" className="block block-facets-summary block-facets-summary-blockfilter-bar">
-          <span class="filter-list-label">selected filters</span>
+          <span className="filter-list-label">selected filters</span>
           <SelectedFilters />
         </div>
         <SearchResultHits />

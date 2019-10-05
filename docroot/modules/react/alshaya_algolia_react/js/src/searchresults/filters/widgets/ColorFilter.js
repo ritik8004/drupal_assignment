@@ -31,8 +31,8 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL })
               }}
             >
               <Swatch label={label} swatch={swatch_info} />
-              <span class="facet-item__value">{label}
-                <span class="facet-item__count">({item.count})</span>
+              <span className="facet-item__value">{label}
+                <span className="facet-item__count">({item.count})</span>
               </span>
             </a>
           </li>

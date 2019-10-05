@@ -6,7 +6,7 @@ const FilterPanel = (props) => {
 
   return (
     <div className={className}>
-      <h3 class="c-facet__title c-accordion__title">{props.header}</h3>
+      <h3 className="c-facet__title c-accordion__title">{props.header}</h3>
       {props.children}
     </div>
   );

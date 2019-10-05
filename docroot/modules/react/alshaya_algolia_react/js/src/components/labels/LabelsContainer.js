@@ -6,13 +6,13 @@ const LabelsContainer = ({labels, sku}) => {
     return (null);
   }
   const labelItems = labels.map(({image, position}) => (
-    <div class={`label ${position}`}>
+    <div className={`label ${position}`}>
       <ImageElement src={image.url} alt={image.alt} title={image.title} />
     </div>
   ));
 
   return (
-    <div class="labels-container" data-type="plp" data-sku={sku} data-main-sku={sku}>
+    <div className="labels-container" data-type="plp" data-sku={sku} data-main-sku={sku}>
       {labelItems}
     </div>
   );

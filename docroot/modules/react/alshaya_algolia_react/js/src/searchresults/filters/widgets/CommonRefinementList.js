@@ -15,9 +15,9 @@ function CommonRefinement({ items, isFromSearch, refine, searchForItems, createU
             }}
           >
             <label for="size-0-2M">
-              <span class="facet-item__value">
+              <span className="facet-item__value">
                 {item.label}
-                <span class="facet-item__count">({item.count})</span>
+                <span className="facet-item__count">({item.count})</span>
               </span>
             </label>
           </a>
