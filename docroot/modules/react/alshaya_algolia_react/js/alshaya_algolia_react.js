@@ -102,6 +102,26 @@
       };
       stickyfacetfilter();
 
+
+      /**
+       * Wrapping all the filters inside a div to make it sticky.
+       */
+      function stickyfacetwrapper() {
+        if ($('.show-all-filters').length > 0) {
+          if ($(window).width() > 767) {
+              var site_brand = $('.site-brand-home').clone();
+              $(site_brand).insertBefore('#alshaya-algolia-search .container-without-product');
+          }
+          else {
+            if ($('.region__content > .all-filters').length < 1) {
+              $('.all-filters').insertAfter('#block-page-title');
+            }
+          }
+        }
+      }
+
+      stickyfacetwrapper();
+
     }
   }
 

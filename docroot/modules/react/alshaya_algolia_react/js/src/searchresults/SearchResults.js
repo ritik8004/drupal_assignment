@@ -94,11 +94,6 @@ const SearchResults = props => {
       <VirtualSearchBox currentRefinement={query}  />
       <div className="container-wrapper">
         <div className="sticky-filter-wrapper">
-          <div className="site-brand-home">
-            <a href="/en/" title="H&amp;M Kuwait" rel="home" className="logo">
-              <img src="/themes/custom/transac/alshaya_hnm/site-logo.svg?sjhgdf7v" alt="H&amp;M Kuwait" />
-            </a>
-          </div>
           <Filters indexName={indexName} />
         </div>
         <div className="block block-alshaya-search-api block-alshaya-grid-count-block">
