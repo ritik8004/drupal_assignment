@@ -7,6 +7,27 @@
 
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
+
+      // Grid switch for PLP and Search pages.
+      $('.small-col-grid').once().on('click', function () {
+        $('.large-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('body').removeClass('large-grid')
+        $('.c-products-list').removeClass('product-large').addClass('product-small');
+
+         // Adjust height of PLP tiles.
+         Drupal.listingProductTileHeight();
+      });
+      $('.large-col-grid').once().on('click', function () {
+        $('.small-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('body').addClass('large-grid')
+        $('.c-products-list').removeClass('product-small').addClass('product-large');
+         // Adjust height of PLP tiles.
+         Drupal.listingProductTileHeight();
+      });
+
+
       // Add dropdown effect for facets filters.
       $('.c-facet__title.c-accordion__title').once().on('click', function () {
         if ($(this).hasClass('active')) {
@@ -49,8 +70,6 @@
         var nav = $('.branding__menu');
         var fixedNavHeight = 0;
 
-        console.log($('.show-all-filters').length);
-
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 1023) {
             filterposition = $('.container-without-product').offset().top;
@@ -80,11 +99,27 @@
             }
           }
         });
-
       };
-
       stickyfacetfilter();
 
     }
   }
+
+  /**
+   * Calculate and add height for each product tile.
+   */
+  Drupal.listingProductTileHeight = function () {
+    if ($(window).width() > 1024) {
+      var Hgt = 0;
+      $('.c-products__item').each(function () {
+        var Height = $(this)
+          .find('> article')
+          .outerHeight(true);
+        Hgt = Hgt > Height ? Hgt : Height;
+      });
+
+      $('.c-products__item').css('height', Hgt);
+    }
+  };
+
 })(jQuery, Drupal);
