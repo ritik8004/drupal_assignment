@@ -93,12 +93,17 @@ const SearchResults = props => {
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       <VirtualSearchBox currentRefinement={query}  />
       <div className="container-wrapper">
-        <div class="views-exposed-form bef-exposed-form block block-views block-views-exposed-filter-blocksearch-page" data-bef-auto-submit-full-form="" data-drupal-selector="views-exposed-form-search-page" data-msg-required="Please enter your This field." id="block-exposedformsearchpage-3" data-block-plugin-id="views_exposed_filter_block:search-page">
+        <div className="sticky-filter-wrapper">
+          <div className="site-brand-home">
+            <a href="/en/" title="H&amp;M Kuwait" rel="home" className="logo">
+              <img src="/themes/custom/transac/alshaya_hnm/site-logo.svg?sjhgdf7v" alt="H&amp;M Kuwait" />
+            </a>
+          </div>
           <Filters indexName={indexName} />
         </div>
-        <div class="block block-alshaya-search-api block-alshaya-grid-count-block">
-          <div class="total-result-count">
-            <div class="view-header search-count tablet">
+        <div className="block block-alshaya-search-api block-alshaya-grid-count-block">
+          <div className="total-result-count">
+            <div className="view-header search-count tablet">
               <Stats
                 translations={{
                   stats(nbHits, timeSpentMS) {

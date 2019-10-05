@@ -8,5 +8,6 @@ vendor:
   js:
     dist/algolia.bundle.js: {}
     dist/promise.js: {}
+    js/alshaya_algolia_react.js: {}
   dependencies:
     - alshaya_react/react
