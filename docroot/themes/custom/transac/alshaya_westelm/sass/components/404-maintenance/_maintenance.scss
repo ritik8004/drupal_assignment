@@ -3,7 +3,7 @@
     @include breakpoint($mobile) {
       text-align: center;
       float: none;
-      margin: 0.75rem 0 27px;
+      margin: 0.75rem 0 1.6875rem;
     }
 
     svg,
@@ -21,7 +21,7 @@
 
     @include breakpoint($desktop) {
       margin-top: 2.375rem;
-      margin-bottom: 27px;
+      margin-bottom: 1.6875rem;
     }
   }
 
@@ -30,11 +30,11 @@
       display: none;
     }
 
-    max-width: calc(97% - 57px);
+    max-width: calc(97% - 3.5625rem);
 
     @include breakpoint($only-mobile) {
       padding-top: 0;
-      max-width: calc(100% - 30px);
+      max-width: calc(100% - 1.875rem);
     }
   }
 
@@ -57,16 +57,16 @@
       content: '';
       border: 1px solid $maintenance_container_border;
       position: absolute;
-      top: -21px;
-      left: -21px;
-      right: -21px;
-      bottom: -21px;
+      top: -1.3125rem;
+      left: -1.3125rem;
+      right: -1.3125rem;
+      bottom: -1.3125rem;
 
       @include breakpoint($only-mobile) {
-        top: -8px;
-        left: -7px;
-        right: -7px;
-        bottom: -8px;
+        top: -0.5rem;
+        left: -0.4375rem;
+        right: -0.4375rem;
+        bottom: -0.5rem;
       }
     }
 
@@ -76,19 +76,19 @@
     h3,
     h4 {
       color: $maintenance_body_text_strong;
-      font-size: 28px;
+      font-size: 1.75rem;
       line-height: 1.14;
       text-transform: uppercase;
 
       @include breakpoint($only-mobile) {
-        font-size: 18px;
+        font-size: 1.125rem;
       }
     }
 
     p {
       color: $maintenance_body_text_regular;
       font-size: 1.5rem;
-      margin-bottom: 10px;
+      margin-bottom: 0.625rem;
 
       @include breakpoint($only-mobile) {
         font-size: 0.875rem;
