@@ -13,6 +13,7 @@ import Filters from './filters/Filters';
 import SelectedFilters from './filters/selectedfilters/SelectedFilters';
 import withURLSync from '../URLSync';
 import GridButtons from './GridButtons';
+import ProgressBar from './filters/widgets/ProgressBar';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
@@ -20,7 +21,10 @@ const VirtualSearchBox = connectSearchBox(() => (null));
 // Stats with pagination.
 const PaginationStats = connectStats(({nbHits, currentResults}) => {
   return (
-    <span class="ais-Stats-text">{`showing ${currentResults} of ${nbHits} items`}</span>
+    <div>
+      <span class="ais-Stats-text">{`showing ${currentResults} of ${nbHits} items`}</span>
+      <ProgressBar completed={((currentResults * 100)/nbHits)}/>
+    </div>
   );
 });
 
