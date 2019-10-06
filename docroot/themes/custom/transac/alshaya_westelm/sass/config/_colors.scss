@@ -56,6 +56,10 @@ $user_login_section_title: $WE_grey_three;
 $user_login_link_btn_text: $WE_grey_three;
 $social-network-text: $WE_grey_three;
 
+// Accordions.
+$accordion_title: $WE_grey_three;
+$accordion_title_icon: $WE_grey_three;
+
 //Buttons.
 $primary_btn_bg: $WE_grey_three;
 $primary_btn_text: $WE_white;
@@ -392,6 +396,7 @@ $breadcrumb_bg_tablet: $WE_gray_five;
 $breadcrumb_link: $WE_grey_three;
 $breadcrumb_link_hover: $WE_grey_two;
 $breadcrumb_link_active: $WE_grey_three;
+
 // Pace progress color
 $progress_loader: $WE_grey_three;
 
@@ -434,3 +439,91 @@ $deliverybanner_subtitle: $WE_grey_two;
 $deliverybanner_border: $WE_black_one;
 $deliverybanner_shadow: rgba(236, 236, 236, 0.5);
 $deliverybanner_link: $WE_grey_three;
+
+// Back to top.
+$btt_text: $WE_grey_three;
+
+// Addressbook.
+$address_primary_controls_active: $WE_grey_three;
+$address_pp_delete_closebtn: $WE_gray_five;
+$address_pp_delete_closebtn_icon: $WE_grey_three;
+$address_cancel_button: $WE_deep_blue;
+$address_book_delete_cancel: $WE_deep_blue;
+
+// User - My account nav & dashboard.
+$my_account_nav_active: $WE_grey_three;
+$user_recent_order_icon: $WE_grey_three;
+$my_account_dashboard_back_link: $WE_grey_three;
+$my_account_no_order_button_bg: $WE_white;
+$my_account_no_order_button_text: $WE_grey_three;
+$my_account_no_order_button_border: $WE_black_one;
+
+// Join the club block - user dashboard page.
+$joinclubblock_title: $WE_alshaya_priv;
+
+// Order Print
+$order_print_dark_txt: $WE_black_one;
+$order_print_delivery_details_row: $WE_white;
+$order_print_delivery_details_row_border: $WE_black_one;
+$order_print_order_details_row_label: $WE_black_one;
+$order_print_order_details_row_dark_label: $WE_grey_three;
+$order_print_order_details_row_bg: $WE_white;
+$order_print_order_details_row_bg_blend: $WE_gray_six;
+$order_print_product_count_row_bg: $WE_gray_six;
+$order_print_order_details_price_wrapper: $WE_black_one;
+$order_print_order_details_row_light: $WE_gray_eight;
+$order_print_order_details_total_label: $WE_grey_two;
+$order_print_order_details_item_row_details: $WE_gray_eight;
+$order_print_delivery_details_price_label: $WE_grey_three;
+
+// Sitemap
+$_sitemap_l1: $WE_grey_three;
+$_sitemap_l3: $WE_grey_three;
+
+// Webform Contact Us.
+$webform_contact_legend: $WE_grey_three;
+
+// 404 & Maintenance Pages.
+$maintenance_body_bg: $WE_white;
+$maintenance_link: $WE_white;
+$maintenance_link_border: $WE_white;
+$maintenance_titles: $WE_white;
+$maintenance_container_border_top: $WE_gray_six;
+$maintenance_container_bg: $WE_gray_six;
+$maintenance_container_border: $WE_grey_three;
+$maintenance_body_text_strong: $WE_grey_three;
+$maintenance_body_text_regular: $WE_grey_three;
+$maintenance_body_text_arabic: $WE_black_one;
+
+// Store finder.
+$store_finder_header: $WE_black_one;
+$store_finder_header_desktop: $WE_black_one;
+$store_finder_subheader: $WE_black_one;
+$store_finder_text: $WE_grey_three;
+$store_finder_location_search_text_placeholder: $WE_gray_eight;
+$store_finder_location_search_text_input_border_mobile: $WE_gray_eight;
+$store_finder_icon: $WE_grey_three;
+$store_finder_text_hover: $WE_grey_three;
+$store_finder_border_hover: $WE_grey_three;
+$store_finder_backbtn: $WE_grey_three;
+$store_finder_search_results_hour_label: $WE_grey_three;
+$store_finder_get_direction_label_color: $WE_grey_three;
+$store_finder_search_results_tile_link: $WE_grey_three;
+$store_finder_search_results_label: $WE_black_one;
+$store_finder_search_results_hour_icon_open: $WE_grey_three;
+
+// Store finder - search results.
+$store_finder_search_results_tile_icon: $WE_grey_three;
+$store_finder_search_results_tile_bg: $WE_white_three;
+$store_finder_search_results_tile_hover_bg: $WE_white_three;
+$store_finder_search_results_counter_bg: $WE_grey_three;
+$store_finder_search_results_counter_text: $WE_white;
+
+// Store finder - glossary.
+$store_finder_glossary_alphabet: $WE_black_one;
+$store_finder_glossary_text: $WE_grey_three;
+$store_finder_glossary_icon: $WE_grey_three;
+$store_finder_glossary_text_hover: $WE_grey_three;
+$store_finder_glossary_text_border: $WE_gray_five;
+$store_finder_glossary_border: $WE_gray_five;
+$store_finder_glossary_link: $WE_grey_three;

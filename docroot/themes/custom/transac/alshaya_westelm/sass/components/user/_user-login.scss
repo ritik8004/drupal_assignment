@@ -1,0 +1,79 @@
+.user-page {
+  .c-sidebar-second {
+    #block-youllbeableto h3,
+    h3 {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    #block-youllbeableto p,
+    p {
+      text-transform: none;
+    }
+
+    #block-youllbeableto a,
+    #block-onlineexclusiveheadingovertwolinesneverthree a,
+    #block-jointheclub a,
+    a {
+      color: $content_link_color !important;
+      font-weight: 600;
+      text-transform: none !important;
+    }
+  }
+
+  .user-login-form {
+    .form-submit {
+      @include breakpoint($only-mobile) {
+        margin-top: 2.25rem;
+      }
+    }
+  }
+
+  &.c-user-login {
+    @include breakpoint($only-tablet) {
+      margin-top: 3.25rem;
+    }
+
+    .user-login-form {
+      #edit-actions {
+        @include breakpoint($desktop) {
+          margin-top: 2.3rem;
+        }
+
+        .form-submit {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+.alias--user-login {
+  #block-youllbeableto {
+    @include breakpoint($only-mobile) {
+      margin-top: 4.75rem;
+    }
+  }
+}
+
+#block-youllbeableto-checkout-confirm,
+#block-jointheclub-checkout-confirm,
+#block-youllbeableto,
+#block-jointheclub {
+  span.icon-win {
+    background-image: url(../../alshaya_white_label/imgs/icons/ic-trophy.svg);
+  }
+
+  span.icon-reward {
+    background-image: url(../../alshaya_white_label/imgs/icons/ic-like.svg);
+  }
+
+  span.icon-heart {
+    background-image: url(../../alshaya_white_label/imgs/icons/ic-speech-bubble.svg);
+  }
+}
+
+.user-login-form > a {
+  text-transform: none;
+  font-weight: 600;
+}

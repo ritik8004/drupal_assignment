@@ -1,0 +1,103 @@
+.page-404 {
+  .not-found {
+    padding-top: 0;
+    max-width: 100%;
+    margin: 0;
+
+    &::after {
+      display: none;
+    }
+
+    .not-found__body {
+      @include breakpoint($upto-desktop) {
+        position: absolute;
+        height: auto;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin: 0;
+        top: 5rem;
+        #{$left}: 6rem;
+        width: auto;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin: 0 2rem;
+        width: calc(100% - 4rem);
+        top: 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        height: auto;
+        bottom: inherit;
+        top: 5.3125rem;
+        #{$left}: calc(50% - 20.52rem);
+      }
+
+      .not-found__body__container {
+        display: block;
+        text-align: $left;
+        width: 17.125rem;
+
+        @include breakpoint($only-mobile) {
+          text-align: center;
+        }
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: normal;
+        color: $maintenance_titles;
+        text-transform: uppercase;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.25;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        a {
+          font-size: 0.875rem;
+          border: 2px solid $maintenance_link_border;
+          font-weight: 600;
+          text-transform: uppercase;
+          height: 2.5rem;
+          width: 8.8125rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 1rem;
+          line-height: 36px;
+          text-shadow: none;
+        }
+      }
+    }
+  }
+
+  .not-found__image {
+    img {
+      object-fit: cover;
+      width: 100%;
+
+      @include breakpoint($tablet) {
+        height: 26.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        height: 12.5rem;
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      display: block;
+    }
+  }
+}

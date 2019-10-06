@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34" height="45" viewBox="0 0 34 45">
+    <defs>
+        <rect id="a" width="1.625" height="1" x="3.656" y="4.321" rx=".5"/>
+        <rect id="b" width="1.625" height="1" x="7.719" y="4.321" rx=".5"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g stroke="#333" stroke-linejoin="round">
+            <path d="M11.611 18.333a.612.612 0 1 1-1.224-.002.612.612 0 0 1 1.224.002z"/>
+            <path stroke-linecap="round" d="M11 18.944v3.667"/>
+            <path d="M21.389 11.611H.61v17.111H21.39zM4.278 7.333a6.722 6.722 0 0 1 13.444 0v4.278H4.278V7.333z"/>
+        </g>
+        <circle cx="22" cy="33" r="12" fill="#9A0000"/>
+        <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" d="M20.47 31.321v-2.357c0-1.085.91-1.964 2.032-1.964 1.122 0 2.031.88 2.031 1.964v2.357"/>
+        <path stroke="#FFF" d="M17.147 30.543a.464.464 0 0 1 .447-.4h9.812a.46.46 0 0 1 .448.4l.783 7.057c.025.22-.13.4-.352.4h-11.57a.35.35 0 0 1-.352-.4l.784-7.057z"/>
+        <g transform="translate(16 27)">
+            <use fill="#D8D8D8" xlink:href="#a"/>
+            <rect width="1.125" height="1" x="3.906" y="4.571" stroke="#FFF" stroke-width=".5" rx=".5"/>
+        </g>
+        <g transform="translate(16 27)">
+            <use fill="#D8D8D8" xlink:href="#b"/>
+            <rect width="1.125" height="1" x="7.969" y="4.571" stroke="#FFF" stroke-width=".5" rx=".5"/>
+        </g>
+    </g>
+</svg>
