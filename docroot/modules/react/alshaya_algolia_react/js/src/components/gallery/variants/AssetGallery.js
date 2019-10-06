@@ -2,6 +2,9 @@ import React from 'react';
 import { ImageWrapper } from '../imageHelper/ImageWrapper';
 
 const AssetGallery = ({media, title}) => {
+  if (typeof media === 'undefined') {
+    return (null);
+  }
   // Clone media items, so that .shift() deletes items from
   // clonned array, keep original array reusable on state change.
   const images = [...media];

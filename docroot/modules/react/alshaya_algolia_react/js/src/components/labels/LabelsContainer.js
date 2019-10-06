@@ -2,7 +2,7 @@ import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
 const LabelsContainer = ({labels, sku}) => {
-  if (labels.length === 0) {
+  if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
   }
   const labelItems = labels.map(({image, position}) => (

@@ -2,7 +2,6 @@ import React from 'react';
 import Slider from "react-slick";
 import { ImageWrapper } from '../imageHelper/ImageWrapper';
 import ImageLazyLoad from '../imageHelper/ImageLazyLoad';
-import ImageElement from '../imageHelper/ImageElement';
 
 const SliderElement = props => {
   return(
@@ -20,6 +19,11 @@ const SliderElement = props => {
 };
 
 class SearchGallery extends React.Component {
+
+  static defaultProps = {
+    media: [],
+  }
+
   constructor(props) {
     super(props);
     this.mainImage = props.media.length > 0 ? props.media[0] : {};
@@ -57,8 +61,6 @@ class SearchGallery extends React.Component {
 
   render() {
     const { media, title } = this.props;
-
-    const mainImageWrapper = ImageWrapper(this.state.mainImage, title, "alshaya_search_mainimage", true);
 
     const origObj = this;
     const thumbnails = [];
