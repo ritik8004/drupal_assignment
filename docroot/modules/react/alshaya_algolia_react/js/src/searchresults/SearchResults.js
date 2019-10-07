@@ -15,6 +15,7 @@ import AllFilters from '../filters/AllFilters';
 import GridButtons from './GridButtons';
 import withURLSync from '../URLSync';
 import ProgressBar from '../filters/widgets/ProgressBar';
+import NoResults from './NoResults';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
@@ -64,25 +65,29 @@ const SearchResultHits = connectInfiniteHits(props => {
   return (
     <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>
       <div className="view-content">{hs}</div>
-        <ul className="js-pager__items pager">
-          <li className="pager__item">
-            <PaginationStats currentResults={hits.length} />
-          </li>
-          {hasMore ? (
+        {hits.length > 0 ? (
+          <ul className="js-pager__items pager">
             <li className="pager__item">
-              <button
-                className="button"
-                title="Load morer products"
-                rel="next"
-                onClick={refineNext}
-              >
-                Load more products
-              </button>
+              <PaginationStats currentResults={hits.length} />
             </li>
-          ) : (
-            null
-          )}
-        </ul>
+            {hasMore ? (
+              <li className="pager__item">
+                <button
+                  className="button"
+                  title="Load morer products"
+                  rel="next"
+                  onClick={refineNext}
+                >
+                  Load more products
+                </button>
+              </li>
+            ) : (
+              null
+            )}
+          </ul>
+        ) : (
+          null
+        )}
     </div>
   );
 });
@@ -136,6 +141,7 @@ const SearchResults = props => {
         </div>
         <SelectedFilters />
         <SearchResultHits />
+        <NoResults />
       </div>
     </InstantSearch>
   );
