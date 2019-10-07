@@ -8,15 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_mobile_app module.
- */
-function alshaya_bbw_update_8106() {
-  \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add new string translations.
  */
 function alshaya_bbw_update_8105() {
