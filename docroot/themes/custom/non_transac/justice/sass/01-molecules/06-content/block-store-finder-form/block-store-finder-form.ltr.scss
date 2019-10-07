@@ -4,6 +4,12 @@
   border-top: 0;
   border-bottom: 0;
 
+  @include breakpoint($upto-palm) {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 0;
+  }
+
   @include breakpoint($above-palm) {
     width: 100vw !important;
     padding: 1.75rem 1rem;
@@ -95,7 +101,7 @@
   @include breakpoint($upto-palm) {
     background: $store_finder_search_bg;
     width: 100vw !important;
-    padding: 1.75rem 1rem;
+    padding: 1.25rem;
     font-size: 1rem;
     left: 50%;
     right: 50%;
@@ -156,6 +162,10 @@
 }
 
 .block-store-finder-form__input__wrapper {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0;
+  }
+
   @include breakpoint($above-palm) {
     float: $right;
   }
@@ -266,5 +276,15 @@
     color: $store_finder_views_text;
     border-color: $store_finder_views_border;
     border-width: 0.125rem;
+  }
+}
+
+.page-store-finder,
+.alias--store-finder-list {
+  .region-content {
+    @include breakpoint($upto-palm) {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
   }
 }
