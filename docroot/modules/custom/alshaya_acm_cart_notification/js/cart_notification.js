@@ -94,6 +94,7 @@
             // Trigger a custom event cart:notification:animation:complete
             // Use this whenever we need to handle any JS animations after
             // cart notification animations are completed.
+            $('body').removeClass('notification--on');
             $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
           }, drupalSettings.addToCartNotificationTime * 1000);
         }
