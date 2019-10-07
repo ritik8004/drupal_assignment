@@ -23,4 +23,19 @@ function alshaya_ve_non_transac_install() {
 
   // Enable the Policies block.
   alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_ve_non_transac', 'optional');
+
+  // Enable search as per env.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    // Enable alshaya_search_acquia_search to ensure config are overridden to
+    // use solr on cloud.
+    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
+  }
+  else {
+    // Enable alshaya_search_local_search to ensure config are overridden to
+    // use solr in local.
+    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
+
+  // Disable default search.
+  \Drupal::service('module_installer')->uninstall(['search']);
 }
