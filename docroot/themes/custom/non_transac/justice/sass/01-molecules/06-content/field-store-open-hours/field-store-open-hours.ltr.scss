@@ -1,0 +1,114 @@
+@import '../../../config/_config.scss';
+
+.hours--wrapper .hours--label,
+.hours--wrapper .open--hours,
+.view-on--map a,
+.get--directions a {
+  border-bottom: 2px solid $store_finder_store_row_border;
+  padding-#{$left}: 2.0625rem;
+}
+
+.view-on--map a {
+  border-bottom: 0;
+}
+
+.geolocation-common-map-container {
+  .hours--wrapper {
+    .open--hours,
+    .hours--label {
+      margin: 0;
+    }
+
+    .hours--label {
+      @include icon(chevron#{direction(right)}, after) {
+        font-size: 2rem;
+        color: $store_finder_icon;
+        top: 0.5rem;
+      }
+    }
+  }
+
+  .hours--label,
+  .open--hours {
+    padding-#{direction(left)}: 0;
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin: 0;
+  }
+
+  .location-content {
+    min-width: 10rem;
+  }
+
+  .get--directions a {
+    color: $store_finder_direction;
+    font-weight: normal;
+    margin: 0;
+
+    @include icon(map, after) {
+      font-size: 2rem;
+      color: $store_finder_icon;
+      top: 1.0625rem;
+      background: none;
+    }
+  }
+}
+
+.get--directions a,
+.view-on--map a {
+  color: $store_finder_direction;
+  margin-#{$left}: 1.5rem;
+  margin-#{$right}: 2rem;
+}
+
+.get--directions a {
+  border-bottom: 0;
+  padding: 1.5rem 1rem;
+  padding-#{$left}: 2rem;
+
+  @include icon(map, after) {
+    font-size: 2.75rem;
+    color: $store_finder_icon;
+    top: 0.5625rem;
+    background: none;
+  }
+}
+
+.lat-lng {
+  display: none;
+}
+
+.hours--wrapper {
+  .open--hours {
+    margin-#{$left}: 1.25rem;
+  }
+
+  .hours--label {
+    color: $store_finder_hours_label;
+    margin-#{$left}: 1.25rem;
+    margin-#{$right}: 1.25rem;
+    border-top: 2px solid $store_finder_store_row_border;
+
+    @include icon(chevron#{direction(right)}, after) {
+      font-size: 3rem;
+      color: $store_finder_icon;
+      top: 0.0625rem;
+
+      @include breakpoint($upto-palm) {
+        #{$right}: -0.3125rem;
+      }
+    }
+  }
+}
+
+.view-on--map {
+  a {
+    @include icon(map, after) {
+      color: $store_finder_icon;
+
+      @include breakpoint($upto-palm) {
+        #{$right}: -0.3125rem;
+      }
+    }
+  }
+}

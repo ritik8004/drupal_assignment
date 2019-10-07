@@ -1,0 +1,34 @@
+.region-secondary-header {
+  @include breakpoint($above-palm) {
+    background: $header_bg;
+    color: $header_text;
+    width: auto;
+    padding-#{$right}: 0;
+    display: block;
+  }
+
+  .region__wrapper {
+    @include breakpoint($above-palm) {
+      display: flex;
+      flex-wrap: nowrap;
+      max-width: 64rem;
+      margin: 0 auto;
+      align-items: center;
+    }
+  }
+}
+
+.region-top-header {
+  .region-secondary-header {
+    @include breakpoint($upto-palm) {
+      display: block;
+    }
+  }
+
+  .block-language-switcher--desktop,
+  .block-sign-up-desktop {
+    @include breakpoint($upto-lap) {
+      display: none;
+    }
+  }
+}

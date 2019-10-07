@@ -1,0 +1,15 @@
+.button--primary,
+%btn {
+  background-color: $primary_btn_bg;
+  border-radius: 0.3125rem;
+  color: $primary_btn_text;
+  padding: 0.875rem 2rem;
+  display: inline-block;
+  font-family: $jus_bold;
+  font-size: 1.125rem;
+  border: 0;
+
+  html[lang=ar] & {
+    font-size: 0.75rem;
+  }
+}

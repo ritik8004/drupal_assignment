@@ -1,0 +1,14 @@
+@import '../../config/_config.scss';
+
+.store-row--counter {
+  background-color: $store-finder_store_row_counter;
+  line-height: 1.1;
+}
+
+.mobile-only--back-to-glossary {
+  a {
+    &::after {
+      color: $store_finder_icon;
+    }
+  }
+}
