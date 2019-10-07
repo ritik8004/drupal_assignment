@@ -1,12 +1,27 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import FiltersLabels from './FiltersLabels';
+const _ = require("lodash");
 
-const CurrentFilters = ({ items, refine }) => {
+
+const CustomClearRefinements = connectCurrentRefinements(({ items, refine }) => (
+  <a
+    href="#"
+    onClick={event => {
+      event.preventDefault();
+      refine(items)
+    }}
+  >
+    Clear Filters
+  </a>
+));
+
+const CustomCurrentFilters =  connectCurrentRefinements(({ items, refine }) => {
+ const uniqueItems = _.uniqBy(items, 'attribute');
   return(
     <ul>
       {
-        items.map(item => {
+        uniqueItems.map(item => {
           return (
             <React.Fragment>
               {item.items ? (
@@ -45,6 +60,9 @@ const CurrentFilters = ({ items, refine }) => {
             </React.Fragment>
           );
         })
+      }
+      {
+        (items.length > 0) ? <li className="clear-all"><CustomClearRefinements /></li> : ''
       }
     </ul>
   );
