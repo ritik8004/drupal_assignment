@@ -20,6 +20,8 @@
 
       @include breakpoint($upto-palm) {
         color: $store_finder_mobile_backline_icon;
+        padding-#{$left}: 0;
+        top: 0;
       }
     }
   }
@@ -29,6 +31,10 @@
   border-top: 0;
   border-bottom: 0;
   color: $store_finder_store_row_text;
+
+  .field-store--address {
+    border-bottom: 0;
+  }
 
   .row-title {
     font-weight: normal;
