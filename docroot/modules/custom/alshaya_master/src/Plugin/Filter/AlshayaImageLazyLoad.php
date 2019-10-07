@@ -79,10 +79,11 @@ class AlshayaImageLazyLoad extends FilterBase {
       return;
     }
 
-    // If it is an AMP page, we dont support lazyload.
-    // Check for ?amp in URL.
-    if (\Drupal::request()->query->has('amp')) {
-      return;
+    // If not AMP page, no need to process.
+    if (\Drupal::moduleHandler()->moduleExists('amp')) {
+      if (!\Drupal::service('router.amp_context')->isAmpRoute()) {
+        return;
+      }
     }
 
     $this->modified = TRUE;
