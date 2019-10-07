@@ -23,6 +23,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\RedirectRepository;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Block\BlockManagerInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -79,6 +80,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected $advancedPageNode = NULL;
 
   /**
+   * Block plugin manager.
+   *
+   * @var \Drupal\Core\Block\BlockManagerInterface
+   */
+  protected $blockPluginManager;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
@@ -117,6 +125,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Redirect repository.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_plugin_manager
+   *   Block plugin manager.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -136,13 +146,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     ConfigFactoryInterface $config_factory,
     APIWrapper $api_wrapper,
     RedirectRepository $redirect_repository,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    BlockManagerInterface $block_plugin_manager
   ) {
     parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
     $this->paragraphBaseFields = $this->entityFieldManager->getBaseFieldDefinitions('paragraph');
+    $this->blockPluginManager = $block_plugin_manager;
   }
 
   /**
@@ -818,15 +830,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function prepareAppNavigationLinks(array $item) {
     $data = [];
-    $block_manager = \Drupal::service('plugin.manager.block');
 
     if (($node = $this->getAdvancedPageNode()) instanceof NodeInterface) {
       $item['settings']['advanced_page_node'] = $node;
 
       /** @var \Drupal\Core\Block\BlockPluginInterface $block_instance */
-      $block_instance = $block_manager->createInstance($item['plugin_id'], $item['settings']);
+      $block_instance = $this->blockPluginManager->createInstance($item['plugin_id'], $item['settings']);
       if (!empty($block_data = $block_instance->build())) {
         $data = [
+          'id' => 'alshaya_dp_navigation_link',
           'label' => $item['settings']['label'],
           'label_display' => (bool) $item['settings']['label_display'],
           'l2' => $block_data['l2'] ?? [],
