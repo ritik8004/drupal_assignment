@@ -1,6 +1,8 @@
 @import '../../../config/_config.scss';
 
 .menu-social-links {
+  text-align: $right;
+
   @include breakpoint($upto-palm) {
     text-align: $left;
   }
@@ -23,7 +25,7 @@
   }
 
   .ic-social-instagram::before {
-    background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-instagram.png');
+    background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-instagram.svg');
   }
 
   .ic-social-facebook::before {
