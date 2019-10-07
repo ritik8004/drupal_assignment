@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Display progress bar for number of results being displayed.
+// this will progress with number of pages and results user scrolls.
 class ProgressBar extends React.Component {
 
   static defaultProps = {

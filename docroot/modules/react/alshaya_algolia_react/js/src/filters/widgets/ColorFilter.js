@@ -2,6 +2,7 @@ import React from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
 import Swatch from './Swatch';
 
+// Seprate a string by comma to get the label and color code/image/text.
 const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL }) => {
   var searchForm = (null);
   if (isFromSearch) {

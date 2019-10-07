@@ -1,6 +1,7 @@
 import React from 'react';
 import { connectRefinementList } from 'react-instantsearch-dom';
 
+// RefinementList used commonly for most of filters.
 function CommonRefinement(props) {
   const { items, attribute, refine } = props;
 

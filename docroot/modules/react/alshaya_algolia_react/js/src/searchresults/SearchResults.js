@@ -9,11 +9,12 @@ import {
 } from 'react-instantsearch-dom';
 import { searchClient } from '../config/SearchClient';
 import Teaser from '../components/teaser/Teaser';
-import Filters from './filters/Filters';
-import SelectedFilters from './filters/selectedfilters/SelectedFilters';
-import withURLSync from '../URLSync';
+import Filters from '../filters/Filters';
+import SelectedFilters from '../filters/selectedfilters/SelectedFilters';
+import AllFilters from '../filters/AllFilters';
 import GridButtons from './GridButtons';
-import ProgressBar from './filters/widgets/ProgressBar';
+import withURLSync from '../URLSync';
+import ProgressBar from '../filters/widgets/ProgressBar';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
@@ -63,22 +64,25 @@ const SearchResultHits = connectInfiniteHits(props => {
   return (
     <div id="hits" className="c-products-list product-small view-search" ref={teaserRef}>
       <div className="view-content">{hs}</div>
-      <ul className="js-pager__items pager">
-        <li className="pager__item">
-          <PaginationStats currentResults={hits.length} />
-        </li>
-        <li className="pager__item">
-          <button
-            className="button"
-            title="Load morer products"
-            rel="next"
-            onClick={refineNext}
-            disabled={!hasMore}
-          >
-            Load more products
-          </button>
-        </li>
-      </ul>
+        <ul className="js-pager__items pager">
+          <li className="pager__item">
+            <PaginationStats currentResults={hits.length} />
+          </li>
+          {hasMore ? (
+            <li className="pager__item">
+              <button
+                className="button"
+                title="Load morer products"
+                rel="next"
+                onClick={refineNext}
+              >
+                Load more products
+              </button>
+            </li>
+          ) : (
+            null
+          )}
+        </ul>
     </div>
   );
 });
@@ -109,8 +113,13 @@ const SearchResults = props => {
       <VirtualSearchBox currentRefinement={query}  />
       <div className="container-wrapper">
         <div className="sticky-filter-wrapper">
-          <Filters indexName={indexName} />
+          <div className="container-without-product">
+            <Filters indexName={indexName} />
+          </div>
         </div>
+        <AllFilters>
+          <Filters indexName={indexName} />
+        </AllFilters>
         <div className="block block-alshaya-search-api block-alshaya-grid-count-block">
           <div className="total-result-count">
             <div className="view-header search-count tablet">
@@ -125,11 +134,7 @@ const SearchResults = props => {
           </div>
           <GridButtons />
         </div>
-
-        <div id="block-filterbar" className="block block-facets-summary block-facets-summary-blockfilter-bar">
-          <span className="filter-list-label">selected filters</span>
-          <SelectedFilters />
-        </div>
+        <SelectedFilters />
         <SearchResultHits />
       </div>
     </InstantSearch>

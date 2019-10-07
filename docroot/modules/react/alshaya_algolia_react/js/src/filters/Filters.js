@@ -1,21 +1,14 @@
 import React from 'react';
-import {
-  HierarchicalMenu,
-  Panel,
-  RefinementList,
-  SortBy,
-  NumericMenu
-} from 'react-instantsearch-dom';
-import { formatPrice } from '../../components/price/PriceHelper';
+import { formatPrice } from '../components/price/PriceHelper';
+import FilterPanel from './FilterPanel';
+import SortByList from './SortByList';
 import ColorFilter from './widgets/ColorFilter';
 import CommonRefinementList from './widgets/CommonRefinementList';
 import PriceFilter from './widgets/PriceFilter';
-import FilterPanel from './FilterPanel';
-import SortByList from '../SortByList';
 
 export default ({indexName}) => (
-  <div className="container-without-product">
-    <FilterPanel header="Sort By">
+  <React.Fragment>
+    <FilterPanel header="Sort By" id="sort_by">
       <SortByList
         defaultRefinement={indexName}
         items={[
@@ -28,7 +21,7 @@ export default ({indexName}) => (
         ]}
       />
     </FilterPanel>
-    <FilterPanel header="Price">
+    <FilterPanel header="Price" id="final_price">
       <PriceFilter
         attribute="final_price"
         createURL={() => '#'}
@@ -42,25 +35,25 @@ export default ({indexName}) => (
         canRefine={true}
       />
     </FilterPanel>
-    <FilterPanel header="Colour" className="block-facet--swatch-list">
+    <FilterPanel header="Colour" id="attr_color_family" className="block-facet--swatch-list">
       <ColorFilter
         attribute="attr_color_family.label"
         searchable={false}
       />
     </FilterPanel>
-    <FilterPanel header="Brands">
+    <FilterPanel header="Brands" id="attr_product_brand">
       <CommonRefinementList
         attribute="attr_product_brand"
         searchable={false}
       />
     </FilterPanel>
-    <FilterPanel header="Collection">
+    <FilterPanel header="Collection" id="attr_collection">
       <CommonRefinementList
         attribute="attr_collection"
         searchable={false}
       />
     </FilterPanel>
-    <FilterPanel header="Size">
+    <FilterPanel header="Size" id="attr_size">
       <CommonRefinementList
         attribute="attr_size"
         searchable={false}
@@ -79,5 +72,5 @@ export default ({indexName}) => (
       <span className="desktop">all filters</span>
       <span className="upto-desktop">filter &amp; sort</span>
     </div>
-  </div>
+  </React.Fragment>
 );

@@ -7,6 +7,35 @@
 
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
+      // On clicking facet block title, update the title of block and hide
+      // other facets.
+      $('.all-filters .c-accordion').on('click', function() {
+        // Update the title on click of facet.
+        var facet_title = $(this).find('h3.c-facet__title').html();
+        $('.filter-sort-title').html(facet_title);
+
+        // Only show current facet and hide all others.
+        $(this).removeClass('show-facet');
+        $('.all-filters .c-accordion').hide();
+        $(this).addClass('show-facet');
+
+        // Show the back button.
+        $('.facet-all-back').show();
+        // Update the the hidden field with the id of selected facet.
+        $('#all-filter-active-facet-sort').val($(this).attr('id'));
+      });
+
+      // On clicking on back button, reset the block title and add class so
+      // that facet blocks can be closed.
+      $('.facet-all-back').on('click', function() {
+        $(this).hide();
+        $('.filter-sort-title').html(Drupal.t('filter & sort'));
+        $('.all-filters .c-accordion').removeClass('show-facet');
+        $('.all-filters .c-accordion').show();
+        $('.all-filters .c-accordion .c-facet__title').removeClass('active');
+        // Reset the hidden field value.
+        $('#all-filter-active-facet-sort').val('');
+      });
 
       // Grid switch for PLP and Search pages.
       $('.small-col-grid').once().on('click', function () {
@@ -119,6 +148,43 @@
         }
       }
       stickyfacetwrapper();
+
+      // Show all filters blocks.
+      $('.show-all-filters').once().on('click', function() {
+        $('.all-filters').addClass('filters-active');
+
+        if ($(window).width() > 1023) {
+          $('html').addClass('all-filters-overlay');
+        }
+        else {
+          $('body').addClass('mobile--overlay');
+        }
+
+        $('.all-filters .c-accordion').removeClass('show-facet');
+
+        var active_filter_sort = $('#all-filter-active-facet-sort').val();
+        // On clicking `all` filters, check if there was filter which selected last.
+        if (active_filter_sort.length > 0) {
+          $('.all-filters #' + active_filter_sort).show();
+          $('.all-filters #' + active_filter_sort).addClass('show-facet');
+        }
+        else {
+          $('.all-filters .c-accordion__title.active').parent('.c-accordion').addClass('show-facet');
+        }
+        $('.all-filters .show-all-filters').css('display', 'none');
+
+        $('.all-filters').show();
+      });
+
+      // Fake facet apply button to close the `all filter`.
+      $('.facet-all-apply', context).once().on('click', function() {
+        $('.all-filters').removeClass('filters-active');
+        $('body').removeClass('mobile--overlay');
+        $('html').removeClass('all-filters-overlay');
+        // Show filter count if applicable.
+        // showFilterCount();
+      });
+
     }
   }
 

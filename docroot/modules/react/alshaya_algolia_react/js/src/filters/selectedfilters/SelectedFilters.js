@@ -1,20 +1,8 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import FiltersLabels from './FiltersLabels';
+import ClearRefinements from './ClearFilters';
 const _ = require("lodash");
-
-
-const CustomClearRefinements = connectCurrentRefinements(({ items, refine }) => (
-  <a
-    href="#"
-    onClick={event => {
-      event.preventDefault();
-      refine(items)
-    }}
-  >
-    Clear Filters
-  </a>
-));
 
 const CustomCurrentFilters =  connectCurrentRefinements(({ items, refine }) => {
  const uniqueItems = _.uniqBy(items, 'attribute');
@@ -62,10 +50,19 @@ const CustomCurrentFilters =  connectCurrentRefinements(({ items, refine }) => {
         })
       }
       {
-        (items.length > 0) ? <li className="clear-all"><CustomClearRefinements /></li> : ''
+        (items.length > 0) ? <li className="clear-all"><ClearRefinements /></li> : ''
       }
     </ul>
   );
-};
+});
 
-export default connectCurrentRefinements(CurrentFilters);
+const SelectedFilters = (props) => {
+  return (
+    <div id="block-filterbar" className="block block-facets-summary block-facets-summary-blockfilter-bar">
+      <span className="filter-list-label">Selected Filters</span>
+      <CustomCurrentFilters />
+    </div>
+  );
+}
+
+export default SelectedFilters;
