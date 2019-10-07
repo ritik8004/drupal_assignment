@@ -464,7 +464,7 @@
         });
 
         setTimeout(function () {
-          $('.ui-dialog-titlebar-close').once().on('click', function (e) {
+          $('.ui-dialog-titlebar-close').on('click', function (e) {
             if ($('body').hasClass('magazine-layout-ajax-throbber')) {
               $('body').removeClass('magazine-layout-ajax-throbber');
             }
