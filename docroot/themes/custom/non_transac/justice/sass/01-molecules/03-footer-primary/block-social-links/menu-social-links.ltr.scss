@@ -1,6 +1,10 @@
 @import '../../../config/_config.scss';
 
 .menu-social-links {
+  @include breakpoint($upto-palm) {
+    text-align: $left;
+  }
+
   li {
     margin-#{$right}: 0.0625rem;
   }
