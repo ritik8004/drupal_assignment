@@ -61,7 +61,7 @@
 
         @include breakpoint($only-mobile) {
           font-size: 0.875rem;
-          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+          text-shadow: 0 1px 0 $maintenance_text_shadow;
         }
 
         a {
