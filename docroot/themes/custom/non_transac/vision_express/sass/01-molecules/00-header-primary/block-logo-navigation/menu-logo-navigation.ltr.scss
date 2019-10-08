@@ -9,10 +9,7 @@
     top: 0;
     width: 85%;
     height: 100%;
-
-    html[lang=en] & {
-      transform: translateX(-100%);
-    }
+    transform: translateX(-100%);
 
     html[lang=ar] & {
       transform: translateX(100%);
