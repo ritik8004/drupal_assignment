@@ -1,10 +1,29 @@
 @import '../../config/_config.scss';
 
+.view--store-list {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0;
+  }
+
+  .view-header {
+    strong {
+      font-family: $jus_semi_bold;
+    }
+  }
+}
+
 .list-store--detail {
-  width: 34%;
+  @include breakpoint($above-palm) {
+    width: 34%;
+  }
 
   .list-view-locator {
     background-color: $store_finder_list_locator_bg;
+
+    @include breakpoint($upto-palm) {
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
   }
 }
 
@@ -21,7 +40,7 @@
   }
 
   .views-field-field-store-address {
-    border-bottom: 0.125rem solid $store_finder_store_row_border;
+    border-bottom: 0;
     margin-#{$left}: 1.5rem;
     margin-#{$right}: 1rem;
 
@@ -39,4 +58,12 @@
   @include breakpoint($desk) {
     width: 65%;
   }
+}
+
+.load-more-button a {
+  background-color: $store_finder_mobile_load_more;
+  border-color: $store_finder_mobile_load_more;
+  color: $primary_btn_text;
+  font-family: $jus_semi_bold;
+  border-radius: 0.3125rem;
 }

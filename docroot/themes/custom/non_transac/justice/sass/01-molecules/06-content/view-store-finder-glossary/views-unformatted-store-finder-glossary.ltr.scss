@@ -20,11 +20,14 @@
 .view-store-finder--list__alphabet__item {
   @include breakpoint($upto-palm) {
     border-bottom: 0.125rem solid $store_finder_store_row_border;
+    line-height: 2.5;
+    height: 2.5rem;
   }
 
   &::before {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
     color: $store_finder_list_mobile_icon;
+    #{$right}: -0.625rem;
   }
 
   a {
