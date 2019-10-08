@@ -147,7 +147,7 @@ display:
           empty: false
           tokenize: true
           content:
-            value: "{{ arguments.tid }}\r\n[view:total-rows] {{ 'products'|t }}"
+            value: "<div class='product-info'><p>{{ arguments.tid }}</p><p>[view:total-rows] {{ 'products'|t }}</p></div>"
             format: full_text
           plugin_id: text
       pager:

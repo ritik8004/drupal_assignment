@@ -105,6 +105,12 @@
           });
 
           $('select[name="quantity"]', this).trigger('refresh');
+
+          if (typeof variantInfo['description'] !== 'undefined') {
+            for (var i in variantInfo['description']) {
+              $(variantInfo['description'][i]['selector'], node).html(variantInfo['description'][i]['markup']);
+            }
+          }
         });
 
         var variants = drupalSettings.productInfo[sku]['variants'];
@@ -152,10 +158,15 @@
     }
 
     if (layout === 'magazine') {
-      Drupal.behaviors.magazine_gallery.attach(product);
+      // Set timeout so that original behavior attachment is not affected.
+      setTimeout(function () {
+        Drupal.behaviors.magazine_gallery.attach(product);
+      }, 1);
     }
     else {
-      Drupal.behaviors.alshaya_product_zoom.attach(product);
+      setTimeout(function () {
+        Drupal.behaviors.alshaya_product_zoom.attach(product);
+      }, 1);
     }
   };
 
