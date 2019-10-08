@@ -1,7 +1,7 @@
 .c-pre-content__region {
   @include breakpoint($desktop) {
     background: $pre_content_region_bg;
-    border-top-color: $mm_l1_border;
+    border-top-color: transparent;
     border-bottom-color: $mm_l1_border;
     height: 2.5rem;
   }

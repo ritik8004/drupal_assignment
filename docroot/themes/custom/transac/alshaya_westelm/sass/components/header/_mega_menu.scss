@@ -10,7 +10,8 @@
     text-transform: none;
 
     @include breakpoint($desktop) {
-      height: 2rem;
+      height: 2.5rem;
+      margin-top: -0.125rem;
 
       a.menu--one__link,
       div.menu__link.menu--one__link {
