@@ -62,7 +62,11 @@
   .divider {
     span {
       text-transform: uppercase;
-      padding: 0 0.875rem;
+      padding: 0.0625rem 0.875rem 0;
+
+      @include breakpoint($tablet) {
+        padding: 0.1875rem 0.875rem 0;
+      }
     }
   }
 

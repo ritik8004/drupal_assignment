@@ -1,0 +1,18 @@
+.region-footer-secondary {
+  margin: 0;
+  background: $footer_secondary_bg;
+  padding: 1rem;
+
+  @include breakpoint($above-palm) {
+    margin: 0;
+  }
+
+  .region__wrapper {
+    @include breakpoint($desk) {
+      display: flex;
+      align-items: center;
+      max-width: 64rem;
+      margin: 0 auto;
+    }
+  }
+}

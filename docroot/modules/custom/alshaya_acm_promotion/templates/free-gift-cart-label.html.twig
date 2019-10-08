@@ -1,0 +1,22 @@
+{% for id, promotion in promos %}
+  {% if (promotion.sku_entity_id is not empty) and (promotion.coupon_code is not empty) %}
+    <div class="free-gift-promo">
+      <div class="gift-message">
+          {{ 'Click' | t }}
+          {% for id, coupon in promotion.coupon_code %}
+            <span class="coupon-code">{{ coupon.value }}</span>
+          {% endfor %}
+          {{ 'to get a Free Gift' | t }}
+        <span class="free-gift-title">
+          <a class="use-ajax" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_promotion.free_gift_modal', {'acq_sku': promotion.sku_entity_id, 'js': 'nojs'}) }}">{{ promotion.sku_title }}</a>
+        </span>
+      </div>
+    </div>
+  {% elseif promotion.link is not empty %}
+    <div class="free-gift-promo">
+      <div class="gift-message">
+        {{ promotion.link }}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

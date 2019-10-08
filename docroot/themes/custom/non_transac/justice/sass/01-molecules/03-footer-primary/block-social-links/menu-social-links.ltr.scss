@@ -1,0 +1,34 @@
+@import '../../../config/_config.scss';
+
+.menu-social-links {
+  text-align: $right;
+
+  @include breakpoint($upto-palm) {
+    text-align: $left;
+  }
+
+  li {
+    margin-#{$right}: 0.0625rem;
+  }
+
+  .ic-social-instagram,
+  .ic-social-facebook {
+    &::before {
+      content: '';
+      background-repeat: no-repeat;
+      width: 3rem;
+      height: 3rem;
+      display: inline-block;
+      background-size: contain;
+      background-position: center;
+    }
+  }
+
+  .ic-social-instagram::before {
+    background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-instagram.svg');
+  }
+
+  .ic-social-facebook::before {
+    background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-facebook.svg');
+  }
+}

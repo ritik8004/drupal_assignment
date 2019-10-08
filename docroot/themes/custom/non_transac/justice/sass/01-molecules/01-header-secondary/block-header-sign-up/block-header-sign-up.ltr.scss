@@ -1,0 +1,41 @@
+@import '../../../config/_config.scss';
+
+.block-sign-up-desktop {
+  padding: 0.75rem 0.875rem;
+  background-color: transparent;
+
+  a {
+    color: $signup_text;
+    text-align: $left;
+    text-decoration: none;
+    font-size: 0.9375rem;
+
+    &::before {
+      content: '';
+      background-repeat: no-repeat;
+      width: 2.75rem;
+      height: 2.75rem;
+      background-size: contain;
+      background-position: center;
+      display: inline-block;
+      vertical-align: -1rem;
+      background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-email.svg');
+
+      @include breakpoint($upto-lap) {
+        vertical-align: -1.5rem;
+      }
+    }
+
+    @include breakpoint($upto-lap) {
+      display: none;
+    }
+  }
+}
+
+#block-headerlinks {
+  min-width: 14.375rem;
+
+  ul {
+    text-align: $left;
+  }
+}

@@ -186,6 +186,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
     $concepts_markup = [
       '#theme' => 'product_concept_markup',
+      '#title' => t('concept'),
       '#concepts' => $concepts,
     ];
 
@@ -198,6 +199,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
   $composition_markup = [
     '#theme' => 'product_composition_markup',
+    '#title' => t('composition'),
   ];
 
   if (!empty($composition)) {
@@ -227,6 +229,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
   $warning_markup = [
     '#theme' => 'product_article_warning_markup',
+    '#title' => t('safety warning'),
   ];
 
   if (!empty($warning)) {
@@ -332,5 +335,51 @@ function alshaya_hm_theme($existing, $type, $theme, $path) {
         'color_nodes' => NULL,
       ],
     ],
+  ];
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $composition = $skuManager->fetchProductAttribute($child, 'attr_composition', 'self');
+  $composition_markup = '';
+  if (!empty($composition)) {
+    $markup = [
+      '#theme' => 'product_composition_markup',
+      '#title' => t('composition'),
+      '#composition' => [
+        '#markup' => $composition,
+      ],
+    ];
+
+    $composition_markup = render($markup);
+  }
+
+  $variant['description'][] = [
+    'selector' => '.composition-wrapper',
+    'markup' => $composition_markup,
+  ];
+
+  $warning = $skuManager->fetchProductAttribute($child, 'attr_article_warning', 'self');
+  $warning_markup = '';
+  if (!empty($warning)) {
+    $markup = [
+      '#theme' => 'product_article_warning_markup',
+      '#title' => t('safety warning'),
+      '#composition' => [
+        '#markup' => $warning,
+      ],
+    ];
+
+    $warning_markup = render($markup);
+  }
+
+  $variant['description'][] = [
+    'selector' => '.warning-wrapper',
+    'markup' => $warning_markup,
   ];
 }

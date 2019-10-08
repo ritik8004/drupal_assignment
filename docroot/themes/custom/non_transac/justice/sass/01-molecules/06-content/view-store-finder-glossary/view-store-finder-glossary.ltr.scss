@@ -1,0 +1,60 @@
+@import '../../../config/_config.scss';
+
+.view-stores-finder {
+  header {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    background: $store_finder_list_title;
+    padding: 1.875rem;
+    font-size: 0.9375rem;
+
+    @include breakpoint($upto-palm) {
+      margin: 0;
+      padding: 1.25rem;
+      padding-bottom: 0.3125rem;
+      display: block;
+    }
+
+    @include breakpoint($lap) {
+      margin-bottom: 0;
+    }
+  }
+
+  @include breakpoint($upto-palm) {
+    .individual--store {
+      margin-bottom: 0.5rem;
+
+      .list-view--locator {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+      }
+    }
+  }
+}
+
+.view-display-id-page_2 .geolocation-common-map-container,
+.view-store-finder--list__columns {
+  background: $store_finder_list_bg;
+
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0.5rem;
+    padding: 1.25rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 0;
+    padding-bottom: 7.5rem;
+  }
+}
+
+.view-store-finder--list__column--1 {
+  @include breakpoint($above-palm) {
+    border-#{direction(right)}: 0;
+  }
+}
+
+.view-store-finder--list__column--2 {
+  @include breakpoint($desk) {
+    padding-#{direction(left)}: 0;
+  }
+}

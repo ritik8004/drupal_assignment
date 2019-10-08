@@ -1,0 +1,35 @@
+.page-generic {
+  padding-top: 9.5rem;
+
+  @include breakpoint($upto-lap) {
+    padding-top: 3.5rem;
+  }
+}
+
+.region-content {
+  @include breakpoint($upto-palm) {
+    padding-#{$left}: 1rem;
+    padding-#{$right}: 1rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 64rem;
+    padding: 0;
+  }
+}
+
+.page-home .promo-container,
+.node-advanced-page .promo-container {
+  @include breakpoint($lap) {
+    width: 100%;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 64rem;
+  }
+
+  @include breakpoint($upto-lap) {
+    padding-#{$left}: 1.25rem;
+    padding-#{$right}: 1.25rem;
+  }
+}

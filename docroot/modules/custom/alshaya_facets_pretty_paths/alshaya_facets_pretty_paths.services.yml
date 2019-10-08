@@ -20,3 +20,4 @@ services:
       - '@path.alias_manager'
       - '@facets.manager'
       - '@config.factory'
+      - '@alshaya_acm_product.skumanager'

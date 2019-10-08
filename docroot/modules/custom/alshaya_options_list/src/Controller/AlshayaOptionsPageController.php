@@ -88,7 +88,13 @@ class AlshayaOptionsPageController extends ControllerBase {
     if (!$this->alshayaOptionsService->optionsPageEnabled()) {
       throw new NotFoundHttpException();
     }
+
     $config = $this->config('alshaya_options_list.settings');
+    $cache_tags = Cache::mergeTags(
+      [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG],
+      $config->getCacheTags()
+    );
+
     $options_list = [];
     $libraries = ['alshaya_white_label/optionlist_filter', 'alshaya_options_list/alshaya_options_list_search'];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -136,7 +142,7 @@ class AlshayaOptionsPageController extends ControllerBase {
           $options_list[$attributeCode]['mobile_title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title'];
         }
       }
-      $this->cache->set($cid, $options_list, Cache::PERMANENT, [AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
+      $this->cache->set($cid, $options_list, Cache::PERMANENT, $cache_tags);
     }
 
     // Only show those facets that have values.
@@ -168,6 +174,9 @@ class AlshayaOptionsPageController extends ControllerBase {
       '#description' => $attribute_options[$request]['description'],
       '#attached' => [
         'library' => $libraries,
+      ],
+      '#cache' => [
+        'tags' => $cache_tags,
       ],
     ];
 

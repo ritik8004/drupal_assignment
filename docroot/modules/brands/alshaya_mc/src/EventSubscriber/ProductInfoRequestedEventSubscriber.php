@@ -142,7 +142,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     if ($attr_at_glance = $sku_entity->get('attr_at_glance')->getString()) {
       $description[] = [
-        'label' => ['#markup' => $this->t('At a glance')],
+        'label' => [
+          '#markup' => $this->t('At a glance', [], ['langcode' => $sku_entity->language()->getId()]),
+        ],
         'value' => ['#markup' => $attr_at_glance],
       ];
     }
@@ -160,14 +162,18 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $description[] = [
-      'label' => ['#markup' => $this->t('Features and benefits')],
+      'label' => [
+        '#markup' => $this->t('Features and benefits', [], ['langcode' => $sku_entity->language()->getId()]),
+      ],
       'value' => ['#markup' => $description_value],
     ];
 
     // If specifications are enabled, prepare the specification variable.
     if ($this->configFactory->get('alshaya_acm.settings')->get('pdp_show_specifications')) {
       $specifications = [
-        'label' => ['#markup' => $this->t('Specifications')],
+        'label' => [
+          '#markup' => $this->t('Specifications', [], ['langcode' => $sku_entity->language()->getId()]),
+        ],
         'value' => [
           "#theme" => 'item_list',
           '#items' => [],
@@ -177,32 +183,34 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
         $specifications['value']['#items'][] = $this->t('Style Code: @value', [
           '@value' => $attr_style_code,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       if ($attr_color = $sku_entity->get('attr_color')->getString()) {
         $specifications['value']['#items'][] = $this->t('Color: @value', [
           '@value' => $attr_color,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       if ($attr_season = $sku_entity->get('attr_season')->getString()) {
         $specifications['value']['#items'][] = $this->t('Season: @value', [
           '@value' => $attr_season,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
 
       if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
         $specifications['value']['#items'][] = $this->t('Product brand: @value', [
           '@value' => $attr_brand,
-        ]);
+        ], ['langcode' => $sku_entity->language()->getId()]);
       }
       $description[] = $specifications;
     }
 
     if ($in_box = $sku_entity->get('attr_whats_in_the_box')->getString()) {
       $description[] = [
-        'label' => ['#markup' => $this->t("What's In The Box")],
+        'label' => [
+          '#markup' => $this->t("What's In The Box", [], ['langcode' => $sku_entity->language()->getId()]),
+        ],
         'value' => ['#markup' => $in_box],
       ];
     }

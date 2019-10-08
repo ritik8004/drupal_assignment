@@ -125,6 +125,7 @@ class AlshayaSearchApiFacetsManager {
       'show_count' => 1,
       'weight' => 0,
     ];
+
     $filter_bar->set('facets', $facets);
     $filter_bar->save();
 
@@ -147,6 +148,7 @@ class AlshayaSearchApiFacetsManager {
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
+
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
 
     // Translate facet block titles.

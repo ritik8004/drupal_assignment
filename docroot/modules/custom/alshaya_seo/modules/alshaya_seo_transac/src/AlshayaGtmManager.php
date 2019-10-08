@@ -81,6 +81,7 @@ class AlshayaGtmManager {
     'view.search.page' => 'Search Results Page',
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
+    'entity.node.canonical:acq_promotion' => 'Promotion',
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'HP-ProductCarrousel',
     'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',

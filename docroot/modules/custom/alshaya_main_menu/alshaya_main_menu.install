@@ -10,6 +10,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add new setting in alshaya_main_menu - desktop_main_menu_layout.
+ */
+function alshaya_main_menu_update_8404() {
+  \Drupal::configFactory()->getEditable('alshaya_main_menu.settings')
+    ->set('desktop_main_menu_layout', 'default')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new setting in alshaya_main_menu - desktop_main_menu_highlight_timing.
  */
 function alshaya_main_menu_update_8403() {

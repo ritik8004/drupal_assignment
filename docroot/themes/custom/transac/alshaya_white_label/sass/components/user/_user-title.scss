@@ -95,6 +95,11 @@
   }
 
   .back-link {
+    @include breakpoint($tablet) {
+      display: inline-block;
+      pointer-events: none;
+    }
+
     @include breakpoint($only-mobile) {
       @include icon(arrowup, before) {
         position: absolute;

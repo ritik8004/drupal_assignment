@@ -5,12 +5,18 @@ namespace Drupal\alshaya_acm;
 use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Response\NeedsRedirectException;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * ApiHelper.
@@ -28,6 +34,20 @@ class CartHelper {
   protected $cartStorage;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -39,12 +59,20 @@ class CartHelper {
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage service.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
    *   Logger Factory.
    */
   public function __construct(CartStorageInterface $cart_storage,
+                              EventDispatcherInterface $dispatcher,
+                              ModuleHandlerInterface $module_handler,
                               LoggerChannelFactoryInterface $logger_channel) {
     $this->cartStorage = $cart_storage;
+    $this->dispatcher = $dispatcher;
+    $this->moduleHandler = $module_handler;
     $this->logger = $logger_channel->get('CartHelper');
   }
 
@@ -270,6 +298,102 @@ class CartHelper {
         $sku_entity->refreshStock();
       }
     }
+  }
+
+  /**
+   * Add item to cart.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param array $data
+   *   Post data.
+   *
+   * @return bool|string
+   *   TRUE if successful, error message otherwise.
+   */
+  public function addItemToCart(SKU $sku, array $data) {
+    try {
+      $cart = $this->cartStorage->getCart(TRUE);
+      if (empty($cart)) {
+        $e = new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
+
+        // Dispatch event so action can be taken.
+        $this->dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, new AddToCartErrorEvent($e));
+
+        throw $e;
+      }
+    }
+    catch (\Exception $e) {
+      return $e->getMessage();
+    }
+
+    $quantity = $data['quantity'] ?? 1;
+    $quantity = (int) $quantity;
+
+    if (empty($quantity)) {
+      throw new \InvalidArgumentException();
+    }
+
+    switch ($sku->bundle()) {
+      case 'configurable':
+
+        $selected_variant_sku = $data['selected_variant_sku'] ?? '';
+        $variant = SKU::loadFromSku($selected_variant_sku);
+        if (!($variant instanceof SKUInterface)) {
+          throw new \InvalidArgumentException();
+        }
+
+        if ($cart->hasItem($variant->getSku())) {
+          $cart->addItemToCart($variant->getSku(), $quantity);
+        }
+        else {
+          $tree = Configurable::deriveProductTree($sku);
+
+          foreach ($data['configurables'] as $code => $value) {
+            $options[] = [
+              'option_id' => $tree['configurables'][$code]['attribute_id'],
+              'option_value' => $value,
+            ];
+          }
+
+          // Allow other modules to update the options info sent to ACM.
+          $this->moduleHandler->alter('acq_sku_configurable_cart_options', $options, $sku);
+
+          $cart->addRawItemToCart([
+            'name' => $sku->label(),
+            'sku' => $sku->getSku(),
+            'qty' => $quantity,
+            'options' => [
+              'configurable_item_options' => $options,
+            ],
+          ]);
+        }
+
+        break;
+
+      default:
+        $cart->addItemToCart($sku->getSku(), $quantity);
+        break;
+    }
+
+    try {
+      $this->cartStorage->updateCart(FALSE);
+    }
+    catch (\Exception $e) {
+      if (isset($variant)) {
+        $plugin = $variant->getPluginInstance();
+        $plugin->refreshStock($variant);
+      }
+
+      $plugin = $sku->getPluginInstance();
+      $plugin->refreshStock($sku);
+
+      // Dispatch event so action can be taken.
+      $this->dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, new AddToCartErrorEvent($e));
+      return $e->getMessage();
+    }
+
+    return TRUE;
   }
 
 }

@@ -1,0 +1,25 @@
+@import '../../../config/_config.scss';
+
+.menu-language-switcher--desktop {
+  a {
+    color: $language_switcher_text;
+    text-transform: none;
+  }
+
+  li {
+    @include breakpoint($upto-palm) {
+      position: relative;
+      top: -1.25rem;
+      line-height: 1.4;
+    }
+
+    @include breakpoint($desk) {
+      padding: 0.25rem 0.875rem;
+    }
+
+    & [hreflang="ar"] {
+      font-family: $jus_arabic_regular;
+      font-size: 0.9375rem;
+    }
+  }
+}

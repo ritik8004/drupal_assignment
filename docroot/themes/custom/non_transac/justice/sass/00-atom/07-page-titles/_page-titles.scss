@@ -1,0 +1,27 @@
+.page--title {
+  font-size: 1.5rem;
+  color: $black;
+  font-family: $jus_bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  html[lang=ar] & {
+    font-size: 1rem;
+  }
+
+  @include breakpoint($above-palm) {
+    font-size: 1.5rem;
+
+    html[lang=ar] & {
+      font-size: 1rem;
+    }
+  }
+
+  @include breakpoint($desk) {
+    font-size: 1.5rem;
+
+    html[lang=ar] & {
+      font-size: 1rem;
+    }
+  }
+}

@@ -79,6 +79,13 @@ class AlshayaImageLazyLoad extends FilterBase {
       return;
     }
 
+    // If not AMP page, no need to process.
+    if (\Drupal::moduleHandler()->moduleExists('amp')) {
+      if (\Drupal::service('router.amp_context')->isAmpRoute()) {
+        return;
+      }
+    }
+
     $this->modified = TRUE;
 
     $element->setAttribute('data-' . $tag, $element->getAttribute($tag));
