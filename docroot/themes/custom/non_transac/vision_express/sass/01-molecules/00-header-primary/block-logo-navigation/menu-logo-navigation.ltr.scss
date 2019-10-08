@@ -4,23 +4,18 @@
   background-color: $menu-bg;
 
   @include breakpoint($upto-palm) {
-    -webkit-transition: -webkit-transform 0.25s ease-in-out;
-    transition: -webkit-transform 0.25s ease-in-out;
     transition: transform 0.25s ease-in-out;
-    transition: transform 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
     position: fixed;
     top: 0;
     width: 85%;
     height: 100%;
 
     html[lang=en] & {
-      -webkit-transform: translateX(-100%);
       transform: translateX(-100%);
     }
 
     html[lang=ar] & {
       transform: translateX(100%);
-      -webkit-transform: translateX(100%);
     }
 
     &.is-active-ul {
@@ -50,11 +45,11 @@
     }
 
     @include breakpoint($above-palm) {
-      border-bottom: 6px solid transparent;
+      border-bottom: 0.375rem solid transparent;
 
       &:hover,
       &.is-active {
-        border-bottom: 6px solid $link-border;
+        border-bottom: 0.375rem solid $link-border;
       }
     }
   }
@@ -80,7 +75,7 @@
 .menu-close {
   &.is-active-close {
     display: block;
-    background: #fff;
+    background: $menu-close-bg;
     height: 3.5rem;
     top: 0;
     width: 3.5625rem;
