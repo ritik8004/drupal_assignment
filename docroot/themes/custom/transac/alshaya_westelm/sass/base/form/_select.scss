@@ -47,7 +47,7 @@
 
     &::after {
       // IE10 needs this in px.
-      line-height: 2rem;
+      line-height: 32px;
       font-size: 1.75rem;
       top: 1px;
       #{$left}: auto;
