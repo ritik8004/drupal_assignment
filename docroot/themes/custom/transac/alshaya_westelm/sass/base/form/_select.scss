@@ -70,15 +70,14 @@
 
   @include icon(chevrondown, after) {
     font-size: 1.75rem;
-    line-height: 32px;
+    line-height: 2rem;
     pointer-events: none;
     position: absolute;
     #{$right}: 1px;
-    top: 2px;
+    top: 0.125rem;
     text-align: center;
     background-color: $primary_dropdown_arrow_bg;
     width: 2.1875rem;
-    height: 32px;
     height: 2rem;
     border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
     color: $primary_dropdown_arrow_icon;

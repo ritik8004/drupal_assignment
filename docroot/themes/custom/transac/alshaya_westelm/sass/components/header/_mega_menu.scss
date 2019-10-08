@@ -10,7 +10,8 @@
     text-transform: none;
 
     @include breakpoint($desktop) {
-      height: 2rem;
+      height: 2.5rem;
+      margin-top: -0.125rem;
 
       a.menu--one__link,
       div.menu__link.menu--one__link {
@@ -35,7 +36,7 @@
           border-top: none !important;
           background: $mm_l1_link_active_bg !important;
           color: $mm_l1_link_active !important;
-          box-shadow: inset 0 2px 0 0 $mm_l1_link_active_shadow;
+          box-shadow: inset 0 0.125rem 0 0 $mm_l1_link_active_shadow;
           font-weight: 600;
           cursor: default;
         }

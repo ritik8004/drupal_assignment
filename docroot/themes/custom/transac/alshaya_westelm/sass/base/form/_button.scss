@@ -3,7 +3,7 @@ button.edit-add-to-cart {
     .ladda-spinner {
       background-image: url($base_theme_loader_img_directory_path);
       background-size: contain;
-      top: 2px;
+      top: 0.125rem;
       #{$left}: 37%;
 
       > div {

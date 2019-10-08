@@ -1,0 +1,7 @@
+.c-accordion__title {
+  text-transform: none;
+
+  &::after {
+    color: $accordion_title_icon;
+  }
+}
