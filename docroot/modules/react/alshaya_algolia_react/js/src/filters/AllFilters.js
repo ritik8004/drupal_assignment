@@ -16,6 +16,14 @@ const AllFilters = (props) => {
       const filters = allFiltersRef.current.querySelectorAll('.c-accordion');
       filters.forEach(element => {
         const children = element.getElementsByTagName('ul')[0];
+
+        if (children.querySelector('li') === null) {
+          element.classList.add('hide-facet-block');
+        }
+        else {
+          element.classList.remove('hide-facet-block');
+        }
+
         const selectedFilters = children.querySelectorAll('li.is-active');
         // get all selected items for current filters.
         let currentSelection = [];

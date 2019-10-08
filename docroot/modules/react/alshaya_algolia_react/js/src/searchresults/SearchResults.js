@@ -8,14 +8,15 @@ import {
   connectStats
 } from 'react-instantsearch-dom';
 import { searchClient } from '../config/SearchClient';
+import NoResults from '../components/NoResults';
+import GridButtons from '../components/GridButtons';
 import Teaser from '../components/teaser/Teaser';
-import Filters from '../filters/Filters';
-import SelectedFilters from '../filters/selectedfilters/SelectedFilters';
 import AllFilters from '../filters/AllFilters';
-import GridButtons from './GridButtons';
-import withURLSync from '../URLSync';
+import Filters from '../filters/Filters';
+import StickyFilter from '../filters/StickyFilter';
+import SelectedFilters from '../filters/selectedfilters/SelectedFilters';
 import ProgressBar from '../filters/widgets/ProgressBar';
-import NoResults from './NoResults';
+import withURLSync from '../URLSync';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
@@ -117,11 +118,9 @@ const SearchResults = props => {
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       <VirtualSearchBox currentRefinement={query}  />
       <div className="container-wrapper">
-        <div className="sticky-filter-wrapper">
-          <div className="container-without-product">
-            <Filters indexName={indexName} />
-          </div>
-        </div>
+        <StickyFilter>
+          <Filters indexName={indexName} />
+        </StickyFilter>
         <AllFilters>
           <Filters indexName={indexName} />
         </AllFilters>
