@@ -3,9 +3,16 @@
 .menu-language-switcher--desktop {
   a {
     color: $language_switcher_text;
+    text-transform: none;
   }
 
   li {
+    @include breakpoint($upto-palm) {
+      position: relative;
+      top: -1.25rem;
+      line-height: 1.4;
+    }
+
     @include breakpoint($desk) {
       padding: 0.25rem 0.875rem;
     }
