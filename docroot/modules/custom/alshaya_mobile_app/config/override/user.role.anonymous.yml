@@ -18,3 +18,4 @@ permissions:
   - 'restful get payment_methods'
   - 'restful get cart_promotions'
   - 'restful get stock'
+  - 'restful get product_exclude_linked'
