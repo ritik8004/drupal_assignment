@@ -53,16 +53,6 @@
   }
 
   .c-products-list {
-    .view-content {
-      & > div {
-        @include breakpoint($desktop) {
-          display: flex;
-          flex-wrap: wrap;
-          align-content: flex-start;
-        }
-      }
-    }
-
     &.product-small {
       .alshaya_search_gallery {
         .alshaya_search_mainimage {
