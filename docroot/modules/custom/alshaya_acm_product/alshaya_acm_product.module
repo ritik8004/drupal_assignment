@@ -499,8 +499,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           throw new NotFoundHttpException();
         }
 
-        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
-
         $context = 'pdp';
 
         // This is required to allow showing different gallery on page load
@@ -638,6 +636,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       if (in_array($view_mode, ['modal', 'full'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
 
+        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
         $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
         $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
         if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
