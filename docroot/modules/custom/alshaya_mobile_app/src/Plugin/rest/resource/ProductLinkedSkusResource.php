@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
@@ -32,6 +33,13 @@ class ProductLinkedSkusResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
+   * Store cache tags and contexts to be added in response.
+   *
+   * @var array
+   */
+  private $cache;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -57,6 +65,10 @@ class ProductLinkedSkusResource extends ResourceBase {
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
+    $this->cache = [
+      'tags' => [],
+      'contexts' => [],
+    ];
   }
 
   /**
@@ -88,6 +100,9 @@ class ProductLinkedSkusResource extends ResourceBase {
       $this->mobileAppUtility->throwException();
     }
 
+    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $skuEntity->getCacheTags());
+    $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $skuEntity->getCacheContexts());
+
     $data = [];
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [
@@ -98,6 +113,14 @@ class ProductLinkedSkusResource extends ResourceBase {
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
+
+    if (!empty($this->cache['contexts'])) {
+      $cacheableMetadata->addCacheContexts($this->cache['contexts']);
+    }
+
+    if (!empty($this->cache['tags'])) {
+      $cacheableMetadata->addCacheTags($this->cache['tags']);
+    }
 
     $response->addCacheableDependency($cacheableMetadata);
 
