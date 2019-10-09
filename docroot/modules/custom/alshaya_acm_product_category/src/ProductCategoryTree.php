@@ -511,7 +511,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
     $query->fields('mtr', ['field_move_to_right_value']);
 
-    // For the `move to right`.
+    // For the `app navigation links`.
     $query->leftJoin('taxonomy_term__field_show_in_app_navigation', 'mln', 'mln.entity_id = tfd.tid');
     $query->fields('mln', ['field_show_in_app_navigation_value']);
 
