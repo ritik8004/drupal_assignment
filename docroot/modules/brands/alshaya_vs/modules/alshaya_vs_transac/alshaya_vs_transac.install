@@ -299,8 +299,8 @@ function _alshaya_vs_transac_save_metatag_translations() {
       'ar' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [alshaya_seo:super_category] [term:name] Online, Shop [term:name] in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] Collection, Shop [term:name] in [alshaya_seo:city1], Shop [term:name] in [alshaya_seo:city2]',
-      'ar' => 'متجر [term:parent:name][term:name] [alshaya_seo:brand_name]، متجر [alshaya_seo:brand_name] من [term:name] على الانترنت، متجر [term:name] من [alshaya_seo:brand_name]، وشراء [term:parent:name] مجموعة [term:name] على الانترنت، متجر [term:parent:name] على الانترنت[term:name] على الانترنت في [alshaya_seo:city1]، متجر [term:parent:name] [term:name] على الانترنت في [alshaya_seo:city2]، متجر [alshaya_seo:super_category] [term:name] على الانترنت في [alshaya_seo:country]',
+      'en' => 'Shop [alshaya_seo:super_category] [term:name] Online, Shop [term:name] in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] Collection, [alshaya_seo:term_cities]',
+      'ar' => 'متجر [term:parent:name][term:name] [alshaya_seo:brand_name]، متجر [alshaya_seo:brand_name] من [term:name] على الانترنت، متجر [term:name] من [alshaya_seo:brand_name]، وشراء [term:parent:name] مجموعة [term:name] على الانترنت، [alshaya_seo:term_cities]، متجر [alshaya_seo:super_category] [term:name] على الانترنت في [alshaya_seo:country]',
     ],
   ];
 
