@@ -468,7 +468,6 @@
             if ($('body').hasClass('magazine-layout-ajax-throbber')) {
               $('body').removeClass('magazine-layout-ajax-throbber');
             }
-            $('body').removeClass('magazine-layout-overlay');
           });
         }, 10);
       }

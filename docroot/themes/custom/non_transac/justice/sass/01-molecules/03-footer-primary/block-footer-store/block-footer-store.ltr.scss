@@ -31,6 +31,11 @@
 
     @include breakpoint($upto-palm) {
       text-transform: none;
+      width: 100%;
+      display: inline-block;
+      padding-#{$left}: 10px;
+      margin: 0;
+      text-align: $right;
     }
 
     &::before {

@@ -11,6 +11,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_mobile_app module.
+ */
+function alshaya_bbw_transac_update_8009() {
+  \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update meta variables.
  */
 function alshaya_bbw_transac_update_8008() {

@@ -80,3 +80,7 @@ hidden:
   langcode: true
   field_pdp_image_slider_position: true
   field_mobile_plp_video_links: true
+  field_group_by_sub_categories: true
+  field_select_sub_categories_plp: true
+  field_plp_group_category_img: true
+  field_plp_group_category_desc: true

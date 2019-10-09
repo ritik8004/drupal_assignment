@@ -16,7 +16,7 @@
     }
 
     .fashion-news {
-      padding-#{$right}: 2.25rem;
+      padding-#{$right}: 1.25rem;
 
       @include breakpoint($upto-palm) {
         padding-#{$right}: 0;
@@ -32,6 +32,10 @@
         font-size: 1.125rem;
         display: block;
 
+        @include breakpoint($upto-palm) {
+          margin-bottom: 0.625rem;
+        }
+
         &::before {
           content: '';
           background-repeat: no-repeat;
@@ -44,7 +48,7 @@
           background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-email.svg');
 
           @include breakpoint($upto-palm) {
-            top: 1rem;
+            margin-bottom: 0.625rem;
           }
         }
       }
@@ -52,6 +56,7 @@
       p {
         font-size: 0.875rem;
         padding-#{$left}: 2.6875rem;
+        line-height: 1.4;
 
         @include breakpoint($upto-palm) {
           padding-#{$left}: 0;
@@ -62,12 +67,17 @@
     .latest-update-link {
       padding-top: 1rem;
 
+      @include breakpoint($upto-palm) {
+        padding-top: 0.625rem;
+      }
+
       a {
         font-size: 1.125rem;
         text-decoration: none;
 
         html[lang=ar] & {
           font-size: 0.75rem;
+          line-height: 2;
         }
       }
     }

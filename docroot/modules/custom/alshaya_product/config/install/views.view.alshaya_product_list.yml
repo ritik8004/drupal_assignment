@@ -5,6 +5,7 @@ dependencies:
     - search_api.index.product
   module:
     - alshaya_acm_product_position
+    - alshaya_search_api
     - better_exposed_filters
     - search_api
     - user
@@ -595,6 +596,8 @@ display:
       defaults:
         cache: false
         sorts: false
+        style: false
+        row: false
       exposed_block: true
       sorts:
         nid:
@@ -693,6 +696,18 @@ display:
           expose:
             label: ''
           plugin_id: search_api
+      style:
+        type: default
+        options:
+          row_class: c-products__item
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: alshaya_search_api_grouped_row
+        options:
+          view_modes:
+            'entity:node':
+              acq_product: search_result
     cache_metadata:
       max-age: -1
       contexts:

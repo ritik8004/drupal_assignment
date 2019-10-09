@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "965d8e085fcef0cbcc4ea50922bde43b",
+    "content-hash": "002804fb45e7930862f749e4b2e1165d",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5540,13 +5540,14 @@
                     "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2019-06-18/views-render_caching_ajax_requests-2500313-49-87x.patch",
                     "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch",
-                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-18/add_a_new_setting_allow_insecure_derivates-3059836-12.patch",
+                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-10-07/3059836-15.patch",
                     "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
                     "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
                     "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                     "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch",
                     "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
                     "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch",
+                    "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2019-06-20/termStorage-loadChildren-sorted-by-weight-3063118-6-D8.6.16.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",

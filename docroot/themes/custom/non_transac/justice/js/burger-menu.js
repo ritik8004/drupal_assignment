@@ -24,6 +24,7 @@
 
   Drupal.behaviors.slideOutMenu = {
     attach: function (context, settings) {
+      var body = $('body');
       var menuButton = $('.burger');
       var closeButton = $('.menu-close');
       var menuContent = $('.navigation__sub-menu');
@@ -36,6 +37,7 @@
         menuLogos.toggleClass('is-active-ul');
         closeButton.toggleClass('is-active-close');
         overlayContent.toggleClass('overlay-content');
+        body.toggleClass('disable-scroll');
         menuContent.find('li, li > ul').removeClass('active');
       }
 
@@ -48,10 +50,12 @@
           if ($this.next().length > 0) {
             if ($this.closest('li').hasClass('active')) {
               menuContent.find('li, li > ul').removeClass('active');
+              menuContent.removeClass('disable-scroll');
             }
             else {
               $this.closest('li').addClass('active');
               $this.closest('li').find('ul').addClass('active');
+              menuContent.addClass('disable-scroll');
             }
             e.preventDefault();
           }
