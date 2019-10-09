@@ -1965,7 +1965,7 @@ schemas:
   /product-exclude-linked:
     /{sku}:
       get:
-        description: "Get product by SKU."
+        description: "Get product excluding linked products by SKU."
         responses:
           200:
             body:
@@ -2091,6 +2091,54 @@ schemas:
                     },
                     "cart_combinations": {},
                     "variants": []
+                  }
+  /product/{sku}/linked:
+    /{sku}:
+      get:
+        description: "Get linked product by SKU."
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetProduct
+                example: |
+                  {
+                     "linked": [
+                       {
+                         "link_type": "related",
+                         "skus": [],
+                       },
+                       {
+                         "link_type": "upsell",
+                         "skus": [],
+                       },
+                       {
+                         "link_type": "crosssell",
+                         "skus": [
+                           {
+                             "id": 66,
+                             "title": "Suit trousers Slim fit_test",
+                             "sku": "0391750",
+                             "deeplink": "/rest/v1/product/0391750",
+                             "original_price": "8.00",
+                             "final_price": "8.00",
+                             "in_stock": true,
+                             "promo": [],
+                             "medias": {
+                               "images": [],
+                               "videos": []
+                             },
+                             "labels": [],
+                             "swatches": [
+                               {
+                                 "key": 356,
+                                 "color_code": "#494C4F"
+                               }
+                             ]
+                           },
+                         ]
+                       }
+                     ],
                   }
   /stock:
     /{sku}:
