@@ -123,6 +123,10 @@ class AlshayaAlgoliaIndexHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function processIndexItem(array &$object, NodeInterface $node) {
+    if (empty($object['sku'])) {
+      throw new \Exception('SKU not available');
+    }
+
     $product_color = '';
     if ($this->skuManager->isListingModeNonAggregated()) {
       $product_color = $node->get('field_product_color')->getString();
