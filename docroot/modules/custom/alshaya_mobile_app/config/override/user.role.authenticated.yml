@@ -17,4 +17,4 @@ permissions:
   - 'restful get deeplink'
   - 'restful get payment_methods'
   - 'restful get product_exclude_linked'
-  - 'restful get product_linked'
+  - 'restful get product_linked_skus'

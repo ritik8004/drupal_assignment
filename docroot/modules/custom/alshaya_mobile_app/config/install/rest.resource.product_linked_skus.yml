@@ -6,8 +6,8 @@ dependencies:
     - alshaya_acm_product
     - serialization
     - simple_oauth
-id: product_linked
-plugin_id: product_linked
+id: product_linked_skus
+plugin_id: product_linked_skus
 granularity: method
 configuration:
   GET:

@@ -25,14 +25,14 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
  * Provides a resource to get product details with linked skus.
  *
  * @RestResource(
- *   id = "product_linked",
- *   label = @Translation("Product Linked"),
+ *   id = "product_linked_skus",
+ *   label = @Translation("Product Linked Skus"),
  *   uri_paths = {
  *     "canonical" = "/rest/v1/product/{sku}/linked"
  *   }
  * )
  */
-class ProductLinkedResource extends ResourceBase {
+class ProductLinkedSkusResource extends ResourceBase {
 
   /**
    * SKU Manager.
