@@ -157,7 +157,7 @@
       $(product).find('#product-zoom-container').replaceWith(gallery);
     }
 
-    if (layout === 'magazine') {
+    if (layout === 'pdp-magazine') {
       // Set timeout so that original behavior attachment is not affected.
       setTimeout(function () {
         Drupal.behaviors.magazine_gallery.attach(product);
