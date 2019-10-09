@@ -186,7 +186,7 @@ class ProductLinkedSkusResource extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * Returns available delivery method data.
+   * Returns linked skus of the given sku.
    *
    * @return \Drupal\rest\ResourceResponse
    *   The response containing delivery methods data.
