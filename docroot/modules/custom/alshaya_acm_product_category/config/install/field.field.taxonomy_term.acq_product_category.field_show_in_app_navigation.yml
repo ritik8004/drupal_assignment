@@ -8,8 +8,8 @@ id: taxonomy_term.acq_product_category.field_show_in_app_navigation
 field_name: field_show_in_app_navigation
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Show in App Navigation'
-description: 'If checked, this term will be shown in the navigation links for the mobile.'
+label: 'Show in mobile web and app Navigation'
+description: 'If checked, this term will be shown in the navigation links for the mobile app and web.'
 required: false
 translatable: false
 skip_translation_check: 0
