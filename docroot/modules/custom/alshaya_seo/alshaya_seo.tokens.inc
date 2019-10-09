@@ -71,7 +71,12 @@ function alshaya_seo_token_info() {
 
   $info['tokens']['alshaya_seo']['cities'] = [
     'name' => t('Cities'),
-    'description' => t('Cities for meta data.'),
+    'description' => t('Cities for node meta data.'),
+  ];
+
+  $info['tokens']['alshaya_seo']['term_cities'] = [
+    'name' => t('Term Cities'),
+    'description' => t('Cities for term meta data.'),
   ];
 
   $info['tokens']['alshaya_seo']['country'] = [
@@ -111,12 +116,8 @@ function alshaya_seo_token_info() {
     'name' => t('Gender category.'),
   ];
 
-  $info['tokens']['alshaya_seo']['title_prefix'] = [
-    'name' => t('Title Prefix.'),
-  ];
-
-  $info['tokens']['alshaya_seo']['title_suffix'] = [
-    'name' => t('Title Suffix.'),
+  $info['tokens']['alshaya_seo']['term_name'] = [
+    'name' => t('Term Name with prefix and suffix.'),
   ];
 
   $info['tokens']['alshaya_seo']['sub_categories'] = [
@@ -237,6 +238,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     $seo_config = \Drupal::config('alshaya_seo_transac.meta_variables');
     $token_service = \Drupal::token();
 
+    /** @var \Drupal\taxonomy\Entity\Term $category_term */
     $category_term = NULL;
 
     if (!empty($data['taxonomy_term'])) {
@@ -344,25 +346,57 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           $replacements[$original] = implode(', ', array_filter($cities));
           break;
 
-        case 'title_prefix':
-          if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_title_prefix');
-            $replacements[$original] = $value == 'alshaya_seo_sale_title_prefix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+        case 'term_cities':
+          $cities = array_filter([
+            $token_service->replace('[alshaya_seo:city1]'),
+            $token_service->replace('[alshaya_seo:city2]'),
+          ]);
+
+          foreach ($cities as &$city) {
+            if (isset($sale) && $sale === TRUE) {
+              $city = (string) t('[term:name] sale in @city', ['@city' => $city]);
+            }
+            else {
+              $city = (string) t('Shop [term:name] in @city', ['@city' => $city]);
+            }
           }
-          else {
-            $replacements[$original] = $token_service->replace('Shop [alshaya_seo:super_category]', ['term' => $category_term]);
-          }
+
+          $cities = implode(', ', array_filter($cities));
+          $replacements[$original] = $token_service->replace($cities, ['term' => $category_term]);
           break;
 
-        case  'title_suffix':
+        case 'term_name':
+          $is_l1 = empty(array_filter(array_column($category_term->get('parent')->getValue(), 'target_id')));
+
           if (isset($sale) && $sale === TRUE) {
-            $value = (string) t('alshaya_seo_sale_title_suffix');
-            $replacements[$original] = $value == 'alshaya_seo_sale_title_suffix' ? '' : $token_service->replace($value, ['term' => $category_term]);
+            $prefix_token = (string) t('alshaya_seo_sale_title_prefix');
+            $prefix = ($prefix_token == 'alshaya_seo_sale_title_prefix')
+              ? ''
+              : $token_service->replace($prefix_token, ['term' => $category_term]);
+
+            $suffix_token = (string) t('alshaya_seo_sale_title_suffix');
+            $suffix = ($suffix_token == 'alshaya_seo_sale_title_suffix')
+              ? ''
+              : $token_service->replace($suffix_token, ['term' => $category_term]);
           }
           else {
-            $value = (string) t('Collection [alshaya_seo:top_category] Online');
-            $replacements[$original] = $token_service->replace($value, ['term' => $category_term]);
+            $prefix = $token_service->replace('Shop [alshaya_seo:super_category]', ['term' => $category_term]);
+
+            $suffix_token = $is_l1
+              ? t('Collection Online')
+              : t('Collection for @category Online');
+
+            $suffix = $token_service->replace((string) $suffix_token, ['term' => $category_term]);
           }
+
+          $name = $is_l1 ? '' : $category_term->label();
+
+          $replacements[$original] = implode(' ', array_filter([
+            $prefix,
+            $name,
+            $suffix,
+          ]));
+
           break;
 
         case 'text_before_cod':
