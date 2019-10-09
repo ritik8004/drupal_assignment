@@ -1,10 +1,10 @@
 import React from 'react';
-import { formatPrice } from '../components/price/PriceHelper';
 import FilterPanel from './FilterPanel';
 import SortByList from './SortByList';
 import ColorFilter from './widgets/ColorFilter';
 import CommonRefinementList from './widgets/CommonRefinementList';
 import PriceFilter from './widgets/PriceFilter';
+import NewPriceFilter from './widgets/NewPriceFilter';
 
 export default ({indexName}) => (
   <React.Fragment>
@@ -22,17 +22,9 @@ export default ({indexName}) => (
       />
     </FilterPanel>
     <FilterPanel header="Price" id="final_price">
-      <PriceFilter
+      <NewPriceFilter
         attribute="final_price"
-        createURL={() => '#'}
-        refine={() => null}
-        items={[
-          { label: 'Under ' + formatPrice(10), end: 10, noRefinement: true },
-          { label: formatPrice(10) + ' - ' + formatPrice(100), start: 10, end: 100, noRefinement: true },
-          { label: formatPrice(100) + ' - ' + formatPrice(500), start: 100, end: 500, noRefinement: true },
-          { label: 'Above ' + formatPrice(500), start: 500, noRefinement: true },
-        ]}
-        canRefine={true}
+        granularity={5}
       />
     </FilterPanel>
     <FilterPanel header="Colour" id="attr_color_family" className="block-facet--swatch-list">
