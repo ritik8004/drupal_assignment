@@ -119,13 +119,18 @@
       }
 
       /**
-       * Helper function to remove classes from body when dailog is closed.
+       * Helper function to remove overlay classes from body when dialog is closed.
        *
        */
       function modalCloseBtnEvent() {
         $('.ui-dialog-titlebar-close').once().on('click', function () {
-          // Remove the last class added for overlay.
-          $('body').removeClass($('body').attr('class').split(' ').pop());
+          // Remove the classes added for overlay having suffix '-overlay'.
+          var bodyClasses = $('body').attr('class').split(' ');
+          for (var i = bodyClasses.length - 1; i >= 0; i--) {
+            if (bodyClasses[i].indexOf('-overlay') > -1) {
+              $('body').removeClass(bodyClasses[i]);
+            }
+          }
         });
       }
 
