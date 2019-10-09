@@ -380,20 +380,18 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
               : $token_service->replace($suffix_token, ['term' => $category_term]);
           }
           else {
-            $prefix = $token_service->replace('Shop [alshaya_seo:super_category]', ['term' => $category_term]);
+            $prefix = t('Shop');
 
             $suffix_token = $is_l1
               ? t('Collection Online')
-              : t('Collection for @category Online');
+              : t('Collection for [term:parents:first] Online');
 
             $suffix = $token_service->replace((string) $suffix_token, ['term' => $category_term]);
           }
 
-          $name = $is_l1 ? '' : $category_term->label();
-
           $replacements[$original] = implode(' ', array_filter([
             $prefix,
-            $name,
+            $category_term->label(),
             $suffix,
           ]));
 
