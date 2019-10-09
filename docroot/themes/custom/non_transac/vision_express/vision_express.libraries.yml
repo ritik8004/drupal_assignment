@@ -4,6 +4,36 @@ global:
     theme:
       dist/css/global.ltr.css: {}
 
+block-site-logo:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/02-header-tertiary/block-site-logo/block-site-logo.ltr.css: {}
+
+block-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/block-logo-navigation.ltr.css: {}
+
+menu-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
+
+block-header-language:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-language/block-header-language.ltr.css: {}
+
+header-language-switcher:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-language/language-switcher.ltr.css: {}
+
 block-footer-store:
   version: VERSION
   css:

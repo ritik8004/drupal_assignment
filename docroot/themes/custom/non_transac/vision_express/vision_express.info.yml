@@ -21,6 +21,16 @@ libraries:
   - vision_express/global
 
 libraries-extend:
+  whitelabel/block-site-logo:
+    - vision_express/block-site-logo
+  whitelabel/block-logo-navigation:
+    - vision_express/block-logo-navigation
+  whitelabel/menu-logo-navigation:
+    - vision_express/menu-logo-navigation
+  whitelabel/block-header-language:
+    - vision_express/block-header-language
+  whitelabel/header-language-switcher:
+    - vision_express/header-language-switcher
   whitelabel/block-footer-store:
     - vision_express/block-footer-store
   whitelabel/block-social-links:
@@ -31,3 +41,20 @@ libraries-extend:
     - vision_express/block-footer-language
   whitelabel/menu-terms-conditions:
     - vision_express/menu-terms-conditions
+
+component-libraries:
+  atoms:
+    paths:
+      - components/_patterns/00-atoms
+  molecules:
+    paths:
+      - components/_patterns/01-molecules
+  organisms:
+    paths:
+      - components/_patterns/02-organisms
+  templates:
+    paths:
+      - components/_patterns/03-templates
+  pages:
+    paths:
+      - components/_patterns/04-pages
