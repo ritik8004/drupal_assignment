@@ -17,44 +17,47 @@ const AllFilters = (props) => {
       filters.forEach(element => {
         const children = element.getElementsByTagName('ul')[0];
 
-        if (children.querySelector('li') === null) {
+        if (typeof children !== 'undefined' && children.querySelector('li') === null) {
           element.classList.add('hide-facet-block');
         }
         else {
           element.classList.remove('hide-facet-block');
         }
 
-        const selectedFilters = children.querySelectorAll('li.is-active');
-        // get all selected items for current filters.
-        let currentSelection = [];
-        [].forEach.call(selectedFilters, function (item) {
-          // Replace count in parentesis with empty string.
-          currentSelection.push(item.textContent.replace(/ *\([^)]*\) */g, ''));
-        });
+        if (typeof children !== 'undefined') {
+          const selectedFilters = children.querySelectorAll('li.is-active');
+          // get all selected items for current filters.
+          let currentSelection = [];
+          [].forEach.call(selectedFilters, function (item) {
+            // Replace count in parentesis with empty string.
+            currentSelection.push(item.textContent.replace(/ *\([^)]*\) */g, ''));
+          });
 
-        // Get the currrent filter's title.
-        const textContent = (element.getElementsByTagName('h3')[0].querySelector('span') === null)
-        ? element.getElementsByTagName('h3')[0].textContent
-        : element.getElementsByTagName('h3')[0].querySelector('span').innerHTML;
+          // Get the currrent filter's title.
+          const textContent = (element.getElementsByTagName('h3')[0].querySelector('span') === null)
+          ? element.getElementsByTagName('h3')[0].textContent
+          : element.getElementsByTagName('h3')[0].querySelector('span').innerHTML;
 
-        // Prepares html content to display texts for only 2 items, and rest
-        // Will be displayed as a count ((+5) selected.) in brackets. (i.e black, white (+2))
-        if (currentSelection.length > 0) {
-          const displayItems = (currentSelection.length > 2)
-            ? currentSelection.slice(0, 2)
-            : currentSelection;
-          const additionalSelection = (currentSelection.length - 2);
+          // Prepares html content to display texts for only 2 items, and rest
+          // Will be displayed as a count ((+5) selected.) in brackets. (i.e black, white (+2))
+          if (currentSelection.length > 0) {
+            const displayItems = (currentSelection.length > 2)
+              ? currentSelection.slice(0, 2)
+              : currentSelection;
+            const additionalSelection = (currentSelection.length - 2);
 
-          const additionalSelectionHtml = (additionalSelection > 0) ? '<span class="total-count"> (+' + additionalSelection + ')</span>' : '';
-          element.getElementsByTagName('h3')[0].innerHTML = '<span>' + textContent + '</span>';
-          element.getElementsByTagName('h3')[0].innerHTML += '<div class="selected-facets">'+
-          '<span class="title">' + displayItems.join() + '</span>' +
-          additionalSelectionHtml
-          '</div>';
+            const additionalSelectionHtml = (additionalSelection > 0) ? '<span class="total-count"> (+' + additionalSelection + ')</span>' : '';
+            element.getElementsByTagName('h3')[0].innerHTML = '<span>' + textContent + '</span>';
+            element.getElementsByTagName('h3')[0].innerHTML += '<div class="selected-facets">'+
+            '<span class="title">' + displayItems.join() + '</span>' +
+            additionalSelectionHtml
+            '</div>';
+          }
+          else {
+            element.getElementsByTagName('h3')[0].innerHTML = '<span>' + textContent + '</span>';
+          }
         }
-        else {
-          element.getElementsByTagName('h3')[0].innerHTML = '<span>' + textContent + '</span>';
-        }
+
       });
     }, 500);
   });
