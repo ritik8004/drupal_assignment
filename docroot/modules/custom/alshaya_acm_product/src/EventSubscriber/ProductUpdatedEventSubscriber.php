@@ -2,8 +2,11 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -48,6 +51,29 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdated(ProductUpdatedEvent $event) {
+    $entity = $event->getSku();
+    $skus = [$entity->getSku()];
+
+    if ($entity->bundle() == 'simple') {
+      $parents = $entity->getPluginInstance()->getAllParentIds($entity->getSku());
+      if (!empty($parents)) {
+        $skus = $parents;
+      }
+    }
+
+    foreach ($skus as $sku) {
+      $skuEntity = ($entity->getSku() == $sku)
+        ? $entity
+        : SKU::loadFromSku($sku);
+
+      if ($skuEntity instanceof SKUInterface) {
+        $nid = $entity->getPluginInstance()->getDisplayNodeId($skuEntity);
+        if ($nid > 0) {
+          Cache::invalidateTags(['node:' . $nid]);
+        }
+      }
+    }
+
     // Reset all static caches.
     drupal_static_reset();
   }
