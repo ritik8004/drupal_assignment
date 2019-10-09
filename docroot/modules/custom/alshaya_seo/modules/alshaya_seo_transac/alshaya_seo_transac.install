@@ -139,8 +139,8 @@ function _alshaya_seo_transac_save_metatag_translations() {
     'Collection Online' => [
       'ar' => 'اون لاين',
     ],
-    'Collection for @category Online' => [
-      'ar' => 'لل category@ اون لاين',
+    'Collection for [term:parents:first] Online' => [
+      'ar' => 'لل [term:parents:first] اون لاين',
     ],
     'Shop [term:name] in @city' => [
       'ar' => 'تسوق [term:name] اون لاين في city@',
