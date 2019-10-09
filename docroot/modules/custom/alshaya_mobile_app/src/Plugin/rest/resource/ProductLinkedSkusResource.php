@@ -91,7 +91,7 @@ class ProductLinkedSkusResource extends ResourceBase {
    * Returns linked skus of the given sku.
    *
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing delivery methods data.
+   *   The response containing linked skus of the given sku.
    */
   public function get(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
