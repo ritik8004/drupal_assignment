@@ -35,6 +35,8 @@
   a {
     color: $black-smoke;
     font-weight: bold;
+    margin-top: 0.9375rem;
+    display: inline-block;
   }
 }
 
@@ -82,6 +84,12 @@
     margin-bottom: 0.2rem;
     display: inline-block;
     padding-#{direction(right)}: 0.4375rem;
+
+    @include breakpoint($desk) {
+      &:last-child {
+        display: block;
+      }
+    }
 
     html[lang=ar] & {
       line-height: 1.3;

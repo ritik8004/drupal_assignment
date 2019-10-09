@@ -1,0 +1,7 @@
+alshaya_subcategory_scroll:
+  js:
+    js/alshaya-subcategory-scroll.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
