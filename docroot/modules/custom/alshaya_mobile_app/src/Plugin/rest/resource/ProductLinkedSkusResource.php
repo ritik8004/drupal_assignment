@@ -10,14 +10,11 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
@@ -198,19 +195,16 @@ class ProductLinkedSkusResource extends ResourceBase {
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!($skuEntity instanceof SKUInterface)) {
-      throw (new NotFoundHttpException());
+      $this->mobileAppUtility->throwException();
     }
 
-    $node = $this->skuManager->getDisplayNode($sku);
-    if (!($node instanceof NodeInterface)) {
-      throw (new NotFoundHttpException());
+    $data = [];
+    foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
+      $data['linked'][] = [
+        'link_type' => $linked_type,
+        'skus' => $this->mobileAppUtility->getLinkedSkus($skuEntity, $linked_type),
+      ];
     }
-
-    $link = $node->toUrl('canonical', ['absolute' => TRUE])
-      ->toString(TRUE)
-      ->getGeneratedUrl();
-
-    $data = $this->getSkuData($skuEntity, $link);
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
@@ -226,33 +220,6 @@ class ProductLinkedSkusResource extends ResourceBase {
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
-  }
-
-  /**
-   * Wrapper function to get product data.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $link
-   *   Product link if main product.
-   *
-   * @return array
-   *   Product Data.
-   */
-  private function getSkuData(SKUInterface $sku, string $link = ''): array {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $data = [];
-    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $sku->getCacheTags());
-    $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $sku->getCacheContexts());
-
-    foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-      $data['linked'][] = [
-        'link_type' => $linked_type,
-        'skus' => $this->mobileAppUtility->getLinkedSkus($sku, $linked_type),
-      ];
-    }
-
-    return $data;
   }
 
 }
