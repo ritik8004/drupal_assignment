@@ -14,20 +14,20 @@
     $('.checkout-ajax-progress-throbber').hide();
   }
 
-  $('.sku-base-form').on('product-add-to-cart-success', function () {
-    spinner_stop();
-
-    if ($('.ui-dialog').length > 0) {
-      $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
-    }
-  });
-
-  $('.sku-base-form').on('product-add-to-cart-failed', function () {
-    spinner_stop();
-  });
-
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function () {
+        spinner_stop();
+
+        if ($('.ui-dialog').length > 0) {
+          $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
+        }
+      });
+
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-failed', function () {
+        spinner_stop();
+      });
+
       $(window).on('click', function () {
         if ($('#cart_notification').length) {
           // check if element is Visible
