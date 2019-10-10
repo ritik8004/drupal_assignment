@@ -790,25 +790,15 @@
         }
 
       // Tracking of homepage banner.
-      $('.c-content__slider .field--name-field-banner').once('js-event').each(function () {
-        $(this).on('click', function () {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
-        });
+      $('.c-content__slider .field--name-field-banner').once('js-event').on('click', function () {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
       });
 
       // Tracking view of homepage banner in body.
-      $('.field--name-body, .paragraph--type--promo-block, .paragraph--type--banner').once('js-event').each(function () {
-        $(this).on('click', function (e) {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
-        });
+      $('.field--name-body, .paragraph--type--promo-block, .paragraph--type--banner').once('js-event').on('click', function () {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
       });
 
-      // Tracking images in rectangle on homepage.
-      $('.field--name-body > div[class^="rectangle"]:visible').once('js-event').each(function () {
-        $(this).on('click', function () {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
-        });
-      });
 
       // Tracking promotion banner on PLP.
       if (listName === 'PLP') {
