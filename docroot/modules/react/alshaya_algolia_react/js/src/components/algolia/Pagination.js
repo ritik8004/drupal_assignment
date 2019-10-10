@@ -20,19 +20,16 @@ export default function Pagination(props) {
         <li className="pager__item">
           <PaginationStats currentResults={props.results} />
         </li>
-        {props.hasMore ? (
+        {props.hasMore && (
           <li className="pager__item">
             <button
               className="button"
-              title="Load morer products"
               rel="next"
               onClick={props.refineNext}
             >
               {props.children}
             </button>
           </li>
-        ) : (
-          null
         )}
       </ul>
     );
