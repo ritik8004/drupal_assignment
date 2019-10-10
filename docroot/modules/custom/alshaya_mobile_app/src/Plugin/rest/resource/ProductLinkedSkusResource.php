@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
-use Drupal\Core\Cache\Cache;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
@@ -99,9 +98,6 @@ class ProductLinkedSkusResource extends ResourceBase {
     if (!($skuEntity instanceof SKUInterface)) {
       $this->mobileAppUtility->throwException();
     }
-
-    $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $skuEntity->getCacheTags());
-    $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $skuEntity->getCacheContexts());
 
     $data = [];
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
