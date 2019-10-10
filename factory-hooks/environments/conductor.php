@@ -314,6 +314,11 @@ $conductors = [
     'hmac_id' => 'be57e78e9c5642018b14ca7678f32ee7',
     'hmac_secret' => 'YmNkYTg3ODQtOThjMi00',
   ],
+  // Westelm AE.
+  'weae_dev2' => [
+    'hmac_id' => '82e9dce9da1e4cc7a25a61658f359576',
+    'hmac_secret' => 'YzI0ZjNmNzUtMzgyNS00',
+  ],
 ];
 
 // Default values for each ACM middleware.
