@@ -1,0 +1,11 @@
+{
+    "name": "alshaya/spc-middleware",
+    "description": "Provides a middleware for the Alshaya SPC.",
+    "require": {
+        "silex/silex": "^2.3",
+        "springimport/magento2-api-v1": "^1.0"
+    },
+    "autoload": {
+        "psr-4": { "AlshayaMiddleware\\": "src/" }
+    }
+}
