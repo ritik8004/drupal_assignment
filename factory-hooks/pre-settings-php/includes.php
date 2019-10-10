@@ -53,7 +53,6 @@ if ($settings['env'] === 'local') {
 
   // Set config of stage file proxy to ignore invalid ssl errors.
   $config['stage_file_proxy.settings']['verify'] = FALSE;
-  $config['stage_file_proxy.settings']['origin_dir'] = 'files';
 }
 
 // Social app keys for register/login.
