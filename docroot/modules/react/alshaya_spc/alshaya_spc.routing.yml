@@ -1,8 +1,0 @@
-alshaya_spc.get_cart:
-  path: '/get-cart'
-  defaults:
-    _controller: \Drupal\alshaya_spc\Controller\AlshayaSpcController::getCart
-  methods: [GET]
-  requirements:
-    _format: 'json'
-    _permission: 'access content'
