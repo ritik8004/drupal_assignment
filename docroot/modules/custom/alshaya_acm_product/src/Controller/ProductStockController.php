@@ -112,6 +112,7 @@ class ProductStockController extends ControllerBase {
 
     if ($response === TRUE) {
       $this->moduleHandler()->alter('alshaya_acm_product_add_to_cart_submit_ajax_response', $return, $entity, $data);
+      $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
     }
     else {
       $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
@@ -120,6 +121,7 @@ class ProductStockController extends ControllerBase {
         '#theme' => 'global_error',
       ];
       $return->addCommand(new HtmlCommand($class, $error));
+      $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-failed']));
     }
 
     // Instantiate and Dispatch add_to_cart_submit event.

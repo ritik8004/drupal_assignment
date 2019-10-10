@@ -10,6 +10,61 @@
   var gtm_execute_onetime_events = true;
   var currentListName = null;
 
+  $('.sku-base-form').on('product-add-to-cart-success', function (event) {
+    var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
+    var quantity = parseInt($('.form-item-quantity select', $(this)).val());
+    var size = $('.form-item-configurables-size select option:selected', $(this)).text();
+    var selectedVariant = '';
+
+    if (addedProduct.attr('gtm-sku-type') === 'configurable') {
+      selectedVariant = $('.selected-variant-sku', $(this)).val();
+    }
+
+    var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
+
+    // Remove product position: Not needed while adding to cart.
+    delete product.position;
+
+    // Set product quantity to selected quatity.
+    product.quantity = !isNaN(quantity) ? quantity : 1;
+
+    // Set product size to selected size.
+    if (!$.inArray('dimension6', drupalSettings.gtm.disabled_vars) && product.dimension2 !== 'simple') {
+      var currentLangCode = drupalSettings.path.currentLanguage;
+      if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
+        size = drupalSettings.alshaya_product_size_config[size];
+      }
+      if (product.hasOwnProperty('dimension6') && product.dimension6) {
+        product.dimension6 = size;
+      }
+    }
+
+    // Set product variant to the selected variant.
+    if (product.dimension2 !== 'simple') {
+      product.variant = selectedVariant;
+    }
+    else {
+      product.variant = product.id;
+    }
+
+    // Calculate metric 1 value.
+    product.metric2 = product.price * product.quantity;
+
+    var productData = {
+      event: 'addToCart',
+      ecommerce: {
+        currencyCode: drupalSettings.currency_code,
+        add: {
+          products: [
+            product
+          ]
+        }
+      }
+    };
+
+    dataLayer.push(productData);
+  });
+
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
