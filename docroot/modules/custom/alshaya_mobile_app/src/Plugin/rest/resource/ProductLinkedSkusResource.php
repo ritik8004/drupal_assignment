@@ -32,13 +32,6 @@ class ProductLinkedSkusResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
-   * Store cache tags and contexts to be added in response.
-   *
-   * @var array
-   */
-  private $cache;
-
-  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -64,10 +57,6 @@ class ProductLinkedSkusResource extends ResourceBase {
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
-    $this->cache = [
-      'tags' => [],
-      'contexts' => [],
-    ];
   }
 
   /**
@@ -95,7 +84,7 @@ class ProductLinkedSkusResource extends ResourceBase {
   public function get(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
 
-    if (!($skuEntity instanceof SKUInterface)) {
+    if (!$skuEntity instanceof SKUInterface) {
       $this->mobileAppUtility->throwException();
     }
 
@@ -108,16 +97,10 @@ class ProductLinkedSkusResource extends ResourceBase {
     }
 
     $response = new ResourceResponse($data);
+
     $cacheableMetadata = $response->getCacheableMetadata();
-
-    if (!empty($this->cache['contexts'])) {
-      $cacheableMetadata->addCacheContexts($this->cache['contexts']);
-    }
-
-    if (!empty($this->cache['tags'])) {
-      $cacheableMetadata->addCacheTags($this->cache['tags']);
-    }
-
+    $cacheableMetadata->addCacheTags($skuEntity->getCacheTags());
+    $cacheableMetadata->addCacheContexts($skuEntity->getCacheContexts());
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
