@@ -51,15 +51,6 @@ export default ({indexName}) => (
         searchable={false}
       />
     </FilterPanel>
-    {/* <Panel header="Category" className="c-facet c-accordion">
-      <HierarchicalMenu
-        attributes={[
-          'field_category_name.lvl0',
-          'field_category_name.lvl1',
-          'field_category_name.lvl2',
-        ]}
-      />
-    </Panel> */}
     <div className="show-all-filters">
       <span className="desktop">all filters</span>
       <span className="upto-desktop">filter &amp; sort</span>

@@ -118,7 +118,17 @@ const SearchResults = props => {
       <Configure clickAnalytics />
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       <VirtualSearchBox currentRefinement={query}  />
-      <div className="container-wrapper">
+        <ul>
+          <li>
+            <HierarchicalMenu
+              attributes={[
+                'field_category_name.lvl0',
+                'field_category_name.lvl1',
+                'field_category_name.lvl2',
+              ]}
+            />
+          </li>
+        </ul>
         <StickyFilter>
           <Filters indexName={indexName} />
         </StickyFilter>
