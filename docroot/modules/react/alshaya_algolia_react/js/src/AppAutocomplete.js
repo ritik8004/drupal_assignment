@@ -66,7 +66,7 @@ class AppAutocomplete extends React.Component {
     return (
       <div>
         <InstantSearch indexName={ `${drupalSettings.algoliaSearch.indexName}_query` } searchClient={searchClient}>
-          <Configure hitsPerPage="{drupalSettings.autocomplete.hits}"/>
+          <Configure hitsPerPage={drupalSettings.autocomplete.hits}/>
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
