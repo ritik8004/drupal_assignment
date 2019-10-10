@@ -11,6 +11,8 @@ export const getCartCookie = function() {
   if (cart_id === null) {
     return false;
   }
+
+  return cart_id;
 }
 
 export const cartAvailableInStorage = function () {
@@ -47,10 +49,11 @@ export const fetchCartData = function () {
   if (cart !== false) {
     return Promise.resolve(cart);
   }
-  // Prepare api url.
-  var api_url = window.drupalSettings.mini_cart.base_url + '/' + window.drupalSettings.mini_cart.langcode;
 
-  return axios.get(api_url + '/get-cart')
+  // Prepare api url.
+  var api_url = window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart_cookie;
+
+  return axios.get(api_url)
     .then(response => {
       return response.data
   })
