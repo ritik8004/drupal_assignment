@@ -18,7 +18,7 @@ $app = new Application();
 // For the post data.
 $app->before(function (Request $request) {
   $method = $request->getMethod();
-  /* POST, PUT, PATCH */
+  // For POST request.
   if (in_array($method, [Request::METHOD_POST])) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
       $data = json_decode($request->getContent(), TRUE);
