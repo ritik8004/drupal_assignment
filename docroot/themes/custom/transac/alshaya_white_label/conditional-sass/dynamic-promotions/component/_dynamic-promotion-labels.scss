@@ -8,6 +8,11 @@
     padding-#{$left}: 1rem;
     padding-#{$right}: 1.5rem;
     position: relative;
+    font-size: 0.75rem;
+
+    .c-pdp & {
+      margin-top: 0.5rem;
+    }
 
     @include icon('chevron#{$right}', 'after') {
       font-size: 1.375rem;

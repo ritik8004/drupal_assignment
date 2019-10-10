@@ -93,7 +93,7 @@ do
   if [[ "$type" == "reset" ]]; then
     echo
     echo "Initiating reset-individual-site-post-stage on $current_site in a screen."
-    ssh $remote_user@$remote_host "screen -dm bash -c \"cd /var/www/html/alshaya.$target_env/docroot; ../scripts/staging/reset-individual-site-post-stage.sh '$target_env' '$current_site'\""
+    ssh $remote_user@$remote_host "screen -S $current_site -dm bash -c \"cd /var/www/html/alshaya.$target_env/docroot; ../scripts/staging/reset-individual-site-post-stage.sh '$target_env' '$current_site'\""
   fi
 done
 

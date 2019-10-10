@@ -472,7 +472,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
 
       if ($view_mode == 'search_result') {
         $build['labels'] = [
@@ -502,8 +502,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if ($skuManager->isSkuFreeGift($sku_entity)) {
           throw new NotFoundHttpException();
         }
-
-        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
 
         $context = 'pdp';
 
@@ -642,6 +640,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       if (in_array($view_mode, ['modal', 'full'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
 
+        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
         $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
         $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
         if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
@@ -850,6 +849,14 @@ function _alshaya_acm_product_get_items_per_page_on_listing(): int {
 function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
   // Alter number of items per page for PLP / Search pages.
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
+    // Initialise pager.
+    $view->getPager();
+
+    // If we want to show all items, we don't process per page below.
+    if ($view->getItemsPerPage() === 0) {
+      return;
+    }
+
     $per_page = _alshaya_acm_product_get_items_per_page_on_listing();
 
     $request = \Drupal::request();
@@ -878,7 +885,21 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
  */
 function alshaya_acm_product_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
+    // Dynamically set memory limit based on number of results.
+    ini_set('memory_limit', (count($view->result) + ((int) ini_get('memory_limit'))) . 'M');
+
     $view->element['#attached']['drupalSettings']['plp_slider'] = \Drupal::config('alshaya_acm_product.display_settings')->get('plp_slider');
+
+    $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      $view->element['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
+      $view->element['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $sku_manager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');
+    }
+    $view->element['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
+    $view->element['#attached']['library'][] = 'alshaya_acm_product/show_color_images_on_filter';
   }
 }
 

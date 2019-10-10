@@ -182,6 +182,10 @@ class PromotionProductListResource extends ResourceBase {
         $response_data = $this->addExtraPromoData($node);
         // Prepare response from result set.
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+
+        // Filter the empty products.
+        $response_data['products'] = array_filter($response_data['products']);
+
         return (new ModifiedResourceResponse($response_data));
       }
 

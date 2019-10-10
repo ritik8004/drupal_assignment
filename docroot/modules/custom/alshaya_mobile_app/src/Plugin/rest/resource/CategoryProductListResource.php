@@ -180,6 +180,10 @@ class CategoryProductListResource extends ResourceBase {
     // Prepare response from result set.
     $response_data = $this->addExtraTermData($term);
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+
+    // Filter the empty products.
+    $response_data['products'] = array_filter($response_data['products']);
+
     $response_data['total'] = $this->alshayaSearchApiQueryExecute->getResultTotalCount();
     return (new ModifiedResourceResponse($response_data));
   }

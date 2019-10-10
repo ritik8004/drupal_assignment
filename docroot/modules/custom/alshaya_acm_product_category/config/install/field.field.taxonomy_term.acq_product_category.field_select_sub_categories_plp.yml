@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_select_sub_categories_plp
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - options
+id: taxonomy_term.acq_product_category.field_select_sub_categories_plp
+field_name: field_select_sub_categories_plp
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Select sub-categories to display on PLP'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
