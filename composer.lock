@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe6fd3c50afdd8db24c447e9292639ef",
+    "content-hash": "ac22e82701a5d6b1e0912ea4cd966b75",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5540,7 +5540,7 @@
                     "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2019-06-18/views-render_caching_ajax_requests-2500313-49-87x.patch",
                     "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch",
-                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-18/add_a_new_setting_allow_insecure_derivates-3059836-12.patch",
+                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-10-07/3059836-15.patch",
                     "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
                     "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
                     "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
