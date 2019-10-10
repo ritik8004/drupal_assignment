@@ -4,7 +4,6 @@ import SortByList from './SortByList';
 import ColorFilter from './widgets/ColorFilter';
 import RefinementList from './widgets/RefinementList';
 import PriceFilter from './widgets/PriceFilter';
-import NewPriceFilter from './widgets/NewPriceFilter';
 
 export default ({indexName}) => (
   <React.Fragment>
@@ -22,7 +21,7 @@ export default ({indexName}) => (
       />
     </FilterPanel>
     <FilterPanel header="Price" id="final_price">
-      <NewPriceFilter
+      <PriceFilter
         attribute="final_price"
         granularity={5}
       />
