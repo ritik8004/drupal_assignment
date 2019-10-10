@@ -159,6 +159,9 @@ class SearchPageProductListResource extends ResourceBase {
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
 
+    // Filter the empty products.
+    $response_data['products'] = array_filter($response_data['products']);
+
     // Get spell check results, if avaialable.
     $message['message']['spellcheck'] = $this->prepareSpellCheckResults($result_set, $search_keyword) ?? NULL;
     $response_data = array_merge($response_data, $message);
