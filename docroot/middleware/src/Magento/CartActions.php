@@ -10,6 +10,11 @@ namespace AlshayaMiddleware\Magento;
 final class CartActions {
 
   /**
+   * Action for creating new cart.
+   */
+  const CART_CREATE_NEW = 'create cart';
+
+  /**
    * Action used for adding an item in cart.
    */
   const CART_ADD_ITEM = 'add item';

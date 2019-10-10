@@ -77,14 +77,28 @@ class CartController {
    *   Json response.
    */
   public function updateCart(Request $request, Application $app) {
-    // If action info or cart id not available.
-    if (empty($action = $request->request->get('action'))
-      || empty($cart_id = $request->request->get('cart_id'))) {
+    // Validate request.
+    if (!$this->validateRequest($request)) {
       // Return error response if not valid data.
       return $app->json($this->cart->getErrorResponse('Invalid data'), '500');
     }
 
+    $action = $request->request->get('action');
+
     switch ($action) {
+      case CartActions::CART_CREATE_NEW:
+        // First create a new cart.
+        $cart_id = $this->cart->createCart();
+        // Then add item to the cart.
+        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request->request->get('sku'), $request->request->get('quantity'), CartActions::CART_ADD_ITEM);
+
+        if (!empty($cart['error'])) {
+          return $app->json($cart);
+        }
+
+        // Here we will do the processing of cart to make it in required format.
+        return $app->json($cart);
+
       case CartActions::CART_ADD_ITEM:
       case CartActions::CART_UPDATE_ITEM:
       case CartActions::CART_REMOVE_ITEM:
@@ -109,6 +123,30 @@ class CartController {
         return $app->json($cart);
 
     }
+  }
+
+  /**
+   * Validate incoming request.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return bool
+   *   Valid request or not.
+   */
+  private function validateRequest(Request $request) {
+    $valid = TRUE;
+
+    // If action info or cart id not available.
+    if (empty($request->request->get('action'))) {
+      $valid = FALSE;
+    }
+    elseif ($request->request->get('action') != CartActions::CART_CREATE_NEW
+      && empty($request->request->get('cart_id'))) {
+      $valid = FALSE;
+    }
+
+    return $valid;
   }
 
 }

@@ -57,6 +57,26 @@ class Cart {
   }
 
   /**
+   * Create a new cart and get cart id.
+   *
+   * @return mixed
+   *   Cart id.
+   */
+  public function createCart() {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/carts';
+    try {
+      $response = $client->request('POST', $url);
+      $result = $response->getBody()->getContents();
+      return json_decode($result, TRUE);
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
    * Add/Update/Remove item in cart.
    *
    * @param int $cart_id
