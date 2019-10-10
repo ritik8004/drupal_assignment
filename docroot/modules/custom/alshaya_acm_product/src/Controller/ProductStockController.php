@@ -111,8 +111,8 @@ class ProductStockController extends ControllerBase {
     );
 
     if ($response === TRUE) {
-      $this->moduleHandler()->alter('alshaya_acm_product_add_to_cart_submit_ajax_response', $return, $entity, $data);
       $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
+      $this->moduleHandler()->alter('alshaya_acm_product_add_to_cart_submit_ajax_response', $return, $entity, $data);
     }
     else {
       $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
