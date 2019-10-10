@@ -6,10 +6,10 @@ import ProgressBar from '../../filters/widgets/ProgressBar';
 // Stats with pagination.
 const PaginationStats = connectStats(({nbHits, currentResults}) => {
   return (
-    <div>
+    <React.Fragment>
       <span class="ais-Stats-text">{`showing ${currentResults} of ${nbHits} items`}</span>
       <ProgressBar completed={((currentResults * 100)/nbHits)}/>
-    </div>
+    </React.Fragment>
   );
 });
 
