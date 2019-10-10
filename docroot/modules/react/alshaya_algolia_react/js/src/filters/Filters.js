@@ -2,7 +2,7 @@ import React from 'react';
 import FilterPanel from './FilterPanel';
 import SortByList from './SortByList';
 import ColorFilter from './widgets/ColorFilter';
-import CommonRefinementList from './widgets/CommonRefinementList';
+import RefinementList from './widgets/RefinementList';
 import PriceFilter from './widgets/PriceFilter';
 import NewPriceFilter from './widgets/NewPriceFilter';
 
@@ -34,19 +34,19 @@ export default ({indexName}) => (
       />
     </FilterPanel>
     <FilterPanel header="Brands" id="attr_product_brand">
-      <CommonRefinementList
+      <RefinementList
         attribute="attr_product_brand"
         searchable={false}
       />
     </FilterPanel>
     <FilterPanel header="Collection" id="attr_collection">
-      <CommonRefinementList
+      <RefinementList
         attribute="attr_collection"
         searchable={false}
       />
     </FilterPanel>
     <FilterPanel header="Size" id="attr_size">
-      <CommonRefinementList
+      <RefinementList
         attribute="attr_size"
         searchable={false}
       />

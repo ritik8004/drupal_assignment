@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { updateAfter } from '../utils/utils';
 
 /**
  * Sticky filters.
@@ -40,7 +41,7 @@ const StickyFilter = (props) => {
           stickyFiltersRef.current.querySelector('.show-all-filters').classList.remove('hide-for-desktop');
         }
       }
-    }, 500);
+    }, updateAfter);
   });
 
   return (

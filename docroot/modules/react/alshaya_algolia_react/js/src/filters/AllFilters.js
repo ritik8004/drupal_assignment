@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Stats } from 'react-instantsearch-dom';
 import ClearRefinements from './selectedfilters/ClearFilters';
+import { updateAfter } from '../utils/utils';
 
 /**
  * All filters displayed a slide toggle from right side.
@@ -60,7 +61,7 @@ const AllFilters = (props) => {
           }
         });
       }
-    }, 500);
+    }, updateAfter);
   });
 
   return (

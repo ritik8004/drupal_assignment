@@ -1,14 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { createConnector } from 'react-instantsearch-dom';
 const _ = require("lodash");
 import {
   cleanUpValue,
   getCurrentRefinementValue,
-  getIndex,
+  getIndexId,
   getResults,
   refineValue
-} from '../../../utils/connectorUtils';
+} from '../../../utils/indexUtils';
 
 const namespace = 'multiRange';
 
@@ -46,6 +45,11 @@ function refine(props, searchState, nextRefinement, context) {
   return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
 
+// Copied from \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular::getRange().
+// and modified logic for startvalue.
+// Ex: For a granularity of 5 and value of 0, range = 0-5.
+// Ex: For a granularity of 5 and value of 5, range = 0-5.
+// Ex: For a granularity of 5 and value of 9, range = 5-10.
 function getRange(currentvalue, granularity) {
   // Initial values.
   var startvalue = 0;
@@ -54,8 +58,11 @@ function getRange(currentvalue, granularity) {
   if (currentvalue % granularity) {
     startvalue = currentvalue - (currentvalue % granularity);
   }
+  else if (currentvalue > 0 ) {
+    startvalue = currentvalue - (granularity - (currentvalue % granularity));
+  }
   else {
-    startvalue = currentvalue;
+    startvalue = currentvalue
   }
 
   stopvalue = startvalue + granularity;
@@ -88,15 +95,23 @@ function stringifyItem(item) {
   return (item.start ? item.start : '') + ':' + (item.end ? item.end : '');
 }
 
+function getLimit(_ref) {
+  var showMore = _ref.showMore,
+      limit = _ref.limit,
+      showMoreLimit = _ref.showMoreLimit;
+  return showMore ? showMoreLimit : limit;
+}
+
 const sortBy = ['isRefined', 'count:desc'];
 
 export default createConnector({
-  displayName: 'WidgetWithQuery',
+  displayName: 'AlgoliaPriceRefinement',
 
   propTypes: {
     id: PropTypes.string,
     attribute: PropTypes.string.isRequired,
     operator: PropTypes.oneOf(['and', 'or']),
+    showMore: PropTypes.bool,
     defaultRefinement: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
@@ -104,6 +119,7 @@ export default createConnector({
   },
 
   defaultProps: {
+    showMore: false,
     operator: 'or',
   },
 
@@ -132,6 +148,7 @@ export default createConnector({
     results.getFacetValues(attribute, { sortBy }).forEach(v => {
       const range = getRange(parseFloat(v.name), parseInt(granularity));
       const rangeKey = stringifyItem(range);
+
       const key = _.findKey(newItems, {label: rangeKey});
 
       if (typeof key === 'undefined') {
@@ -148,7 +165,6 @@ export default createConnector({
         newItems[key].count = newItems[key].count + parseInt(v.count);
       }
     });
-
     const sortedItems = _.sortBy(newItems, ['sort']);
 
     return {
@@ -162,6 +178,14 @@ export default createConnector({
     return refine(props, searchState, nextRefinement, this.context);
   },
 
+  searchForFacetValues(props, searchState, nextRefinement) {
+    return {
+      facetName: props.attribute,
+      query: nextRefinement,
+      maxFacetHits: getLimit(props)
+    };
+  },
+
   getSearchParameters(searchParameters, props, searchState) {
     const { attribute } = props;
     const { start, end } = parseItem(
@@ -172,7 +196,7 @@ export default createConnector({
     if (start) {
       searchParameters = searchParameters.addNumericRefinement(
         attribute,
-        '>=',
+        '>',
         start
       );
     }
@@ -183,6 +207,7 @@ export default createConnector({
         end
       );
     }
+
     return searchParameters;
   },
 
@@ -193,9 +218,10 @@ export default createConnector({
   getMetadata(props, searchState) {
     const id = getId(props);
     const value = getCurrentRefinement(props, searchState, this.context);
-    const index = getIndex(this.context);
+    const index = getIndexId(this.context);
     const items = [];
-    if (value !== '') {
+
+    if (value.length > 0) {
       items.push({
         label: `${props.attribute}: ${value}`,
         attribute: props.attribute,
