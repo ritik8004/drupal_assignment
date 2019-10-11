@@ -641,7 +641,7 @@ display:
           plugin_id: field
         title:
           alter:
-            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a><span class="rettinal-enabled-{{ field_store_retina_photography }}">{{ field_store_retina_photography }}</span>'
+            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a><span class="rettinal-enabled-{{ field_store_retina_photography | lower }}">{{ field_store_retina_photography }}</span>'
         field_store_country:
           id: field_store_country
           table: node__field_store_country
