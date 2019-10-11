@@ -337,22 +337,6 @@ function _alshaya_search_translate_search_view_config() {
 }
 
 /**
- * Implements hook_alshaya_profile_installed_final_task().
- */
-function alshaya_search_alshaya_profile_installed_final_task() {
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    // Enable alshaya_search_acquia_search to ensure config are overridden to
-    // use solr on cloud.
-    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
-  }
-  else {
-    // Enable alshaya_search_local_search to ensure config are overridden to
-    // use solr in local.
-    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
-  }
-}
-
-/**
  * Helper function to clear all indexed items resave indexes.
  *
  * Since we will add/update lot of attributes, best to re-use the code.

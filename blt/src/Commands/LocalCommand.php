@@ -67,15 +67,12 @@ class LocalCommand extends BltTasks {
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield')
+      ->drush('pmu purge acquia_search acquia_connector shield')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
     $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
-    if ($info['profile'] == 'alshaya_transac') {
-      $modules_to_enable .= ' alshaya_search_local_search';
-    }
 
     $this->say('Enable local only modules');
     $this->taskDrush()
