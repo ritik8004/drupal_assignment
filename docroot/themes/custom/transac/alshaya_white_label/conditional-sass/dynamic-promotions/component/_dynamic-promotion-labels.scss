@@ -14,6 +14,11 @@
       margin-top: 0.5rem;
     }
 
+    .table-cart-items & {
+      font-size: 0.75rem !important;
+      margin-top: 0.5rem;
+    }
+
     @include icon('chevron#{$right}', 'after') {
       font-size: 1.375rem;
       position: absolute;
