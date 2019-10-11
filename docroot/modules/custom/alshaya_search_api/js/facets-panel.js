@@ -461,17 +461,20 @@
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                   $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  $('.sticky-filter-wrapper').css("height", $('.container-without-product').height() + 10);
                 }
               } else {
                 // Action to perform when we are scrolling down.
                 if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                   $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                  $('.sticky-filter-wrapper').css("height", '3.5rem');
                 }
               }
               this.oldScroll = this.scrollY;
             } else {
               if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                 $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                $('.sticky-filter-wrapper').css("height", '3.5rem');
               }
             }
           }
