@@ -61,16 +61,13 @@
         $('body').addClass('free-gifts-modal-overlay');
       });
 
-      // Adding a delay here to make sure this gets called once modal is closed also multiple.
-      // click event on modal close button so to make sure this gets called last.
-      setTimeout(function () {
-        $('.free-gifts-modal-overlay .ui-dialog-titlebar-close').once().on('click', function () {
-          if ($('body').hasClass('free-gift-promo-list-overlay')) {
-            $('body').removeClass('free-gift-promo-list-overlay');
-          }
-          $('body').removeClass('free-gifts-modal-overlay');
-        });
-      }, 3);
+      // On dialog close remove the free gift overlay related classes.
+      $('.free-gifts-modal-overlay #drupal-modal').once().on('dialogclose', function () {
+        if ($('body').hasClass('free-gift-promo-list-overlay')) {
+          $('body').removeClass('free-gift-promo-list-overlay');
+        }
+        $('body').removeClass('free-gifts-modal-overlay');
+      });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
         if ($('.free-gifts-modal-overlay').length > 0) {
