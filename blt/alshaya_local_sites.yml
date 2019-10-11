@@ -94,3 +94,15 @@ sites:
     module: alshaya_ve
     type: alshaya_non_transac
     country: kw
+  jusnontransackw:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: kw
+  jusnontransacae:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: ae
+  jusnontransacsa:
+    module: alshaya_jus
+    type: alshaya_non_transac
+    country: sa

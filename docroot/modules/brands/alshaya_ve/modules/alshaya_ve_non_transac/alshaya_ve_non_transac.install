@@ -9,6 +9,11 @@
  * Implements hook_install().
  */
 function alshaya_ve_non_transac_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_ve_non_transac', 'inc', 'alshaya_ve_non_transac.content');
+
+  // Create default content.
+  alshaya_ve_non_transac_create_default_content();
+
   // Enable and set vision_express as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('vision_express');
@@ -32,4 +37,10 @@ function alshaya_ve_non_transac_install() {
 
   // Import block configuration after updating store finder view.
   alshaya_config_install_configs(['block.block.exposedformstores_finderpage_2'], 'alshaya_ve_non_transac', 'install');
+
+  // Create secondary menu.
+  alshaya_config_install_configs(['system.menu.secondary-menu', 'block.block.secondarymenu'], 'alshaya_ve_non_transac');
+
+  // Enable customer_support & customer_subscribe block.
+  alshaya_config_install_configs(['block.block.customersubscribe', 'block.block.customersupport'], 'alshaya_ve_non_transac');
 }

@@ -14,6 +14,7 @@ services:
     class: Drupal\alshaya_config\AlshayaConfigManager
     arguments:
       - '@config.factory'
+      - '@language_manager'
       - '@entity_type.manager'
       - '@theme.manager'
       - '@module_handler'

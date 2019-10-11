@@ -1,0 +1,47 @@
+@import '../../../config/_config.scss';
+
+.block-store-link {
+  @include breakpoint($upto-lap) {
+    position: absolute;
+    #{$right}: 0;
+    top: -0.5rem;
+  }
+
+  a {
+    font-size: 0.9375rem;
+
+    @include breakpoint($upto-lap) {
+      font-size: 0;
+    }
+
+    @include icon(mappin, after) {
+      color: $store_finder_icon;
+      font-size: 2.5rem;
+      vertical-align: -0.75rem;
+    }
+  }
+}
+
+.region-secondary-header {
+  .block-store-link {
+    border-bottom: 0;
+    background-color: transparent;
+    text-align: $right;
+
+    @include breakpoint($above-palm) {
+      width: 27%;
+
+      html[lang=ar] & {
+        width: 29%;
+      }
+    }
+
+    @include breakpoint($upto-lap) {
+      padding-#{$right}: 0.75rem;
+    }
+
+    a {
+      color: $store_header_link;
+    }
+  }
+}

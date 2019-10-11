@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca14daa6209d3877918779035529cea5",
+    "content-hash": "bda7bba51f7f8aa7dcbac17b56dab524",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5527,6 +5527,7 @@
                     "merge-extra": false
                 },
                 "patches_applied": {
+                    "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2019-09-28/3084138-87x-9.patch",
                     "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                     "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
                     "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
@@ -5539,13 +5540,14 @@
                     "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2019-06-18/views-render_caching_ajax_requests-2500313-49-87x.patch",
                     "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch",
-                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-06-18/add_a_new_setting_allow_insecure_derivates-3059836-12.patch",
+                    "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-10-07/3059836-15.patch",
                     "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
                     "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
                     "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                     "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-05-06/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-15.patch",
                     "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
                     "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch",
+                    "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2019-06-20/termStorage-loadChildren-sorted-by-weight-3063118-6-D8.6.16.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
@@ -13214,6 +13216,81 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/social_auth_google",
                 "issues": "https://www.drupal.org/project/issues/social_auth_google"
+            }
+        },
+        {
+            "name": "drupal/stage_file_proxy",
+            "version": "1.0.0-rc1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
+                "reference": "8.x-1.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-8.x-1.0-rc1.zip",
+                "reference": "8.x-1.0-rc1",
+                "shasum": "609dc94f9e6d5e4e0fe4c2f71f3134625a071860"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-rc1",
+                    "datestamp": "1569500290",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "BarisW",
+                    "homepage": "https://www.drupal.org/user/107229"
+                },
+                {
+                    "name": "geek.merlin aka axel.rutz",
+                    "homepage": "https://www.drupal.org/user/229048"
+                },
+                {
+                    "name": "greggles",
+                    "homepage": "https://www.drupal.org/user/36762"
+                },
+                {
+                    "name": "markdorison",
+                    "homepage": "https://www.drupal.org/user/346106"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                },
+                {
+                    "name": "msonnabaum",
+                    "homepage": "https://www.drupal.org/user/75278"
+                },
+                {
+                    "name": "netaustin",
+                    "homepage": "https://www.drupal.org/user/199298"
+                },
+                {
+                    "name": "robwilmshurst",
+                    "homepage": "https://www.drupal.org/user/144488"
+                }
+            ],
+            "description": "Provides stage_file_proxy module.",
+            "homepage": "https://www.drupal.org/project/stage_file_proxy",
+            "support": {
+                "source": "https://git.drupalcode.org/project/stage_file_proxy"
             }
         },
         {
@@ -21947,21 +22024,21 @@
             "time": "2017-07-28T17:11:54+00:00"
         },
         {
-            "name": "drupal/stage_file_proxy",
+            "name": "drupal/layout_builder_styles",
             "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
+                "url": "https://git.drupalcode.org/project/layout_builder_styles.git",
                 "reference": "8.x-1.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-8.x-1.0-beta1.zip",
+                "url": "https://ftp.drupal.org/files/projects/layout_builder_styles-8.x-1.0-beta1.zip",
                 "reference": "8.x-1.0-beta1",
-                "shasum": "6609a2166509fd7cc2e593ff2efd7c44daeb0e5b"
+                "shasum": "69c291b9bf62d638fa01919aea2f0c94d62c14dd"
             },
             "require": {
-                "drupal/core": "~8.0"
+                "drupal/core": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -21970,55 +22047,39 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta1",
-                    "datestamp": "1555515785",
+                    "datestamp": "1563566880",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Project has not opted into security advisory coverage!"
                     }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
-                    "name": "BarisW",
-                    "homepage": "https://www.drupal.org/user/107229"
+                    "name": "bkosborne",
+                    "homepage": "https://www.drupal.org/user/788032"
                 },
                 {
-                    "name": "axel.rutz",
-                    "homepage": "https://www.drupal.org/user/229048"
+                    "name": "mark_fullmer",
+                    "homepage": "https://www.drupal.org/user/2612816"
                 },
                 {
-                    "name": "greggles",
-                    "homepage": "https://www.drupal.org/user/36762"
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
                 },
                 {
-                    "name": "markdorison",
-                    "homepage": "https://www.drupal.org/user/346106"
-                },
-                {
-                    "name": "moshe weitzman",
-                    "homepage": "https://www.drupal.org/user/23"
-                },
-                {
-                    "name": "msonnabaum",
-                    "homepage": "https://www.drupal.org/user/75278"
-                },
-                {
-                    "name": "netaustin",
-                    "homepage": "https://www.drupal.org/user/199298"
-                },
-                {
-                    "name": "robwilmshurst",
-                    "homepage": "https://www.drupal.org/user/144488"
+                    "name": "twfahey",
+                    "homepage": "https://www.drupal.org/user/3403722"
                 }
             ],
-            "description": "Provides stage_file_proxy module.",
-            "homepage": "https://www.drupal.org/project/stage_file_proxy",
+            "description": "Apply styles to blocks in Layout Builder.",
+            "homepage": "https://www.drupal.org/project/layout_builder_styles",
             "support": {
-                "source": "https://git.drupalcode.org/project/stage_file_proxy"
+                "source": "https://git.drupalcode.org/project/layout_builder_styles"
             }
         },
         {
@@ -23138,9 +23199,9 @@
         "drupal/search_api_spellcheck": 20,
         "drupal/sharethis": 10,
         "drupal/social_api": 20,
+        "drupal/stage_file_proxy": 5,
         "drupal/views_ajax_get": 20,
         "drupal/views_block_filter_block": 10,
-        "drupal/stage_file_proxy": 15,
         "sensiolabs-de/deprecation-detector": 20
     },
     "prefer-stable": true,

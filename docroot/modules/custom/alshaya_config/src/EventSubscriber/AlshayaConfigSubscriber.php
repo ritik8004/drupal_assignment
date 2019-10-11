@@ -13,6 +13,8 @@ use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\language\Config\LanguageConfigOverrideCrudEvent;
+use Drupal\language\Config\LanguageConfigOverrideEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -20,6 +22,13 @@ use Symfony\Component\Yaml\Yaml;
  * Class AlshayaConfigSubscriber.
  */
 class AlshayaConfigSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Static flag to avoid recursive execution for event.
+   *
+   * @var bool
+   */
+  protected static $processingOnLanguageConfigOverrideSave = FALSE;
 
   /**
    * Module handler object.
@@ -96,6 +105,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events[ConfigEvents::SAVE] = ['onConfigSave'];
+    $events[LanguageConfigOverrideEvents::SAVE_OVERRIDE] = ['onLanguageConfigOverrideSave'];
 
     return $events;
   }
@@ -133,6 +143,55 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // Log the config changes.
     if ($this->configFactory->get('alshaya_config.settings')->get('log_config_changes')) {
       $this->logConfigChanges($config_name, $config->getOriginal(), $data);
+    }
+  }
+
+  /**
+   * This method is called whenever the config language override is saved.
+   *
+   * @param \Drupal\language\Config\LanguageConfigOverrideCrudEvent $event
+   *   Event Object.
+   */
+  public function onLanguageConfigOverrideSave(LanguageConfigOverrideCrudEvent $event) {
+    if (static::$processingOnLanguageConfigOverrideSave) {
+      return;
+    }
+
+    $config = $event->getLanguageConfigOverride();
+    $config_name = $config->getName();
+
+    $data_modified = FALSE;
+    // We browse all the modules to check for override.
+    foreach ($this->moduleHandler->getModuleList() as $module) {
+      $override_path = drupal_get_path('module', $module->getName()) . '/config/' . $config->getLangcode() . '/override/' . $config_name . '.yml';
+
+      // If there is an override, we merge it with the initial config.
+      if (file_exists($override_path)) {
+        $data_modified = TRUE;
+        $config->merge(Yaml::parse(file_get_contents($override_path)));
+
+        // Disable subscription of this event for now.
+        static::$processingOnLanguageConfigOverrideSave = TRUE;
+
+        $config->save();
+
+        // Enable again.
+        static::$processingOnLanguageConfigOverrideSave = FALSE;
+      }
+    }
+
+    if ($data_modified) {
+      // Re-write the config to make sure the overrides are not lost.
+      Cache::invalidateTags($config->getCacheTags());
+      $this->configFactory->reset($config_name);
+
+      // Log the config changes.
+      if ($this->configFactory->get('alshaya_config.settings')->get('log_config_changes')) {
+        $this->logger->notice('Config overrides appled for @config in @language', [
+          '@config' => $config_name,
+          '@language' => $config->getLangcode(),
+        ]);
+      }
     }
   }
 

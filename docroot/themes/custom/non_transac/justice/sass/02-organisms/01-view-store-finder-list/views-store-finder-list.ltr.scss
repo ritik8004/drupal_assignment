@@ -1,0 +1,69 @@
+@import '../../config/_config.scss';
+
+.view--store-list {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0;
+  }
+
+  .view-header {
+    strong {
+      font-family: $jus_semi_bold;
+    }
+  }
+}
+
+.list-store--detail {
+  @include breakpoint($above-palm) {
+    width: 34%;
+  }
+
+  .list-view-locator {
+    background-color: $store_finder_list_locator_bg;
+
+    @include breakpoint($upto-palm) {
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+  }
+}
+
+.list-view-locator {
+  color: $store_finder_store_row_text;
+  border-top: 0;
+  border-bottom: 0;
+
+  .row-title {
+    color: $store_finder_store_row_text;
+    font-family: $jus_bold;
+    font-weight: normal;
+    font-size: 1.125rem;
+  }
+
+  .views-field-field-store-address {
+    border-bottom: 0;
+    margin-#{$left}: 1.5rem;
+    margin-#{$right}: 1rem;
+
+    .field-content {
+      padding-#{$left}: 2rem;
+
+      @include breakpoint($lap) {
+        padding-#{direction(left)}: 1.75rem;
+      }
+    }
+  }
+}
+
+.store--map {
+  @include breakpoint($desk) {
+    width: 65%;
+  }
+}
+
+.load-more-button a {
+  background-color: $store_finder_mobile_load_more;
+  border-color: $store_finder_mobile_load_more;
+  color: $primary_btn_text;
+  font-family: $jus_semi_bold;
+  border-radius: 0.3125rem;
+}

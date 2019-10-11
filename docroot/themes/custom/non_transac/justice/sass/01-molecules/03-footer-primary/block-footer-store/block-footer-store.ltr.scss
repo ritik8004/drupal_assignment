@@ -1,0 +1,51 @@
+@import '../../../config/_config.scss';
+
+.block-find-store-heading {
+  background-color: transparent;
+  color: $black;
+  position: static;
+
+  @include breakpoint($upto-palm) {
+    display: block;
+    padding-top: 1.625rem;
+    width: 50%;
+  }
+
+  @include breakpoint($desk) {
+    padding-top: 1.6rem;
+    text-align: $right;
+    white-space: nowrap;
+  }
+
+  h2 {
+    display: none;
+  }
+
+  a {
+    color: $black;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-family: $jus_regular;
+    margin-#{$right}: 0;
+    margin-#{$left}: 2rem;
+
+    @include breakpoint($upto-palm) {
+      text-transform: none;
+      width: 100%;
+      display: inline-block;
+      padding-#{$left}: 10px;
+      margin: 0;
+      text-align: $right;
+    }
+
+    &::before {
+      display: none;
+    }
+
+    @include icon(mappin, after) {
+      font-size: 2.75rem;
+      vertical-align: -0.75rem;
+      color: $store_finder_icon;
+    }
+  }
+}

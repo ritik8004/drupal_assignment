@@ -1,0 +1,30 @@
+@import '../../../config/_config.scss';
+
+.block-logo-navigation {
+  @include breakpoint($above-palm) {
+    background: $menu-bg;
+  }
+}
+
+.region-primary-header {
+  @include breakpoint($above-palm) {
+    background: $menu-bg;
+  }
+
+  .region__wrapper {
+    max-width: 80rem;
+    margin: auto;
+
+    @include breakpoint($above-palm) {
+      position: relative;
+    }
+  }
+}
+
+.page-generic {
+  padding-top: 7.6875rem;
+
+  @include breakpoint($upto-palm) {
+    padding-top: 3.4375rem;
+  }
+}

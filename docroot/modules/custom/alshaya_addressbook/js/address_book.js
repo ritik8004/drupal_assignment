@@ -15,13 +15,23 @@
       }
 
       $('.address--delete a').click(function () {
-        $('body').addClass('reduce-zindex');
-        $('body').addClass('modal-overlay');
+        if ($(window).width() < 768) {
+          $('body').addClass('mobile--overlay address--delete-popup');
 
-        $(document).ajaxComplete(function () {
-          toggleOverlay('.ui-dialog-titlebar-close', 'modal-overlay');
-          toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
-        });
+          $(document).ajaxComplete(function () {
+            toggleOverlay('.ui-dialog-titlebar-close', 'mobile--overlay address--delete-popup');
+            toggleOverlay('.address--delete-popup .dialog-cancel', 'mobile--overlay address--delete-popup');
+          });
+        }
+
+        else {
+          $('body').addClass('reduce-zindex modal-overlay');
+
+          $(document).ajaxComplete(function () {
+            toggleOverlay('.ui-dialog-titlebar-close', 'modal-overlay');
+            toggleOverlay('.ui-dialog-buttonpane .dialog-cancel', 'modal-overlay');
+          });
+        }
       });
     }
   };

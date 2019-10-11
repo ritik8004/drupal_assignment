@@ -18,11 +18,11 @@ product_detail:
     - core/drupal.dialog.ajax
     - core/drupal.form
     - clientside_validation_jquery/cv.jquery.validate
-    - alshaya_master/ladda
     - alshaya_master/common_functions
     - alshaya_acm_product/product_view
     - alshaya_acm_cart_notification/cart_notification_js
     - alshaya_white_label/jquery_mobile_touch_swipe
+    - alshaya_white_label/attribute
 
 sku_gallery_format:
   version: 1.x
@@ -49,12 +49,3 @@ sharethis:
     - core/jquery.once
     - core/drupalSettings
     - alshaya_master/jquery_is_in_viewport
-
-add_to_cart_form:
-  version: 1.x
-  js:
-    js/add_to_cart_form.js: {}
-  dependencies:
-    - core/jquery.once
-    - core/drupal
-    - alshaya_white_label/attribute
