@@ -4,6 +4,7 @@ namespace AlshayaMiddleware\Controller;
 
 use AlshayaMiddleware\Magento\CartActions;
 use AlshayaMiddleware\Magento\MagentoInfo;
+use AlshayaMiddleware\Drupal\Drupal;
 use AlshayaMiddleware\Magento\Cart;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,13 @@ class CartController {
   protected $magentoInfo;
 
   /**
+   * Drupal service.
+   *
+   * @var \AlshayaMiddleware\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
    * Service for cart interaction.
    *
    * @var \AlshayaMiddleware\Magento\Cart
@@ -32,12 +40,16 @@ class CartController {
    *
    * @param \AlshayaMiddleware\Magento\MagentoInfo $magentoInfo
    *   Magento info service.
+   * @param \AlshayaMiddleware\Drupal\Drupal $drupal
+   *   Drupal service.
    * @param \AlshayaMiddleware\Magento\Cart $cart
    *   Cart service.
    */
   public function __construct(MagentoInfo $magentoInfo,
+                              Drupal $drupal,
                               Cart $cart) {
     $this->magentoInfo = $magentoInfo;
+    $this->drupal = $drupal;
     $this->cart = $cart;
   }
 
@@ -104,6 +116,7 @@ class CartController {
       case CartActions::CART_ADD_ITEM:
       case CartActions::CART_UPDATE_ITEM:
       case CartActions::CART_REMOVE_ITEM:
+        $cart_id = $action = $request->request->get('cart_id');
         $cart = $this->cart->addUpdateRemoveItem($cart_id, $request->request->get('sku'), $request->request->get('quantity'), $action);
 
         if (!empty($cart['error'])) {
@@ -116,6 +129,7 @@ class CartController {
 
       case CartActions::CART_APPLY_COUPON:
       case CartActions::CART_REMOVE_COUPON:
+        $cart_id = $action = $request->request->get('cart_id');
         $cart = $this->cart->applyRemovePromo($cart_id, $request->request->get('promo'), $action);
 
         if (!empty($cart['error'])) {
@@ -171,6 +185,9 @@ class CartController {
       'base_grand_total' => $cart_data['totals']['base_grand_total'],
       'discount_amount' => $cart_data['totals']['discount_amount'],
     ];
+
+    $sku_items = array_column($cart_data['cart']['items'], 'sku');
+    $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
 
     return $data;
   }
