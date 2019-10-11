@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+  use Drupal\views\ViewExecutable;
+  use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_ve_non_transac_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() == 'stores_finder' && ($display_id == 'page_2' || $display_id == 'attachment_2')) {
+    $handler = $view->getHandler($display_id, 'filter', 'field_store_country_value');
+    // Get user's detected country.
+    $country = \Drupal::service('alshaya_ve_non_transac.user_location_detect')->getUserCountryCode();
+
+    // If detected country count is 1 then default value should be that.
+    $handler['value'] = (count($country) == 1) ? $country : ['All'];
+    $view->setHandler($display_id, 'filter', 'field_store_country_value', $handler);
+
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $exposed_form_ids = [
+      'views-exposed-form-stores-finder-page-1',
+    ];
+
+    if (in_array($form['#id'], $exposed_form_ids)) {
+      $current_route_name = \Drupal::routeMatch()->getRouteName();
+      $hidden_class_map_list = '';
+      if ($current_route_name == 'view.stores_finder.page_1') {
+        $hidden_class_map_list = 'hidden';
+      }
+
+      $form['map_view'] = [
+        '#markup' => '<a href="#" class="map-view-link block-store-finder-form__list-view icon-map ' . $hidden_class_map_list . ' ">' . t('Map View') . '</a>',
+        '#weight' => 8,
+      ];
+    }
+
+    $glossary_exposed_form_id = [
+      'views-exposed-form-stores-finder-page-2',
+    ];
+
+    if (in_array($form['#id'], $glossary_exposed_form_id)) {
+      $form['country']['#options']['All'] = t('Middle East');
+      $form['actions']['#attributes']['class'] = ['hidden'];
+    }
+
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_ve_non_transac_page_attachments(array &$attachments) {
+  // Attach store finder js only on store-finder pages.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if (strpos($current_path, '/store-finder') !== FALSE) {
+    // Get user's detected country.
+    $country = \Drupal::service('alshaya_ve_non_transac.user_location_detect')->getUserCountryCode();
+    $filterCountry = \Drupal::request()->get('country');
+    if ($filterCountry && $filterCountry !== 'All') {
+      $country = [];
+      $country[] = $filterCountry;
+    }
+    $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => $country];
+    $attachments['#attached']['library'][] = 'alshaya_ve_non_transac/alshaya_ve_non_transac_store_finder';
+  }
+}
+
+/**
+ * Implements hook_alshaya_config_save_alter().
+ */
+function alshaya_ve_non_transac_alshaya_config_save_alter(array &$data, $config_name) {
+  if ($config_name == 'views.view.stores_finder') {
+    $view_displays = ['page_1'];
+    foreach ($view_displays as $view_display) {
+      if (isset($data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity'])) {
+        // Clean the country from plugin settings and add it on runtime as per
+        // user's detected country.
+        $data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = '';
+      }
+    }
+  }
+}
