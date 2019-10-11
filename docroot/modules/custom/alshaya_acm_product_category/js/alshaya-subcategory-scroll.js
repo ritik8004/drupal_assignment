@@ -37,13 +37,16 @@
               stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight();
             }
           }
+          else if (!$('body').hasClass('.header-sticky-filter') && !$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+            stickyFilterPosition = $('.plp-subcategory-block').outerHeight() + stickyFilterPosition;
+          }
         }
         else {
           if ($('.sticky-filter-wrapper').hasClass('show-sub-category') && $('.plp-subcategory-block').offset().top > $(element).offset().top) {
             stickyFilterPosition = $('.show-sub-category').outerHeight();
           }
           else {
-            stickyFilterPosition = $('#block-subcategoryblock + .block-views-exposed-filter-blockalshaya-product-list-block-1').outerHeight();
+            stickyFilterPosition = $('.block-views-exposed-filter-blockalshaya-product-list-block-1').outerHeight();
           }
         }
 
