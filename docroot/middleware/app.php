@@ -33,7 +33,7 @@ $app->register(new MiddleWareProvider());
 $app->register(new ServiceControllerServiceProvider());
 
 $app['cart.controller'] = function () use ($app) {
-  return new CartController($app['magento'], $app['get_cart']);
+  return new CartController($app['magento'], $app['drupal'], $app['get_cart']);
 };
 
 $app->get('/cart/{cart_id}', 'cart.controller:getCart');
