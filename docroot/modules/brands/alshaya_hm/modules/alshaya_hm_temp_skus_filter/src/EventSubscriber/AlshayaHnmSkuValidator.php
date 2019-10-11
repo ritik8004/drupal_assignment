@@ -5,6 +5,7 @@ namespace Drupal\alshaya_hm_temp_skus_filter\EventSubscriber;
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -68,9 +69,14 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
           continue;
         }
 
+        $descriptiveStillLifeTypes = Settings::get('hm_descriptive_still_life_types', [
+          'StillMediaComponents/Product/DescriptiveStillLife',
+          'StillMedia/DescriptiveStillLife',
+        ]);
+
         // Avoid skipping product import only if we find an asset with
         // DescriptiveStillLife image & multipack attribute set to TRUE.
-        if ($asset['Data']['AssetType'] === 'StillMediaComponents/Product/DescriptiveStillLife') {
+        if (in_array($asset['Data']['AssetType'], $descriptiveStillLifeTypes)) {
           if (($skip_skus_without_multipack) && ($asset['Data']['isMultiPack'] == 'true')) {
             $product['skip'] = FALSE;
             break;
