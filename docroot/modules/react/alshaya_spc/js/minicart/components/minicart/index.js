@@ -30,6 +30,11 @@ export default class MiniCart extends React.Component {
 
           // Store info in storage.
           addInfoInStorage(result);
+
+          // Trigger event so that data can be passed to other components.
+          var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
+          document.dispatchEvent(event);
+
         });
       }
     } catch (error) {
