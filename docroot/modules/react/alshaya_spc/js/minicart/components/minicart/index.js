@@ -25,7 +25,7 @@ export default class MiniCart extends React.Component {
             this.setState({
             wait: false,
             qty: result.items_qty,
-            amount: result.total
+            amount: result.cart_total
           });
 
           // Store info in storage.
