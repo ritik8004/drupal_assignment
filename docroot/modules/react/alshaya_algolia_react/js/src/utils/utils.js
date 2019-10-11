@@ -18,4 +18,14 @@ function updateSearchQuery(queryValue) {
   history.push({hash: queryValue});
 }
 
-export { getCurrentSearchQueryString, getCurrentSearchQuery, updateSearchQuery, updateAfter }
+function isMobile() {
+  return (window.innerWidth < 768);
+}
+
+export {
+  getCurrentSearchQueryString,
+  getCurrentSearchQuery,
+  updateSearchQuery,
+  updateAfter,
+  isMobile
+}

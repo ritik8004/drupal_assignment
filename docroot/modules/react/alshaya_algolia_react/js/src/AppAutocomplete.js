@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { InstantSearch } from 'react-instantsearch-dom';
-import { Configure } from "react-instantsearch-dom";
+import { Configure, Hits } from "react-instantsearch-dom";
 import qs from 'qs'
 import {searchClient} from './config/SearchClient';
 import AutoComplete from './Autocomplete';
 import { toggleSearchResultsContainer } from './searchresults/SearchUtility';
 import SearchResultsRender from './searchresults/SearchResultsRender';
-import { getCurrentSearchQuery } from './utils/utils';
+import { getCurrentSearchQuery, isMobile } from './utils/utils';
+import TopResults from './components/TopResults/TopResults';
+import Teaser from './components/teaser/Teaser';
 
 class AppAutocomplete extends React.Component {
 
@@ -75,6 +77,14 @@ class AppAutocomplete extends React.Component {
             currentValue={query}
           />
         </InstantSearch>
+        {isMobile() && (
+          <TopResults query={query}>
+            <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
+              <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
+              <Hits hitComponent={Teaser}/>
+            </InstantSearch>
+          </TopResults>
+        )}
         {searchResultsDiv}
       </div>
     );
