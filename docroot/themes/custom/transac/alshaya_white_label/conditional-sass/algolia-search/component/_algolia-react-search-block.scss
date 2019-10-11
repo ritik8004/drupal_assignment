@@ -112,6 +112,10 @@
       }
 
       &--open {
+        #top-results {
+          display: block;
+        }
+
         &::before {
           border-bottom-#{$right}-radius: 0;
         }
@@ -210,6 +214,15 @@
             }
           }
         }
+      }
+
+      article[data-vmode="search_result"]:hover .alshaya_search_hoverimage {
+        opacity: 0;
+        transition: none;
+      }
+
+      #top-results {
+        display: none;
       }
     }
   }
