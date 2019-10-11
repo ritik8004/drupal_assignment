@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_spc
+  theme:
+    - alshaya_white_label
+id: alshayareactcartminicartblock
+theme: alshaya_white_label
+region: header
+weight: 0
+provider: null
+plugin: alshaya_react_mini_cart
+settings:
+  id: alshaya_react_mini_cart
+  label: 'Alshaya React Cart Mini Cart Block'
+  provider: alshaya_spc
+  label_display: '0'
+visibility: { }

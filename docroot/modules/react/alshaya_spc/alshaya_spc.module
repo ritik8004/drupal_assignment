@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_spc_preprocess_html(&$variables) {
+  $currency_config = [
+    'currency_code' => \Drupal::config('acq_commerce.currency')->get('currency_code'),
+    'currency_code_position' => \Drupal::config('acq_commerce.currency')->get('currency_code_position'),
+    'decimal_points' => \Drupal::config('acq_commerce.currency')->get('decimal_points'),
+  ];
+
+  $variables['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = $currency_config;
+
+  // Prepare middleware url.
+  $host_url = \Drupal::request()->getHost();
+  $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = $host_url . '/middleware/app.php';
+}
