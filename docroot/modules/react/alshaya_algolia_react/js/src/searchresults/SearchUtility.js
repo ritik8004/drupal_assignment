@@ -2,7 +2,6 @@
 var contentDiv = document.querySelector('#block-content');
 // Create Search result div wrapper to render results.
 var searchResultDiv = document.createElement('div');
-
 searchResultDiv.id = 'alshaya-algolia-search';
 // searchResultDiv.className = 'c-plp-only l-one--w lhn-without-sidebar';
 searchResultDiv.style.display = 'none';
