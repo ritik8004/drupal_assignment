@@ -62,6 +62,7 @@ class CartController {
     }
 
     // Here we will do the processing of cart to make it in required format.
+    $data = $this->processCartData($data);
     return $app->json($data);
   }
 
@@ -97,6 +98,7 @@ class CartController {
         }
 
         // Here we will do the processing of cart to make it in required format.
+        $cart = $this->processCartData($cart);
         return $app->json($cart);
 
       case CartActions::CART_ADD_ITEM:
@@ -109,6 +111,7 @@ class CartController {
         }
 
         // Here we will do the processing of cart to make it in required format.
+        $cart = $this->processCartData($cart);
         return $app->json($cart);
 
       case CartActions::CART_APPLY_COUPON:
@@ -120,6 +123,7 @@ class CartController {
         }
 
         // Here we will do the processing of cart to make it in required format.
+        $cart = $this->processCartData($cart);
         return $app->json($cart);
 
     }
@@ -147,6 +151,28 @@ class CartController {
     }
 
     return $valid;
+  }
+
+  /**
+   * Process cart data.
+   *
+   * @param array $cart_data
+   *   Cart data.
+   *
+   * @return array
+   *   Processed data.
+   */
+  private function processCartData(array $cart_data) {
+    $data = [];
+    $data['items_qty'] = $cart_data['cart']['items_qty'];
+    $data['cart_total'] = $cart_data['totals']['base_grand_total'];
+    $data['totals'] = [
+      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
+      'base_grand_total' => $cart_data['totals']['base_grand_total'],
+      'discount_amount' => $cart_data['totals']['discount_amount'],
+    ];
+
+    return $data;
   }
 
 }
