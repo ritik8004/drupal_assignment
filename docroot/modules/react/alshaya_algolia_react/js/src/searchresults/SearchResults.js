@@ -75,11 +75,11 @@ const SearchResultHits = connectInfiniteHits(props => {
               <li className="pager__item">
                 <button
                   className="button"
-                  title="Load morer products"
+                  title="Load more products"
                   rel="next"
                   onClick={refineNext}
                 >
-                  Load more products
+                  load more products
                 </button>
               </li>
             ) : (
