@@ -115,6 +115,7 @@ const SearchResults = props => {
       createURL={props.createURL}
       onSearchStateChange={onSearchStateChange}
     >
+      <Configure clickAnalytics />
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       <VirtualSearchBox currentRefinement={query}  />
       <div className="container-wrapper">

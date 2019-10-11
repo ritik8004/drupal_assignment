@@ -9,10 +9,15 @@
   Drupal.behaviors.alshayaAlgoliaInsights = {
     attach: function (context) {
       $('#alshaya-algolia-search').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
-        event.preventDefault();
-        insights('clickedObjectIDsAfterSearch', {
-          eventName: 'Product View'
-        })
+        var hit = $(this).closest('[data-insights-query-id]');
+
+        window.aa('clickedObjectIDsAfterSearch', {
+          eventName: "Visit Detail Page",
+          index: "...",
+          queryID: hit.attr('data-insights-query-id'),
+          objectIDs: [hit.attr('data-insights-object-id')],
+          positions: [parseInt(hit.attr('data-insights-position'))],
+        });
       });
     }
   };
