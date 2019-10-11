@@ -16,5 +16,8 @@ function alshaya_spc_preprocess_html(&$variables) {
   ];
 
   $variables['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = $currency_config;
-  $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = 'https://local.alshaya-hmkw.com/middleware/app.php';
+
+  // Prepare middleware url.
+  $host_url = \Drupal::request()->getHost();
+  $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = $host_url . '/middleware/app.php';
 }
