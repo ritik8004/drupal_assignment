@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_static_html_images
     - field.storage.node.body
-    - search_api.server.acquia_search_server
+    - search_api.server.non_transac_acquia_search_server
   module:
     - node
     - search_api
@@ -147,4 +147,4 @@ tracker_settings:
 options:
   index_directly: true
   cron_limit: 50
-server: acquia_search_server
+server: non_transac_acquia_search_server
