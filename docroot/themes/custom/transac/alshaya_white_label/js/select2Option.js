@@ -59,7 +59,7 @@ jQuery.fn.select2Option = function (options) {
               liHtml.append(swatch_markup);
             }
             else {
-              liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+              liHtml.append('<span class="' + $(this).text() + '">' + $(this).text() + '</span>');
             }
           }
           else {
@@ -69,7 +69,7 @@ jQuery.fn.select2Option = function (options) {
               liHtml.append(swatch_markup);
             }
             else {
-              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).text() + '</a>');
             }
           }
         }

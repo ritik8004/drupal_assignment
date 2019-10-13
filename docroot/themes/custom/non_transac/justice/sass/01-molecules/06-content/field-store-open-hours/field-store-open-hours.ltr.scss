@@ -8,6 +8,10 @@
   padding-#{$left}: 2.0625rem;
 }
 
+.view-on--map a {
+  border-bottom: 0;
+}
+
 .geolocation-common-map-container {
   .hours--wrapper {
     .open--hours,
@@ -76,18 +80,23 @@
 
 .hours--wrapper {
   .open--hours {
-    margin-#{$left}: 1.5rem;
+    margin-#{$left}: 1.25rem;
   }
 
   .hours--label {
     color: $store_finder_hours_label;
-    margin-#{$left}: 1.5rem;
-    margin-#{$right}: 1rem;
+    margin-#{$left}: 1.25rem;
+    margin-#{$right}: 1.25rem;
+    border-top: 2px solid $store_finder_store_row_border;
 
     @include icon(chevron#{direction(right)}, after) {
       font-size: 3rem;
       color: $store_finder_icon;
       top: 0.0625rem;
+
+      @include breakpoint($upto-palm) {
+        #{$right}: -0.3125rem;
+      }
     }
   }
 }
@@ -98,7 +107,7 @@
       color: $store_finder_icon;
 
       @include breakpoint($upto-palm) {
-        #{$right}: 0;
+        #{$right}: -0.3125rem;
       }
     }
   }

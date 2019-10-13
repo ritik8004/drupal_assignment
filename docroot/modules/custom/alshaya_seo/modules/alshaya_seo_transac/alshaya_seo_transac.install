@@ -136,8 +136,17 @@ function alshaya_seo_transac_install() {
  */
 function _alshaya_seo_transac_save_metatag_translations() {
   $strings = [
-    'Collection [alshaya_seo:top_category] Online' => [
-      'ar' => 'مجموعة [alshaya_seo:top_category] على الانترنت',
+    'Collection Online' => [
+      'ar' => 'اون لاين',
+    ],
+    'Collection for [term:parents:first] Online' => [
+      'ar' => 'لل [term:parents:first] اون لاين',
+    ],
+    'Shop [term:name] in @city' => [
+      'ar' => 'تسوق [term:name] اون لاين في city@',
+    ],
+    '[term:name] sale in @city' => [
+      'ar' => '[term_name] البيع في @city',
     ],
     'alshaya_seo_text_before_cod' => [
       'en' => 'Compare [current-date:html_year] [term:name] collection at the best specs and prices of [alshaya_seo:sub_categories] and more.',

@@ -21,9 +21,9 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   // Attach the js file with the add to cart form.
   $form['#attached']['library'][] = 'core/drupal.ajax';
   $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-  $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
   $form['#attached']['drupalSettings']['currency_code'] = \Drupal::config('acq_commerce.currency')->getRawData()['currency_code'];
+  $form['#attached']['drupalSettings']['ajaxSpinnerMessageInterval'] = (int) \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
   $form['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
 }
 
@@ -116,7 +116,6 @@ function alshaya_acm_cart_notification_theme_suggestions_input_alter(array &$sug
     $is_add_to_cart = !empty($variables['element']['#id']) && ($variables['element']['#id'] == 'edit-add-to-cart');
     if ($node->bundle() == 'acq_product' && $is_add_to_cart) {
       $suggestions[] = 'input__add_to_cart';
-      $variables['element']['#attributes']['class'][] = 'ladda-button';
     }
   }
 }

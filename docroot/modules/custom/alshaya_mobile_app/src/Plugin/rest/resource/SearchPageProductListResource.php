@@ -151,9 +151,16 @@ class SearchPageProductListResource extends ResourceBase {
   public function get() {
     // Get search keyword.
     $search_keyword = $this->currentRequest->query->get(self::KEYWORD_KEY, '');
+
+    // Trim if any whitespaces.
+    $search_keyword = trim($search_keyword);
+
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+
+    // Filter the empty products.
+    $response_data['products'] = array_filter($response_data['products']);
 
     // Get spell check results, if avaialable.
     $message['message']['spellcheck'] = $this->prepareSpellCheckResults($result_set, $search_keyword) ?? NULL;
