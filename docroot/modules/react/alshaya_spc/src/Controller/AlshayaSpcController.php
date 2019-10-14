@@ -45,7 +45,17 @@ class AlshayaSpcController extends ControllerBase {
   }
 
   /**
-   * Overriden controller for cart page.
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('module_handler')
+    );
+  }
+
+  /**
+   * Overridden controller for cart page.
    *
    * @return array
    *   Markup for cart page.
@@ -60,16 +70,6 @@ class AlshayaSpcController extends ControllerBase {
         ],
       ],
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('alshaya_acm_product.skumanager'),
-      $container->get('module_handler')
-    );
   }
 
   /**
