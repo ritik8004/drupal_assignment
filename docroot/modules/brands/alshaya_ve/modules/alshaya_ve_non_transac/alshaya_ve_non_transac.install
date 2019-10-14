@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * @file
  * Install, uninstall, update function for alshaya_ve_non_transac.
@@ -34,6 +36,13 @@ function alshaya_ve_non_transac_install() {
 
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_ve_non_transac');
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['views.view.stores_finder'],
+      'alshaya_ve_non_transac',
+      'override',
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    );
 
   // Import block configuration after updating store finder view.
   alshaya_config_install_configs(['block.block.exposedformstores_finderpage_2'], 'alshaya_ve_non_transac', 'install');
