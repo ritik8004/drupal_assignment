@@ -24,15 +24,15 @@ const StickyFilter = (props) => {
         }
       });
 
-      if (activeFilters.length > 5) {
-        var hideFilters = activeFilters.slice(5);
+      if (activeFilters.length > 3) {
+        var hideFilters = activeFilters.slice(3);
         hideFilters.forEach((filter) => {
           filter.classList.add('hide-facet-block');
         });
       }
 
       // Hide the `all filters` link when less filters (only for desktop).
-      if (activeFilters.length <= 5) {
+      if (activeFilters.length <= 3) {
         allFiltersRef.current.querySelector('.show-all-filters').classList.add('hide-for-desktop');
       }
       else {
