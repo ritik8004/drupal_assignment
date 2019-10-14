@@ -1,11 +1,11 @@
 <?php
 
-use Drupal\alshaya_config\AlshayaConfigManager;
-
 /**
  * @file
  * Install, uninstall, update function for alshaya_ve_non_transac.
  */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_install().
@@ -23,14 +23,14 @@ function alshaya_ve_non_transac_install() {
   // Enable the Policies block.
   alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_ve_non_transac', 'optional');
 
-  // Install config for new fields(country & retian photography) in store content.
+  // Install config for new fields(country & retian photography)
+  // in store content.
   // Install config for views exposed form block for store_finder view page_2.
-
   $configs = [
-  	'field.field.node.store.field_store_country',
-  	'field.field.node.store.field_store_retina_photography',
-  	'field.storage.node.field_store_country',
-  	'field.storage.node.field_store_retina_photography'
+    'field.field.node.store.field_store_country',
+    'field.field.node.store.field_store_retina_photography',
+    'field.storage.node.field_store_country',
+    'field.storage.node.field_store_retina_photography',
   ];
   alshaya_config_install_configs($configs, 'alshaya_ve_non_transac', 'install');
 
