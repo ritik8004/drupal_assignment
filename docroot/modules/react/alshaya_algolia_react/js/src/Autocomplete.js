@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
-import CustomHighlight from './CustomHighlight';
+import CustomHighlight from './components/algolia/CustomHighlight';
 
 class Autocomplete extends React.Component {
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
@@ -36,8 +36,8 @@ class Autocomplete extends React.Component {
     if (!newValue) {
       this.props.onSuggestionCleared();
     }
+    this.props.refine(newValue);
     this.props.onChange(newValue);
-
     this.setState({
       value: newValue,
     });
@@ -76,6 +76,7 @@ class Autocomplete extends React.Component {
   render() {
     const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
+
     const inputProps = {
       placeholder: Drupal.t('What are you looking for?'),
       onChange: this.onChange,

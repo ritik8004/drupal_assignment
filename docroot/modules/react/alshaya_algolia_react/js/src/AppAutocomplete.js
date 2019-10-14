@@ -1,22 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Configure } from "react-instantsearch-dom";
-import AutoComplete from './components/Autocomplete';
-import SearchResults from './components/SearchResults';
-import InstantSearchComponent from './components/InstantSearchComponent';
-import { createBrowserHistory } from 'history';
-import queryString from 'query-string'
-
-const history = createBrowserHistory();
+import { InstantSearch } from 'react-instantsearch-dom';
+import { Configure, Hits } from "react-instantsearch-dom";
+import qs from 'qs'
+import {searchClient} from './config/SearchClient';
+import AutoComplete from './Autocomplete';
+import { toggleSearchResultsContainer } from './searchresults/SearchUtility';
+import SearchResultsRender from './searchresults/SearchResultsRender';
+import { getCurrentSearchQuery, isMobile } from './utils/utils';
+import TopResults from './components/TopResults/TopResults';
+import Teaser from './components/teaser/Teaser';
 
 class AppAutocomplete extends React.Component {
 
   constructor(props) {
     super(props);
-    const parsedHash = queryString.parse(location.hash);
     this.state = {
-      query: parsedHash && parsedHash.q ? parsedHash.q : ''
+      query: getCurrentSearchQuery()
     };
+    toggleSearchResultsContainer(this.state.query);
     this.updateQueryValue = this.updateQueryValue.bind(this);
   };
 
@@ -25,16 +27,15 @@ class AppAutocomplete extends React.Component {
   };
 
   updateQueryValue() {
-    const parsedHash = queryString.parse(location.hash);
-    if (parsedHash && parsedHash.q) {
-      this.setQueryValue(parsedHash.q);
+    const parsedHash = qs.parse(location.hash);
+    if (parsedHash && parsedHash.query) {
+      this.setQueryValue(parsedHash.query);
     }
   };
 
   setQueryValue(queryValue) {
     this.setState({query: queryValue});
-    // Push query to browser histroy to ga back and see previous results.
-    history.push({hash: `q=${queryValue}`});
+    toggleSearchResultsContainer(queryValue);
   };
 
   onSuggestionSelected = (event, { suggestion }) => {
@@ -61,13 +62,13 @@ class AppAutocomplete extends React.Component {
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null)
-      ? (<SearchResults query={query} />)
+      ? (<SearchResultsRender query={query} />)
       : '';
 
     return (
       <div>
-        <InstantSearchComponent indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }>
-          <Configure hitsPerPage="6"/>
+        <InstantSearch indexName={ `${drupalSettings.algoliaSearch.indexName}_query` } searchClient={searchClient}>
+          <Configure hitsPerPage={drupalSettings.autocomplete.hits}/>
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
@@ -75,7 +76,15 @@ class AppAutocomplete extends React.Component {
             onChange={this.onChange}
             currentValue={query}
           />
-        </InstantSearchComponent>
+        </InstantSearch>
+        {isMobile() && (
+          <TopResults query={query}>
+            <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
+              <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
+              <Hits hitComponent={Teaser}/>
+            </InstantSearch>
+          </TopResults>
+        )}
         {searchResultsDiv}
       </div>
     );

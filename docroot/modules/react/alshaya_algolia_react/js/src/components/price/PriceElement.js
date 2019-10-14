@@ -1,6 +1,10 @@
 import React from 'react';
 
 const PriceElement = (props) => {
+  if (typeof props.amount === 'undefined') {
+    return (null);
+  }
+
   const priceParts = [
     (<span className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>),
     (<span className="price-amount">{props.amount.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}</span>)

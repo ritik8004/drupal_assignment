@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from "react-slick";
 import { ImageWrapper } from '../imageHelper/ImageWrapper';
-import ImageElement from '../imageHelper/ImageElement';
+import ImageLazyLoad from '../imageHelper/ImageLazyLoad';
 
 const SliderElement = props => {
   return(
@@ -9,7 +9,7 @@ const SliderElement = props => {
       onMouseEnter={props.mouseenter.bind(this)}
       onMouseOut={props.mouseout.bind(this)}
     >
-      <ImageElement
+      <ImageLazyLoad
         src={props.src}
         title={props.title}
         className="b-lazy b-loaded"
@@ -19,6 +19,11 @@ const SliderElement = props => {
 };
 
 class SearchGallery extends React.Component {
+
+  static defaultProps = {
+    media: [],
+  }
+
   constructor(props) {
     super(props);
     this.mainImage = props.media.length > 0 ? props.media[0] : {};
@@ -57,8 +62,6 @@ class SearchGallery extends React.Component {
   render() {
     const { media, title } = this.props;
 
-    const mainImageWrapper = ImageWrapper(this.state.mainImage, title, "alshaya_search_mainimage", true);
-
     const origObj = this;
     const thumbnails = [];
     media.forEach((element, index) => {
@@ -74,8 +77,13 @@ class SearchGallery extends React.Component {
 
     return (
       <div className="alshaya_search_gallery">
-        {mainImageWrapper}
-        <div class="alshaya_search_slider">
+        <ImageWrapper
+          src={typeof this.state.mainImage.url != 'undefined' ? this.state.mainImage.url : ''}
+          title={title}
+          className='alshaya_search_mainimage'
+          showDefaultImage={true}
+        />
+        <div className="alshaya_search_slider">
           <Slider {...this.settings} className="search-lightSlider">
             {thumbnails}
           </Slider>
