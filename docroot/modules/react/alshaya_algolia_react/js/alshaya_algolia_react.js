@@ -9,7 +9,7 @@
     attach: function (context, settings) {
       // On clicking facet block title, update the title of block and hide
       // other facets.
-      $('.all-filters .c-accordion').on('click', function() {
+      $('.all-filters .c-accordion').once().on('click', function() {
         // Update the title on click of facet.
         var facet_title = $(this).find('h3.c-facet__title').html();
         $('.filter-sort-title').html(facet_title);
@@ -27,7 +27,7 @@
 
       // On clicking on back button, reset the block title and add class so
       // that facet blocks can be closed.
-      $('.facet-all-back').on('click', function() {
+      $('.facet-all-back').once().on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('filter & sort'));
         $('.all-filters .c-accordion').removeClass('show-facet');
@@ -80,7 +80,7 @@
       });
 
       // Close the facets on click anywherer outside.
-      document.addEventListener('click', function(event) {
+      $(window).on('click', function(event) {
         var facet_block = $('.c-content .region__content .container-without-product .c-accordion');
         if ($(facet_block).find(event.target).length == 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
@@ -88,69 +88,11 @@
         }
       });
 
-      /**
-       * Make Header sticky on scroll.
-       */
-      function stickyfacetfilter() {
-        var filterposition = 0;
-        var supercategorymenuHeight = 0;
-        var position = 0;
-        var filter = $('.region__content');
-        var nav = $('.branding__menu');
-        var fixedNavHeight = 0;
-
-        if ($('.show-all-filters').length > 0) {
-          if ($(window).width() > 1023) {
-            filterposition = $('.container-without-product').offset().top;
-          }
-          else if ($(window).width() > 767 && $(window).width() < 1024) {
-            filterposition = $('.show-all-filters').offset().top;
-          }
-          else {
-            if ($('.block-alshaya-super-category').length > 0) {
-              supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
-            }
-            filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
-            fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
-          }
-        }
-
-        $(window, context).once().on('scroll', function () {
-          // Sticky filter header.
-          if ($('.show-all-filters').length > 0) {
-            if ($(this).scrollTop() > filterposition) {
-              filter.addClass('filter-fixed-top');
-              $('body').addClass('header-sticky-filter');
-            }
-            else {
-              filter.removeClass('filter-fixed-top');
-              $('body').removeClass('header-sticky-filter');
-            }
-          }
-        });
-      };
       stickyfacetfilter();
-
-      /**
-       * Wrapping all the filters inside a div to make it sticky.
-       */
-      function stickyfacetwrapper() {
-        if ($('.show-all-filters').length > 0) {
-          if ($(window).width() > 767) {
-              var site_brand = $('.site-brand-home').clone();
-              $(site_brand).insertBefore('#alshaya-algolia-search .container-without-product');
-          }
-          else {
-            if ($('.region__content > .all-filters').length < 1) {
-              $('.all-filters').insertAfter('#block-page-title');
-            }
-          }
-        }
-      }
       stickyfacetwrapper();
 
       // Show all filters blocks.
-      $('.show-all-filters').once().on('click', function() {
+      $('.sticky-filter-wrapper .show-all-filters').once().on('click', function() {
         $('.all-filters').addClass('filters-active');
 
         if ($(window).width() > 1023) {
@@ -193,16 +135,75 @@
    */
   Drupal.listingProductTileHeight = function () {
     if ($(window).width() > 1024) {
-      var Hgt = 0;
+      var maxHeight = 0;
       $('.c-products__item').each(function () {
-        var Height = $(this)
+        var currentHeight = $(this)
           .find('> article')
           .outerHeight(true);
-        Hgt = Hgt > Height ? Hgt : Height;
+        maxHeight = maxHeight > currentHeight ? maxHeight : currentHeight;
       });
 
-      $('.c-products__item').css('height', Hgt);
+      $('.c-products__item').css('height', maxHeight);
     }
   };
+
+  /**
+   * Make Header sticky on scroll.
+   */
+  function stickyfacetfilter() {
+    var filterposition = 0;
+    var supercategorymenuHeight = 0;
+    var position = 0;
+    var filter = $('.region__content');
+    var nav = $('.branding__menu');
+    var fixedNavHeight = 0;
+
+    if ($('.show-all-filters').length > 0) {
+      if ($(window).width() > 1023) {
+        filterposition = $('.container-without-product').offset().top;
+      }
+      else if ($(window).width() > 767 && $(window).width() < 1024) {
+        filterposition = $('.show-all-filters').offset().top;
+      }
+      else {
+        if ($('.block-alshaya-super-category').length > 0) {
+          supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
+        }
+        filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+        fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+      }
+    }
+
+    $(window).once().on('scroll', function () {
+      // Sticky filter header.
+      if ($('.show-all-filters').length > 0) {
+        if ($(this).scrollTop() > filterposition) {
+          filter.addClass('filter-fixed-top');
+          $('body').addClass('header-sticky-filter');
+        }
+        else {
+          filter.removeClass('filter-fixed-top');
+          $('body').removeClass('header-sticky-filter');
+        }
+      }
+    });
+  };
+
+  /**
+   * Wrapping all the filters inside a div to make it sticky.
+   */
+  function stickyfacetwrapper() {
+    if ($('.show-all-filters').length > 0) {
+      if ($(window).width() > 767) {
+          var site_brand = $('.site-brand-home').clone();
+          $(site_brand).insertBefore('#alshaya-algolia-search .container-without-product');
+      }
+      else {
+        if ($('.region__content > .all-filters').length < 1) {
+          $('.all-filters').insertAfter('#block-page-title');
+        }
+      }
+    }
+  }
 
 })(jQuery, Drupal);
