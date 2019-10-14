@@ -324,7 +324,7 @@ class SkuAssetManager {
     // Download the file contents.
     try {
       $options = [
-        'timeout' => Settings::get('media_download_timeout', 3),
+        'timeout' => Settings::get('media_download_timeout', 5),
       ];
 
       $file_data = $this->httpClient->get($url, $options)->getBody();
