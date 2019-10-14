@@ -6,13 +6,13 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  Drupal.behaviors.alshayaAlgoliaInsights = {
+  Drupal.behaviors.alshayaAlgoliaInsightsListing = {
     attach: function (context) {
       $('#alshaya-algolia-search').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
         var hit = $(this).closest('[data-insights-query-id]');
 
         window.aa('clickedObjectIDsAfterSearch', {
-          eventName: "Visit Detail Page",
+          eventName: 'Visit Detail Page',
           index: "...",
           queryID: hit.attr('data-insights-query-id'),
           objectIDs: [hit.attr('data-insights-object-id')],

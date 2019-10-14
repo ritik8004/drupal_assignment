@@ -17,14 +17,14 @@ const Teaser = ({hit}) => {
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
-            href={hit.url}
-            data--original-url={hit.url}
+            href={`${hit.url}?queryID=${hit.__queryID}`}
+            data--original-url={`${hit.url}?queryID=${hit.__queryID}`}
             className="list-product-gallery product-selected-url">
             <Gallery media={hit.media} title={hit.title} />
           </a>
           <div className="product-plp-detail-wrapper">
             <h2 className="field--name-name">
-              <a href={hit.url} className="product-selected-url">{hit.title}</a>
+              <a href={`${hit.url}?queryID=${hit.__queryID}`} className="product-selected-url">{hit.title}</a>
             </h2>
             <PriceContainer price={hit.original_price} final_price={hit.final_price}/>
             <PromotionsContainer promotions={hit.promotions}/>

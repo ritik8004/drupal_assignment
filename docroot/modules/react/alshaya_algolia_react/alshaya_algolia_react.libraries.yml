@@ -24,7 +24,7 @@ search_insights_detail:
   js:
     js/search-insights.detail.js: {}
   dependencies:
-    - core/jquery
+    - alshaya_master/common_functions
     - alshaya_algolia_react/search_insights
 
 search_insights:
