@@ -1,0 +1,5 @@
+services:
+  alshaya_spc.route_subscriber:
+    class: Drupal\alshaya_spc\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

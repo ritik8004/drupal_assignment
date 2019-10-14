@@ -45,6 +45,24 @@ class AlshayaSpcController extends ControllerBase {
   }
 
   /**
+   * Overriden controller for cart page.
+   *
+   * @return array
+   *   Markup for cart page.
+   */
+  public function cart() {
+    return [
+      '#type' => 'markup',
+      '#markup' => '<div id="spc-cart"></div>',
+      '#attached' => [
+        'library' => [
+          'alshaya_spc/cart',
+        ],
+      ],
+    ];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
