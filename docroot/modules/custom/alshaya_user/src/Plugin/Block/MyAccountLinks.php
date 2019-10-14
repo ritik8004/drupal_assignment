@@ -236,7 +236,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Get user id of user who's profile is currently visit.
     $account = $this->currentRequest->attributes->get('user');
-    if (empty($account) || !$account instanceof User) {
+    if (!$account instanceof User) {
       $account = $this->currentUser;
     }
 
