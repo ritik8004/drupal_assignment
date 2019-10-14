@@ -13,8 +13,14 @@
     // On mouseleave removed active class from all the places.
     $('.block-alshaya-main-menu').mouseleave(function () {
       $(parent).removeClass('active');
+
+      // Checking if first l2 doesn't have l3 and it is in active state.
+      if (!$('.menu__links__wrapper > .menu--two__list-item.last-element:not(.move-to-right):first').hasClass('active')) {
+        $('.move-to-right').removeClass('move-to-left');
+      }
+
       $('.menu--two__list-item').removeClass('active');
-      $('.move-to-right').removeClass('move-to-left');
+
     });
 
     // On hover of L1 item make first L2 item active by default.
@@ -22,6 +28,12 @@
       $(parent).removeClass('active');
       $(this).addClass('active');
       $(this).find('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right):first').addClass('active');
+
+      // If first L2 doesn't has L3 by default move right category to left.
+      if ($(this).find('.menu__links__wrapper > .menu--two__list-item.active:not(.move-to-right):first').hasClass('last-element')) {
+        $('.move-to-right').addClass('move-to-left');
+      }
+
     });
 
     // On hover of l2 item add active class.
