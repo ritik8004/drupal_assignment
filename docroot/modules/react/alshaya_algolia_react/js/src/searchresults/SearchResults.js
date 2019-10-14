@@ -92,8 +92,6 @@ const SearchResults = props => {
             )}
           </SearchResultInfiniteHits>
         </div>
-        <SelectedFilters />
-        <SearchResultHits />
         <NoResults />
       </MainContent>
     </InstantSearch>

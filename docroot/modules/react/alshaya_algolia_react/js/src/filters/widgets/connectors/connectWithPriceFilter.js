@@ -216,7 +216,7 @@ export default createConnector({
   getMetadata(props, searchState) {
     const id = getId(props);
     const value = getCurrentRefinement(props, searchState, this.context);
-    const index = getIndexId(this.context);
+    const index = getIndex(this.context);
     const items = [];
 
     if (value.length > 0) {
