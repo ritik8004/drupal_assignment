@@ -1,3 +1,4 @@
+// Ref: https://github.com/algolia/react-instantsearch/blob/v5.7.0/packages/react-instantsearch-core/src/core/indexUtils.js
 import { omit } from 'lodash';
 
 export function getIndexId(context) {
