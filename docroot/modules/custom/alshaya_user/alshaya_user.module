@@ -254,10 +254,11 @@ function alshaya_user_preprocess_page_title(&$variables) {
   if (strpos($current_path, '/user') !== FALSE && $user = \Drupal::request()->attributes->get('user')) {
     $arg = explode('/', $current_path);
 
-    if (!empty($arg[3]) && $user instanceof User) {
+    if (!empty($arg[3])) {
       $back_link_route = ($arg[3] === 'order') ? 'acq_customer.orders' : 'entity.user.canonical';
 
-      $link = Url::fromRoute($back_link_route, ['user' => $user->id()])->toString();
+      $uid = $user instanceof User ? $user->id() : $user;
+      $link = Url::fromRoute($back_link_route, ['user' => $uid])->toString();
 
       $variables['title_prefix'] = [
         '#markup' => "<a href=" . $link . " class='back-link'>",
