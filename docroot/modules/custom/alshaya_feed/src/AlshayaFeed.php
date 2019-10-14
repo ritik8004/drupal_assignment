@@ -169,10 +169,6 @@ class AlshayaFeed {
       '@total' => $context['sandbox']['total'],
     ]);
 
-    if ($context['sandbox']['count'] != $context['sandbox']['total']) {
-      $context['finished'] = $context['sandbox']['count'] / $context['sandbox']['total'];
-    }
-
     if (count($nids) > 0 && $context['sandbox']['count'] != $context['sandbox']['total']) {
       $context['finished'] = $context['sandbox']['count'] / $context['sandbox']['total'];
     }
