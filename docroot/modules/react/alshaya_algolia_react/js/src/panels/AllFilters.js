@@ -16,7 +16,7 @@ const AllFilters = (props) => {
       // main display, Which toggles with sliding effect from right side and
       // also used for mobile.
       if (typeof allFiltersRef.current == 'object') {
-        const filters = allFiltersRef.current.querySelectorAll('.c-accordion');
+        const filters = allFiltersRef.current.querySelectorAll('.c-collapse-item');
         filters.forEach(element => {
           const children = element.getElementsByTagName('ul')[0];
 
@@ -67,11 +67,11 @@ const AllFilters = (props) => {
 
   return (
     <div className="block block-alshaya-search-api block-alshaya-search-facets-block-all">
-      <div className="all-filters">
+      <div className="all-filters-algolia">
         <div className="filter__head">
-          <div className="facet-all-back"></div>
+          <div className="back-facet-list"></div>
           <div className="filter-sort-title">filter &amp; sort</div>
-          <div className="facet-all-apply"></div>
+          <div className="all-filters-close"></div>
         </div>
         <div className="filter__inner" ref={allFiltersRef}>
           {props.children}
@@ -87,8 +87,8 @@ const AllFilters = (props) => {
                 />
               </div>
             </div>
-            <div className="facet-all-clear button"><ClearRefinements /></div>
-            <a className="facet-all-apply button">apply filter</a>
+            <div className="facet-clear-all button has-link"><ClearRefinements /></div>
+            <a className="facet-apply-all button">apply filter</a>
           </div>
         </div>
       </div>

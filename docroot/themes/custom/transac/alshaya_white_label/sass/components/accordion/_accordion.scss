@@ -9,7 +9,8 @@
   }
 }
 
-.c-accordion__title {
+.c-accordion__title,
+.c-collapse__title {
   @include icon(chevrondown, after);
 
   position: relative;

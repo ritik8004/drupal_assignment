@@ -13,7 +13,7 @@ const StickyFilter = (props) => {
       // Show only maximum 4 filters for desktop sticky filter
       // excluding the sort by, (with sort by 5).
       if (typeof stickyFiltersRef.current == 'object') {
-        const filters = stickyFiltersRef.current.querySelectorAll('.c-accordion');
+        const filters = stickyFiltersRef.current.querySelectorAll('.c-collapse-item');
         let activeFilters = [];
         filters.forEach(element => {
           const children = element.getElementsByTagName('ul')[0];
@@ -36,10 +36,10 @@ const StickyFilter = (props) => {
 
         // Hide the `all filters` link when less filters (only for desktop).
         if (activeFilters.length <= 5) {
-          stickyFiltersRef.current.querySelector('.show-all-filters').classList.add('hide-for-desktop');
+          stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.add('hide-for-desktop');
         }
         else {
-          stickyFiltersRef.current.querySelector('.show-all-filters').classList.remove('hide-for-desktop');
+          stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.remove('hide-for-desktop');
         }
       }
     }, updateAfter);
