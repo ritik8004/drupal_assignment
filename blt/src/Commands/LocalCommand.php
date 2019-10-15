@@ -81,25 +81,6 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    // @TODO Remove this and alshaya_search_* modules after we use new approach.
-    if ($info['profile'] == 'alshaya_transac') {
-      $this->say('Save server config again to ensure local solr is used.');
-      $this->taskDrush()
-        ->drush('php-eval')
-        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');")
-        ->alias($info['local']['alias'])
-        ->uri($info['local']['url'])
-        ->run();
-
-      $this->say('Clear solr index');
-      $this->taskDrush()
-        ->drush('search-api-clear')
-        ->arg('acquia_search_index')
-        ->alias($info['local']['alias'])
-        ->uri($info['local']['url'])
-        ->run();
-    }
-
     $this->say('Configure stage_file_proxy');
     $this->taskDrush()
       ->drush('cset')
