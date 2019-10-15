@@ -399,14 +399,15 @@
         // JS to make sidebar sticky beyond Mobile.
         // PDP Sidebar.
         var sidebarWrapper = $('.content-sidebar-wrapper');
-        // Magazine Gallery.
-        var galleryWrapper = $('.gallery-wrapper');
         var lastScrollTop = 0;
         var pageScrollDirection;
         var heightDiff;
         var initialSidebarTop = sidebarWrapper.offset().top;
 
-        $(window).once().on('scroll', function (event) {
+        $(window).once('mobileMagazine').on('scroll', function (event) {
+          // Magazine Gallery.
+          var galleryWrapper = $('.gallery-wrapper');
+
           // Figure out scroll direction.
           var currentScrollTop = $(this).scrollTop();
           if (currentScrollTop < lastScrollTop) {
