@@ -3,10 +3,9 @@ import { connectSortBy } from 'react-instantsearch-dom';
 const SortByList = ({ items, refine }) => (
   <ul>
     {items.map(item => (
-      <li key={item.value}>
+      <li key={item.value} className={"facet-item " + (item.isRefined ? 'active-item' : '')}>
         <a
           href="#"
-          style={{ fontWeight: item.isRefined ? 'bold' : '' }}
           onClick={event => {
             event.preventDefault();
             refine(item.value);

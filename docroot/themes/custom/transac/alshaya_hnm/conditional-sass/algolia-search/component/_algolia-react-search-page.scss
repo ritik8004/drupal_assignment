@@ -1,0 +1,33 @@
+#alshaya-algolia-search {
+  .block-alshaya-category-lhn-block {
+    a {
+      @include arabic-letter-spacing;
+
+      letter-spacing: 1px;
+
+      .ais-HierarchicalMenu-label {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  #sort_by {
+    li {
+      @include icon(radio-empty, before) {
+        margin-#{$right}: 1rem;
+        position: relative;
+        color: $primary_radiobtn_empty;
+        vertical-align: middle;
+        border: none;
+        font-size: 1.875rem;
+        top: -0.5rem;
+      }
+
+      &.active-item {
+        @include icon(radio-filled, before) {
+          border: none;
+        }
+      }
+    }
+  }
+}
