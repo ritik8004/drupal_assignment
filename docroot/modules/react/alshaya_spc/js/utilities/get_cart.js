@@ -1,20 +1,5 @@
 import axios from 'axios';
 
-export const getCartCookie = function() {
-  // If cart id cookie is not set, don't process further.
-  // @Todo: check if we will be using the acq_cart_id or something else.
-  // @Todo: need to check what will happen for logged in user when cookie is not set.
-  var cookie = document.cookie.match('(^|;) ?' + 'Drupal.visitor.acq_cart_id' + '=([^;]*)(;|$)');
-  var cart_id = cookie ? cookie[2] : null;
-
-  // No need to process if cookie is not set.
-  if (cart_id === null) {
-    return false;
-  }
-
-  return cart_id;
-}
-
 export const cartAvailableInStorage = function () {
   // Get data from local storage.
   var cart_data = localStorage.getItem('cart_data');
@@ -39,19 +24,16 @@ export const cartAvailableInStorage = function () {
 }
 
 export const fetchCartData = function () {
-  var cart_cookie = getCartCookie();
-  if (cart_cookie === false) {
-    return null;
-  }
-
   // Check if cart available in storage.
   var cart = cartAvailableInStorage();
   if (cart !== false) {
     return Promise.resolve(cart);
   }
 
+  return null;
+
   // Prepare api url.
-  var api_url = window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart_cookie;
+  var api_url = window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart.cart_id;
 
   return axios.get(api_url)
     .then(response => {
