@@ -233,3 +233,8 @@ free_gifts:
   dependencies:
     - core/jquery
     - alshaya_white_label/slick
+
+app-navigation-links:
+  css:
+    theme:
+      css/conditional-sass/app-navigation-links/app-navigation-links.ltr.css: {}
