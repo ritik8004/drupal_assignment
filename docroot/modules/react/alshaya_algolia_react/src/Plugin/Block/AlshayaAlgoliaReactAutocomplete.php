@@ -124,40 +124,6 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $currency = $this->configFactory->get('acq_commerce.currency');
     $configuration = $this->getConfiguration();
 
-    $filter_facets = [
-      [
-        'identifier' => 'sort_by',
-        'name' => $this->t('Sort By'),
-        'widget' => [
-          'type' => 'sort_by',
-          'items' => [
-            ['value' => $index_name, 'label' => $this->t('Featured')],
-            ['value' => $index_name . '_created_desc', 'label' => $this->t('New In')],
-            ['value' => $index_name . '_title_asc', 'label' => $this->t('Name A to Z')],
-            ['value' => $index_name . '_title_desc', 'label' => $this->t('Name Z to A')],
-            ['value' => $index_name . '_final_price_desc', 'label' => $this->t('Price High to Low')],
-            ['value' => $index_name . '_final_price_asc', 'label' => $this->t('Price Low to High')],
-          ],
-        ],
-      ],
-    ];
-
-    $facets = $this->facetManager->getFacetsByFacetSourceId(self::FACET_SOURCE);
-    if (!empty($facets)) {
-      foreach ($facets as $facet) {
-        if (!in_array(
-          $facet->getFieldIdentifier(),
-          ['field_category', 'attr_color', 'attr_selling_price']
-        )) {
-          $filter_facets[] = [
-            'identifier' => $facet->getFieldIdentifier(),
-            'name' => $facet->getName(),
-            'widget' => $facet->getWidget(),
-          ];
-        }
-      }
-    }
-
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-autocomplete"></div>',
@@ -175,7 +141,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'filterOos' => $listing->get('filter_oos_product'),
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/search-insights@1.3.0.min.js',
-            'filters' => $filter_facets,
+            'filters' => $this->getFilters($index_name),
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'],
@@ -206,6 +172,67 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
         'contexts' => ['languages'],
       ],
     ];
+  }
+
+  /**
+   * Return filters to show for current site.
+   *
+   * The function gets all the filters for the existing search api
+   * self::FACET_SOURCE, and as we don't have any configuration which facets
+   * to show for search, we are removing 'field_category', 'attr_selling_price'
+   * and 'attr_color' if 'attr_color_family' is also available (For H&M case).
+   *
+   * @param string $index_name
+   *   The current algolia index.
+   *
+   * @return array
+   *   Return array of filters.
+   *
+   * @todo: this is temporary way to get filters, work on it to make something
+   * solid on which we can rely.
+   */
+  protected function getFilters($index_name) {
+    $filter_facets = [
+      [
+        'identifier' => 'sort_by',
+        'name' => $this->t('Sort By'),
+        'widget' => [
+          'type' => 'sort_by',
+          'items' => [
+            ['value' => $index_name, 'label' => $this->t('Featured')],
+            ['value' => $index_name . '_created_desc', 'label' => $this->t('New In')],
+            ['value' => $index_name . '_title_asc', 'label' => $this->t('Name A to Z')],
+            ['value' => $index_name . '_title_desc', 'label' => $this->t('Name Z to A')],
+            ['value' => $index_name . '_final_price_desc', 'label' => $this->t('Price High to Low')],
+            ['value' => $index_name . '_final_price_asc', 'label' => $this->t('Price Low to High')],
+          ],
+        ],
+      ],
+    ];
+
+    $facets = $this->facetManager->getFacetsByFacetSourceId(self::FACET_SOURCE);
+    if (!empty($facets)) {
+      foreach ($facets as $facet) {
+        if (!in_array(
+          $facet->getFieldIdentifier(),
+          ['field_category', 'attr_selling_price']
+        )) {
+          $filter_facets[] = [
+            'identifier' => $facet->getFieldIdentifier(),
+            'name' => $facet->getName(),
+            'widget' => $facet->getWidget(),
+          ];
+        }
+      }
+    }
+
+    $intersect = array_intersect(array_column($filter_facets, 'identifier'), ['attr_color', 'attr_color_family']);
+    if (count($intersect) > 1) {
+      unset($intersect[array_search('attr_color_family', $intersect)]);
+      unset($filter_facets[key($intersect)]);
+    }
+
+    return $filter_facets;
   }
 
   /**
