@@ -12,9 +12,8 @@ export function getResults(searchResults, context) {
     return searchResults.results[getIndexId(context)]
       ? searchResults.results[getIndexId(context)]
       : null;
-  } else {
-    return searchResults.results ? searchResults.results : null;
   }
+  return searchResults.results ? searchResults.results : null;
 }
 
 export function hasMultipleIndices(context) {
