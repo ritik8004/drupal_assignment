@@ -5,8 +5,8 @@
  * Module file.
  */
 
-  use Drupal\views\ViewExecutable;
-  use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_views_pre_view().
@@ -91,4 +91,42 @@ function alshaya_ve_non_transac_alshaya_config_save_alter(array &$data, $config_
       }
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_ve_non_transac_alshaya_i18n_onetime_translation_add() {
+  // Save some translations.
+  $strings = [];
+
+  $strings['Retina photography'] = [
+    'ar' => 'تفاصيل التوصيل',
+  ];
+
+  $strings['Middle East'] = [
+    'ar' => 'الشرق الأوسط',
+  ];
+
+  $strings['Kuwait'] = [
+    'ar' => 'الكويت',
+  ];
+
+  $strings['UAE'] = [
+    'ar' => 'الامارات',
+  ];
+
+  $strings['KSA'] = [
+    'ar' => 'المبشور',
+  ];
+
+  $strings['Qatar'] = [
+    'ar' => 'دولة قطر',
+  ];
+
+  $strings['Bahrain'] = [
+    'ar' => 'البحرين',
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

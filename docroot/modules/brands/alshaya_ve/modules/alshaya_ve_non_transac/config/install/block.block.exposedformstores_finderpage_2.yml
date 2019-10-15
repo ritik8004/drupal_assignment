@@ -7,9 +7,9 @@ dependencies:
     - system
     - views
   theme:
-    - pottery_barn_non_trans
+    - vision_express
 id: exposedformstores_finderpage_2
-theme: pottery_barn_non_trans
+theme: vision_express
 region: content
 weight: -4
 provider: null
