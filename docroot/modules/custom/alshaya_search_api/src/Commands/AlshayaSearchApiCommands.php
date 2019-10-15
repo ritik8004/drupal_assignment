@@ -193,8 +193,6 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *
    * @param string $index_id
    *   Index id.
-   * @param string $langcode
-   *   Langcode.
    * @param array $options
    *   Command options.
    *
@@ -204,10 +202,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *
    * @aliases index-specified-skus
    *
-   * @usage drush index-specified-skus acquia_search_index en --skus="1234,4323" --batch-size=100
+   * @usage drush index-specified-skus acquia_search_index --skus="1234,4323" --batch-size=100
    *   Index specified skus in batches of 100.
    */
-  public function prioritiseIndexing(string $index_id, string $langcode, array $options = ['skus' => NULL, 'batch-size' => 100]) {
+  public function prioritiseIndexing(string $index_id, array $options = ['skus' => NULL, 'batch-size' => 100]) {
     // Validate index.
     $index = Index::load($index_id);
     if (empty($index)) {
@@ -232,7 +230,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     foreach (array_chunk($skus, $options['batch-size']) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'indexProritiesedSkus'],
-        [$index_id, $langcode, $chunk],
+        [$index_id, $chunk],
       ];
     }
 
@@ -241,6 +239,8 @@ class AlshayaSearchApiCommands extends DrushCommands {
 
     // Process the batch.
     drush_backend_batch_process();
+
+    $this->logger->notice(dt('Process finished'));
   }
 
   /**
@@ -248,12 +248,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *
    * @param string $index_id
    *   Index id.
-   * @param string $langcode
-   *   Langcode.
    * @param array $chunk
    *   Chunk of SKUs.
    */
-  public static function indexProritiesedSkus(string $index_id, string $langcode, array $chunk) {
+  public static function indexProritiesedSkus(string $index_id, array $chunk) {
     $item_ids = [];
     foreach ($chunk as $skuId) {
       $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['field_skus' => $skuId]);
@@ -261,7 +259,9 @@ class AlshayaSearchApiCommands extends DrushCommands {
       if (!$node instanceof NodeInterface) {
         continue;
       }
-      $item_ids['nodes'][] = 'entity:node/' . $node->id() . ':' . $langcode;
+      foreach ($node->getTranslationLanguages() as $language) {
+        $item_ids['nodes'][] = 'entity:node/' . $node->id() . ':' . $language->getId();
+      }
       $item_ids['skus'][] = $skuId;
     }
     self::indexSpecifiedSkus($index_id, $item_ids);
@@ -394,8 +394,6 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $index = Index::load($index_id);
     $items = $index->loadItemsMultiple($item_ids['nodes']);
     $index->indexSpecificItems($items);
-
-    self::$loggerStatic->notice(dt('Process finished'));
   }
 
   /**
