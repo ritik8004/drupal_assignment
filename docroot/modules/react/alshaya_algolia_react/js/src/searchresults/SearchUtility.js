@@ -1,5 +1,4 @@
-// var contentDiv = document.querySelector('.page-standard main');
-var contentDiv = document.querySelector('#block-content');
+var contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
 var searchResultDiv = document.createElement('div');
 searchResultDiv.id = 'alshaya-algolia-search';
@@ -9,7 +8,8 @@ contentDiv.parentNode.insertBefore( searchResultDiv, contentDiv.nextSibling );
 
 var pageStandard = document.querySelector('.page-standard');
 var defaultClasses = pageStandard.className;
-var searchClasses = "page-standard c-plp c-plp-only l-one--w lhn-without-sidebar l-container";
+// var searchClasses = "page-standard c-plp c-plp-only l-one--w lhn-without-sidebar l-container";
+var searchClasses = "page-standard c-plp c-plp-only l-two--sf l-container";
 
 function showSearchResultContainer() {
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {

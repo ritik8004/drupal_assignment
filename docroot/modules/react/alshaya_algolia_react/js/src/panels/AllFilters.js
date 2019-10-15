@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Stats } from 'react-instantsearch-dom';
-import ClearRefinements from './selectedfilters/ClearFilters';
+import ClearRefinements from '../filters/selectedfilters/ClearFilters';
 import { updateAfter } from '../utils/utils';
 
 /**

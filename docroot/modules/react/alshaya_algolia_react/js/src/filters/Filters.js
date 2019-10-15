@@ -4,6 +4,7 @@ import SortByList from './SortByList';
 import ColorFilter from './widgets/ColorFilter';
 import RefinementList from './widgets/RefinementList';
 import PriceFilter from './widgets/PriceFilter';
+import NewPriceFilter from './widgets/NewPriceFilter';
 
 export default ({indexName}) => (
   <React.Fragment>
@@ -21,7 +22,7 @@ export default ({indexName}) => (
       />
     </FilterPanel>
     <FilterPanel header="Price" id="final_price">
-      <PriceFilter
+      <NewPriceFilter
         attribute="final_price"
         granularity={5}
       />
@@ -50,15 +51,6 @@ export default ({indexName}) => (
         searchable={false}
       />
     </FilterPanel>
-    {/* <Panel header="Category" className="c-facet c-accordion">
-      <HierarchicalMenu
-        attributes={[
-          'field_category_name.lvl0',
-          'field_category_name.lvl1',
-          'field_category_name.lvl2',
-        ]}
-      />
-    </Panel> */}
     <div className="show-all-filters">
       <span className="desktop">all filters</span>
       <span className="upto-desktop">filter &amp; sort</span>

@@ -4,10 +4,10 @@ const _ = require("lodash");
 import {
   cleanUpValue,
   getCurrentRefinementValue,
-  getIndexId,
+  getIndex,
   getResults,
   refineValue
-} from '../../../utils/indexUtils';
+} from '../../../utils/connectorUtils';
 
 const namespace = 'multiRange';
 
@@ -111,7 +111,6 @@ export default createConnector({
     id: PropTypes.string,
     attribute: PropTypes.string.isRequired,
     operator: PropTypes.oneOf(['and', 'or']),
-    showMore: PropTypes.bool,
     defaultRefinement: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
@@ -119,7 +118,6 @@ export default createConnector({
   },
 
   defaultProps: {
-    showMore: false,
     operator: 'or',
   },
 
@@ -148,7 +146,6 @@ export default createConnector({
     results.getFacetValues(attribute, { sortBy }).forEach(v => {
       const range = getRange(parseFloat(v.name), parseInt(granularity));
       const rangeKey = stringifyItem(range);
-
       const key = _.findKey(newItems, {label: rangeKey});
 
       if (typeof key === 'undefined') {
@@ -165,6 +162,7 @@ export default createConnector({
         newItems[key].count = newItems[key].count + parseInt(v.count);
       }
     });
+
     const sortedItems = _.sortBy(newItems, ['sort']);
 
     return {
@@ -218,7 +216,7 @@ export default createConnector({
   getMetadata(props, searchState) {
     const id = getId(props);
     const value = getCurrentRefinement(props, searchState, this.context);
-    const index = getIndexId(this.context);
+    const index = getIndex(this.context);
     const items = [];
 
     if (value.length > 0) {
