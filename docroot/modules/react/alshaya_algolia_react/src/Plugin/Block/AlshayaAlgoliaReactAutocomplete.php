@@ -125,6 +125,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'indexName' => $index['algolia_index_name'] . "_{$lang}",
             'filterOos' => $listing->get('filter_oos_product'),
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
+            'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/search-insights@1.3.0.min.js',
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'],

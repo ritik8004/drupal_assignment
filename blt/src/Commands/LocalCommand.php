@@ -67,15 +67,12 @@ class LocalCommand extends BltTasks {
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield')
+      ->drush('pmu purge acquia_search acquia_connector shield')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
     $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
-    if ($info['profile'] == 'alshaya_transac') {
-      $modules_to_enable .= ' alshaya_search_local_search';
-    }
 
     $this->say('Enable local only modules');
     $this->taskDrush()
@@ -83,25 +80,6 @@ class LocalCommand extends BltTasks {
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
-
-    // @TODO Remove this and alshaya_search_* modules after we use new approach.
-    if ($info['profile'] == 'alshaya_transac') {
-      $this->say('Save server config again to ensure local solr is used.');
-      $this->taskDrush()
-        ->drush('php-eval')
-        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');")
-        ->alias($info['local']['alias'])
-        ->uri($info['local']['url'])
-        ->run();
-
-      $this->say('Clear solr index');
-      $this->taskDrush()
-        ->drush('search-api-clear')
-        ->arg('acquia_search_index')
-        ->alias($info['local']['alias'])
-        ->uri($info['local']['url'])
-        ->run();
-    }
 
     $this->say('Configure stage_file_proxy');
     $this->taskDrush()

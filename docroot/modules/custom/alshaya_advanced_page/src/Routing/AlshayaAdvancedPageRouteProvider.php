@@ -19,6 +19,16 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
       $exploded_path = explode('/', $path);
       // Get tid from path.
       if (isset($exploded_path[3]) && is_numeric($exploded_path[3])) {
+
+        // If we have both route `term canonical` and `term edit` available,
+        // this case happens only for the term edit url. We check for the
+        // `edit` in url as well to make sure term/edit screen and not process
+        // further if term edit screen.
+        if ($collection->get('entity.taxonomy_term.edit_form')
+          && isset($exploded_path[4]) && $exploded_path[4] == 'edit') {
+          return $collection;
+        }
+
         $department_node = alshaya_advanced_page_is_department_page($exploded_path[3]);
         // If department page exists.
         if ($department_node) {

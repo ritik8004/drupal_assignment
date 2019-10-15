@@ -313,7 +313,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['brands'] = $brands;
     }
   }
-  elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
+  elseif ($variables['plugin_id'] === 'keyword_search_block') {
     $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
   }
 

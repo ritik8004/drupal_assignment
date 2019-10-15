@@ -12,6 +12,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall obsolete module alshaya_search_acquia_search.
+ */
+function alshaya_search_update_8030() {
+  \Drupal::service('module_installer')->uninstall(['alshaya_search_acquia_search']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Cleanup all configurations related to textbox display for facets.
  */
 function alshaya_search_update_8029() {
