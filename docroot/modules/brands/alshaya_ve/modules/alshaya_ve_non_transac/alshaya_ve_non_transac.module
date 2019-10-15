@@ -53,6 +53,10 @@ function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $for
     if (in_array($form['#id'], $glossary_exposed_form_id)) {
       $form['country']['#options']['All'] = t('Middle East');
       $form['actions']['#attributes']['class'] = ['hidden'];
+      $form['retina_view'] = [
+        '#markup' => '<div class="retinal-photography"><span class="rettinal-enabled-yes">' . t('Stores with retinal photography') . '</span></div>',
+        '#weight' => 2,
+      ];
     }
 
   }
