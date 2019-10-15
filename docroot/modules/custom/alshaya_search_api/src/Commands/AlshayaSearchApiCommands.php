@@ -191,6 +191,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
   /**
    * Index specified skus.
    *
+   * @param string $index_id
+   *   Index id.
+   * @param string $langcode
+   *   Langcode.
    * @param array $options
    *   Command options.
    *
@@ -200,18 +204,26 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *
    * @aliases index-specified-skus
    *
-   * @usage drush index-specified-skus --batch-size=100
+   * @usage drush index-specified-skus acquia_search_index en --skus="1234,4323" --batch-size=100
    *   Index specified skus in batches of 100.
    */
-  public function prioritiseIndexing(array $options = ['skus' => NULL, 'batch-size' => 100]) {
+  public function prioritiseIndexing(string $index_id, string $langcode, array $options = ['skus' => NULL, 'batch-size' => 100]) {
+    // Validate index.
+    $index = Index::load($index_id);
+    if (empty($index)) {
+      $this->logger->error(dt('Index id is invalid: @index', [
+        '@index' => $index_id,
+      ]));
+      return;
+    }
     if (empty($options['skus'])) {
-      $this->logger->warning('SKU not found.');
+      $this->logger->error(dt('SKU not found.'));
       return;
     }
 
     $batch = [
       'operations' => [],
-      'init_message' => $this->logger->notice('Checking for sku indexes...'),
+      'init_message' => dt('Checking for sku indexes...'),
       'progress_message' => dt('Completed @current step of @total.'),
       'error_message' => dt('Proritised skus marked for indexing.'),
     ];
@@ -220,7 +232,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     foreach (array_chunk($skus, $options['batch-size']) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'indexProritiesedSkus'],
-        [$chunk],
+        [$index_id, $langcode, $chunk],
       ];
     }
 
@@ -234,30 +246,25 @@ class AlshayaSearchApiCommands extends DrushCommands {
   /**
    * Batch callback to process chunk of specified skus.
    *
+   * @param string $index_id
+   *   Index id.
+   * @param string $langcode
+   *   Langcode.
    * @param array $chunk
    *   Chunk of SKUs.
    */
-  public static function indexProritiesedSkus(array $chunk) {
+  public static function indexProritiesedSkus(string $index_id, string $langcode, array $chunk) {
     $item_ids = [];
     foreach ($chunk as $skuId) {
-      $sku = SKU::loadFromSku($skuId);
-      // Not able to load SKU, we will handle it separately.
-      if (!($sku instanceof SKU)) {
-        self::$loggerStatic->notice(dt('SKU - @sku not found.', [
-          '@sku' => $skuId,
-        ]));
-        continue;
-      }
       $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['field_skus' => $skuId]);
       $node = reset($nodes);
       if (!$node instanceof NodeInterface) {
         continue;
       }
-      $item_ids['nodes'][] = 'entity:node/' . $node->id() . ':' . $node->language()->getId();
+      $item_ids['nodes'][] = 'entity:node/' . $node->id() . ':' . $langcode;
       $item_ids['skus'][] = $skuId;
     }
-    $indexes = ['acquia_search_index', 'product'];
-    self::indexSpecifiedSkus($indexes, $item_ids);
+    self::indexSpecifiedSkus($index_id, $item_ids);
   }
 
   /**
@@ -370,12 +377,12 @@ class AlshayaSearchApiCommands extends DrushCommands {
   /**
    * Mark specified items for indexation.
    *
-   * @param array $indexes
+   * @param string $index_id
    *   Indexes for which entry needs to be added in search api item.
    * @param array $item_ids
    *   Item ids.
    */
-  protected static function indexSpecifiedSkus(array $indexes, array $item_ids) {
+  protected static function indexSpecifiedSkus(string $index_id, array $item_ids) {
     if (empty($item_ids)) {
       return;
     }
@@ -384,13 +391,11 @@ class AlshayaSearchApiCommands extends DrushCommands {
       '@items' => json_encode($item_ids['skus']),
     ]));
 
-    foreach ($indexes as $index_id) {
-      $index = Index::load($index_id);
-      $items = $index->loadItemsMultiple($item_ids['nodes']);
-      $index->indexSpecificItems($items);
-    }
+    $index = Index::load($index_id);
+    $items = $index->loadItemsMultiple($item_ids['nodes']);
+    $index->indexSpecificItems($items);
 
-    self::$loggerStatic->warning(dt('Process finished'));
+    self::$loggerStatic->notice(dt('Process finished'));
   }
 
   /**
