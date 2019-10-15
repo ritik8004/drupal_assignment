@@ -93,10 +93,12 @@
 
     .react-autosuggest__suggestions-container {
       &--open {
-        border: none;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
-        box-shadow: 0 0 20px 0 $search-hover;
+        box-shadow: 0 0 1.25rem 0 $search-hover;
       }
 
       ul li {
@@ -163,6 +165,15 @@
           max-width: none;
           box-shadow: none;
 
+          &--open {
+            #top-results {
+              .top-suggestions-title {
+                font-family: $hnm-bold;
+                text-transform: uppercase;
+              }
+            }
+          }
+
           &::after {
             top: 50%;
             transform: translateY(-50%);
@@ -178,8 +189,6 @@
           }
 
           .react-autosuggest__suggestions-container--open {
-            height: 100vh;
-            overflow-y: auto;
             box-shadow: none;
             margin-top: 1px;
           }

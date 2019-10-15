@@ -88,7 +88,6 @@ class Autocomplete extends React.Component {
 
     return (
       <React.Fragment>
-        <span className="algolia-search-back-icon"></span>
         <Autosuggest
           suggestions={hits}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -100,7 +99,6 @@ class Autocomplete extends React.Component {
           shouldRenderSuggestions={this.shouldRenderSuggestions}
           inputProps={inputProps}
         />
-        <span className="algolia-search-cleartext-icon" onClick={this.clearSearchFieldInput}></span>
       </React.Fragment>
     );
   }
