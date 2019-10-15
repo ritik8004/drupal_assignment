@@ -8,6 +8,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\Entity\Index;
 use Drush\Commands\DrushCommands;
 
@@ -188,6 +189,78 @@ class AlshayaSearchApiCommands extends DrushCommands {
   }
 
   /**
+   * Index specified skus.
+   *
+   * @param array $options
+   *   Command options.
+   *
+   * @command alshaya_search_api:index-specified-skus
+   *
+   * @option batch-size Batch size to use for processing items.
+   *
+   * @aliases index-specified-skus
+   *
+   * @usage drush index-specified-skus --batch-size=100
+   *   Index specified skus in batches of 100.
+   */
+  public function prioritiseIndexing(array $options = ['skus' => NULL, 'batch-size' => 100]) {
+    if (empty($options['skus'])) {
+      $this->logger->warning('SKU not found.');
+      return;
+    }
+
+    $batch = [
+      'operations' => [],
+      'init_message' => $this->logger->notice('Checking for sku indexes...'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Proritised skus marked for indexing.'),
+    ];
+
+    $skus = explode(',', $options['skus']);
+    foreach (array_chunk($skus, $options['batch-size']) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'indexProritiesedSkus'],
+        [$chunk],
+      ];
+    }
+
+    // Initialize the batch.
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+  }
+
+  /**
+   * Batch callback to process chunk of specified skus.
+   *
+   * @param array $chunk
+   *   Chunk of SKUs.
+   */
+  public static function indexProritiesedSkus(array $chunk) {
+    $item_ids = [];
+    foreach ($chunk as $skuId) {
+      $sku = SKU::loadFromSku($skuId);
+      // Not able to load SKU, we will handle it separately.
+      if (!($sku instanceof SKU)) {
+        self::$loggerStatic->notice(dt('SKU - @sku not found.', [
+          '@sku' => $skuId,
+        ]));
+        continue;
+      }
+      $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['field_skus' => $skuId]);
+      $node = reset($nodes);
+      if (!$node instanceof NodeInterface) {
+        continue;
+      }
+      $item_ids['nodes'][] = 'entity:node/' . $node->id() . ':' . $node->language()->getId();
+      $item_ids['skus'][] = $skuId;
+    }
+    $indexes = ['acquia_search_index', 'product'];
+    self::indexSpecifiedSkus($indexes, $item_ids);
+  }
+
+  /**
    * Batch callback to process chunk of skus for corrupt stock index data.
    *
    * @param array $chunk
@@ -292,6 +365,32 @@ class AlshayaSearchApiCommands extends DrushCommands {
       $index = Index::load($index_id);
       $index->trackItemsUpdated('entity:node', $item_ids);
     }
+  }
+
+  /**
+   * Mark specified items for indexation.
+   *
+   * @param array $indexes
+   *   Indexes for which entry needs to be added in search api item.
+   * @param array $item_ids
+   *   Item ids.
+   */
+  protected static function indexSpecifiedSkus(array $indexes, array $item_ids) {
+    if (empty($item_ids)) {
+      return;
+    }
+
+    self::$loggerStatic->notice(dt('Indexing specified items @items', [
+      '@items' => json_encode($item_ids['skus']),
+    ]));
+
+    foreach ($indexes as $index_id) {
+      $index = Index::load($index_id);
+      $items = $index->loadItemsMultiple($item_ids['nodes']);
+      $index->indexSpecificItems($items);
+    }
+
+    self::$loggerStatic->warning(dt('Process finished'));
   }
 
   /**
