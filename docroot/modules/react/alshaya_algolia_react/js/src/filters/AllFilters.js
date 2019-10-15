@@ -10,6 +10,7 @@ const AllFilters = (props) => {
   const allFiltersRef = useRef();
 
   useEffect(() => {
+    // @todo: Check if we can avoid setTimeout and usage of updateAfter.
     setTimeout(() => {
       // Show selected with title accordion of filter, for the "All Filters"
       // main display, Which toggles with sliding effect from right side and
@@ -37,8 +38,8 @@ const AllFilters = (props) => {
 
             // Get the currrent filter's title.
             const textContent = (element.getElementsByTagName('h3')[0].querySelector('span') === null)
-            ? element.getElementsByTagName('h3')[0].textContent
-            : element.getElementsByTagName('h3')[0].querySelector('span').innerHTML;
+              ? element.getElementsByTagName('h3')[0].textContent
+              : element.getElementsByTagName('h3')[0].querySelector('span').innerHTML;
 
             // Prepares html content to display texts for only 2 items, and rest
             // Will be displayed as a count ((+5) selected.) in brackets. (i.e black, white (+2))

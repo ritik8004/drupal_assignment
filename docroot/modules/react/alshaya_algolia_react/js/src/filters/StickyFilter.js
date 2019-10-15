@@ -8,6 +8,7 @@ const StickyFilter = (props) => {
   const stickyFiltersRef = useRef();
 
   useEffect(() => {
+    // @todo: Check if we can avoid setTimeout and usage of updateAfter.
     setTimeout(() => {
       // Show only maximum 4 filters for desktop sticky filter
       // excluding the sort by, (with sort by 5).
