@@ -81,7 +81,7 @@
 
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
-        var facet_block = $('.c-content .region__content .container-without-product .c-accordion');
+        var facet_block = $('.region__content .container-without-product .c-accordion');
         if ($(facet_block).find(event.target).length == 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
           $(facet_block).find('ul').slideUp();
