@@ -1,4 +1,5 @@
 import React from 'react';
+import { getPriceRangeLabel } from '../../utils/PriceHelper';
 
 const filtersLabels = {
   'attr_color_family.label': (value) =>  {
@@ -12,7 +13,8 @@ const filtersLabels = {
     return value.trim();
   },
   'final_price': (value) => {
-    return value.replace('final_price:', '').trim();
+    const price = value.replace('final_price:', '').trim();
+    return getPriceRangeLabel(price);
   },
   'attr_size': (value) => {
     return value;

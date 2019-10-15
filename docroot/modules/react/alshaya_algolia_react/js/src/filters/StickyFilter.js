@@ -1,49 +1,52 @@
 import React, { useRef, useEffect } from 'react';
+import { updateAfter } from '../utils/utils';
 
 /**
  * Sticky filters.
  */
 const StickyFilter = (props) => {
-  const allFiltersRef = useRef();
+  const stickyFiltersRef = useRef();
 
   useEffect(() => {
     setTimeout(() => {
       // Show only maximum 4 filters for desktop sticky filter
       // excluding the sort by, (with sort by 5).
-      const filters = allFiltersRef.current.querySelectorAll('.c-accordion');
-      let activeFilters = [];
-      filters.forEach(element => {
-        const children = element.getElementsByTagName('ul')[0];
+      if (typeof stickyFiltersRef.current == 'object') {
+        const filters = stickyFiltersRef.current.querySelectorAll('.c-accordion');
+        let activeFilters = [];
+        filters.forEach(element => {
+          const children = element.getElementsByTagName('ul')[0];
 
-        if (typeof children !== 'undefined' && children.querySelector('li') === null) {
-          element.classList.add('hide-facet-block');
+          if (typeof children !== 'undefined' && children.querySelector('li') === null) {
+            element.classList.add('hide-facet-block');
+          }
+          else {
+            activeFilters.push(element);
+            element.classList.remove('hide-facet-block');
+          }
+        });
+
+        if (activeFilters.length > 5) {
+          var hideFilters = activeFilters.slice(5);
+          hideFilters.forEach((filter) => {
+            filter.classList.add('hide-facet-block');
+          });
+        }
+
+        // Hide the `all filters` link when less filters (only for desktop).
+        if (activeFilters.length <= 5) {
+          stickyFiltersRef.current.querySelector('.show-all-filters').classList.add('hide-for-desktop');
         }
         else {
-          activeFilters.push(element);
-          element.classList.remove('hide-facet-block');
+          stickyFiltersRef.current.querySelector('.show-all-filters').classList.remove('hide-for-desktop');
         }
-      });
-
-      if (activeFilters.length > 5) {
-        var hideFilters = activeFilters.slice(5);
-        hideFilters.forEach((filter) => {
-          filter.classList.add('hide-facet-block');
-        });
       }
-
-      // Hide the `all filters` link when less filters (only for desktop).
-      if (activeFilters.length <= 5) {
-        allFiltersRef.current.querySelector('.show-all-filters').classList.add('hide-for-desktop');
-      }
-      else {
-        allFiltersRef.current.querySelector('.show-all-filters').classList.remove('hide-for-desktop');
-      }
-    }, 500);
+    }, updateAfter);
   });
 
   return (
     <div className="sticky-filter-wrapper">
-        <div className="container-without-product" ref={allFiltersRef}>
+        <div className="container-without-product" ref={stickyFiltersRef}>
           {props.children}
       </div>
     </div>

@@ -1,9 +1,8 @@
 import React from 'react';
-import { formatPrice } from '../components/price/PriceHelper';
 import FilterPanel from './FilterPanel';
 import SortByList from './SortByList';
 import ColorFilter from './widgets/ColorFilter';
-import CommonRefinementList from './widgets/CommonRefinementList';
+import RefinementList from './widgets/RefinementList';
 import PriceFilter from './widgets/PriceFilter';
 
 export default ({indexName}) => (
@@ -24,15 +23,7 @@ export default ({indexName}) => (
     <FilterPanel header="Price" id="final_price">
       <PriceFilter
         attribute="final_price"
-        createURL={() => '#'}
-        refine={() => null}
-        items={[
-          { label: 'Under ' + formatPrice(10), end: 10, noRefinement: true },
-          { label: formatPrice(10) + ' - ' + formatPrice(100), start: 10, end: 100, noRefinement: true },
-          { label: formatPrice(100) + ' - ' + formatPrice(500), start: 100, end: 500, noRefinement: true },
-          { label: 'Above ' + formatPrice(500), start: 500, noRefinement: true },
-        ]}
-        canRefine={true}
+        granularity={5}
       />
     </FilterPanel>
     <FilterPanel header="Colour" id="attr_color_family" className="block-facet--swatch-list">
@@ -42,19 +33,19 @@ export default ({indexName}) => (
       />
     </FilterPanel>
     <FilterPanel header="Brands" id="attr_product_brand">
-      <CommonRefinementList
+      <RefinementList
         attribute="attr_product_brand"
         searchable={false}
       />
     </FilterPanel>
     <FilterPanel header="Collection" id="attr_collection">
-      <CommonRefinementList
+      <RefinementList
         attribute="attr_collection"
         searchable={false}
       />
     </FilterPanel>
     <FilterPanel header="Size" id="attr_size">
-      <CommonRefinementList
+      <RefinementList
         attribute="attr_size"
         searchable={false}
       />
