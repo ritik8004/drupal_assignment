@@ -78,7 +78,7 @@ class AppAutocomplete extends React.Component {
           />
         </InstantSearch>
         {isMobile() && (
-          <TopResults query={query}>
+          <TopResults id="top-results" query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
               <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
@@ -86,6 +86,10 @@ class AppAutocomplete extends React.Component {
             </InstantSearch>
           </TopResults>
         )}
+        <TopResults className="algolia-search-back-icon" id="react-algolia-searchbar-back-button" query="">
+        </TopResults>
+        <TopResults className="algolia-search-cleartext-icon" id="react-algolia-searchbar-clear-button" query="">
+        </TopResults>
         {searchResultsDiv}
       </div>
     );

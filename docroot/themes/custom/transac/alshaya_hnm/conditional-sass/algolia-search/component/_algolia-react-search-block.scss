@@ -70,6 +70,12 @@
         padding: 0;
         padding-#{$left}: 0 !important;
 
+        @include breakpoint($only-mobile) {
+          margin-#{$left}: 0;
+          margin-#{$right}: 0;
+          width: 100%;
+        }
+
         &::placeholder {
           line-height: 1.0625rem;
           text-transform: initial;
@@ -93,9 +99,7 @@
 
     .react-autosuggest__suggestions-container {
       &--open {
-        border-left: 0;
-        border-right: 0;
-        border-bottom: 0;
+        border: none;
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
         box-shadow: 0 0 1.25rem 0 $search-hover;
@@ -157,9 +161,15 @@
     }
 
     .block-alshaya-algolia-react-autocomplete {
+      .algolia-search-back-icon {
+        @include breakpoint($only-mobile) {
+          top: 0.75rem;
+          #{$left}: 0;
+        }
+      }
+
       #alshaya-algolia-autocomplete {
         max-width: none;
-        padding: 0;
 
         .react-autosuggest__container {
           max-width: none;
@@ -191,6 +201,7 @@
           .react-autosuggest__suggestions-container--open {
             box-shadow: none;
             margin-top: 1px;
+            border-top: 1px solid $algolia-dropdown-border;
           }
         }
       }

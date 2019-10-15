@@ -69,7 +69,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      padding: 0 0.5rem;
+      padding: 0;
     }
 
     .react-autosuggest__suggestions-container {
@@ -109,6 +109,10 @@
         border-bottom-#{$left}-radius: 0.5rem;
         border-bottom-#{$right}-radius: 0.5rem;
         background-color: $algolia-search-bar-background;
+
+        @include breakpoint($only-mobile) {
+          border: none;
+        }
       }
     }
 
@@ -125,6 +129,10 @@
         border-top-#{$right}-radius: 0.5rem;
         border-bottom-#{$right}-radius: 0.5rem;
         z-index: 2;
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 0.5rem;
+        }
       }
 
       #top-results {
@@ -165,6 +173,12 @@
                 &:nth-child(2n+1) {
                   margin-#{$left}: 0;
                 }
+
+                .alshaya_search_slider {
+                  @include breakpoint($upto-desktop) {
+                    display: none;
+                  }
+                }
               }
             }
 
@@ -185,7 +199,16 @@
         }
 
         &::before {
-          border-bottom-#{$right}-radius: 0;
+          @include breakpoint($tablet) {
+            border-bottom-#{$right}-radius: 0;
+          }
+        }
+
+        .react-autosuggest__input {
+          @include breakpoint($tablet) {
+            border-bottom-#{$left}-radius: 0;
+            border-bottom: none;
+          }
         }
       }
 
@@ -193,7 +216,6 @@
         color: $algolia-search-icon;
         font-size: 2.1875rem;
         height: 2.75rem;
-        #{$right}: 1.0625rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -201,6 +223,10 @@
         top: 0;
         position: absolute;
         #{$right}: 0.375rem;
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 0.75rem;
+        }
       }
 
       .trending-title {
@@ -312,6 +338,12 @@
     width: 100%;
     transition: padding-#{$left} 0.2s;
 
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5rem;
+      margin-#{$right}: 0.5rem;
+      width: calc(100% - 1rem);
+    }
+
     &::placeholder {
       font-family: $alshaya-thin;
       font-size: 0.875rem;
@@ -324,11 +356,6 @@
           line-height: 1.875rem;
         }
       }
-    }
-
-    &.react-autosuggest__input--focused {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
     }
   }
 }
@@ -406,14 +433,14 @@
         cursor: pointer;
         transition: opacity 0.2s;
         visibility: hidden;
-        #{$left}: 0;
+        #{$left}: 0.625rem;
 
         @include icon(arrow-#{$left}) {
           font-size: 2.25rem;
         }
 
         @include breakpoint($only-mobile) {
-          top: 0.75rem;
+          top: 0.3125rem;
           transform: none;
         }
       }
