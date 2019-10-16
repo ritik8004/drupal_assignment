@@ -168,8 +168,13 @@
       }, 1);
     }
     else {
+      // Hide the thumbnails till JS is applied.
+      $('.cloudzoom__thumbnails', product).addClass('hidden-important');
       setTimeout(function () {
         Drupal.behaviors.alshaya_product_zoom.attach(product);
+
+        // Show thumbnails again.
+        $('.cloudzoom__thumbnails', product).removeClass('hidden-important');
       }, 1);
     }
   };
