@@ -14,6 +14,18 @@
     $('.checkout-ajax-progress-throbber').hide();
   }
 
+  // Get markup for the cart notification.
+  function cartNotificationMarkup(data) {
+    var markup = '<div class ="notification">';
+    markup += '<div class="col-1">' + data.image + '<span class="qty">' + data.quantity + '</span></div>';
+    markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
+    markup += Drupal.t('has been added to your cart');
+    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '</div>';
+    markup += '</div>';
+    return markup;
+  }
+
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
       $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function () {
@@ -176,18 +188,6 @@
         var viewportBottom = viewportTop + $(window).height() + stickyHeader;
         return elementBottom  > viewportTop && elementTop < viewportBottom;
       };
-
-      // Get markup for the cart notification.
-      var cartNotificationMarkup = function(data) {
-        var markup = '<div class ="notification">';
-        markup += '<div class="col-1">' + data.image + '<span class="qty">' + data.quantity + '</span></div>';
-        markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
-        markup += Drupal.t('has been added to your cart');
-        markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
-        markup += '</div>';
-        markup += '</div>';
-        return markup;
-      }
 
       $.fn.cartGenericScroll = function (selector) {
         if ($(window).width() < 768 && $('body').find(selector).length !== 0) {
