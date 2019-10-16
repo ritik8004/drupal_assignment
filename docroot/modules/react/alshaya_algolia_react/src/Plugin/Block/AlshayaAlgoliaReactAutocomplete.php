@@ -5,6 +5,7 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -116,7 +117,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     // Get current index name.
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
-    $index_name = $index['algolia_index_name'] . "_{$lang}";
+    $index_name = $index['algolia_index_name'] . '_' . $lang;
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
@@ -168,10 +169,48 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
           ],
         ],
       ],
-      '#cache' => [
-        'contexts' => ['languages'],
-      ],
     ];
+  }
+
+  /**
+   * Get sort by list options to show.
+   *
+   * @param string $index_name
+   *   The algolia index to use.
+   *
+   * @return array
+   *   The array of options with key and label.
+   */
+  protected function getSortByOptions($index_name): array {
+    $enabled_sorts = array_filter(_alshaya_search_get_config(), function ($item) {
+      return ($item != '');
+    });
+    $labels = _alshaya_search_get_config(TRUE);
+
+    $sort_items = [];
+    foreach ($labels as $label_key => $label_value) {
+      if (empty($label_value)) {
+        continue;
+      }
+
+      $sort_index_key = '';
+      list($sort_key, $sort_order) = preg_split('/\s+/', $label_key);
+      if (in_array($sort_key, $enabled_sorts)) {
+        $sort_index_key = $index_name . '_' . $sort_key . '_' . strtolower($sort_order);
+      }
+      elseif ($sort_key == 'search_api_relevance') {
+        $sort_index_key = $index_name;
+      }
+
+      if (!empty($sort_index_key)) {
+        $sort_items[] = [
+          'value' => $sort_index_key,
+          'label' => $label_value,
+        ];
+      }
+
+    }
+    return $sort_items;
   }
 
   /**
@@ -198,14 +237,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
         'name' => $this->t('Sort By'),
         'widget' => [
           'type' => 'sort_by',
-          'items' => [
-            ['value' => $index_name, 'label' => $this->t('Featured')],
-            ['value' => $index_name . '_created_desc', 'label' => $this->t('New In')],
-            ['value' => $index_name . '_title_asc', 'label' => $this->t('Name A to Z')],
-            ['value' => $index_name . '_title_desc', 'label' => $this->t('Name Z to A')],
-            ['value' => $index_name . '_final_price_desc', 'label' => $this->t('Price High to Low')],
-            ['value' => $index_name . '_final_price_asc', 'label' => $this->t('Price Low to High')],
-          ],
+          'items' => $this->getSortByOptions($index_name),
         ],
       ],
     ];
@@ -275,6 +307,28 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $this->configuration['top_results'] = $form_state->getValue('top_results');
 
     parent::submitConfigurationForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'languages',
+    ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'config:acq_commerce.currency',
+      'config:alshaya_acm_product.display_settings',
+      'config:alshaya_search_api.listing_settings',
+      'config:alshaya_search.settings',
+      'config:alshaya_acm_product.settings',
+    ]);
   }
 
 }
