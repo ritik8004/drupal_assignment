@@ -17,6 +17,8 @@ const AllFilters = (props) => {
       // also used for mobile.
       if (typeof allFiltersRef.current == 'object') {
         const filters = allFiltersRef.current.querySelectorAll('.c-collapse-item');
+
+        let hasSelection = false;
         filters.forEach(element => {
           const children = element.getElementsByTagName('ul')[0];
 
@@ -44,6 +46,7 @@ const AllFilters = (props) => {
             // Prepares html content to display texts for only 2 items, and rest
             // Will be displayed as a count ((+5) selected.) in brackets. (i.e black, white (+2))
             if (currentSelection.length > 0) {
+              hasSelection = true;
               const displayItems = (currentSelection.length > 2)
                 ? currentSelection.slice(0, 2)
                 : currentSelection;
@@ -61,6 +64,13 @@ const AllFilters = (props) => {
             }
           }
         });
+
+        if (hasSelection) {
+          allFiltersRef.current.querySelector('.facet-clear-all').classList.add('has-link');
+        }
+        else {
+          allFiltersRef.current.querySelector('.facet-clear-all').classList.remove('has-link');
+        }
       }
     }, updateAfter);
   });
@@ -87,7 +97,7 @@ const AllFilters = (props) => {
                 />
               </div>
             </div>
-            <div className="facet-clear-all button has-link"><ClearRefinements /></div>
+            <div className="facet-clear-all button"><ClearRefinements /></div>
             <a className="facet-apply-all button">apply filter</a>
           </div>
         </div>

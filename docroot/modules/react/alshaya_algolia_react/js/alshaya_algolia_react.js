@@ -85,7 +85,7 @@
 
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
-        var facet_block = $('.c-content .region__content .container-without-product .c-collapse-item');
+        var facet_block = $('.container-without-product .c-collapse-item');
         if ($(facet_block).find(event.target).length == 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
           $(facet_block).find('ul').slideUp();
@@ -122,7 +122,7 @@
       });
 
       // Fake facet apply button to close the `all filter`.
-      $('.all-filters-algolia .all-filters-close', '.all-filters-algolia .facet-apply-all').once().on('click', function() {
+      $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once().on('click', function() {
         $('.all-filters-algolia').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
         $('html').removeClass('all-filters-overlay');

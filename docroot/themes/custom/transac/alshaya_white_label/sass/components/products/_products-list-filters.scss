@@ -387,7 +387,8 @@ html {
         }
       }
 
-      .block-facets-ajax > ul {
+      .block-facets-ajax > ul,
+      .c-collapse-item > ul {
         .facet-item {
           padding: 0.25rem 1.5rem !important;
           margin-bottom: 0;
@@ -436,6 +437,18 @@ html {
           .view-header.search-count {
             padding-top: 0;
           }
+        }
+      }
+
+      .facet-clear-all {
+        a {
+          color: $plp_clear_all_btn_disabled;
+        }
+
+        &.has-link a {
+          color: $plp_clear_all_btn_text;
+          border-color: $plp_clear_all_btn_text;
+          pointer-events: all;
         }
       }
 

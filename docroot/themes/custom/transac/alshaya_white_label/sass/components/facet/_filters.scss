@@ -180,6 +180,26 @@
   }
 }
 
+
+.c-facet.c-collapse-item {
+  .sticky-filter-wrapper & {
+    ul {
+      li {
+        margin-bottom: 0;
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  ul {
+    li {
+      .facet-item__value {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 .c-plp .c-content__region {
   .block-views-exposed-filter-blockalshaya-product-list-block-1,
   .block-views-exposed-filter-blockalshaya-product-list-block-2,
