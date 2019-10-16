@@ -1,3 +1,5 @@
 alshaya_ve_non_transac_store_finder:
+  dependencies:
+    - core/jquery
   js:
     js/alshaya_ve_non_transac_store_finder.js: {}

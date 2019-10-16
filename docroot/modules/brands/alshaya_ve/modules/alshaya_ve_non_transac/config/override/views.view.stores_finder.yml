@@ -23,9 +23,9 @@ display:
       displays:
         page_1: page_1
         page_2: ''
-  attachment_2:
+  glossary_map_view:
     display_plugin: attachment
-    id: attachment_2
+    id: glossary_map_view
     display_title: 'glossary view map attachment'
     position: 4
     display_options:
@@ -716,7 +716,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a><span class="rettinal-enabled-{{ field_store_retina_photography | lower }}">{{ field_store_retina_photography }}</span>'
+            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a><span class="retinal-enabled-{{ field_store_retina_photography | lower }}">{{ field_store_retina_photography }}</span>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false

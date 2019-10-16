@@ -39,25 +39,32 @@
     attach: function (context, settings) {
       var latitude = $.cookie('alshaya_client_latitude');
       var longitude = $.cookie('alshaya_client_longitude');
-
+      var country_code = $.cookie('alshaya_client_country_code');
       if (typeof latitude === 'undefined' || !latitude || typeof longitude === 'undefined' || !longitude) {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function (position) {
             var cookie_options = {path: '/', expires: 7200, secure: true};
-            if (position.coords.latitude && position.coords.longitude) {
-              $.cookie('alshaya_client_latitude', position.coords.latitude, cookie_options);
-              $.cookie('alshaya_client_longitude', position.coords.longitude, cookie_options);
-            }
+            var googleApiKey = window.drupalSettings.googleApiKey;
+            $.get("https://maps.googleapis.com/maps/api/geocode/json?key=" + googleApiKey + "&latlng=" + position.coords.latitude + "," + position.coords.longitude, function(response) {
+              if (response.results[0].address_components) {
+                $.each(response.results[0].address_components, function( index, value ) {
+                  if (value.types[0] == 'country') {
+                    var cookie_options = {path: '/', expires: 7200, secure: true};
+                    $.cookie('alshaya_client_country_code', value.short_name, cookie_options);
+                  }
+                });
+              }
+            });
           });
         } else {
-          alert("Sorry, your browser does not support HTML5 geolocation.");
+          alert('Sorry, your browser does not support HTML5 geolocation.');
         }
       }
     }
   };
 
   // Set default country option on page load using client's detected country.
-  $( window ).on( "load", defaultSelectCountryOption );
+  $( window ).on( 'load', defaultSelectCountryOption );
 })(jQuery, Drupal, drupalSettings);
 
 
