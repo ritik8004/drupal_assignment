@@ -45,7 +45,12 @@ function renderWidget(filter, indexName) {
 export default ({indexName}) => {
   // Loop through all the filters given in config and prepare an array of filters.
   var filters = [];
-  drupalSettings.algoliaSearch.filters.forEach(filter => {
+
+  var allFilters = (typeof drupalSettings.algoliaSearch.filters === 'object')
+    ? Object.values(drupalSettings.algoliaSearch.filters)
+    : drupalSettings.algoliaSearch.filters;
+
+  allFilters.forEach(filter => {
     filters.push(renderWidget(filter, indexName));
   });
 
