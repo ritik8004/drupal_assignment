@@ -43,7 +43,7 @@ const StickyFilter = (props) => {
         }
       }
     }, updateAfter);
-  });
+  }, [props.children]);
 
   return (
     <div className="sticky-filter-wrapper">

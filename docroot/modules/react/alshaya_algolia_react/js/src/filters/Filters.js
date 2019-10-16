@@ -5,47 +5,62 @@ import ColorFilter from './widgets/ColorFilter';
 import RefinementList from './widgets/RefinementList';
 import PriceFilter from './widgets/PriceFilter';
 
-export default ({indexName}) => (
-  <React.Fragment>
-    <FilterPanel header="Sort By" id="sort_by">
-      <SortByList
-        defaultRefinement={indexName}
-        items={drupalSettings.algoliaSearch.filters.sortby.widget.items}
-      />
+/**
+ * Decide and return which widget to render based on Drupal widget types.
+ *
+ * @param {Array} filter
+ *   The array of filter, with name, identifier and widget as key.
+ * @param {String} indexName
+ *   The current index name.
+ */
+function renderWidget(filter, indexName) {
+  var currentWidget = '';
+  var className = '';
+  switch (filter.widget.type) {
+    case 'sort_by':
+      currentWidget = <SortByList defaultRefinement={indexName} items={filter.widget.items}/>;
+      break;
+
+    case 'swatch_list':
+      className = 'block-facet--swatch-list';
+      currentWidget = <ColorFilter attribute={`${filter.identifier}.label`} searchable={false} />;
+      break;
+
+    case 'range_checkbox':
+      currentWidget = <PriceFilter attribute={filter.identifier} granularity={filter.widget.config.granularity} />;
+      break;
+
+    case 'checkbox':
+    default:
+      currentWidget = <RefinementList attribute={filter.identifier} searchable={false} />;
+  }
+
+  return (
+    <FilterPanel header={filter.name} id={filter.identifier} className={className}>
+      {currentWidget}
     </FilterPanel>
-    <FilterPanel header="Price" id="final_price">
-      <PriceFilter
-        attribute="final_price"
-        granularity={5}
-      />
-    </FilterPanel>
-    <FilterPanel header="Colour" id="attr_color_family" className="block-facet--swatch-list">
-      <ColorFilter
-        attribute="attr_color_family.label"
-        searchable={false}
-      />
-    </FilterPanel>
-    <FilterPanel header="Brands" id="attr_product_brand">
-      <RefinementList
-        attribute="attr_product_brand"
-        searchable={false}
-      />
-    </FilterPanel>
-    <FilterPanel header="Collection" id="attr_collection">
-      <RefinementList
-        attribute="attr_collection"
-        searchable={false}
-      />
-    </FilterPanel>
-    <FilterPanel header="Size" id="attr_size">
-      <RefinementList
-        attribute="attr_size"
-        searchable={false}
-      />
-    </FilterPanel>
-    <div className="show-all-filters">
-      <span className="desktop">all filters</span>
-      <span className="upto-desktop">filter &amp; sort</span>
-    </div>
-  </React.Fragment>
-);
+  )
+}
+
+export default ({indexName}) => {
+  // Loop through all the filters given in config and prepare an array of filters.
+  var filters = [];
+
+  var allFilters = (typeof drupalSettings.algoliaSearch.filters === 'object')
+    ? Object.values(drupalSettings.algoliaSearch.filters)
+    : drupalSettings.algoliaSearch.filters;
+
+  allFilters.forEach(filter => {
+    filters.push(renderWidget(filter, indexName));
+  });
+
+  return (
+    <React.Fragment>
+      {filters}
+      <div className="show-all-filters">
+        <span className="desktop">all filters</span>
+        <span className="upto-desktop">filter &amp; sort</span>
+      </div>
+    </React.Fragment>
+  );
+}

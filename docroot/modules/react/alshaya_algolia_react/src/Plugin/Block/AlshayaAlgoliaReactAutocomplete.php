@@ -10,6 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,6 +23,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFactoryPluginInterface {
+
+  const FACET_SOURCE = 'search_api:views_page__search__page';
 
   /**
    * The config factory service.
@@ -45,6 +48,13 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
   protected $skuImagesManager;
 
   /**
+   * Facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetManager;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -59,6 +69,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
    *   The language manager service.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
    *   SKU Images Manager.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
+   *   Facet manager.
    */
   public function __construct(
     array $configuration,
@@ -66,12 +78,14 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
     LanguageManagerInterface $language_manager,
-    SkuImagesManager $sku_images_manager
+    SkuImagesManager $sku_images_manager,
+    DefaultFacetManager $facet_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->skuImagesManager = $sku_images_manager;
+    $this->facetManager = $facet_manager;
   }
 
   /**
@@ -89,7 +103,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('language_manager'),
-      $container->get('alshaya_acm_product.sku_images_manager')
+      $container->get('alshaya_acm_product.sku_images_manager'),
+      $container->get('facets.manager')
     );
   }
 
@@ -100,6 +115,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $lang = $this->languageManager->getCurrentLanguage()->getId();
     $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+    // Get current index name.
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
     $index_name = $index['algolia_index_name'] . '_' . $lang;
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
@@ -126,13 +142,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'filterOos' => $listing->get('filter_oos_product'),
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/search-insights@1.3.0.min.js',
-            'filters' => [
-              'sortby' => [
-                'widget' => [
-                  'items' => $this->getSortByOptions($index_name),
-                ],
-              ],
-            ],
+            'filters' => $this->getFilters($index_name),
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'],
@@ -201,6 +211,60 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
 
     }
     return $sort_items;
+  }
+
+  /**
+   * Return filters to show for current site.
+   *
+   * The function gets all the filters for the existing search api
+   * self::FACET_SOURCE, and as we don't have any configuration which facets
+   * to show for search, we are removing 'field_category', 'attr_selling_price'
+   * and 'attr_color' if 'attr_color_family' is also available (For H&M case).
+   *
+   * @param string $index_name
+   *   The current algolia index.
+   *
+   * @return array
+   *   Return array of filters.
+   *
+   * @todo: this is temporary way to get filters, work on it to make something
+   * solid on which we can rely.
+   */
+  protected function getFilters($index_name) {
+    $filter_facets = [
+      [
+        'identifier' => 'sort_by',
+        'name' => $this->t('Sort By'),
+        'widget' => [
+          'type' => 'sort_by',
+          'items' => $this->getSortByOptions($index_name),
+        ],
+      ],
+    ];
+
+    $facets = $this->facetManager->getFacetsByFacetSourceId(self::FACET_SOURCE);
+    if (!empty($facets)) {
+      foreach ($facets as $facet) {
+        if (!in_array(
+          $facet->getFieldIdentifier(),
+          ['field_category', 'attr_selling_price']
+        )) {
+          $filter_facets[] = [
+            'identifier' => $facet->getFieldIdentifier(),
+            'name' => $facet->getName(),
+            'widget' => $facet->getWidget(),
+          ];
+        }
+      }
+    }
+
+    $intersect = array_intersect(array_column($filter_facets, 'identifier'), ['attr_color', 'attr_color_family']);
+    if (count($intersect) > 1) {
+      unset($intersect[array_search('attr_color_family', $intersect)]);
+      unset($filter_facets[key($intersect)]);
+    }
+
+    return $filter_facets;
   }
 
   /**
