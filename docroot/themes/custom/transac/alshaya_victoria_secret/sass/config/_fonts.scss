@@ -308,7 +308,7 @@ $icons: (
 );
 
 @mixin iconbase() {
-  font-family: $vs-icons !important;
+  font-family: $vs-icons;
   speak: none;
   font-style: normal;
   font-weight: normal;
