@@ -82,6 +82,9 @@
         var $pager = $(this);
         $pager.addClass('visually-hidden');
         $window.on(scrollEvent, debounce(function () {
+
+          // Do not trigger infinite scroll if algolia search is active on the
+          // current page.
           var algoliaSearch = ($('#alshaya-algolia-search').length > 0 && $('#alshaya-algolia-search').is(':visible') === false);
           if (window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold && algoliaSearch) {
             $pager.find('[rel=next]').click();
