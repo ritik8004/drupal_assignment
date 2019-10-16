@@ -242,6 +242,14 @@
             }
           }
         }
+
+        @include breakpoint($only-mobile) {
+          .sku-promotions {
+            .free-gift-promo {
+              display: none;
+            }
+          }
+        }
       }
     }
   }
