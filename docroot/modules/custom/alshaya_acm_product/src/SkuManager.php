@@ -1266,41 +1266,42 @@ class SkuManager {
    *   List of skus related with a promotion.
    */
   public function getSkutextsForPromotion(NodeInterface $promotion, $includeChildSkus = FALSE) {
+    $static = &drupal_static(__METHOD__, []);
+
     if (!$includeChildSkus) {
-      $cid = 'promotions_sku_' . $promotion->id();
-      if (!empty($this->cache->get($cid))) {
-        $skus_cache = $this->cache->get($cid);
-        $skus = $skus_cache->data;
-      }
-      else {
+      $cid = implode(':', [
+        'promotion_sku',
+        $promotion->language()->getId(),
+        $promotion->id(),
+      ]);
+
+      if (!isset($static[$cid])) {
         // Fetch corresponding SKUs for promotion.
-        $skus = $this->fetchSkuTextsForPromotion($promotion);
-        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
+        $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
       }
     }
     else {
-      $cid = 'promotions_all_sku_' . $promotion->id();
-      if (!empty($this->cache->get($cid))) {
-        $skus_cache = $this->cache->get($cid);
-        $skus = $skus_cache->data;
-      }
-      else {
+      $cid = implode(':', [
+        'promotions_all_sku',
+        $promotion->language()->getId(),
+        $promotion->id(),
+      ]);
+
+      if (!isset($static[$cid])) {
         // Fetch corresponding SKUs for promotion.
-        $skus = $this->fetchSkuTextsForPromotion($promotion);
-        if (!empty($skus)) {
+        $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
+        if (!empty($static[$cid])) {
           // Fetch child SKUs based on configurable parent SKUs.
-          $childSkus = $this->fetchChildSkuTexts($skus);
+          $childSkus = $this->fetchChildSkuTexts($static[$cid]);
           if (!empty($childSkus)) {
             // Merge the list of SKUs.
-            $skus = array_unique(array_merge($skus, $childSkus));
+            $static[$cid] = array_unique(array_merge($static[$cid], $childSkus));
           }
         }
-
-        $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
       }
     }
 
-    return $skus;
+    return $static[$cid];
   }
 
   /**
