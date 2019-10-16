@@ -17,7 +17,7 @@ export const cartAvailableInStorage = function () {
 
   // If data/cart is expired.
   if ((current_time - cart_data.last_update) > expire_time) {
-    return false;
+    return cart_data.cart_id;
   }
 
   return cart_data;
@@ -26,14 +26,20 @@ export const cartAvailableInStorage = function () {
 export const fetchCartData = function () {
   // Check if cart available in storage.
   var cart = cartAvailableInStorage();
-  if (cart !== false) {
+
+  if (cart === false) {
+    return null;
+  }
+
+  // If we get integer, mean we get only cart id and thus we need to fetch
+  // fresh cart. If we not get integer, means we get cart object and we can
+  // just use and return that.
+  if (!Number.isInteger(cart)) {
     return Promise.resolve(cart);
   }
 
-  return null;
-
   // Prepare api url.
-  var api_url = window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart.cart_id;
+  var api_url = window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart;
 
   return axios.get(api_url)
     .then(response => {
