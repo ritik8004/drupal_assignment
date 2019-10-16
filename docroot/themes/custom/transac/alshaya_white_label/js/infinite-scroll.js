@@ -82,7 +82,8 @@
         var $pager = $(this);
         $pager.addClass('visually-hidden');
         $window.on(scrollEvent, debounce(function () {
-          if (window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold) {
+          var algoliaSearch = ($('#alshaya-algolia-search').length > 0 && $('#alshaya-algolia-search').is(':visible') === false);
+          if (window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold && algoliaSearch) {
             $pager.find('[rel=next]').click();
             $window.off(scrollEvent);
           }
