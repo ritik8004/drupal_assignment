@@ -122,68 +122,12 @@ class AlshayaFeed {
   }
 
   /**
-   * Batch process helper method to store context data.
-   *
-   * @param int $batch_size
-   *   The batch size.
-   * @param mixed|array $context
-   *   The batch current context.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
-   * @throws \Twig_Error_Loader
-   * @throws \Twig_Error_Runtime
-   * @throws \Twig_Error_Syntax
-   */
-  public function batchProcess($batch_size, &$context) {
-    if (!isset($context['sandbox']['current'])) {
-      $context['sandbox']['count'] = 0;
-      $context['sandbox']['current'] = 0;
-      $context['sandbox']['feed_template'] = drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig';
-      $context['results']['files'] = [];
-    }
-
-    $query = $this->getNodesQuery();
-    // Get the total amount of items to process.
-    if (!isset($context['sandbox']['total'])) {
-      $countQuery = clone $query;
-      $context['sandbox']['total'] = $countQuery->count()->execute();
-
-      // If there are no entities to update, then stop immediately.
-      if (!$context['sandbox']['total']) {
-        $context['finished'] = 1;
-        return;
-      }
-    }
-
-    $query->range($context['sandbox']['count'], $batch_size);
-    $nids = $query->execute();
-    $updates = $this->process($nids, $context);
-
-    $context['sandbox']['count'] += count($nids);
-    $context['sandbox']['current'] = !empty($nids) ? current($nids) : 0;
-    $context['results']['updates'] += $updates;
-    $context['message'] = $this->t('Updated feeds for @count out of @total.', [
-      '@count' => $context['sandbox']['count'],
-      '@total' => $context['sandbox']['total'],
-    ]);
-
-    if ($context['sandbox']['count'] != $context['sandbox']['total']) {
-      $context['finished'] = $context['sandbox']['count'] / $context['sandbox']['total'];
-    }
-  }
-
-  /**
    * Process given nids and get product related info.
    *
    * @param array $nids
    *   The array of nids to process.
    * @param mixed|array $context
    *   The batch current context.
-   *
-   * @return int
-   *   Return total number of nid processed.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -193,10 +137,9 @@ class AlshayaFeed {
    * @throws \Twig_Error_Syntax
    */
   public function process(array $nids, &$context) {
-    $updates = 0;
+    $context['results']['count'] += count($nids);
 
     foreach ($nids as $nid) {
-      $updates++;
       $product = $this->feedSkuInfoHelper->prepareFeedData($nid);
       if (empty($product)) {
         continue;
@@ -210,7 +153,7 @@ class AlshayaFeed {
         }
 
         $file_content .= $this->twig
-          ->loadTemplate($context['sandbox']['feed_template'])
+          ->loadTemplate($context['results']['feed_template'])
           ->render(['product' => $item]);
 
         if (!file_put_contents($context['results']['files'][$lang], $file_content, FILE_APPEND)) {
@@ -219,7 +162,10 @@ class AlshayaFeed {
       }
     }
 
-    return $updates;
+    $context['message'] = $this->t('Updated feeds for @count out of @total.', [
+      '@count' => $context['results']['count'],
+      '@total' => $context['results']['total'],
+    ]);
   }
 
   /**
