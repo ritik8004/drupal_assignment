@@ -5,8 +5,6 @@ import ColorFilter from './widgets/ColorFilter';
 import RefinementList from './widgets/RefinementList';
 import PriceFilter from './widgets/PriceFilter';
 
-console.log();
-
 export default ({indexName}) => (
   <React.Fragment>
     <FilterPanel header="Sort By" id="sort_by">

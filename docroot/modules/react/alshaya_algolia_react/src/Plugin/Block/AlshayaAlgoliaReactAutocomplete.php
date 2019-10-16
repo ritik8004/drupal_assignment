@@ -128,7 +128,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'filters' => [
               'sortby' => [
                 'widget' => [
-                  'items' => (array) $this->getSortByOptions($index_name),
+                  'items' => $this->getSortByOptions($index_name),
                 ],
               ],
             ],
@@ -185,6 +185,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
         continue;
       }
 
+      $sort_index_key = '';
       list($sort_key, $sort_order) = preg_split('/\s+/', $label_key);
       if (in_array($sort_key, $enabled_sorts)) {
         $sort_index_key = $index_name . '_' . $sort_key . '_' . strtolower($sort_order);
