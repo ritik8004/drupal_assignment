@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
@@ -67,6 +68,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   The request stack.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -82,12 +85,22 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager, ProductCategoryHelper $product_category_helper) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree,
+                              RequestStack $request_stack,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
+                              LanguageManagerInterface $language_manager,
+                              CacheBackendInterface $cache,
+                              RouteMatchInterface $route_match,
+                              Connection $connection,
+                              ConfigFactoryInterface $config_factory,
+                              AliasManagerInterface $alias_manager,
+                              ProductCategoryHelper $product_category_helper) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->requestStack = $request_stack;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection, $product_category_helper);
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $connection, $product_category_helper);
   }
 
   /**
@@ -303,6 +316,31 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       ProductCategoryTree::VOCABULARY_ID,
     ]);
     return $cache_terms;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isCategoryL1(TermInterface $category) {
+    $static = &drupal_static(__METHOD__, []);
+
+    if (isset($static[$category->id()])) {
+      return $static[$category->id()];
+    }
+
+    $parents = $this->termStorage->loadAllParents($category->id());
+    // Super Category + Current Category is two.
+    $static[$category->id()] = count($parents) < 3;
+    return $static[$category->id()];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getL1Category(TermInterface $category) {
+    $parents = $this->termStorage->loadAllParents($category->id());
+    $parent = array_reverse($parents, FALSE)[1];
+    return $this->entityRepository->getTranslationFromContext($parent);
   }
 
 }
