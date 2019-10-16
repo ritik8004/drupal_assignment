@@ -15,7 +15,7 @@
   }
 
   // Get markup for the cart notification.
-  function cartNotificationMarkup(data) {
+  Drupal.theme.cartNotificationMarkup = function(data) {
     var markup = '<div class ="notification">';
     markup += '<div class="col-1">' + data.image + '<span class="qty">' + data.quantity + '</span></div>';
     markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
@@ -43,7 +43,7 @@
           quantity: quantity
         };
         $.fn.cartNotificationScroll();
-        $('#cart_notification').html(cartNotificationMarkup(cart_notification_data));
+        $('#cart_notification').html(Drupal.theme('cartNotificationMarkup', cart_notification_data));
 
         if ($('.ui-dialog').length > 0) {
           $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
