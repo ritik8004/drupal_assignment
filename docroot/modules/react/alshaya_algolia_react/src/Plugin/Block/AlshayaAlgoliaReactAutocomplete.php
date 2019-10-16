@@ -100,13 +100,12 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    $index_name = $index['algolia_index_name'] . '_' . $lang;
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
     }
-
     $currency = $this->configFactory->get('acq_commerce.currency');
-
     $configuration = $this->getConfiguration();
 
     return [
@@ -122,10 +121,17 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
           'algoliaSearch' => [
             'application_id' => $algolia_config['application_id'],
             'api_key' => $algolia_config['api_key'],
-            'indexName' => $index['algolia_index_name'] . "_{$lang}",
+            'indexName' => $index_name,
             'filterOos' => $listing->get('filter_oos_product'),
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/search-insights@1.3.0.min.js',
+            'filters' => [
+              'sortby' => [
+                'widget' => [
+                  'items' => (array) $this->getSortByOptions($index_name),
+                ],
+              ],
+            ],
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'],
@@ -156,6 +162,46 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
         'contexts' => ['languages'],
       ],
     ];
+  }
+
+  /**
+   * Get sort by list options to show.
+   *
+   * @param string $index_name
+   *   The algolia index to use.
+   *
+   * @return array
+   *   The array of options with key and label.
+   */
+  protected function getSortByOptions($index_name): array {
+    $enabled_sorts = array_filter(_alshaya_search_get_config(), function ($item) {
+      return ($item != '');
+    });
+    $labels = _alshaya_search_get_config(TRUE);
+
+    $sort_items = [];
+    foreach ($labels as $label_key => $label_value) {
+      if (empty($label_value)) {
+        continue;
+      }
+
+      list($sort_key, $sort_order) = preg_split('/\s+/', $label_key);
+      if (in_array($sort_key, $enabled_sorts)) {
+        $sort_index_key = $index_name . '_' . $sort_key . '_' . strtolower($sort_order);
+      }
+      elseif ($sort_key == 'search_api_relevance') {
+        $sort_index_key = $index_name;
+      }
+
+      if (!empty($sort_index_key)) {
+        $sort_items[] = [
+          'value' => $sort_index_key,
+          'label' => $label_value,
+        ];
+      }
+
+    }
+    return $sort_items;
   }
 
   /**
