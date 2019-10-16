@@ -5,6 +5,8 @@
  * Contains form alter for sku base form.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -47,4 +49,23 @@ function alshaya_acm_cart_notification_theme_suggestions_input_alter(array &$sug
       $suggestions[] = 'input__add_to_cart';
     }
   }
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_acm_cart_notification_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  // Include the utility file to get product image.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  $variant['cart_title'] = $productInfoHelper->getTitle($child, 'basket');
+  $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+
+  // Prepare image style url.
+  if (!empty($image['#uri'])) {
+    $image = ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']);
+  }
+
+  $variant['cart_image'] = is_string($image) ? $image : '';
 }
