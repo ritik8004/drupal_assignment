@@ -55,11 +55,13 @@ html {
       outline: 0;
     }
 
-    .c-facet__title.c-accordion__title {
+    .c-facet__title.c-accordion__title,
+    .c-facet__title.c-collapse__title {
       display: block;
     }
 
-    .c-facet.c-accordion {
+    .c-facet.c-accordion,
+    .c-facet.c-collapse-item {
       @include breakpoint($only-mobile) {
         display: block;
       }
