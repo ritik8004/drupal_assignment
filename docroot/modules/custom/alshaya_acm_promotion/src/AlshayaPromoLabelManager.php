@@ -120,13 +120,32 @@ class AlshayaPromoLabelManager {
         continue;
       }
 
-      $promotion_action = $promotionNode->get('field_acq_promotion_action')->getString();
-      if (in_array($promotion_action, self::DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS)) {
+      if ($this->isPromotionLabelDynamic($promotionNode)) {
         $eligiblePromotions[] = $promotionNode;
       }
     }
 
     return $eligiblePromotions;
+  }
+
+  /**
+   * Checks if promotion node has dynamic label or not.
+   *
+   * @param \Drupal\node\NodeInterface $promotionNode
+   *   Promotion Node.
+   *
+   * @return bool
+   *   Promotion label dynamic or not.
+   */
+  private function isPromotionLabelDynamic(NodeInterface $promotionNode) {
+    $dynamic = FALSE;
+
+    $promotion_action = $promotionNode->get('field_acq_promotion_action')->getString();
+    if (in_array($promotion_action, self::DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS)) {
+      $dynamic = TRUE;
+    }
+
+    return $dynamic;
   }
 
   /**
@@ -306,7 +325,9 @@ class AlshayaPromoLabelManager {
       'original_label' => $promotion->get('field_acq_promotion_label')->getString(),
       'dynamic_label' => '',
     ];
-    if (!empty($this->isDynamicLabelsEnabled())) {
+
+    if (!empty($this->isDynamicLabelsEnabled())
+      && $this->isPromotionLabelDynamic($promotion)) {
       $cartSKUs = $this->cartManager->getCartSkus();
       $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
 
