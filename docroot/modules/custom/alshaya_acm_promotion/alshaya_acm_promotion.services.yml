@@ -13,6 +13,7 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
+      - '@entity.repository'
       - '@acq_cart.cart_storage'
       - '@config.factory'
   alshaya_acm_promotion.update_promotion:

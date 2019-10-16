@@ -6,11 +6,16 @@
 (function ($, Drupal) {
   'use strict';
 
+  // Copy queryID from query string to tag in html.
+  // This is to ensure we have queryID even after we update URL in cases
+  // where color split is enabled.
+  $('html').attr('data-algolia-query-id', Drupal.getQueryVariable('queryID'));
+
   Drupal.behaviors.alshayaAlgoliaInsightsDetail = {
     attach: function (context) {
       $('.sku-base-form').once('alshayaAlgoliaInsightsDetail').on('product-add-to-cart-success', function () {
         // Do nothing if no query id to send.
-        if (Drupal.getQueryVariable('queryID') === '') {
+        if ($('html').attr('data-algolia-query-id') === '') {
           return;
         }
 
@@ -19,7 +24,7 @@
         window.aa('clickedObjectIDsAfterSearch', {
           eventName: 'Add to cart',
           index: "...",
-          queryID: Drupal.getQueryVariable('queryID'),
+          queryID: $('html').attr('data-algolia-query-id'),
           objectIDs: [addedProduct.attr('data-insights-object-id')]
         });
       });

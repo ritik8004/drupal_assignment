@@ -3,5 +3,6 @@ services:
     class: Drupal\alshaya_feed\Commands\AlshayaFeedCommands
     arguments:
       - '@config.factory'
+      - '@alshaya_feed.generate'
     tags:
       - { name: drush.command }
