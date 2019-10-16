@@ -5,6 +5,7 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -152,18 +153,6 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
           ],
         ],
       ],
-      '#cache' => [
-        'contexts' => [
-          'languages',
-        ],
-        'tags' => [
-          'config:acq_commerce.currency',
-          'config:alshaya_acm_product.display_settings',
-          'config:alshaya_search_api.listing_settings',
-          'config:alshaya_search.settings',
-          'config:alshaya_acm_product.settings',
-        ],
-      ],
     ];
   }
 
@@ -207,6 +196,28 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $this->configuration['top_results'] = $form_state->getValue('top_results');
 
     parent::submitConfigurationForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'languages',
+    ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'config:acq_commerce.currency',
+      'config:alshaya_acm_product.display_settings',
+      'config:alshaya_search_api.listing_settings',
+      'config:alshaya_search.settings',
+      'config:alshaya_acm_product.settings',
+    ]);
   }
 
 }
