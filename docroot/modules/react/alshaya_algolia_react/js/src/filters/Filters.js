@@ -10,14 +10,7 @@ export default ({indexName}) => (
     <FilterPanel header="Sort By" id="sort_by">
       <SortByList
         defaultRefinement={indexName}
-        items={[
-          { value: indexName, label: 'Featured' },
-          { value: indexName + '_created_desc', label: 'New In.' },
-          { value: indexName + '_title_asc', label: 'Name A to Z.' },
-          { value: indexName + '_title_desc', label: 'Name Z to A.' },
-          { value: indexName + '_final_price_desc', label: 'Price High to Low.' },
-          { value: indexName + '_final_price_asc', label: 'Price Low to High.' },
-        ]}
+        items={drupalSettings.algoliaSearch.filters.sortby.widget.items}
       />
     </FilterPanel>
     <FilterPanel header="Price" id="final_price">
