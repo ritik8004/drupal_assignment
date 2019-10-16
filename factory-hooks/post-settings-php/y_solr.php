@@ -16,6 +16,7 @@ if (isset($_ENV['AH_SITE_NAME'])) {
 // Connect to local solr server in local and travis.
 else {
   $config['search_api.server.acquia_search_server']['name'] = 'Local Solr server';
+  $config['search_api.server.acquia_search_server']['backend_config']['connector'] = 'standard';
   $config['search_api.server.acquia_search_server']['backend_config']['connector_config']['host'] = 'localhost';
   $config['search_api.server.acquia_search_server']['backend_config']['connector_config']['port'] = '8983';
   $config['search_api.server.acquia_search_server']['backend_config']['connector_config']['path'] = '/solr';

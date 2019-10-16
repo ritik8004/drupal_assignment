@@ -91,7 +91,10 @@ class AppAutocomplete extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <AppAutocomplete />,
-  document.querySelector('#alshaya-algolia-autocomplete')
-);
+// Start instant search only after Document ready.
+(function ($, Drupal) {
+  ReactDOM.render(
+    <AppAutocomplete />,
+    document.querySelector('#alshaya-algolia-autocomplete')
+  );
+})(jQuery);
