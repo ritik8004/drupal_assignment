@@ -13,6 +13,7 @@
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
+        var product = $(this).closest('article[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
@@ -20,9 +21,8 @@
 
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 
-        $('article[gtm-type="gtm-product-link"]')
-          .attr('gtm-product-sku', variant)
-          .attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-product-sku', variant);
+        product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
       $('.sku-base-form').once('alshaya-seo-gtm').on('product-add-to-cart-success', function () {
