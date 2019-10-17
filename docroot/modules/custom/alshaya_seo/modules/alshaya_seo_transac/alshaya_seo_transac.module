@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -467,5 +468,28 @@ function alshaya_seo_transac_entity_delete(EntityInterface $entity) {
   ) {
     // Execute delete query only for the ones we have in sitemap.
     simple_sitemap_entity_delete($entity);
+  }
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+  $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+
+  foreach ($objects as $id => &$object) {
+    $node = $items[$id]->getOriginalObject()->getValue();
+
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
+      continue;
+    }
+
+    // Add GTM data.
+    $object['gtm'] = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
   }
 }

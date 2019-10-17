@@ -7,12 +7,3 @@ services:
       - '@renderer'
     tags:
       - { name: 'event_subscriber' }
-
-  alshaya_hm.algolia_index_event:
-    class: Drupal\alshaya_hm\EventSubscriber\AlgoliaIndexEventSubscriber
-    arguments:
-      - '@alshaya_acm_product.skumanager'
-      - '@alshaya_product_options.swatches'
-      - '@alshaya_acm_product.sku_images_manager'
-    tags:
-      - { name: 'event_subscriber' }

@@ -8,4 +8,3 @@ services:
       - '@alshaya_acm_product.sku_info'
       - '@logger.factory'
       - '@entity_type.manager'
-      - '@event_dispatcher'

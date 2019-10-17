@@ -7,14 +7,12 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_search_algolia\Event\AlshayaAlgoliaProductIndexEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -66,13 +64,6 @@ class AlshayaAlgoliaIndexHelper {
   protected $termStorage;
 
   /**
-   * Event Dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -87,8 +78,6 @@ class AlshayaAlgoliaIndexHelper {
    *   The logger service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-   *   Event Dispatcher.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -99,8 +88,7 @@ class AlshayaAlgoliaIndexHelper {
     RendererInterface $renderer,
     SkuInfoHelper $sku_info_helper,
     LoggerChannelFactoryInterface $logger_factory,
-    EntityTypeManagerInterface $entity_type_manager,
-    EventDispatcherInterface $dispatcher
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -108,7 +96,6 @@ class AlshayaAlgoliaIndexHelper {
     $this->skuInfoHelper = $sku_info_helper;
     $this->logger = $logger_factory->get('alshaya_search_algolia');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -221,12 +208,6 @@ class AlshayaAlgoliaIndexHelper {
     if ($object['stock'] === 0) {
       $this->removeAttributesFromIndex($object);
     }
-
-    // Dispatches AlshayaAlgoliaProductIndexEvent::PRODUCT_INDEX, so that other
-    // modules can update this array before an item is indexed.
-    $event = new AlshayaAlgoliaProductIndexEvent($sku, $node, $object);
-    $this->dispatcher->dispatch(AlshayaAlgoliaProductIndexEvent::PRODUCT_INDEX, $event);
-    $object = $event->getItem();
   }
 
   /**

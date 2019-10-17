@@ -21,9 +21,3 @@ services:
       - '@alshaya_acm_product.category_helper'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]
-  alshaya_seo_transac.algolia_product_index_event:
-    class: Drupal\alshaya_seo_transac\EventSubscriber\AlgoliaIndexEventSubscriber
-    arguments:
-      - '@alshaya_seo_transac.gtm_manager'
-    tags:
-      - { name: 'event_subscriber' }
