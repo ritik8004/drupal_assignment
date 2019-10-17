@@ -7,7 +7,7 @@
 }
 
 .region-primary-header {
-  @include breakpoint($above-palm) {
+  @include breakpoint($desk) {
     background: $menu-bg;
   }
 
@@ -15,16 +15,20 @@
     max-width: 80rem;
     margin: auto;
 
-    @include breakpoint($above-palm) {
+    @include breakpoint($desk) {
       position: relative;
     }
   }
 }
 
 .page-generic {
-  padding-top: 7.6875rem;
+  padding-top: 8.125rem;
 
   @include breakpoint($upto-palm) {
-    padding-top: 3.4375rem;
+    padding-top: 3.125rem;
+  }
+
+  @include breakpoint($lap) {
+    padding-top: 4.375rem;
   }
 }

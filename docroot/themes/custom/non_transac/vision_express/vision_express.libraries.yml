@@ -3,6 +3,8 @@ global:
   css:
     theme:
       dist/css/global.ltr.css: {}
+  js:
+    js/global.js: {}
 
 block-site-logo:
   version: VERSION
