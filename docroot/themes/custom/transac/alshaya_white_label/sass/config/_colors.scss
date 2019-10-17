@@ -86,6 +86,7 @@ $_plp_clear_all_btn_disabled: #8d8d8d;
 $light-blue-border: #b3d3f0;
 $_algolia_search_icon_bg: #0072ce;
 $_algolia_suggestion_list_bg: #f7fafe;
+$_algolia_search_page_sidebar_count: #707070;
 $_peackock_blue_10: rgba(0, 86, 153, 0.1);
 
 /* ------- 2. Primary Colors ------- */
@@ -969,10 +970,12 @@ $free-gifts-modal-product-name: $black;
 $free-gift-modal-item-code-border: $warm-grey-two;
 $free-gifts-modal-product-description-label: $black;
 $free-gifts-modal-product-item-code: $grey-light;
+$free-gifts-modal-promo-list-title-color: $mothercare-black;
 $cart-free-gifts-message: $grey-ash;
 $cart-free-gifts-title: $grey-ash;
 $cart-free-gifts-label: $white-five;
 $cart-free-gifts-label-background: $marine-blue;
+$cart-free-gifts-button-color: $white-five;
 
 // Pace progress color
 $progress_loader: $marine-blue;
@@ -1059,6 +1062,10 @@ $algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
 $algolia-react-progressbar: $warm-grey-two;
 $algolia-react-progressbar-text: $brownish-grey;
 $algolia-react-progressbar-fill: $marine-blue-two;
+$algolia-react-search-page-title: $marine-blue;
+$algolia-react-sidebar-label-color: $marine-blue-two;
+$algolia_react-search_page_sidebar_count: $_algolia_search_page_sidebar_count;
+$algolia_react-facet-item-color: $brownish-grey;
 
 // Option list filter.
 $options-page-title: $black;
@@ -1090,3 +1097,6 @@ $option-list-menu-background: $white-smoke-light;
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $peacock-blue;
 $megamenu-inline-layout-right-category-seperator: $white-two;
+
+// App navigation links
+$app-navigation-link-seperator-border: $white-smoke-light;

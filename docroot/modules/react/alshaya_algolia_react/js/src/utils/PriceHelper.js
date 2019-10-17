@@ -1,4 +1,20 @@
-function calculateDiscount(price, final_price) {
+export function getPriceRangeLabel(value) {
+  if (value == '') {
+    return (null);
+  }
+  const [startStr, endStr] = value.split(':');
+
+  const startPrice = (startStr !== '') ? parseFloat(startStr) : 0;
+  const endPrice = parseFloat(endStr);
+
+  var label = (startStr == '')
+    ? `Under ${formatPrice(endPrice)}`
+    : `${formatPrice(startPrice)} - ${formatPrice(endPrice)}`;
+
+  return label;
+}
+
+export function calculateDiscount(price, final_price) {
   const floatPrice = parseFloat(price);
   const floatFinalPrice = parseFloat(final_price);
 
@@ -10,7 +26,7 @@ function calculateDiscount(price, final_price) {
   return parseFloat(Math.round((discount * 100) / floatPrice));
 }
 
-function formatPrice(price) {
+export function formatPrice(price) {
   const priceParts = [
     drupalSettings.reactTeaserView.price.currency.toUpperCase(),
     price.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)
@@ -20,5 +36,3 @@ function formatPrice(price) {
     ? priceParts.map(item => item).join(' ')
     : priceParts.reverse().map(item => item).join(' ');
 }
-
-export { calculateDiscount, formatPrice };

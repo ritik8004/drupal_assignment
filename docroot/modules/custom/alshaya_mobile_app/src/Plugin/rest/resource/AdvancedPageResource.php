@@ -158,6 +158,9 @@ class AdvancedPageResource extends ResourceBase {
           'body' => $term->getDescription(),
         ];
       }
+
+      // Set the advanced page node so that it can be used later.
+      $this->mobileAppUtility->setAdvancedPageNode($node);
     }
 
     // Change the position of the "delivery_banner" on the frontpage.
@@ -177,6 +180,8 @@ class AdvancedPageResource extends ResourceBase {
         $field_info['label'],
         $field_info['type']
       );
+
+      $current_blocks = array_filter($current_blocks);
       if (!empty($current_blocks['type'])) {
         $blocks[] = $current_blocks;
       }

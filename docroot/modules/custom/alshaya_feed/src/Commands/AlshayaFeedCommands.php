@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_feed\Commands;
 
+use Drupal\alshaya_feed\AlshayaFeed;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -17,18 +18,30 @@ class AlshayaFeedCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  private $configFactory;
+  protected $configFactory;
+
+
+  /**
+   * Alshaya feed service.
+   *
+   * @var \Drupal\alshaya_feed\AlshayaFeed
+   */
+  protected $alshayaFeed;
 
   /**
    * AlshayaFeedCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
+   * @param \Drupal\alshaya_feed\AlshayaFeed $alshaya_feed
+   *   Alshaya feed service.
    */
   public function __construct(
-    ConfigFactoryInterface $configFactory
+    ConfigFactoryInterface $configFactory,
+    AlshayaFeed $alshaya_feed
   ) {
     $this->configFactory = $configFactory->get('alshaya_feed.settings');
+    $this->alshayaFeed = $alshaya_feed;
   }
 
   /**
@@ -54,18 +67,24 @@ class AlshayaFeedCommands extends DrushCommands {
   public function generateFeed(array $options = ['batch-size' => NULL]) {
     $batch_size = $options['batch-size'] ?? $this->configFactory->get('batch_size');
     $batch = [
-      'operations' => [
-        [[__CLASS__, 'batchStart'], []],
-        [[__CLASS__, 'batchProcess'], [$batch_size]],
-        [[__CLASS__, 'batchGenerate'], []],
-      ],
       'finished' => [__CLASS__, 'batchFinish'],
       'title' => dt('Generating product feed'),
       'init_message' => dt('Starting feed creation...'),
-      'progress_message' => '',
+      'progress_message' => dt('Completed @current step of @total.'),
       'error_message' => dt('encountered error while generating feed.'),
     ];
 
+    $query = $this->alshayaFeed->getNodesQuery();
+    $nids = $query->execute();
+
+    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($nids)]];
+    foreach (array_chunk($nids, $batch_size) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'batchProcess'],
+        [$chunk],
+      ];
+    }
+    $batch['operations'][] = [[__CLASS__, 'batchGenerate'], []];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -73,13 +92,17 @@ class AlshayaFeedCommands extends DrushCommands {
   /**
    * Batch callback; initialize the batch.
    *
+   * @param int $total
+   *   The total number of nids to process.
    * @param mixed|array $context
    *   The batch current context.
    */
-  public static function batchStart(&$context) {
-    $context['results']['updates'] = 0;
+  public static function batchStart($total, &$context) {
+    $context['results']['total'] = $total;
+    $context['results']['count'] = 0;
     $context['results']['products'] = [];
-    $context['results']['markups'] = [];
+    $context['results']['files'] = [];
+    $context['results']['feed_template'] = drupal_get_path('module', 'alshaya_feed') . '/templates/feed.html.twig';
     $context['results']['timestart'] = microtime(TRUE);
     \Drupal::service('alshaya_feed.generate')->clear();
   }
@@ -87,13 +110,13 @@ class AlshayaFeedCommands extends DrushCommands {
   /**
    * Batch API callback; collect the products data.
    *
-   * @param int $batch_size
+   * @param array $nids
    *   A batch size.
    * @param mixed|array $context
    *   The batch current context.
    */
-  public static function batchProcess($batch_size, &$context) {
-    \Drupal::service('alshaya_feed.generate')->batchProcess($batch_size, $context);
+  public static function batchProcess(array $nids, &$context) {
+    \Drupal::service('alshaya_feed.generate')->process($nids, $context);
   }
 
   /**
@@ -120,7 +143,7 @@ class AlshayaFeedCommands extends DrushCommands {
    */
   public static function batchFinish($success, array $results, array $operations) {
     if ($success) {
-      if ($results['updates']) {
+      if ($results['count']) {
         // Display Script End time.
         $time_end = microtime(TRUE);
         $execution_time = ($time_end - $results['timestart']) / 60;
@@ -128,7 +151,7 @@ class AlshayaFeedCommands extends DrushCommands {
         \Drupal::service('messenger')->addMessage(
           \Drupal::translation()
             ->formatPlural(
-              $results['updates'],
+              $results['count'],
               'Generated 1 product feed in time: @time.',
               'Generated @count products feed in time: @time.',
               ['@time' => $execution_time]

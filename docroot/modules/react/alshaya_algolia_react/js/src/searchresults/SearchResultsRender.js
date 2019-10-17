@@ -28,7 +28,12 @@ export default class SearchResultsRender extends React.Component {
 
   render() {
     return ReactDOM.createPortal(
-      <SearchResults query={this.props.query}/>,
+      <React.Fragment>
+        <div class="block block-core block-page-title-block">
+          <h1 class="c-page-title">Search results</h1>
+        </div>
+        <SearchResults query={this.props.query}/>
+      </React.Fragment>,
       this.el
     );
   }

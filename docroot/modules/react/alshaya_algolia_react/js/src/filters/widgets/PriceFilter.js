@@ -1,13 +1,14 @@
 import React from 'react';
-import { connectNumericMenu } from 'react-instantsearch-dom';
+import connectWithPriceFilter from './connectors/connectWithPriceFilter';
+import { getPriceRangeLabel } from '../../utils/PriceHelper';
 
-function PriceFilter(props) {
-  const { items, refine } = props;
+const PriceFilter = (props) => {
+  const { items, attribute, refine } = props;
 
   return (
     <ul>
       {items.map(item => (
-        <li key={item.value} className={"facet-item " + (item.isRefined ? 'is-active' : '')}>
+        <li key={item.label} className={"facet-item " + (item.isRefined ? 'is-active' : '')}>
           <span
             className="facet-item__value"
             onClick={event => {
@@ -15,13 +16,14 @@ function PriceFilter(props) {
               refine(item.value);
             }}
           >
-            {item.label}
-            <span className="facet-item__count"></span>
+            {getPriceRangeLabel(item.value)}
+            <span className="facet-item__count">({item.count})</span>
           </span>
         </li>
       ))}
     </ul>
   );
- }
+}
 
-export default connectNumericMenu(PriceFilter);
+export default connectWithPriceFilter(PriceFilter);
+

@@ -182,15 +182,6 @@
         modalClasses('size-guide', 'sizeguide-modal-overlay');
       });
 
-      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
-        $('body').addClass('free-gifts-modal-overlay');
-        modalCloseBtnEvent();
-
-        $(document).ajaxComplete(function () {
-          modalCloseBtnEvent();
-        });
-      });
-
       var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
 
       $(document).on('keyup', function (evt) {

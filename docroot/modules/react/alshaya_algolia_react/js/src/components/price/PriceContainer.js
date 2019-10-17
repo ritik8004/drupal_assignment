@@ -1,7 +1,7 @@
 import React from 'react';
 import PriceBlock from './PriceBlock';
 import PriceElement from './PriceElement';
-import {calculateDiscount} from './PriceHelper';
+import {calculateDiscount} from '../../utils/PriceHelper';
 
 const PriceContainer = ({price, final_price}) => {
   if (price > 0 && final_price > 0 &&  final_price < price) {

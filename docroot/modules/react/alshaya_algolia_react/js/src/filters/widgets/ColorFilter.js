@@ -1,5 +1,5 @@
 import React from 'react';
-import { connectRefinementList } from 'react-instantsearch-dom';
+import connectRefinementList from './connectors/connectRefinementList';
 import Swatch from './Swatch';
 
 // Seprate a string by comma to get the label and color code/image/text.
