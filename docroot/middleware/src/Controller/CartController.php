@@ -116,7 +116,7 @@ class CartController {
       case CartActions::CART_ADD_ITEM:
       case CartActions::CART_UPDATE_ITEM:
       case CartActions::CART_REMOVE_ITEM:
-        $cart_id = $action = $request->request->get('cart_id');
+        $cart_id = $request->request->get('cart_id');
         $cart = $this->cart->addUpdateRemoveItem($cart_id, $request->request->get('sku'), $request->request->get('quantity'), $action);
 
         if (!empty($cart['error'])) {
@@ -178,6 +178,7 @@ class CartController {
    */
   private function getProcessedCartData(array $cart_data) {
     $data = [];
+    $data['cart_id'] = $cart_data['cart']['id'];
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];
     $data['totals'] = [
@@ -187,7 +188,13 @@ class CartController {
     ];
 
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
+    $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
+    foreach ($data['items'] as $key => $value) {
+      if (isset($items_quantity[$key])) {
+        $data['items'][$key]['qty'] = $items_quantity[$key];
+      }
+    }
 
     return $data;
   }

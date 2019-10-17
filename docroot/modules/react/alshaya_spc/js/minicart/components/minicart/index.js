@@ -1,7 +1,7 @@
 import React from 'react';
 
 import 'promise-polyfill/src/polyfill';
-import {getCartCookie, cartAvailableInStorage, fetchCartData} from '../../../utilities/get_cart';
+import {fetchCartData} from '../../../utilities/get_cart';
 import {addInfoInStorage} from '../../../utilities/storage';
 import EmptyMiniCart from '../empty-mini-cart';
 import Price from '../../../utilities/price';
@@ -37,6 +37,20 @@ export default class MiniCart extends React.Component {
 
         });
       }
+
+      // Listen to `refreshMiniCart` event which will update/refresh the minicart from
+      // PDP item add or from the update from cart page.
+      document.addEventListener('refreshMiniCart', (e) => {
+        var data = e.detail.data();
+        this.setState({
+          qty: data.items_qty,
+          amount: data.cart_total,
+          wait: false
+        });
+
+        // Store info in storage.
+        addInfoInStorage(data);
+      }, false);
     } catch (error) {
       // In case of error, do nothing.
     }
