@@ -39,7 +39,7 @@ class AlshayaGtmManager {
    *
    * @var null
    */
-  protected static $gtmContainer = NULL;
+  public static $gtmContainer = NULL;
 
   /**
    * The current route matcher service.
@@ -328,16 +328,6 @@ class AlshayaGtmManager {
   public function setStoreFinderUtility(StoresFinderUtility $storesFinderUtility) {
     // @TODO: Move this back to normal/constructor once module enabled on prod.
     $this->storeFinder = $storesFinderUtility;
-  }
-
-  /**
-   * Set GTM container.
-   *
-   * @param array $container
-   *   Container info.
-   */
-  public function setGtmContainer(array $container) {
-    self::$gtmContainer = $container;
   }
 
   /**
