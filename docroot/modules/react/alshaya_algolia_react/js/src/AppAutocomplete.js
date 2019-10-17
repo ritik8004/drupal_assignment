@@ -8,7 +8,7 @@ import AutoComplete from './Autocomplete';
 import { toggleSearchResultsContainer } from './searchresults/SearchUtility';
 import SearchResultsRender from './searchresults/SearchResultsRender';
 import { getCurrentSearchQuery, isMobile } from './utils/utils';
-import Portals from './components/Portals/Portals';
+import Portal from './components/Portal/Portal';
 import Teaser from './components/teaser/Teaser';
 
 class AppAutocomplete extends React.Component {
@@ -89,20 +89,20 @@ class AppAutocomplete extends React.Component {
           />
         </InstantSearch>
         {isMobile() && (
-          <Portals id="top-results" query={query}>
+          <Portal id="top-results" query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
               <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
               <Hits hitComponent={Teaser}/>
             </InstantSearch>
-          </Portals>
+          </Portal>
         )}
-        <Portals
+        <Portal
           className="algolia-search-back-icon"
           id="react-algolia-searchbar-back-button"
           query=""
         />
-        <Portals
+        <Portal
           onclick={(event) => this.clearSearchFieldInput(event)}
           className="algolia-search-cleartext-icon"
           id="react-algolia-searchbar-clear-button"
