@@ -12,6 +12,7 @@ import Portals from './components/Portals/Portals';
 import Teaser from './components/teaser/Teaser';
 
 class AppAutocomplete extends React.Component {
+  reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
 
   constructor(props) {
     super(props);
@@ -60,6 +61,7 @@ class AppAutocomplete extends React.Component {
   clearSearchFieldInput = (event) => {
     // Empty State & Input.
     this.setQueryValue('');
+    this.reactSearchBlock[0].classList.remove('clear-icon');
     const reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
     let searchInput = reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
     // Keep focus.
