@@ -89,7 +89,7 @@ class AppAutocomplete extends React.Component {
           />
         </InstantSearch>
         {isMobile() && (
-          <Portal id="top-results" query={query}>
+          <Portal id="top-results" conditional query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
               <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
