@@ -24,6 +24,9 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  */
 class ProductSuperCategoryTree extends ProductCategoryTree {
 
+  /**
+   * When super category is enabled L2 becomes L1.
+   */
   const L1_DEPTH_LEVEL = 2;
 
   /**

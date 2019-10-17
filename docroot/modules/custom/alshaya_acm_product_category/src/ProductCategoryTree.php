@@ -20,6 +20,9 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  */
 class ProductCategoryTree implements ProductCategoryTreeInterface {
 
+  /**
+   * L1 is level 1 category terms.
+   */
   const L1_DEPTH_LEVEL = 1;
 
   const CACHE_BIN = 'alshaya';
