@@ -8,7 +8,7 @@ import AutoComplete from './Autocomplete';
 import { toggleSearchResultsContainer } from './searchresults/SearchUtility';
 import SearchResultsRender from './searchresults/SearchResultsRender';
 import { getCurrentSearchQuery, isMobile } from './utils/utils';
-import TopResults from './components/TopResults/TopResults';
+import Portals from './components/Portals/Portals';
 import Teaser from './components/teaser/Teaser';
 
 class AppAutocomplete extends React.Component {
@@ -57,6 +57,19 @@ class AppAutocomplete extends React.Component {
     </div>
   );
 
+  backToPage = (event) => {
+    this.setQueryValue('');
+  }
+
+  clearSearchFieldInput = (event) => {
+    // // Empty State & Input.
+    this.setQueryValue('');
+    const reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
+    let searchInput = reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
+    // // Keep focus.
+    searchInput[0].focus();
+  };
+
   render() {
     const { query, categories } = this.state;
     // Display search results when wrapper is present on page.
@@ -78,18 +91,26 @@ class AppAutocomplete extends React.Component {
           />
         </InstantSearch>
         {isMobile() && (
-          <TopResults id="top-results" query={query}>
+          <Portals id="top-results" query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
               <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
               <Hits hitComponent={Teaser}/>
             </InstantSearch>
-          </TopResults>
+          </Portals>
         )}
-        <TopResults className="algolia-search-back-icon" id="react-algolia-searchbar-back-button" query="">
-        </TopResults>
-        <TopResults className="algolia-search-cleartext-icon" id="react-algolia-searchbar-clear-button" query="">
-        </TopResults>
+        <Portals
+          onclick={(event) => this.backToPage(event)}
+          className="algolia-search-back-icon"
+          id="react-algolia-searchbar-back-button"
+          query=""
+        />
+        <Portals
+          onclick={(event) => this.clearSearchFieldInput(event)}
+          className="algolia-search-cleartext-icon"
+          id="react-algolia-searchbar-clear-button"
+          query=""
+        />
         {searchResultsDiv}
       </div>
     );

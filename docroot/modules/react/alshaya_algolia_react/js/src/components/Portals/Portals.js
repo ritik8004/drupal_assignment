@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const TopResults = ({query, children, ...attr}) => {
+const Portals = ({query, children, ...attr}) => {
   const el = useRef(document.createElement('div'));
   const [dynamic] = useState(!el.current.parentElement);
   useEffect(() => {
@@ -23,4 +23,4 @@ const TopResults = ({query, children, ...attr}) => {
   return createPortal(children, el.current);
 };
 
-export default TopResults;
+export default Portals;
