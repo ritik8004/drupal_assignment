@@ -27,6 +27,10 @@
       opacity: 1;
       visibility: visible;
     }
+
+    .trending-title {
+      display: none !important;
+    }
   }
 
   @include breakpoint($only-tablet) {
@@ -86,23 +90,8 @@
         }
       }
 
-      .trending-title {
-        display: none;
-        visibility: hidden;
-        opacity: 0;
-        font-size: 0;
-      }
-
       &--open {
         display: block;
-
-        .trending-title {
-          display: block;
-          visibility: visible;
-          opacity: 1;
-          font-size: 0.75rem;
-        }
-
         border: solid 0.1875rem $algolia-auto-complete-border;
         border-top: 1px solid $algolia-trending-title-border;
         z-index: 5;
@@ -236,7 +225,7 @@
         color: $algolia-trending-title-text;
         font-family: $alshaya-bold;
         padding: 1.5625rem 0.75rem !important;
-        display: block !important;
+        display: block;
         border-bottom: 1px solid $algolia-trending-title-border;
         text-transform: lowercase;
 

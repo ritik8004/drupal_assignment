@@ -14,7 +14,6 @@ const Portals = ({query, children, ...attr}) => {
     }
     return () => {
       if (dynamic && el.current.parentElement) {
-        console.log(el.current);
         el.current.parentElement.removeChild(el.current);
       }
     };

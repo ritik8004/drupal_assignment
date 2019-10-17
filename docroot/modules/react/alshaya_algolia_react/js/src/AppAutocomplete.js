@@ -57,16 +57,12 @@ class AppAutocomplete extends React.Component {
     </div>
   );
 
-  backToPage = (event) => {
-    this.setQueryValue('');
-  }
-
   clearSearchFieldInput = (event) => {
-    // // Empty State & Input.
+    // Empty State & Input.
     this.setQueryValue('');
     const reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
     let searchInput = reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
-    // // Keep focus.
+    // Keep focus.
     searchInput[0].focus();
   };
 
@@ -100,7 +96,6 @@ class AppAutocomplete extends React.Component {
           </Portals>
         )}
         <Portals
-          onclick={(event) => this.backToPage(event)}
           className="algolia-search-back-icon"
           id="react-algolia-searchbar-back-button"
           query=""
