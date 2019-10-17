@@ -16,6 +16,7 @@ function showSearchResultContainer() {
     element.style.display = 'none';
   });
   searchResultDiv.style.display = 'block';
+  searchResultDiv.className = 'show-algolia-result';
   pageStandard.className = searchClasses;
 }
 
@@ -27,6 +28,7 @@ function hideSearchResultContainer() {
     element.style.display = 'block';
   });
   searchResultDiv.style.display = 'none';
+  searchResultDiv.classList.remove('show-algolia-result');
   pageStandard.className = defaultClasses;
 }
 

@@ -104,7 +104,7 @@
         }
       });
 
-      stickyfacetfilter();
+      Drupal.algoliaReact.stickyfacetfilter();
       stickyfacetwrapper();
 
       // Show all filters blocks.
@@ -159,47 +159,49 @@
     }
   };
 
+  Drupal.algoliaReact = Drupal.algoliaReact || {};
+
   /**
    * Make Header sticky on scroll.
    */
-  function stickyfacetfilter() {
-    var filterposition = 0;
-    var supercategorymenuHeight = 0;
-    var position = 0;
-    var filter = $('.region__content');
-    var nav = $('.branding__menu');
-    var fixedNavHeight = 0;
+  Drupal.algoliaReact.stickyfacetfilter = function () {
+      var AlgoliaReactFilterPosition = 0;
+      var supercategorymenuHeight = 0;
+      var position = 0;
+      var filter = $('#alshaya-algolia-search .region__content');
+      var nav = $('.branding__menu');
+      var fixedNavHeight = 0;
 
-    if ($('.show-all-filters-algolia').length > 0) {
-      if ($(window).width() > 1023) {
-        filterposition = $('.container-without-product').offset().top;
-      }
-      else if ($(window).width() > 767 && $(window).width() < 1024) {
-        filterposition = $('.show-all-filters-algolia').offset().top;
-      }
-      else {
-        if ($('.block-alshaya-super-category').length > 0) {
-          supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
+      if ($('.show-all-filters-algolia').length > 0) {
+        if ($(window).width() > 1023) {
+          AlgoliaReactFilterPosition = $('#alshaya-algolia-search .container-without-product').offset().top;
+        } else if ($(window).width() > 767 && $(window).width() < 1024) {
+          AlgoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top;
+        } else {
+          if ($('.block-alshaya-super-category').length > 0) {
+            supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
+          }
+          if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0) {
+            AlgoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+          }
+          fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
         }
-        filterposition = $('.show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
-        fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
       }
-    }
 
     $(window).once().on('scroll', function () {
       // Sticky filter header.
-      if ($('.show-all-filters-algolia').length > 0) {
-        if ($(this).scrollTop() > filterposition) {
+      if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0 && $('.show-algolia-result').length > 0) {
+        if ($(this).scrollTop() > AlgoliaReactFilterPosition) {
           filter.addClass('filter-fixed-top');
           $('body').addClass('header-sticky-filter');
-        }
-        else {
+        } else {
           filter.removeClass('filter-fixed-top');
           $('body').removeClass('header-sticky-filter');
         }
       }
     });
   };
+
 
   /**
    * Wrapping all the filters inside a div to make it sticky.

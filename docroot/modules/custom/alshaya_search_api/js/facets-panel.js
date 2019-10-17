@@ -344,7 +344,7 @@
       function stickyfacetwrapper() {
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 767) {
-            if ($('.container-without-product').length < 1) {
+            if ($('.c-content .container-without-product').length < 1) {
               var site_brand = $('.site-brand-home').clone();
               $('#block-subcategoryblock, .region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
               $(site_brand).insertBefore('.container-without-product');
@@ -456,7 +456,7 @@
             }
           }
           else {
-            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('#block-subcategoryblock').length > 0) {
               if (this.oldScroll > this.scrollY) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
