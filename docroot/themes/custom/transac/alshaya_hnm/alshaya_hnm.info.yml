@@ -49,6 +49,11 @@ libraries-override:
       theme:
         css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
 
+  alshaya_white_label/dynamic-promotions:
+    css:
+      theme:
+        css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css: css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css
+
   alshaya_white_label/ltr_print_styles:
     css:
       theme:
