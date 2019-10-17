@@ -1,7 +1,7 @@
 import React from 'react';
 import AssetGallery from './variants/AssetGallery';
 import SearchGallery from './variants/SearchGallery';
-import { isMobile } from '../../utils/utils';
+import { isMobile } from '../../utils';
 import { ImageWrapper } from './imageHelper/ImageWrapper';
 
 const Gallery = (props) => {
