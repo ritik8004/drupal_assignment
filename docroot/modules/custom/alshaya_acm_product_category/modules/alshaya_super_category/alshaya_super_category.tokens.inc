@@ -63,7 +63,7 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
               if ($valid_term || $valid_node) {
                 $super_category = _alshaya_super_category_get_super_category_for_term();
                 if ($super_category instanceof TermInterface) {
-                  $replacements[$original] = \Drupal::service('token')->replace('[alshaya_seo:term_name]', ['term' => $super_category]);
+                  $replacements[$original] = $super_category->label();
                 }
               }
               break;

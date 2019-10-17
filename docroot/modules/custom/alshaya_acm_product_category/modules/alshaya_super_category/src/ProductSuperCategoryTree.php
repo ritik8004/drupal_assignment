@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
@@ -22,6 +23,11 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  * Class ProductSuperCategoryTree.
  */
 class ProductSuperCategoryTree extends ProductCategoryTree {
+
+  /**
+   * When super category is enabled L2 becomes L1.
+   */
+  const L1_DEPTH_LEVEL = 2;
 
   /**
    * Language manager.
@@ -67,6 +73,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   The request stack.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -82,12 +90,22 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager, ProductCategoryHelper $product_category_helper) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree,
+                              RequestStack $request_stack,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
+                              LanguageManagerInterface $language_manager,
+                              CacheBackendInterface $cache,
+                              RouteMatchInterface $route_match,
+                              Connection $connection,
+                              ConfigFactoryInterface $config_factory,
+                              AliasManagerInterface $alias_manager,
+                              ProductCategoryHelper $product_category_helper) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->requestStack = $request_stack;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection, $product_category_helper);
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $connection, $product_category_helper);
   }
 
   /**
