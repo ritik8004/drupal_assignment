@@ -29,7 +29,7 @@
           filterPosition = $('.branding__menu').outerHeight() + superCategoryMenuHeight + slugBannerHeight;
         }
 
-        $(window).on('scroll', function () {
+        $(window).once('algoliaReactSearch').on('scroll', function () {
           if ($(window).width() < 768) {
             if ($(this).scrollTop() > filterPosition) {
               $('body').addClass('Sticky-algolia-search');
