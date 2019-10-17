@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const TopResults = ({query, children}) => {
+const Portal = ({query, children, ...attr}) => {
   const el = useRef(document.createElement('div'));
-
   const [dynamic] = useState(!el.current.parentElement);
   useEffect(() => {
     if (dynamic) {
-      el.current.id = 'top-results';
-      document.querySelector('.react-autosuggest__container').appendChild(el.current);
+      for (const [property, value] of Object.entries(attr)) {
+        el.current[property] = value;
+      }
+      const autosuggestContainer = document.querySelector('.react-autosuggest__container');
+      autosuggestContainer.appendChild(el.current);
     }
     return () => {
       if (dynamic && el.current.parentElement) {
@@ -20,4 +22,4 @@ const TopResults = ({query, children}) => {
   return createPortal(children, el.current);
 };
 
-export default TopResults;
+export default Portal;
