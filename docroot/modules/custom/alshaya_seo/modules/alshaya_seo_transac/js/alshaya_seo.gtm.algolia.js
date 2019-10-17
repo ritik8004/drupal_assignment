@@ -10,7 +10,7 @@
 
   // Bind for Algolia Search page. No impact if Algolia search not enabled
   // as selector won't be available.
-  $('#alshaya-algolia-search').once('seoGoogleTagManager').on('search-results-updated', function () {
+  $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function () {
     // Avoid triggering again for each page.
     if (searchQuery !== $('#alshaya-algolia-autocomplete input:text').val()) {
       searchQuery = $('#alshaya-algolia-autocomplete input:text').val();
@@ -33,7 +33,7 @@
       if (!$(this).hasClass('impression-processed')) {
         $(this).addClass('impression-processed');
         var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-        impression.list = listName;
+        impression.list = 'Search Results Page';
         impression.position = $(this).attr('data-insights-position');
         // Keep variant empty for impression pages. Populated only post add to cart action.
         impression.variant = '';
