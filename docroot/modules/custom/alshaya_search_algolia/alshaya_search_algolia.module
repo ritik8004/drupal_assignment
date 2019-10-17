@@ -11,6 +11,18 @@ use Drupal\search_api\IndexInterface;
 use AlgoliaSearch\Client;
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_search_algolia_module_implements_alter(&$implementations, $hook) {
+  // Call the alshaya_search_algolia_search_api_algolia_objects_alter first.
+  if ($hook == 'search_api_algolia_objects_alter') {
+    $group = $implementations['alshaya_search_algolia'];
+    unset($implementations['alshaya_search_algolia']);
+    $implementations = ['alshaya_search_algolia' => $group] + $implementations;
+  }
+}
+
+/**
  * Implements hook_search_api_algolia_sorts_alter().
  */
 function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, IndexInterface $index) {
@@ -84,6 +96,8 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
   SkuManager::$colorSplitMergeChildren = FALSE;
 
   $logger = \Drupal::logger('alshaya_search_algolia');
+
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
   $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
   foreach ($objects as $id => &$object) {
     $node = $items[$id]->getOriginalObject()->getValue();

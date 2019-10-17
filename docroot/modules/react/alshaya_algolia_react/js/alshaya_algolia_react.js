@@ -5,6 +5,18 @@
 (function ($, Drupal) {
   'use strict';
 
+  // Plug into XHR requests to identify and trigger events when Algolia
+  // finishes loading search results.
+  var origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    this.addEventListener('load', function () {
+      if (url.indexOf('algolia') > -1 && url.indexOf('instantsearch') > -1) {
+        $('#alshaya-algolia-search').trigger('search-results-updated');
+      }
+    });
+    origOpen.apply(this, arguments);
+  };
+
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
       // On clicking facet block title, update the title of block and hide
