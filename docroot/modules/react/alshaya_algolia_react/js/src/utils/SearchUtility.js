@@ -2,13 +2,11 @@ var contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
 var searchResultDiv = document.createElement('div');
 searchResultDiv.id = 'alshaya-algolia-search';
-// searchResultDiv.className = 'c-plp-only l-one--w lhn-without-sidebar';
 searchResultDiv.style.display = 'none';
 contentDiv.parentNode.insertBefore( searchResultDiv, contentDiv.nextSibling );
 
 var pageStandard = document.querySelector('.page-standard');
 var defaultClasses = pageStandard.className;
-// var searchClasses = "page-standard c-plp c-plp-only l-one--w lhn-without-sidebar l-container";
 var searchClasses = "page-standard c-plp c-plp-only l-two--sf l-container";
 
 function showSearchResultContainer() {
@@ -31,7 +29,7 @@ function hideSearchResultContainer() {
 }
 
 function toggleSearchResultsContainer(query) {
-  (typeof query === 'uundefined' || query == '')
+  (typeof query === 'undefined' || query == '')
     ? hideSearchResultContainer()
     : showSearchResultContainer();
 }

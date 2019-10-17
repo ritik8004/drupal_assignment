@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { updateAfter } from '../utils/utils';
+import { updateAfter } from '../utils';
 
 /**
  * Sticky filters.

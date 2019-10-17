@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPriceRangeLabel } from '../../utils/PriceHelper';
+import { getPriceRangeLabel } from '../../utils';
 
 const filtersLabels = {
   'attr_color_family.label': (value) =>  {

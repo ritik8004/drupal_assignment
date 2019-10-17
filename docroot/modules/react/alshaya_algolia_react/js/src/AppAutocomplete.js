@@ -5,9 +5,9 @@ import { Configure, Hits } from "react-instantsearch-dom";
 import qs from 'qs'
 import {searchClient} from './config/SearchClient';
 import AutoComplete from './Autocomplete';
-import { toggleSearchResultsContainer } from './searchresults/SearchUtility';
+import { toggleSearchResultsContainer } from './utils';
 import SearchResultsRender from './searchresults/SearchResultsRender';
-import { getCurrentSearchQuery, isMobile } from './utils/utils';
+import { getCurrentSearchQuery, isMobile } from './utils';
 import Portal from './components/Portal/Portal';
 import Teaser from './components/teaser/Teaser';
 
