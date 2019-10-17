@@ -659,7 +659,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
         // Prepare image style url.
         if (!empty($image['#uri'])) {
-          $image = ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']);
+          $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
         }
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['cart_image'] = is_string($image) ? $image : '';
         // If configurable type product.

@@ -56,8 +56,6 @@ export default class MiniCart extends React.Component {
     }
   }
 
-
-
   render() {
     const currency_config = window.drupalSettings.alshaya_spc.currency_config;
     if (this.state.wait) {
