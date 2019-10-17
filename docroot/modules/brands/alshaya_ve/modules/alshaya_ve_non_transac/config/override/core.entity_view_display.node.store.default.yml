@@ -2,8 +2,6 @@ dependencies:
   config:
     - field.field.node.store.field_store_country
     - field.field.node.store.field_store_retina_photography
-  module:
-    - panelizer
 third_party_settings:
   panelizer:
     enable: false

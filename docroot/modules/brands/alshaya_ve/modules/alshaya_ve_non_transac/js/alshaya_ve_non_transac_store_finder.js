@@ -37,22 +37,24 @@
 
   Drupal.behaviors.storeFinderSetLatLongCookie = {
     attach: function (context, settings) {
-      var latitude = $.cookie('alshaya_client_latitude');
-      var longitude = $.cookie('alshaya_client_longitude');
       var country_code = $.cookie('alshaya_client_country_code');
-      if (typeof latitude === 'undefined' || !latitude || typeof longitude === 'undefined' || !longitude) {
+      if (typeof country_code === 'undefined' || !country_code) {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function (position) {
             var cookie_options = {path: '/', expires: 7200, secure: true};
-            var googleApiKey = window.drupalSettings.googleApiKey;
-            $.get("https://maps.googleapis.com/maps/api/geocode/json?key=" + googleApiKey + "&latlng=" + position.coords.latitude + "," + position.coords.longitude, function(response) {
-              if (response.results[0].address_components) {
-                $.each(response.results[0].address_components, function( index, value ) {
-                  if (value.types[0] == 'country') {
-                    var cookie_options = {path: '/', expires: 7200, secure: true};
-                    $.cookie('alshaya_client_country_code', value.short_name, cookie_options);
-                  }
-                });
+            var latlng = {lat: parseFloat(position.coords.latitude), lng: parseFloat(position.coords.longitude)};
+            var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
+            geocoder.geocode({location: latlng}, function (results, status) {
+              if (status === 'OK') {
+                if (results[0].address_components) {
+                  $.each(results[0].address_components, function( index, value ) {
+                    if (value.types[0] == 'country') {
+                      alert(value.short_name);
+                      var cookie_options = {path: '/', expires: 7200, secure: true};
+                      $.cookie('alshaya_client_country_code', value.short_name, cookie_options);
+                    }
+                  });
+                }
               }
             });
           });
@@ -78,3 +80,5 @@ function defaultSelectCountryOption() {
     }
   }
 }
+
+
