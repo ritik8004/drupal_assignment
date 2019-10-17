@@ -11,7 +11,7 @@ const NoResults = ({ searchResults }) => {
       translations={{
         reset: (
           <div className="clear-filters">
-            Clear filters
+            {Drupal.t('clear filters')}
           </div>
         ),
       }}

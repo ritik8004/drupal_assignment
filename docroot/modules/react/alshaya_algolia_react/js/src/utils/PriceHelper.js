@@ -8,8 +8,11 @@ export function getPriceRangeLabel(value) {
   const endPrice = parseFloat(endStr);
 
   var label = (startStr == '')
-    ? `Under ${formatPrice(endPrice)}`
-    : `${formatPrice(startPrice)} - ${formatPrice(endPrice)}`;
+    ? Drupal.t('under @stop', {'@stop': formatPrice(endPrice)})
+    : Drupal.t('@start - @stop', {
+        '@start': formatPrice(startPrice),
+        '@stop': formatPrice(endPrice)
+      });
 
   return label;
 }

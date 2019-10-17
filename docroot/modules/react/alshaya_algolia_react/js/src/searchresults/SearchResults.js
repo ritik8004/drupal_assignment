@@ -70,8 +70,8 @@ const SearchResults = props => {
         <StickyFilter>
           <Filters indexName={indexName} />
           <div className="show-all-filters-algolia">
-            <span className="desktop">all filters</span>
-            <span className="upto-desktop">filter &amp; sort</span>
+            <span className="desktop">{Drupal.t('all filters')}</span>
+            <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
           </div>
         </StickyFilter>
         <AllFilters>
@@ -81,7 +81,7 @@ const SearchResults = props => {
           <Stats
             translations={{
               stats(nbHits, timeSpentMS) {
-                return `${nbHits} items`;
+                return Drupal.t('@total items', {'@total': nbHits});
               },
             }}
           />
@@ -92,7 +92,7 @@ const SearchResults = props => {
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits>
             {(paginationArgs) => (
-              <Pagination {...paginationArgs}>Load more products</Pagination>
+              <Pagination {...paginationArgs}>{Drupal.t('Load more products')}</Pagination>
             )}
           </SearchResultInfiniteHits>
         </div>

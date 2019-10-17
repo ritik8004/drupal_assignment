@@ -80,7 +80,7 @@ const AllFilters = (props) => {
       <div className="all-filters-algolia">
         <div className="filter__head">
           <div className="back-facet-list"></div>
-          <div className="filter-sort-title">filter &amp; sort</div>
+          <div className="filter-sort-title">{Drupal.t('filter & sort')}</div>
           <div className="all-filters-close"></div>
         </div>
         <div className="filter__inner" ref={allFiltersRef}>
@@ -91,14 +91,14 @@ const AllFilters = (props) => {
                 <Stats
                   translations={{
                     stats(nbHits, timeSpentMS) {
-                      return `${nbHits} items`;
+                      return Drupal.t('@total items', {'@total': nbHits});
                     },
                   }}
                 />
               </div>
             </div>
-            <div className="facet-clear-all button"><ClearRefinements /></div>
-            <a className="facet-apply-all button">apply filter</a>
+            <div className="facet-clear-all button"><ClearRefinements title={Drupal.t('clear all')}/></div>
+            <a className="facet-apply-all button">{Drupal.t('apply filter')}</a>
           </div>
         </div>
       </div>
