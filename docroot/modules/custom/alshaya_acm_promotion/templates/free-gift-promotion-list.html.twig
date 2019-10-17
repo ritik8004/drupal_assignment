@@ -1,11 +1,13 @@
-<div class="free-gift-promo-wrapper">
+{{ attach_library('alshaya_white_label/free_gifts') }}
+
+<div class="free-gift-promo-wrapper free-gift-promo-list">
   {% if image is not empty %}
     <div class="free-gift-image">
       {{ image }}
     </div>
   {% endif %}
 
-  <div class="free-gift-message">
+  <div class="free-gift-wrapper">
     <div class="free-gift-title">
       {{ title }}
     </div>
