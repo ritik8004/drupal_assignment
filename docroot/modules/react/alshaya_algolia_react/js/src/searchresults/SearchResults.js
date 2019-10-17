@@ -24,6 +24,7 @@ import StickyFilter from '../panels/StickyFilter';
 import withURLSync from '../URLSync';
 import Pagination from '../components/algolia/Pagination';
 import HierarchicalMenu from '../filters/widgets/HierarchicalMenu';
+import { hasCategoryFilter } from '../utils';
 
 // Create a dummy search box to generate result.
 const VirtualSearchBox = connectSearchBox(() => (null));
@@ -53,19 +54,21 @@ const SearchResults = props => {
       <Configure clickAnalytics />
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       <VirtualSearchBox currentRefinement={query}  />
-      <SideBar>
-        <ul>
-          <li>
-            <HierarchicalMenu
-              attributes={[
-                'field_category_name.lvl0',
-                'field_category_name.lvl1',
-                'field_category_name.lvl2',
-              ]}
-            />
-          </li>
-        </ul>
-      </SideBar>
+      {hasCategoryFilter() && (
+        <SideBar>
+          <ul>
+            <li>
+              <HierarchicalMenu
+                attributes={[
+                  'field_category_name.lvl0',
+                  'field_category_name.lvl1',
+                  'field_category_name.lvl2',
+                ]}
+              />
+            </li>
+          </ul>
+        </SideBar>
+      )}
       <MainContent>
         <StickyFilter>
           <Filters indexName={indexName} />

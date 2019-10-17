@@ -4,9 +4,11 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\block\BlockInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -55,6 +57,13 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
   protected $facetManager;
 
   /**
+   * Entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -71,6 +80,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
    *   SKU Images Manager.
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
    *   Facet manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager service.
    */
   public function __construct(
     array $configuration,
@@ -79,13 +90,15 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     ConfigFactoryInterface $config_factory,
     LanguageManagerInterface $language_manager,
     SkuImagesManager $sku_images_manager,
-    DefaultFacetManager $facet_manager
+    DefaultFacetManager $facet_manager,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->skuImagesManager = $sku_images_manager;
     $this->facetManager = $facet_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -104,7 +117,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       $container->get('config.factory'),
       $container->get('language_manager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('facets.manager')
+      $container->get('facets.manager'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -229,12 +243,16 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
    *
    * @todo: this is temporary way to get filters, work on it to make something
    * solid on which we can rely.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   protected function getFilters($index_name) {
     $filter_facets = [
-      [
+      'sort_by' => [
         'identifier' => 'sort_by',
-        'name' => $this->t('Sort By'),
+        'name' => $this->t('Sort by'),
+        'label' => $this->t('Sort by'),
         'widget' => [
           'type' => 'sort_by',
           'items' => $this->getSortByOptions($index_name),
@@ -245,23 +263,40 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $facets = $this->facetManager->getFacetsByFacetSourceId(self::FACET_SOURCE);
     if (!empty($facets)) {
       foreach ($facets as $facet) {
-        if (!in_array(
-          $facet->getFieldIdentifier(),
-          ['field_category', 'attr_selling_price']
-        )) {
-          $filter_facets[] = [
-            'identifier' => $facet->getFieldIdentifier(),
+        $block_id = str_replace('_', '', $facet->id());
+        $block = $this->entityTypeManager->getStorage('block')->load($block_id);
+        if ($block instanceof BlockInterface && !$block->status()) {
+          continue;
+        }
+
+        $visibility = $block->getVisibility();
+        if (isset($visibility['request_path']['pages']) && stripos($visibility['request_path']['pages'], '/search') === FALSE) {
+          continue;
+        }
+
+        if (!in_array($facet->getFieldIdentifier(), ['attr_selling_price'])) {
+          $widget = $facet->getWidget();
+          if ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
+            $identifier = 'promotions';
+          }
+          elseif ($facet->getFieldIdentifier() === 'field_category') {
+            // For category we have index hierarchy in field_category_name
+            // so, updating field_name and type for react.
+            $identifier = 'field_category_name';
+            $widget['type'] = 'hierarchy';
+          }
+          else {
+            $identifier = $facet->getFieldIdentifier();
+          }
+
+          $filter_facets[$identifier] = [
+            'identifier' => $identifier,
+            'label' => $block->label(),
             'name' => $facet->getName(),
-            'widget' => $facet->getWidget(),
+            'widget' => $widget,
           ];
         }
       }
-    }
-
-    $intersect = array_intersect(array_column($filter_facets, 'identifier'), ['attr_color', 'attr_color_family']);
-    if (count($intersect) > 1) {
-      unset($intersect[array_search('attr_color_family', $intersect)]);
-      unset($filter_facets[key($intersect)]);
     }
 
     return $filter_facets;

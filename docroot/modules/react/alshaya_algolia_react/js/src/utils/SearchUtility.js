@@ -1,3 +1,5 @@
+import { hasCategoryFilter } from './FilterUtils';
+
 var contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
 var searchResultDiv = document.createElement('div');
@@ -7,7 +9,8 @@ contentDiv.parentNode.insertBefore( searchResultDiv, contentDiv.nextSibling );
 
 var pageStandard = document.querySelector('.page-standard');
 var defaultClasses = pageStandard.className;
-var searchClasses = "page-standard c-plp c-plp-only l-two--sf l-container";
+var searchClasses = "page-standard c-plp c-plp-only ";
+searchClasses += hasCategoryFilter() ? "l-two--sf l-container" : "l-one--w lhn-without-sidebar l-container";
 
 function showSearchResultContainer() {
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {

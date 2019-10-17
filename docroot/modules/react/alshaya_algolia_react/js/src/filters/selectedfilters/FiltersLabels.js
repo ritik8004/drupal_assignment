@@ -1,28 +1,48 @@
 import React from 'react';
 import { getPriceRangeLabel } from '../../utils';
 
-const filtersLabels = {
-  'attr_color_family.label': (value) =>  {
-    const [label, ] = value.split(',');
-    return label.trim();
-  },
-  'field_category_name.lvl0': (value) => {
-    return value.replace('field_category_name.lvl0:', '').trim();
-  },
-  'attr_product_brand': (value) => {
-    return value.trim();
-  },
-  'final_price': (value) => {
-    const price = value.replace('final_price:', '').trim();
-    return getPriceRangeLabel(price);
-  },
-  'attr_size': (value) => {
-    return value;
-  },
-};
+/**
+ * Format selected values to make it presentable for selected filters.
+ *
+ * @param {String} attribute
+ *   The selected attribute.
+ * @param {String} value
+ *   The value of selected attribute.
+ * @param {Array} filter
+ *   The widget array of facet.
+ */
+function selectedFiltersLables(attribute, value, filter) {
+  var selctionText = '';
+  switch (filter.widget.type) {
+    case 'swatch_list':
+      const [label, ] = value.split(',');
+      selctionText = label.trim();
+      break;
+
+    case 'hierarchy':
+      selctionText = value.replace(attribute + ':', '').trim();
+      break;
+
+    case 'range_checkbox':
+      const price = value.replace(attribute + ':', '').trim();
+      selctionText = getPriceRangeLabel(price);
+      break;
+
+    case 'checkbox':
+    default:
+      selctionText = value.trim();
+  }
+
+  return selctionText;
+}
 
 export default function FiltersLabels({ attribute, value }) {
-  const label = filtersLabels[attribute](value);
+  const [attributeName, ] = attribute.split('.');
+  const label = selectedFiltersLables(
+    attribute,
+    value,
+    drupalSettings.algoliaSearch.filters[attributeName]
+  );
 
   return (
     <React.Fragment>
