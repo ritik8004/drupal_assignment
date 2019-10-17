@@ -109,6 +109,7 @@ html {
         display: flex;
         align-items: center;
         justify-content: center;
+        line-height: normal;
 
         @include breakpoint($only-mobile) {
           line-height: 2.9375rem;
@@ -138,7 +139,8 @@ html {
       .facet-all-back,
       .facet-all-apply,
       .facet-apply-all,
-      .all-filters-close {
+      .all-filters-close,
+      .back-facet-list {
         display: flex;
         align-items: center;
       }
