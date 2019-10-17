@@ -24,6 +24,8 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  */
 class ProductSuperCategoryTree extends ProductCategoryTree {
 
+  const L1_DEPTH_LEVEL = 2;
+
   /**
    * Language manager.
    *
@@ -316,31 +318,6 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       ProductCategoryTree::VOCABULARY_ID,
     ]);
     return $cache_terms;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isCategoryL1(TermInterface $category) {
-    $static = &drupal_static(__METHOD__, []);
-
-    if (isset($static[$category->id()])) {
-      return $static[$category->id()];
-    }
-
-    $parents = $this->termStorage->loadAllParents($category->id());
-    // Super Category + Current Category is two.
-    $static[$category->id()] = count($parents) < 3;
-    return $static[$category->id()];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getL1Category(TermInterface $category) {
-    $parents = $this->termStorage->loadAllParents($category->id());
-    $parent = array_reverse($parents, FALSE)[1];
-    return $this->entityRepository->getTranslationFromContext($parent);
   }
 
 }

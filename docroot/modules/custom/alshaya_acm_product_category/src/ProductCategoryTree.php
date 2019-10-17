@@ -20,6 +20,8 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  */
 class ProductCategoryTree implements ProductCategoryTreeInterface {
 
+  const L1_DEPTH_LEVEL = 1;
+
   const CACHE_BIN = 'alshaya';
 
   const CACHE_ID = 'product_category_tree';
@@ -828,11 +830,12 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   TRUE if category is L1.
    */
   public function isCategoryL1(TermInterface $category) {
-    return empty(array_filter(array_column($category->get('parent')->getValue(), 'target_id')));
+    $depth = (int) $category->get('depth_level')->getString();
+    return $depth === static::L1_DEPTH_LEVEL;
   }
 
   /**
-   * Get L1 Category for current category.
+   * Get L1 Parent Category for given category.
    *
    * @param \Drupal\taxonomy\TermInterface $category
    *   Category.
@@ -842,7 +845,12 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getL1Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
-    $parent = array_reverse($parents, FALSE)[0];
+
+    if (count($parents) < static::L1_DEPTH_LEVEL) {
+      return $category;
+    }
+
+    $parent = array_reverse($parents, FALSE)[static::L1_DEPTH_LEVEL - 1];
     return $this->entityRepository->getTranslationFromContext($parent);
   }
 
