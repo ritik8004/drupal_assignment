@@ -57,14 +57,12 @@ export default class MiniCart extends React.Component {
   }
 
   render() {
-    const currency_config = window.drupalSettings.alshaya_spc.currency_config;
     if (this.state.wait) {
       return <EmptyMiniCart></EmptyMiniCart>
     }
 
     return <div>
-        <span>{currency_config.currency_code}</span>
-        <Price price={this.state.amount} decimal_position={currency_config.decimal_points}></Price>
+        <Price price={this.state.amount}></Price>
         <span>{this.state.qty}</span>
       </div>
   }
