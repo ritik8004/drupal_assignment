@@ -362,10 +362,10 @@ $magentos = [
   'we_qa' => [
     'url' => 'https://qa-dc3i3ua-xj72gv64n7kci.eu-3.magentosite.cloud',
     'magento_secrets' => [
-      'consumer_key' => 'sujo9buytcm8lf20dl446lw7qbv2ahc3',
-      'consumer_secret' => 'lpfw5yjr37hmvlp49c6871fgwa6uu8am',
-      'access_token' => 'jma3d276kdxfh01yleicq14thsf4rlam',
-      'access_token_secret' => '9njmhvu3xw7d1kgwrprtw72y1c0lk9jf',
+      'consumer_key' => '3bdibgcmd49t4t68mj2owvyfbcu2wqen',
+      'consumer_secret' => '4jpl7afsknu48ljktkemk0tjg24ffmcp',
+      'access_token' => 'rmg64nidqu7i51xaaqu7uk5105169t3q',
+      'access_token_secret' => 'qjvquv43s8tyexf856pox9dyped422y0',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 6],
