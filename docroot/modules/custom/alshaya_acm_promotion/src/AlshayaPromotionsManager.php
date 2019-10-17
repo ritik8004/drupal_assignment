@@ -412,7 +412,7 @@ class AlshayaPromotionsManager {
           $options
         )->toString();
 
-        $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click @coupon to get a Free Gift from @collection', [
+        $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click <span class="coupon-code">@coupon</span> to get a <span class="label">Free Gift</span> from @collection', [
           '@coupon' => $link_coupons,
           '@collection' => $link_collection,
         ]);
@@ -433,7 +433,7 @@ class AlshayaPromotionsManager {
             $options
           )->toString();
 
-          $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click @coupon to get a Free Gift @title', [
+          $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click <span class="coupon-code">@coupon</span> to get a <span class="label">Free Gift</span> @title', [
             '@coupon' => $link,
             '@title' => $free_sku_entity->label(),
           ]);
