@@ -463,3 +463,27 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
 function alshaya_seo_transac_home_delivery_save_address_alter(&$response, $plugin_id) {
   $response->addCommand(new InvokeCommand(NULL, 'triggerDeliveryAddress', []));
 }
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_seo_transac_module_implements_alter(&$implementations, $hook) {
+  if ($hook === 'entity_delete' && isset($implementations['simple_sitemap'])) {
+    // We don't want simple_sitemap_entity_delete() to be executed for all the
+    // entities, not at-least for SKU entity type.
+    unset($implementations['simple_sitemap']);
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function alshaya_seo_transac_entity_delete(EntityInterface $entity) {
+  if (
+    ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'acq_product')
+    || ($entity->getEntityTypeId() === 'taxonomy_term' && $entity->bundle() === 'acq_product_category')
+  ) {
+    // Execute delete query only for the ones we have in sitemap.
+    simple_sitemap_entity_delete($entity);
+  }
+}
