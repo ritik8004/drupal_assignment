@@ -16,7 +16,9 @@ const AllFilters = (props) => {
       // main display, Which toggles with sliding effect from right side and
       // also used for mobile.
       if (typeof allFiltersRef.current == 'object') {
-        const filters = allFiltersRef.current.querySelectorAll('.c-accordion');
+        const filters = allFiltersRef.current.querySelectorAll('.c-collapse-item');
+
+        let hasSelection = false;
         filters.forEach(element => {
           const children = element.getElementsByTagName('ul')[0];
 
@@ -44,6 +46,7 @@ const AllFilters = (props) => {
             // Prepares html content to display texts for only 2 items, and rest
             // Will be displayed as a count ((+5) selected.) in brackets. (i.e black, white (+2))
             if (currentSelection.length > 0) {
+              hasSelection = true;
               const displayItems = (currentSelection.length > 2)
                 ? currentSelection.slice(0, 2)
                 : currentSelection;
@@ -61,17 +64,24 @@ const AllFilters = (props) => {
             }
           }
         });
+
+        if (hasSelection) {
+          allFiltersRef.current.querySelector('.facet-clear-all').classList.add('has-link');
+        }
+        else {
+          allFiltersRef.current.querySelector('.facet-clear-all').classList.remove('has-link');
+        }
       }
     }, updateAfter);
   });
 
   return (
     <div className="block block-alshaya-search-api block-alshaya-search-facets-block-all">
-      <div className="all-filters">
+      <div className="all-filters-algolia">
         <div className="filter__head">
-          <div className="facet-all-back"></div>
+          <div className="back-facet-list"></div>
           <div className="filter-sort-title">filter &amp; sort</div>
-          <div className="facet-all-apply"></div>
+          <div className="all-filters-close"></div>
         </div>
         <div className="filter__inner" ref={allFiltersRef}>
           {props.children}
@@ -87,8 +97,8 @@ const AllFilters = (props) => {
                 />
               </div>
             </div>
-            <div className="facet-all-clear button"><ClearRefinements /></div>
-            <a className="facet-all-apply button">apply filter</a>
+            <div className="facet-clear-all button"><ClearRefinements /></div>
+            <a className="facet-apply-all button">apply filter</a>
           </div>
         </div>
       </div>

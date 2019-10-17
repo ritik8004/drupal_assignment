@@ -57,10 +57,6 @@ export default ({indexName}) => {
   return (
     <React.Fragment>
       {filters}
-      <div className="show-all-filters">
-        <span className="desktop">all filters</span>
-        <span className="upto-desktop">filter &amp; sort</span>
-      </div>
     </React.Fragment>
   );
 }

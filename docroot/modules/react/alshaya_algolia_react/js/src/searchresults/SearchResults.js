@@ -69,6 +69,10 @@ const SearchResults = props => {
       <MainContent>
         <StickyFilter>
           <Filters indexName={indexName} />
+          <div className="show-all-filters-algolia">
+            <span className="desktop">all filters</span>
+            <span className="upto-desktop">filter &amp; sort</span>
+          </div>
         </StickyFilter>
         <AllFilters>
           <Filters indexName={indexName} />
