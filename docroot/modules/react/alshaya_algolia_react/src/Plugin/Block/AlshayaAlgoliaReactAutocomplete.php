@@ -257,6 +257,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
           'type' => 'sort_by',
           'items' => $this->getSortByOptions($index_name),
         ],
+        // We want to display filters on the first position.
+        'weight' => -100,
       ],
     ];
 
@@ -294,10 +296,19 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'label' => $block->label(),
             'name' => $facet->getName(),
             'widget' => $widget,
+            'weight' => $block->getWeight(),
           ];
         }
       }
     }
+
+    // Sort facets by weight.
+    uasort($filter_facets, function ($a, $b) {
+      if ($a['weight'] == $b['weight']) {
+        return 0;
+      }
+      return ($a['weight'] < $b['weight']) ? -1 : 1;
+    });
 
     return $filter_facets;
   }
