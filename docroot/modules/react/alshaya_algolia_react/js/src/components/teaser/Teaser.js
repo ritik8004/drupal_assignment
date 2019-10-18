@@ -9,7 +9,9 @@ const Teaser = ({hit}) => {
 
   return (
     <div className="c-products__item views-row" >
-      <article data-sku={hit.sku}
+      <article
+        className="node--view-mode-search-result"
+        data-sku={hit.sku}
         data-vmode="search_result"
         data-insights-object-id={hit.objectID}
         data-insights-position={hit.__position}

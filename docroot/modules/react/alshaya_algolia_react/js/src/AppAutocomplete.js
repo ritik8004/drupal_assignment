@@ -56,7 +56,7 @@ class AppAutocomplete extends React.Component {
 
   renderSuggestionsContainer = ({ containerProps, children, query }) => (
     <div {...containerProps}>
-      {<span className="trending-title">Trending searches</span>}
+      {<span className="trending-title">{Drupal.t('Trending searches')}</span>}
       {children}
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 
-export default connectCurrentRefinements(({ items, refine }) => (
+export default connectCurrentRefinements(({ title, items, refine }) => (
   <a
     href="#"
     onClick={event => {
@@ -9,6 +9,6 @@ export default connectCurrentRefinements(({ items, refine }) => (
       refine(items)
     }}
   >
-    Clear Filters
+    {title}
   </a>
 ));

@@ -19,7 +19,7 @@ const SelectedFilters = (props) => {
 
   return (
     <div id="block-filterbar" className="block block-facets-summary block-facets-summary-blockfilter-bar" ref={selectedFilterRef} style={{display: 'none'}}>
-      <span className="filter-list-label">Selected Filters</span>
+      <span className="filter-list-label">{Drupal.t('selected filters')}</span>
       {props.children}
     </div>
   );

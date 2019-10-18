@@ -50,7 +50,7 @@ export default connectCurrentRefinements(({ items, refine }) => {
         })
       }
       {
-        (items.length > 0) ? <li className="clear-all"><ClearRefinements /></li> : ''
+        (items.length > 0) ? <li className="clear-all"><ClearRefinements title={Drupal.t('clear filters')}/></li> : ''
       }
     </ul>
   );
