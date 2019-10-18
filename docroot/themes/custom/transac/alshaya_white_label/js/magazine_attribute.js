@@ -203,7 +203,6 @@
     }
 
     $('.size-tray-link', context).off().on('click', function () {
-      console.log(123);
       $('.size-tray').addClass('tray-open');
       $('.size-tray > div').slideDown(400);
       $('body').addClass('tray-overlay mobile--overlay');
