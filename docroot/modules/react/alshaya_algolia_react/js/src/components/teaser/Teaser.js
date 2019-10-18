@@ -9,11 +9,14 @@ const Teaser = ({hit}) => {
 
   return (
     <div className="c-products__item views-row" >
-      <article data-sku={hit.sku}
+      <article
+        className="node--view-mode-search-result"
+        data-sku={hit.sku}
         data-vmode="search_result"
         data-insights-object-id={hit.objectID}
         data-insights-position={hit.__position}
         data-insights-query-id={hit.__queryID}
+        gtm-type="gtm-product-link"
         {...hit.gtm}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">

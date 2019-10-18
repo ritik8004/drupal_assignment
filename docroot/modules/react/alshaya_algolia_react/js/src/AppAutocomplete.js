@@ -5,11 +5,14 @@ import { Configure, Hits } from "react-instantsearch-dom";
 import qs from 'qs'
 import {searchClient} from './config/SearchClient';
 import AutoComplete from './Autocomplete';
-import { toggleSearchResultsContainer } from './searchresults/SearchUtility';
 import SearchResultsRender from './searchresults/SearchResultsRender';
-import { getCurrentSearchQuery, isMobile } from './utils/utils';
 import Portal from './components/Portal/Portal';
 import Teaser from './components/teaser/Teaser';
+import {
+  toggleSearchResultsContainer,
+  getCurrentSearchQuery,
+  isMobile
+} from './utils';
 
 class AppAutocomplete extends React.Component {
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
@@ -53,7 +56,7 @@ class AppAutocomplete extends React.Component {
 
   renderSuggestionsContainer = ({ containerProps, children, query }) => (
     <div {...containerProps}>
-      {<span className="trending-title">Trending searches</span>}
+      {<span className="trending-title">{Drupal.t('Trending searches')}</span>}
       {children}
     </div>
   );

@@ -70,7 +70,7 @@ class Autocomplete extends React.Component {
     const { value } = this.state;
 
     const inputProps = {
-      placeholder: Drupal.t('What are you looking for?'),
+      placeholder: Drupal.t('Search', {}, {'context': "algolia_search_block_placeholder"}),
       onChange: this.onChange,
       onFocus: () => this.toggleFocus('add'),
       onBlur: () => this.toggleFocus('remove'),

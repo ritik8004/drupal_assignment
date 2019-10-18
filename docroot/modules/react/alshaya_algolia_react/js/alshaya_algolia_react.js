@@ -42,7 +42,6 @@
       // that facet blocks can be closed.
       $('.all-filters-algolia .back-facet-list').once().on('click', function() {
         var all_filters = $(this).parents('.all-filters-algolia');
-        console.log(all_filters);
         $(this).hide();
         $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
         $('.c-collapse-item', all_filters).removeClass('show-facet');
