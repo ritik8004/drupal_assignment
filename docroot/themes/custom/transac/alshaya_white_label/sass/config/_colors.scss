@@ -87,6 +87,7 @@ $light-blue-border: #b3d3f0;
 $_algolia_search_icon_bg: #0072ce;
 $_algolia_suggestion_list_bg: #f7fafe;
 $_peackock_blue_10: rgba(0, 86, 153, 0.1);
+$_dynamic_promo_text: #04599b;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -526,6 +527,7 @@ $pdp_swatch_selected_border: $black;
 
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $_peackock_blue_10;
+$promo_dynamic_label_txt: $_dynamic_promo_text;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
