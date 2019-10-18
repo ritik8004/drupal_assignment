@@ -165,8 +165,8 @@
    * Make Header sticky on scroll.
    */
   Drupal.algoliaReact.stickyfacetfilter = function () {
-      var AlgoliaReactFilterPosition = 0;
-      var supercategorymenuHeight = 0;
+      var algoliaReactFilterPosition = 0;
+      var superCategoryMenuHeight = 0;
       var position = 0;
       var filter = $('#alshaya-algolia-search .region__content');
       var nav = $('.branding__menu');
@@ -174,24 +174,24 @@
 
       if ($('.show-all-filters-algolia').length > 0) {
         if ($(window).width() > 1023) {
-          AlgoliaReactFilterPosition = $('#alshaya-algolia-search .container-without-product').offset().top;
+          algoliaReactFilterPosition = $('#alshaya-algolia-search .container-without-product').offset().top;
         } else if ($(window).width() > 767 && $(window).width() < 1024) {
-          AlgoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top;
+          algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top;
         } else {
           if ($('.block-alshaya-super-category').length > 0) {
-            supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
+            superCategoryMenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
           }
           if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0) {
-            AlgoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+            algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
           }
-          fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
+          fixedNavHeight = nav.outerHeight() + superCategoryMenuHeight;
         }
       }
 
     $(window).once().on('scroll', function () {
       // Sticky filter header.
       if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0 && $('.show-algolia-result').length > 0) {
-        if ($(this).scrollTop() > AlgoliaReactFilterPosition) {
+        if ($(this).scrollTop() > algoliaReactFilterPosition) {
           filter.addClass('filter-fixed-top');
           $('body').addClass('header-sticky-filter');
         } else {
