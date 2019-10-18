@@ -19,10 +19,9 @@ function alshaya_search_algolia_update_8001() {
     'install'
   );
 
+  // Rebuild tracker info to index products.
   $index = Index::load('alshaya_algolia_index');
-  // Re-index all items.
   $index->rebuildTracker();
-  // Save index to reflect new category field.
   $index->save();
 
   // Remove unnecessary autocomplete block.
