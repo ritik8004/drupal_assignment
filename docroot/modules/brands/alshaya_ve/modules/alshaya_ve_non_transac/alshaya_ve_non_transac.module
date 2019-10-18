@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_ve_non_transac_theme($existing, $type, $theme, $path) {
+  $items = [];
+  $items['book_appointment'] = [
+    'variables' => [
+      'iframe_url' => NULL,
+    ],
+  ];
+  return $items;
+}
