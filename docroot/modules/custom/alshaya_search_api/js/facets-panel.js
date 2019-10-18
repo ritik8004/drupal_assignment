@@ -400,7 +400,7 @@
           }
         }
 
-        $(window, context).once().on('scroll', function () {
+        $(window).once('lhnStickyFilters').on('scroll', function () {
           // Sticky filter header.
           if ($('.show-all-filters').length > 0) {
             if ($(this).scrollTop() > filterposition) {
