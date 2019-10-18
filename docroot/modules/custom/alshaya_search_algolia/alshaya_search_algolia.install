@@ -5,6 +5,8 @@
  * Install file.
  */
 
+use Drupal\search_api\Entity\Index;
+
 /**
  * Implements hook_update_N().
  */
@@ -16,6 +18,12 @@ function alshaya_search_algolia_update_8001() {
     'alshaya_search_algolia',
     'install'
   );
+
+  $index = Index::load('alshaya_algolia_index');
+  // Re-index all items.
+  $index->rebuildTracker();
+  // Save index to reflect new category field.
+  $index->save();
 
   // Remove unnecessary autocomplete block.
   alshaya_block_delete_blocks(['autocompletewidgetofalgolia']);
