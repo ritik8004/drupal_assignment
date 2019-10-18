@@ -17,7 +17,7 @@
     cursor: pointer;
 
     @include breakpoint($only-mobile) {
-      top: 0.75rem;
+      top: 0.3125rem;
       transform: none;
     }
   }
