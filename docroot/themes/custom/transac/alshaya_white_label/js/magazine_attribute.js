@@ -48,10 +48,8 @@
     }
   };
 
-  /**
-   * Implementation of view more/less colour for swatches.
-   */
   Drupal.magazine_swatches_count = function (context) {
+    // Implementation of view more/less colour for swatches.
     if ($('.configurable-swatch .select-buttons li:nth-child(2) a', context).attr('data-swatch-type') === 'Details') {
       $('.configurable-swatch').addClass('product-swatch');
     }
