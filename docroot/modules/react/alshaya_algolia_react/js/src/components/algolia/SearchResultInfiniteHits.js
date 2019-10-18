@@ -30,6 +30,7 @@ export default connectInfiniteHits(props => {
             }
           }
         }, 500);
+        Drupal.algoliaReact.stickyfacetfilter();
       }
     }, [hits]
   );

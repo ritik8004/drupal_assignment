@@ -198,4 +198,28 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .block-alshaya-grid-count-block {
+      width: 100%;
+    }
+
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all {
+      height: 0;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .mobile--overlay {
+    #alshaya-algolia-search {
+      .block-alshaya-plp-facets-block-all,
+      .block-alshaya-promo-facets-block-all,
+      .block-alshaya-search-facets-block-all {
+        height: 2.9375rem;
+      }
+    }
+  }
 }
