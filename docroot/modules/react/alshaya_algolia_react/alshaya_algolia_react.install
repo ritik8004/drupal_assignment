@@ -5,8 +5,6 @@
  * Install file.
  */
 
-use Drupal\search_api\Entity\Index;
-
 /**
  * Implements hook_install().
  */
@@ -23,19 +21,4 @@ function alshaya_algolia_react_install() {
   $new = \Drupal::configFactory()->getEditable('block.block.alshayaalgoliareactautocomplete');
   $new->set('weight', $existing->get('weight'));
   $new->save();
-
-  // Disable acquia_search_index as alshaya_algolia_index is enabled for the
-  // algolia server.
-  $index = Index::load('acquia_search_index');
-  $index->disable();
-  $index->save();
-}
-
-/**
- * Implements hook_uninstall().
- */
-function alshaya_algolia_react_uninstall() {
-  $index = Index::load('acquia_search_index');
-  $index->enable();
-  $index->save();
 }
