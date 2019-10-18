@@ -202,14 +202,14 @@
       $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
     }
 
-    $('.size-tray-link', context).once().on('click', function () {
+    $('.size-tray-link', context).off().on('click', function () {
       $('.size-tray').addClass('tray-open');
-      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      $('.size-tray > div').slideDown(400);
       $('body').addClass('tray-overlay mobile--overlay');
     });
 
-    $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400, function () {
+    $('.size-tray-close', context).off().on('click', function () {
+      $('.size-tray > div').slideUp(400, function () {
         $('.size-tray').removeClass('tray-open');
       });
       $('body').removeClass('tray-overlay mobile--overlay');
@@ -340,13 +340,10 @@
           mobileSize(product);
 
           // Closing the tray after selection.
-          $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-          // Close with a delay allowing time for sliding animation to finish.
-          setTimeout(function () {
+          $('.size-tray > div').slideUp(400, function () {
             $('.size-tray').removeClass('tray-open');
-          }, 400);
-          $('body').removeClass('tray-overlay mobile--overlay');
-
+            $('body').removeClass('tray-overlay mobile--overlay');
+          });
 
           // JS function to show less/more for colour swatches.
           Drupal.magazine_swatches_count(product);
