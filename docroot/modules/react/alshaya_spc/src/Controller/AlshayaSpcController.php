@@ -5,6 +5,7 @@ namespace Drupal\alshaya_spc\Controller;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -89,10 +90,17 @@ class AlshayaSpcController extends ControllerBase {
     if ($sku_entity instanceof SKU
       && $sku_entity->bundle() == 'simple') {
       $data[$sku]['label'] = $sku_entity->label();
-      $data[$sku]['promotions'] = '';
       $data[$sku]['price'] = $sku_entity->get('price')->first()->getValue()['value'];
       $data[$sku]['final_price'] = $sku_entity->get('final_price')->first()->getValue()['value'];
       $data[$sku]['stock'] = $this->skuManager->getStockQuantity($sku_entity);
+
+      $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku_entity, '', ['cart'], 'full', FALSE);
+      if (!empty($promotions_data)) {
+        foreach ($promotions_data as $nid => $promo_data) {
+          $promo_data['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+          $data[$sku]['promotions'][] = $promo_data;
+        }
+      }
 
       // Prepare attributes data to shown.
       $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
