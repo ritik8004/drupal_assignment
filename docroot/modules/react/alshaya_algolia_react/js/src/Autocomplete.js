@@ -2,21 +2,15 @@ import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
 import CustomHighlight from './components/algolia/CustomHighlight';
+import { getCurrentSearchQuery } from './utils';
 
 class Autocomplete extends React.Component {
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
+  searchQuery = getCurrentSearchQuery();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.currentValue !== null && props.currentValue !== '' ? props.currentValue : this.props.currentRefinement,
-    };
-  }
-
-  // To update component when property change.
-  componentWillReceiveProps(nextProps) {
-    this.setState({ value: nextProps.currentValue });
-  }
+  state = {
+    value: this.searchQuery !== null && this.searchQuery !== '' ? this.searchQuery : this.props.currentRefinement,
+  };
 
   toggleFocus = (action) => {
     this.reactSearchBlock[0].classList[action]('focused');
@@ -36,11 +30,10 @@ class Autocomplete extends React.Component {
     if (!newValue) {
       this.props.onSuggestionCleared();
     }
-    this.props.refine(newValue);
-    this.props.onChange(newValue);
     this.setState({
       value: newValue,
     });
+    this.props.onChange(newValue);
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -62,7 +55,7 @@ class Autocomplete extends React.Component {
   shouldRenderSuggestions(value) {
     // Display trending searches for desktop on when searchbox is emty.
     // otherwise show it only for mobile always.
-    return (value === '') || (window.innerWidth < 768);
+    return (value.trim() === '') || (window.innerWidth < 768);
   }
 
   render() {
