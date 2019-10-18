@@ -839,7 +839,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function isCategoryL1(TermInterface $category) {
     $depth = (int) $category->get('depth_level')->getString();
-    return $depth === static::getL1DepthLevel();
+    return $depth === $this->getL1DepthLevel();
   }
 
   /**
@@ -854,11 +854,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getL1Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
 
-    if (count($parents) < static::getL1DepthLevel()) {
+    if (count($parents) < $this->getL1DepthLevel()) {
       return $category;
     }
 
-    $parent = array_reverse($parents, FALSE)[static::getL1DepthLevel() - 1];
+    $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel() - 1];
     return $this->entityRepository->getTranslationFromContext($parent);
   }
 
