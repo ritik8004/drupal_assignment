@@ -1,0 +1,150 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_static_html_images
+    - field.storage.node.body
+    - search_api.server.non_transac_acquia_search_server
+  module:
+    - node
+    - search_api
+    - paragraphs
+id: non_transac_acquia_solr_search_index
+name: 'Non-transac Solr search index'
+description: ''
+read_only: false
+field_settings:
+  alt:
+    label: 'Images » Alternative text'
+    datasource_id: 'entity:node'
+    property_path: 'field_static_html_images:alt'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_static_html_images
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - node
+  nid:
+    label: ID
+    datasource_id: 'entity:node'
+    property_path: nid
+    type: integer
+    dependencies:
+      module:
+        - node
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    boost: !!float 8
+    dependencies:
+      module:
+        - node
+  title_1:
+    label: 'Images » Title'
+    datasource_id: 'entity:node'
+    property_path: 'field_static_html_images:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_static_html_images
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - advanced_page
+        - static_html
+    languages:
+      default: true
+      selected: {  }
+  'entity:paragraph':
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  entity_status: {  }
+  html_filter:
+    all_fields: false
+    fields:
+      - body
+      - title
+    title: true
+    alt: true
+    tags:
+      b: 2
+      em: 1
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+      u: 1
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+  ignorecase:
+    all_fields: false
+    fields:
+      - body
+      - title
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
+  rendered_item: {  }
+  stemmer:
+    all_fields: false
+    fields:
+      - body
+      - title
+    exceptions:
+      mexican: mexic
+      texan: texa
+    weights:
+      preprocess_index: 0
+      preprocess_query: 0
+  tokenizer:
+    all_fields: false
+    fields:
+      - body
+      - title
+    spaces: ''
+    overlap_cjk: 1
+    minimum_word_size: '3'
+    weights:
+      preprocess_index: -6
+      preprocess_query: -6
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: true
+  cron_limit: 50
+server: non_transac_acquia_search_server

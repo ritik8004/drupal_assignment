@@ -48,32 +48,9 @@
     }
   };
 
-  /**
-   * JS for converting select list for size to unformatted list on PDP pages.
-   *
-   * @param {object} element
-   *   The HTML element inside which we want to convert select list into unformatted list.
-   */
-  Drupal.convertSelectListtoUnformattedList = function (element) {
-    element.once('bind-events').each(function () {
-      var that = $(this).parent();
-      $('select', that).select2Option();
-
-      $('.select2Option', that).find('.list-title .selected-text').html('');
-
-      var clickedOption = $('select option:selected', that);
-      if (!clickedOption.is(':disabled')) {
-        $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
-        Drupal.alshaya_color_swatch_update_selected_label();
-      }
-    });
-  };
-
-  /**
-   * Implementation of view more/less colour for swatches.
-   */
-  Drupal.magazine_swatches_count = function () {
-    if ($('.configurable-swatch .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
+  Drupal.magazine_swatches_count = function (context) {
+    // Implementation of view more/less colour for swatches.
+    if ($('.configurable-swatch .select-buttons li:nth-child(2) a', context).attr('data-swatch-type') === 'Details') {
       $('.configurable-swatch').addClass('product-swatch');
     }
     else {
@@ -88,98 +65,81 @@
       colour_swatches = drupalSettings.colour_swatch_items_tab;
       product_swatches = drupalSettings.product_swatch_items_tab;
     }
-
     else if ($(window).width() > 1024) {
       colour_swatches = drupalSettings.colour_swatch_items_desk;
       product_swatches = drupalSettings.product_swatch_items_desk;
     }
 
-    if ($('.configurable-swatch.product-swatch').length > 0) {
+    if ($('.configurable-swatch.product-swatch', context).length > 0) {
       swatch_items_to_show = product_swatches;
     }
     else {
       swatch_items_to_show = colour_swatches;
     }
 
-    if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
-      $('.show-less-color').show();
-      $('.configurable-swatch').addClass('swatch-toggle');
+    if ($('.content__title_wrapper', context).hasClass('show-all-swatch')) {
+      $('.show-less-color', context).show();
+      $('.configurable-swatch', context).addClass('swatch-toggle');
     }
-    else if ($('.content__title_wrapper').hasClass('show-less-swatch')) {
-      $('.show-more-color').show();
-      $('.configurable-swatch').removeClass('swatch-toggle');
+    else if ($('.content__title_wrapper', context).hasClass('show-less-swatch')) {
+      $('.show-more-color', context).show();
+      $('.configurable-swatch', context).removeClass('swatch-toggle');
     }
 
     if ($(window).width() > 767) {
-      if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show && !$('.content__title_wrapper').hasClass('show-all-swatch')) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').hide();
-        $('.configurable-swatch').addClass('swatch-toggle');
-        $('.show-more-color').show();
-        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+      if ($('.configurable-swatch .select-buttons li', context).length > swatch_items_to_show && !$('.content__title_wrapper', context).hasClass('show-all-swatch')) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")', context).hide();
+        $('.configurable-swatch', context).addClass('swatch-toggle');
+        $('.show-more-color', context).show();
+        $('.configurable-swatch, .magazine-swatch-placeholder', context).addClass('swatch-effect');
       }
 
       else {
-        $('.configurable-swatch').addClass('simple-swatch-effect');
+        $('.configurable-swatch', context).addClass('simple-swatch-effect');
       }
     }
     else {
-      if ($('.magazine-swatch-placeholder .select-buttons li').length > swatch_items_to_show && !$('.content__title_wrapper').hasClass('show-all-swatch')) {
-        $('.show-more-color').show();
-        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
-        $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+      if ($('.magazine-swatch-placeholder .select-buttons li', context).length > swatch_items_to_show && !$('.content__title_wrapper', context).hasClass('show-all-swatch')) {
+        $('.show-more-color', context).show();
+        $('.configurable-swatch, .magazine-swatch-placeholder', context).addClass('swatch-effect');
+        $('.magazine-swatch-placeholder', context).removeClass('simple-swatch-effect');
       }
 
-      else if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
-        $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
-        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+      else if ($('.content__title_wrapper', context).hasClass('show-all-swatch')) {
+        $('.magazine-swatch-placeholder', context).removeClass('simple-swatch-effect');
+        $('.configurable-swatch, .magazine-swatch-placeholder', context).addClass('swatch-effect');
       }
 
       else {
-        $('.magazine-swatch-placeholder').addClass('simple-swatch-effect');
+        $('.magazine-swatch-placeholder', context).addClass('simple-swatch-effect');
       }
     }
 
-    $('.show-more-color').once().on('click', function (e) {
+    $('.show-more-color', context).once().on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")', context).slideToggle();
       }
       else {
-        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder', context).addClass('swatch-toggle');
       }
-      $('.content__title_wrapper').addClass('show-all-swatch');
-      $('.content__title_wrapper').removeClass('show-less-swatch');
+      $('.content__title_wrapper', context).addClass('show-all-swatch');
+      $('.content__title_wrapper', context).removeClass('show-less-swatch');
       $(this).hide();
-      $('.show-less-color').show();
+      $('.show-less-color', context).show();
     });
 
-    $('.show-less-color').once().on('click', function (e) {
+    $('.show-less-color', context).once().on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")', context).slideToggle();
       }
       else {
-        $('.configurable-swatch, .magazine-swatch-placeholder').removeClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder', context).removeClass('swatch-toggle');
       }
-      $('.content__title_wrapper').removeClass('show-all-swatch');
-      $('.content__title_wrapper').addClass('show-less-swatch');
+      $('.content__title_wrapper', context).removeClass('show-all-swatch');
+      $('.content__title_wrapper', context).addClass('show-less-swatch');
       $(this).hide();
-      $('.show-more-color').show();
+      $('.show-more-color', context).show();
     });
-  };
-
-  Drupal.behaviors.configurableAttributeBoxes = {
-    attach: function (context, settings) {
-      $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
-      $('.form-item-configurable-select').parent().addClass('configurable-select');
-
-      // Show mobile slider only on mobile resolution.
-      Drupal.select2OptionConvert(context);
-
-      if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
-        $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
-          $(this).closest('.sku-base-form').find('div.error, label.error, span.error').remove();
-        });
-      }
-    }
   };
 
   /**
@@ -188,33 +148,21 @@
    * @param {context} context on ajax update.
    */
   function mobileColors(context) {
+    var clickedOption = $('.sku-base-form .configurable-swatch select option:selected', context);
+
     // Moving color swatches from sidebar to main content in between the gallery after
     // first image as per design.
-    var sku_swatch = $('.configurable-swatch', context).clone();
-    $('.magazine-swatch-placeholder').html(sku_swatch);
-    $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
+    var sku_swatch = $('.sku-base-form .configurable-swatch', context).clone(true, true);
+    $('.magazine-swatch-placeholder', context).html(sku_swatch);
 
-    $('.magazine-product-description .select2Option li a').on('click', function (e) {
-      e.preventDefault();
-      var select = $('.sku-base-form .configurable-swatch select');
-      var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
+    // Add required classes.
+    $('.magazine-swatch-placeholder', context).once('mobileColors').addClass('configurable-swatch form-item-configurables-article-castor-id');
 
-      if (clickedOption.is(':selected')) {
-        return;
-      }
+    $('.magazine-swatch-placeholder', context).find('.select2Option .list-title .selected-text').html(clickedOption.text());
+    sku_swatch.find('a[data-color-label="' + clickedOption.text() + '"]').addClass('picked');
 
-      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
-      if ($(this).hasClass('picked')) {
-        $(this).removeClass('picked');
-        clickedOption.removeProp('selected');
-      }
-      else {
-        $('.magazine-product-description .select-buttons').find('a, span').removeClass('picked');
-        $(this).addClass('picked');
-        clickedOption.prop('selected', true);
-      }
-      select.trigger('change');
-    });
+    // Remove size tray link so we process size again.
+    $('.content__title_wrapper').find('.size-tray-link').remove();
   }
 
   /**
@@ -223,29 +171,35 @@
    *  @param {context} context on ajax update.
    */
   function mobileSize(context) {
-    if (context === document) {
-      var sizeDiv = $('#configurable_ajax .form-item-configurables-size', context).clone();
-      var sizeTray = $('.size-tray', context);
-      var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
+    var clickedOption = $('.sku-base-form #edit-configurables-size option:selected', context);
+
+    var sizeDiv = $('#configurable_ajax .form-item-configurables-size', context).clone(true, true);
+    var sizeTray = $('.size-tray', context);
+    var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
+    if (sizeTrayButtons.find('.size-tray-close').length === 0) {
       // Move size-tray close buttons inside configurable size container.
       sizeTrayButtons.append('<div class="size-tray-close"></div>');
-      // Move the configurable select container to size tray.
-      if (sizeDiv.length > 0) {
-        $('.size-tray-content').html(sizeDiv).prepend(sizeTrayButtons);
-      }
     }
 
-    if ($('.content__title_wrapper').find('.size-tray-link').length < 1) {
-      var sizeTraylinkText = Drupal.t('Select Size');
-      // If size is default selected.
-      if ($('.size-tray .select2Option .list-title .selected-text').text().length > 0) {
-        sizeTraylinkText = $('.size-tray .select2Option .list-title .selected-text').text();
-      }
+    // Move the configurable select container to size tray.
+    if (sizeDiv.length > 0) {
+      $('.size-tray-content').html(sizeDiv).prepend(sizeTrayButtons);
+    }
 
-      // Add Size link only with product having size.
-      if ($('.form-item-configurables-size').length > 0) {
-        $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
-      }
+    $('.size-tray .select2Option .list-title .selected-text').text(clickedOption.text());
+    $('.select-buttons a[data-value="' + clickedOption.text() + '"]', context).addClass('picked');
+
+
+    $('.content__title_wrapper').find('.size-tray-link').remove();
+    var sizeTraylinkText = Drupal.t('Select Size');
+    // If size is default selected.
+    if ($('.size-tray .select2Option .list-title .selected-text').text().length > 0) {
+      sizeTraylinkText = $('.size-tray .select2Option .list-title .selected-text').text();
+    }
+
+    // Add Size link only with product having size.
+    if ($('.form-item-configurables-size').length > 0) {
+      $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
     }
 
     $('.size-tray-link', context).once().on('click', function () {
@@ -265,39 +219,6 @@
       }
     });
 
-    $('.size-tray-content .select2Option li a').on('click', function (e) {
-      e.preventDefault();
-      var select = $('.sku-base-form .form-item-configurables-size select');
-      var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
-
-      if (clickedOption.is(':selected')) {
-        return;
-      }
-
-      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
-
-      // Replace the size tray text with selected value..
-      $('.size-tray-link').addClass('selected-text').html(clickedOption.text());
-
-      if ($(this).hasClass('picked')) {
-        $(this).removeClass('picked');
-        clickedOption.removeProp('selected');
-      }
-      else {
-        $('.size-tray-content .select-buttons').find('a, span').removeClass('picked');
-        $(this).addClass('picked');
-        clickedOption.prop('selected', true);
-      }
-      select.trigger('change');
-
-      // Closing the tray after selection.
-      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-      // Close with a delay allowing time for sliding animation to finish.
-      setTimeout(function () {
-        $('.size-tray').removeClass('tray-open');
-      }, 400);
-      $('body').removeClass('tray-overlay mobile--overlay');
-    });
   }
 
   /**
@@ -331,6 +252,19 @@
     }
   };
 
+  // If tray is opening on clicking of add to basket (missing attribute selection).
+  // then on selection of attribute product should add to basket directly.
+  $(document).ajaxComplete(function (event, xhr, settings) {
+    if (($(window).width() < 768)
+      && (settings.hasOwnProperty('extraData'))
+      && ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))
+      && $('body').hasClass('open-tray-without-selection')
+    ) {
+      $('body').removeClass('open-tray-without-selection');
+      $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
+    }
+  });
+
   /**
    * JS to implement Magazine layout - Contains logic for sticky sidebar.
    *
@@ -338,75 +272,100 @@
    */
   Drupal.behaviors.mobileMagazine = {
     attach: function (context, settings) {
-      if ($(window).width() < 768) {
-        // Moving title section below delivery options in mobile.
-        var tittleSection = $('.content__title_wrapper');
-        tittleSection.insertAfter('.mobile-content-wrapper');
+      $('.sku-base-form').once('mobileMagazine').each(function () {
+        var product = $(this).closest('article[gtm-type="gtm-product-link"]');
 
-        // Moving sharethis before description field in mobile.
-        var sharethisSection = $('.basic-details-wrapper .modal-share-this').clone();
-        if ($('.magazine-product-description .modal-share-this').length < 1) {
-          sharethisSection.once('bind-events').insertAfter('.magazine-swatch-placeholder');
-        }
-        $('.basic-details-wrapper .modal-share-this').addClass('visually-hidden');
-        if ($('.magazine-product-description .modal-share-this').hasClass('visually-hidden')) {
-          $('.magazine-product-description .modal-share-this').removeClass('visually-hidden');
-        }
+        if ($(window).width() < 768) {
+          // Moving title section below delivery options in mobile.
+          var tittleSection = $('.content__title_wrapper', product);
+          tittleSection.insertAfter(product.find('.mobile-content-wrapper'));
 
-        // JS function to move mobile colors to bellow of PDP main image in
-        // product description section.
-        if (!$(context).hasClass('modal-content')) {
-          mobileColors(context);
-        }
-
-        // JS function to move mobile size div to size-tray.
-        mobileSize(context);
-
-        // JS function to show less/more for colour swatches.
-        Drupal.magazine_swatches_count();
-
-        var sizeTray = $('.size-tray', context);
-        var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
-        var sizeGuideLink = $('#configurable_ajax .size-guide-link', context);
-        // Move size guide link inside configurable size container.
-        sizeTrayButtons.prepend(sizeGuideLink);
-
-        $('.edit-add-to-cart', context).once().on('mousedown', function () {
-          var that = this;
-          setTimeout(function () {
-            if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
-              $('.size-tray').addClass('tray-open');
-              $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-              $('body').addClass('open-tray-without-selection');
-              $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('submit');
-            }
-          }, 10);
-        });
-
-        // If tray is opening on clicking of add to basket (missing attribute selection).
-        // then on selection of attribute product should add to basket directly.
-        $(document).ajaxComplete(function (event, xhr, settings) {
-          if ((settings.hasOwnProperty('extraData')) &&
-            ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0)) &&
-            $('body').hasClass('open-tray-without-selection')) {
-            $('body').removeClass('open-tray-without-selection');
-            $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
+          // Moving sharethis before description field in mobile.
+          var sharethisSection = $('.basic-details-wrapper .modal-share-this', product).clone();
+          if ($('.magazine-product-description .modal-share-this', product).length < 1) {
+            sharethisSection.once('bind-events').insertAfter(product.find('.magazine-swatch-placeholder'));
           }
-        });
+          $('.basic-details-wrapper .modal-share-this', product).addClass('visually-hidden');
+          if ($('.magazine-product-description .modal-share-this', product).hasClass('visually-hidden')) {
+            $('.magazine-product-description .modal-share-this', product).removeClass('visually-hidden');
+          }
 
-      }
-      else {
+          // JS function to move mobile colors to bellow of PDP main image in
+          // product description section.
+          if ($(product).parents('.modal-content').length === 0) {
+            mobileColors(product);
+          }
+
+          // JS function to move mobile size div to size-tray.
+          mobileSize(product);
+
+          // JS function to show less/more for colour swatches.
+          Drupal.magazine_swatches_count(product);
+
+          var sizeTray = $('.size-tray', product);
+          var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
+          var sizeGuideLink = $('#configurable_ajax .size-guide-link', product);
+          // Move size guide link inside configurable size container.
+          sizeTrayButtons.prepend(sizeGuideLink);
+
+          $('.edit-add-to-cart', product).once().on('mousedown', function () {
+            var that = this;
+            setTimeout(function () {
+              if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
+                $('.size-tray').addClass('tray-open');
+                $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+                $('body').addClass('open-tray-without-selection');
+                $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('submit');
+              }
+            }, 10);
+          });
+        }
+
+        $(this).on('variant-selected', function (event, variant, code) {
+          if ($(window).width() > 767) {
+            return;
+          }
+
+          var product = $(this).closest('article[gtm-type="gtm-product-link"]');
+
+          // Do this after other "variant-selected" event attachments
+          // are executed.
+          // JS function to move mobile colors to bellow of PDP main image in
+          // product description section.
+          if ($(product).parents('.modal-content').length === 0) {
+            mobileColors(product);
+          }
+
+          // JS function to move mobile size div to size-tray.
+          mobileSize(product);
+
+          // Closing the tray after selection.
+          $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+          // Close with a delay allowing time for sliding animation to finish.
+          setTimeout(function () {
+            $('.size-tray').removeClass('tray-open');
+          }, 400);
+          $('body').removeClass('tray-overlay mobile--overlay');
+
+
+          // JS function to show less/more for colour swatches.
+          Drupal.magazine_swatches_count(product);
+        });
+      });
+
+      if ($(window).width() > 767) {
         // JS to make sidebar sticky beyond Mobile.
         // PDP Sidebar.
         var sidebarWrapper = $('.content-sidebar-wrapper');
-        // Magazine Gallery.
-        var galleryWrapper = $('.gallery-wrapper');
         var lastScrollTop = 0;
         var pageScrollDirection;
         var heightDiff;
         var initialSidebarTop = sidebarWrapper.offset().top;
 
-        $(window).once().on('scroll', function (event) {
+        $(window).once('mobileMagazine').on('scroll', function (event) {
+          // Magazine Gallery.
+          var galleryWrapper = $('.gallery-wrapper');
+
           // Figure out scroll direction.
           var currentScrollTop = $(this).scrollTop();
           if (currentScrollTop < lastScrollTop) {
@@ -459,17 +418,15 @@
           }
         });
 
-        $('.size-guide-link').on('click', function (e) {
+        $('body').once('size-guide-link').on('click', '.size-guide-link', function (e) {
           $('body').addClass('magazine-layout-ajax-throbber');
         });
 
-        setTimeout(function () {
-          $('.ui-dialog-titlebar-close').on('click', function (e) {
-            if ($('body').hasClass('magazine-layout-ajax-throbber')) {
-              $('body').removeClass('magazine-layout-ajax-throbber');
-            }
-          });
-        }, 10);
+        $('body').once('magazine-layout-ajax-throbber').on('click', '.ui-dialog-titlebar-close', function (e) {
+          if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+            $('body').removeClass('magazine-layout-ajax-throbber');
+          }
+        });
       }
 
       /**

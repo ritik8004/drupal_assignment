@@ -1,0 +1,30 @@
+.block-alshaya-dp-navigation-link {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+
+  .menu-terms-link {
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    li {
+      border-bottom: 1px solid $app-navigation-link-seperator-border;
+    }
+
+    a {
+      min-height: 2.8125rem;
+      display: flex;
+      align-items: center;
+      text-transform: capitalize;
+
+      @include icon(chevron#{$right}, after) {
+        font-size: 2.125rem;
+        position: absolute;
+        #{$right}: 0;
+      }
+    }
+  }
+}
