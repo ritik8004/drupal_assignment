@@ -21,7 +21,7 @@ const NoResults = ({ searchResults }) => {
   return (
     <div className="hits-empty-state">
       <div class="view-empty">
-        Your search did not return any results.
+        {Drupal.t('Your search did not return any results.')}
       </div>
       {clearRefinements}
     </div>
