@@ -73,7 +73,9 @@ class AppAutocomplete extends React.Component {
   backIconClickEvent = (event) => {
     this.reactSearchBlock[0].classList.remove('show-algolia-search-bar');
     let mobileSearchInNav = document.getElementsByClassName('search-active');
-    mobileSearchInNav[0].classList.remove('search-active');
+    if (mobileSearchInNav.length !== 0) {
+      mobileSearchInNav[0].classList.remove('search-active');
+    }
   };
 
   render() {

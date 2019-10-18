@@ -421,10 +421,8 @@
         cursor: pointer;
         transition: opacity 0.2s;
         #{$left}: 0.625rem;
-
-        @include icon(arrow-#{$left}) {
-          font-size: 2.25rem;
-        }
+        width: 2rem;
+        height: 2rem;
 
         @include breakpoint($only-mobile) {
           top: 0.3125rem;
@@ -434,8 +432,9 @@
 
       &.focused {
         .algolia-search-back-icon {
-          opacity: 1;
-          visibility: visible;
+          @include icon(arrow-#{$left}) {
+            font-size: 2.25rem;
+          }
         }
 
         .react-autosuggest__input {
