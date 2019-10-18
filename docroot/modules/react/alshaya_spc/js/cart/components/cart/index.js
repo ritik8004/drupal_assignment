@@ -1,6 +1,7 @@
 import React from 'react';
 
 import EmptyCart from '../empty-cart';
+import CartTotalSubTotal from '../cart-total-subtotal';
 
 export default class Cart extends React.Component {
 
@@ -34,7 +35,12 @@ export default class Cart extends React.Component {
         return <EmptyCart></EmptyCart>
       }
 
-      return <h1>This is cart component</h1>
+      return (
+        <div>
+          <CartTotalSubTotal totals={this.state.totals}></CartTotalSubTotal>
+          This is cart component
+        </div>
+      );
   }
 
 }
