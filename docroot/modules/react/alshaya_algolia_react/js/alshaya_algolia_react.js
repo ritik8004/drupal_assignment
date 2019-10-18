@@ -181,7 +181,7 @@
             superCategoryMenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
           }
           if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0) {
-            algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+            algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - superCategoryMenuHeight;
           }
           fixedNavHeight = nav.outerHeight() + superCategoryMenuHeight;
         }
