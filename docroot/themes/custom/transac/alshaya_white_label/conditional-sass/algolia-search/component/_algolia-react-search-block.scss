@@ -82,6 +82,10 @@
       #{$left}: 0;
       display: none;
 
+      @include breakpoint($tablet) {
+        top: 100%;
+      }
+
       @include breakpoint($only-mobile) {
         position: relative;
 
