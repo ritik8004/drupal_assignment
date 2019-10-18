@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs'
-import { updateAfter, getCurrentSearchQueryString, updateSearchQuery } from './utils/utils';
+import { updateAfter, getCurrentSearchQueryString, updateSearchQuery } from './utils';
 
 const searchStateToURL = searchState => {
   return searchState.query ? qs.stringify(searchState) : '';

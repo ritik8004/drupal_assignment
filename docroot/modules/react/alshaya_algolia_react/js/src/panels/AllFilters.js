@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Stats } from 'react-instantsearch-dom';
 import ClearRefinements from '../filters/selectedfilters/ClearFilters';
-import { updateAfter } from '../utils/utils';
+import { updateAfter } from '../utils';
 
 /**
  * All filters displayed a slide toggle from right side.
