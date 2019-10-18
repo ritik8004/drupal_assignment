@@ -366,7 +366,9 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'term_name':
-          $is_l1 = empty(array_filter(array_column($category_term->get('parent')->getValue(), 'target_id')));
+          /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $categoryManager */
+          $categoryManager = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+          $is_l1 = $categoryManager->isCategoryL1($category_term);
 
           if (isset($sale) && $sale === TRUE) {
             $prefix_token = (string) t('alshaya_seo_sale_title_prefix');
@@ -384,7 +386,9 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
             $suffix_token = $is_l1
               ? t('Collection Online')
-              : t('Collection for [term:parents:first] Online');
+              : t('Collection for @parent Online', [
+                '@parent' => $categoryManager->getL1Category($category_term)->label(),
+              ]);
 
             $suffix = $token_service->replace((string) $suffix_token, ['term' => $category_term]);
           }
