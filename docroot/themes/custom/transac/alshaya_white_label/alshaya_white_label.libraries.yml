@@ -105,10 +105,20 @@ autosize:
   js:
     vendor/js/autosize.min.js: {}
 
-attribute:
+attribute.common:
   js:
     js/select2Option.js: {}
+    js/attribute.common.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
+attribute:
+  js:
     js/attribute.js: {}
+  dependencies:
+    - alshaya_white_label/attribute.common
 
 ucfix:
   js:
@@ -147,12 +157,12 @@ pace:
 
 magazine_attribute:
   js:
-    js/select2Option.js: {}
     js/magazine_attribute.js: {}
   css:
     theme:
       css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
   dependencies:
+    - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
 
 campaign-plp-style-1-video-provider:
