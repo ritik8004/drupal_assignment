@@ -418,10 +418,8 @@
         transform: translateY(-50%);
         z-index: 4;
         color: $algolia-search-clear-text-icon;
-        opacity: 0;
         cursor: pointer;
         transition: opacity 0.2s;
-        visibility: hidden;
         #{$left}: 0.625rem;
 
         @include icon(arrow-#{$left}) {
