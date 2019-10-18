@@ -310,6 +310,12 @@ function _alshaya_vs_transac_save_metatag_translations() {
       'en' => "Victoria's Secret @term",
       'ar' => "ﭬيكتوريا سيكريت @term",
     ],
+    'Collection Online' => [
+      'en' => 'Online',
+    ],
+    'Collection for @parent Online' => [
+      'en' => 'for @parent Online',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
