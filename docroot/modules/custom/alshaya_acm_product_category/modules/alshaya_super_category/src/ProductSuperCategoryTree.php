@@ -25,11 +25,6 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 class ProductSuperCategoryTree extends ProductCategoryTree {
 
   /**
-   * When super category is enabled L2 becomes L1.
-   */
-  const L1_DEPTH_LEVEL = 2;
-
-  /**
    * Language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -321,6 +316,19 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       ProductCategoryTree::VOCABULARY_ID,
     ]);
     return $cache_terms;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getL1DepthLevel() {
+    $depthLevel = parent::getL1DepthLevel();
+
+    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      $depthLevel++;
+    }
+
+    return $depthLevel;
   }
 
 }

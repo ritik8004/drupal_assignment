@@ -302,6 +302,14 @@ function _alshaya_vs_transac_save_metatag_translations() {
       'en' => 'Shop [alshaya_seo:super_category] [term:name] Online, Shop [term:name] in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] Collection, [alshaya_seo:term_cities]',
       'ar' => 'متجر [term:parent:name][term:name] [alshaya_seo:brand_name]، متجر [alshaya_seo:brand_name] من [term:name] على الانترنت، متجر [term:name] من [alshaya_seo:brand_name]، وشراء [term:parent:name] مجموعة [term:name] على الانترنت، [alshaya_seo:term_cities]، متجر [alshaya_seo:super_category] [term:name] على الانترنت في [alshaya_seo:country]',
     ],
+    'alshaya_seo_super_category_prefix' => [
+      'en' => "Victoria's Secret",
+      'ar' => "ﭬيكتوريا سيكريت",
+    ],
+    'alshaya_seo_super_category_prefix @term' => [
+      'en' => "Victoria's Secret @term",
+      'ar' => "ﭬيكتوريا سيكريت @term",
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

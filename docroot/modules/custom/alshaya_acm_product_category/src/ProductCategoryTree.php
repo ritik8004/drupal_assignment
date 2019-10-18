@@ -20,11 +20,6 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
  */
 class ProductCategoryTree implements ProductCategoryTreeInterface {
 
-  /**
-   * L1 is level 1 category terms.
-   */
-  const L1_DEPTH_LEVEL = 1;
-
   const CACHE_BIN = 'alshaya';
 
   const CACHE_ID = 'product_category_tree';
@@ -824,6 +819,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
+   * Get depth level for L1 category.
+   *
+   * @return int
+   *   Depth level.
+   */
+  public function getL1DepthLevel() {
+    return 1;
+  }
+
+  /**
    * Check if category is L1.
    *
    * @param \Drupal\taxonomy\TermInterface $category
@@ -834,7 +839,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function isCategoryL1(TermInterface $category) {
     $depth = (int) $category->get('depth_level')->getString();
-    return $depth === static::L1_DEPTH_LEVEL;
+    return $depth === $this->getL1DepthLevel();
   }
 
   /**
@@ -849,11 +854,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getL1Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
 
-    if (count($parents) < static::L1_DEPTH_LEVEL) {
+    if (count($parents) < $this->getL1DepthLevel()) {
       return $category;
     }
 
-    $parent = array_reverse($parents, FALSE)[static::L1_DEPTH_LEVEL - 1];
+    $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel() - 1];
     return $this->entityRepository->getTranslationFromContext($parent);
   }
 
