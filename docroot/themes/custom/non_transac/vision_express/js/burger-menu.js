@@ -30,12 +30,10 @@
           if ($this.next().length > 0) {
             if ($this.closest('li').hasClass('active')) {
               menuContent.find('li, li > ul').removeClass('active');
-              menuContent.removeClass('disable-scroll');
             }
             else {
               $this.closest('li').addClass('active');
               $this.closest('li').find('ul').addClass('active');
-              menuContent.addClass('disable-scroll');
             }
             e.preventDefault();
           }
