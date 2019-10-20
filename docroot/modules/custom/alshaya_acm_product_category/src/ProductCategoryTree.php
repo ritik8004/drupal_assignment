@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product_category;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
@@ -49,6 +50,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @var \Drupal\node\NodeStorageInterface
    */
   protected $nodeStorage;
+
+  /**
+   * Entity Repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
 
   /**
    * Language manager.
@@ -125,6 +133,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -137,6 +147,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Product Category Helper service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
@@ -144,6 +155,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
                               ProductCategoryHelper $product_category_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
@@ -244,6 +256,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'depth' => (int) $term->depth_level,
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
         'move_to_right' => !is_null($term->field_move_to_right_value) ? (bool) $term->field_move_to_right_value : FALSE,
+        'app_navigation_link' => !is_null($term->field_show_in_app_navigation_value) ? (bool) $term->field_show_in_app_navigation_value : FALSE,
       ];
 
       if (!$term->display_in_desktop) {
@@ -509,6 +522,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // For the `move to right`.
     $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
     $query->fields('mtr', ['field_move_to_right_value']);
+
+    // For the `app navigation links`.
+    $query->leftJoin('taxonomy_term__field_show_in_app_navigation', 'mln', 'mln.entity_id = tfd.tid');
+    $query->fields('mln', ['field_show_in_app_navigation_value']);
 
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent_target_id', $parent_tid);
@@ -828,6 +845,50 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
     }
     return FALSE;
+  }
+
+  /**
+   * Get depth level for L1 category.
+   *
+   * @return int
+   *   Depth level.
+   */
+  public function getL1DepthLevel() {
+    return 1;
+  }
+
+  /**
+   * Check if category is L1.
+   *
+   * @param \Drupal\taxonomy\TermInterface $category
+   *   Category to check.
+   *
+   * @return bool
+   *   TRUE if category is L1.
+   */
+  public function isCategoryL1(TermInterface $category) {
+    $depth = (int) $category->get('depth_level')->getString();
+    return $depth === $this->getL1DepthLevel();
+  }
+
+  /**
+   * Get L1 Parent Category for given category.
+   *
+   * @param \Drupal\taxonomy\TermInterface $category
+   *   Category.
+   *
+   * @return \Drupal\taxonomy\TermInterface
+   *   L1 category for the category.
+   */
+  public function getL1Category(TermInterface $category) {
+    $parents = $this->termStorage->loadAllParents($category->id());
+
+    if (count($parents) < $this->getL1DepthLevel()) {
+      return $category;
+    }
+
+    $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel() - 1];
+    return $this->entityRepository->getTranslationFromContext($parent);
   }
 
 }

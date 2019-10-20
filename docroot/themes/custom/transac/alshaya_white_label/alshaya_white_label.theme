@@ -354,6 +354,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
     }
   }
 
+  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
+  }
+
   // Add class for category facet.
   $category_facets = [
     'facet_block:category_facet_plp',
