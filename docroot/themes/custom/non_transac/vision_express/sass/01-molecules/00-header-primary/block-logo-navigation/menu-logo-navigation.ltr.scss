@@ -185,6 +185,8 @@
 .block-logo-navigation {
   .menu-logo-navigation {
     @include breakpoint($upto-lap) {
+      overflow-y: auto;
+
       li.active-trail {
         & > a,
         & > span {
