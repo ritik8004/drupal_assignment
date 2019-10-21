@@ -175,6 +175,11 @@
 
         // Show thumbnails again.
         $('#product-zoom-container', product).removeClass('hidden-important');
+
+        //  Calculate the height the position on thumbnails image load.
+        if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
+          Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
+        }
       }, 1);
     }
   };
