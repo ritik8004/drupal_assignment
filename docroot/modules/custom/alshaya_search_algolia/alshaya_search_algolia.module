@@ -125,13 +125,10 @@ function alshaya_search_algolia_search_api_index_items_alter(IndexInterface $ind
         }
       }
       catch (\Throwable $e) {
-        if ($e->getCode() != 200) {
-          $logger->warning('Indexing failed for the node:@nid message:@message', [
-            '@nid' => $node->id(),
-            '@message' => $e->getMessage(),
-          ]);
-        }
-
+        $logger->warning('Indexing failed for the node:@nid message:@message', [
+          '@nid' => $node->id(),
+          '@message' => $e->getMessage(),
+        ]);
         unset($items[$item_id]);
       }
     }
@@ -151,16 +148,19 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
   $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
   foreach ($objects as $id => &$object) {
     $node = $items[$id]->getOriginalObject()->getValue();
+
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
+      continue;
+    }
+
     try {
       $algolia_index->processIndexItem($object, $node);
     }
     catch (\Throwable $e) {
-      if ($e->getCode() != 200) {
-        $logger->warning('Indexing failed for the node:@nid message:@message', [
-          '@nid' => $object['nid'],
-          '@message' => $e->getMessage(),
-        ]);
-      }
+      $logger->warning('Indexing failed for the node:@nid message:@message', [
+        '@nid' => $object['nid'],
+        '@message' => $e->getMessage(),
+      ]);
       unset($objects[$id]);
     }
   }
