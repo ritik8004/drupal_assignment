@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_alshaya_click_and_collect_config_alter().
@@ -52,5 +53,36 @@ function alshaya_mobile_app_config_translation_info_alter(&$info) {
 function alshaya_mobile_app_alshaya_knet_success_route_alter(string &$route, array $state_data) {
   if (isset($state_data['context']) && $state_data['context'] === 'mobile') {
     $route = 'alshaya_mobile_app.mobile_complete';
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data) {
+  if (!empty($data)) {
+    foreach ($data['promo'] ?? [] as $key => $promo) {
+      if (!empty($promo['promo_node'])) {
+        $promo_node = \Drupal::entityTypeManager()->getStorage('node')->load($promo['promo_node']);
+        $data['promo'][$key]['deeplink'] = \Drupal::service('alshaya_mobile_app.utility')->getDeepLink($promo_node, 'promotion');
+        unset($data['promo'][$key]['promo_node']);
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_full_product_data_alter().
+ */
+function alshaya_mobile_app_alshaya_acm_product_full_product_data_alter(SKU $sku, array &$data) {
+  if (!empty($data)) {
+    foreach ($data['promotions'] ?? [] as $key => $promo) {
+      if (!empty($promo['promo_node'])) {
+        $promo_node = \Drupal::entityTypeManager()->getStorage('node')->load($promo['promo_node']);
+        $data['promotions'][$key]['deeplink'] = \Drupal::service('alshaya_mobile_app.utility')->getDeepLink($promo_node, 'promotion');
+        unset($data['promotions'][$key]['promo_node']);
+      }
+    }
   }
 }
