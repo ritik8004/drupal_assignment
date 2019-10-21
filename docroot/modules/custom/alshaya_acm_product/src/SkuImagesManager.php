@@ -171,38 +171,35 @@ class SkuImagesManager {
    *   Processed media items.
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
-    $static = &drupal_static(__FUNCTION__, []);
-
-    $static_id = implode(':', [
-      $sku->getSku(),
-      $sku->language()->getId(),
+    $cache_key = implode(':', [
+      'product_media',
       (int) $check_parent_child,
       $context,
     ]);
 
-    if (isset($static[$static_id])) {
-      return $static[$static_id];
-    }
+    $cache = $this->productCacheManager->get($sku, $cache_key);
 
-    // For configurable products with no children, we may not have any
-    // child to get media items from.
-    $static[$static_id] = [];
+    if (is_array($cache)) {
+      return $cache;
+    }
 
     try {
-      $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
-      $static[$static_id] = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
+      $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
+      $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
 
-      foreach ($static[$static_id]['media_items']['images'] ?? [] as $key => $item) {
+      foreach ($data['media_items']['images'] ?? [] as $key => $item) {
         if (empty($item['label'])) {
-          $static[$static_id]['media_items']['images'][$key]['label'] = $sku->label();
+          $data['media_items']['images'][$key]['label'] = (string) $sku->label();
         }
       }
+
+      $this->productCacheManager->set($sku, $cache_key, $data);
     }
     catch (\Exception $e) {
-      // Do nothing.
+      $data = [];
     }
 
-    return $static[$static_id];
+    return $data;
   }
 
   /**
@@ -425,7 +422,7 @@ class SkuImagesManager {
       return [];
     }
 
-    $media = $this->getProductMedia($sku, $context);
+    $media = $this->getProductMedia($sku, $context, FALSE);
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {

@@ -236,3 +236,15 @@ dynamic-promotions:
   css:
     theme:
       css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css: {}
+
+free_gifts:
+  js:
+    js/free-gift.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/slick
+
+app-navigation-links:
+  css:
+    theme:
+      css/conditional-sass/app-navigation-links/app-navigation-links.ltr.css: {}

@@ -256,6 +256,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'depth' => (int) $term->depth_level,
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
         'move_to_right' => !is_null($term->field_move_to_right_value) ? (bool) $term->field_move_to_right_value : FALSE,
+        'app_navigation_link' => !is_null($term->field_show_in_app_navigation_value) ? (bool) $term->field_show_in_app_navigation_value : FALSE,
       ];
 
       if (!$term->display_in_desktop) {
@@ -521,6 +522,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // For the `move to right`.
     $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
     $query->fields('mtr', ['field_move_to_right_value']);
+
+    // For the `app navigation links`.
+    $query->leftJoin('taxonomy_term__field_show_in_app_navigation', 'mln', 'mln.entity_id = tfd.tid');
+    $query->fields('mln', ['field_show_in_app_navigation_value']);
 
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent_target_id', $parent_tid);
@@ -816,6 +821,30 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getExcludeNotInMenu() {
     return $this->excludeNotInMenu;
+  }
+
+  /**
+   * Check if category is a sub-category of given term.
+   *
+   * @param int $sub_category_id
+   *   Product category id.
+   * @param int $parent_category_id
+   *   Selected category id.
+   *
+   * @return bool
+   *   TRUE if $sub_category is a $sub-catgegory of $parent_category.
+   */
+  public function checkIfSubCategory($sub_category_id, $parent_category_id) {
+    if ($sub_category_id === $parent_category_id) {
+      return TRUE;
+    }
+    $ancestors = $this->termStorage->loadAllParents($sub_category_id);
+    foreach ($ancestors as $term) {
+      if ($term->id() === $parent_category_id) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
   /**
