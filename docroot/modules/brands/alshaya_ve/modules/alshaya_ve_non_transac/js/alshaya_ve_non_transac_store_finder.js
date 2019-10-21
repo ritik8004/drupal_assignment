@@ -49,7 +49,6 @@
                 if (results[0].address_components) {
                   $.each(results[0].address_components, function( index, value ) {
                     if (value.types[0] == 'country') {
-                      alert(value.short_name);
                       var cookie_options = {path: '/', expires: 7200, secure: true};
                       $.cookie('alshaya_client_country_code', value.short_name, cookie_options);
                     }
@@ -58,8 +57,6 @@
               }
             });
           });
-        } else {
-          alert('Sorry, your browser does not support HTML5 geolocation.');
         }
       }
     }

@@ -30,9 +30,8 @@ function alshaya_ve_non_transac_views_pre_view(ViewExecutable $view, $display_id
 function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] === 'views-exposed-form-stores-finder-page-1') {
-      $current_route_name = \Drupal::routeMatch()->getRouteName();
       $hidden_class_map_list = '';
-      if ($current_route_name == 'view.stores_finder.page_1') {
+      if (\Drupal::routeMatch()->getRouteName() == 'view.stores_finder.page_1') {
         $hidden_class_map_list = 'hidden';
       }
 
