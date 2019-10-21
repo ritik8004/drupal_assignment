@@ -55,6 +55,7 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  entity_status: {  }
   price_from_to_facets_processor:
     weights:
       postprocess_query: 100
