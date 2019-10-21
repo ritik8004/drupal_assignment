@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search_algolia\Service;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
@@ -119,6 +120,13 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+
+    if (!($sku instanceof SKUInterface)) {
+      throw new \Exception('Not able to load sku from node.');
+    }
+    elseif ($sku->language()->getId() != $node->language()->getId()) {
+      throw new \Exception('SKU not available for language of Node');
+    }
 
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
