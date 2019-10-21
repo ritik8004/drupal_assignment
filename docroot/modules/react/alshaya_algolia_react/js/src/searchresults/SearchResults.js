@@ -38,18 +38,13 @@ const SearchResults = props => {
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
   const indexName = drupalSettings.algoliaSearch.indexName;
 
-  const onSearchStateChange = searchState => {
-    props.onSearchStateChange(searchState);
-  };
-
   return (
     <InstantSearch
-      indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }
       searchClient={searchClient}
       indexName={indexName}
       searchState={props.searchState}
       createURL={props.createURL}
-      onSearchStateChange={onSearchStateChange}
+      onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics />
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>

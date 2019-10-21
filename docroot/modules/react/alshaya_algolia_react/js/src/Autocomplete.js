@@ -37,7 +37,9 @@ class Autocomplete extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    this.props.refine(value);
+    if (this.shouldRenderSuggestions(value)) {
+      this.props.refine(value);
+    }
   };
 
   onSuggestionsClearRequested = () => {
