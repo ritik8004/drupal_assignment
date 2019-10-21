@@ -457,7 +457,8 @@ class SkuInfoHelper {
       $data['color'] = $color;
     }
     // Allow other modules to alter light product data.
-    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data);
+    $type = 'light';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
     return $data;
   }
 

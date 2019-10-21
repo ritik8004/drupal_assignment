@@ -10,7 +10,6 @@ use Drupal\Core\Url;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
@@ -334,7 +333,8 @@ class ProductResource extends ResourceBase {
     }
 
     // Allow other modules to alter light product data.
-    $this->moduleHandler->alter('alshaya_acm_product_full_product_data', $sku, $data);
+    $type = 'full';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
 
     return $data;
   }

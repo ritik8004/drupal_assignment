@@ -59,8 +59,8 @@ function alshaya_mobile_app_alshaya_knet_success_route_alter(string &$route, arr
 /**
  * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
-function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data) {
-  if (!empty($data)) {
+function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  if (!empty($data) && $type == 'light') {
     foreach ($data['promo'] ?? [] as $key => $promo) {
       if (!empty($promo['promo_node'])) {
         $promo_node = \Drupal::entityTypeManager()->getStorage('node')->load($promo['promo_node']);
@@ -68,15 +68,8 @@ function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sk
         unset($data['promo'][$key]['promo_node']);
       }
     }
-
   }
-}
-
-/**
- * Implements hook_alshaya_acm_product_full_product_data_alter().
- */
-function alshaya_mobile_app_alshaya_acm_product_full_product_data_alter(SKU $sku, array &$data) {
-  if (!empty($data)) {
+  elseif (!empty($data) && $type == 'full') {
     foreach ($data['promotions'] ?? [] as $key => $promo) {
       if (!empty($promo['promo_node'])) {
         $promo_node = \Drupal::entityTypeManager()->getStorage('node')->load($promo['promo_node']);

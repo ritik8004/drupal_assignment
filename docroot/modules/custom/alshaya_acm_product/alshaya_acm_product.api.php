@@ -49,25 +49,13 @@ function hook_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $s
  *   SKU object.
  * @param array $data
  *   Light product data that needs to be altered.
+ * @param mixed $type
+ *   Type of product - `light` or `full`.
  *
  * @see \Drupal\alshaya_acm_product\Service\SkuInfoHelper::getLightProduct()
- */
-function hook_alshaya_acm_product_light_product_data_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$data) {
-  $test_data = [];
-  $data['test'] = $test_data;
-}
-
-/**
- * Alter full product data.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU object.
- * @param array $data
- *   Full product data that needs to be altered.
- *
  * @see \Drupal\alshaya_acm_product\Plugin\rest\resource\ProductResource::getSkuData()
  */
-function hook_alshaya_acm_product_full_product_data_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$data) {
+function hook_alshaya_acm_product_light_product_data_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$data, $type) {
   $test_data = [];
   $data['test'] = $test_data;
 }

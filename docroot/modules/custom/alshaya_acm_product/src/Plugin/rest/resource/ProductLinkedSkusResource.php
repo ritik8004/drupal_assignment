@@ -5,7 +5,6 @@ namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
