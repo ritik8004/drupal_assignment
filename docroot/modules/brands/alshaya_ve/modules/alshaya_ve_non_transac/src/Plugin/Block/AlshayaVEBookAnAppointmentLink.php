@@ -83,11 +83,11 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
       '#title' => $this->t('Book an Appointment'),
       '#url' => Url::fromRoute('alshaya_ve_non_transac.appointment_modal_form'),
       '#attributes' => [
-        'class' => ['use-ajax', 'device__desktop'],
+        'class' => ['use-ajax'],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => json_encode(static::getDataDialogOptions()),
         // Add this id so that we can test this form.
-        'id' => 'book-appointment-modal-link',
+        'id' => 'book-appointment-modal-link-id',
       ],
     ];
 
@@ -97,8 +97,8 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
       '#title' => $this->t('Book an Appointment'),
       '#url' => Url::fromUri($this->config->get('book_appointment_url') . "&lang=" . $this->languageManager->getCurrentLanguage()->getId()),
       '#attributes' => [
-        'class' => ['book-appointment-mobile-link', 'device__no-desktop'],
-        'id' => 'book-appointment-mobile-link',
+        'class' => ['book-appointment-mobile-link'],
+        'id' => 'book-appointment-mobile-link-id',
         'target' => '_blank',
       ],
     ];
@@ -109,6 +109,7 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
       '#attached' => [
         'library' => [
           'core/drupal.dialog.ajax',
+          'alshaya_ve_non_transac/book_appointment',
         ],
       ],
     ];
