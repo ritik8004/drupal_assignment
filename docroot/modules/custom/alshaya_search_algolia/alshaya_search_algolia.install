@@ -27,9 +27,8 @@ function alshaya_search_algolia_update_8001() {
   // Remove unnecessary autocomplete block.
   alshaya_block_delete_blocks(['autocompletewidgetofalgolia']);
 
-  // Installing module here, alshaya_algolia_react has a dependency on
-  // this (alshaya_search_algolia) module. to avoid recursion not adding
-  // alshaya_algolia_react as dependency in this module.
+  // Installing module, for sites where alshaya_search_algolia is already
+  // enabled.
   \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
 }
 
@@ -60,6 +59,11 @@ function alshaya_search_algolia_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  // Installing module here, alshaya_algolia_react has a dependency on
+  // this (alshaya_search_algolia) module. to avoid recursion not adding
+  // alshaya_algolia_react as dependency in this module.
+  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
 }
 
 /**
