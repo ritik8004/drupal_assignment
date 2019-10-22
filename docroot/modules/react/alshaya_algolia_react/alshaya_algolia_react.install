@@ -27,7 +27,7 @@ function alshaya_algolia_react_install() {
       'ar' => 'أفضل الإقتراحات',
     ],
     'showing @current of @total items' => [
-      'ar' => 'عرض @current من إجمالي@total',
+      'ar' => 'عرض @current من إجمالي @total',
     ],
     'Load more products' => [
       'ar' => 'تحميل المزيد من المنتجات',
