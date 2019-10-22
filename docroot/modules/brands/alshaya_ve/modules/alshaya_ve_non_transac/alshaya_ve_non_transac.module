@@ -93,13 +93,10 @@ function alshaya_ve_non_transac_page_attachments(array &$attachments) {
  */
 function alshaya_ve_non_transac_alshaya_config_save_alter(array &$data, $config_name) {
   if ($config_name == 'views.view.stores_finder') {
-    $view_displays = ['page_1'];
-    foreach ($view_displays as $view_display) {
-      if (isset($data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity'])) {
-        // Clean the country from plugin settings and add it on runtime as per
-        // user's detected country.
-        $data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = '';
-      }
+    if (isset($data['display']['page_1']['display_options']['filters']['field_latitude_longitude_proximity'])) {
+      // Clean the country from plugin settings and add it on runtime as per
+      // user's detected country.
+      $data['display']['page_1']['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = '';
     }
   }
 }
