@@ -1,9 +1,14 @@
 .block-alshaya-algolia-react-autocomplete {
   .algolia-search-cleartext-icon {
-    background: none;
-    #{$right}: 0;
+    @include breakpoint($tablet) {
+      #{$right}: 2.5rem;
+    }
 
     @include breakpoint($only-mobile) {
+      background: none;
+      #{$right}: 0;
+      top: 0.75rem;
+
       @include icon(close, after) {
         color: $algolia-search-clear-text-icon;
         font-size: 2.25rem;
@@ -162,10 +167,8 @@
 
     .block-alshaya-algolia-react-autocomplete {
       .algolia-search-back-icon {
-        @include breakpoint($only-mobile) {
-          top: 0.75rem;
-          #{$left}: 0;
-        }
+        top: 0.75rem;
+        #{$left}: 0;
       }
 
       #alshaya-algolia-autocomplete {

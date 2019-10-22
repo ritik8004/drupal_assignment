@@ -418,8 +418,6 @@
     .block-alshaya-algolia-react-autocomplete {
       .algolia-search-back-icon {
         position: absolute;
-        top: 0.75rem;
-        transform: translateY(-50%);
         z-index: 4;
         color: $algolia-search-clear-text-icon;
         cursor: pointer;
@@ -427,15 +425,15 @@
         #{$left}: 0.625rem;
         width: 2rem;
         height: 2rem;
-
-        @include breakpoint($only-mobile) {
-          top: 0.3125rem;
-          transform: none;
-        }
+        top: 0.3125rem;
+        transform: none;
+        visibility: hidden;
       }
 
       &.focused {
         .algolia-search-back-icon {
+          visibility: visible;
+
           @include icon(arrow-#{$left}) {
             font-size: 2.25rem;
           }
