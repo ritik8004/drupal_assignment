@@ -1,3 +1,4 @@
+{{ attach_library('alshaya_white_label/dynamic-promotions') }}
 <div {{ gtm_attributes }}>
     {% if image is not empty %}
         <div class="image">{{ image }}</div>
@@ -36,6 +37,13 @@
                       {{ promotion.text }}
                     </a>
                   </div>
+                  {% if promotion.dynamic_label %}
+                    <div class="promotions-dynamic-label">
+                      <a class="sku-dynamic-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+                        {{ promotion.dynamic_label.text }}
+                      </a>
+                    </div>
+                  {% endif %}
                 {% endif %}
               {% endfor %}
             </div>

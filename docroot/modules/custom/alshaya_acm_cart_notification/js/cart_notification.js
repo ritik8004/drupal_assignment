@@ -16,7 +16,18 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      var currency = drupalSettings.currency_code;
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-success', function () {
+        spinner_stop();
+
+        if ($('.ui-dialog').length > 0) {
+          $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
+        }
+      });
+
+      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-failed', function () {
+        spinner_stop();
+      });
+
       $(window).on('click', function () {
         if ($('#cart_notification').length) {
           // check if element is Visible
@@ -33,9 +44,6 @@
       $('#cart_notification').once('bind-events').on('click', function (event) {
         event.stopPropagation();
       });
-
-      // Create a new instance of ladda for the specified button
-      $('.edit-add-to-cart').attr('data-style', 'zoom-in');
 
       $('.edit-add-to-cart', context).on('mousedown', function () {
         var that = this;
@@ -67,11 +75,6 @@
         }
       });
 
-      $('#configurable_ajax .form-select').once('bind-spinner-js').on('change', function () {
-        // Start loading.
-        spinner_start();
-      });
-
       $(document).ajaxComplete(function (event, xhr, settings) {
         if ((settings.hasOwnProperty('extraData')) &&
           ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
@@ -96,6 +99,11 @@
 
           setTimeout(function () {
             $('#cart_notification').fadeOut();
+            // Trigger a custom event cart:notification:animation:complete
+            // Use this whenever we need to handle any JS animations after
+            // cart notification animations are completed.
+            $('body').removeClass('notification--on');
+            $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
           }, drupalSettings.addToCartNotificationTime * 1000);
         }
       };
@@ -126,7 +134,7 @@
             });
           }, 500)
         }
-      }
+      };
 
       // Calculate the sticky header hight.
       var stickyHeaderHight = function() {
@@ -143,7 +151,7 @@
           return parseInt(brandingMenuHight) + parseInt(superCategoryHight);
         }
 
-      }
+      };
 
       // Check if error element is visible.
       var isInViewPort = function(element) {
@@ -153,7 +161,7 @@
         var viewportTop = $(window).scrollTop() + stickyHeader;
         var viewportBottom = viewportTop + $(window).height() + stickyHeader;
         return elementBottom  > viewportTop && elementTop < viewportBottom;
-      }
+      };
 
       $.fn.cartGenericScroll = function (selector) {
         if ($(window).width() < 768 && $('body').find(selector).length !== 0) {
@@ -161,88 +169,6 @@
             scrollTop: $(selector).offset().top - $('.branding__menu').height() - 100
           }, 'slow');
         }
-      };
-
-      $.fn.stopSpinner = function (data) {
-        spinner_stop();
-        if (data.message === 'success') {
-          $('.edit-add-to-cart', $(data.sku_css_id).parent()).find('.ladda-label').html(Drupal.t('added'));
-          var pdpAddCartButton = $('.edit-add-to-cart');
-
-          if ($('.ui-dialog').length > 0) {
-            pdpAddCartButton = $('.edit-add-to-cart', $('.ui-dialog'));
-          }
-          var addedProduct = pdpAddCartButton.closest('article[gtm-type="gtm-product-link"]');
-          var quantity = parseInt(pdpAddCartButton.closest('.sku-base-form').find('.form-item-quantity select').val());
-          var size = pdpAddCartButton.closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
-          var selectedVariant = '';
-
-          if (addedProduct.attr('gtm-sku-type') === 'configurable') {
-            selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku-class-identifier').toLowerCase()).val();
-          }
-
-          if ($('.ui-dialog').length > 0) {
-            // Expose details of product being added to the cart before closing the modal.
-            var productModalSelector = $('.ui-dialog');
-            addedProduct = productModalSelector.find('article[gtm-type="gtm-product-link"]');
-            quantity = parseInt(productModalSelector.find('.form-item-quantity select').val());
-            size = productModalSelector.find('.form-item-configurables-size select option:selected').text();
-
-            $('.ui-dialog .ui-dialog-titlebar-close').trigger('click');
-          }
-
-          if (addedProduct.length > 0) {
-            var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
-            // Remove product position: Not needed while adding to cart.
-            delete product.position;
-
-            // Set product quantity to selected quatity.
-            product.quantity = !isNaN(quantity) ? quantity : 1;
-
-            // Set product size to selected size.
-            if (!$.inArray('dimension6', settings.gtm.disabled_vars) && product.dimension2 !== 'simple') {
-              var currentLangCode = drupalSettings.path.currentLanguage;
-              if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
-                size = drupalSettings.alshaya_product_size_config[size];
-              }
-              if (product.hasOwnProperty('dimension6') && product.dimension6) {
-                product.dimension6 = size;
-              }
-            }
-
-            // Set product variant to the selected variant.
-            if (product.dimension2 !== 'simple') {
-              product.variant = selectedVariant;
-            }
-            else {
-              product.variant = product.id;
-            }
-
-            // Calculate metric 1 value.
-            product.metric2 = product.price * product.quantity;
-
-            var productData = {
-              event: 'addToCart',
-              ecommerce: {
-                currencyCode: currency,
-                add: {
-                  products: [
-                    product
-                  ]
-                }
-              }
-            };
-
-            dataLayer.push(productData);
-          }
-        }
-        else if (data.message === 'failure') {
-          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('error'));
-        }
-        setTimeout(
-          function () {
-            $('.edit-add-to-cart').find('.ladda-label').html(Drupal.t('add to cart'));
-          }, data.interval);
       };
     }
   };

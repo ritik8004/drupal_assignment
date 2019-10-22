@@ -3,7 +3,22 @@ services:
     class: Drupal\alshaya_acm_promotion\AlshayaPromotionsManager
     arguments:
       - '@entity_type.manager'
-      - '@logger.factory'
       - '@language_manager'
       - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
       - '@acq_promotion.promotions_manager'
+  alshaya_acm_promotion.label_manager:
+    class: Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+      - '@entity.repository'
+      - '@acq_cart.cart_storage'
+      - '@config.factory'
+  alshaya_acm_promotion.update_promotion:
+    class: Drupal\alshaya_acm_promotion\EventSubscriber\UpdatePromotionLabel
+    arguments:
+      - '@alshaya_acm_promotion.label_manager'
+    tags:
+      - { name: 'event_subscriber' }

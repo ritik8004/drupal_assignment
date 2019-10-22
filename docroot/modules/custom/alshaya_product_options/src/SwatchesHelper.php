@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\facets\FacetInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -298,7 +299,11 @@ class SwatchesHelper {
 
     // Download the file contents.
     try {
-      $file_data = $this->httpClient->get($url)->getBody();
+      $options = [
+        'timeout' => Settings::get('media_download_timeout', 5),
+      ];
+
+      $file_data = $this->httpClient->get($url, $options)->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_product_options', $e);

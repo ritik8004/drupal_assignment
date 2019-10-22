@@ -63,12 +63,16 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
               if ($valid_term || $valid_node) {
                 $super_category = _alshaya_super_category_get_super_category_for_term();
                 if ($super_category instanceof TermInterface) {
-                  $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
-                  // We just removing the the token/pattern for the super
-                  // category or we will stuck in infinite loop.
-                  $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
-                  $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
-                  $replacements[$original] = $meta_title;
+                  $prefix_label = (string) t('alshaya_seo_super_category_prefix');
+                  $prefix = t('alshaya_seo_super_category_prefix @term', [
+                    '@term' => $super_category->label(),
+                  ]);
+
+                  // Avoid duplicating for the first root super category term.
+                  // For VS do not repeat Victoria's Secret Victoria's Secret.
+                  $replacements[$original] = ($prefix_label == $super_category->label())
+                    ? $super_category->label()
+                    : $prefix;
                 }
               }
               break;

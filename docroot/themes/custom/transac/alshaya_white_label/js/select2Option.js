@@ -37,7 +37,7 @@ jQuery.fn.select2Option = function (options) {
             liHtml.append('<span class="' + $(this).text() + '">' + swatchImage + '</span>');
           }
           else {
-            liHtml.append('<a href="#" class="' + $(this).text().replace(/\s+/g, '-') + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
+            liHtml.append('<a href="#" data-value="' + $(this).text() + '" class="' + $(this).text().replace(/\s+/g, '-') + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
           }
         }
         else {
@@ -59,7 +59,7 @@ jQuery.fn.select2Option = function (options) {
               liHtml.append(swatch_markup);
             }
             else {
-              liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+              liHtml.append('<span class="' + $(this).text() + '">' + $(this).text() + '</span>');
             }
           }
           else {
@@ -69,7 +69,7 @@ jQuery.fn.select2Option = function (options) {
               liHtml.append(swatch_markup);
             }
             else {
-              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+              liHtml.append('<a href="#" data-value="' + $(this).text() + '" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).text() + '</a>');
             }
           }
         }
@@ -191,10 +191,10 @@ jQuery.fn.select2Option = function (options) {
 
 (function ($) {
   'use strict';
-  Drupal.alshaya_color_swatch_update_selected_label = function () {
+  Drupal.alshayaSelect2OptionUpdateSelectedLabel = function () {
     // Set the value for selected option.
     $('.select-buttons').find('a.picked').each(function () {
-      var selectedText = $(this).attr('class').replace(' picked', '');
+      var selectedText = $(this).attr('data-value');
 
       var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
       if ($(this).attr('data-color-label')) {
