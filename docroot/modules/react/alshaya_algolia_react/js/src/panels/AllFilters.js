@@ -79,7 +79,7 @@ const AllFilters = (props) => {
     <div className="block block-alshaya-search-api block-alshaya-search-facets-block-all">
       <div className="all-filters-algolia">
         <div className="filter__head">
-          <div className="back-facet-list"></div>
+          <div className="back-facet-list" style={{display: 'none'}}></div>
           <div className="filter-sort-title">{Drupal.t('filter & sort')}</div>
           <div className="all-filters-close"></div>
         </div>
