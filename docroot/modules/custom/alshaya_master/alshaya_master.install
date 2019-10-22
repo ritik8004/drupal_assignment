@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for - Your search did not return any results.
+ */
+function alshaya_master_update_8032() {
+  $strings = [
+    'Your search did not return any results.' => [
+      'ar' => 'لا يوجد نتائج لبحثك',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_rum module.
  */
 function alshaya_master_update_8031() {
@@ -1565,6 +1580,9 @@ function alshaya_master_install() {
       'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. يرجى إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
     ],
     'No area found' => [
+      'ar' => 'لا يوجد نتائج لبحثك',
+    ],
+    'Your search did not return any results.' => [
       'ar' => 'لا يوجد نتائج لبحثك',
     ],
     'Your order will be available for pickup at the following store' => [

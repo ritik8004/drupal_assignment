@@ -55,6 +55,7 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  entity_status: {  }
   price_from_to_facets_processor:
     weights:
       postprocess_query: 100
@@ -64,6 +65,6 @@ tracker_settings:
   default:
     indexing_order: fifo
 options:
-  index_directly: true
-  cron_limit: 0
+  index_directly: false
+  cron_limit: 50
 server: algolia

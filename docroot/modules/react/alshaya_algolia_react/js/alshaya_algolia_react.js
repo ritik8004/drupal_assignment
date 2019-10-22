@@ -187,18 +187,20 @@
         }
       }
 
-    $(window).once().on('scroll', function () {
-      // Sticky filter header.
-      if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0 && $('.show-algolia-result').length > 0) {
-        if ($(this).scrollTop() > algoliaReactFilterPosition) {
-          filter.addClass('filter-fixed-top');
-          $('body').addClass('header-sticky-filter');
-        } else {
-          filter.removeClass('filter-fixed-top');
-          $('body').removeClass('header-sticky-filter');
+    if ($('.show-algolia-result').length > 0) {
+      $(window).once('algoliaStickyFilter').on('scroll', function () {
+        // Sticky filter header.
+        if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0 && $('.show-algolia-result').length > 0) {
+          if ($(this).scrollTop() > algoliaReactFilterPosition) {
+            filter.addClass('filter-fixed-top');
+            $('body').addClass('header-sticky-filter');
+          } else {
+            filter.removeClass('filter-fixed-top');
+            $('body').removeClass('header-sticky-filter');
+          }
         }
-      }
-    });
+      });
+    }
   };
 
 
