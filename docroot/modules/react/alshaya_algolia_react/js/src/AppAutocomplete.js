@@ -23,18 +23,6 @@ class AppAutocomplete extends React.Component {
       query: getCurrentSearchQuery()
     };
     toggleSearchResultsContainer(this.state.query);
-    this.updateQueryValue = this.updateQueryValue.bind(this);
-  };
-
-  componentDidMount() {
-    window.addEventListener('hashchange', this.updateQueryValue, false);
-  };
-
-  updateQueryValue() {
-    const parsedHash = qs.parse(location.hash);
-    if (parsedHash && parsedHash.query) {
-      this.setQueryValue(parsedHash.query);
-    }
   };
 
   setQueryValue(queryValue) {
@@ -72,7 +60,8 @@ class AppAutocomplete extends React.Component {
   };
 
   render() {
-    const { query, categories } = this.state;
+    const { query } = this.state;
+
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null)
