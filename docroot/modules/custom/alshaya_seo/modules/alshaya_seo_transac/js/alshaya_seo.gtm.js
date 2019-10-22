@@ -960,12 +960,13 @@
    * @param impressions
    */
   Drupal.alshaya_seo_gtm_push_impressions = function (currencyCode, impressions) {
-    if (impressions.length > 0) {
+    // To avoid max size in POST data issue we do it in batches of 10.
+    while (impressions.length > 0) {
       var data = {
         event: 'productImpression',
         ecommerce: {
           currencyCode: currencyCode,
-          impressions: impressions
+          impressions: impressions.splice(0, 10)
         }
       };
 
