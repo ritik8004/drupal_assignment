@@ -42,6 +42,11 @@ libraries-extend:
   whitelabel/menu-terms-conditions:
     - vision_express/menu-terms-conditions
 
+libraries-override:
+  whitelabel/menu-logo-navigation:
+    js:
+      components/js/burger-menu.js: dist/js/burger-menu.js
+
 component-libraries:
   atoms:
     paths:
