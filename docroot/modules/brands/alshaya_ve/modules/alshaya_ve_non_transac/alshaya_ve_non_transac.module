@@ -6,19 +6,6 @@
  */
 
 /**
- * Implements hook_theme().
- */
-function alshaya_ve_non_transac_theme($existing, $type, $theme, $path) {
-  $items = [];
-  $items['book_appointment'] = [
-    'variables' => [
-      'iframe_url' => NULL,
-    ],
-  ];
-  return $items;
-}
-
-/**
  * Implements hook_acquia_search_get_list_of_possible_cores_alter().
  */
 function alshaya_ve_non_transac_acquia_search_get_list_of_possible_cores_alter(&$possible_core_ids, $core_service) {

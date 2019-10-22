@@ -4,6 +4,7 @@ namespace Drupal\alshaya_ve_non_transac\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Class VESettingsForm.
@@ -49,21 +50,9 @@ class VeSettingsForm extends ConfigFormBase {
       '#type' => 'url',
       '#title' => $this->t('Book appointment url'),
       '#required' => TRUE,
-      '#default_value' => $config->get('book_appointment_url'),
+      '#default_value' => ($config->get('book_appointment_url')) ?? Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'],
     ];
     return parent::buildForm($form, $form_state);
-  }
-
-  /**
-   * Helper method so we can have consistent dialog options.
-   *
-   * @return string[]
-   *   An array of jQuery UI elements to pass on to our dialog form.
-   */
-  protected static function getDataDialogOptions() {
-    return [
-      'width' => '60%',
-    ];
   }
 
 }

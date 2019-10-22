@@ -5,6 +5,8 @@
  * Install, uninstall, update function for alshaya_ve_non_transac.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_install().
  */
@@ -28,6 +30,6 @@ function alshaya_ve_non_transac_install() {
   \Drupal::service('module_installer')->uninstall(['search']);
 
   // Configure Appointment API url settings.
-  $settings = Settings::get('alshaya_knet.settings')['book_appointment_url'];
+  $settings = Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'];
   \Drupal::configFactory()->getEditable('alshaya_ve_non_transac.settings')->set('book_appointment_url', $settings)->save();
 }

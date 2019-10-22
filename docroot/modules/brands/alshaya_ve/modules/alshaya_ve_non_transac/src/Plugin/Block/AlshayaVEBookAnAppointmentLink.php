@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_ve_non_transac\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -83,11 +82,9 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
       '#title' => $this->t('Book an Appointment'),
       '#url' => Url::fromRoute('alshaya_ve_non_transac.appointment_modal_form'),
       '#attributes' => [
-        'class' => ['use-ajax'],
+        'class' => ['use-ajax', 'book-appointment-desktop'],
         'data-dialog-type' => 'modal',
-        'data-dialog-options' => json_encode(static::getDataDialogOptions()),
-        // Add this id so that we can test this form.
-        'id' => 'book-appointment-modal-link-id',
+        'data-dialog-options' => '{"width":"60%"}',
       ],
     ];
 
@@ -97,8 +94,7 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
       '#title' => $this->t('Book an Appointment'),
       '#url' => Url::fromUri($this->config->get('book_appointment_url') . "&lang=" . $this->languageManager->getCurrentLanguage()->getId()),
       '#attributes' => [
-        'class' => ['book-appointment-mobile-link'],
-        'id' => 'book-appointment-mobile-link-id',
+        'class' => ['book-appointment-mobile'],
         'target' => '_blank',
       ],
     ];
@@ -113,25 +109,6 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
         ],
       ],
     ];
-  }
-
-  /**
-   * Helper method so we can have consistent dialog options.
-   *
-   * @return string[]
-   *   An array of jQuery UI elements to pass on to our dialog form.
-   */
-  protected static function getDataDialogOptions() {
-    return [
-      'width' => '60%',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['book-an-appointment-link']);
   }
 
 }

@@ -52,14 +52,14 @@ class BookingAppointmentController extends ControllerBase {
   /**
    * Callback for opening the book an appointment modal window.
    */
-  public function openBookAppointmentModal() {
+  public function bookAppointmentModal() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $config = $this->config('alshaya_ve_non_transac.settings');
     $bookAppointmentUrl = $config->get('book_appointment_url');
     $bookAppointmentUrl = $bookAppointmentUrl . "&lang=" . $langcode;
     return [
-      '#theme' => 'book_appointment',
-      '#iframe_url' => $bookAppointmentUrl,
+      '#type' => 'inline_template',
+      '#template' => '<iframe id="bookAppontmentModal" name="bookAppontmentModal" sandbox="allow-forms allow-scripts allow-same-origin" src="' . $bookAppointmentUrl . '" width="100%" height="700px"></iframe>',
     ];
   }
 
