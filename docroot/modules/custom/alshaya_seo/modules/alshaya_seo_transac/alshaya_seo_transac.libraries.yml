@@ -14,3 +14,10 @@ gtm_algolia:
     js/alshaya_seo.gtm.algolia.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+
+checkout_login:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.checkout_login.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
