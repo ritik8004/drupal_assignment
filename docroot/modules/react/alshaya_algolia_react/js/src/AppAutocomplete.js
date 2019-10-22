@@ -25,7 +25,7 @@ class AppAutocomplete extends React.Component {
     toggleSearchResultsContainer(this.state.query);
   };
 
-  setQueryValue(queryValue) {
+  setQueryValue = (queryValue) => {
     this.setState({query: queryValue});
     toggleSearchResultsContainer(queryValue);
   };
