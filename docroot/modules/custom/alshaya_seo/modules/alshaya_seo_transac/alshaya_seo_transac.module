@@ -10,6 +10,7 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 
 /**
@@ -302,6 +303,15 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   }
   catch (Exception $e) {
     \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_seo_transac_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'multistep_checkout' && $form_state->getTemporaryValue('step_id') === 'login') {
+    $form['#attached']['library'][] = 'alshaya_seo_transac/checkout_login';
   }
 }
 
