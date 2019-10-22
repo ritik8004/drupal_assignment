@@ -3,6 +3,7 @@ import Gallery from '../gallery/Gallery';
 import PriceContainer from '../price/PriceContainer';
 import PromotionsContainer from '../promotions/PromotionsContainer';
 import LabelsContainer from '../labels/LabelsContainer';
+import CustomHighlight from '../algolia/CustomHighlight';
 
 const Teaser = ({hit}) => {
   const swatches = (null);
@@ -28,7 +29,9 @@ const Teaser = ({hit}) => {
           </a>
           <div className="product-plp-detail-wrapper">
             <h2 className="field--name-name">
-              <a href={`${hit.url}?queryID=${hit.__queryID}`} className="product-selected-url">{hit.title}</a>
+              <a href={`${hit.url}?queryID=${hit.__queryID}`} className="product-selected-url">
+                <CustomHighlight attribute="title" hit={hit} />
+              </a>
             </h2>
             <PriceContainer price={hit.original_price} final_price={hit.final_price}/>
             <PromotionsContainer promotions={hit.promotions}/>

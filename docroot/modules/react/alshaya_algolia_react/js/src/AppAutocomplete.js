@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { Configure, Hits } from "react-instantsearch-dom";
-import qs from 'qs'
 import {searchClient} from './config/SearchClient';
 import AutoComplete from './Autocomplete';
 import SearchResultsRender from './searchresults/SearchResultsRender';
@@ -25,7 +24,7 @@ class AppAutocomplete extends React.Component {
     toggleSearchResultsContainer(this.state.query);
   };
 
-  setQueryValue(queryValue) {
+  setQueryValue = (queryValue) => {
     this.setState({query: queryValue});
     toggleSearchResultsContainer(queryValue);
   };
@@ -68,10 +67,9 @@ class AppAutocomplete extends React.Component {
 
   render() {
     const { query } = this.state;
-
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
-    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null)
+    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) && query != ''
       ? (<SearchResultsRender query={query} />)
       : '';
 

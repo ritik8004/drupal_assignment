@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectHighlight } from 'react-instantsearch-dom';
 
-const Highlight = ({ highlight, attribute, hit }) => {
+const Highlight = ({ highlight, attribute, hit, suffix }) => {
   const parsedHit = highlight({
     highlightProperty: '_highlightResult',
     attribute,
@@ -18,7 +18,7 @@ const Highlight = ({ highlight, attribute, hit }) => {
               : (<span key={index} className="nonHighlighted">{part.value}</span>)
         )}
       </span>
-      <span className="populate-input">&#8598;</span>
+      {suffix}
     </div>
   );
 };
