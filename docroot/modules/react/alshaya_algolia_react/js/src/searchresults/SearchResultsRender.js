@@ -30,7 +30,7 @@ export default class SearchResultsRender extends React.Component {
     return ReactDOM.createPortal(
       <React.Fragment>
         <div class="block block-core block-page-title-block">
-          <h1 class="c-page-title">Search results</h1>
+          <h1 class="c-page-title">{Drupal.t('Search results')}</h1>
         </div>
         <SearchResults query={this.props.query}/>
       </React.Fragment>,
