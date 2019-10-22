@@ -59,7 +59,10 @@ class BookingAppointmentController extends ControllerBase {
     $bookAppointmentUrl = $bookAppointmentUrl . "&lang=" . $langcode;
     return [
       '#type' => 'inline_template',
-      '#template' => '<iframe id="bookAppontmentModal" name="bookAppontmentModal" sandbox="allow-forms allow-scripts allow-same-origin" src="' . $bookAppointmentUrl . '" width="100%" height="700px"></iframe>',
+      '#template' => '<iframe id="bookAppontmentModal" name="bookAppontmentModal" sandbox="allow-forms allow-scripts allow-same-origin" src="{{bookAppointmentUrl}}" width="100%" height="700px"></iframe>',
+      '#context' => [
+        'bookAppointmentUrl' => $bookAppointmentUrl,
+      ],
     ];
   }
 

@@ -12,7 +12,3 @@ alshaya_ve_non_transac.appointment_modal_form:
     _controller: '\Drupal\alshaya_ve_non_transac\Controller\BookingAppointmentController::bookAppointmentModal'
   requirements:
     _permission: 'access content'
-  localized_options:
-    attributes:
-      class:
-        fa-drupal

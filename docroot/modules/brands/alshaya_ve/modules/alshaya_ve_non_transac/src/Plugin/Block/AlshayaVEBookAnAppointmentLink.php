@@ -105,7 +105,6 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
       '#attached' => [
         'library' => [
           'core/drupal.dialog.ajax',
-          'alshaya_ve_non_transac/book_appointment',
         ],
       ],
     ];

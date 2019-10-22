@@ -1,4 +1,4 @@
-alshaya_ve_non_transac.ve_settings_form:
+alshaya_ve_non_transac.settings_form:
   title: 'VE settings'
   description: 'Configure Vision Express settings.'
   parent: alshaya_master.alshaya_admin

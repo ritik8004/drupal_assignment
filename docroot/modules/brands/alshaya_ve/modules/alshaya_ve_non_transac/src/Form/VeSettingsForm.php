@@ -42,15 +42,12 @@ class VeSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_ve_non_transac.settings');
-    $form['ve'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Vision Express settings'),
-    ];
-    $form['ve']['book_appointment_url'] = [
+    $form['book_appointment_url'] = [
       '#type' => 'url',
       '#title' => $this->t('Book appointment url'),
       '#required' => TRUE,
       '#default_value' => ($config->get('book_appointment_url')) ?? Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'],
+      '#description' => $this->t('Vision express book an appointment API url.'),
     ];
     return parent::buildForm($form, $form_state);
   }
