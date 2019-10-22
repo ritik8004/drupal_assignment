@@ -53,10 +53,17 @@ class AppAutocomplete extends React.Component {
     // Empty State & Input.
     this.setQueryValue('');
     this.reactSearchBlock[0].classList.remove('clear-icon');
-    const reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
-    let searchInput = reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
+    let searchInput = this.reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
     // Keep focus.
     searchInput[0].focus();
+  };
+
+  backIconClickEvent = (event) => {
+    this.reactSearchBlock[0].classList.remove('show-algolia-search-bar');
+    let mobileSearchInNav = document.getElementsByClassName('search-active');
+    if (mobileSearchInNav.length !== 0) {
+      mobileSearchInNav[0].classList.remove('search-active');
+    }
   };
 
   render() {
@@ -90,6 +97,7 @@ class AppAutocomplete extends React.Component {
           </Portal>
         )}
         <Portal
+          onclick={(event) => this.backIconClickEvent(event)}
           className="algolia-search-back-icon"
           id="react-algolia-searchbar-back-button"
           query=""

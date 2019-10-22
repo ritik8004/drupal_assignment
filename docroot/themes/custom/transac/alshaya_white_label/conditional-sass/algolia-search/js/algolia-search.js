@@ -47,6 +47,7 @@
       function showAlgoliaSearchBar() {
         $('.mobile--search').once().on('click', function (e) {
           algoliaAutocompleteBlock.toggleClass('show-algolia-search-bar');
+          algoliaAutocompleteBlock.find('input').trigger('focus');
         });
       }
 
