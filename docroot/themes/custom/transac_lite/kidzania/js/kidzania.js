@@ -325,7 +325,6 @@
                 timeEle
                   .show()
                   .find('a')
-                  .html(data.getShiftsResult.Shift.Name)
                   .after('<input type="hidden" value="' + val + '" id="book-visit-date">') // store visit date.
                   .after('<input type="hidden" id="book-shifts">'); // store shifts data.
                 $('#book-shifts').val(JSON.stringify(data));
