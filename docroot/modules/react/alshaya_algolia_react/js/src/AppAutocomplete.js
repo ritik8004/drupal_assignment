@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { Configure, Hits } from "react-instantsearch-dom";
-import qs from 'qs'
 import {searchClient} from './config/SearchClient';
 import AutoComplete from './Autocomplete';
 import SearchResultsRender from './searchresults/SearchResultsRender';
