@@ -7,3 +7,10 @@ gtm:
     - core/jquery
     - core/jquery.once
     - alshaya_master/common_functions
+
+checkout_login:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.checkout_login.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
