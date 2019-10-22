@@ -5,6 +5,10 @@ global:
       dist/css/global.ltr.css: {}
   js:
     js/global.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
 
 block-site-logo:
   version: VERSION

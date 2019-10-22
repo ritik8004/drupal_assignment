@@ -8,7 +8,7 @@
 
   Drupal.behaviors.toggleSearch = {
     attach: function (context, settings) {
-      $('.toggle-search').on('click', function () {
+      $('.toggle-search').once('toggleSearch').on('click', function () {
         $('.search-block').toggleClass('search-active');
       });
     }
