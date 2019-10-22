@@ -5,24 +5,8 @@
  * Module file.
  */
 
-use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldStorageConfig;
-
-/**
- * Implements hook_views_pre_view().
- */
-function alshaya_ve_non_transac_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
-  if ($view->id() == 'stores_finder' && ($display_id == 'page_2' || $display_id == 'glossary_map_view')) {
-    $handler = $view->getHandler($display_id, 'filter', 'field_store_country_value');
-    // Get user's detected country.
-    $country = \Drupal::service('alshaya_ve_non_transac.user_location_detect')->getUserCountryCode();
-
-    // If detected country count is 1 then default value should be that.
-    $handler['value'] = (count($country) == 1) ? $country : ['All'];
-    $view->setHandler($display_id, 'filter', 'field_store_country_value', $handler);
-  }
-}
 
 /**
  * Implements hook_form_alter().
@@ -47,7 +31,7 @@ function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $for
       if (strpos($current_path, '/store-finder') !== FALSE) {
         $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
         $filterCountry = \Drupal::request()->get('country');
-        if ($filterCountry) {
+        if ($filterCountry && !empty($countryFieldValues[$filterCountry])) {
           $countryName = $countryFieldValues[$filterCountry];
         }
         else {
@@ -69,21 +53,10 @@ function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $for
  * Implements hook_page_attachments().
  */
 function alshaya_ve_non_transac_page_attachments(array &$attachments) {
-  $config = \Drupal::config('geolocation.settings');
-  if (!empty($config->get('google_map_api_key'))) {
-    $attachments['#attached']['drupalSettings']['googleApiKey'] = $config->get('google_map_api_key');
-  }
   // Attach store finder js only on store-finder pages.
   $current_path = \Drupal::service('path.current')->getPath();
   if (strpos($current_path, '/store-finder') !== FALSE) {
-    // Get user's detected country.
-    $country = \Drupal::service('alshaya_ve_non_transac.user_location_detect')->getUserCountryCode();
-    $filterCountry = \Drupal::request()->get('country');
-    if ($filterCountry && $filterCountry !== 'All') {
-      $country = [];
-      $country[] = $filterCountry;
-    }
-    $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => $country];
+    $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => ''];
     $attachments['#attached']['library'][] = 'alshaya_ve_non_transac/alshaya_ve_non_transac_store_finder';
   }
 }

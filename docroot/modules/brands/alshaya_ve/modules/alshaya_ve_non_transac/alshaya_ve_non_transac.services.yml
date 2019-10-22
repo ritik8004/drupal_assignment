@@ -1,5 +1,0 @@
-services:
-  alshaya_ve_non_transac.user_location_detect:
-    class: Drupal\alshaya_ve_non_transac\AlshayaUserLocationDetect
-    arguments:
-      - '@request_stack'
