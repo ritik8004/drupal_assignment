@@ -110,6 +110,7 @@ class AlshayaAlgoliaIndexHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function processIndexItem(array &$object, NodeInterface $node) {
+    $langcode = $node->language()->getId();
     if (empty($object['sku'])) {
       throw new \Exception('SKU not available');
     }
@@ -132,7 +133,7 @@ class AlshayaAlgoliaIndexHelper {
     $description = $this->skuManager->getDescription($sku, 'full');
     $object['body'] = $this->renderer->renderPlain($description);
 
-    $object['field_category_name'] = $this->getCategoryHierarchy($node);
+    $object['field_category_name'] = $this->getCategoryHierarchy($node, $langcode);
 
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
@@ -281,6 +282,8 @@ class AlshayaAlgoliaIndexHelper {
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object for which we need to prepare hierarchy.
+   * @param string $langcode
+   *   The language code to use to load terms.
    *
    * @return array
    *   The array of hierarchy.
@@ -288,11 +291,14 @@ class AlshayaAlgoliaIndexHelper {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getCategoryHierarchy(NodeInterface $node): array {
+  protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
 
     $list = [];
     foreach ($categories as $category) {
+      if ($category->hasTranslation($langcode)) {
+        $category = $category->getTranslation($langcode);
+      }
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1') {
         continue;
@@ -303,6 +309,9 @@ class AlshayaAlgoliaIndexHelper {
       // Top parent term id.
       $parent_key = NULL;
       foreach ($parents as $term) {
+        if ($term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
         if (empty($parent_key)) {
           $parent_key = $term->id();
         }
