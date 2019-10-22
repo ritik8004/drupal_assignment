@@ -63,7 +63,16 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
               if ($valid_term || $valid_node) {
                 $super_category = _alshaya_super_category_get_super_category_for_term();
                 if ($super_category instanceof TermInterface) {
-                  $replacements[$original] = \Drupal::service('token')->replace('[alshaya_seo:term_name]', ['term' => $super_category]);
+                  $prefix_label = (string) t('alshaya_seo_super_category_prefix');
+                  $prefix = t('alshaya_seo_super_category_prefix @term', [
+                    '@term' => $super_category->label(),
+                  ]);
+
+                  // Avoid duplicating for the first root super category term.
+                  // For VS do not repeat Victoria's Secret Victoria's Secret.
+                  $replacements[$original] = ($prefix_label == $super_category->label())
+                    ? $super_category->label()
+                    : $prefix;
                 }
               }
               break;

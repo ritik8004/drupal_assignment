@@ -290,6 +290,12 @@ function _alshaya_bbw_transac_save_metatag_translations() {
       'en' => 'Shop [term:name] Products Online, Shop [term:name] Online, Shop [term:name] Products in [alshaya_seo:country], Shop [term:name] Collection, [alshaya_seo:term_cities]',
       'ar' => 'تسوق منتجات [term:name] اون لاين, تسوق مستلزمات [term:name] اون لاين, اشتري مستلزمات [term:name] من [alshaya_seo:brand_name], [alshaya_seo:term_cities], تسوق منتجات [term:name] اون لاين [alshaya_seo:country]',
     ],
+    'Collection Online' => [
+      'en' => 'Products Online',
+    ],
+    'Collection for @parent Online' => [
+      'en' => 'Products for @parent Online',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

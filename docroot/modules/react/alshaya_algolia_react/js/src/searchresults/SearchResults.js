@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Configure,
-  connectSearchBox,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
@@ -26,9 +25,6 @@ import Pagination from '../components/algolia/Pagination';
 import HierarchicalMenu from '../filters/widgets/HierarchicalMenu';
 import { hasCategoryFilter } from '../utils';
 
-// Create a dummy search box to generate result.
-const VirtualSearchBox = connectSearchBox(() => (null));
-
 /**
  * Render search results elements facets, filters and sorting etc.
  */
@@ -38,22 +34,16 @@ const SearchResults = props => {
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
   const indexName = drupalSettings.algoliaSearch.indexName;
 
-  const onSearchStateChange = searchState => {
-    props.onSearchStateChange(searchState);
-  };
-
   return (
     <InstantSearch
-      indexName={ `${drupalSettings.algoliaSearch.indexName}_query` }
       searchClient={searchClient}
       indexName={indexName}
       searchState={props.searchState}
       createURL={props.createURL}
-      onSearchStateChange={onSearchStateChange}
+      onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics />
       <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
-      <VirtualSearchBox currentRefinement={query}  />
       {hasCategoryFilter() && (
         <SideBar>
           <ul>

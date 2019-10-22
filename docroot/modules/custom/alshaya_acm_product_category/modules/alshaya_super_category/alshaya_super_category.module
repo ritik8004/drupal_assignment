@@ -761,6 +761,7 @@ function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_
     if ($super_category_feature_enabled) {
       // Just replace the title.
       $data['tags']['title'] = $meta_configs[$config_name];
+      $data['tags']['og_title'] = $meta_configs[$config_name];
     }
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import qs from 'qs'
+import qs from 'qs';
 import { updateAfter, getCurrentSearchQueryString, updateSearchQuery } from './utils';
 
 const searchStateToURL = searchState => {
@@ -39,7 +39,7 @@ const withURLSync = SearchResults =>
       delete searchState.configure;
       // We do want to clear the filters and do not want to show querystring
       // in addressbar, when there are no search query.
-      if (searchState.query === '') {
+      if (searchState.query.trim() === '') {
         searchState = {};
       }
 

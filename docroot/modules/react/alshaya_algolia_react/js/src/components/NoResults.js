@@ -1,29 +1,16 @@
 import React from 'react';
-import { connectStateResults, ClearRefinements } from 'react-instantsearch-dom';
+import { connectStateResults } from 'react-instantsearch-dom';
 
 const NoResults = ({ searchResults }) => {
   if (!searchResults || searchResults.nbHits > 0) {
     return null;
   }
 
-  const clearRefinements = searchResults.getRefinements().length > 0
-    ? (<ClearRefinements
-      translations={{
-        reset: (
-          <div className="clear-filters">
-            {Drupal.t('clear filters')}
-          </div>
-        ),
-      }}
-    />)
-    : (null);
-
   return (
     <div className="hits-empty-state">
       <div class="view-empty">
-        Your search did not return any results.
+        {Drupal.t('Your search did not return any results.')}
       </div>
-      {clearRefinements}
     </div>
   );
 };

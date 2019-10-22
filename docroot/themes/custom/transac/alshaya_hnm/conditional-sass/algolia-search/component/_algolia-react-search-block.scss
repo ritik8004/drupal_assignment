@@ -195,7 +195,7 @@
 
           .react-autosuggest__input {
             height: 3.5625rem;
-            margin-#{$left}: 3rem;
+            padding-#{$left}: 3rem !important;
           }
 
           .react-autosuggest__suggestions-container--open {
@@ -213,6 +213,12 @@
               opacity: 0;
             }
           }
+        }
+      }
+
+      &.clear-icon {
+        .aa-suggestion {
+          color: $algolia-react-autocomplete !important;
         }
       }
     }
