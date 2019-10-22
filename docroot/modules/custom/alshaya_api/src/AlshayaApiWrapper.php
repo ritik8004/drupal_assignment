@@ -908,6 +908,22 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Update Cart by invoking Magento API directly.
+   *
+   * @param string $cart_id
+   *   Cart ID.
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return mixed
+   *   API Response.
+   */
+  public function updateCart(string $cart_id, array $cart) {
+    $endpoint = 'carts/' . $cart_id . '/updateCart';
+    return $this->invokeApi($endpoint, $cart, 'POST', FALSE);
+  }
+
+  /**
    * Cancel cart reservation.
    *
    * @param string $cart_id
