@@ -1,8 +1,0 @@
-book_appointment:
-  version: 1.x
-  js:
-    js/alshaya_book_appointment.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-    - core/jquery.once
