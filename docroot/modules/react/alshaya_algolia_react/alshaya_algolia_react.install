@@ -21,4 +21,18 @@ function alshaya_algolia_react_install() {
   $new = \Drupal::configFactory()->getEditable('block.block.alshayaalgoliareactautocomplete');
   $new->set('weight', $existing->get('weight'));
   $new->save();
+
+  $strings = [
+    'top suggestions' => [
+      'ar' => 'أفضل الإقتراحات',
+    ],
+    'showing @current of @total items' => [
+      'ar' => 'عرض @current من إجمالي @total',
+    ],
+    'Load more products' => [
+      'ar' => 'تحميل المزيد من المنتجات',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
