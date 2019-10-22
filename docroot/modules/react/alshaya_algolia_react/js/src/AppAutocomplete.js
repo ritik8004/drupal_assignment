@@ -10,11 +10,11 @@ import Teaser from './components/teaser/Teaser';
 import {
   toggleSearchResultsContainer,
   getCurrentSearchQuery,
-  isMobile
+  isMobile,
+  updateSearchQuery
 } from './utils';
 
 class AppAutocomplete extends React.Component {
-  reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
 
   constructor(props) {
     super(props);
@@ -27,6 +27,9 @@ class AppAutocomplete extends React.Component {
   setQueryValue = (queryValue) => {
     this.setState({query: queryValue});
     toggleSearchResultsContainer(queryValue);
+    if (queryValue == '') {
+      updateSearchQuery('');
+    }
   };
 
   onSuggestionSelected = (event, { suggestion }) => {
@@ -47,23 +50,6 @@ class AppAutocomplete extends React.Component {
       {children}
     </div>
   );
-
-  clearSearchFieldInput = (event) => {
-    // Empty State & Input.
-    this.setQueryValue('');
-    this.reactSearchBlock[0].classList.remove('clear-icon');
-    let searchInput = this.reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
-    // Keep focus.
-    searchInput[0].focus();
-  };
-
-  backIconClickEvent = (event) => {
-    this.reactSearchBlock[0].classList.remove('show-algolia-search-bar');
-    let mobileSearchInNav = document.getElementsByClassName('search-active');
-    if (mobileSearchInNav.length !== 0) {
-      mobileSearchInNav[0].classList.remove('search-active');
-    }
-  };
 
   render() {
     const { query } = this.state;
@@ -94,18 +80,6 @@ class AppAutocomplete extends React.Component {
             </InstantSearch>
           </Portal>
         )}
-        <Portal
-          onclick={(event) => this.backIconClickEvent(event)}
-          className="algolia-search-back-icon"
-          id="react-algolia-searchbar-back-button"
-          query=""
-        />
-        <Portal
-          onclick={(event) => this.clearSearchFieldInput(event)}
-          className="algolia-search-cleartext-icon"
-          id="react-algolia-searchbar-clear-button"
-          query=""
-        />
         {searchResultsDiv}
       </div>
     );
