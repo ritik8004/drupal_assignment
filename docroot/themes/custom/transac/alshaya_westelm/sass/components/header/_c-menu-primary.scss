@@ -63,6 +63,7 @@
   .mobile--menu {
     @include breakpoint($only-mobile) {
       top: 0.25rem;
+      #{$left}: 0;
     }
 
     @include breakpoint($only-tablet) {

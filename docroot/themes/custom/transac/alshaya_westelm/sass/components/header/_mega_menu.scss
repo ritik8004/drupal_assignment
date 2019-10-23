@@ -10,18 +10,17 @@
     text-transform: none;
 
     @include breakpoint($desktop) {
-      height: 2.5rem;
-      margin-top: -0.125rem;
+      height: 2.4rem;
 
       a.menu--one__link,
       div.menu__link.menu--one__link {
         font-size: 0.9375rem;
-        height: 2.5rem;
+        height: 2.4rem;
         border-bottom: none;
         border-top: none;
         color: $mm_l1_link;
         display: block;
-        line-height: normal;
+        line-height: 1.5;
         text-transform: uppercase;
         font-family: $we-bold;
       }
@@ -78,7 +77,6 @@
         &.active {
           @include mm-l1-highlight;
 
-          font-weight: 600;
           border-bottom: none;
         }
       }
@@ -190,7 +188,8 @@
 
       li {
         @include breakpoint($desktop) {
-          padding-bottom: 0.25rem;
+          padding-bottom: 0.3125rem;
+          padding-top: 0.3125rem;
         }
       }
     }
