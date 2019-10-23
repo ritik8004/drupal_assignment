@@ -177,9 +177,7 @@
         $('#product-zoom-container', product).removeClass('hidden-important');
 
         //  Trigger an event on thumbnails image load.
-        if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
-          $(product).trigger('alshaya-acm-product-detail-thumbnails-loaded')
-        }
+        $(product).trigger('alshaya-acm-product-detail-thumbnails-loaded')
       }, 1);
     }
   };

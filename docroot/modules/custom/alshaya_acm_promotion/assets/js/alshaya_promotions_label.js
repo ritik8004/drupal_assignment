@@ -50,10 +50,12 @@
           }
         });
 
-        // Bind event to calculate the height of dynamic promo position and make it scrollable or sticky accordingly.
-        $('.promotions-dynamic-label').once('bind-alshaya-acm-product-detail-thumbnails-loaded').on('alshaya-acm-product-detail-thumbnails-loaded', function () {
-          Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
-        });
+        if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
+          // Bind event to calculate the height of dynamic promo position and make it scrollable or sticky accordingly.
+          $('.promotions-dynamic-label').once('bind-alshaya-acm-product-detail-thumbnails-loaded').on('alshaya-acm-product-detail-thumbnails-loaded', function () {
+            Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
+          });
+        }
       }
 
     }
