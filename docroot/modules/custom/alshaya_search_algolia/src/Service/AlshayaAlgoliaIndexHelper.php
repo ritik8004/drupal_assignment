@@ -7,6 +7,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -64,6 +65,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $termStorage;
 
   /**
+   * Entity Repository object.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -78,6 +86,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The logger service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository object.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -88,7 +98,8 @@ class AlshayaAlgoliaIndexHelper {
     RendererInterface $renderer,
     SkuInfoHelper $sku_info_helper,
     LoggerChannelFactoryInterface $logger_factory,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -96,6 +107,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->skuInfoHelper = $sku_info_helper;
     $this->logger = $logger_factory->get('alshaya_search_algolia');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -110,7 +122,6 @@ class AlshayaAlgoliaIndexHelper {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function processIndexItem(array &$object, NodeInterface $node) {
-    $langcode = $node->language()->getId();
     if (empty($object['sku'])) {
       throw new \Exception('SKU not available');
     }
@@ -133,7 +144,7 @@ class AlshayaAlgoliaIndexHelper {
     $description = $this->skuManager->getDescription($sku, 'full');
     $object['body'] = $this->renderer->renderPlain($description);
 
-    $object['field_category_name'] = $this->getCategoryHierarchy($node, $langcode);
+    $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
 
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
@@ -291,14 +302,11 @@ class AlshayaAlgoliaIndexHelper {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
+  public function getCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
 
     $list = [];
     foreach ($categories as $category) {
-      if ($category->hasTranslation($langcode)) {
-        $category = $category->getTranslation($langcode);
-      }
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1') {
         continue;
@@ -309,13 +317,11 @@ class AlshayaAlgoliaIndexHelper {
       // Top parent term id.
       $parent_key = NULL;
       foreach ($parents as $term) {
-        if ($term->hasTranslation($langcode)) {
-          $term = $term->getTranslation($langcode);
-        }
         if (empty($parent_key)) {
           $parent_key = $term->id();
         }
 
+        $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
         // Break the loop if any level of term is disabled.
         if ($term->get('field_commerce_status')->getString() !== '1') {
           // Remove the parent hierarchy, If the hierarchy initiated for this
