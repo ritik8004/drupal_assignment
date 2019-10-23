@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_show_in_app_navigation
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_show_in_app_navigation
+field_name: field_show_in_app_navigation
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Show in mobile web and app Navigation'
+description: 'If checked, this term will be shown in the navigation links for the mobile app and web.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

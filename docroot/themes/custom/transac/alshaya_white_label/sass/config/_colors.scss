@@ -87,6 +87,7 @@ $light-blue-border: #b3d3f0;
 $_algolia_search_icon_bg: #0072ce;
 $_algolia_suggestion_list_bg: #f7fafe;
 $_peackock_blue_10: rgba(0, 86, 153, 0.1);
+$_dynamic_promo_text: #04599b;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -526,6 +527,7 @@ $pdp_swatch_selected_border: $black;
 
 // Dynamic Promotions.
 $promo_dynamic_label_bg: $_peackock_blue_10;
+$promo_dynamic_label_txt: $_dynamic_promo_text;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
@@ -969,10 +971,12 @@ $free-gifts-modal-product-name: $black;
 $free-gift-modal-item-code-border: $warm-grey-two;
 $free-gifts-modal-product-description-label: $black;
 $free-gifts-modal-product-item-code: $grey-light;
+$free-gifts-modal-promo-list-title-color: $mothercare-black;
 $cart-free-gifts-message: $grey-ash;
 $cart-free-gifts-title: $grey-ash;
 $cart-free-gifts-label: $white-five;
 $cart-free-gifts-label-background: $marine-blue;
+$cart-free-gifts-button-color: $white-five;
 
 // Pace progress color
 $progress_loader: $marine-blue;
@@ -1087,3 +1091,6 @@ $option-list-menu-background: $white-smoke-light;
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $peacock-blue;
 $megamenu-inline-layout-right-category-seperator: $white-two;
+
+// App navigation links
+$app-navigation-link-seperator-border: $white-smoke-light;

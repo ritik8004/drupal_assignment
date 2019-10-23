@@ -3,10 +3,10 @@
 .block-language-switcher--desktop {
   background-color: transparent;
   position: absolute;
-  #{$right}: 0;
+  #{$right}: 1.25rem;
   top: 0;
 
-  @include breakpoint($upto-palm) {
+  @include breakpoint($upto-lap) {
     display: none;
   }
 }

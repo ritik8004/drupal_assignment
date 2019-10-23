@@ -184,7 +184,7 @@ class SkuImagesManager {
     }
 
     try {
-      $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
+      $skuForGallery = $check_parent_child ? $this->getSkuForGallery($sku, $check_parent_child) : $sku;
       $data = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
 
       foreach ($data['media_items']['images'] ?? [] as $key => $item) {
@@ -422,7 +422,7 @@ class SkuImagesManager {
       return [];
     }
 
-    $media = $this->getProductMedia($sku, $context);
+    $media = $this->getProductMedia($sku, $context, FALSE);
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {

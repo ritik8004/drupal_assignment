@@ -7,12 +7,34 @@ header {
     top: 0;
     z-index: 60;
     background-color: $header-bg;
+
+    @include breakpoint($upto-palm) {
+      height: 3.125rem;
+    }
+
+    @include breakpoint($lap) {
+      height: 4.375rem;
+    }
+
+    @include breakpoint($lap) {
+      box-shadow: 1px 1px 1px $header-bg;
+    }
   }
 
   .region-page-header {
     .region__wrapper {
       max-width: 80rem;
       margin: auto;
+
+      @include breakpoint($desk) {
+        padding-top: 1.5625rem;
+        padding-bottom: 1.25rem;
+
+        html[lang=ar] & {
+          padding-top: 0.8125rem;
+          padding-bottom: 0.8125rem;
+        }
+      }
     }
   }
 }
@@ -25,19 +47,37 @@ header {
     margin-#{$right}: 0.9375rem;
 
     @include breakpoint($upto-palm) {
+      #{$right}: -2%;
+    }
+
+    @include breakpoint($upto-lap) {
       margin-top: 0.625rem;
+      position: absolute;
+      top: 0;
+    }
+
+    @include breakpoint($lap) {
+      top: 1.25rem;
+      #{$right}: 0;
     }
 
     @include breakpoint($above-palm) {
-      margin-top: 1.25rem;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    @include breakpoint($desk) {
+      html[lang=ar] & {
+        margin-top: 0.8125rem;
+      }
     }
   }
 
   li {
     display: inline-block;
 
-    @include breakpoint($above-palm) {
-      margin: 0.625rem 0.75rem;
+    @include breakpoint($desk) {
+      margin: 0 0.75rem;
     }
 
     a {
@@ -53,7 +93,7 @@ header {
         background: $btn-bg;
         color: $btn;
 
-        @include breakpoint($upto-palm) {
+        @include breakpoint($upto-lap) {
           padding: 0;
 
           &::after {
@@ -67,9 +107,16 @@ header {
             background-size: contain;
 
             @include breakpoint($upto-palm) {
+              margin-#{$left}: 0;
+            }
+
+            @include breakpoint($upto-lap) {
               width: 2rem;
               height: 2rem;
               padding: 0;
+            }
+
+            @include breakpoint($lap) {
               margin-#{$left}: 0.5rem;
             }
           }
@@ -80,6 +127,10 @@ header {
       }
 
       &.icon-contact {
+        &.is-active {
+          color: $sub-link-active;
+        }
+
         &::after {
           content: '';
           background: url("../../images/call-centre.svg") no-repeat center;
@@ -92,12 +143,16 @@ header {
           margin-top: -0.3125rem;
         }
 
-        @include breakpoint($upto-palm) {
+        @include breakpoint($upto-lap) {
           display: none;
         }
       }
 
       &.icon-store {
+        &.is-active {
+          color: $sub-link-active;
+        }
+
         @include icon(mappin, after) {
           width: 2.1875rem;
           height: 2.1875rem;
@@ -109,13 +164,24 @@ header {
           font-size: 2.25rem;
 
           @include breakpoint($upto-palm) {
+            font-size: 1.75rem;
+            width: 1.625rem;
+            height: 2rem;
+          }
+
+          @include breakpoint($upto-lap) {
+            margin-top: 0;
+          }
+
+          @include breakpoint($lap) {
             width: 2rem;
             height: 2rem;
+            font-size: 2rem;
             margin-#{$left}: 0.5rem;
           }
         }
 
-        @include breakpoint($upto-palm) {
+        @include breakpoint($upto-lap) {
           font-size: 0;
         }
       }
