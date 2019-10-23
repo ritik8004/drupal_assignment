@@ -64,6 +64,10 @@ html {
     .c-facet.c-collapse-item {
       @include breakpoint($only-mobile) {
         display: block;
+
+        &.hide-facet-block {
+          display: none;
+        }
       }
     }
   }
