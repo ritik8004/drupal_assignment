@@ -28,6 +28,14 @@ export default class MiniCart extends React.Component {
             amount: result.cart_total
           });
 
+          var in_stock = true;
+          Object.keys(result.items).forEach(function(key) {
+            if (result.items[key].stock === 0) {
+              in_stock = false;
+            }
+          });
+          result.in_stock = in_stock;
+
           // Store info in storage.
           addInfoInStorage(result);
 

@@ -37,10 +37,32 @@ class Drupal {
     $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = $this->drupalInfo->getDrupalUrl() . '/' . sprintf('sku-details/%s', $sku);
+      $url = $this->drupalInfo->getDrupalUrl() . '/' . sprintf('rest/v1/product/%s', $sku);
       $response = $client->request('GET', $url, ['verify' => FALSE]);
       $result = $response->getBody()->getContents();
-      $data = array_merge($data, json_decode($result, TRUE));
+      $data[$sku] = json_decode($result, TRUE);
+    }
+
+    return $data;
+  }
+
+  /**
+   * Get linked skus info from Drupal.
+   *
+   * @param array $skus
+   *   Skus.
+   *
+   * @return array
+   *   Linked skus data.
+   */
+  public function getDrupalLinkedSkus(array $skus) {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $data = [];
+    foreach ($skus as $sku) {
+      $url = $this->drupalInfo->getDrupalUrl() . '/' . sprintf('rest/v1/product/%s/linked', $sku);
+      $response = $client->request('GET', $url, ['verify' => FALSE]);
+      $result = $response->getBody()->getContents();
+      $data[$sku] = json_decode($result, TRUE);
     }
 
     return $data;
