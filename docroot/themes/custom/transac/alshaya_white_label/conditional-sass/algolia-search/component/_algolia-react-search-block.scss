@@ -170,6 +170,13 @@
                     display: none;
                   }
                 }
+
+                .c-products__item {
+                  text-align: center;
+                  color: $plp_tile_product_text;
+                  font-size: 0.9375rem;
+                  position: relative;
+                }
               }
             }
 

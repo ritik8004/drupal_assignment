@@ -199,6 +199,18 @@
     }
   }
 
+  .c-products__item {
+    .price-currency {
+      margin-#{$right}: 3px;
+    }
+
+    .special--price {
+      @include breakpoint($tablet) {
+        margin-#{$left}: 0.3125rem;
+      }
+    }
+  }
+
   @include breakpoint($only-mobile) {
     .block-alshaya-grid-count-block {
       width: 100%;
