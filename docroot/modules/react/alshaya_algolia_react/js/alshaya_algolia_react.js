@@ -19,81 +19,6 @@
 
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
-      // On clicking facet block title, update the title of block and hide
-      // other facets.
-      $('.all-filters-algolia .c-collapse-item').once().on('click', function() {
-        var all_filters = $(this).parents('.all-filters-algolia');
-        // Update the title on click of facet.
-        var facet_title = $(this).find('h3.c-facet__title').html();
-        $('.filter-sort-title', all_filters).html(facet_title);
-
-        // Only show current facet and hide all others.
-        $(this).removeClass('show-facet');
-        $('.all-filters-algolia .c-collapse-item').hide();
-        $(this).addClass('show-facet');
-
-        // Show the back button.
-        $('.back-facet-list', all_filters).show();
-        // Update the the hidden field with the id of selected facet.
-        all_filters.parent().find('#all-filter-active-facet-sort').val($(this).attr('id'));
-      });
-
-      // On clicking on back button, reset the block title and add class so
-      // that facet blocks can be closed.
-      $('.all-filters-algolia .back-facet-list').once().on('click', function() {
-        var all_filters = $(this).parents('.all-filters-algolia');
-        $(this).hide();
-        $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
-        $('.c-collapse-item', all_filters).removeClass('show-facet');
-        $('.c-collapse-item', all_filters).not('.hide-facet-block').show();
-        $('.c-collapse-item .c-facet__title', all_filters).removeClass('active');
-        // Reset the hidden field value.
-        all_filters.parent().find('#all-filter-active-facet-sort').val('');
-      });
-
-      // Grid switch for PLP and Search pages.
-      $('.small-col-grid').once().on('click', function () {
-        $('.large-col-grid').removeClass('active');
-        $(this).addClass('active');
-        $('body').removeClass('large-grid')
-        $('.c-products-list').removeClass('product-large').addClass('product-small');
-
-         // Adjust height of PLP tiles.
-         Drupal.listingProductTileHeight();
-      });
-
-      $('.large-col-grid').once().on('click', function () {
-        $('.small-col-grid').removeClass('active');
-        $(this).addClass('active');
-        $('body').addClass('large-grid')
-        $('.c-products-list').removeClass('product-small').addClass('product-large');
-         // Adjust height of PLP tiles.
-         Drupal.listingProductTileHeight();
-      });
-
-
-      // Add dropdown effect for facets filters.
-      $('.c-facet__title.c-collapse__title').once().on('click', function () {
-        if ($(this).hasClass('active')) {
-          $(this).removeClass('active');
-          // We want to run this only on main page facets.
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).siblings('ul').slideUp();
-          }
-        }
-        else {
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
-          }
-          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
-
-          $(this).addClass('active');
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).siblings('ul').slideDown();
-          }
-        }
-      });
-
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
         var facet_block = $('.container-without-product .c-collapse-item');
@@ -102,44 +27,9 @@
           $(facet_block).find('ul').slideUp();
         }
       });
-
-      Drupal.algoliaReact.stickyfacetfilter();
-      stickyfacetwrapper();
-
-      // Show all filters blocks.
-      $('.sticky-filter-wrapper .show-all-filters-algolia').once().on('click', function() {
-        $('.all-filters-algolia').addClass('filters-active');
-
-        if ($(window).width() > 1023) {
-          $('html').addClass('all-filters-overlay');
-        }
-        else {
-          $('body').addClass('mobile--overlay');
-        }
-
-        $('.all-filters-algolia .c-collapse-item').removeClass('show-facet');
-
-        var active_filter_sort = $('#all-filter-active-facet-sort').val();
-        // On clicking `all` filters, check if there was filter which selected last.
-        if (active_filter_sort.length > 0) {
-          $('.all-filters-algolia #' + active_filter_sort).show();
-          $('.all-filters-algolia #' + active_filter_sort).addClass('show-facet');
-        }
-        else {
-          $('.all-filters-algolia .c-collapse__title.active').parent('.c-collapse-item').addClass('show-facet');
-        }
-
-        $('.all-filters-algolia').show();
-      });
-
-      // Fake facet apply button to close the `all filter`.
-      $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once().on('click', function() {
-        $('.all-filters-algolia').removeClass('filters-active');
-        $('body').removeClass('mobile--overlay');
-        $('html').removeClass('all-filters-overlay');
-      });
+      Drupal.algoliaReact.facetEffects();
     }
-  }
+  };
 
   /**
    * Calculate and add height for each product tile.
@@ -159,6 +49,119 @@
   };
 
   Drupal.algoliaReact = Drupal.algoliaReact || {};
+
+  // Show all filters blocks.
+  Drupal.algoliaReact.facetEffects = function () {
+    // On clicking facet block title, update the title of block and hide
+    // other facets.
+    $('.all-filters-algolia .c-collapse-item').once().on('click', function() {
+      var all_filters = $(this).parents('.all-filters-algolia');
+      // Update the title on click of facet.
+      var facet_title = $(this).find('h3.c-facet__title').html();
+      $('.filter-sort-title', all_filters).html(facet_title);
+
+      // Only show current facet and hide all others.
+      $(this).removeClass('show-facet');
+      $('.all-filters-algolia .c-collapse-item').hide();
+      $(this).addClass('show-facet');
+
+      // Show the back button.
+      $('.back-facet-list', all_filters).show();
+      // Update the the hidden field with the id of selected facet.
+      all_filters.parent().find('#all-filter-active-facet-sort').val($(this).attr('id'));
+    });
+
+    // On clicking on back button, reset the block title and add class so
+    // that facet blocks can be closed.
+    $('.all-filters-algolia .back-facet-list').once().on('click', function() {
+      var all_filters = $(this).parents('.all-filters-algolia');
+      $(this).hide();
+      $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
+      $('.c-collapse-item', all_filters).removeClass('show-facet');
+      $('.c-collapse-item', all_filters).not('.hide-facet-block').show();
+      $('.c-collapse-item .c-facet__title', all_filters).removeClass('active');
+      // Reset the hidden field value.
+      all_filters.parent().find('#all-filter-active-facet-sort').val('');
+    });
+
+    // Grid switch for PLP and Search pages.
+    $('#alshaya-algolia-search .small-col-grid').once().on('click', function () {
+      var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
+      $('.large-col-grid', algolia_wrapper).removeClass('active');
+      $(this).addClass('active');
+      $('body').removeClass('large-grid')
+      $('.c-products-list', algolia_wrapper).removeClass('product-large').addClass('product-small');
+      // Adjust height of PLP tiles.
+      Drupal.listingProductTileHeight();
+    });
+
+    $('#alshaya-algolia-search .large-col-grid').once().on('click', function () {
+      var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
+      $('.small-col-grid', algolia_wrapper).removeClass('active');
+      $(this).addClass('active');
+      $('body').addClass('large-grid')
+      $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
+      // Adjust height of PLP tiles.
+      Drupal.listingProductTileHeight();
+    });
+
+
+    // Add dropdown effect for facets filters.
+    $('.c-facet__title.c-collapse__title').once().on('click', function () {
+      if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+        // We want to run this only on main page facets.
+        if (!$(this).parent().parent().hasClass('filter__inner')) {
+          $(this).siblings('ul').slideUp();
+        }
+      }
+      else {
+        if (!$(this).parent().parent().hasClass('filter__inner')) {
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
+        }
+        $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+
+        $(this).addClass('active');
+        if (!$(this).parent().parent().hasClass('filter__inner')) {
+          $(this).siblings('ul').slideDown();
+        }
+      }
+    });
+
+    $('.sticky-filter-wrapper .show-all-filters-algolia').once().on('click', function() {
+      $('.all-filters-algolia').addClass('filters-active');
+
+      if ($(window).width() > 1023) {
+        $('html').addClass('all-filters-overlay');
+      }
+      else {
+        $('body').addClass('mobile--overlay');
+      }
+
+      $('.all-filters-algolia .c-collapse-item').removeClass('show-facet');
+
+      var active_filter_sort = $('#all-filter-active-facet-sort').val();
+      // On clicking `all` filters, check if there was filter which selected last.
+      if (active_filter_sort.length > 0) {
+        $('.all-filters-algolia #' + active_filter_sort).show();
+        $('.all-filters-algolia #' + active_filter_sort).addClass('show-facet');
+      }
+      else {
+        $('.all-filters-algolia .c-collapse__title.active').parent('.c-collapse-item').addClass('show-facet');
+      }
+
+      $('.all-filters-algolia').show();
+    });
+
+    // Fake facet apply button to close the `all filter`.
+    $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once().on('click', function() {
+      $('.all-filters-algolia').removeClass('filters-active');
+      $('body').removeClass('mobile--overlay');
+      $('html').removeClass('all-filters-overlay');
+    });
+
+    stickyfacetwrapper();
+  };
 
   /**
    * Make Header sticky on scroll.
@@ -202,7 +205,6 @@
       });
     }
   };
-
 
   /**
    * Wrapping all the filters inside a div to make it sticky.
