@@ -35,7 +35,6 @@ const SearchResults = props => {
   const indexName = drupalSettings.algoliaSearch.indexName;
   Drupal.algoliaReact.facetEffects();
 
-
   return (
     <InstantSearch
       searchClient={searchClient}

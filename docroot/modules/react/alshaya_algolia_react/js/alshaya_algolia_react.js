@@ -29,7 +29,7 @@
       });
       Drupal.algoliaReact.facetEffects();
     }
-  }
+  };
 
   /**
    * Calculate and add height for each product tile.
