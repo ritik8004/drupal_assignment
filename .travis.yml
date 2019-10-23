@@ -88,6 +88,8 @@ install:
   - nvm use 8.12.0
   # Setup the themes here so the node_modules folders can be cached.
   - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
+  # Build middleware.
+  - source ${BUILD_DIR}/blt/scripts/middleware-build.sh "${BUILD_DIR}/docroot/middleware"
   # Frontend-setup.sh changed directory, hence we return to the original dir.
   - cd ${BUILD_DIR}
 
