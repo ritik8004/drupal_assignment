@@ -17,6 +17,7 @@ use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ProductStockController.
@@ -104,6 +105,12 @@ class ProductStockController extends ControllerBase {
     }
 
     $data = $request->request->all();
+
+    // Sanity check.
+    if (empty($data)) {
+      throw new NotFoundHttpException();
+    }
+
     $return = new AjaxResponse();
     $response = $this->cartHelper->addItemToCart(
       $entity,
