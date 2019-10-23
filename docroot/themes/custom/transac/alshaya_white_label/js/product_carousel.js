@@ -5,13 +5,12 @@
 
 /* global isRTL */
 
-/* global debounce */
-
 (function ($, Drupal) {
   'use strict';
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
+      var productCarousel = '.product-category-carousel';
       var pdp_items_desk = drupalSettings.pdp_items_desk;
       var basket_carousel_items = drupalSettings.basket_carousel_items;
       var dp_product_carousel_items = drupalSettings.dp_product_carousel_items;
@@ -50,6 +49,12 @@
         if ($(window).width() < 1024) {
           return;
         }
+
+        // Lazy Load on carousels.
+        $(productCarousel).on('afterChange', function () {
+          Drupal.blazyRevalidate();
+        });
+
         // Get number of items.
         var itemsCount = ocObject.find('.views-row').length;
 
@@ -102,14 +107,11 @@
         applyRtl($(this), optionsPdp);
       });
 
-      // To fix lazyload for horizontal scroll areas on devices.
-      // We dont use a slider in devices.
+      // We dont have carousel in tablets & phones,
+      // Enable horizontal lazy load.
       if ($(window).width() < 1024) {
-        $('.product-category-carousel').on('touchmove', debounce(function () {
-          if (typeof Drupal.blazyRevalidate !== 'undefined') {
-            Drupal.blazyRevalidate();
-          }
-        }, 350));
+        // Horizontal Lazy load for scroll areas.
+        Drupal.blazyHorizontalLazyLoad(productCarousel);
       }
     }
   };
