@@ -311,3 +311,18 @@
     }
   }
 }
+
+@include breakpoint($above-palm) {
+  .field-mobile-banner-image,
+  .field-promotion-image-mobile {
+    display: none;
+  }
+}
+
+@include breakpoint($upto-palm) {
+  .paragraph-t-1-row-1-col {
+    .field__wrapper.field-banner {
+      display: none;
+    }
+  }
+}

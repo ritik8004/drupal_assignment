@@ -1,11 +1,5 @@
 @import '../../../config/_config.scss';
 
-@include breakpoint($above-palm) {
-  .paragraph-t-banner .field-mobile-banner-image {
-    display: none;
-  }
-}
-
 .form-type-search-api-autocomplete {
   .input__label {
     display: none;

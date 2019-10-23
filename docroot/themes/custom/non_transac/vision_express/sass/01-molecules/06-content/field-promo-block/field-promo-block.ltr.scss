@@ -15,8 +15,11 @@
     display: block;
   }
 
-  .field-banner img {
-    width: 100%;
+  .field-banner,
+  .field-promotion-image-mobile {
+    img {
+      width: 100%;
+    }
   }
 }
 
