@@ -1,0 +1,33 @@
+<div class="individual--store">
+  <div class="view-content">
+    <div class="list-view-locator">
+      <div class="back-link">
+        <a href="{{ path('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
+      </div>
+      <div>
+        {% if content.field_store_retina_photography %}
+          <span class="retinal-enabled-yes">{{ content.field_store_retina_photography }}</span>
+        {% endif %}
+        <span class=""></span>
+        <a class="row-title">{{ label }}</a>
+        <div class="views-row">
+          <div class="views-field-field-store-address">
+            <div class="field-content">
+              {{ content.field_store_address }}
+              {{ content.field_store_phone }}
+              {% block store_additional_fields %}{% endblock %}
+            </div>
+          </div>
+          <div class="views-field-field-store-open-hours">
+            <div class="field-content">
+              {{ content.field_store_open_hours }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="map--store">
+    {{ content.field_latitude_longitude }}
+  </div>
+</div>
