@@ -18,7 +18,6 @@
         $('div.view-id-stores_finder .view-content:first').hide();
         $(this).addClass('active');
         $('#views-exposed-form-stores-finder-page-1 a#edit-list-view').removeClass('active');
-        $('.path--store-finder .attachment-after').css("width", "100%");
       });
     }
   };
