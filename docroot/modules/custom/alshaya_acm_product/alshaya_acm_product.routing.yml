@@ -53,6 +53,7 @@ alshaya_acm_product.add_to_cart_submit:
     _title: ''
   requirements:
     _permission: 'access content'
+  methods: [POST]
   options:
     parameters:
       entity:
