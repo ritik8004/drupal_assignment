@@ -28,3 +28,43 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .c-pdp {
+    .dynamic-promotion-wrapper {
+      position: relative;
+
+      .promotions-dynamic-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: -2.5rem;
+        width: 100%;
+        margin: 0 -0.5rem;
+        background: $promo_dynamic_label_txt_bg;
+
+        a {
+          &.sku-dynamic-promotion-link {
+            background: none;
+            margin: 0;
+            padding-top: 0.71875rem;
+            padding-bottom: 0.71875rem;
+          }
+        }
+      }
+
+      &.sticky-promotion-wrapper {
+        .promotions-dynamic-label {
+          position: fixed;
+          bottom: 3.5rem;
+          #{$left}: 0;
+          z-index: 5;
+          margin: 0;
+          top: auto;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
