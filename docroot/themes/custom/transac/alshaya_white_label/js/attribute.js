@@ -77,28 +77,38 @@
     select.attr('data-selected-title', that.attr('data-selected-title'));
     select.attr('data-default-title', that.attr('data-default-title'));
 
-    // Add each option with different display label based on alternate.
-    that.find('option').each(function () {
-      var option = $(this).clone();
-
-      var group_data = $(this).attr('group-data');
-      if ((typeof group_data == 'undefined')) {
-        option.html($(this).html());
-      }
-      else {
-        var option_alternates = JSON.parse(group_data);
-        option.html(option_alternates[i]['value']);
-        option.attr('selected-text', option_alternates[i]['label'] + '-' + option_alternates[i]['value']);
-      }
-
-      select.append(option);
-    });
-
     // Bind to events and trigger same for original dropdown.
     select.on('change', function () {
       that.val($(this).val());
       that.trigger('change');
     });
+
+    that.on('refresh', function () {
+      // Add all options again every-time.
+      select.find('option').remove();
+
+      // Add each option with different display label based on alternate.
+      that.find('option').each(function () {
+        var option = $(this).clone();
+
+        var group_data = $(this).attr('group-data');
+        if ((typeof group_data == 'undefined')) {
+          option.html($(this).html());
+        }
+        else {
+          var option_alternates = JSON.parse(group_data);
+          option.html(option_alternates[i]['value']);
+          option.attr('selected-text', option_alternates[i]['label'] + '-' + option_alternates[i]['value']);
+        }
+
+        select.append(option);
+      });
+
+      select.trigger('refresh');
+    });
+
+    // Add each option with different display label based on alternate.
+    that.trigger('refresh');
 
     // Using group class to link anchor to its group.
     var group_class = 'group-' + alternate.label.toLowerCase();
