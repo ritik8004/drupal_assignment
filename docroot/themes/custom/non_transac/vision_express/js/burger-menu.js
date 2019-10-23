@@ -25,7 +25,7 @@
       closeButton.once().on('click', toggleMenu);
 
       if ($(window).width() < 1025) {
-        menuContent.once()('click', 'a, span', function (e) {
+        menuContent.once().on('click', 'a, span', function (e) {
           var $this = $(this);
           if ($this.next().length > 0) {
             if ($this.closest('li').hasClass('active')) {
