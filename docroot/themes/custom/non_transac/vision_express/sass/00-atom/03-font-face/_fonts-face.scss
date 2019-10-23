@@ -21,6 +21,20 @@
 }
 
 @font-face {
+  font-family: 'HelveticaNeue-Thin';
+  src: url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Thin.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HelveticaNeue-Bold';
+  src: url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/HelveticaNeue-Bold.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'DroidArabicKufi';
   src: url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.eot?#iefix') format('embedded-opentype'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff') format('woff'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.woff2') format('woff2'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.ttf')  format('truetype'), url('/themes/custom/non_transac/vision_express/fonts/DroidArabicKufi.svg#NotoKufiArabic-Bold') format('svg');
   font-weight: normal;
