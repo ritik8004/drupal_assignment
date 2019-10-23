@@ -4,12 +4,14 @@ $brand: #ec1d24;
 $white: #fff;
 $white-smoke: #f2f2f2;
 $grey: #777;
+$black-two: #000;
 
 // Primary Color.
 $primary-border: $white-smoke;
 $icon: $brand;
 $link: $black;
 $content-text: $black;
+$text: $black-two;
 
 // Button.
 $btn-bg: $brand;
@@ -34,3 +36,12 @@ $footer-primary-bg: $white-smoke;
 // footer-tertiary
 $footer-tertiary-bg: $grey;
 $footer-text: $white;
+
+// home-slider
+$slick-arrow: $brand;
+$slick-dot-border: $brand;
+$slick-dot-active-bg: $brand;
+
+// Promo Block
+$image-title-subtitle-bg: $white-smoke;
+$show-more-icon: $brand;

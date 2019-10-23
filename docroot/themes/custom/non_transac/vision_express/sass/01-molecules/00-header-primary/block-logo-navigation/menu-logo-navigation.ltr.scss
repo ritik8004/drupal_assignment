@@ -46,6 +46,8 @@
     }
 
     @include breakpoint($upto-lap) {
+      font-family: $helvetica-neue-bold;
+
       &:hover {
         color: $sub-link-active;
 
