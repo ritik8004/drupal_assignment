@@ -302,7 +302,7 @@ class AlshayaAlgoliaIndexHelper {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getCategoryHierarchy(NodeInterface $node, $langcode): array {
+  protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
 
     $list = [];
