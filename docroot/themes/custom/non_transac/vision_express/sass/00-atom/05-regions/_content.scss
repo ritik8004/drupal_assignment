@@ -6,8 +6,16 @@
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
+}
 
+.page-home .promo-container {
   @include breakpoint($desk) {
     max-width: 80rem;
+  }
+}
+
+.node-advanced-page .promo-container {
+  @include breakpoint($desk) {
+    max-width: 57.875rem;
   }
 }

@@ -59,3 +59,16 @@
     }
   }
 }
+
+@include breakpoint($desk) {
+  .node-advanced-page {
+    .slick-slider .slick-list {
+      min-height: 100%;
+    }
+  }
+
+  .field__slider {
+    max-width: 120rem;
+    margin: auto;
+  }
+}
