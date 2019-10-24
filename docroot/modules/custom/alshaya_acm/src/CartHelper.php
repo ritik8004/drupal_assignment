@@ -11,6 +11,8 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerTrait;
@@ -48,6 +50,13 @@ class CartHelper {
   protected $moduleHandler;
 
   /**
+   * API Wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -63,16 +72,20 @@ class CartHelper {
    *   Event Dispatcher.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   API Wrapper.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
    *   Logger Factory.
    */
   public function __construct(CartStorageInterface $cart_storage,
                               EventDispatcherInterface $dispatcher,
                               ModuleHandlerInterface $module_handler,
+                              AlshayaApiWrapper $api_wrapper,
                               LoggerChannelFactoryInterface $logger_channel) {
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
     $this->moduleHandler = $module_handler;
+    $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_channel->get('CartHelper');
   }
 
@@ -406,6 +419,39 @@ class CartHelper {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Cancel cart reservation is required.
+   *
+   * @param string $message
+   *   Message to log for cancelling reservation.
+   */
+  public function cancelCartReservation(string $message) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (!($cart instanceof CartInterface)) {
+      return;
+    }
+
+    if (!empty($cart->getExtension('attempted_payment'))) {
+      try {
+        $response = $this->apiWrapper->cancelCartReservation((string) $cart->id(), $message);
+        if (empty($response['status']) || $response['status'] !== 'SUCCESS') {
+          throw new \Exception($response['message'] ?? Json::encode($response));
+        }
+      }
+      catch (\Exception $e) {
+        $this->logger->warning('Error occurred while cancelling reservation for cart id @cart_id, Drupal message: @message, API Response: @response', [
+          '@cart_id' => $cart->id(),
+          '@message' => $message,
+          '@response' => $e->getMessage(),
+        ]);
+      }
+
+      // Restore cart to get more info about what is wrong in cart.
+      $this->cartStorage->restoreCart($cart->id());
+    }
   }
 
 }

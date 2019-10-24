@@ -6,6 +6,8 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Conductor\RouteException;
 use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\alshaya_acm\Event\AlshayaAcmPlaceOrderFailedEvent;
+use Drupal\alshaya_acm\Event\AlshayaAcmUpdateCartFailedEvent;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -91,6 +93,34 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     }
 
     return $result;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateCart($cart_id, $cart) {
+    try {
+      return parent::updateCart($cart_id, $cart);
+    }
+    catch (\Exception $e) {
+      $event = new AlshayaAcmUpdateCartFailedEvent($e->getMessage());
+      $this->dispatcher->dispatch(AlshayaAcmUpdateCartFailedEvent::EVENT_NAME, $event);
+      throw $e;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function placeOrder($cart_id, $customer_id = NULL) {
+    try {
+      return parent::placeOrder($cart_id, $customer_id);
+    }
+    catch (\Exception $e) {
+      $event = new AlshayaAcmPlaceOrderFailedEvent($e->getMessage());
+      $this->dispatcher->dispatch(AlshayaAcmPlaceOrderFailedEvent::EVENT_NAME, $event);
+      throw $e;
+    }
   }
 
 }

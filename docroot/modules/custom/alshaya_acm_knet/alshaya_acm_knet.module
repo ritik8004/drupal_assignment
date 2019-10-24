@@ -42,6 +42,8 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     // Log message in watchdog.
     \Drupal::logger('alshaya_acm_knet')->error($e->getMessage());
 
+    \Drupal::service('alshaya_acm.cart_helper')->cancelCartReservation($e->getMessage());
+
     // Show generic message to user.
     drupal_set_message(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'), 'error');
 
