@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from "react-slick";
 import { ImageWrapper } from '../imageHelper/ImageWrapper';
 import ImageLazyLoad from '../imageHelper/ImageLazyLoad';
+import { updateAfter } from '../../../utils';
 
 const SliderElement = props => {
   return(
@@ -56,7 +57,7 @@ class SearchGallery extends React.Component {
     const obj = this;
     this.setTimeoutConst = setTimeout(function() {
       obj.setState({ mainImage: obj.mainImage });
-    }, 500);
+    }, updateAfter);
   };
 
   render() {

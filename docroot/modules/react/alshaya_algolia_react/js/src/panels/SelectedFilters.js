@@ -1,20 +1,23 @@
 import React, { useRef, useEffect }  from 'react';
+import { updateAfter } from '../utils';
 
 const SelectedFilters = (props) => {
   const selectedFilterRef = useRef();
 
   useEffect(() => {
     setTimeout(() => {
-      // Hide selected filters div when theere are not selected filters.
-      const selectedFilters = selectedFilterRef.current;
-      if (selectedFilters.querySelector('li') === null) {
-        selectedFilters.style.display = 'none';
-      }
-      else {
-        selectedFilters.style.display = 'block';
-      }
+      if (typeof selectedFilterRef.current === 'object' && selectedFilterRef.current !== null) {
+        // Hide selected filters div when theere are not selected filters.
+        const selectedFilters = selectedFilterRef.current;
 
-    }, 500);
+        if (selectedFilters.querySelector('li') === null) {
+          selectedFilters.style.display = 'none';
+        }
+        else {
+          selectedFilters.style.display = 'block';
+        }
+      }
+    }, updateAfter);
   });
 
   return (
