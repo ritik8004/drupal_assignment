@@ -3,6 +3,7 @@ import React from 'react';
 import EmptyCart from '../empty-cart';
 import CartTotalSubTotal from '../cart-total-subtotal';
 import CartOutOfStock from '../cart-oos';
+import CartRecommendedProducts from '../recommended-products';
 
 export default class Cart extends React.Component {
 
@@ -33,7 +34,7 @@ export default class Cart extends React.Component {
       this.setState(state => ({
         items: data.items,
         totals: data.totals,
-        recommended_products: { },
+        recommended_products: data.recommended_products,
         total_items: data.items_qty,
         wait: false,
         in_stock: in_stock
@@ -50,6 +51,7 @@ export default class Cart extends React.Component {
         <div>
           <CartOutOfStock in_stock={this.state.in_stock} />
           <CartTotalSubTotal totals={this.state.totals} in_stock={this.state.in_stock}></CartTotalSubTotal>
+          <CartRecommendedProducts recommended_products={this.state.recommended_products} />
         </div>
       );
   }
