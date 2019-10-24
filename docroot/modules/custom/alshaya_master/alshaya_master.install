@@ -18,6 +18,9 @@ function alshaya_master_update_8032() {
     'Your search did not return any results.' => [
       'ar' => 'لا يوجد نتائج لبحثك',
     ],
+    'Search results' => [
+      'ar' => 'نتائج البحث',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1584,6 +1587,9 @@ function alshaya_master_install() {
     ],
     'Your search did not return any results.' => [
       'ar' => 'لا يوجد نتائج لبحثك',
+    ],
+    'Search results' => [
+      'ar' => 'نتائج البحث',
     ],
     'Your order will be available for pickup at the following store' => [
       'ar' => 'طلبيتك ستكون جاهزة للاستلام في هذا المحل',
