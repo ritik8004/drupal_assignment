@@ -14,6 +14,8 @@
 
   @include breakpoint($upto-palm) {
     padding: 0.625rem;
+    line-height: 0;
+    padding-top: 0.9375rem;
 
     html[lang=ar] & {
       width: 35%;

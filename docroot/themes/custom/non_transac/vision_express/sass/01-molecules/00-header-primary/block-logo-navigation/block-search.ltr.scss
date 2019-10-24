@@ -67,6 +67,14 @@
 
     @include breakpoint($upto-lap) {
       top: 0.125rem;
+
+      @include icon(chevron#{$right}, after) {
+        color: $show-more-icon;
+        position: absolute;
+        font-size: 2.1875rem;
+        #{$right}: 0;
+        z-index: 0;
+      }
     }
 
     .form-submit {
@@ -80,6 +88,9 @@
 
       @include breakpoint($upto-lap) {
         height: 2.1875rem;
+        background: none;
+        position: relative;
+        z-index: 100;
       }
     }
   }
