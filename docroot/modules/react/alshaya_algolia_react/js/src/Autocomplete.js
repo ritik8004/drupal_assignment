@@ -3,6 +3,7 @@ import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
 import CustomHighlight from './components/algolia/CustomHighlight';
 import { getCurrentSearchQuery } from './utils';
+import Portal from './components/Portal/Portal';
 
 class Autocomplete extends React.Component {
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
@@ -27,9 +28,6 @@ class Autocomplete extends React.Component {
 
   // On change send value to parent component to update search results.
   onChange = (event, { newValue }) => {
-    if (!newValue) {
-      this.props.onSuggestionCleared();
-    }
     this.setState({
       value: newValue,
     });
@@ -60,6 +58,27 @@ class Autocomplete extends React.Component {
     return (value.trim() === '') || (window.innerWidth < 768);
   }
 
+  clearSearchFieldInput = (event) => {
+    // Empty State & Input.
+    this.reactSearchBlock[0].classList.remove('clear-icon');
+    let searchInput = this.reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
+    // Clear sate value and suggestions.
+    this.setState({value: ''});
+    this.onSuggestionsClearRequested();
+    // Set query to empty to hide the search results and update the browser hash.
+    this.props.onChange('');
+    // Keep focus.
+    searchInput[0].focus();
+  };
+
+  backIconClickEvent = (event) => {
+    this.reactSearchBlock[0].classList.remove('show-algolia-search-bar');
+    let mobileSearchInNav = document.getElementsByClassName('search-active');
+    if (mobileSearchInNav.length !== 0) {
+      mobileSearchInNav[0].classList.remove('search-active');
+    }
+  };
+
   render() {
     const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
     const { value } = this.state;
@@ -85,6 +104,18 @@ class Autocomplete extends React.Component {
           renderSuggestion={this.renderSuggestion}
           shouldRenderSuggestions={this.shouldRenderSuggestions}
           inputProps={inputProps}
+        />
+        <Portal
+          onclick={(event) => this.backIconClickEvent(event)}
+          className="algolia-search-back-icon"
+          id="react-algolia-searchbar-back-button"
+          query=""
+        />
+        <Portal
+          onclick={(event) => this.clearSearchFieldInput(event)}
+          className="algolia-search-cleartext-icon"
+          id="react-algolia-searchbar-clear-button"
+          query=""
         />
       </React.Fragment>
     );
