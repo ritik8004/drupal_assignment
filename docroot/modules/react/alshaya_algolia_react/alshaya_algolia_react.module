@@ -23,3 +23,10 @@ function alshaya_algolia_react_node_view(array &$build, EntityInterface $entity,
     $build['#attached']['library'][] = 'alshaya_algolia_react/search_insights_detail';
   }
 }
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_algolia_react_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $reset[] = 'block.block.alshayaalgoliareactautocomplete';
+}

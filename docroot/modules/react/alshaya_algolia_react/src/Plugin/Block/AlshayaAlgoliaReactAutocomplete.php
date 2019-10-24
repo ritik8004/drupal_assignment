@@ -127,7 +127,6 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
    */
   public function build() {
     $lang = $this->languageManager->getCurrentLanguage()->getId();
-    $algolia_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
     $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
     // Get current index name.
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
@@ -150,8 +149,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
         ],
         'drupalSettings' => [
           'algoliaSearch' => [
-            'application_id' => $algolia_config['application_id'],
-            'api_key' => $algolia_config['api_key'],
+            'application_id' => $configuration['application_id'],
+            'api_key' => $configuration['search_api_key'],
             'indexName' => $index_name,
             'filterOos' => $listing->get('filter_oos_product'),
             'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
@@ -320,6 +319,20 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $config = $this->getConfiguration();
     $form = parent::buildConfigurationForm($form, $form_state);
 
+    $form['application_id'] = [
+      '#title' => $this->t('Application id'),
+      '#type' => 'textfield',
+      '#default_value' => $config['application_id'] ?? '',
+      '#required' => TRUE,
+    ];
+
+    $form['search_api_key'] = [
+      '#title' => $this->t('Search api key.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['search_api_key'] ?? '',
+      '#required' => TRUE,
+    ];
+
     $form['hits'] = [
       '#type' => 'number',
       '#min' => 1,
@@ -351,6 +364,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
 
     $this->configuration['hits'] = $form_state->getValue('hits');
     $this->configuration['top_results'] = $form_state->getValue('top_results');
+    $this->configuration['search_api_key'] = $form_state->getValue('search_api_key');
+    $this->configuration['application_id'] = $form_state->getValue('application_id');
 
     parent::submitConfigurationForm($form, $form_state);
   }
