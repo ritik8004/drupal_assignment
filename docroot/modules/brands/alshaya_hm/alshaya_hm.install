@@ -14,6 +14,22 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Translations for sku code label.
+ */
+function alshaya_hm_update_8040() {
+  $strings = [
+    'ART NO' => [
+      'en' => 'Art. no.',
+      'ar' => 'فن. لا.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update meta variables.
  */
 function alshaya_hm_update_8039() {
@@ -733,6 +749,10 @@ function alshaya_hm_install() {
     'READ MAGAZINE' => [
       'en' => 'READ H&M MAGAZINE',
       'ar' => 'اقرأ مجلة اتش آند ام',
+    ],
+    'ART NO' => [
+      'en' => 'Art. no.',
+      'ar' => 'فن. لا.',
     ],
   ];
 
