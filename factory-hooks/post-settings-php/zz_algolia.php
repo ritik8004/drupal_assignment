@@ -19,4 +19,4 @@ $config['search_api.index.acquia_search_index']['options']['algolia_index_name']
 $settings['search_api.server.algolia']['backend_config']['application_id'] = 'testing24192T8KHZ';
 $settings['search_api.server.algolia']['backend_config']['api_key'] = '628e74a9b6f3817cdd868278c8b8656e';
 $settings['block.block.alshayaalgoliareactautocomplete']['settings']['application_id'] = 'testing24192T8KHZ';
-$settings['block.block.alshayaalgoliareactautocomplete']['settings']['search_api_key'] = '802d49d16cb8eb80897bc514b12b388f';
+$settings['block.block.alshayaalgoliareactautocomplete']['settings']['search_api_key'] = 'afeb84ab13757e11fbe8765142e2d7ad';
