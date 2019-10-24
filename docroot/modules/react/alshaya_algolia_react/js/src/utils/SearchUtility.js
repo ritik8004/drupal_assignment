@@ -39,5 +39,4 @@ function toggleSearchResultsContainer(query) {
     : showSearchResultContainer();
 }
 
-
 export {contentDiv, searchResultDiv, toggleSearchResultsContainer};

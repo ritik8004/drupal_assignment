@@ -33,7 +33,6 @@ const SearchResults = props => {
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
   const indexName = drupalSettings.algoliaSearch.indexName;
-  Drupal.algoliaReact.facetEffects();
 
   return (
     <InstantSearch

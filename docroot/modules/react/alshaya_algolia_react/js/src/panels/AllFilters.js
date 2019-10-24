@@ -10,12 +10,11 @@ const AllFilters = (props) => {
   const allFiltersRef = useRef();
 
   useEffect(() => {
-    // @todo: Check if we can avoid setTimeout and usage of updateAfter.
+    // Show selected with title accordion of filter, for the "All Filters"
+    // main display, Which toggles with sliding effect from right side and
+    // also used for mobile.
     setTimeout(() => {
-      // Show selected with title accordion of filter, for the "All Filters"
-      // main display, Which toggles with sliding effect from right side and
-      // also used for mobile.
-      if (typeof allFiltersRef.current == 'object') {
+      if (typeof allFiltersRef.current == 'object' && allFiltersRef.current !== null) {
         const filters = allFiltersRef.current.querySelectorAll('.c-collapse-item');
 
         let hasSelection = false;

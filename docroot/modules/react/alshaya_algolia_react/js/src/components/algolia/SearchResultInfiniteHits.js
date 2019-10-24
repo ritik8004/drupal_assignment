@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { connectInfiniteHits } from 'react-instantsearch-dom';
 
 import Teaser from '../teaser/Teaser';
+import { updateAfter } from '../../utils';
 
 export default connectInfiniteHits(props => {
   const { hits, hasMore, refineNext } = props;
@@ -11,8 +12,8 @@ export default connectInfiniteHits(props => {
   // Get height of each article and set the max height to all article tags.
   useEffect(
     () => {
-      if (typeof teaserRef.current != 'undefined') {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
           var elements = teaserRef.current.getElementsByTagName('article');
           if (elements.length > 0) {
             Array.prototype.forEach.call(elements, element => {
@@ -29,9 +30,9 @@ export default connectInfiniteHits(props => {
               });
             }
           }
-        }, 500);
-        Drupal.algoliaReact.stickyfacetfilter();
-      }
+          Drupal.algoliaReact.stickyfacetfilter();
+        }
+      }, updateAfter);
     }, [hits]
   );
 

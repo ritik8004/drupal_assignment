@@ -8,11 +8,10 @@ const StickyFilter = (props) => {
   const stickyFiltersRef = useRef();
 
   useEffect(() => {
-    // @todo: Check if we can avoid setTimeout and usage of updateAfter.
+    // Show only maximum 4 filters for desktop sticky filter
+    // excluding the sort by, (with sort by 5).
     setTimeout(() => {
-      // Show only maximum 4 filters for desktop sticky filter
-      // excluding the sort by, (with sort by 5).
-      if (typeof stickyFiltersRef.current == 'object') {
+      if (typeof stickyFiltersRef.current == 'object' && stickyFiltersRef.current !== null) {
         const filters = stickyFiltersRef.current.querySelectorAll('.c-collapse-item');
         let activeFilters = [];
         filters.forEach(element => {
@@ -41,13 +40,19 @@ const StickyFilter = (props) => {
         else {
           stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.remove('hide-for-desktop');
         }
+
+        Drupal.algoliaReact.facetEffects();
+        if ($(window).width() > 767 && stickyFiltersRef.current.parentNode.querySelector('.site-brand-home') === null) {
+          var site_brand = $('.site-brand-home').clone();
+          $(site_brand).insertBefore(stickyFiltersRef.current);
+        }
       }
     }, updateAfter);
   }, [props.children]);
 
   return (
     <div className="sticky-filter-wrapper">
-        <div className="container-without-product" ref={stickyFiltersRef}>
+      <div className="container-without-product" ref={stickyFiltersRef}>
           {props.children}
       </div>
     </div>

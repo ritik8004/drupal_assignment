@@ -27,7 +27,10 @@
           $(facet_block).find('ul').slideUp();
         }
       });
-      Drupal.algoliaReact.facetEffects();
+
+      if ($('#alshaya-algolia-search').length > 0) {
+        Drupal.algoliaReact.facetEffects();
+      }
     }
   };
 
@@ -54,7 +57,7 @@
   Drupal.algoliaReact.facetEffects = function () {
     // On clicking facet block title, update the title of block and hide
     // other facets.
-    $('.all-filters-algolia .c-collapse-item').once().on('click', function() {
+    $('.all-filters-algolia .c-collapse-item').once('algolia-search').on('click', function() {
       var all_filters = $(this).parents('.all-filters-algolia');
       // Update the title on click of facet.
       var facet_title = $(this).find('h3.c-facet__title').html();
@@ -73,7 +76,7 @@
 
     // On clicking on back button, reset the block title and add class so
     // that facet blocks can be closed.
-    $('.all-filters-algolia .back-facet-list').once().on('click', function() {
+    $('.all-filters-algolia .back-facet-list').once('algolia-search').on('click', function() {
       var all_filters = $(this).parents('.all-filters-algolia');
       $(this).hide();
       $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
@@ -85,7 +88,7 @@
     });
 
     // Grid switch for PLP and Search pages.
-    $('#alshaya-algolia-search .small-col-grid').once().on('click', function () {
+    $('#alshaya-algolia-search .small-col-grid').once('algolia-search').on('click', function () {
       var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
       $('.large-col-grid', algolia_wrapper).removeClass('active');
       $(this).addClass('active');
@@ -95,7 +98,7 @@
       Drupal.listingProductTileHeight();
     });
 
-    $('#alshaya-algolia-search .large-col-grid').once().on('click', function () {
+    $('#alshaya-algolia-search .large-col-grid').once('algolia-search').on('click', function () {
       var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
       $('.small-col-grid', algolia_wrapper).removeClass('active');
       $(this).addClass('active');
@@ -107,7 +110,7 @@
 
 
     // Add dropdown effect for facets filters.
-    $('.c-facet__title.c-collapse__title').once().on('click', function () {
+    $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
       if ($(this).hasClass('active')) {
         $(this).removeClass('active');
         // We want to run this only on main page facets.
@@ -128,7 +131,7 @@
       }
     });
 
-    $('.sticky-filter-wrapper .show-all-filters-algolia').once().on('click', function() {
+    $('.sticky-filter-wrapper .show-all-filters-algolia').once('algolia-search').on('click', function() {
       $('.all-filters-algolia').addClass('filters-active');
 
       if ($(window).width() > 1023) {
@@ -154,13 +157,11 @@
     });
 
     // Fake facet apply button to close the `all filter`.
-    $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once().on('click', function() {
+    $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once('algolia-search').on('click', function() {
       $('.all-filters-algolia').removeClass('filters-active');
       $('body').removeClass('mobile--overlay');
       $('html').removeClass('all-filters-overlay');
     });
-
-    stickyfacetwrapper();
   };
 
   /**
@@ -217,7 +218,7 @@
       }
       else {
         if ($('.region__content > .all-filters-algolia').length < 1) {
-          $('.all-filters-algolias').insertAfter('#block-page-title');
+          $('.all-filters-algolia').insertAfter('#block-page-title');
         }
       }
     }
