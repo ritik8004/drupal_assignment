@@ -1,4 +1,5 @@
 export {
+  searchStateToURL,
   getCurrentSearchQueryString,
   getCurrentSearchQuery,
   updateSearchQuery,

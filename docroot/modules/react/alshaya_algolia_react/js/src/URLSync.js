@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import qs from 'qs';
-import { updateAfter, getCurrentSearchQueryString, updateSearchQuery } from './utils';
-
-const searchStateToURL = searchState => {
-  return searchState.query ? qs.stringify(searchState) : '';
-}
+import {
+  updateAfter,
+  getCurrentSearchQueryString,
+  updateSearchQuery,
+  searchStateToURL
+} from './utils';
 
 const withURLSync = SearchResults =>
   class WithURLSync extends Component {
@@ -12,6 +12,10 @@ const withURLSync = SearchResults =>
       super(props);
       let searchState = getCurrentSearchQueryString();
       delete searchState.page;
+      if (!Object.keys(searchState).length) {
+        searchState = {'query': props.query};
+        this.updateBrowserHash({'query': props.query});
+      }
       this.state = {
         searchState: searchState,
       };
@@ -42,14 +46,16 @@ const withURLSync = SearchResults =>
       if (searchState.query.trim() === '') {
         searchState = {};
       }
+      this.updateBrowserHash(searchState);
+      this.setState({ searchState });
+    };
 
+    updateBrowserHash = (searchState) => {
       clearTimeout(this.debouncedSetState);
       this.debouncedSetState = setTimeout(() => {
         updateSearchQuery(searchStateToURL(searchState));
       }, updateAfter);
-
-      this.setState({ searchState });
-    };
+    }
 
     render() {
       const { searchState } = this.state;

@@ -42,8 +42,7 @@ const SearchResults = props => {
       createURL={props.createURL}
       onSearchStateChange={props.onSearchStateChange}
     >
-      <Configure clickAnalytics />
-      <Configure hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
+      <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       {hasCategoryFilter() && (
         <SideBar>
           <ul>
