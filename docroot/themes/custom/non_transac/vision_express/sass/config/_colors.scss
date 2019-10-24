@@ -33,6 +33,9 @@ $sub-link-active: $brand;
 // footer-primary
 $footer-primary-bg: $white-smoke;
 
+// footer-secondary
+$footer-secondary: rgba(242, 242, 242, 0.4);
+
 // footer-tertiary
 $footer-tertiary-bg: $grey;
 $footer-text: $white;
@@ -45,3 +48,9 @@ $slick-dot-active-bg: $brand;
 // Promo Block
 $image-title-subtitle-bg: $white-smoke;
 $show-more-icon: $brand;
+
+// Footer language switcher
+$language-switcher: $white;
+$language-link-bg: $black;
+$language-link: $white;
+$close-bg: $brand;

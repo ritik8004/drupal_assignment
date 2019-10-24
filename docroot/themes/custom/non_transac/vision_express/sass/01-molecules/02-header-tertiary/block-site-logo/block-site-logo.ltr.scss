@@ -4,9 +4,10 @@
   margin: 0;
   display: inline-block;
   height: auto;
+  line-height: 0;
 
   @include breakpoint($upto-lap) {
-    width: 56%;
+    width: 11.25rem;
     display: block;
     margin: auto;
     padding-top: 0.625rem;
@@ -14,6 +15,7 @@
 
   @include breakpoint($upto-palm) {
     padding: 0.625rem;
+    padding-top: 0.9375rem;
 
     html[lang=ar] & {
       width: 35%;

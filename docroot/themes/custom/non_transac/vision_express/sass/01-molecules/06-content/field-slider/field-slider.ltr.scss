@@ -18,7 +18,7 @@
   .slick-next,
   .slick-prev {
     outline: 0;
-    top: 35% !important;
+    top: 42% !important;
 
     &::before {
       color: $slick-arrow;
@@ -40,6 +40,11 @@
   }
 
   .slick-dots {
+    @include breakpoint($upto-palm) {
+      margin-top: -0.9375rem;
+      margin-bottom: 0.9375rem;
+    }
+
     @include breakpoint($desk) {
       display: none !important;
     }
@@ -52,5 +57,18 @@
         background: $slick-dot-active-bg;
       }
     }
+  }
+}
+
+@include breakpoint($desk) {
+  .node-advanced-page {
+    .slick-slider .slick-list {
+      min-height: 100%;
+    }
+  }
+
+  .field__slider {
+    max-width: 120rem;
+    margin: auto;
   }
 }
