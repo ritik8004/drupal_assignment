@@ -35,13 +35,12 @@ class SearchGallery extends React.Component {
     this.settings = {
       dots: false,
       infinite: false,
-      speed: 500,
       slidesToShow: drupalSettings.reactTeaserView.gallery.plp_slider.item,
       slidesToScroll: 1,
       vertical: false,
       arrows: true,
       touchThreshold: 1000,
-      variableWidth: true,
+      variableWidth: false,
     };
   }
 
@@ -75,6 +74,8 @@ class SearchGallery extends React.Component {
       ));
     });
 
+    const sliderStatus = thumbnails.length > this.settings.slidesToShow ? 'true' : 'false';
+
     return (
       <div className="alshaya_search_gallery">
         <ImageWrapper
@@ -83,7 +84,7 @@ class SearchGallery extends React.Component {
           className='alshaya_search_mainimage'
           showDefaultImage={true}
         />
-        <div className="alshaya_search_slider">
+        <div className="alshaya_search_slider" data-slider-status={sliderStatus}>
           <Slider {...this.settings} className="search-lightSlider">
             {thumbnails}
           </Slider>
