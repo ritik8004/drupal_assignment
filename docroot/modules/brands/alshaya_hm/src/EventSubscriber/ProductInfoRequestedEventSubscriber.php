@@ -179,6 +179,16 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $description_value .= '</div>';
     }
 
+    // Render SKU id for magazine layou on PDP.
+    if (!empty($sku_entity->getSku())) {
+      $item_code = [
+        '#theme' => 'product_item_code_markup',
+        '#title' => $this->t('ART NO'),
+        '#item_code' => $sku_entity->getSku(),
+      ];
+      $description_value .= $this->renderer->renderPlain($item_code);
+    }
+
     // Render the wrapper div for article warning always so that the same
     // can be filled with data on variant selection.
     $warning = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
