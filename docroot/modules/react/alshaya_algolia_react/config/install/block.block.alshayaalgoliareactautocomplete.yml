@@ -18,4 +18,6 @@ settings:
   label_display: '0'
   hits: '4'
   top_results: '4'
+  application_id: ''
+  search_api_key: ''
 visibility: {  }
