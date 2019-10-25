@@ -322,23 +322,6 @@ class AlshayaAlgoliaIndexHelper {
         }
 
         $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
-        // Break the loop if any level of term is disabled or the term is not
-        // included in menu.
-        if ($term->get('field_commerce_status')->getString() !== '1' || $term->get('field_category_include_menu')->getString() !== '1') {
-          // Remove the parent hierarchy, If the hierarchy initiated for this
-          // specific loop.
-          if (empty($list[$parent_key]["lvl{$i}"])) {
-            $previous = $i - 1;
-            if (is_string($list[$parent_key]["lvl{$previous}"])) {
-              unset($list[$parent_key]["lvl{$previous}"]);
-              if (empty($list[$parent_key])) {
-                unset($list[$parent_key]);
-              }
-            }
-          }
-          break;
-        }
-
         $temp_list[] = $term->label();
         $current_value = implode(' > ', $temp_list);
 
