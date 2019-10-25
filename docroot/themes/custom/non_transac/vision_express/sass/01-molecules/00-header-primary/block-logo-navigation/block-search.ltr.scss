@@ -17,6 +17,10 @@
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 0 $content-text;
       background: $form-search-bg;
+
+      &.form-autocomplete {
+        background-image: none;
+      }
     }
 
     .input__line {
@@ -122,5 +126,34 @@
 
   @include breakpoint($upto-lap) {
     height: 2.1875rem;
+  }
+}
+
+.ui-autocomplete {
+  background-color: $ui-autocomplete-bg;
+  max-height: 21.875rem;
+  overflow-y: auto;
+
+  @include breakpoint($upto-palm) {
+    max-height: 12.5rem;
+  }
+
+  .ui-menu-item {
+    border-bottom: 1px solid $primary-border;
+
+    a {
+      display: block;
+
+      .search-api-autocomplete-suggestion {
+        padding: 0.625rem 0.3125rem;
+      }
+
+      &.ui-state-active {
+        .search-api-autocomplete-suggestion {
+          background-color: $ui-autocomplete-list-active-bg;
+          color: $ui-autocomplete-list-active;
+        }
+      }
+    }
   }
 }
