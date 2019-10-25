@@ -81,7 +81,7 @@
             return;
           }
 
-          $(node).find('.price-block').html(variantInfo.price);
+          $('.price-block-' + drupalSettings.productInfo[sku].identifier, node).html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
             Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
