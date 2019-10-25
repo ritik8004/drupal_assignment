@@ -1,58 +1,42 @@
-import React from 'react';
-import FilterPanel from './FilterPanel';
-import SortByList from './SortByList';
-import ColorFilter from './widgets/ColorFilter';
-import RefinementList from './widgets/RefinementList';
-import PriceFilter from './widgets/PriceFilter';
+import React, { useState, useRef } from 'react';
 import { getFilters } from '../utils';
+import WidgetManager from './widgets/WidgetManager';
 
-/**
- * Decide and return which widget to render based on Drupal widget types.
- *
- * @param {Array} filter
- *   The array of filter, with name, identifier and widget as key.
- * @param {String} indexName
- *   The current index name.
- */
-function renderWidget(filter, indexName) {
-  var currentWidget = '';
-  var className = '';
-  switch (filter.widget.type) {
-    case 'sort_by':
-      currentWidget = <SortByList defaultRefinement={indexName} items={filter.widget.items}/>;
-      break;
-
-    case 'swatch_list':
-      className = 'block-facet--swatch-list';
-      currentWidget = <ColorFilter attribute={`${filter.identifier}.label`} searchable={false} />;
-      break;
-
-    case 'range_checkbox':
-      currentWidget = <PriceFilter attribute={filter.identifier} granularity={filter.widget.config.granularity} />;
-      break;
-
-    case 'checkbox':
-    default:
-      currentWidget = <RefinementList attribute={filter.identifier} searchable={false} />;
-  }
-
-  return (
-    <FilterPanel header={filter.label} id={filter.identifier} className={className}>
-      {currentWidget}
-    </FilterPanel>
-  )
-}
-
-export default ({indexName}) => {
+export default ({indexName, ...props}) => {
+  const [filterCounts, setfilters] = useState([]);
+  const ref = useRef();
   // Loop through all the filters given in config and prepare an array of filters.
   var facets = [];
+
+  const updateFilterResult = (itm) => {
+    filterCounts[itm.attr] = itm.count;
+    setfilters(filterCounts);
+    if (typeof ref.current == 'object' && ref.current !== null) {
+      const filters = ref.current.querySelectorAll('.c-collapse-item');
+      let activeFilters = [];
+      filters.forEach(element => {
+        const children = element.getElementsByTagName('ul')[0];
+
+        if (typeof children !== 'undefined' && children.querySelector('li') === null) {
+          element.classList.add('hide-facet-block');
+        }
+        else {
+          activeFilters.push(element);
+          element.classList.remove('hide-facet-block');
+        }
+      });
+
+      props.callback({activeFilters, filterCounts, ...props});
+    }
+  }
+
   getFilters().forEach(facet => {
-    facets.push(renderWidget(facet, indexName));
+    facets.push(<WidgetManager facet={facet} indexName={indexName} filterResult={(test) => updateFilterResult(test)} />);
   });
 
   return (
-    <React.Fragment>
+    <div ref={ref}>
       {facets}
-    </React.Fragment>
+    </div>
   );
 }

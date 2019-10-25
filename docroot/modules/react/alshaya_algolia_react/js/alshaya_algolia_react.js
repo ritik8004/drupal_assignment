@@ -77,6 +77,7 @@
     // On clicking on back button, reset the block title and add class so
     // that facet blocks can be closed.
     $('.all-filters-algolia .back-facet-list').once('algolia-search').on('click', function() {
+      $('.c-collapse-item', all_filters).find('ul').hide();
       var all_filters = $(this).parents('.all-filters-algolia');
       $(this).hide();
       $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));

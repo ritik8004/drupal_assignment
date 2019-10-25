@@ -5,6 +5,10 @@ import connectRefinementList from './connectors/connectRefinementList';
 function CommonRefinement(props) {
   const { items, attribute, refine } = props;
 
+  if (typeof props.itemCount != 'undefined') {
+    props.itemCount(attribute, items.length);
+  }
+
   return (
     <ul>
       {items.map(item => (

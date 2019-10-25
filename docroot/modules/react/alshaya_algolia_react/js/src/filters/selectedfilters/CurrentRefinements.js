@@ -1,12 +1,14 @@
-import React, { useRef, useEffect }  from 'react';
+import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import FiltersLabels from './FiltersLabels';
 import ClearRefinements from './ClearFilters';
 const _ = require("lodash");
 
-export default connectCurrentRefinements(({ items, refine }) => {
+export default connectCurrentRefinements(({ items, refine, ...props }) => {
  const uniqueItems = _.uniqBy(items, 'attribute');
-  return(
+ props.callback(uniqueItems.length);
+
+ return(
     <ul>
       {
         uniqueItems.map(item => {
