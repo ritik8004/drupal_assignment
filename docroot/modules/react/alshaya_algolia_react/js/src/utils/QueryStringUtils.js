@@ -18,11 +18,16 @@ function updateSearchQuery(queryValue) {
   history.push({hash: queryValue});
 }
 
+function searchStateToURL(searchState) {
+  return searchState.query ? qs.stringify(searchState) : '';
+}
+
 function isMobile() {
   return (window.innerWidth < 768);
 }
 
 export {
+  searchStateToURL,
   getCurrentSearchQueryString,
   getCurrentSearchQuery,
   updateSearchQuery,
