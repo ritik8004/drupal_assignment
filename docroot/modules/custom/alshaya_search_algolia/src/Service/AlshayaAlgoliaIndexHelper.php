@@ -308,7 +308,7 @@ class AlshayaAlgoliaIndexHelper {
     $list = [];
     foreach ($categories as $category) {
       // Skip the term which is disabled.
-      if ($category->get('field_commerce_status')->getString() !== '1') {
+      if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
         continue;
       }
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
@@ -324,7 +324,7 @@ class AlshayaAlgoliaIndexHelper {
         $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
         // Break the loop if any level of term is disabled or the term is not
         // included in menu.
-        if ($term->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
+        if ($term->get('field_commerce_status')->getString() !== '1' || $term->get('field_category_include_menu')->getString() !== '1') {
           // Remove the parent hierarchy, If the hierarchy initiated for this
           // specific loop.
           if (empty($list[$parent_key]["lvl{$i}"])) {
