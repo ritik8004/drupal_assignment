@@ -357,8 +357,19 @@ select:-webkit-autofill {
   display: inline-block;
 }
 
-.mobile-only-block {
+.mobile-only-block,
+.tablet-upto-block {
   display: none;
+}
+
+@include breakpoint($upto-lap) {
+  .desktop-only-block {
+    display: none;
+  }
+
+  .tablet-upto-block {
+    display: block;
+  }
 }
 
 @include breakpoint($upto-palm) {
