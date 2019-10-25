@@ -1,8 +1,8 @@
 import { hasCategoryFilter } from './FilterUtils';
 
-var contentDiv = document.querySelector('.page-standard main');
+const contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
-var searchResultDiv = document.createElement('div');
+const searchResultDiv = document.createElement('div');
 searchResultDiv.id = 'alshaya-algolia-search';
 searchResultDiv.style.display = 'none';
 contentDiv.parentNode.insertBefore( searchResultDiv, contentDiv.nextSibling );
@@ -34,7 +34,7 @@ function hideSearchResultContainer() {
 }
 
 function toggleSearchResultsContainer(query) {
-  (typeof query === 'undefined' || query == '')
+  (typeof query === 'undefined' || query === '')
     ? hideSearchResultContainer()
     : showSearchResultContainer();
 }

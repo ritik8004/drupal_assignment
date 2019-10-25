@@ -5,7 +5,7 @@ const ImageElement = lazy(() => import('./ImageElement'));
 const ImageLazyLoad = (props) => {
   const {src, title, alt, ...otherProps} = props;
 
-  if (src == '') {
+  if (src === '') {
     return (null);
   }
 

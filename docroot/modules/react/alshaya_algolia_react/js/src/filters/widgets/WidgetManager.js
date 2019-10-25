@@ -4,7 +4,6 @@ import SortByList from '../SortByList';
 import ColorFilter from './ColorFilter';
 import RefinementList from './RefinementList';
 import PriceFilter from './PriceFilter';
-import { getFilters } from '../../utils';
 import renderWidget from './RenderWidget';
 
 class WidgetManager extends React.Component {
@@ -21,11 +20,11 @@ class WidgetManager extends React.Component {
 
       case 'swatch_list':
         className = 'block-facet--swatch-list';
-        currentWidget = <ColorFilter attribute={`${filter.identifier}.label`} searchable={false} />;
+        currentWidget = <ColorFilter attribute={`${filter.identifier}.label`} searchable={false} itemCount={this.props.itemCount} />;
         break;
 
       case 'range_checkbox':
-        currentWidget = <PriceFilter attribute={filter.identifier} granularity={filter.widget.config.granularity} />;
+        currentWidget = <PriceFilter attribute={filter.identifier} granularity={filter.widget.config.granularity} itemCount={this.props.itemCount} />;
         break;
 
       case 'checkbox':

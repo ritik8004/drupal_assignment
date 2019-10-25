@@ -1,3 +1,4 @@
+import React from 'react';
 import { connectHierarchicalMenu } from 'react-instantsearch-dom';
 
 const HierarchicalMenu = ({ items, refine, createURL }) => (

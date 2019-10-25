@@ -9,7 +9,7 @@ const Highlight = ({ highlight, attribute, hit, suffix }) => {
   });
 
   return (
-    <div className="aa-suggestion" role="option">
+    <div className="aa-suggestion">
       <span className="suggested-text">
         {parsedHit.map(
           (part, index) =>

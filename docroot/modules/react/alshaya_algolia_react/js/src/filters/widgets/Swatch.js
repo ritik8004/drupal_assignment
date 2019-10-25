@@ -11,7 +11,6 @@ export default function Swatch({ swatch, label }) {
   switch(swatch_type) {
     case 'swatch_color':
       return (<span className={`swatch swatch-color swatch-color-${swatch_data.substr(1)}`} style={{ backgroundColor: swatch_data}}></span>);
-      break;
 
     case 'swatch_image':
       return (
@@ -19,12 +18,11 @@ export default function Swatch({ swatch, label }) {
           <ImageElement src={swatch_data} title={label} />
         </span>
       );
-      break;
 
     case 'swatch_text':
+    default:
       return (
         <span className="swatch swatch-text">{swatch_data}</span>
       );
-      break;
   }
 }

@@ -10,9 +10,6 @@ import React from 'react';
  */
 const renderWidget = WidgetManager =>
   class RenderWidget extends React.Component {
-    constructor(props) {
-      super(props);
-    }
 
     updateItemCount = (attr, count) => {
       this.props.filterResult({'attr': attr, count: count});

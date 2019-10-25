@@ -1,5 +1,5 @@
 export function getPriceRangeLabel(value) {
-  if (value == '') {
+  if (value === '') {
     return (null);
   }
   const [startStr, endStr] = value.split(':');
@@ -7,7 +7,7 @@ export function getPriceRangeLabel(value) {
   const startPrice = (startStr !== '') ? parseFloat(startStr) : 0;
   const endPrice = parseFloat(endStr);
 
-  var label = (startStr == '')
+  var label = (startStr === '')
     ? Drupal.t('under @stop', {'@stop': formatPrice(endPrice)})
     : Drupal.t('@start - @stop', {
         '@start': formatPrice(startPrice),
@@ -35,7 +35,7 @@ export function formatPrice(price) {
     price.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)
   ];
 
-  return drupalSettings.reactTeaserView.price.currencyPosition == 'before'
+  return drupalSettings.reactTeaserView.price.currencyPosition === 'before'
     ? priceParts.map(item => item).join(' ')
     : priceParts.reverse().map(item => item).join(' ');
 }
