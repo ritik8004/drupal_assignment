@@ -47,6 +47,12 @@ libraries-extend:
     - vision_express/field-promo-block
   whitelabel/paragraph-title-textarea:
     - vision_express/paragraph-title-textarea
+  whitelabel/modal-email-signup:
+    - vision_express/modal-email-signup
+  whitelabel/form-element-textual:
+    - vision_express/form-element-textual
+
+
 
 libraries-override:
   whitelabel/menu-logo-navigation:

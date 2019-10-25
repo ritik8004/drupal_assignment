@@ -5,6 +5,7 @@ $white: #fff;
 $white-smoke: #f2f2f2;
 $grey: #777;
 $black-two: #000;
+$error: #d0011b;
 
 // Primary Color.
 $primary-border: $white-smoke;
@@ -12,6 +13,7 @@ $icon: $brand;
 $link: $black;
 $content-text: $black;
 $text: $black-two;
+$message-success: $brand;
 
 // Button.
 $btn-bg: $brand;
@@ -54,3 +56,27 @@ $language-switcher: $white;
 $language-link-bg: $black;
 $language-link: $white;
 $close-bg: $brand;
+
+// Form
+$form-search-bg: $white;
+$form-dropdown-icon: $brand;
+$form-tnc-text: $black-two;
+$form-input-placeholder-text: $grey;
+$form-input-text: $black-two;
+$form-input-bg: $white-smoke;
+$form-error-msg: $error;
+$form-feedback-subtitle: $brand;
+$form-btn-bg: $brand;
+$form-btn: $white;
+$form-label: $black;
+
+// Checkbox
+$checkbox-border: $brand;
+$checkbox-tick_mark: $brand;
+
+// Contact form
+$contact-form-bg: rgba(242, 242, 242, 0.4);
+
+// Modal
+$modal-bg: $white;
+$modal-overlay-bg: rgba(119, 119, 119, 0.8);
