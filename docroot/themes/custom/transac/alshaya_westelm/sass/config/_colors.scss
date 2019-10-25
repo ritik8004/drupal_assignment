@@ -13,6 +13,8 @@ $WE_gray_eight: #b3b3b3;
 $WE_gray_nine: #eaeaea;
 $WE_gray_ten: #a0a0a0;
 $WE_gray_eleven: #f0f0f0;
+$WE_gray_twelve: #eeee;
+$WE_shadow: rgba(128, 128, 128, 0.5);
 $WE_white: #fff;
 $WE_white_two: #f9f9f9;
 $WE_white_three: #f7f7f7;
@@ -24,7 +26,7 @@ $WE_message_green: #39b54a;
 $medium-green: #1da545;
 $WE_deep_red: #b61935;
 $WE_light_red: rgba(182, 25, 53, 0.15);
-$WE_warning_red: #cc0;
+$WE_warning_red: #d0011b;
 $WE_tint_red: #f65044;
 $tomato: #e6591b;
 $WE_deep_blue: #4285f4;
@@ -35,6 +37,9 @@ $roman_coffee: #81644b;
 // Global elements.
 $content_link_color: $WE_grey_two;
 $primary_link: $WE_grey_three;
+$primary_link-hover: $WE_grey_three;
+$primary_link-active: $WE_grey_three;
+$primary_text: $WE_grey_three;
 $primary_input_focus_border: $WE_grey_four;
 $secondary_link: $WE_grey_three;
 
@@ -94,8 +99,12 @@ $primary_dropdown_option_disbled: $WE_grey_two;
 $primary_dropdown_focus: $WE_gray_five;
 
 // Radio Buttons.
-$primary_radiobtn_filled: $WE_deep_blue;
-$primary_radiobtn_empty: $WE_black_one;
+$primary_radiobtn_filled: $WE_grey_three;
+$primary_radiobtn_empty: $WE_grey_two;
+
+// Checkbox & Radio.
+$primary_checkbox_empty: $WE_grey_two;
+$primary_checkbox_filled: $WE_grey_three;
 
 // Tables.
 $primary_th_bg: $WE_gray_eleven;
@@ -104,7 +113,12 @@ $primary_tr_hover: $WE_white_three;
 
 // Language Switcher
 $lang_switch: $WE_grey_three;
+$lang_switch_active: $WE_grey_three;
 $lang_switch_firsttime_bg: $WE_grey_three;
+$lang_switch_firsttime_border: $WE_tint_red;
+$lang_switch_firsttime_bg: $WE_white;
+$lang_switch_list: $WE_grey_three;
+$lang_switch_close_icon: $WE_grey_three;
 
 // Header - Top header.
 $header_secondary_bg: $WE_gray_six;
@@ -536,12 +550,17 @@ $store_finder_glossary_border: $WE_gray_five;
 $store_finder_glossary_link: $WE_grey_three;
 
 // Product Listing page & Search results page.
+$plp_facet_item_label: $WE_grey_three;
 $plp_tile_product_title_hover: $WE_grey_three;
 $plp_category_desc: $WE_grey_three;
 $plp_promotion_description: $WE_grey_three;
 $plp_sort_by_label: $WE_grey_three;
+$plp_sort_for_label: $WE_grey_two;
+$plp_facet_filter: $WE_grey_three;
 $plp_facet_filter_bg: $WE_grey_three;
 $plp_facet_filter_link: $WE_white_three;
+$plp_facet_border: $WE_gray_twelve;
+$plp_facet_wrapper_shadow: $WE_shadow;
 $plp_facet_clear_border: $WE_grey_three;
 $plp_facet_clear_bg: $WE_grey_three;
 $plp_facet_clear_text: $WE_grey_three;
@@ -549,8 +568,12 @@ $plp_facet_label_border_mobile: $WE_grey_three;
 $plp_facet_label_bg_mobile: $WE_white;
 $plp_facet_label_text_color: $WE_grey_three;
 $plp_facet_label: $WE_grey_three;
+$plp_sort_by_options: $WE_grey_three;
 $plp_facet_filter_count: $WE_grey_three;
 $plp_facet_filter_count_background: $WE_deep_blue;
+$plp_facet_count_number: $WE_grey_three;
+$plp_clear_all_btn_disabled: $WE_grey_three;
+$plp_clear_all_btn_disabled_bg: $WE_white_three;
 $plp_pager_link: $WE_white;
 $plp_pager_btn_bg: $WE_grey_three;
 $plp_promotion_link: $WE_deep_red;
@@ -565,3 +588,6 @@ $plp_filter_active_tick: $WE_deep_red;
 $lhn_l2: $WE_grey_three;
 $lhn_l3: $WE_grey_three;
 $lhn_l4: $WE_grey_three;
+
+// PLP Filter bar.
+$plp_filter_active_item: $WE_white_two;
