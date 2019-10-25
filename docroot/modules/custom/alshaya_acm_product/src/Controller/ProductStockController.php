@@ -120,6 +120,18 @@ class ProductStockController extends ControllerBase {
     if ($response === TRUE) {
       $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
       $this->moduleHandler()->alter('alshaya_acm_product_add_to_cart_submit_ajax_response', $return, $entity, $data);
+
+      // Use the variant sku for event if configurable product added.
+      $variant_sku = $data['selected_variant_sku'] ?? '';
+      if (!empty($variant_sku)) {
+        $variant = SKU::loadFromSku($variant_sku);
+      }
+
+      // Instantiate and Dispatch add_to_cart_submit event.
+      $this->eventDispatcher->dispatch(
+        AddToCartFormSubmitEvent::EVENT_NAME,
+        new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
+      );
     }
     else {
       $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
@@ -130,12 +142,6 @@ class ProductStockController extends ControllerBase {
       $return->addCommand(new HtmlCommand($class, $error));
       $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-failed']));
     }
-
-    // Instantiate and Dispatch add_to_cart_submit event.
-    $this->eventDispatcher->dispatch(
-      AddToCartFormSubmitEvent::EVENT_NAME,
-      new AddToCartFormSubmitEvent($entity, $return)
-    );
 
     $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
 
