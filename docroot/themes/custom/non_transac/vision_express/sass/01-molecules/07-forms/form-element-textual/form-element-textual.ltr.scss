@@ -4,6 +4,17 @@ input[type="search"] {
   box-sizing: border-box;
 }
 
+.webform-submission-form {
+  .input__label label {
+    padding-#{$left}: 0.625rem;
+  }
+
+  .input__label,
+  .input__line {
+    display: none;
+  }
+}
+
 .webform-submission-alshaya-contact-form,
 .webform-submission-contact-form {
   background: $contact-form-bg;
@@ -86,10 +97,6 @@ input[type="search"] {
   html[lang=ar] & {
     padding-left: 0.625rem;
   }
-}
-
-.input__label label {
-  padding-#{$left}: 0.625rem;
 }
 
 .mobile-input--wrapper {
@@ -182,11 +189,6 @@ input[type="search"] {
       color: $form-dropdown-icon;
     }
   }
-}
-
-.input__label,
-.input__line {
-  display: none;
 }
 
 .input--checkbox__container {
