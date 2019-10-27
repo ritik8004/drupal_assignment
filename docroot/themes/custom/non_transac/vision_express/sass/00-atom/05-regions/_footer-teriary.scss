@@ -57,6 +57,10 @@
   .button {
     display: inline-block;
 
+    @include breakpoint ($upto-palm) {
+      display: block;
+    }
+
     @include breakpoint ($above-palm) {
       margin-#{$left}: 1.25rem;
     }

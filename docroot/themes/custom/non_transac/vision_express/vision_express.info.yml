@@ -47,6 +47,12 @@ libraries-extend:
     - vision_express/field-promo-block
   whitelabel/paragraph-title-textarea:
     - vision_express/paragraph-title-textarea
+  whitelabel/block-store-finder-form:
+    - vision_express/block-store-finder-form
+  whitelabel/block-copyright:
+    - vision_express/block-copyright
+
+
 
 libraries-override:
   whitelabel/menu-logo-navigation:
