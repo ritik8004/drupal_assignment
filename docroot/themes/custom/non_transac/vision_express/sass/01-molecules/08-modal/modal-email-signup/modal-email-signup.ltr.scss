@@ -1,0 +1,105 @@
+@import '../../../config/_config.scss';
+
+.ui-widget-overlay {
+  background: $modal-overlay-bg;
+}
+
+.ui-dialog {
+  background-color: $modal-bg;
+
+  @include breakpoint($upto-lap) {
+    top: 5%;
+    width: 100% !important;
+  }
+
+  @include breakpoint($desk) {
+    top: 35%;
+  }
+
+  .ui-dialog-content {
+    height: auto !important;
+  }
+
+  #webform_submission_alshaya_email_signup_add_form-ajax {
+    padding: 0 !important;
+  }
+
+  .webform-submission-form {
+    height: auto !important;
+
+    @include breakpoint($above-palm) {
+      padding-#{$left}: 23%;
+      padding-#{$right}: 23%;
+    }
+
+    .modal-form-elements-wrapper > p {
+      display: none;
+    }
+  }
+
+  .ui-dialog-title {
+    font-size: 1.25rem;
+    font-family: $helvetica-neue-thin;
+    color: $black-two;
+    margin-bottom: 1.125rem;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    padding-top: 3.875rem;
+    padding-#{$left}: 8.25rem;
+    padding-#{$right}: 8.25rem;
+    width: 100%;
+
+    @include breakpoint($upto-palm) {
+      padding: 1.875rem;
+      padding-bottom: 0;
+    }
+  }
+
+  .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: none !important;
+
+    @include breakpoint($above-palm) {
+      padding-#{$left}: 23%;
+      padding-#{$right}: 23%;
+      padding-bottom: 3.875rem;
+    }
+
+    .webform-button--submit {
+      width: 100%;
+    }
+  }
+
+  .ui-button-icon-only.ui-dialog-titlebar-close {
+    outline: 0;
+    top: 0.3125rem;
+    #{$right}: 1.875rem;
+    #{$left}: inherit;
+    border: 0;
+    background: transparent;
+
+    html[lang='ar'] & {
+      #{$right}: 0;
+    }
+
+    .ui-icon {
+      text-indent: 0;
+
+      @include icon(close, before) {
+        color: $icon;
+        font-size: 2.875rem;
+      }
+    }
+  }
+}
+
+.modal-form-elements-wrapper {
+  .input--inner__container .option {
+    font-size: 0.875rem;
+    color: $form-input-text;
+  }
+}
+
+iframe {
+  border: 0;
+}

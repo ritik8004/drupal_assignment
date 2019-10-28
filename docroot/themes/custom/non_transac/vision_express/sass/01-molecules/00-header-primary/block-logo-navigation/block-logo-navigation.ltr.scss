@@ -9,6 +9,7 @@
 .region-primary-header {
   @include breakpoint($desk) {
     background: $menu-bg;
+    border-bottom: 1px solid $primary-border;
   }
 
   .region__wrapper {

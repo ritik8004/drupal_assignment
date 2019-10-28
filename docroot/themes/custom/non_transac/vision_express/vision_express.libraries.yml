@@ -83,6 +83,18 @@ paragraph-title-textarea:
     theme:
       dist/css/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
 
+modal-email-signup:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
+form-element-textual:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+
 block-store-finder-form:
   version: VERSION
   css:
