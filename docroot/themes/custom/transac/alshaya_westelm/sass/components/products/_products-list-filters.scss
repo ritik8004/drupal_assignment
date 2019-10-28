@@ -1,0 +1,98 @@
+.c-plp .c-content__region {
+  .all-filters {
+    .facet-all-clear,
+    .facet-all-apply {
+      text-transform: uppercase;
+      font-family: $alshaya-bold;
+    }
+
+    .filter__foot .facet-all-clear {
+      border-color: transparent;
+      background: $plp_clear_all_btn_disabled_bg;
+      font-weight: normal;
+    }
+  }
+
+  .show-all-filters,
+  .filter-list-label {
+    text-transform: capitalize;
+  }
+}
+
+// Css for filters on products listing page and search page.
+.c-plp .c-content__region {
+  // Filter Head
+  .all-filters .filter {
+    &__head {
+      padding: 0 1rem;
+      min-height: 3.125rem;
+
+      .filter-sort-title {
+        text-transform: lowercase;
+        font-weight: 600;
+      }
+
+      .facet-all-apply {
+        margin-#{$right}: -0.625rem;
+      }
+
+      .facet-all-back {
+        @include facet-arrow(before, false) {
+          position: relative;
+          #{$left}: 0;
+          top: 0;
+          width: 0.875rem;
+          border-width: 0.3125rem 0 0.3125rem 0.5rem;
+        }
+      }
+    }
+
+    &__inner {
+      .block-views-exposed-filter-blockalshaya-product-list-block-1,
+      .block-views-exposed-filter-blockalshaya-product-list-block-2,
+      .block-views-exposed-filter-blocksearch-page {
+        fieldset.form-wrapper {
+          .fieldset-wrapper .form-item {
+            @include breakpoint($upto-tablet) {
+              line-height: 3rem;
+            }
+          }
+
+          .fieldset-legend {
+            font-size: 0.9375rem;
+            padding: 1rem 2rem 0.9375rem;
+
+            .sort-for-label {
+              @include breakpoint($upto-tablet) {
+                top: 1rem;
+                color: $plp_sort_for_label;
+                font-size: 0.75rem;
+              }
+            }
+
+            @include facet-arrow(after, false);
+          }
+        }
+      }
+
+      .views-exposed-form.c-accordion .c-accordion__title,
+      .c-facet.c-accordion .c-accordion__title {
+        font-size: 0.9375rem;
+
+        @include breakpoint($upto-tablet) {
+          padding: 1rem 2rem 0.9375rem;
+        }
+
+        @include facet-arrow(after, false);
+      }
+    }
+  }
+}
+
+.c-plp .c-products__item {
+  .field--name-name {
+    @include breakpoint($tablet) {
+      font-size: 0.9375rem;
+    }
+  }
+}
