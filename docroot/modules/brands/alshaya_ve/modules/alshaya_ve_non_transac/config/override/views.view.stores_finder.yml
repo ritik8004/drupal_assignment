@@ -947,7 +947,7 @@ display:
           plugin_id: list_field
       arguments: {  }
       exposed_block: true
-      use_ajax: true
+      use_ajax: false
       empty:
         area:
           id: area
