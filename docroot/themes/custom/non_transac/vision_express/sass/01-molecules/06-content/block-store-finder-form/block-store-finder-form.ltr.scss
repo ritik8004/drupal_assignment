@@ -414,7 +414,6 @@
     @include breakpoint($above-palm) {
       width: 67% !important;
       display: inline-block;
-      border: 2px solid green;
       margin-#{$left}: 1.875rem;
     }
   }
