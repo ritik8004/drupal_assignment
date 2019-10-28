@@ -37,7 +37,7 @@
         });
 
         // See https://github.com/select2/select2/pull/5035.
-        $('.cybersource-credit-card-exp-month-select').once('select2select').on('change', function () {
+        $('.cybersource-credit-card-exp-month-select').once('manage-disable').on('change', function () {
           setTimeout(function () {
             $('.cybersource-credit-card-exp-month-select').select2('destroy');
 

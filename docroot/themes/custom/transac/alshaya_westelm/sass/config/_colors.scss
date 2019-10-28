@@ -24,7 +24,7 @@ $WE_message_green: #39b54a;
 $medium-green: #1da545;
 $WE_deep_red: #b61935;
 $WE_light_red: rgba(182, 25, 53, 0.15);
-$WE_warning_red: #cc0;
+$WE_warning_red: #d0011b;
 $WE_tint_red: #f65044;
 $tomato: #e6591b;
 $WE_deep_blue: #4285f4;
@@ -104,7 +104,12 @@ $primary_tr_hover: $WE_white_three;
 
 // Language Switcher
 $lang_switch: $WE_grey_three;
+$lang_switch_active: $WE_grey_three;
 $lang_switch_firsttime_bg: $WE_grey_three;
+$lang_switch_firsttime_border: $WE_tint_red;
+$lang_switch_firsttime_bg: $WE_white;
+$lang_switch_list: $WE_grey_three;
+$lang_switch_close_icon: $WE_grey_three;
 
 // Header - Top header.
 $header_secondary_bg: $WE_gray_six;

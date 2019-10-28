@@ -3,7 +3,7 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       .form-text {
         text-transform: none;
-        height: 2.1875rem;
+        height: 2.5rem;
         width: 100%;
         border-#{$right}: 0;
 
@@ -21,12 +21,12 @@ header {
         }
 
         @include breakpoint($desktop) {
-          width: 14.4375rem;
+          width: 12.3125rem;
         }
       }
 
       #edit-submit-search {
-        height: 2.1875rem;
+        height: 2.5rem;
         width: 2.625rem;
         background-color: $primary_search_bg;
         background-size: 47%;
@@ -35,7 +35,7 @@ header {
       }
 
       @include breakpoint($desktop) {
-        #{$left}: -1rem;
+        #{$left}: 0;
         top: 0;
       }
 
@@ -109,6 +109,10 @@ header {
     .site-brand-home {
       text-align: center;
 
+      @include breakpoint($only-tablet) {
+        text-align: #{$left};
+      }
+
       html[lang=ar] & {
         @include breakpoint($only-tablet) {
           width: 8rem;
@@ -116,19 +120,18 @@ header {
       }
 
       a {
-        max-width: none;
+        display: inline-block;
+
+        @include breakpoint($desktop) {
+          max-width: 12.5rem;
+        }
 
         @include breakpoint($only-tablet) {
           max-width: 11rem;
-
-          html[lang=ar] & {
-            max-width: none;
-          }
         }
 
         @include breakpoint($only-mobile) {
           margin-top: 0.875rem;
-          max-width: none;
           font-size: 1rem;
           line-height: 2.3;
           margin-#{$left}: 3.5rem;
@@ -196,6 +199,14 @@ header {
           }
         }
       }
+
+      .region__header {
+        > div {
+          @include breakpoint($desktop) {
+            width: 33.33%;
+          }
+        }
+      }
     }
   }
 }
@@ -241,6 +252,10 @@ body {
       }
     }
   }
+
+  .menu--two__list {
+    padding-top: 1.25rem;
+  }
 }
 
 .c-menu-primary .store {
@@ -275,6 +290,8 @@ body {
 
 .menu__in {
   @include breakpoint($upto-desktop) {
+    margin-top: -2.25rem;
+
     @include mm-mob-arrow(after, false) {
       top: 0.5rem;
       #{$right}: 0.5rem;

@@ -69,38 +69,6 @@
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
   };
 
-  /**
-   * JS for converting select list for size to unformatted list on PDP pages.
-   *
-   * @param {object} element
-   *   The HTML element inside which we want to convert select list into unformatted list.
-   */
-  Drupal.convertSelectListtoUnformattedList = function (element) {
-    element.once('convert-select-list-to-unformatted-list').each(function () {
-      $(this).on('refresh', function () {
-        var that = $(this).parent();
-
-        $(this).select2Option();
-        $(this).find('.list-title .selected-text').html('');
-
-        var clickedOption = $('option:selected', this);
-        if (!clickedOption.is(':disabled')) {
-          if ($(this).parent().hasClass('form-item-configurables-article-castor-id')) {
-            Drupal.alshaya_color_swatch_update_selected_label();
-          }
-          else {
-            var selectedText = clickedOption.attr('selected-text')
-              ? clickedOption.attr('selected-text')
-              : clickedOption.text();
-            $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
-          }
-        }
-      });
-
-      $(this).trigger('refresh');
-    });
-  };
-
   Drupal.processAlternateForGroupedSelected = function (that, i, alternate) {
     // Select needs to have some classes for styling and boxes JS.
     var select = $('<select class="form-item-configurable-select form-select" />');
@@ -109,28 +77,38 @@
     select.attr('data-selected-title', that.attr('data-selected-title'));
     select.attr('data-default-title', that.attr('data-default-title'));
 
-    // Add each option with different display label based on alternate.
-    that.find('option').each(function () {
-      var option = $(this).clone();
-
-      var group_data = $(this).attr('group-data');
-      if ((typeof group_data == 'undefined')) {
-        option.html($(this).html());
-      }
-      else {
-        var option_alternates = JSON.parse(group_data);
-        option.html(option_alternates[i]['value']);
-        option.attr('selected-text', option_alternates[i]['label'] + '-' + option_alternates[i]['value']);
-      }
-
-      select.append(option);
-    });
-
     // Bind to events and trigger same for original dropdown.
     select.on('change', function () {
       that.val($(this).val());
       that.trigger('change');
     });
+
+    that.on('refresh', function () {
+      // Add all options again every-time.
+      select.find('option').remove();
+
+      // Add each option with different display label based on alternate.
+      that.find('option').each(function () {
+        var option = $(this).clone();
+
+        var group_data = $(this).attr('group-data');
+        if ((typeof group_data == 'undefined')) {
+          option.html($(this).html());
+        }
+        else {
+          var option_alternates = JSON.parse(group_data);
+          option.html(option_alternates[i]['value']);
+          option.attr('selected-text', option_alternates[i]['label'] + '-' + option_alternates[i]['value']);
+        }
+
+        select.append(option);
+      });
+
+      select.trigger('refresh');
+    });
+
+    // Add each option with different display label based on alternate.
+    that.trigger('refresh');
 
     // Using group class to link anchor to its group.
     var group_class = 'group-' + alternate.label.toLowerCase();
@@ -160,25 +138,6 @@
     });
 
     group_anchor_wrapper.append(anchor);
-  };
-
-  Drupal.behaviors.configurableAttributeBoxes = {
-    attach: function (context, settings) {
-      $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
-      $('.form-item-configurable-select').parent().addClass('configurable-select');
-
-      // Show mobile slider only on mobile resolution.
-      Drupal.select2OptionConvert();
-      $(window).on('resize', function (e) {
-        Drupal.select2OptionConvert();
-      });
-
-      if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
-        $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
-          $(this).closest('form').find('div.error, label.error, span.error').remove();
-        });
-      }
-    }
   };
 
 })(jQuery, Drupal);

@@ -343,6 +343,14 @@ class CartHelper {
           throw new \InvalidArgumentException();
         }
 
+        // Load the parent again to ensure we keep adding the product for
+        // first parent when multiple parents are available and also to
+        // ensure we select proper parent when using alshaya_color_split.
+        $sku = $variant->getPluginInstance()->getParentSku($variant);
+        if (!($sku instanceof SKUInterface)) {
+          throw new \InvalidArgumentException();
+        }
+
         if ($cart->hasItem($variant->getSku())) {
           $cart->addItemToCart($variant->getSku(), $quantity);
         }
