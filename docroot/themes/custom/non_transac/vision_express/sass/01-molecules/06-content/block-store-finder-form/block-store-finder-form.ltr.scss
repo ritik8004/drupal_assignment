@@ -300,7 +300,6 @@
     margin-#{$left}: 0.75rem;
   }
 
-  // .view-stores-finder,
   .views-element-container {
     background-color: $store-content-bg;
 
@@ -392,7 +391,6 @@
 
     @include breakpoint($upto-palm) {
       margin-bottom: 0.9375rem;
-      // width: 100%;
     }
   }
 
@@ -422,10 +420,6 @@
   }
 
   .list-view-locator {
-    // padding-left: 2.8125rem;
-    // width: 40%;
-    // position: relative;
-
     .row-title span {
       font-family: $helvetica-neue-bold;
       display: inline-block;
@@ -444,29 +438,6 @@
     .back-link,
     .mobile-only--back-to-glossary {
       display: none;
-
-      // position: absolute;
-      // #{$left}: 0;
-      //
-      // a {
-      //   font-size: 0;
-      //
-      //   @include icon(chevron#{$left}, after) {
-      //     color: $icon;
-      //     font-size: 3rem;
-      //     top: -0.3125rem;
-      //
-      //     @include breakpoint($upto-palm) {
-      //       color: $icon;
-      //       padding-#{$left}: 0;
-      //       top: 0;
-      //     }
-      //   }
-      // }
-    }
-
-    & > div:not(.back-link) {
-      // border: 1px solid red;
     }
 
     .retinal-enabled-yes {
@@ -554,9 +525,6 @@
       position: absolute;
       #{$right}: -0.3125rem;
       #{$left}: inherit;
-
-      // top: 0;
-      // line-height: 1.5rem;
     }
 
     .field-content {
@@ -580,10 +548,6 @@
     display: inline;
     margin-#{$right}: 0.625rem;
     color: $content-text;
-
-    @include breakpoint($upto-palm) {
-      // line-height: 1.125rem;
-    }
   }
 }
 
@@ -669,7 +633,6 @@
       }
 
       .view-header {
-        // padding-top: 1.25rem;
         margin-bottom: 0;
       }
     }
