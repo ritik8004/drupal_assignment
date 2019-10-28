@@ -94,3 +94,15 @@ form-element-textual:
   css:
     theme:
       dist/css/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+
+block-store-finder-form:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/block-store-finder-form/block-store-finder-form.ltr.css: {}
+
+block-copyright:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/04-footer-secondary/block-copyright/block-copyright.ltr.css: {}

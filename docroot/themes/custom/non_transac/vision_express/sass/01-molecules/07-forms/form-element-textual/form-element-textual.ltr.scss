@@ -411,14 +411,3 @@ textarea:-webkit-autofill,
 select:-webkit-autofill {
   -webkit-text-fill-color: $form_input_text;
 }
-
-input[type="submit"],
-button {
-  padding: 0.625rem 1.375rem;
-  background-color: $btn-bg;
-  color: $btn;
-  display: inline-block;
-  font-size: 0.875rem;
-  text-decoration: none;
-  font-weight: bold;
-}

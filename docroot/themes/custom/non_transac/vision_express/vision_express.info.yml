@@ -51,6 +51,10 @@ libraries-extend:
     - vision_express/modal-email-signup
   whitelabel/form-element-textual:
     - vision_express/form-element-textual
+  whitelabel/block-store-finder-form:
+    - vision_express/block-store-finder-form
+  whitelabel/block-copyright:
+    - vision_express/block-copyright
 
 
 

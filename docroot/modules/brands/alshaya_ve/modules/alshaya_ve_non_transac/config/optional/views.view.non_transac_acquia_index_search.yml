@@ -347,7 +347,7 @@ display:
               reviewer: '0'
               seo_admin: '0'
               site_builder: '0'
-            placeholder: ''
+            placeholder: 'Search'
           is_grouped: false
           group_info:
             label: ''

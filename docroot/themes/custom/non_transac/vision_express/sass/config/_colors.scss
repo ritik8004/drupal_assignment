@@ -18,6 +18,11 @@ $message-success: $brand;
 // Button.
 $btn-bg: $brand;
 $btn: $white;
+$form-label: $black;
+
+// Form
+$form-input-placeholder-text: $grey;
+$form-input-bg: $white-smoke;
 
 // Header
 $header-bg: $white-smoke;
@@ -84,3 +89,8 @@ $modal-overlay-bg: rgba(119, 119, 119, 0.8);
 $ui-autocomplete-bg: $white;
 $ui-autocomplete-list-active-bg: $white-smoke;
 $ui-autocomplete-list-active: $black-two;
+
+// Store finder
+$store-content-bg: rgba(243, 243, 243, 0.4);
+$store-active-link: $brand;
+$store-counter-bg: $brand;
