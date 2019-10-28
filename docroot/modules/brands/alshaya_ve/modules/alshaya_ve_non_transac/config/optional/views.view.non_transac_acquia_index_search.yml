@@ -347,7 +347,7 @@ display:
               reviewer: '0'
               seo_admin: '0'
               site_builder: '0'
-            placeholder: ''
+            placeholder: Search
           is_grouped: false
           group_info:
             label: ''
@@ -406,7 +406,20 @@ display:
       title: ''
       header: {  }
       footer: {  }
-      empty: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: 'Your search did not return any results.'
+            format: full_text
+          plugin_id: text
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
