@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
+    - field.storage.node.field_search_content
     - search_api.index.non_transac_acquia_solr_search_index
   module:
     - better_exposed_filters
@@ -245,10 +245,10 @@ display:
             multi_separator: ', '
           entity_type: node
           plugin_id: search_api_field
-        body:
-          id: body
+        field_search_content:
+          id: field_search_content
           table: search_api_datasource_non_transac_acquia_solr_search_index_entity_node
-          field: body
+          field: field_search_content
           relationship: none
           group_type: group
           admin_label: ''
@@ -271,7 +271,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 200
+            max_length: 300
             word_boundary: true
             ellipsis: true
             more_link: true
@@ -419,7 +419,7 @@ display:
         - url
         - url.query_args
       tags:
-        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_search_content'
   non_transac_search:
     display_plugin: page
     id: non_transac_search
@@ -437,4 +437,4 @@ display:
         - url
         - url.query_args
       tags:
-        - 'config:field.storage.node.body'
+        - 'config:field.storage.node.field_search_content'

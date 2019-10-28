@@ -12,7 +12,7 @@ backend_config:
   autocorrect_spell: true
   autocorrect_suggest_words: true
   excerpt: false
-  highlight_data: false
+  highlight_data: true
   retrieve_data: false
   sasm_domain: generic
   sasm_language_unspecific_fallback_on_schema_issues: true
