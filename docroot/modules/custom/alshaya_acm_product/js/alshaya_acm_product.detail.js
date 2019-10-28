@@ -65,13 +65,12 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        var skuType = $(this).attr('gtm-sku-type');
         if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-
+        var skuType = node.attr('gtm-sku-type');
         // For static products gallery is directly returned no need of JS updates.
         if (skuType === 'configurable') {
           Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
