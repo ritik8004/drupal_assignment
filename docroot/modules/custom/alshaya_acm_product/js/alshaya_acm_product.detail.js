@@ -65,12 +65,20 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
+        var skuType = $(this).attr('gtm-sku-type');
         if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+
+        // For static products gallery is directly returned no need of JS updates.
+        if (skuType === 'configurable') {
+          Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        }
+        else {
+          return;
+        }
 
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
@@ -113,34 +121,36 @@
           }
         });
 
-        var variants = drupalSettings.productInfo[sku]['variants'];
-        var selectedSku = Object.keys(variants)[0];
-        var selected = parseInt(Drupal.getQueryVariable('selected'));
+        if (drupalSettings.productInfo[sku]['variants']) {
+          var variants = drupalSettings.productInfo[sku]['variants'];
+          var selectedSku = Object.keys(variants)[0];
+          var selected = parseInt(Drupal.getQueryVariable('selected'));
 
-        if (selected > 0) {
-          for (var i in variants) {
-            if (variants[i]['id'] === selected) {
-              selectedSku = variants[i]['sku'];
-              break;
+          if (selected > 0) {
+            for (var i in variants) {
+              if (variants[i]['id'] === selected) {
+                selectedSku = variants[i]['sku'];
+                break;
+              }
             }
           }
-        }
-        else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
-          // Try to get first child with parent sku matching. This could go
-          // in color split but is generic enough so added here.
-          for (var i in variants) {
-            if (variants[i]['parent_sku'] === sku) {
-              selectedSku = variants[i]['sku'];
-              break;
+          else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
+            // Try to get first child with parent sku matching. This could go
+            // in color split but is generic enough so added here.
+            for (var i in variants) {
+              if (variants[i]['parent_sku'] === sku) {
+                selectedSku = variants[i]['sku'];
+                break;
+              }
             }
           }
-        }
 
-        var firstAttribute = $('.form-select[data-configurable-code]:first', this);
-        var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
-        $(firstAttribute).removeProp('selected').removeAttr('selected');
-        $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
-        $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+          var firstAttribute = $('.form-select[data-configurable-code]:first', this);
+          var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
+          $(firstAttribute).removeProp('selected').removeAttr('selected');
+          $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
+          $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+        }
       });
     }
   };
