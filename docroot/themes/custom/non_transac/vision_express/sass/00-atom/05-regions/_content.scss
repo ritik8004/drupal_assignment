@@ -19,3 +19,18 @@
     max-width: 57.875rem;
   }
 }
+
+.region-content {
+  @include breakpoint($desk) {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 1280px;
+  }
+}
+
+.paragraph-vm-default {
+  @include breakpoint($desk) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

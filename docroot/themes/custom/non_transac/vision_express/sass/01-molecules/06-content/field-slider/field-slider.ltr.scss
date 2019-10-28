@@ -33,10 +33,16 @@
 
   .slick-next {
     #{$right}: 3%;
+    #{$left}: inherit;
+
+    @include icon(chevron#{$right}, before);
   }
 
   .slick-prev {
     #{$left}: 0;
+    #{$right}: inherit;
+
+    @include icon(chevron#{$left}, before);
   }
 
   .slick-dots {
