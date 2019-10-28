@@ -16,6 +16,11 @@ $text: $black-two;
 // Button.
 $btn-bg: $brand;
 $btn: $white;
+$form-label: $black;
+
+// Form
+$form-input-placeholder-text: $grey;
+$form-input-bg: $white-smoke;
 
 // Header
 $header-bg: $white-smoke;
@@ -54,3 +59,11 @@ $language-switcher: $white;
 $language-link-bg: $black;
 $language-link: $white;
 $close-bg: $brand;
+
+// Modal
+$modal-overlay-bg: rgba(119, 119, 119, 0.8);
+
+// Store finder
+$store-content-bg: rgba(243, 243, 243, 0.4);
+$store-active-link: $brand;
+$store-counter-bg: $brand;
