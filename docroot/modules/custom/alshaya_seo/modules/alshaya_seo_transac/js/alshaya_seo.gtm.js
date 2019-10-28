@@ -25,7 +25,7 @@
         product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
-      $('.sku-base-form').once('alshaya-seo-gtm').on('product-add-to-cart-success', function () {
+      $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
         var quantity = parseInt($('.form-item-quantity select', $(this)).val());
         var size = $('.form-item-configurables-size select option:selected', $(this)).text();
