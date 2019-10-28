@@ -1,0 +1,5 @@
+#block-welcomeuser h3 {
+  @include breakpoint($upto-desktop) {
+    font-size: 0.75rem;
+  }
+}
