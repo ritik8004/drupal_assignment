@@ -65,6 +65,7 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
+        var skuType = $(this).attr('gtm-sku-type');
         if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
@@ -72,8 +73,11 @@
         var node = $(this).parents('article.entity--type-node:first');
 
         // For static products gallery is directly returned no need of JS updates.
-        if (drupalSettings.productInfo[sku].gallery) {
+        if (skuType === 'configurable') {
           Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        }
+        else {
+          return;
         }
 
         $(this).on('variant-selected', function (event, variant, code) {
