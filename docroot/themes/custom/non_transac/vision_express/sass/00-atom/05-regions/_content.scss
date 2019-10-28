@@ -8,7 +8,8 @@
   }
 }
 
-.page-home .promo-container {
+.page-home .promo-container,
+.region-content {
   @include breakpoint($desk) {
     max-width: 80rem;
   }
@@ -20,14 +21,7 @@
   }
 }
 
-.region-content {
-  @include breakpoint($desk) {
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 1280px;
-  }
-}
-
+.region-content,
 .paragraph-vm-default {
   @include breakpoint($desk) {
     padding-left: 0;
