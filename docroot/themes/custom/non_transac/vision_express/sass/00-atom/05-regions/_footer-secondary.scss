@@ -2,12 +2,17 @@
 
 .region-footer-secondary {
   margin: 0;
+  background-color: $footer-secondary;
 
   .region__wrapper {
     max-width: 64rem;
     margin: 0 auto;
-    padding: 1rem 0.9375rem;
+    padding: 0.6875rem 0.9375rem;
     position: relative;
+
+    @include breakpoint ($upto-palm) {
+      padding: 0.625rem;
+    }
 
     @include breakpoint ($above-palm) {
       flex-direction: row;

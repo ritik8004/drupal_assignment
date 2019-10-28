@@ -4,12 +4,14 @@ $brand: #ec1d24;
 $white: #fff;
 $white-smoke: #f2f2f2;
 $grey: #777;
+$black-two: #000;
 
 // Primary Color.
 $primary-border: $white-smoke;
 $icon: $brand;
 $link: $black;
 $content-text: $black;
+$text: $black-two;
 
 // Button.
 $btn-bg: $brand;
@@ -22,10 +24,33 @@ $header-bg: $white-smoke;
 $menu-bg: $white;
 $link-border: $black;
 $menu-close-bg: $white;
+$sub-menu-bg: rgba(242, 242, 242, 0.95);
+$sub-link-hover-bg: $black;
+$sub-link-hover: $white;
+$sub-link-icon-active: $brand;
+$sub-link-active: $brand;
 
 // footer-primary
 $footer-primary-bg: $white-smoke;
 
+// footer-secondary
+$footer-secondary: rgba(242, 242, 242, 0.4);
+
 // footer-tertiary
 $footer-tertiary-bg: $grey;
 $footer-text: $white;
+
+// home-slider
+$slick-arrow: $brand;
+$slick-dot-border: $brand;
+$slick-dot-active-bg: $brand;
+
+// Promo Block
+$image-title-subtitle-bg: $white-smoke;
+$show-more-icon: $brand;
+
+// Footer language switcher
+$language-switcher: $white;
+$language-link-bg: $black;
+$language-link: $white;
+$close-bg: $brand;

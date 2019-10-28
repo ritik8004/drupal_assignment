@@ -346,6 +346,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_item_code_markup'] = [
+    'variables' => [
+      'title' => NULL,
+      'item_code' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -660,6 +667,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['gallery'] = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', TRUE);
         }
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
       }
 
       if (isset($context)) {

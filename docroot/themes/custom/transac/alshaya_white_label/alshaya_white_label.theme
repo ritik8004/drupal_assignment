@@ -313,7 +313,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['brands'] = $brands;
     }
   }
-  elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
+  elseif ($variables['plugin_id'] === 'keyword_search_block') {
     $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
   }
 
@@ -352,6 +352,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
     if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_inline_layout';
     }
+  }
+
+  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
   }
 
   // Add class for category facet.

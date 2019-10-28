@@ -70,6 +70,7 @@ product_carousel:
     - core/jquery
     - alshaya_white_label/utils
     - alshaya_white_label/slick
+    - alshaya_white_label/alshaya_image_lazy_load
 
 autosize_textarea:
   js:
@@ -101,10 +102,20 @@ autosize:
   js:
     vendor/js/autosize.min.js: {}
 
-attribute:
+attribute.common:
   js:
     js/select2Option.js: {}
+    js/attribute.common.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
+attribute:
+  js:
     js/attribute.js: {}
+  dependencies:
+    - alshaya_white_label/attribute.common
 
 ucfix:
   js:
@@ -143,12 +154,12 @@ pace:
 
 magazine_attribute:
   js:
-    js/select2Option.js: {}
     js/magazine_attribute.js: {}
   css:
     theme:
       css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
   dependencies:
+    - alshaya_white_label/attribute.common
     - core/jquery.ui.effects.slide
 
 campaign-plp-style-1-video-provider:
@@ -226,3 +237,15 @@ dynamic-promotions:
   css:
     theme:
       css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css: {}
+
+free_gifts:
+  js:
+    js/free-gift.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/slick
+
+app-navigation-links:
+  css:
+    theme:
+      css/conditional-sass/app-navigation-links/app-navigation-links.ltr.css: {}

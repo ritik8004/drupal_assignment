@@ -13,6 +13,7 @@
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
       $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
+        var product = $(this).closest('article[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
@@ -20,9 +21,8 @@
 
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 
-        $('article[gtm-type="gtm-product-link"]')
-          .attr('gtm-product-sku', variant)
-          .attr('gtm-price', variantInfo['gtm_price']);
+        product.attr('gtm-product-sku', variant);
+        product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
       $('.sku-base-form').once('alshaya-seo-gtm').on('product-add-to-cart-success', function () {
@@ -588,20 +588,6 @@
       if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
         Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
       }
-
-      /**
-       * Tracking New customers.
-       */
-      cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_checkout_option('Guest Login', 1);
-      });
-
-      /**
-       * Tracking Returning customers.
-       */
-        cartCheckoutLoginSelector.find('button[gtm-type="checkout-signin"]').once('js-event').on('mousedown', function () {
-        Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
-      });
 
       /**
        * Tracking Home Delivery.

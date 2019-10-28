@@ -41,6 +41,17 @@ libraries-extend:
     - vision_express/block-footer-language
   whitelabel/menu-terms-conditions:
     - vision_express/menu-terms-conditions
+  whitelabel/field-slider:
+    - vision_express/field-slider
+  whitelabel/field-promo-block:
+    - vision_express/field-promo-block
+  whitelabel/paragraph-title-textarea:
+    - vision_express/paragraph-title-textarea
+
+libraries-override:
+  whitelabel/menu-logo-navigation:
+    js:
+      components/js/burger-menu.js: dist/js/burger-menu.js
 
 component-libraries:
   atoms:

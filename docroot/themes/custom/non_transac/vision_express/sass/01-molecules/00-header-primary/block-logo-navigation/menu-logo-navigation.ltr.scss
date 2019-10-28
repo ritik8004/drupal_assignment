@@ -3,11 +3,11 @@
 .menu-logo-navigation {
   background-color: $menu-bg;
 
-  @include breakpoint($upto-palm) {
+  @include breakpoint($upto-lap) {
     transition: transform 0.25s ease-in-out;
     position: fixed;
     top: 0;
-    width: 85%;
+    width: 82%;
     height: 100%;
     transform: translateX(-100%);
 
@@ -15,38 +15,126 @@
       transform: translateX(100%);
     }
 
-    &.is-active-ul {
+    &.is-active {
       transform: translateX(0%) !important;
     }
 
     li {
       width: 100%;
       border-bottom: 1px solid $primary-border;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      -webkit-tap-highlight-color: transparent;
     }
   }
 
-  a {
+  a,
+  span {
     font-size: 0.875rem;
     text-decoration: none;
-    padding: 0.75rem 0.9375rem 0.5rem;
+    padding: 0.75rem 1.25rem 0.5rem;
     font-family: $helvetica-neue;
     color: $link;
     line-height: 1;
+    border: 0;
+    text-shadow: none;
+    display: block;
 
-    &::after {
-      display: none;
+    @include breakpoint($desk) {
+      &::after {
+        display: none;
+      }
     }
 
-    @include breakpoint($upto-palm) {
+    @include breakpoint($upto-lap) {
+      font-family: $helvetica-neue-bold;
+
+      &:hover {
+        color: $sub-link-active;
+
+        &::after {
+          color: $sub-link-icon-active;
+        }
+      }
+
       padding: 1.25rem 0.9375rem;
+      position: relative;
+
+      @include icon(chevron#{$right}, after) {
+        font-size: 2.1875rem;
+        position: absolute;
+        #{$right}: 0.3125rem;
+        margin-top: 0;
+        color: #000;
+        top: 15%;
+        width: 2.1875rem;
+        height: 2.1875rem;
+      }
     }
 
-    @include breakpoint($above-palm) {
-      border-bottom: 0.375rem solid transparent;
+    @include breakpoint($lap) {
+      height: auto;
+    }
+  }
 
-      &:hover,
-      &.is-active {
+  & > li {
+    @include breakpoint($desk) {
+      & > a,
+      span {
+        border-bottom: 0.375rem solid transparent;
+      }
+
+      &.active-trail {
+        & > a,
+        & > span {
+          border-bottom: 0.375rem solid $link-border;
+        }
+      }
+
+      &:hover > a,
+      & > a.is-active,
+      &:hover > span,
+      & > span.is-active {
         border-bottom: 0.375rem solid $link-border;
+      }
+
+      ul {
+        visibility: hidden;
+        position: absolute;
+        opacity: 0;
+        margin-top: 0;
+        padding-#{$left}: 0;
+        min-width: 16%;
+
+        li {
+          display: block;
+          background: $sub-menu-bg;
+          text-align: center;
+
+          a,
+          span {
+            padding: 0.8125rem 0.9375rem;
+
+            &:hover {
+              background: $sub-link-hover-bg;
+              color: $sub-link-hover;
+            }
+          }
+
+          &.active-trail {
+            a,
+            span {
+              background: $sub-link-hover-bg;
+              color: $sub-link-hover;
+            }
+          }
+        }
+      }
+
+      &:hover {
+        ul {
+          visibility: visible;
+          opacity: 1;
+        }
       }
     }
   }
@@ -56,10 +144,14 @@
   display: block;
   font-size: 0;
   position: absolute;
-  top: 0.625rem;
-  #{$left}: 0.625rem;
+  top: 1.125rem;
+  #{$left}: 2.5%;
 
-  @include breakpoint($above-palm) {
+  @include breakpoint($upto-palm) {
+    top: 0.5rem;
+  }
+
+  @include breakpoint($desk) {
     display: none;
   }
 
@@ -70,17 +162,141 @@
 }
 
 .menu-close {
-  &.is-active-close {
-    display: block;
-    background: $menu-close-bg;
-    height: 3.5rem;
-    top: 0;
-    width: 3.5625rem;
-    #{$right}: 0;
+  display: block !important;
+  opacity: 0;
+  #{$right}: inherit !important;
+  #{$left}: -6.25rem;
+  background: $menu-close-bg;
+  height: 3.5rem;
+  top: 0;
+  width: 3.5625rem;
+  transition: all 0.3s ease-in-out;
 
-    @include icon(close, before) {
-      color: $icon;
-      font-size: 3.4375rem;
+  @include icon(close, before) {
+    color: $icon;
+    font-size: 3.4375rem;
+  }
+
+  &.is-active-close {
+    #{$left}: 82%;
+    opacity: 1;
+  }
+}
+
+// Mobile slide
+.block-logo-navigation {
+  .menu-logo-navigation {
+    @include breakpoint($upto-lap) {
+      overflow-y: auto;
+
+      li.active-trail {
+        & > a,
+        & > span {
+          color: $sub-link-active;
+
+          &::before,
+          &::after {
+            color: $sub-link-icon-active;
+          }
+        }
+      }
+    }
+
+    > li.active {
+      @include breakpoint($upto-lap) {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        #{$left}: 0;
+        height: 100%;
+        z-index: 90;
+        animation: slideIn 0.25s;
+        clear: both;
+        background: $menu-bg;
+        overflow: auto;
+      }
+
+      > a,
+      span {
+        @include breakpoint($upto-lap) {
+          color: $sub-link-icon-active;
+          padding-#{$left}: 2.8125rem;
+        }
+
+        @include icon(chevron#{$left}, before) {
+          @include breakpoint($upto-lap) {
+            font-size: 2.1875rem;
+            width: 2.1875rem;
+            height: 2.1875rem;
+            position: absolute;
+            #{$left}: 0.3125rem;
+            margin-top: 0;
+            top: 15%;
+            color: $sub-link-icon-active;
+          }
+        }
+
+        &::after {
+          @include breakpoint($upto-lap) {
+            display: none;
+          }
+        }
+      }
+
+      @keyframes slideIn {
+        0% {
+          margin-#{$left}: -100%;
+        }
+
+        40% {
+          margin-#{$left}: -60%;
+        }
+
+        60% {
+          margin-#{$left}: -40%;
+        }
+
+        100% {
+          margin-#{$left}: 0%;
+        }
+      }
+    }
+
+    @include breakpoint($upto-lap) {
+      li > ul {
+        visibility: hidden;
+        position: absolute;
+        opacity: 0;
+        margin-top: 0;
+        padding-#{$left}: 0;
+      }
+
+      ul.active {
+        width: 100%;
+        #{$left}: 0;
+        visibility: visible;
+        opacity: 1;
+
+        a,
+        span {
+          padding-#{$left}: 2.8125rem;
+        }
+      }
     }
   }
+
+  &::before {
+    .overlay & {
+      content: '';
+      background: rgba(33, 28, 28, 0.7);
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+    }
+  }
+}
+
+body.overlay {
+  overflow: hidden;
 }

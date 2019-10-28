@@ -229,7 +229,20 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
 
   $sku = $skuManager->getSkuForNode($entity);
+
+  // Sanity check.
+  // We add logs for such faulty data either in ACM or in alshaya_acm_product.
+  if (empty($sku)) {
+    return;
+  }
+
   $sku_entity = SKU::loadFromSku($sku);
+
+  // Sanity check.
+  // We add logs for such faulty data either in ACM or in alshaya_acm_product.
+  if (!($sku_entity instanceof SKUInterface)) {
+    return;
+  }
 
   $promotion_types = ['cart'];
   $promotion_nodes = $skuManager->getSkuPromotions($sku_entity, $promotion_types);
@@ -368,7 +381,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
         if (!empty($free_gift_promotion['coupon_code'])) {
           $build['free_gift_promotions']['#coupon'] = [
             '#type' => 'markup',
-            '#markup' => t('Use code <span>@coupon</span> in basket', [
+            '#markup' => t('Use code <span class="coupon-code">@coupon</span> in basket', [
               '@coupon' => $free_gift_promotion['coupon_code'][0]['value'],
             ]),
           ];

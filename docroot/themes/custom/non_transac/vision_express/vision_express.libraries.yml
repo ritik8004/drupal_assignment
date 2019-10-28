@@ -3,6 +3,8 @@ global:
   css:
     theme:
       dist/css/global.ltr.css: {}
+  js:
+    js/global.js: {}
 
 block-site-logo:
   version: VERSION
@@ -63,3 +65,20 @@ menu-terms-conditions:
   css:
     theme:
       dist/css/01-molecules/04-footer-secondary/block-terms-conditions/menu-terms-conditions.ltr.css: {}
+
+field-slider:
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-slider/field-slider.ltr.css: {}
+
+field-promo-block:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
+
+paragraph-title-textarea:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
