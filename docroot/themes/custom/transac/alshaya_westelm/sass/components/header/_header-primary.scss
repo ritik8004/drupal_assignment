@@ -3,7 +3,7 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       .form-text {
         text-transform: none;
-        height: 2.1875rem;
+        height: 2.5rem;
         width: 100%;
         border-#{$right}: 0;
 
@@ -21,12 +21,12 @@ header {
         }
 
         @include breakpoint($desktop) {
-          width: 14.4375rem;
+          width: 12.3125rem;
         }
       }
 
       #edit-submit-search {
-        height: 2.1875rem;
+        height: 2.5rem;
         width: 2.625rem;
         background-color: $primary_search_bg;
         background-size: 47%;

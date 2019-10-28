@@ -14,7 +14,7 @@
 
       a.menu--one__link,
       div.menu__link.menu--one__link {
-        font-size: 0.9375rem;
+        font-size: 0.85rem;
         height: 2.4rem;
         border-bottom: none;
         border-top: none;
@@ -199,5 +199,15 @@
 .highlights {
   .hightlight__title {
     font-weight: bold;
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    .menu--one__link {
+      @include breakpoint($desktop) {
+        padding: 0.625rem 0;
+      }
+    }
   }
 }
