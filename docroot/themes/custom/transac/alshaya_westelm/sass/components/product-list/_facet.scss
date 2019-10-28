@@ -16,6 +16,8 @@
 
   a {
     font-weight: normal;
+    font-size: 0.9375rem;
+    text-transform: capitalize;
   }
 
   input[type=checkbox] ~ label::before {
