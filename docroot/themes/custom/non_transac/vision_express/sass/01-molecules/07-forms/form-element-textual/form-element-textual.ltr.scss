@@ -74,6 +74,7 @@ input[type="search"] {
 .input--textual__container input[type='text'],
 .input--textual__container input[type='email'],
 .input--textual__container input[type='tel'],
+.input--textual__container input[type='password'],
 .mobile-number-field .local-number,
 .input--textual__container textarea {
   border-bottom: 0;
@@ -87,6 +88,7 @@ input[type="search"] {
 .input--textual__container input[type='text'],
 .input--textual__container input[type='email'],
 .input--textual__container input[type='tel'],
+.input--textual__container input[type='password'],
 .mobile-number-field .local-number, {
   height: 2.8125rem;
 }
@@ -382,4 +384,41 @@ select:-webkit-autofill {
   .mobile-only-block {
     display: block;
   }
+}
+
+.modal-form-elements-wrapper {
+  .mobile-number-field .local-number {
+    &::placeholder {
+      color: $form-input-placeholder-text;
+    }
+  }
+}
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+textarea,
+select {
+  &::placeholder {
+    color: $form-input-placeholder-text;
+  }
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: $form_input_text;
+}
+
+input[type="submit"],
+button {
+  padding: 0.625rem 1.375rem;
+  background-color: $btn-bg;
+  color: $btn;
+  display: inline-block;
+  font-size: 0.875rem;
+  text-decoration: none;
+  font-weight: bold;
 }
