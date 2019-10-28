@@ -7,6 +7,7 @@
 .c-user-register h1,
 .c-user-login h1 {
   font-size: 1.125rem;
+  text-transform: lowercase;
 
   @include breakpoint($tablet) {
     font-size: 1.375rem;

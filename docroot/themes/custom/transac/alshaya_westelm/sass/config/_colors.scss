@@ -35,6 +35,7 @@ $roman_coffee: #81644b;
 
 // Overrides for variables.
 // Global elements.
+$primary_form_link: $WE_grey_three;
 $content_link_color: $WE_grey_two;
 $primary_link: $WE_grey_three;
 $primary_link-hover: $WE_grey_three;
@@ -551,6 +552,7 @@ $store_finder_glossary_link: $WE_grey_three;
 
 // Product Listing page & Search results page.
 $plp_facet_item_label: $WE_grey_three;
+$plp_tile_product_title: $WE_grey_two;
 $plp_tile_product_title_hover: $WE_grey_three;
 $plp_category_desc: $WE_grey_three;
 $plp_promotion_description: $WE_grey_three;
@@ -558,7 +560,7 @@ $plp_sort_by_label: $WE_grey_three;
 $plp_sort_for_label: $WE_grey_two;
 $plp_facet_filter: $WE_grey_three;
 $plp_facet_filter_bg: $WE_grey_three;
-$plp_facet_filter_link: $WE_white_three;
+$plp_facet_filter_link: $WE_grey_two;
 $plp_facet_border: $WE_gray_twelve;
 $plp_facet_wrapper_shadow: $WE_shadow;
 $plp_facet_clear_border: $WE_grey_three;

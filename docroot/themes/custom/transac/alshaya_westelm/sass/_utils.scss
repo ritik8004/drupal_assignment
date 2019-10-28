@@ -9,6 +9,12 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_westelm/i
   margin-top: 0;
 }
 
+@mixin container_shadow {
+  padding: 0.625rem 0 0.3125rem;
+  border-width: 4px;
+  box-shadow: 2px 2px 6px 0 $plp_facet_wrapper_shadow;
+}
+
 @mixin mm-mob-arrow ($position, $direction: false) {
   &:#{$position} {
     content: '';
