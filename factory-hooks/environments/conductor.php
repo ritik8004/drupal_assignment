@@ -299,6 +299,26 @@ $conductors = [
     'hmac_id' => 'a220ff2d59e846c79426e5b001516063',
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
   ],
+  // Westelm KW.
+  'wekw_qa' => [
+    'hmac_id' => '5adbb23fe93249438105a3560d7c86d3',
+    'hmac_secret' => 'NjFhYTM2OTAtMjE5Ni00',
+  ],
+  // Westelm SA.
+  'wesa_qa' => [
+    'hmac_id' => 'e811273bb860476da288afeb111816b6',
+    'hmac_secret' => 'ZmVjMDczMzUtYTY4Yy00',
+  ],
+  // Westelm AE.
+  'weae_qa' => [
+    'hmac_id' => 'be57e78e9c5642018b14ca7678f32ee7',
+    'hmac_secret' => 'YmNkYTg3ODQtOThjMi00',
+  ],
+  // Westelm AE.
+  'weae_dev2' => [
+    'hmac_id' => '82e9dce9da1e4cc7a25a61658f359576',
+    'hmac_secret' => 'YzI0ZjNmNzUtMzgyNS00',
+  ],
 ];
 
 // Default values for each ACM middleware.

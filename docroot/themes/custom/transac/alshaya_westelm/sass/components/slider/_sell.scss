@@ -1,0 +1,5 @@
+.subtitle.crossell-title {
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0.5rem;
+  }
+}

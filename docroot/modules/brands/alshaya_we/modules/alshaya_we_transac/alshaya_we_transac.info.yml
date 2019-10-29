@@ -1,0 +1,9 @@
+name: 'Alshaya Westelm (Transac)'
+type: module
+description: 'The dedicated module for transac Westelm brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_we:alshaya_we
+  - alshaya_furnitures:alshaya_furnitures
+  - alshaya_furnitures:alshaya_furnitures_free_design_services
