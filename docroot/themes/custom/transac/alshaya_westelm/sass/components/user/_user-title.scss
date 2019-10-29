@@ -1,0 +1,27 @@
+.order-detail .block-page-title-block,
+.c-change-password .block-page-title-block,
+.c-communication-preferences .block-page-title-block,
+.c-user-edit .block-page-title-block,
+.c-order-list .block-page-title-block,
+.c-user--node .block-page-title-block,
+.c-address-book .block-page-title-block {
+  .back-link {
+    @include breakpoint($only-mobile) {
+      color: $my_account_dashboard_back_link;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    padding-bottom: 0.75rem;
+  }
+}
+
+.c-user--node.l-two--sf {
+  aside.c-sidebar-first {
+    .my-account-mobile-title1 {
+      @include breakpoint($only-mobile) {
+        padding: 0.45rem 0 0.3rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{% extends "@alshaya_white_label/node/node--acq-product--full.html.twig" %}
+
+{% block afterDescription %}
+  {% if content.dimensions_and_care %}
+    <div class="content--dimensions-and-care">
+      {{ content.dimensions_and_care }}
+   </div>
+  {% endif %}
+{% endblock %}
+
+{% block itemCode %}
+{% endblock %}

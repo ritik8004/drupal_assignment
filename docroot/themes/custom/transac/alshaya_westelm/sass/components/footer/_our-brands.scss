@@ -1,0 +1,16 @@
+.c-our-brands {
+  border-width: 0.125rem;
+
+  .brand-list {
+    .brand {
+      margin: 0.875rem 1rem 0;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+}

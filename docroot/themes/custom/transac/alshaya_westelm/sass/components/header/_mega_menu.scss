@@ -1,0 +1,213 @@
+.block-alshaya-main-menu {
+  ul.menu--one__list {
+    @include breakpoint($desktop) {
+      background: $pre_content_region_bg;
+      padding: 0 calc((100% - 67.5rem) / 2);
+    }
+  }
+
+  li.menu--one__list-item {
+    text-transform: none;
+
+    @include breakpoint($desktop) {
+      height: 2.4rem;
+
+      a.menu--one__link,
+      div.menu__link.menu--one__link {
+        font-size: 0.85rem;
+        height: 2.4rem;
+        border-bottom: none;
+        border-top: none;
+        color: $mm_l1_link;
+        display: block;
+        line-height: 1.5;
+        text-transform: uppercase;
+        font-family: $we-bold;
+      }
+
+      &:hover {
+        > ul.menu--two__list {
+          transform: translateY(0);
+        }
+
+        div.menu--one__link {
+          border-bottom: none !important;
+          border-top: none !important;
+          background: $mm_l1_link_active_bg !important;
+          color: $mm_l1_link_active !important;
+          box-shadow: inset 0 0.125rem 0 0 $mm_l1_link_active_shadow;
+          font-weight: 600;
+          cursor: default;
+        }
+      }
+    }
+  }
+
+  // MM L1 hover.
+  .active--menu--links {
+    li.menu--one__list-item {
+      @include breakpoint($desktop) {
+        &:hover {
+          a.menu--one__link {
+            @include mm-l1-highlight;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li.menu--one__list-item a.menu--one__link {
+        border-bottom: none;
+      }
+    }
+  }
+
+  // MM L1 active.
+  li.menu--one__list-item {
+    &:hover {
+      @include breakpoint($desktop) {
+        a.menu--one__link {
+          @include mm-l1-highlight;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .menu--one__link {
+        &.active {
+          @include mm-l1-highlight;
+
+          border-bottom: none;
+        }
+      }
+    }
+
+    // Add title content on ::after to prevent the menu links
+    // from shifting when the text is bold on hover.
+    .menu--one__link::after {
+      @include breakpoint($desktop) {
+        content: attr(title);
+        display: block;
+        font-weight: 600;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+      }
+    }
+
+    .menu--one__link {
+      @include breakpoint($upto-desktop) {
+        padding-bottom: 0.9375rem;
+        color: $mm_mob_l3_link;
+        font-size: 0.9375rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
+
+    ul.menu--two__list {
+      @include breakpoint($desktop) {
+        max-width: 67.5rem;
+        border-top-width: 1rem;
+      }
+    }
+  }
+}
+
+.has--three-levels {
+  .menu--two__list {
+    .menu--two__list-item > .menu-two__link-wrapper {
+      a,
+      div.menu-two__link {
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          text-transform: capitalize;
+          font-size: 0.9375rem;
+          color: $mm_mob_l3_link;
+        }
+      }
+
+      div.menu-two__link {
+        &:hover {
+          @include breakpoint($desktop) {
+            cursor: default;
+          }
+        }
+      }
+    }
+  }
+
+  .menu--three__list-item > .menu-two__link-wrapper a {
+    @include breakpoint($desktop) {
+      &.menu__link {
+        font-size: 0.9375rem !important;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .menu--three__list {
+    .level-three__wrapper {
+      .menu--three__list-item {
+        a {
+          @include breakpoint($upto-desktop) {
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+  }
+}
+
+.highlights {
+  .title {
+    font-weight: bold;
+  }
+}
+
+.menu--two__list {
+  .menu--two__list-item {
+    .menu-two__link {
+      @include breakpoint($desktop) {
+        font-size: 0.75rem;
+      }
+    }
+
+    .menu--three__list {
+      @include breakpoint($desktop) {
+        margin-bottom: 2rem;
+      }
+
+      li {
+        @include breakpoint($desktop) {
+          padding-bottom: 0.3125rem;
+          padding-top: 0.3125rem;
+        }
+      }
+    }
+  }
+}
+
+.highlights {
+  .hightlight__title {
+    font-weight: bold;
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    .menu--one__link {
+      @include breakpoint($desktop) {
+        padding: 0.625rem 0;
+      }
+    }
+  }
+}
