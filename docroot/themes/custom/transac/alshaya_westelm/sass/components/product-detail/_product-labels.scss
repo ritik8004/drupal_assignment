@@ -1,0 +1,17 @@
+.labels-container {
+  .label {
+    &.top {
+      &-#{$left} {
+        top: 0;
+        #{$left}: 0;
+      }
+    }
+
+    &.bottom {
+      &-#{$left} {
+        top: 0;
+        #{$left}: 0;
+      }
+    }
+  }
+}
