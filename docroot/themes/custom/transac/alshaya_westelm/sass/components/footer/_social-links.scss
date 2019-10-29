@@ -1,0 +1,7 @@
+.footer--social {
+  .c-social-links {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 0;
+    }
+  }
+}

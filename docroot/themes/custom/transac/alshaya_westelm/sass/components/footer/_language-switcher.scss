@@ -1,0 +1,34 @@
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        a {
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}
+
+.c-footer-primary {
+  .language--switcher {
+    @include breakpoint($only-tablet) {
+      margin-top: 1.5rem;
+    }
+
+    .language-switcher-language-url ul {
+      li {
+        @include breakpoint($only-tablet) {
+          &.en a {
+            margin-left: 0;
+          }
+
+          &.ar a {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+}
