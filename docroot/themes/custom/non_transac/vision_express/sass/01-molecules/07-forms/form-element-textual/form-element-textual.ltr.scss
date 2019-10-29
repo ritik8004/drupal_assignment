@@ -114,15 +114,23 @@ input[type="search"] {
     height: 2.8125rem;
 
     .prefix {
-      line-height: 3;
+      line-height: 2.875rem;
       padding-left: 0.625rem;
       min-width: 5.5rem;
+      font-size: 0.875rem;
     }
 
     .arrow {
       position: absolute;
-      border-width: 0.3125rem;
-      top: 22%;
+      top: -0.3125rem;
+      border: 0;
+      right: 1.875rem;
+      color: $form-input-placeholder-text;
+      display: block;
+
+      @include icon(chevrondown, after) {
+        font-size: 1.875rem;
+      }
     }
   }
 
