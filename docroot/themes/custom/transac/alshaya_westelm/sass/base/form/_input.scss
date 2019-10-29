@@ -1,0 +1,5 @@
+.c-input__bar::before,
+.c-input__bar::after {
+  height: 0.125rem !important;
+  color: $primary_input_focus_border;
+}
