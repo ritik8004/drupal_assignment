@@ -1,0 +1,27 @@
+.c-user-register {
+  .c-content__region {
+    .user-form,
+    .change-pwd-form {
+      .field--name-field-subscribe-newsletter p a {
+        font-weight: 600;
+        color: $content_link_color;
+      }
+
+      #edit-actions {
+        margin-top: 2.3rem;
+      }
+    }
+  }
+
+  &.user-page {
+    @include breakpoint($desktop) {
+      margin-top: 4.8rem;
+    }
+  }
+
+  .user-form {
+    .form-submit {
+      font-size: 0.75rem;
+    }
+  }
+}

@@ -1,0 +1,34 @@
+.select2Option {
+  .select-buttons {
+    li,
+    li.disabled {
+      a,
+      span {
+        font-size: 0.625rem;
+        padding: 0.6rem 0.75rem;
+      }
+
+      a.picked {
+        font-weight: normal;
+      }
+    }
+
+    li.disabled {
+      &:hover {
+        cursor: default;
+      }
+
+      a,
+      span {
+        background: none;
+        color: $pdp_swatch_disabled;
+        border-color: $pdp_swatch_disabled;
+      }
+    }
+  }
+
+  .selected-text {
+    font-weight: 600;
+    color: $pdp_size_option_text;
+  }
+}

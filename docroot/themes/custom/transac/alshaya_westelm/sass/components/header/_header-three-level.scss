@@ -1,0 +1,7 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
+      margin-bottom: 0.3125rem;
+    }
+  }
+}
