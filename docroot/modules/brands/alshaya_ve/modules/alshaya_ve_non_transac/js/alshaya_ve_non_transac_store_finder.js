@@ -21,9 +21,7 @@
       $('#edit-country').on('change', function (event, ui) {
         var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
         $('body').after(progress_element);
-        setTimeout(function () {
-          $('#views-exposed-form-stores-finder-page-2 [id^="edit-submit-stores-finder"]').trigger('click');
-        }, 500);
+        Drupal.nonTransacVeApplySearch();
       });
       var country_code = $.cookie('alshaya_client_country_code');
       if (typeof country_code === 'undefined' || !country_code) {
@@ -76,12 +74,17 @@
         var name = Drupal.getQueryVariable('country');
         if (name.length === 0 || typeof name === 'undefined') {
           jQuery("#views-exposed-form-stores-finder-page-2 select option[value=" + countryCode + "]").prop('selected',true);
-          setTimeout(function () {
-            jQuery('#views-exposed-form-stores-finder-page-2 [id^="edit-submit-stores-finder"]').trigger('click');
-          }, 500);
+          Drupal.nonTransacVeApplySearch();
         }
       }
     }
+  };
+
+  /**
+   * Helper function to trigger apply button.
+   */
+  Drupal.nonTransacVeApplySearch = function () {
+    jQuery('#views-exposed-form-stores-finder-page-2 [id^="edit-submit-stores-finder"]').trigger('click');
   };
 
   // Set default country option on page load using client's detected country.
