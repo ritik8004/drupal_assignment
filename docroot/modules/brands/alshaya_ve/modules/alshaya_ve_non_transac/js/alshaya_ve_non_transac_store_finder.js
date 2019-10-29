@@ -5,10 +5,8 @@
 
 (function ($, Drupal, drupalSettings) {
   'use strict';
-  /**
-   * @namespace
-   */
-  Drupal.behaviors.storeFinderGlossaryMap = {
+
+  Drupal.behaviors.storeFinderUpdateCountry = {
     attach: function (context, settings) {
       // Reset active class on store finder page on page load or ajax load.
       $('#views-exposed-form-stores-finder-page-1 a.map-view-link').removeClass('active');
@@ -19,23 +17,12 @@
         $(this).addClass('active');
         $('#views-exposed-form-stores-finder-page-1 a#edit-list-view').removeClass('active');
       });
-    }
-  };
 
-  Drupal.behaviors.storeFinderCountrySelected = {
-    attach: function (context, settings) {
       $('#edit-country').on('change', function (event, ui) {
         var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
         $('body').after(progress_element);
-        setTimeout(function () {
-          $('#views-exposed-form-stores-finder-page-2 [id^="edit-submit-stores-finder"]').trigger('click');
-        }, 500);
+        Drupal.nonTransacVeApplySearch();
       });
-    }
-  };
-
-  Drupal.behaviors.storeFinderSetLatLongCookie = {
-    attach: function (context, settings) {
       var country_code = $.cookie('alshaya_client_country_code');
       if (typeof country_code === 'undefined' || !country_code) {
         if (navigator.geolocation) {
@@ -58,16 +45,10 @@
           });
         }
       }
-    }
-  };
 
-
-  Drupal.behaviors.storeFinderUpdateCountry = {
-    attach: function (context, settings) {
-      var country_code = $.cookie('alshaya_client_country_code');
-      var name = GetParameterValues('country');
+      var name = Drupal.getQueryVariable('country');
       var options = $('#views-exposed-form-stores-finder-page-2 select option').map(function() { return $(this).val(); }).get();
-      if (typeof name === 'undefined') {
+      if (name.length === 0 || typeof name === 'undefined') {
         drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = options.slice(1);
         if(jQuery.cookie('alshaya_client_country_code') && jQuery.inArray(jQuery.cookie('alshaya_client_country_code').toLowerCase(), options) !== -1) {
           drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = [jQuery.cookie('alshaya_client_country_code').toLowerCase()];
@@ -82,37 +63,30 @@
     }
   };
 
-  // Set default country option on page load using client's detected country.
-  $( window ).on( 'load', defaultSelectCountryOption );
-})(jQuery, Drupal, drupalSettings);
-
-
-
-function defaultSelectCountryOption() {
-  if (drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country.length == 1) {
-    var countryCode = drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country[0];
-    var optionExists = (jQuery("#views-exposed-form-stores-finder-page-2 select option[value=" + countryCode + "]").length > 0);
-    if (optionExists) {
-      var name = GetParameterValues('country');
-      if (typeof name === 'undefined') {
-        jQuery("#views-exposed-form-stores-finder-page-2 select option[value=" + countryCode + "]").prop('selected',true);
-        setTimeout(function () {
-          jQuery('#views-exposed-form-stores-finder-page-2 [id^="edit-submit-stores-finder"]').trigger('click');
-        }, 500);
+  /**
+   * Helper function to set default country.
+   */
+  Drupal.nonTransacVeDefaultCountry = function () {
+    if (drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country.length == 1) {
+      var countryCode = drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country[0];
+      var optionExists = (jQuery("#views-exposed-form-stores-finder-page-2 select option[value=" + countryCode + "]").length > 0);
+      if (optionExists) {
+        var name = Drupal.getQueryVariable('country');
+        if (name.length === 0 || typeof name === 'undefined') {
+          jQuery("#views-exposed-form-stores-finder-page-2 select option[value=" + countryCode + "]").prop('selected',true);
+          Drupal.nonTransacVeApplySearch();
+        }
       }
     }
-  }
-}
+  };
 
-// Function to check url parameters.
-function GetParameterValues(param) {  
-  var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');  
-  for (var i = 0; i < url.length; i++) {  
-    var urlparam = url[i].split('=');  
-    if (urlparam[0] == param) {  
-      return urlparam[1];  
-    }  
-  } 
-}
+  /**
+   * Helper function to trigger apply button.
+   */
+  Drupal.nonTransacVeApplySearch = function () {
+    jQuery('#views-exposed-form-stores-finder-page-2 [id^="edit-submit-stores-finder"]').trigger('click');
+  };
 
-
+  // Set default country option on page load using client's detected country.
+  $( window ).on( 'load', Drupal.nonTransacVeDefaultCountry );
+})(jQuery, Drupal, drupalSettings);
