@@ -1,0 +1,25 @@
+#backtotop {
+  font-size: 0;
+  height: 2.3125rem;
+  width: 2.3125rem;
+  bottom: 1.5rem;
+  line-height: normal;
+  #{$right}: 0.875rem;
+
+  @include breakpoint($tablet) {
+    z-index: 11;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 3.5625rem;
+  }
+
+  &::after {
+    content: '';
+    background: url(../imgs/icons/back-to-top.svg) no-repeat;
+    background-size: contain;
+    border-radius: 0;
+    top: 0;
+    #{$right}: 0;
+  }
+}

@@ -1,0 +1,53 @@
+.promo__panel {
+  bottom: -0.5625rem;
+
+  @include breakpoint($only-tablet) {
+    .mobile--overlay & {
+      z-index: 5;
+    }
+  }
+
+  .promo-panel-label {
+    color: $promo_panel_label;
+    background-color: $promo_panel_label_bg;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    width: 20.625rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    height: 2.5rem;
+    transition: background-color 0.5s ease-in-out;
+
+    @include icon(chevronup, after) {
+      padding-#{$left}: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &.active-promo-panel {
+    .promo-panel-label {
+      background-color: $promo_panel_label_bg_active;
+
+      @include icon(chevrondown, after) {
+        padding-#{$left}: 0.5rem;
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .paragraph--type--offers-bordered {
+    .field--name-field-link {
+      a {
+        border-color: $_promo_panel_CTA_border;
+        color: $_promo_panel_CTA_text;
+      }
+    }
+  }
+}
