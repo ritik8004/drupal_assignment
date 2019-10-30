@@ -24,8 +24,12 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
         // this case happens only for the term edit url. We check for the
         // `edit` in url as well to make sure term/edit screen and not process
         // further if term edit screen.
-        if ($collection->get('entity.taxonomy_term.edit_form')
-          && isset($exploded_path[4]) && $exploded_path[4] == 'edit') {
+        if (($collection->get('entity.taxonomy_term.edit_form')
+            || $collection->get('entity.taxonomy_term.content_translation_add')
+            || $collection->get('entity.taxonomy_term.content_translation_overview')
+            || $collection->get('entity.taxonomy_term.delete_form'))
+          && isset($exploded_path[4])
+          && in_array($exploded_path[4], ['edit', 'translations', 'delete'])) {
           return $collection;
         }
 
