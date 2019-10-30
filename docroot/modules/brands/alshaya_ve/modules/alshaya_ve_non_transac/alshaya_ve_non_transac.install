@@ -48,4 +48,7 @@ function alshaya_ve_non_transac_install() {
   // Configure Appointment API url settings.
   $settings = Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'];
   \Drupal::configFactory()->getEditable('alshaya_ve_non_transac.settings')->set('book_appointment_url', $settings)->save();
+
+  // Country code and timezone for Kuwait.
+  alshaya_country_set_default_regional_info('KW');
 }
