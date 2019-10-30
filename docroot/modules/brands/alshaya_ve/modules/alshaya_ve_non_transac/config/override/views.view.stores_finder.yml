@@ -692,8 +692,8 @@ display:
           type: boolean
           settings:
             format: yes-no
-            format_custom_true: ''
-            format_custom_false: ''
+            format_custom_true: 'yes'
+            format_custom_false: 'no'
           group_column: value
           group_columns: {  }
           group_rows: true
