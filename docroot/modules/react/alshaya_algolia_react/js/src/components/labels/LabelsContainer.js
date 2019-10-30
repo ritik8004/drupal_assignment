@@ -6,7 +6,7 @@ const LabelsContainer = ({labels, sku}) => {
     return (null);
   }
   const labelItems = labels.map(({image, position}) => (
-    <div className={`label ${position}`}>
+    <div className={`label ${position}`} key={image.url}>
       <ImageElement src={image.url} alt={image.alt} title={image.title} />
     </div>
   ));

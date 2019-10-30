@@ -31,7 +31,7 @@ export default ({indexName, ...props}) => {
   }
 
   getFilters().forEach(facet => {
-    facets.push(<WidgetManager facet={facet} indexName={indexName} filterResult={(test) => updateFilterResult(test)} />);
+    facets.push(<WidgetManager key={facet.identifier} facet={facet} indexName={indexName} filterResult={(test) => updateFilterResult(test)} />);
   });
 
   return (

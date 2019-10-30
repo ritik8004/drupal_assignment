@@ -36,6 +36,6 @@ export function formatPrice(price) {
   ];
 
   return drupalSettings.reactTeaserView.price.currencyPosition === 'before'
-    ? priceParts.map(item => item).join(' ')
-    : priceParts.reverse().map(item => item).join(' ');
+    ? priceParts.join(' ')
+    : priceParts.reverse().join(' ');
 }

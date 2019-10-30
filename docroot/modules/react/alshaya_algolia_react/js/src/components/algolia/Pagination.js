@@ -7,7 +7,7 @@ import ProgressBar from '../../filters/widgets/ProgressBar';
 const PaginationStats = connectStats(({nbHits, currentResults}) => {
   return (
     <React.Fragment>
-      <span class="ais-Stats-text">
+      <span className="ais-Stats-text">
         {
           Drupal.t('showing @current of @total items', {
             '@current': currentResults,
