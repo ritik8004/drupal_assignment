@@ -6,20 +6,20 @@ const Portal = ({query, children, conditional = false, ...attr}) => {
   const [dynamic] = useState(!el.current.parentElement);
   useEffect(() => {
     const createPortal = (conditional === true) ? (query !== '') : true;
-
+    const refElement = el.current;
     if (dynamic && createPortal) {
       for (const [property, value] of Object.entries(attr)) {
-        el.current[property] = value;
+        refElement[property] = value;
       }
       const autosuggestContainer = document.querySelector('.react-autosuggest__container');
-      autosuggestContainer.appendChild(el.current);
+      autosuggestContainer.appendChild(refElement);
     }
     return () => {
-      if (dynamic && el.current.parentElement) {
-        el.current.parentElement.removeChild(el.current);
+      if (dynamic && refElement.parentElement) {
+        refElement.parentElement.removeChild(refElement);
       }
     };
-  }, [query]);
+  }, [attr, conditional, dynamic, query]);
 
   return createPortal(children, el.current);
 };

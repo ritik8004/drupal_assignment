@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { updateAfter } from '../utils';
+import { isMobile } from '../utils';
 
 /**
  * Sticky filters.
@@ -8,52 +8,35 @@ const StickyFilter = (props) => {
   const stickyFiltersRef = useRef();
 
   useEffect(() => {
-    // Show only maximum 4 filters for desktop sticky filter
-    // excluding the sort by, (with sort by 5).
-    setTimeout(() => {
-      if (typeof stickyFiltersRef.current == 'object' && stickyFiltersRef.current !== null) {
-        const filters = stickyFiltersRef.current.querySelectorAll('.c-collapse-item');
-        let activeFilters = [];
-        filters.forEach(element => {
-          const children = element.getElementsByTagName('ul')[0];
-
-          if (typeof children !== 'undefined' && children.querySelector('li') === null) {
-            element.classList.add('hide-facet-block');
-          }
-          else {
-            activeFilters.push(element);
-            element.classList.remove('hide-facet-block');
-          }
-        });
-
-        if (activeFilters.length > 5) {
-          var hideFilters = activeFilters.slice(5);
-          hideFilters.forEach((filter) => {
-            filter.classList.add('hide-facet-block');
-          });
-        }
-
-        // Hide the `all filters` link when less filters (only for desktop).
-        if (activeFilters.length <= 5) {
-          stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.add('hide-for-desktop');
-        }
-        else {
-          stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.remove('hide-for-desktop');
-        }
-
-        Drupal.algoliaReact.facetEffects();
-        if ($(window).width() > 767 && stickyFiltersRef.current.parentNode.querySelector('.site-brand-home') === null) {
-          var site_brand = $('.site-brand-home').clone();
-          $(site_brand).insertBefore(stickyFiltersRef.current);
-        }
-      }
-    }, updateAfter);
+    Drupal.algoliaReact.facetEffects();
+    const stickyFilterWrapper = stickyFiltersRef.current.parentNode;
+    if (!isMobile() && stickyFilterWrapper.querySelector('.site-brand-home') === null) {
+      var site_brand = document.querySelector('.site-brand-home').cloneNode(true);
+      stickyFilterWrapper.insertBefore(site_brand, stickyFilterWrapper.childNodes[0]);
+    }
   }, [props.children]);
+
+  const filtersCallBack = ({activeFilters, limit}) => {
+    if (activeFilters.length > limit) {
+      var hideFilters = activeFilters.slice(limit);
+      hideFilters.forEach((filter) => {
+        filter.classList.add('hide-facet-block');
+      });
+    }
+
+    // Hide the `all filters` link when less filters (only for desktop).
+    if (activeFilters.length <= limit) {
+      stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.add('hide-for-desktop');
+    }
+    else {
+      stickyFiltersRef.current.querySelector('.show-all-filters-algolia').classList.remove('hide-for-desktop');
+    }
+  }
 
   return (
     <div className="sticky-filter-wrapper">
       <div className="container-without-product" ref={stickyFiltersRef}>
-          {props.children}
+        {props.children(filtersCallBack)}
       </div>
     </div>
   );

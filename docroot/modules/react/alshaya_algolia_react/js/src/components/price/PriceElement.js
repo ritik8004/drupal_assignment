@@ -13,7 +13,7 @@ const PriceElement = (props) => {
   return (
     <span className="price-wrapper">
       <div className="price">
-        {drupalSettings.reactTeaserView.price.currencyPosition == 'before' ? priceParts.map(item => item) : priceParts.reverse().map(item => item)}
+        {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts.map(item => item) : priceParts.reverse().map(item => item)}
       </div>
     </span>
   );

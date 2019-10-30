@@ -1,10 +1,9 @@
 import React from 'react';
-import ImageElement from './ImageElement';
 import ImageLazyLoad from './ImageLazyLoad';
 
 export function ImageWrapper({src, title, className, showDefaultImage = false}) {
   let imageSrc = '';
-  if (typeof src != 'undefined' && src != '') {
+  if (typeof src != 'undefined' && src !== '') {
     imageSrc = src;
   }
   else if (showDefaultImage && drupalSettings.reactTeaserView.gallery.defaultImage) {

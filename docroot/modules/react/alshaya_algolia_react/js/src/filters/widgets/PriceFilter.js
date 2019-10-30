@@ -3,7 +3,11 @@ import connectWithPriceFilter from './connectors/connectWithPriceFilter';
 import { getPriceRangeLabel } from '../../utils';
 
 const PriceFilter = (props) => {
-  const { items, attribute, refine } = props;
+  const { items, refine } = props;
+
+  if (typeof props.itemCount != 'undefined') {
+    props.itemCount(props.attribute, items.length);
+  }
 
   return (
     <ul>

@@ -60,14 +60,20 @@ const SearchResults = props => {
       )}
       <MainContent>
         <StickyFilter>
-          <Filters indexName={indexName} />
-          <div className="show-all-filters-algolia">
-            <span className="desktop">{Drupal.t('all filters')}</span>
-            <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
-          </div>
+          {(callback) => (
+            <React.Fragment>
+              <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
+              <div className="show-all-filters-algolia hide-for-desktop">
+                <span className="desktop">{Drupal.t('all filters')}</span>
+                <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
+              </div>
+            </React.Fragment>
+          )}
         </StickyFilter>
         <AllFilters>
-          <Filters indexName={indexName} />
+          {(callback) => (
+            <Filters indexName={indexName} callback={(callerProps) => callback(callerProps)}/>
+          )}
         </AllFilters>
         <GridAndCount>
           <Stats
@@ -79,7 +85,9 @@ const SearchResults = props => {
           />
         </GridAndCount>
         <SelectedFilters>
-          <CurrentRefinements />
+          {(callback) => (
+            <CurrentRefinements callback={(callerProps) => callback(callerProps)}/>
+          )}
         </SelectedFilters>
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits>

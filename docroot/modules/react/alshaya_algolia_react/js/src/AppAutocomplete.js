@@ -27,7 +27,7 @@ class AppAutocomplete extends React.Component {
   setQueryValue = (queryValue) => {
     this.setState({query: queryValue});
     toggleSearchResultsContainer(queryValue);
-    if (queryValue == '') {
+    if (queryValue === '') {
       updateSearchQuery('');
     }
   };
@@ -55,7 +55,7 @@ class AppAutocomplete extends React.Component {
     const { query } = this.state;
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
-    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) && query != ''
+    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) && query !== ''
       ? (<SearchResultsRender query={query} />)
       : '';
 

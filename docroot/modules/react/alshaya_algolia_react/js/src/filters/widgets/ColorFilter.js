@@ -3,7 +3,7 @@ import connectRefinementList from './connectors/connectRefinementList';
 import Swatch from './Swatch';
 
 // Seprate a string by comma to get the label and color code/image/text.
-const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL }) => {
+const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) => {
   var searchForm = (null);
   if (isFromSearch) {
     searchForm = (
@@ -14,6 +14,10 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, createURL })
         />
       </li>
     );
+  }
+
+  if (typeof props.itemCount != 'undefined') {
+    props.itemCount(props.attribute, items.length);
   }
 
   return (

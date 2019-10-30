@@ -1,3 +1,4 @@
+import React from 'react';
 import { connectSortBy } from 'react-instantsearch-dom';
 
 const SortByList = ({ items, refine }) => (

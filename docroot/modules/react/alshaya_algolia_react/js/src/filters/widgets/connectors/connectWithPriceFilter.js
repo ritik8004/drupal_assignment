@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { createConnector } from 'react-instantsearch-dom';
-const _ = require("lodash");
 import {
   cleanUpValue,
   getCurrentRefinementValue,
@@ -8,6 +7,7 @@ import {
   getResults,
   refineValue
 } from '../../../utils/indexUtils';
+const _ = require("lodash");
 
 const namespace = 'multiRange';
 
@@ -154,7 +154,7 @@ export default createConnector({
           value: rangeKey,
           sort: range.start == null ? 0 : parseInt(range.start),
           count: parseInt(v.count),
-          isRefined: rangeKey == currentRefinement
+          isRefined: rangeKey === currentRefinement
         };
         newItems.push(object);
       }
