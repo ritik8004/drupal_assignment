@@ -12,8 +12,8 @@
       $('#views-exposed-form-stores-finder-page-1 a.map-view-link').removeClass('active');
       $('#views-exposed-form-stores-finder-page-1 a#edit-list-view').addClass('active');
       $('.block-store-finder-form__list-view').on('click', function () {
-        $('.path--store-finder .attachment-after').show();
-        $('div.view-id-stores_finder .view-content:first').hide();
+        $('.page-store-finder .views-view__attachment-after').show();
+        $('div.view-id-stores_finder .view-store-finder--list__columns').hide();
         $(this).addClass('active');
         $('#views-exposed-form-stores-finder-page-1 a#edit-list-view').removeClass('active');
       });
