@@ -24,7 +24,7 @@ class WidgetManager extends React.Component {
         break;
 
       case 'range_checkbox':
-        currentWidget = <PriceFilter attribute={filter.identifier} granularity={filter.widget.config.granularity} itemCount={this.props.itemCount} />;
+        currentWidget = <PriceFilter attribute={filter.identifier} granularity={parseInt(filter.widget.config.granularity)} itemCount={this.props.itemCount} />;
         break;
 
       case 'checkbox':

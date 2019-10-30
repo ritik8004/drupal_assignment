@@ -8,7 +8,7 @@ const NoResults = ({ searchResults }) => {
 
   return (
     <div className="hits-empty-state">
-      <div class="view-empty">
+      <div className="view-empty">
         {Drupal.t('Your search did not return any results.')}
       </div>
     </div>

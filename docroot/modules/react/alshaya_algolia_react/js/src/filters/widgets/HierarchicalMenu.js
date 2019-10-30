@@ -13,8 +13,8 @@ const HierarchicalMenu = ({ items, refine, createURL }) => (
             refine(item.value);
           }}
         >
-          <span class="ais-HierarchicalMenu-label">{item.label}</span>
-          <span class="ais-HierarchicalMenu-count">{item.count}</span>
+          <span className="ais-HierarchicalMenu-label">{item.label}</span>
+          <span className="ais-HierarchicalMenu-count">{item.count}</span>
         </a>
         {item.items && (
           <HierarchicalMenu

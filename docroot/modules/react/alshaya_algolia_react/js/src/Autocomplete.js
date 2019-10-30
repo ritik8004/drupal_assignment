@@ -106,12 +106,14 @@ class Autocomplete extends React.Component {
           inputProps={inputProps}
         />
         <Portal
+          key="back-button"
           onclick={(event) => this.backIconClickEvent(event)}
           className="algolia-search-back-icon"
           id="react-algolia-searchbar-back-button"
           query=""
         />
         <Portal
+          key="clear-button"
           onclick={(event) => this.clearSearchFieldInput(event)}
           className="algolia-search-cleartext-icon"
           id="react-algolia-searchbar-clear-button"
