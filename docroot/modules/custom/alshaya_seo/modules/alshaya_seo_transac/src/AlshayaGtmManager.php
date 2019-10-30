@@ -766,6 +766,8 @@ class AlshayaGtmManager {
   public function fetchProductCategories(Node $product_node) {
     $terms = [];
 
+    // For GTM we always want English data.
+    $product_node = $this->entityRepository->getTranslationFromContext($product_node, 'en');
     $langcode = $product_node->language()->getId();
 
     $cid = implode(':', [
@@ -790,10 +792,8 @@ class AlshayaGtmManager {
 
     /** @var \Drupal\taxonomy\Entity\Term $parent */
     foreach ($parents ?? [] as $parent) {
-      if ($parent->language()->getId() != $langcode && $parent->hasTranslation($langcode)) {
-        $parent = $parent->getTranslation($langcode);
-      }
-
+      // For GTM we always want English data.
+      $parent = $this->entityRepository->getTranslationFromContext($parent, 'en');
       $terms[$parent->id()] = trim($parent->getName());
     }
 
