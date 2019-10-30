@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { isMobile } from '../utils';
 
 /**
  * Sticky filters.
@@ -8,9 +9,10 @@ const StickyFilter = (props) => {
 
   useEffect(() => {
     Drupal.algoliaReact.facetEffects();
-    if ($(window).width() > 767 && stickyFiltersRef.current.parentNode.querySelector('.site-brand-home') === null) {
-      var site_brand = $('.site-brand-home').clone();
-      $(site_brand).insertBefore(stickyFiltersRef.current);
+    const stickyFilterWrapper = stickyFiltersRef.current.parentNode;
+    if (!isMobile() && stickyFilterWrapper.querySelector('.site-brand-home') === null) {
+      var site_brand = document.querySelector('.site-brand-home').cloneNode(true);
+      stickyFilterWrapper.insertBefore(site_brand, stickyFilterWrapper.childNodes[0]);
     }
   }, [props.children]);
 

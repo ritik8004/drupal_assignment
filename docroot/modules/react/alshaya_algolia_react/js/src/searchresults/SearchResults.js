@@ -85,9 +85,9 @@ const SearchResults = props => {
           />
         </GridAndCount>
         <SelectedFilters>
-        {(callback) => (
-          <CurrentRefinements callback={(callerProps) => callback(callerProps)}/>
-        )}
+          {(callback) => (
+            <CurrentRefinements callback={(callerProps) => callback(callerProps)}/>
+          )}
         </SelectedFilters>
         <div id="hits" className="c-products-list product-small view-search">
           <SearchResultInfiniteHits>
