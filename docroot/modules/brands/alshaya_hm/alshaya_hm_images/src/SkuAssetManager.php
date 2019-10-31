@@ -322,9 +322,9 @@ class SkuAssetManager {
     // Check if file already exists in the directory.
     if (file_exists($target)) {
       // If file exists in directory, check if file entity exists.
-      $files = $this->fileStorage->loadByProperties(['uri' => $target]);
-      if (!empty($files) && $files[0] instanceof FileInterface) {
-        return $files[0];
+      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
+      if (!empty($files) && $files instanceof FileInterface) {
+        return $files;
       }
     }
 
@@ -396,6 +396,19 @@ class SkuAssetManager {
       return NULL;
     }
 
+    // Prepare the directory path.
+    $directory = 'public://assets-lp/' . trim(dirname($asset['Data']['FilePath']), '/');
+    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
+
+    // Check if file already exists in the directory.
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
+      if (!empty($files) && $files instanceof FileInterface) {
+        return $files;
+      }
+    }
+
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
 
     // Download the file contents.
@@ -431,13 +444,9 @@ class SkuAssetManager {
       return NULL;
     }
 
-    // Prepare the directory path.
-    $directory = 'public://assets-lp/' . $sku . '/' . trim(dirname($asset['Data']['FilePath']), '/');
-
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
-    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
     try {
       $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
 
