@@ -799,14 +799,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       /** @var \Drupal\acq_sku\Entity\SKU $entity */
       foreach ($entity->getMedia(FALSE) as $media) {
         if ($media['file'] instanceof FileInterface) {
-          /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
-          $file_usage = \Drupal::service('file.usage');
-          // Delete usage of file.
-          $file_usage->delete($media['file'], $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
-          // If no usage of the image, delete it.
-          if (empty($file_usage->listUsage())) {
-            $media['file']->delete();
-          }
+          $media['file']->delete();
         }
       }
     }
