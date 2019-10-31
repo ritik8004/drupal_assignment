@@ -60,10 +60,19 @@ if [ -d "$files_dir/assets" ]
 then
  mv "$files_dir/assets" "$files_dir/todelete/assets"
 fi
+if [ -d "$files_dir/assets-shared" ]
+then
+ mv "$files_dir/assets-shared" "$files_dir/todelete/assets-shared"
+fi
 if [ -d "$files_dir/assets-lp" ]
 then
  mv "$files_dir/assets-lp" "$files_dir/todelete/assets-lp"
 fi
+if [ -d "$files_dir/assets-lp-shared" ]
+then
+ mv "$files_dir/assets-lp-shared" "$files_dir/todelete/assets-lp-shared"
+fi
+
 
 echo "Moving styles directory inside 'todelete'"
 if [ -d "$files_dir/styles" ]

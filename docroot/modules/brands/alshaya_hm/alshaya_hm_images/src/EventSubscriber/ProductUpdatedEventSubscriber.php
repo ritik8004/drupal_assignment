@@ -6,6 +6,7 @@ use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\FileInterface;
+use Drupal\file\FileUsage\FileUsageInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -30,17 +31,28 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   private $logger;
 
   /**
+   * File usage.
+   *
+   * @var \Drupal\file\FileUsage\FileUsageInterface
+   */
+  private $fileUsage;
+
+  /**
    * ProductUpdatedEventSubscriber constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Factory.
+   * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
+   *   File usage.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              FileUsageInterface $file_usage) {
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger_factory->get('alshaya_hm_images');
+    $this->fileUsage = $file_usage;
   }
 
   /**
@@ -70,12 +82,17 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
       if (isset($asset['fid'])) {
         $file = $this->getFileStorage()->load($asset['fid']);
         if ($file instanceof FileInterface) {
-          $this->logger->notice('Deleting file @fid for sku @sku as it is getting deleted', [
-            '@fid' => $file->id(),
-            '@sku' => $entity->getSku(),
-          ]);
+          // Remove usage of file.
+          $this->fileUsage->delete($file, $entity->getEntityTypeId(), $entity->getEntityTypeId(), $entity->id());
+          // Delete file if there is no usage.
+          if (empty($this->fileUsage->listUsage($file))) {
+            $this->logger->notice('Deleting file @fid for sku @sku as it is getting deleted', [
+              '@fid' => $file->id(),
+              '@sku' => $entity->getSku(),
+            ]);
 
-          $file->delete();
+            $file->delete();
+          }
         }
       }
     }
