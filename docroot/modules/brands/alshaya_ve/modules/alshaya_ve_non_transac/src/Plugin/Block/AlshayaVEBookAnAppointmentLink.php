@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Provides a block to display 'Book appointment link' elements.
@@ -89,10 +90,11 @@ class AlshayaVEBookAnAppointmentLink extends BlockBase implements ContainerFacto
     ];
 
     // Add book an appontment link for mobile devices.
+    $bookAppointmentUrl = ($this->config->get('book_appointment_url')) ?? Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'];
     $link[] = [
       '#type' => 'link',
       '#title' => $this->t('Book an Appointment'),
-      '#url' => Url::fromUri($this->config->get('book_appointment_url') . "&lang=" . $this->languageManager->getCurrentLanguage()->getId()),
+      '#url' => Url::fromUri($bookAppointmentUrl . "&lang=" . $this->languageManager->getCurrentLanguage()->getId()),
       '#attributes' => [
         'class' => ['book-appointment-mobile'],
         'target' => '_blank',
