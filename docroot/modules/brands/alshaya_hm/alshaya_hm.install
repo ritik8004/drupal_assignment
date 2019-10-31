@@ -14,20 +14,6 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * UnCheck the include file checkbox for GTM.
- */
-function alshaya_hm_update_8041() {
-  $country_code = _alshaya_custom_get_site_level_country_code();
-  if (strtolower($country_code) == 'sa') {
-    \Drupal::configFactory()->getEditable('google_tag.settings')
-      ->set('include_file', FALSE)
-      ->save();
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Translations for sku code label.
  */
 function alshaya_hm_update_8040() {
