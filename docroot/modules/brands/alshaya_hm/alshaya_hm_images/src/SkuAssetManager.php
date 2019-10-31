@@ -17,6 +17,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
@@ -106,7 +107,7 @@ class SkuAssetManager {
   /**
    * GuzzleHttp\Client definition.
    *
-   * @var GuzzleHttp\Client
+   * @var \GuzzleHttp\Client
    */
   protected $httpClient;
 
@@ -314,6 +315,19 @@ class SkuAssetManager {
     $base_url = $this->hmImageSettings->get('pims_base_url');
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
+    // Prepare the directory path.
+    $directory = 'public://assets/' . trim($data['path'], '/');
+    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
+
+    // Check if file already exists in the directory.
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $files = $this->fileStorage->loadByProperties(['uri' => $target]);
+      if (!empty($files) && $files[0] instanceof FileInterface) {
+        return $files[0];
+      }
+    }
+
     $url = implode('/', [
       trim($base_url, '/'),
       trim($pims_directory, '/'),
@@ -344,15 +358,10 @@ class SkuAssetManager {
       return NULL;
     }
 
-    // Prepare the directory path.
-    $directory = 'public://assets/' . $sku . '/' . trim($data['path'], '/');
-
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-
-    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
     try {
-      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
 
       if (!($file instanceof FileInterface)) {
         throw new \Exception('Failed to save asset file');
