@@ -17,6 +17,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
@@ -106,7 +107,7 @@ class SkuAssetManager {
   /**
    * GuzzleHttp\Client definition.
    *
-   * @var GuzzleHttp\Client
+   * @var \GuzzleHttp\Client
    */
   protected $httpClient;
 
@@ -314,6 +315,19 @@ class SkuAssetManager {
     $base_url = $this->hmImageSettings->get('pims_base_url');
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
+    // Prepare the directory path.
+    $directory = 'public://assets-shared/' . trim($data['path'], '/');
+    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
+
+    // Check if file already exists in the directory.
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
+      if (!empty($files) && $files instanceof FileInterface) {
+        return $files;
+      }
+    }
+
     $url = implode('/', [
       trim($base_url, '/'),
       trim($pims_directory, '/'),
@@ -344,15 +358,10 @@ class SkuAssetManager {
       return NULL;
     }
 
-    // Prepare the directory path.
-    $directory = 'public://assets/' . $sku . '/' . trim($data['path'], '/');
-
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
-
-    $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
     try {
-      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
 
       if (!($file instanceof FileInterface)) {
         throw new \Exception('Failed to save asset file');
@@ -385,6 +394,19 @@ class SkuAssetManager {
     $cache = $this->cachePimsFiles->get($skipped_key);
     if (isset($cache, $cache->data)) {
       return NULL;
+    }
+
+    // Prepare the directory path.
+    $directory = 'public://assets-lp-shared/' . trim(dirname($asset['Data']['FilePath']), '/');
+    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
+
+    // Check if file already exists in the directory.
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
+      if (!empty($files) && $files instanceof FileInterface) {
+        return $files;
+      }
     }
 
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
@@ -422,15 +444,11 @@ class SkuAssetManager {
       return NULL;
     }
 
-    // Prepare the directory path.
-    $directory = 'public://assets-lp/' . $sku . '/' . trim(dirname($asset['Data']['FilePath']), '/');
-
     // Prepare the directory.
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
-    $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
     try {
-      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
 
       if (!($file instanceof FileInterface)) {
         throw new \Exception('Failed to save asset file: ' . $url);
