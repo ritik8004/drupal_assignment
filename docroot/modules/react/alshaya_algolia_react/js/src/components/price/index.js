@@ -1,9 +1,20 @@
 import React from 'react';
-import PriceBlock from './PriceBlock';
 import PriceElement from './PriceElement';
 import {calculateDiscount} from '../../utils';
 
-const PriceContainer = ({price, final_price}) => {
+const PriceBlock = props => {
+  return (
+    <div className="price-block">
+      {
+        (typeof props.children != 'undefined' && props.children.length > 0)
+          ? props.children
+          : <PriceElement {...props} />
+      }
+    </div>
+  );
+}
+
+const Price = ({price, final_price}) => {
   if (price > 0 && final_price > 0 &&  final_price < price) {
     const discount = calculateDiscount(price, final_price);
     const discountTxt = (discount > 0)
@@ -29,4 +40,4 @@ const PriceContainer = ({price, final_price}) => {
   return <PriceBlock amount={price} />;
 }
 
-export default PriceContainer;
+export default Price;
