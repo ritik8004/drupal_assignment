@@ -4,9 +4,9 @@ import { InstantSearch } from 'react-instantsearch-dom';
 import { Configure, Hits } from "react-instantsearch-dom";
 import {searchClient} from './config/SearchClient';
 import AutoComplete from './Autocomplete';
-import SearchResultsRender from './searchresults/SearchResultsRender';
-import Portal from './components/Portal/Portal';
-import Teaser from './components/teaser/Teaser';
+import SearchResults from './searchresults';
+import Portal from './components/portal';
+import Teaser from './components/teaser';
 import {
   toggleSearchResultsContainer,
   getCurrentSearchQuery,
@@ -56,7 +56,7 @@ class AppAutocomplete extends React.Component {
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) && query !== ''
-      ? (<SearchResultsRender query={query} />)
+      ? (<SearchResults query={query} />)
       : '';
 
     return (

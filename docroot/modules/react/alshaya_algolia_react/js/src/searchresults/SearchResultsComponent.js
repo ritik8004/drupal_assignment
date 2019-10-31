@@ -7,7 +7,7 @@ import {
 
 import { searchClient } from '../config/SearchClient';
 
-import NoResults from '../components/NoResults';
+import NoResults from '../components/algolia/NoResults';
 import SearchResultInfiniteHits from '../components/algolia/SearchResultInfiniteHits';
 
 import CurrentRefinements from '../filters/selectedfilters/CurrentRefinements';
@@ -28,7 +28,7 @@ import { hasCategoryFilter } from '../utils';
 /**
  * Render search results elements facets, filters and sorting etc.
  */
-const SearchResults = props => {
+const SearchResultsComponent = props => {
   const { query } = props;
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
@@ -102,4 +102,4 @@ const SearchResults = props => {
   );
 }
 
-export default withURLSync(SearchResults);
+export default withURLSync(SearchResultsComponent);

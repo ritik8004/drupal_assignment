@@ -6,7 +6,7 @@ import {
   searchStateToURL
 } from './utils';
 
-const withURLSync = SearchResults =>
+const withURLSync = SearchResultsComponent =>
   class WithURLSync extends Component {
     constructor(props) {
       super(props);
@@ -61,7 +61,7 @@ const withURLSync = SearchResults =>
       const { searchState } = this.state;
 
       return (
-        <SearchResults
+        <SearchResultsComponent
           {...this.props}
           searchState={searchState}
           onSearchStateChange={this.onSearchStateChange}
