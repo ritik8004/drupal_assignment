@@ -1,7 +1,7 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-dom';
 import FiltersLabels from './FiltersLabels';
-import ClearRefinements from './ClearFilters';
+import ClearRefinements from '../ClearFilters';
 const _ = require("lodash");
 
 export default connectCurrentRefinements(({ items, refine, ...props }) => {
