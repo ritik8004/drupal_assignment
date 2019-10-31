@@ -1,12 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { Configure, Hits } from "react-instantsearch-dom";
 import {searchClient} from './config/SearchClient';
-import AutoComplete from './Autocomplete';
-import SearchResultsRender from './searchresults/SearchResultsRender';
-import Portal from './components/Portal/Portal';
-import Teaser from './components/teaser/Teaser';
+import AutoComplete from './components/algolia/Autocomplete';
+import SearchResults from './components/searchresults';
+import Portal from './components/portal';
+import Teaser from './components/teaser';
 import {
   toggleSearchResultsContainer,
   getCurrentSearchQuery,
@@ -14,8 +13,7 @@ import {
   updateSearchQuery
 } from './utils';
 
-class AppAutocomplete extends React.Component {
-
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,7 +54,7 @@ class AppAutocomplete extends React.Component {
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) && query !== ''
-      ? (<SearchResultsRender query={query} />)
+      ? (<SearchResults query={query} />)
       : '';
 
     return (
@@ -86,10 +84,4 @@ class AppAutocomplete extends React.Component {
   }
 }
 
-// Start instant search only after Document ready.
-(function ($, Drupal) {
-  ReactDOM.render(
-    <AppAutocomplete />,
-    document.querySelector('#alshaya-algolia-autocomplete')
-  );
-})(jQuery);
+export default App;

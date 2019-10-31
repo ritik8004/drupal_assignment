@@ -5,13 +5,13 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 
-import { searchClient } from '../config/SearchClient';
+import { searchClient } from '../../config/SearchClient';
 
-import NoResults from '../components/NoResults';
-import SearchResultInfiniteHits from '../components/algolia/SearchResultInfiniteHits';
+import NoResults from '../algolia/NoResults';
+import SearchResultInfiniteHits from '../algolia/SearchResultInfiniteHits';
 
-import CurrentRefinements from '../filters/selectedfilters/CurrentRefinements';
-import Filters from '../filters/Filters';
+import CurrentRefinements from '../algolia/current-refinements';
+import Filters from '../filters';
 
 import AllFilters from '../panels/AllFilters';
 import GridAndCount from '../panels/GridAndCount';
@@ -20,15 +20,15 @@ import SelectedFilters from '../panels/SelectedFilters';
 import SideBar from '../panels/SideBar';
 import StickyFilter from '../panels/StickyFilter';
 
-import withURLSync from '../URLSync';
-import Pagination from '../components/algolia/Pagination';
-import HierarchicalMenu from '../filters/widgets/HierarchicalMenu';
-import { hasCategoryFilter } from '../utils';
+import withURLSync from '../url-sync';
+import Pagination from '../algolia/Pagination';
+import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
+import { hasCategoryFilter } from '../../utils';
 
 /**
  * Render search results elements facets, filters and sorting etc.
  */
-const SearchResults = props => {
+const SearchResultsComponent = props => {
   const { query } = props;
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
@@ -102,4 +102,4 @@ const SearchResults = props => {
   );
 }
 
-export default withURLSync(SearchResults);
+export default withURLSync(SearchResultsComponent);

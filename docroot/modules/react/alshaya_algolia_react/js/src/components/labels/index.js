@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
-const LabelsContainer = ({labels, sku}) => {
+const Labels = ({labels, sku}) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
   }
@@ -18,5 +18,5 @@ const LabelsContainer = ({labels, sku}) => {
   );
 };
 
-export default LabelsContainer;
+export default Labels;
 

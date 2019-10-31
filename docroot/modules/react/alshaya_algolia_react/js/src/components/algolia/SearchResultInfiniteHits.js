@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { connectInfiniteHits } from 'react-instantsearch-dom';
 
-import Teaser from '../teaser/Teaser';
+import Teaser from '../teaser';
 import { updateAfter } from '../../utils';
 
 export default connectInfiniteHits(props => {

@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { searchResultDiv } from '../utils';
-import SearchResults from './SearchResults';
+import { searchResultDiv } from '../../utils';
+import SearchResultsComponent from './SearchResultsComponent';
 
 /**
  * Render search result component with ReactDom.createPortal.
  */
-export default class SearchResultsRender extends React.Component {
+export default class SearchResults extends React.Component {
   constructor(props) {
     super(props);
     // Create a div that we'll render the search results into. Because each
@@ -32,7 +32,7 @@ export default class SearchResultsRender extends React.Component {
         <div className="block block-core block-page-title-block">
           <h1 className="c-page-title">{Drupal.t('Search results')}</h1>
         </div>
-        <SearchResults query={this.props.query}/>
+        <SearchResultsComponent query={this.props.query}/>
       </React.Fragment>,
       this.el
     );

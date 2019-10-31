@@ -1,8 +1,8 @@
 import React from 'react';
-import Gallery from '../gallery/Gallery';
-import PriceContainer from '../price/PriceContainer';
-import PromotionsContainer from '../promotions/PromotionsContainer';
-import LabelsContainer from '../labels/LabelsContainer';
+import Gallery from '../gallery';
+import Price from '../price';
+import Promotions from '../promotions';
+import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
 
 const Teaser = ({hit}) => {
@@ -33,12 +33,12 @@ const Teaser = ({hit}) => {
                 <CustomHighlight attribute="title" hit={hit} />
               </a>
             </h2>
-            <PriceContainer price={hit.original_price} final_price={hit.final_price}/>
-            <PromotionsContainer promotions={hit.promotions}/>
+            <Price price={hit.original_price} final_price={hit.final_price}/>
+            <Promotions promotions={hit.promotions}/>
             {swatches}
           </div>
         </div>
-        <LabelsContainer labels={hit.product_labels} sku={hit.sku} />
+        <Lables labels={hit.product_labels} sku={hit.sku} />
       </article>
     </div>
   );

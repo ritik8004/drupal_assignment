@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { isMobile } from '../utils';
+import { isMobile } from '../../utils';
 
 /**
  * Sticky filters.

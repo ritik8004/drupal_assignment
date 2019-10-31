@@ -1,9 +1,9 @@
 import React from 'react';
-import FilterPanel from '../FilterPanel';
-import SortByList from '../SortByList';
-import ColorFilter from './ColorFilter';
-import RefinementList from './RefinementList';
-import PriceFilter from './PriceFilter';
+import FilterPanel from '../panels/FilterPanel';
+import SortByList from '../algolia/widgets/SortByList';
+import ColorFilter from '../algolia/widgets/ColorFilter';
+import RefinementList from '../algolia/widgets/RefinementList';
+import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
 
 class WidgetManager extends React.Component {

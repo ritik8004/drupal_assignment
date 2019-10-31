@@ -1,5 +1,5 @@
 import React from 'react';
-import connectRefinementList from './connectors/connectRefinementList';
+import connectRefinementList from '../connectors/connectRefinementList';
 
 // RefinementList used commonly for most of filters.
 function CommonRefinement(props) {
