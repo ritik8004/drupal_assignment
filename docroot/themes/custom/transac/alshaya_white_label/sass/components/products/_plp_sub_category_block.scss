@@ -134,4 +134,29 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .view-alshaya-product-list {
+      .view-content {
+        > .views-infinite-scroll-content-wrapper {
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+        }
+      }
+    }
+
+    .c-plp {
+      .c-products-list {
+        &.product-small,
+        &.product-large {
+          .view-alshaya-product-list {
+            .c-products__item {
+              margin-#{$left}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
 }
