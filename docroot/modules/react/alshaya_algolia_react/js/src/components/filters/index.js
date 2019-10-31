@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { getFilters } from '../utils';
-import WidgetManager from './widgets/WidgetManager';
+import { getFilters } from '../../utils';
+import WidgetManager from '../widget-manager';
 
 export default ({indexName, ...props}) => {
   const [filterCounts, setfilters] = useState([]);

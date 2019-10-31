@@ -1,6 +1,6 @@
 import React from 'react';
-import connectWithPriceFilter from './connectors/connectWithPriceFilter';
-import { getPriceRangeLabel } from '../../utils';
+import connectWithPriceFilter from '../connectors/connectWithPriceFilter';
+import { getPriceRangeLabel } from '../../../utils';
 
 const PriceFilter = (props) => {
   const { items, refine } = props;

@@ -1,6 +1,6 @@
 import React from 'react';
-import connectRefinementList from './connectors/connectRefinementList';
-import Swatch from './Swatch';
+import connectRefinementList from '../connectors/connectRefinementList';
+import SwatchList from './SwatchList';
 
 // Seprate a string by comma to get the label and color code/image/text.
 const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) => {
@@ -34,7 +34,7 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) 
                 refine(item.value);
               }}
             >
-              <Swatch label={label} swatch={swatch_info} />
+              <SwatchList label={label} swatch={swatch_info} />
               <span className="facet-item__value">{label}
                 <span className="facet-item__count">({item.count})</span>
               </span>

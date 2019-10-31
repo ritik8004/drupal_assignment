@@ -5,15 +5,15 @@ import ClearRefinements from './ClearFilters';
 const _ = require("lodash");
 
 export default connectCurrentRefinements(({ items, refine, ...props }) => {
- const uniqueItems = _.uniqBy(items, 'attribute');
- props.callback(uniqueItems.length);
+  const uniqueItems = _.uniqBy(items, 'attribute');
+  props.callback(uniqueItems.length);
 
- return(
+  return(
     <ul>
       {
         uniqueItems.map(item => {
           return (
-            <React.Fragment>
+            <React.Fragment key={item.id}>
               {item.items ? (
                 <React.Fragment>
                     {

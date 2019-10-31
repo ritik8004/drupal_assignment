@@ -1,5 +1,5 @@
 import React from 'react'
-import GridButtons from '../components/grid-buttons';
+import GridButtons from '../grid-buttons';
 
 export default function GridAndCount(props) {
   return (

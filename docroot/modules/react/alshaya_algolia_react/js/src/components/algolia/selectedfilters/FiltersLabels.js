@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPriceRangeLabel } from '../../utils';
+import { getPriceRangeLabel } from '../../../utils';
 
 /**
  * Format selected values to make it presentable for selected filters.

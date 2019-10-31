@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { searchResultDiv } from '../utils';
+import { searchResultDiv } from '../../utils';
 import SearchResultsComponent from './SearchResultsComponent';
 
 /**

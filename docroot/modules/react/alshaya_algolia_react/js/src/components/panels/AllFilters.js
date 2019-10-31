@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Stats } from 'react-instantsearch-dom';
-import ClearRefinements from '../filters/selectedfilters/ClearFilters';
+import ClearRefinements from '../algolia/selectedfilters/ClearFilters';
 
 /**
  * All filters displayed a slide toggle from right side.

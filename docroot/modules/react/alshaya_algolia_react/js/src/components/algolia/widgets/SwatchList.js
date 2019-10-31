@@ -1,8 +1,8 @@
 import React from 'react';
-import ImageElement from '../../components/gallery/imageHelper/ImageElement';
+import ImageElement from '../../gallery/imageHelper/ImageElement';
 
 // Swatch type to be displayed with "ColorFilter".
-export default function Swatch({ swatch, label }) {
+export default function SwatchList({ swatch, label }) {
   if (typeof swatch == 'undefined') {
     return (null);
   }

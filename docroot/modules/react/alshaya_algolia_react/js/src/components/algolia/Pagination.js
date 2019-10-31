@@ -1,7 +1,7 @@
 import React from 'react'
 import { connectStats } from 'react-instantsearch-dom';
 
-import ProgressBar from '../../filters/widgets/ProgressBar';
+import ProgressBar from './widgets/ProgressBar';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({nbHits, currentResults}) => {

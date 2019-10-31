@@ -4,7 +4,7 @@ import {
   getCurrentSearchQueryString,
   updateSearchQuery,
   searchStateToURL
-} from './utils';
+} from '../../utils';
 
 const withURLSync = SearchResultsComponent =>
   class WithURLSync extends Component {
