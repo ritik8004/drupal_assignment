@@ -448,7 +448,7 @@ class SkuAssetManager {
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
     try {
-      $file = file_save_data($file_data, $target, FILE_EXISTS_RENAME);
+      $file = file_save_data($file_data, $target, FileSystemInterface::EXISTS_REPLACE);
 
       if (!($file instanceof FileInterface)) {
         throw new \Exception('Failed to save asset file: ' . $url);
