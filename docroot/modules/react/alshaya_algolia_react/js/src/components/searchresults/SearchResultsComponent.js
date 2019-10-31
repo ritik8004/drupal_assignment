@@ -10,7 +10,7 @@ import { searchClient } from '../../config/SearchClient';
 import NoResults from '../algolia/NoResults';
 import SearchResultInfiniteHits from '../algolia/SearchResultInfiniteHits';
 
-import CurrentRefinements from '../algolia/selectedfilters';
+import CurrentRefinements from '../algolia/current-refinements';
 import Filters from '../filters';
 
 import AllFilters from '../panels/AllFilters';
