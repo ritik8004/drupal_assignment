@@ -129,9 +129,18 @@
               $.each(results, function (index, result) {
                 var addressType = result.types[0];
                 if (addressType === 'country') {
-                  if (result.address_components[0].short_name.toLowerCase() !== componentRestrictions.country.toLowerCase()) {
-                    runscript = false;
-                    return false;
+                  // In case of multiple countries we are using country as an array eg. for Vision Express.
+                  if($.isArray(componentRestrictions.country)) {
+                    if($.inArray(result.address_components[0].short_name.toLowerCase(), componentRestrictions.country) == -1) {
+                      runscript = false;
+                      return false;
+                    }
+                  }
+                  else {
+                    if (result.address_components[0].short_name.toLowerCase() !== componentRestrictions.country.toLowerCase()) {
+                      runscript = false;
+                      return false;
+                    }
                   }
                 }
               });
