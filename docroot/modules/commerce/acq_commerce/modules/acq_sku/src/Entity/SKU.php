@@ -372,20 +372,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
     /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
     $file_usage = \Drupal::service('file.usage');
 
-    // Check if file already exists in the directory.
-    if (file_exists($directory . '/' . $file_name)) {
-      // If file exists in directory, check if file entity exists.
-      $file_storage = \Drupal::entityTypeManager()->getStorage('file');
-      $files = reset($file_storage->loadByProperties(['uri' => $directory . '/' . $file_name]));
-      if (!empty($files) && $files instanceof FileInterface) {
-        // Release the lock now.
-        $lock->release($lock_key);
-        // Add file usage.
-        $file_usage->add($files, $this->getEntityTypeId(), $this->getEntityTypeId(), $this->id());
-        return $files;
-      }
-    }
-
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
@@ -397,6 +383,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $lock->release($lock_key);
       }
 
+      /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
+      $file_usage = \Drupal::service('file.usage');
       $file_usage->add($file, $this->getEntityTypeId(), $this->getEntityTypeId(), $this->id());
 
       return $file;
