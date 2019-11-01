@@ -3,9 +3,8 @@ import React from 'react';
 import 'promise-polyfill/src/polyfill';
 import {fetchCartData} from '../../../utilities/get_cart';
 import {addInfoInStorage} from '../../../utilities/storage';
-import EmptyMiniCart from '../empty-mini-cart';
-import Price from '../../../utilities/price';
-import MiniCartContent from "../min-cart-content";
+import EmptyMiniCartContent from '../empty-mini-cart-content';
+import MiniCartContent from "../mini-cart-content";
 
 export default class MiniCart extends React.Component {
 
@@ -67,12 +66,12 @@ export default class MiniCart extends React.Component {
 
   render() {
     if (this.state.wait) {
-      return <div className={'acq-mini-cart'}>
-        <EmptyMiniCart/>
+      return <div className="acq-mini-cart">
+        <EmptyMiniCartContent/>
       </div>
     }
 
-    return <div className={'acq-mini-cart'}>
+    return <div className="acq-mini-cart">
       <MiniCartContent amount={this.state.amount} qty={this.state.qty}/>
       </div>
   }
