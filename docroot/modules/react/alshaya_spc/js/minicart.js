@@ -4,5 +4,5 @@ import MiniCart from './minicart/components/minicart';
 
 ReactDOM.render(
   <MiniCart></MiniCart>,
-  document.getElementById('spc-minicart')
+  document.getElementById('mini-cart-wrapper')
 );

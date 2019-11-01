@@ -20,7 +20,7 @@ class AlshayaReactMiniCartBlock extends BlockBase {
   public function build() {
     $build = [
       '#type' => 'markup',
-      '#markup' => '<div id="spc-minicart"></div>',
+      '#markup' => '<div id="mini-cart-wrapper"></div><div id="cart_notification"></div>',
       '#attached' => [
         'library' => [
           'alshaya_spc/mini_cart',
