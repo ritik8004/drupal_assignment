@@ -104,6 +104,7 @@ class Autocomplete extends React.Component {
           renderSuggestion={this.renderSuggestion}
           shouldRenderSuggestions={this.shouldRenderSuggestions}
           inputProps={inputProps}
+          focusInputOnSuggestionClick={false}
         />
         <Portal
           key="back-button"
