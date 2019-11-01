@@ -1,6 +1,6 @@
 /**
  * @file
- * Store Finder.
+ * Overriding the alshaya_stores_finder.js.
  */
 
 (function ($, Drupal) {
