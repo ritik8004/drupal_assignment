@@ -37,5 +37,6 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@logger.factory'
+      - '@file.usage'
     tags:
       - { name: 'event_subscriber' }
