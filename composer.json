@@ -268,7 +268,8 @@
                 "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             },
             "drupal/simple_oauth": {
-                "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch"
+                "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch",
+                "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
             },
             "drupal/simple_sitemap": {
                 "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014.patch"
