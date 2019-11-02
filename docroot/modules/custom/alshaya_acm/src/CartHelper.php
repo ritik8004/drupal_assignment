@@ -331,16 +331,20 @@ class CartHelper {
     $quantity = (int) $quantity;
 
     if (empty($quantity)) {
-      throw new \InvalidArgumentException();
+      throw new \InvalidArgumentException('Quantity is required.');
     }
 
     switch ($sku->bundle()) {
       case 'configurable':
 
         $selected_variant_sku = $data['selected_variant_sku'] ?? '';
+        if (empty($selected_variant_sku)) {
+          throw new \InvalidArgumentException('Selected Variant SKU is required.');
+        }
+
         $variant = SKU::loadFromSku($selected_variant_sku);
         if (!($variant instanceof SKUInterface)) {
-          throw new \InvalidArgumentException();
+          throw new \InvalidArgumentException('Invalid selected variant: ' . $selected_variant_sku);
         }
 
         // Load the parent again to ensure we keep adding the product for
@@ -348,7 +352,7 @@ class CartHelper {
         // ensure we select proper parent when using alshaya_color_split.
         $sku = $variant->getPluginInstance()->getParentSku($variant);
         if (!($sku instanceof SKUInterface)) {
-          throw new \InvalidArgumentException();
+          throw new \InvalidArgumentException('Unable to load parent for selected variant: ' . $selected_variant_sku);
         }
 
         if ($cart->hasItem($variant->getSku())) {
