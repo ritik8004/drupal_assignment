@@ -99,17 +99,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
-      'ae' => [
-        '01uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-N6X25H2',
-          ],
-        ],
-      ],
     ],
     'fl' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-T8L97TK',
+          ],
           'social_auth_google.settings' => [
             'client_id' => '489743492796-4euishl08asap26893fooomkqgi8ketl.apps.googleusercontent.com',
             'client_secret' => 'mT47obTKfcKzXIJSRcXyjdkx',
@@ -120,6 +116,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'pb' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-M793JHJ',
+          ],
           'social_auth_google.settings' => [
             'client_id' => '290156815523-4pqhofs87lrj62gucij8rko1dj61od0q.apps.googleusercontent.com',
             'client_secret' => 'YE8Y9NX3mli9p-ivnstUzBpG',
@@ -130,6 +129,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'vs' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KLZ3ZQR',
+          ],
           'social_auth_google.settings' => [
             'client_id' => '764146281003-4qh0d2dgj3cjfotf5fr8307bp0l0248g.apps.googleusercontent.com',
             'client_secret' => 'ZEZJZTxz9mmY0H0sAB03iJdo',
