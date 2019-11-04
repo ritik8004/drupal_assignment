@@ -60,7 +60,7 @@
                 if (response.error === true) {
                   var cleaned_sku = $(form).attr('data-cleaned-sku');
                   // Showing the error message.
-                  $('.error-container-' + cleaned_sku).html(response.error_message);
+                  $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
                   // Trigger the failed event for other listeners.
                   $(form).trigger('product-add-to-cart-failed');
                 }
