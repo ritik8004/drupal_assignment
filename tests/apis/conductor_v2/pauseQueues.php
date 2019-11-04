@@ -22,9 +22,14 @@ $status = isset($argv, $argv[4]) ? $argv[4] : '';
 $status = ($status == 'pause');
 $status_txt = ($status) ? 'pausing' : 'resuming';
 
+$env_map = [
+  'prod' => 'live',
+  'qa' => 'test',
+];
+
 foreach ($conductors as $key => $value) {
   list($country_brand, $base_env) = explode('_', $key);
-  $base_env = ($base_env == 'live') ? 'prod': $base_env;
+  $base_env = $env_map[$base_env] ?? $base_env;
 
   if ($env !==  '01' . $base_env || empty($value['site_id'])) {
     continue;
@@ -51,7 +56,7 @@ foreach ($conductors as $key => $value) {
 }
 
 function upate_queue_status_call($status_txt, $site_id, $status, $args = []) {
-  echo PHP_EOL . '=>' . $status_txt . ' queue status for site_id ==> ' . $site_id . '(' . json_encode($args) .')';
+  echo PHP_EOL . '=>' . $status_txt . ' queue status for site_id ==> ' . $site_id . ' ==> (' . json_encode($args) .')';
   echo PHP_EOL;
   update_queue_status($site_id, $status);
 }
