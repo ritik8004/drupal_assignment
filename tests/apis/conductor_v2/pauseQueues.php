@@ -1,6 +1,22 @@
 <?php
 // @codingStandardsIgnoreFile
 
+/**
+ * Script to pause / resume queue for given env, brand and country.
+ *
+ * ==> php ./tests/apis/conductor_v2/pauseQueues.php 01live hm all pause
+ * should pause the queue for all the country sites for HM brand on 01live ENV
+ *
+ * ==> php ./tests/apis/conductor_v2/pauseQueues.php 01live hm all resume
+ * should resume the queue for all the country sites for HM brand on 01live ENV
+ *
+ * ==> php ./tests/apis/conductor_v2/pauseQueues.php 01live hm kw pause
+ * should pause the queue for KW country site of HM brand on 01live ENV
+ *
+ * ==>  php ./tests/apis/conductor_v2/pauseQueues.php 01live all kw pause
+ * should pause the queue for KW country for all the brands on 01live ENV
+ */
+
 const DRUPAL_ROOT = __DIR__ . '/../../';
 
 require_once __DIR__ . '/common.php';
