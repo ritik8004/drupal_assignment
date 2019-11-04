@@ -1,6 +1,6 @@
 var path  = require("path");
 
-module.exports = {
+var config = {
   entry: {
     cart: './js/cart',
     minicart: './js/minicart'
@@ -28,3 +28,12 @@ module.exports = {
     ]
   }
 };
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    config.devtool = 'source-map';
+    config.externals = {};
+  }
+
+  return config;
+}
