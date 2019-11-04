@@ -8,7 +8,6 @@ import ItemLowQuantity from '../item-low-quantity';
 export default class CartItem extends React.Component {
 
   render() {
-    console.log(this.props.item);
     return <div>
       <div><a href={Drupal.url.toAbsolute(this.props.item.link)}>{this.props.item.title}</a></div>
       <div>
