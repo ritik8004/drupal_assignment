@@ -5,6 +5,7 @@ import CheckoutSectionTitle from '../spc-checkout-section-title';
 import CartTotalSubTotal from '../cart-total-subtotal';
 import CartOutOfStock from '../cart-oos';
 import CartRecommendedProducts from '../recommended-products';
+import MobileCartPreview from '../mobile-cart-preview';
 
 export default class Cart extends React.Component {
 
@@ -52,10 +53,14 @@ export default class Cart extends React.Component {
 
       return (
         <React.Fragment>
-          <div className="spc-pre-content"></div>
+          <div className="spc-pre-content">
+            <div className="spc-oos">
+              <CartOutOfStock in_stock={this.state.in_stock} />
+            </div>
+            <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} ></MobileCartPreview>
+          </div>
           <div className="spc-main">
             <div className="spc-content">
-              <CartOutOfStock in_stock={this.state.in_stock} />
               <CheckoutSectionTitle>
                 {Drupal.t('My Shopping Bag (@qty items)', {'@qty': this.state.total_items})}
               </CheckoutSectionTitle>
