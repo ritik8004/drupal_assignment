@@ -5,6 +5,8 @@
  * Install file.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_install().
  */
@@ -14,4 +16,19 @@ function alshaya_spc_install() {
     \Drupal::service('theme_handler')->getDefault(),
     'alshaya_white_label'
   );
+
+  // Disable the `acq_commerce` mini cart block.
+  $mini_cart_block = Block::load('cartminiblock');
+  $mini_cart_block->disable();
+  $mini_cart_block->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_spc_uninstall() {
+  // Disable the `acq_commerce` mini cart block.
+  $mini_cart_block = Block::load('cartminiblock');
+  $mini_cart_block->disable();
+  $mini_cart_block->save();
 }
