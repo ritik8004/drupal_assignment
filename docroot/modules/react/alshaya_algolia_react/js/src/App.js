@@ -42,13 +42,6 @@ class App extends React.Component {
     this.setQueryValue(newValue);
   };
 
-  renderSuggestionsContainer = ({ containerProps, children, query }) => (
-    <div {...containerProps}>
-      {<span className="trending-title">{Drupal.t('Trending searches')}</span>}
-      {children}
-    </div>
-  );
-
   render() {
     const { query } = this.state;
     // Display search results when wrapper is present on page.
@@ -64,7 +57,6 @@ class App extends React.Component {
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
-            renderSuggestionsContainer={this.renderSuggestionsContainer}
             onChange={this.onChange}
             currentValue={query}
           />
