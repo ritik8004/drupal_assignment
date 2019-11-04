@@ -1,7 +1,7 @@
 import React from 'react';
 
 import EmptyCart from '../empty-cart';
-import CartShoppingBag from '../cart-shopping-bag';
+import CheckoutSectionTitle from '../spc-checkout-section-title';
 import CartTotalSubTotal from '../cart-total-subtotal';
 import CartOutOfStock from '../cart-oos';
 import CartRecommendedProducts from '../recommended-products';
@@ -51,12 +51,23 @@ export default class Cart extends React.Component {
       }
 
       return (
-        <div>
-          <CartOutOfStock in_stock={this.state.in_stock} />
-          <CartShoppingBag qty={this.state.total_items} total={this.state.amount} />
-          <CartTotalSubTotal totals={this.state.totals} in_stock={this.state.in_stock}></CartTotalSubTotal>
-          <CartRecommendedProducts recommended_products={this.state.recommended_products} />
-        </div>
+        <React.Fragment>
+          <div className="spc-pre-content"></div>
+          <div className="spc-main">
+            <div className="spc-content">
+              <CartOutOfStock in_stock={this.state.in_stock} />
+              <CheckoutSectionTitle>
+                {Drupal.t('My Shopping Bag (@qty items)', {'@qty': this.state.total_items})}
+              </CheckoutSectionTitle>
+            </div>
+            <div className="spc-sidebar">
+              <CartTotalSubTotal totals={this.state.totals} in_stock={this.state.in_stock}></CartTotalSubTotal>
+            </div>
+          </div>
+          <div className="spc-post-content">
+            <CartRecommendedProducts recommended_products={this.state.recommended_products} />
+          </div>
+        </React.Fragment>
       );
   }
 
