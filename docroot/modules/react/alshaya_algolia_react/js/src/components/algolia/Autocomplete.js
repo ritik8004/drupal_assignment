@@ -5,6 +5,28 @@ import CustomHighlight from './CustomHighlight';
 import { getCurrentSearchQuery } from '../../utils';
 import Portal from '../portal';
 
+const InputButtons = React.memo((props) => {
+  return (
+    <React.Fragment>
+      <Portal
+        key="back-button"
+        onclick={(event) => props.backCallback(event)}
+        className="algolia-search-back-icon"
+        id="react-algolia-searchbar-back-button"
+        query=""
+      />
+      <Portal
+        key="clear-button"
+        onclick={(event) => props.clearCallback(event)}
+        className="algolia-search-cleartext-icon"
+        id="react-algolia-searchbar-clear-button"
+        query=""
+      />
+    </React.Fragment>
+  );
+});
+
+
 class Autocomplete extends React.Component {
   timerId = null;
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
@@ -14,8 +36,22 @@ class Autocomplete extends React.Component {
     value: this.searchQuery !== null && this.searchQuery !== '' ? this.searchQuery : this.props.currentRefinement,
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return (this.state.value !== nextState.value);
+  }
+
   toggleFocus = (action) => {
     this.reactSearchBlock[0].classList[action]('focused');
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    if (this.shouldRenderSuggestions(value)) {
+      this.props.refine(value);
+    }
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.props.refine();
   };
 
   onKeyUp = () => {
@@ -44,16 +80,6 @@ class Autocomplete extends React.Component {
     this.setState({
       value: newValue,
     });
-  };
-
-  onSuggestionsFetchRequested = ({ value }) => {
-    if (this.shouldRenderSuggestions(value)) {
-      this.props.refine(value);
-    }
-  };
-
-  onSuggestionsClearRequested = () => {
-    this.props.refine();
   };
 
   getSuggestionValue(hit) {
@@ -91,8 +117,15 @@ class Autocomplete extends React.Component {
     }
   };
 
+  renderSuggestionsContainer = ({ containerProps, children, query }) => (
+    <div {...containerProps}>
+      {<span className="trending-title">{Drupal.t('Trending searches')}</span>}
+      {children}
+    </div>
+  );
+
   render() {
-    const { hits, onSuggestionSelected, renderSuggestionsContainer } = this.props;
+    const { hits, onSuggestionSelected } = this.props;
     const { value } = this.state;
 
     const inputProps = {
@@ -112,26 +145,13 @@ class Autocomplete extends React.Component {
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={onSuggestionSelected}
           getSuggestionValue={this.getSuggestionValue}
-          renderSuggestionsContainer={renderSuggestionsContainer}
+          renderSuggestionsContainer={this.renderSuggestionsContainer}
           renderSuggestion={this.renderSuggestion}
           shouldRenderSuggestions={this.shouldRenderSuggestions}
           inputProps={inputProps}
           focusInputOnSuggestionClick={false}
         />
-        <Portal
-          key="back-button"
-          onclick={(event) => this.backIconClickEvent(event)}
-          className="algolia-search-back-icon"
-          id="react-algolia-searchbar-back-button"
-          query=""
-        />
-        <Portal
-          key="clear-button"
-          onclick={(event) => this.clearSearchFieldInput(event)}
-          className="algolia-search-cleartext-icon"
-          id="react-algolia-searchbar-clear-button"
-          query=""
-        />
+        <InputButtons backCallback={this.backIconClickEvent} clearCallback={this.clearSearchFieldInput} />
       </React.Fragment>
     );
   }
