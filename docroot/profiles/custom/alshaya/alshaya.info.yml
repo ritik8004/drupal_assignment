@@ -26,3 +26,6 @@ themes:
   - whitelabel
 
 base profile: lightning
+
+exclude:
+  - lightning_api
