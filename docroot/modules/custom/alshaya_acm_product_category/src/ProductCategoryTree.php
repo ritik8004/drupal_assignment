@@ -268,9 +268,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if ($term->field_override_target_link_value) {
-        $data[$term->tid]['path'] = !empty($term->field_target_link_uri)
-          ? (UrlHelper::isExternal($term->field_target_link_uri) ? $term->field_target_link_uri : Url::fromUri($term->field_target_link_uri)->toString())
-          : '';
+        $data[$term->tid]['path'] = UrlHelper::isExternal($term->field_target_link_uri) ? $term->field_target_link_uri : Url::fromUri($term->field_target_link_uri)->toString();
         $data[$term->tid]['class'][] = 'overridden-link';
       }
 
