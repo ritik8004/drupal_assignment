@@ -4,6 +4,7 @@ import EmptyCart from '../empty-cart';
 import CheckoutSectionTitle from '../spc-checkout-section-title';
 import CartTotalSubTotal from '../cart-total-subtotal';
 import CartOutOfStock from '../cart-oos';
+import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
 
 export default class Cart extends React.Component {
@@ -59,6 +60,7 @@ export default class Cart extends React.Component {
               <CheckoutSectionTitle>
                 {Drupal.t('My Shopping Bag (@qty items)', {'@qty': this.state.total_items})}
               </CheckoutSectionTitle>
+              <CartItems items={this.state.items} />
             </div>
             <div className="spc-sidebar">
               <CartTotalSubTotal totals={this.state.totals} in_stock={this.state.in_stock}></CartTotalSubTotal>
