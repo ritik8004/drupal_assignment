@@ -249,3 +249,8 @@ app-navigation-links:
   css:
     theme:
       css/conditional-sass/app-navigation-links/app-navigation-links.ltr.css: {}
+
+spc-cart:
+  css:
+    theme:
+      css/conditional-sass/spc-cart/spc-cart.ltr.css: {}
