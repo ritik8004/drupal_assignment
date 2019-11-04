@@ -68,6 +68,7 @@ class AlshayaSpcController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_spc/cart',
+          'alshaya_white_label/spc-cart',
         ],
       ],
     ];
