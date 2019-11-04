@@ -57,7 +57,7 @@ export default class Cart extends React.Component {
             <div className="spc-oos">
               <CartOutOfStock in_stock={this.state.in_stock} />
             </div>
-            <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} ></MobileCartPreview>
+            <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} />
           </div>
           <div className="spc-main">
             <div className="spc-content">
