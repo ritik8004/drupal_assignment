@@ -29,6 +29,12 @@ if (count($argv) < 5) {
   echo PHP_EOL;
   die();
 }
+else if (isset($argv, $argv[4]) && !in_array($argv[4], ['pause', 'resume'])) {
+  echo '=> Please enter pause/resume value for status argument.';
+  echo PHP_EOL . '=> Required args: {env} {brand / all} {country / all} {status: pause / resume}';
+  echo PHP_EOL;
+  die();
+}
 
 $env = isset($argv, $argv[1]) ? $argv[1] : '';
 $brand = isset($argv, $argv[2]) ? $argv[2] : '';
