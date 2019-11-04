@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -65,65 +64,6 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
   catch (Exception $e) {
     \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
   }
-}
-
-/**
- * Implements hook_gtm_product_attributes_alter().
- */
-function alshaya_hm_gtm_product_attributes_alter($product, &$attributes) {
-  // Changes for the image count.
-  $attributes['gtm-dimension4'] = ($product instanceof NodeInterface) ? (count(alshaya_hm_get_product_images($product)) ?: 'image not available') : 'image not available';
-}
-
-/**
- * Implements hook_gtm_pdp_attributes_alter().
- */
-function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
-  if (empty($attributes['productPictureUrl'])) {
-    $images = alshaya_hm_get_sku_images($sku);
-    if (!empty($images[0]) && isset($images[0]['url'])) {
-      $attributes['productPictureUrl'] = $images[0]['url']->toString();
-    }
-  }
-}
-
-/**
- * Get the product images from the product object.
- *
- * @param \Drupal\node\NodeInterface $product
- *   The product node object.
- *
- * @return array
- *   Return the array of images or empty array.
- */
-function alshaya_hm_get_product_images(NodeInterface $product) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $skuId = $skuManager->getSkuForNode($product);
-
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') && !empty($skuId)) {
-    return alshaya_hm_get_sku_images($skuId);
-  }
-  return [];
-}
-
-/**
- * Get the images from given sku.
- *
- * @param int|Object $sku
- *   The SKU id or SKU entity object.
- *
- * @return array
- *   Return the array of images or empty array.
- */
-function alshaya_hm_get_sku_images($sku) {
-  $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-  $images = [];
-  if ($sku instanceof SKU) {
-    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp');
-  }
-  return $images;
 }
 
 /**
