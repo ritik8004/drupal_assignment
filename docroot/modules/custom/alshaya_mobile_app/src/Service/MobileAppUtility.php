@@ -701,31 +701,6 @@ class MobileAppUtility {
   }
 
   /**
-   * Wrapper function get fully loaded linked skus.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $linked_type
-   *   Linked type.
-   *
-   * @return array
-   *   Linked SKUs.
-   */
-  public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
-    $return = [];
-    $linkedSkus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
-
-    foreach (array_keys($linkedSkus) as $linkedSku) {
-      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-      if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
-        $return[] = $lightProduct;
-      }
-    }
-
-    return $return;
-  }
-
-  /**
    * Convert relative url img tag in string with absolute url.
    *
    * @param string $string
