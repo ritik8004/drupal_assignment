@@ -13,6 +13,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\metatag\MetatagManager;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -79,6 +80,13 @@ class SkuInfoHelper {
   protected $acqSkuStockManager;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -97,6 +105,8 @@ class SkuInfoHelper {
    *   The database object.
    * @param \Drupal\acq_sku\StockManager $acq_stock_manager
    *   The stock manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -106,7 +116,8 @@ class SkuInfoHelper {
     RendererInterface $renderer,
     ModuleHandlerInterface $module_handler,
     Connection $database,
-    StockManager $acq_stock_manager
+    StockManager $acq_stock_manager,
+    LanguageManagerInterface $language_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -116,6 +127,7 @@ class SkuInfoHelper {
     $this->moduleHandler = $module_handler;
     $this->database = $database;
     $this->acqSkuStockManager = $acq_stock_manager;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -453,6 +465,60 @@ class SkuInfoHelper {
         break;
     }
     return $static[$sku_string];
+  }
+
+  /**
+   * Get Light Product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $color
+   *   Color value.
+   *
+   * @return array
+   *   Light Product.
+   */
+  public function getLightProduct(SKUInterface $sku, string $color = ''): array {
+    $node = $this->skuManager->getDisplayNode($sku);
+    if (!($node instanceof NodeInterface) || !($node->hasTranslation($this->languageManager->getCurrentLanguage()->getId()))) {
+      return [];
+    }
+    // Get the prices.
+    $prices = $this->skuManager->getMinPrices($sku, $color);
+    // Get the promotion data.
+    $promotions = $this->skuManager->getPromotions($sku);
+    // Get promo labels.
+    $promo_label = $this->skuManager->getDiscountedPriceMarkup($prices['price'], $prices['final_price']);
+    if ($promo_label) {
+      $promotions[] = [
+        'text' => $promo_label,
+      ];
+    }
+    // Get label for the SKU.
+    $labels = $this->skuManager->getSkuLabels($sku, 'plp');
+    // Get media (images/video) for the SKU.
+    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
+    $images = $this->getMedia($sku_for_gallery, 'search');
+    $data = [
+      'id' => (int) $sku->id(),
+      'title' => $sku->label(),
+      'sku' => $sku->getSku(),
+      'link' => $this->getEntityUrl($node),
+      'original_price' => $this->formatPriceDisplay($prices['price']),
+      'final_price' => $this->formatPriceDisplay($prices['final_price']),
+      'in_stock' => $this->skuManager->isProductInStock($sku),
+      'promo' => $promotions,
+      'medias' => $images,
+      'labels' => $labels,
+      'color' => NULL,
+    ];
+    if ($color) {
+      $data['color'] = $color;
+    }
+    // Allow other modules to alter light product data.
+    $type = 'light';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+    return $data;
   }
 
 }

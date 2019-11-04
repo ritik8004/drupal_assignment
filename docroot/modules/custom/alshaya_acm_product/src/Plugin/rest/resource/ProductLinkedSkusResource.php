@@ -1,14 +1,15 @@
 <?php
 
-namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,11 +26,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ProductLinkedSkusResource extends ResourceBase {
 
   /**
-   * The mobile app utility service.
+   * Sku info helper.
    *
-   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
-  private $mobileAppUtility;
+  private $skuInfoHelper;
 
   /**
    * ProductResource constructor.
@@ -44,8 +45,8 @@ class ProductLinkedSkusResource extends ResourceBase {
    *   Serializer formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
-   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
-   *   The mobile app utility service.
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
+   *   TSku info helper.
    */
   public function __construct(
     array $configuration,
@@ -53,10 +54,10 @@ class ProductLinkedSkusResource extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    MobileAppUtility $mobile_app_utility
+    SkuInfoHelper $sku_info_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->mobileAppUtility = $mobile_app_utility;
+    $this->skuInfoHelper = $sku_info_helper;
   }
 
   /**
@@ -68,8 +69,8 @@ class ProductLinkedSkusResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('logger.factory')->get('alshaya_acm_product'),
+      $container->get('alshaya_acm_product.sku_info')
     );
   }
 
@@ -85,14 +86,14 @@ class ProductLinkedSkusResource extends ResourceBase {
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!$skuEntity instanceof SKUInterface) {
-      $this->mobileAppUtility->throwException();
+      throw new NotFoundHttpException($this->t("page not found"));
     }
 
     $data = [];
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [
         'link_type' => $linked_type,
-        'skus' => $this->mobileAppUtility->getLinkedSkus($skuEntity, $linked_type),
+        'skus' => $this->getLinkedSkus($skuEntity, $linked_type),
       ];
     }
 
@@ -104,6 +105,29 @@ class ProductLinkedSkusResource extends ResourceBase {
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
+  }
+
+  /**
+   * Get fully loaded linked skus.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $linked_type
+   *   Linked type.
+   *
+   * @return array
+   *   Linked SKUs.
+   */
+  protected function getLinkedSkus(SKUInterface $sku, string $linked_type) {
+    $return = [];
+    $linkedSkus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
+    foreach (array_keys($linkedSkus) as $linkedSku) {
+      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
+      if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
+        $return[] = $lightProduct;
+      }
+    }
+    return $return;
   }
 
 }

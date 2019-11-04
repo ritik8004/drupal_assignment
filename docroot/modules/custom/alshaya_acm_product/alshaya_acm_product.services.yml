@@ -145,3 +145,4 @@ services:
       - '@module_handler'
       - '@database'
       - '@acq_sku.stock_manager'
+      - '@language_manager'

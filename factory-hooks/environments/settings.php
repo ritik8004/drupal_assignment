@@ -90,9 +90,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'bbw' => [
       'default' => [
         'default' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KXQ8P3S',
-          ],
           'social_auth_google.settings' => [
             'client_id' => '979778569503-3a6dfbjcfvm5er41fd4s46d27oqe8efl.apps.googleusercontent.com',
             'client_secret' => 'kSiVHuw6W4AGXnqW_aXWRFS9',
@@ -102,7 +99,21 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
       'ae' => [
         '01uat' => [
           'google_tag.container.primary' => [
-            'container_id' => 'GTM-N6X25H2',
+            'container_id' => 'GTM-KXQ8P3S',
+          ],
+        ],
+      ],
+      'kw' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KXQ8P3S',
+          ],
+        ],
+      ],
+      'sa' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KXQ8P3S',
           ],
         ],
       ],
@@ -116,6 +127,27 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
+      'ae' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-T8L97TK',
+          ],
+        ],
+      ],
+      'kw' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-T8L97TK',
+          ],
+        ],
+      ],
+      'sa' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-T8L97TK',
+          ],
+        ],
+      ],
     ],
     'pb' => [
       'default' => [
@@ -126,6 +158,27 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
+      'ae' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-M793JHJ',
+          ],
+        ],
+      ],
+      'kw' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-M793JHJ',
+          ],
+        ],
+      ],
+      'sa' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-M793JHJ',
+          ],
+        ],
+      ],
     ],
     'vs' => [
       'default' => [
@@ -133,6 +186,27 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'social_auth_google.settings' => [
             'client_id' => '764146281003-4qh0d2dgj3cjfotf5fr8307bp0l0248g.apps.googleusercontent.com',
             'client_secret' => 'ZEZJZTxz9mmY0H0sAB03iJdo',
+          ],
+        ],
+      ],
+      'ae' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KLZ3ZQR',
+          ],
+        ],
+      ],
+      'kw' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KLZ3ZQR',
+          ],
+        ],
+      ],
+      'sa' => [
+        '01uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
       ],

@@ -342,9 +342,14 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
 }
 
 /**
- * Implements hook_alshaya_mobile_app_light_product_data_alter().
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
-function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku, array &$data) {
+function alshaya_hm_images_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  // If not light product, no need to process further.
+  if ($type != 'light') {
+    return;
+  }
+
   $data['swatches'] = [];
 
   $swatches_display_status = (bool) \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');

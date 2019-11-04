@@ -13,7 +13,7 @@ use Drupal\Core\Config\FileStorage;
  *
  * Adding arabic translations for - Your search did not return any results.
  */
-function alshaya_master_update_8032() {
+function alshaya_master_update_8033() {
   $strings = [
     'Your search did not return any results.' => [
       'ar' => 'لا يوجد نتائج لبحثك',
@@ -24,6 +24,17 @@ function alshaya_master_update_8032() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Uninstall jsonapi and related optional modules.
+ */
+function alshaya_master_update_8032() {
+  \Drupal::service('module_installer')->uninstall(
+    ['lightning_api', 'jsonapi', 'openapi_ui', 'openapi']
+  );
 }
 
 /**
@@ -1584,12 +1595,6 @@ function alshaya_master_install() {
     ],
     'No area found' => [
       'ar' => 'لا يوجد نتائج لبحثك',
-    ],
-    'Your search did not return any results.' => [
-      'ar' => 'لا يوجد نتائج لبحثك',
-    ],
-    'Search results' => [
-      'ar' => 'نتائج البحث',
     ],
     'Your order will be available for pickup at the following store' => [
       'ar' => 'طلبيتك ستكون جاهزة للاستلام في هذا المحل',

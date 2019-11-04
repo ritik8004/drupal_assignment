@@ -1,18 +1,19 @@
 <?php
 
-namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\Core\Url;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\taxonomy\TermInterface;
@@ -72,18 +73,11 @@ class ProductResource extends ResourceBase {
   private $termStorage;
 
   /**
-   * The mobile app utility service.
-   *
-   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
-   */
-  private $mobileAppUtility;
-
-  /**
    * Production Options Manager service object.
    *
    * @var \Drupal\acq_sku\ProductOptionsManager
    */
-  protected $productOptionsManager;
+  private $productOptionsManager;
 
   /**
    * Store cache tags and contexts to be added in response.
@@ -97,14 +91,21 @@ class ProductResource extends ResourceBase {
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  private $moduleHandler;
 
   /**
    * Sku info helper.
    *
    * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
    */
-  protected $skuInfoHelper;
+  private $skuInfoHelper;
+
+  /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  private $languageManager;
 
   /**
    * ProductResource constructor.
@@ -127,14 +128,14 @@ class ProductResource extends ResourceBase {
    *   Product Info helper.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
-   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
-   *   The mobile app utility service.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
    *   Production Options Manager service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
   public function __construct(
     array $configuration,
@@ -146,10 +147,10 @@ class ProductResource extends ResourceBase {
     SkuImagesManager $sku_images_manager,
     ProductInfoHelper $product_info_helper,
     EntityTypeManagerInterface $entity_type_manager,
-    MobileAppUtility $mobile_app_utility,
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    LanguageManagerInterface $language_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -157,7 +158,6 @@ class ProductResource extends ResourceBase {
     $this->productInfoHelper = $product_info_helper;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->mobileAppUtility = $mobile_app_utility;
     $this->productOptionsManager = $product_options_manager;
     $this->cache = [
       'tags' => [],
@@ -165,6 +165,7 @@ class ProductResource extends ResourceBase {
     ];
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -181,10 +182,10 @@ class ProductResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('acq_sku.product_info_helper'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_mobile_app.utility'),
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
-      $container->get('alshaya_acm_product.sku_info')
+      $container->get('alshaya_acm_product.sku_info'),
+      $container->get('language_manager')
     );
   }
 
@@ -274,7 +275,7 @@ class ProductResource extends ResourceBase {
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [
         'link_type' => $linked_type,
-        'skus' => $this->mobileAppUtility->getLinkedSkus($sku, $linked_type),
+        'skus' => $this->getLinkedSkus($sku, $linked_type),
       ];
     }
 
@@ -297,7 +298,7 @@ class ProductResource extends ResourceBase {
     foreach ($label_contexts as $key => $context) {
       $data['labels'][] = [
         'context' => $context,
-        'labels' => $this->mobileAppUtility->getLabels($sku, $key),
+        'labels' => $this->skuManager->getSkuLabels($sku, $key),
       ];
     }
 
@@ -330,6 +331,10 @@ class ProductResource extends ResourceBase {
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
     }
+
+    // Allow other modules to alter light product data.
+    $type = 'full';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
 
     return $data;
   }
@@ -464,7 +469,7 @@ class ProductResource extends ResourceBase {
             ($term = $this->productOptionsManager->loadProductOptionByOptionId(
               $attribute_code,
               $value,
-              $this->mobileAppUtility->currentLanguage())
+              $this->languageManager->getCurrentLanguage()->getId())
             )
             && $term instanceof TermInterface
           ) {
@@ -497,13 +502,36 @@ class ProductResource extends ResourceBase {
     $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
-      $promotion_node = $this->nodeStorage->load($nid);
       $promotions[] = [
         'text' => $promotion['text'],
-        'deeplink' => $this->mobileAppUtility->getDeepLink($promotion_node, 'promotion'),
+        'promo_web_url' => Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl(),
+        'promo_node' => $nid,
       ];
     }
     return $promotions;
+  }
+
+  /**
+   * Get fully loaded linked skus.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $linked_type
+   *   Linked type.
+   *
+   * @return array
+   *   Linked SKUs.
+   */
+  private function getLinkedSkus(SKUInterface $sku, string $linked_type) {
+    $return = [];
+    $linkedSkus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
+    foreach (array_keys($linkedSkus) as $linkedSku) {
+      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
+      if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
+        $return[] = $lightProduct;
+      }
+    }
+    return $return;
   }
 
 }

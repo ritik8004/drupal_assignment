@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
@@ -3486,6 +3487,60 @@ class SkuManager {
     }
 
     return $combination;
+  }
+
+  /**
+   * Wrapper function get labels and make the urls absolute.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Labels data.
+   */
+  public function getSkuLabels(SKUInterface $sku, string $context): array {
+    $labels = $this->getLabels($sku, $context);
+    if (empty($labels)) {
+      return [];
+    }
+    foreach ($labels as &$label) {
+      $doc = new \DOMDocument();
+      $doc->loadHTML((string) $label['image']);
+      $xpath = new \DOMXPath($doc);
+      // We are using `data-src` attribute as we are using blazy for images.
+      // If blazy is disabled, then we need to revert back to `src` attribute.
+      $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
+      // Checking if the image path is relative or absolute. If image path is
+      // absolute, we are using the same path.
+      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
+        ? $promo_image_path
+        : $this->currentRequest->getSchemeAndHttpHost() . $promo_image_path;
+    }
+    return $labels;
+  }
+
+  /**
+   * Wrapper function get promotions.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Promotions.
+   */
+  public function getPromotions(SKUInterface $sku) {
+    $promotions = [];
+    $promotions_data = $this->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    foreach ($promotions_data as $nid => $promotion) {
+      $promotions[] = [
+        'text' => $promotion['text'],
+        'promo_node' => $nid,
+        'promo_web_url' => Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl(),
+      ];
+    }
+    return $promotions;
   }
 
 }
