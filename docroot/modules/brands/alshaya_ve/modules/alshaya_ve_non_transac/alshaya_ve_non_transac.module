@@ -15,6 +15,7 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] === 'views-exposed-form-stores-finder-page-1') {
+      $form['geolocation_geocoder_google_places_api']['#description'] = t('Please enter a valid area / city');
       $hidden_class_map_list = '';
       if (\Drupal::routeMatch()->getRouteName() == 'view.stores_finder.page_1') {
         $hidden_class_map_list = 'hidden';
@@ -58,6 +59,9 @@ function alshaya_ve_non_transac_page_attachments(array &$attachments) {
   $current_path = \Drupal::service('path.current')->getPath();
   if (strpos($current_path, '/store-finder') !== FALSE) {
     $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => ''];
+    $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
+    unset($countryFieldValues['All']);
+    $attachments['#attached']['drupalSettings']['storeFinder'] = ['storeCountries' => array_keys($countryFieldValues)];
     $attachments['#attached']['library'][] = 'alshaya_ve_non_transac/alshaya_ve_non_transac_store_finder';
   }
 }
