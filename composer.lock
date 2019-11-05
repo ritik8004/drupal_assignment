@@ -13723,7 +13723,7 @@
             "description": "Overrides Views Ajax to work with GET instead of POST",
             "homepage": "https://www.drupal.org/project/views_ajax_get",
             "support": {
-                "source": "http://cgit.drupalcode.org/views_ajax_get"
+                "source": "https://git.drupalcode.org/project/views_ajax_get"
             },
             "time": "2018-09-14T13:01:07+00:00"
         },
