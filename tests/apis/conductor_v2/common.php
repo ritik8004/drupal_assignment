@@ -279,5 +279,5 @@ function get_queue_total($site_id) {
  *   The data returned by the API.
  */
 function update_queue_status($site_id, bool $status = FALSE) {
-  return invoke_api('config/site/' . $site_id . '/queue?pause=' . $status, 'GET');
+  return invoke_api('config/site/' . $site_id . '/queue', 'GET', ['pause' => $status]);
 }

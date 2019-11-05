@@ -12,6 +12,9 @@ $conductors = [
   'mckw_dev' => [
     'hmac_id' => '1c981b44daae428fae5fb6b2a3812214',
     'hmac_secret' => 'N2Y0MDEzMWEtZGE4Ny00',
+    // We add site id here to be able to invoke organization level ACM APIs.
+    // For now we have a utility script to pause ACM queues which uses this.
+    // We could have more scripts using this value.
     'site_id' => 152,
   ],
   'mckw_qa' => [
