@@ -5,7 +5,7 @@ import CheckoutSectionTitle from '../spc-checkout-section-title';
 import CartOutOfStock from '../cart-oos';
 import CartRecommendedProducts from '../recommended-products';
 import MobileCartPreview from '../mobile-cart-preview';
-import OrderSummaryBlock from "../order-summary-block";
+import OrderSummaryBlock from "../../../utilities/order-summary-block";
 
 export default class Cart extends React.Component {
 

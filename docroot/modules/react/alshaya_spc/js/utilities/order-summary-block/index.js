@@ -1,6 +1,6 @@
 import React from 'react';
-import CheckoutSectionTitle from "../spc-checkout-section-title";
-import TotalLineItems from "../total-line-items";
+import CheckoutSectionTitle from "../../cart/components/spc-checkout-section-title";
+import TotalLineItems from "../../cart/components/total-line-items";
 
 class OrderSummaryBlock extends React.Component {
  render() {
