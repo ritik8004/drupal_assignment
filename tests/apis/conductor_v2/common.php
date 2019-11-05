@@ -267,7 +267,6 @@ function get_queue_total($site_id) {
   return invoke_api('config/site/' . $site_id . '/queue/total', 'GET');
 }
 
-
 /**
  * Function to pause/unpause the queue.
  *
@@ -276,7 +275,7 @@ function get_queue_total($site_id) {
  * @param $status
  *   The status to set for the queue.
  *
- * @return \stdClass
+ * @return object
  *   The data returned by the API.
  */
 function update_queue_status($site_id, bool $status = FALSE) {

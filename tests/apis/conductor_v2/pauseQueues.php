@@ -29,14 +29,14 @@ if (count($argv) < 5) {
   echo PHP_EOL;
   die();
 }
-else if (isset($argv, $argv[4]) && !in_array($argv[4], ['pause', 'resume'])) {
+elseif (!in_array($argv[4], ['pause', 'resume'])) {
   echo '=> Please enter pause/resume value for status argument.';
   echo PHP_EOL . '=> Required args: {env} {brand / all} {country / all} {status: pause / resume}';
   echo PHP_EOL;
   die();
 }
 
-$env = isset($argv, $argv[1]) ? $argv[1] : '';
+$env = isset($argv, $argv[1]) ? str_replace('01', '', $argv[1]) : '';
 $brand = isset($argv, $argv[2]) ? $argv[2] : '';
 $country = isset($argv, $argv[3]) ? $argv[3] : '';
 $status = isset($argv, $argv[4]) ? $argv[4] : '';
@@ -53,12 +53,12 @@ foreach ($conductors as $key => $value) {
   list($country_brand, $base_env) = explode('_', $key);
   $base_env = $env_map[$base_env] ?? $base_env;
 
-  if ($env !==  '01' . $base_env || empty($value['site_id'])) {
+  if ($env !== $base_env || empty($value['site_id'])) {
     continue;
   }
 
   if ($country == 'all' && $brand == 'all' ) {
-    upate_queue_status_call($status_txt, $value['site_id'], $status, [$env, $country_brand]);
+    update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $country_brand]);
     continue;
   }
   else {
@@ -66,19 +66,22 @@ foreach ($conductors as $key => $value) {
     $current_brand = substr($country_brand ,0,-2);
 
     if ($country == 'all' && $brand == $current_brand) {
-      upate_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
+      update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
     }
     else if ($brand == 'all' && $country == $current_country) {
-      upate_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
+      update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
     }
     else if ($brand == $current_brand && $country == $current_country) {
-      upate_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
+      update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
     }
   }
 }
 
-function upate_queue_status_call($status_txt, $site_id, $status, $args = []) {
+function update_queue_status_call($status_txt, $site_id, $status, $args = []) {
   echo PHP_EOL . '=>' . $status_txt . ' queue status for site_id ==> ' . $site_id . ' ==> (' . json_encode($args) .')';
+  $data = update_queue_status($site_id, $status);
+  if (get_object_vars($data)) {
+    echo PHP_EOL .  '==> ' . json_encode($data);
+  }
   echo PHP_EOL;
-  update_queue_status($site_id, $status);
 }
