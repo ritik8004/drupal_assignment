@@ -188,3 +188,14 @@ function alshaya_ve_non_transac_js_alter(&$javascript, AttachedAssetsInterface $
   // Swap out alshaya_store_finder.js to use it for Vision Express.
   $javascript['modules/custom/alshaya_stores_finder/js/alshaya_store_finder.js']['data'] = drupal_get_path('module', 'alshaya_ve_non_transac') . '/js/alshaya_store_finder.override.js';
 }
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function alshaya_ve_non_transac_preprocess_views_view_field__stores_finder__glossary_map_view__field_store_open_hours(&$variables) {
+  /* @var \Drupal\node\Entity\Node $node */
+  $node = $variables['row']->_entity;
+  $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+  $output = $node->field_store_open_hours->view('default');
+  $variables['output'] = $output;
+}
