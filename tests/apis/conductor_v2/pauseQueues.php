@@ -59,7 +59,6 @@ foreach ($conductors as $key => $value) {
 
   if ($country == 'all' && $brand == 'all' ) {
     update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $country_brand]);
-    continue;
   }
   else {
     $current_country = substr($country_brand, -2);
@@ -68,10 +67,10 @@ foreach ($conductors as $key => $value) {
     if ($country == 'all' && $brand == $current_brand) {
       update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
     }
-    else if ($brand == 'all' && $country == $current_country) {
+    elseif ($brand == 'all' && $country == $current_country) {
       update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
     }
-    else if ($brand == $current_brand && $country == $current_country) {
+    elseif ($brand == $current_brand && $country == $current_country) {
       update_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
     }
   }
