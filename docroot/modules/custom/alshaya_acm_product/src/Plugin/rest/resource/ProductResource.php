@@ -368,6 +368,10 @@ class ProductResource extends ResourceBase {
           ];
         }
       }
+
+      // Removing media if context set as we don't require and to
+      // make response light.
+      unset($data['media']);
     }
 
     // Allow other modules to alter light product data.
