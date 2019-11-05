@@ -18,6 +18,10 @@
       text-shadow: 0 0 0 $content-text;
       background: $form-search-bg;
 
+      &::placeholder {
+        text-shadow: 0 0 0 $form-input-placeholder-text;
+      }
+
       &.form-autocomplete {
         background-image: none;
       }
