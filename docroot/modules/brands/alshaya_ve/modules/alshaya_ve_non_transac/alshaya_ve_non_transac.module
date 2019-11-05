@@ -10,9 +10,42 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_ve_non_transac_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_ve_non_transac_mobile_number_process';
+  }
+}
+
+/**
+ * Processor for the mobile number field to enable multi countries support.
+ */
+function _alshaya_ve_non_transac_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  if ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_add_form' ||
+    $form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_email_signup_add_form') {
+
+    $element['country-code']['#options'] = $element['#allowed_countries'];
+    if (!empty($form_state->getValue('mobile_number'))) {
+      $element['country-code']['#value'] = $form_state->getValue('mobile_number')['country'];
+    }
+  }
+
+  return $element;
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'webform_submission_alshaya_contact_add_form') {
+    $form['actions']['submit']['#value'] = t('Send');
+  }
+
+  if ($form_id == 'webform_submission_alshaya_email_signup_add_form') {
+    $form['actions']['submit']['#value'] = t('Subscribe');
+  }
+
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] === 'views-exposed-form-stores-finder-page-1') {
       $hidden_class_map_list = '';
