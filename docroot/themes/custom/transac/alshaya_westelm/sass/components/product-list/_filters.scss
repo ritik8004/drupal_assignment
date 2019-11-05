@@ -1,0 +1,82 @@
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    legend {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      padding-#{$right}: 1.875rem;
+
+      @include breakpoint($desktop) {
+        @include facet-arrow(after, down);
+
+        &.active {
+          &::after {
+            transform: translateY(0%) rotate(270deg);
+          }
+        }
+      }
+    }
+  }
+
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    .fieldset-wrapper .form-type-radio label {
+      font-size: 0.9375rem;
+
+      &::before {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .fieldset-wrapper {
+        @include container_shadow;
+
+        .form-type-radio {
+          padding-bottom: 0.3125rem;
+
+          label {
+            padding-#{$left}: 2.1875rem;
+
+            &::before {
+              #{$left}: 0.625rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-facet.c-accordion {
+  ul {
+    @include breakpoint($desktop) {
+      @include container_shadow;
+    }
+
+    li span {
+      font-size: 0.9375rem;
+    }
+  }
+
+  margin-#{$left}: 1.875rem;
+
+  .c-accordion__title {
+    font-size: 0.75rem;
+    padding-#{$right}: 1.875rem;
+  }
+}
+
+.c-facet.block-facet--swatch-list {
+  li {
+    a {
+      .facet-item__value,
+      .facet-item__count {
+        font-size: 0.9375rem;
+      }
+    }
+  }
+}

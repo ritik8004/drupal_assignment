@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac22e82701a5d6b1e0912ea4cd966b75",
+    "content-hash": "208be727cbf13131dfea507b4d47f570",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7487,6 +7487,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12597,7 +12600,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch"
+                    "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch",
+                    "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

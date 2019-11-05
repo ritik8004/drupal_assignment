@@ -721,11 +721,19 @@ function alshaya_transac_install() {
     'alshaya_facets_pretty_paths',
   ];
 
+  // Add 10 MB per module we are going to enable above.
+  $memory = 256 + 10 * count($modules);
+  ini_set('memory_limit', $memory . 'M');
+
   global $_alshaya_modules_installed;
 
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
     $_alshaya_modules_installed[] = $module;
+
+    \Drupal::service('entity.memory_cache')->deleteAll();
+    \Drupal::configFactory()->clearStaticCache();
+    drupal_static_reset();
   }
 
   // Invoke a hook to let other modules know that profile installation is done.

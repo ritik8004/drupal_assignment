@@ -358,6 +358,25 @@ $magentos = [
       'store_id' => ['en' => 13, 'ar' => 16],
     ],
   ],
+  // Westelm.
+  'we_qa' => [
+    'url' => 'https://qa-dc3i3ua-xj72gv64n7kci.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '3bdibgcmd49t4t68mj2owvyfbcu2wqen',
+      'consumer_secret' => '4jpl7afsknu48ljktkemk0tjg24ffmcp',
+      'access_token' => 'rmg64nidqu7i51xaaqu7uk5105169t3q',
+      'access_token_secret' => 'qjvquv43s8tyexf856pox9dyped422y0',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [

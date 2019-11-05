@@ -176,10 +176,6 @@ class AcqSkuPositionCommands extends DrushCommands {
 
     $this->skipped = $this->updated = $this->deleted = $this->inserted = 0;
     foreach (array_chunk($terms, $chunk_size) as $categories_chunk) {
-      // Initialize insert query & add values for insert while processing the
-      // API response for bulk insert.
-      $insert_query = $this->connection->insert('acq_sku_position')
-        ->fields(['nid', 'tid', 'position', 'position_type']);
       foreach ($categories_chunk as $term) {
         // Find the commerce id from the term. Skip if not found.
         $commerce_id = $term->commerce_id;
@@ -230,34 +226,43 @@ class AcqSkuPositionCommands extends DrushCommands {
           continue;
         }
 
+        // Initialize insert query & add values for insert while processing the
+        // API response for bulk insert.
+        $insert_query = $this->connection->insert('acq_sku_position')->fields([
+          'nid',
+          'tid',
+          'position',
+          'position_type',
+        ]);
+
+        $updated = $this->updated;
+        $deleted = $this->deleted;
+        $inserted = $this->inserted;
+
         try {
           // Perform merge query for all positions received as a part of
           // position sync.
           $this->processPositionResponse($response, $term, $nids, $position_type, $insert_query);
+
+          // Execute query only if we have records to insert.
+          if ($insert_record_count = $insert_query->count()) {
+            $insert_query->execute();
+            $this->inserted += $insert_record_count;
+          }
         }
         catch (\Exception $e) {
-          $this->logger->error('Error while updating data for product position for terms: @tids. Message: @message', [
-            '@tids' => implode(',', array_column($categories_chunk, 'tid')),
+          $this->logger->error('Error while processing data for product position for term: @tid. Message: @message', [
+            '@tids' => $term->tid,
             '@message' => $e->getMessage(),
           ]);
         }
-      }
 
-      try {
-        // Execute query only if we have records to insert.
-        if ($insert_record_count = $insert_query->count()) {
-          $insert_query->execute();
-          $this->inserted += $insert_record_count;
+        // Invoke hook if there is at-least one operation done
+        // for the category. Either inserted, updated or deleted.
+        if ($inserted != $this->inserted || $updated != $this->updated || $deleted != $this->deleted) {
+          $this->moduleHandler->invokeAll('acq_sku_position_sync_category_term_processed', [$term]);
         }
       }
-      catch (\Exception $e) {
-        $this->logger->error('Error while inserting data for product position for terms: @tids. Message: @message', [
-          '@tids' => implode(',', array_column($categories_chunk, 'tid')),
-          '@message' => $e->getMessage(),
-        ]);
-      }
-
-      $this->moduleHandler->invokeAll('acq_sku_position_sync_category_chunk_processed', [$categories_chunk]);
     }
 
     // Allow other modules to take action after position sync finished.
@@ -278,7 +283,7 @@ class AcqSkuPositionCommands extends DrushCommands {
    *
    * @param array $response
    *   Response received from Magento for positions.
-   * @param \stdClass $term
+   * @param object $term
    *   Term being processed.
    * @param array $nids
    *   List of nids fetched from list of SKUs in response for the term.
@@ -295,7 +300,7 @@ class AcqSkuPositionCommands extends DrushCommands {
                                           $position_type,
                                           Insert $insert_query) {
     // Fetch positions from database.
-    $db_positions = $this->getDbPositions();
+    $db_positions = $this->getDbPositions($term->tid);
     $processed_response_nids = [];
 
     foreach ($response as $product_position) {
@@ -304,7 +309,7 @@ class AcqSkuPositionCommands extends DrushCommands {
         // Prepare list of valid nids from the response for deleting the invalid
         // ones.
         $processed_response_nids[] = $nids[$product_position['sku']];
-        $db_position_nid = isset($db_positions[$term->tid][$nids[$product_position['sku']]]) ? $db_positions[$term->tid][$nids[$product_position['sku']]] : NULL;
+        $db_position_nid = isset($db_positions[$nids[$product_position['sku']]]) ? $db_positions[$nids[$product_position['sku']]] : NULL;
 
         // Skip merge query for this if the db position matches the one in
         // response.
@@ -348,25 +353,25 @@ class AcqSkuPositionCommands extends DrushCommands {
    *
    * @param array $processed_response_nids
    *   List of nids from response which were processed for the current term.
-   * @param \stdClass $term
+   * @param object $term
    *   Term object which is being processed.
    */
   public function removeObsoletePositionsForCategory(array $processed_response_nids, \stdClass $term) {
-    $db_positions = $this->getDbPositions();
+    $db_positions = $this->getDbPositions($term->tid);
 
     // Return if there was no record in db for this term pre-import.
-    if (empty($db_positions[$term->tid])) {
+    if (empty($db_positions)) {
       return;
     }
 
     // Consider all db positions for this term as obsolete if no nid got
     // processed while processing the response nids.
     if (empty($processed_response_nids)) {
-      $obsolete_record_nids = $db_positions[$term->tid];
+      $obsolete_record_nids = $db_positions;
     }
     else {
       // Fetch the diff between nids in DB & the ones from response.
-      $obsolete_record_nids = array_diff(array_keys($db_positions[$term->tid]), $processed_response_nids);
+      $obsolete_record_nids = array_diff(array_keys($db_positions), $processed_response_nids);
     }
 
     // Delete obsolete records & update the delete count for logging.
@@ -402,20 +407,25 @@ class AcqSkuPositionCommands extends DrushCommands {
   /**
    * Helper function to fetch positions stored in DB for the category chunk.
    *
+   * @param int|string $tid
+   *   Term ID for which we want to load the positions.
+   *
    * @return array
    *   List of product positions grouped by term_id.
    */
-  public function getDbPositions() {
+  public function getDbPositions($tid) {
     $db_positions = &drupal_static(__METHOD__, []);
 
-    if (!empty($db_positions)) {
-      return $db_positions;
+    if (isset($db_positions[$tid])) {
+      return $db_positions[$tid];
     }
+
+    $db_positions[$tid] = [];
 
     $query = $this->connection->select('acq_sku_position', 'asp');
     $query->fields('asp', ['nid', 'tid', 'position']);
+    $query->condition('tid', $tid);
     $existing_nid_positions = $query->execute()->fetchAll();
-    $db_positions = [];
 
     // Group product position mapping by tids.
     foreach ($existing_nid_positions as $position) {
@@ -425,7 +435,7 @@ class AcqSkuPositionCommands extends DrushCommands {
       $db_positions[$position->tid][$position->nid] = $position->position;
     }
 
-    return $db_positions;
+    return $db_positions[$tid];
   }
 
   /**
@@ -494,15 +504,18 @@ class AcqSkuPositionCommands extends DrushCommands {
    *   Categories data.
    */
   protected function getCategoriesFromDrupal() {
-    $sql_query = 'SELECT tc.entity_id as tid, tc.field_commerce_id_value as commerce_id, td.name
-                  FROM taxonomy_term__field_commerce_id tc
-                  INNER JOIN taxonomy_term_field_data td
-                  ON td.tid=tc.entity_id AND td.langcode=tc.langcode';
+    $query = $this->connection->select('taxonomy_term_field_data', 'ttfd');
+    $query->innerJoin('taxonomy_term__field_commerce_id', 'commerce_id', 'ttfd.tid = commerce_id.entity_id AND ttfd.langcode = commerce_id.langcode');
+    $query->innerJoin('taxonomy_term__field_commerce_status', 'status', 'ttfd.tid = status.entity_id AND ttfd.langcode = status.langcode');
 
-    // Get all product category terms.
-    $query = $this->connection->query($sql_query);
-    $query->execute();
-    return $query->fetchAllAssoc('commerce_id');
+    $query->condition('ttfd.default_langcode', 1);
+    $query->condition('status.field_commerce_status_value', 1);
+
+    $query->addField('ttfd', 'tid', 'tid');
+    $query->addField('commerce_id', 'field_commerce_id_value', 'commerce_id');
+    $query->addField('ttfd', 'name', 'name');
+
+    return $query->execute()->fetchAllAssoc('commerce_id');
   }
 
 }
