@@ -90,10 +90,6 @@ $conductors = [
     'hmac_secret' => 'YzJiNGQzYWItYzk0Yy00',
     'site_id' => 98,
   ],
-  'hmkw_mapp' => [
-    'hmac_id' => 'd42e1e4ee7354200891b4e13fcd5a06b',
-    'hmac_secret' => 'ZGMzYmYzMWYtNDAyOS00',
-  ],
   // H&M SA.
   'hmsa_qa' => [
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
@@ -110,10 +106,6 @@ $conductors = [
     'hmac_secret' => 'NTFkM2E4ZmMtZWE5MS00',
     'site_id' => 99,
   ],
-  'hmsa_mapp' => [
-    'hmac_id' => '3fede9458f664760bdcf74e136af78df',
-    'hmac_secret' => 'OGE2ZTUzZjItMjE0YS00',
-  ],
   // H&M AE.
   'hmae_qa' => [
     'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
@@ -129,10 +121,6 @@ $conductors = [
     'hmac_id' => '31a535578a434459a044b5dda6e6b735',
     'hmac_secret' => 'MWYxYTA0NmItMjM1Yy00',
     'site_id' => 100,
-  ],
-  'hmae_mapp' => [
-    'hmac_id' => '57331ba72f7a45a1823e38c69d0aab44',
-    'hmac_secret' => 'YjMyYzdkMjMtMzk3Mi00',
   ],
   // H&M EG.
   'hmeg_qa' => [
