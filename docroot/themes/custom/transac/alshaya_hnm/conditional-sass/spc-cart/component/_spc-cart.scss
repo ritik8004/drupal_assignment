@@ -1,9 +1,3 @@
-.spc-content {
-  .checkout-section-title {
-    font-family: $hnm-demibold;
-  }
-}
-
 .spc-mobile-cart-preview {
   @include breakpoint($only-mobile) {
     .cart-quantity,
