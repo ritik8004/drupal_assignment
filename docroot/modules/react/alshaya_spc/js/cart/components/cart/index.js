@@ -2,11 +2,11 @@ import React from 'react';
 
 import EmptyCart from '../empty-cart';
 import CheckoutSectionTitle from '../spc-checkout-section-title';
-import CartOutOfStock from '../cart-oos';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
 import MobileCartPreview from '../mobile-cart-preview';
 import OrderSummaryBlock from "../../../utilities/order-summary-block";
+import CheckoutErrorMessage from '../../../utilities/checkout-error-message';
 
 export default class Cart extends React.Component {
 
@@ -55,14 +55,16 @@ export default class Cart extends React.Component {
       return (
         <React.Fragment>
           <div className="spc-pre-content">
-            <div className="spc-oos">
-              <CartOutOfStock in_stock={this.state.in_stock} />
-            </div>
+            {(!this.state.in_stock)
+            && (
+              <CheckoutErrorMessage>
+                {Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.')}
+              </CheckoutErrorMessage>
+            )}
             <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} />
           </div>
           <div className="spc-main">
             <div className="spc-content">
-              <CartOutOfStock in_stock={this.state.in_stock} />
               <CheckoutSectionTitle>
                 {Drupal.t('My Shopping Bag (@qty items)', {'@qty': this.state.total_items})}
               </CheckoutSectionTitle>
