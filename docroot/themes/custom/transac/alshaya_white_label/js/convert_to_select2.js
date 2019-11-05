@@ -47,6 +47,16 @@
           }, 50);
         });
 
+        $('.checkoutcom-credit-card-exp-month-select').once('manage-disable').on('change', function () {
+          setTimeout(function () {
+            $('.checkoutcom-credit-card-exp-month-select').select2('destroy');
+
+            $('.checkoutcom-credit-card-exp-month-select').select2({
+              minimumResultsForSearch: -1
+            });
+          }, 50);
+        });
+
         $('.alshaya-acm-customer-order-list-search .form-select').once('select2select').select2({
           minimumResultsForSearch: -1,
           dropdownCssClass: 'order-list-select'
