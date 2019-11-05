@@ -3,6 +3,8 @@
     background-color: $spc-cart-background;
     padding-bottom: 5rem;
     margin-top: 0 !important;
+    padding-#{$left}: 0 !important;
+    padding-#{$right}: 0 !important;
   }
 
   .c-footer {
@@ -11,9 +13,15 @@
 }
 
 #spc-cart {
-  .spc-main {
+  .spc-main,
+  .spc-pre-content {
     max-width: 64.125rem;
     margin: 0 auto;
+  }
+}
+
+#spc-cart {
+  .spc-main {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
@@ -44,6 +52,7 @@
   .checkout-section-title {
     font-size: 1.125rem;
     color: $spc-cart-section-title-color;
+    font-weight: 600;
 
     @include breakpoint($only-mobile) {
       display: none;
@@ -59,7 +68,6 @@
   @include breakpoint($only-mobile) {
     background-color: #fff;
     padding: 1.25rem 0;
-    margin: 0 -0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
