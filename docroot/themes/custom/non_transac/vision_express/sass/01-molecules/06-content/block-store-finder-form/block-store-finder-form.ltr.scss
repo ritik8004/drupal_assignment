@@ -552,6 +552,10 @@
     display: inline;
     margin-#{$right}: 0.625rem;
     color: $content-text;
+
+    &:hover {
+      color: $store-active-link;
+    }
   }
 }
 
@@ -687,5 +691,26 @@
   a {
     color: $content-text;
     padding-#{$left}: 0;
+  }
+}
+
+.geolocation-common-map-container {
+  .location-content {
+    min-width: 11rem;
+  }
+
+  .hours--label {
+    font-family: $helvetica-neue-bold;
+    font-weight: normal;
+  }
+
+  .get--directions a {
+    color: $content-text;
+    text-decoration: underline;
+    font-weight: normal;
+
+    &::after {
+      display: none;
+    }
   }
 }

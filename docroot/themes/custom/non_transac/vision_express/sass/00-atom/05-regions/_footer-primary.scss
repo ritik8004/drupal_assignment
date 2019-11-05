@@ -55,8 +55,8 @@
 
   h3 {
     font-size: 0.9375rem;
-    font-weight: bold;
-    font-family: $helvetica-neue;
+    font-weight: normal;
+    font-family: $helvetica-neue-bold;
     margin: 0;
     margin-bottom: 0.3125rem;
   }
@@ -69,4 +69,9 @@
 
 #backtotop {
   z-index: 10;
+  bottom: 5rem;
+  width: 3.125rem;
+  height: 3.125rem;
+  #{$right}: 0.3125rem;
+  background-size: contain;
 }
