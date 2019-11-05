@@ -22,6 +22,9 @@ function alshaya_performance_update_8002() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+
+  // Rebuild router.
+  \Drupal::service('router.builder')->rebuild();
 }
 
 /**
