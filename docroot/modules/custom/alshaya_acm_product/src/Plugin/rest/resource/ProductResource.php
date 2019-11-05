@@ -504,7 +504,9 @@ class ProductResource extends ResourceBase {
       $this->cache['tags'][] = 'node:' . $nid;
       $promotions[] = [
         'text' => $promotion['text'],
-        'promo_web_url' => Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl(),
+        'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+          Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
         'promo_node' => $nid,
       ];
     }
