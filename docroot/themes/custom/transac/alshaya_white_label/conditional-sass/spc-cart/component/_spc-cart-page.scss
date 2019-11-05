@@ -41,10 +41,7 @@
 }
 
 .spc-content {
-  .checkout-section-title {
-    font-size: 1.125rem;
-    color: $spc-cart-section-title-color;
-
+  .spc-checkout-section-title {
     @include breakpoint($only-mobile) {
       display: none;
     }
@@ -57,7 +54,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    background-color: #fff;
+    background-color: $spc-order-summary-totals-bg;
     padding: 1.25rem 0;
     margin: 0 -0.5rem;
     display: flex;
@@ -66,7 +63,7 @@
 
     .cart-quantity,
     .cart-value {
-      color: $spc-cart-section-title-color;
+      color: $spc-cart-section-highlight;
       font-size: 0.875rem;
     }
 

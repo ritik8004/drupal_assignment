@@ -1,0 +1,49 @@
+.spc-order-summary-block {
+  .totals {
+    background: $spc-order-summary-totals-bg;
+    padding: 1.25rem;
+  }
+
+  .total-line-item {
+    display: flex;
+    justify-content: space-between;
+    color: $spc-totals-line-item-color;
+    text-transform: capitalize;
+    line-height: 1.125rem;
+    margin-bottom: 0.625rem;
+    font-size: 1rem;
+
+    .price-currency {
+      padding-#{$right}: 5px;
+    }
+
+    .discount-total {
+      color: $spc-order-summary-discount-text;
+
+      + .value {
+        color: $spc-order-summary-discount-text;
+      }
+    }
+  }
+
+  .hero-total {
+    border-top: 1px solid $spc-order-summary-hero-total-border;
+    padding: 1.25rem 0;
+
+    .total-line-item {
+      font-family: $alshaya-bold;
+      margin-bottom: 0;
+    }
+
+    .delivery-vat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        font-size: 0.75rem;
+        color: $spc-order-total-suffix-text;
+      }
+    }
+  }
+}
