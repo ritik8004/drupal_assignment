@@ -336,17 +336,6 @@ function whitelabel_preprocess_views_view_field__stores_finder__attachment_1__fi
 }
 
 /**
- * Implements hook_preprocess_views_view_field().
- */
-function whitelabel_preprocess_views_view_field__stores_finder__glossary_map_view__field_store_open_hours(&$variables) {
-  /* @var \Drupal\node\Entity\Node $node */
-  $node = $variables['row']->_entity;
-  $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
-  $output = $node->field_store_open_hours->view('default');
-  $variables['output'] = $output;
-}
-
-/**
  * Implements hook_preprocess_views_view_unformatted().
  */
 function whitelabel_preprocess_views_view_unformatted__store_list(&$variables) {
