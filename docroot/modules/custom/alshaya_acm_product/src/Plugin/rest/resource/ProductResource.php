@@ -349,7 +349,7 @@ class ProductResource extends ResourceBase {
         $data['extra_data']['cart_image'] = [
           'url' => $image['#attributes']['src'],
           'title' => $image['#attributes']['title'],
-          'alt' =>  $image['#attributes']['alt'],
+          'alt' => $image['#attributes']['alt'],
         ];
       }
     }
