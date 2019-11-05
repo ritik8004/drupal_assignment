@@ -5,9 +5,11 @@ services:
       - '@config.factory'
       - '@current_route_match'
       - '@entity_type.manager'
+      - '@request_stack'
   alshaya_acm_product_position.sort_labels:
     class: Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService
     arguments:
       - '@config.factory'
       - '@current_route_match'
       - '@entity_type.manager'
+      - '@request_stack'
