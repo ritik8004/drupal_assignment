@@ -12,6 +12,7 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -330,6 +331,27 @@ class ProductResource extends ResourceBase {
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
+    }
+
+    // Adding extra data to the product resource.
+    $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+    $data['extra_data'] = [];
+    $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
+    if (!empty($image)) {
+      if ($image['#theme'] == 'image_style') {
+        $data['extra_data']['cart_image'] = [
+          'url' => ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']),
+          'title' => $image['#title'],
+          'alt' => $image['#alt'],
+        ];
+      }
+      elseif ($image['#theme'] == 'image') {
+        $data['extra_data']['cart_image'] = [
+          'url' => $image['#attributes']['src'],
+          'title' => $image['#attributes']['title'],
+          'alt' =>  $image['#attributes']['alt'],
+        ];
+      }
     }
 
     // Allow other modules to alter light product data.
