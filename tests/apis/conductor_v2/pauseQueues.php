@@ -63,7 +63,7 @@ foreach ($conductors as $key => $value) {
   }
   else {
     $current_country = substr($country_brand, -2);
-    $current_brand = substr_replace($country_brand ,"",-2);
+    $current_brand = substr($country_brand ,0,-2);
 
     if ($country == 'all' && $brand == $current_brand) {
       upate_queue_status_call($status_txt, $value['site_id'], $status, [$env, $current_brand, $current_country]);
