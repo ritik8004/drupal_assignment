@@ -11,6 +11,12 @@ elements: |
     '#placeholder': 'Mobile number'
     '#verify': none
     '#required': true
+    '#allowed_countries':
+      KW: 'Kuwait (+965)'
+      SA: 'Saudi Arabia (+966)'
+      AE: 'United Arab Emirates (+971)'
+      BH: 'Bahrain (+973)'
+      QA: 'Qatar (+974)'
   email:
     '#title': 'Email Address'
     '#placeholder': 'Email Address'
