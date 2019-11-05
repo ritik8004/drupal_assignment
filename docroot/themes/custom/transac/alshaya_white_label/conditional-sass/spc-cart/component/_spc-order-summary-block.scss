@@ -2,6 +2,10 @@
   .totals {
     background: $spc-order-summary-totals-bg;
     padding: 1.25rem;
+
+    .sub-total {
+      margin-bottom: 0;
+    }
   }
 
   .total-line-item {
