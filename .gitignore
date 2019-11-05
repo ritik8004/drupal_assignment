@@ -3,6 +3,7 @@ local.settings.php
 local.drush.yml
 local.site.yml
 local.services.yml
+tests/apis/conductor_v2/settings.php
 tests/behat/local.yml
 box/local.config.yml
 box/alshaya_acm*
