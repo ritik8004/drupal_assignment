@@ -7,6 +7,7 @@ import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
 import MobileCartPreview from '../mobile-cart-preview';
 import OrderSummaryBlock from "../../../utilities/order-summary-block";
+import CartPromoBlock from "../cart-promo-block";
 
 export default class Cart extends React.Component {
 
@@ -22,6 +23,10 @@ export default class Cart extends React.Component {
       'in_stock': true
     };
   }
+
+  getStockStatus = () => {
+    return this.state.in_stock === true ? '' : 'cart-error';
+  };
 
   componentDidMount() {
     // Listen to `refreshCart` event triggered from `mini-cart/index.js`.
@@ -69,6 +74,7 @@ export default class Cart extends React.Component {
               <CartItems items={this.state.items} />
             </div>
             <div className="spc-sidebar">
+              <CartPromoBlock/>
               <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock}/>
             </div>
           </div>
