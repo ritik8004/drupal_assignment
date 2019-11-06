@@ -28,6 +28,7 @@ const InputButtons = React.memo((props) => {
 
 
 class Autocomplete extends React.Component {
+  timerId = null;
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
   searchQuery = getCurrentSearchQuery();
 
@@ -36,7 +37,7 @@ class Autocomplete extends React.Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.value !==  nextState.value);
+    return (this.state.value !== nextState.value);
   }
 
   toggleFocus = (action) => {
@@ -68,8 +69,13 @@ class Autocomplete extends React.Component {
       this.props.onSuggestionCleared();
     }
 
-    this.props.refine(newValue)
-    this.props.onChange(newValue);
+    // Wait for sometime for user to finish typing, before we do update
+    // query and do api call to algolia.
+    clearTimeout(this.timerId);
+    this.timerId = setTimeout(() => {
+      this.props.refine(newValue)
+      this.props.onChange(newValue);
+    }, 300);
 
     this.setState({
       value: newValue,

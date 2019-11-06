@@ -58,7 +58,6 @@ class App extends React.Component {
             onSuggestionSelected={this.onSuggestionSelected}
             onSuggestionCleared={this.onSuggestionCleared}
             onChange={this.onChange}
-            currentValue={query}
           />
         </InstantSearch>
         {isMobile() && (
