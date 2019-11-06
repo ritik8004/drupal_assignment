@@ -1,0 +1,47 @@
+elements: |
+  select_your_preference_of_channel_of_communication:
+    '#type': radios
+    '#title': 'Select your prefered communication channel'
+    '#default_value': Email
+    '#title_display': inline
+    '#options':
+      'Email': 'Email'
+      'Mobile': 'Mobile'
+    '#required': true
+  first_name:
+    '#type': textfield
+    '#title': 'First name'
+    '#placeholder': 'First name'
+    '#required': true
+  last_name:
+    '#type': textfield
+    '#title': 'Last name'
+    '#placeholder': 'Last name'
+    '#required': true
+  mobile_number:
+    '#type': mobile_number
+    '#title': 'Mobile number'
+    '#verify': none
+    '#required': true
+    '#allowed_countries':
+      KW: 'Kuwait (+965)'
+      SA: 'Saudi Arabia (+966)'
+      AE: 'United Arab Emirates (+971)'
+      BH: 'Bahrain (+973)'
+      QA: 'Qatar (+974)'
+  email:
+    '#type': email
+    '#title': 'Email Address'
+    '#placeholder': 'Email Address'
+    '#required': true
+  message:
+    '#type': textarea
+    '#title': Message
+    '#placeholder': Message
+    '#required': true
+    '#maxlength': 220
+  tnc:
+    '#type': checkbox
+    '#title': 'I agree to receive messages about advertisements, promotions, campaigns etc. through email'
+    '#required': true
+    '#required_error': 'please agree the terms and condition'

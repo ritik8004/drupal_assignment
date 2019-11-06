@@ -1,0 +1,4 @@
+alshaya_ve_non_transac.settings_form:
+  route_name: alshaya_ve_non_transac.settings_form
+  title: 'VE settings'
+  base_route: alshaya_ve_non_transac.settings_form
