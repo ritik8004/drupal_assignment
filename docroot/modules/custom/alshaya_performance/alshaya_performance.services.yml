@@ -2,3 +2,10 @@ services:
   lock:
     class: Drupal\Core\Lock\LockBackendInterface
     factory: ['@memcache.lock.factory', get]
+
+  alshaya_performance.route_subscriber:
+    class: Drupal\alshaya_performance\Routing\RouteSubscriber
+    arguments:
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,8 @@
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next {
+  &::before {
+    background-color: $slider_arrow_bg;
+  }
+}

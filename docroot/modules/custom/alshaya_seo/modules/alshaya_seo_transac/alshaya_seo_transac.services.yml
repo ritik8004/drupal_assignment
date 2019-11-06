@@ -15,6 +15,7 @@ services:
       - '@database'
       - '@alshaya_addressbook.manager'
       - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
       - '@module_handler'
       - '@alshaya_acm_customer.orders_manager'
       - '@entity.repository'

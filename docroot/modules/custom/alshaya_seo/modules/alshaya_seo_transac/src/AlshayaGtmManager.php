@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo_transac;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
@@ -211,6 +212,13 @@ class AlshayaGtmManager {
   protected $skuManager;
 
   /**
+   * SKU Images Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * Module Handler service object.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -267,6 +275,8 @@ class AlshayaGtmManager {
    *   Address Book Manager service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU Images Manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -289,6 +299,7 @@ class AlshayaGtmManager {
                               Connection $database,
                               AlshayaAddressBookManager $addressBookManager,
                               SkuManager $skuManager,
+                              SkuImagesManager $sku_images_manager,
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
                               EntityRepositoryInterface $entityRepository,
@@ -306,6 +317,7 @@ class AlshayaGtmManager {
     $this->database = $database;
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
+    $this->skuImagesManager = $sku_images_manager;
     $this->moduleHandler = $module_handler;
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
@@ -426,7 +438,11 @@ class AlshayaGtmManager {
       $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
     }
 
-    $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
+    $media = $this->skuImagesManager->getProductMedia($sku, 'pdp', TRUE);
+    $attributes['gtm-dimension4'] = isset($media['media_items'], $media['media_items']['images'])
+      ? count($media['media_items']['images'])
+      : 'image not available';
+
     $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
@@ -766,6 +782,8 @@ class AlshayaGtmManager {
   public function fetchProductCategories(Node $product_node) {
     $terms = [];
 
+    // For GTM we always want English data.
+    $product_node = $this->entityRepository->getTranslationFromContext($product_node, 'en');
     $langcode = $product_node->language()->getId();
 
     $cid = implode(':', [
@@ -790,10 +808,8 @@ class AlshayaGtmManager {
 
     /** @var \Drupal\taxonomy\Entity\Term $parent */
     foreach ($parents ?? [] as $parent) {
-      if ($parent->language()->getId() != $langcode && $parent->hasTranslation($langcode)) {
-        $parent = $parent->getTranslation($langcode);
-      }
-
+      // For GTM we always want English data.
+      $parent = $this->entityRepository->getTranslationFromContext($parent, 'en');
       $terms[$parent->id()] = trim($parent->getName());
     }
 
@@ -998,12 +1014,6 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
-        $this->moduleHandler->invokeAll('gtm_pdp_attributes_alter',
-          [
-            &$sku_entity,
-            &$page_dl_attributes,
-          ]
-        );
         break;
 
       case 'product listing page':

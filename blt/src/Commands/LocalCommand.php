@@ -345,4 +345,35 @@ class LocalCommand extends BltTasks {
     return '';
   }
 
+  /**
+   * Pause ACM Queue for unavailable sites on particular ENV.
+   *
+   * @param string $env
+   *   Environment code.
+   *
+   * @command local:pause-unavailable
+   *
+   * @description Pause ACM Queue for unavailable sites on particular ENV.
+   */
+  public function pauseUnavailableSites(string $env) {
+    $data = $this->getSitesData('mckw.01' . $env);
+    $sites = [];
+    foreach ($data ?? [] as $line) {
+      if (strpos($line, ' ') < -1) {
+        $sites[] = $line;
+      }
+    }
+
+    // First pause for all the sites in particular ENV.
+    $this->_exec('php /var/www/alshaya/tests/apis/conductor_v2/pauseQueues.php ' . $env . ' all all pause');
+
+    // Unpause for the sites which are currently available.
+    // We do so as we don't have a way to know current status of queue.
+    foreach ($sites as $site) {
+      $country = substr($site, -2);
+      $brand = substr($site, 0, -2);
+      $this->_exec("php /var/www/alshaya/tests/apis/conductor_v2/pauseQueues.php $env $brand $country resume");
+    }
+  }
+
 }

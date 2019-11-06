@@ -1,0 +1,108 @@
+.page-maintenance {
+  .maintenance__logo {
+    @include breakpoint($mobile) {
+      text-align: center;
+      float: none;
+      margin: 0.75rem 0 1.6875rem;
+    }
+
+    svg,
+    img {
+      height: auto;
+
+      @include breakpoint($tablet) {
+        width: 28.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 15.5rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.375rem;
+      margin-bottom: 1.6875rem;
+    }
+  }
+
+  .not-found {
+    &::after {
+      display: none;
+    }
+
+    max-width: calc(97% - 3.5625rem);
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
+      max-width: calc(100% - 1.875rem);
+    }
+  }
+
+  .not-found__body {
+    position: relative;
+    width: 100%;
+    #{$right}: auto;
+    bottom: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $maintenance_container_bg;
+    height: 34.75rem;
+
+    @include breakpoint($only-mobile) {
+      height: 27.75rem;
+    }
+
+    &::after {
+      content: '';
+      border: 1px solid $maintenance_container_border;
+      position: absolute;
+      top: -1.3125rem;
+      left: -1.3125rem;
+      right: -1.3125rem;
+      bottom: -1.3125rem;
+
+      @include breakpoint($only-mobile) {
+        top: -0.5rem;
+        left: -0.4375rem;
+        right: -0.4375rem;
+        bottom: -0.5rem;
+      }
+    }
+
+    strong,
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: $maintenance_body_text_strong;
+      font-size: 1.75rem;
+      line-height: 1.14;
+      text-transform: uppercase;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.125rem;
+      }
+    }
+
+    p {
+      color: $maintenance_body_text_regular;
+      font-size: 1.5rem;
+      margin-bottom: 0.625rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
+    }
+
+    .ar {
+      color: $maintenance_body_text_arabic;
+    }
+  }
+}
+
+.maintenance-page {
+  @include breakpoint($only-mobile) {
+    border-top-width: 0.75rem;
+  }
+}

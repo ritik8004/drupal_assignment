@@ -1,0 +1,22 @@
+.c-footer-secondary {
+  .c-footer__copy {
+    @include breakpoint($tablet) {
+      text-align: $right;
+      margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      margin-#{$right}: 0;
+    }
+
+    .field--name-body p {
+      font-size: 0.6875rem;
+
+      @include breakpoint($tablet) {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
