@@ -1,0 +1,108 @@
+global:
+  version: VERSION
+  css:
+    theme:
+      dist/css/global.ltr.css: {}
+  js:
+    js/global.js: {}
+
+block-site-logo:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/02-header-tertiary/block-site-logo/block-site-logo.ltr.css: {}
+
+block-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/block-logo-navigation.ltr.css: {}
+
+menu-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
+
+block-header-language:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-language/block-header-language.ltr.css: {}
+
+header-language-switcher:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/01-header-secondary/block-header-language/language-switcher.ltr.css: {}
+
+block-footer-store:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-footer-store/block-footer-store.ltr.css: {}
+
+block-social-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-social-links/block-social-links.ltr.css: {}
+
+menu-social-links:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-social-links/menu-social-links.ltr.css: {}
+
+block-footer-language:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+
+menu-terms-conditions:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/04-footer-secondary/block-terms-conditions/menu-terms-conditions.ltr.css: {}
+
+field-slider:
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-slider/field-slider.ltr.css: {}
+
+field-promo-block:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
+
+paragraph-title-textarea:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
+
+modal-email-signup:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
+form-element-textual:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+
+block-store-finder-form:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/06-content/block-store-finder-form/block-store-finder-form.ltr.css: {}
+
+block-copyright:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/04-footer-secondary/block-copyright/block-copyright.ltr.css: {}

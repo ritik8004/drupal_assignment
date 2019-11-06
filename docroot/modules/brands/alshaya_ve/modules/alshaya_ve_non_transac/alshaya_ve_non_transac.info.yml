@@ -1,0 +1,12 @@
+name: 'Alshaya Vision Express (Non-Transac)'
+type: module
+description: 'The dedicated module for vision express non-transac brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_ve:alshaya_ve
+  - search_api:search_api
+  - search_api_autocomplete:search_api_autocomplete
+  - search_api_spellcheck:search_api_spellcheck
+  - search_api_solr_multilingual:search_api_solr_multilingual
+  - search_api_solr:search_api_solr

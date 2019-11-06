@@ -1,0 +1,56 @@
+dependencies:
+  config:
+    - field.field.node.store.field_store_country
+    - field.field.node.store.field_store_retina_photography
+content:
+  created:
+    weight: 14
+  field_latitude_longitude:
+    weight: 4
+  field_meta_tags:
+    weight: 16
+  field_store_address:
+    weight: 6
+  field_store_area:
+    weight: 5
+  field_store_country:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_store_email:
+    weight: 7
+  field_store_locator_id:
+    weight: 3
+  field_store_open_hours:
+    weight: 10
+  field_store_phone:
+    weight: 8
+  field_store_retina_photography:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_store_sts_label:
+    weight: 9
+  langcode:
+    weight: 11
+  path:
+    weight: 17
+  promote:
+    weight: 19
+  status:
+    weight: 13
+  sticky:
+    weight: 20
+  title:
+    weight: 0
+  translation:
+    weight: 12
+  uid:
+    weight: 15
+  url_redirects:
+    weight: 18

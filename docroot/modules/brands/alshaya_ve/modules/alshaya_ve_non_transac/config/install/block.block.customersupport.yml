@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies: {   }
+id: customersupport
+theme: vision_express
+region: footer_primary
+weight: 0
+provider: null
+plugin: 'block_content:37282103-1a2e-4856-aab8-2c380e10acdc'
+settings:
+  id: 'block_content:37282103-1a2e-4856-aab8-2c380e10acdc'
+  label: 'Customer Support'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

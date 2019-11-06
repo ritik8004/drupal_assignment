@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_ve.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_ve_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_ve', 'inc', 'alshaya_ve.content');
+
+  // Create default content for the site.
+  alshaya_ve_create_default_content();
+}

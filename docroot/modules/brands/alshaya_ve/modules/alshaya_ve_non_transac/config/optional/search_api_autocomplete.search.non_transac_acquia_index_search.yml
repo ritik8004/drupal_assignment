@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.non_transac_acquia_solr_search_index
+    - views.view.non_transac_acquia_index_search
+  module:
+    - views
+    - search_api_autocomplete
+id: non_transac_acquia_index_search
+label: 'Non Transac Acquia index search'
+index_id: non_transac_acquia_solr_search_index
+suggester_settings:
+  server:
+    fields: {  }
+suggester_weights: {  }
+suggester_limits: {  }
+search_settings:
+  'views:non_transac_acquia_index_search':
+    displays:
+      default: true
+      selected: {  }
+options: {  }
