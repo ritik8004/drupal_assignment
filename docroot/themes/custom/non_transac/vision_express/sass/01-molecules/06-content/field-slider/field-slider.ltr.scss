@@ -1,0 +1,80 @@
+@import '../../../config/_config.scss';
+
+.slick-slider {
+  .slick-list {
+    min-width: auto;
+    width: 100%;
+    max-width: 120rem;
+    margin: 0 auto;
+    #{$left}: 0;
+  }
+
+  .field__wrapper.field-banner {
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
+
+  .slick-next,
+  .slick-prev {
+    outline: 0;
+    top: 42% !important;
+
+    &::before {
+      color: $slick-arrow;
+      background-color: transparent;
+      font-size: 5rem;
+    }
+
+    @include breakpoint($upto-lap) {
+      display: none !important;
+    }
+  }
+
+  .slick-next {
+    #{$right}: 3%;
+    #{$left}: inherit;
+
+    @include icon(chevron#{$right}, before);
+  }
+
+  .slick-prev {
+    #{$left}: 0;
+    #{$right}: inherit;
+
+    @include icon(chevron#{$left}, before);
+  }
+
+  .slick-dots {
+    @include breakpoint($upto-palm) {
+      margin-top: -0.9375rem;
+      margin-bottom: 0.9375rem;
+    }
+
+    @include breakpoint($desk) {
+      display: none !important;
+    }
+
+    li {
+      border-color: $slick-dot-border;
+
+      &.active,
+      &.slick-active {
+        background: $slick-dot-active-bg;
+      }
+    }
+  }
+}
+
+@include breakpoint($desk) {
+  .node-advanced-page {
+    .slick-slider .slick-list {
+      min-height: 100%;
+    }
+  }
+
+  .field__slider {
+    max-width: 120rem;
+    margin: auto;
+  }
+}

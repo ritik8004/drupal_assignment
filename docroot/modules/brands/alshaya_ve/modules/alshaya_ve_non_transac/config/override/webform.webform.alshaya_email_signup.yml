@@ -1,0 +1,29 @@
+title: 'Receive exclusive offers, new product launches and learn about our new stores.'
+elements: |
+  full_name:
+    '#title': 'Full Name'
+    '#placeholder': 'Full Name'
+    '#type': textfield
+    '#required': true
+  mobile_number:
+    '#type': mobile_number
+    '#title': 'Mobile number'
+    '#placeholder': 'Mobile number'
+    '#verify': none
+    '#required': true
+    '#allowed_countries':
+      KW: 'Kuwait (+965)'
+      SA: 'Saudi Arabia (+966)'
+      AE: 'United Arab Emirates (+971)'
+      BH: 'Bahrain (+973)'
+      QA: 'Qatar (+974)'
+  email:
+    '#title': 'Email Address'
+    '#placeholder': 'Email Address'
+    '#type': email
+    '#required': true
+  exclusive_deals:
+    '#type': checkbox
+    '#title': 'I agree to receive messages about advertisements, promotions, campaigns etc. through email'
+    '#required': true
+    '#required_error': 'Please agree the terms and condition'

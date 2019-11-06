@@ -1,0 +1,7 @@
+@import '../../../config/_config.scss';
+
+.paragraph-t-banner {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0.9375rem;
+  }
+}
