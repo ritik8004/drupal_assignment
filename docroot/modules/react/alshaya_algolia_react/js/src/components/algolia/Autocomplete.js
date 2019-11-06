@@ -36,8 +36,8 @@ class Autocomplete extends React.Component {
     value: this.searchQuery !== null && this.searchQuery !== '' ? this.searchQuery : this.props.currentRefinement,
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.value !== nextState.value);
+  componentDidMount()  {
+    this.onKeyUp();
   }
 
   toggleFocus = (action) => {
