@@ -1,0 +1,38 @@
+.spc-promo-code-block {
+  position: relative;
+  margin-bottom: 2.5rem;
+
+  #promo-code {
+    border: none;
+    height: 3.25rem;
+    width: calc(100% - 8.6875rem);
+    padding-#{$left}: 1.25rem;
+  }
+
+  .promo-submit {
+    border: none;
+    width: 8.6875rem;
+    height: 3.25rem;
+    background: $spc-cart-promo-code-submit-enabled;
+    color: $spc-cart-promo-code-text;
+    padding: 0;
+    font-family: $alshaya-bold;
+    letter-spacing: 1.14px;
+    font-size: 1rem;
+    transition: background 0.3s ease-in-out;
+  }
+
+  .promo-remove {
+    padding: 0;
+    height: 3.25rem;
+    position: absolute;
+    #{$left}: 14.5rem;
+    border: none;
+    background: none;
+    color: $spc-cart-promo-code-submit-enabled;
+
+    @include icon('close', after) {
+      font-size: 2rem;
+    }
+  }
+}

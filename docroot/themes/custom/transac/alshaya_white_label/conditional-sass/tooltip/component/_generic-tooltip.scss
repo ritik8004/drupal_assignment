@@ -1,0 +1,51 @@
+.tooltip-box {
+  position: absolute;
+  background: $spc-tooltip-bg;
+  border: 0.25rem solid $spc-tooltip-bg;
+  width: 11.25rem;
+  padding: 0.4375rem;
+  color: $spc-tooltip-text;
+  line-height: 1.33;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  display: none;
+  bottom: 2rem;
+  #{$left}: -4.9rem;
+
+  &::before,
+  &::after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: '';
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &::after {
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: $spc-tooltip-bg;
+    border-width: 0.5rem;
+    margin-left: -0.5rem;
+  }
+
+  &::before {
+    border-color: rgba(194, 225, 245, 0);
+    border-top-color: $spc-tooltip-bg;
+    border-width: 0.8125rem;
+    margin-left: -0.8125rem;
+  }
+}
+
+.tooltip-anchor {
+  @include icon(infomation, before) {
+    font-size: 1.5rem;
+    color: $tooltip_icon;
+  }
+
+  &:hover .tooltip-box {
+    display: block;
+  }
+}
