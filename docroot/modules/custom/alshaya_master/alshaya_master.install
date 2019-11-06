@@ -29,12 +29,16 @@ function alshaya_master_update_8033() {
 /**
  * Implements hook_update_N().
  *
- * Uninstall jsonapi and related optional modules.
+ * Uninstall jsonapi (and related), install pcb_memcache module.
  */
 function alshaya_master_update_8032() {
-  \Drupal::service('module_installer')->uninstall(
+  $moduleInstaller = \Drupal::service('module_installer');
+
+  $moduleInstaller->uninstall(
     ['lightning_api', 'jsonapi', 'openapi_ui', 'openapi']
   );
+
+  $moduleInstaller->install(['pcb_memcache']);
 }
 
 /**

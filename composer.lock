@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4d945a5947300ba4215dac9d963e27a",
+    "content-hash": "435c5d5b00e491bcd308a68f1c0b6a9e",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7488,6 +7488,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11095,7 +11098,7 @@
             "description": "Processes the queue every time cron runs, recommended for most configurations.",
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
-                "source": "http://cgit.drupalcode.org/purge"
+                "source": "https://git.drupalcode.org/project/purge"
             }
         },
         {
@@ -11140,7 +11143,7 @@
             "description": "Process the queue on every request, this is only recommended on high latency configurations.",
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
-                "source": "http://cgit.drupalcode.org/purge"
+                "source": "https://git.drupalcode.org/project/purge"
             }
         },
         {
@@ -11185,7 +11188,7 @@
             "description": "Queues every tag that Drupal invalidates internally.",
             "homepage": "https://www.drupal.org/project/purge",
             "support": {
-                "source": "http://cgit.drupalcode.org/purge"
+                "source": "https://git.drupalcode.org/project/purge"
             }
         },
         {
@@ -11943,6 +11946,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13723,7 +13729,7 @@
             "description": "Overrides Views Ajax to work with GET instead of POST",
             "homepage": "https://www.drupal.org/project/views_ajax_get",
             "support": {
-                "source": "https://git.drupalcode.org/project/views_ajax_get"
+                "source": "http://cgit.drupalcode.org/views_ajax_get"
             },
             "time": "2018-09-14T13:01:07+00:00"
         },
