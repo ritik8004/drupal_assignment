@@ -1,0 +1,163 @@
+@import '../../../config/_config.scss';
+
+.form-type-search-api-autocomplete {
+  .input__label {
+    display: none;
+  }
+
+  .input--textual__container {
+    margin: 0;
+
+    input[type=text],
+    input[type=search] {
+      height: 2.5rem;
+      border: 0;
+      padding: 0.625rem 0.5rem;
+      color: $icon;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 0 $content-text;
+      background: $form-search-bg;
+
+      &::placeholder {
+        text-shadow: 0 0 0 $form-input-placeholder-text;
+      }
+
+      &.form-autocomplete {
+        background-image: none;
+      }
+    }
+
+    .input__line {
+      display: none;
+    }
+  }
+}
+
+.search-block {
+  max-width: 21.875rem;
+  width: 100%;
+  display: inline-block;
+
+  @include breakpoint($upto-palm) {
+    top: 3.125rem;
+  }
+
+  @include breakpoint($upto-lap) {
+    position: absolute;
+    display: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.625rem;
+    background: $header-bg;
+
+    &.search-active {
+      display: block;
+    }
+  }
+
+  @include breakpoint($lap) {
+    top: 4.375rem;
+  }
+
+  @include breakpoint($desk) {
+    html[lang=ar] & {
+      margin-top: 0.9375rem;
+    }
+  }
+
+  form {
+    position: relative;
+  }
+
+  .form-actions {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+
+    @include breakpoint($upto-lap) {
+      top: 0.125rem;
+
+      @include icon(chevron#{$right}, after) {
+        color: $show-more-icon;
+        position: absolute;
+        font-size: 2.1875rem;
+        #{$right}: 0;
+        z-index: 0;
+      }
+    }
+
+    .form-submit {
+      font-size: 0;
+      border: 0;
+      width: 2.375rem;
+      height: 2.5rem;
+      background: url("../../images/search.svg") no-repeat center;
+      background-size: contain;
+      outline: none;
+
+      @include breakpoint($upto-lap) {
+        height: 2.1875rem;
+        background: none;
+        position: relative;
+        z-index: 100;
+      }
+    }
+  }
+}
+
+.toggle-search {
+  display: none;
+
+  @include breakpoint($upto-lap) {
+    display: block;
+    position: absolute;
+  }
+
+  @include breakpoint($upto-palm) {
+    #{$left}: 2.5rem;
+    top: 0.5rem;
+  }
+
+  @include breakpoint($lap) {
+    #{$left}: 3.4375rem;
+    top: 1.125rem;
+  }
+
+  width: 2.375rem;
+  height: 2.5rem;
+  background: url("../../images/search.svg") no-repeat center;
+  background-size: contain;
+
+  @include breakpoint($upto-lap) {
+    height: 2.1875rem;
+  }
+}
+
+.ui-autocomplete {
+  background-color: $ui-autocomplete-bg;
+  max-height: 21.875rem;
+  overflow-y: auto;
+
+  @include breakpoint($upto-palm) {
+    max-height: 12.5rem;
+  }
+
+  .ui-menu-item {
+    border-bottom: 1px solid $primary-border;
+
+    a {
+      display: block;
+
+      .search-api-autocomplete-suggestion {
+        padding: 0.625rem 0.3125rem;
+      }
+
+      &.ui-state-active {
+        .search-api-autocomplete-suggestion {
+          background-color: $ui-autocomplete-list-active-bg;
+          color: $ui-autocomplete-list-active;
+        }
+      }
+    }
+  }
+}

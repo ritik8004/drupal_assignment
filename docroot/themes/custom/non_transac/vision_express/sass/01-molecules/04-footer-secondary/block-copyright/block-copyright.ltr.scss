@@ -1,0 +1,13 @@
+@import '../../../config/_config.scss';
+
+.block-copyright {
+  @include breakpoint ($upto-palm) {
+    margin-top: 0.9375rem;
+    text-align: $left;
+  }
+
+  p {
+    color: $content-text;
+    font-size: 0.75rem;
+  }
+}

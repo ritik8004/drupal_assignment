@@ -1,0 +1,62 @@
+@import '../../../config/_config.scss';
+
+.alias--search {
+  .views-element-container {
+    background-color: $white-smoke;
+    margin: 0.625rem auto;
+    padding: 0.625rem;
+
+    @include breakpoint($desk) {
+      max-width: 57.875rem;
+      padding: 2.0625rem;
+    }
+  }
+
+  .views-field-title {
+    font-size: 1.125rem;
+    font-family: $helvetica-neue-bold;
+    font-weight: normal;
+    line-height: 1.22;
+    color: $black-two;
+
+    a {
+      text-decoration: none;
+      font-size: 1.125rem;
+      font-family: $helvetica-neue-bold;
+
+      @include breakpoint($upto-palm) {
+        font-size: 1rem;
+      }
+    }
+
+    &[hreflang="ar"] {
+      font-family: $arabic_bold;
+    }
+
+    &[hreflang="en"] {
+      font-family: $helvetica-neue-bold;
+    }
+  }
+
+  p {
+    line-height: 1.29;
+    color: $content-text;
+  }
+
+  a {
+    font-weight: bold;
+
+    &.views-more-link {
+      color: $brand;
+    }
+
+    &.views-more-link:hover {
+      color: $content-text;
+      text-decoration: none;
+    }
+  }
+
+  .views-row {
+    padding-bottom: 1.875rem;
+  }
+}
