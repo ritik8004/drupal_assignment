@@ -31,14 +31,14 @@ fi
 while IFS= read -r site
 do
   if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Restoring database and run updb on $site.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Restoring database and run updb on $target_env.$site.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
   fi
 
   ## Restore database dump before applying database updates.
   if [ ! -f ~/backup/$target_env/post-stage/$site.sql.gz ]; then
-    echo "Could not find a dump to restore for $site."
+    echo "Could not find a dump to restore for $target_env.$site."
     if [ $slack == 1 ]; then
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Could not find a dump to restore for $site.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Could not find a dump to restore for $target_env.$site.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     fi
   else
     gunzip -k ~/backup/$target_env/post-stage/$site.sql.gz
@@ -69,10 +69,10 @@ do
     if [ -n "$output" ]; then
       if echo $output | grep -q "$errorstr"; then
         echo "Sending error notification to Slack channel for $site."
-        curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $site. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+        curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env.$site. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
       else
         echo "Sending success notification to Slack channel."
-        curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and updb on $site.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+        curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and updb on $target_env.$site.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
       fi
     else
       echo "No output variable to check."
