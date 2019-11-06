@@ -6,7 +6,7 @@ class TotalLineItems extends React.Component {
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('sub total')} value={this.props.totals.subtotal_incl_tax}/>
-        <TotalLineItem name="discount-total" title={Drupal.t('discount')} value={this.props.totals.discount_amount}/>
+        <TotalLineItem tooltip={true} tooltipContent={Drupal.t('discount')} name="discount-total" title={Drupal.t('discount')} value={this.props.totals.discount_amount}/>
         {/*To Be used later on Checkout Delivery pages.*/}
         <TotalLineItem name="delivery-total" title={Drupal.t('delivery')} value={Drupal.t('Free')}/>
         <div className="hero-total">

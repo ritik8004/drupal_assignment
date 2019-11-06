@@ -7,6 +7,7 @@ import CartRecommendedProducts from '../recommended-products';
 import MobileCartPreview from '../mobile-cart-preview';
 import OrderSummaryBlock from "../../../utilities/order-summary-block";
 import CheckoutErrorMessage from '../../../utilities/checkout-error-message';
+import CartPromoBlock from "../cart-promo-block";
 
 export default class Cart extends React.Component {
 
@@ -71,6 +72,7 @@ export default class Cart extends React.Component {
               <CartItems items={this.state.items} />
             </div>
             <div className="spc-sidebar">
+              <CartPromoBlock/>
               <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock}/>
             </div>
           </div>
