@@ -3204,10 +3204,7 @@ class SkuManager {
    *   Return 2 if product is buyable or in-stock else 0.
    */
   public function getStockStatusForIndex(SKUInterface $sku) {
-    if (!alshaya_acm_product_is_buyable($sku)) {
-      return 2;
-    }
-    elseif ($this->isProductInStock($sku)) {
+    if (!alshaya_acm_product_is_buyable($sku) || $this->isProductInStock($sku)) {
       return 2;
     }
     return 0;
