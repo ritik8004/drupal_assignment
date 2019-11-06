@@ -16,6 +16,22 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Making 'field_target_link' of category non-translatable.
+ */
+function alshaya_acm_product_category_update_8037() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['field.field.taxonomy_term.acq_product_category.field_target_link'],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field `Show in app navigation`.
  */
 function alshaya_acm_product_category_update_8036() {
