@@ -37,7 +37,7 @@ class Drupal {
     $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = $this->drupalInfo->getDrupalUrl() . '/' . sprintf('rest/v1/product/%s', $sku);
+      $url = $this->drupalInfo->getDrupalUrl() . '/' . sprintf('rest/v1/product/%s', $sku) . '?context=cart';
       $response = $client->request('GET', $url, ['verify' => FALSE]);
       $result = $response->getBody()->getContents();
       $data[$sku] = json_decode($result, TRUE);

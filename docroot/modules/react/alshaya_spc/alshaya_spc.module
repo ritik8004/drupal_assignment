@@ -27,6 +27,10 @@ function alshaya_spc_preprocess_html(&$variables) {
   $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
   $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text'] = $vat_text;
   $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
+
+  /* @var \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager */
+  $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['default_image'] = $sku_images_manager->getProductDefaultImageUrl();
 }
 
 /**
