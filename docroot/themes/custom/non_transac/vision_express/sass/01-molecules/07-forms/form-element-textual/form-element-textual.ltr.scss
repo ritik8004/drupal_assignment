@@ -418,3 +418,7 @@ textarea:-webkit-autofill,
 select:-webkit-autofill {
   -webkit-text-fill-color: $form_input_text;
 }
+
+.status-message {
+  background-color: transparent;
+}

@@ -8,6 +8,8 @@
 
   Drupal.behaviors.storeFinderUpdateCountry = {
     attach: function (context, settings) {
+      // Changing country exposed form submit button id as it was conflicting with store finder search box.
+      $('#views-exposed-form-stores-finder-page-2 .form-actions input').attr('id', 'edit-submit-stores-finder-country');
       // Reset active class on store finder page on page load or ajax load.
       $('#views-exposed-form-stores-finder-page-1 a.map-view-link').removeClass('active');
       $('#views-exposed-form-stores-finder-page-1 a#edit-list-view').addClass('active');
@@ -47,17 +49,16 @@
       }
 
       var name = Drupal.getQueryVariable('country');
-      var options = $('#views-exposed-form-stores-finder-page-2 select option').map(function() { return $(this).val(); }).get();
       if (name.length === 0 || typeof name === 'undefined') {
-        drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = options.slice(1);
-        if(jQuery.cookie('alshaya_client_country_code') && jQuery.inArray(jQuery.cookie('alshaya_client_country_code').toLowerCase(), options) !== -1) {
+        drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = drupalSettings.storeFinder.storeCountries;
+        if($('#edit-country').length && jQuery.cookie('alshaya_client_country_code') && jQuery.inArray(jQuery.cookie('alshaya_client_country_code').toLowerCase(), drupalSettings.storeFinder.storeCountries) !== -1) {
           drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = [jQuery.cookie('alshaya_client_country_code').toLowerCase()];
         }
       }
       else {
         drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = [name];
         if (name == 'All') {
-          drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = options.slice(1);
+          drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions.country = drupalSettings.storeFinder.storeCountries;
         }
       }
     }

@@ -7,13 +7,48 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Asset\AttachedAssetsInterface;
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_ve_non_transac_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_ve_non_transac_mobile_number_process';
+  }
+}
+
+/**
+ * Processor for the mobile number field to enable multi countries support.
+ */
+function _alshaya_ve_non_transac_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  if ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_add_form' ||
+    $form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_email_signup_add_form') {
+
+    $element['country-code']['#options'] = $element['#allowed_countries'];
+    if (!empty($form_state->getValue('mobile_number'))) {
+      $element['country-code']['#value'] = $form_state->getValue('mobile_number')['country'];
+    }
+  }
+
+  return $element;
+}
 
 /**
  * Implements hook_form_alter().
  */
 function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'webform_submission_alshaya_contact_add_form') {
+    $form['actions']['submit']['#value'] = t('Send');
+  }
+
+  if ($form_id == 'webform_submission_alshaya_email_signup_add_form') {
+    $form['actions']['submit']['#value'] = t('Subscribe');
+  }
+
   if ($form_id == 'views_exposed_form') {
     if ($form['#id'] === 'views-exposed-form-stores-finder-page-1') {
+      $form['geolocation_geocoder_google_places_api']['#description'] = t('Please enter a valid area / city');
       $hidden_class_map_list = '';
       if (\Drupal::routeMatch()->getRouteName() == 'view.stores_finder.page_1') {
         $hidden_class_map_list = 'hidden';
@@ -57,6 +92,9 @@ function alshaya_ve_non_transac_page_attachments(array &$attachments) {
   $current_path = \Drupal::service('path.current')->getPath();
   if (strpos($current_path, '/store-finder') !== FALSE) {
     $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => ''];
+    $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
+    unset($countryFieldValues['All']);
+    $attachments['#attached']['drupalSettings']['storeFinder'] = ['storeCountries' => array_keys($countryFieldValues)];
     $attachments['#attached']['library'][] = 'alshaya_ve_non_transac/alshaya_ve_non_transac_store_finder';
   }
 }
@@ -140,4 +178,24 @@ function alshaya_ve_non_transac_acquia_search_get_list_of_possible_cores_alter(&
   }
 
   array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $acsf_site_code);
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_ve_non_transac_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+
+  // Swap out alshaya_store_finder.js to use it for Vision Express.
+  $javascript['modules/custom/alshaya_stores_finder/js/alshaya_store_finder.js']['data'] = drupal_get_path('module', 'alshaya_ve_non_transac') . '/js/alshaya_store_finder.override.js';
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function alshaya_ve_non_transac_preprocess_views_view_field__stores_finder__glossary_map_view__field_store_open_hours(&$variables) {
+  /* @var \Drupal\node\Entity\Node $node */
+  $node = $variables['row']->_entity;
+  $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+  $output = $node->field_store_open_hours->view('default');
+  $variables['output'] = $output;
 }
