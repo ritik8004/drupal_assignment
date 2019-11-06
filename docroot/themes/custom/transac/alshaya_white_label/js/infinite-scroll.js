@@ -85,8 +85,11 @@
 
           // Do not trigger infinite scroll if algolia search is active on the
           // current page.
-          var algoliaSearch = ($('#alshaya-algolia-search').length > 0 && $('#alshaya-algolia-search').is(':visible') === false);
-          if (window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold && algoliaSearch) {
+          var isAlgoliaSearchDisabled = true;
+          if ($('#alshaya-algolia-search').length > 0) {
+            isAlgoliaSearchDisabled = ($('#alshaya-algolia-search').is(':visible') === false);
+          }
+          if (window.innerHeight + window.pageYOffset > $pager.offset().top - scrollThreshold && isAlgoliaSearchDisabled) {
             $pager.find('[rel=next]').click();
             $window.off(scrollEvent);
           }
