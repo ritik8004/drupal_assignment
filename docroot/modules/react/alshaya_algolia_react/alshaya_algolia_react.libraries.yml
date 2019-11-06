@@ -29,6 +29,6 @@ search_insights_detail:
 
 search_insights:
   js:
-    js/search-insights.js: { scope: footer }
+    js/algolia/search-insights.js: { scope: footer }
   dependencies:
     - core/drupalSettings
