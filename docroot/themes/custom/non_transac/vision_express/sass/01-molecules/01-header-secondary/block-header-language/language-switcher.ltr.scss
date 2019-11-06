@@ -1,0 +1,27 @@
+@import '../../../config/_config.scss';
+
+.menu-language-switcher--desktop {
+  li {
+    padding: 0.3125rem;
+  }
+
+  a {
+    color: $link;
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 0.8125rem 0.5rem;
+    text-transform: capitalize;
+
+    &:hover {
+      color: $sub-link-active;
+    }
+
+    &[hreflang="ar"] {
+      font-family: $arabic_regular;
+    }
+
+    &[hreflang="en"] {
+      font-family: $helvetica-neue;
+    }
+  }
+}

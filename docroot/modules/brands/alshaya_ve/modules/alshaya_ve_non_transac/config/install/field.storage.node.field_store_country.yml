@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_store_country
+field_name: field_store_country
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: All
+      label: 'Middle East'
+    -
+      value: kw
+      label: Kuwait
+    -
+      value: ae
+      label: UAE
+    -
+      value: sa
+      label: KSA
+    -
+      value: qa
+      label: Qatar
+    -
+      value: bh
+      label: Bahrain
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

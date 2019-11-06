@@ -1,0 +1,5 @@
+// Define theme variables here.
+$helvetica-neue: if-ltr($helvetica-neue, $arabic_regular);
+$helvetica: if-ltr($helvetica, $arabic_regular);
+$helvetica-neue-thin: if-ltr($helvetica-neue-thin, $arabic_regular);
+$helvetica-neue-bold: if-ltr($helvetica-neue-bold, $arabic_bold);

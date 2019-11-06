@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.non_transac_acquia_index_search
+  module:
+    - views
+  theme:
+    - vision_express
+id: exposedformnon_transac_acquia_index_searchnon_transac_search
+theme: vision_express
+region: header
+weight: 0
+provider: null
+plugin: 'views_exposed_filter_block:non_transac_acquia_index_search-non_transac_search'
+settings:
+  id: 'views_exposed_filter_block:non_transac_acquia_index_search-non_transac_search'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+visibility: {  }

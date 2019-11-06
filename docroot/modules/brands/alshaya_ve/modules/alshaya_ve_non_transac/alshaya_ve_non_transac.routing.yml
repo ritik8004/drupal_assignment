@@ -1,0 +1,14 @@
+alshaya_ve_non_transac.settings_form:
+  path: '/admin/config/ve-settings'
+  defaults:
+    _form: '\Drupal\alshaya_ve_non_transac\Form\VeSettingsForm'
+    _title: 'VE settings'
+  requirements:
+    _permission: 'administer site configuration'
+alshaya_ve_non_transac.appointment_modal_form:
+  path: '/book-appointment'
+  defaults:
+    _title: 'Book An Appointment'
+    _controller: '\Drupal\alshaya_ve_non_transac\Controller\BookingAppointmentController::bookAppointmentModal'
+  requirements:
+    _permission: 'access content'
