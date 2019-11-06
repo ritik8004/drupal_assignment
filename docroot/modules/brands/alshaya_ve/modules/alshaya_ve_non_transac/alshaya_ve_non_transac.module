@@ -1,0 +1,201 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Asset\AttachedAssetsInterface;
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_ve_non_transac_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_ve_non_transac_mobile_number_process';
+  }
+}
+
+/**
+ * Processor for the mobile number field to enable multi countries support.
+ */
+function _alshaya_ve_non_transac_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  if ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_add_form' ||
+    $form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_email_signup_add_form') {
+
+    $element['country-code']['#options'] = $element['#allowed_countries'];
+    if (!empty($form_state->getValue('mobile_number'))) {
+      $element['country-code']['#value'] = $form_state->getValue('mobile_number')['country'];
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_ve_non_transac_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'webform_submission_alshaya_contact_add_form') {
+    $form['actions']['submit']['#value'] = t('Send');
+  }
+
+  if ($form_id == 'webform_submission_alshaya_email_signup_add_form') {
+    $form['actions']['submit']['#value'] = t('Subscribe');
+  }
+
+  if ($form_id == 'views_exposed_form') {
+    if ($form['#id'] === 'views-exposed-form-stores-finder-page-1') {
+      $form['geolocation_geocoder_google_places_api']['#description'] = t('Please enter a valid area / city');
+      $hidden_class_map_list = '';
+      if (\Drupal::routeMatch()->getRouteName() == 'view.stores_finder.page_1') {
+        $hidden_class_map_list = 'hidden';
+      }
+
+      $form['map_view'] = [
+        '#markup' => '<a href="#" class="map-view-link block-store-finder-form__list-view icon-map ' . $hidden_class_map_list . ' ">' . t('Map View') . '</a>',
+        '#weight' => 8,
+      ];
+    }
+
+    if ($form['#id'] === 'views-exposed-form-stores-finder-page-2') {
+      $form['country']['#options']['All'] = t('Middle East');
+      $current_path = \Drupal::service('path.current')->getPath();
+      if (strpos($current_path, '/store-finder') !== FALSE) {
+        $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
+        $filterCountry = \Drupal::request()->get('country');
+        if ($filterCountry && !empty($countryFieldValues[$filterCountry])) {
+          $countryName = $countryFieldValues[$filterCountry];
+        }
+        else {
+          $countryName = t('Middle East');
+        }
+      }
+      $form['country']['#title'] = t('Displaying stores in') . ' ' . $countryName;
+      $form['actions']['#attributes']['class'] = ['hidden'];
+      $form['retina_view'] = [
+        '#markup' => '<div class="retinal-photography"><span class="retinal-enabled-yes">' . t('Stores with retinal photography') . '</span></div>',
+        '#weight' => 2,
+      ];
+    }
+
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_ve_non_transac_page_attachments(array &$attachments) {
+  // Attach store finder js only on store-finder pages.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if (strpos($current_path, '/store-finder') !== FALSE) {
+    $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googlePlacesAPI']['restrictions'] = ['country' => ''];
+    $countryFieldValues = FieldStorageConfig::loadByName('node', 'field_store_country')->getSetting('allowed_values');
+    unset($countryFieldValues['All']);
+    $attachments['#attached']['drupalSettings']['storeFinder'] = ['storeCountries' => array_keys($countryFieldValues)];
+    $attachments['#attached']['library'][] = 'alshaya_ve_non_transac/alshaya_ve_non_transac_store_finder';
+  }
+}
+
+/**
+ * Implements hook_alshaya_config_save_alter().
+ */
+function alshaya_ve_non_transac_alshaya_config_save_alter(array &$data, $config_name) {
+  if ($config_name == 'views.view.stores_finder') {
+    if (isset($data['display']['page_1']['display_options']['filters']['field_latitude_longitude_proximity'])) {
+      // Clean the country from plugin settings and add it on runtime as per
+      // user's detected country.
+      $data['display']['page_1']['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = '';
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_ve_non_transac_alshaya_i18n_onetime_translation_add() {
+  // Save some translations.
+  $strings = [];
+
+  $strings['Retina photography'] = [
+    'ar' => 'تفاصيل التوصيل',
+  ];
+
+  $strings['Middle East'] = [
+    'ar' => 'الشرق الأوسط',
+  ];
+
+  $strings['Kuwait'] = [
+    'ar' => 'الكويت',
+  ];
+
+  $strings['UAE'] = [
+    'ar' => 'الامارات',
+  ];
+
+  $strings['KSA'] = [
+    'ar' => 'المبشور',
+  ];
+
+  $strings['Qatar'] = [
+    'ar' => 'دولة قطر',
+  ];
+
+  $strings['Bahrain'] = [
+    'ar' => 'البحرين',
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/*
+ * The Module file.
+ */
+
+/**
+ * Implements hook_acquia_search_get_list_of_possible_cores_alter().
+ */
+function alshaya_ve_non_transac_acquia_search_get_list_of_possible_cores_alter(&$possible_core_ids, $core_service) {
+
+  // @codingStandardsIgnoreLine
+  global $acsf_site_code;
+
+  $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service->ah_env);
+
+  // During the production deployment, `01update` env is used and there we
+  // don't have appropriate solr cores. So use `01live` solr.
+  if ($ah_env == '01update') {
+    $ah_env = '01live';
+  }
+  // For non-prod env, we have env likes `01dev3up`, `01qaup` which are used
+  // during release/deployment. We just remove last `up` from the env name
+  // to use the original env. For example - original env for `01dev3up` will
+  // be `01dev3`.
+  elseif (substr($ah_env, -2) == 'up') {
+    $ah_env = substr($ah_env, 0, -2);
+  }
+
+  array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $acsf_site_code);
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_ve_non_transac_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+
+  // Swap out alshaya_store_finder.js to use it for Vision Express.
+  $javascript['modules/custom/alshaya_stores_finder/js/alshaya_store_finder.js']['data'] = drupal_get_path('module', 'alshaya_ve_non_transac') . '/js/alshaya_store_finder.override.js';
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function alshaya_ve_non_transac_preprocess_views_view_field__stores_finder__glossary_map_view__field_store_open_hours(&$variables) {
+  /* @var \Drupal\node\Entity\Node $node */
+  $node = $variables['row']->_entity;
+  $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+  $output = $node->field_store_open_hours->view('default');
+  $variables['output'] = $output;
+}

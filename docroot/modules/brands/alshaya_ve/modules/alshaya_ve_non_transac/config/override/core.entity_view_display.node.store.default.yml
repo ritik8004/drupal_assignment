@@ -1,0 +1,36 @@
+dependencies:
+  config:
+    - field.field.node.store.field_store_country
+    - field.field.node.store.field_store_retina_photography
+third_party_settings:
+  panelizer:
+    enable: false
+    custom: false
+    allow: false
+    default: default
+content:
+  field_latitude_longitude:
+    weight: 3
+  field_store_address:
+    weight: 2
+  field_store_open_hours:
+    weight: 6
+  field_store_phone:
+    weight: 7
+  field_store_retina_photography:
+    type: boolean
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      format: custom
+      format_custom_true: 'Store with retinal photography'
+      format_custom_false: ''
+    third_party_settings: {  }
+  links:
+    weight: 5
+  sharethis:
+    weight: 4
+hidden:
+  field_store_country: true
+  search_api_excerpt: true

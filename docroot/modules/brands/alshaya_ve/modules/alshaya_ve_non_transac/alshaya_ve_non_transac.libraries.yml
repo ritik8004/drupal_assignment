@@ -1,0 +1,8 @@
+alshaya_ve_non_transac_store_finder:
+  js:
+    js/alshaya_ve_non_transac_store_finder.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.cookie
+    - alshaya_geolocation/places-api-autocomplete
+    - alshaya_master/common_functions

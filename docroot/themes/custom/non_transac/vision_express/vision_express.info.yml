@@ -1,0 +1,81 @@
+name: Vision Express
+description: Theme for Vision Express.
+type: theme
+core: 8.x
+base theme: whitelabel
+alshaya_theme_type: non_transac
+
+regions:
+  admin_content: 'Admin Content'
+  header_secondary: 'Header Secondary'
+  header: Header
+  header_primary: 'Header Primary'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - whitelabel/global
+  - vision_express/global
+
+libraries-extend:
+  whitelabel/block-site-logo:
+    - vision_express/block-site-logo
+  whitelabel/block-logo-navigation:
+    - vision_express/block-logo-navigation
+  whitelabel/menu-logo-navigation:
+    - vision_express/menu-logo-navigation
+  whitelabel/block-header-language:
+    - vision_express/block-header-language
+  whitelabel/header-language-switcher:
+    - vision_express/header-language-switcher
+  whitelabel/block-footer-store:
+    - vision_express/block-footer-store
+  whitelabel/block-social-links:
+    - vision_express/block-social-links
+  whitelabel/menu-social-links:
+    - vision_express/menu-social-links
+  whitelabel/block-footer-language:
+    - vision_express/block-footer-language
+  whitelabel/menu-terms-conditions:
+    - vision_express/menu-terms-conditions
+  whitelabel/field-slider:
+    - vision_express/field-slider
+  whitelabel/field-promo-block:
+    - vision_express/field-promo-block
+  whitelabel/paragraph-title-textarea:
+    - vision_express/paragraph-title-textarea
+  whitelabel/modal-email-signup:
+    - vision_express/modal-email-signup
+  whitelabel/form-element-textual:
+    - vision_express/form-element-textual
+  whitelabel/block-store-finder-form:
+    - vision_express/block-store-finder-form
+  whitelabel/block-copyright:
+    - vision_express/block-copyright
+
+
+
+libraries-override:
+  whitelabel/menu-logo-navigation:
+    js:
+      components/js/burger-menu.js: dist/js/burger-menu.js
+
+component-libraries:
+  atoms:
+    paths:
+      - components/_patterns/00-atoms
+  molecules:
+    paths:
+      - components/_patterns/01-molecules
+  organisms:
+    paths:
+      - components/_patterns/02-organisms
+  templates:
+    paths:
+      - components/_patterns/03-templates
+  pages:
+    paths:
+      - components/_patterns/04-pages
