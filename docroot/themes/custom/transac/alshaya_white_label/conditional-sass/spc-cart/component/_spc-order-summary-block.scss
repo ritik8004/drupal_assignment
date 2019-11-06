@@ -28,6 +28,16 @@
         color: $spc-order-summary-discount-text;
       }
     }
+
+    .discount-total {
+      position: relative;
+
+      .tooltip-anchor {
+        position: absolute;
+        top: -0.1875rem;
+        #{$right}: -1.875rem;
+      }
+    }
   }
 
   .hero-total {
