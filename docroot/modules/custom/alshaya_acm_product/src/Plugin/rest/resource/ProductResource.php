@@ -12,12 +12,14 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
@@ -108,6 +110,13 @@ class ProductResource extends ResourceBase {
   private $languageManager;
 
   /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -136,6 +145,8 @@ class ProductResource extends ResourceBase {
    *   Sku info helper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(
     array $configuration,
@@ -150,7 +161,8 @@ class ProductResource extends ResourceBase {
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    RequestStack $request_stack
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -166,6 +178,7 @@ class ProductResource extends ResourceBase {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -185,7 +198,8 @@ class ProductResource extends ResourceBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('request_stack')
     );
   }
 
@@ -330,6 +344,34 @@ class ProductResource extends ResourceBase {
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
+    }
+
+    $current_request = $this->requestStack->getCurrentRequest();
+    if ($current_request->query->get('context')) {
+      // Adding extra data to the product resource.
+      $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+      $data['extra_data'] = [];
+      $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
+      if (!empty($image)) {
+        if ($image['#theme'] == 'image_style') {
+          $data['extra_data']['cart_image'] = [
+            'url' => ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']),
+            'title' => $image['#title'],
+            'alt' => $image['#alt'],
+          ];
+        }
+        elseif ($image['#theme'] == 'image') {
+          $data['extra_data']['cart_image'] = [
+            'url' => $image['#attributes']['src'],
+            'title' => $image['#attributes']['title'],
+            'alt' => $image['#attributes']['alt'],
+          ];
+        }
+      }
+
+      // Removing media if context set as we don't require and to
+      // make response light.
+      unset($data['media']);
     }
 
     // Allow other modules to alter light product data.
