@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function MainContent(props) {
   return (
-    <main>
+    <div>
       <div className="c-content__region">
         <div className="region region__content clearfix">
           <div className="container-wrapper">
@@ -10,6 +10,6 @@ export default function MainContent(props) {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 };
