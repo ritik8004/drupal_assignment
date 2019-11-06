@@ -1,6 +1,8 @@
 /**
  * @file
  * This file contains code for integration with Algolia Insights for analytics.
+ *
+ * @reference: https://www.algolia.com/doc/guides/getting-insights-and-analytics/personalization/personalizing-results/how-to/send-personalization-events-with-instantsearch/js/#install-the-search-insights-library
  */
 
 var ALGOLIA_INSIGHTS_SRC = drupalSettings.path.baseUrl + drupalSettings.algoliaSearch.insightsJsUrl;
