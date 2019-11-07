@@ -11,16 +11,10 @@
 // Configure your hash salt here.
 // $settings['hash_salt'] = '';.
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
-
-$env = 'local';
-if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-  $env = $_ENV['AH_SITE_ENVIRONMENT'];
-}
-elseif (getenv('TRAVIS')) {
-  $env = 'travis';
-}
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
 
 // Set the env in settings to allow re-using in custom code.
+$env = alshaya_get_site_environment();
 $settings['env'] = $env;
 
 if ($settings['env'] === 'local') {
@@ -32,19 +26,9 @@ if ($settings['env'] === 'local') {
 
   global $host_site_code;
 
-  // Get site code from site uri.
-  if (!empty($_SERVER['HTTP_HOST'])) {
-    $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-    $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
-  }
-  else {
-    foreach ($_SERVER['argv'] as $arg) {
-      preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
-      if (!empty($matches)) {
-        $host_site_code = $matches[1];
-        break;
-      }
-    }
+  if (!isset($host_site_code)) {
+    // Retrieve host_site_code.
+    require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
   }
 
   // Set private files directory for local, it is not set in

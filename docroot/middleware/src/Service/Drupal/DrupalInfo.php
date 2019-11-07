@@ -27,8 +27,8 @@ class DrupalInfo {
    *   Drupal base url.
    */
   public function getDrupalBaseUrl() {
-    // @Todo: Make it dynamic.
-    return 'http://local.alshaya-hmkw.com/';
+    $hostname = $_SERVER['HTTP_HOST'];
+    return 'https://' . $hostname . '/';
   }
 
   /**
