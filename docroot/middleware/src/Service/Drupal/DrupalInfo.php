@@ -1,6 +1,6 @@
 <?php
 
-namespace AlshayaMiddleware\Drupal;
+namespace App\Service\Drupal;
 
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
@@ -28,7 +28,7 @@ class DrupalInfo {
    */
   public function getDrupalBaseUrl() {
     // @Todo: Make it dynamic.
-    return 'http://local.alshaya-hmkw.com/';
+    return 'http://local.alshaya-mckw.com/';
   }
 
   /**

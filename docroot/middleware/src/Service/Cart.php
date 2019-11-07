@@ -1,6 +1,8 @@
 <?php
 
-namespace AlshayaMiddleware\Magento;
+namespace App\Service;
+
+use App\Service\Magento\MagentoInfo;
 
 /**
  * Class Cart.
@@ -32,6 +34,8 @@ class Cart {
    *
    * @return array
    *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart(int $cart_id) {
     $client = $this->magentoInfo->getMagentoApiClient();
@@ -61,6 +65,8 @@ class Cart {
    *
    * @return mixed
    *   Cart id.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function createCart() {
     $client = $this->magentoInfo->getMagentoApiClient();
@@ -90,6 +96,8 @@ class Cart {
    *
    * @return array
    *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function addUpdateRemoveItem(int $cart_id, string $sku, ?int $quantity, string $action) {
     $data['items'][] = (object) [
@@ -116,6 +124,8 @@ class Cart {
    *
    * @return array
    *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function applyRemovePromo(int $cart_id, ?string $promo, string $action) {
     $data = [
@@ -141,6 +151,9 @@ class Cart {
    *
    * @return array
    *   Cart data.
+   *
+   * @return array|mixed
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updateCart(array $data, int $cart_id) {
     $client = $this->magentoInfo->getMagentoApiClient();

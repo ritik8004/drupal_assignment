@@ -1,170 +1,65 @@
 <?php
 
-namespace AlshayaMiddleware\Controller;
+namespace App\Controller;
 
-use AlshayaMiddleware\Magento\CartActions;
-use AlshayaMiddleware\Magento\MagentoInfo;
-use AlshayaMiddleware\Drupal\Drupal;
-use AlshayaMiddleware\Magento\Cart;
-use Silex\Application;
+use App\Service\Magento\CartActions;
+use App\Service\Cart;
+use App\Service\Drupal\Drupal;
+use App\Service\Magento\MagentoInfo;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class CartController.
- */
 class CartController {
 
   /**
    * Service for magento info.
    *
-   * @var \AlshayaMiddleware\Magento\MagentoInfo
+   * @var \App\Service\Magento\MagentoInfo
    */
   protected $magentoInfo;
 
   /**
    * Drupal service.
    *
-   * @var \AlshayaMiddleware\Drupal\Drupal
+   * @var \App\Service\Drupal\Drupal
    */
   protected $drupal;
 
   /**
    * Service for cart interaction.
    *
-   * @var \AlshayaMiddleware\Magento\Cart
+   * @var \App\Service\Cart
    */
   protected $cart;
 
   /**
    * CartController constructor.
    *
-   * @param \AlshayaMiddleware\Magento\MagentoInfo $magentoInfo
-   *   Magento info service.
-   * @param \AlshayaMiddleware\Drupal\Drupal $drupal
-   *   Drupal service.
-   * @param \AlshayaMiddleware\Magento\Cart $cart
+   * @param \App\Service\Cart $cart
    *   Cart service.
+   * @param \App\Service\Drupal\Drupal $drupal
+   *   Drupal service.
+   * @param \App\Service\Magento\MagentoInfo $magento_info
+   *   Magento info service.
    */
-  public function __construct(MagentoInfo $magentoInfo,
-                              Drupal $drupal,
-                              Cart $cart) {
-    $this->magentoInfo = $magentoInfo;
-    $this->drupal = $drupal;
+  public function  __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info) {
     $this->cart = $cart;
+    $this->drupal = $drupal;
+    $this->magentoInfo = $magento_info;
   }
 
-  /**
-   * Get cart controller.
-   *
-   * @param \Silex\Application $app
-   *   Silex application.
-   * @param int $cart_id
-   *   Cart id.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getCart(Application $app, int $cart_id) {
+  public function getCart(int $cart_id) {
     $data = $this->cart->getCart($cart_id);
 
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
-      return $app->json($data);
+      return new JsonResponse($data);
     }
 
     // Here we will do the processing of cart to make it in required format.
     $data = $this->getProcessedCartData($data);
-    return $app->json($data);
-  }
-
-  /**
-   * Update cart controller.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Current request.
-   * @param \Silex\Application $app
-   *   Silex app.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function updateCart(Request $request, Application $app) {
-    // Validate request.
-    if (!$this->validateRequest($request)) {
-      // Return error response if not valid data.
-      return $app->json($this->cart->getErrorResponse('Invalid data'), '500');
-    }
-
-    $action = $request->request->get('action');
-
-    switch ($action) {
-      case CartActions::CART_CREATE_NEW:
-        // First create a new cart.
-        $cart_id = $this->cart->createCart();
-        // Then add item to the cart.
-        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request->request->get('sku'), $request->request->get('quantity'), CartActions::CART_ADD_ITEM);
-
-        if (!empty($cart['error'])) {
-          return $app->json($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return $app->json($cart);
-
-      case CartActions::CART_ADD_ITEM:
-      case CartActions::CART_UPDATE_ITEM:
-      case CartActions::CART_REMOVE_ITEM:
-        $cart_id = $request->request->get('cart_id');
-        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request->request->get('sku'), $request->request->get('quantity'), $action);
-
-        if (!empty($cart['error'])) {
-          return $app->json($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return $app->json($cart);
-
-      case CartActions::CART_APPLY_COUPON:
-      case CartActions::CART_REMOVE_COUPON:
-        $cart_id = $action = $request->request->get('cart_id');
-        $cart = $this->cart->applyRemovePromo($cart_id, $request->request->get('promo'), $action);
-
-        if (!empty($cart['error'])) {
-          return $app->json($cart);
-        }
-
-        // Here we will do the processing of cart to make it in required format.
-        $cart = $this->getProcessedCartData($cart);
-        return $app->json($cart);
-
-    }
-  }
-
-  /**
-   * Validate incoming request.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   *
-   * @return bool
-   *   Valid request or not.
-   */
-  private function validateRequest(Request $request) {
-    $valid = TRUE;
-
-    // If action info or cart id not available.
-    if (empty($request->request->get('action'))) {
-      $valid = FALSE;
-    }
-    elseif ($request->request->get('action') != CartActions::CART_CREATE_NEW
-      && empty($request->request->get('cart_id'))) {
-      $valid = FALSE;
-    }
-
-    return $valid;
+    return new JsonResponse($data);
   }
 
   /**
@@ -217,5 +112,97 @@ class CartController {
 
     return $data;
   }
+
+  /**
+   * Update cart controller.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   * @param \Silex\Application $app
+   *   Silex app.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function updateCart(Request $request) {
+
+    $request_content = $request_data = json_decode($request->getContent(), TRUE);
+
+    // Validate request.
+    if (!$this->validateRequestData($request_content)) {
+      // Return error response if not valid data.
+      return new JsonResponse($this->cart->getErrorResponse('Invalid data', '500'));
+    }
+
+    $action = $request_content['action'];
+
+    switch ($action) {
+      case CartActions::CART_CREATE_NEW:
+        // First create a new cart.
+        $cart_id = $this->cart->createCart();
+        // Then add item to the cart.
+        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM);
+
+        if (!empty($cart['error'])) {
+          return new JsonResponse($cart);
+        }
+
+        // Here we will do the processing of cart to make it in required format.
+        $cart = $this->getProcessedCartData($cart);
+        return new JsonResponse($cart);
+
+      case CartActions::CART_ADD_ITEM:
+      case CartActions::CART_UPDATE_ITEM:
+      case CartActions::CART_REMOVE_ITEM:
+        $cart_id = $request_content['cart_id'];
+        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], $action);
+
+        if (!empty($cart['error'])) {
+          return new JsonResponse($cart);
+        }
+
+        // Here we will do the processing of cart to make it in required format.
+        $cart = $this->getProcessedCartData($cart);
+        return new JsonResponse($cart);
+
+      case CartActions::CART_APPLY_COUPON:
+      case CartActions::CART_REMOVE_COUPON:
+        $cart_id = $action = $request_content['cart_id'];
+        $cart = $this->cart->applyRemovePromo($cart_id, $request_content['promo'], $action);
+
+        if (!empty($cart['error'])) {
+          return new JsonResponse($cart);
+        }
+
+        // Here we will do the processing of cart to make it in required format.
+        $cart = $this->getProcessedCartData($cart);
+        return new JsonResponse($cart);
+    }
+  }
+
+  /**
+   * Validate incoming request.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return bool
+   *   Valid request or not.
+   */
+  private function validateRequestData(array $request_content) {
+    $valid = TRUE;
+
+    // If action info or cart id not available.
+    if (empty($request_content['action'])) {
+      $valid = FALSE;
+    }
+    elseif ($request_content['action'] != CartActions::CART_CREATE_NEW
+            && empty($request_content['cart_id'])) {
+      $valid = FALSE;
+    }
+
+    return $valid;
+  }
+
 
 }

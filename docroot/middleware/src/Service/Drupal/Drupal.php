@@ -1,6 +1,6 @@
 <?php
 
-namespace AlshayaMiddleware\Drupal;
+namespace App\Service\Drupal;
 
 /**
  * Class Drupal.

@@ -1,6 +1,6 @@
 <?php
 
-namespace AlshayaMiddleware\Magento;
+namespace App\Service\Magento;
 
 /**
  * Class CartActions.
