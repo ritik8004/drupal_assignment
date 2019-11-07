@@ -461,3 +461,21 @@
     }
   }
 }
+
+@include breakpoint($tablet) {
+  .magazine-layout-node {
+    .content__title_wrapper {
+      .promotions {
+        .promotions-dynamic-label {
+          a {
+            @include icon('chevron#{$right}', 'after') {
+              display: block !important;
+              width: auto;
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
