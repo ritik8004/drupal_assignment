@@ -83,26 +83,11 @@
       // Calculate the height of attributes wrapper.
       cartFormHeightCalculation();
 
-      // Select the node that will be observed for mutations
-      var targetNode = document.querySelector('.acq-content-product .sku-base-form');
-      // Options for the observer (which mutations to observe)
-      var config = {attributes: true, childList: false, subtree: false};
-      // Callback function to execute when mutations are observed
-      var callback = function (mutationsList, observer) {
-        mutationsList.forEach(function (mutation) {
-          if ((mutation.type === 'attributes') &&
-            (mutation.attributeName === 'class') &&
-            (!mutation.target.classList.contains('visually-hidden'))) {
-            cartFormHeightCalculation();
-            mobileStickyAddtobasketButton('bottom', 'initial');
-            observer.disconnect();
-          }
-        });
-      };
-      // Create an observer instance linked to the callback function
-      var observer = new MutationObserver(callback);
-      // Start observing the target node for configured mutations
-      observer.observe(targetNode, config);
+      // Once add to cart form loaded recalculate the height of attributes wrapper.
+      $('.sku-base-form').once('bind-form-visible').on('form-visible', function () {
+        cartFormHeightCalculation();
+        mobileStickyAddtobasketButton('bottom', 'initial');
+      });
 
       var lastScrollTop = 0;
       $(window).on('scroll', function () {

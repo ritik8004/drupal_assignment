@@ -264,7 +264,10 @@
 
   $(window).on('load', function () {
     // Show add to cart form now.
-    $('.sku-base-form').removeClass('visually-hidden');
+    $('.sku-base-form').each(function () {
+      $(this).removeClass('visually-hidden');
+      $(this).trigger('form-visible');
+    });
 
     if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
