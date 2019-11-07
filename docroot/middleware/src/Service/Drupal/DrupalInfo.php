@@ -28,7 +28,7 @@ class DrupalInfo {
    */
   public function getDrupalBaseUrl() {
     // @Todo: Make it dynamic.
-    return 'http://local.alshaya-mckw.com/';
+    return 'http://local.alshaya-hmkw.com/';
   }
 
   /**

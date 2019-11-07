@@ -204,5 +204,4 @@ class CartController {
     return $valid;
   }
 
-
 }
