@@ -9,13 +9,10 @@ export default class CartItems extends React.Component {
     let productItems = [];
     Object.entries(products).forEach(([key, product]) => {
       productItems.push(<CartItem key={key} item={product} />);
-      productItems.push(<CartItem key={key} item={product} />);
     });
 
     return (
-    <React.Fragment>
       <div className="spc-cart-items">{productItems}</div>
-    </React.Fragment>
     );
   }
 
