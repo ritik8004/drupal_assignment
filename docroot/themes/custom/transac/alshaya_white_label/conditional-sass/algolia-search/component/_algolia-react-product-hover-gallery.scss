@@ -1,0 +1,24 @@
+#hits {
+  .c-products__item {
+    .alshaya_search_gallery {
+      .alshaya_search_slider {
+        width: 12.5rem !important;
+
+        .slick-slide {
+          width: 2.75rem !important;
+
+          img {
+            max-width: none;
+            height: 2.5rem;
+          }
+        }
+
+        &[data-slider-status=false] {
+          .slick-track {
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+  }
+}

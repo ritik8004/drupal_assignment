@@ -11,6 +11,24 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for - Your search did not return any results.
+ */
+function alshaya_master_update_8033() {
+  $strings = [
+    'Your search did not return any results.' => [
+      'ar' => 'لا يوجد نتائج لبحثك',
+    ],
+    'Search results' => [
+      'ar' => 'نتائج البحث',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall jsonapi (and related), install pcb_memcache module.
  */
 function alshaya_master_update_8032() {

@@ -84,11 +84,15 @@ convert_to_select2:
     - alshaya_white_label/select2
 
 slick:
+  js:
+    vendor/js/slick.min.js: {}
+  dependencies:
+    - alshaya_white_label/slick_css
+
+slick_css:
   css:
     theme:
       vendor/css/slick.css: {}
-  js:
-    vendor/js/slick.min.js: {}
 
 select2:
   css:

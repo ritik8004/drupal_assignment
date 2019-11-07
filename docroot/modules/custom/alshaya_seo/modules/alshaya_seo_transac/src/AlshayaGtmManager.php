@@ -36,6 +36,13 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 class AlshayaGtmManager {
 
   /**
+   * Store GTM Container in static to avoid re-calculating.
+   *
+   * @var null
+   */
+  public static $gtmContainer = NULL;
+
+  /**
    * The current route matcher service.
    *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
@@ -503,16 +510,14 @@ class AlshayaGtmManager {
    * Helper function to fetch the current url & return corresponding page-type.
    */
   public function getGtmContainer() {
-    $currentRoute = &drupal_static(__FUNCTION__);
-
-    if (!isset($currentRoute)) {
-      $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
-      $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
-      $currentRoute['pathinfo'] = $this->currentRouteMatch->getRouteObject();
-      $currentRoute['query'] = $this->requestStack->getCurrentRequest()->query->all();
+    if (empty(self::$gtmContainer)) {
+      self::$gtmContainer['route_name'] = $this->currentRouteMatch->getRouteName();
+      self::$gtmContainer['route_params'] = $this->currentRouteMatch->getParameters()->all();
+      self::$gtmContainer['pathinfo'] = $this->currentRouteMatch->getRouteObject();
+      self::$gtmContainer['query'] = $this->requestStack->getCurrentRequest()->query->all();
     }
 
-    return $currentRoute;
+    return self::$gtmContainer;
   }
 
   /**

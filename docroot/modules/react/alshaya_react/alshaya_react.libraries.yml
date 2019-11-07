@@ -5,4 +5,4 @@ react:
     js/react.production.min.js: { }
     js/react-dom.production.min.js: { }
   dependencies:
-    - core/drupalSettings
+    - core/drupal

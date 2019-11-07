@@ -1,0 +1,110 @@
+#alshaya-algolia-search {
+  .block-alshaya-category-lhn-block {
+    a {
+      @include arabic-letter-spacing;
+
+      letter-spacing: 1px;
+
+      .ais-HierarchicalMenu-label {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  #sort_by {
+    li {
+      a {
+        @include icon(radio-empty, before) {
+          margin-#{$right}: 1rem;
+          position: relative;
+          color: $primary_radiobtn_empty;
+          vertical-align: middle;
+          border: none;
+          font-size: 1.875rem;
+          top: -0.5625rem;
+        }
+      }
+
+      &.active-item a {
+        font-family: $hnm-demibold;
+
+        @include icon(radio-filled, before) {
+          border: none;
+        }
+      }
+    }
+  }
+
+  .filter__inner {
+    .c-collapse-item:not(#sort_by),
+    .c-collapse-item:not(.block-facet--swatch-list) {
+      li {
+        &.facet-item {
+          .facet-item__value {
+            @include icon(check-box-empty) {
+              font-size: 1.3125rem;
+              color: $primary_checkbox_empty;
+              margin-#{$right}: 0.5rem;
+              margin-top: 0;
+            }
+          }
+
+          &.is-active {
+            .facet-item__value {
+              @include icon(check-box-filled) {
+                color: $primary_checkbox_filled;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #sort_by {
+      li {
+        padding-#{$left}: 3rem !important;
+
+        a {
+          &::before {
+            position: absolute;
+            font-size: 3.75rem;
+            #{$left}: 0;
+            top: 0;
+            transform: translateY(0);
+
+            @include breakpoint($only-mobile) {
+              top: -0.125rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .sticky-filter-wrapper {
+      .c-collapse-item {
+        .c-collapse__title {
+          text-transform: uppercase;
+          font-family: $hnm-demibold;
+          color: $plp_facet_title;
+          letter-spacing: 1px;
+          font-size: 0.6875rem;
+
+          @include icon(dropdown-expand, after) {
+            position: absolute;
+            font-size: 2.25rem;
+          }
+        }
+      }
+    }
+  }
+
+  .show-all-filters-algolia {
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $plp_facet_title;
+    font-size: 0.6875rem;
+  }
+}

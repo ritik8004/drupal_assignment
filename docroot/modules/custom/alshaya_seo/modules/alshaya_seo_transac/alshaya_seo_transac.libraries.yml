@@ -8,6 +8,13 @@ gtm:
     - core/jquery.once
     - alshaya_master/common_functions
 
+gtm_algolia:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.algolia.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+
 checkout_login:
   version: 1.x
   js:
