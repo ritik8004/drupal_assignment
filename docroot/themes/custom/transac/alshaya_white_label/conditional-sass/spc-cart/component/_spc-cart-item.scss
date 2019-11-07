@@ -24,7 +24,46 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        align-items: flex-end;
+
+        .spc-remove-btn {
+          align-self: flex-end;
+        }
+
+        .qty {
+          align-self: normal;
+
+          .spc-qty-select {
+            &.open {
+              div[class$='-indicatorContainer'] {
+                svg {
+                  transform: rotate(180deg);
+                }
+              }
+            }
+          }
+
+          div[class$='-control'] {
+            border: 1px solid #000;
+            border-radius: 0;
+            height: 40px;
+            font-size: 14px;
+            box-shadow: none;
+
+            > div:nth-child(2) {
+              span[class$='-indicatorSeparator'] {
+                display: none;
+              }
+
+              div[class$='-indicatorContainer'] {
+                color: #000;
+
+                svg {
+                  transition: transform 0.3s ease-in-out;
+                }
+              }
+            }
+          }
+        }
       }
 
       .spc-remove-btn {

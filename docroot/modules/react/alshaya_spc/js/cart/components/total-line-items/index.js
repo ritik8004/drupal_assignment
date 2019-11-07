@@ -17,7 +17,7 @@ class TotalLineItems extends React.Component {
           </div>
         </div>
         {/*To Be used later on Checkout Delivery pages.*/}
-        <div className="checkout-link"/>
+        <div className="checkout-link"><a href={Drupa.url('cart')} className="checkout-link">{Drupal.t('continue to checkout')}</a></div>
       </div>
     );
   };
