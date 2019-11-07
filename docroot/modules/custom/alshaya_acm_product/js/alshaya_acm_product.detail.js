@@ -184,9 +184,6 @@
 
         // Show thumbnails again.
         $('#product-zoom-container', product).removeClass('hidden-important');
-
-        //  Trigger an event on thumbnails image load.
-        $(product).trigger('alshaya-acm-product-detail-thumbnails-loaded')
       }, 1);
     }
   };
