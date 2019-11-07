@@ -177,9 +177,6 @@
 
         // Show thumbnails again.
         $('#product-zoom-container', product).removeClass('hidden-important');
-
-        //  Trigger an event on thumbnails image load.
-        $(product).trigger('alshaya-acm-product-detail-thumbnails-loaded')
       }, 1);
     }
   };
@@ -260,7 +257,10 @@
 
   $(window).on('load', function () {
     // Show add to cart form now.
-    $('.sku-base-form').removeClass('visually-hidden');
+    $('.sku-base-form').each(function () {
+      $(this).removeClass('visually-hidden');
+      $(this).trigger('form-visible');
+    });
 
     if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
