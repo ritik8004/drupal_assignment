@@ -4,11 +4,29 @@ namespace App\Service\Drupal;
 
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class DrupalInfo.
  */
 class DrupalInfo {
+
+  /**
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * DrupalInfo constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   RequestStack Object.
+   */
+  public function __construct(RequestStack $request) {
+    $this->request = $request->getCurrentRequest();
+  }
 
   /**
    * Get drupal url.
@@ -27,8 +45,7 @@ class DrupalInfo {
    *   Drupal base url.
    */
   public function getDrupalBaseUrl() {
-    $hostname = $_SERVER['HTTP_HOST'];
-    return 'https://' . $hostname . '/';
+    return $this->request->getScheme() . '://' . $this->request->getHttpHost() . '/';
   }
 
   /**
