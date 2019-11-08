@@ -37,9 +37,14 @@ export default class CartPromoBlock extends React.Component {
 
     var action = (promo_applied === true) ? 'remove coupon' : 'apply coupon';
 
+    // Adding class on promo button for showing progress when click.
+    document.getElementById('promo-action-button').classList.add('button-clicked');
+
     var cart_data = applyRemovePromo(action, promo_value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
+        // Removing button clicked class.
+        document.getElementById('promo-action-button').classList.remove('button-clicked');
         // If coupon is not valid.
         if (result.response_message.status === 'error_coupon') {
           document.getElementById('promo-error-message').innerHTML = result.response_message.msg;
@@ -85,7 +90,7 @@ export default class CartPromoBlock extends React.Component {
         <CheckoutSectionTitle>{Drupal.t('have a promo code?')}</CheckoutSectionTitle>
         <div className="block-content">
           <input id="promo-code" type="text" placeholder={Drupal.t('Enter your promo code here')} />
-          <button className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
+          <button id="promo-action-button" className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
           <div id="promo-error-message"/>
         </div>
       </div>
