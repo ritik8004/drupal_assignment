@@ -1,0 +1,8 @@
+name = "alshaya-acquia"
+type = "webpack"
+account_id = "712b5dd353dfc12aca7b342b28d5118f"
+route = "monitoring.factory.alshaya.com/fdcb70e7-c7b1-4183-a3ab-c92476c77589"
+zone_id = "376c11738312fe6e3a8eedf679ea74c6"
+kv-namespaces = [
+         { binding = "AlshayaAcquiaStability", id = "f21217b14e244ad7ba54f11c6b70e087" }
+]
