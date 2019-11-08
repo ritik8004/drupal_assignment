@@ -11,6 +11,57 @@ use springimport\magento2\apiv1\Configuration;
 class MagentoInfo {
 
   /**
+   * Alshaya commerce_third_party settings.
+   *
+   * @var array
+   */
+  protected $settings;
+
+  /**
+   * MagentoInfo constructor.
+   */
+  public function __construct() {
+    $this->setMagentoCredentials();
+  }
+
+  /**
+   * Initialize magento credentials.
+   */
+  protected function setMagentoCredentials() {
+    // Get site environment.
+    require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+    $env = alshaya_get_site_environment();
+
+    // Get host_site_code or acsf_site_name based on environment.
+    $site_name = NULL;
+    if ($env === 'local') {
+      // Require local_sites.php file for host site code.
+      require DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
+      global $host_site_code;
+      $site_name = $host_site_code;
+    }
+    else {
+      // Require sites.inc and post-sites-php/includes.php for ACSF site_name.
+      require DRUPAL_ROOT . '/sites/g/sites.inc';
+      require DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes.php';
+      global $_acsf_site_name;
+      $site_name = $_acsf_site_name;
+    }
+
+    // Get magento (commerce_third_party) settings.
+    if (!empty($site_name)) {
+      $site_country_code = alshaya_get_site_country_code($site_name);
+      require DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
+      $commerce_settings = alshaya_get_commerce_third_party_settings(
+        $site_country_code['site_code'],
+        $site_country_code['country_code'],
+        $env
+      );
+      $this->settings = $commerce_settings ?? NULL;
+    }
+  }
+
+  /**
    * Get the magento url for api call.
    *
    * This contains the `MDC url` + `MDC store code` + `MDC api prefix`.
@@ -30,8 +81,7 @@ class MagentoInfo {
    *   Magento base url.
    */
   public function getMagentoBaseUrl() {
-    // @Todo: Make it dynamic.
-    return 'http://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
+    return !empty($this->settings) ? $this->settings['alshaya_api.settings']['magento_host'] : NULL;
   }
 
   /**
@@ -41,8 +91,9 @@ class MagentoInfo {
    *   Magento store code.
    */
   public function getMagentoStore() {
-    // @Todo: Make it dynamic.
-    return 'kwt_en';
+    // @TODO Get lang dynamically passed from API request.
+    $lang = 'en';
+    return !empty($this->settings) ? $this->settings['magento_lang_prefix'][$lang] : NULL;
   }
 
   /**
@@ -52,13 +103,7 @@ class MagentoInfo {
    *   Magento secret info.
    */
   public function getMagentoSecretInfo() {
-    // @Todo: Make it dynamic.
-    return [
-      'consumer_key' => '3ewl8lsult7l5mpp1ckv0hw1ftk0u2bc',
-      'consumer_secret' => '84avnwtrinkpt2jmda6f61l8vy5cabb1',
-      'access_token' => 'yw1bvvwqe1vrab9sqjioepclb044jja2',
-      'access_token_secret' => 'bsmp4igrv2bgtn6pk5ojko32qvrrk798',
-    ];
+    return !empty($this->settings) ? $this->settings['alshaya_api.settings'] : NULL;
   }
 
   /**
