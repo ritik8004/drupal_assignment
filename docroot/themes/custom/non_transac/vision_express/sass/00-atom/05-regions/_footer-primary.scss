@@ -1,0 +1,81 @@
+@import '../../config/_config.scss';
+
+.region-footer-primary {
+  background-color: $footer-primary-bg;
+
+  .region__wrapper {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 1rem 0.9375rem;
+
+    @include breakpoint ($above-palm) {
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+.block-customer-support {
+  width: 50%;
+
+  @include breakpoint ($upto-palm) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1.875rem;
+  }
+}
+
+.cust-support {
+  padding-#{$right}: 3.4375rem;
+  position: relative;
+  float: $right;
+  text-align: $right;
+
+  @include breakpoint ($upto-palm) {
+    text-align: center;
+  }
+
+  &.icon-contact {
+    &::after {
+      content: '';
+      background: url("../../images/call-centre.svg") no-repeat center;
+      width: 3rem;
+      height: 3rem;
+      display: inline-block;
+      vertical-align: middle;
+      background-size: contain;
+      position: absolute;
+      #{$right}: 0;
+      top: -0.3125rem;
+    }
+  }
+
+  h3 {
+    font-size: 0.9375rem;
+    font-weight: normal;
+    font-family: $helvetica-neue-bold;
+    margin: 0;
+    margin-bottom: 0.3125rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+#backtotop {
+  z-index: 10;
+  bottom: 5rem;
+  width: 3.125rem;
+  height: 3.125rem;
+  #{$right}: 0.3125rem;
+  background-size: contain;
+}

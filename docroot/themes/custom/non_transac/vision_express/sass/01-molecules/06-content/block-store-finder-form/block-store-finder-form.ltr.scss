@@ -1,0 +1,715 @@
+@import '../../../config/_config.scss';
+
+.alias--store-finder,
+.alias--store-finder-list {
+  .region-content {
+    @include breakpoint($upto-palm) {
+      padding: 0;
+    }
+  }
+
+  .block-store-finder-form {
+    border: 0;
+
+    @include breakpoint($upto-palm) {
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+      margin-bottom: 0;
+    }
+
+    .block-store-finder-form__form__label {
+      display: none;
+    }
+
+    .block-store-finder-form__current-location {
+      position: relative;
+      padding: 0;
+      text-indent: 0;
+      padding-#{$left}: 3.4375rem;
+      text-transform: lowercase;
+      font-family: $helvetica-neue-bold;
+      font-size: 1.125rem;
+      line-height: 2.5rem;
+
+      @include breakpoint($upto-palm) {
+        margin: 0 auto 1.25rem;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+
+        &::before {
+          position: static !important;
+
+          html[lang='ar'] & {
+            margin-top: -1.125rem;
+          }
+        }
+
+        html[lang='ar'] & {
+          line-height: 0.875rem;
+          padding-top: 0.625rem;
+        }
+      }
+
+      html[lang='ar'] & {
+        font-size: 0.875rem;
+      }
+
+      @include breakpoint($lap) {
+        font-size: 0.875rem;
+      }
+
+      &::before {
+        position: absolute;
+        #{$left}: -0.1875rem;
+        top: -0.1875rem;
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+
+    .block-store-finder-form__input__wrapper {
+      @include breakpoint($lap) {
+        .input__container {
+          padding: 0;
+        }
+      }
+
+      .input__inner-container {
+        position: relative;
+        padding-#{$right}: 3rem;
+
+        input[type="search"],
+        input[type="text"] {
+          height: 3rem;
+          background-color: $form-input-bg;
+          border: 0;
+          color: $text;
+          padding: 1rem;
+
+          &::placeholder {
+            color: $form-input-placeholder-text;
+          }
+        }
+
+        @include icon(chevron#{$right}, after) {
+          background-color: $icon;
+          color: $btn;
+          padding: 0.3125rem;
+          height: 3rem;
+          width: 3rem;
+          position: absolute;
+          #{$right}: 0;
+          font-size: 2.375rem;
+          line-height: 2.1875rem;
+          top: 0;
+        }
+      }
+    }
+
+    .block-store-finder-form__input__submit__wrapper {
+      display: block;
+
+      &::before {
+        color: transparent;
+      }
+    }
+
+    @include breakpoint($above-palm) {
+      .block-store-finder-form__form__wrapper {
+        margin-top: 0.8125rem;
+        margin-#{$right}: 1.25rem;
+      }
+
+      .block-store-finder-form__input__wrapper {
+        width: 100%;
+      }
+
+      .block-store-finder-form__current-location {
+        width: auto;
+        margin-#{$right}: 3.125rem;
+        margin-top: 0.9375rem;
+
+        html[lang='ar'] & {
+          margin-#{$right}: 0.625rem;
+        }
+      }
+
+      .list-view-link {
+        margin-#{$left}: 0;
+      }
+    }
+
+    @include breakpoint($lap) {
+      .block-store-finder-form__form__wrapper {
+        width: 34%;
+      }
+
+      .block-store-finder-form__current-location {
+        margin-#{$right}: 2.1875rem;
+
+        html[lang='ar'] & {
+          width: 18%;
+          line-height: 0.9375rem;
+          padding-top: 0.625rem;
+        }
+      }
+    }
+
+    @include breakpoint($desk) {
+      .block-store-finder-form__form__wrapper {
+        width: 42%;
+      }
+    }
+
+    @include breakpoint($desk) {
+      max-width: 57.875rem;
+      margin: auto;
+    }
+  }
+
+  .form-item-country {
+    @include breakpoint($desk) {
+      width: 50%;
+      display: inline-block;
+    }
+
+    @include breakpoint($lap) {
+      width: 60%;
+      display: inline-block;
+    }
+  }
+
+  .retinal-photography {
+    @include breakpoint($above-palm) {
+      width: 40%;
+      display: inline-block;
+      text-align: $right;
+      float: $right;
+    }
+
+    .retinal-enabled-yes {
+      margin-top: 0.9375rem;
+      font-size: 0.875rem;
+      display: inline-block;
+
+      @include breakpoint($upto-palm) {
+        margin-top: 1.5625rem;
+        margin-bottom: 1.25rem;
+      }
+
+      &::before {
+        top: -0.4375rem;
+      }
+    }
+  }
+
+  .js-form-type-select.form-item-country {
+    .input__label label {
+      color: $form-label;
+      font-size: 0.875rem;
+      margin-top: 0.9375rem;
+
+      @include breakpoint($upto-palm) {
+        top: -2.5rem;
+      }
+
+      @include breakpoint($lap) {
+        width: 45%;
+      }
+    }
+
+    .input__inner-container {
+      position: relative;
+
+      @include icon(chevrondown, after) {
+        background-color: $icon;
+        color: $btn;
+        padding: 0.3125rem;
+        height: 3rem;
+        width: 3rem;
+        position: absolute;
+        #{$right}: 0;
+        font-size: 2.375rem;
+        line-height: 2.1875rem;
+        top: 0;
+        pointer-events: none;
+      }
+
+      select {
+        @include breakpoint($above-palm) {
+          max-width: 13rem;
+        }
+
+        height: 3rem;
+        float: $right;
+        outline: 0;
+        padding-#{$left}: 1rem;
+      }
+    }
+  }
+
+  .block-store-finder-form__current-location {
+    &::before {
+      background: url("../../../../../images/icons/icon-mylocation.svg") no-repeat center;
+    }
+
+    &:hover {
+      color: $brand;
+
+      &::before {
+        background: url("../../../../../images/icons/icon-mylocation.svg") no-repeat center;
+      }
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    border: 1px solid $primary-border;
+    height: 4.375rem;
+    padding: 0.9375rem;
+    padding-#{$left}: 4.375rem;
+    width: auto;
+    font-family: $helvetica-neue-bold;
+    text-transform: lowercase;
+    font-size: 1.125rem;
+    line-height: 2.1875rem;
+
+    html[lang='ar'] & {
+      padding-right: 3.75rem;
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($lap) {
+      font-size: 0.875rem;
+    }
+
+    &::before {
+      color: $brand;
+      font-size: 2.8125rem;
+    }
+
+    &.active,
+    &:hover {
+      color: $text;
+      border-color: $store-active-link;
+    }
+  }
+
+  .map-view-link {
+    margin-#{$left}: 0.75rem;
+  }
+
+  .views-element-container {
+    background-color: $store-content-bg;
+
+    @include breakpoint($upto-palm) {
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+      padding-top: 0.625rem;
+    }
+
+    @include breakpoint($above-palm) {
+      padding: 0.9375rem 2rem;
+    }
+
+    header {
+      display: none;
+    }
+
+    @include breakpoint($desk) {
+      max-width: 57.875rem;
+      margin: auto;
+    }
+
+    .view-store-finder--list__alphabet {
+      h3 {
+        color: $brand;
+        font-size: 2.125rem;
+        font-family: $helvetica-neue-bold;
+        padding-#{$left}: 0;
+      }
+
+      .views-view-unformatted__rows {
+        clear: both;
+
+        .field-content {
+          display: flex;
+
+          .retinal-enabled-yes {
+            padding: 0;
+
+            @include breakpoint($upto-palm) {
+              padding: 0;
+              margin-top: 0.625rem;
+            }
+          }
+        }
+      }
+    }
+
+    .views-element-container {
+      background: transparent;
+      padding: 0;
+    }
+  }
+
+  #block-exposedformstores-finderpage-2 {
+    background-color: $store-content-bg;
+
+    @include breakpoint($above-palm) {
+      max-width: 57.875rem;
+      margin: auto;
+      padding: 0.9375rem 2rem;
+      margin-top: 1.5625rem;
+    }
+
+    @include breakpoint($upto-palm) {
+      padding-left: 0.625rem;
+      padding-right: 0.625rem;
+      padding-top: 1.875rem;
+    }
+  }
+
+  .back-to-glossary {
+    margin-top: 0.9375rem;
+    padding-#{$left}: 3.75rem;
+    position: relative;
+    width: auto;
+    margin-left: 0.3125rem;
+    font-size: 1.125rem;
+    font-family: $helvetica-neue-bold;
+    text-transform: lowercase;
+
+    @include icon(list, after) {
+      color: $icon;
+      font-size: 3.125rem;
+      position: absolute;
+      #{$left}: 0;
+      top: -0.25rem;
+
+      @include breakpoint($upto-palm) {
+        top: -0.1875rem;
+        line-height: 1.75rem;
+      }
+    }
+
+    @include breakpoint($upto-palm) {
+      margin-bottom: 0.9375rem;
+    }
+  }
+
+  .individual--store {
+    display: flex;
+
+    & > .view-content {
+      @include breakpoint($above-palm) {
+        width: 30.2%;
+        display: inline-block;
+      }
+
+      @include breakpoint($upto-palm) {
+        width: 100%;
+      }
+    }
+  }
+
+  .store--map,
+  .map--store {
+    @include breakpoint($above-palm) {
+      width: 67% !important;
+      display: inline-block;
+      margin-#{$left}: 1.875rem;
+    }
+  }
+
+  .list-view-locator {
+    .row-title span {
+      font-family: $helvetica-neue-bold;
+      display: inline-block;
+      padding-#{$right}: 2.1875rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.125rem;
+    }
+
+    .views-field-field-store-address {
+      .field-store-address {
+        line-height: 1.375rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .back-link,
+    .mobile-only--back-to-glossary {
+      display: none;
+    }
+
+    .retinal-enabled-yes {
+      float: $right;
+      #{$right}: -0.625rem;
+      top: -0.3125rem;
+    }
+
+    .hours--wrapper,
+    .hours--wrapper,
+    .view-on--map,
+    .get--directions {
+      .hours--label,
+      .open--hours,
+      a {
+        padding-#{$left}: 0;
+        border: 0;
+        color: $content-text;
+        font-size: 0.875rem;
+      }
+
+      .hours--label {
+        font-family: $helvetica-neue-bold;
+        margin-top: 0.9375rem;
+      }
+
+      .open--hours {
+        padding: 0;
+        display: block !important;
+      }
+
+      .hours--label,
+      .device__desktop a,
+      .device__tablet a,
+      a {
+        &::after {
+          display: none;
+        }
+      }
+
+      a {
+        text-decoration: underline;
+        margin-top: 1.5625rem;
+      }
+    }
+  }
+
+  .view-header {
+    strong {
+      font-family: $helvetica-neue-bold;
+    }
+  }
+}
+
+.retinal-enabled-yes {
+  padding-#{$left}: 2.5rem;
+  position: relative;
+  font-size: 0;
+  display: inline;
+  color: $content-text;
+
+  &::before {
+    content: '';
+    position: absolute;
+    #{$left}: 0;
+    top: 0;
+    width: 1.875rem;
+    height: 1.875rem;
+    background: url("../../../../../images/eye-test.svg") no-repeat center;
+    background-size: contain;
+  }
+}
+
+.retinal-enabled-no {
+  visibility: hidden;
+}
+
+.view-store-finder--list__alphabet__item {
+  @include breakpoint($upto-palm) {
+    height: auto;
+
+    @include icon(chevron#{$right}, before) {
+      color: $show-more-icon;
+      font-size: 2.1875rem;
+      position: absolute;
+      #{$right}: -0.3125rem;
+      #{$left}: inherit;
+    }
+
+    .field-content {
+      align-items: center;
+      padding: 0;
+      width: 80%;
+
+      a {
+        padding: 0;
+      }
+
+      .retinal-enabled-yes::before {
+        top: 0.1875rem;
+      }
+    }
+  }
+
+  a {
+    line-height: 1.125rem;
+    padding-top: 0.3125rem;
+    display: inline;
+    margin-#{$right}: 0.625rem;
+    color: $content-text;
+
+    &:hover {
+      color: $store-active-link;
+    }
+  }
+}
+
+.view-store-finder--list__column--1 {
+  border: 0;
+}
+
+.view-store-finder--list__column--2 {
+  @include breakpoint($desk) {
+    padding-#{$left}: 0.9375rem;
+  }
+}
+
+.list-store--detail {
+  @include breakpoint($above-palm) {
+    width: 30.2%;
+  }
+
+  .list-view-locator {
+    background-color: transparent;
+    border-top: 0;
+    padding-top: 0;
+
+    .row-title {
+      padding: 0;
+      padding-#{$left}: 1.875rem;
+      font-family: $helvetica-neue-bold;
+      margin-bottom: 0.5rem;
+      color: $content-text;
+      line-height: 1.125rem;
+    }
+
+    .views-field-field-store-address {
+      border: 0;
+      padding-bottom: 0;
+
+      .field-content {
+        padding: 0;
+        padding-#{$left}: 1.875rem;
+        line-height: 1.375rem;
+      }
+    }
+  }
+}
+
+.store-row--counter {
+  background-color: $store-counter-bg;
+  #{$left}: 0;
+}
+
+.alias--store-finder-list {
+  .view-stores-finder {
+    @include breakpoint($above-palm) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .view-header {
+        flex: 0 0 100%;
+        flex-basis: 100%;
+      }
+
+      .list-store--detail {
+        width: 30.2%;
+        flex: 0 0 30.2%;
+        padding: 0;
+      }
+
+      .store--map,
+      .map--store {
+        flex: 0 0 65%;
+      }
+
+      .view-footer {
+        flex: 0 0 30%;
+        flex-basis: 100%;
+      }
+    }
+
+    @include breakpoint($upto-palm) {
+      .list-store--detail {
+        margin-top: 0.625rem;
+      }
+
+      .view-header {
+        margin-bottom: 0;
+      }
+    }
+
+    @include breakpoint($lap) {
+      .list-store--detail {
+        margin-#{$right}: 0;
+      }
+    }
+
+    .view-footer {
+      @include breakpoint($upto-palm) {
+        padding-top: 1.25rem;
+      }
+    }
+
+    .load-more-button a {
+      background-color: $btn-bg;
+      color: $btn;
+    }
+  }
+}
+
+.ajax-progress-fullscreen {
+  &::before {
+    background-color: $modal-overlay-bg;
+  }
+
+  &::after {
+    color: $icon;
+  }
+}
+
+.hours--wrapper {
+  .hours--label,
+  .open--hours {
+    color: $content-text;
+    padding-#{$left}: 0;
+
+    &::after {
+      color: $icon;
+    }
+  }
+}
+
+.get--directions,
+.view-on--map {
+  a {
+    color: $content-text;
+    padding-#{$left}: 0;
+  }
+}
+
+.geolocation-common-map-container {
+  .location-content {
+    min-width: 11rem;
+  }
+
+  .hours--label {
+    font-family: $helvetica-neue-bold;
+  }
+
+  .get--directions a {
+    color: $content-text;
+    text-decoration: underline;
+    font-weight: normal;
+
+    &::after {
+      display: none;
+    }
+  }
+}

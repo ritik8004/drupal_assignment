@@ -1,0 +1,8 @@
+display:
+  default:
+    display_options:
+      access:
+        type: role
+        options:
+          role:
+            administrator: administrator

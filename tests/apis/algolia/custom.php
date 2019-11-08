@@ -7,13 +7,15 @@ use AlgoliaSearch\Client;
  * Custom code to add support for creating query suggestions.
  */
 
+define('ALGOLIA_QUERY_SUGGESTTIONS_URL', 'https://query-suggestions.eu.algolia.com/1/configs');
+
 function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
   static $result;
 
   if (empty($result[$app_id])) {
     $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, 'https://query-suggestions.fi.algolia.com/1/configs');
+    curl_setopt($ch, CURLOPT_URL, ALGOLIA_QUERY_SUGGESTTIONS_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
@@ -43,7 +45,7 @@ function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
 function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) {
   $ch = curl_init();
 
-  curl_setopt($ch, CURLOPT_URL, 'https://query-suggestions.fi.algolia.com/1/configs/' . $name);
+  curl_setopt($ch, CURLOPT_URL, ALGOLIA_QUERY_SUGGESTTIONS_URL . '/' . $name);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
@@ -70,7 +72,7 @@ function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) 
 function algolia_delete_query_suggestion($app_id, $app_secret_admin, $index) {
   $ch = curl_init();
 
-  curl_setopt($ch, CURLOPT_URL, 'https://query-suggestions.fi.algolia.com/1/configs/' . $index);
+  curl_setopt($ch, CURLOPT_URL, ALGOLIA_QUERY_SUGGESTTIONS_URL . '/' . $index);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
   curl_setopt($ch, CURLOPT_TIMEOUT, 3000);
@@ -197,7 +199,7 @@ function algolia_get_synonyms(\AlgoliaSearch\Index $index) {
       break;
     }
 
-    $synonyms += $synonymsPage['hits'];
+    $synonyms = array_merge($synonyms, $synonymsPage['hits']);
 
     $page++;
     $total = $synonymsPage['nbPages'] ?? 0;
@@ -224,7 +226,7 @@ function algolia_get_rules($indexSource) {
       break;
     }
 
-    $rules += $rulesPage['hits'];
+    $rules = array_merge($rules, $rulesPage['hits']);
 
     $page++;
     if ($page >= $rulesPage['nbPages']) {

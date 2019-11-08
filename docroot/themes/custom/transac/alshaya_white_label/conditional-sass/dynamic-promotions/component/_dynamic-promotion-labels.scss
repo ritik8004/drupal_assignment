@@ -1,4 +1,8 @@
 .promotions-dynamic-label {
+  @include breakpoint($only-mobile) {
+    display: none !important;
+  }
+
   a.sku-dynamic-promotion-link {
     background: $promo_dynamic_label_bg;
     color: $promo_dynamic_label_txt !important;
@@ -31,38 +35,63 @@
 
 @include breakpoint($only-mobile) {
   .c-pdp {
-    .dynamic-promotion-wrapper {
-      position: relative;
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        border-bottom: none;
 
-      .promotions-dynamic-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: -2.5rem;
-        width: 100%;
-        margin: 0 -0.5rem;
-        background: $promo_dynamic_label_txt_bg;
+        .sku-base-form {
+          .promotions-dynamic-label {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: $promo_dynamic_label_txt_bg;
+            margin-#{$right}: 0;
+            margin-top: 0.5rem;
+            height: 2.5rem;
 
-        a {
-          &.sku-dynamic-promotion-link {
-            background: none;
-            margin: 0;
-            padding-top: 0.71875rem;
-            padding-bottom: 0.71875rem;
+            a {
+              &.sku-dynamic-promotion-link {
+                background: none;
+                margin: 0;
+                padding-top: 0.71875rem;
+                padding-bottom: 0.71875rem;
+              }
+            }
           }
         }
       }
+    }
 
-      &.sticky-promotion-wrapper {
-        .promotions-dynamic-label {
-          position: fixed;
-          bottom: 3.5rem;
-          #{$left}: 0;
-          z-index: 5;
-          margin: 0;
-          top: auto;
-          width: 100%;
+    .dynamic-promotions-wrapper {
+      .edit-add-to-cart {
+        transition: none !important;
+      }
+    }
+
+    .fix-dynamic-promotion-button {
+      &.basic-details-wrapper {
+        .field--name-field-skus {
+          .sku-base-form {
+            button[type="submit"] {
+              &.fix-button {
+                bottom: 3rem;
+                box-shadow: 0 -1px 20px -1px $sticky-btn;
+              }
+            }
+          }
+
+          .promotions-dynamic-label {
+            position: fixed;
+            bottom: 0;
+            border: 0.5rem solid;
+            border-top: 0;
+            padding-top: 0;
+            margin-top: 0;
+            #{$left}: 0;
+            border-color: $promo-dynamic-label-border-color;
+            height: 3rem;
+          }
         }
       }
     }

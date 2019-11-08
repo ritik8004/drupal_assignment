@@ -28,3 +28,4 @@ dependencies:
   - alshaya_contact:alshaya_contact
   - seckit:seckit
   - alshaya_rum:alshaya_rum
+  - pcb:pcb_memcache

@@ -1,0 +1,10 @@
+name: Alshaya algolia react
+type: module
+description: 'Implement algolia instant search for Alshaya.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_block:alshaya_block
+  - alshaya_search_algolia:alshaya_search_algolia
+  - alshaya_react:alshaya_react
+  - alshaya_i18n:alshaya_i18n
