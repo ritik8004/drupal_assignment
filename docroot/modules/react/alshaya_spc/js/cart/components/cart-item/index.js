@@ -52,7 +52,7 @@ export default class CartItem extends React.Component {
             </div>
             <div className="spc-product-attributes-wrapper">
               {this.props.item.configurable_values.map((key, val) =>
-                <CartConfigurableOption label={key} />
+                <CartConfigurableOption key={val} label={key} />
               )}
             </div>
           </div>
@@ -65,7 +65,7 @@ export default class CartItem extends React.Component {
         </div>
         <div className="spc-promotions">
           {this.props.item.promotions.map((key, val) =>
-            <CartPromotion promo={key} />
+            <CartPromotion key={val} promo={key} />
           )}
         </div>
         <CartItemOOS in_stock={this.props.item.in_stock} />
