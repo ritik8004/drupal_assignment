@@ -66,6 +66,7 @@
         "drupal/password_policy": "^3.0",
         "drupal/pcb": "^1.0",
         "drupal/profile": "^1.0@alpha",
+        "drupal/queue_unique": "^2.0",
         "drupal/r4032login": "1.x-dev",
         "drupal/recaptcha": "^2.3",
         "drupal/redirect": "^1.0@alpha",
