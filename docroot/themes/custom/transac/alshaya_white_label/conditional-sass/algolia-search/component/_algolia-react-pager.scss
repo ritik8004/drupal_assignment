@@ -18,10 +18,6 @@
         background: $primary_btn_bg;
         color: $primary_btn_text;
         border: none;
-
-        @include breakpoint($only-mobile) {
-          width: calc(100% - 1rem);
-        }
       }
     }
 
