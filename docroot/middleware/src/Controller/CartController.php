@@ -9,6 +9,9 @@ use App\Service\Magento\MagentoInfo;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class CartController.
+ */
 class CartController {
 
   /**
@@ -42,12 +45,21 @@ class CartController {
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
    */
-  public function  __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info) {
+  public function __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
   }
 
+  /**
+   * Get cart data.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Cart response.
+   */
   public function getCart(int $cart_id) {
     $data = $this->cart->getCart($cart_id);
 
@@ -82,12 +94,30 @@ class CartController {
       'discount_amount' => $cart_data['totals']['discount_amount'],
     ];
 
+    $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
+
+    // Set the status message if we get from magento.
+    if (!empty($cart_data['response_message'])) {
+      $data['response_message'] = [
+        'status' => $cart_data['response_message'][1],
+        'msg' => $cart_data['response_message'][0],
+      ];
+    }
+
+    // For determining global OOS for cart.
+    $data['in_stock'] = TRUE;
+
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
     foreach ($data['items'] as $key => $value) {
       if (isset($items_quantity[$key])) {
         $data['items'][$key]['qty'] = $items_quantity[$key];
+      }
+
+      // For the OOS.
+      if ($data['in_stock'] && !$value['in_stock']) {
+        $data['in_stock'] = FALSE;
       }
     }
 
@@ -118,15 +148,13 @@ class CartController {
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request.
-   * @param \Silex\Application $app
-   *   Silex app.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    */
   public function updateCart(Request $request) {
 
-    $request_content = $request_data = json_decode($request->getContent(), TRUE);
+    $request_content = json_decode($request->getContent(), TRUE);
 
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
@@ -167,7 +195,7 @@ class CartController {
 
       case CartActions::CART_APPLY_COUPON:
       case CartActions::CART_REMOVE_COUPON:
-        $cart_id = $action = $request_content['cart_id'];
+        $cart_id = $request_content['cart_id'];
         $cart = $this->cart->applyRemovePromo($cart_id, $request_content['promo'], $action);
 
         if (!empty($cart['error'])) {
@@ -183,8 +211,8 @@ class CartController {
   /**
    * Validate incoming request.
    *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
+   * @param array $request_content
+   *   Request data.
    *
    * @return bool
    *   Valid request or not.

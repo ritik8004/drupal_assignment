@@ -20,6 +20,7 @@ export default class Cart extends React.Component {
       'recommended_products': [],
       'total_items': null,
       'amount': null,
+      'coupon_code': null,
       'in_stock': true
     };
   }
@@ -28,13 +29,6 @@ export default class Cart extends React.Component {
     // Listen to `refreshCart` event triggered from `mini-cart/index.js`.
     document.addEventListener('refreshCart', (e) => {
       const data = e.detail.data();
-      var in_stock = true;
-
-      Object.keys(data.items).forEach(function(key) {
-        if (data.items[key].stock === 0) {
-          in_stock = false;
-        }
-      })
 
       this.setState(state => ({
         items: data.items,
@@ -43,7 +37,8 @@ export default class Cart extends React.Component {
         total_items: data.items_qty,
         amount: data.cart_total,
         wait: false,
-        in_stock: in_stock
+        coupon_code: data.coupon_code,
+        in_stock: data.in_stock
       }));
     }, false);
   };
@@ -72,7 +67,7 @@ export default class Cart extends React.Component {
               <CartItems items={this.state.items} />
             </div>
             <div className="spc-sidebar">
-              <CartPromoBlock/>
+              <CartPromoBlock coupon_code={this.state.coupon_code} />
               <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock}/>
             </div>
           </div>
