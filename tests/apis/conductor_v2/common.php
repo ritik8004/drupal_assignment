@@ -266,3 +266,18 @@ function create_mapping($name, $description, $site_id, $backend_id, $frontend_id
 function get_queue_total($site_id) {
   return invoke_api('config/site/' . $site_id . '/queue/total', 'GET');
 }
+
+/**
+ * Function to pause/unpause the queue.
+ *
+ * @param $site_id
+ *   The site id to get the queue count from.
+ * @param $status
+ *   The status to set for the queue.
+ *
+ * @return object
+ *   The data returned by the API.
+ */
+function update_queue_status($site_id, bool $status = FALSE) {
+  return invoke_api('config/site/' . $site_id . '/queue', 'GET', ['pause' => $status]);
+}

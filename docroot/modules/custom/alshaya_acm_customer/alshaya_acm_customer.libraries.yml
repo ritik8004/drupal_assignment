@@ -11,3 +11,11 @@ order_print:
   version: VERSION
   js:
     js/order-print.js: {}
+recent-order:
+  version: VERSION
+  js:
+    js/recent-order.js: {}
+order_confirmation:
+  version: VERSION
+  js:
+    js/order-confirmation.js: {}

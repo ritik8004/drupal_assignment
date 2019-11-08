@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_search_content
+    - node.type.static_html
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    full_text: full_text
+    limited_options: '0'
+    mail_text: '0'
+    rich_text: '0'
+    plain_text: '0'
+id: node.static_html.field_search_content
+field_name: field_search_content
+entity_type: node
+bundle: static_html
+label: 'Search content'
+description: ''
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

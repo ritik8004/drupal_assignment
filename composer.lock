@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bda7bba51f7f8aa7dcbac17b56dab524",
+    "content-hash": "435c5d5b00e491bcd308a68f1c0b6a9e",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -990,7 +990,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fengyuanchen/cropper.git",
+                "url": "git@github.com:fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -1041,7 +1041,7 @@
             "version": "v1.8.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kenwheeler/slick.git",
+                "url": "git@github.com:kenwheeler/slick.git",
                 "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
             },
             "dist": {
@@ -7488,6 +7488,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Cache noscript content and avoid using file_get_contents for better performance": "https://www.drupal.org/files/issues/2019-11-04/cache-noscript-3092193-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11943,9 +11946,6 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12598,7 +12598,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch"
+                    "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch",
+                    "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

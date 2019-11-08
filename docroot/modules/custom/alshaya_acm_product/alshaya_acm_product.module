@@ -67,6 +67,10 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
  * Implements hook_search_api_index_items_alter().
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  if (!in_array($index->id(), ['product', 'acquia_search_index'])) {
+    return;
+  }
+
   $logger = \Drupal::logger('alshaya_acm_product');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
@@ -659,6 +663,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery) ? \Drupal::service('renderer')->renderPlain($gallery) : '';
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
+        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
         $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
         $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
@@ -673,11 +678,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if ($sku_entity->bundle() == 'configurable') {
           $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
         }
-        else {
-          $build['gallery'] = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', TRUE);
-        }
+
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
       }
 
       if (isset($context)) {

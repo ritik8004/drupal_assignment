@@ -1,0 +1,95 @@
+@import '../../../config/_config.scss';
+
+.block-language-switcher__tablet {
+  display: block;
+  background-color: transparent;
+  color: $link;
+  position: static;
+  width: 100%;
+  text-align: $right;
+
+  @include breakpoint ($upto-palm) {
+    position: absolute;
+    top: 0.625rem;
+    #{$right}: 0.625rem;
+    #{$left}: inherit;
+    width: auto;
+  }
+}
+
+.menu-language-switcher--desktop {
+  li {
+    padding: 0;
+
+    &::after {
+      display: none !important;
+    }
+
+    &.is-hidden {
+      display: none !important;
+    }
+  }
+
+  a {
+    color: $link;
+    font-size: 0.9375rem;
+    line-height: 1;
+
+    footer & {
+      padding: 0;
+    }
+
+    &[hreflang="ar"] {
+      font-family: $arabic_regular;
+    }
+
+    &[hreflang="en"] {
+      font-family: $helvetica-neue;
+    }
+  }
+}
+
+.block-language-switcher__cookies {
+  #{$left}: 0;
+  background: $language-switcher;
+  padding: 0.3125rem 0.625rem;
+
+  .menu-language-switcher--desktop {
+    display: flex;
+    padding-#{$right}: 3.125rem;
+
+    li {
+      flex: 1;
+
+      &.is-hidden {
+        display: block !important;
+      }
+
+      a {
+        background: $language-link-bg;
+        height: 2.5rem;
+        padding: 0.625rem;
+        text-align: center;
+        color: $language-link;
+        min-width: 7.75rem;
+        margin-#{$right}: 0.3125rem;
+        line-height: 1.125rem;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .language-switcher-close {
+    font-size: 1rem;
+    background: $close-bg;
+    height: 2.5rem;
+    width: 2.5rem;
+    top: 0;
+    #{$right}: 0;
+    #{$left}: inherit;
+
+    &::before {
+      font-size: 2.5rem;
+    }
+  }
+}

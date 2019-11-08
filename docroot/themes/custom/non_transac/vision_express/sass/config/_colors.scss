@@ -1,0 +1,92 @@
+// Define theme colors here.
+$black: #333;
+$brand: #ec1d24;
+$white: #fff;
+$white-smoke: #f2f2f2;
+$grey: #777;
+$black-two: #000;
+$error: #d0011b;
+
+// Primary Color.
+$primary-border: $white-smoke;
+$icon: $brand;
+$link: $black;
+$content-text: $black;
+$text: $black-two;
+$message-success: $brand;
+
+// Button.
+$btn-bg: $brand;
+$btn: $white;
+$form-label: $black;
+
+// Header
+$header-bg: $white-smoke;
+
+// Main navigation.
+$menu-bg: $white;
+$link-border: $black;
+$menu-close-bg: $white;
+$sub-menu-bg: rgba(242, 242, 242, 0.95);
+$sub-link-hover-bg: $black;
+$sub-link-hover: $white;
+$sub-link-icon-active: $brand;
+$sub-link-active: $brand;
+
+// footer-primary
+$footer-primary-bg: $white-smoke;
+
+// footer-secondary
+$footer-secondary: rgba(242, 242, 242, 0.4);
+
+// footer-tertiary
+$footer-tertiary-bg: $grey;
+$footer-text: $white;
+
+// home-slider
+$slick-arrow: $brand;
+$slick-dot-border: $brand;
+$slick-dot-active-bg: $brand;
+
+// Promo Block
+$image-title-subtitle-bg: $white-smoke;
+$show-more-icon: $brand;
+
+// Footer language switcher
+$language-switcher: $white;
+$language-link-bg: $black;
+$language-link: $white;
+$close-bg: $brand;
+
+// Form
+$form-search-bg: $white;
+$form-dropdown-icon: $brand;
+$form-input-placeholder-text: rgba(0, 0, 0, 0.3);
+$form-input-text: $black-two;
+$form-input-bg: $white-smoke;
+$form-error-msg: $error;
+$form-feedback-subtitle: $brand;
+$form-btn-bg: $brand;
+$form-btn: $white;
+$form-label: $black;
+
+// Checkbox
+$checkbox-border: $brand;
+$checkbox-tick_mark: $brand;
+
+// Contact form
+$contact-form-bg: rgba(242, 242, 242, 0.4);
+
+// Modal
+$modal-bg: $white;
+$modal-overlay-bg: rgba(119, 119, 119, 0.8);
+
+// Search Autocomplete
+$ui-autocomplete-bg: $white;
+$ui-autocomplete-list-active-bg: $white-smoke;
+$ui-autocomplete-list-active: $black-two;
+
+// Store finder
+$store-content-bg: rgba(243, 243, 243, 0.4);
+$store-active-link: $brand;
+$store-counter-bg: $brand;

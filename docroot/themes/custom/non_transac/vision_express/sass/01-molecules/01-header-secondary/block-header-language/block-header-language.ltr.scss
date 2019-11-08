@@ -1,0 +1,12 @@
+@import '../../../config/_config.scss';
+
+.block-language-switcher--desktop {
+  background-color: transparent;
+  position: absolute;
+  #{$right}: 1.25rem;
+  top: 0;
+
+  @include breakpoint($upto-lap) {
+    display: none;
+  }
+}
