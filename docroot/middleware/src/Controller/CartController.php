@@ -116,7 +116,9 @@ class CartController {
       }
 
       // For the OOS.
-      $data['in_stock'] = ($data['in_stock'] && !$value['in_stock']);
+      if ($data['in_stock'] && !$value['in_stock']) {
+        $data['in_stock'] = FALSE;
+      }
     }
 
     // Prepare recommended product data.
