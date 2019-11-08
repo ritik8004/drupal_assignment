@@ -63,7 +63,7 @@ export default class CartItem extends React.Component {
             </div>
           </div>
         </div>
-        <div className="promotions">
+        <div className="spc-promotions">
           {this.props.item.promotions.map((key, val) =>
             <CartPromotion promo={key} />
           )}

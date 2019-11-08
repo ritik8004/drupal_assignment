@@ -35,4 +35,11 @@
       font-size: 2rem;
     }
   }
+
+  #promo-error-message {
+    font-size: 14px;
+    color: #ff3030;
+    padding-#{$left}: 18px;
+    margin-top: 4px;
+  }
 }

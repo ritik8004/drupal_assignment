@@ -83,6 +83,20 @@
       }
     }
 
+    .spc-promotions {
+      padding-top: 1.5rem;
+      padding-#{$left}: 6px;
+
+      span {
+        margin-#{$right}: 0.5rem;
+
+        > a {
+          color: #ce262c;
+          font-size: 0.75rem;
+        }
+      }
+    }
+
     .spc-product-attributes-wrapper {
       font-size: 0.75rem;
       color: #777;
