@@ -1,6 +1,6 @@
 <?php
 
-namespace AlshayaMiddleware\Drupal;
+namespace App\Service\Drupal;
 
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;

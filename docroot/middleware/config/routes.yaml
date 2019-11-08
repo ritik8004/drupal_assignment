@@ -1,0 +1,9 @@
+get_cart:
+    path: /cart/{cart_id}
+    controller: App\Controller\CartController::getCart
+    methods: GET
+
+update_cart:
+    path: /update-cart
+    controller: App\Controller\CartController::updateCart
+    methods: POST
