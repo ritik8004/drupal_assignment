@@ -119,26 +119,41 @@ class ProductStockController extends ControllerBase {
 
     if ($response === TRUE) {
       $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
+      try {
+        $response = $this->cartHelper->addItemToCart(
+          $entity,
+          $data
+        );
+
+        if ($response === TRUE) {
+          $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
+        }
+        else {
+          $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
+          $error = [
+            '#message' => $response,
+            '#theme' => 'global_error',
+          ];
+          $return->addCommand(new HtmlCommand($class, $error));
+          $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-failed']));
+        }
+
+        // Instantiate and Dispatch add_to_cart_submit event.
+        $this->eventDispatcher->dispatch(
+          AddToCartFormSubmitEvent::EVENT_NAME,
+          new AddToCartFormSubmitEvent($entity, $return)
+        );
+      }
+      catch (\Exception $e) {
+        $this->getLogger('AddToCartSubmit')->warning('Failed while trying to add to cart: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+      }
+
+      $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
+
+      return $return;
     }
-    else {
-      $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
-      $error = [
-        '#message' => $response,
-        '#theme' => 'global_error',
-      ];
-      $return->addCommand(new HtmlCommand($class, $error));
-      $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-failed']));
-    }
-
-    // Instantiate and Dispatch add_to_cart_submit event.
-    $this->eventDispatcher->dispatch(
-      AddToCartFormSubmitEvent::EVENT_NAME,
-      new AddToCartFormSubmitEvent($entity, $return)
-    );
-
-    $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
-
-    return $return;
   }
 
 }

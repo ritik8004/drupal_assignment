@@ -1,0 +1,18 @@
+body {
+  font-family: $helvetica-neue;
+}
+
+a {
+  color: $link;
+
+  &:hover {
+    color: $sub-link-active;
+  }
+}
+
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  outline: 0;
+}

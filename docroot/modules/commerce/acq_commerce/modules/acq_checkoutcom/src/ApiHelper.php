@@ -213,7 +213,7 @@ class ApiHelper {
       );
       $configs = Json::decode($response);
 
-      if (!empty($configs) || isset($configs['public_key'])) {
+      if (!empty($configs)) {
         $this->cache->set($cache_key, $configs);
       }
     }
@@ -221,7 +221,7 @@ class ApiHelper {
       $configs = $cache->data;
     }
 
-    if (empty($configs['public_key']) || empty($configs['secret_key'])) {
+    if (empty($configs)) {
       if ($reset) {
         $this->logger->error('Invalid response from checkout.com api, @response', [
           '@response' => Json::encode($configs),

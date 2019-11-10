@@ -1,0 +1,4 @@
+region: header_primary
+settings:
+  depth: 2
+  expand_all_items: true

@@ -11,7 +11,7 @@
     display: none;
   }
 
-  > .c-sidebar-first {
+  .c-sidebar-first {
     @include breakpoint($desktop) {
       .c-facet__label,
       .c-accordion {

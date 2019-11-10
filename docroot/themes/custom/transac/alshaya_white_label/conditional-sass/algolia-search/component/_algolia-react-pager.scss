@@ -1,0 +1,44 @@
+#hits {
+  .js-pager__items.pager {
+    clear: both;
+    margin-top: 3.125rem;
+    margin-bottom: 8.125rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    li.pager__item {
+      button {
+        font-family: $alshaya-bold;
+        width: 18.75rem;
+        height: 2.1875rem;
+        font-size: 0.75rem;
+        background: $primary_btn_bg;
+        color: $primary_btn_text;
+        border: none;
+      }
+    }
+
+    .progressbar-container {
+      margin-top: 0.625rem;
+      margin-bottom: 1.25rem;
+      border-radius: 2px;
+      height: 0.25rem;
+      background: $algolia-react-progressbar;
+
+      .progressbar-progress {
+        border-radius: 2px;
+        height: 100%;
+        background: $algolia-react-progressbar-fill;
+      }
+    }
+
+    .ais-Stats-text {
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      color: $algolia-react-progressbar-text;
+    }
+  }
+}

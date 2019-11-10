@@ -12,6 +12,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_seo_transac\AlshayaGtmManager;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -37,6 +39,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
   if (_alshaya_seo_process_gtm()) {
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
+
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {
+      $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia';
+    }
   }
 }
 
@@ -176,8 +182,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
           $products = [];
-          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'];
-          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
+          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'] ?? '';
+          $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'] ?? '';
           $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
           unset($cart_item_attributes['privilegeCustomer'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
 
@@ -477,5 +483,35 @@ function alshaya_seo_transac_entity_delete(EntityInterface $entity) {
   ) {
     // Execute delete query only for the ones we have in sitemap.
     simple_sitemap_entity_delete($entity);
+  }
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+  $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+
+  AlshayaGtmManager::$gtmContainer = [
+    'route_name' => 'view.search.page',
+    'route_params' => [],
+    'pathinfo' => NULL,
+    'query' => [],
+  ];
+
+  foreach ($objects as $id => &$object) {
+    $node = $items[$id]->getOriginalObject()->getValue();
+
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
+      continue;
+    }
+
+    // Add GTM data.
+    $object['gtm'] = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
   }
 }

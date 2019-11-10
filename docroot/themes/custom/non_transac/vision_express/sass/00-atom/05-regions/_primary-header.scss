@@ -1,0 +1,16 @@
+@import '../../config/_config.scss';
+
+.region-primary-header {
+  @include breakpoint($upto-lap) {
+    height: auto;
+  }
+
+  @include breakpoint($above-palm) {
+    width: 100%;
+    display: inline-block;
+  }
+
+  @include breakpoint($desk) {
+    width: 100%;
+  }
+}

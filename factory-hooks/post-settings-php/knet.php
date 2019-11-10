@@ -8,14 +8,9 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-$env = 'local';
-
-if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-  $env = $_ENV['AH_SITE_ENVIRONMENT'];
-}
-elseif (getenv('TRAVIS')) {
-  $env = 'travis';
-}
+// Get site environment.
+require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
+$env = alshaya_get_site_environment();
 
 global $_acsf_site_name;
 

@@ -26,7 +26,8 @@ html {
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Main all filters div theming.
-  .all-filters {
+  .all-filters,
+  .all-filters-algolia {
     max-width: 31.25rem;
     width: 100%;
     box-sizing: border-box;
@@ -54,20 +55,26 @@ html {
       outline: 0;
     }
 
-    .hide-facet-block,
-    .c-facet__title.c-accordion__title {
+    .c-facet__title.c-accordion__title,
+    .c-facet__title.c-collapse__title {
       display: block;
     }
 
-    .c-facet.c-accordion {
+    .c-facet.c-accordion,
+    .c-facet.c-collapse-item {
       @include breakpoint($only-mobile) {
         display: block;
+
+        &.hide-facet-block {
+          display: none;
+        }
       }
     }
   }
 
   // Filter Head
-  .all-filters .filter {
+  .all-filters .filter,
+  .all-filters-algolia .filter {
     &__head {
       border-bottom: 1px solid $plp_all_filter_head_border;
       padding: 1.625rem 1rem;
@@ -86,7 +93,8 @@ html {
       }
 
       // Back Button
-      .facet-all-back {
+      .facet-all-back,
+      .back-facet-list {
         cursor: pointer;
 
         @include icon(chevron#{$left}, before) {
@@ -105,6 +113,7 @@ html {
         display: flex;
         align-items: center;
         justify-content: center;
+        line-height: normal;
 
         @include breakpoint($only-mobile) {
           line-height: 2.9375rem;
@@ -117,7 +126,9 @@ html {
       }
 
       // Close button
-      .facet-all-apply {
+      .facet-all-apply,
+      .facet-apply-all,
+      .all-filters-close {
         cursor: pointer;
         line-height: 1;
 
@@ -130,7 +141,10 @@ html {
       }
 
       .facet-all-back,
-      .facet-all-apply {
+      .facet-all-apply,
+      .facet-apply-all,
+      .all-filters-close,
+      .back-facet-list {
         display: flex;
         align-items: center;
       }
@@ -276,7 +290,8 @@ html {
             }
           }
 
-          .c-accordion__title {
+          .c-accordion__title,
+          .c-collapse__title {
             display: none;
 
             &.active {
@@ -287,7 +302,8 @@ html {
           }
         }
 
-        &.c-accordion {
+        &.c-accordion,
+        &.c-collapse-item {
           margin-#{$left}: 0;
           margin-#{$right}: 0;
           float: none;
@@ -325,7 +341,8 @@ html {
             }
           }
 
-          .c-accordion__title {
+          .c-accordion__title,
+          .c-collapse__title {
             text-transform: capitalize;
             padding: 1.25rem 2rem;
             height: auto;
@@ -378,7 +395,8 @@ html {
         }
       }
 
-      .block-facets-ajax > ul {
+      .block-facets-ajax > ul,
+      .c-collapse-item > ul {
         .facet-item {
           padding: 0.25rem 1.5rem !important;
           margin-bottom: 0;
@@ -430,7 +448,20 @@ html {
         }
       }
 
-      .facet-all-clear {
+      .facet-clear-all {
+        a {
+          color: $plp_clear_all_btn_disabled;
+        }
+
+        &.has-link a {
+          color: $plp_clear_all_btn_text;
+          border-color: $plp_clear_all_btn_text;
+          pointer-events: all;
+        }
+      }
+
+      .facet-all-clear,
+      .facet-clear-all {
         @extend %button-brand;
 
         font-size: 0.8125rem;
@@ -480,7 +511,9 @@ html {
         }
       }
 
-      .facet-all-apply {
+      .facet-all-apply,
+      .facet-apply-all,
+      .all-filters-close {
         @extend %button-wide;
 
         cursor: pointer;
