@@ -134,7 +134,7 @@ class CartController {
       }
 
       // For the OOS.
-      if ($data['in_stock'] && !$value['in_stock']) {
+      if ($data['in_stock'] && (isset($value['in_stock']) && !$value['in_stock'])) {
         $data['in_stock'] = FALSE;
       }
     }
@@ -158,7 +158,25 @@ class CartController {
       $data['recommended_products'] = $recommended_products_data;
     }
 
+    $this->session->set(self::STORAGE_KEY, $data);
     return $data;
+  }
+
+  /**
+   * Retrieve cart from session on trying to create a new cart.
+   *
+   * @return int
+   *   Return cart id from session if cart data exists else create new cart id.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  protected function createCart() {
+    $cart_data = $this->session->get(self::STORAGE_KEY);
+    if (!empty($cart_data) && isset($cart_data['cart_id'])) {
+      return $cart_data['cart_id'];
+    }
+    $this->session->remove(self::STORAGE_KEY);
+    return $this->cart->createCart();
   }
 
   /**
@@ -179,7 +197,6 @@ class CartController {
       $this->session->start();
     }
 
-    $this->session->set(self::STORAGE_KEY, $request_content);
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
@@ -190,8 +207,9 @@ class CartController {
 
     switch ($action) {
       case CartActions::CART_CREATE_NEW:
-        // First create a new cart.
-        $cart_id = $this->cart->createCart();
+        // Get cart id from session or create a new cart id.
+        $cart_id = $this->createCart();
+
         // Then add item to the cart.
         $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM);
 
