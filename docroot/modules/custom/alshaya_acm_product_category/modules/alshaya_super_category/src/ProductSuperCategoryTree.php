@@ -10,6 +10,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
@@ -30,13 +31,6 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $productCategoryTree;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
 
   /**
    * The config factory.
@@ -66,6 +60,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Entity type manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
@@ -87,6 +83,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    */
   public function __construct(ProductCategoryTreeInterface $product_category_tree,
                               RequestStack $request_stack,
+                              CurrentPathStack $current_path,
                               EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
                               LanguageManagerInterface $language_manager,
@@ -98,9 +95,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
                               ProductCategoryHelper $product_category_helper) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
-    $this->requestStack = $request_stack;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $connection, $product_category_helper);
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper);
   }
 
   /**
