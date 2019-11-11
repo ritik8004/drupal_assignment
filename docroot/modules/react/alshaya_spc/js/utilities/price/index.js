@@ -9,7 +9,7 @@ export default class Price extends React.Component {
     return <div className="price-type__wrapper">
       <div className="price">
         <span className="price-currency suffix">{currency_config.currency_code}</span>
-        <span className="price-amount">{ price }</span>
+        <span className="price-amount">{price}</span>
       </div>
     </div>
   }
