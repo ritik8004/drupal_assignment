@@ -53,5 +53,5 @@ function alshaya_ve_non_transac_install() {
   alshaya_country_set_default_regional_info('KW');
 
   // Update search placeholder.
-  alshaya_country_set_default_store_search_placeholder('Search Area / City', 'بحث المنطقة / المدينة');
+  alshaya_country_set_default_store_search_placeholder('Search Area / City', 'البحث المنطقة / المدينة');
 }
