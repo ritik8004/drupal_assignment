@@ -8,11 +8,17 @@ use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoInfo;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class CartController.
  */
 class CartController {
+
+  /**
+   * The cart storage key.
+   */
+  const STORAGE_KEY = 'acq_cart_middleware';
 
   /**
    * Service for magento info.
@@ -36,6 +42,13 @@ class CartController {
   protected $cart;
 
   /**
+   * Service for session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   */
+  protected $session;
+
+  /**
    * CartController constructor.
    *
    * @param \App\Service\Cart $cart
@@ -44,11 +57,14 @@ class CartController {
    *   Drupal service.
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *   Service for session.
    */
-  public function __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info) {
+  public function  __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info, SessionInterface $session) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
+    $this->session = $session;
   }
 
   /**
@@ -59,6 +75,8 @@ class CartController {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Cart response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart(int $cart_id) {
     $data = $this->cart->getCart($cart_id);
@@ -151,11 +169,17 @@ class CartController {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updateCart(Request $request) {
-
     $request_content = json_decode($request->getContent(), TRUE);
 
+    if (!$this->session->isStarted()) {
+      $this->session->start();
+    }
+
+    $this->session->set(self::STORAGE_KEY, $request_content);
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
