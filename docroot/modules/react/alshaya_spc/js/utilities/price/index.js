@@ -4,7 +4,7 @@ export default class Price extends React.Component {
 
   render() {
     const currency_config = window.drupalSettings.alshaya_spc.currency_config;
-    const price = this.props.price.toFixed(currency_config.decimal_points);
+    const price = typeof this.props.price === 'undefined' ? 'Error' : this.props.price.toFixed(currency_config.decimal_points);
 
     return <div className="price-type__wrapper">
       <div className="price">
