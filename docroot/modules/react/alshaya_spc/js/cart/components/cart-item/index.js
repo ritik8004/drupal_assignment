@@ -37,18 +37,22 @@ export default class CartItem extends React.Component {
   };
 
   render() {
+    const { cart_image } = this.props.item.extra_data;
+    const { currency_code } = drupalSettings.alshaya_spc.currency_config;
+    const {title, link, stock, qty, in_stock, original_price } = this.props.item;
+
     return (
       <div className="spc-cart-item">
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CartItemImage img_data={this.props.item.extra_data.cart_image} />
+            <CartItemImage img_data={cart_image} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={Drupal.url.toAbsolute(this.props.item.link)}>{this.props.item.title}</a>
+                <a href={Drupal.url.toAbsolute(link)}>{title}</a>
               </div>
-              <div className="spc-product-price">{drupalSettings.alshaya_spc.currency_config.currency_code}{this.props.item.original_price}</div>
+              <div className="spc-product-price">{currency_code}{original_price}</div>
             </div>
             <div className="spc-product-attributes-wrapper">
               {this.props.item.configurable_values.map((key, val) =>
@@ -68,8 +72,8 @@ export default class CartItem extends React.Component {
             <CartPromotion key={val} promo={key} />
           )}
         </div>
-        <CartItemOOS in_stock={this.props.item.in_stock} />
-        <ItemLowQuantity stock={this.props.item.stock} qty={this.props.item.qty} />
+        <CartItemOOS in_stock={in_stock} />
+        <ItemLowQuantity stock={stock} qty={qty} />
       </div>
     );
   }
