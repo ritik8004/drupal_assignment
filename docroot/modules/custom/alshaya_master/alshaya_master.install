@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall jsonapi (and related), install pcb_memcache module.
+ */
+function alshaya_master_update_8032() {
+  $moduleInstaller = \Drupal::service('module_installer');
+
+  $moduleInstaller->uninstall(
+    ['lightning_api', 'jsonapi', 'openapi_ui', 'openapi']
+  );
+
+  $moduleInstaller->install(['pcb_memcache']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_rum module.
  */
 function alshaya_master_update_8031() {

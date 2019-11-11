@@ -35,27 +35,19 @@
       if (alshayaAcmPromotions !== undefined) {
         // Slide down the dynamic label.
         $('.promotions-dynamic-label', context).on('cart:notification:animation:complete dynamic:promotion:label:ajax:complete', function() {
-          $(this).slideDown('slow');
-          if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
-            Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
-          }
+          $(this).slideDown('slow', function() {
+            if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
+              Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
+              // Adding an event to recalculate the pdp sidebar container.
+              $('.basic-details-wrapper').trigger('pdp-dynamic-promotion-enabled');
+            }
+          });
         });
 
         // Go ahead and display dynamic promotions.
         $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
           updateAlshayaPromotionsLabel(alshayaAcmPromotions);
-
-          if ($(window).width() < 768) {
-            $('.acq-content-product .content__title_wrapper').addClass('dynamic-promotion-wrapper');
-          }
         });
-
-        if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
-          // Bind event to calculate the height of dynamic promo position and make it scrollable or sticky accordingly.
-          $('.promotions-dynamic-label').once('bind-alshaya-acm-product-detail-thumbnails-loaded').on('alshaya-acm-product-detail-thumbnails-loaded', function () {
-            Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
-          });
-        }
       }
 
     }
@@ -64,28 +56,28 @@
   Drupal.alshayaPromotions = Drupal.alshayaPromotions || {};
 
   /**
-   * Js to make the scrollable dynamic promotion depend on the image height.
+   * Js to make the scrollable dynamic promotion depend on the position inside view port.
    *
    */
   Drupal.alshayaPromotions.stickyDynamicPromotionLabel = function () {
-    var dynamicPromotionPosition = $('.promotions-dynamic-label').offset().top;
+    var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
+    dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
+    $('.promotions .promotions-dynamic-label').remove();
+    $('.content__sidebar').addClass('dynamic-promotions-wrapper');
 
-    // Scroll required to make it sticky with image.
-    // 56 is the fixed height for scrollable sticky add to cart button and value is fixed for all the brands.
-    var dynamicPromotionScrollHeight = $('.content__title_wrapper').offset().top - $(window).height() + 56;
-
-    // If image height is more than screen height make promo sticky on load.
-    if ($(window).height() < dynamicPromotionPosition) {
-      $('.acq-content-product .content__title_wrapper').addClass('sticky-promotion-wrapper');
+    if ($('.edit-add-to-cart').hasClass('fix-button')) {
+      $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button');
+    }
+    else {
+      $('.basic-details-wrapper').removeClass('fix-dynamic-promotion-button');
     }
 
     $(window).once('dynamicPromotion').on('scroll', function () {
-      // Make it scrollable till main image end point is not visible in mobile view port.
-      if ($(this).scrollTop() < dynamicPromotionScrollHeight) {
-        $('.acq-content-product .content__title_wrapper').addClass('sticky-promotion-wrapper');
+      if ($('.edit-add-to-cart').hasClass('fix-button')) {
+        $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button');
       }
       else {
-        $('.acq-content-product .content__title_wrapper').removeClass('sticky-promotion-wrapper');
+        $('.basic-details-wrapper').removeClass('fix-dynamic-promotion-button');
       }
     });
   };

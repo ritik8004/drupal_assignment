@@ -113,34 +113,36 @@
           }
         });
 
-        var variants = drupalSettings.productInfo[sku]['variants'];
-        var selectedSku = Object.keys(variants)[0];
-        var selected = parseInt(Drupal.getQueryVariable('selected'));
+        if (drupalSettings.productInfo[sku]['variants']) {
+          var variants = drupalSettings.productInfo[sku]['variants'];
+          var selectedSku = Object.keys(variants)[0];
+          var selected = parseInt(Drupal.getQueryVariable('selected'));
 
-        if (selected > 0) {
-          for (var i in variants) {
-            if (variants[i]['id'] === selected) {
-              selectedSku = variants[i]['sku'];
-              break;
+          if (selected > 0) {
+            for (var i in variants) {
+              if (variants[i]['id'] === selected) {
+                selectedSku = variants[i]['sku'];
+                break;
+              }
             }
           }
-        }
-        else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
-          // Try to get first child with parent sku matching. This could go
-          // in color split but is generic enough so added here.
-          for (var i in variants) {
-            if (variants[i]['parent_sku'] === sku) {
-              selectedSku = variants[i]['sku'];
-              break;
+          else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
+            // Try to get first child with parent sku matching. This could go
+            // in color split but is generic enough so added here.
+            for (var i in variants) {
+              if (variants[i]['parent_sku'] === sku) {
+                selectedSku = variants[i]['sku'];
+                break;
+              }
             }
           }
-        }
 
-        var firstAttribute = $('.form-select[data-configurable-code]:first', this);
-        var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
-        $(firstAttribute).removeProp('selected').removeAttr('selected');
-        $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
-        $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+          var firstAttribute = $('.form-select[data-configurable-code]:first', this);
+          var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
+          $(firstAttribute).removeProp('selected').removeAttr('selected');
+          $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
+          $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+        }
       });
     }
   };
@@ -175,9 +177,6 @@
 
         // Show thumbnails again.
         $('#product-zoom-container', product).removeClass('hidden-important');
-
-        //  Trigger an event on thumbnails image load.
-        $(product).trigger('alshaya-acm-product-detail-thumbnails-loaded')
       }, 1);
     }
   };
@@ -258,7 +257,10 @@
 
   $(window).on('load', function () {
     // Show add to cart form now.
-    $('.sku-base-form').removeClass('visually-hidden');
+    $('.sku-base-form').each(function () {
+      $(this).removeClass('visually-hidden');
+      $(this).trigger('form-visible');
+    });
 
     if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
       $('.content__title_wrapper').addClass('show-sticky-wrapper');

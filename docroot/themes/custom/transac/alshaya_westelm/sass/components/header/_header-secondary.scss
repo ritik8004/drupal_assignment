@@ -1,0 +1,45 @@
+.c-menu-secondary {
+  text-transform: capitalize;
+
+  li {
+    @include breakpoint($upto-desktop) {
+      @include mm-mob-arrow(after, false) {
+        #{$right}: 0.5rem;
+        margin-top: -1.875rem;
+      }
+    }
+  }
+
+  .block-language-blocklanguage-interface {
+    .en a::after {
+      display: none;
+    }
+  }
+
+  a {
+    line-height: 2;
+    font-size: 0.75rem;
+
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+      font-size: 0.9375rem;
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+
+  [role="navigation"] {
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+    }
+  }
+}
+
+.header--wrapper.navbar-fixed-top {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+}
