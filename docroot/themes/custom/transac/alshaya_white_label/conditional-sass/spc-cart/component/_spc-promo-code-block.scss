@@ -35,4 +35,11 @@
       font-size: 2rem;
     }
   }
+
+  #promo-error-message {
+    font-size: 0.875rem;
+    color: $spc-promo-code-error;
+    padding-#{$left}: 1.25rem;
+    margin-top: 0.25rem;
+  }
 }

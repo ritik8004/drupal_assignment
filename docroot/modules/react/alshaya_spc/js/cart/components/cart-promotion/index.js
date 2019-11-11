@@ -7,9 +7,7 @@ export default class CartPromotion extends React.Component {
       return (null);
     }
 
-    return <div>
-      <span><a href={Drupal.url(this.props.promo.promo_web_url)}>{this.props.promo.text}</a></span>
-    </div>
+    return <span className="promotion-label"><a href={Drupal.url(this.props.promo.promo_web_url)}>{this.props.promo.text}</a></span>;
   }
 
 }

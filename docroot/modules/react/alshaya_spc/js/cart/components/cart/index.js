@@ -1,6 +1,5 @@
 import React from 'react';
 
-import EmptyCart from '../empty-cart';
 import CheckoutSectionTitle from '../spc-checkout-section-title';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
@@ -8,6 +7,7 @@ import MobileCartPreview from '../mobile-cart-preview';
 import OrderSummaryBlock from "../../../utilities/order-summary-block";
 import CheckoutErrorMessage from '../../../utilities/checkout-error-message';
 import CartPromoBlock from "../cart-promo-block";
+import Loading from "../../../utilities/loading";
 
 export default class Cart extends React.Component {
 
@@ -45,7 +45,7 @@ export default class Cart extends React.Component {
 
   render() {
       if (this.state.wait) {
-        return <EmptyCart/>
+        return <Loading loadingMessage={Drupal.t('Loading your cart ...')}/>
       }
 
       return (
