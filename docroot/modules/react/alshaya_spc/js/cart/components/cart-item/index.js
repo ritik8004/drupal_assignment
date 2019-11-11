@@ -37,15 +37,14 @@ export default class CartItem extends React.Component {
   };
 
   render() {
-    const { cart_image } = this.props.item.extra_data;
     const { currency_code } = drupalSettings.alshaya_spc.currency_config;
-    const {title, link, stock, qty, in_stock, original_price } = this.props.item;
+    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data } = this.props.item;
 
     return (
       <div className="spc-cart-item">
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CartItemImage img_data={cart_image} />
+            <CartItemImage img_data={extra_data.cart_image} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
@@ -55,7 +54,7 @@ export default class CartItem extends React.Component {
               <div className="spc-product-price">{currency_code}{original_price}</div>
             </div>
             <div className="spc-product-attributes-wrapper">
-              {this.props.item.configurable_values.map((key, val) =>
+              {configurable_values.map((key, val) =>
                 <CartConfigurableOption key={val} label={key} />
               )}
             </div>
@@ -68,7 +67,7 @@ export default class CartItem extends React.Component {
           </div>
         </div>
         <div className="spc-promotions">
-          {this.props.item.promotions.map((key, val) =>
+          {promotions.map((key, val) =>
             <CartPromotion key={val} promo={key} />
           )}
         </div>
