@@ -288,3 +288,18 @@ body {
   opacity: 1;
   font-size: 0.75rem;
 }
+
+// When you need to block any user action until a AJAX is finished.
+@mixin fullPageTransparentOverlay($pseudo-element: after) {
+  &::#{$pseudo-element} {
+    content: '';
+    background: transparent;
+    position: fixed;
+    top: 0;
+    #{$left}: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    cursor: progress;
+  }
+}

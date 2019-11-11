@@ -30,7 +30,8 @@ export default class CartPromoBlock extends React.Component {
     var promo_value = document.getElementById('promo-code').value.trim();
     // If empty promo text.
     if (this.state.promo_applied === false && promo_value.length === 0) {
-      document.getElementById('promo-error-message').innerHTML = Drupal.t('Please enter promo code.');
+      document.getElementById('promo-message').innerHTML = Drupal.t('Please enter promo code.');
+      document.getElementById('promo-message').classList.add('error');
       document.getElementById('promo-code').classList.add('error');
       return;
     }
@@ -38,20 +39,22 @@ export default class CartPromoBlock extends React.Component {
     var action = (promo_applied === true) ? 'remove coupon' : 'apply coupon';
 
     // Adding class on promo button for showing progress when click.
-    document.getElementById('promo-action-button').classList.add('button-clicked');
+    document.getElementById('promo-action-button').classList.add('loading');
 
     var cart_data = applyRemovePromo(action, promo_value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
         // Removing button clicked class.
-        document.getElementById('promo-action-button').classList.remove('button-clicked');
+        document.getElementById('promo-action-button').classList.remove('loading');
         // If coupon is not valid.
         if (result.response_message.status === 'error_coupon') {
-          document.getElementById('promo-error-message').innerHTML = result.response_message.msg;
+          document.getElementById('promo-message').innerHTML = result.response_message.msg;
+          document.getElementById('promo-message').classList.add('error');
           document.getElementById('promo-code').classList.add('error');
         }
         else if(result.response_message.status === 'success') {
-          document.getElementById('promo-error-message').innerHTML = result.response_message.msg;
+          document.getElementById('promo-message').innerHTML = result.response_message.msg;
+          document.getElementById('promo-message').classList.remove('error');
           document.getElementById('promo-code').classList.add('success');
           // I initially promo_applied was false, means promo is applied now.
           if (promo_applied === false) {
@@ -91,7 +94,7 @@ export default class CartPromoBlock extends React.Component {
         <div className="block-content">
           <input id="promo-code" type="text" placeholder={Drupal.t('Enter your promo code here')} />
           <button id="promo-action-button" className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
-          <div id="promo-error-message"/>
+          <div id="promo-message"/>
         </div>
       </div>
     );
