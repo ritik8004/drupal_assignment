@@ -153,13 +153,13 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'api_key' => $configuration['search_api_key'],
             'indexName' => $index_name,
             'filterOos' => $listing->get('filter_oos_product'),
-            'itemsPerPage' => _alshaya_acm_product_get_items_per_page_on_listing(),
+            'itemsPerPage' => $configuration['items_per_page'] ?? 12,
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/algolia/search-insights@1.3.0.min.js',
             'filters' => $this->getFilters($index_name),
           ],
           'autocomplete' => [
-            'hits' => $configuration['hits'],
-            'topResults' => $configuration['top_results'],
+            'hits' => $configuration['hits'] ?? 4,
+            'topResults' => $configuration['top_results'] ?? 4,
           ],
           'reactTeaserView' => [
             'price' => [
@@ -351,6 +351,15 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       '#default_value' => $config['top_results'] ?? 10,
     ];
 
+    $form['items_per_page'] = [
+      '#type' => 'number',
+      '#min' => 1,
+      '#step' => 1,
+      '#max' => 100,
+      '#title' => $this->t('Number of items to show for search results.'),
+      '#default_value' => $config['items_per_page'] ?? 12,
+    ];
+
     return $form;
   }
 
@@ -366,6 +375,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $this->configuration['top_results'] = $form_state->getValue('top_results');
     $this->configuration['search_api_key'] = $form_state->getValue('search_api_key');
     $this->configuration['application_id'] = $form_state->getValue('application_id');
+    $this->configuration['items_per_page'] = $form_state->getValue('items_per_page');
 
     parent::submitConfigurationForm($form, $form_state);
   }
@@ -388,7 +398,6 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       'config:alshaya_acm_product.display_settings',
       'config:alshaya_search_api.listing_settings',
       'config:alshaya_search.settings',
-      'config:alshaya_acm_product.settings',
     ]);
   }
 
