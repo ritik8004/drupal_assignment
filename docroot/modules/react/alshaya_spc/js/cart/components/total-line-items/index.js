@@ -16,8 +16,6 @@ class TotalLineItems extends React.Component {
             <span className="vat-text">{Drupal.t('Inclusive of VAT')}</span>
           </div>
         </div>
-        {/*To Be used later on Checkout Delivery pages.*/}
-        <div className="checkout-link"><a href={Drupal.url('cart')} className="checkout-link">{Drupal.t('continue to checkout')}</a></div>
       </div>
     );
   };
