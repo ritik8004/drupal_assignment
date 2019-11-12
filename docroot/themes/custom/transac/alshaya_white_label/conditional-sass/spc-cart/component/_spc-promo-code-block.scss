@@ -19,7 +19,13 @@
     font-family: $alshaya-bold;
     letter-spacing: 1.14px;
     font-size: 1rem;
-    transition: background 0.3s ease-in-out;
+
+    &.loading {
+      color: transparent;
+      background: $spc-cart-promo-code-submit-enabled url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+
+      @include fullPageTransparentOverlay('after');
+    }
   }
 
   .promo-remove {
@@ -36,10 +42,14 @@
     }
   }
 
-  #promo-error-message {
+  #promo-message {
     font-size: 0.875rem;
-    color: $spc-promo-code-error;
     padding-#{$left}: 1.25rem;
     margin-top: 0.25rem;
+    color: $spc-promo-code-success;
+
+    &.error {
+      color: $spc-promo-code-error;
+    }
   }
 }
