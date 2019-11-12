@@ -12,6 +12,40 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Remove products key and its values from field_acq_promotion_data.
+ */
+function acq_promotion_update_8002() {
+  $table_mapping = \Drupal::entityTypeManager()->getStorage('node')->getTableMapping();
+  $storage_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
+
+  // Get table names for "field_acq_promotion_data".
+  $tables = [
+    $table_mapping->getDedicatedDataTableName($storage_definitions['field_acq_promotion_data']),
+    $table_mapping->getDedicatedRevisionTableName($storage_definitions['field_acq_promotion_data'])
+  ];
+
+  // Update field tables to remove products key, as we are not using it
+  // anywhere, and that is creating unnecessary load on promotion node load.
+  $connection = \Drupal::database();
+  foreach($tables as $promotion_table) {
+    $records = $connection->select($promotion_table)->fields($promotion_table)->execute()->fetchAll(PDO::FETCH_ASSOC);
+    foreach($records as $record) {
+      $data = unserialize($record['field_acq_promotion_data_value']);
+      unset($data['products']);
+      $connection->update($promotion_table)
+      ->fields([
+        'field_acq_promotion_data_value' => serialize($data),
+      ])
+      ->condition('entity_id', $record['entity_id'])
+      ->condition('revision_id', $record['revision_id'])
+      ->execute();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add field to store sort_order.
  */
 function acq_promotion_update_8001() {
