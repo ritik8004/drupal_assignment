@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
-use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
+use Drupal\Core\Queue\QueueFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -15,20 +17,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * SKU Manager.
+   * Queue factory service.
    *
-   * @var \Drupal\alshaya_acm_product\SkuManager
+   * @var \Drupal\Core\Queue\QueueFactory
    */
-  private $skuManager;
+  protected $queueFactory;
 
   /**
    * ProductUpdatedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
-   *   SKU Manager.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   Queue factory service.
    */
-  public function __construct(SkuManager $sku_manager) {
-    $this->skuManager = $sku_manager;
+  public function __construct(QueueFactory $queue_factory) {
+    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -37,7 +39,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     $events = [];
     $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 999];
-    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdatedProcessColor', 500];
+    $events[StockUpdatedEvent::EVENT_NAME][] = ['onStockUpdated', -101];
     return $events;
   }
 
@@ -48,38 +50,44 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdated(ProductUpdatedEvent $event) {
-    // Reset all static caches.
-    drupal_static_reset();
+    $this->queueProductForProcessing($event->getSku());
   }
 
   /**
-   * Subscriber Callback for the event to process color nodes.
+   * Subscriber Callback for the stock updated event.
    *
-   * @param \Drupal\alshaya_acm_product\Event\ProductUpdatedEvent $event
+   * @param \Drupal\acq_sku_stock\Event\StockUpdatedEvent $event
    *   Event object.
    */
-  public function onProductUpdatedProcessColor(ProductUpdatedEvent $event) {
-    // Do nothing when listing display mode is not non-aggregated.
-    if (!$this->skuManager->isListingModeNonAggregated()) {
+  public function onStockUpdated(StockUpdatedEvent $event) {
+    // Do nothing if stock status not changed.
+    if (!$event->isStockStatusChanged()) {
       return;
     }
 
-    $entity = $event->getSku();
+    $this->queueProductForProcessing($event->getSku());
+    $event->stopPropagation();
+  }
 
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $entity->getPluginInstance();
+  /**
+   * Queue product for processing.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $entity
+   *   SKU entity.
+   */
+  private function queueProductForProcessing(SKU $entity) {
+    $skus = [$entity->getSku()];
 
-    $parent_skus = $plugin->getParentSku($entity, FALSE);
-
-    if (!empty($parent_skus)) {
-      foreach ($parent_skus as $parent_sku) {
-        // Update color nodes on save of each child.
-        $node = $this->skuManager->getDisplayNode($parent_sku, FALSE);
-        if ($node instanceof NodeInterface) {
-          $this->skuManager->processColorNodesForConfigurable($node);
-          break;
-        }
+    if ($entity->bundle() == 'simple') {
+      $parents = $entity->getPluginInstance()->getAllParentIds($entity->getSku());
+      if (!empty($parents)) {
+        $skus = $parents;
       }
+    }
+
+    // Create multiple items if we have multiple parents.
+    foreach ($skus as $sku) {
+      $this->queueFactory->get(ProcessProduct::QUEUE_NAME)->createItem($sku);
     }
   }
 

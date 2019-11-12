@@ -17,6 +17,9 @@ class ProductUpdatedEvent extends Event {
   const EVENT_UPDATE = 'update';
   const EVENT_DELETE = 'delete';
 
+  const PRODUCT_PROCESSED = 'processed';
+  const PRODUCT_PROCESSED_EVENT = 'product_processed_event';
+
   /**
    * SKU Entity.
    *
