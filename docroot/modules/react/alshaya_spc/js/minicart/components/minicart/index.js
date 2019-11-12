@@ -15,6 +15,13 @@ export default class MiniCart extends React.Component {
       'amount': null,
       'wait': true
     };
+    this.emptyResult = { cart_id: null };
+  }
+
+  dispatchRefereshCart = (result) => {
+    // Trigger event so that data can be passed to other components.
+    var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
+    document.dispatchEvent(event);
   }
 
   componentDidMount() {
@@ -22,25 +29,33 @@ export default class MiniCart extends React.Component {
       var cart_data = fetchCartData();
       if (cart_data instanceof Promise) {
         cart_data.then((result) => {
-          this.setState({
-            wait: false,
-            qty: result.items_qty,
-            amount: result.cart_total
-          });
+          if (typeof result.error !== 'undefined' && result.error) {
+            this.setState({
+              wait: false,
+              qty: null,
+              amount: null
+            });
+
+            result = this.emptyResult;
+          }
+          else {
+            this.setState({
+              wait: false,
+              qty: result.items_qty,
+              amount: result.cart_total
+            });
+          }
 
           // Store info in storage.
           addInfoInStorage(result);
 
           // Trigger event so that data can be passed to other components.
-          var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
-          document.dispatchEvent(event);
-
-          if (result.items.length == 0) {
-            this.setState({
-              wait: true
-            });
-          }
+          this.dispatchRefereshCart(result);
         });
+      }
+      else {
+        // Trigger event so that data can be passed to other components.s
+        this.dispatchRefereshCart(this.emptyResult);
       }
 
       // Listen to `refreshMiniCart` event which will update/refresh the minicart from
@@ -71,7 +86,7 @@ export default class MiniCart extends React.Component {
   }
 
   render() {
-    if (this.state.wait) {
+    if (this.state.wait || !this.state.qty) {
       return <div className="acq-mini-cart">
         <EmptyMiniCartContent/>
       </div>

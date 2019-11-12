@@ -13,6 +13,15 @@ export function updateCartApiUrl() {
 }
 
 /**
+ * Get the middleware update cart endpoint.
+ *
+ * @returns {string}
+ */
+export function restoreCartApiUrl() {
+  return window.drupalSettings.alshaya_spc.middleware_url + '/restore-cart';
+}
+
+/**
  * Apply/Remove the promo code.
  *
  * @param action

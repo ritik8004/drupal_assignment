@@ -33,8 +33,11 @@ export default class Cart extends React.Component {
     document.addEventListener('refreshCart', (e) => {
       const data = e.detail.data();
 
-      // If there is no error.
-      if (data.error === undefined) {
+      if (typeof data === 'undefined' || data.cart_id === null) {
+        const prevState = this.state;
+        this.setState({ ...prevState, wait: false});
+      }
+      else {
         this.setState(state => ({
           items: data.items,
           totals: data.totals,
@@ -68,6 +71,8 @@ export default class Cart extends React.Component {
           message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.')
         });
       }
+
+
     }, false);
   };
 
@@ -76,7 +81,7 @@ export default class Cart extends React.Component {
         return <Loading loadingMessage={Drupal.t('loading your cart.')}/>
       }
 
-      if (this.state.items.length === 0) {
+      if (!this.state.wait && this.state.items.length === 0) {
         return (
           <React.Fragment>
             <EmptyResult Message={Drupal.t('your shopping basket is empty.')}/>

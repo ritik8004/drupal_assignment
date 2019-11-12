@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { restoreCartApiUrl } from './update_cart';
 
 /**
  * Get the middleware get cart endpoint.
@@ -13,7 +14,6 @@ export function getCartApiUrl(cart_id) {
 export const cartAvailableInStorage = function () {
   // Get data from local storage.
   var cart_data = localStorage.getItem('cart_data');
-
   // If data is not available in storage, we flag it to check/fetch from api.
   if (!cart_data) {
     return false;
@@ -40,14 +40,28 @@ export const fetchCartData = function () {
   // Check if cart available in storage.
   var cart = cartAvailableInStorage();
 
-  if (cart === false) {
+  if (cart === null) {
     return null;
   }
+  else if (cart === false) {
+    // Prepare api url.
+    var api_url = restoreCartApiUrl();
 
-  // If we get integer, mean we get only cart id and thus we need to fetch
-  // fresh cart. If we not get integer, means we get cart object and we can
-  // just use and return that.
-  if (!Number.isInteger(cart)) {
+    return axios.get(api_url)
+      .then(response => {
+        return response.data
+      })
+      .catch(error => {
+        // Processing of error here.
+      });
+  }
+  else if (!Number.isInteger(cart)) {
+    // If we get integer, mean we get only cart id and thus we need to fetch
+    // fresh cart. If we not get integer, means we get cart object and we can
+    // just use and return that.
+    if (cart.cart_id === null) {
+      return null;
+    }
     return Promise.resolve(cart);
   }
 
