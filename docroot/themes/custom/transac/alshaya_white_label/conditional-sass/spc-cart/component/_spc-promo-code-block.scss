@@ -2,19 +2,35 @@
   position: relative;
   margin-bottom: 2.5rem;
 
+  .block-content {
+    @include breakpoint($only-mobile) {
+      padding: 1.25rem;
+      background: $spc-promo-code-bg;
+
+      #promo-code {
+        border: 1px solid $spc-promo-code-border;
+      }
+    }
+  }
+
   #promo-code {
     border: none;
     height: 3.25rem;
     width: calc(100% - 8.6875rem);
     padding-#{$left}: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+      padding-#{$left}: 0.625rem;
+    }
   }
 
   .promo-submit {
     border: none;
     width: 8.6875rem;
     height: 3.25rem;
-    background: $spc-cart-promo-code-submit-enabled;
-    color: $spc-cart-promo-code-text;
+    background: $primary_btn_bg;
+    color: $primary_btn_text;
     padding: 0;
     font-family: $alshaya-bold;
     letter-spacing: 1.14px;
@@ -22,7 +38,7 @@
 
     &.loading {
       color: transparent;
-      background: $spc-cart-promo-code-submit-enabled url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+      background: $primary_btn_bg url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
 
       @include fullPageTransparentOverlay('after');
     }
