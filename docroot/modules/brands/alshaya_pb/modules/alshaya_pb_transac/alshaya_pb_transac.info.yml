@@ -5,6 +5,5 @@ package: Alshaya
 core: 8.x
 dependencies:
   - alshaya_pb:alshaya_pb
-  - alshaya_pb:alshaya_pb_free_design_services
-themes:
-  - alshaya_pottery_barn
+  - alshaya_furnitures:alshaya_furnitures
+  - alshaya_furnitures:alshaya_furnitures_free_design_services
