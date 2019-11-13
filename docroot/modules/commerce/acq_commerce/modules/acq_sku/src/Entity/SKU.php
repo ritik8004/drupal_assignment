@@ -315,14 +315,19 @@ class SKU extends ContentEntityBase implements SKUInterface {
         'timeout' => Settings::get('media_download_timeout', 5),
       ];
 
-      $file_data = \Drupal::httpClient()->get($data['file'], $options)->getBody();
+      $file_stream = \Drupal::httpClient()->get($data['file'], $options);
+      $file_data = $file_stream->getBody();
+      $file_data_length = $file_stream->getHeader('Content-Length');
     }
     catch (RequestException $e) {
       watchdog_exception('acq_commerce', $e);
     }
 
     // Check to ensure empty file is not saved in SKU.
-    if (empty($file_data)) {
+    // Using Content-Length Header to check for valid image data, sometimes we
+    // also get a 0 byte image with response 200 instead of 404.
+    // So only checking $file_data is not enough.
+    if ($file_data_length[0] === '0') {
       if ($lock_key) {
         $lock->release($lock_key);
       }
