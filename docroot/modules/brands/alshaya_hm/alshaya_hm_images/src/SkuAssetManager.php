@@ -313,7 +313,7 @@ class SkuAssetManager {
    */
   private function downloadPimsImage(array &$data, string $sku) {
     // If image is blacklisted, block download.
-    if (isset($data['blacklist_expiry']) && time() > $data['blacklist_expiry']) {
+    if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return FALSE;
     }
 
@@ -409,7 +409,7 @@ class SkuAssetManager {
    */
   private function downloadLiquidPixelImage(array &$asset, string $sku) {
     // If image is blacklisted, block download.
-    if (isset($asset['blacklist_expiry']) && time() > $asset['blacklist_expiry']) {
+    if (isset($asset['blacklist_expiry']) && time() < $asset['blacklist_expiry']) {
       return FALSE;
     }
 

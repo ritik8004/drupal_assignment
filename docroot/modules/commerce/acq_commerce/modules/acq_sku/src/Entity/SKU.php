@@ -277,7 +277,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $lock_key = '';
 
     // If image is blacklisted, block download.
-    if (isset($data['blacklist_expiry']) && time() > $data['blacklist_expiry']) {
+    if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return FALSE;
     }
 
