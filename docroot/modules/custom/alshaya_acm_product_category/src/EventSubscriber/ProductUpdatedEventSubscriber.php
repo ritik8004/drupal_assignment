@@ -35,7 +35,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 600];
+    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = ['onProductProcessed', 600];
     return $events;
   }
 
@@ -45,7 +45,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\alshaya_acm_product\Event\ProductUpdatedEvent $event
    *   Event object.
    */
-  public function onProductUpdated(ProductUpdatedEvent $event) {
+  public function onProductProcessed(ProductUpdatedEvent $event) {
     $this->productCategoryManager->processSalesCategoryCheckForSku($event->getSku());
   }
 
