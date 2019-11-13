@@ -296,7 +296,7 @@ class Configurable extends SKUPluginBase {
         implode(', ', $label_parts)
       );
 
-      $this->messenger->addStatus(
+      $this->messenger()->addStatus(
         $this->t('Added @quantity of @name to the cart.',
           [
             '@quantity' => $quantity,
