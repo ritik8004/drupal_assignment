@@ -9,6 +9,19 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enabled retinal display on Arabic for Store Finder.
+ */
+function alshaya_ve_non_transac_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.stores_finder'],
+    'alshaya_stores_finder'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_ve_non_transac_install() {

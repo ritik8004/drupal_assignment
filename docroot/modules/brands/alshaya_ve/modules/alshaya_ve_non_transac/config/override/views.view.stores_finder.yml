@@ -691,7 +691,7 @@ display:
           click_sort_column: value
           type: boolean
           settings:
-            format: yes-no
+            format: custom
             format_custom_true: 'yes'
             format_custom_false: 'no'
           group_column: value
@@ -716,7 +716,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a><span class="retinal-enabled-{{ field_store_retina_photography | lower }}">{{ field_store_retina_photography }}</span>'
+            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}"><span class="title">{{ title }}</span> <span class="retinal-enabled-{{ field_store_retina_photography | lower }}">{{ field_store_retina_photography }}</span></a>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false
