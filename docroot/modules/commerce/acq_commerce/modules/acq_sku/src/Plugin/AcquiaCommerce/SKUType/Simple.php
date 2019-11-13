@@ -75,7 +75,7 @@ class Simple extends SKUPluginBase {
     $sku = $sku_entity->getSku();
     $quantity = $form_state->getValue('quantity');
 
-    $this->messenger->addStatus(
+    $this->messenger()->addStatus(
       $this->t('Added @quantity of @name to the cart.',
       [
         '@quantity' => $quantity,
