@@ -51,4 +51,7 @@ function alshaya_ve_non_transac_install() {
 
   // Country code and timezone for Kuwait.
   alshaya_country_set_default_regional_info('KW');
+
+  // Update search placeholder.
+  alshaya_country_set_default_store_search_placeholder('Search Area / City', 'البحث المنطقة / المدينة');
 }

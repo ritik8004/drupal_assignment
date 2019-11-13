@@ -314,6 +314,9 @@ class AcqPromotionsManager {
     $promotion_node->setPublished((bool) $promotion['status']);
 
     // Store everything as serialized string in DB.
+    // Before that remove products key, as we are not using it anywhere, and
+    // that is creating unnecessary load on promotion node load.
+    unset($promotion['products']);
     $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
 
     // Set the Promotion type.

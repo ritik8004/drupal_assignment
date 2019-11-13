@@ -11,7 +11,9 @@ export default class CartItems extends React.Component {
       productItems.push(<CartItem key={key} item={product} />);
     });
 
-    return productItems;
+    return (
+      <div className="spc-cart-items">{productItems}</div>
+    );
   }
 
 }

@@ -1,7 +1,20 @@
 .spc-order-summary-block {
+  .block-content {
+    background: $spc-order-summary-totals-bg;
+
+    .actions {
+      padding: 0 1.25rem 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 1.25rem;
+        border-top: 0.625rem solid $spc-cart-background;
+      }
+    }
+  }
+
   .totals {
     background: $spc-order-summary-totals-bg;
-    padding: 1.25rem;
+    padding: 1.25rem 1.25rem 0;
 
     .sub-total {
       margin-bottom: 0;
@@ -58,6 +71,22 @@
         font-size: 0.75rem;
         color: $spc-order-total-suffix-text;
       }
+    }
+  }
+
+  .checkout-link {
+    background: $primary_btn_bg;
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    a {
+      color: $primary_btn_text;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      font-size: 1rem;
+      letter-spacing: 1.14px;
     }
   }
 }
