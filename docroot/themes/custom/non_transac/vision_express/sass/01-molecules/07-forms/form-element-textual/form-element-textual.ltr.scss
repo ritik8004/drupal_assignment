@@ -314,6 +314,14 @@ select:-webkit-autofill {
     height: 2.5rem;
     width: 100%;
     margin: 1.25rem 0;
+
+    &:hover {
+      background-color: $btn-hover-bg;
+    }
+
+    html[lang=ar] & {
+      line-height: 1.125rem;
+    }
   }
 }
 
