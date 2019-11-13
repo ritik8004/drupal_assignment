@@ -12,6 +12,15 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Enable queue_unique.
+ */
+function alshaya_acm_product_update_8052() {
+  \Drupal::service('module_installer')->install(['queue_unique']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update site uuid for taxonomy term fields missing them.
  */
 function alshaya_acm_product_update_8051() {
