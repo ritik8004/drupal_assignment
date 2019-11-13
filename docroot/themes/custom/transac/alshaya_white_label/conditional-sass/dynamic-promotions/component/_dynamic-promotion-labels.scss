@@ -91,6 +91,7 @@
             #{$left}: 0;
             border-color: $promo-dynamic-label-border-color;
             height: 3rem;
+            z-index: 5;
           }
         }
       }

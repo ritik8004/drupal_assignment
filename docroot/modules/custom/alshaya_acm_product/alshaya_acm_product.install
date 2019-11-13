@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Re-saving the linked sku and PDP resource to moved outside mobile app.
  */
-function alshaya_acm_product_update_8052() {
+function alshaya_acm_product_update_8053() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
@@ -25,6 +25,15 @@ function alshaya_acm_product_update_8052() {
 
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
   \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable queue_unique.
+ */
+function alshaya_acm_product_update_8052() {
+  \Drupal::service('module_installer')->install(['queue_unique']);
 }
 
 /**
