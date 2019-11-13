@@ -51,6 +51,9 @@ fi
 # to the acquia cloud.
 if [ $uname_string == 'Darwin' ]
 then
+  sed -i'' '/vendor/d' $deployDir/docroot/middleware/.gitignore
+  sed -i'' '/var/d' $deployDir/docroot/middleware/.gitignore
+else
   sed -i '/vendor/d' $deployDir/docroot/middleware/.gitignore
   sed -i '/var/d' $deployDir/docroot/middleware/.gitignore
 fi
