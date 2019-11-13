@@ -2,7 +2,7 @@
 #
 # This script migrates given site between stacks.
 #
-# ./scripts/staging/migrate.sh 01live vskw 02live vskw2
+# ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2
 
 source_env="$1"
 source_site="$2"
@@ -11,26 +11,26 @@ target_site="$4"
 
 type="$3"
 if [[ -z "$source_env" ]]; then
-  echo "Usage: ./scripts/staging/migrate.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/staging/migrate.sh 01live vskw 02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
   exit
 fi
 
 if [[ -z "$source_site" ]]; then
-  echo "Usage: ./scripts/staging/migrate.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/staging/migrate.sh 01live vskw 02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
   exit
 fi
 
 if [[ -z "$target_env" ]]; then
-  echo "Usage: ./scripts/staging/migrate.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/staging/migrate.sh 01live vskw 02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
   exit
 fi
 
 if [[ -z "$target_site" ]]; then
-  echo "Usage: ./scripts/staging/migrate.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/staging/migrate.sh 01live vskw 02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration.sh 01live vskw 02live vskw2"
   exit
 fi
 
@@ -58,6 +58,12 @@ echo
 drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
 
 echo
+echo "Syncing files with target env for $source_site"
+source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'`
+target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'"`
+screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -a $source_files_folder $target:$target_files_folder"
+
+echo
 echo "Dumping database..."
 mkdir -p /tmp/migrate
 
@@ -77,12 +83,6 @@ ssh $target 'gunzip /tmp/migrate/*.gz'
 echo
 echo "Droppping and importing database again for $target_site"
 ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < /tmp/migrate/$source_site.sql"
-
-echo
-echo "Syncing files with target env for $source_site"
-source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'`
-target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'"`
-rsync -a source_files_folder $target:$target_files_folder
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
