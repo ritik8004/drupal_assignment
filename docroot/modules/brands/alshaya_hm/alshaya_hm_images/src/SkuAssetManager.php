@@ -341,9 +341,15 @@ class SkuAssetManager {
         'timeout' => Settings::get('media_download_timeout', 5),
       ];
 
-      $file_data = $this->httpClient->get($url, $options)->getBody();
+      $file_stream = $this->httpClient->get($url, $options);
+      $file_data = $file_stream->getBody();
+      $file_data_length = $file_stream->getHeader('Content-Length');
 
-      if (empty($file_data)) {
+      // Check to ensure empty file is not saved in SKU.
+      // Using Content-Length Header to check for valid image data, sometimes we
+      // also get a 0 byte image with response 200 instead of 404.
+      // So only checking $file_data is not enough.
+      if ($file_data_length[0] === '0') {
         throw new \Exception('Failed to download asset file: ' . $url);
       }
     }
@@ -413,9 +419,15 @@ class SkuAssetManager {
 
     // Download the file contents.
     try {
-      $file_data = $this->httpClient->get($url)->getBody();
+      $file_stream = $this->httpClient->get($url);
+      $file_data = $file_stream->getBody();
+      $file_data_length = $file_stream->getHeader('Content-Length');
 
-      if (empty($file_data)) {
+      // Check to ensure empty file is not saved in SKU.
+      // Using Content-Length Header to check for valid image data, sometimes we
+      // also get a 0 byte image with response 200 instead of 404.
+      // So only checking $file_data is not enough.
+      if ($file_data_length[0] === '0') {
         throw new \Exception('Failed to download asset file');
       }
     }
