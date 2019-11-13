@@ -226,10 +226,6 @@ function alshaya_acm_product_category_link_attributes_plugin_alter(array &$defin
 function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $node, $product) {
   // Set the category from ACM field to our backup field.
   $node->get('field_category_original')->setValue($node->get('field_category')->getValue());
-
-  /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
-  $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
-  $manager->processCategorizationCheckForNode($node);
 }
 
 /**
