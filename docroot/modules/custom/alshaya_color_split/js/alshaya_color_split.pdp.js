@@ -29,6 +29,14 @@
           $('.language-switcher-language-url .language-link').each(function () {
             $(this).attr('href', variantInfo.url[$(this).attr('hreflang')])
           });
+
+          if (typeof variantInfo.promotions !== 'undefined') {
+            $('.promotions-full-view-mode', node).html(variantInfo.promotions);
+          }
+
+          if (typeof variantInfo.free_gift_promotions !== 'undefined') {
+            $('.free-gift-promotions-full-view-mode', node).html(variantInfo.free_gift_promotions);
+          }
         }
 
         $(node).find('.content--item-code .field__value').html(variantInfo.parent_sku);

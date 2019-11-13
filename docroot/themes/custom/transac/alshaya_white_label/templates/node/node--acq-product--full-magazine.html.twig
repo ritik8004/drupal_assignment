@@ -37,9 +37,8 @@
                 ({{ content.price_block['#discount'] }})
               {% endif %}
             </div>
-            {% if content.promotions %}
-              <div class="promotions">{{ content.promotions }}</div>
-            {% endif %}
+
+            <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
           </div>
 
           {% if vat_text %}
@@ -55,11 +54,7 @@
           </div>
         {% endif %}
 
-        {% if content.free_gift_promotions %}
-          <div class="free-gift-promotions">
-            {{ content.free_gift_promotions }}
-          </div>
-        {% endif %}
+        <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
         <div class="basic-details-wrapper">
           {{ content.field_skus }}

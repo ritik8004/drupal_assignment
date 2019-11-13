@@ -280,6 +280,19 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
       ])->toString();
     }
 
+    /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+    $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+
+    $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($parent_sku, 'full');
+
+    $variant['promotions'] = !empty($promotion_label['promotions'])
+      ? render($promotion_label['promotions'])
+      : '';
+
+    $variant['free_gift_promotions'] = !empty($promotion_label['free_gift_promotions'])
+      ? render($promotion_label['free_gift_promotions'])
+      : '';
+
     $variant['color_attribute'] = \Drupal::config('alshaya_color_split.settings')->get('attribute_code_color_id');
     $variant['color_value'] = $node->get('field_product_color')->getString();
   }
