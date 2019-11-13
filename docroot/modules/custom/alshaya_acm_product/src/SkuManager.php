@@ -2341,9 +2341,13 @@ class SkuManager {
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
       if ($this->isAttributeOptionToExclude($value)) {
-        $configurable['#options_attributes'][$id]['class'][] = 'hidden';
-        $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
-        $notRequiredValue = $id;
+        // Workaroud to fix fl issue for one size on PDP.
+        return;
+
+        // $configurable['#options_attributes'][$id]['class'][] = 'hidden';
+        // $configurable['#options_attributes'][$id]['class'][]
+        // = 'visually-hidden';
+        // $notRequiredValue = $id;
       }
       elseif (empty($configurable['#options_attributes'][$id]['disabled'])) {
         $availableOptions[$id] = $value;
