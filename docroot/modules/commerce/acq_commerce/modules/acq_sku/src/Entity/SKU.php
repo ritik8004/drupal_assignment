@@ -269,12 +269,17 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   File data.
    *
    * @return \Drupal\file\Entity\File
-   *   File id.
+   *   File id or FALSE if file cant be downloaded.
    *
    * @throws \Exception
    */
-  protected function downloadMediaImage(array $data) {
+  protected function downloadMediaImage(array &$data) {
     $lock_key = '';
+
+    // If image is blacklisted, block download.
+    if (isset($data['blacklist_expiry']) && time() > $data['blacklist_expiry']) {
+      return FALSE;
+    }
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
@@ -331,7 +336,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($lock_key) {
         $lock->release($lock_key);
       }
-      throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
+      // Blacklist this image URL to prevent subsequent downloads for 1 day.
+      $data['blacklist_expiry'] = strtotime('+1 day');
+      return FALSE;
+    }
+
+    // Check if image was blacklisted, remove it from blacklist.
+    if (isset($data['blacklist_expiry'])) {
+      unset($data['blacklist_expiry']);
     }
 
     // Get the path part in the url, remove hostname.
