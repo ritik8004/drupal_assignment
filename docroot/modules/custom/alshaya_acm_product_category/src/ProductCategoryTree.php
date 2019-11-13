@@ -6,6 +6,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
@@ -14,6 +15,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class ProductCategoryTree.
@@ -80,6 +82,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $routeMatch;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * The current path.
+   *
+   * @var \Drupal\Core\Path\CurrentPathStack
+   */
+  protected $currentPath;
+
+  /**
    * Database connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -141,6 +157,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route match service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
@@ -151,6 +171,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
+                              RequestStack $request_stack,
+                              CurrentPathStack $current_path,
                               Connection $connection,
                               ProductCategoryHelper $product_category_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
@@ -159,6 +181,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
+    $this->requestStack = $request_stack;
+    $this->currentPath = $current_path;
     $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->productCategoryHelper = $product_category_helper;
@@ -442,6 +466,28 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       if (count($terms) > 0) {
         $term = $this->termStorage->load($terms[0]['target_id']);
+      }
+    }
+    elseif (in_array($route_name, ['views.ajax', 'facets.block.ajax'])) {
+      $q = NULL;
+
+      // For facets block we get it in current request itself.
+      if ($route_name === 'facets.block.ajax') {
+        $q = $this->requestStack->getCurrentRequest()->getRequestUri();
+      }
+      // For views ajax requests it replaces current path.
+      // We get it from there.
+      else {
+        // For some reason we get double forward slash in beginning.
+        // We replace it with single forward slash.
+        $q = str_replace('//', '/', $this->currentPath->getPath());
+      }
+
+      if ($q) {
+        $route_params = Url::fromUserInput($q)->getRouteParameters();
+        if (isset($route_params['taxonomy_term'])) {
+          $term = $this->termStorage->load($route_params['taxonomy_term']);
+        }
       }
     }
 
