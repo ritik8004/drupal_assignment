@@ -91,22 +91,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public function getCacheTagsToInvalidate() {
     $tags = [];
-
-    if ($this->isNew()) {
-      // Only for new simple sku we want to invalidate parent sku cache.
-      if ($this->bundle() == 'simple') {
-        $plugin = $this->getPluginInstance();
-
-        $parents = array_keys($plugin->getAllParentIds($this->getSku()));
-        foreach ($parents as $id) {
-          $tags[] = $this->entityTypeId . ':' . $id;
-        }
-      }
-    }
-    else {
-      $tags[] = $this->entityTypeId . ':' . $this->id();
-    }
-
+    $tags[] = $this->entityTypeId . ':' . $this->id();
     return $tags;
   }
 
@@ -116,16 +101,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
   public function getCacheTags() {
     $tags = $this->getCacheTagsToInvalidate();
 
-    if ($this->cacheTags) {
-      $tags = Cache::mergeTags($tags, $this->cacheTags);
-    }
-
-    if ($this->bundle() == 'configurable') {
-      $children = array_keys($this->getPluginInstance()->getAvailableChildrenIds($this));
-      // Load all children and add them to tags.
-      foreach ($children as $id) {
+    // Always add cache tag of parent in variants.
+    if ($this->bundle() == 'simple') {
+      $parents = array_keys($this->getPluginInstance()->getAllParentIds($this->getSku()));
+      foreach ($parents as $id) {
         $tags[] = $this->entityTypeId . ':' . $id;
       }
+    }
+
+    if ($this->cacheTags) {
+      $tags = Cache::mergeTags($tags, $this->cacheTags);
     }
 
     return $tags;
