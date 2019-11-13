@@ -12,8 +12,8 @@
     border: 0;
 
     @include breakpoint($upto-palm) {
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
+      padding-left: 0.9375rem;
+      padding-right: 0.9375rem;
       margin-bottom: 0;
     }
 
@@ -86,6 +86,7 @@
           border: 0;
           color: $text;
           padding: 1rem;
+          -webkit-appearance: none;
 
           &::placeholder {
             color: $form-input-placeholder-text;
@@ -304,13 +305,12 @@
     background-color: $store-content-bg;
 
     @include breakpoint($upto-palm) {
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
-      padding-top: 0.625rem;
+      padding: 0.625rem 0.9375rem 0.9375rem;
     }
 
     @include breakpoint($above-palm) {
       padding: 0.9375rem 2rem;
+      margin-bottom: 1.25rem;
     }
 
     header {
@@ -320,6 +320,7 @@
     @include breakpoint($desk) {
       max-width: 57.875rem;
       margin: auto;
+      margin-bottom: 1.25rem;
     }
 
     .view-store-finder--list__alphabet {
@@ -333,15 +334,23 @@
       .views-view-unformatted__rows {
         clear: both;
 
-        .field-content {
+        .field-content a {
           display: flex;
+          align-items: center;
+          width: 100%;
+
+          @include breakpoint($upto-palm) {
+            padding-#{$right}: 4.0625rem;
+            position: relative;
+          }
 
           .retinal-enabled-yes {
             padding: 0;
+            margin-#{$left}: 0.625rem;
 
             @include breakpoint($upto-palm) {
               padding: 0;
-              margin-top: 0.625rem;
+              margin: 0;
             }
           }
         }
@@ -365,8 +374,8 @@
     }
 
     @include breakpoint($upto-palm) {
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
+      padding-left: 0.9375rem;
+      padding-right: 0.9375rem;
       padding-top: 1.875rem;
     }
   }
@@ -381,7 +390,15 @@
     font-family: $helvetica-neue-bold;
     text-transform: lowercase;
 
-    @include icon(list, after) {
+    @include breakpoint($upto-palm) {
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      padding: 0;
+      text-indent: 3.125rem;
+    }
+
+    @include icon(list, before) {
       color: $icon;
       font-size: 3.125rem;
       position: absolute;
@@ -391,6 +408,8 @@
       @include breakpoint($upto-palm) {
         top: -0.1875rem;
         line-height: 1.75rem;
+        #{$left}: inherit;
+        text-indent: -3.125rem;
       }
     }
 
@@ -420,6 +439,10 @@
       width: 67% !important;
       display: inline-block;
       margin-#{$left}: 1.875rem;
+    }
+
+    @include breakpoint($upto-palm) {
+      display: none;
     }
   }
 
@@ -534,20 +557,24 @@
     .field-content {
       align-items: center;
       padding: 0;
-      width: 80%;
+      width: 100%;
 
       a {
         padding: 0;
+
+        .title {
+          line-height: 1.25rem;
+        }
       }
 
       .retinal-enabled-yes::before {
-        top: 0.1875rem;
+        top: 0.625rem;
+        #{$left}: 0.625rem;
       }
     }
   }
 
   a {
-    line-height: 1.125rem;
     padding-top: 0.3125rem;
     display: inline;
     margin-#{$right}: 0.625rem;
@@ -601,6 +628,12 @@
   }
 }
 
+.view-display-id-page_2 .geolocation-common-map-container,
+.view-store-finder--list__columns,
+.view--store-list {
+  margin-bottom: 0 !important;
+}
+
 .store-row--counter {
   background-color: $store-counter-bg;
   #{$left}: 0;
@@ -612,6 +645,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      margin-bottom: 0;
 
       .view-header {
         flex: 0 0 100%;
