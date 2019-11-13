@@ -311,7 +311,12 @@ class SkuAssetManager {
    * @return \Drupal\file\FileInterface|null
    *   File entity if image download successful.
    */
-  private function downloadPimsImage(array $data, string $sku) {
+  private function downloadPimsImage(array &$data, string $sku) {
+    // If image is blacklisted, block download.
+    if (isset($data['blacklist_expiry']) && time() > $data['blacklist_expiry']) {
+      return FALSE;
+    }
+
     $base_url = $this->hmImageSettings->get('pims_base_url');
     $pims_directory = $this->hmImageSettings->get('pims_directory');
 
@@ -350,7 +355,9 @@ class SkuAssetManager {
       // also get a 0 byte image with response 200 instead of 404.
       // So only checking $file_data is not enough.
       if ($file_data_length[0] === '0') {
-        throw new \Exception('Failed to download asset file: ' . $url);
+        // Blacklist this image URL to prevent subsequent downloads for 1 day.
+        $data['blacklist_expiry'] = strtotime('+1 day');
+        return FALSE;
       }
     }
     catch (\Exception $e) {
@@ -362,6 +369,11 @@ class SkuAssetManager {
 
       // Not able to download image, no further processing required.
       return NULL;
+    }
+
+    // Check if image was blacklisted, remove it from blacklist.
+    if (isset($data['blacklist_expiry'])) {
+      unset($data['blacklist_expiry']);
     }
 
     // Prepare the directory.
@@ -395,7 +407,12 @@ class SkuAssetManager {
    * @return \Drupal\file\FileInterface|null
    *   File entity download successful.
    */
-  private function downloadLiquidPixelImage(array $asset, string $sku) {
+  private function downloadLiquidPixelImage(array &$asset, string $sku) {
+    // If image is blacklisted, block download.
+    if (isset($asset['blacklist_expiry']) && time() > $asset['blacklist_expiry']) {
+      return FALSE;
+    }
+
     $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
     $cache = $this->cachePimsFiles->get($skipped_key);
     if (isset($cache, $cache->data)) {
@@ -428,7 +445,8 @@ class SkuAssetManager {
       // also get a 0 byte image with response 200 instead of 404.
       // So only checking $file_data is not enough.
       if ($file_data_length[0] === '0') {
-        throw new \Exception('Failed to download asset file');
+        $asset['blacklist_expiry'] = strtotime('+1 day');
+        return FALSE;
       }
     }
     catch (\Exception $e) {
@@ -440,6 +458,11 @@ class SkuAssetManager {
 
       // Not able to download image, no further processing required.
       return NULL;
+    }
+
+    // Check if image was blacklisted, remove it from blacklist.
+    if (isset($asset['blacklist_expiry'])) {
+      unset($asset['blacklist_expiry']);
     }
 
     $file_data = (string) $file_data;
@@ -490,7 +513,7 @@ class SkuAssetManager {
    *
    * @throws \Exception
    */
-  private function downloadImage(array $asset, string $sku) {
+  private function downloadImage(array &$asset, string $sku) {
     $lock_key = '';
 
     // Allow disabling this through settings.
