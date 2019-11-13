@@ -2,6 +2,11 @@ import { KVNamespace } from '@cloudflare/workers-types'
 const CryptoJS = require('crypto-js');
 
 export async function handleRequest(request: Request): Promise<Response> {
+  var authKey = await AlshayaAcquiaStability.get('x-alshaya-key');
+  if (request.headers.get('x-alshaya-key') !== authKey) {
+    return new Response('Invalid request.');
+  }
+
   var status = 'FALSE';
 
   function guid() {
@@ -69,5 +74,5 @@ export async function handleRequest(request: Request): Promise<Response> {
     var response = await fetch(url, options);
   }
 
-  return new Response(`Hello world`);
+  return new Response('Request processed.');
 }
