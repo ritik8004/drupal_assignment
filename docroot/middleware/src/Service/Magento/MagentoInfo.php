@@ -48,6 +48,9 @@ class MagentoInfo {
       $site_name = $_acsf_site_name;
     }
 
+    // Include overrides
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
+
     // Get magento (commerce_third_party) settings.
     if (!empty($site_name)) {
       $site_country_code = alshaya_get_site_country_code($site_name);
