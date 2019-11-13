@@ -7,7 +7,7 @@ export async function handleRequest(request: Request): Promise<Response> {
     return new Response('Invalid request.');
   }
 
-  var status = 'FALSE';
+  var status = 'TRUE';
 
   function guid() {
     function s4() {
@@ -58,8 +58,7 @@ export async function handleRequest(request: Request): Promise<Response> {
     // acquia-http-hmac realm="Acquia",id="key",nonce="7d5e7dbd-2deb-4939-b45b-09b2777dca08",version="2.0",headers="",signature="s2I3e/w6PPsanfMxaW2MCJvMF3bbFTM5BbDdLXSR55c="
     headerString = "acquia-http-hmac realm=\"" + hmacRealm + "\",id=\"" + hmacId + "\",nonce=\"" + nonce + "\",version=\"" + hmacVersion + "\",headers=\"\",signature=\"" + signature + "\"";
 
-    // var url = 'https://api.eu-west-1.prod.acm.acquia.io/v2/config/site/' + siteId + '/queue?pause=' + status;
-    var url = 'https://nikunj.dev?siteId=' + siteIds[siteId];
+    var url = 'https://api.eu-west-1.prod.acm.acquia.io/v2/config/site/' + siteId + '/queue?pause=' + status;
 
     var options = {
       headers: {
