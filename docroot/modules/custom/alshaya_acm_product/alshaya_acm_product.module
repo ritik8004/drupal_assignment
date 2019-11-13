@@ -31,7 +31,7 @@ use Drupal\search_api\IndexInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
-use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
+use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
@@ -385,9 +385,10 @@ function template_preprocess_commerce_price_with_currency(array &$variables) {
  */
 function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation) {
   try {
-    // Only for configurable sku.
-    if ($entity->getType() == 'configurable') {
-      ProcessFinishEventSubscriber::$colorNodeSkus[] = $entity->getSku();
+    // We might save the same SKU again when processing it.
+    // Do not queue it.
+    if (ProcessProduct::$processingItem) {
+      return;
     }
 
     $event = new ProductUpdatedEvent($entity, $operation);

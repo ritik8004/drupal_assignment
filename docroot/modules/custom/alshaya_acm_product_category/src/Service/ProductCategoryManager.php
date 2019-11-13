@@ -379,18 +379,16 @@ class ProductCategoryManager {
       return;
     }
 
-    if ($sku->bundle() === 'simple') {
-      $node = $this->skuManager->getDisplayNode($sku);
+    $node = $this->skuManager->getDisplayNode($sku);
 
-      if ($node instanceof NodeInterface) {
-        if ($this->processCategorizationCheckForNode($node)) {
-          $node->save();
+    if ($node instanceof NodeInterface) {
+      if ($this->processCategorizationCheckForNode($node)) {
+        $node->save();
 
-          // Reset static cache to ensure we use updated node in later
-          // code execution.
-          // @see Drupal\acq_sku\AcquiaCommerce\SKUPluginBase::getDisplayNode().
-          drupal_static_reset('getDisplayNode');
-        }
+        // Reset static cache to ensure we use updated node in later
+        // code execution.
+        // @see Drupal\acq_sku\AcquiaCommerce\SKUPluginBase::getDisplayNode().
+        drupal_static_reset('getDisplayNode');
       }
     }
   }
