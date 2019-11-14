@@ -372,7 +372,7 @@ class SkuAssetManager {
       // Blacklist this image URL to prevent subsequent downloads for 1 day.
       $data['blacklist_expiry'] = strtotime('+1 day');
       // Leave a message for developers to find out why this happened.
-      \Drupal::logger('acq_sku')->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
+      $this->logger->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
         '@url' => $url,
         '@sku' => $sku,
         '@remote_id' => $data['filename'],
@@ -467,7 +467,7 @@ class SkuAssetManager {
       // Blacklist this image URL to prevent subsequent downloads for 1 day.
       $asset['blacklist_expiry'] = strtotime('+1 day');
       // Leave a message for developers to find out why this happened.
-      \Drupal::logger('acq_sku')->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
+      $this->logger->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
         '@url' => $url,
         '@sku' => $sku,
         '@remote_id' => $asset['Data']['AssetId'],
