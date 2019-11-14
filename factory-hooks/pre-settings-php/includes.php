@@ -220,6 +220,10 @@ switch ($env) {
   case '01dev2':
   case '01dev3':
   case '01test':
+  case '02dev':
+  case '02dev2':
+  case '02dev3':
+  case '02test':
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
@@ -233,6 +237,7 @@ switch ($env) {
     break;
 
   case '01live':
+  case '02live':
     // We want to timeout linked skus API call in 1 second on prod.
     $settings['linked_skus_timeout'] = 1;
     break;

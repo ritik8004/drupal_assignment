@@ -25,7 +25,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
-if ($env != '01live') {
+if (!preg_match('/\d{2}live/', $env)) {
   print 'We should copy to downstream indexes only from production.';
   print PHP_EOL . PHP_EOL . PHP_EOL;
   die();
