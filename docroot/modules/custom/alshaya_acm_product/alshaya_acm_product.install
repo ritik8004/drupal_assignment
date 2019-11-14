@@ -17,46 +17,12 @@ use Drupal\node\Entity\Node;
 function alshaya_acm_product_update_8053() {
   $connection = \Drupal::database();
   // Find all files with file size 0.
-  $find_empty_file = 'SELECT fid FROM {file_managed} WHERE filesize=0';
+  $find_empty_file = 'SELECT fid FROM {file_managed} WHERE filesize=0 AND (uri LIKE "%public://media%" OR uri LIKE "%public://assets%")';
   $result = $connection->query($find_empty_file);
   if ($result) {
     // Work on each fid.
     while ($row = $result->fetchAssoc()) {
       $fid = $row['fid'];
-      // Fetch all SKUs which have this fid reference.
-      $find_skus_with_empty_files = 'SELECT id, sku, langcode, media__value FROM {acq_sku_field_data} WHERE media__value LIKE "%' . $fid . '%"';
-      $sku_result = $connection->query($find_skus_with_empty_files);
-      if ($sku_result) {
-        // Work on each SKU.
-        while ($sku = $sku_result->fetchAssoc()) {
-          // Fetch all assets on a SKU.
-          $acq_sku_id = $sku['id'];
-          $sku_id = $sku['sku'];
-          $sku_lang = $sku['langcode'];
-          $media_items = unserialize($sku['media__value']);
-          $changed = FALSE;
-          foreach ($media_items as $key => $media_item) {
-            if ($media_item['fid'] === $fid) {
-              unset($media_items[$key]['fid']);
-              $changed = TRUE;
-              // One fid will be only once in each SKU so no need to complete
-              // the loop.
-              break;
-            }
-          }
-          // Update the assets.
-          if ($changed === TRUE) {
-            $connection->update('acq_sku_field_data')
-              ->fields([
-                'media__value' => serialize($media_items),
-              ])
-              ->condition('sku', $sku_id)
-              ->condition('id', $acq_sku_id)
-              ->condition('langcode', $sku_lang)
-              ->execute();
-          }
-        }
-      }
       // Delete the file now that its references are deleted.
       file_delete_multiple([$fid]);
     }

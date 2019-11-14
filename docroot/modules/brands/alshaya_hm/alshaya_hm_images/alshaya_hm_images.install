@@ -10,60 +10,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Only HM: Remove empty images to avoid 500 error.
- */
-function alshaya_hm_images_update_8011() {
-  $connection = \Drupal::database();
-  // Find all files with file size 0.
-  $find_empty_file = 'SELECT fid FROM {file_managed} WHERE filesize=0';
-  $result = $connection->query($find_empty_file);
-  if ($result) {
-    // Work on each fid.
-    while ($row = $result->fetchAssoc()) {
-      $fid = $row['fid'];
-      // Fetch all SKUs which have this fid reference.
-      $find_skus_with_empty_files = 'SELECT id, sku, langcode, attr_assets__value FROM {acq_sku_field_data} WHERE attr_assets__value LIKE "%' . $fid . '%"';
-      $sku_result = $connection->query($find_skus_with_empty_files);
-      if ($sku_result) {
-        // Work on each SKU.
-        while ($sku = $sku_result->fetchAssoc()) {
-          // Fetch all assets on a SKU.
-          $acq_sku_id = $sku['id'];
-          $sku_id = $sku['sku'];
-          $sku_lang = $sku['langcode'];
-          $media_items = unserialize($sku['attr_assets__value']);
-          $changed = FALSE;
-          foreach ($media_items as $key => $media_item) {
-            if ($media_item['fid'] === $fid) {
-              unset($media_items[$key]['fid']);
-              $changed = TRUE;
-              // One fid will be only once in each SKU so no need to complete
-              // the loop.
-              break;
-            }
-          }
-          // Update the assets.
-          if ($changed === TRUE) {
-            $connection->update('acq_sku_field_data')
-              ->fields([
-                'attr_assets__value' => serialize($media_items),
-              ])
-              ->condition('sku', $sku_id)
-              ->condition('id', $acq_sku_id)
-              ->condition('langcode', $sku_lang)
-              ->execute();
-          }
-        }
-      }
-      // Delete the file now that its references are deleted.
-      file_delete_multiple([$fid]);
-    }
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Make assets field non-translatable.
  */
 function alshaya_hm_images_update_8010() {
