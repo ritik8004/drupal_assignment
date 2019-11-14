@@ -86,8 +86,8 @@ echo "Dumping databases for $source_site"
 drush -l $source_site.factory.alshaya.com sql-dump --result-file=/tmp/migrate/$source_site.sql --skip-tables-key=common
 
 echo "Replacing site identifier in database search: $search, replace: $replace"
-echo "s#$search#$replace#g" > /tmp/migrate/script.sed
-sed -i -f /tmp/migrate/script.sed /tmp/migrate/$source_site.sql
+echo "s#$search#$replace#g" > /tmp/migrate/$source_site.sed
+sed -i -f /tmp/migrate/$source_site.sed /tmp/migrate/$source_site.sql
 
 echo
 echo "Copying the dump to $target_env env..."
@@ -110,6 +110,10 @@ echo
 echo "Update simple_oauth settings: $target_simple_oauth"
 ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings public_key '${target_simple_oauth}alshaya_acm.pub' -y"
 ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings private_key '${target_simple_oauth}alshaya_acm' -y"
+
+echo
+echo "Update Acquia Subscription"
+ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com ev \"(new \Drupal\acquia_connector\Subscription())->update();\""
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
