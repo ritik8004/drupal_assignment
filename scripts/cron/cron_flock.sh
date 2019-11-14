@@ -5,9 +5,14 @@
 # First argument(id) can be any name and this will be used for flock.
 # Second argument(command) will be the actual drush command that will be run.
 #
+# If command argument contains the `.sh`, means we running a script otherwise
+# it assume that it will be drush command.
+#
 # Usage -
-# 1. Without any option - ./scripts/cron/cron_flock.sh acspm acspm
-# 2. With options -  ./scripts/cron/cron_flock.sh acspm '"acspm" "--types=cart"'
+# 1. Without any option (for drush) - ./scripts/cron/cron_flock.sh acspm acspm
+# 2. With options (for drush) -  ./scripts/cron/cron_flock.sh acspm '"acspm" "--types=cart"'
+# 3. Without option (for scripts) - ./scripts/cron/cron_flock.sh clear-varnish /var/www/fullpath/clear-varnish.sh
+# 4. With option (for scripts) - ./scripts/cron/cron_flock.sh clear-varnish `/var/www/fullpath/clear-varnish.sh arg1 arg2`
 #
 
 id="$1"
@@ -25,6 +30,15 @@ seconds_check=86400
 # Flag to determine whether cron will process or not.
 process_cron=true
 
+# Checking if argument 2 (command) passed is a shell script or not.
+# If argument2/command contains '.sh', it means it is a shell script
+# or this is a drush command.
+is_shell_script=false
+if [[ ${command} == *".sh"* ]]
+then
+    is_shell_script=true
+fi
+
 # Check if there is currently a lock in place.
 if [ -f $file_name ]
 then
@@ -38,8 +52,15 @@ fi
 if [ "$process_cron" = true ]; then
     echo "Creating lock file ${file_name}" &>> ${log_file}
     touch $file_name
-    cd /var/www/html/${AH_SITE_NAME}/docroot
-    drush acsf-tools-ml ${command} &>> ${log_file}
+
+    # If a script is given, then run it. Else run drush command.
+    if [ "$is_shell_script" = true ]; then
+        bash ${command} &>> ${log_file}
+    else
+        cd /var/www/html/${AH_SITE_NAME}/docroot
+        drush acsf-tools-ml ${command} &>> ${log_file}
+    fi
+
     #  Releasing the lock.
     rm /tmp/cron-lock-$id.lock
     echo "Lock ${log_file} is now released." &>> ${log_file}
