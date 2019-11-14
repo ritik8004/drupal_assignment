@@ -11,6 +11,7 @@ vendor:
     dist/promise.js: {}
     dist/object.js: {}
     js/alshaya_algolia_react.js: {}
+    js/back_to_search.js: {}
   dependencies:
     - alshaya_react/react
 
