@@ -13,11 +13,14 @@
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
 
 $env = 'local';
+$env_name = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
+  $env_name = substr($env, 2);
 }
 elseif (getenv('TRAVIS')) {
   $env = 'travis';
+  $env_name = 'travis';
 }
 
 // Set the env in settings to allow re-using in custom code.
@@ -195,47 +198,45 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 // settings must be overridden on a per site basis, please, check
 // factory-hooks/environments/settings.php to see the other settings.
 // ################################################################
-if (in_array($env, ['local', 'travis'])) {
-  // Requests from local are slow, we can to wait for some more time
-  // while loading linked skus.
-  $settings['linked_skus_timeout'] = 5;
+switch ($env_name) {
+  case 'local':
+  case 'travis':
+    // Requests from local are slow, we can to wait for some more time
+    // while loading linked skus.
+    $settings['linked_skus_timeout'] = 5;
 
-  // Specific/development modules to be enabled on this env.
-  $settings['additional_modules'][] = 'dblog';
-  $settings['additional_modules'][] = 'views_ui';
+    // Specific/development modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
 
-  // Increase autologout timeout on local so we are not always logged out.
-  $config['autologout.settings']['timeout'] = 86400;
+    // Increase autologout timeout on local so we are not always logged out.
+    $config['autologout.settings']['timeout'] = 86400;
 
-  $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
-  $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
+    $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
+    $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
 
-  // Log debug messages too.
-  $settings['alshaya_performance_log_mode'] = 'developer';
-}
-elseif (preg_match('/(\d{2})(\S*)/', $env, $matches)
-  && !empty($matches) && !empty($matches[2])) {
-  $env_name = $matches[2];
-  switch ($env_name) {
-    case 'dev':
-    case 'dev2':
-    case 'dev3':
-    case 'test':
-      // Specific/development modules to be enabled on this env.
-      $settings['additional_modules'][] = 'dblog';
-      $settings['additional_modules'][] = 'views_ui';
-      $settings['additional_modules'][] = 'purge_ui';
+    // Log debug messages too.
+    $settings['alshaya_performance_log_mode'] = 'developer';
+    break;
 
-      // Log debug messages too.
-      $settings['alshaya_performance_log_mode'] = 'developer';
+  case 'dev':
+  case 'dev2':
+  case 'dev3':
+  case 'test':
+    // Specific/development modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
+    $settings['additional_modules'][] = 'purge_ui';
 
-      // We only debug on ACSF dev/test environments.
-      $config['acq_commerce.conductor']['debug'] = TRUE;
-      break;
+    // Log debug messages too.
+    $settings['alshaya_performance_log_mode'] = 'developer';
 
-    case 'live':
-      // We want to timeout linked skus API call in 1 second on prod.
-      $settings['linked_skus_timeout'] = 1;
-      break;
- }
+    // We only debug on ACSF dev/test environments.
+    $config['acq_commerce.conductor']['debug'] = TRUE;
+    break;
+
+  case 'live':
+    // We want to timeout linked skus API call in 1 second on prod.
+    $settings['linked_skus_timeout'] = 1;
+    break;
 }
