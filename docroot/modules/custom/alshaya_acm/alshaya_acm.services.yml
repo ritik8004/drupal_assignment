@@ -47,6 +47,7 @@ services:
       - '@event_dispatcher'
       - '@module_handler'
       - '@alshaya_api.api'
+      - '@config.factory'
       - '@logger.factory'
 
   alshaya_acm.config_check:

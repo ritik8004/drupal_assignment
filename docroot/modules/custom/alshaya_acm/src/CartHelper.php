@@ -13,6 +13,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerTrait;
@@ -57,6 +58,13 @@ class CartHelper {
   protected $apiWrapper;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -74,6 +82,8 @@ class CartHelper {
    *   Module Handler.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   API Wrapper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
    *   Logger Factory.
    */
@@ -81,11 +91,13 @@ class CartHelper {
                               EventDispatcherInterface $dispatcher,
                               ModuleHandlerInterface $module_handler,
                               AlshayaApiWrapper $api_wrapper,
+                              ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_channel) {
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
     $this->moduleHandler = $module_handler;
     $this->apiWrapper = $api_wrapper;
+    $this->configFactory = $config_factory;
     $this->logger = $logger_channel->get('CartHelper');
   }
 
@@ -434,7 +446,7 @@ class CartHelper {
       return;
     }
 
-    if (!empty($cart->getExtension('attempted_payment'))) {
+    if ($this->isCancelReservationEnabled() && !empty($cart->getExtension('attempted_payment'))) {
       try {
         $response = $this->apiWrapper->cancelCartReservation((string) $cart->id(), $message);
         if (empty($response['status']) || $response['status'] !== 'SUCCESS') {
@@ -452,6 +464,16 @@ class CartHelper {
       // Restore cart to get more info about what is wrong in cart.
       $this->cartStorage->restoreCart($cart->id());
     }
+  }
+
+  /**
+   * Wrapper to get the flag if cancel reservation API is enabled or not.
+   *
+   * @return int|bool
+   *   Flag value.
+   */
+  protected function isCancelReservationEnabled() {
+    return $this->configFactory->get('alshaya_acm_checkout.settings')->get('cancel_reservation_enabled') ?? 0;
   }
 
 }
