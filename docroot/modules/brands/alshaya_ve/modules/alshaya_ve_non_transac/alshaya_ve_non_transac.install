@@ -11,15 +11,27 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Enabled retinal display on Arabic for Store Finder.
  * Update search placeholder.
  */
-function alshaya_ve_non_transac_update_8001() {
+function alshaya_ve_non_transac_update_8002() {
   alshaya_country_set_default_store_search_placeholder('Search Area / City', 'البحث المنطقة / المدينة');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabled retinal display on Arabic for Store Finder.
+ * Make mobile field optional on email subscription form.
+ */
+function alshaya_ve_non_transac_update_8001() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['views.view.stores_finder'],
     'alshaya_stores_finder'
+  );
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_email_signup'],
+    'alshaya_email_signup'
   );
 }
 
