@@ -10,7 +10,7 @@ elements: |
     '#title': 'Mobile number'
     '#placeholder': 'Mobile number'
     '#verify': none
-    '#required': true
+    '#required': false
     '#allowed_countries':
       KW: 'Kuwait (+965)'
       SA: 'Saudi Arabia (+966)'
