@@ -24,7 +24,11 @@
         }
 
         if ($(node).attr('data-vmode') === 'full') {
-          window.history.pushState(variantInfo, variantInfo.title, variantInfo.url[$('html').attr('lang')]);
+          var url = variantInfo.url[$('html').attr('lang')];
+          if(location.search.indexOf("selected") == -1) {
+            url = variantInfo.url[$('html').attr('lang')] + location.search;
+          }
+          window.history.pushState(variantInfo, variantInfo.title, url);
 
           $('.language-switcher-language-url .language-link').each(function () {
             $(this).attr('href', variantInfo.url[$(this).attr('hreflang')])
