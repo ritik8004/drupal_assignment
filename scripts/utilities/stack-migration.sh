@@ -36,9 +36,11 @@ fi
 if [ ${target_env:0:2} == "02" ]; then
   target_var="alshaya202live"
   target="alshaya2.02live@web-4238.enterprise-g1.hosting.acquia.com"
+  target_simple_oauth="/home/alshaya2/simple-oauth/02live/"
 elif [ ${target_env:0:2} == "01" ]; then
   target_var="alshaya01live"
   target="alshaya.01live@web-1503.enterprise-g1.hosting.acquia.com"
+  target_simple_oauth="/home/alshaya/simple-oauth/01live/"
 else
   echo "Invalid target env $target_env"
   exit
@@ -65,11 +67,14 @@ drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
 echo
 echo "Syncing files with target env for $source_site"
 source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'`
+search="$source_files_folder"
 echo "Source folder $source_files_folder"
-target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep 'Site path' | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'"`
-target_files_folder="/var/www/html/$target_var/docroot/$target_files_folder"
 
+target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep 'Site path' | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'"`
+replace="$target_files_folder/files"
+target_files_folder="/var/www/html/$target_var/docroot/$target_files_folder"
 echo "Target folder $target_files_folder"
+
 screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -auv $source_files_folder $target:$target_files_folder"
 
 echo
@@ -78,16 +83,16 @@ mkdir -p /tmp/migrate
 
 echo
 echo "Dumping databases for $source_site"
-drush -l $source_site.factory.alshaya.com sql-dump --result-file=/tmp/migrate/$source_site.sql --skip-tables-key=common --gzip
+drush -l $source_site.factory.alshaya.com sql-dump --result-file=/tmp/migrate/$source_site.sql --skip-tables-key=common
+
+echo "Replacing site identifier in database search: $search, replace: $replace"
+echo "s#$search#$replace#g" > /tmp/migrate/script.sed
+sed -i -f /tmp/migrate/script.sed /tmp/migrate/$source_site.sql
 
 echo
 echo "Copying the dump to $target_env env..."
 ssh $target 'mkdir -p /tmp/migrate'
 scp /tmp/migrate/* $target:/tmp/migrate/
-
-echo
-echo "Unzipping the dump on $target_env env..."
-ssh $target 'gunzip /tmp/migrate/*.gz'
 
 echo
 echo "Clearing caches for $target_site"
@@ -100,6 +105,11 @@ ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory
 echo
 echo "Clearing caches for $target_site"
 ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cr"
+
+echo
+echo "Update simple_oauth settings: $target_simple_oauth"
+ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings public_key '${target_simple_oauth}alshaya_acm.pub' -y"
+ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings private_key '${target_simple_oauth}alshaya_acm' -y"
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
