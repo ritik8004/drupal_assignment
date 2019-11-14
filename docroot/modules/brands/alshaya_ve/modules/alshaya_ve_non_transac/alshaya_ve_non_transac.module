@@ -159,6 +159,18 @@ function alshaya_ve_non_transac_alshaya_i18n_onetime_translation_add() {
     'ar' => 'احجز موعد',
   ];
 
+  $strings['Stores with retinal photography'] = [
+    'ar' => 'الفروع التي تقدم خدمة تصوير الشبكية',
+  ];
+
+  $strings['Map View'] = [
+    'ar' => 'عرض الخريطة',
+  ];
+
+  $strings['List of all Stores'] = [
+    'ar' => 'قائمة جميع الفروع',
+  ];
+
   alshaya_i18n_save_translations($strings);
 }
 
