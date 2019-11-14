@@ -38,7 +38,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 999];
+    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 900];
     $events[StockUpdatedEvent::EVENT_NAME][] = ['onStockUpdated', -101];
     return $events;
   }
