@@ -332,12 +332,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Using Content-Length Header to check for valid image data, sometimes we
     // also get a 0 byte image with response 200 instead of 404.
     // So only checking $file_data is not enough.
-    if ($file_data_length[0] === '0') {
+    if (!isset($file_data_length) || $file_data_length[0] === '0') {
       if ($lock_key) {
         $lock->release($lock_key);
       }
+      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
       // Blacklist this image URL to prevent subsequent downloads for 1 day.
       $data['blacklist_expiry'] = strtotime('+1 day');
+      // Empty file detected log.
+      // Leave a message for developers to find out why this happened.
+      \Drupal::logger('acq_sku')->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
+        '@url' => $data['file'],
+        '@sku' => $this->getSku(),
+        '@remote_id' => $data['value_id'],
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
       return FALSE;
     }
 
