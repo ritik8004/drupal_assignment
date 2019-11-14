@@ -64,9 +64,13 @@ drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
 
 echo
 echo "Syncing files with target env for $source_site"
-source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'`
-target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'"`
-screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -a $source_files_folder $target:$target_files_folder"
+source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'`
+echo "Source folder $source_files_folder"
+target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep 'Site path' | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'"`
+target_files_folder="/var/www/html/$target_var/docroot/$target_files_folder"
+
+echo "Target folder $target_files_folder"
+screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -auv $source_files_folder $target:$target_files_folder"
 
 echo
 echo "Dumping database..."
@@ -79,15 +83,23 @@ drush -l $source_site.factory.alshaya.com sql-dump --result-file=/tmp/migrate/$s
 echo
 echo "Copying the dump to $target_env env..."
 ssh $target 'mkdir -p /tmp/migrate'
-scp /tmp/migrate/* $remote_user@$remote_host:/tmp/migrate/
+scp /tmp/migrate/* $target:/tmp/migrate/
 
 echo
-echo "Importing the dump on $target_env env..."
+echo "Unzipping the dump on $target_env env..."
 ssh $target 'gunzip /tmp/migrate/*.gz'
+
+echo
+echo "Clearing caches for $target_site"
+ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cr"
 
 echo
 echo "Droppping and importing database again for $target_site"
 ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < /tmp/migrate/$source_site.sql"
+
+echo
+echo "Clearing caches for $target_site"
+ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cr"
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
