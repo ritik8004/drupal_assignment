@@ -313,7 +313,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['brands'] = $brands;
     }
   }
-  elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
+  elseif ($variables['plugin_id'] === 'keyword_search_block') {
     $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
   }
 
@@ -352,6 +352,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
     if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_inline_layout';
     }
+  }
+
+  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
   }
 
   // Add class for category facet.
@@ -413,6 +417,13 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
   elseif ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_2') {
     // If store finder glossary view.
     $suggestions[] = "views_view_unformatted__store_glossary";
+  }
+
+  if ($variables['view']->id() == 'alshaya_product_list' && $variables['view']->current_display == 'block_1') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      $suggestions[] = 'views_view_unformatted__alshaya_product_list_sub_cat';
+    }
   }
 }
 

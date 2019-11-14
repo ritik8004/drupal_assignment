@@ -590,20 +590,6 @@
       }
 
       /**
-       * Tracking New customers.
-       */
-      cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_checkout_option('Guest Login', 1);
-      });
-
-      /**
-       * Tracking Returning customers.
-       */
-        cartCheckoutLoginSelector.find('button[gtm-type="checkout-signin"]').once('js-event').on('mousedown', function () {
-        Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
-      });
-
-      /**
        * Tracking Home Delivery.
        */
       if (cartCheckoutDeliverySelector.length !== 0) {

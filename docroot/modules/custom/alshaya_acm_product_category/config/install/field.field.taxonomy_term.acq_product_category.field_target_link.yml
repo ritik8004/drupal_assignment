@@ -13,7 +13,7 @@ bundle: acq_product_category
 label: 'Target link'
 description: 'Allows you to customise the link URL for this term.'
 required: false
-translatable: true
+translatable: false
 skip_translation_check: 0
 default_value: {  }
 default_value_callback: ''

@@ -7,6 +7,8 @@ services:
       - '@language_manager'
       - '@cache.product_category_tree'
       - '@current_route_match'
+      - '@request_stack'
+      - '@path.current'
       - '@database'
       - '@alshaya_acm_product.category_helper'
 

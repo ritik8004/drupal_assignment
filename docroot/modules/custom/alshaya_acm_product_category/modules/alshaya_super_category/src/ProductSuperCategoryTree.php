@@ -10,6 +10,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
@@ -30,13 +31,6 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $productCategoryTree;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
 
   /**
    * The config factory.
@@ -66,6 +60,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Entity type manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
@@ -87,6 +83,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    */
   public function __construct(ProductCategoryTreeInterface $product_category_tree,
                               RequestStack $request_stack,
+                              CurrentPathStack $current_path,
                               EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
                               LanguageManagerInterface $language_manager,
@@ -98,9 +95,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
                               ProductCategoryHelper $product_category_helper) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
-    $this->requestStack = $request_stack;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $connection, $product_category_helper);
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper);
   }
 
   /**
@@ -124,49 +120,35 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
-        if ($brand = $request->query->get('brand')) {
-          if (!is_numeric($brand)) {
-            // On search result page when user tries to switch content language,
-            // it throws an error.
-            //
-            // Because the url will generate link with /ar but other parameters
-            // are still in english and system will try to look for english
-            // brand name in arabic, and vice versa.
-            // Handle the error by loading the term id by detecting brand
-            // parameter's language.
-            $alias_lang = NULL;
-            if ($this->languageManager->getCurrentLanguage()->getId() == 'ar' && !preg_match("/\p{Arabic}/u", $brand)) {
-              $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
-            }
-            elseif ($this->languageManager->getCurrentLanguage()->getId() == 'en' && preg_match("/\p{Arabic}/u", $brand)) {
-              // Redirect to correct language, based on user input.
-              $languages = $this->languageManager->getLanguages();
-              if (count($languages) > 1 && array_key_exists('ar', $languages)) {
-                $alias_lang = $languages['ar']->getId();
-              }
-            }
-            else {
-              // If brand parameter and current language both are same then
-              // try to get taxonomy term from brand only.
-              $params = Url::fromUserInput("/$brand")->getRouteParameters();
-              if (!empty($params['taxonomy_term'])) {
-                $brand = $params['taxonomy_term'];
-              }
-            }
+        $brand = $request->query->get('brand');
 
-            if ($alias_lang) {
-              $alias = $this->aliasManager->getPathByAlias('/' . $brand, $alias_lang);
-              $brand = str_replace('/taxonomy/term/', '', $alias);
+        if (is_numeric($brand)) {
+          $brand = '';
+          $request->query->set('brand', '');
+        }
+        else {
+          try {
+            $params = Url::fromUserInput("/$brand")->getRouteParameters();
+            if (!empty($params['taxonomy_term'])) {
+              $brand = $params['taxonomy_term'];
             }
           }
+          catch (\Exception $e) {
+            // Ignore the value, someone is simply trying to mess up with system
+            // using random value in GET.
+            $brand = '';
+            $request->query->set('brand', '');
+          }
+        }
 
+        if (!empty($brand)) {
           $term = $this->termStorage->load($brand);
         }
       }
     }
 
     // If term is of 'acq_product_category' vocabulary.
-    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == self::VOCABULARY_ID) {
       return $term;
     }
 

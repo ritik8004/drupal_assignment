@@ -70,14 +70,7 @@
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        var skuType = node.attr('gtm-sku-type');
-        // For static products gallery is directly returned no need of JS updates.
-        if (skuType === 'configurable') {
-          Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
-        }
-        else {
-          return;
-        }
+        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
 
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
@@ -264,7 +257,10 @@
 
   $(window).on('load', function () {
     // Show add to cart form now.
-    $('.sku-base-form').removeClass('visually-hidden');
+    $('.sku-base-form').each(function () {
+      $(this).removeClass('visually-hidden');
+      $(this).trigger('form-visible');
+    });
 
     if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
       $('.content__title_wrapper').addClass('show-sticky-wrapper');

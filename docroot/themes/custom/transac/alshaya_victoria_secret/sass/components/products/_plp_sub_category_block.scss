@@ -1,0 +1,86 @@
+.c-plp {
+  .c-products-list {
+    .term-header {
+      .term-title {
+        font-family: $vs-bentonsanscomp-medium;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .sticky-filter-wrapper {
+      #block-subcategoryblock {
+        .header-sticky-filter & {
+          visibility: hidden;
+          opacity: 0;
+          width: 0;
+          top: 2.5rem;
+          transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+        }
+      }
+
+      &.show-sub-category {
+        height: 14rem;
+
+        .container-without-product {
+          top: 0;
+          display: flex;
+          flex-flow: row wrap;
+        }
+
+        #block-subcategoryblock {
+          display: block;
+          width: 100%;
+          text-align: center;
+          visibility: visible;
+          opacity: 1;
+          position: absolute;
+          top: 3.5rem;
+
+          .plp-subcategory-block {
+            border-bottom: none;
+            margin-#{$left}: -14.625rem;
+            max-width: 77.25rem;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #block-subcategoryblock {
+      top: 0;
+      transition: top 0.5s ease-in-out;
+
+      &.mobile-sticky-sub-category {
+        position: fixed;
+        background: $modal_bg;
+        width: 100%;
+        top: 8.2rem;
+        z-index: 1;
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .filter-fixed-top {
+      #block-subcategoryblock {
+        visibility: hidden;
+        opacity: 0;
+        width: 0;
+        transition: opacity 0.5s ease-in-out;
+
+        &.mobile-sticky-sub-category {
+          display: block;
+          position: fixed;
+          background: $modal_bg;
+          width: 100%;
+          top: 3.2rem;
+          z-index: 1;
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
