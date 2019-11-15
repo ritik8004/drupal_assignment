@@ -269,12 +269,17 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   File data.
    *
    * @return \Drupal\file\Entity\File
-   *   File id.
+   *   File id or FALSE if file cant be downloaded.
    *
    * @throws \Exception
    */
-  protected function downloadMediaImage(array $data) {
+  protected function downloadMediaImage(array &$data) {
     $lock_key = '';
+
+    // If image is blacklisted, block download.
+    if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
+      return FALSE;
+    }
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
@@ -315,18 +320,39 @@ class SKU extends ContentEntityBase implements SKUInterface {
         'timeout' => Settings::get('media_download_timeout', 5),
       ];
 
-      $file_data = \Drupal::httpClient()->get($data['file'], $options)->getBody();
+      $file_stream = \Drupal::httpClient()->get($data['file'], $options);
+      $file_data = $file_stream->getBody();
+      $file_data_length = $file_stream->getHeader('Content-Length');
     }
     catch (RequestException $e) {
       watchdog_exception('acq_commerce', $e);
     }
 
     // Check to ensure empty file is not saved in SKU.
-    if (empty($file_data)) {
+    // Using Content-Length Header to check for valid image data, sometimes we
+    // also get a 0 byte image with response 200 instead of 404.
+    // So only checking $file_data is not enough.
+    if (!isset($file_data_length) || $file_data_length[0] === '0') {
       if ($lock_key) {
         $lock->release($lock_key);
       }
-      throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
+      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
+      // Blacklist this image URL to prevent subsequent downloads for 1 day.
+      $data['blacklist_expiry'] = strtotime('+1 day');
+      // Empty file detected log.
+      // Leave a message for developers to find out why this happened.
+      \Drupal::logger('acq_sku')->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
+        '@url' => $data['file'],
+        '@sku' => $this->getSku(),
+        '@remote_id' => $data['value_id'],
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
+      return FALSE;
+    }
+
+    // Check if image was blacklisted, remove it from blacklist.
+    if (isset($data['blacklist_expiry'])) {
+      unset($data['blacklist_expiry']);
     }
 
     // Get the path part in the url, remove hostname.

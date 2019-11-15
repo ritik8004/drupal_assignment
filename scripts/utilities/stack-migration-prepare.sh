@@ -59,8 +59,12 @@ cd /var/www/html/${source_var}/docroot
 
 echo
 echo "Syncing files with target env for $source_site"
-source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'`
-target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep Public | cut -d":" -f2 | sed 's/ //g'"`
-rsync -a $source_files_folder $target:$target_files_folder
+source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'`
+echo "Source folder $source_files_folder"
+target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep 'Site path' | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'"`
+target_files_folder="/var/www/html/$target_var/docroot/$target_files_folder"
+echo "Target folder $target_files_folder"
+
+rsync -auv $source_files_folder $target:$target_files_folder
 
 echo
