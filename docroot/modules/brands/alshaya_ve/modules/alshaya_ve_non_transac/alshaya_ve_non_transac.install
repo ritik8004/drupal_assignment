@@ -15,14 +15,13 @@ use Drupal\Core\Site\Settings;
  * Make mobile field optional on email subscription form.
  */
 function alshaya_ve_non_transac_update_8001() {
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
       ['views.view.stores_finder'],
       'alshaya_stores_finder',
       'install',
       AlshayaConfigManager::USE_FROM_OVERRIDE
     );
-  $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['webform.webform.alshaya_email_signup'],
     'alshaya_email_signup'
