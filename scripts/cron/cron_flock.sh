@@ -50,20 +50,25 @@ then
 fi
 
 if [ "$process_cron" = true ]; then
+    echo "Creating lock file ${file_name}"
     echo "Creating lock file ${file_name}" &>> ${log_file}
     touch $file_name
 
     # If a script is given, then run it. Else run drush command.
     if [ "$is_shell_script" = true ]; then
+        echo "Running script ${command}"
         bash ${command} &>> ${log_file}
     else
+        echo "Running drush ${command}"
         cd /var/www/html/${AH_SITE_NAME}/docroot
         drush acsf-tools-ml ${command} &>> ${log_file}
     fi
 
     #  Releasing the lock.
     rm /tmp/cron-lock-$id.lock
-    echo "Lock ${log_file} is now released." &>> ${log_file}
+    echo "Lock ${file_name} is now released."
+    echo "Lock ${file_name} is now released." &>> ${log_file}
 else
+    echo "Skipping as command:$command with id:$id already running."
     echo "Skipping as command:$command with id:$id already running." &>> ${log_file}
 fi
