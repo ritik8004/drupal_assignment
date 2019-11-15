@@ -54,6 +54,11 @@ class AlshayaConfigManager {
   const MODE_RESAVE = 'resave';
 
   /**
+   * If there is an override, we override the complete configuration.
+   */
+  const USE_FROM_OVERRIDE = 'use_from_override';
+
+  /**
    * Config Storage service.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -152,6 +157,7 @@ class AlshayaConfigManager {
     foreach ($configs as $config_id) {
       // Be nice to devs, forgive them if they add .yml in config name.
       $config_id = str_replace('.yml', '', $config_id);
+      $options['config_name'] = $config_id;
 
       $config = $this->configFactory->getEditable($config_id);
       $data = $this->getDataFromCode($config_id, $module_name, $path);
@@ -319,6 +325,19 @@ class AlshayaConfigManager {
         // We just want the overrides to be applied and not actually change
         // anything in existing config or re-read from config yaml.
         $data = $existing;
+        break;
+
+      case self::USE_FROM_OVERRIDE:
+        if (!empty($options['config_name'])) {
+          foreach ($this->moduleHandler->getModuleList() as $module) {
+            $override_path = drupal_get_path('module', $module->getName()) . '/config/override/' . $options['config_name'] . '.yml';
+
+            // If there is an override, we override the complete configuration.
+            if (file_exists($override_path)) {
+              $data = Yaml::parse(file_get_contents($override_path));
+            }
+          }
+        }
         break;
 
       case self::MODE_REPLACE:
