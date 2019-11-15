@@ -113,12 +113,15 @@
   Drupal.behaviors.backToSearch = {
     attach: function (context, settings) {
       // On product click, store the product position.
-      $('.views-infinite-scroll-content-wrapper .c-products__item').once('back-to-plp').on('click', function () {
+      $('#alshaya-algolia-search .view-search .c-products__item').once('back-to-search').on('click', function () {
+        console.log('clicked...');
         // Prepare object to store details.
         var storage_details = {
           nid: $(this).find('article:first').attr('data-nid'),
           grid_type: $('.c-products-list').hasClass('product-large') ? 'large' : 'small',
         };
+
+        console.log(storage_details);
 
         // As local storage only supports string key/value pair.
         localStorage.setItem(window.location.pathname, JSON.stringify(storage_details));

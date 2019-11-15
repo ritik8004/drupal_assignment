@@ -67,6 +67,7 @@ class SearchGallery extends React.Component {
     media.forEach((element, index) => {
       thumbnails.push((
         <SliderElement
+          key={element.url}
           src={element.url}
           title={title}
           mouseenter={origObj.changeImg}
