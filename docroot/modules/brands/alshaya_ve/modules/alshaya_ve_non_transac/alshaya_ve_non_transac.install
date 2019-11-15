@@ -18,9 +18,9 @@ function alshaya_ve_non_transac_update_8001() {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       ['views.view.stores_finder'],
-      'alshaya_ve_non_transac',
-      'override',
-      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+      'alshaya_stores_finder',
+      'install',
+      AlshayaConfigManager::USE_FROM_OVERRIDE
     );
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
