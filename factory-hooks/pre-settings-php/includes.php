@@ -13,11 +13,14 @@
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
 
 $env = 'local';
+$env_name = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
+  $env_name = substr($env, 2);
 }
 elseif (getenv('TRAVIS')) {
   $env = 'travis';
+  $env_name = 'travis';
 }
 
 // Set the env in settings to allow re-using in custom code.
@@ -195,7 +198,7 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 // settings must be overridden on a per site basis, please, check
 // factory-hooks/environments/settings.php to see the other settings.
 // ################################################################
-switch ($env) {
+switch ($env_name) {
   case 'local':
   case 'travis':
     // Requests from local are slow, we can to wait for some more time
@@ -216,10 +219,10 @@ switch ($env) {
     $settings['alshaya_performance_log_mode'] = 'developer';
     break;
 
-  case '01dev':
-  case '01dev2':
-  case '01dev3':
-  case '01test':
+  case 'dev':
+  case 'dev2':
+  case 'dev3':
+  case 'test':
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
@@ -232,9 +235,8 @@ switch ($env) {
     $config['acq_commerce.conductor']['debug'] = TRUE;
     break;
 
-  case '01live':
+  case 'live':
     // We want to timeout linked skus API call in 1 second on prod.
     $settings['linked_skus_timeout'] = 1;
     break;
-
 }
