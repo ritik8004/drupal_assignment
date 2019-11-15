@@ -9,14 +9,19 @@
 # it assume that it will be drush command.
 #
 # Usage -
-# 1. Without any option (for drush) - ./scripts/cron/cron_flock.sh acspm acspm
-# 2. With options (for drush) -  ./scripts/cron/cron_flock.sh acspm '"acspm" "--types=cart"'
+# 1. Without any option (for drush) - ./scripts/cron/cron_flock.sh acspm acsf-tools-ml acspm
+# 2. With options (for drush) -  ./scripts/cron/cron_flock.sh acspm acsf-tools-ml '"acspm" "--types=cart"'
 # 3. Without option (for scripts) - ./scripts/cron/cron_flock.sh clear-varnish /var/www/fullpath/clear-varnish.sh
 # 4. With option (for scripts) - ./scripts/cron/cron_flock.sh clear-varnish `/var/www/fullpath/clear-varnish.sh arg1 arg2`
 #
+id=$1
+args=("$@")
 
-id="$1"
-command="$2"
+command=$2
+for i in $(seq 2 ${#args[@]})
+do
+  command="$command \"${args[$i]}\""
+done
 
 file_name=/tmp/cron-lock-$id.lock
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-${id}.log
@@ -57,11 +62,12 @@ if [ "$process_cron" = true ]; then
     # If a script is given, then run it. Else run drush command.
     if [ "$is_shell_script" = true ]; then
         echo "Running script ${command}"
-        bash ${command} &>> ${log_file}
+        bash $command &>> ${log_file}
     else
-        echo "Running drush ${command}"
+        command="drush $command"
+        echo "Running drush $command"
         cd /var/www/html/${AH_SITE_NAME}/docroot
-        drush acsf-tools-ml ${command} &>> ${log_file}
+        eval $command &>> ${log_file}
     fi
 
     #  Releasing the lock.
