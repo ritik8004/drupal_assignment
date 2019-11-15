@@ -17,7 +17,7 @@ use Drupal\node\Entity\Node;
 function alshaya_acm_product_update_8053() {
   $connection = \Drupal::database();
   // Find all files with file size 0.
-  $find_empty_file = 'SELECT fid FROM {file_managed} WHERE filesize=0 AND (uri LIKE "%public://media%" OR uri LIKE "%public://assets%")';
+  $find_empty_file = "SELECT fid FROM {file_managed} WHERE filesize=0 AND (uri LIKE '%public://media%' OR uri LIKE '%public://assets%')";
   $result = $connection->query($find_empty_file);
   if ($result) {
     // Work on each fid.
