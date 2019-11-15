@@ -534,7 +534,7 @@ class AlshayaPromoLabelManager {
             '#tag' => 'div',
             '#value' => '',
           ];
-          $build['promotions']['dynamic_label']['#attributes']['class'][] = 'promotions-dynamic-label sku-' . $sku->id() . ' hidden';
+          $build['promotions']['dynamic_label']['#attributes']['class'][] = 'promotions-dynamic-label sku-' . $sku->id() . ' hidden' . ' mobile-only-dynamic-promotion';
           break;
 
         case 'modal':

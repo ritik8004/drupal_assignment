@@ -35,14 +35,28 @@
       if (alshayaAcmPromotions !== undefined) {
         // Slide down the dynamic label.
         $('.promotions-dynamic-label', context).on('cart:notification:animation:complete dynamic:promotion:label:ajax:complete', function() {
-          $(this).slideDown('slow', function() {
-            if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
-              Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
-              // Adding an event to recalculate the pdp sidebar container.
-              $('.basic-details-wrapper').trigger('pdp-dynamic-promotion-enabled');
+          if ($(window).width() > 767) {
+            $(this).slideDown('slow', function() {
+            });
+          }
+          else if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {
+            if ($('.edit-add-to-cart').hasClass('fix-button')) {
+              // Add the specific class added for slide the dynamic promotion.
+              $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button slide-dynamic-promotion-button');
             }
-          });
+            else {
+              $('.basic-details-wrapper').removeClass('fix-dynamic-promotion-button');
+            }
+            Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
+            $('.promotions-dynamic-label').removeClass('mobile-only-dynamic-promotion');
+          }
         });
+
+        // Cut the Dynamic promotion wrapper and insert it after add to cart button.
+        if ($(window).width() < 768 && $('.sku-dynamic-promotion-link').length > 0 && $('.basic-details-wrapper .promotions-dynamic-label').length < 1) {
+          var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
+          dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
+        }
 
         // Go ahead and display dynamic promotions.
         $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
@@ -60,19 +74,16 @@
    *
    */
   Drupal.alshayaPromotions.stickyDynamicPromotionLabel = function () {
-    var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
-    dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
-    $('.promotions .promotions-dynamic-label').remove();
     $('.content__sidebar').addClass('dynamic-promotions-wrapper');
-
-    if ($('.edit-add-to-cart').hasClass('fix-button')) {
-      $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button');
-    }
-    else {
-      $('.basic-details-wrapper').removeClass('fix-dynamic-promotion-button');
-    }
+    // Adding an event to recalculate the pdp sidebar container.
+    $('.basic-details-wrapper').trigger('pdp-dynamic-promotion-enabled');
 
     $(window).once('dynamicPromotion').on('scroll', function () {
+      // Remove the specific class added for slide the dynamic promotion.
+      if ($('.basic-details-wrapper').hasClass('slide-dynamic-promotion-button')) {
+        $('.basic-details-wrapper').removeClass(('slide-dynamic-promotion-button'));
+      }
+
       if ($('.edit-add-to-cart').hasClass('fix-button')) {
         $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button');
       }
