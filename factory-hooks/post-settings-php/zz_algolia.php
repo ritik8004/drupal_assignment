@@ -10,6 +10,26 @@
 
 global $_acsf_site_name;
 
+$algolia_env = $settings['env'];
+
+// We want to use Algolia index name with 01 prefix all the time.
+if (substr($algolia_env, 0, 2) !== '01') {
+  $algolia_env = '01' . substr($algolia_env, 2);
+}
+
+// During the production deployment, `01update` env is used and that is
+// not a valid index name prefix, we want to use `01live` only even there.
+if ($algolia_env == '01update') {
+  $algolia_env = '01live';
+}
+// For non-prod env, we have env likes `01dev3up`, `01qaup` which are used
+// during release/deployment. We just remove last `up` from the env name
+// to use the original env. For example - original env for `01dev3up` will
+// be `01dev3`.
+elseif (substr($algolia_env, -2) == 'up') {
+  $algolia_env = substr($algolia_env, 0, -2);
+}
+
 // Ensure we never connect to Index of another ENV.
 $config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $settings['env'] . '_' . $_acsf_site_name;
 $config['block.block.autocompletewidgetofalgolia']['settings']['index'] = $settings['env'] . '_' . $_acsf_site_name;
