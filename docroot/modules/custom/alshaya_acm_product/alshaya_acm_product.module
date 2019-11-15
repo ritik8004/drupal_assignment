@@ -592,7 +592,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
-        if ($sku_media) {
+        if (!empty($sku_media['drupal_uri'])) {
           $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
         }
 
