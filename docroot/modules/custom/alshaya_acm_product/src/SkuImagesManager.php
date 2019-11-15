@@ -710,14 +710,14 @@ class SkuImagesManager {
         foreach ($media['media_items']['images'] ?? [] as $media_item) {
           // For now we are displaying only image slider on search results
           // page and PLP.
-          if (empty($search_main_image)) {
+          if (empty($search_main_image) && !empty($media_item['drupal_uri'])) {
             $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
           }
-          elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
+          elseif ($this->productDisplaySettings->get('gallery_show_hover_image') && !empty($media_item['drupal_uri'])) {
             $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
           }
 
-          if ($this->productDisplaySettings->get('image_thumb_gallery')) {
+          if ($this->productDisplaySettings->get('image_thumb_gallery') && !empty($media_item['drupal_uri'])) {
             $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing', 'product_listing');
           }
         }
