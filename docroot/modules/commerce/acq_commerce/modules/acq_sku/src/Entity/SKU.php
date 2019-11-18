@@ -204,7 +204,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
     }
 
-    return $this->mediaData;
+    return array_filter($this->mediaData, function ($row) {
+      return !empty($row['fid']);
+    });
   }
 
   /**
