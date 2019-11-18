@@ -10,7 +10,6 @@
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
-      var productCarousel = '.product-category-carousel';
       var pdp_items_desk = drupalSettings.pdp_items_desk;
       var basket_carousel_items = drupalSettings.basket_carousel_items;
       var dp_product_carousel_items = drupalSettings.dp_product_carousel_items;
@@ -44,16 +43,18 @@
         touchThreshold: 1000
       };
 
+      function applyHorizontalLazyLoad(carousel) {
+        // Lazy Load on carousels.
+        carousel.on('afterChange', function () {
+          Drupal.blazyRevalidate();
+        });
+      }
+
       function applyRtl(ocObject, options) {
         // For tablets and mobile we don't want to apply OwlCarousel.
         if ($(window).width() < 1024) {
           return;
         }
-
-        // Lazy Load on carousels.
-        $(productCarousel).on('afterChange', function () {
-          Drupal.blazyRevalidate();
-        });
 
         // Get number of items.
         var itemsCount = ocObject.find('.views-row').length;
@@ -82,36 +83,45 @@
       var upSell = $('.horizontal-upell .owl-carousel');
       var relatedSell = $('.horizontal-related .owl-carousel');
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
+      var productCarouselClasses = ['.product-category-carousel', '.owl-carousel'];
 
       plpfeaturedproduct.each(function () {
         applyRtl($(this), optionsPlp);
+        applyHorizontalLazyLoad($(this));
       });
 
       advancedfeaturedproduct.each(function () {
         applyRtl($(this), optionshp);
+        applyHorizontalLazyLoad($(this));
       });
 
       basketHR.each(function () {
         applyRtl($(this), optionsBasket);
+        applyHorizontalLazyLoad($(this));
       });
 
       crossSell.each(function () {
         applyRtl($(this), optionsPdp);
+        applyHorizontalLazyLoad($(this));
       });
 
       upSell.each(function () {
         applyRtl($(this), optionsPdp);
+        applyHorizontalLazyLoad($(this));
       });
 
       relatedSell.each(function () {
         applyRtl($(this), optionsPdp);
+        applyHorizontalLazyLoad($(this));
       });
 
       // We dont have carousel in tablets & phones,
       // Enable horizontal lazy load.
       if ($(window).width() < 1024) {
         // Horizontal Lazy load for scroll areas.
-        Drupal.blazyHorizontalLazyLoad(productCarousel);
+        $.each(productCarouselClasses, function (key, scrollArea) {
+          Drupal.blazyHorizontalLazyLoad(scrollArea);
+        });
       }
     }
   };
