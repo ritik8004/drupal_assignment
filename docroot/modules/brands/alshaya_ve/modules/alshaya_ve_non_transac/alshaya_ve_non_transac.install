@@ -29,7 +29,7 @@ function alshaya_ve_non_transac_update_8001() {
       ['views.view.stores_finder'],
       'alshaya_stores_finder',
       'install',
-      AlshayaConfigManager::USE_FROM_OVERRIDE
+      AlshayaConfigManager::USE_FROM_REPLACE
     );
   $manager->updateConfigs(
     ['webform.webform.alshaya_email_signup'],
