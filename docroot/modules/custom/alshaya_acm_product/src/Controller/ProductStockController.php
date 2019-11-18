@@ -133,7 +133,6 @@ class ProductStockController extends ControllerBase {
           AddToCartFormSubmitEvent::EVENT_NAME,
           new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
         );
-
       }
       else {
         $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
