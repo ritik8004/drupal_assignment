@@ -43,24 +43,21 @@
 
     .spcSelect__menu-list {
       padding: 0;
-      border: 1px solid #000;
+      border: 1px solid $spc-select-text;
       border-top-width: 0;
 
       > div {
-        color: #000;
-        border-top: 1px solid #ddd;
+        color: $spc-select-text;
+        border-top: 1px solid $spc-select-border-separator;
         font-size: 0.75rem;
         letter-spacing: 1px;
-        background: white;
+        background: $spc-select_bg;
         cursor: pointer;
         padding: 0.75rem;
 
-        &:hover {
-          background: #f7f7f7;
-        }
-
+        &:hover,
         &.spcSelect__option--is-selected {
-          background: #f7f7f7;
+          background: $spc-select_bg_hover;
         }
       }
     }
