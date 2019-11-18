@@ -188,8 +188,8 @@ done`). One argument - site code will be passed to this script.
 
 Script usage:
 * `blt local:sync "site" "env" "mode"`
-* `blt local:sync mckw dev reuse`
-* `blt local:sync mckw dev download`
+* `blt local:sync mckw 01dev reuse`
+* `blt local:sync vsae 02dev download`
 * `blt local:download "site" "env"`
 
 Be careful in using the mode download, it will take time as it does sql-dump
