@@ -54,9 +54,9 @@ class AlshayaConfigManager {
   const MODE_RESAVE = 'resave';
 
   /**
-   * If there is an override, we override the complete configuration.
+   * If there is a replace, we replace the complete configuration.
    */
-  const USE_FROM_OVERRIDE = 'use_from_override';
+  const USE_FROM_REPLACE = 'use_from_replace';
 
   /**
    * Config Storage service.
@@ -327,12 +327,12 @@ class AlshayaConfigManager {
         $data = $existing;
         break;
 
-      case self::USE_FROM_OVERRIDE:
+      case self::USE_FROM_REPLACE:
         if (!empty($options['config_name'])) {
           foreach ($this->moduleHandler->getModuleList() as $module) {
-            $override_path = drupal_get_path('module', $module->getName()) . '/config/override/' . $options['config_name'] . '.yml';
+            $override_path = drupal_get_path('module', $module->getName()) . '/config/replace/' . $options['config_name'] . '.yml';
 
-            // If there is an override, we override the complete configuration.
+            // If there is a replace, we replace the complete configuration.
             if (file_exists($override_path)) {
               $data = Yaml::parse(file_get_contents($override_path));
             }
