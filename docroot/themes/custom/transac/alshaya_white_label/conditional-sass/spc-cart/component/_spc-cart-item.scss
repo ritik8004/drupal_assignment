@@ -35,47 +35,16 @@
 
         .qty {
           align-self: normal;
-
-          .spc-qty-select {
-            &.open {
-              div[class$='-indicatorContainer'] {
-                svg {
-                  transform: rotate(180deg);
-                }
-              }
-            }
-          }
-
-          div[class$='-control'] {
-            border: 1px solid $spc-select-text;
-            border-radius: 0;
-            height: 2.5rem;
-            font-size: 0.875rem;
-            box-shadow: none;
-
-            > div:nth-child(2) {
-              span[class$='-indicatorSeparator'] {
-                display: none;
-              }
-
-              div[class$='-indicatorContainer'] {
-                color: $spc-select-text;
-
-                svg {
-                  transition: transform 0.3s ease-in-out;
-                }
-              }
-            }
-          }
         }
       }
 
       .spc-remove-btn {
-        background: url(#{$base_theme_img_directory_path}/icons/ic-trashbin-two.svg) center center no-repeat;
-        width: 2.125rem;
-        height: 2.125rem;
+        background: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg) center center no-repeat;
+        width: 1.5rem;
+        height: 1.5rem;
         border: none;
         font-size: 0;
+        background-size: contain;
       }
     }
 

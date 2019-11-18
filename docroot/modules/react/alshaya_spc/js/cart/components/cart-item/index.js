@@ -29,11 +29,11 @@ export default class CartItem extends React.Component {
   };
 
   onMenuOpen = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-qty-select').classList.add('open');
+    this.selectRef.current.select.inputRef.closest('.spc-select').classList.add('open');
   };
 
   onMenuClose = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-qty-select').classList.remove('open');
+    this.selectRef.current.select.inputRef.closest('.spc-select').classList.remove('open');
   };
 
   render() {
@@ -62,7 +62,7 @@ export default class CartItem extends React.Component {
           <div className="spc-product-tile-actions">
             <button className="spc-remove-btn" onClick={() => {this.removeCartItem()}}>{Drupal.t('remove')}</button>
             <div className="qty">
-              <Select ref={this.selectRef} className="spc-qty-select" onMenuOpen={this.onMenuOpen} onMenuClose={this.onMenuClose} options={options} defaultValue={options[0]} isSearchable={false} />
+              <Select ref={this.selectRef} classNamePrefix="spcSelect" className="spc-select" onMenuOpen={this.onMenuOpen} onMenuClose={this.onMenuClose} options={options} defaultValue={options[0]} isSearchable={false} />
             </div>
           </div>
         </div>
