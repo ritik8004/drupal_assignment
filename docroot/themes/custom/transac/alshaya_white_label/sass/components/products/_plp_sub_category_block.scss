@@ -1,14 +1,12 @@
 .block-alshaya-sub-category-block {
   .plp-subcategory-block {
-    display: flex;
-    align-items: flex-start;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    white-space: nowrap;
     overflow-x: auto;
     padding: 1.25rem 0 2.5rem;
     border-bottom: 1px solid $primary_border;
-
-    @include breakpoint($desktop) {
-      justify-content: center;
-    }
 
     .sub-category {
       display: inline-block;
