@@ -38,7 +38,7 @@
         letter-spacing: 1px;
         color: $plp_sub_cat_block_cat_title;
         white-space: normal;
-        margin-top: 6.5px;
+        margin-top: 0.4375rem;
 
         @include breakpoint($only-tablet) {
           font-size: 0.75rem;
@@ -52,7 +52,6 @@
       .sub-category-image {
         width: 5.625rem;
         height: 4.1875rem;
-        margin-bottom: 0.4375rem;
         margin: 0 auto;
 
         @include breakpoint($tablet) {
