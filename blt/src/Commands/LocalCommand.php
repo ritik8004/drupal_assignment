@@ -25,6 +25,8 @@ class LocalCommand extends BltTasks {
    * @description Syncs DB from remote and set stage file proxy.
    */
   public function localSync($site = '', $env = 'dev', $mode = 'reuse') {
+    $env = is_numeric(substr($env, 0, 2)) ? $env : '01' . $env;
+
     $info = $this->validateAndPrepareInfo($site, $env);
 
     if (empty($info)) {
@@ -125,7 +127,7 @@ class LocalCommand extends BltTasks {
     // Now the last thing, dev script, I love it :).
     $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
-      $this->_exec('sh ' . $dev_script_path . ' ' . $site);
+      $this->_exec('sh ' . $dev_script_path . ' ' . preg_replace('/\d/', '', $site));
     }
 
   }
@@ -232,6 +234,8 @@ class LocalCommand extends BltTasks {
    *   Fully prepared array or 0.
    */
   private function validateAndPrepareInfo($site, $env) {
+    $remote_site = $site;
+    $site = preg_replace('/\d/', '', $site);
     static $static;
 
     if (isset($static[$env][$site])) {
@@ -246,20 +250,22 @@ class LocalCommand extends BltTasks {
       return 0;
     }
 
+    $site_data = $sites[$site];
+
     $info = [];
 
-    $info['profile'] = $sites[$site]['type'];
+    $info['profile'] = $site_data['type'];
 
     $info['local']['url'] = 'local.alshaya-' . $site . '.com';
     $info['local']['alias'] = 'self';
-    $info['remote']['alias'] = $site . '.01' . $env;
+    $info['remote']['alias'] = 'alshaya.' . $env;
 
     // Get remote data to confirm site code is valid and we can get db role
     // and remote url.
     $remote_data = $this->getSitesData($info['remote']['alias']);
 
-    $info['remote']['db_role'] = $this->extractInfo($remote_data, $site, 'db_role');
-    $info['remote']['url'] = $this->extractInfo($remote_data, $site, 'url');
+    $info['remote']['db_role'] = $this->extractInfo($remote_data, $remote_site, 'db_role');
+    $info['remote']['url'] = $this->extractInfo($remote_data, $remote_site, 'url');
 
     $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'];
     $info['origin'] = 'https://' . $info['remote']['url'];
