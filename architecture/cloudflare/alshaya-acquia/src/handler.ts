@@ -3,11 +3,31 @@ const CryptoJS = require('crypto-js');
 
 export async function handleRequest(request: Request): Promise<Response> {
   var authKey = await AlshayaAcquiaStability.get('x-alshaya-key');
+  var slackUrl = await AlshayaAcquiaStability.get('slackUrl');
+
+  var slackOptions = {
+    method: 'POST',
+    body: '',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  };
+
+  slackOptions.body = 'payload={"text": "Cloudflare worker url invoked"}';
+  var slackResponse = await fetch(slackUrl, slackOptions);
+
   if (request.headers.get('x-alshaya-key') !== authKey) {
     return new Response('Invalid request.');
   }
 
   var status = 'TRUE';
+  if (request.headers.get('x-queue-status')) {
+    status = request.headers.get('x-queue-status').toString();
+  }
+
+  if (request.headers.get('x-debug-status')) {
+    return new Response(status);
+  }
 
   function guid() {
     function s4() {
@@ -38,13 +58,15 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   var siteIds = (await AlshayaAcquiaStability.get('siteIds')).split(',');
   for (var siteId in siteIds) {
+    siteId = siteIds[siteId];
+
     var nonce = guid();
     var acqHmacTimestamp = epochTime();
 
     partsMock = [
       'GET',
       'api.eu-west-1.prod.acm.acquia.io',
-      'v2/config/site/' + siteIds[siteId] + '/queue',
+      '/v2/config/site/' + siteId + '/queue',
       'pause=' + status,
       'id=' + hmacId + '&nonce=' + nonce + '&realm=' + encodeURIComponent(hmacRealm) + '&version=' + hmacVersion
     ];
@@ -71,6 +93,9 @@ export async function handleRequest(request: Request): Promise<Response> {
     };
 
     var response = await fetch(url, options);
+
+    slackOptions.body = 'payload={"text": "siteid=' + siteId + ': ' + (await response.text()).replace(/["']/g, "") + '"}';
+    slackResponse = await fetch(slackUrl, slackOptions);
   }
 
   return new Response('Request processed.');
