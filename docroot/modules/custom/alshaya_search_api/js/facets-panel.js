@@ -456,7 +456,7 @@
             }
           }
           else {
-            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('body').hasClass('subcategory-listing-enabled')) {
               if (this.oldScroll > this.scrollY) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
