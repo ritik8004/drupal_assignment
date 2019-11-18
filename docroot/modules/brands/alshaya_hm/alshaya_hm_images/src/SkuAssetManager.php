@@ -302,7 +302,9 @@ class SkuAssetManager {
       ]);
     }
 
-    return $assets;
+    return array_filter($assets, function ($row) {
+      return !empty($row['fid']);
+    });
   }
 
   /**
