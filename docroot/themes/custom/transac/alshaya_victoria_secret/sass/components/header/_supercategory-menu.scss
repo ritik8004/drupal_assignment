@@ -144,3 +144,9 @@
     }
   }
 }
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    overflow: auto;
+  }
+}
