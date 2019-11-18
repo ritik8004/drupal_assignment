@@ -50,7 +50,7 @@
 
     // Adding 10px of margin from top so spacing doesn't look tight between term title and sticky facet filters.
     $('html, body').animate({
-      scrollTop: ($(element).offset().top - stickyFilterPosition - 10)
+      scrollTop: ($(element).offset().top - stickyFilterPosition - 20)
     }, 500);
   }
 
