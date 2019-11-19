@@ -8,6 +8,16 @@
 (function ($, Drupal) {
   'use strict';
 
+  /**
+   * Call blazyRevalidate() on afterChange of slick sliders.
+   */
+  function applyHorizontalLazyLoad(carousel) {
+    // Lazy Load on carousels.
+    carousel.on('afterChange', function () {
+      Drupal.blazyRevalidate();
+    });
+  }
+
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
       var pdp_items_desk = drupalSettings.pdp_items_desk;
@@ -42,13 +52,6 @@
         focusOnSelect: false,
         touchThreshold: 1000
       };
-
-      function applyHorizontalLazyLoad(carousel) {
-        // Lazy Load on carousels.
-        carousel.on('afterChange', function () {
-          Drupal.blazyRevalidate();
-        });
-      }
 
       function applyRtl(ocObject, options) {
         // For tablets and mobile we don't want to apply OwlCarousel.
