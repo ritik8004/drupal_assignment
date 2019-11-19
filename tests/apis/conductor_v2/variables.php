@@ -13,6 +13,7 @@ $brand_code = 'vs';
 // Environment information.
 // dev, test, uat, pprod, live, dev2, dev3, qa2.
 $env = 'test';
+$stack = '02';
 
 // Magento information.
 // Must match a magento key defined in factory-hooks/environment/magento.php.

@@ -27,21 +27,21 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'kw' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-PP5PK4C',
           ],
         ],
       ],
       'ae' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-TTQFBZ',
           ],
         ],
       ],
       'sa' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-NMZXSP',
           ],
@@ -61,26 +61,26 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'kw' => [
-        '01live' => [
+        'live' => [
           'alshaya_knet.settings' => [
             'alias' => 'hm',
           ],
         ],
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-NQ4JXJP',
           ],
         ],
       ],
       'ae' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-5ZNGJRP',
           ],
         ],
       ],
       'sa' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-PXGWK9J',
           ],
@@ -97,7 +97,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'ae' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KXQ8P3S',
           ],

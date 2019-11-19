@@ -24,7 +24,7 @@ $languages = [
 ];
 
 foreach ($countries as $country_code => $country_name) {
-  $magento_data = alshaya_get_commerce_third_party_settings(strtolower($brand_code), $country_code, '01' . strtolower($env));
+  $magento_data = alshaya_get_commerce_third_party_settings(strtolower($brand_code), $country_code, $stack . strtolower($env));
   if (empty($magento_data)) {
     echo "\nNothing for: " . $brand_name . ' ' . $country_name . ' - ' . $env;
     continue;
