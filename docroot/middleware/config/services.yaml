@@ -62,15 +62,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-#    session:
-#        public: true
-#        class: Symfony\Component\HttpFoundation\Session\Session
-#        arguments: ['@session_manager', '@session.attribute_bag', '@session.flash_bag']
-#
-#    session_manager:
-#        class: App\Session\SessionManager
-#        arguments: ['%session.storage.options%', '@session.storage.metadata_bag', '@session_handler']
-
-#    session_handler:
-#        class: App\Session\SessionHandler
-#        arguments: ['@request_stack', '@doctrine.dbal.default_connection']

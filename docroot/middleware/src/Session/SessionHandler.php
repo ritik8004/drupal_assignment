@@ -6,9 +6,7 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Drupal\Component\Utility\Crypt;
-use Drupal\Core\Utility\Error;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Storage\Proxy\AbstractProxy;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
 /**
@@ -87,13 +85,8 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
       return TRUE;
     }
     catch (\Exception $exception) {
-//      require_once DRUPAL_ROOT . '/core/includes/errors.inc';
-//      // If we are displaying errors, then do so with no possibility of a
-//      // further uncaught exception being thrown.
-//      if (error_displayable()) {
-//        print '<h1>Uncaught exception thrown in session handler.</h1>';
-//        print '<p>' . Error::renderExceptionSafe($exception) . '</p><hr />';
-//      }
+      // If we are displaying errors, then do so with no possibility of a
+      // further uncaught exception being thrown.
       return FALSE;
     }
   }
@@ -122,7 +115,7 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
     // value. For example, if you want user sessions to stay in your database
     // for three weeks before deleting them, you need to set gc_maxlifetime
     // to '1814400'. At that value, only after a user doesn't log in after
-    // three weeks (1814400 seconds) will his/her session be removed.
+    // three weeks (1814400 seconds) will their session be removed.
     $qb = $this->connection->createQueryBuilder();
     $qb->delete('sessions');
     $qb->where('timestamp < :timestamp');
