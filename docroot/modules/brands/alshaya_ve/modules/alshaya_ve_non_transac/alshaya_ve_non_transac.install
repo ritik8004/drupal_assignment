@@ -14,7 +14,15 @@ use Drupal\Core\Site\Settings;
  * Update search placeholder.
  */
 function alshaya_ve_non_transac_update_8002() {
-  alshaya_country_set_default_store_search_placeholder('Search Area / City', 'البحث المنطقة / المدينة');
+  // Set Country specific placeholder for store finder search.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'Search Area / City')
+    ->save();
+
+  // Make configuration value translatable.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'البحث المنطقة / المدينة')
+    ->save();
 }
 
 /**
@@ -135,9 +143,14 @@ function alshaya_ve_non_transac_install() {
   $settings = Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'];
   \Drupal::configFactory()->getEditable('alshaya_ve_non_transac.settings')->set('book_appointment_url', $settings)->save();
 
-  // Country code and timezone for Kuwait.
-  alshaya_country_set_default_regional_info('KW');
-
   // Update search placeholder.
-  alshaya_country_set_default_store_search_placeholder('Search Area / City', 'البحث المنطقة / المدينة');
+  // Set Country specific placeholder for store finder search.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'Search Area / City')
+    ->save();
+
+  // Make configuration value translatable.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'البحث المنطقة / المدينة')
+    ->save();
 }
