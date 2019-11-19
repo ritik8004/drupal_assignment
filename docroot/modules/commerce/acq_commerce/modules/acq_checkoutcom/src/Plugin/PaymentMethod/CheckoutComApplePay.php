@@ -3,6 +3,7 @@
 namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\acq_checkout\Event\AcqCheckoutPaymentFailedEvent;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -130,6 +131,9 @@ class CheckoutComApplePay extends PaymentMethodBase implements PaymentMethodInte
     if (empty($payload) || empty($payload['publicKeyHash'])) {
       $this->messenger()->addError($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
       $form_state->setError($complete_form['actions']['apple_wrapper']['apple_pay'], $this->t('Payment failed'));
+
+      $event = new AcqCheckoutPaymentFailedEvent('checkout_com_applepay', 'Invalid data in payload or empty publicKeyHash.');
+      \Drupal::service('event_dispatcher')->dispatch(AcqCheckoutPaymentFailedEvent::EVENT_NAME, $event);
     }
   }
 
