@@ -60,7 +60,7 @@ class CartController {
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    *   Service for session.
    */
-  public function  __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info, SessionInterface $session) {
+  public function __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info, SessionInterface $session) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
@@ -158,7 +158,7 @@ class CartController {
       $data['recommended_products'] = $recommended_products_data;
     }
 
-    $this->session->set(self::STORAGE_KEY, $data);
+    $this->session->set(self::STORAGE_KEY, $data['cart_id']);
     return $data;
   }
 
@@ -171,9 +171,9 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   protected function createCart() {
-    $cart_data = $this->session->get(self::STORAGE_KEY);
-    if (!empty($cart_data) && isset($cart_data['cart_id'])) {
-      return $cart_data['cart_id'];
+    $cart_id = $this->session->get(self::STORAGE_KEY);
+    if (!empty($cart_id)) {
+      return $cart_id;
     }
     $this->session->remove(self::STORAGE_KEY);
     return $this->cart->createCart();
