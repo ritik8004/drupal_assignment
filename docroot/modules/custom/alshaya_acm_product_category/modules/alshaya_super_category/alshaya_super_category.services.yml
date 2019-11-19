@@ -7,6 +7,7 @@ services:
     arguments:
       - '@alshaya_super_category.product_category_tree.inner'
       - '@request_stack'
+      - '@path.current'
       - '@entity_type.manager'
       - '@entity.repository'
       - '@language_manager'

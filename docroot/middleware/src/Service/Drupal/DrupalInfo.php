@@ -2,8 +2,7 @@
 
 namespace App\Service\Drupal;
 
-use springimport\magento2\apiv1\ApiFactory;
-use springimport\magento2\apiv1\Configuration;
+use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -66,9 +65,10 @@ class DrupalInfo {
    *   Api client.
    */
   public function getDrupalApiClient() {
-    $configuration = new Configuration();
-    $configuration->setBaseUri($this->getDrupalBaseUrl());
-    return (new ApiFactory($configuration))->getApiClient();
+    return (new Client([
+      // Base URI is used with relative requests.
+      'base_uri' => $this->getDrupalUrl(),
+    ]));
   }
 
 }
