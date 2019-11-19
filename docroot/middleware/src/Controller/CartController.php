@@ -187,79 +187,85 @@ class CartController {
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
-    $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
-    foreach ($data['items'] as $key => $value) {
-      if (isset($items_quantity[$key])) {
-        $data['items'][$key]['qty'] = $items_quantity[$key];
-      }
-
-      // If CnC is disabled for any item, we don't process and consider
-      // CnC disabled.
-      if ($data['cnc_enabled'] && isset($data['items'][$key]['delivery_options']['click_and_collect'])) {
-        $data['cnc_enabled'] = $data['items'][$key]['delivery_options']['click_and_collect']['status'];
-      }
-
-      // For the OOS.
-      if ($data['in_stock'] && (isset($value['in_stock']) && !$value['in_stock'])) {
-        $data['in_stock'] = FALSE;
-      }
-
-      // This is to determine whether item to be shown free or not in cart.
-      $data['items'][$key]['free_item'] = FALSE;
-      foreach ($cart_data['totals']['items'] as $total_item) {
-        if (in_array($value['sku'], array_keys($items_id))
-          && $items_id[$value['sku']] == $total_item['item_id']
-          && ($total_item['price'] * $items_quantity[$value['sku']] === $total_item['discount_amount'])) {
-          $data['items'][$key]['free_item'] = TRUE;
-          break;
+    try {
+      $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
+      foreach ($data['items'] as $key => $value) {
+        if (isset($items_quantity[$key])) {
+          $data['items'][$key]['qty'] = $items_quantity[$key];
         }
-      }
-    }
 
-    $data['cart_promo'] = [];
-    // If there is any rule applied on cart.
-    if (!empty($cart_data['cart']['applied_rule_ids'])) {
-      $drupal_promos_data = $this->drupal->getAllPromoData();
-      // If we have promo data from drupal.
-      if (!empty($drupal_promos_data)) {
-        $cart_promo_rule_ids = explode(',', $cart_data['cart']['applied_rule_ids']);
-        foreach ($drupal_promos_data as $drupal_promo_data) {
-          // If there is any rule applied on cart.
-          if (in_array($drupal_promo_data['commerce_id'], $cart_promo_rule_ids)) {
-            $data['cart_promo'][] = [
-              'label' => $drupal_promo_data['promo_label'],
-              'description' => strip_tags($drupal_promo_data['promo_desc']),
-            ];
-            // If rule is of type `free shipping`.
-            if ($drupal_promo_data['promo_sub_tpe'] == 'free_shipping_order') {
-              $data['totals']['free_delivery'] = TRUE;
-            }
+        // If CnC is disabled for any item, we don't process and consider
+        // CnC disabled.
+        if ($data['cnc_enabled'] && isset($data['items'][$key]['delivery_options']['click_and_collect'])) {
+          $data['cnc_enabled'] = $data['items'][$key]['delivery_options']['click_and_collect']['status'];
+        }
+
+        // For the OOS.
+        if ($data['in_stock'] && (isset($value['in_stock']) && !$value['in_stock'])) {
+          $data['in_stock'] = FALSE;
+        }
+
+        // This is to determine whether item to be shown free or not in cart.
+        $data['items'][$key]['free_item'] = FALSE;
+        foreach ($cart_data['totals']['items'] as $total_item) {
+          if (in_array($value['sku'], array_keys($items_id))
+            && $items_id[$value['sku']] == $total_item['item_id']
+            && ($total_item['price'] * $items_quantity[$value['sku']] === $total_item['discount_amount'])) {
+            $data['items'][$key]['free_item'] = TRUE;
+            break;
           }
         }
       }
-    }
 
-    // Prepare recommended product data.
-    $recommended_products = $this->drupal->getDrupalLinkedSkus($sku_items);
-    $recommended_products_data = [];
-    $data['recommended_products'] = [];
-    // If there any recommended products.
-    if (!empty($recommended_products)) {
-      foreach ($recommended_products as $recommended_product) {
-        if (!empty($recommended_product['linked'])) {
-          foreach ($recommended_product['linked'] as $linked) {
-            if ($linked['link_type'] == 'crosssell' && !empty($linked['skus'])) {
-              foreach ($linked['skus'] as $link) {
-                $recommended_products_data[$link['sku']] = $link;
+      $data['cart_promo'] = [];
+      // If there is any rule applied on cart.
+      if (!empty($cart_data['cart']['applied_rule_ids'])) {
+        $drupal_promos_data = $this->drupal->getAllPromoData();
+        // If we have promo data from drupal.
+        if (!empty($drupal_promos_data)) {
+          $cart_promo_rule_ids = explode(',', $cart_data['cart']['applied_rule_ids']);
+          foreach ($drupal_promos_data as $drupal_promo_data) {
+            // If there is any rule applied on cart.
+            if (in_array($drupal_promo_data['commerce_id'], $cart_promo_rule_ids)) {
+              $data['cart_promo'][] = [
+                'label' => $drupal_promo_data['promo_label'],
+                'description' => strip_tags($drupal_promo_data['promo_desc']),
+              ];
+              // If rule is of type `free shipping`.
+              if ($drupal_promo_data['promo_sub_tpe'] == 'free_shipping_order') {
+                $data['totals']['free_delivery'] = TRUE;
               }
             }
           }
         }
       }
-      $data['recommended_products'] = $recommended_products_data;
+
+      // Prepare recommended product data.
+      $recommended_products = $this->drupal->getDrupalLinkedSkus($sku_items);
+      $recommended_products_data = [];
+      $data['recommended_products'] = [];
+      // If there any recommended products.
+      if (!empty($recommended_products)) {
+        foreach ($recommended_products as $recommended_product) {
+          if (!empty($recommended_product['linked'])) {
+            foreach ($recommended_product['linked'] as $linked) {
+              if ($linked['link_type'] == 'crosssell' && !empty($linked['skus'])) {
+                foreach ($linked['skus'] as $link) {
+                  $recommended_products_data[$link['sku']] = $link;
+                }
+              }
+            }
+          }
+        }
+        $data['recommended_products'] = $recommended_products_data;
+      }
+
+      $this->session->set(self::STORAGE_KEY, $data['cart_id']);
+    }
+    catch (\Exception $e) {
+      return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    $this->session->set(self::STORAGE_KEY, $data['cart_id']);
     return $data;
   }
 
