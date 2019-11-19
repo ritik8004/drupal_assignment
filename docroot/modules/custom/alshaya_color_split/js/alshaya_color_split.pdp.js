@@ -24,10 +24,8 @@
         }
 
         if ($(node).attr('data-vmode') === 'full') {
-          var url = variantInfo.url[$('html').attr('lang')];
-          if(location.search.indexOf("selected") == -1) {
-            url = variantInfo.url[$('html').attr('lang')] + location.search;
-          }
+          var url = variantInfo.url[$('html').attr('lang')] + location.search;
+          url = Drupal.removeURLParameter(url, 'selected');
           window.history.pushState(variantInfo, variantInfo.title, url);
 
           $('.language-switcher-language-url .language-link').each(function () {

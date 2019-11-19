@@ -33,6 +33,7 @@ $settings['alshaya_knet.settings']['knet_currency_code'] = '414';
 $settings['alshaya_knet.settings']['knet_udf5_prefix'] = 'ptlf';
 
 $settings['alshaya_knet.settings']['knet_url'] = 'https://kpaytest.com.kw/kpg/PaymentHTTP.htm';
-if ($env == '01live' || $env == '01update') {
+
+if (preg_match('/\d{2}(live|update)/', $env)) {
   $settings['alshaya_knet.settings']['knet_url'] = 'https://kpay.com.kw/kpg/PaymentHTTP.htm';
 }

@@ -1,8 +1,4 @@
 .promotions-dynamic-label {
-  @include breakpoint($only-mobile) {
-    display: none !important;
-  }
-
   a.sku-dynamic-promotion-link {
     background: $promo_dynamic_label_bg;
     color: $promo_dynamic_label_txt !important;
@@ -49,6 +45,7 @@
             margin-#{$right}: 0;
             margin-top: 0.5rem;
             height: 2.5rem;
+            bottom: -3rem;
 
             a {
               &.sku-dynamic-promotion-link {
@@ -94,6 +91,24 @@
             z-index: 5;
           }
         }
+      }
+    }
+
+    .slide-dynamic-promotion-button {
+      &.basic-details-wrapper {
+        .field--name-field-skus {
+          .promotions-dynamic-label {
+            transition: bottom 0.5s ease-in !important;
+          }
+        }
+      }
+    }
+
+    .mobile-only-dynamic-promotion {
+      &.hidden {
+        display: block;
+        visibility: hidden;
+        position: absolute;
       }
     }
   }
