@@ -1093,7 +1093,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         'selected-variant-sku-' . $sku_identifier,
       ],
     ],
-    '#value' => '',
+    '#default_value' => ($sku_entity->bundle() === 'simple') ? $sku_entity->getSku() : '',
   ];
 
   // We need to change the markup for submit button.

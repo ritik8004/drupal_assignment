@@ -14,6 +14,14 @@ use Drupal\Core\Entity\EntityChangedInterface;
 interface SKUInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
   /**
+   * Get SKU of the entity.
+   *
+   * @return string
+   *   SKU of the entity;
+   */
+  public function getSku();
+
+  /**
    * Refresh stock for the sku using stock api.
    */
   public function refreshStock();
