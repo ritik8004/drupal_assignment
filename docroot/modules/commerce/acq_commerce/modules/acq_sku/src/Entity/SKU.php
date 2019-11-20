@@ -452,7 +452,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @param string $langcode
    *   Language code.
    * @param bool $log_not_found
-   *   Log errors when store not found. Can be false during sync.
+   *   Log errors when SKU not found. Can be false during sync.
    * @param bool $create_translation
    *   Create translation and return if entity available but translation is not.
    *
@@ -476,18 +476,26 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
+    // Check in static.
+    $sku_static = &drupal_static(__FUNCTION__);
+    if (isset($sku_static[$sku][$langcode])) {
+      return $sku_static[$sku][$langcode];
+    }
+
     // Do a query to fetch SKU id instead of using loadByProperties to
     // avoid JOINs. Below query should always return one record as
     // sku + langcode combination is unique.
     $database = \Drupal::database();
-    $sku_record = $database->query("SELECT id FROM {acq_sku_field_data} WHERE sku=:sku AND langcode=:langcode", [
+    $sku_record = $database->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku AND langcode=:langcode', [
       ':sku' => $sku,
       ':langcode' => $langcode,
     ])->fetchField();
 
     // First check if we have some result before doing anything else.
     if (!isset($sku_record)) {
-      \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku.', ['@sku' => $sku]);
+      if ($log_not_found) {
+        \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku.', ['@sku' => $sku]);
+      }
       return NULL;
     }
 
@@ -512,6 +520,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
     }
 
+    // Stash before return.
+    $sku_static[$sku][$langcode] = $sku_entity;
     return $sku_entity;
   }
 
