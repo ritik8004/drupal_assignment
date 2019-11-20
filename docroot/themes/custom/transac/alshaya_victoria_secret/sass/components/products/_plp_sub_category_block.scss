@@ -58,6 +58,15 @@
         width: 100%;
         top: 8.2rem;
         z-index: 1;
+
+        .plp-subcategory-block {
+          .sub-category {
+            .sub-category-image {
+              width: 4.375rem;
+              height: 3.25rem;
+            }
+          }
+        }
       }
     }
   }
