@@ -477,7 +477,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     // Do a query to fetch SKU id instead of using loadByProperties to
-    // avoid JOINs.
+    // avoid JOINs. Below query should always return one record as
+    // sku + langcode combination is unique.
     $database = \Drupal::database();
     $sku_record = $database->query("SELECT id FROM {acq_sku_field_data} WHERE sku=:sku AND langcode=:langcode", [
       ':sku' => $sku,
