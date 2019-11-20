@@ -32,7 +32,7 @@ vm:
     ac-site: alshaya
     ac-env: 01dev2
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01dev2.livedev:
         parent: '@alshaya.01dev2'
         root: /mnt/gfs/alshaya.01dev2/livedev/docroot
     paths:
@@ -46,7 +46,7 @@ vm:
     ac-site: alshaya
     ac-env: 01dev3
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01dev3.livedev:
         parent: '@alshaya.01dev3'
         root: /mnt/gfs/alshaya.01dev3/livedev/docroot
     paths:
@@ -60,7 +60,7 @@ vm:
     ac-site: alshaya
     ac-env: 01live
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01live.livedev:
         parent: '@alshaya.01live'
         root: /mnt/gfs/alshaya.01live/livedev/docroot
     paths:
@@ -74,7 +74,7 @@ vm:
     ac-site: alshaya
     ac-env: 01pprod
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01pprod.livedev:
         parent: '@alshaya.01pprod'
         root: /mnt/gfs/alshaya.01pprod/livedev/docroot
     paths:
@@ -88,7 +88,7 @@ vm:
     ac-site: alshaya
     ac-env: 01qa2
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01qa2.livedev:
         parent: '@alshaya.01qa2'
         root: /mnt/gfs/alshaya.01qa2/livedev/docroot
     paths:
@@ -102,7 +102,7 @@ vm:
     ac-site: alshaya
     ac-env: 01test
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01test.livedev:
         parent: '@alshaya.01test'
         root: /mnt/gfs/alshaya.01test/livedev/docroot
     paths:
@@ -116,7 +116,7 @@ vm:
     ac-site: alshaya
     ac-env: 01uat
     ac-realm: enterprise-g1
-    01dev.livedev:
+    01uat.livedev:
         parent: '@alshaya.01uat'
         root: /mnt/gfs/alshaya.01uat/livedev/docroot
     paths:
