@@ -9,67 +9,115 @@ vm:
     user: vagrant
     ssh:
         options: '-o PasswordAuthentication=no -i "~/.vagrant.d/insecure_private_key"'
+
 01dev:
     uri: hmeg.dev-alshaya.acsitefactory.com
     host: staging-1505.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01dev/docroot
     user: alshaya.01dev
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01dev
+    ac-realm: enterprise-g1
+    01dev.livedev:
+        parent: '@alshaya.01dev'
+        root: /mnt/gfs/alshaya.01dev/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01dev2:
     uri: hmeg.dev2-alshaya.acsitefactory.com
     host: staging-2000.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01dev2/docroot
     user: alshaya.01dev2
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01dev2
+    ac-realm: enterprise-g1
+    01dev2.livedev:
+        parent: '@alshaya.01dev2'
+        root: /mnt/gfs/alshaya.01dev2/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01dev3:
     uri: hmeg.dev3-alshaya.acsitefactory.com
     host: staging-2001.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01dev3/docroot
     user: alshaya.01dev3
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01dev3
+    ac-realm: enterprise-g1
+    01dev3.livedev:
+        parent: '@alshaya.01dev3'
+        root: /mnt/gfs/alshaya.01dev3/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01live:
-    uri: kw.hm.com
+    uri: eg.hm.com
     host: web-1504.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01live/docroot
     user: alshaya.01live
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01live
+    ac-realm: enterprise-g1
+    01live.livedev:
+        parent: '@alshaya.01live'
+        root: /mnt/gfs/alshaya.01live/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01pprod:
     uri: hmeg.pprod-alshaya.acsitefactory.com
     host: staging-1510.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01pprod/docroot
     user: alshaya.01pprod
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01pprod
+    ac-realm: enterprise-g1
+    01pprod.livedev:
+        parent: '@alshaya.01pprod'
+        root: /mnt/gfs/alshaya.01pprod/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01qa2:
     uri: hmeg.qa2-alshaya.acsitefactory.com
     host: staging-2002.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01qa2/docroot
     user: alshaya.01qa2
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01qa2
+    ac-realm: enterprise-g1
+    01qa2.livedev:
+        parent: '@alshaya.01qa2'
+        root: /mnt/gfs/alshaya.01qa2/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01test:
     uri: hmeg.test-alshaya.acsitefactory.com
     host: staging-1505.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01test/docroot
     user: alshaya.01test
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01test
+    ac-realm: enterprise-g1
+    01test.livedev:
+        parent: '@alshaya.01test'
+        root: /mnt/gfs/alshaya.01test/livedev/docroot
+    paths:
+        drush-script: drush9
+
 01uat:
     uri: hmeg.uat-alshaya.acsitefactory.com
     host: staging-1509.enterprise-g1.hosting.acquia.com
-    options: {  }
-    paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01uat/docroot
     user: alshaya.01uat
-    ssh: { options: '-p 22' }
+    ac-site: alshaya
+    ac-env: 01uat
+    ac-realm: enterprise-g1
+    01uat.livedev:
+        parent: '@alshaya.01uat'
+        root: /mnt/gfs/alshaya.01uat/livedev/docroot
+    paths:
+        drush-script: drush9
