@@ -34,7 +34,7 @@ vm:
     user: alshaya.01dev3
     ssh: { options: '-p 22' }
 01live:
-    uri: kw.hm.com
+    uri: eg.hm.com
     host: web-1504.enterprise-g1.hosting.acquia.com
     options: {  }
     paths: { dump-dir: /mnt/tmp }
