@@ -246,7 +246,7 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
     '#empty_value' => '',
     '#empty_option' => t('Select @title', ['@title' => $label]),
     '#attributes' => [
-      'class' => ['form-item-configurable-select'],
+      'class' => ['form-item-configurable-swatch'],
       'data-default-title' => $label,
     ],
     '#weight' => -1,
