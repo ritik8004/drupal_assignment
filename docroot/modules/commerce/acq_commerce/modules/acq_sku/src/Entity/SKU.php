@@ -476,38 +476,26 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
-    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
-    $skus = $storage->loadByProperties(['sku' => $sku]);
+    // Do a query to fetch SKU id instead of using loadByProperties to
+    // avoid JOINs.
+    $database = \Drupal::database();
+    $sku_record = $database->query("SELECT id FROM {acq_sku_field_data} WHERE sku=:sku AND langcode=:langcode", [
+      ':sku' => $sku,
+      ':langcode' => $langcode,
+    ])->fetchField();
 
     // First check if we have some result before doing anything else.
-    if (count($skus) == 0) {
-      // We simply return NULL as this is very normal to have SKU missing.
+    if (!isset($sku_record)) {
+      \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku.', ['@sku' => $sku]);
       return NULL;
     }
 
-    // Get the first entity to use from result.
-    $sku_entity = reset($skus);
+    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
+    $sku_entity = $storage->load($sku_record);
 
     // Sanity check.
     if (!($sku_entity instanceof SKUInterface)) {
       return NULL;
-    }
-
-    // Remove all skus in other languages if there are more than one available
-    // We need to have multiple languages enabled to clean db result.
-    // If only one is available, we might be adding translation, leave it as is.
-    if ($is_multilingual && !empty($skus) && count($skus) > 1) {
-      // Get rid of undesired languages. Later first one is picked up.
-      foreach ($skus as $key => $skuEntity) {
-        if ($skuEntity->langcode->value != $langcode) {
-          unset($skus[$key]);
-        }
-      }
-    }
-
-    // Log error message if we have more than one available even after cleanup.
-    if (count($skus) > 1) {
-      \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
     if ($is_multilingual && $sku_entity->language()->getId() != $langcode) {
