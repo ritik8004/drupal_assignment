@@ -190,11 +190,13 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $current_path = substr($current_path, 0, strpos($current_path, '/--'));
       }
 
+      $filters_count = 0;
       if (count($filters_current_result_array)) {
         foreach ($filters_current_result_array as $key => $values) {
           $encoded = [];
           foreach ($values as $value) {
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);
+            $filters_count++;
           }
           $filters_current_result_array[$key] = $key . '-' . implode('-', $encoded);
         }
@@ -208,7 +210,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url = Url::fromUri('base:' . $current_path . '/');
       }
 
-      if (count($filters_current_result_array, COUNT_RECURSIVE) - count($filters_current_result_array) > 2) {
+      // If more than 2 filters are selected, don't index.
+      if ($filters_count >= 2) {
         $url->setOption('attributes', ['rel' => 'nofollow noindex ']);
       }
       else {
