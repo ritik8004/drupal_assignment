@@ -23,7 +23,7 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
    */
-  private $skuManager;
+  protected $skuManager;
 
   /**
    * Queue factory service.

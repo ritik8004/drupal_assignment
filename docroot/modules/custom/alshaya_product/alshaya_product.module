@@ -5,7 +5,6 @@
  * Module file.
  */
 
-use Drupal\alshaya_search_api\Plugin\QueueWorker\InvalidateCategoryListingCache;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface;
@@ -185,19 +184,5 @@ function alshaya_product_acq_sku_base_fields_updated(array $fields, $op = 'add')
         }
       }
       break;
-  }
-}
-
-/**
- * Implements hook_views_post_build().
- */
-function alshaya_product_views_post_build(ViewExecutable $view) {
-  if ($view->id() != 'alshaya_product_list') {
-    return;
-  }
-
-  $tids = $view->args[0] ?? '';
-  foreach (explode('+', $tids) as $tid) {
-    $view->element['#cache']['tags'][] = InvalidateCategoryListingCache::CACHE_TAG_PREFIX . $tid;
   }
 }

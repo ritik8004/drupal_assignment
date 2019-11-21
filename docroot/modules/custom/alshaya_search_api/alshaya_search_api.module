@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_search_api\Plugin\QueueWorker\InvalidateCategoryListingCache;
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\ViewExecutable;
@@ -89,6 +90,21 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
   // Add 'back to list' library to search/plp/promo page.
   if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
     $view->element['#attached']['library'][] = 'alshaya_search_api/back_to_list';
+  }
+}
+
+/**
+ * Implements hook_views_post_build().
+ */
+function alshaya_search_api_views_post_build(ViewExecutable $view) {
+  if ($view->id() != 'alshaya_product_list') {
+    return;
+  }
+
+  // We will invalidate this cache tag later in separate queue / cron.
+  $tids = $view->args[0] ?? '';
+  foreach (explode('+', $tids) as $tid) {
+    $view->element['#cache']['tags'][] = InvalidateCategoryListingCache::CACHE_TAG_PREFIX . $tid;
   }
 }
 
