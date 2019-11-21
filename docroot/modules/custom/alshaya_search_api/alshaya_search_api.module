@@ -5,8 +5,7 @@
  * Module file.
  */
 
-use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber;
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\ViewExecutable;
@@ -91,6 +90,21 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
   // Add 'back to list' library to search/plp/promo page.
   if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
     $view->element['#attached']['library'][] = 'alshaya_search_api/back_to_list';
+  }
+}
+
+/**
+ * Implements hook_views_post_build().
+ */
+function alshaya_search_api_views_post_build(ViewExecutable $view) {
+  if ($view->id() != 'alshaya_product_list') {
+    return;
+  }
+
+  // We will invalidate this cache tag later in separate queue / cron.
+  $tids = $view->args[0] ?? '';
+  foreach (explode('+', $tids) as $tid) {
+    $view->element['#cache']['tags'][] = AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $tid;
   }
 }
 
@@ -225,15 +239,4 @@ function alshaya_search_api_modules_uninstalled($modules) {
   // Reset configs overridden by alshaya_search_algolia module.
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
   alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_search_api_node_presave(EntityInterface $entity) {
-  // We will indexation manually while processing product.
-  // Skip tracking by default.
-  if ($entity->bundle() == 'acq_product' && empty(ProcessProduct::$processingItem)) {
-    $entity->search_api_skip_tracking = TRUE;
-  }
 }
