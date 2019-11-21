@@ -3,15 +3,18 @@
 # This script clean production data from all sites, synchronize the commerce
 # data with the appropriate Magento and take database dump for later restore.
 
-target_env="$1"
+target_env=${AH_SITE_ENVIRONMENT}
 
-if [ $target_env = "01live" -o $target_env = "01update" ]
+# Get the environment without the "01" prefix.
+env=${target_env:2}
+
+if [ $env = "live" -o $env = "update" ]
 then
   echo "Lets not try developer scripts on prod env :)"
   exit
 fi
 
-sites="$2"
+sites="$1"
 
 if [ -z "$sites" ]
 then
@@ -19,11 +22,8 @@ then
   exit
 fi
 
-# Get the environment without the "01" prefix.
-env=${target_env:2}
-
 # Move to proper directory to get access to drush9 acsf-tools commands.
-cd /var/www/html/alshaya$target_env/docroot
+cd /var/www/html/${AH_SITE_NAME}/docroot
 
 echo "Starting post stage reset process on $sites."
 
@@ -31,6 +31,7 @@ echo "Starting post stage reset process on $sites."
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site before doing anything."
+  mkdir -p ~/backup/$target_env/pre-stage
   drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
 done
 
@@ -64,5 +65,6 @@ done
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site after process."
+  mkdir -p ~/backup/$target_env/post-stage
   drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
 done
