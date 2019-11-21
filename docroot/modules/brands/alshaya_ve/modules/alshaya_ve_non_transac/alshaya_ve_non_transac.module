@@ -8,6 +8,28 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_ve_non_transac_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == 'non_transac_acquia_index_search' && $view->total_rows > 0) {
+    $format_plural = new PluralTranslatableMarkup($view->total_rows, '(1 result)', '(@count results)');
+    if (!empty($view->getExposedInput()['keywords'])) {
+      $view->setTitle(t('"@keyword" @results', ['@keyword' => $view->getExposedInput()['keywords'], '@results' => $format_plural]));
+    }
+    else {
+      $view->setTitle(t('@results',
+        ['@results' => str_replace(['(', ')'], '', $format_plural)]));
+    }
+
+    foreach ($view->result as &$result) {
+      $result->search_api_excerpt = str_replace('… ', '', $result->search_api_excerpt);
+    }
+  }
+}
 
 /**
  * Implements hook_element_info_alter().
