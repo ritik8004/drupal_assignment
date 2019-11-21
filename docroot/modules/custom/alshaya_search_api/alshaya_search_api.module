@@ -5,7 +5,7 @@
  * Module file.
  */
 
-use Drupal\alshaya_search_api\Plugin\QueueWorker\InvalidateCategoryListingCache;
+use Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber;
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\ViewExecutable;
@@ -104,7 +104,7 @@ function alshaya_search_api_views_post_build(ViewExecutable $view) {
   // We will invalidate this cache tag later in separate queue / cron.
   $tids = $view->args[0] ?? '';
   foreach (explode('+', $tids) as $tid) {
-    $view->element['#cache']['tags'][] = InvalidateCategoryListingCache::CACHE_TAG_PREFIX . $tid;
+    $view->element['#cache']['tags'][] = AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $tid;
   }
 }
 

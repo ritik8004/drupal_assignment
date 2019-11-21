@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_search_api\Plugin\QueueWorker;
+namespace Drupal\alshaya_performance\Plugin\QueueWorker;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
@@ -9,26 +9,22 @@ use Drupal\Core\Queue\QueueWorkerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * InvalidateCategoryListingCache.
+ * InvalidateCacheTags.
  *
  * @QueueWorker(
- *   id = "alshaya_invalidate_category_listing_cache",
- *   title = @Translation("Alshaya Invalidate Category Listing Cache"),
+ *   id = "alshaya_invalidate_cache_tags",
+ *   title = @Translation("Alshaya Invalidate Cache Tags in Queue."),
  * )
  */
-class InvalidateCategoryListingCache extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   use LoggerChannelTrait;
 
   /**
    * Queue Name.
    */
-  const QUEUE_NAME = 'alshaya_invalidate_category_listing_cache';
+  const QUEUE_NAME = 'alshaya_invalidate_cache_tags';
 
-  /**
-   * Prefix for custom cache tag on listing pages.
-   */
-  const CACHE_TAG_PREFIX = 'search_api_list:term:';
 
   /**
    * Cache Tags Invalidator.
@@ -60,7 +56,7 @@ class InvalidateCategoryListingCache extends QueueWorkerBase implements Containe
   /**
    * Works on a single queue item.
    *
-   * @param mixed $category_id
+   * @param string $tag
    *   The data that was passed to
    *   \Drupal\Core\Queue\QueueInterface::createItem() when the item was queued.
    *
@@ -82,16 +78,16 @@ class InvalidateCategoryListingCache extends QueueWorkerBase implements Containe
    *
    * @see \Drupal\Core\Cron::processQueues()
    */
-  public function processItem($category_id) {
-    if (!is_numeric($category_id)) {
+  public function processItem($tag) {
+    if (empty($tag)) {
       return;
     }
 
     // Invalid cache tags for node and sku.
-    $this->cacheTagsInvalidator->invalidateTags([self::CACHE_TAG_PREFIX . $category_id]);
+    $this->cacheTagsInvalidator->invalidateTags([$tag]);
 
-    $this->getLogger('InvalidateCategoryListingCache')->notice('Invalidated cache tag for category term id @id', [
-      '@id' => $category_id,
+    $this->getLogger('InvalidateCacheTags')->notice('Invalidated cache tag @tag', [
+      '@tag' => $tag,
     ]);
   }
 

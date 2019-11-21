@@ -4,7 +4,7 @@ namespace Drupal\alshaya_search_api\EventSubscriber;
 
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_search_api\Plugin\QueueWorker\InvalidateCategoryListingCache;
+use Drupal\alshaya_performance\Plugin\QueueWorker\InvalidateCacheTags;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\node\NodeInterface;
@@ -17,6 +17,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @package Drupal\alshaya_search_api\EventSubscriber
  */
 class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Prefix for custom cache tag on listing pages.
+   */
+  const CACHE_TAG_PREFIX = 'search_api_list:term:';
 
   /**
    * SKU Manager.
@@ -91,10 +96,20 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
       foreach ($indexes as $index) {
         $items = $index->loadItemsMultiple([$item_id]);
         $index->indexSpecificItems($items);
+
+        // For search page, invalidate cache if we had nothing in old and
+        // something now in new. Ideally this means this product is new.
+        // For Algolia it shouldn't matter, we will get data directly from
+        // Algolia, we do here for SOLR.
+        if ($index->id() === 'acquia_search_index' && empty($indexed_category_ids) && !empty($current_category_ids)) {
+          $this->queueCacheInvalidation('search_api_list:acquia_search_index');
+        }
       }
 
+      // For listing pages, if we have new categories - add them for
+      // cache invalidation.
       foreach ($new_categories ?? [] as $new_category) {
-        $this->queueCategoryForCacheInvalidation($new_category);
+        $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $new_category);
       }
     }
   }
@@ -117,13 +132,13 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
   }
 
   /**
-   * Queue category for cache invalidation.
+   * Queue for cache invalidation.
    *
-   * @param string|int $category_id
-   *   SKU entity.
+   * @param string $tag
+   *   Tag.
    */
-  protected function queueCategoryForCacheInvalidation($category_id) {
-    $this->queueFactory->get(InvalidateCategoryListingCache::QUEUE_NAME)->createItem($category_id);
+  protected function queueCacheInvalidation(string $tag) {
+    $this->queueFactory->get(InvalidateCacheTags::QUEUE_NAME)->createItem($tag);
   }
 
 }
