@@ -11,8 +11,8 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm\CartHelper;
-use Drupal\Core\State\StateInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -80,8 +80,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    *   K-Net helper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   State object.
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $temp_store_factory
+   *   The factory for the temp store object.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger channel.
    * @param \Drupal\acq_commerce\Conductor\APIWrapperInterface $api_wrapper
@@ -97,17 +97,19 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
    */
-  public function __construct(KnetHelper $knet_helper,
-                              ConfigFactoryInterface $config_factory,
-                              StateInterface $state,
-                              LoggerChannelInterface $logger,
-                              APIWrapperInterface $api_wrapper,
-                              AlshayaApiWrapper $alshaya_api,
-                              CartStorageInterface $cart_storage,
-                              CheckoutHelper $checkout_helper,
-                              CartHelper $cart_helper,
-                              ModuleHandlerInterface $module_handler) {
-    parent::__construct($config_factory, $state, $logger);
+  public function __construct(
+    KnetHelper $knet_helper,
+    ConfigFactoryInterface $config_factory,
+    SharedTempStoreFactory $temp_store_factory,
+    LoggerChannelInterface $logger,
+    APIWrapperInterface $api_wrapper,
+    AlshayaApiWrapper $alshaya_api,
+    CartStorageInterface $cart_storage,
+    CheckoutHelper $checkout_helper,
+    CartHelper $cart_helper,
+    ModuleHandlerInterface $module_handler
+  ) {
+    parent::__construct($config_factory, $temp_store_factory, $logger);
     $this->knetHelper = $knet_helper;
     $this->api = $api_wrapper;
     $this->alshayaApi = $alshaya_api;
@@ -186,7 +188,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     }
 
     $state_key = $response['state_key'];
-    $state_data = $this->state->get($state_key);
+    $state_data = $this->tempStore->get($state_key);
     $cartToLog = $this->cartHelper->getCleanCartToLog($cart);
     // Check if we have data in state available and it matches data in POST.
     if (empty($state_data)
@@ -212,7 +214,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     }
     // Store amount in state variable for logs.
     $response['amount'] = $totals['grand'];
-    $this->state->set($state_key, $response);
+    $this->tempStore->set($state_key, $response);
     // On local/dev we don't use https for response url.
     // But for sure we want to use httpd on success url.
     $url_options = [
@@ -316,14 +318,14 @@ class AlshayaAcmKnetHelper extends KnetHelper {
 
       // Preserve the payment id in a state variable to render it on Order
       // Confirmation page.
-      $this->state->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
+      $this->tempStore->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
         'payment_id' => $data['payment_id'],
         'transaction_id' => $data['transaction_id'],
         'result_code' => $data['result'],
       ]);
 
       // Delete the data from DB (state).
-      $this->state->delete($state_key);
+      $this->tempStore->delete($state_key);
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
@@ -345,7 +347,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    * {@inheritdoc}
    */
   public function processKnetFailed(string $state_key) {
-    $data = $this->state->get($state_key);
+    $data = $this->tempStore->get($state_key);
     parent::processKnetFailed($state_key);
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],
@@ -400,7 +402,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     ];
 
     $state_key = md5(json_encode($state_data));
-    $data = $this->state->get($state_key);
+    $data = $this->tempStore->get($state_key);
 
     // @TODO: Confirm message.
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
