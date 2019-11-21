@@ -355,21 +355,21 @@ $conductors = [
   ],
   // Westelm KW.
   'wekw_qa' => [
-    'hmac_id' => '5adbb23fe93249438105a3560d7c86d3',
-    'hmac_secret' => 'NjFhYTM2OTAtMjE5Ni00',
-    'site_id' => 154,
+    'hmac_id' => '2546a170c84c49248207de3a8665a920',
+    'hmac_secret' => 'N2Q4ZjhlY2YtMTA1Yy00',
+    'site_id' => 165,
   ],
   // Westelm SA.
   'wesa_qa' => [
-    'hmac_id' => 'e811273bb860476da288afeb111816b6',
-    'hmac_secret' => 'ZmVjMDczMzUtYTY4Yy00',
-    'site_id' => 155,
+    'hmac_id' => 'f8415a9cef1d46aeb0ffeafb5937682f',
+    'hmac_secret' => 'ZjI2YjYzZWItZDYyZi00',
+    'site_id' => 166,
   ],
   // Westelm AE.
   'weae_qa' => [
-    'hmac_id' => 'be57e78e9c5642018b14ca7678f32ee7',
-    'hmac_secret' => 'YmNkYTg3ODQtOThjMi00',
-    'site_id' => 156,
+    'hmac_id' => '868bd73816b6425987a7d43b96c0ed84',
+    'hmac_secret' => 'OGY5ODFiM2MtYTk0Mi00',
+    'site_id' => 167,
   ],
   // Westelm AE.
   'weae_dev2' => [

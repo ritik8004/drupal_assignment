@@ -19,6 +19,13 @@ services:
     tags:
       - { name: event_subscriber }
 
+  alshaya_acm.checkout_operation_failed_event_subscriber:
+    class: Drupal\alshaya_acm\EventSubscriber\AlshayaAcmCheckoutOperationFailedEvent
+    arguments:
+      - '@alshaya_acm.cart_helper'
+    tags:
+      - { name: event_subscriber }
+
   alshaya_acm.route_subscriber:
     class: Drupal\alshaya_acm\Routing\RouteSubscriber
     tags:
@@ -39,6 +46,8 @@ services:
       - '@acq_cart.cart_storage'
       - '@event_dispatcher'
       - '@module_handler'
+      - '@alshaya_api.api'
+      - '@config.factory'
       - '@logger.factory'
 
   alshaya_acm.config_check:
