@@ -5,8 +5,6 @@
  * Module file.
  */
 
-use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\ViewExecutable;
@@ -228,12 +226,10 @@ function alshaya_search_api_modules_uninstalled($modules) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
+ * Implements hook_entity_type_build().
  */
-function alshaya_search_api_node_presave(EntityInterface $entity) {
-  // We will indexation manually while processing product.
-  // Skip tracking by default.
-  if ($entity->bundle() == 'acq_product' && empty(ProcessProduct::$processingItem)) {
-    $entity->search_api_skip_tracking = TRUE;
+function alshaya_search_api_entity_type_build(&$entity_types) {
+  if (isset($entity_types['search_api_index'])) {
+    $entity_types['search_api_index']->setClass('Drupal\alshaya_search_api\Entity\AlshayaSearchApiIndex');
   }
 }
