@@ -263,7 +263,7 @@
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
-        if (userDetails.userID !== 0 && userDetails.userID !== undefined && localStorage.getItem('userID') !== userDetails.userID) {
+        if (userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
