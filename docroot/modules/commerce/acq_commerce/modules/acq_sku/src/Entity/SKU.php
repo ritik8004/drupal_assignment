@@ -478,29 +478,37 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Check in static.
     $sku_static = &drupal_static(__FUNCTION__);
-    if (isset($sku_static[$sku][$langcode])) {
-      return $sku_static[$sku][$langcode];
+    if (isset($sku_static[$sku])) {
+      $sku_id = $sku_static[$sku];
     }
+    else {
+      $database = \Drupal::database();
+      $sku_records = $database->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku', [
+        ':sku' => $sku,
+      ])->fetchAllKeyed(0, 0);
 
-    // Do a query to fetch SKU id instead of using loadByProperties to
-    // avoid JOINs. Below query should always return one record as
-    // sku + langcode combination is unique.
-    $database = \Drupal::database();
-    $sku_record = $database->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku AND langcode=:langcode', [
-      ':sku' => $sku,
-      ':langcode' => $langcode,
-    ])->fetchField();
-
-    // First check if we have some result before doing anything else.
-    if (!isset($sku_record)) {
-      if ($log_not_found) {
-        \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku.', ['@sku' => $sku]);
+      // First check if we have some result before doing anything else.
+      if (empty($sku_records)) {
+        if ($log_not_found) {
+          \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku.', ['@sku' => $sku]);
+        }
+        return NULL;
       }
-      return NULL;
+
+      // If we find more than one, raise a log.
+      if (!empty($sku_records) && count($sku_records) > 1) {
+        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
+      }
+
+      // We should always get one, but get first SKU entity for processing just
+      // in case.
+      $sku_id = reset($sku_records);
+      // Stash before return.
+      $sku_static[$sku] = $sku_id;
     }
 
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
-    $sku_entity = $storage->load($sku_record);
+    $sku_entity = $storage->load($sku_id);
 
     // Sanity check.
     if (!($sku_entity instanceof SKUInterface)) {
@@ -519,9 +527,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
-
-    // Stash before return.
-    $sku_static[$sku][$langcode] = $sku_entity;
     return $sku_entity;
   }
 
