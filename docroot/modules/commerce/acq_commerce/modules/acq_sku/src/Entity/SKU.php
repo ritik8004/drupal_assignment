@@ -452,7 +452,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @param string $langcode
    *   Language code.
    * @param bool $log_not_found
-   *   Log errors when store not found. Can be false during sync.
+   *   Log errors when SKU not found. Can be false during sync.
    * @param bool $create_translation
    *   Create translation and return if entity available but translation is not.
    *
@@ -476,38 +476,43 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
-    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
-    $skus = $storage->loadByProperties(['sku' => $sku]);
+    // Check in static.
+    $sku_static = &drupal_static(__FUNCTION__);
+    if (isset($sku_static[$sku])) {
+      $sku_id = $sku_static[$sku];
+    }
+    else {
+      $database = \Drupal::database();
+      $sku_records = $database->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku', [
+        ':sku' => $sku,
+      ])->fetchAllKeyed(0, 0);
 
-    // First check if we have some result before doing anything else.
-    if (count($skus) == 0) {
-      // We simply return NULL as this is very normal to have SKU missing.
-      return NULL;
+      // First check if we have some result before doing anything else.
+      if (empty($sku_records)) {
+        if ($log_not_found) {
+          \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku & lang code: @langcode.', ['@sku' => $sku, '@langcode' => $langcode]);
+        }
+        return NULL;
+      }
+
+      // If we find more than one, raise a log.
+      if (!empty($sku_records) && count($sku_records) > 1) {
+        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', ['@sku' => $sku, '@langcode' => $langcode]);
+      }
+
+      // We should always get one, but get first SKU entity for processing just
+      // in case.
+      $sku_id = reset($sku_records);
+      // Stash before return.
+      $sku_static[$sku] = $sku_id;
     }
 
-    // Get the first entity to use from result.
-    $sku_entity = reset($skus);
+    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
+    $sku_entity = $storage->load($sku_id);
 
     // Sanity check.
     if (!($sku_entity instanceof SKUInterface)) {
       return NULL;
-    }
-
-    // Remove all skus in other languages if there are more than one available
-    // We need to have multiple languages enabled to clean db result.
-    // If only one is available, we might be adding translation, leave it as is.
-    if ($is_multilingual && !empty($skus) && count($skus) > 1) {
-      // Get rid of undesired languages. Later first one is picked up.
-      foreach ($skus as $key => $skuEntity) {
-        if ($skuEntity->langcode->value != $langcode) {
-          unset($skus[$key]);
-        }
-      }
-    }
-
-    // Log error message if we have more than one available even after cleanup.
-    if (count($skus) > 1) {
-      \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
     if ($is_multilingual && $sku_entity->language()->getId() != $langcode) {
@@ -522,7 +527,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
-
     return $sku_entity;
   }
 
