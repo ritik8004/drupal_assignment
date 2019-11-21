@@ -320,6 +320,10 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $alshaya_active_facet_filter_string = rtrim($alshaya_active_facet_filter_string, '/');
 
+    // For example, if we received: "/--price-0/any-radom-string"
+    // We need to remove "/any-radom-string", from active filter's string.
+    $alshaya_active_facet_filter_string = !empty($alshaya_active_facet_filter_string) ? explode('/', $alshaya_active_facet_filter_string)[0] : $alshaya_active_facet_filter_string;
+
     $alshaya_active_facet_filters = array_filter(explode('--', $alshaya_active_facet_filter_string));
 
     return $alshaya_active_facet_filters;
