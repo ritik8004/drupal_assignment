@@ -120,10 +120,11 @@ do
 
   if [[ "$type" == "iso" ]]; then
     echo
-    echo "Enabling stage file proxy for $current_site"
+    echo "Enabling stage file proxy for $current_site to https://${siteUri}"
     ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri pm:enable stage_file_proxy"
-    ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin $siteUri -y"
+    ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin https://${siteUri} -y"
     ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin_dir $files_folder -y"
+    ssh $remote_user@$remote_host "cd /var/www/html/alshaya.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings hotlink 1 -y"
   fi
 done
 ssh $remote_user@$remote_host 'rm -rf /tmp/manual-stage'
