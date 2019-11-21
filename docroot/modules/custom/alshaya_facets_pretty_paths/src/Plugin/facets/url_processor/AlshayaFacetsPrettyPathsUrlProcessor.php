@@ -126,8 +126,15 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       }
     }
 
+    $active_results = [];
+    foreach ($results as $key => $result) {
+      if ($result->isActive()) {
+        $active_results[$key] = $result;
+      }
+    }
+
     /** @var \Drupal\facets\Result\ResultInterface $result */
-    foreach ($results as &$result) {
+    foreach ($results as $result_key => &$result) {
       $filters_current_result_array = [];
       foreach ($filters_array as $filters) {
         $array = explode('-', $filters);
@@ -137,8 +144,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $filter_key = $facet->getUrlAlias();
       $raw_value = $result->getRawValue();
+
       // If the value is active, remove the filter string from the parameters.
-      if ($result->isActive()) {
+      if (!empty($active_results[$result_key])) {
         $active_facet = [];
 
         foreach ($filters_current_result_array[$filter_key] as $value) {
@@ -169,10 +177,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         // Exclude currently active results from the filter params if we are in
         // the show_only_one_result mode.
         if ($facet->getShowOnlyOneResult()) {
-          foreach ($results as $result2) {
-            if ($result2->isActive()) {
-              unset($filters_current_result_array[array_search($result2->getRawValue(), $filters_current_result_array[$filter_key])]);
-            }
+          foreach ($active_results as $result2) {
+            unset($filters_current_result_array[array_search($result2->getRawValue(), $filters_current_result_array[$filter_key])]);
           }
         }
       }
@@ -184,11 +190,13 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $current_path = substr($current_path, 0, strpos($current_path, '/--'));
       }
 
+      $filters_count = 0;
       if (count($filters_current_result_array)) {
         foreach ($filters_current_result_array as $key => $values) {
           $encoded = [];
           foreach ($values as $value) {
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);
+            $filters_count++;
           }
           $filters_current_result_array[$key] = $key . '-' . implode('-', $encoded);
         }
@@ -202,7 +210,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url = Url::fromUri('base:' . $current_path . '/');
       }
 
-      if (count($filters_current_result_array, COUNT_RECURSIVE) - count($filters_current_result_array) > 2) {
+      // If more than 2 filters are selected, don't index.
+      if ($filters_count >= 2) {
         $url->setOption('attributes', ['rel' => 'nofollow noindex ']);
       }
       else {
