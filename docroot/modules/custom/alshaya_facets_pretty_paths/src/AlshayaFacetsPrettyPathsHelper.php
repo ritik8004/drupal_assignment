@@ -192,6 +192,9 @@ class AlshayaFacetsPrettyPathsHelper {
 
         if (strpos($alias, 'taxonomy/term') === FALSE) {
           $encoded = str_replace($productOptionAliasPrefix . '/', '', $alias);
+          // Decode it once, it will be encoded again later.
+          $encoded = urldecode($encoded);
+          break;
         }
       }
       else {
@@ -199,13 +202,11 @@ class AlshayaFacetsPrettyPathsHelper {
         $alias = trim($alias, '/');
 
         if (strpos($alias, 'node/') === FALSE) {
-          $encoded = $alias;
+          // Decode it once, it will be encoded again later.
+          $encoded = urldecode($alias);
+          break;
         }
       }
-
-      // Decode it once, it will be encoded again later.
-      $encoded = urldecode($encoded);
-      break;
     }
 
     foreach (self::REPLACEMENTS as $original => $replacement) {
