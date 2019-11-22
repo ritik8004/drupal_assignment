@@ -15,9 +15,11 @@ services:
       - '@module_handler'
 
   alshaya_search_api.product_updated_event:
-    class: Drupal\alshaya_search_api\EventSubscriber\ProductUpdatedEventSubscriber
+    class: Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber
     arguments:
     - '@alshaya_acm_product.skumanager'
+    - '@queue'
+    - '@database'
     tags:
     - { name: 'event_subscriber' }
 

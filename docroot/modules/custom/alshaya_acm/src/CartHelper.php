@@ -409,6 +409,13 @@ class CartHelper {
         break;
 
       default:
+        // We might be adding different product then the visited PDP.
+        // Use the product SKU from request data if available.
+        $selected_variant_sku = $data['selected_variant_sku'] ?? '';
+        $sku = empty($selected_variant_sku) ? $sku : SKU::loadFromSku($selected_variant_sku);
+        if (!($sku instanceof SKUInterface)) {
+          throw new \InvalidArgumentException('Invalid selected variant: ' . $selected_variant_sku);
+        }
         $cart->addItemToCart($sku->getSku(), $quantity);
         break;
     }
@@ -461,8 +468,17 @@ class CartHelper {
         ]);
       }
 
+      // Get current step, we will set it again after restore.
+      $step = $cart->getCheckoutStep();
+
       // Restore cart to get more info about what is wrong in cart.
       $this->cartStorage->restoreCart($cart->id());
+
+      // Restore current step if cart still available.
+      $cart = $this->cartStorage->getCart(FALSE);
+      if ($cart instanceof CartInterface) {
+        $cart->setCheckoutStep($step);
+      }
     }
   }
 

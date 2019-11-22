@@ -5,5 +5,10 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [alshaya_product_configurations]
+
   alshaya_color_split.manager:
     class: Drupal\alshaya_color_split\AlshayaColorSplitManager
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+      - '@entity.repository'
