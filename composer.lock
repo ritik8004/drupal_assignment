@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ab9c0ca2fdec4f83d382e9e33dad291",
+    "content-hash": "b2fd078556fa9a9f94d602efbea8744f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11986,7 +11986,8 @@
                     }
                 },
                 "patches_applied": {
-                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
+                    "DO NOT INVALID LIST TAG": "patches/search_api/search_api_do_not_invalid_list_tags.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
