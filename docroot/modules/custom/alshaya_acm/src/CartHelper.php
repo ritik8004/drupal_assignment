@@ -468,8 +468,17 @@ class CartHelper {
         ]);
       }
 
+      // Get current step, we will set it again after restore.
+      $step = $cart->getCheckoutStep();
+
       // Restore cart to get more info about what is wrong in cart.
       $this->cartStorage->restoreCart($cart->id());
+
+      // Restore current step if cart still available.
+      $cart = $this->cartStorage->getCart(FALSE);
+      if ($cart instanceof CartInterface) {
+        $cart->setCheckoutStep($step);
+      }
     }
   }
 
