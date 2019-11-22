@@ -3,9 +3,9 @@
 namespace Drupal\alshaya_knet\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Helper\KnetHelper;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,11 +22,11 @@ class KnetController extends ControllerBase {
   protected $knetHelper;
 
   /**
-   * State object.
+   * Stores the tempstore factory.
    *
-   * @var \Drupal\Core\State\StateInterface
+   * @var \Drupal\Core\TempStore\SharedTempStore
    */
-  protected $state;
+  protected $tempStore;
 
   /**
    * Logger.
@@ -40,17 +40,18 @@ class KnetController extends ControllerBase {
    *
    * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
    *   Knet helper.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   State object.
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $temp_store_factory
+   *   The factory for the temp store object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory.
    */
-  public function __construct(KnetHelper $knet_helper,
-                              StateInterface $state,
-                              LoggerChannelFactoryInterface $logger_factory) {
-
+  public function __construct(
+    KnetHelper $knet_helper,
+    SharedTempStoreFactory $temp_store_factory,
+    LoggerChannelFactoryInterface $logger_factory
+  ) {
     $this->knetHelper = $knet_helper;
-    $this->state = $state;
+    $this->tempStore = $temp_store_factory->get('knet');
     $this->logger = $logger_factory->get('alshaya_knet');
   }
 
@@ -60,7 +61,7 @@ class KnetController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_knet.helper'),
-      $container->get('state'),
+      $container->get('tempstore.shared'),
       $container->get('logger.factory')
     );
   }
@@ -112,9 +113,9 @@ class KnetController extends ControllerBase {
     // For the new toolkit, payment id not available before redirecting to
     // PG. So adding the payment id in state variable later.
     if ($this->knetHelper->useNewKnetToolKit()
-      && !empty($state = $this->state->get($response['state_key']))) {
+      && !empty($state = $this->tempStore->get($response['state_key']))) {
       $state['payment_id'] = $response['payment_id'];
-      $this->state->set($response['state_key'], $state);
+      $this->tempStore->set($response['state_key'], $state);
     }
 
     return $this->knetHelper->processKnetResponse($response);
@@ -125,7 +126,7 @@ class KnetController extends ControllerBase {
    * Page callback for success state.
    */
   public function success($state_key) {
-    $data = $this->state->get($state_key);
+    $data = $this->tempStore->get($state_key);
 
     if (empty($data)) {
       $this->logger->warning('KNET success page requested with invalid state_key: @state_key', [
