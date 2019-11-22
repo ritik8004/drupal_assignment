@@ -47,10 +47,9 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
   public function postAddToCartFormSubmit(AddToCartFormSubmitEvent $event) {
     if ($this->labelManager->isDynamicLabelsEnabled()) {
       $sku = $event->getSku();
+      $variant = $event->getVariant();
 
       if ($sku->bundle() === 'configurable') {
-        $variant = $event->getVariant();
-
         // Load the parent again to ensure we keep adding the product for
         // first parent when multiple parents are available and also to
         // ensure we select proper parent when using alshaya_color_split.

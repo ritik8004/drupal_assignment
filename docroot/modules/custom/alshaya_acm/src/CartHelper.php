@@ -409,6 +409,13 @@ class CartHelper {
         break;
 
       default:
+        // We might be adding different product then the visited PDP.
+        // Use the product SKU from request data if available.
+        $selected_variant_sku = $data['selected_variant_sku'] ?? '';
+        $sku = empty($selected_variant_sku) ? $sku : SKU::loadFromSku($selected_variant_sku);
+        if (!($sku instanceof SKUInterface)) {
+          throw new \InvalidArgumentException('Invalid selected variant: ' . $selected_variant_sku);
+        }
         $cart->addItemToCart($sku->getSku(), $quantity);
         break;
     }
