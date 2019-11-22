@@ -90,7 +90,6 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
       // Load the categories currently indexed for this product.
       $indexed_category_ids = $this->getIndexedCategoryIds($item_id);
       $current_category_ids = array_column($node->get('field_category')->getValue(), 'target_id');
-      $new_categories = array_diff($current_category_ids, $indexed_category_ids);
 
       $indexes = ContentEntity::getIndexesForEntity($node);
       foreach ($indexes as $index) {
@@ -106,9 +105,12 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
         }
       }
 
-      // For listing pages, if we have new categories - add them for
-      // cache invalidation.
-      foreach ($new_categories ?? [] as $new_category) {
+      // If we have new categories - add them for cache invalidation.
+      foreach (array_diff($current_category_ids, $indexed_category_ids) ?? [] as $new_category) {
+        $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $new_category);
+      }
+      // If we have categories removed - add them for cache invalidation.
+      foreach (array_diff($indexed_category_ids, $current_category_ids) ?? [] as $new_category) {
         $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $new_category);
       }
     }

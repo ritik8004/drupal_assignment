@@ -3,12 +3,30 @@
 namespace Drupal\alshaya_mobile_app\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Class AlshayaMobileAppController.
  */
 class AlshayaMobileAppController extends ControllerBase {
+
+  /**
+   * Stores the tempstore factory.
+   *
+   * @var \Drupal\Core\TempStore\SharedTempStore
+   */
+  protected $tempStore;
+
+  /**
+   * AlshayaMobileAppController constructor.
+   *
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $temp_store_factory
+   *   The factory for the temp store object.
+   */
+  public function __construct(SharedTempStoreFactory $temp_store_factory) {
+    $this->tempStore = $temp_store_factory->get('knet');
+  }
 
   /**
    * Get control back from knet on error.
@@ -20,7 +38,7 @@ class AlshayaMobileAppController extends ControllerBase {
    *   Redirect to final page.
    */
   public function mobileError(string $state_key) {
-    $data = $this->state()->get($state_key);
+    $data = $this->tempStore->get($state_key);
     if (empty($data)) {
       $this->getLogger('alshaya_mobile_app')->warning('KNET mobile error page requested with invalid state_key: @state_key', [
         '@state_key' => $state_key,
@@ -28,7 +46,7 @@ class AlshayaMobileAppController extends ControllerBase {
       throw new AccessDeniedHttpException();
     }
     $data['status'] = 'error';
-    $this->state()->set($state_key, $data);
+    $this->tempStore->set($state_key, $data);
     return $this->redirect('alshaya_mobile_app.mobile_final');
   }
 
@@ -44,7 +62,7 @@ class AlshayaMobileAppController extends ControllerBase {
    *   Redirect to final page.
    */
   public function mobileComplete(string $state_key) {
-    $data = $this->state()->get($state_key);
+    $data = $this->tempStore->get($state_key);
     if (empty($data)) {
       $this->getLogger('alshaya_mobile_app')->warning('KNET mobile finalize page requested with invalid state_key: @state_key', [
         '@state_key' => $state_key,
@@ -52,7 +70,7 @@ class AlshayaMobileAppController extends ControllerBase {
       throw new AccessDeniedHttpException();
     }
     $data['status'] = ($data['result'] == 'CAPTURED') ? 'success' : 'failed';
-    $this->state()->set($state_key, $data);
+    $this->tempStore->set($state_key, $data);
     return $this->redirect('alshaya_mobile_app.mobile_final');
   }
 

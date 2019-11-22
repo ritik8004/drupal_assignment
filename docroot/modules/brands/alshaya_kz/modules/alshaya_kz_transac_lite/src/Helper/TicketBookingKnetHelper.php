@@ -2,10 +2,10 @@
 
 namespace Drupal\alshaya_kz_transac_lite\Helper;
 
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Helper\KnetHelper;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
@@ -46,8 +46,8 @@ class TicketBookingKnetHelper extends KnetHelper {
    *   K-net helper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   State object.
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $temp_store_factory
+   *   The factory for the temp store object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger channel.
    * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $booking_payment
@@ -55,13 +55,15 @@ class TicketBookingKnetHelper extends KnetHelper {
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The ticket booking.
    */
-  public function __construct(KnetHelper $knet_helper,
-                              ConfigFactoryInterface $config_factory,
-                              StateInterface $state,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              BookingPaymentManager $booking_payment,
-                              TicketBookingManager $ticket_booking) {
-    parent::__construct($config_factory, $state, $logger_factory->get('alshaya_kz_transac_lite_knet'));
+  public function __construct(
+    KnetHelper $knet_helper,
+    ConfigFactoryInterface $config_factory,
+    SharedTempStoreFactory $temp_store_factory,
+    LoggerChannelFactoryInterface $logger_factory,
+    BookingPaymentManager $booking_payment,
+    TicketBookingManager $ticket_booking
+  ) {
+    parent::__construct($config_factory, $temp_store_factory, $logger_factory->get('alshaya_kz_transac_lite_knet'));
     $this->knetHelper = $knet_helper;
     $this->bookingPayment = $booking_payment;
     $this->ticketBooking = $ticket_booking;
@@ -78,7 +80,7 @@ class TicketBookingKnetHelper extends KnetHelper {
       throw new \Exception();
     }
     $state_key = $response['state_key'];
-    $state_data = $this->state->get($state_key);
+    $state_data = $this->tempStore->get($state_key);
     // Check if we have data in state available and it matches data in POST.
     if (empty($state_data)
       || $state_data['cart_id'] != $response['quote_id']
@@ -99,7 +101,7 @@ class TicketBookingKnetHelper extends KnetHelper {
     }
     // Store amount in state variable for logs.
     $response['amount'] = $booking['order_total'];
-    $this->state->set($state_key, $response);
+    $this->tempStore->set($state_key, $response);
     $url_options = [
       'https' => TRUE,
       'absolute' => TRUE,
@@ -163,7 +165,7 @@ class TicketBookingKnetHelper extends KnetHelper {
    * {@inheritdoc}
    */
   public function processKnetFailed(string $state_key) {
-    $data = $this->state->get($state_key);
+    $data = $this->tempStore->get($state_key);
     parent::processKnetFailed($state_key);
     // Update current ticket details with payment id and transaction id.
     $this->bookingPayment->updateTicketDetails($data);
