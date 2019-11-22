@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Delete all state entries for knet.
+ */
+function alshaya_acm_knet_update_8402() {
+  $connection = \Drupal::database();
+  $query = $connection->delete('key_value');
+  $query->condition('collection', 'state');
+  $or_condition = $query->orConditionGroup()
+    ->condition('name', 'knet%', 'LIKE')
+    ->condition('value', '%payment_id%', 'LIKE');
+  $query->condition($or_condition);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding prefix for the knet 'udf5'.
  */
 function alshaya_acm_knet_update_8401() {

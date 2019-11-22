@@ -6,8 +6,8 @@ use Drupal\alshaya_knet\Knet\E24PaymentPipe;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\State\StateInterface;
 use Drupal\alshaya_knet\Knet\KnetNewToolKit;
+use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,11 +30,11 @@ class KnetHelper {
   protected $configFactory;
 
   /**
-   * State API.
+   * Stores the tempstore factory.
    *
-   * @var \Drupal\Core\State\StateInterface
+   * @var \Drupal\Core\TempStore\SharedTempStore
    */
-  protected $state;
+  protected $tempStore;
 
   /**
    * Logger.
@@ -76,16 +76,18 @@ class KnetHelper {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   State API.
+   * @param \Drupal\Core\TempStore\SharedTempStoreFactory $temp_store_factory
+   *   The factory for the temp store object.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              StateInterface $state,
-                              LoggerChannelInterface $logger) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    SharedTempStoreFactory $temp_store_factory,
+    LoggerChannelInterface $logger
+  ) {
     $this->configFactory = $config_factory;
-    $this->state = $state;
+    $this->tempStore = $temp_store_factory->get('knet');
     $this->logger = $logger;
   }
 
@@ -198,7 +200,7 @@ class KnetHelper {
 
     // We store the data in state here to ensure we can use it back and avoid
     // security issues.
-    $this->state->set($state_key, $state_data);
+    $this->tempStore->set($state_key, $state_data);
 
     return [
       'state_key' => $state_key,
@@ -312,7 +314,7 @@ class KnetHelper {
    *   State Data.
    */
   public function getKnetStatus(string $state_key): array {
-    $data = $this->state->get($state_key);
+    $data = $this->tempStore->get($state_key);
 
     if (empty($data)) {
       throw new NotFoundHttpException();
@@ -329,7 +331,7 @@ class KnetHelper {
    */
   public function processKnetResponse(array $response = []) {
     $state_key = $response['state_key'];
-    $state_data = $this->state->get($state_key);
+    $state_data = $this->tempStore->get($state_key);
     $url_options = [
       'https' => TRUE,
       'absolute' => TRUE,
@@ -382,7 +384,7 @@ class KnetHelper {
    *   Response.
    */
   public function processKnetFailed(string $state_key) {
-    $data = $this->state->get($state_key);
+    $data = $this->tempStore->get($state_key);
 
     if (empty($data)) {
       $this->logger->warning('KNET failed page requested with invalid state_key: @state_key', [
@@ -404,7 +406,7 @@ class KnetHelper {
     ]);
 
     // Delete the data from DB.
-    $this->state->delete($state_key);
+    $this->tempStore->delete($state_key);
   }
 
   /**
