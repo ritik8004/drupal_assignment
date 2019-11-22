@@ -59,7 +59,7 @@ function alshaya_color_split_tokens($type, $tokens, array $data, array $options,
         }
         elseif ($sku->bundle() === 'simple'
           && ($grouping_attribute = $manager->getGroupingAttribute($sku))
-          && $sku->hasField('attr_' . $grouping_attribute)->getString()) {
+          && $sku->hasField('attr_' . $grouping_attribute)) {
           $color_label = $sku->get('attr_' . $grouping_attribute)->getString();
         }
       }
