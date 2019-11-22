@@ -5,7 +5,7 @@ namespace Drupal\alshaya_search_api\EventSubscriber;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_performance\Plugin\QueueWorker\InvalidateCacheTags;
-use Drupal\Core\Database\Connection;
+use Drupal\alshaya_search_api\AlshayaSearchApiDataHelper;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
@@ -38,11 +38,11 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
   protected $queueFactory;
 
   /**
-   * Database Connection.
+   * Alshaya Search API Data Helper.
    *
-   * @var \Drupal\Core\Database\Connection
+   * @var \Drupal\alshaya_search_api\AlshayaSearchApiDataHelper
    */
-  protected $connection;
+  protected $helper;
 
   /**
    * AlshayaSearchApiProductProcessedEventSubscriber constructor.
@@ -51,15 +51,15 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
    *   SKU Manager.
    * @param \Drupal\Core\Queue\QueueFactory $queue_factory
    *   Queue factory service.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   Database Connection.
+   * @param \Drupal\alshaya_search_api\AlshayaSearchApiDataHelper $helper
+   *   Alshaya Search API Data Helper.
    */
   public function __construct(SkuManager $sku_manager,
                               QueueFactory $queue_factory,
-                              Connection $connection) {
+                              AlshayaSearchApiDataHelper $helper) {
     $this->skuManager = $sku_manager;
     $this->queueFactory = $queue_factory;
-    $this->connection = $connection;
+    $this->helper = $helper;
   }
 
   /**
@@ -88,7 +88,7 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
       // Search API Database. This seems at-least somewhat far in future so
       // going ahead with it. We could even invoke Algolia OR Solr Query here.
       // Load the categories currently indexed for this product.
-      $indexed_category_ids = $this->getIndexedCategoryIds($item_id);
+      $indexed_category_ids = $this->helper->getIndexedData($item_id, 'field_category');
       $current_category_ids = array_column($node->get('field_category')->getValue(), 'target_id');
 
       $indexes = ContentEntity::getIndexesForEntity($node);
@@ -114,23 +114,6 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
         $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $new_category);
       }
     }
-  }
-
-  /**
-   * Wrapper function to get indexed category ids from database.
-   *
-   * @param string $item_id
-   *   Item ID.
-   *
-   * @return array
-   *   Category IDs indexed for the item.
-   */
-  protected function getIndexedCategoryIds(string $item_id): array {
-    $query = $this->connection->select('search_api_db_product_field_category');
-    $query->addField('search_api_db_product_field_category', 'value');
-    $query->condition('item_id', $item_id);
-    $category_ids = $query->execute()->fetchAllKeyed(0, 0);
-    return is_array($category_ids) ? $category_ids : [];
   }
 
   /**
