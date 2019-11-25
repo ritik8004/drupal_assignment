@@ -171,13 +171,15 @@
     }
     else {
       // Hide the thumbnails till JS is applied.
-      $('#product-zoom-container .cloudzoom__thumbnails', product).addClass('hidden-important');
+      // We use opacity through a class on parent to ensure JS get's applied
+      // properly and heights are calculated properly.
+      $('#product-zoom-container', product).addClass('whiteout');
       setTimeout(function () {
         Drupal.behaviors.alshaya_product_zoom.attach(document);
         Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
 
         // Show thumbnails again.
-        $('#product-zoom-container .cloudzoom__thumbnails', product).removeClass('hidden-important');
+        $('#product-zoom-container', product).removeClass('whiteout');
       }, 1);
     }
   };
