@@ -22,7 +22,7 @@ function alshaya_acm_product_category_update_8038() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['block.block.alshayasubcategorytitleblock'],
+    ['block.block.alshaya_group_by_sub_category_page_title'],
     'alshaya_acm_product_category',
     'install'
   );

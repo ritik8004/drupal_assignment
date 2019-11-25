@@ -6,6 +6,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\TermInterface;
@@ -16,11 +17,11 @@ use Drupal\Core\Language\LanguageManagerInterface;
  * Provides Sub Category Title Block.
  *
  * @Block(
- *   id = "alshaya_sub_category_title_block",
- *   admin_label = @Translation("Sub Category Title Block (Panty Guide)"),
+ *   id = "alshaya_group_by_sub_category_page_title",
+ *   admin_label = @Translation("Sub Category page Title (Panty Guide)"),
  * )
  */
-class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * Product category tree.
@@ -37,7 +38,14 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
   protected $languageManager;
 
   /**
-   * AlshayaGroupByTitle constructor.
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
+   * AlshayaGroupBySubCategoryPageTitle constructor.
    *
    * @param array $configuration
    *   The configuration.
@@ -49,17 +57,21 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
    *   Product category tree.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ProductCategoryTree $product_category_tree,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    EntityRepositoryInterface $entity_repository
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -71,7 +83,8 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('entity.repository')
     );
   }
 
@@ -87,17 +100,18 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
     $description = NULL;
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
       // Get all selected subcategories to be displayed on PLP.
-      if ($term->hasTranslation($current_language)) {
-        $term = $term->getTranslation($current_language);
-      }
+      $term = $this->entityRepository->getTranslationFromContext($term, $current_language);
 
-      $title = $term->label();
-      $description = !empty($term->get('description')->getValue())
-        ? $term->get('description')->getValue()[0]['value']
+      $title = !empty($term->get('field_plp_group_category_title')->getValue())
+        ? $term->get('field_plp_group_category_title')->getValue()[0]['value']
+        : NULL;
+
+      $description = !empty($term->get('field_plp_group_category_desc')->getValue())
+        ? $term->get('field_plp_group_category_desc')->getValue()[0]['value']
         : NULL;
 
       return [
-        '#theme' => 'alshaya_sub_category_title',
+        '#theme' => 'alshaya_group_by_sub_category_page_title',
         '#title' => $title,
         '#description' => $description,
       ];
@@ -112,7 +126,7 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
 
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+    if ($term instanceof TermInterface && $term->hasField('field_group_by_sub_categories')) {
       // Add current term tags always.
       $tags = Cache::mergeTags($tags, $term->getCacheTags());
     }
@@ -134,17 +148,11 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
-    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')) {
-      if ($term->get('field_group_by_sub_categories')->getString()) {
-        $cachetags = $this->getCacheTags();
+    if ($term instanceof TermInterface && $term->hasField('field_group_by_sub_categories')) {
+      $cachetags = $this->getCacheTags();
 
-        // Allowed if group by sub categories is enabled.
-        return AccessResult::allowed()->addCacheTags($cachetags);
-      }
-
-      // Denied if group by sub categories is not enabled.
-      // We still add current term cache tags for access check.
-      return AccessResult::forbidden()->addCacheTags($term->getCacheTags());
+      // Allowed if group by sub categories is enabled.
+      return AccessResult::allowedIf($term->get('field_group_by_sub_categories')->getString())->addCacheTags($cachetags);
     }
     return AccessResult::forbidden();
   }
