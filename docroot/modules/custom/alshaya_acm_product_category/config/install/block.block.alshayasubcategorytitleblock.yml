@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product_category
+  theme:
+    - alshaya_white_label
+id: alshayasubcategorytitleblock
+theme: alshaya_white_label
+region: highlighted
+weight: -5
+provider: null
+plugin: alshaya_sub_category_title_block
+settings:
+  id: alshaya_sub_category_title_block
+  label: 'Sub Category Title Block (Panty Guide)'
+  provider: alshaya_acm_product_category
+  label_display: '0'
+visibility: {  }
