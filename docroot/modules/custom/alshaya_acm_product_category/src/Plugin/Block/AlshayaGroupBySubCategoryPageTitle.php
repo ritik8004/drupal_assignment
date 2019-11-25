@@ -11,7 +11,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides Sub Category Title Block.
@@ -31,13 +30,6 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
   protected $productCategoryTree;
 
   /**
-   * Language Manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * The entity repository.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
@@ -55,8 +47,6 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
    *   Plugin definition.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language Manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository.
    */
@@ -65,12 +55,10 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
     $plugin_id,
     $plugin_definition,
     ProductCategoryTree $product_category_tree,
-    LanguageManagerInterface $language_manager,
     EntityRepositoryInterface $entity_repository
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
-    $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
   }
 
@@ -83,7 +71,6 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('language_manager'),
       $container->get('entity.repository')
     );
   }
@@ -94,13 +81,12 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
   public function build() {
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    $current_language = $this->languageManager->getCurrentLanguage()->getId();
 
     $title = NULL;
     $description = NULL;
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
       // Get all selected subcategories to be displayed on PLP.
-      $term = $this->entityRepository->getTranslationFromContext($term, $current_language);
+      $term = $this->entityRepository->getTranslationFromContext($term);
 
       $title = !empty($term->get('field_plp_group_category_title')->getValue())
         ? $term->get('field_plp_group_category_title')->getValue()[0]['value']
