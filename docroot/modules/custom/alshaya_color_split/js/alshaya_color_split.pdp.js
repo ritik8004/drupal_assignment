@@ -54,6 +54,15 @@
         }
 
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+        // We can have mix of color split and normal products.
+        // Avoid processing further if we have a product which is normal but
+        // color split module is enabled.
+        if (typeof variantInfo.url === 'undefined') {
+          return;
+        }
+
+        // Avoid processing again and again for variants of same color.
         if ($(node).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
         }
