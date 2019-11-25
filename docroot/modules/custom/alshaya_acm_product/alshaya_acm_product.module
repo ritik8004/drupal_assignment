@@ -169,28 +169,25 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     }
   }
 
-  // If there any attributes to skip.
-  if (!empty($attr_to_skip)) {
-    // Flag to determine if there any change in attribute values.
-    $attr_changed = FALSE;
-    // Get configurable fields/attributes.
-    static $fields = [];
-    if (empty($fields)) {
-      $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  // Flag to determine if there any change in attribute values.
+  $attr_changed = FALSE;
+  // Get configurable fields/attributes.
+  static $fields = [];
+  if (empty($fields)) {
+    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  }
+  $attributes = $sku->get('attributes')->getValue();
+  foreach ($attributes as $key => $attr) {
+    // If attribute is not configurable (not available in fields), remove it.
+    if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
+      unset($attributes[$key]);
+      $attr_changed = TRUE;
     }
-    $attributes = $sku->get('attributes')->getValue();
-    foreach ($attributes as $key => $attr) {
-      // If attribute is not configurable (not available in fields), remove it.
-      if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
-        unset($attributes[$key]);
-        $attr_changed = TRUE;
-      }
-    }
+  }
 
-    // If there any change in attribute.
-    if ($attr_changed) {
-      $sku->get('attributes')->setValue($attributes);
-    }
+  // If there any change in attribute.
+  if ($attr_changed) {
+    $sku->get('attributes')->setValue($attributes);
   }
 
   // Price is only available on simple skus.
