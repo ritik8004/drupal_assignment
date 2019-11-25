@@ -172,10 +172,7 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   // Flag to determine if there any change in attribute values.
   $attr_changed = FALSE;
   // Get configurable fields/attributes.
-  static $fields = [];
-  if (empty($fields)) {
-    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
-  }
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $attributes = $sku->get('attributes')->getValue();
   foreach ($attributes as $key => $attr) {
     // If attribute is not configurable (not available in fields), remove it.
@@ -191,7 +188,7 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   }
 
   // Price is only available on simple skus.
-  if ($sku->get('type')->first()->getString() == 'simple') {
+  if ($sku->bundle() == 'simple') {
     $price = (float) $sku->get('price')->first()->getString();
     $final_price = (float) $sku->get('final_price')->first()->getString();
     static $max_discount = NULL;
