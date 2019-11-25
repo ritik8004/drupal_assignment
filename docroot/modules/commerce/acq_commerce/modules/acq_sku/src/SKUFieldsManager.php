@@ -215,11 +215,16 @@ class SKUFieldsManager {
   /**
    * Get all existing field additions.
    *
+   * @param bool $clear_static_cache
+   *   Whether static cache needs to clear or not.
+   *
    * @return array
    *   Existing field additions.
    */
-  public function getFieldAdditions() {
-    $this->configFactory->clearStaticCache();
+  public function getFieldAdditions($clear_static_cache = FALSE) {
+    if ($clear_static_cache) {
+      $this->configFactory->clearStaticCache();
+    }
     return $this->configFactory->get(self::BASE_FIELD_ADDITIONS_CONFIG)->getRawData();
   }
 
