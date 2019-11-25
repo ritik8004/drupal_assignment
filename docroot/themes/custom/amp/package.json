@@ -45,6 +45,9 @@
   "scripts": {
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
     "install-tools": "npm install && npm rebuild node-sass",
-    "uninstall-tools": "rm -r node_modules"
+    "uninstall-tools": "rm -r node_modules",
+    "build": "../node_modules/gulp/bin/gulp.js",
+    "build:dev": "../node_modules/gulp/bin/gulp.js build:dev",
+    "watch": "../node_modules/gulp/bin/gulp.js watch"
   }
 }
