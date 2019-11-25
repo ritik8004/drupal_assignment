@@ -489,9 +489,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       // First check if we have some result before doing anything else.
       if (empty($sku_records)) {
-        if ($log_not_found) {
-          \Drupal::logger('acq_sku')->error('SKU entity record not found while loading for @sku & lang code: @langcode.', ['@sku' => $sku, '@langcode' => $langcode]);
-        }
         return NULL;
       }
 
