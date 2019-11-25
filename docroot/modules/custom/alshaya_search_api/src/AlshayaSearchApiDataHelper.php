@@ -38,10 +38,17 @@ class AlshayaSearchApiDataHelper {
    *   Category IDs indexed for the item.
    */
   public function getIndexedData(string $item_id, string $field): array {
-    $query = $this->connection->select('search_api_db_product_' . $field, $field);
-    $query->addField($field, 'value');
-    $query->condition('item_id', $item_id);
-    $values = $query->execute()->fetchAllKeyed(0, 0);
+    try {
+      $query = $this->connection->select('search_api_db_product_' . $field, $field);
+      $query->addField($field, 'value');
+      $query->condition('item_id', $item_id);
+      $values = $query->execute()->fetchAllKeyed(0, 0);
+    }
+    catch (\Exception $e) {
+      // Do nothing, we may have disabled indexes temporarily.
+      $values = [];
+    }
+
     return is_array($values) ? $values : [];
   }
 
