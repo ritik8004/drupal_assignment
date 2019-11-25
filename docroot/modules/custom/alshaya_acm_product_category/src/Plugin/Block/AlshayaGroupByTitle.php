@@ -88,7 +88,7 @@ class AlshayaGroupByTitle extends BlockBase implements ContainerFactoryPluginInt
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
       // Get all selected subcategories to be displayed on PLP.
       if ($term->hasTranslation($current_language)) {
-        $term->getTranslation($current_language);
+        $term = $term->getTranslation($current_language);
       }
 
       $title = $term->label();
