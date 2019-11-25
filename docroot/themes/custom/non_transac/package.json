@@ -37,8 +37,8 @@
   "scripts": {
     "patternlab": "rm -rf patternlab && composer create-project -n pattern-lab/edition-drupal-standard patternlab && php patternlab/core/console -c --set twigAutoescape=0 && php patternlab/core/console -c --set sourceDir=../components && rm -rf patternlab/source",
     "install-tools": "npm install && npm rebuild node-sass",
-    "build": "gulp",
-    "watch": "gulp watch"
+    "build": "../node_modules/gulp/bin/gulp.js",
+    "watch": "../node_modules/gulp/bin/gulp.js watch"
   },
   "repository": {
     "type": "git",
@@ -50,5 +50,9 @@
   "bugs": {
     "url": "https://github.com/skippednote/kashmir/issues"
   },
-  "homepage": "https://github.com/skippednote/kashmir#readme"
+  "homepage": "https://github.com/skippednote/kashmir#readme",
+  "devDependencies": {
+    "babel-preset-env": "^1.6.0",
+    "gulp-babel": "^7.0.0"
+  }
 }
