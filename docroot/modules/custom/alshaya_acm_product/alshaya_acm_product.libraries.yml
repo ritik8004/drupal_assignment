@@ -11,9 +11,6 @@ product_detail:
   version: 1.x
   js:
     js/alshaya_acm_product.detail.js: {}
-  css:
-    theme:
-      css/alshaya_acm_product.detail.css: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
