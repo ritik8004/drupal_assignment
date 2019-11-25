@@ -1,4 +1,13 @@
-product_detail:
+grouped_configurable:
   version: 1.x
   js:
-    js/alshaya_color_split.pdp.js: {}
+    js/alshaya_color_split.grouped_configurable.js: {}
+  dependencies:
+    - alshaya_acm_product/product_detail
+
+grouped_simple:
+  version: 1.x
+  js:
+    js/alshaya_color_split.grouped_simple.js: {}
+  dependencies:
+    - alshaya_acm_product/product_detail
