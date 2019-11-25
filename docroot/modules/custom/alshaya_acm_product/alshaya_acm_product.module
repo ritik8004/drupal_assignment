@@ -146,7 +146,7 @@ function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
-  static $attr_to_skip;
+  static $attr_to_skip = NULL;
 
   // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
@@ -154,7 +154,7 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   }
 
   // Skip additional attributes specified in config.
-  if (empty($attr_to_skip)) {
+  if (!isset($attr_to_skip)) {
     $attr_to_skip = \Drupal::configFactory()
       ->getEditable('alshaya_acm_product.settings')
       ->get('acq_sku__attributes_skip') ?? [];
@@ -169,13 +169,27 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     }
   }
 
-  // Get configurable fields/attributes.
-  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
-  $attributes = $sku->get('attributes')->getValue();
-  foreach ($attributes as $key => $attr) {
-    // If attribute is not configurable (not available in fields), remove it.
-    if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
-      unset($attributes[$key]);
+  // If there any attributes to skip.
+  if (!empty($attr_to_skip)) {
+    // Flag to determine if there any change in attribute values.
+    $attr_changed = FALSE;
+    // Get configurable fields/attributes.
+    static $fields = [];
+    if (empty($fields)) {
+      $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+    }
+    $attributes = $sku->get('attributes')->getValue();
+    foreach ($attributes as $key => $attr) {
+      // If attribute is not configurable (not available in fields), remove it.
+      if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
+        unset($attributes[$key]);
+        $attr_changed = TRUE;
+      }
+    }
+
+    // If there any change in attribute.
+    if ($attr_changed) {
+      $sku->get('attributes')->setValue($attributes);
     }
   }
 
@@ -194,8 +208,6 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
       ]);
     }
   }
-
-  $sku->get('attributes')->setValue($attributes);
 }
 
 /**
