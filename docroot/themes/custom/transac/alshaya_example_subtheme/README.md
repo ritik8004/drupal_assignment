@@ -8,6 +8,8 @@
 * Rename `.theme` file.
 * Rename `.breakpoints.yml` file.
 * Rename the `.settings.yml` file in `config/install`.
+* Create a symlink for `package.json` file from the transac directory and place it inside the root of your new theme.
+* Without the package.json symlink the build commands wont work for this theme.
 
 ## After renaming
 
@@ -22,3 +24,7 @@ requirements.
  from base theme.
 * Maximum emphasis should be given to reuse from base theme and override what is
  necessary rather than duplicating.
+
+## Usage and development
+
+* For rebuilding sass, run `npm run build` from your theme directory.
