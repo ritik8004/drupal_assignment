@@ -198,18 +198,31 @@
     }
   };
 
+  var ajaxRequest = XMLHttpRequest.prototype.open;
+  var currentAJAXRequests = [];
+  XMLHttpRequest.prototype.open = function (method, url) {
+    currentAJAXRequests.push(url);
+    ajaxRequest.apply(this, arguments);
+  };
+
   // Add loader on plp search page.
   Drupal.behaviors.facetSearchLoader = {
     attach: function (context, settings) {
+      var removeProgressBar = false;
       $(document).ajaxSend(function (event, jqxhr, settings) {
         if (settings.url.indexOf('facets-block') > -1) {
+          removeProgressBar = true;
           if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
             $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
           }
         }
       });
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if (settings.url.indexOf('facets-block') > -1) {
+        currentAJAXRequests = currentAJAXRequests.filter(function(ele){
+          return ele !== settings.url;
+        });
+        if (removeProgressBar && currentAJAXRequests.length === 0) {
+          removeProgressBar = false;
           $('div.ajax-progress-fullscreen').remove();
         }
       });
