@@ -79,7 +79,6 @@
         // Start observing the target node for configured mutations
         observer.observe(targetNode, config);
 
-        mobileStickyAddtobasketButton('bottom', 'initial');
         var lastScrollTop = 0;
         $(window).on('scroll', function () {
           var windowScrollTop = $(this).scrollTop();
@@ -97,6 +96,8 @@
     }
   };
 
+  if ($(window).width() < 768) {
+    mobileStickyAddtobasketButton('bottom', 'initial');
+  }
+
 })(jQuery, Drupal);
-
-
