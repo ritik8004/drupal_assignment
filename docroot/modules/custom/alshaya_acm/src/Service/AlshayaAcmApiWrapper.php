@@ -18,6 +18,7 @@ use Drupal\alshaya_acm\Event\AlshayaAcmPlaceOrderFailedEvent;
 use Drupal\alshaya_acm\Event\AlshayaAcmUpdateCartFailedEvent;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Class AlshayaAcmApiWrapper.
@@ -163,7 +164,6 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     // Acquia Commerce Connector.
     // But for robustness we go back to the SKU plugin and ask
     // it to return a name as a string only.
-    $originalItemsNames = [];
     $items = $cart->items ?? NULL;
     if ($items) {
       foreach ($items as $key => &$item) {
@@ -174,8 +174,6 @@ class AlshayaAcmApiWrapper extends APIWrapper {
             $cart->items[$key]['name'] = "";
             continue;
           }
-
-          $originalItemsNames[$item['sku']] = $item['name'];
 
           $sku = SKU::loadFromSku($item['sku']);
 
@@ -196,21 +194,13 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     try {
       // First invalidate so even if we get exception, all blocks are updated.
       Cache::invalidateTags(['cart:' . $cart_id]);
-      $cart = $this->alshayaApi->updateCart($cart_id, json_decode(json_encode($cart), TRUE));
+      $this->alshayaApi->updateCart($cart_id, Json::decode(Json::encode($cart), TRUE));
     }
     catch (ConnectorException $e) {
-      // Restore cart structure.
-      foreach ($cart->items ?? [] as $key => $item) {
-        if (isset($originalItemsNames[$item['sku']])) {
-          $cart->items[$key]['name'] = $originalItemsNames[$item['sku']];
-        }
-      }
-
-      // Now throw.
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
-    return $cart;
+    return $this->getCart($cart_id);
   }
 
   /**
@@ -219,10 +209,10 @@ class AlshayaAcmApiWrapper extends APIWrapper {
   public function updateCart($cart_id, $cart) {
     try {
       if (isset($cart->extension, $cart->extension['do_direct_call'])) {
-        $this->updateCartDirectCall($cart_id, $cart);
+        $response = $this->updateCartDirectCall($cart_id, $cart);
       }
       else {
-        return parent::updateCart($cart_id, $cart);
+        $response = parent::updateCart($cart_id, $cart);
       }
     }
     catch (\Exception $e) {
@@ -230,6 +220,8 @@ class AlshayaAcmApiWrapper extends APIWrapper {
       $this->dispatcher->dispatch(AlshayaAcmUpdateCartFailedEvent::EVENT_NAME, $event);
       throw $e;
     }
+
+    return $response ?? NULL;
   }
 
   /**

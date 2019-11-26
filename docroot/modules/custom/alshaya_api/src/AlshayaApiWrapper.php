@@ -920,7 +920,7 @@ class AlshayaApiWrapper {
    */
   public function updateCart(string $cart_id, array $cart) {
     $endpoint = 'carts/' . $cart_id . '/updateCart';
-    return $this->invokeApi($endpoint, $cart, 'POST', FALSE);
+    return $this->invokeApi($endpoint, $cart, 'JSON', FALSE);
   }
 
   /**
