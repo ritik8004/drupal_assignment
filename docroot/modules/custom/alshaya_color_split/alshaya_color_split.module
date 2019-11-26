@@ -293,7 +293,7 @@ function alshaya_color_split_node_view(array &$build, EntityInterface $entity, E
 
       $context = ($view_mode === 'full') ? 'pdp' : 'modal';
       $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
-      foreach ($manager->getProductsInStyle($sku) as $variant) {
+      foreach ($product_in_style as $variant) {
         $group[$variant->getSku()] = $skuInfo->getVariantInfo($variant, $pdp_layout);
       }
 
