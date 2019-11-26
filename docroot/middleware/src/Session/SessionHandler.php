@@ -68,6 +68,10 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
   public function write($sid, $value) {
     // The exception handler is not active at this point, so we need to do it
     // manually.
+    if (empty($value)) {
+      return TRUE;
+    }
+
     try {
       $request = $this->requestStack->getCurrentRequest();
       $fields = [
