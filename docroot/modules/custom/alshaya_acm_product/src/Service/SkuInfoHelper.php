@@ -410,7 +410,7 @@ class SkuInfoHelper {
         continue;
       }
 
-      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout);
+      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $sku);
     }
 
     return $variants;
