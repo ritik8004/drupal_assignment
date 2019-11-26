@@ -21,7 +21,7 @@
     var mobileCWBottom;
     if (state === 'initial') {
       // Button top.
-      var buttonTop = button.offset().top + button.height();
+      var buttonTop = mobileContentWrapper.offset().top + mobileContentWrapper.height();
       // Screen bottom.
       windowBottom = $(window).scrollTop() + $(window).height();
       if (buttonTop > windowBottom) {
@@ -79,6 +79,7 @@
         // Start observing the target node for configured mutations
         observer.observe(targetNode, config);
 
+        mobileStickyAddtobasketButton('bottom', 'initial');
         var lastScrollTop = 0;
         $(window).on('scroll', function () {
           var windowScrollTop = $(this).scrollTop();
@@ -95,9 +96,5 @@
       }
     }
   };
-
-  if ($(window).width() < 768) {
-    mobileStickyAddtobasketButton('bottom', 'initial');
-  }
 
 })(jQuery, Drupal);
