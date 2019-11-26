@@ -90,11 +90,13 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
 
       $title = !empty($term->get('field_plp_group_category_title')->getValue())
         ? $term->get('field_plp_group_category_title')->getValue()[0]['value']
-        : NULL;
+        : $term->label();
 
       $description = !empty($term->get('field_plp_group_category_desc')->getValue())
         ? $term->get('field_plp_group_category_desc')->getValue()[0]['value']
-        : NULL;
+        : (!empty($term->get('description')->getValue())
+          ? $term->get('description')->getValue()[0]['value']
+          : NULL);
 
       return [
         '#theme' => 'alshaya_group_by_sub_category_page_title',

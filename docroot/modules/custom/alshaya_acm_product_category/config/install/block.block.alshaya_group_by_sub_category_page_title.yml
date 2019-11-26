@@ -8,7 +8,7 @@ dependencies:
 id: alshaya_group_by_sub_category_page_title
 theme: alshaya_white_label
 region: highlighted
-weight: -27
+weight: -30
 provider: null
 plugin: alshaya_group_by_sub_category_page_title
 settings:
