@@ -151,8 +151,9 @@ elseif ($env == 'travis') {
   $soauth_key_name = 'travis_acm';
 }
 else {
-  $soauth_key_dir = '/home/alshaya/simple-oauth/' . $env . '/';
+  $soauth_key_dir = $_SERVER['HOME'] . '/simple-oauth/' . $env . '/';
 }
+
 $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name . '.pub';
 $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name;
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
@@ -171,7 +172,7 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
-$config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
+$config['acq_commerce.conductor']['debug_dir'] = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . $env;
 $config['acq_commerce.conductor']['debug'] = FALSE;
 
 // Set page size to sync products to 30.
