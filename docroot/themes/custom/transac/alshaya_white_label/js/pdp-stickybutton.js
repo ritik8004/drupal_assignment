@@ -96,8 +96,8 @@
     }
   };
 
-  mobileStickyAddtobasketButton('bottom', 'initial');
+  if ($(window).width() < 768) {
+    mobileStickyAddtobasketButton('bottom', 'initial');
+  }
 
 })(jQuery, Drupal);
-
-
