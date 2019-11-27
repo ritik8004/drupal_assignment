@@ -565,7 +565,7 @@
    * Calculate and add height for each product tile.
    */
   Drupal.plpListingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
+    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
       var Hgt = 0;
       $('.c-products__item').each(function () {
         var Height = $(this)
