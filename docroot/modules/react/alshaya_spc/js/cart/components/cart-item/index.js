@@ -39,7 +39,19 @@ export default class CartItem extends React.Component {
         var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => result }});
         document.dispatchEvent(event);
 
-        // Refreshing cart components..
+        if (result.error !== undefined) {
+          result.message = {
+            'type': 'error',
+            'message': result.error_message
+          }
+        } else {
+          result.message = {
+            'type': 'success',
+            'message': Drupal.t('The product has been removed from your cart.')
+          }
+        }
+
+        // Refreshing cart components.
         var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
         document.dispatchEvent(event);
       });

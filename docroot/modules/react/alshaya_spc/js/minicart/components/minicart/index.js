@@ -49,19 +49,22 @@ export default class MiniCart extends React.Component {
       // PDP item add or from the update from cart page.
       document.addEventListener('refreshMiniCart', (e) => {
         var data = e.detail.data();
-        this.setState({
-          qty: data.items_qty,
-          amount: data.cart_total,
-          wait: false
-        });
-
-        // Store info in storage.
-        addInfoInStorage(data);
-
-        if (data.cart_total <= 0 || data.items.length === 0) {
+        // If no error from MDC.
+        if (data.error === undefined) {
           this.setState({
-            wait: true
+            qty: data.items_qty,
+            amount: data.cart_total,
+            wait: false
           });
+
+          // Store info in storage.
+          addInfoInStorage(data);
+
+          if (data.cart_total <= 0 || data.items.length === 0) {
+            this.setState({
+              wait: true
+            });
+          }
         }
       }, false);
     } catch (error) {
