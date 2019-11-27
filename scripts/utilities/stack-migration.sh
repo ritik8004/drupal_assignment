@@ -57,7 +57,7 @@ cd $source_root
 
 echo "Enabling maintenance mode"
 echo
-#drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
+drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
 
 echo
 echo "Syncing files with target env for $source_site"
