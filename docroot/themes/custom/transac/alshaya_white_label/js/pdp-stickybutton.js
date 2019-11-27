@@ -70,6 +70,7 @@
               var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
               mobileContentWrapper.css('height', 'auto');
               mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
+              mobileStickyAddtobasketButton('bottom', 'initial');
               observer.disconnect();
             }
           });
@@ -79,7 +80,10 @@
         // Start observing the target node for configured mutations
         observer.observe(targetNode, config);
 
-        mobileStickyAddtobasketButton('bottom', 'initial');
+        // Call only for simple product.
+        if ($('#configurable_ajax').length < 1) {
+          mobileStickyAddtobasketButton('bottom', 'initial');
+        }
         var lastScrollTop = 0;
         $(window).on('scroll', function () {
           var windowScrollTop = $(this).scrollTop();
