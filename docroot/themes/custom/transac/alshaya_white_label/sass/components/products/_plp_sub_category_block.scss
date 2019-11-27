@@ -174,6 +174,38 @@
     display: none;
   }
 
+  .block-alshaya-group-by-sub-category-page-title {
+    h1 {
+      font-family: $alshaya-thin;
+      font-weight: normal;
+      margin: 0 0 0.3125rem;
+      font-size: 1.5rem;
+      line-height: 1.17;
+      color: $plp_sub_cat_page_cat_title;
+
+      @include breakpoint($only-mobile) {
+        margin: 0.875rem 0.5rem 0.3125rem;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+    }
+
+    .sub-category-page-description {
+      font-family: $alshaya-thin;
+      line-height: 1.28;
+      font-size: 0.875rem;
+      color: $plp_sub_cat_page_cat_desc;
+      padding-bottom: 0.5625rem;
+      border-bottom: 1px solid $plp_sub_cat_page_cat_separator;
+      margin-bottom: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.4375rem;
+        margin: 0 0.5rem 0.875rem;
+      }
+    }
+  }
+
   .c-plp {
     .c-products__item {
       height: 33.75rem;
