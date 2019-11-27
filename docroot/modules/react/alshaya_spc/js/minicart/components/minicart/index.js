@@ -31,6 +31,13 @@ export default class MiniCart extends React.Component {
           // Store info in storage.
           addInfoInStorage(result);
 
+          if (result.cart_total <= 0 || result.items.length == 0) {
+            this.setState({
+              wait: true
+            });
+            return;
+          }
+
           // Trigger event so that data can be passed to other components.
           var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
           document.dispatchEvent(event);
@@ -42,14 +49,23 @@ export default class MiniCart extends React.Component {
       // PDP item add or from the update from cart page.
       document.addEventListener('refreshMiniCart', (e) => {
         var data = e.detail.data();
-        this.setState({
-          qty: data.items_qty,
-          amount: data.cart_total,
-          wait: false
-        });
+        // If no error from MDC.
+        if (data.error === undefined) {
+          this.setState({
+            qty: data.items_qty,
+            amount: data.cart_total,
+            wait: false
+          });
 
-        // Store info in storage.
-        addInfoInStorage(data);
+          // Store info in storage.
+          addInfoInStorage(data);
+
+          if (data.cart_total <= 0 || data.items.length === 0) {
+            this.setState({
+              wait: true
+            });
+          }
+        }
       }, false);
     } catch (error) {
       // In case of error, do nothing.
