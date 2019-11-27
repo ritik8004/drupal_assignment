@@ -152,16 +152,17 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
-    if (is_numeric($value) && !$is_swatch) {
-      $static[$alias][$value] = $value;
-      return $value;
-    }
-
     $encoded = $value;
 
     $storage = $this->termStorage;
     $entity_type = 'term';
-    if ($attribute_code == 'field_acq_promotion_label') {
+
+    // We use ids only for category.
+    if ($attribute_code === 'field_category') {
+      $static[$alias][$value] = $value;
+      return $value;
+    }
+    elseif ($attribute_code == 'field_acq_promotion_label') {
       $storage = $this->nodeStorage;
       $entity_type = 'node';
       $query = $storage->getQuery();
@@ -238,7 +239,9 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
-    if (is_numeric($value) && !$is_swatch) {
+
+    // We use ids only for category.
+    if ($attribute_code === 'field_category') {
       $static[$value] = $value;
       return $value;
     }

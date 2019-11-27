@@ -304,17 +304,17 @@ $conductors = [
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
-    'site_id' => 84,
+    'site_id' => 63,
   ],
   'flkw_uat' => [
     'hmac_id' => 'b7850578d9864538a51eb94bc9632487',
     'hmac_secret' => 'MjU3YjExNDYtYzFmMy00',
-    'site_id' => 63,
+    'site_id' => 91,
   ],
   'flkw_prod' => [
     'hmac_id' => '4cc5c57ce5b5413f98fe0661158e4e99',
     'hmac_secret' => 'M2U3NWQxYjAtMDE4Zi00',
-    'site_id' => 91,
+    'site_id' => 127,
   ],
   // FootLocker SA.
   'flsa_dev' => [

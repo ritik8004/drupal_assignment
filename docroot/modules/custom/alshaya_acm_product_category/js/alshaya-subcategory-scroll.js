@@ -43,8 +43,12 @@
       if ($('.sticky-filter-wrapper').hasClass('show-sub-category') && $('.plp-subcategory-block').offset().top > $(element).offset().top) {
         stickyFilterPosition = $('.show-sub-category').outerHeight();
       }
+      else if ($('.region__content').hasClass('filter-fixed-top') && $('.plp-subcategory-block').offset().top < $(element).offset().top) {
+        stickyFilterPosition = $('.site-brand-home').outerHeight();
+      }
       else {
-        stickyFilterPosition = $('.block-views-exposed-filter-blockalshaya-product-list-block-1').outerHeight();
+        // Removing extra added 20px for top margin here when filters are not sticky.
+        stickyFilterPosition = -20;
       }
     }
 

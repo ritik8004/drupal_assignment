@@ -205,4 +205,18 @@
       }
     }
   }
+
+  .c-plp {
+    .c-products__item {
+      height: 33.75rem;
+    }
+
+    .c-products-list {
+      &.product-large {
+        .c-products__item {
+          height: 41.25rem;
+        }
+      }
+    }
+  }
 }
