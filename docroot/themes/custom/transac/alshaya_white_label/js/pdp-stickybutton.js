@@ -27,7 +27,7 @@
     }
     if (state === 'initial') {
       // Button top.
-      var buttonTop = button.offset().top + button.height();
+      var buttonTop = mobileContentWrapper.offset().top + mobileContentWrapper.height();
       // Screen bottom.
       windowBottom = $(window).scrollTop() + $(window).height();
       if (buttonTop > windowBottom) {
