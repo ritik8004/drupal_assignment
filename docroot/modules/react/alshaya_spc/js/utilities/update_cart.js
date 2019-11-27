@@ -42,7 +42,7 @@ export const applyRemovePromo = function (action, promo_code) {
   });
 }
 
-export const removeItemFromCart = function (action, sku) {
+export const updateCartItemData = function (action, sku, quantity) {
   var cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
@@ -57,7 +57,8 @@ export const removeItemFromCart = function (action, sku) {
   return axios.post(api_url, {
     action: action,
     sku: sku,
-    cart_id: cart
+    cart_id: cart,
+    quantity: quantity
   })
     .then((response) => {
     return response.data;
