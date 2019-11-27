@@ -33,36 +33,31 @@ if [[ -z "$target_site" ]]; then
   exit
 fi
 
-if [ ${target_env:0:2} == "02" ]; then
-  target_var="alshaya202live"
-  target="alshaya2.02live@web-4238.enterprise-g1.hosting.acquia.com"
-  target_simple_oauth="/home/alshaya2/simple-oauth/02live/"
-elif [ ${target_env:0:2} == "01" ]; then
-  target_var="alshaya01live"
-  target="alshaya.01live@web-1503.enterprise-g1.hosting.acquia.com"
-  target_simple_oauth="/home/alshaya/simple-oauth/01live/"
-else
-  echo "Invalid target env $target_env"
-  exit
-fi
-
-if [ ${source_env:0:2} == "02" ]; then
-  source_var="alshaya202live"
-  source="alshaya2.02live@web-4238.enterprise-g1.hosting.acquia.com"
-elif [ ${source_env:0:2} == "01" ]; then
-  source_var="alshaya01live"
-  source="alshaya.01live@web-1503.enterprise-g1.hosting.acquia.com"
-else
+echo
+source_alias=`drush sa | grep "$source_env\$"`
+if [[ -z "$source_alias" ]]; then
   echo "Invalid source env $source_env"
   exit
 fi
 
-cd /var/www/html/${source_var}/docroot
+target_alias=`drush sa | grep "$target_env\$"`
+if [[ -z "$target_alias" ]]; then
+  echo "Invalid target env $target_env"
+  exit
+fi
 
-echo
+source_root=`drush sa $source_alias | grep root | cut -d"'" -f4`
+
+target_root=`drush sa $target_alias | grep root | cut -d"'" -f4`
+target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
+target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
+target="$target_remote_user@$target_remote_host"
+
+cd $source_root
+
 echo "Enabling maintenance mode"
 echo
-drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
+#drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
 
 echo
 echo "Syncing files with target env for $source_site"
@@ -70,9 +65,9 @@ source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Pub
 search="$source_files_folder"
 echo "Source folder $source_files_folder"
 
-target_files_folder=`ssh -t $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com status | grep 'Site path' | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'"`
+target_files_folder=`ssh -t $target "cd $target_root; drush -l $target_site.factory.alshaya.com status | grep 'Site path' | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'"`
 replace="$target_files_folder/files"
-target_files_folder="/var/www/html/$target_var/docroot/$target_files_folder"
+target_files_folder="$target_root/$target_files_folder"
 echo "Target folder $target_files_folder"
 
 screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -auv $source_files_folder $target:$target_files_folder"
@@ -96,24 +91,28 @@ scp /tmp/migrate/* $target:/tmp/migrate/
 
 echo
 echo "Clearing caches for $target_site"
-ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cr"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cr"
 
 echo
 echo "Droppping and importing database again for $target_site"
-ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < /tmp/migrate/$source_site.sql"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < /tmp/migrate/$source_site.sql"
 
 echo
 echo "Clearing caches for $target_site"
-ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cr"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cr"
 
 echo
 echo "Update simple_oauth settings: $target_simple_oauth"
-ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings public_key '${target_simple_oauth}alshaya_acm.pub' -y"
-ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings private_key '${target_simple_oauth}alshaya_acm' -y"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings public_key '${target_simple_oauth}alshaya_acm.pub' -y"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cset simple_oauth.settings private_key '${target_simple_oauth}alshaya_acm' -y"
 
 echo
 echo "Update Acquia Subscription"
-ssh $target "cd /var/www/html/$target_var/docroot; drush -l $target_site.factory.alshaya.com ev \"(new \Drupal\acquia_connector\Subscription())->update();\""
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com ev \"(new \Drupal\acquia_connector\Subscription())->update();\""
+
+echo
+echo "Put copy online"
+ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sset system.maintenance_mode FALSE"
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
@@ -121,3 +120,4 @@ rm -rf /tmp/migrate
 ssh $target 'rm -rf /tmp/migrate'
 
 echo
+
