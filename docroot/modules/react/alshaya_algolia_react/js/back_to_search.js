@@ -1,39 +1,15 @@
 /**
  * @file
- * JS for Back to PLP.
+ * JS for Back to Search.
  */
 
 (function ($) {
   'use strict';
 
-  var replaceState;
-
-  $.fn.updateWindowLocation = function (data) {
-    data = Drupal.removeURLParameter(data, 'facet_filter_url');
-    replaceState = data;
-  };
-
-  $(window).on('beforeunload pagehide', function () {
-    if (typeof replaceState !== 'undefined') {
-      history.replaceState({'back_to_list': true}, document.title, replaceState);
-    }
-  });
-
-  function returnRefinedURL(key, url) {
-    return url.replace(new RegExp(key + "=\\w+"), "").replace("?&", "?").replace("&&", "&");
-  }
-
   // For RTL, we have some code to mess with page scroll.
   // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
   $(window).on('pageshow', function () {
-    if (window.location.search.indexOf('show_on_load') > -1) {
-      replaceState = window.location.href;
-      var url = returnRefinedURL('show_on_load', window.location.href);
-      url = url.replace(/&$/g, "");
-      history.replaceState({}, document.title, url);
-    }
-
-    setTimeout(Drupal.processBackToList, 10);
+    setTimeout(Drupal.processBackToSearch, 10);
   });
 
   /**
@@ -41,8 +17,8 @@
    *
    * @returns {null}
    */
-  function getStorageValues() {
-    var value = localStorage.getItem(window.location.pathname);
+  function getAlgoliaStorageValues() {
+    var value = localStorage.getItem(window.location.hash);
     if (typeof value !== 'undefined' && value !== null) {
       return JSON.parse(value);
     }
@@ -53,9 +29,9 @@
   /**
    * Scroll to the appropriate product.
    */
-  function scrollToProduct() {
-    var storage_value = getStorageValues();
-    var first_visible_product = $('.views-infinite-scroll-content-wrapper article[data-nid="' + storage_value.nid + '"]:visible:first');
+  function scrollToAlgoliaProduct() {
+    var storage_value = getAlgoliaStorageValues();
+    var first_visible_product = $('#alshaya-algolia-search .view-search article[data-sku="' + storage_value.sku + '"]:visible:first');
 
     if (typeof first_visible_product === 'undefined') {
       return;
@@ -74,59 +50,41 @@
   /**
    * Adjust the grid view when back from PDP to listing page.
    */
-  function adjustGridView() {
+  function adjustAlgoliaGridView() {
     // Get storage values.
-    var storage_value = getStorageValues();
+    var storage_value = getAlgoliaStorageValues();
     // Prepare grid type class as per storage value.
     var grid_class_remove = storage_value.grid_type == 'small' ? 'large' : 'small';
-    $('.c-products-list').removeClass('product-' + grid_class_remove);
-    $('.c-products-list').addClass('product-' + storage_value.grid_type);
-    $('.c-products-list').addClass('back-to-list');
-    $('.' + grid_class_remove  + '-col-grid').removeClass('active');
-    $('.' + storage_value.grid_type + '-col-grid').addClass('active');
+    var $algoliaSearchProductList = $('#alshaya-algolia-search .c-products-list');
+    $algoliaSearchProductList.removeClass('product-' + grid_class_remove);
+    $algoliaSearchProductList.addClass('product-' + storage_value.grid_type);
+    $algoliaSearchProductList.addClass('back-to-search');
+    $('#alshaya-algolia-search').find('.' + grid_class_remove  + '-col-grid').removeClass('active');
+    $('#alshaya-algolia-search').find('.' + storage_value.grid_type + '-col-grid').addClass('active');
     // Remove the grid_type property once applied when back from list
     // so that on next page load, default behavior is used.
     delete storage_value.grid_type;
-    localStorage.setItem(window.location.pathname, JSON.stringify(storage_value));
+    localStorage.setItem(window.location.hash, JSON.stringify(storage_value));
   }
 
-  Drupal.processBackToList = function () {
+  Drupal.processBackToSearch = function () {
     // On page load, apply filter/sort if any.
     $('html').once('back-to-list').each(function () {
-      var storage_value = getStorageValues();
+      var storage_value = getAlgoliaStorageValues();
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         // To adjust the grid view mode.
         if (typeof storage_value.grid_type !== 'undefined') {
-          adjustGridView();
+          adjustAlgoliaGridView();
         }
 
-        if (typeof storage_value.nid !== 'undefined') {
+        if (typeof storage_value.sku !== 'undefined') {
           // Set timeout because of conflict.
           setTimeout(function () {
-            scrollToProduct();
+            scrollToAlgoliaProduct();
           }, 1);
         }
       }
     });
-  };
-
-  Drupal.behaviors.backToSearch = {
-    attach: function (context, settings) {
-      // On product click, store the product position.
-      $('#alshaya-algolia-search .view-search .c-products__item').once('back-to-search').on('click', function () {
-        console.log('clicked...');
-        // Prepare object to store details.
-        var storage_details = {
-          nid: $(this).find('article:first').attr('data-nid'),
-          grid_type: $('.c-products-list').hasClass('product-large') ? 'large' : 'small',
-        };
-
-        console.log(storage_details);
-
-        // As local storage only supports string key/value pair.
-        localStorage.setItem(window.location.pathname, JSON.stringify(storage_details));
-      });
-    }
   };
 
 }(jQuery));
