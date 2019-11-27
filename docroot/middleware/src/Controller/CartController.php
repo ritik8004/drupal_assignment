@@ -124,6 +124,7 @@ class CartController {
     // Prepare recommended product data.
     $recommended_products = $this->drupal->getDrupalLinkedSkus($sku_items);
     $recommended_products_data = [];
+    $data['recommended_products'] = [];
     // If there any recommended products.
     if (!empty($recommended_products)) {
       foreach ($recommended_products as $recommended_product) {

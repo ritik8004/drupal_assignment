@@ -6,6 +6,7 @@ import CartItemOOS from '../cart-item-oos';
 import ItemLowQuantity from '../item-low-quantity';
 import CartItemImage from '../cart-item-image';
 import Select from 'react-select';
+import {removeItemFromCart} from '../../../utilities/update_cart';
 
 // @TODO: For demo only, qty values should be dynamic.
 const options = [
@@ -23,9 +24,26 @@ export default class CartItem extends React.Component {
     this.selectRef = React.createRef();
   }
 
+  /**
+   * Remove item from the cart.
+   */
+  removeCartItem = (sku, action, id) => {
+    // Adding class on remove button for showing progress when click.
+    document.getElementById('remove-item-' + id).classList.add('loading');
+    var cart_data = removeItemFromCart(action, sku);
+    if (cart_data instanceof Promise) {
+      // Removing class on remove button for showing progress when click.
+      document.getElementById('remove-item-' + id).classList.remove('loading');
+      cart_data.then((result) => {
+        // Refreshing mini-cart.
+        var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => result }});
+        document.dispatchEvent(event);
 
-  removeCartItem = () => {
-    alert('product-removed');
+        // Refreshing cart components..
+        var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
+        document.dispatchEvent(event);
+      });
+    }
   };
 
   onMenuOpen = () => {
@@ -38,7 +56,7 @@ export default class CartItem extends React.Component {
 
   render() {
     const { currency_code } = drupalSettings.alshaya_spc.currency_config;
-    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data } = this.props.item;
+    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id } = this.props.item;
 
     return (
       <div className="spc-cart-item">
@@ -60,7 +78,7 @@ export default class CartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button className="spc-remove-btn" onClick={() => {this.removeCartItem()}}>{Drupal.t('remove')}</button>
+            <button id={'remove-item-' + id} className="spc-remove-btn" onClick={() => {this.removeCartItem(sku, 'remove item', id)}}>{Drupal.t('remove')}</button>
             <div className="qty">
               <Select ref={this.selectRef} classNamePrefix="spcSelect" className="spc-select" onMenuOpen={this.onMenuOpen} onMenuClose={this.onMenuClose} options={options} defaultValue={options[0]} isSearchable={false} />
             </div>

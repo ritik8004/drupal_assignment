@@ -41,3 +41,27 @@ export const applyRemovePromo = function (action, promo_code) {
     // Processing of error here.
   });
 }
+
+export const removeItemFromCart = function (action, sku) {
+  var cart = cartAvailableInStorage();
+  if (cart === false) {
+    return null;
+  }
+
+  if (!Number.isInteger(cart)) {
+    cart = cart.cart_id;
+  }
+
+  const api_url = updateCartApiUrl();
+
+  return axios.post(api_url, {
+    action: action,
+    sku: sku,
+    cart_id: cart
+  })
+    .then((response) => {
+    return response.data;
+  }, (error) => {
+    // Processing of error here.
+  });
+}

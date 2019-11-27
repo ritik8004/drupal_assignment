@@ -40,6 +40,12 @@ export default class Cart extends React.Component {
         coupon_code: data.coupon_code,
         in_stock: data.in_stock
       }));
+
+      if (data.cart_total <= 0 || data.items.length === 0) {
+        this.setState({
+          wait: true
+        });
+      }
     }, false);
   };
 
