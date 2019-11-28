@@ -14,13 +14,11 @@ export default class CartQuantitySelect extends React.Component {
     const cart_max_qty = window.drupalSettings.alshaya_spc.max_cart_qty;
     var data = new Array();
     for (var i = 1; i <= cart_max_qty; i++) {
-      var ob = {
+      data[i] = {
         value: i,
         label: i,
         isDisabled: (i > stock)
       };
-
-      data.push(ob);
     }
 
     return data;
