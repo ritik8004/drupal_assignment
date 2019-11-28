@@ -35,7 +35,7 @@ export default class CartQuantitySelect extends React.Component {
   };
 
   handleChange = (selectedOption) => {
-    const sku = this.props.sku;console.log(sku);
+    const sku = this.props.sku;
     var cart_data = updateCartItemData('update item', sku, selectedOption.value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
