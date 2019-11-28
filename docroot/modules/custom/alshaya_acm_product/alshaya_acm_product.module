@@ -1152,6 +1152,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['combinations'] = $combinations;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['configurables'] = $product_tree['configurables'];
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
