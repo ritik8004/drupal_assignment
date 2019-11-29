@@ -53,9 +53,15 @@
         });
 
         // Cut the Dynamic promotion wrapper and insert it after add to cart button.
-        if ($(window).width() < 768 && $('.sku-dynamic-promotion-link').length > 0 && $('.basic-details-wrapper .promotions-dynamic-label').length < 1) {
+        if ($(window).width() < 768 && $('.promotions .sku-dynamic-promotion-link').length > 0) {
           var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
-          dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
+          if ($('.basic-details-wrapper .promotions-dynamic-label').length < 1) {
+            dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
+          }
+          else {
+            // Replace the same promotion wrapper with updated dynamic label.
+            $('.basic-details-wrapper .promotions-dynamic-label').replaceWith(dynamicPromotionWrapper);
+          }
         }
 
         // Go ahead and display dynamic promotions.
