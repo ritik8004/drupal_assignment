@@ -57,7 +57,7 @@ $settings['country_code'] = strtoupper($country_code);
 
 // Filepath for MDC rabbitmq credentials.
 $rabbitmq_creds_dir = $settings['server_home_dir'] . '/rabbitmq-creds/';
-if ($settings['env'] === 'local') {
+if ($settings['env'] !== 'local') {
   $rabbitmq_creds_dir .= $settings['env'] . DIRECTORY_SEPARATOR;
 }
 
