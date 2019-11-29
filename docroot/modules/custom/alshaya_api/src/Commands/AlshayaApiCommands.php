@@ -86,6 +86,20 @@ class AlshayaApiCommands extends DrushCommands {
   private $configFactory;
 
   /**
+   * Loaded Magento Data.
+   *
+   * @var array|null
+   */
+  protected $magentoData;
+
+  /**
+   * Loaded Drupal Data.
+   *
+   * @var array|null
+   */
+  protected $drupalData;
+
+  /**
    * AlshayaApiCommands constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
@@ -133,6 +147,44 @@ class AlshayaApiCommands extends DrushCommands {
   }
 
   /**
+   * Get data from Magento.
+   *
+   * @return array
+   *   Data from Magento.
+   */
+  protected function getDataFromMagento() {
+    if (empty($this->magentoData)) {
+      // Retrieve all enabled SKUs from Magento.
+      $this->output()->writeln('Getting SKUs from Magento, please wait...');
+      $this->magentoData = $this->alshayaApiWrapper->getSkusData();
+    }
+
+    return $this->magentoData ?? [];
+  }
+
+  /**
+   * Drupal data.
+   *
+   * @return array
+   *   Drupal data.
+   */
+  protected function getDataFromDrupal() {
+    if (empty($this->drupalData)) {
+      // Retrieve all data from Magento.
+      $this->output()->writeln('Getting SKUs from Drupal, please wait...');
+
+      $query = $this->connection->select('acq_sku_field_data', 'asfd');
+      $query->join('acq_sku_stock', 'stock', 'stock.sku = asfd.sku');
+      $query->fields('asfd', ['sku', 'price', 'final_price']);
+      $query->fields('stock', ['quantity', 'status']);
+      $query->condition('default_langcode', 1);
+      $this->drupalData = $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
+    }
+
+    return $this->drupalData ?? [];
+  }
+
+  /**
    * Run sanity check to get diff between Magento and Drupal SKUs data.
    *
    * @param array $options
@@ -143,370 +195,378 @@ class AlshayaApiCommands extends DrushCommands {
    * @option types
    *   The comma-separated list of SKUs types to check (simple, configurable).
    *
-   * @aliases aasc,alshaya-api-sanity-check
+   * @aliases alshaya-api-sanity-check
+   * @usage alshaya-api-sanity-check --check="category,price,stock,status" --page_size=3
+   * @usage alshaya-api-sanity-check --types="category,stock"
+   * @usage alshaya-api-sanity-check --types="category,status"
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function sanityCheck(array $options = [
-    'types' => 'configurable,simple',
     'page_size' => 3,
-    'chunk_size' => 100,
+    'check' => 'category,price,stock,status',
   ]) {
-    $verbose = $options['verbose'];
+    $to_check = explode(',', $options['check']);
 
-    $types = array_map('trim', explode(',', $options['types']));
-
-    $languages = $this->languageManager->getLanguages();
-
-    $this->output->writeln(dt("\n#### FETCHING DATA ####"));
-
-    // Retrieve all enabled SKUs from Magento.
-    $this->output->writeln(dt('Getting SKUs from Magento, please wait...'));
-    $mskus = $this->alshayaApiWrapper->getSkusData();
-
-    foreach ($types as $type) {
-      $this->logger()->debug(dt("@type SKUs (@count) from Magento:\n@skus", [
-        '@type' => $type,
-        '@count' => count($mskus[$type]),
-        '@skus' => "'" . implode("','", array_keys($mskus[$type])) . "'",
-      ]));
+    if (in_array('stock', $to_check)) {
+      $this->sanityCheckStock($options);
     }
 
-    // Retrieve all enabled SKUs from Drupal indexed by type and langcode.
-    $this->output->writeln(dt("\nGetting @types SKUs from Drupal, please wait...", [
-      '@types' => implode(dt(' and '), $types),
-    ]));
+    if (in_array('category', $to_check)) {
+      $this->sanityCheckCategoryMappings($options);
+    }
 
-    foreach ($types as $type) {
-      foreach ($languages as $language) {
-        $dskus[$type][$language->getId()] = $this->skuManager->getSkus($language->getId(), $type);
+    if (in_array('price', $to_check)) {
+      $this->sanityCheckPrice($options);
+    }
 
-        $this->logger()->debug(dt("@type @language SKUs (@count) from Drupal:\n@skus", [
-          '@type' => $type,
-          '@language' => $language->getName(),
-          '@count' => count($dskus[$type][$language->getId()]),
-          '@skus' => "'" . implode("','", array_keys($dskus[$type][$language->getId()])) . "'",
-        ]));
+    if (in_array('status', $to_check)) {
+      $this->sanityCheckStatus($options);
+    }
+
+    $this->output()->writeln('Sanity check completed.');
+  }
+
+  /**
+   * Run sanity check to get diff between Magento and Drupal category mappings.
+   *
+   * @param array $options
+   *   List of options supported by drush command.
+   *
+   * @command alshaya_api:sanity-check-category-mapping
+   *
+   * @aliases alshaya-api-sanity-check-cats
+   * @usage drush alshaya-api-sanity-check-cats
+   * @usage drush alshaya-api-sanity-check-cats --page_size=2
+   */
+  public function sanityCheckCategoryMappings(array $options = ['page_size' => 3]) {
+    $to_sync = [];
+
+    // MDC categories those needs to be ignored while checking for the category
+    // diff between drupal and mdc.
+    $skip_cats = [];
+    if (!empty($cats_to_ignore = $this->configFactory->get('alshaya_api.settings')->get('ignored_mdc_cats_on_sanity_check'))) {
+      $skip_cats = explode(',', $cats_to_ignore);
+    }
+
+    $mskus = $this->getDataFromMagento();
+
+    $result = $this->connection->query('SELECT field_skus_value, field_commerce_id_value FROM node__field_skus
+    LEFT JOIN node__field_category ON node__field_skus.entity_id = node__field_category.entity_id
+    LEFT JOIN taxonomy_term__field_commerce_id ON node__field_category.field_category_target_id = taxonomy_term__field_commerce_id.entity_id
+    WHERE field_commerce_id_value IS NOT NULL')->fetchAll();
+
+    $dskus = [];
+    foreach ($result as $row) {
+      $dskus[$row->field_skus_value]['category_ids'][] = $row->field_commerce_id_value;
+    }
+
+    foreach ($mskus as $data) {
+      foreach ($data as $sku => $row) {
+        // For whatever reason, we might not have the product in Drupal.
+        // Skip category mis match for it.
+        if (empty($dskus[$sku])) {
+          continue;
+        }
+
+        $mids = explode(',', $row['category_ids']);
+        $dids = $dskus[$sku]['category_ids'];
+
+        $mids = array_filter($mids, function ($a) use ($skip_cats) {
+          return !empty($a) && !(in_array($a, $skip_cats));
+        });
+
+        $dids = array_filter($dids);
+
+        // Skip if both are empty.
+        if (empty($mids) && empty($dids)) {
+          continue;
+        }
+        // Sync if either is empty.
+        elseif (empty($mids) || empty($dids)) {
+          $this->logger()->warning(dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
+            '@sku' => $sku,
+            '@magento' => implode(',', $mids),
+            '@drupal' => implode(',', $dids),
+          ]));
+
+          $to_sync[$sku] = $sku;
+        }
+        // Sync if either of them have additional values or difference.
+        elseif (array_diff($mids, $dids) || array_diff($dids, $mids)) {
+          $this->logger()->warning(dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
+            '@sku' => $sku,
+            '@magento' => implode(',', $mids),
+            '@drupal' => implode(',', $dids),
+          ]));
+
+          $to_sync[$sku] = $sku;
+        }
       }
     }
 
-    $this->output->writeln(dt("\n#### REPORT SUMMARY ####"));
-
-    $missing = [];
-    $to_be_deleted = [];
-    $stock_mismatch_sync = [];
-    $price_mismatch_sync = [];
-
-    foreach ($types as $type) {
-      $missing[$type]['all'] = [];
-      $to_be_deleted[$type]['all'] = [];
-      $stock_mismatch[$type] = [];
-      $price_mismatch[$type] = [];
-
-      foreach ($languages as $language) {
-        // The ones which are missing in Drupal.
-        $missing[$type][$language->getId()] = array_diff(array_keys($mskus[$type]), array_keys($dskus[$type][$language->getId()]));
-        $missing[$type]['all'] = array_merge($missing[$type]['all'], $missing[$type][$language->getId()]);
-
-        // The ones which are only in Drupal and should be removed.
-        $to_be_deleted[$type][$language->getId()] = array_diff(array_keys($dskus[$type][$language->getId()]), array_keys($mskus[$type]));
-        $to_be_deleted[$type]['all'] = array_merge($to_be_deleted[$type]['all'], $to_be_deleted[$type][$language->getId()]);
-
-        if (!empty($missing[$type][$language->getId()])) {
-          $this->output->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced!skus", [
-            '@count' => count($missing[$type][$language->getId()]),
-            '@language' => strtolower($language->getName()),
-            '@type' => $type,
-            '!skus' => $verbose ? ":\n'" . implode("','", $missing[$type][$language->getId()]) . "'" : '.',
-          ]));
-        }
-        else {
-          $this->output->writeln(dt("\nNo missing SKUs match for @language @type in Drupal.", [
-            '@language' => strtolower($language->getName()),
-            '@type' => $type,
-          ]));
-        }
-
-        if (!empty($to_be_deleted[$type][$language->getId()])) {
-          $this->output->writeln(dt("\n@count @language @type's SKUs are only in Drupal and must be removed!skus", [
-            '@count' => count($to_be_deleted[$type][$language->getId()]),
-            '@language' => strtolower($language->getName()),
-            '@type' => $type,
-            '!skus' => $verbose ? ":\n'" . implode("','", $to_be_deleted[$type][$language->getId()]) . "'" : '.',
-          ]));
-        }
-        else {
-          $this->output->writeln(dt("\nNo additional SKUs for @language @type found in Drupal. Nothing to delete.", [
-            '@language' => strtolower($language->getName()),
-            '@type' => $type,
-          ]));
-        }
-      }
-
-      // We check stock and price only for simple SKUs.
-      if ($type == 'simple') {
-        $checked_skus = [];
-
-        foreach ($languages as $language) {
-          foreach ($dskus[$type][$language->getId()] as $sku => $data) {
-            // We will check the stock and price for this SKU only if it exists
-            // in Magento (otherwise it must be deleted) and if it has not been
-            // checked yet in another language.
-            if (!empty($mskus[$type][$sku]) && !in_array($sku, $checked_skus)) {
-              $checked_skus[] = $sku;
-
-              $stock_output = '';
-              $price_output = '';
-
-              // If stock in Drupal does not match with stock in Magento.
-              if ($data['quantity'] != (int) $mskus[$type][$sku]['qty']
-                || ($data['quantity'] > 0 && $data['status'] != $mskus[$type][$sku]['stock_status'])) {
-                $stock_output .= 'Drupal stock:' . $data['quantity'] . ' | ';
-                $stock_output .= 'Drupal stock status:' . $data['status'] . ' | ';
-                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'] . ' | ';
-                $stock_output .= 'MDC stock status:' . $mskus[$type][$sku]['stock_status'];
-                $stock_mismatch_sync[$type][] = $sku;
-              }
-
-              // Cast prices to ensure comparison is between apple to apple.
-              $data['price'] = (float) $data['price'];
-              $data['final_price'] = (float) $data['final_price'];
-              $mskus[$type][$sku]['price'] = (float) $mskus[$type][$sku]['price'];
-              $mskus[$type][$sku]['final_price'] = (float) $mskus[$type][$sku]['final_price'];
-
-              // If price in Drupal not matches with price in Magento.
-              if ($data['price'] != $mskus[$type][$sku]['price']) {
-                $price_output .= 'Drupal price:' . $data['price'] . ' | ';
-                $price_output .= 'MDC price:' . $mskus[$type][$sku]['price'];
-                $price_mismatch_sync[$type][] = $sku;
-              }
-
-              // If final price in Drupal not matches with final price
-              // in Magento.
-              if ($data['final_price'] != $mskus[$type][$sku]['final_price']) {
-                $price_output .= 'Drupal final price:' . $data['final_price'] . ' | ';
-                $price_output .= 'MDC final price:' . $mskus[$type][$sku]['final_price'];
-                $price_mismatch_sync[$type][] = $sku;
-              }
-
-              // If there any sku having stock mismatch.
-              if (!empty($stock_output)) {
-                $stock_mismatch[$type][$sku] = "SKU:" . $sku . " | " . $stock_output;
-              }
-
-              // If there any sku having price mismatch.
-              if (!empty($price_output)) {
-                $price_mismatch[$type][$sku] = "SKU:" . $sku . " | " . $price_output;
-              }
-            }
-          }
-        }
-
-        // Output the details of stock mismatch.
-        if (!empty($stock_mismatch[$type])) {
-          $this->output->writeln(dt("\n@count @type's SKUs in Drupal have different stock than Magento!output", [
-            '@count' => count($stock_mismatch[$type]),
-            '@type' => $type,
-            '!output' => $verbose ? ":\n" . implode("\n", $stock_mismatch[$type]) : '.',
-          ]));
-        }
-        else {
-          $this->output->writeln(dt("\nNo stock mismatch for @type's in Drupal.", [
-            '@type' => $type,
-          ]));
-        }
-
-        // Output the details of price mismatch.
-        if (!empty($price_mismatch[$type])) {
-          $this->output->writeln(dt("\n@count @type's SKUs in Drupal have different price than Magento!output", [
-            '@count' => count($price_mismatch[$type]),
-            '@type' => $type,
-            '!output' => $verbose ? ":\n" . implode("\n", $price_mismatch[$type]) : '.',
-          ]));
-        }
-        else {
-          $this->output->writeln(dt("\nNo price mismatch for @type's in Drupal.", [
-            '@type' => $type,
-          ]));
-        }
-      }
-      else {
-        // Check the stock status for configurable ones.
-        foreach ($languages as $language) {
-          foreach ($dskus[$type][$language->getId()] as $sku => $data) {
-            $stock_output = '';
-
-            if ($data['status'] != $mskus[$type][$sku]['stock_status']) {
-              $stock_output .= 'Drupal stock status:' . $data['status'] . ' | ';
-              $stock_output .= 'MDC stock status:' . $mskus[$type][$sku]['stock_status'];
-              $stock_mismatch_sync[$type][] = $sku;
-            }
-
-            // If there any sku having stock mismatch.
-            if (!empty($stock_output)) {
-              $stock_mismatch[$type][$sku] = "SKU:" . $sku . " | " . $stock_output;
-            }
-          }
-        }
-
-        // Output the details of stock mismatch.
-        if (!empty($stock_mismatch[$type])) {
-          $this->output->writeln(dt("\n@count @type's SKUs in Drupal have different stock than Magento!output", [
-            '@count' => count($stock_mismatch[$type]),
-            '@type' => $type,
-            '!output' => $verbose ? ":\n" . implode("\n", $stock_mismatch[$type]) : '.',
-          ]));
-        }
-        else {
-          $this->output->writeln(dt("\nNo stock mismatch for @type's in Drupal.", [
-            '@type' => $type,
-          ]));
-        }
-      }
-
-      $missing[$type]['all'] = array_unique($missing[$type]['all']);
-      $to_be_deleted[$type]['all'] = array_unique($to_be_deleted[$type]['all']);
-      $stock_mismatch_sync[$type] = !empty($stock_mismatch_sync[$type]) ? array_unique($stock_mismatch_sync[$type]) : [];
-      $price_mismatch_sync[$type] = !empty($price_mismatch_sync[$type]) ? array_unique($price_mismatch_sync[$type]) : [];
+    if (empty($to_sync)) {
+      $this->logger()->notice('No category mapping diff found.');
+      return;
     }
 
-    $this->output->writeln(dt("\n#### SYNCHRONIZATION ####"));
+    // Sync?
+    $confirmation = dt('Do you want to sync products with category mismatch? Count: @count', [
+      '@count' => count($to_sync),
+    ]);
 
-    $chunk_size = $options['chunk_size'];
-    $page_size = $options['page_size'];
+    if ($this->io()->confirm($confirmation)) {
+      $this->ingestApiWrapper->productFullSync(
+        $this->configFactory->get('store_id'),
+        'en',
+        $to_sync,
+        NULL,
+        $options['page_size']
+      );
+    }
+  }
 
-    foreach ($types as $type) {
-      // Missing SKUs synchronization.
-      if (!empty($missing[$type]['all']) && $this->io()->confirm(dt('Do you want to sync the @count @type missing SKUs?', [
-        '@count' => count($missing[$type]['all']),
-        '@type' => $type,
-      ]))) {
+  /**
+   * Run sanity check to get diff between Magento and Drupal stock.
+   *
+   * @param array $options
+   *   List of options supported by drush command.
+   *
+   * @command alshaya_api:sanity-check-stock
+   *
+   * @aliases alshaya-api-sanity-check-stock
+   * @usage drush alshaya-api-sanity-check-stock
+   * @usage drush alshaya-api-sanity-check-stock --page_size=2
+   */
+  public function sanityCheckStock(array $options = ['page_size' => 3]) {
+    $to_sync = [];
+
+    $dskus = $this->getDataFromDrupal();
+    $mskus = $this->getDataFromMagento();
+
+    $this->output()->writeln('Finding stock differences.');
+
+    foreach ($dskus as $sku => $data) {
+      $mdata = $mskus[$sku] ?? [];
+
+      // We will check in status if not available now in Magento.
+      if (empty($mdata)) {
+        continue;
+      }
+
+      // If stock in Drupal does not match with stock in Magento.
+      if (($data['type_id'] == 'simple' && $data['quantity'] != (int) $mdata['qty'])
+        || ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status'])) {
+
+        $message = $sku . ' | ';
+        $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
+        $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
+        $message .= 'Drupal stock status:' . $data['status'] . ' | ';
+        $message .= 'MDC stock status:' . $mdata['stock_status'];
+        $this->output()->writeln($message);
+
+        $to_sync[] = $sku;
+      }
+    }
+
+    if (empty($to_sync)) {
+      $this->logger()->notice('No stock difference found.');
+      return;
+    }
+
+    // Sync?
+    $confirmation = dt('Do you want to sync products with stock mismatch? Count: @count', [
+      '@count' => count($to_sync),
+    ]);
+
+    if ($this->io()->confirm($confirmation)) {
+      $this->ingestApiWrapper->productFullSync(
+        $this->configFactory->get('store_id'),
+        'en',
+        $to_sync,
+        NULL,
+        $options['page_size']
+      );
+    }
+  }
+
+  /**
+   * Run sanity check to get diff between Magento and Drupal price.
+   *
+   * @param array $options
+   *   List of options supported by drush command.
+   *
+   * @command alshaya_api:sanity-check-price
+   *
+   * @aliases alshaya-api-sanity-check-price
+   * @usage drush alshaya-api-sanity-check-price
+   * @usage drush alshaya-api-sanity-check-price --page_size=2
+   */
+  public function sanityCheckPrice(array $options = ['page_size' => 3]) {
+    $to_sync = [];
+
+    $dskus = $this->getDataFromDrupal();
+    $mskus = $this->getDataFromMagento();
+
+    $this->output()->writeln('Finding price differences.');
+
+    foreach ($dskus as $sku => $data) {
+      $mdata = $mskus[$sku] ?? [];
+
+      // We will check in status if not available now in Magento.
+      if (empty($mdata)) {
+        continue;
+      }
+
+      // Cast prices to ensure comparison is between apple to apple.
+      $d_price = (float) $data['price'];
+      $d_final_price = (float) $data['final_price'];
+      $m_price = (float) $mdata['price'];
+      $m_final_price = (float) $mdata['final_price'];
+
+      // If price in Drupal not matches with price in Magento.
+      if (($d_price != $m_price) || ($d_final_price != $m_final_price)) {
+        $message = $sku . ' | ';
+        $message .= 'Drupal price:' . $d_price . ' | ';
+        $message .= 'MDC price:' . $m_price . ' | ';
+        $message .= 'Drupal final price:' . $d_final_price . ' | ';
+        $message .= 'MDC final price:' . $m_final_price;
+        $this->output()->writeln($message);
+
+        $to_sync[] = $sku;
+      }
+    }
+
+    if (empty($to_sync)) {
+      $this->logger()->notice('No price difference found.');
+      return;
+    }
+
+    // Sync?
+    $confirmation = dt('Do you want to sync products with price mismatch? Count: @count', [
+      '@count' => count($to_sync),
+    ]);
+
+    if ($this->io()->confirm($confirmation)) {
+      $this->ingestApiWrapper->productFullSync(
+        $this->configFactory->get('store_id'),
+        'en',
+        $to_sync,
+        NULL,
+        $options['page_size']
+      );
+    }
+  }
+
+  /**
+   * Run sanity check to get diff between Magento and Drupal status.
+   *
+   * @param array $options
+   *   List of options supported by drush command.
+   *
+   * @command alshaya_api:sanity-check-status
+   *
+   * @aliases alshaya-api-sanity-check-status
+   * @usage drush alshaya-api-sanity-check-status
+   * @usage drush alshaya-api-sanity-check-status --page_size=2
+   */
+  public function sanityCheckStatus(array $options = ['page_size' => 3]) {
+    $dskus = $this->getDataFromDrupal();
+    $mskus = $this->getDataFromMagento();
+
+    $this->output()->writeln('Finding status differences.');
+
+    $in_drupal_only = array_diff(array_keys($dskus), array_keys($mskus));
+    $in_magento_only = array_diff(array_keys($mskus), array_keys($dskus));
+
+    if (!empty($in_magento_only)) {
+      $this->output()->writeln('Products not available in Drupal: ' . implode(', ', $in_magento_only));
+
+      $confirmation = dt('Do you want to sync products that are not available in Drupal? Count: @count', [
+        '@count' => count($in_magento_only),
+      ]);
+
+      if ($this->io()->confirm($confirmation)) {
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-          foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), $chunk_size) as $chunk) {
-            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
-          }
-
-          $this->output->writeln(dt('Sync launched for the @count @language @type missing SKUs.', [
-            '@count' => count($missing[$type]['all']),
-            '@language' => $languages[$langcode]->getName(),
-            '@type' => $type,
-          ]));
+          $this->ingestApiWrapper->productFullSync(
+            $store_id,
+            $langcode,
+            $in_magento_only,
+            NULL,
+            $options['page_size']
+          );
         }
       }
+    }
 
-      // Additional SKUs synchronization/deletion.
-      if (!empty($to_be_deleted[$type]['all'])) {
-        $this->output->writeln(dt('Extra SKUs can be deleted in Drupal directly or can be synchronized with Magento to trigger the deletion.'));
-        if ($this->io()
-          ->confirm(dt('Do you want to delete the @count @type extra SKUs in Drupal directly?', [
-            '@count' => count($to_be_deleted[$type]['all']),
-            '@type' => $type,
-          ]))) {
-          foreach ($languages as $langcode => $language) {
-            foreach ($to_be_deleted[$type][$langcode] as $sku) {
-              if ($sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, TRUE)) {
-                $this->logger->notice('Removing disabled @language @type SKU @sku from the system: @sku.', [
-                  '@language' => $languages[$langcode]->getName(),
-                  '@type' => $type,
-                  '@sku' => $sku,
-                ]);
+    if (!empty($in_drupal_only)) {
+      $this->output()->writeln('Products only in Drupal: ' . implode(', ', $in_drupal_only));
 
-                $lock_key = 'deleteProduct' . $sku;
+      $confirmation_delete = dt('Do you want to delete products directly in Drupal? Count: @count', [
+        '@count' => count($in_drupal_only),
+      ]);
 
-                // Acquire lock to ensure parallel processes are executed
-                // sequentially.
-                // @TODO: These 8 lines might be duplicated in multiple places. We
-                // may want to create a utility service in alshaya_performance.
-                do {
-                  $lock_acquired = $this->lock->acquire($lock_key);
+      $confirmation_sync = dt('Do you want to request products not available in Magento again to let them autocorrect? Count: @count', [
+        '@count' => count($in_drupal_only),
+      ]);
 
-                  // Sleep for half a second before trying again.
-                  // @TODO: Move this 0.5s to a config variable.
-                  if (!$lock_acquired) {
-                    usleep(500000);
-                  }
-                } while (!$lock_acquired);
+      if ($this->io()->confirm($confirmation_delete)) {
+        foreach ($in_drupal_only as $sku) {
+          $sku_entity = SKU::loadFromSku($sku, NULL, FALSE, FALSE);
+          if (!($sku_entity instanceof SKU)) {
+            $this->output()->writeln('Not able to load SKU Entity for ' . $sku);
+            continue;
+          }
 
-                // Delete the node if it is linked to this SKU only.
-                try {
-                  if ($node = $sku_entity->getPluginInstance()->getDisplayNode($sku_entity, FALSE, FALSE)) {
-                    $node->delete();
-                  }
-                }
-                catch (\Exception $e) {
-                  // Not doing anything, we might not have node for the sku.
-                }
+          $this->logger()->notice('Removing disabled SKU @sku from the system.', [
+            '@sku' => $sku,
+          ]);
 
-                // Delete the SKU.
-                $sku_entity->delete();
+          $lock_key = 'deleteProduct' . $sku;
 
-                // Release the lock.
-                $this->lock->release($lock_key);
+          // Acquire lock to ensure parallel processes are executed
+          // sequentially.
+          // @TODO: These 8 lines might be duplicated in multiple places. We
+          // may want to create a utility service in alshaya_performance.
+          do {
+            $lock_acquired = $this->lock->acquire($lock_key);
 
-                $this->logger()->debug(dt('Disabled @language @type SKU @sku removed from the system.', [
-                  '@language' => $languages[$langcode]->getName(),
-                  '@type' => $type,
-                  '@sku' => $sku,
-                ]));
-              }
+            // Sleep for half a second before trying again.
+            // @TODO: Move this 0.5s to a config variable.
+            if (!$lock_acquired) {
+              usleep(500000);
+            }
+          } while (!$lock_acquired);
+
+          // Delete the node if it is linked to this SKU only.
+          try {
+            if ($node = $sku_entity->getPluginInstance()->getDisplayNode($sku_entity, FALSE, FALSE)) {
+              $node->delete();
             }
           }
-        }
-        elseif ($this->io()
-          ->confirm(dt('Do you want to sync the @count @type extra SKUs?', [
-            '@count' => count($to_be_deleted[$type]['all']),
-            '@type' => $type,
-          ]))) {
-          foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-            foreach (array_chunk(str_replace("'", '', $to_be_deleted[$type]['all']), $chunk_size) as $chunk) {
-              $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
-            }
-
-            $this->output->writeln(dt('Sync launched for the @count @language @type extra SKUs.', [
-              '@count' => count($to_be_deleted[$type]['all']),
-              '@language' => $languages[$langcode]->getName(),
-              '@type' => $type,
-            ]));
+          catch (\Exception $e) {
+            // Not doing anything, we might not have node for the sku.
           }
+
+          // Delete the SKU.
+          $sku_entity->delete();
+
+          // Release the lock.
+          $this->lock->release($lock_key);
+
+          $this->logger()->notice('Disabled SKU @sku removed from the system.', [
+            '@sku' => $sku,
+          ]);
         }
       }
-
-      // Stock and price sync is only valid for simple SKUs. Also, these are
-      // not translatable fields, hence we only need to sync one language.
-      if ($type == 'simple') {
-        $stores = $this->i18nHelper->getStoreLanguageMapping();
-        $langcode = key($stores);
-        $store_id = $stores[$langcode];
-
-        // Stock mismatch synchronization.
-        if (!empty($stock_mismatch_sync[$type]) && $this->io()->confirm(dt('Do you want to sync the @count @type SKUs with stock mismatch?', [
-          '@count' => count($stock_mismatch_sync[$type]),
-          '@type' => $type,
-        ]))) {
-          foreach (array_chunk(str_replace("'", '', $stock_mismatch_sync[$type]), $chunk_size) as $chunk) {
-            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
-          }
-
-          $this->output->writeln(dt('Sync launched for the @count @type SKUs with stock mismatch.', [
-            '@count' => count($stock_mismatch_sync[$type]),
-            '@type' => $type,
-          ]));
-        }
-
-        // Price mismatch synchronization.
-        if (!empty($price_mismatch_sync[$type]) && $this->io()->confirm(dt('Do you want to sync the @count @type SKUs with price mismatch?', [
-          '@count' => count($price_mismatch_sync[$type]),
-          '@type' => $type,
-        ]))) {
-          foreach (array_chunk(str_replace("'", '', $price_mismatch_sync[$type]), $chunk_size) as $chunk) {
-            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
-          }
-
-          $this->output->writeln(dt('Sync launched for the @count @type SKUs with price mismatch.', [
-            '@count' => count($price_mismatch_sync[$type]),
-            '@type' => $type,
-          ]));
-        }
+      elseif ($this->io()->confirm($confirmation_sync)) {
+        $this->ingestApiWrapper->productFullSync(
+          $this->configFactory->get('store_id'),
+          'en',
+          $in_drupal_only,
+          NULL,
+          $options['page_size']
+        );
       }
     }
   }
@@ -563,7 +623,7 @@ class AlshayaApiCommands extends DrushCommands {
     $languages = $this->languageManager->getLanguages();
 
     // Retrieve all enabled SKUs from Magento indexed by type.
-    $this->output->writeln(dt('Getting @types SKUs from Magento, please wait...', [
+    $this->output()->writeln(dt('Getting @types SKUs from Magento, please wait...', [
       '@types' => implode(dt(' and '), $types),
     ]));
 
@@ -576,7 +636,7 @@ class AlshayaApiCommands extends DrushCommands {
 
     if ($debug) {
       foreach ($types as $type) {
-        $this->output->writeln(dt("@type SKUs (@count) from Magento:\n@skus", [
+        $this->output()->writeln(dt("@type SKUs (@count) from Magento:\n@skus", [
           '@type' => $type,
           '@count' => count($mskus[$type]),
           '@skus' => "'" . implode("','", array_keys($mskus[$type])) . "'",
@@ -590,7 +650,7 @@ class AlshayaApiCommands extends DrushCommands {
     }
 
     // Retrieve all enabled SKUs from Drupal indexed by type and langcode.
-    $this->output->writeln(dt("\nGetting @types SKUs from Drupal, please wait...", [
+    $this->output()->writeln(dt("\nGetting @types SKUs from Drupal, please wait...", [
       '@types' => implode(dt(' and '), $types),
     ]));
 
@@ -599,7 +659,7 @@ class AlshayaApiCommands extends DrushCommands {
         $dskus[$type][$language->getId()] = $this->skuManager->getSkus($language->getId(), $type);
 
         if ($debug) {
-          $this->output->writeln(dt("@type @language SKUs (@count) from Drupal:\n@skus", [
+          $this->output()->writeln(dt("@type @language SKUs (@count) from Drupal:\n@skus", [
             '@type' => $type,
             '@language' => $language->getName(),
             '@count' => count($dskus[$type][$language->getId()]),
@@ -609,7 +669,7 @@ class AlshayaApiCommands extends DrushCommands {
       }
     }
 
-    $this->output->writeln(dt("\n#### SUMMARY ####"));
+    $this->output()->writeln(dt("\n#### SUMMARY ####"));
 
     $missing = [];
     $to_be_deleted = [];
@@ -652,7 +712,7 @@ class AlshayaApiCommands extends DrushCommands {
         $to_be_deleted[$type]['all'] = $tall;
 
         if (!empty($missing[$type][$language->getId()])) {
-          $this->output->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced!skus", [
+          $this->output()->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced!skus", [
             '@count' => count($missing[$type][$language->getId()]),
             '@language' => $language->getName(),
             '@type' => $type,
@@ -660,14 +720,14 @@ class AlshayaApiCommands extends DrushCommands {
           ]));
         }
         else {
-          $this->output->writeln(dt("\nNo missing SKUs match for @language @type in Drupal.", [
+          $this->output()->writeln(dt("\nNo missing SKUs match for @language @type in Drupal.", [
             '@language' => $language->getName(),
             '@type' => $type,
           ]));
         }
 
         if (!empty($to_be_deleted[$type][$language->getId()])) {
-          $this->output->writeln(dt("\n@count @language @type's SKUs are only in Drupal and must be removed!skus", [
+          $this->output()->writeln(dt("\n@count @language @type's SKUs are only in Drupal and must be removed!skus", [
             '@count' => count($to_be_deleted[$type][$language->getId()]),
             '@language' => $language->getName(),
             '@type' => $type,
@@ -675,7 +735,7 @@ class AlshayaApiCommands extends DrushCommands {
           ]));
         }
         else {
-          $this->output->writeln(dt("\nNo additional SKUs for @language @type found in Drupal. Nothing to delete.", [
+          $this->output()->writeln(dt("\nNo additional SKUs for @language @type found in Drupal. Nothing to delete.", [
             '@language' => $language->getName(),
             '@type' => $type,
           ]));
@@ -751,7 +811,7 @@ class AlshayaApiCommands extends DrushCommands {
               if ($live_check && $data['quantity'] != $mskus[$type][$sku]['qty']) {
                 $live_check_api_call_done++;
                 if (($live_check_api_call_done % $live_check_api_call_step) == 0) {
-                  $this->output->writeln(dt("@current/@total Fetching data from Magento's API for stock and price. Please wait ...", [
+                  $this->output()->writeln(dt("@current/@total Fetching data from Magento's API for stock and price. Please wait ...", [
                     '@current' => $live_check_api_call_done,
                     '@total' => $live_check_total_api_request,
                   ]));
@@ -774,7 +834,7 @@ class AlshayaApiCommands extends DrushCommands {
               ) {
                 $live_check_api_call_done++;
                 if (($live_check_api_call_done % $live_check_api_call_step) == 0) {
-                  $this->output->writeln(dt("@current/@total Fetching data from Magento's API for stock and price. Please wait ...", [
+                  $this->output()->writeln(dt("@current/@total Fetching data from Magento's API for stock and price. Please wait ...", [
                     '@current' => $live_check_api_call_done,
                     '@total' => $live_check_total_api_request,
                   ]));
@@ -824,28 +884,28 @@ class AlshayaApiCommands extends DrushCommands {
 
         // Output the details of stock mismatch.
         if (!empty($stock_mismatch[$type])) {
-          $this->output->writeln(dt("\n@count @type's SKUs in drupal have different stock than magento!output", [
+          $this->output()->writeln(dt("\n@count @type's SKUs in drupal have different stock than magento!output", [
             '@count' => count($stock_mismatch[$type]),
             '@type' => $type,
             '!output' => $verbose ? ":\n" . implode("\n", $stock_mismatch[$type]) : '.',
           ]));
         }
         else {
-          $this->output->writeln(dt("\nNo stock mismatch for @type's in Drupal.", [
+          $this->output()->writeln(dt("\nNo stock mismatch for @type's in Drupal.", [
             '@type' => $type,
           ]));
         }
 
         // Output the details of price mismatch.
         if (!empty($price_mismatch[$type])) {
-          $this->output->writeln(dt("\n@count @type's SKUs in drupal have different price than magento!output", [
+          $this->output()->writeln(dt("\n@count @type's SKUs in drupal have different price than magento!output", [
             '@count' => count($price_mismatch[$type]),
             '@type' => $type,
             '!output' => $verbose ? ":\n" . implode("\n", $price_mismatch[$type]) : '.',
           ]));
         }
         else {
-          $this->output->writeln(dt("\nNo price mismatch for @type's in Drupal.", [
+          $this->output()->writeln(dt("\nNo price mismatch for @type's in Drupal.", [
             '@type' => $type,
           ]));
         }
@@ -857,7 +917,7 @@ class AlshayaApiCommands extends DrushCommands {
       $price_mismatch_sync[$type] = !empty($price_mismatch_sync[$type]) ? array_unique($price_mismatch_sync[$type]) : [];
     }
 
-    $this->output->writeln(dt("\n#### SYNCHRONIZATION ####"));
+    $this->output()->writeln(dt("\n#### SYNCHRONIZATION ####"));
 
     $chunk_size = 100;
 
@@ -891,7 +951,7 @@ class AlshayaApiCommands extends DrushCommands {
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
 
-          $this->output->writeln(dt('Sync launched for the @count @type SKUs with stock mismatch.', [
+          $this->output()->writeln(dt('Sync launched for the @count @type SKUs with stock mismatch.', [
             '@count' => count($stock_mismatch_sync[$type]),
             '@type' => $type,
           ]));
@@ -911,7 +971,7 @@ class AlshayaApiCommands extends DrushCommands {
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
 
-          $this->output->writeln(dt('Sync launched for the @count @type SKUs with price mismatch.', [
+          $this->output()->writeln(dt('Sync launched for the @count @type SKUs with price mismatch.', [
             '@count' => count($price_mismatch_sync[$type]),
             '@type' => $type,
           ]));
@@ -935,7 +995,7 @@ class AlshayaApiCommands extends DrushCommands {
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
 
-          $this->output->writeln(dt('Sync launched for the @count @language @type SKUs.', [
+          $this->output()->writeln(dt('Sync launched for the @count @language @type SKUs.', [
             '@count' => count($missing[$type]['all']),
             '@language' => $languages[$langcode]->getName(),
             '@type' => $type,
@@ -960,7 +1020,7 @@ class AlshayaApiCommands extends DrushCommands {
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
 
-          $this->output->writeln(dt('Sync launched for the @count @language @type SKUs.', [
+          $this->output()->writeln(dt('Sync launched for the @count @language @type SKUs.', [
             '@count' => count($to_be_deleted[$type]['all']),
             '@language' => $languages[$langcode]->getName(),
             '@type' => $type,
@@ -1023,7 +1083,7 @@ class AlshayaApiCommands extends DrushCommands {
               // Release the lock.
               $this->lock->release($lock_key);
 
-              $this->output->writeln(dt('Disabled @language @type SKU @sku removed from the system.', [
+              $this->output()->writeln(dt('Disabled @language @type SKU @sku removed from the system.', [
                 '@language' => $languages[$langcode]->getName(),
                 '@type' => $type,
                 '@sku' => $sku,
@@ -1055,7 +1115,7 @@ class AlshayaApiCommands extends DrushCommands {
     $handle = $this->alshayaApiWrapper->getMerchandisingReport();
 
     if (!$handle) {
-      $this->output->writeln(dt('Impossible to get the merchandising report from Magento.'));
+      $this->output()->writeln(dt('Impossible to get the merchandising report from Magento.'));
       return;
     }
 
@@ -1093,7 +1153,7 @@ class AlshayaApiCommands extends DrushCommands {
     fclose($handle);
 
     if (empty($not_visible_ind_skus)) {
-      $this->output->writeln(dt('There is no SKU which are not visible individually as per the merchandising report.'));
+      $this->output()->writeln(dt('There is no SKU which are not visible individually as per the merchandising report.'));
       return;
     }
 
@@ -1103,7 +1163,7 @@ class AlshayaApiCommands extends DrushCommands {
     $query->condition('n.field_skus_value', $not_visible_ind_skus, 'IN');
     $nids = $query->execute()->fetchAllKeyed(0, 0);
 
-    $this->output->writeln(dt('@count product nodes are related to SKUs which are not supposed to be visible individually!nids', [
+    $this->output()->writeln(dt('@count product nodes are related to SKUs which are not supposed to be visible individually!nids', [
       '@count' => count($nids),
       '!nids' => $verbose ? ":\n'" . implode("','", $nids) . "'" : '.',
     ]));
@@ -1119,7 +1179,7 @@ class AlshayaApiCommands extends DrushCommands {
             $node->delete();
 
             if ($count % 100 == 0) {
-              $this->output->writeln(dt("Delete @count/@total...", [
+              $this->output()->writeln(dt("Delete @count/@total...", [
                 '@count' => $count,
                 '@total' => count($nids),
               ]));
@@ -1132,106 +1192,6 @@ class AlshayaApiCommands extends DrushCommands {
         }
       }
     }
-  }
-
-  /**
-   * Run sanity check to get diff between Magento and Drupal category mappings.
-   *
-   * @param array $options
-   *   List of options supported by drush command.
-   *
-   * @command alshaya_api:category-mapping-sanity-check
-   *
-   * @aliases alshaya-api-sanity-check-cats
-   * @usage drush alshaya-api-sanity-check-cats
-   * @usage drush alshaya-api-sanity-check-cats --page_size=2
-   */
-  public function sanityCheckCategoryMappings(array $options = ['page_size' => 3]) {
-    $to_sync = [];
-
-    // MDC categories those needs to be ignored while checking for the category
-    // diff between drupal and mdc.
-    $skip_cats = [];
-    if (!empty($cats_to_ignore = $this->configFactory->get('alshaya_api.settings')->get('ignored_mdc_cats_on_sanity_check'))) {
-      $skip_cats = explode(',', $cats_to_ignore);
-    }
-
-    $mskus = $this->alshayaApiWrapper->getSkusData();
-
-    $result = $this->connection->query('SELECT field_skus_value, field_commerce_id_value FROM node__field_skus
-    LEFT JOIN node__field_category ON node__field_skus.entity_id = node__field_category.entity_id
-    LEFT JOIN taxonomy_term__field_commerce_id ON node__field_category.field_category_target_id = taxonomy_term__field_commerce_id.entity_id
-    WHERE field_commerce_id_value IS NOT NULL')->fetchAll();
-
-    $dskus = [];
-    foreach ($result as $row) {
-      $dskus[$row->field_skus_value]['category_ids'][] = $row->field_commerce_id_value;
-    }
-
-    foreach ($mskus as $data) {
-      foreach ($data as $sku => $row) {
-        // For whatever reason, we might not have the product in Drupal.
-        // Skip category mis match for it.
-        if (empty($dskus[$sku])) {
-          continue;
-        }
-
-        $mids = explode(',', $row['category_ids']);
-        $dids = $dskus[$sku]['category_ids'];
-
-        $mids = array_filter($mids, function ($a) use ($skip_cats) {
-          return !empty($a) && !(in_array($a, $skip_cats));
-        });
-
-        $dids = array_filter($dids);
-
-        // Skip if both are empty.
-        if (empty($mids) && empty($dids)) {
-          continue;
-        }
-        // Sync if either is empty.
-        elseif (empty($mids) || empty($dids)) {
-          $this->logger()->warning(dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
-            '@sku' => $sku,
-            '@magento' => implode(',', $mids),
-            '@drupal' => implode(',', $dids),
-          ]));
-
-          $to_sync[$sku] = $sku;
-        }
-        // Sync if either of them have additional values or difference.
-        elseif (array_diff($mids, $dids) || array_diff($dids, $mids)) {
-          $this->logger()->warning(dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
-            '@sku' => $sku,
-            '@magento' => implode(',', $mids),
-            '@drupal' => implode(',', $dids),
-          ]));
-
-          $to_sync[$sku] = $sku;
-        }
-      }
-    }
-
-    if (empty($to_sync)) {
-      $this->logger()->notice('No category mapping diff found.');
-      return;
-    }
-
-    // Sync?
-    $confirmation = dt('Do you want to sync products with category mismatch? Count: @count', [
-      '@count' => count($to_sync),
-    ]);
-
-    if ($this->io()->confirm($confirmation)) {
-      $this->ingestApiWrapper->productFullSync(
-        $this->configFactory->get('store_id'),
-        'en',
-        $to_sync,
-        NULL,
-        $options['page_size']
-      );
-    }
-
   }
 
 }
