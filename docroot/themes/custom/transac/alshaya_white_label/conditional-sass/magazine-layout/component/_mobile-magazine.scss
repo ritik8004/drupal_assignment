@@ -300,7 +300,7 @@
         overflow: hidden;
         margin-top: 1rem;
 
-        .js-form-wrapper {
+        .js-form-wrapper:not(.errors-container) {
           grid-column: 1 / -1;
         }
 

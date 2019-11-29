@@ -19,6 +19,11 @@
         }
 
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+
+        // Updating the parent sku for selected variant.
+        // @see alshaya_acm_product_form_sku_base_form_alter().
+        $(this).find('.selected-parent-sku').val(variantInfo.parent_sku);
+
         if ($(node).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
         }
