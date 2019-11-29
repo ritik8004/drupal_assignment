@@ -5,24 +5,10 @@ import CartPromotion from '../cart-promotion';
 import CartItemOOS from '../cart-item-oos';
 import ItemLowQuantity from '../item-low-quantity';
 import CartItemImage from '../cart-item-image';
-import Select from 'react-select';
-import {removeItemFromCart} from '../../../utilities/update_cart';
-
-// @TODO: For demo only, qty values should be dynamic.
-const options = [
-  { value: '1', label: '1' },
-  { value: '2', label: '2', isDisabled: true },
-  { value: '3', label: '3' },
-  { value: '4', label: '4' },
-  { value: '5', label: '5' },
-  { value: '6', label: '6' },
-];
+import CartQuantitySelect from '../cart-quantity-select';
+import {updateCartItemData} from '../../../utilities/update_cart';
 
 export default class CartItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.selectRef = React.createRef();
-  }
 
   /**
    * Remove item from the cart.
@@ -30,7 +16,7 @@ export default class CartItem extends React.Component {
   removeCartItem = (sku, action, id) => {
     // Adding class on remove button for showing progress when click.
     document.getElementById('remove-item-' + id).classList.add('loading');
-    var cart_data = removeItemFromCart(action, sku);
+    var cart_data = updateCartItemData(action, sku, 0);
     if (cart_data instanceof Promise) {
       // Removing class on remove button for showing progress when click.
       document.getElementById('remove-item-' + id).classList.remove('loading');
@@ -56,14 +42,6 @@ export default class CartItem extends React.Component {
         document.dispatchEvent(event);
       });
     }
-  };
-
-  onMenuOpen = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-select').classList.add('open');
-  };
-
-  onMenuClose = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-select').classList.remove('open');
   };
 
   render() {
@@ -92,7 +70,7 @@ export default class CartItem extends React.Component {
           <div className="spc-product-tile-actions">
             <button id={'remove-item-' + id} className="spc-remove-btn" onClick={() => {this.removeCartItem(sku, 'remove item', id)}}>{Drupal.t('remove')}</button>
             <div className="qty">
-              <Select ref={this.selectRef} classNamePrefix="spcSelect" className="spc-select" onMenuOpen={this.onMenuOpen} onMenuClose={this.onMenuClose} options={options} defaultValue={options[0]} isSearchable={false} />
+              <CartQuantitySelect qty={qty} stock={stock} sku={sku} />
             </div>
           </div>
         </div>
@@ -102,7 +80,7 @@ export default class CartItem extends React.Component {
           )}
         </div>
         <CartItemOOS in_stock={in_stock} />
-        <ItemLowQuantity stock={stock} qty={qty} />
+        <ItemLowQuantity stock={stock} qty={qty} in_stock={in_stock} />
       </div>
     );
   }

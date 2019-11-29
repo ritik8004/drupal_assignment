@@ -12,14 +12,14 @@ class Cart {
   /**
    * Magento service.
    *
-   * @var MagentoInfo
+   * @var \App\Service\Magento\MagentoInfo
    */
   protected $magentoInfo;
 
   /**
    * Cart constructor.
    *
-   * @param MagentoInfo $magentoInfo
+   * @param \App\Service\Magento\MagentoInfo $magentoInfo
    *   Magento info service.
    */
   public function __construct(MagentoInfo $magentoInfo) {
@@ -93,17 +93,32 @@ class Cart {
    *   Quantity.
    * @param string $action
    *   Action to be performed (add/update/remove).
+   * @param array $options
+   *   Options array.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addUpdateRemoveItem(int $cart_id, string $sku, ?int $quantity, string $action) {
+  public function addUpdateRemoveItem(int $cart_id, string $sku, ?int $quantity, string $action, array $options = []) {
+    $option_data = [];
+    // If options data available.
+    if (!empty($options)) {
+      foreach ($options as &$op) {
+        $op = (object) $op;
+      }
+      $option_data = [
+        'extension_attributes' => (object) [
+          'configurable_item_options' => $options,
+        ],
+      ];
+    }
     $data['items'][] = (object) [
       'sku' => $sku,
       'qty' => $quantity ?? 1,
-      'quote_id' => $cart_id,
+      'quote_id' => (string) $cart_id,
+      'product_option' => (object) $option_data,
     ];
     $data['extension'] = (object) [
       'action' => $action,
@@ -152,7 +167,6 @@ class Cart {
    * @return array
    *   Cart data.
    *
-   * @return array|mixed
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updateCart(array $data, int $cart_id) {
@@ -166,7 +180,11 @@ class Cart {
 
       // In case magento not returns cart data.
       if (!$cart || !isset($cart['cart'])) {
-        throw new \Exception('Invalid cart', '500');
+        $message = 'Sorry, something went wrong. Please try again later.';
+        if (!empty($cart['message'])) {
+          $message = $cart['message'];
+        }
+        throw new \Exception($message, '500');
       }
 
       return $cart;

@@ -12,9 +12,12 @@
             var form = that.closest('form');
             var currentSelectedVariant = $(form).attr('data-sku');
 
+            // If sku is variant type.
+            var is_configurable = false;
             // If `selected_variant_sku` available, means its configurable.
             if ($('[name="selected_variant_sku"]', form).length > 0) {
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
+              is_configurable = true;
             }
 
             var quantity = 1;
@@ -26,7 +29,9 @@
             var cart_action = 'create cart';
 
             var cart_id = null;
+            var options = new Array();
             var cart_data = localStorage.getItem('cart_data');
+            var available_in_cart = false;
             if (cart_data) {
               cart_data = JSON.parse(cart_data);
               cart_id = cart_data.cart_id;
@@ -36,6 +41,24 @@
               if (cart_data.items.currentSelectedVariant !== undefined) {
                 quantity = cart_data.items.currentSelectedVariant.qty + quantity;
                 cart_action = 'update item';
+                available_in_cart = true;
+              }
+            }
+
+            // We pass configurable options if product is not available in cart
+            // and of configurable variant.
+            if (is_configurable && !available_in_cart) {
+              var simple = currentSelectedVariant;
+              var configurable = $(form).attr('data-sku');
+              if (settings.configurableCombinations[configurable].bySku[simple]) {
+                Object.keys(settings.configurableCombinations[configurable].bySku[simple]).forEach(function(key) {
+                  var option = {
+                    'option_id': settings.configurableCombinations[configurable].configurables[key].attribute_id,
+                    'option_value': settings.configurableCombinations[configurable].bySku[simple][key]
+                  };
+                  options.push(option);
+                  currentSelectedVariant = configurable;
+                });
               }
             }
 
@@ -44,7 +67,8 @@
               'action': cart_action,
               'sku': currentSelectedVariant,
               'quantity': quantity,
-              'cart_id': cart_id
+              'cart_id': cart_id,
+              'options': options
             };
 
             // Post to ajax for cart update/create.

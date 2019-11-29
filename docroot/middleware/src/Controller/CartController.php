@@ -124,6 +124,7 @@ class CartController {
     // Prepare recommended product data.
     $recommended_products = $this->drupal->getDrupalLinkedSkus($sku_items);
     $recommended_products_data = [];
+    $data['recommended_products'] = [];
     // If there any recommended products.
     if (!empty($recommended_products)) {
       foreach ($recommended_products as $recommended_product) {
@@ -169,7 +170,7 @@ class CartController {
         // First create a new cart.
         $cart_id = $this->cart->createCart();
         // Then add item to the cart.
-        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM);
+        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM, $request_content['options']);
 
         if (!empty($cart['error'])) {
           return new JsonResponse($cart);
@@ -183,7 +184,11 @@ class CartController {
       case CartActions::CART_UPDATE_ITEM:
       case CartActions::CART_REMOVE_ITEM:
         $cart_id = $request_content['cart_id'];
-        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], $action);
+        $options = [];
+        if ($action == CartActions::CART_ADD_ITEM) {
+          $options = $request_content['options'];
+        }
+        $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], $action, $options);
 
         if (!empty($cart['error'])) {
           return new JsonResponse($cart);

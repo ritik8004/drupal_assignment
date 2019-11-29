@@ -15,6 +15,9 @@ class TotalLineItem extends React.Component {
       );
     }
     else {
+      if (this.props.value == 0) {
+        return (null);
+      }
       return (
         <div className="total-line-item">
           <span className={this.props.name}>{this.props.title}
