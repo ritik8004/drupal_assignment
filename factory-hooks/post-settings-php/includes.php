@@ -56,7 +56,10 @@ $country_code = substr($_acsf_site_name, -2);
 $settings['country_code'] = strtoupper($country_code);
 
 // Filepath for MDC rabbitmq credentials.
-$rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home/alshaya/rabbitmq-creds/' . $settings['env'] . '/';
+$rabbitmq_creds_dir = $settings['server_home_dir'] . '/rabbitmq-creds/';
+if ($settings['env'] !== 'local') {
+  $rabbitmq_creds_dir .= $settings['env'] . DIRECTORY_SEPARATOR;
+}
 
 $settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
 

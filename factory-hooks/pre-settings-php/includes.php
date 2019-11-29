@@ -27,6 +27,9 @@ elseif (getenv('TRAVIS')) {
 $settings['env'] = $env;
 $settings['env_name'] = $env_name;
 
+// Set server home directory.
+$settings['server_home_dir'] = ($env === 'local') ? '/home/vagrant' : $_SERVER['HOME'];
+
 if ($settings['env'] === 'local') {
   // For Drush and other CLI commands increase the memory limit to 512 MB.
   // We do this only for local env, for cloud envs it is already done.
@@ -152,8 +155,9 @@ elseif ($env == 'travis') {
   $soauth_key_name = 'travis_acm';
 }
 else {
-  $soauth_key_dir = '/home/alshaya/simple-oauth/' . $env . '/';
+  $soauth_key_dir = $settings['server_home_dir'] . '/simple-oauth/' . $env . '/';
 }
+
 $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name . '.pub';
 $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name;
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
@@ -172,7 +176,7 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
-$config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
+$config['acq_commerce.conductor']['debug_dir'] = $settings['server_home_dir'] . DIRECTORY_SEPARATOR . $env;
 $config['acq_commerce.conductor']['debug'] = FALSE;
 
 // Set page size to sync products to 30.
