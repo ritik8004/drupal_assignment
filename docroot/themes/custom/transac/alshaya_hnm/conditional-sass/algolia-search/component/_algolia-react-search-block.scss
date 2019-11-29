@@ -72,6 +72,7 @@
         border-radius: 0;
         border: none;
         height: 2.25rem;
+        line-height: 2.25rem;
         padding: 0;
         padding-#{$left}: 0 !important;
 
@@ -82,10 +83,12 @@
         }
 
         &::placeholder {
-          line-height: 1.0625rem;
+          line-height: 2.25rem;
           text-transform: initial;
 
           @include breakpoint($only-mobile) {
+            line-height: 3.5625rem;
+
             html[lang=ar] & {
               line-height: 1.0625rem;
             }
@@ -198,6 +201,7 @@
 
           .react-autosuggest__input {
             height: 3.5625rem;
+            line-height: 3.5625rem;
             padding-#{$left}: 3rem !important;
           }
 
