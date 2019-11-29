@@ -157,6 +157,7 @@ elseif ($env == 'travis') {
 else {
   $soauth_key_dir = $settings['server_home_dir'] . '/simple-oauth/' . $env . '/';
 }
+
 $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name . '.pub';
 $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name;
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
