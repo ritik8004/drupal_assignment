@@ -198,20 +198,27 @@
     }
   };
 
+  // For PLP we send two requests one to update the results and second to
+  // update the facets, Both takes different time to finish. We want to wait
+  // for both requests to finish before we hide the full page loader to allow
+  // user to interact with page.
   var ajaxRequest = XMLHttpRequest.prototype.open;
   var currentAJAXRequests = [];
+  var waitForAllAjaxCall = false;
   XMLHttpRequest.prototype.open = function (method, url) {
-    currentAJAXRequests.push(url);
-    ajaxRequest.apply(this, arguments);
+    if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1 ) {
+      currentAJAXRequests.push(url);
+      ajaxRequest.apply(this, arguments);
+    }
   };
 
   // Add loader on plp search page.
   Drupal.behaviors.facetSearchLoader = {
     attach: function (context, settings) {
-      var removeProgressBar = false;
+
       $(document).ajaxSend(function (event, jqxhr, settings) {
+        waitForAllAjaxCall = true;
         if (settings.url.indexOf('facets-block') > -1) {
-          removeProgressBar = true;
           if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
             $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
           }
@@ -221,8 +228,9 @@
         currentAJAXRequests = currentAJAXRequests.filter(function(ele){
           return ele !== settings.url;
         });
-        if (removeProgressBar && currentAJAXRequests.length === 0) {
-          removeProgressBar = false;
+
+        if (waitForAllAjaxCall && currentAJAXRequests.length === 0) {
+          waitForAllAjaxCall = false;
           $('div.ajax-progress-fullscreen').remove();
         }
       });
