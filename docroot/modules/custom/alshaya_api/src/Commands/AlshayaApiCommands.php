@@ -147,6 +147,61 @@ class AlshayaApiCommands extends DrushCommands {
   }
 
   /**
+   * Log message.
+   *
+   * @param string $message
+   *   Message to log.
+   * @param bool $verbose
+   *   Show in console or not.
+   */
+  protected function logMessage($message, $verbose) {
+    if ($verbose) {
+      $this->logger()->notice($message);
+    }
+    else {
+      $this->logger()->info($message);
+    }
+  }
+
+  /**
+   * Request product sync.
+   *
+   * Sync only once per request.
+   *
+   * @param array $skus
+   *   SKUs to sync.
+   * @param string|int $store_id
+   *   Store id.
+   * @param string $langcode
+   *   Language code.
+   * @param string|int $page_size
+   *   Page size.
+   */
+  protected function requestSync(array $skus, $store_id, $langcode, $page_size) {
+    static $already_requested = [];
+
+    // Initialise.
+    $already_requested[$langcode] = $already_requested[$langcode] ?? [];
+
+    $skus = array_diff($skus, $already_requested[$langcode]);
+    $already_requested[$langcode] = array_merge($already_requested[$langcode], $skus);
+
+    $this->logger()->notice(dt('Requesting sync for skus: @skus (count: @count) in language: @langcode', [
+      '@skus' => implode(',', $skus),
+      '@count' => count($skus),
+      '@langcode' => $langcode,
+    ]));
+
+    $this->ingestApiWrapper->productFullSync(
+      $store_id,
+      $langcode,
+      $skus,
+      NULL,
+      $page_size
+    );
+  }
+
+  /**
    * Get data from Magento.
    *
    * @return array
@@ -263,6 +318,8 @@ class AlshayaApiCommands extends DrushCommands {
 
     foreach ($mskus as $data) {
       foreach ($data as $sku => $row) {
+        $message = '';
+
         // For whatever reason, we might not have the product in Drupal.
         // Skip category mis match for it.
         if (empty($dskus[$sku])) {
@@ -284,23 +341,27 @@ class AlshayaApiCommands extends DrushCommands {
         }
         // Sync if either is empty.
         elseif (empty($mids) || empty($dids)) {
-          $this->logger()->warning(dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
+          $message = dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
             '@sku' => $sku,
             '@magento' => implode(',', $mids),
             '@drupal' => implode(',', $dids),
-          ]));
+          ]);
 
           $to_sync[$sku] = $sku;
         }
         // Sync if either of them have additional values or difference.
         elseif (array_diff($mids, $dids) || array_diff($dids, $mids)) {
-          $this->logger()->warning(dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
+          $message = dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
             '@sku' => $sku,
             '@magento' => implode(',', $mids),
             '@drupal' => implode(',', $dids),
-          ]));
+          ]);
 
           $to_sync[$sku] = $sku;
+        }
+
+        if ($message) {
+          $this->logMessage($message, $options['verbose'] ?? FALSE);
         }
       }
     }
@@ -310,17 +371,15 @@ class AlshayaApiCommands extends DrushCommands {
       return;
     }
 
-    // Sync?
     $confirmation = dt('Do you want to sync products with category mismatch? Count: @count', [
       '@count' => count($to_sync),
     ]);
 
     if ($this->io()->confirm($confirmation)) {
-      $this->ingestApiWrapper->productFullSync(
-        $this->configFactory->get('store_id'),
-        'en',
+      $this->requestSync(
         $to_sync,
-        NULL,
+        $this->configFactory->get('acq_commerce.store')->get('store_id'),
+        'en',
         $options['page_size']
       );
     }
@@ -363,7 +422,7 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
         $message .= 'MDC stock status:' . $mdata['stock_status'];
-        $this->output()->writeln($message);
+        $this->logMessage($message, $options['verbose'] ?? FALSE);
 
         $to_sync[] = $sku;
       }
@@ -380,11 +439,10 @@ class AlshayaApiCommands extends DrushCommands {
     ]);
 
     if ($this->io()->confirm($confirmation)) {
-      $this->ingestApiWrapper->productFullSync(
-        $this->configFactory->get('store_id'),
-        'en',
+      $this->requestSync(
         $to_sync,
-        NULL,
+        $this->configFactory->get('acq_commerce.store')->get('store_id'),
+        'en',
         $options['page_size']
       );
     }
@@ -431,7 +489,7 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC price:' . $m_price . ' | ';
         $message .= 'Drupal final price:' . $d_final_price . ' | ';
         $message .= 'MDC final price:' . $m_final_price;
-        $this->output()->writeln($message);
+        $this->logMessage($message, $options['verbose'] ?? FALSE);
 
         $to_sync[] = $sku;
       }
@@ -448,11 +506,10 @@ class AlshayaApiCommands extends DrushCommands {
     ]);
 
     if ($this->io()->confirm($confirmation)) {
-      $this->ingestApiWrapper->productFullSync(
-        $this->configFactory->get('store_id'),
-        'en',
+      $this->requestSync(
         $to_sync,
-        NULL,
+        $this->configFactory->get('acq_commerce.store')->get('store_id'),
+        'en',
         $options['page_size']
       );
     }
@@ -480,7 +537,7 @@ class AlshayaApiCommands extends DrushCommands {
     $in_magento_only = array_diff(array_keys($mskus), array_keys($dskus));
 
     if (!empty($in_magento_only)) {
-      $this->output()->writeln('Products not available in Drupal: ' . implode(', ', $in_magento_only));
+      $this->logMessage('Products not available in Drupal: ' . implode(', ', $in_magento_only), TRUE);
 
       $confirmation = dt('Do you want to sync products that are not available in Drupal? Count: @count', [
         '@count' => count($in_magento_only),
@@ -488,11 +545,10 @@ class AlshayaApiCommands extends DrushCommands {
 
       if ($this->io()->confirm($confirmation)) {
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-          $this->ingestApiWrapper->productFullSync(
+          $this->requestSync(
+            $in_magento_only,
             $store_id,
             $langcode,
-            $in_magento_only,
-            NULL,
             $options['page_size']
           );
         }
@@ -500,7 +556,7 @@ class AlshayaApiCommands extends DrushCommands {
     }
 
     if (!empty($in_drupal_only)) {
-      $this->output()->writeln('Products only in Drupal: ' . implode(', ', $in_drupal_only));
+      $this->logMessage('Products available only in Drupal: ' . implode(', ', $in_drupal_only), TRUE);
 
       $confirmation_delete = dt('Do you want to delete products directly in Drupal? Count: @count', [
         '@count' => count($in_drupal_only),
@@ -518,9 +574,10 @@ class AlshayaApiCommands extends DrushCommands {
             continue;
           }
 
-          $this->logger()->notice('Removing disabled SKU @sku from the system.', [
+          $message = dt('Removing disabled SKU @sku from the system.', [
             '@sku' => $sku,
           ]);
+          $this->logMessage($message, $options['verbose'] ?? FALSE);
 
           $lock_key = 'deleteProduct' . $sku;
 
@@ -554,17 +611,17 @@ class AlshayaApiCommands extends DrushCommands {
           // Release the lock.
           $this->lock->release($lock_key);
 
-          $this->logger()->notice('Disabled SKU @sku removed from the system.', [
+          $message = dt('Disabled SKU @sku removed from the system.', [
             '@sku' => $sku,
           ]);
+          $this->logMessage($message, $options['verbose'] ?? FALSE);
         }
       }
       elseif ($this->io()->confirm($confirmation_sync)) {
-        $this->ingestApiWrapper->productFullSync(
-          $this->configFactory->get('store_id'),
-          'en',
+        $this->requestSync(
           $in_drupal_only,
-          NULL,
+          $this->configFactory->get('acq_commerce.store')->get('store_id'),
+          'en',
           $options['page_size']
         );
       }
