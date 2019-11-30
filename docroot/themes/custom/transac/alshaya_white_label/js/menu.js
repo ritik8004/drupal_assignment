@@ -80,7 +80,7 @@
         $('body').addClass('mobile--overlay');
       });
 
-      $('.c-menu-primary .mobile--search').off().on('click', function (e) {
+      $('.c-menu-primary .mobile--search').once('mainMenu').on('click', function (e) {
         e.preventDefault();
         $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
         $('.c-header__region .block-views-exposed-filter-blocksearch-page input.ui-autocomplete-input').focus();
