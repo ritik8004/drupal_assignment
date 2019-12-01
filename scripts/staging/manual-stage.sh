@@ -34,21 +34,21 @@ source_domain=$AH_SITE_GROUP.acsitefactory.com
 target_domain=${target_env:2}-$source_domain
 
 echo "Preparing list of sites to stage..."
-cd /var/www/html/${AH_SITE_NAME}/docroot
 valid_sites=""
 for current_site in $(echo $sites | tr "," "\n")
 do
-  found=$(drush -l $current_site.$source_domain status | grep "Drupal version")
-
+  cd /var/www/html/${AH_SITE_NAME}/docroot
+  found=$(drush -l $current_site.$source_domain status | grep "DB driver")
   if [ -z "$found" ]; then
     echo "Impossible to find site $current_site on live."
     continue
   fi
 
-  found=$(drush $target_alias -l $current_site.$target_domain status | grep "Drupal version")
-
+  cd ~
+  found=$(drush $target_alias ssh "drush -l $current_site.$target_domain status" | grep "DB driver")
   if [ -z "$found" ]; then
     echo "Impossible to find site $current_site on $target_env."
+    continue
   fi
 
   valid_sites="$valid_sites,$current_site"
@@ -61,6 +61,7 @@ if [ -z "$valid_sites" ]; then
   exit
 fi
 
+cd /var/www/html/${AH_SITE_NAME}/docroot
 
 echo "Dumping databases..."
 mkdir -p /tmp/manual-stage
