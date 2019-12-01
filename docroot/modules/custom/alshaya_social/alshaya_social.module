@@ -117,6 +117,7 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
     }
   }
 
+  $variables['#attached']['library'][] = 'alshaya_social/alshaya_social_popup';
   $variables['base_path'] = base_path();
 }
 
