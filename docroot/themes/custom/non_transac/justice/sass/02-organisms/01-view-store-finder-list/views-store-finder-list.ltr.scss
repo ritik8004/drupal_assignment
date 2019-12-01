@@ -25,6 +25,12 @@
       margin-bottom: 1.25rem;
     }
   }
+
+  .store-row--counter + .mobile-only--back-to-glossary {
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
 }
 
 .list-view-locator {

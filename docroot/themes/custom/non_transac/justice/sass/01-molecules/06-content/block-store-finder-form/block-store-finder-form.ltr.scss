@@ -265,6 +265,15 @@
     width: 13.5%;
   }
 
+  @include breakpoint($above-palm) {
+    border-width: 0.125rem;
+    border-color: transparent;
+    padding-#{$left}: 3.4375rem !important;
+    padding-#{$right}: 1.25rem;
+    width: auto;
+    max-width: 100%;
+  }
+
   &::before {
     @include breakpoint($above-palm) {
       color: $store_finder_views_icon;

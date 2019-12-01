@@ -20,4 +20,12 @@
       padding: 0 1.25rem;
     }
   }
+
+  .device__mobile {
+    .region-secondary-header {
+      .block-language-switcher--desktop {
+        display: none !important;
+      }
+    }
+  }
 }

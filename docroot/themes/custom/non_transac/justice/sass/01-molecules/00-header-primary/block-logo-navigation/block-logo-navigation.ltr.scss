@@ -7,3 +7,9 @@
     }
   }
 }
+
+.block-logo-navigation li {
+  @include breakpoint($desk) {
+    cursor: default !important;
+  }
+}

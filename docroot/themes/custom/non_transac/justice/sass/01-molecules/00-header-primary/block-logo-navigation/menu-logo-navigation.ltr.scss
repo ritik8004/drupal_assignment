@@ -25,9 +25,25 @@ body.disable-scroll {
     justify-content: space-between;
   }
 
-  li.active-trail a {
-    @include breakpoint($desk) {
-      background: transparent;
+  li.active-trail {
+    a {
+      @include breakpoint($desk) {
+        background: transparent;
+      }
+    }
+
+    & > a {
+      color: $dark-pink;
+
+      @include breakpoint($upto-palm) {
+        color: $dark-pink;
+        background: $white;
+      }
+    }
+
+    li.active-trail > a {
+      color: $burger_menu_level2_active_text;
+      background-color: $burger_menu_level2_active_bg;
     }
   }
 
@@ -130,6 +146,67 @@ body.disable-scroll {
           #{direction(right)}: 0;
           margin-top: -1.375rem;
           color: $burger_menu_arrow;
+        }
+      }
+
+      &.active-trail {
+        > a {
+          @include breakpoint($upto-palm) {
+            color: $dark-pink;
+            background: $white-smoke;
+          }
+
+          &::after {
+            @include breakpoint($upto-palm) {
+              color: $dark-pink;
+            }
+          }
+        }
+
+        &.active > a {
+          @include breakpoint($upto-palm) {
+            background: $white;
+          }
+        }
+
+        li {
+          a {
+            @include breakpoint($upto-palm) {
+              background: $white-smoke;
+            }
+          }
+
+          &.active-trail {
+            & > a.is-active {
+              @include breakpoint($upto-palm) {
+                color: $dark-pink;
+                background: $white-smoke;
+              }
+
+              &::after {
+                @include breakpoint($upto-palm) {
+                  color: $dark-pink;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      li {
+        & > a {
+          &:hover {
+            @include breakpoint($upto-palm) {
+              color: $white;
+              background: $dark-pink;
+            }
+
+            &::after {
+              @include breakpoint($upto-palm) {
+                color: $white;
+              }
+            }
+          }
         }
       }
     }
@@ -263,6 +340,10 @@ html[dir=rtl] {
 
 .block-logo-navigation {
   .menu-logo-navigation {
+    & > {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     > li.active {
       @include breakpoint($upto-lap) {
         position: absolute;
@@ -292,6 +373,10 @@ html[dir=rtl] {
             #{$left}: 0;
             margin-top: -1.375rem;
             color: $burger_menu_arrow_active;
+
+            html[lang=ar] & {
+              transform: rotate(180deg);
+            }
           }
         }
 
@@ -328,5 +413,12 @@ html[dir=rtl] {
         margin-top: 1rem;
       }
     }
+  }
+}
+
+.disabled_link {
+  @include breakpoint($desk) {
+    pointer-events: none;
+    cursor: default !important;
   }
 }
