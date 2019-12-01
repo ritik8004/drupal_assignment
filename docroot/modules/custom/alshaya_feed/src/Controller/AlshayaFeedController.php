@@ -7,7 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -81,21 +81,19 @@ class AlshayaFeedController extends ControllerBase {
    */
   public function getFeed(Request $request) {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $file = file_url_transform_relative(file_create_url(file_default_scheme() . '://feed_' . $langcode . '.xml'));
-    $output = FALSE;
-    if (file_exists(ltrim($file, '/'))) {
-      $output = file_get_contents(ltrim($file, '/'));
-    }
-
-    if (!$output) {
-      $this->logger->notice('Either file is not exists or there are no content in file: @file', ['@file' => $file]);
+    $uri = file_default_scheme() . '://feed_' . $langcode . '.xml';
+    $file = file_url_transform_relative(file_create_url($uri));
+    if (!file_exists(ltrim($file, '/'))) {
+      $this->logger->notice('Feed accessed but not available in system: @file', ['@file' => $file]);
       throw new NotFoundHttpException();
     }
 
-    return new Response($output, Response::HTTP_OK, [
+    $headers = [
       'Content-type' => 'application/xml; charset=utf-8',
       'Cache-Control' => 'public, max-age=' . $this->configFactory->get('alshaya_feed.settings')->get('cache_time'),
-    ]);
+    ];
+
+    return new BinaryFileResponse($uri, 200, $headers, TRUE, 'attachment');
   }
 
 }
