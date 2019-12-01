@@ -30,7 +30,7 @@ target_remote_user=`drush sa $target_alias | grep remote-user | cut -d"'" -f4`
 target_remote_host=`drush sa $target_alias | grep remote-host | cut -d"'" -f4`
 target="$target_remote_user@$target_remote_host"
 
-source_domain=$AH_SITE_GROUP.acsitefactory.com
+source_domain=alshaya.acsitefactory.com
 target_domain=${target_env:2}-$source_domain
 
 echo "Preparing list of sites to stage..."
