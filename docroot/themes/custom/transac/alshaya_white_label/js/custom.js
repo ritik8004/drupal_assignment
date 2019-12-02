@@ -5,7 +5,7 @@
 
 /* global debounce */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   document.addEventListener('gesturestart', function (ee) {
@@ -204,20 +204,21 @@
   // user to interact with page.
   var ajaxRequest = XMLHttpRequest.prototype.open;
   var currentAJAXRequests = [];
-  var waitForAllAjaxCall = false;
-  XMLHttpRequest.prototype.open = function (method, url) {
-    if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1 ) {
-      currentAJAXRequests.push(url);
-      ajaxRequest.apply(this, arguments);
-    }
-  };
+
+  if (typeof drupalSettings.alshayaSearch !== 'undefined' && drupalSettings.alshayaSearch.waitForAjax) {
+    XMLHttpRequest.prototype.open = function (method, url) {
+      if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1 ) {
+        currentAJAXRequests.push(url);
+        ajaxRequest.apply(this, arguments);
+      }
+    };
+  }
 
   // Add loader on plp search page.
   Drupal.behaviors.facetSearchLoader = {
     attach: function (context, settings) {
 
       $(document).ajaxSend(function (event, jqxhr, settings) {
-        waitForAllAjaxCall = true;
         if (settings.url.indexOf('facets-block') > -1) {
           if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
             $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
@@ -229,8 +230,7 @@
           return ele !== settings.url;
         });
 
-        if (waitForAllAjaxCall && currentAJAXRequests.length === 0) {
-          waitForAllAjaxCall = false;
+        if (currentAJAXRequests.length === 0) {
           $('div.ajax-progress-fullscreen').remove();
         }
       });
@@ -285,4 +285,4 @@
       }
     }
   };
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
