@@ -94,9 +94,12 @@
   Drupal.behaviors.alshayaAcmProductCategorySubCategoryFilterSelectionScroll = {
     attach: function (context) {
       var plpBanner = $('.subcategory-listing-enabled .view-id-plp_promotional_banner', context);
-      // To get the offset top of plp_subcategory_block, using banner offset top + banner height because
-      // plp_subcategory_block's offset top will keep changing.
-      exposedViewOffset = plpBanner.height() + plpBanner.offset().top;
+      // context keep changing on ajax call, so calculating only once when context is equals to document.
+      if (context === document) {
+        // To get the offset top of plp_subcategory_block, using banner offset top + banner height because
+        // plp_subcategory_block's offset top will keep changing.
+        exposedViewOffset = plpBanner.height() + plpBanner.offset().top;
+      }
     }
   };
 
