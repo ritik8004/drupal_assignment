@@ -11,15 +11,8 @@
       $('#alshaya-algolia-search').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
         var hit = $(this).closest('[data-insights-query-id]');
 
-        if (drupalSettings.userDetails === undefined || drupalSettings.userDetails.userID === undefined || !(drupalSettings.userDetails.userID)) {
-          var userToken = $.cookie('_ALGOLIA');
-        }
-        else {
-          var userToken = drupalSettings.userDetails.userID;
-        }
-
         window.aa('clickedObjectIDsAfterSearch', {
-          userToken: userToken,
+          userToken: Drupal.getAlgoliaUserToken(),
           eventName: 'Visit Detail Page',
           index: "...",
           queryID: hit.attr('data-insights-query-id'),

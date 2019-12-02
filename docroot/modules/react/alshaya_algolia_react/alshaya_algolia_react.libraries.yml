@@ -31,5 +31,6 @@ search_insights_detail:
 search_insights:
   js:
     js/algolia/search-insights.js: { scope: footer }
+    js/search-insights.common.js: {}
   dependencies:
     - core/drupalSettings
