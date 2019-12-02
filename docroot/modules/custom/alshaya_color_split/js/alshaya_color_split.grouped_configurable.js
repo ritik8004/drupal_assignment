@@ -27,22 +27,31 @@
           return;
         }
 
+        // Updating the parent sku for selected variant.
+        // @see alshaya_acm_product_form_sku_base_form_alter().
+        $(this).find('.selected-parent-sku').val(variantInfo.parent_sku);
+
         // Avoid processing again and again for variants of same color.
         if ($(node).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
         }
 
         if ($(node).attr('data-vmode') === 'full') {
-          var url = variantInfo.url[$('html').attr('lang')] + location.search;
-          url = Drupal.removeURLParameter(url, 'selected');
-          window.history.pushState(variantInfo, variantInfo.title, url);
+          if (window.location.pathname !== variantInfo.url[$('html').attr('lang')]) {
+            var url = variantInfo.url[$('html').attr('lang')] + location.search;
+            url = Drupal.removeURLParameter(url, 'selected');
+            window.history.replaceState(variantInfo, variantInfo.title, url);
+          }
 
           $('.language-switcher-language-url .language-link').each(function () {
-            $(this).attr('href', variantInfo.url[$(this).attr('hreflang')])
+            $(this).attr('href', variantInfo.url[$(this).attr('hreflang')]);
           });
 
           if (typeof variantInfo.promotions !== 'undefined') {
-            $('.promotions-full-view-mode', node).html(variantInfo.promotions);
+            var reattachedPromotions = $('.promotions-full-view-mode', node).html(variantInfo.promotions);
+
+            // Attach Drupal Behaviors to add event listeners back.
+            Drupal.alshayaPromotions.initializeDynamicPromotions(reattachedPromotions);
           }
 
           if (typeof variantInfo.free_gift_promotions !== 'undefined') {
