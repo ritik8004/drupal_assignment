@@ -33,11 +33,11 @@ body.disable-scroll {
     }
 
     & > a {
-      color: $dark-pink;
+      color: $header_menu_level2_active_link;
 
       @include breakpoint($upto-palm) {
-        color: $dark-pink;
-        background: $white;
+        color: $header_menu_level2_active_link;
+        background: $header_menu_level2_active_bg;
       }
     }
 
@@ -152,40 +152,40 @@ body.disable-scroll {
       &.active-trail {
         > a {
           @include breakpoint($upto-palm) {
-            color: $dark-pink;
-            background: $white-smoke;
+            color: $header_menu_level2_active_link;
+            background: $header_menu_level2_active_smoke_bg;
           }
 
           &::after {
             @include breakpoint($upto-palm) {
-              color: $dark-pink;
+              color: $burger_menu_icon;
             }
           }
         }
 
         &.active > a {
           @include breakpoint($upto-palm) {
-            background: $white;
+            background: $header_menu_level2_active_bg;
           }
         }
 
         li {
           a {
             @include breakpoint($upto-palm) {
-              background: $white-smoke;
+              background: $header_menu_level2_active_smoke_bg;
             }
           }
 
           &.active-trail {
             & > a.is-active {
               @include breakpoint($upto-palm) {
-                color: $dark-pink;
-                background: $white-smoke;
+                color: $header_menu_level2_active_link;
+                background: $header_menu_level2_active_smoke_bg;
               }
 
               &::after {
                 @include breakpoint($upto-palm) {
-                  color: $dark-pink;
+                  color: $burger_menu_icon;
                 }
               }
             }
@@ -197,13 +197,13 @@ body.disable-scroll {
         & > a {
           &:hover {
             @include breakpoint($upto-palm) {
-              color: $white;
-              background: $dark-pink;
+              color: $header_menu_level2_link;
+              background: $header_menu_level2_hover_bg;
             }
 
             &::after {
               @include breakpoint($upto-palm) {
-                color: $white;
+                color: $header_menu_level2_link;
               }
             }
           }
@@ -419,6 +419,6 @@ html[dir=rtl] {
 .disabled_link {
   @include breakpoint($desk) {
     pointer-events: none;
-    cursor: default !important;
+    cursor: default;
   }
 }
