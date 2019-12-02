@@ -226,7 +226,7 @@
         }
       });
       $(document).ajaxComplete(function (event, xhr, settings) {
-        currentAJAXRequests = currentAJAXRequests.filter(function(ele){
+        currentAJAXRequests = currentAJAXRequests.filter(function (ele) {
           return ele !== settings.url;
         });
 
