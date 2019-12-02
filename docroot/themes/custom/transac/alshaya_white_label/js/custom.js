@@ -207,7 +207,7 @@
 
   if (typeof drupalSettings.alshayaSearch !== 'undefined' && drupalSettings.alshayaSearch.waitForAjax) {
     XMLHttpRequest.prototype.open = function (method, url) {
-      if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1 ) {
+      if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1) {
         currentAJAXRequests.push(url);
         ajaxRequest.apply(this, arguments);
       }
