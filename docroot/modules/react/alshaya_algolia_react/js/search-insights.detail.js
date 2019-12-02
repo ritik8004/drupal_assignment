@@ -21,7 +21,15 @@
 
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
 
-        window.aa('clickedObjectIDsAfterSearch', {
+        if (drupalSettings.userDetails === undefined || drupalSettings.userDetails.userID === undefined || !(drupalSettings.userDetails.userID)) {
+          var userToken = $.cookie('_ALGOLIA');
+        }
+        else {
+          var userToken = drupalSettings.userDetails.userID;
+        }
+
+        window.aa('convertedObjectIDsAfterSearch', {
+          userToken: userToken,
           eventName: 'Add to cart',
           index: "...",
           queryID: $('html').attr('data-algolia-query-id'),
