@@ -896,12 +896,11 @@ class AlshayaApiWrapper {
   public function getSkusData() : array {
     $endpoint = 'sanity-check-data';
     $response = $this->invokeApi($endpoint, [], 'GET');
-
     $response = json_decode($response, TRUE) ?? [];
 
     $skus = [];
     foreach ($response as $data) {
-      $skus[$data['type_id']][$data['sku']] = $data;
+      $skus[$data['sku']] = $data;
     }
 
     return $skus;
