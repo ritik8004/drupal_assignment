@@ -372,12 +372,14 @@ class CartHelper {
           throw new \InvalidArgumentException('Invalid selected variant: ' . $selected_variant_sku);
         }
 
-        // Load the parent again to ensure we keep adding the product for
-        // first parent when multiple parents are available and also to
-        // ensure we select proper parent when using alshaya_color_split.
-        $sku = $variant->getPluginInstance()->getParentSku($variant);
-        if (!($sku instanceof SKUInterface)) {
-          throw new \InvalidArgumentException('Unable to load parent for selected variant: ' . $selected_variant_sku);
+        // If selected parent sku available in post data and that is not
+        // same as available parent variant.
+        if (!empty($data['selected_parent_sku'])
+          && $sku->getSku() != $data['selected_parent_sku']) {
+          $sku = SKU::loadFromSku($data['selected_parent_sku']);
+          if (!($sku instanceof SKUInterface)) {
+            throw new \InvalidArgumentException('Unable to load parent:' . $data['selected_parent_sku'] . ' for selected variant: ' . $selected_variant_sku);
+          }
         }
 
         if ($cart->hasItem($variant->getSku())) {
