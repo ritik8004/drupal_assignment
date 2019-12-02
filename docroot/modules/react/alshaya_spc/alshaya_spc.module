@@ -8,6 +8,8 @@
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -73,4 +75,31 @@ function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_s
 function _alshaya_spc_get_middleware_url() {
   $host_url = \Drupal::request()->getHost();
   return 'https://' . $host_url . '/middleware/public';
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  if (!empty($data) && $type == 'light' && !empty(\Drupal::requestStack()->getCurrentRequest()->query->get('context'))) {
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $data['extra_data'] = [];
+    $image = alshaya_acm_get_product_display_image($sku, 'product_teaser', 'cart');
+    if (!empty($image)) {
+      if ($image['#theme'] == 'image_style') {
+        $data['extra_data']['cart_image'] = [
+          'url' => ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']),
+          'title' => $image['#title'],
+          'alt' => $image['#alt'],
+        ];
+      }
+      elseif ($image['#theme'] == 'image') {
+        $data['extra_data']['cart_image'] = [
+          'url' => $image['#attributes']['src'],
+          'title' => $image['#attributes']['title'],
+          'alt' => $image['#attributes']['alt'],
+        ];
+      }
+    }
+  }
 }
