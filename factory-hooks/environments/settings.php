@@ -104,14 +104,14 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'kw' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KXQ8P3S',
           ],
         ],
       ],
       'sa' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KXQ8P3S',
           ],
@@ -128,21 +128,21 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'ae' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-T8L97TK',
           ],
         ],
       ],
       'kw' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-T8L97TK',
           ],
         ],
       ],
       'sa' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-T8L97TK',
           ],
@@ -159,21 +159,21 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'ae' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-M793JHJ',
           ],
         ],
       ],
       'kw' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-M793JHJ',
           ],
         ],
       ],
       'sa' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-M793JHJ',
           ],
@@ -190,21 +190,21 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'ae' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
       ],
       'kw' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
       ],
       'sa' => [
-        '01uat' => [
+        'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
           ],
