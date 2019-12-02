@@ -29,9 +29,11 @@
         }
 
         if ($(node).attr('data-vmode') === 'full') {
-          var url = variantInfo.url[$('html').attr('lang')] + location.search;
-          url = Drupal.removeURLParameter(url, 'selected');
-          window.history.pushState(variantInfo, variantInfo.title, url);
+          if (window.location.pathname !== variantInfo.url[$('html').attr('lang')]) {
+            var url = variantInfo.url[$('html').attr('lang')] + location.search;
+            url = Drupal.removeURLParameter(url, 'selected');
+            window.history.replaceState(variantInfo, variantInfo.title, url);
+          }
 
           $('.language-switcher-language-url .language-link').each(function () {
             $(this).attr('href', variantInfo.url[$(this).attr('hreflang')])
