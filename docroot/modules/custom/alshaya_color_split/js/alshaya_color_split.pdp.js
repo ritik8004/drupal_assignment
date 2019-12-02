@@ -43,7 +43,7 @@
             var reattachedPromotions = $('.promotions-full-view-mode', node).html(variantInfo.promotions);
 
             // Attach Drupal Behaviors to add event listeners back.
-            Drupal.attachBehaviors(reattachedPromotions);
+            Drupal.alshayaPromotions.initializeDynamicPromotions(reattachedPromotions);
           }
 
           if (typeof variantInfo.free_gift_promotions !== 'undefined') {
