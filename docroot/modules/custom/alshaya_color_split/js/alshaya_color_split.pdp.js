@@ -36,11 +36,14 @@
           }
 
           $('.language-switcher-language-url .language-link').each(function () {
-            $(this).attr('href', variantInfo.url[$(this).attr('hreflang')])
+            $(this).attr('href', variantInfo.url[$(this).attr('hreflang')]);
           });
 
           if (typeof variantInfo.promotions !== 'undefined') {
-            $('.promotions-full-view-mode', node).html(variantInfo.promotions);
+            var reattachedPromotions = $('.promotions-full-view-mode', node).html(variantInfo.promotions);
+
+            // Attach Drupal Behaviors to add event listeners back.
+            Drupal.attachBehaviors(reattachedPromotions);
           }
 
           if (typeof variantInfo.free_gift_promotions !== 'undefined') {
