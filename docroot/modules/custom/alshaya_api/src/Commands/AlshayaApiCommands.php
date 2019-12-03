@@ -414,7 +414,7 @@ class AlshayaApiCommands extends DrushCommands {
       }
 
       // If stock in Drupal does not match with stock in Magento.
-      if (($data['type_id'] == 'simple' && $data['quantity'] != (int) $mdata['qty'])
+      if (($mdata['type_id'] == 'simple' && $data['quantity'] != (int) $mdata['qty'])
         || ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status'])) {
 
         $message = $sku . ' | ';
