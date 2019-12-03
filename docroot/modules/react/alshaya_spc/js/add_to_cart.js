@@ -3,6 +3,13 @@
 
   Drupal.behaviors.alshayaSpcAddToCart = {
     attach: function (context, settings) {
+
+      $('form.sku-base-form').on('submit.validate', function (event) {
+        // Stop submitting form via normal process as this refreshes/redirects
+        // the page on submit button click.
+        return false;
+      });
+
       $('.edit-add-to-cart', context).on('mousedown', function () {
         var that = this;
         setTimeout(function () {
@@ -97,6 +104,9 @@
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => response }});
+                  document.dispatchEvent(event);
+
+                  var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => response }});
                   document.dispatchEvent(event);
                 }
               }
