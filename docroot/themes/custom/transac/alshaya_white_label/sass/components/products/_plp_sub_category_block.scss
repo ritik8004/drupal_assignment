@@ -208,13 +208,31 @@
 
   .c-plp {
     .c-products__item {
-      height: 33.75rem;
+      @include breakpoint($desktop) {
+        height: 33.75rem;
+      }
     }
 
     .c-products-list {
       &.product-large {
         .c-products__item {
-          height: 41.25rem;
+          @include breakpoint($desktop) {
+            height: 41.25rem;
+          }
+        }
+
+        .alshaya_search_gallery {
+          @include breakpoint($only-tablet) {
+            height: 29.125rem;
+          }
+        }
+      }
+
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($only-tablet) {
+            height: 19.375rem;
+          }
         }
       }
     }
