@@ -34,3 +34,4 @@ search_insights:
     js/search-insights.common.js: {}
   dependencies:
     - core/drupalSettings
+    - core/jquery.cookie
