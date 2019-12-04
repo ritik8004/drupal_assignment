@@ -441,13 +441,13 @@
                   $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
                 }
               }
-              this.oldScroll = this.scrollY;
             }
             else {
               if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                 $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
               }
             }
+            this.oldScroll = this.scrollY;
           }
           else {
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('body').hasClass('subcategory-listing-enabled')) {
@@ -462,12 +462,12 @@
                   $('.sticky-filter-wrapper').removeClass('show-sub-category');
                 }
               }
-              this.oldScroll = this.scrollY;
             } else {
               if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                 $('.sticky-filter-wrapper').removeClass('show-sub-category');
               }
             }
+            this.oldScroll = this.scrollY;
           }
         });
       }
