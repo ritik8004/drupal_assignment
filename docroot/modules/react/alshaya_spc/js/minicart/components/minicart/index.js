@@ -21,8 +21,8 @@ export default class MiniCart extends React.Component {
     try {
       var cart_data = fetchCartData();
       if (cart_data instanceof Promise) {
-          cart_data.then((result) => {
-            this.setState({
+        cart_data.then((result) => {
+          this.setState({
             wait: false,
             qty: result.items_qty,
             amount: result.cart_total
@@ -31,17 +31,15 @@ export default class MiniCart extends React.Component {
           // Store info in storage.
           addInfoInStorage(result);
 
-          if (result.items.length == 0) {
-            this.setState({
-              wait: true
-            });
-            return;
-          }
-
           // Trigger event so that data can be passed to other components.
           var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
           document.dispatchEvent(event);
 
+          if (result.items.length == 0) {
+            this.setState({
+              wait: true
+            });
+          }
         });
       }
 

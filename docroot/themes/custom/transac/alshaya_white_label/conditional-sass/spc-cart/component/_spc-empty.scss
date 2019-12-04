@@ -1,0 +1,12 @@
+.spc-empty-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .spc-empty-text {
+    font-family: $alshaya-thin;
+    color: $spc-empty-text;
+    min-width: 1.25rem;
+    font-size: 1.125rem;
+  }
+}
