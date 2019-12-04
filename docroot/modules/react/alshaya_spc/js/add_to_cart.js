@@ -63,7 +63,9 @@
                     'option_id': settings.configurableCombinations[configurable].configurables[key].attribute_id,
                     'option_value': settings.configurableCombinations[configurable].bySku[simple][key]
                   };
-                  if (option.option_id !== 99999) {
+
+                  // Skipping the psudo attributes.
+                  if (settings.psudo_attribute === undefined || settings.psudo_attribute !== option.option_id) {
                     options.push(option);
                   }
                   currentSelectedVariant = configurable;
