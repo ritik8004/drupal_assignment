@@ -38,8 +38,9 @@
           stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight();
         }
       }
-      else if (!$('body').hasClass('.header-sticky-filter') && !$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
-        stickyFilterPosition = $('.plp-subcategory-block').outerHeight() + stickyFilterPosition;
+      else if (!$('body').hasClass('header-sticky-filter') && !$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+        // On page load when filters are not sticky.
+        stickyFilterPosition = 0;
       }
     }
     else {
