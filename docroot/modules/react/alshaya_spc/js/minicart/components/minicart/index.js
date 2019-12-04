@@ -31,7 +31,7 @@ export default class MiniCart extends React.Component {
           // Store info in storage.
           addInfoInStorage(result);
 
-          if (result.cart_total <= 0 || result.items.length == 0) {
+          if (result.items.length == 0) {
             this.setState({
               wait: true
             });
@@ -60,7 +60,7 @@ export default class MiniCart extends React.Component {
           // Store info in storage.
           addInfoInStorage(data);
 
-          if (data.cart_total <= 0 || data.items.length === 0) {
+          if (data.items.length === 0) {
             this.setState({
               wait: true
             });

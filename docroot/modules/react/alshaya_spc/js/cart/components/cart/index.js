@@ -43,7 +43,7 @@ export default class Cart extends React.Component {
           in_stock: data.in_stock
         }));
 
-        if (data.cart_total <= 0 || data.items.length === 0) {
+        if (data.items.length === 0) {
           this.setState({
             wait: true
           });

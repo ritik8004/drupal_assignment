@@ -501,6 +501,7 @@ class SkuInfoHelper {
     $images = $this->getMedia($sku_for_gallery, 'search');
     $data = [
       'id' => (int) $sku->id(),
+      'nid' => $node->id(),
       'title' => $sku->label(),
       'sku' => $sku->getSku(),
       'link' => $this->getEntityUrl($node),

@@ -116,11 +116,12 @@
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) &&
-          ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
+        if (!settings.hasOwnProperty('extraData')) {
           spinner_stop();
         }
-        else if (!settings.hasOwnProperty('extraData')) {
+        else if ((settings.hasOwnProperty('extraData')) &&
+          (settings.extraData._triggering_element_name !== undefined) &&
+          ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
           spinner_stop();
         }
       });

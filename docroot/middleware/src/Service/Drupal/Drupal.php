@@ -59,7 +59,7 @@ class Drupal {
     $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = '/' . sprintf('rest/v1/product/%s/linked', $sku);
+      $url = '/' . sprintf('rest/v1/product/%s/linked?context=cart', $sku);
       $response = $client->request('GET', $url, ['verify' => FALSE]);
       $result = $response->getBody()->getContents();
       $data[$sku] = json_decode($result, TRUE);
