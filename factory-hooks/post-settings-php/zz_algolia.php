@@ -13,7 +13,8 @@ global $_acsf_site_name;
 $algolia_env = $settings['env'];
 
 // We want to use Algolia index name with 01 prefix all the time.
-if (substr($algolia_env, 0, 2) !== '01') {
+$env_number = substr($algolia_env, 0, 2);
+if (is_numeric($env_number) && $env_number !== '01') {
   $algolia_env = '01' . substr($algolia_env, 2);
 }
 
