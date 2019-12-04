@@ -34,6 +34,7 @@ export default class CartQuantitySelect extends React.Component {
 
   handleChange = (selectedOption) => {
     const sku = this.props.sku;
+    this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.add('loading');
     var cart_data = updateCartItemData('update item', sku, selectedOption.value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
@@ -42,9 +43,10 @@ export default class CartQuantitySelect extends React.Component {
 
         var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
         document.dispatchEvent(event);
-      })
+      });
     }
-  }
+    this.selectRef.current.select.inputRef.closest('.spc-select').previousSibling.classList.remove('loading');
+  };
 
   render() {
     const {qty, stock} = this.props;

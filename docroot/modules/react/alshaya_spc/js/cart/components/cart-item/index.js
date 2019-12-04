@@ -18,8 +18,6 @@ export default class CartItem extends React.Component {
     document.getElementById('remove-item-' + id).classList.add('loading');
     var cart_data = updateCartItemData(action, sku, 0);
     if (cart_data instanceof Promise) {
-      // Removing class on remove button for showing progress when click.
-      document.getElementById('remove-item-' + id).classList.remove('loading');
       cart_data.then((result) => {
         // Refreshing mini-cart.
         var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => result }});
@@ -70,6 +68,7 @@ export default class CartItem extends React.Component {
           <div className="spc-product-tile-actions">
             <button id={'remove-item-' + id} className="spc-remove-btn" onClick={() => {this.removeCartItem(sku, 'remove item', id)}}>{Drupal.t('remove')}</button>
             <div className="qty">
+              <div className="qty-loader-placeholder"/>
               <CartQuantitySelect qty={qty} stock={stock} sku={sku} />
             </div>
           </div>

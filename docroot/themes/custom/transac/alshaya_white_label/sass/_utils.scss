@@ -303,3 +303,14 @@ body {
     cursor: progress;
   }
 }
+
+// Add a component level loader which shall add a loader in place of the component.
+@mixin componentLoader($background-color, $pseudo-element) {
+  &.loading {
+    color: transparent;
+    background: $background-color url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+    background-size: contain;
+
+    @include fullPageTransparentOverlay($pseudo-element);
+  }
+}
