@@ -104,7 +104,7 @@
     }
   };
 
-  // Overriding Drupal core Views scroll to top ajax command.
+  // Overriding Drupal core Views scroll to top ajax command specific to panty guide.
   Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
     if (response){
       var offset = $(response.selector).offset();
