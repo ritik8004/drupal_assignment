@@ -5,6 +5,7 @@
 # ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae,vsae,vskw,bbwae" 01dev3
 # ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae" 01dev3 reset
 # ./manual-stage.sh "hmkw,hmae,pbae" 01dev3 iso
+# ./manual-stage.sh "hmkw,hmae,pbae" 01dev3 proxy
 
 sites="$1"
 target_env="$2"
@@ -20,8 +21,8 @@ if [[ -z "$type" ]]; then
   type="iso"
 fi
 
-if [[ ! "$type" == "reset" && ! "$type" == "iso" && ! "$type" == "copy" ]]; then
-  echo "3rd parameter is either 'iso' or 'reset' or 'copy'"
+if [[ ! "$type" == "reset" && ! "$type" == "iso" && ! "$type" == "proxy" ]]; then
+  echo "3rd parameter is either 'iso' or 'reset' or 'proxy'"
   exit
 fi
 
@@ -125,12 +126,14 @@ do
   rsync -a $files_folder/media-icons $target:$target_files_folder
   rsync -t $files_folder/* $target:$target_files_folder
 
-  if [[ "$type" == "copy" ]]; then
+  if [[ "$type" == "iso" ]]; then
+    echo
+    echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
     screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder"
     screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder"
   fi
 
-  if [[ "$type" == "iso" ]]; then
+  if [[ "$type" == "proxy" ]]; then
     echo
     echo "Enabling stage file proxy for $current_site to https://${siteUri}"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri pm:enable stage_file_proxy"
