@@ -49,7 +49,7 @@ export default class CartQuantitySelect extends React.Component {
   };
 
   render() {
-    const {qty, stock} = this.props;
+    const {qty, stock, is_disabled} = this.props;
     const options = this.prepareOptions(stock, qty);
     const qty_class = stock < qty ? 'invalid' : 'valid';
     return (
@@ -63,6 +63,7 @@ export default class CartQuantitySelect extends React.Component {
         options={options}
         defaultValue={options[qty]}
         isSearchable={false}
+        isDisabled={!is_disabled}
       />
     )
   }
