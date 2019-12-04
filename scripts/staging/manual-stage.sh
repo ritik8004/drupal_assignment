@@ -20,8 +20,8 @@ if [[ -z "$type" ]]; then
   type="iso"
 fi
 
-if [[ ! "$type" == "reset" && ! "$type" == "iso" ]]; then
-  echo "3rd parameter is either 'iso' or 'reset'"
+if [[ ! "$type" == "reset" && ! "$type" == "iso" && ! "$type" == "copy" ]]; then
+  echo "3rd parameter is either 'iso' or 'reset' or 'copy'"
   exit
 fi
 
@@ -124,6 +124,11 @@ do
   rsync -a $files_folder/maintenance_mode_image $target:$target_files_folder
   rsync -a $files_folder/media-icons $target:$target_files_folder
   rsync -t $files_folder/* $target:$target_files_folder
+
+  if [[ "$type" == "copy" ]]; then
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder"
+  fi
 
   if [[ "$type" == "iso" ]]; then
     echo
