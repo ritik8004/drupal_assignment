@@ -36,12 +36,7 @@
     letter-spacing: 1.14px;
     font-size: 1rem;
 
-    &.loading {
-      color: transparent;
-      background: $primary_btn_bg url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
-
-      @include fullPageTransparentOverlay('after');
-    }
+    @include componentLoader($primary_btn_bg, 'after');
   }
 
   .promo-remove {

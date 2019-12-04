@@ -63,7 +63,9 @@
                     'option_id': settings.configurableCombinations[configurable].configurables[key].attribute_id,
                     'option_value': settings.configurableCombinations[configurable].bySku[simple][key]
                   };
-                  options.push(option);
+                  if (option.option_id !== 99999) {
+                    options.push(option);
+                  }
                   currentSelectedVariant = configurable;
                 });
               }
