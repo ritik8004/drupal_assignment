@@ -485,6 +485,11 @@
     }
   };
 
+  // Move plp to page title on slection of any filters.
+  if ($(window).width() > 767 && $('.subcategory-listing-enabled').length < 1) {
+    pageScrollToTitle();
+  }
+
   /**
    * Update the facet titles with the selected value.
    */
@@ -627,5 +632,27 @@
       }
     }
   };
+
+  /**
+   * Scroll page to page title on selection of any of the facet item.
+   */
+  function pageScrollToTitle() {
+    // To get the offset top of plp Title, using title offset top.
+    var exposedViewOffset = $('#block-page-title').offset().top;
+
+    // Overriding Drupal core Views scroll to top ajax command.
+    Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
+      var offset = $(response.selector).offset();
+
+      var scrollTarget = response.selector;
+      while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
+        scrollTarget = $(scrollTarget).parent();
+      }
+
+      if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+        $(scrollTarget).animate({ scrollTop: exposedViewOffset }, 500);
+      }
+    };
+  }
 
 })(jQuery, Drupal);
