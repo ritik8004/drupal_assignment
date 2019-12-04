@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a06be307c43611ba0a3a2690e7ea8e5",
+    "content-hash": "ce49d617e2f9ef5bee8c8f4588f3e831",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7128,7 +7128,7 @@
                     "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch",
                     "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
                     "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
-                    "Use entityQuery instead of loading children in getNestedChildIds for better performance": "https://www.drupal.org/files/issues/2019-11-20/getNestedChildIds-entityQuery-3095601-2.patch"
+                    "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2019-11-30/3095601-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
