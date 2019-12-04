@@ -19,28 +19,28 @@
     var stickyFilterPosition;
 
     if ($(window).width() < 768) {
-      stickyFilterPosition = $('#block-supercategorymenu').outerHeight() + $('#block-mobilenavigation').outerHeight() + $('.show-all-filters').outerHeight();
+      stickyFilterPosition = $('#block-supercategorymenu').outerHeight() + $('#block-mobilenavigation').outerHeight() + $('.show-all-filters').outerHeight() + 20;
       if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
         // If target is above of the current view point in that case subcategory will be visible.
         if ($('.plp-subcategory-block').offset().top > $(element).offset().top) {
-          stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight();
+          stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight() - 10;
         }
         else {
-          stickyFilterPosition = stickyFilterPosition - $('.mobile-sticky-sub-category').outerHeight();
+          stickyFilterPosition = stickyFilterPosition - $('.mobile-sticky-sub-category').outerHeight() - 20;
         }
       }
     }
     else if ($(window).width() > 767 && $(window).width() < 1024) {
       // Height of sticky filter.
-      stickyFilterPosition = 60;
+      stickyFilterPosition = 55;
       if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
         if ($('.plp-subcategory-block').offset().top > $(element).offset().top) {
-          stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight();
+          stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight() - 10;
         }
       }
       else if (!$('body').hasClass('header-sticky-filter') && !$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
         // On page load when filters are not sticky.
-        stickyFilterPosition = 0;
+        stickyFilterPosition = 10;
       }
     }
     else {
@@ -56,9 +56,14 @@
       }
     }
 
+    // Adding padding from the sticky filters wrapper.
+    var topPadding = 0;
+    if ($(window).width() > 1023) {
+      topPadding = 20;
+    }
     // Adding 10px of margin from top so spacing doesn't look tight between term title and sticky facet filters.
     $('html, body').animate({
-      scrollTop: ($(element).offset().top - stickyFilterPosition - 20)
+      scrollTop: ($(element).offset().top - stickyFilterPosition - topPadding)
     }, 500);
   }
 
