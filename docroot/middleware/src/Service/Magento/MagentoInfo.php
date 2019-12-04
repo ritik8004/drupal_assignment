@@ -43,12 +43,15 @@ class MagentoInfo {
     else {
       // Require sites.inc and post-sites-php/includes.php for ACSF site_name.
       require DRUPAL_ROOT . '/sites/g/sites.inc';
+      $host = rtrim($_SERVER['HTTP_HOST'], '.');
+      $data = gardens_site_data_refresh_one($host);
+      $GLOBALS['gardens_site_settings'] = $data['gardens_site_settings'];
       require DRUPAL_ROOT . '/../factory-hooks/post-sites-php/includes.php';
       global $_acsf_site_name;
       $site_name = $_acsf_site_name;
     }
 
-    // Include overrides
+    // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
 
     // Get magento (commerce_third_party) settings.
