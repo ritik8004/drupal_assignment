@@ -123,7 +123,7 @@
 
         @include breakpoint($only-mobile) {
           margin: 0;
-          max-width: 6.75rem;
+          max-width: 12.5rem;
         }
       }
     }
@@ -235,6 +235,12 @@
           }
         }
       }
+    }
+  }
+
+  .view-plp-promotional-banner {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
     }
   }
 }
