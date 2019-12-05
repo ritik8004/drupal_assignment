@@ -69,7 +69,7 @@ export default class CartItem extends React.Component {
             <button id={'remove-item-' + id} className="spc-remove-btn" onClick={() => {this.removeCartItem(sku, 'remove item', id)}}>{Drupal.t('remove')}</button>
             <div className="qty">
               <div className="qty-loader-placeholder"/>
-              <CartQuantitySelect qty={qty} stock={stock} sku={sku} />
+              <CartQuantitySelect qty={qty} stock={stock} sku={sku} is_disabled={in_stock} />
             </div>
           </div>
         </div>
