@@ -3,6 +3,8 @@
 namespace Drupal\alshaya_acm_promotion;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_promotion\AcqPromotionInterface;
+use Drupal\acq_promotion\AcqPromotionPluginManager;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
@@ -80,6 +82,13 @@ class AlshayaPromotionsManager {
   protected $imagesManager;
 
   /**
+   * Acq Promotion Plugin Manager.
+   *
+   * @var \Drupal\acq_promotion\AcqPromotionPluginManager
+   */
+  protected $acqPromotionPluginManager;
+
+  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -94,19 +103,23 @@ class AlshayaPromotionsManager {
    *   Images Manager.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $acq_promotions_manager
    *   Promotions manager service object from commerce code.
+   * @param \Drupal\acq_promotion\AcqPromotionPluginManager $acqPromotionPluginManager
+   *   Promotion Plugin Manager.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
-                              AcqPromotionsManager $acq_promotions_manager) {
+                              AcqPromotionsManager $acq_promotions_manager,
+                              AcqPromotionPluginManager $acqPromotionPluginManager) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->acqPromotionsManager = $acq_promotions_manager;
+    $this->acqPromotionPluginManager = $acqPromotionPluginManager;
   }
 
   /**
@@ -162,13 +175,15 @@ class AlshayaPromotionsManager {
    *   - 'field': Name of the field being queried.
    *   - 'value': The value for field.
    *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
+   * @param array $orders
+   *   An array of associative array containing orders, to be used in query.
    *
    * @return array
    *   Array of node objects.
    *
    * @see \Drupal\Core\Entity\Query\QueryInterface
    */
-  public function getAllPromotions(array $conditions = []) {
+  public function getAllPromotions(array $conditions = [], array $orders = []) {
     $nodes = [];
 
     $query = $this->nodeStorage->getQuery();
@@ -177,6 +192,12 @@ class AlshayaPromotionsManager {
       if (!empty($condition['field']) && !empty($condition['value'])) {
         $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
         $query->condition($condition['field'], $condition['value'], $condition['operator']);
+      }
+    }
+
+    foreach ($orders as $order) {
+      if (!empty($order['field']) && !empty($order['direction'])) {
+        $query->sort($order['field'], $order['direction']);
       }
     }
 
@@ -509,6 +530,185 @@ class AlshayaPromotionsManager {
     }
 
     return $sku;
+  }
+
+  /**
+   * Return Cart Promotion Plugin mapped with nodes.
+   *
+   * @param array $exclude_nids
+   *   List of excluding nids.
+   *
+   * @return array
+   *   Sorted list of cart promotions priority-price based.
+   */
+  public function getCartPromotionPluginNodes(array $exclude_nids = []) {
+    $allApplicablePromotions = $this->getAllPromotions(
+      [
+        [
+          'field' => 'status',
+          'value' => NodeInterface::PUBLISHED,
+        ],
+        [
+          'field' => 'field_alshaya_promotion_subtype',
+          'value' => [
+            self::SUBTYPE_FREE_SHIPPING_ORDER,
+          ],
+          'operator' => 'IN',
+        ],
+        [
+          'field' => 'nid',
+          'value' => $exclude_nids,
+          'operator' => 'NOT IN',
+        ],
+      ],
+      [
+        [
+          'field' => 'field_acq_promotion_sort_order',
+          'direction' => 'DESC',
+        ],
+      ]
+    );
+
+    // Prepare sorted list of cart promotions based on priority, base_subtotal.
+    $cartPromotionPluginNodes = [];
+    foreach ($allApplicablePromotions as $promotion) {
+      if ($promotion instanceof NodeInterface) {
+        $order = $promotion->get('field_acq_promotion_sort_order')->getString();
+        $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
+        $promotion_data = unserialize($promotion_data);
+        $threshold_price = 0;
+
+        if (!empty($promotion_data)
+          && !empty($promotion_data['condition'])
+          && !empty($promotion_data['condition']['conditions'])) {
+          foreach ($promotion_data['condition']['conditions'] as $condition) {
+            if ($condition['attribute'] === 'base_subtotal') {
+              $threshold_price = $condition['value'];
+            }
+          }
+        }
+
+        $cartPromotionPluginNodes[$order][$threshold_price][] = $promotion;
+      }
+    }
+
+    return $cartPromotionPluginNodes;
+  }
+
+  /**
+   * Get all promotion plugin types.
+   *
+   * @return array
+   *   Array of Promotion Plugin Types.
+   */
+  public function getAcqPromotionTypes() {
+    $definitions = $this->acqPromotionPluginManager->getDefinitions();
+
+    $types = [];
+    foreach ($definitions as $definition) {
+      $types[$definition['id']] = $definition['label'];
+    }
+
+    return $types;
+  }
+
+  /**
+   * Get promotion plugin type and active/inactive label.
+   *
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion Node.
+   * @param bool $status
+   *   Active or Inactive Flag.
+   *
+   * @return array|null
+   *   Promotion data.
+   */
+  public function getPromotionData(NodeInterface $promotion, $status = TRUE) {
+    $data = NULL;
+    $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
+    $definitions = $this->acqPromotionPluginManager->getDefinitions();
+
+    // Get matching plugin type.
+    if (!empty($definitions[$field_alshaya_promotion_subtype])) {
+      try {
+        $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
+          'free_shipping_order',
+          ['promotion_node' => $promotion]
+        );
+        if ($promotionPlugin instanceof AcqPromotionInterface) {
+          // @todo Create promotion node part of plugin using createInstance.
+          $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel();
+          $data = [
+            'type' => $field_alshaya_promotion_subtype,
+            'label' => $label,
+          ];
+        }
+      }
+      catch (\Exception $exception) {
+        watchdog_exception('alshaya_acm_promotion', $exception);
+      }
+    }
+
+    return $data;
+  }
+
+  /**
+   * Fetches Inactive Cart promotion.
+   *
+   * @param array $appliedPromotions
+   *   Currently applied promotion nodes.
+   *
+   * @return mixed|null
+   *   Inactive promotion node.
+   */
+  public function getInactiveCartPromotion(array $appliedPromotions) {
+    $inactiveCartPromotion = NULL;
+    $exclude_nids = [];
+    foreach ($appliedPromotions as $promotion) {
+      $exclude_nids[] = $promotion->id();
+    }
+
+    // Get all inactive promotions.
+    $cartPromotions = $this->getCartPromotionPluginNodes($exclude_nids);
+
+    // Now get the next eligible active promotion.
+    if (!empty($cartPromotions)) {
+      $inactiveCartPromotion = $this->getNextEligibleInactivePromotion($cartPromotions, $appliedPromotions);
+    }
+
+    return $inactiveCartPromotion;
+  }
+
+  /**
+   * Get next eligible inactive promotion based on order and price.
+   *
+   * @param array $cartPromotions
+   *   All applicable cart promotion mapped plugin nodes.
+   * @param array $appliedPromotions
+   *   Currently applied cart promotions.
+   *
+   * @return mixed|null
+   *   Next eligible inactive promotion node.
+   */
+  protected function getNextEligibleInactivePromotion(array $cartPromotions, array $appliedPromotions) {
+    $eligiblePromotion = NULL;
+    if (!empty($appliedPromotions)) {
+
+    }
+    else {
+      // Highest priority promotion is the next eligible promotion.
+      krsort($cartPromotions);
+
+      // Get Top priority promotion.
+      $topPromotions = array_pop($cartPromotions);
+
+      // Sort to get Lowest price promotion.
+      ksort($topPromotions);
+      $eligiblePromotion = array_pop($topPromotions);
+      $eligiblePromotion = reset($eligiblePromotion);
+    }
+
+    return $eligiblePromotion;
   }
 
 }

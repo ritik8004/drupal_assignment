@@ -11,11 +11,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides the Buy X Get Y Free cart level promotion.
  *
  * @ACQPromotion(
- *   id = "buy_x_get_y_cheapest_free",
- *   label = @Translation("Buy X Get Y Free (Cheapest one free)"),
+ *   id = "free_shipping_order",
+ *   label = @Translation("Free shipping with an order over X KD"),
  * )
  */
-class BuyXgetYfree extends AcqPromotionBase {
+class FreeShippingOrder extends AcqPromotionBase {
 
   /**
    * EntityTypeManagerInterface Definition.
@@ -30,6 +30,13 @@ class BuyXgetYfree extends AcqPromotionBase {
    * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $cartStorage;
+
+  /**
+   * NodeInterface Definition.
+   *
+   * @var \Drupal\node\NodeInterface
+   */
+  protected $promotionNode;
 
   /**
    * BuyXgetYfree constructor.
@@ -53,6 +60,7 @@ class BuyXgetYfree extends AcqPromotionBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entityTypeManager;
     $this->cartStorage = $cartStorage;
+    $this->promotionNode = $configuration['promotion_node'];
   }
 
   /**
@@ -72,14 +80,14 @@ class BuyXgetYfree extends AcqPromotionBase {
    * {@inheritdoc}
    */
   public function getInactiveLabel() {
-    // TODO: Implement getInactiveLabel() method.
+    return $this->promotionNode->get('field_acq_promotion_label')->getString();
   }
 
   /**
    * {@inheritdoc}
    */
   public function getActiveLabel() {
-    // TODO: Implement getActiveLabel() method.
+    return $this->t('Your order qualifies for Free Delivery');
   }
 
 }

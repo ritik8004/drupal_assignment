@@ -8,6 +8,7 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
       - '@acq_promotion.promotions_manager'
+      - '@plugin.manager.acq_promotion'
   alshaya_acm_promotion.label_manager:
     class: Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
     arguments:

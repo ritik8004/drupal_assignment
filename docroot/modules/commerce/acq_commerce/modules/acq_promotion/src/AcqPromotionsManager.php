@@ -173,7 +173,7 @@ class AcqPromotionsManager {
    */
   protected function deletePromotions(array $types, array $validIDs = []) {
     $query = $this->nodeStorage->getQuery();
-    $query->condition('type', 'acq_promotion');
+    $query->condition('type', self::ACQ_PROMOTIONS_BUNDLE);
     $query->condition('field_acq_promotion_type', $types, 'IN');
 
     if ($validIDs) {

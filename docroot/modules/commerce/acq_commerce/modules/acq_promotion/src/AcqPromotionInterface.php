@@ -10,38 +10,6 @@ interface AcqPromotionInterface {
   const ACQ_PROMOTION_DEFAULT_PRIORITY = 0;
 
   /**
-   * Check if promotion is applicable or not.
-   *
-   * @return bool
-   *   Promotion is applicable or not.
-   */
-  public function isApplicable();
-
-  /**
-   * Get promotion priority.
-   *
-   * @return mixed
-   *   Promotion priority.
-   */
-  public function getPriority();
-
-  /**
-   * Get inactive promo label display threshold order value.
-   *
-   * @return mixed
-   *   Threshold order value.
-   */
-  public function getInactiveLabelThreshold();
-
-  /**
-   * Get active promo label display threshold order value.
-   *
-   * @return mixed
-   *   Threshold order value.
-   */
-  public function getActiveLabelThreshold();
-
-  /**
    * Get inactive promo label.
    *
    * @return mixed

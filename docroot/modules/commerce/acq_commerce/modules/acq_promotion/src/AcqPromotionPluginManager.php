@@ -31,7 +31,7 @@ class AcqPromotionPluginManager extends DefaultPluginManager {
       'Drupal\acq_promotion\Annotation\ACQPromotion'
     );
 
-    $this->alterInfo('sandwich_info');
+    $this->alterInfo('acq_promotion');
     $this->setCacheBackend($cache_backend, 'acq_promotion_plugins');
   }
 

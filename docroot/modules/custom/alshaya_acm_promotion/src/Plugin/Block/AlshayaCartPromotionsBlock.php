@@ -103,9 +103,19 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
+    $form['source'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Select Promotions Source'),
+      '#options' => [
+        'static' => $this->t('Static'),
+        'dynamic' => $this->t('Dynamic'),
+      ],
+      '#default_value' => $this->configuration['source'],
+      '#weight' => -1,
+    ];
+
     $promotion_nodes = $this->alshayaAcmPromotionManager->getAllPromotions();
     $options = [];
-
     if (!empty($promotion_nodes)) {
       foreach ($promotion_nodes as $promotion_node) {
         // Only allow promotions with value "other".
@@ -115,24 +125,40 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         }
       }
     }
-
-    $form['source'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Select Promotions Source'),
-      '#options' => [
-        'static' => $this->t('Static'),
-        'dynamic' => $this->t('Dynamic'),
+    $form['static'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Static Promotions Configurations'),
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[source]"]' => ['value' => 'static'],
+        ],
       ],
-      '#weight' => -1,
     ];
-
-    $form['promotions'] = [
+    $form['static']['promotions'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Promotions'),
       '#description' => $this->t('Selection promotions to display in block.'),
       '#options' => $options,
       '#default_value' => $this->configuration['promotions'],
       '#weight' => '0',
+    ];
+
+    $promotion_types = $this->alshayaAcmPromotionManager->getAcqPromotionTypes();
+    $form['dynamic'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Dynamic Promotions Configurations'),
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[source]"]' => ['value' => 'dynamic'],
+        ],
+      ],
+    ];
+    $form['dynamic']['promotion_types'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Dynamic Promotions'),
+      '#description' => $this->t('Selection promotions to display in block.'),
+      '#options' => $promotion_types,
+      '#default_value' => !empty($this->configuration['promotion_types']) ? $this->configuration['promotion_types'] : [],
     ];
 
     return $form;
@@ -142,8 +168,10 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['source'] = $form_state->getValue('source');
-    $this->configuration['promotions'] = $form_state->getValue('promotions');
+    $values = $form_state->getValues();
+    $this->configuration['source'] = $values['source'];
+    $this->configuration['promotions'] = $values['static']['promotions'];
+    $this->configuration['promotion_types'] = $values['dynamic']['promotion_types'];
   }
 
   /**
@@ -201,6 +229,87 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    *   Render Array.
    */
   protected function getDynamicBuild(array &$build) {
+    $active_promotions = $inactive_promotions = [];
+    $cartRulesApplied = $this->cartStorage->getCart(FALSE)->getCart()->cart_rules;
+
+    $appliedPromotions = [];
+    if (!empty($cartRulesApplied)) {
+      foreach ($cartRulesApplied as $rule_id) {
+        $appliedPromotions[$rule_id] = $this->alshayaAcmPromotionManager->getPromotionByRuleId($rule_id);
+      }
+    }
+
+    // If cart has applied rules, fetch directly active labels.
+    if (!empty($appliedPromotions)) {
+      $active_promotions = $this->getActivePromotionLabels($appliedPromotions);
+    }
+
+    $inactive_promotions = $this->getInactivePromotionLabels($appliedPromotions);
+
+    if (!empty($active_promotions) || !empty($inactive_promotions)) {
+      $build = [
+        '#theme' => 'cart_top_promotions',
+        '#active_promotions' => $active_promotions,
+        '#inactive_promotions' => $inactive_promotions,
+      ];
+    }
+  }
+
+  /**
+   * Get Active promotion labels.
+   *
+   * @param array $appliedPromotions
+   *   Array of promotion nodes currently active.
+   *
+   * @return array
+   *   Promotion Data - Label and Type.
+   */
+  protected function getActivePromotionLabels(array $appliedPromotions = []) {
+    // Get active cart rules if any.
+    $active_promotions = [];
+    foreach ($appliedPromotions as $rule_id => $promotion_node) {
+      $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($promotion_node);
+
+      if (!empty($promotion_data)) {
+        $active_promotions[$rule_id] = [
+          'type' => $promotion_data['type'],
+          'label' => [
+            '#markup' => $promotion_data['label'],
+          ],
+        ];
+      }
+    }
+
+    return $active_promotions;
+  }
+
+  /**
+   * Get Inactive promotion labels.
+   *
+   * @param array $appliedPromotions
+   *   Array of promotion nodes currently active.
+   *
+   * @return array
+   *   Promotion Data - Label and Type.
+   */
+  protected function getInactivePromotionLabels(array $appliedPromotions = []) {
+    // Assuming only 1 inactive cart promotion.
+    $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion($appliedPromotions);
+    $inactive_promotions = [];
+
+    if (!empty($applicableInactivePromotion)) {
+      $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
+      $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($applicableInactivePromotion, FALSE);
+
+      $inactive_promotions[$rule_id] = [
+        'type' => $promotion_data['type'],
+        'label' => [
+          '#markup' => $promotion_data['label'],
+        ],
+      ];
+    }
+
+    return $inactive_promotions;
   }
 
   /**
