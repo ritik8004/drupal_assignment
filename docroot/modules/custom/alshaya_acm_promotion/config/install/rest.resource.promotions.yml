@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - alshaya_mobile_app
+    - alshaya_acm_promotion
     - serialization
     - simple_oauth
 id: promotions

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_promotion\Plugin\rest\resource;
 
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\node\NodeInterface;
@@ -55,13 +55,6 @@ class PromotionsResource extends ResourceBase {
   protected $entityTypeManager;
 
   /**
-   * The mobile app utility service.
-   *
-   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
-   */
-  protected $mobileAppUtility;
-
-  /**
    * The database connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -69,7 +62,14 @@ class PromotionsResource extends ResourceBase {
   protected $connection;
 
   /**
-   * SimplePageResource constructor.
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * PromotionsResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -85,10 +85,10 @@ class PromotionsResource extends ResourceBase {
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
-   *   The mobile app utility service.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -97,13 +97,13 @@ class PromotionsResource extends ResourceBase {
                               LoggerInterface $logger,
                               LanguageManagerInterface $language_manager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              MobileAppUtility $mobile_app_utility,
-                              Connection $connection) {
+                              Connection $connection,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->mobileAppUtility = $mobile_app_utility;
     $this->connection = $connection;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -115,11 +115,11 @@ class PromotionsResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_mobile_app'),
+      $container->get('logger.factory')->get('alshaya_acm_promotion'),
       $container->get('language_manager'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_mobile_app.utility'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('module_handler')
     );
   }
 
@@ -173,14 +173,21 @@ class PromotionsResource extends ResourceBase {
         // Get bubbleable metadata for CacheableDependency to avoid fatal error.
         $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 
-        $response_data[] = [
+        $data = [
           'id' => (int) $node->id(),
           'name' => $node->label(),
           'path' => $node_url->getGeneratedUrl(),
-          'deeplink' => $this->mobileAppUtility->getDeepLink($node),
           'commerce_id' => (int) $node->get('field_acq_promotion_rule_id')->first()->getString(),
           'promote' => in_array($node->get('field_acq_promotion_rule_id')->first()->getString(), $active_promotions),
+          'promo_sub_tpe' => $node->get('field_alshaya_promotion_subtype')->first()->getString(),
+          'promo_desc' => $node->get('field_acq_promotion_description')->first()
+            ? $node->get('field_acq_promotion_description')->first()->getString() : '',
+          'promo_label' => $node->get('field_acq_promotion_label')->first()->getValue()['value'],
         ];
+
+        $this->moduleHandler->alter('alshaya_acm_promo_resource', $data, $node);
+
+        $response_data[] = $data;
         $this->content[] = $node;
       }
 
