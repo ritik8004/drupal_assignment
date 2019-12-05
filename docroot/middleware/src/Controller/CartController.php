@@ -92,6 +92,7 @@ class CartController {
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
       'base_grand_total' => $cart_data['totals']['base_grand_total'],
       'discount_amount' => $cart_data['totals']['discount_amount'],
+      'free_delivery' => FALSE,
     ];
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
@@ -118,6 +119,22 @@ class CartController {
       // For the OOS.
       if ($data['in_stock'] && !$value['in_stock']) {
         $data['in_stock'] = FALSE;
+      }
+    }
+
+    // If there is any rule applied on cart.
+    if (!empty($cart_data['cart']['applied_rule_ids'])) {
+      $drupal_promos_data = $this->drupal->getAllPromoData();
+      // If we have promo data from drupal.
+      if (!empty($drupal_promos_data)) {
+        $cart_promo_rule_ids = explode(',', $cart_data['cart']['applied_rule_ids']);
+        foreach ($drupal_promos_data as $drupal_promo_data) {
+          // If there is any rule applied on cart if free shipping.
+          if ($drupal_promo_data['promo_sub_tpe'] == 'free_shipping_order'
+          && in_array($drupal_promo_data['commerce_id'], $cart_promo_rule_ids)) {
+            $data['totals']['free_delivery'] = TRUE;
+          }
+        }
       }
     }
 

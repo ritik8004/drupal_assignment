@@ -68,4 +68,17 @@ class Drupal {
     return $data;
   }
 
+  /**
+   * Get all promo data from drupal.
+   *
+   * @return mixed
+   *   All promo data.
+   */
+  public function getAllPromoData() {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $response = $client->request('GET', '/rest/v1/promotion/all', ['verify' => FALSE]);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
 }
