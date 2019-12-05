@@ -11,9 +11,9 @@
       {% if social_network.route is not empty %}
         <div class="{{ module }}">
           {% if destination %}
-            <a class="{{ key }} auth-link" href="{{ path(social_network.route, {}, {'query': {'destination': destination}}) }}">
+            <a class="{{ key }} auth-link" href="#" social-auth-link="{{ path(social_network.route, {}, {'query': {'destination': destination}}) }}">
           {% else %}
-            <a class="{{ key }} auth-link" href="{{ path(social_network.route) }}">
+            <a class="{{ key }} auth-link" href="#" social-auth-link="{{ path(social_network.route) }}">
           {% endif %}
             {% if social_network.text_link is defined %}
               <span class="social-network-text">{{ social_network.text_link }}</span>

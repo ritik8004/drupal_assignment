@@ -1,0 +1,27 @@
+diff --git a/src/Entity/Index.php b/src/Entity/Index.php
+index 7f512d2b..062d2ee9 100644
+--- a/src/Entity/Index.php
++++ b/src/Entity/Index.php
+@@ -1011,9 +1011,6 @@ class Index extends ConfigEntityBase implements IndexInterface {
+       /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+       $dispatcher = \Drupal::getContainer()->get('event_dispatcher');
+       $dispatcher->dispatch(SearchApiEvents::ITEMS_INDEXED, new ItemsIndexedEvent($this, $processed_ids));
+-
+-      // Clear search api list caches.
+-      Cache::invalidateTags(['search_api_list:' . $this->id]);
+     }
+ 
+     return $processed_ids;
+diff --git a/src/Entity/Server.php b/src/Entity/Server.php
+index 2801eed3..4c0f7804 100644
+--- a/src/Entity/Server.php
++++ b/src/Entity/Server.php
+@@ -364,8 +364,6 @@ class Server extends ConfigEntityBase implements ServerInterface {
+     try {
+       if ($server_task_manager->execute($this)) {
+         $this->getBackend()->deleteItems($index, $item_ids);
+-        // Clear search api list caches.
+-        Cache::invalidateTags(['search_api_list:' . $index->id()]);
+         return;
+       }
+     }

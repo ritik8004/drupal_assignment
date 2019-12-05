@@ -32,7 +32,7 @@ services:
       - '@alshaya_hm_images.skuassetsmanager'
     tags:
       - { name: 'event_subscriber' }
-  alshaya_acm_product.product_updated_event:
+  alshaya_hm_images.product_updated_event:
     class: Drupal\alshaya_hm_images\EventSubscriber\ProductUpdatedEventSubscriber
     arguments:
       - '@entity_type.manager'

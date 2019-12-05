@@ -2435,7 +2435,9 @@ class SkuManager {
     $availableOptions = [];
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
-      if ($this->isAttributeOptionToExclude($value)) {
+
+      // @TODO: CORE-13213, temporarily disabling this.
+      if ($this->isAttributeOptionToExclude($value) && 1 == 2) {
         $configurable['#options_attributes'][$id]['class'][] = 'hidden';
         $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
         $notRequiredValue = $id;

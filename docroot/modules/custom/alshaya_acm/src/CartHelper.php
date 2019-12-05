@@ -11,6 +11,9 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerTrait;
@@ -48,6 +51,20 @@ class CartHelper {
   protected $moduleHandler;
 
   /**
+   * API Wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -63,16 +80,24 @@ class CartHelper {
    *   Event Dispatcher.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   API Wrapper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
    *   Logger Factory.
    */
   public function __construct(CartStorageInterface $cart_storage,
                               EventDispatcherInterface $dispatcher,
                               ModuleHandlerInterface $module_handler,
+                              AlshayaApiWrapper $api_wrapper,
+                              ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_channel) {
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
     $this->moduleHandler = $module_handler;
+    $this->apiWrapper = $api_wrapper;
+    $this->configFactory = $config_factory;
     $this->logger = $logger_channel->get('CartHelper');
   }
 
@@ -347,12 +372,14 @@ class CartHelper {
           throw new \InvalidArgumentException('Invalid selected variant: ' . $selected_variant_sku);
         }
 
-        // Load the parent again to ensure we keep adding the product for
-        // first parent when multiple parents are available and also to
-        // ensure we select proper parent when using alshaya_color_split.
-        $sku = $variant->getPluginInstance()->getParentSku($variant);
-        if (!($sku instanceof SKUInterface)) {
-          throw new \InvalidArgumentException('Unable to load parent for selected variant: ' . $selected_variant_sku);
+        // If selected parent sku available in post data and that is not
+        // same as available parent variant.
+        if (!empty($data['selected_parent_sku'])
+          && $sku->getSku() != $data['selected_parent_sku']) {
+          $sku = SKU::loadFromSku($data['selected_parent_sku']);
+          if (!($sku instanceof SKUInterface)) {
+            throw new \InvalidArgumentException('Unable to load parent:' . $data['selected_parent_sku'] . ' for selected variant: ' . $selected_variant_sku);
+          }
         }
 
         if ($cart->hasItem($variant->getSku())) {
@@ -384,6 +411,13 @@ class CartHelper {
         break;
 
       default:
+        // We might be adding different product then the visited PDP.
+        // Use the product SKU from request data if available.
+        $selected_variant_sku = $data['selected_variant_sku'] ?? '';
+        $sku = empty($selected_variant_sku) ? $sku : SKU::loadFromSku($selected_variant_sku);
+        if (!($sku instanceof SKUInterface)) {
+          throw new \InvalidArgumentException('Invalid selected variant: ' . $selected_variant_sku);
+        }
         $cart->addItemToCart($sku->getSku(), $quantity);
         break;
     }
@@ -406,6 +440,58 @@ class CartHelper {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Cancel cart reservation is required.
+   *
+   * @param string $message
+   *   Message to log for cancelling reservation.
+   */
+  public function cancelCartReservation(string $message) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (!($cart instanceof CartInterface)) {
+      return;
+    }
+
+    if ($this->isCancelReservationEnabled() && !empty($cart->getExtension('attempted_payment'))) {
+      try {
+        $response = $this->apiWrapper->cancelCartReservation((string) $cart->id(), $message);
+        if (empty($response['status']) || $response['status'] !== 'SUCCESS') {
+          throw new \Exception($response['message'] ?? Json::encode($response));
+        }
+      }
+      catch (\Exception $e) {
+        $this->logger->warning('Error occurred while cancelling reservation for cart id @cart_id, Drupal message: @message, API Response: @response', [
+          '@cart_id' => $cart->id(),
+          '@message' => $message,
+          '@response' => $e->getMessage(),
+        ]);
+      }
+
+      // Get current step, we will set it again after restore.
+      $step = $cart->getCheckoutStep();
+
+      // Restore cart to get more info about what is wrong in cart.
+      $this->cartStorage->restoreCart($cart->id());
+
+      // Restore current step if cart still available.
+      $cart = $this->cartStorage->getCart(FALSE);
+      if ($cart instanceof CartInterface) {
+        $cart->setCheckoutStep($step);
+      }
+    }
+  }
+
+  /**
+   * Wrapper to get the flag if cancel reservation API is enabled or not.
+   *
+   * @return int|bool
+   *   Flag value.
+   */
+  protected function isCancelReservationEnabled() {
+    return $this->configFactory->get('alshaya_acm_checkout.settings')->get('cancel_reservation_enabled') ?? 0;
   }
 
 }

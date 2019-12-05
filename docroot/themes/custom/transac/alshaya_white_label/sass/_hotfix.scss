@@ -16,11 +16,6 @@ body.ie {
     }
   }
 
-  // IE 10, 11, not taking line-height from select-wrapper mixin in rems.
-  &.alias--cart #table-cart-items .form-type-select::after {
-    line-height: 34px;
-  }
-
   // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
   // adding color for it.
   summary a.details-title {

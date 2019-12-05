@@ -2,3 +2,7 @@ fields:
   style_code:
     label: 'Style Code'
     type: 'string'
+  grouping_attributes:
+    label: 'Grouping Attribute'
+    type: 'string'
+    translatable: 0

@@ -76,6 +76,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('cod_surcharge_description', $form_state->getValue('cod_surcharge_description'));
     $config->set('cod_surcharge_tooltip', $form_state->getValue('cod_surcharge_tooltip'));
     $config->set('exclude_payment_methods', $form_state->getValue('exclude_payment_methods'));
+    $config->set('cancel_reservation_enabled', $form_state->getValue('cancel_reservation_enabled'));
 
     $config->save();
 
@@ -206,6 +207,18 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Exclude payment methods'),
       '#description' => $this->t('Select the payment methods which needs to be exclude on payment screen.'),
       '#default_value' => $config->get('exclude_payment_methods'),
+    ];
+
+    $form['cancel_reservation_enabled'] = [
+      '#type' => 'select',
+      '#options' => [
+        0 => $this->t('No'),
+        1 => $this->t('Yes'),
+      ],
+      '#title' => $this->t('Invoke Cancel Reservation API?'),
+      '#description' => $this->t('Flag to specify if Drupal should invoke the cancel reservation API or not.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('cancel_reservation_enabled') ?? 0,
     ];
 
     return $form;

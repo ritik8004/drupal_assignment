@@ -15,6 +15,10 @@
       margin-#{$left}: 0;
       padding: 0.75rem;
     }
+
+    &:empty {
+      display: none;
+    }
   }
 
   .free-gift-image {
@@ -400,10 +404,12 @@
         @include breakpoint($only-mobile) {
           position: relative;
 
-          .sku-promotions {
-            position: absolute;
-            bottom: 0;
-            width: 33%;
+          .free-gift-label {
+            + .sku-promotions {
+              position: absolute;
+              bottom: 0;
+              width: 33%;
+            }
           }
         }
       }

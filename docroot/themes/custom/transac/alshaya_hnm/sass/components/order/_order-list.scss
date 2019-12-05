@@ -200,12 +200,6 @@
 }
 
 .recent__orders--list {
-  .price-wrapper {
-    .price-currency {
-      margin-#{$right}: 0;
-    }
-  }
-
   .recent__orders--body {
     .icon-ic_chevrondown {
       @include icon(dropdown-expand, before) {

@@ -24,8 +24,8 @@
         // Initialize.
         Drupal.blazy = new Blazy({
           offset: $(window).height(),
-          success: function () {
-            $(window).trigger('blazySuccess');
+          success: function (element) {
+            $(window).trigger('blazySuccess', element);
           }
         });
       });

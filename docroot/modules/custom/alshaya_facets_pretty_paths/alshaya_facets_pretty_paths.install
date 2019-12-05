@@ -14,7 +14,7 @@ use Drupal\taxonomy\TermInterface;
  * Use hyphen in alias for slash (punctuation).
  * Update path aliases for terms with slash.
  */
-function alshaya_facets_pretty_path_update_8001() {
+function alshaya_facets_pretty_paths_update_8001() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 

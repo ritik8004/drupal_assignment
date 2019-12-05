@@ -13,24 +13,24 @@
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
         $(this).addClass('active');
-        $('body').removeClass('large-grid')
+        $('body').removeClass('large-grid');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight();
+         Drupal.plpListingProductTileHeight('full_page', null);
       });
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
         $(this).addClass('active');
-        $('body').addClass('large-grid')
+        $('body').addClass('large-grid');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight();
+         Drupal.plpListingProductTileHeight('full_page', null);
       });
 
       // On filter selection keeping the selected layout.
@@ -158,14 +158,8 @@
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
 
-      // Adding timeout to do calculation after images get load on plp.
-      setTimeout(function() {
-        // Adjust height of PLP tiles.
-        Drupal.plpListingProductTileHeight();
-      }, 300);
-
-      $(window).on('blazySuccess', function() {
-        Drupal.plpListingProductTileHeight();
+      $(window).on('blazySuccess', function(event, element) {
+        Drupal.plpListingProductTileHeight('row', element);
       });
 
       // Back to PLP and loading a PLP/SRP with facets active in URL.
@@ -447,16 +441,16 @@
                   $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
                 }
               }
-              this.oldScroll = this.scrollY;
             }
             else {
               if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                 $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
               }
             }
+            this.oldScroll = this.scrollY;
           }
           else {
-            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('#block-subcategoryblock').length > 0) {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('body').hasClass('subcategory-listing-enabled')) {
               if (this.oldScroll > this.scrollY) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
@@ -468,12 +462,12 @@
                   $('.sticky-filter-wrapper').removeClass('show-sub-category');
                 }
               }
-              this.oldScroll = this.scrollY;
             } else {
               if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                 $('.sticky-filter-wrapper').removeClass('show-sub-category');
               }
             }
+            this.oldScroll = this.scrollY;
           }
         });
       }
@@ -490,6 +484,11 @@
       });
     }
   };
+
+  // Move plp to page title on slection of any filters.
+  if ($(window).width() > 767 && $('.subcategory-listing-enabled').length < 1) {
+    pageScrollToTitle();
+  }
 
   /**
    * Update the facet titles with the selected value.
@@ -562,20 +561,98 @@
   }
 
   /**
-   * Calculate and add height for each product tile.
+   * Helper function for Drupal.plpListingProductTileHeight() to find
+   * tallest height in a row.
    */
-  Drupal.plpListingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
-      var Hgt = 0;
-      $('.c-products__item').each(function () {
-        var Height = $(this)
-          .find('> article')
-          .outerHeight(true);
-        Hgt = Hgt > Height ? Hgt : Height;
-      });
+  function findMaxRowHeight(indexStart, indexEnd, tiles) {
+    var maxRowHeight = 0;
+    // Find the tallest element in the row.
+    for (var j = indexStart; j <= indexEnd; j++) {
+      var elementHeight = $(tiles[j]).find('> article').outerHeight(true);
+      if (elementHeight > maxRowHeight) {
+        maxRowHeight = elementHeight;
+      }
+    }
+    return maxRowHeight;
+  }
 
-      $('.c-products__item').css('height', Hgt);
+  /**
+   * Apply same height to all elements of a product listing row.
+   */
+  function plpRowHeightSync (indexStart, indexEnd, tiles) {
+    var maxRowHeight = findMaxRowHeight(indexStart, indexEnd, tiles);
+    // Apply height to all tiles in row.
+    var rowTiles = tiles.slice(indexStart, indexEnd+1);
+    $.each(rowTiles, function(index, tile) {
+      $(tile).css('height', maxRowHeight);
+    });
+  }
+
+  /**
+   * Calculate and add height for each product tile.
+   *
+   * @param mode
+   * full_page mode or row mode.
+   *
+   * @param element
+   * The img tag which is lazyloaded.
+   */
+  Drupal.plpListingProductTileHeight = function (mode, element) {
+    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
+      var gridCount = $('.c-products-list').hasClass('product-large') ? 3 : 4;
+      var tiles = $('.c-products__item');
+      var totalCount = $('.c-products__item').length;
+      var loopCount = Math.ceil(totalCount / gridCount);
+      // In full page mode we dont factor lazy loading as this mode is to reorganize the tiles based on the grid.
+      if (mode === 'full_page') {
+        // Run for each row.
+        for (var i = 0; i < loopCount; i++) {
+          var indexStart = gridCount * i;
+          var indexEnd = gridCount * i + gridCount - 1;
+          plpRowHeightSync(indexStart, indexEnd, tiles);
+        }
+      }
+
+      else if (mode === 'row') {
+        // Find the parent of the lazyloaded image, we dont want to take any action if the image is a swatch or
+        // hover gallery image.
+        if (!$(element).closest('*[data--color-attribute]').hasClass('hidden')
+          && $(element).parents('.alshaya_search_slider').length <= 0
+          && !$(element).hasClass('height-sync-processed')) {
+          $(element).addClass('height-sync-processed');
+          var tile = $(element).parents('.c-products__item');
+          var tileIndex = tiles.index(tile);
+          // Find the row to iterate for height.
+          var rowNumber = Math.ceil((tileIndex + 1) / gridCount);
+          var rowIndex = rowNumber - 1;
+          var indexStart = gridCount * rowIndex;
+          var indexEnd = gridCount * rowIndex + gridCount - 1;
+          plpRowHeightSync(indexStart, indexEnd, tiles);
+        }
+      }
     }
   };
+
+  /**
+   * Scroll page to page title on selection of any of the facet item.
+   */
+  function pageScrollToTitle() {
+    // To get the offset top of plp Title, using title offset top.
+    var exposedViewOffset = $('#block-page-title').offset().top;
+
+    // Overriding Drupal core Views scroll to top ajax command.
+    Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
+      var offset = $(response.selector).offset();
+
+      var scrollTarget = response.selector;
+      while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
+        scrollTarget = $(scrollTarget).parent();
+      }
+
+      if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+        $(scrollTarget).animate({ scrollTop: exposedViewOffset }, 500);
+      }
+    };
+  }
 
 })(jQuery, Drupal);

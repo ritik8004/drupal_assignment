@@ -8,6 +8,28 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_ve_non_transac_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == 'non_transac_acquia_index_search' && $view->total_rows > 0) {
+    $format_plural = new PluralTranslatableMarkup($view->total_rows, '(1 result)', '(@count results)');
+    if (!empty($view->getExposedInput()['keywords'])) {
+      $view->setTitle(t('"@keyword" @results', ['@keyword' => $view->getExposedInput()['keywords'], '@results' => $format_plural]));
+    }
+    else {
+      $view->setTitle(t('@results',
+        ['@results' => str_replace(['(', ')'], '', $format_plural)]));
+    }
+
+    foreach ($view->result as &$result) {
+      $result->search_api_excerpt = str_replace('… ', '', $result->search_api_excerpt);
+    }
+  }
+}
 
 /**
  * Implements hook_element_info_alter().
@@ -120,7 +142,7 @@ function alshaya_ve_non_transac_alshaya_i18n_onetime_translation_add() {
   $strings = [];
 
   $strings['Retina photography'] = [
-    'ar' => 'تفاصيل التوصيل',
+    'ar' => 'صورة الشبكية',
   ];
 
   $strings['Middle East'] = [
@@ -132,19 +154,43 @@ function alshaya_ve_non_transac_alshaya_i18n_onetime_translation_add() {
   ];
 
   $strings['UAE'] = [
-    'ar' => 'الامارات',
+    'ar' => 'الإمارات',
   ];
 
   $strings['KSA'] = [
-    'ar' => 'المبشور',
+    'ar' => 'السعودية',
   ];
 
   $strings['Qatar'] = [
-    'ar' => 'دولة قطر',
+    'ar' => 'قطر',
   ];
 
   $strings['Bahrain'] = [
     'ar' => 'البحرين',
+  ];
+
+  $strings['Displaying stores in'] = [
+    'ar' => 'المنتجات المعروضة في المحلات',
+  ];
+
+  $strings['Area / City'] = [
+    'ar' => 'المنطقة / المدينة',
+  ];
+
+  $strings['Book an Appointment'] = [
+    'ar' => 'احجز موعد',
+  ];
+
+  $strings['Stores with retinal photography'] = [
+    'ar' => 'الفروع التي تقدم خدمة تصوير الشبكية',
+  ];
+
+  $strings['Map View'] = [
+    'ar' => 'عرض الخريطة',
+  ];
+
+  $strings['List of all Stores'] = [
+    'ar' => 'قائمة جميع الفروع',
   ];
 
   alshaya_i18n_save_translations($strings);
