@@ -180,8 +180,7 @@ class PromotionsResource extends ResourceBase {
           'commerce_id' => (int) $node->get('field_acq_promotion_rule_id')->first()->getString(),
           'promote' => in_array($node->get('field_acq_promotion_rule_id')->first()->getString(), $active_promotions),
           'promo_sub_tpe' => $node->get('field_alshaya_promotion_subtype')->first()->getString(),
-          'promo_desc' => $node->get('field_acq_promotion_description')->first()
-            ? $node->get('field_acq_promotion_description')->first()->getString() : '',
+          'promo_desc' => $node->get('field_acq_promotion_description')->first() ? $node->get('field_acq_promotion_description')->first()->getString() : '',
           'promo_label' => $node->get('field_acq_promotion_label')->first()->getValue()['value'],
         ];
 
