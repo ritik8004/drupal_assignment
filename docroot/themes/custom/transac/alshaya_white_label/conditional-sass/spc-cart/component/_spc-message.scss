@@ -1,0 +1,73 @@
+.spc-messages-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5625rem 0;
+
+  @include breakpoint($tablet) {
+    margin-bottom: 2.5rem;
+  }
+
+  &.spc-checkout-error-message-container {
+    background-color: $spc-checkout-error-message-background;
+
+    .spc-checkout-error-message {
+      @include icon(warning) {
+        width: 2.125rem;
+        height: 2.125rem;
+        display: inline-block;
+        font-size: 2rem;
+        margin-#{$right}: 0.3125rem;
+        vertical-align: middle;
+        text-indent: 0;
+
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          #{$left}: 0;
+        }
+      }
+    }
+  }
+
+  &.spc-checkout-success-message-container {
+    background-color: $spc-checkout-success-message-background;
+
+    .spc-checkout-success-message {
+      @include icon(checkshape) {
+        width: 2.125rem;
+        height: 2.125rem;
+        display: inline-block;
+        font-size: 2rem;
+        margin-#{$right}: 0.3125rem;
+        vertical-align: middle;
+        text-indent: 0;
+
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          #{$left}: 0;
+        }
+      }
+    }
+  }
+
+  .spc-message {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-#{$left}: 1rem;
+    padding-#{$right}: 1.3125rem;
+
+    &.spc-checkout-error-message {
+      color: $spc-checkout-error-message-color;
+    }
+
+    &.spc-checkout-success-message {
+      color: $spc-checkout-success-message-color;
+    }
+
+    @include breakpoint($only-mobile) {
+      position: relative;
+      padding-#{$left}: 2.5625rem;
+      font-size: 0.875rem;
+    }
+  }
+}

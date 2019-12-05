@@ -7,6 +7,7 @@ import MobileCartPreview from '../mobile-cart-preview';
 import OrderSummaryBlock from "../../../utilities/order-summary-block";
 import CheckoutMessage from '../../../utilities/checkout-message';
 import CartPromoBlock from "../cart-promo-block";
+import EmptyResult from "../../../utilities/empty-result";
 import Loading from "../../../utilities/loading";
 
 export default class Cart extends React.Component {
@@ -43,9 +44,10 @@ export default class Cart extends React.Component {
           in_stock: data.in_stock
         }));
 
+        // The cart is empty.
         if (data.items.length === 0) {
           this.setState({
-            wait: true
+            wait: false
           });
         }
       }
@@ -68,7 +70,15 @@ export default class Cart extends React.Component {
 
   render() {
       if (this.state.wait) {
-        return <Loading loadingMessage={Drupal.t('Loading your cart ...')}/>
+        return <Loading loadingMessage={Drupal.t('loading your cart.')}/>
+      }
+
+      if (this.state.items.length === 0) {
+        return (
+          <React.Fragment>
+            <EmptyResult Message={Drupal.t('your shopping basket is empty.')}/>
+          </React.Fragment>
+        );
       }
 
       return (
