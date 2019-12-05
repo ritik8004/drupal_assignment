@@ -25,6 +25,10 @@ elseif (getenv('TRAVIS')) {
 
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
+$settings['env_name'] = $env_name;
+
+// Set server home directory.
+$settings['server_home_dir'] = ($env === 'local') ? '/home/vagrant' : $_SERVER['HOME'];
 
 if ($settings['env'] === 'local') {
   // For Drush and other CLI commands increase the memory limit to 512 MB.
@@ -66,43 +70,43 @@ $social_config = [
       'app_secret' => '0646a2901853b99062ff2d15127db379',
     ],
   ],
-  '01test' => [
+  'test' => [
     'facebook' => [
       'app_id' => '452346355260372',
       'app_secret' => '466de9be713752a2f19eb566270013ab',
     ],
   ],
-  '01dev' => [
+  'dev' => [
     'facebook' => [
       'app_id' => '2104286043129625',
       'app_secret' => '8af1b7ca4f9d21fd02ff626ee8a2a004',
     ],
   ],
-  '01pprod' => [
+  'pprod' => [
     'facebook' => [
       'app_id' => '844066215928270',
       'app_secret' => '107a72f9b68c6a62baaf917adb1fc9d6',
     ],
   ],
-  '01qa2' => [
+  'qa2' => [
     'facebook' => [
       'app_id' => '2376200055744873',
       'app_secret' => '1dd9679fcc9ba1ba3bdacb87da115a14',
     ],
   ],
-  '01dev2' => [
+  'dev2' => [
     'facebook' => [
       'app_id' => '615516092244231',
       'app_secret' => 'f0eaa4fd253010c23efb9cc3802ca5fd',
     ],
   ],
-  '01dev3' => [
+  'dev3' => [
     'facebook' => [
       'app_id' => '357400338223237',
       'app_secret' => '66354c2dc14b3dbbd9024425148d52b9',
     ],
   ],
-  '01uat' => [
+  'uat' => [
     'facebook' => [
       'app_id' => '307987113196828',
       'app_secret' => '019eda6862dd77160f64a681113dfb0f',
@@ -110,8 +114,8 @@ $social_config = [
   ],
 ];
 
-if (!empty($social_config[$env])) {
-  foreach ($social_config[$env] as $provider => $provider_config) {
+if (!empty($social_config[$env_name])) {
+  foreach ($social_config[$env_name] as $provider => $provider_config) {
     $settings["social_auth_{$provider}.settings"] = $provider_config;
   }
 }
@@ -151,8 +155,9 @@ elseif ($env == 'travis') {
   $soauth_key_name = 'travis_acm';
 }
 else {
-  $soauth_key_dir = '/home/alshaya/simple-oauth/' . $env . '/';
+  $soauth_key_dir = $settings['server_home_dir'] . '/simple-oauth/' . $env . '/';
 }
+
 $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name . '.pub';
 $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name;
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
@@ -171,7 +176,7 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
-$config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
+$config['acq_commerce.conductor']['debug_dir'] = $settings['server_home_dir'] . DIRECTORY_SEPARATOR . $env;
 $config['acq_commerce.conductor']['debug'] = FALSE;
 
 // Set page size to sync products to 30.
