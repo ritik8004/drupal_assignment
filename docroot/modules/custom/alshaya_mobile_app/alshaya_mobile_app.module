@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
@@ -78,4 +79,12 @@ function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sk
       }
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_promo_resource_alter().
+ */
+function alshaya_mobile_app_alshaya_acm_promo_resource_alter(array &$data, NodeInterface $node) {
+  $deeplink = \Drupal::service('alshaya_mobile_app.utility')->getDeepLink($node);
+  $data['deeplink'] = $deeplink;
 }

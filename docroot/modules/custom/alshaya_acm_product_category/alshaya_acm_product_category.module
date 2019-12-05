@@ -64,6 +64,13 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'data' => NULL,
       ],
     ],
+    'alshaya_group_by_sub_category_page_title' => [
+      'template' => 'alshaya-group-by-sub-category-page-title',
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+      ],
+    ],
   ];
 }
 

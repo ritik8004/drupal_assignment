@@ -8,3 +8,4 @@
  */
 
 $settings['queue_service_alshaya_process_product'] = 'queue_unique.database';
+$settings['queue_service_alshaya_invalidate_cache_tags'] = 'queue_unique.database';

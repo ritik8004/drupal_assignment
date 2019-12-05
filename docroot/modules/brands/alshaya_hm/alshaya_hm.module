@@ -283,7 +283,7 @@ function alshaya_hm_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_sku_variant_info_alter().
  */
-function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 

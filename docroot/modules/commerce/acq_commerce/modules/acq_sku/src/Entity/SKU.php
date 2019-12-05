@@ -189,7 +189,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
     }
 
-    return $this->mediaData;
+    return array_filter($this->mediaData, function ($row) {
+      return !empty($row['fid']);
+    });
   }
 
   /**
@@ -269,12 +271,17 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   File data.
    *
    * @return \Drupal\file\Entity\File
-   *   File id.
+   *   File id or FALSE if file cant be downloaded.
    *
    * @throws \Exception
    */
-  protected function downloadMediaImage(array $data) {
+  protected function downloadMediaImage(array &$data) {
     $lock_key = '';
+
+    // If image is blacklisted, block download.
+    if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
+      return FALSE;
+    }
 
     // Allow disabling this through settings.
     if (Settings::get('media_avoid_parallel_downloads', 1)) {
@@ -315,18 +322,39 @@ class SKU extends ContentEntityBase implements SKUInterface {
         'timeout' => Settings::get('media_download_timeout', 5),
       ];
 
-      $file_data = \Drupal::httpClient()->get($data['file'], $options)->getBody();
+      $file_stream = \Drupal::httpClient()->get($data['file'], $options);
+      $file_data = $file_stream->getBody();
+      $file_data_length = $file_stream->getHeader('Content-Length');
     }
     catch (RequestException $e) {
       watchdog_exception('acq_commerce', $e);
     }
 
     // Check to ensure empty file is not saved in SKU.
-    if (empty($file_data)) {
+    // Using Content-Length Header to check for valid image data, sometimes we
+    // also get a 0 byte image with response 200 instead of 404.
+    // So only checking $file_data is not enough.
+    if (!isset($file_data_length) || $file_data_length[0] === '0') {
       if ($lock_key) {
         $lock->release($lock_key);
       }
-      throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
+      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
+      // Blacklist this image URL to prevent subsequent downloads for 1 day.
+      $data['blacklist_expiry'] = strtotime('+1 day');
+      // Empty file detected log.
+      // Leave a message for developers to find out why this happened.
+      \Drupal::logger('acq_sku')->error('Empty file detected during download, blacklisted for 1 day from now. File remote id: @remote_id, File URL: @url on SKU @sku. @trace', [
+        '@url' => $data['file'],
+        '@sku' => $this->getSku(),
+        '@remote_id' => $data['value_id'],
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
+      return FALSE;
+    }
+
+    // Check if image was blacklisted, remove it from blacklist.
+    if (isset($data['blacklist_expiry'])) {
+      unset($data['blacklist_expiry']);
     }
 
     // Get the path part in the url, remove hostname.
@@ -424,7 +452,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @param string $langcode
    *   Language code.
    * @param bool $log_not_found
-   *   Log errors when store not found. Can be false during sync.
+   *   Log errors when SKU not found. Can be false during sync.
    * @param bool $create_translation
    *   Create translation and return if entity available but translation is not.
    *
@@ -448,38 +476,40 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
-    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
-    $skus = $storage->loadByProperties(['sku' => $sku]);
+    // Check in static.
+    $sku_static = &drupal_static(__FUNCTION__);
+    if (isset($sku_static[$sku])) {
+      $sku_id = $sku_static[$sku];
+    }
+    else {
+      $database = \Drupal::database();
+      $sku_records = $database->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku', [
+        ':sku' => $sku,
+      ])->fetchAllKeyed(0, 0);
 
-    // First check if we have some result before doing anything else.
-    if (count($skus) == 0) {
-      // We simply return NULL as this is very normal to have SKU missing.
-      return NULL;
+      // First check if we have some result before doing anything else.
+      if (empty($sku_records)) {
+        return NULL;
+      }
+
+      // If we find more than one, raise a log.
+      if (!empty($sku_records) && count($sku_records) > 1) {
+        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', ['@sku' => $sku, '@langcode' => $langcode]);
+      }
+
+      // We should always get one, but get first SKU entity for processing just
+      // in case.
+      $sku_id = reset($sku_records);
+      // Stash before return.
+      $sku_static[$sku] = $sku_id;
     }
 
-    // Get the first entity to use from result.
-    $sku_entity = reset($skus);
+    $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
+    $sku_entity = $storage->load($sku_id);
 
     // Sanity check.
     if (!($sku_entity instanceof SKUInterface)) {
       return NULL;
-    }
-
-    // Remove all skus in other languages if there are more than one available
-    // We need to have multiple languages enabled to clean db result.
-    // If only one is available, we might be adding translation, leave it as is.
-    if ($is_multilingual && !empty($skus) && count($skus) > 1) {
-      // Get rid of undesired languages. Later first one is picked up.
-      foreach ($skus as $key => $skuEntity) {
-        if ($skuEntity->langcode->value != $langcode) {
-          unset($skus[$key]);
-        }
-      }
-    }
-
-    // Log error message if we have more than one available even after cleanup.
-    if (count($skus) > 1) {
-      \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
     if ($is_multilingual && $sku_entity->language()->getId() != $langcode) {
@@ -494,7 +524,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
-
     return $sku_entity;
   }
 

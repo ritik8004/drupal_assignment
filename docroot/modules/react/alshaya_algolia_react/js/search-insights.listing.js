@@ -12,6 +12,7 @@
         var hit = $(this).closest('[data-insights-query-id]');
 
         window.aa('clickedObjectIDsAfterSearch', {
+          userToken: Drupal.getAlgoliaUserToken(),
           eventName: 'Visit Detail Page',
           index: "...",
           queryID: hit.attr('data-insights-query-id'),

@@ -221,7 +221,8 @@
                 "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
             },
             "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch",
+                "DO NOT INVALID LIST TAG": "patches/search_api/search_api_do_not_invalid_list_tags_2.patch"
             },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
@@ -233,7 +234,9 @@
                 "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
                 "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch",
                 "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch",
-                "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch"
+                "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
+                "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
+                "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2019-11-30/3095601-4.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"

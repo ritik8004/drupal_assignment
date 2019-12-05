@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Re-saving the linked sku and PDP resource to moved outside mobile app.
  */
-function alshaya_acm_product_update_8053() {
+function alshaya_acm_product_update_8054() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
@@ -25,6 +25,26 @@ function alshaya_acm_product_update_8053() {
 
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
   \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove empty images to avoid 500 error.
+ */
+function alshaya_acm_product_update_8053() {
+  $connection = \Drupal::database();
+  // Find all files with file size 0.
+  $find_empty_file = "SELECT fid FROM {file_managed} WHERE filesize=0 AND (uri LIKE '%public://media%' OR uri LIKE '%public://assets%')";
+  $result = $connection->query($find_empty_file);
+  if ($result) {
+    // Work on each fid.
+    while ($row = $result->fetchAssoc()) {
+      $fid = $row['fid'];
+      // Delete the file now that its references are deleted.
+      file_delete_multiple([$fid]);
+    }
+  }
 }
 
 /**

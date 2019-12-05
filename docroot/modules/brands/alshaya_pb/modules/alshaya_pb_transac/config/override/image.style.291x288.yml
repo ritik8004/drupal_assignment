@@ -1,8 +1,0 @@
-effects:
-  e5de9a31-cad0-4b2a-88e0-83336c88d87c:
-    uuid: e5de9a31-cad0-4b2a-88e0-83336c88d87c
-    id: image_scale
-    data:
-      width: 375
-      height: null
-      upscale: false

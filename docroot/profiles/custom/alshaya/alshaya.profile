@@ -29,12 +29,7 @@ function alshaya_is_env_prod() {
   $env = Settings::get('env') ?: 'local';
 
   // @TODO: Find a better way to check if env is prod.
-  $prod_envs = [
-    '01live',
-    '01update',
-  ];
-
-  return in_array($env, $prod_envs);
+  return preg_match('/\d{2}(live|update)/', $env);
 }
 
 /**

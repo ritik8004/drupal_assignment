@@ -3,6 +3,10 @@
 .menu-terms-conditions {
   text-align: $left;
 
+  li {
+    border: 0;
+  }
+
   a {
     color: $link;
     text-decoration: underline;

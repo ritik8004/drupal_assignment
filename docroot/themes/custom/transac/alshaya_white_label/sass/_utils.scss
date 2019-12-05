@@ -314,3 +314,8 @@ body {
     @include fullPageTransparentOverlay($pseudo-element);
   }
 }
+
+// Allow things to be hidden visually without changing visibility.
+.whiteout {
+  opacity: 0;
+}

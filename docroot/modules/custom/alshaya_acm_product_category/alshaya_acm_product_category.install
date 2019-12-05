@@ -16,6 +16,21 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Create 'sub category block title' for panty guide page.
+ */
+function alshaya_acm_product_category_update_8038() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.alshaya_group_by_sub_category_page_title'],
+    'alshaya_acm_product_category',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Making 'field_target_link' of category non-translatable.
  */
 function alshaya_acm_product_category_update_8037() {

@@ -304,17 +304,17 @@ $conductors = [
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
-    'site_id' => 84,
+    'site_id' => 63,
   ],
   'flkw_uat' => [
     'hmac_id' => 'b7850578d9864538a51eb94bc9632487',
     'hmac_secret' => 'MjU3YjExNDYtYzFmMy00',
-    'site_id' => 63,
+    'site_id' => 91,
   ],
   'flkw_prod' => [
     'hmac_id' => '4cc5c57ce5b5413f98fe0661158e4e99',
     'hmac_secret' => 'M2U3NWQxYjAtMDE4Zi00',
-    'site_id' => 91,
+    'site_id' => 127,
   ],
   // FootLocker SA.
   'flsa_dev' => [
@@ -355,21 +355,21 @@ $conductors = [
   ],
   // Westelm KW.
   'wekw_qa' => [
-    'hmac_id' => '5adbb23fe93249438105a3560d7c86d3',
-    'hmac_secret' => 'NjFhYTM2OTAtMjE5Ni00',
-    'site_id' => 154,
+    'hmac_id' => '2546a170c84c49248207de3a8665a920',
+    'hmac_secret' => 'N2Q4ZjhlY2YtMTA1Yy00',
+    'site_id' => 165,
   ],
   // Westelm SA.
   'wesa_qa' => [
-    'hmac_id' => 'e811273bb860476da288afeb111816b6',
-    'hmac_secret' => 'ZmVjMDczMzUtYTY4Yy00',
-    'site_id' => 155,
+    'hmac_id' => 'f8415a9cef1d46aeb0ffeafb5937682f',
+    'hmac_secret' => 'ZjI2YjYzZWItZDYyZi00',
+    'site_id' => 166,
   ],
   // Westelm AE.
   'weae_qa' => [
-    'hmac_id' => 'be57e78e9c5642018b14ca7678f32ee7',
-    'hmac_secret' => 'YmNkYTg3ODQtOThjMi00',
-    'site_id' => 156,
+    'hmac_id' => '868bd73816b6425987a7d43b96c0ed84',
+    'hmac_secret' => 'OGY5ODFiM2MtYTk0Mi00',
+    'site_id' => 167,
   ],
   // Westelm AE.
   'weae_dev2' => [

@@ -13,6 +13,23 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Re-saving the `promotion` resource to moved outside mobile app.
+ */
+function alshaya_acm_promotion_update_8018() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'rest.resource.promotions',
+  ];
+  $manager->updateConfigs($configs, 'alshaya_acm_product');
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new setting 'dynamic_labels'.
  */
 function alshaya_acm_promotion_update_8017() {

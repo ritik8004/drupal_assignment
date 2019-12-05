@@ -13,6 +13,6 @@
 $settings['alshaya_ve_non_transac.settings']['book_appointment_url'] = 'https://staging-alshaya-cts.anzus.solutions/?customer=alshayave&wf=bookings&action=schedule&locationGroupId=visionexpress&appointmentTypeGroupId=visionexpress&questionId__channel=VisionExpress';
 
 // For prod env.
-if (isset($_ENV['AH_SITE_ENVIRONMENT']) && $_ENV['AH_SITE_ENVIRONMENT'] == '01live') {
+if (isset($_ENV['AH_SITE_ENVIRONMENT']) && preg_match('/\d{2}(live|update)/', $_ENV['AH_SITE_ENVIRONMENT'])) {
   $settings['alshaya_ve_non_transac.settings']['book_appointment_url'] = 'https://alshaya-cts.anzus.solutions/?customer=alshayave&wf=bookings&action=schedule&locationGroupId=visionexpress&appointmentTypeGroupId=visionexpress&questionId__channel=VisionExpress';
 }

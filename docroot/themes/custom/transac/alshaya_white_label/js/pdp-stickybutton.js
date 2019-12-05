@@ -27,11 +27,15 @@
     }
     if (state === 'initial') {
       // Button top.
-      var buttonTop = button.offset().top + button.height();
+      var buttonTop = mobileContentWrapper.offset().top + mobileContentWrapper.height();
       // Screen bottom.
       windowBottom = $(window).scrollTop() + $(window).height();
       if (buttonTop > windowBottom) {
         button.addClass('fix-button');
+        if ($('.sku-dynamic-promotion-link').length > 0) {
+          // Add the specific class added for slide the dynamic promotion on load.
+          $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button slide-dynamic-promotion-button');
+        }
       }
       else {
         button.removeClass('fix-button');

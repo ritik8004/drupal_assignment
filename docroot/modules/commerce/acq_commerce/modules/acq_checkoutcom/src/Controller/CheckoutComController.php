@@ -3,6 +3,7 @@
 namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_checkout\Event\AcqCheckoutPaymentFailedEvent;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Component\Serialization\Json;
@@ -76,6 +77,13 @@ class CheckoutComController implements ContainerInjectionInterface {
   protected $logger;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+  /**
    * CheckoutComController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -90,15 +98,16 @@ class CheckoutComController implements ContainerInjectionInterface {
    *   Checkout.com api wrapper object.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    APIWrapper $api_wrapper,
-    CartStorageInterface $cart_storage,
-    MessengerInterface $messenger,
-    CheckoutComAPIWrapper $checkout_com_Api,
-    LoggerInterface $logger
-  ) {
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              APIWrapper $api_wrapper,
+                              CartStorageInterface $cart_storage,
+                              MessengerInterface $messenger,
+                              CheckoutComAPIWrapper $checkout_com_Api,
+                              LoggerInterface $logger,
+                              EventDispatcherInterface $dispatcher) {
     $this->configFactory = $config_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->apiWrapper = $api_wrapper;
@@ -106,6 +115,7 @@ class CheckoutComController implements ContainerInjectionInterface {
     $this->logger = $logger;
     $this->messenger = $messenger;
     $this->checkoutComApi = $checkout_com_Api;
+    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -118,7 +128,8 @@ class CheckoutComController implements ContainerInjectionInterface {
       $container->get('acq_cart.cart_storage'),
       $container->get('messenger'),
       $container->get('acq_checkoutcom.checkout_api'),
-      $container->get('logger.factory')->get('acq_checkoutcom')
+      $container->get('logger.factory')->get('acq_checkoutcom'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -219,6 +230,9 @@ class CheckoutComController implements ContainerInjectionInterface {
         '@info' => Json::encode($data),
       ]
     );
+
+    $event = new AcqCheckoutPaymentFailedEvent('checkout_com_applepay', 'Invalid data in payload or empty publicKeyHash.');
+    $this->dispatcher->dispatch(AcqCheckoutPaymentFailedEvent::EVENT_NAME, $event);
 
     $this->checkoutComApi->setGenericError();
     $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();

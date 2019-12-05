@@ -30,16 +30,26 @@ class AddToCartFormSubmitEvent extends Event {
   private $response;
 
   /**
+   * Variant added to cart if it is configurable product.
+   *
+   * @var \Drupal\acq_commerce\SKUInterface|null
+   */
+  private $variant;
+
+  /**
    * AddToCartFormSubmitEvent constructor.
    *
    * @param \Drupal\acq_commerce\SKUInterface $entity
    *   SKU Entity.
    * @param \Symfony\Component\HttpFoundation\Response $response
    *   Response Object.
+   * @param \Drupal\acq_commerce\SKUInterface|null $variant
+   *   Variant added to cart if it is configurable product.
    */
-  public function __construct(SKUInterface $entity, Response $response) {
+  public function __construct(SKUInterface $entity, Response $response, ?SKUInterface $variant = NULL) {
     $this->sku = $entity;
     $this->response = $response;
+    $this->variant = $variant;
   }
 
   /**
@@ -50,6 +60,16 @@ class AddToCartFormSubmitEvent extends Event {
    */
   public function getSku() {
     return $this->sku;
+  }
+
+  /**
+   * Get the Variant added to cart if it is configurable product.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface|null
+   *   Variant added to cart if it is configurable product.
+   */
+  public function getVariant() {
+    return $this->variant;
   }
 
   /**

@@ -58,7 +58,10 @@ $country_code = $site_country_code['country_code'];
 $settings['country_code'] = strtoupper($country_code);
 
 // Filepath for MDC rabbitmq credentials.
-$rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home/alshaya/rabbitmq-creds/' . $settings['env'] . '/';
+$rabbitmq_creds_dir = $settings['server_home_dir'] . '/rabbitmq-creds/';
+if ($settings['env'] !== 'local') {
+  $rabbitmq_creds_dir .= $settings['env'] . DIRECTORY_SEPARATOR;
+}
 
 $settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
 
@@ -67,4 +70,4 @@ $settings['entity_update_backup'] = FALSE;
 
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
-$settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env']));
+$settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env_name']));

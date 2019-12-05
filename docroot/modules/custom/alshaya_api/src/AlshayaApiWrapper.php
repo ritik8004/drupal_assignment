@@ -263,6 +263,7 @@ class AlshayaApiWrapper {
       }
       elseif ($method == 'JSON') {
         $options['json'] = $data;
+        $method = 'POST';
       }
 
       $response = $client->request($method, $url, $options);
@@ -895,15 +896,37 @@ class AlshayaApiWrapper {
   public function getSkusData() : array {
     $endpoint = 'sanity-check-data';
     $response = $this->invokeApi($endpoint, [], 'GET');
-
     $response = json_decode($response, TRUE) ?? [];
 
     $skus = [];
     foreach ($response as $data) {
-      $skus[$data['type_id']][$data['sku']] = $data;
+      $skus[$data['sku']] = $data;
     }
 
     return $skus;
+  }
+
+  /**
+   * Cancel cart reservation.
+   *
+   * @param string $cart_id
+   *   Cart ID.
+   * @param string $message
+   *   Message to log.
+   *
+   * @return array
+   *   API response.
+   */
+  public function cancelCartReservation(string $cart_id, string $message) {
+    $endpoint = 'cancel/reserve/cart';
+    $data = [
+      'quoteId' => $cart_id,
+      'message' => $message,
+    ];
+
+    $response = $this->invokeApi($endpoint, $data, 'JSON');
+
+    return Json::decode($response);
   }
 
 }

@@ -25,6 +25,20 @@
         product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
+      // For simple grouped products.
+      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
+        var sku = $(this).attr('data-sku');
+        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
+        var variantInfo = drupalSettings.productInfo[sku]['group'][variant];
+
+        $(this).attr('gtm-main-sku', variant);
+        $(this).attr('gtm-product-sku', variant);
+        $(this).attr('gtm-price', variantInfo['gtm_price']);
+      });
+
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
         var quantity = parseInt($('.form-item-quantity select', $(this)).val());
@@ -120,7 +134,7 @@
       // userDetails is set in case of google/facebook login.
       else  {
         userDetails = drupalSettings.userDetails;
-        userId = userDetails.userId;
+        userId = userDetails.userID;
       }
 
       if (localStorage.getItem('userID') === undefined) {
@@ -263,7 +277,7 @@
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
-        if (userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
+        if (userDetails.userID !== undefined && userDetails.userID !== 0 && localStorage.getItem('userID') !== userDetails.userID) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           localStorage.setItem('userID', userDetails.userID);
         }
