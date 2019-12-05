@@ -3,7 +3,6 @@ permissions:
   - 'restful get alshaya_static_texts'
   - 'restful get social_media_links'
   - 'restful get categories'
-  - 'restful get promotions'
   - 'restful get simple_page'
   - 'restful get advanced_page'
   - 'restful get category_product_list'
