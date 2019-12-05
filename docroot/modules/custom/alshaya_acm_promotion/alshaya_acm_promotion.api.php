@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hooks specific to the alshaya_acm_product module.
+ * Hooks specific to the alshaya_acm_promotion module.
  */
 
 use Drupal\node\NodeInterface;
