@@ -124,7 +124,6 @@
         }
       }
 
-
       // Go ahead and display dynamic promotions.
       $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
         updateAlshayaPromotionsLabel(alshayaAcmPromotions);
