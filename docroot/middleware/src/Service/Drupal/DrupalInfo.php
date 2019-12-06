@@ -65,8 +65,11 @@ class DrupalInfo {
    *   Server IP.
    */
   public function getServerIp() {
-    // @Todo: Adding todo to check if possible to remove/make it dynamic.
-    return 'https://104.16.65.106';
+    if (strpos($this->getDrupalBaseUrl(), 'factory') !== FALSE) {
+      return 'https://' . $this->getDrupalBaseUrl() . '.cdn.cloudflare.net';
+    }
+
+    return 'https://' . $this->getDrupalBaseUrl();
   }
 
   /**
