@@ -181,7 +181,7 @@ class PromotionsResource extends ResourceBase {
           'promote' => in_array($node->get('field_acq_promotion_rule_id')->first()->getString(), $active_promotions),
           'promo_sub_tpe' => $node->get('field_alshaya_promotion_subtype')->first()->getString(),
           'promo_desc' => $node->get('field_acq_promotion_description')->first() ? $node->get('field_acq_promotion_description')->first()->getValue()['value'] : '',
-          'promo_label' => $node->get('field_acq_promotion_label')->first() ? $node->get('field_acq_promotion_label')->first()->getString() : '',
+          'promo_label' => $node->get('field_acq_promotion_label')->getString(),
         ];
 
         $this->moduleHandler->alter('alshaya_acm_promo_resource', $data, $node);
