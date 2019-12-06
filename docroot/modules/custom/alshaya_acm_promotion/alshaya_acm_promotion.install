@@ -21,7 +21,7 @@ function alshaya_acm_promotion_update_8018() {
   $configs = [
     'rest.resource.promotions',
   ];
-  $manager->updateConfigs($configs, 'alshaya_acm_product');
+  $manager->updateConfigs($configs, 'alshaya_acm_promotion');
 
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
   \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
