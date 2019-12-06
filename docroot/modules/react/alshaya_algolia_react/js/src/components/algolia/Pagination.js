@@ -2,6 +2,7 @@ import React from 'react'
 import { connectStats } from 'react-instantsearch-dom';
 
 import ProgressBar from './widgets/ProgressBar';
+import { showLoader } from '../../utils';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({nbHits, currentResults}) => {
@@ -21,6 +22,13 @@ const PaginationStats = connectStats(({nbHits, currentResults}) => {
 });
 
 export default function Pagination(props) {
+
+  const loadNextCotent = () => {
+    // const bodyNode = document.getElementsByTagName( 'body' );
+    showLoader();
+    props.refineNext();
+  }
+
   if (props.results > 0) {
     return (
       <ul className="js-pager__items pager">
@@ -32,7 +40,7 @@ export default function Pagination(props) {
             <button
               className="button"
               rel="next"
-              onClick={props.refineNext}
+              onClick={() => loadNextCotent()}
             >
               {props.children}
             </button>

@@ -3,17 +3,19 @@ import Slider from "react-slick";
 import { ImageWrapper } from '../imageHelper/ImageWrapper';
 import ImageLazyLoad from '../imageHelper/ImageLazyLoad';
 import { updateAfter } from '../../../utils';
+import ImageElement from '../imageHelper/ImageElement';
 
 const SliderElement = props => {
   return(
     <div
       onMouseEnter={props.mouseenter.bind(this)}
-      onMouseOut={props.mouseout.bind(this)}
+      onMouseLeave={props.mouseout.bind(this)}
     >
       <ImageLazyLoad
-        src={props.src}
+        src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+        data-src={props.src}
         title={props.title}
-        className="b-lazy b-loaded"
+        className="b-lazy"
       />
     </div>
   );
@@ -27,11 +29,8 @@ class SearchGallery extends React.Component {
 
   constructor(props) {
     super(props);
+    this.mainImageRef = React.createRef();
     this.mainImage = props.media.length > 0 ? props.media[0] : {};
-    this.state = {
-      mainImage: this.mainImage
-    };
-    this.setTimeoutConst = null;
 
     this.settings = {
       dots: false,
@@ -47,15 +46,16 @@ class SearchGallery extends React.Component {
 
   changeImg = event => {
     clearTimeout(this.setTimeoutConst);
+    this.setTimeoutConst = null;
     if (event.target.hasAttribute("src") && event.target.getAttribute("src").length > 0) {
-      this.setState({ mainImage: {url: event.target.getAttribute("src")} });
+      this.mainImageRef.current.firstChild.src = event.target.getAttribute("src");
     }
   };
 
-  resetImg = event => {
+  resetImg = () => {
     const obj = this;
     this.setTimeoutConst = setTimeout(function() {
-      obj.setState({ mainImage: obj.mainImage });
+      obj.mainImageRef.current.firstChild.src = obj.mainImage.url
     }, updateAfter);
   };
 
@@ -68,8 +68,8 @@ class SearchGallery extends React.Component {
       thumbnails.push((
         <SliderElement
           key={element.url}
-          src={element.url}
           title={title}
+          src={element.url}
           mouseenter={origObj.changeImg}
           mouseout={origObj.resetImg}
         />
@@ -80,12 +80,14 @@ class SearchGallery extends React.Component {
 
     return (
       <div className="alshaya_search_gallery">
-        <ImageWrapper
-          src={typeof this.state.mainImage.url != 'undefined' ? this.state.mainImage.url : ''}
-          title={title}
-          className='alshaya_search_mainimage'
-          showDefaultImage={true}
-        />
+        <div className='alshaya_search_mainimage' ref={this.mainImageRef}>
+          <ImageElement
+            src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+            data-src={typeof this.mainImage.url != 'undefined' ? this.mainImage.url : ''}
+            title={title}
+            className='b-lazy'
+          />
+        </div>
         <div className="alshaya_search_slider" data-slider-status={sliderStatus}>
           <Slider {...this.settings} className="search-lightSlider">
             {thumbnails}

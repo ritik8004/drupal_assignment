@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageLazyLoad from './ImageLazyLoad';
 
-export function ImageWrapper({src, title, className, showDefaultImage = false}) {
+export function ImageWrapper({src, title, className, showDefaultImage = false, ...otherProps}) {
   let imageSrc = '';
   if (typeof src != 'undefined' && src !== '') {
     imageSrc = src;
@@ -12,7 +12,7 @@ export function ImageWrapper({src, title, className, showDefaultImage = false}) 
 
   return (
     <div className={className}>
-      <ImageLazyLoad src={imageSrc} title={title} />
+      <ImageLazyLoad src={imageSrc} title={title} {...otherProps} />
     </div>
   );
 };
