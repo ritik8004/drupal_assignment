@@ -13,16 +13,23 @@
 
         // If cart is not empty.
         if (cartQuantity.length) {
-          var getPromoLabel = new Drupal.ajax({
-            url: Drupal.url('get-promotion-dynamic-label/' + dynamicPromotionSku),
-            element: false,
-            base: false,
-            progress: {type: 'throbber'},
-            submit: {js: true}
-          });
+          // Check if we already have fetched dynamic label.
+          if (drupalSettings.alshayaAcmPromotionslabels !== undefined && drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku] !== undefined) {
+            var promotionLabelDiv = $('.promotions-dynamic-label.sku-' + dynamicPromotionSku).html(drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku]);
+            promotionLabelDiv.trigger('dynamic:promotion:label:ajax:complete');
+          }
+          else {
+            var getPromoLabel = new Drupal.ajax({
+              url: Drupal.url('get-promotion-dynamic-label/' + dynamicPromotionSku),
+              element: false,
+              base: false,
+              progress: {type: 'throbber'},
+              submit: {js: true}
+            });
 
-          getPromoLabel.options.type = 'GET';
-          getPromoLabel.execute();
+            getPromoLabel.options.type = 'GET';
+            getPromoLabel.execute();
+          }
         }
       }
     }
@@ -31,6 +38,10 @@
   Drupal.behaviors.alshayaPromotionsLabelManager = {
     attach: function (context) {
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+
+      $('form.sku-base-form').on('variant-selected', function (event, variant, code) {
+        Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+      });
     }
   };
 
@@ -84,6 +95,16 @@
           }
           Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
           $('.promotions-dynamic-label').removeClass('mobile-only-dynamic-promotion');
+        }
+
+        // Set label in alshayaAcmPromotionslabels to have static cache.
+        for (var dynamicPromotionSku in alshayaAcmPromotions) {
+          if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
+            if (drupalSettings.alshayaAcmPromotionslabels === undefined) {
+              drupalSettings.alshayaAcmPromotionslabels = {};
+            }
+            drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku] = this.innerHTML;
+          }
         }
       });
 
