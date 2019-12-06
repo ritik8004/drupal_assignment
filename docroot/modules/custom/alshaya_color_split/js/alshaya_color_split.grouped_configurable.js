@@ -17,7 +17,6 @@
         if (typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
-
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 
         // We can have mix of color split and normal products.
@@ -48,12 +47,7 @@
           });
 
           if (typeof variantInfo.promotions !== 'undefined') {
-            var reattachedPromotions = $('.promotions-full-view-mode', node).html(variantInfo.promotions);
-
-            // Attach Drupal Behaviors to add event listeners back.
-            if (Drupal.alshayaPromotions !== undefined) {
-              Drupal.alshayaPromotions.initializeDynamicPromotions(reattachedPromotions);
-            }
+            $('.promotions-full-view-mode', node).html(variantInfo.promotions);
           }
 
           if (typeof variantInfo.free_gift_promotions !== 'undefined') {
