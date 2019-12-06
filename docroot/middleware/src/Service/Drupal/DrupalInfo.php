@@ -33,8 +33,12 @@ class DrupalInfo {
    * @return string
    *   Drupal url.
    */
-  public function getDrupalUrl() {
-    return $this->getServerIp();
+  public function getDrupalHostUrl() {
+    if (strpos($this->getDrupalBaseUrl(), 'factory') !== FALSE) {
+      return 'https://' . $this->getDrupalBaseUrl() . '.cdn.cloudflare.net';
+    }
+
+    return 'https://' . $this->getDrupalBaseUrl();
   }
 
   /**
@@ -59,20 +63,6 @@ class DrupalInfo {
   }
 
   /**
-   * IP of of the server.
-   *
-   * @return string
-   *   Server IP.
-   */
-  public function getServerIp() {
-    if (strpos($this->getDrupalBaseUrl(), 'factory') !== FALSE) {
-      return 'https://' . $this->getDrupalBaseUrl() . '.cdn.cloudflare.net';
-    }
-
-    return 'https://' . $this->getDrupalBaseUrl();
-  }
-
-  /**
    * Get api client for drupal.
    *
    * @return \GuzzleHttp\Client
@@ -81,7 +71,7 @@ class DrupalInfo {
   public function getDrupalApiClient() {
     return (new Client([
       // Base URI is used with relative requests.
-      'base_uri' => $this->getDrupalUrl(),
+      'base_uri' => $this->getDrupalHostUrl(),
       'headers' => ['Host' => $this->getDrupalBaseUrl()],
       'verify' => FALSE,
     ]));
