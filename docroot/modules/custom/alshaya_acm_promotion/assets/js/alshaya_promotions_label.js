@@ -114,7 +114,8 @@
           var dynamicPromotionWrapper = $('.promotions .promotions-dynamic-label').clone();
           if ($('.basic-details-wrapper .promotions-dynamic-label').length < 1) {
             dynamicPromotionWrapper.once('bind-promotions-dynamic-label-events').insertAfter($('.edit-add-to-cart'));
-          } else {
+          }
+          else {
             // Replace the same promotion wrapper with updated dynamic label.
             $('.basic-details-wrapper .promotions-dynamic-label').replaceWith(dynamicPromotionWrapper);
           }
