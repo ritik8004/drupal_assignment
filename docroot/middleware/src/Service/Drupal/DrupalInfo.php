@@ -34,7 +34,7 @@ class DrupalInfo {
    *   Drupal url.
    */
   public function getDrupalUrl() {
-    return $this->getDrupalBaseUrl() . $this->getDrupalLangcode();
+    return $this->getServerIp();
   }
 
   /**
@@ -44,7 +44,7 @@ class DrupalInfo {
    *   Drupal base url.
    */
   public function getDrupalBaseUrl() {
-    return $this->request->getScheme() . '://' . $this->request->getHttpHost() . '/';
+    return $this->request->getHttpHost();
   }
 
   /**
@@ -59,6 +59,17 @@ class DrupalInfo {
   }
 
   /**
+   * IP of of the server.
+   *
+   * @return string
+   *   Server IP.
+   */
+  public function getServerIp() {
+    // @Todo: Adding todo to check if possible to remove/make it dynamic.
+    return 'https://104.16.65.106';
+  }
+
+  /**
    * Get api client for drupal.
    *
    * @return \GuzzleHttp\Client
@@ -68,6 +79,8 @@ class DrupalInfo {
     return (new Client([
       // Base URI is used with relative requests.
       'base_uri' => $this->getDrupalUrl(),
+      'headers' => ['Host' => $this->getDrupalBaseUrl()],
+      'verify' => FALSE,
     ]));
   }
 

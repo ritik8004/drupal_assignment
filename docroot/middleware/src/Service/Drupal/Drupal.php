@@ -37,8 +37,8 @@ class Drupal {
     $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = '/' . sprintf('rest/v1/product/%s', $sku) . '?context=cart';
-      $response = $client->request('GET', $url, ['verify' => FALSE]);
+      $url = sprintf('/%s/rest/v1/product/%s', $this->drupalInfo->getDrupalLangcode(), $sku) . '?context=cart';
+      $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
       $result = $response->getBody()->getContents();
       $data[$sku] = json_decode($result, TRUE);
     }
@@ -59,8 +59,8 @@ class Drupal {
     $client = $this->drupalInfo->getDrupalApiClient();
     $data = [];
     foreach ($skus as $sku) {
-      $url = '/' . sprintf('rest/v1/product/%s/linked?context=cart', $sku);
-      $response = $client->request('GET', $url, ['verify' => FALSE]);
+      $url = sprintf('/%s/rest/v1/product/%s/linked?context=cart', $this->drupalInfo->getDrupalLangcode(), $sku);
+      $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
       $result = $response->getBody()->getContents();
       $data[$sku] = json_decode($result, TRUE);
     }
@@ -76,7 +76,8 @@ class Drupal {
    */
   public function getAllPromoData() {
     $client = $this->drupalInfo->getDrupalApiClient();
-    $response = $client->request('GET', '/rest/v1/promotion/all', ['verify' => FALSE]);
+    $url = sprintf('/%s/rest/v1/promotion/all', $this->drupalInfo->getDrupalLangcode());
+    $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }
