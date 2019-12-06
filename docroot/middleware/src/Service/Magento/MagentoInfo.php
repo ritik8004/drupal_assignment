@@ -37,6 +37,7 @@ class MagentoInfo {
     if ($env === 'local') {
       // Require local_sites.php file for host site code.
       require DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/local_sites.php';
+      // @codingStandardsIgnoreLine
       global $host_site_code;
       $site_name = $host_site_code;
     }
@@ -58,6 +59,12 @@ class MagentoInfo {
     if (!empty($site_name)) {
       $site_country_code = alshaya_get_site_country_code($site_name);
       require DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
+
+      // This is to remove `01/02` etc from env name.
+      if (substr($env, 0, 1) == '0') {
+        $env = substr($env, 2);
+      }
+
       $commerce_settings = alshaya_get_commerce_third_party_settings(
         $site_country_code['site_code'],
         $site_country_code['country_code'],

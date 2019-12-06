@@ -33,8 +33,12 @@ class DrupalInfo {
    * @return string
    *   Drupal url.
    */
-  public function getDrupalUrl() {
-    return $this->getDrupalBaseUrl() . $this->getDrupalLangcode();
+  public function getDrupalHostUrl() {
+    if (strpos($this->getDrupalBaseUrl(), 'factory') !== FALSE) {
+      return 'https://' . $this->getDrupalBaseUrl() . '.cdn.cloudflare.net';
+    }
+
+    return 'https://' . $this->getDrupalBaseUrl();
   }
 
   /**
@@ -44,7 +48,7 @@ class DrupalInfo {
    *   Drupal base url.
    */
   public function getDrupalBaseUrl() {
-    return $this->request->getScheme() . '://' . $this->request->getHttpHost() . '/';
+    return $this->request->getHttpHost();
   }
 
   /**
@@ -67,7 +71,9 @@ class DrupalInfo {
   public function getDrupalApiClient() {
     return (new Client([
       // Base URI is used with relative requests.
-      'base_uri' => $this->getDrupalUrl(),
+      'base_uri' => $this->getDrupalHostUrl(),
+      'headers' => ['Host' => $this->getDrupalBaseUrl()],
+      'verify' => FALSE,
     ]));
   }
 
