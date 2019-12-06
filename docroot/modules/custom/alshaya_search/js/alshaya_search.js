@@ -135,60 +135,54 @@
     }
   };
 
+  var slickOptions = {
+    slidesToShow: drupalSettings.plp_slider.item,
+    slidesToScroll: 1,
+    vertical: false,
+    arrows: true,
+    focusOnSelect: false,
+    infinite: false,
+    touchThreshold: 1000,
+  };
+
+  function applyRtl(ocObject) {
+    if (isRTL() && $(window).width() > 1024) {
+      ocObject.attr('dir', 'rtl');
+      ocObject.slick(
+        $.extend({}, slickOptions, {rtl: true})
+      );
+      ocObject.slick('resize');
+    }
+    else {
+      ocObject.slick(slickOptions);
+      ocObject.slick('resize');
+    }
+  }
+
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      function applyRtl(ocObject, options) {
-        if (isRTL() && $(window).width() > 1025) {
-          ocObject.attr('dir', 'rtl');
-          ocObject.slick(
-            $.extend({}, options, {rtl: true})
-          );
-          if (context !== document) {
-            ocObject.slick('resize');
-          }
-        }
-        else {
-          ocObject.slick(options);
-          if (context !== document) {
-            ocObject.slick('resize');
-          }
-        }
-      }
-
       if (settings.plp_slider) {
-        var slickOptions = {
-          slidesToShow: settings.plp_slider.item,
-          slidesToScroll: 1,
-          vertical: false,
-          arrows: true,
-          focusOnSelect: false,
-          infinite: false,
-          touchThreshold: 1000,
-        };
-
         // Convert the list to slider.
-        $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
+        $('article.node').once('refresh-thumbnail-gallery').on('mouseenter tap', function () {
           // Create the slider.
-          applyRtl($(this), slickOptions);
+          $('.search-lightSlider', $(this)).once('search-slider').each(function () {
+            applyRtl($(this));
 
-          // Handle click events in hover slider arrows without triggering click to PDP.
-          $(this).find('.slick-arrow').on('click', function (e) {
-            if (e.preventDefault) {
+            // Handle click events in hover slider arrows without triggering click to PDP.
+            $(this).find('.slick-arrow').on('click', function (e) {
               e.preventDefault();
-            }
-            else {
-              e.returnValue = false;
-            }
 
-            if (!$(this).hasClass('slick-disabled')) {
-              if ($(this).attr('class') === 'slick-prev') {
-                $(this).parent().slick('slickPrev');
+              if (!$(this).hasClass('slick-disabled')) {
+                if ($(this).attr('class') === 'slick-prev') {
+                  $(this).parent().slick('slickPrev');
+                }
+                else {
+                  $(this).parent().slick('slickNext');
+                }
               }
-              else {
-                $(this).parent().slick('slickNext');
-              }
-            }
-            return false;
+
+              return false;
+            });
           });
         });
 
@@ -217,10 +211,6 @@
             }, delay);
           }
         );
-
-        $.fn.alshayaAttachSearchSlider = function () {
-          Drupal.attachBehaviors(context);
-        };
       }
     }
   };
