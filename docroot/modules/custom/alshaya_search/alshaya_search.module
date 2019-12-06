@@ -209,6 +209,12 @@ function alshaya_search_ajax_render_alter(array &$data) {
             'method' => 'alshayaSearchHeaderUpdate',
             'args' => [],
           ];
+          $data[] = [
+            'selector' => NULL,
+            'command' => 'invoke',
+            'method' => 'alshayaAttachSearchSlider',
+            'args' => [],
+          ];
         }
       }
     }

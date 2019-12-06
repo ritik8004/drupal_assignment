@@ -29,7 +29,6 @@
   Drupal.skuShowColorImagesOnFilter = function () {
     var firstGallery = $('.list-product-gallery span[data--color]:first');
     if (firstGallery.length === 0) {
-      $(document).trigger('initiateSlider', [$('.list-product-gallery .alshaya_search_gallery')]);
       // Do nothing if no gallery to process.
       return;
     }
@@ -67,9 +66,10 @@
         selectedUrl += activeSpan.attr('data--id');
         $(this).parents('article').find('a.product-selected-url').attr('href', selectedUrl);
       }
-      // At the end, let's make sure sliders work fine.
-      $(document).trigger('initiateSlider', [activeSpan]);
     });
+
+    // At the end, let's make sure sliders work fine.
+    $('.search-lightSlider').slick('refresh');
   }
 
 })(jQuery, Drupal);
