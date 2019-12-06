@@ -14,7 +14,8 @@
 
 #spc-cart {
   .spc-main,
-  .spc-pre-content {
+  .spc-pre-content,
+  .spc-post-content {
     max-width: 64.125rem;
     margin: 0 auto;
     margin-bottom: 0.9375rem;
@@ -22,6 +23,19 @@
 }
 
 #spc-cart {
+  .spc-post-content {
+    @include breakpoint($only-tablet) {
+      max-width: calc(100% - 2.5rem);
+    }
+
+    @include breakpoint($upto-desktop) {
+      .nav-prev,
+      .nav-next {
+        display: none;
+      }
+    }
+  }
+
   .spc-main {
     display: flex;
     flex-flow: row wrap;
@@ -29,6 +43,10 @@
 
     @include breakpoint($only-tablet) {
       max-width: calc(100% - 2.5rem);
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 2.5rem;
     }
 
     .spc-content {
