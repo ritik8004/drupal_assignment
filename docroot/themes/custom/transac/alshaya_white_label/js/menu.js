@@ -8,19 +8,21 @@
 (function ($, Drupal) {
   'use strict';
 
+  var css = document.createElement('style');
+  css.type = 'text/css';
+  document.head.appendChild(css);
+  function setMenuWidth() {
+    var menuWidth = $('.menu--one__list').width();
+    css.innerHTML = '.menu--two__list, .menu--three__list, .menu--four__list { width: ' + menuWidth + 'px}';
+  }
+
+  $(window).resize(function () {
+    setMenuWidth();
+  });
+
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
-
-      var css = document.createElement('style');
-      css.type = 'text/css';
-      document.head.appendChild(css);
-      function setMenuWidth() {
-        var menuWidth = $('.menu--one__list').width();
-        css.innerHTML = '.menu--two__list, .menu--three__list, .menu--four__list { width: ' + menuWidth + 'px}';
-      }
-
-      setMenuWidth();
-      $(window).resize(function () {
+      $('html').once('setMenuWidth').each(function () {
         setMenuWidth();
       });
 
