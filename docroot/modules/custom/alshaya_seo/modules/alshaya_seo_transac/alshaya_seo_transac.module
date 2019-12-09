@@ -119,16 +119,17 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
           $product_title = $sku_entity->get('name')->getString();
         }
 
-        // If final price is available.
-        if ($sku_entity->get('final_price')) {
-          $final_price = (float) $sku_entity->get('final_price')->getString();
-        }
+        $min_prices = $skuManager->getMinPrices($sku_entity);
+        $final_price = (float) $min_prices['final_price'];
+        $availability = $skuManager->isProductInStock($sku_entity);
 
         // Prepare rich snippet.
         $snippet['@type'] = 'Product';
         $snippet['name'] = $product_title;
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
+        $snippet['availability'] = $availability;
+        $snippet['sku'] = $sku_id;
         // @Todo: Change this once brand field is available.
         $snippet['brand'] = [
           '@type' => 'Thing',
