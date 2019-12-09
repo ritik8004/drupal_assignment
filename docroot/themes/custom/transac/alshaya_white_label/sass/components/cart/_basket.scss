@@ -220,6 +220,11 @@
         position: relative;
         #{$left}: 0;
         top: 0.5rem;
+
+        html[lang=ar] & {
+          float: none;
+          top: 0.75rem;
+        }
       }
     }
 
