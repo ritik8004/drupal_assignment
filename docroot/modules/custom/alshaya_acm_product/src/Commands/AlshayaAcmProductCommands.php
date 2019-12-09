@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -427,6 +428,93 @@ class AlshayaAcmProductCommands extends DrushCommands {
       ->execute();
 
     $this->io()->writeln(dt('Corrupt entries in node_field_data are removed.'));
+  }
+
+  /**
+   * Clean up data in acq_sku_field_data table.
+   *
+   * @command alshaya_acm_product:cleanup-sku-field-data
+   *
+   * @aliases cleanup-sku-field-data
+   */
+  public function cleanAcqSkuFieldData() {
+    $query = $this->connection->query('SELECT id, sku 
+      FROM {acq_sku_field_data} fd 
+      WHERE id NOT IN (SELECT id FROM {acq_sku})');
+
+    $result = $query->fetchAll();
+
+    if (empty($result)) {
+      $this->yell('No corrupt entry found in acq_sku_field_data.');
+      return;
+    }
+
+    $message = dt('Found following entries in acq_sku_field_data which do not have any entry in acq_sku. Entries: @entries', [
+      '@entries' => print_r($result, TRUE),
+    ]);
+
+    $this->logger()->notice($message);
+
+    if (!$this->io()->confirm(dt('Do you want to delete them?'))) {
+      throw new UserAbortException();
+    }
+
+    $ids = array_column($result, 'id');
+
+    $this->connection->delete('acq_sku_field_data')
+      ->condition('id', $ids, 'IN')
+      ->execute();
+
+    $this->logger()->notice(dt('Corrupt entries in acq_sku_field_data are removed.'));
+  }
+
+  /**
+   * Clean duplicate SKU entities.
+   *
+   * @command alshaya_acm_product:cleanup-duplicate-skus
+   *
+   * @aliases cleanup-duplicate-skus
+   */
+  public function cleanDuplicateSkus() {
+    $query = 'SELECT fd1.sku FROM {acq_sku_field_data} fd1 INNER JOIN {acq_sku_field_data} fd2 ON fd1.sku = fd2.sku WHERE fd1.id != fd2.id';
+    $result = $this->connection->query($query)->fetchAllKeyed(0, 0);
+
+    if (empty($result)) {
+      $this->yell('No corrupt entry found in acq_sku_field_data.');
+      return;
+    }
+
+    $message = dt('Duplicate SKUs found for: @entries', [
+      '@entries' => print_r($result, TRUE),
+    ]);
+
+    $this->logger()->notice($message);
+
+    if (!$this->io()->confirm(dt('Do you want to delete them?'))) {
+      throw new UserAbortException();
+    }
+
+    foreach ($result as $sku) {
+      $sku_records = $this->connection->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku', [
+        ':sku' => $sku,
+      ])->fetchAllKeyed(0, 0);
+
+      // Remove the first ID we use in Development.
+      array_shift($sku_records);
+
+      foreach ($sku_records as $id) {
+        $entity = $this->entityTypeManager->getStorage('acq_sku')->load($id);
+        if ($entity instanceof SKUInterface) {
+          $entity->delete();
+
+          $this->logger()->notice(dt('Deleted SKU entity with ID @id for SKU @sku', [
+            '@id' => $id,
+            '@sku' => $sku,
+          ]));
+        }
+      }
+    }
+
   }
 
   /**
