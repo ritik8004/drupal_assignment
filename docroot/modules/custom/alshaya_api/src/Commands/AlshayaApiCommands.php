@@ -252,8 +252,8 @@ class AlshayaApiCommands extends DrushCommands {
    *
    * @aliases alshaya-api-sanity-check
    * @usage alshaya-api-sanity-check --check="category,price,stock,status" --page_size=3
-   * @usage alshaya-api-sanity-check --types="category,stock"
-   * @usage alshaya-api-sanity-check --types="category,status"
+   * @usage alshaya-api-sanity-check --check="category,stock"
+   * @usage alshaya-api-sanity-check --check="category,status"
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
