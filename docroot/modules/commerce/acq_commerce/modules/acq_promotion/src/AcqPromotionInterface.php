@@ -7,8 +7,6 @@ namespace Drupal\acq_promotion;
  */
 interface AcqPromotionInterface {
 
-  const ACQ_PROMOTION_DEFAULT_PRIORITY = 0;
-
   /**
    * Get inactive promo label.
    *

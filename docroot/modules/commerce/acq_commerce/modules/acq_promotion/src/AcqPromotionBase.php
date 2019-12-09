@@ -26,11 +26,4 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
     return $this->pluginDefinition['label'];
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getPriority() {
-    return self::ACQ_PROMOTION_DEFAULT_PRIORITY;
-  }
-
 }
