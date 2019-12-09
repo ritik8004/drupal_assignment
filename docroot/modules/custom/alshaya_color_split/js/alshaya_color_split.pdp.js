@@ -27,19 +27,27 @@
           return;
         }
 
+        var productChanged = false;
         if ($(node).attr('data-vmode') === 'full') {
           if (window.location.pathname !== variantInfo.url[$('html').attr('lang')]) {
             var url = variantInfo.url[$('html').attr('lang')] + location.search;
             url = Drupal.removeURLParameter(url, 'selected');
             window.history.replaceState(variantInfo, variantInfo.title, url);
+            productChanged = true;
           }
 
           $('.language-switcher-language-url .language-link').each(function () {
             $(this).attr('href', variantInfo.url[$(this).attr('hreflang')]);
           });
 
-          if (typeof variantInfo.promotions !== 'undefined') {
+          // Update dynamic promotions if product is changed.
+          if (typeof variantInfo.promotions !== 'undefined' && productChanged) {
             $('.promotions-full-view-mode', node).html(variantInfo.promotions);
+
+            // Reinitialize dynamic promotions if product is changed.
+            if (Drupal.alshayaPromotions !== undefined) {
+              Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+            }
           }
 
           if (typeof variantInfo.free_gift_promotions !== 'undefined') {
