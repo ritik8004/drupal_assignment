@@ -123,6 +123,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
         $snippet['availability'] = $availability;
+        $snippet['sku'] = $sku_id;
         // @Todo: Change this once brand field is available.
         $snippet['brand'] = [
           '@type' => 'Thing',
