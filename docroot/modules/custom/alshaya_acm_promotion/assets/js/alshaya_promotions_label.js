@@ -104,6 +104,12 @@
         }
       });
 
+      // Go ahead and display dynamic promotions.
+      $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
+        updateAlshayaPromotionsLabel(alshayaAcmPromotions);
+      });
+
+
       // Cut the Dynamic promotion wrapper and insert it after add to cart button.
       if ($(window).width() < 768) {
         if ($('.promotions .sku-dynamic-promotion-link').length > 0) {
@@ -120,11 +126,6 @@
           $('.basic-details-wrapper .promotions-dynamic-label').remove();
         }
       }
-
-      // Go ahead and display dynamic promotions.
-      $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
-        updateAlshayaPromotionsLabel(alshayaAcmPromotions);
-      });
     }
   };
 
