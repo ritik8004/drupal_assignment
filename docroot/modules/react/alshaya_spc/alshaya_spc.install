@@ -21,14 +21,24 @@ function alshaya_spc_install() {
   $mini_cart_block = Block::load('cartminiblock');
   $mini_cart_block->disable();
   $mini_cart_block->save();
+
+  // Disable the `basket_horizontal_recommendation` block from cart page.
+  $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
+  $horizontal_recommendation->disable();
+  $horizontal_recommendation->save();
 }
 
 /**
  * Implements hook_uninstall().
  */
 function alshaya_spc_uninstall() {
-  // Disable the `acq_commerce` mini cart block.
+  // Enable the `acq_commerce` mini cart block.
   $mini_cart_block = Block::load('cartminiblock');
-  $mini_cart_block->disable();
+  $mini_cart_block->enable();
   $mini_cart_block->save();
+
+  // Enable the `basket_horizontal_recommendation` block from cart page.
+  $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
+  $horizontal_recommendation->enable();
+  $horizontal_recommendation->save();
 }
