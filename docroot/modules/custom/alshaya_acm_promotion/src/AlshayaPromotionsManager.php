@@ -535,13 +535,15 @@ class AlshayaPromotionsManager {
   /**
    * Return Cart Promotion Plugin mapped with nodes.
    *
+   * @param array $subtypes
+   *   List of promotion types.
    * @param array $exclude_nids
    *   List of excluding nids.
    *
    * @return array
    *   Sorted list of cart promotions priority-price based.
    */
-  public function getCartPromotionPluginNodes(array $exclude_nids = []) {
+  public function getCartPromotionPluginNodes(array $subtypes, array $exclude_nids = []) {
     $allApplicablePromotions = $this->getAllPromotions(
       [
         [
@@ -550,9 +552,7 @@ class AlshayaPromotionsManager {
         ],
         [
           'field' => 'field_alshaya_promotion_subtype',
-          'value' => [
-            self::SUBTYPE_FREE_SHIPPING_ORDER,
-          ],
+          'value' => $subtypes,
           'operator' => 'IN',
         ],
         [
@@ -632,7 +632,7 @@ class AlshayaPromotionsManager {
     if (!empty($definitions[$field_alshaya_promotion_subtype])) {
       try {
         $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
-          'free_shipping_order',
+          $field_alshaya_promotion_subtype,
           ['promotion_node' => $promotion]
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
@@ -657,23 +657,35 @@ class AlshayaPromotionsManager {
    *
    * @param array $appliedPromotions
    *   Currently applied promotion nodes.
+   * @param array $config
+   *   Subtype configuration.
    *
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion(array $appliedPromotions) {
+  public function getInactiveCartPromotion(array $appliedPromotions, array $config) {
     $inactiveCartPromotion = NULL;
     $exclude_nids = [];
     foreach ($appliedPromotions as $promotion) {
       $exclude_nids[] = $promotion->id();
     }
 
-    // Get all inactive promotions.
-    $cartPromotions = $this->getCartPromotionPluginNodes($exclude_nids);
+    // Filter promotions based on block config.
+    $subtypes = [];
+    foreach ($config as $key => $subtype) {
+      if (!empty($subtype)) {
+        $subtypes[] = $key;
+      }
+    }
 
-    // Now get the next eligible active promotion.
-    if (!empty($cartPromotions)) {
-      $inactiveCartPromotion = $this->getNextEligibleInactivePromotion($cartPromotions, $appliedPromotions);
+    // Get all inactive promotions.
+    if (!empty($subtypes)) {
+      $cartPromotions = $this->getCartPromotionPluginNodes($subtypes, $exclude_nids);
+
+      // Now get the next eligible active promotion.
+      if (!empty($cartPromotions)) {
+        $inactiveCartPromotion = $this->getNextEligibleInactivePromotion($cartPromotions, $appliedPromotions);
+      }
     }
 
     return $inactiveCartPromotion;
@@ -693,7 +705,7 @@ class AlshayaPromotionsManager {
   protected function getNextEligibleInactivePromotion(array $cartPromotions, array $appliedPromotions) {
     $eligiblePromotion = NULL;
     if (!empty($appliedPromotions)) {
-
+      // @todo Get next promotion in case of cart already has promotion.
     }
     else {
       // Highest priority promotion is the next eligible promotion.
