@@ -38,13 +38,6 @@
   Drupal.behaviors.alshayaPromotionsLabelManager = {
     attach: function (context) {
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
-
-      $('form.sku-base-form').on('variant-selected', function (event, variant, code) {
-        // Reinitialize dynamic promotions if product is changed.
-        if (code === 'article_castor_id') {
-          Drupal.alshayaPromotions.initializeDynamicPromotions(context);
-        }
-      });
     }
   };
 

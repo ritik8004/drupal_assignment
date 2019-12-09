@@ -50,6 +50,13 @@
 
         $(node).find('.content--item-code .field__value').html(variantInfo.parent_sku);
       });
+
+      // Reinitialize dynamic promotions if product is changed.
+      $('form.sku-base-form').on('variant-selected', function (event, variant, code) {
+        if (code === 'article_castor_id') {
+          Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+        }
+      });
     }
   };
 

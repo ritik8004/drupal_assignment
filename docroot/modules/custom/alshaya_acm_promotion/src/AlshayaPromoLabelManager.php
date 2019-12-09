@@ -8,6 +8,7 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -454,6 +455,7 @@ class AlshayaPromoLabelManager {
     if ($response instanceof AjaxResponse) {
       $dynamic_label_selector = '.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId;
       $response->addCommand(new HtmlCommand($dynamic_label_selector, $label));
+      $response->addCommand(new SettingsCommand(['alshayaAcmPromotionslabels' => [$skuId => $label]], TRUE));
     }
 
     return $response;
