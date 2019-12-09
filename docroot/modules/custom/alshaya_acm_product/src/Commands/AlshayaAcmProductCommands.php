@@ -400,8 +400,8 @@ class AlshayaAcmProductCommands extends DrushCommands {
    * @aliases cleanup-nfd, cleanup-node-field-data
    */
   public function cleanNodeFieldData() {
-    $query = $this->connection->query('SELECT nf.nid, nf.vid, nf.langcode 
-      FROM {node_field_data} nf 
+    $query = $this->connection->query('SELECT nf.nid, nf.vid, nf.langcode
+      FROM {node_field_data} nf
       WHERE vid NOT IN (SELECT vid FROM {node})');
 
     $result = $query->fetchAll();
@@ -433,13 +433,17 @@ class AlshayaAcmProductCommands extends DrushCommands {
   /**
    * Clean up data in acq_sku_field_data table.
    *
+   * This command removes entries from acq_sku_field_data
+   * for which we do not have entry in acq_sku (entity)
+   * table.
+   *
    * @command alshaya_acm_product:cleanup-sku-field-data
    *
    * @aliases cleanup-sku-field-data
    */
   public function cleanAcqSkuFieldData() {
-    $query = $this->connection->query('SELECT id, sku 
-      FROM {acq_sku_field_data} fd 
+    $query = $this->connection->query('SELECT id, sku
+      FROM {acq_sku_field_data} fd
       WHERE id NOT IN (SELECT id FROM {acq_sku})');
 
     $result = $query->fetchAll();
@@ -469,7 +473,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
   }
 
   /**
-   * Clean duplicate SKU entities.
+   * Clean duplicate SKU data in acq_sku_field_data.
    *
    * @command alshaya_acm_product:cleanup-duplicate-skus
    *
@@ -480,7 +484,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $result = $this->connection->query($query)->fetchAllKeyed(0, 0);
 
     if (empty($result)) {
-      $this->yell('No corrupt entry found in acq_sku_field_data.');
+      $this->yell('No duplicate entry found in acq_sku_field_data.');
       return;
     }
 
