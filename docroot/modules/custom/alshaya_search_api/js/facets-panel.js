@@ -486,7 +486,7 @@
   };
 
   // Move plp to page title on slection of any filters.
-  if ($(window).width() > 767 && $('.subcategory-listing-enabled').length < 1) {
+  if ($('.subcategory-listing-enabled').length < 1) {
     pageScrollToTitle();
   }
 
@@ -637,8 +637,23 @@
    * Scroll page to page title on selection of any of the facet item.
    */
   function pageScrollToTitle() {
+    //variable to set scroll position to be used in viewsScrollTop command for all PLPs except panty guide.
+    var exposedViewOffset = 0;
     // To get the offset top of plp Title, using title offset top.
-    var exposedViewOffset = $('#block-page-title').offset().top;
+    var pageTitleOffset = $('#block-page-title').offset().top;
+    var brandingMenu = $('.branding__menu').height();
+    if($(window).width() < 768) {
+      var superCategoryMenuHeight = 0;
+      var mobileNavigationMenuHeight = 0;
+      if ($('.block-alshaya-super-category-menu').length > 0) {
+        superCategoryMenuHeight = $('.block-alshaya-super-category-menu').height();
+        mobileNavigationMenuHeight = $('.menu--mobile-navigation').height();
+      }
+      exposedViewOffset = pageTitleOffset - superCategoryMenuHeight - mobileNavigationMenuHeight - brandingMenu;
+    }
+    else {
+      exposedViewOffset = pageTitleOffset;
+    }
 
     // Overriding Drupal core Views scroll to top ajax command.
     Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
