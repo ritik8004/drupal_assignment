@@ -135,56 +135,42 @@
     }
   };
 
+  var slickOptions = {
+    slidesToShow: drupalSettings.plp_slider.item,
+    slidesToScroll: 1,
+    vertical: false,
+    arrows: true,
+    focusOnSelect: false,
+    infinite: false,
+    touchThreshold: 1000,
+  };
+
+  function applyRtl(ocObject) {
+    if (isRTL() && $(window).width() > 1024) {
+      ocObject.attr('dir', 'rtl');
+      ocObject.slick(
+        $.extend({}, slickOptions, {rtl: true})
+      );
+      ocObject.slick('resize');
+    }
+    else {
+      ocObject.slick(slickOptions);
+      ocObject.slick('resize');
+    }
+  }
+
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      function applyRtl(ocObject, options) {
-        if (isRTL() && $(window).width() > 1025) {
-          ocObject.attr('dir', 'rtl');
-          ocObject.slick(
-            $.extend({}, options, {rtl: true})
-          );
-          if (context !== document) {
-            ocObject.slick('resize');
-          }
-        }
-        else {
-          ocObject.slick(options);
-          if (context !== document) {
-            ocObject.slick('resize');
-          }
-        }
-      }
-
       if (settings.plp_slider) {
-        var slickOptions = {
-          slidesToShow: settings.plp_slider.item,
-          slidesToScroll: 1,
-          vertical: false,
-          arrows: true,
-          focusOnSelect: false,
-          infinite: false,
-          touchThreshold: 1000,
-        };
-
-        // Change the image on Mouse hover.
-        // Adding a delay here to avoid flicker during scroll in between two slides.
-        // This also helps in smoothing the mouseout behaviour.
-        var delay = 500;
-        var setTimeoutConst;
-
-        $(document).on('initiateSlider', function(event, element) {
-          $(element).find('.search-lightSlider').once('alshayaSearchSlider').each(function () {
-            // Create the slider.
-            applyRtl($(this), slickOptions);
+        // Convert the list to slider.
+        $('article.node').once('refresh-thumbnail-gallery').on('mouseenter tap', function () {
+          // Create the slider.
+          $('.search-lightSlider', $(this)).once('search-slider').each(function () {
+            applyRtl($(this));
 
             // Handle click events in hover slider arrows without triggering click to PDP.
             $(this).find('.slick-arrow').on('click', function (e) {
-              if (e.preventDefault) {
-                e.preventDefault();
-              }
-              else {
-                e.returnValue = false;
-              }
+              e.preventDefault();
 
               if (!$(this).hasClass('slick-disabled')) {
                 if ($(this).attr('class') === 'slick-prev') {
@@ -194,31 +180,37 @@
                   $(this).parent().slick('slickNext');
                 }
               }
+
               return false;
             });
           });
-
-          $(element).find('.alshaya_search_slider .slick-slide').once('alshayaSearchSlider').hover(
-            function () {
-              // Clear timer when we enter a new thumbnail.
-              clearTimeout(setTimeoutConst);
-              $(this)
-                .closest('.alshaya_search_gallery')
-                .find('.alshaya_search_mainimage img')
-                .attr('src', $(this).find('img').attr('rel'));
-            },
-            function () {
-              // Store this as after delay the mouse is not on element, so this changes.
-              var el = $(this);
-              // Delay the resetting of main image post hover out.
-              setTimeoutConst = setTimeout(function () {
-                el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
-                  el.parent().find('li:first-child').find('img').attr('rel')
-                );
-              }, delay);
-            }
-          );
         });
+
+        // Change the image on Mouse hover.
+        // Adding a delay here to avoid flicker during scroll in between two slides.
+        // This also helps in smoothing the mouseout behaviour.
+        var delay = 500;
+        var setTimeoutConst;
+        $('.alshaya_search_slider .slick-slide', context).once('alshayaSearchSlider').hover(
+          function () {
+            // Clear timer when we enter a new thumbnail.
+            clearTimeout(setTimeoutConst);
+            $(this)
+              .closest('.alshaya_search_gallery')
+              .find('.alshaya_search_mainimage img')
+              .attr('src', $(this).find('img').attr('rel'));
+          },
+          function () {
+            // Store this as after delay the mouse is not on element, so this changes.
+            var el = $(this);
+            // Delay the resetting of main image post hover out.
+            setTimeoutConst = setTimeout(function () {
+              el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
+                el.parent().find('li:first-child').find('img').attr('rel')
+              );
+            }, delay);
+          }
+        );
       }
     }
   };
