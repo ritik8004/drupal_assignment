@@ -38,7 +38,8 @@
             $(this).attr('href', variantInfo.url[$(this).attr('hreflang')]);
           });
 
-          if (typeof variantInfo.promotions !== 'undefined') {
+          // Update dynamic promotions if product is changed.
+          if (typeof variantInfo.promotions !== 'undefined' && code === 'article_castor_id') {
             $('.promotions-full-view-mode', node).html(variantInfo.promotions);
           }
 

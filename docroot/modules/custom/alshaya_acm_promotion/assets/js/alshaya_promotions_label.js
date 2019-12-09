@@ -40,7 +40,10 @@
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
 
       $('form.sku-base-form').on('variant-selected', function (event, variant, code) {
-        Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+        // Reinitialize dynamic promotions if product is changed.
+        if (code === 'article_castor_id') {
+          Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+        }
       });
     }
   };
