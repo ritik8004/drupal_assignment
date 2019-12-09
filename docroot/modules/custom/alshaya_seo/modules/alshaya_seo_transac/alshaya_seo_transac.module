@@ -115,7 +115,12 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
 
         // If final price is available.
         if ($sku_entity->get('final_price')) {
-          $final_price = (float) $sku_entity->get('final_price')->getString();
+          $min_prices = $skuManager->getMinPrices($sku_entity);
+          $final_price = (float) $min_prices['final_price'];
+        }
+
+        if ($sku_entity->get('attr_is_buyable')) {
+          $availability = $skuManager->isProductInStock($sku_entity);
         }
 
         // Prepare rich snippet.
@@ -123,6 +128,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         $snippet['name'] = $product_title;
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
+        $snippet['availability'] = $availability;
         // @Todo: Change this once brand field is available.
         $snippet['brand'] = [
           '@type' => 'Thing',
