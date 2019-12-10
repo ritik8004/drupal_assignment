@@ -138,6 +138,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
           '@type' => "Offer",
           'priceCurrency' => $currency,
           'price' => $final_price,
+          'availability' => isset($availability) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
         ];
       }
     }
