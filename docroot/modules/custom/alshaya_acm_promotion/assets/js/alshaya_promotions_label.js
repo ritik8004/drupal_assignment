@@ -92,16 +92,6 @@
           Drupal.alshayaPromotions.stickyDynamicPromotionLabel();
           $('.promotions-dynamic-label').removeClass('mobile-only-dynamic-promotion');
         }
-
-        // Set label in alshayaAcmPromotionslabels to have static cache.
-        for (var dynamicPromotionSku in alshayaAcmPromotions) {
-          if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
-            if (drupalSettings.alshayaAcmPromotionslabels === undefined) {
-              drupalSettings.alshayaAcmPromotionslabels = {};
-            }
-            drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku] = this.innerHTML;
-          }
-        }
       });
 
       // Go ahead and display dynamic promotions.
