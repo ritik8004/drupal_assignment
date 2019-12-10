@@ -17,3 +17,8 @@ services:
       - '@current_route_match'
     tags:
       - { name: 'event_subscriber' }
+
+  alshaya_advanced_page.brand_builder:
+    class: Drupal\alshaya_advanced_page\Brand\AlshayaBrandListBuilder
+    arguments:
+      - '@entity_type.manager'
