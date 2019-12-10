@@ -18,7 +18,7 @@ use Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper;
 class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Brand List.
+   * Brand list helper.
    *
    * @var \Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper
    */
@@ -49,11 +49,21 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
    */
   public function build() {
     // Get product brand details.
-    $brand_img = $this->brandList->getBrandImages();
+    $terms = $this->brandList->loadBrandTerms();
+
+    if (!empty($terms)) {
+      foreach ($terms as $term) {
+        $brand_images[$term->tid] = [
+          'image' => $term->uri,
+          'title' => $term->name,
+          'link' => '/search?keywords=' . $term->name,
+        ];
+      }
+    }
 
     return [
       '#theme' => 'alshaya_brand_carousel',
-      '#brand_details' => $brand_img,
+      '#brand_details' => $brand_images,
     ];
   }
 

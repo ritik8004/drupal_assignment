@@ -44,7 +44,7 @@
     {% for brand in brand_details %}
       <li>
         <a href="{{ brand.link }}">
-          <img src="{{ brand.image }}" alt="{{ brand.title }}"/>
+          <img src="{{ file_url(brand.image) }}" alt="{{ brand.title }}"/>
         </a>
       </li>
     {% endfor %}
