@@ -122,6 +122,7 @@ class CartController {
       }
     }
 
+    $data['cart_promo'] = [];
     // If there is any rule applied on cart.
     if (!empty($cart_data['cart']['applied_rule_ids'])) {
       $drupal_promos_data = $this->drupal->getAllPromoData();
@@ -129,10 +130,16 @@ class CartController {
       if (!empty($drupal_promos_data)) {
         $cart_promo_rule_ids = explode(',', $cart_data['cart']['applied_rule_ids']);
         foreach ($drupal_promos_data as $drupal_promo_data) {
-          // If there is any rule applied on cart if free shipping.
-          if ($drupal_promo_data['promo_sub_tpe'] == 'free_shipping_order'
-          && in_array($drupal_promo_data['commerce_id'], $cart_promo_rule_ids)) {
-            $data['totals']['free_delivery'] = TRUE;
+          // If there is any rule applied on cart.
+          if (in_array($drupal_promo_data['commerce_id'], $cart_promo_rule_ids)) {
+            $data['cart_promo'][] = [
+              'label' => $drupal_promo_data['promo_label'],
+              'description' => strip_tags($drupal_promo_data['promo_desc']),
+            ];
+            // If rule is of type `free shipping`.
+            if ($drupal_promo_data['promo_sub_tpe'] == 'free_shipping_order') {
+              $data['totals']['free_delivery'] = TRUE;
+            }
           }
         }
       }
