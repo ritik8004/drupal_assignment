@@ -22,6 +22,7 @@ export default class Cart extends React.Component {
       'total_items': null,
       'amount': null,
       'coupon_code': null,
+      'cart_promo': null,
       'in_stock': true
     };
   }
@@ -39,6 +40,7 @@ export default class Cart extends React.Component {
           recommended_products: data.recommended_products,
           total_items: data.items_qty,
           amount: data.cart_total,
+          cart_promo: data.cart_promo,
           wait: false,
           coupon_code: data.coupon_code,
           in_stock: data.in_stock
@@ -98,7 +100,7 @@ export default class Cart extends React.Component {
             </div>
             <div className="spc-sidebar">
               <CartPromoBlock coupon_code={this.state.coupon_code} />
-              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock}/>
+              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo}/>
             </div>
           </div>
           <div className="spc-post-content">
