@@ -18,7 +18,9 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
-  alshaya_advanced_page.brand_builder:
-    class: Drupal\alshaya_advanced_page\Brand\AlshayaBrandListBuilder
+  alshaya.brand_list_helper:
+    class: Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper
     arguments:
-      - '@entity_type.manager'
+      - '@database'
+      - '@language_manager'
+      - '@stream_wrapper_manager'

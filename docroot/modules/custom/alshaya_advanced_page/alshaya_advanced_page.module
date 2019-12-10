@@ -446,3 +446,18 @@ function alshaya_advanced_page_node_view(array &$build, EntityInterface $entity,
   $response->send();
   exit;
 }
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_advanced_page_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['alshaya_brand_carousel'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'brand_details' => [],
+    ],
+  ];
+  return $items;
+}
