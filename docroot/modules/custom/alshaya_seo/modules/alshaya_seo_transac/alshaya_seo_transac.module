@@ -127,7 +127,6 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         $snippet['name'] = $product_title;
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
-        $snippet['availability'] = $availability;
         $snippet['sku'] = $sku_id;
         // @Todo: Change this once brand field is available.
         $snippet['brand'] = [
@@ -138,7 +137,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
           '@type' => "Offer",
           'priceCurrency' => $currency,
           'price' => $final_price,
-          'availability' => ($availability === true) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
+          'availability' => ($availability === TRUE) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
         ];
       }
     }
