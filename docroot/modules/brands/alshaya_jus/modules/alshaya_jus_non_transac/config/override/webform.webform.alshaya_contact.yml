@@ -32,7 +32,7 @@ elements: |
     '#type': mobile_number
     '#title': 'Mobile number'
     '#verify': none
-    '#required': true
+    '#required': false
   email:
     '#type': email
     '#title': 'Email Address'
