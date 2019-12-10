@@ -432,6 +432,7 @@ class AlshayaPromoLabelManager {
       $discount_amount = $promotion_data['discount'];
       $z = NULL;
 
+      // Generate dynamic promotion label based on promotion subtype.
       switch ($promotion_subtype) {
         case 'buy_x_get_y_cheapest_free':
           $z = ($discount_step + $discount_amount) - $eligible_cart_qty;
@@ -444,16 +445,15 @@ class AlshayaPromoLabelManager {
 
         case 'groupn':
           $z = $discount_step - $eligible_cart_qty;
+          $amount = strip_tags(alshaya_acm_price_format($discount_amount));
 
           if ($z >= 1) {
-            $currency = $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code');
             $label['dynamic_label'] = $this->t(
-              'Add @z more to get @step items for @amount @currency',
+              'Add @z more to get @step items for @amount',
               [
                 '@z' => $z,
                 '@step' => $discount_step,
-                '@amount' => $discount_amount,
-                '@currency' => $currency,
+                '@amount' => $amount,
               ]
             );
           }
@@ -461,15 +461,14 @@ class AlshayaPromoLabelManager {
 
         case 'groupn_fixdisc':
           $z = $discount_step - $eligible_cart_qty;
+          $amount = strip_tags(alshaya_acm_price_format($discount_amount));
 
           if ($z >= 1) {
-            $currency = $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code');
             $label['dynamic_label'] = $this->t(
-              'Add @z more to get @amount @currency off',
+              'Add @z more to get @amount off',
               [
                 '@z' => $z,
-                '@amount' => $discount_amount,
-                '@currency' => $currency,
+                '@amount' => $amount,
               ]
             );
           }
@@ -490,6 +489,7 @@ class AlshayaPromoLabelManager {
           break;
       }
 
+      // Default label if promotion is applied.
       if (isset($z) && ($z < 1)) {
         $label['dynamic_label'] = $this->t('Add more and keep saving');
       }
