@@ -23,7 +23,7 @@ import StickyFilter from '../panels/StickyFilter';
 import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
-import { hasCategoryFilter } from '../../utils';
+import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -33,6 +33,16 @@ const SearchResultsComponent = props => {
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
   const indexName = drupalSettings.algoliaSearch.indexName;
+
+  // Get default page to display for back to search,
+  // and delete the stored info from local storage.
+  const storedvalues = getAlgoliaStorageValues();
+  var defaultpageRender = false;
+  if (storedvalues !== null && typeof storedvalues.page !== null) {
+    defaultpageRender = storedvalues.page;
+    delete storedvalues.page;
+    localStorage.removeItem(window.location.hash);
+  }
 
   return (
     <InstantSearch
@@ -90,7 +100,7 @@ const SearchResultsComponent = props => {
           )}
         </SelectedFilters>
         <div id="hits" className="c-products-list product-small view-search">
-          <SearchResultInfiniteHits>
+          <SearchResultInfiniteHits defaultpageRender={defaultpageRender}>
             {(paginationArgs) => (
               <Pagination {...paginationArgs}>{Drupal.t('Load more products')}</Pagination>
             )}

@@ -9,7 +9,10 @@
   // For RTL, we have some code to mess with page scroll.
   // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
   $(window).on('pageshow', function () {
-    setTimeout(Drupal.processBackToSearch, 10);
+    var storage_value = getAlgoliaStorageValues();
+    if (typeof storage_value !== 'undefined' && storage_value !== null) {
+      setTimeout(Drupal.processBackToSearch(storage_value), 10);
+    }
   });
 
   /**
@@ -67,10 +70,9 @@
     localStorage.setItem(window.location.hash, JSON.stringify(storage_value));
   }
 
-  Drupal.processBackToSearch = function () {
+  Drupal.processBackToSearch = function (storage_value) {
     // On page load, apply filter/sort if any.
     $('html').once('back-to-list').each(function () {
-      var storage_value = getAlgoliaStorageValues();
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         // To adjust the grid view mode.
         if (typeof storage_value.grid_type !== 'undefined') {

@@ -4,15 +4,19 @@ import Price from '../price';
 import Promotions from '../promotions';
 import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
+import { getCurrentSearchQueryString } from '../../utils';
 
 const Teaser = ({hit}) => {
   const swatches = (null);
 
   const localStorageStore = (event) => {
     const articleNode = event.target.closest('.node--view-mode-search-result');
+    const queryString =  getCurrentSearchQueryString();
+
     var storage_details = {
       sku: articleNode.getAttribute('data-sku'),
       grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
+      page: parseInt(queryString.page)
     };
 
     localStorage.setItem(window.location.hash, JSON.stringify(storage_details));
