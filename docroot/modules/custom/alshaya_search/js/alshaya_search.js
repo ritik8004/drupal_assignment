@@ -6,6 +6,7 @@
   'use strict';
 
   var browserFacetUrl = null;
+  var setTimeoutConst = null;
 
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
@@ -183,34 +184,32 @@
 
               return false;
             });
+
+            // Change the image on Mouse hover.
+            // Adding a delay here to avoid flicker during scroll in between two slides.
+            // This also helps in smoothing the mouseout behaviour.
+            $('.slick-slide', $(this)).hover(
+              function () {
+                // Clear timer when we enter a new thumbnail.
+                clearTimeout(setTimeoutConst);
+                $(this)
+                  .closest('.alshaya_search_gallery')
+                  .find('.alshaya_search_mainimage img')
+                  .attr('src', $(this).find('img').attr('rel'));
+              },
+              function () {
+                // Store this as after delay the mouse is not on element, so this changes.
+                var el = $(this);
+                // Delay the resetting of main image post hover out.
+                setTimeoutConst = setTimeout(function () {
+                  el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
+                    el.parent().find('li:first-child').find('img').attr('rel')
+                  );
+                }, 500);
+              }
+            );
           });
         });
-
-        // Change the image on Mouse hover.
-        // Adding a delay here to avoid flicker during scroll in between two slides.
-        // This also helps in smoothing the mouseout behaviour.
-        var delay = 500;
-        var setTimeoutConst;
-        $('.alshaya_search_slider .slick-slide', context).once('alshayaSearchSlider').hover(
-          function () {
-            // Clear timer when we enter a new thumbnail.
-            clearTimeout(setTimeoutConst);
-            $(this)
-              .closest('.alshaya_search_gallery')
-              .find('.alshaya_search_mainimage img')
-              .attr('src', $(this).find('img').attr('rel'));
-          },
-          function () {
-            // Store this as after delay the mouse is not on element, so this changes.
-            var el = $(this);
-            // Delay the resetting of main image post hover out.
-            setTimeoutConst = setTimeout(function () {
-              el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
-                el.parent().find('li:first-child').find('img').attr('rel')
-              );
-            }, delay);
-          }
-        );
       }
     }
   };
