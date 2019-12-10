@@ -10,7 +10,8 @@ export default class CartPromoBlock extends React.Component {
     this.state = {
       'promo_applied': false,
       'promo_code': '',
-      'button_text': Drupal.t('Apply')
+      'button_text': Drupal.t('Apply'),
+      'disabled': false
     };
   }
 
@@ -19,7 +20,8 @@ export default class CartPromoBlock extends React.Component {
       this.setState({
         promo_applied: true,
         promo_code: this.props.coupon_code,
-        button_text: Drupal.t('Remove')
+        button_text: Drupal.t('Remove'),
+        disabled: true
       });
 
       document.getElementById('promo-code').value = this.props.coupon_code;
@@ -61,7 +63,8 @@ export default class CartPromoBlock extends React.Component {
             this.setState({
               promo_applied: true,
               promo_code: promo_value,
-              button_text: Drupal.t('Remove')
+              button_text: Drupal.t('Remove'),
+              disabled: true
             });
           }
           else {
@@ -69,7 +72,8 @@ export default class CartPromoBlock extends React.Component {
             this.setState({
               promo_applied: false,
               promo_code: '',
-              button_text: Drupal.t('Apply')
+              button_text: Drupal.t('Apply'),
+              disabled: false
             });
 
             document.getElementById('promo-code').value = '';
@@ -92,7 +96,7 @@ export default class CartPromoBlock extends React.Component {
       <div className="spc-promo-code-block">
         <CheckoutSectionTitle>{Drupal.t('have a promo code?')}</CheckoutSectionTitle>
         <div className="block-content">
-          <input id="promo-code" type="text" placeholder={Drupal.t('Enter your promo code here')} />
+          <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('Enter your promo code here')} />
           <button id="promo-action-button" className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
           <div id="promo-message"/>
         </div>
