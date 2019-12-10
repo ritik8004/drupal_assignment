@@ -28,6 +28,18 @@
   }
 }
 
+.paragraph--type--promo-block {
+  .field-link a {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    font-size: 0;
+  }
+}
+
 // @TODO: Move to single class.
 .paragraph-t-1-row-2-col-dept,
 .paragraph-t-1-row-2-col {
@@ -96,5 +108,23 @@
         margin-bottom: 1.5rem;
       }
     }
+  }
+}
+
+#block-views-block-product-list-banner-non-transac {
+  @include breakpoint($upto-palm) {
+    margin-top: -1.875rem;
+    width: 100vw;
+    margin-#{$left}: -1rem;
+  }
+
+  @include breakpoint($upto-lap) {
+    width: 100vw;
+    margin-#{$left}: -3%;
+    margin-top: -1.5625rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-top: -0.3125rem;
   }
 }

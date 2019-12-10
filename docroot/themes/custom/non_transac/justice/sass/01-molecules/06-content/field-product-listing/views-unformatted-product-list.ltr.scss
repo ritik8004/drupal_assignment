@@ -31,6 +31,10 @@
 }
 
 .pager {
+  @include breakpoint($desk) {
+    margin-top: -0.3125rem;
+  }
+
   a {
     border: 0;
     line-height: 3.125rem;
@@ -62,6 +66,10 @@
       width: 100%;
     }
   }
+
+  .field-content p {
+    margin-top: 0;
+  }
 }
 
 .product-info {
@@ -76,6 +84,15 @@
       font-family: $jus_regular;
       font-size: 0.875rem;
       margin-bottom: 1.25rem;
+    }
+  }
+}
+
+.view-product-list {
+  .view-product-list__item {
+    .view-product-item__meta {
+      // we need this letter spacing to match the VD.
+      letter-spacing: -0.2px;
     }
   }
 }

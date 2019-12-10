@@ -43,3 +43,11 @@
     background-image: url('/themes/custom/non_transac/justice/images/icons/svg/ic-share.svg');
   }
 }
+
+.view-product-item__inner-container {
+  &.share-overlay {
+    &::after {
+      margin-bottom: 0.25rem;
+    }
+  }
+}

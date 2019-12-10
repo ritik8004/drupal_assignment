@@ -4,6 +4,10 @@
   padding: 0.75rem 0.875rem;
   background-color: transparent;
 
+  @include breakpoint($desk) {
+    width: 30%;
+  }
+
   a {
     color: $signup_text;
     text-align: $left;
@@ -30,6 +34,12 @@
       display: none;
     }
   }
+}
+
+.block-sign-up-desktop a:hover,
+.region-secondary-header .block-store-link a:hover,
+.block-find-store-heading a:hover {
+  color: $dark-pink;
 }
 
 #block-headerlinks {
