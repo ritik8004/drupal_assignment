@@ -175,15 +175,15 @@ class AlshayaPromotionsManager {
    *   - 'field': Name of the field being queried.
    *   - 'value': The value for field.
    *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
-   * @param array $orders
-   *   An array of associative array containing orders, to be used in query.
+   * @param array $sort_orders
+   *   An array of associative array containing sort orders for query.
    *
    * @return array
    *   Array of node objects.
    *
    * @see \Drupal\Core\Entity\Query\QueryInterface
    */
-  public function getAllPromotions(array $conditions = [], array $orders = []) {
+  public function getAllPromotions(array $conditions = [], array $sort_orders = []) {
     $nodes = [];
 
     $query = $this->nodeStorage->getQuery();
@@ -195,9 +195,9 @@ class AlshayaPromotionsManager {
       }
     }
 
-    foreach ($orders as $order) {
-      if (!empty($order['field']) && !empty($order['direction'])) {
-        $query->sort($order['field'], $order['direction']);
+    foreach ($sort_orders as $sort_order) {
+      if (!empty($sort_order['field']) && !empty($sort_order['direction'])) {
+        $query->sort($sort_order['field'], $sort_order['direction']);
       }
     }
 

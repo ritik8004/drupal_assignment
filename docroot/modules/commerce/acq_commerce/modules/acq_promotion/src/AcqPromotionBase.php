@@ -16,7 +16,7 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
    * {@inheritdoc}
    */
   public function getId() {
-    return $this->pluginId;
+    return $this->getPluginId();
   }
 
   /**
