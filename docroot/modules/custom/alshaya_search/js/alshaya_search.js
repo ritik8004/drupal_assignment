@@ -136,33 +136,35 @@
     }
   };
 
-  var slickOptions = {
-    slidesToShow: drupalSettings.plp_slider.item,
-    slidesToScroll: 1,
-    vertical: false,
-    arrows: true,
-    focusOnSelect: false,
-    infinite: false,
-    touchThreshold: 1000,
-  };
+  if (drupalSettings.plp_slider !== undefined && drupalSettings.plp_slider !== null) {
+    var slickOptions = {
+      slidesToShow: drupalSettings.plp_slider.item,
+      slidesToScroll: 1,
+      vertical: false,
+      arrows: true,
+      focusOnSelect: false,
+      infinite: false,
+      touchThreshold: 1000,
+    };
 
-  function applyRtl(ocObject) {
-    if (isRTL() && $(window).width() > 1024) {
-      ocObject.attr('dir', 'rtl');
-      ocObject.slick(
-        $.extend({}, slickOptions, {rtl: true})
-      );
-      ocObject.slick('resize');
-    }
-    else {
-      ocObject.slick(slickOptions);
-      ocObject.slick('resize');
+    function applyRtl(ocObject) {
+      if (isRTL() && $(window).width() > 1024) {
+        ocObject.attr('dir', 'rtl');
+        ocObject.slick(
+          $.extend({}, slickOptions, {rtl: true})
+        );
+        ocObject.slick('resize');
+      }
+      else {
+        ocObject.slick(slickOptions);
+        ocObject.slick('resize');
+      }
     }
   }
 
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      if (settings.plp_slider) {
+      if (settings.plp_slider !== undefined && settings.plp_slider !== null) {
         // Convert the list to slider.
         $('article.node').once('refresh-thumbnail-gallery').on('mouseenter tap', function () {
           // Create the slider.
@@ -308,4 +310,4 @@
     }
   });
 
-})(jQuery);
+})(jQuery, Drupal, drupalSettings);
