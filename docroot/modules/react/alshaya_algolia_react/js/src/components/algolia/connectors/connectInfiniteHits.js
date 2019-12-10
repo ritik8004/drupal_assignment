@@ -119,9 +119,6 @@ export default createConnector({
     var hasPrevious = this._firstReceivedPage > 0;
     var lastPageIndex = nbPages - 1;
     var hasMore = page < lastPageIndex;
-    console.log(page);
-    console.log(lastPageIndex);
-    console.log(hasMore);
 
     var refinePrevious = function refinePrevious(event) {
       return _this.refine(event, _this._firstReceivedPage - 1);
