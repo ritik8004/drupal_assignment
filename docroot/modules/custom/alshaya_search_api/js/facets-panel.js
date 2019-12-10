@@ -514,21 +514,23 @@
         else {
           filterScrollPosition = pageTitleOffset;
         }
+        // on window onload so that it will check for subcategory-listing-enabled class
+        // after page load only
+        if ($('.subcategory-listing-enabled').length < 1) {
+          Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
+            var offset = $(response.selector).offset();
+
+            var scrollTarget = response.selector;
+            while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
+              scrollTarget = $(scrollTarget).parent();
+            }
+
+            if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+              $(scrollTarget).animate({ scrollTop: filterScrollPosition }, 500);
+            }
+          };
+        }
       });
-      if ($('.subcategory-listing-enabled').length < 1) {
-        Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
-          var offset = $(response.selector).offset();
-
-          var scrollTarget = response.selector;
-          while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
-            scrollTarget = $(scrollTarget).parent();
-          }
-
-          if (offset.top - 10 < $(scrollTarget).scrollTop()) {
-            $(scrollTarget).animate({ scrollTop: filterScrollPosition }, 500);
-          }
-        };
-      }
     }
   };
 
