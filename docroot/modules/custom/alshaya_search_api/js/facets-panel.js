@@ -485,10 +485,46 @@
     }
   };
 
-  // Move plp to page title on slection of any filters.
-  if ($('.subcategory-listing-enabled').length < 1) {
-    pageScrollToTitle();
-  }
+  /**
+   * Scroll page to page title on selection of any of the facet item on PLPs except panty-guide.
+   */
+  Drupal.behaviors.alshayaAcmPlpFilterSelectionScroll = {
+    attach: function () {
+      var filterScrollPosition;
+
+      $(window).once('plp-filter-selection').on('load', function () {
+        // To get the offset top of plp Title, using title offset top.
+        var pageTitleOffset = $('#block-page-title').offset().top;
+        var brandingMenu = $('.branding__menu').height();
+        if($(window).width() < 768) {
+          var superCategoryMenuHeight = 0;
+          var mobileNavigationMenuHeight = 0;
+          if ($('.block-alshaya-super-category-menu').length > 0) {
+            superCategoryMenuHeight = $('.block-alshaya-super-category-menu').height();
+            mobileNavigationMenuHeight = $('.menu--mobile-navigation').height();
+          }
+          filterScrollPosition = pageTitleOffset - superCategoryMenuHeight - mobileNavigationMenuHeight - brandingMenu;
+        }
+        else {
+          filterScrollPosition = pageTitleOffset;
+        }
+      });
+      if ($('.subcategory-listing-enabled').length < 1) {
+        Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
+          var offset = $(response.selector).offset();
+
+          var scrollTarget = response.selector;
+          while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
+            scrollTarget = $(scrollTarget).parent();
+          }
+
+          if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+            $(scrollTarget).animate({ scrollTop: filterScrollPosition }, 500);
+          }
+        };
+      }
+    }
+  };
 
   /**
    * Update the facet titles with the selected value.
@@ -632,42 +668,5 @@
       }
     }
   };
-
-  /**
-   * Scroll page to page title on selection of any of the facet item.
-   */
-  function pageScrollToTitle() {
-    //variable to set scroll position to be used in viewsScrollTop command for all PLPs except panty guide.
-    var exposedViewOffset = 0;
-    // To get the offset top of plp Title, using title offset top.
-    var pageTitleOffset = $('#block-page-title').offset().top;
-    var brandingMenu = $('.branding__menu').height();
-    if($(window).width() < 768) {
-      var superCategoryMenuHeight = 0;
-      var mobileNavigationMenuHeight = 0;
-      if ($('.block-alshaya-super-category-menu').length > 0) {
-        superCategoryMenuHeight = $('.block-alshaya-super-category-menu').height();
-        mobileNavigationMenuHeight = $('.menu--mobile-navigation').height();
-      }
-      exposedViewOffset = pageTitleOffset - superCategoryMenuHeight - mobileNavigationMenuHeight - brandingMenu;
-    }
-    else {
-      exposedViewOffset = pageTitleOffset;
-    }
-
-    // Overriding Drupal core Views scroll to top ajax command.
-    Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
-      var offset = $(response.selector).offset();
-
-      var scrollTarget = response.selector;
-      while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
-        scrollTarget = $(scrollTarget).parent();
-      }
-
-      if (offset.top - 10 < $(scrollTarget).scrollTop()) {
-        $(scrollTarget).animate({ scrollTop: exposedViewOffset }, 500);
-      }
-    };
-  }
 
 })(jQuery, Drupal);
