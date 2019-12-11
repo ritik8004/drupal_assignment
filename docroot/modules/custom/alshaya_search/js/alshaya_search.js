@@ -2,7 +2,7 @@
  * @file
  */
 
-(function ($) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   var browserFacetUrl = null;
