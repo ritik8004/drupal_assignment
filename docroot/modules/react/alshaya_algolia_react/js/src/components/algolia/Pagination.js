@@ -21,8 +21,7 @@ const PaginationStats = connectStats(({nbHits, currentResults}) => {
   );
 });
 
-export default function Pagination(props) {
-
+const Pagination = React.memo((props) => {
   const loadNextCotent = () => {
     // const bodyNode = document.getElementsByTagName( 'body' );
     showLoader();
@@ -49,7 +48,10 @@ export default function Pagination(props) {
       </ul>
     );
   }
-  else {
-    return (null);
-  }
-}
+
+  return (null);
+}, (prevProps, nextProps) => {
+  return (prevProps.results === nextProps.results && prevProps.hasMore === nextProps.hasMore);
+});
+
+export default Pagination;

@@ -21,7 +21,19 @@ const SliderElement = props => {
   );
 };
 
-class SearchGallery extends React.Component {
+const sliderSettings = {
+  dots: false,
+  infinite: false,
+  slidesToShow: drupalSettings.reactTeaserView.gallery.plp_slider.item,
+  slidesToScroll: 1,
+  vertical: false,
+  arrows: true,
+  touchThreshold: 1000,
+  variableWidth: false,
+};
+
+
+class SearchGallery extends React.PureComponent {
 
   static defaultProps = {
     media: [],
@@ -31,17 +43,6 @@ class SearchGallery extends React.Component {
     super(props);
     this.mainImageRef = React.createRef();
     this.mainImage = props.media.length > 0 ? props.media[0] : {};
-
-    this.settings = {
-      dots: false,
-      infinite: false,
-      slidesToShow: drupalSettings.reactTeaserView.gallery.plp_slider.item,
-      slidesToScroll: 1,
-      vertical: false,
-      arrows: true,
-      touchThreshold: 1000,
-      variableWidth: false,
-    };
   }
 
   changeImg = event => {
@@ -76,7 +77,7 @@ class SearchGallery extends React.Component {
       ));
     });
 
-    const sliderStatus = thumbnails.length > this.settings.slidesToShow ? 'true' : 'false';
+    const sliderStatus = thumbnails.length > sliderSettings.slidesToShow ? 'true' : 'false';
 
     return (
       <div className="alshaya_search_gallery">
@@ -89,7 +90,7 @@ class SearchGallery extends React.Component {
           />
         </div>
         <div className="alshaya_search_slider" data-slider-status={sliderStatus}>
-          <Slider {...this.settings} className="search-lightSlider">
+          <Slider {...sliderSettings} className="search-lightSlider">
             {thumbnails}
           </Slider>
         </div>

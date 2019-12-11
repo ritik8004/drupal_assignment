@@ -30,11 +30,18 @@ const InputButtons = React.memo((props) => {
 class Autocomplete extends React.Component {
   timerId = null;
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
-  searchQuery = getCurrentSearchQuery();
 
-  state = {
-    value: this.searchQuery !== null && this.searchQuery !== '' ? this.searchQuery : this.props.currentRefinement,
-  };
+  constructor(props)  {
+    super(props);
+    const searchQuery = getCurrentSearchQuery();
+    this.state = {
+      value: searchQuery !== null && searchQuery !== '' ? searchQuery : props.currentRefinement,
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value);
+  }
 
   componentDidMount()  {
     this.onKeyUp();

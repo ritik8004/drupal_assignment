@@ -12,11 +12,13 @@ export default connectInfiniteHits(props => {
   // Get height of each article and set the max height to all article tags.
   useEffect(
     () => {
-      setTimeout(() => {
-        Drupal.blazyRevalidate();
-        Drupal.algoliaReact.stickyfacetfilter();
-        removeLoader();
-      }, updateAfter);
+      if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
+        setTimeout(() => {
+          Drupal.blazyRevalidate();
+          Drupal.algoliaReact.stickyfacetfilter();
+          removeLoader();
+        }, updateAfter);
+      }
     }, [hits]
   );
 
