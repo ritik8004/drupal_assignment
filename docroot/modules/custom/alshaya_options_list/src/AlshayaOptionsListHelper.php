@@ -300,6 +300,8 @@ class AlshayaOptionsListHelper {
 
     foreach ($raw_facet_results as $attribute_code => $results) {
       $attribute_code_key = $attribute_code;
+      // Remove 'attr_' from facet result key
+      // to match the attribute code we get from terms.
       if (!in_array($attribute_code, $attribute_codes) && strpos($attribute_code, 'attr_') !== FALSE) {
         $attribute_code_key = str_replace('attr_', '', $attribute_code);
       }
