@@ -558,7 +558,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
       $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
 
       if (empty($term)) {
-        return AccessResult::neutral();
+        return;
       }
 
       $result = AccessResult::forbiddenIf($term->get('field_group_by_sub_categories')->getString());
