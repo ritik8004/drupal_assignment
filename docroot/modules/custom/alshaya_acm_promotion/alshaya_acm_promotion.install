@@ -13,6 +13,15 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Add Translations for Dynamic Promo Labels.
+ */
+function alshaya_acm_promotion_update_8018() {
+  _alshaya_acm_promotion_add_promotions_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new setting 'dynamic_labels'.
  */
 function alshaya_acm_promotion_update_8017() {
@@ -238,6 +247,15 @@ function _alshaya_acm_promotion_add_promotions_translations() {
   $strings = [
     'Add @z more to get FREE item' => [
       'ar' => 'أضف @z واحصل على قطعة مجاناً',
+    ],
+    'Add @z more to get @step items for @amount' => [
+      'ar' => 'اضف المزيد من @z واحصل على  المزيد من المنتجات بسعر  @amount',
+    ],
+    'Add @z more to get @amount off' => [
+      'ar' => 'اضف المزيد من @z واحصل على خصم بقيمة @amount',
+    ],
+    'Add @z more to get @amount% off' => [
+      'ar' => 'اضف المزيد من @z واحصل على خصم % @amount',
     ],
     'Add more and keep saving' => [
       'ar' => 'أضف أكثر ووفر أكثر',
