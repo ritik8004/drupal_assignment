@@ -19,6 +19,7 @@ use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper;
 
 /**
  * Implements hook_acq_sku_sync_categories_delete_alter().
@@ -460,4 +461,28 @@ function alshaya_advanced_page_theme($existing, $type, $theme, $path) {
     ],
   ];
   return $items;
+}
+
+/**
+ * Implements hook_taxonomy_term_presave().
+ */
+function alshaya_advanced_page_taxonomy_term_presave(TermInterface $term) {
+  if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
+    if ($term->get('field_sku_attribute_code')->value === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
+      // Invalidate page cache.
+      Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
+    }
+  }
+}
+
+/**
+ * Implements hook_taxonomy_term_delete().
+ */
+function alshaya_advanced_page_taxonomy_term_delete(TermInterface $term) {
+  if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
+    if ($term->get('field_sku_attribute_code')->value === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
+      // Invalidate page cache.
+      Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
+    }
+  }
 }

@@ -10,6 +10,11 @@ use Drupal\Core\Database\Connection;
 class AlshayaBrandListHelper {
 
   /**
+   * Brand cache tag.
+   */
+  const BRAND_CACHETAG = 'alshaya-brand-list';
+
+  /**
    * Taxonomy used for product brand.
    */
   const BRAND_VID = 'sku_product_option';
@@ -39,8 +44,7 @@ class AlshayaBrandListHelper {
   /**
    * Load all product brand terms.
    */
-  public function loadBrandTerms() {
-
+  public function getBrandTerms() {
     $query = $query = $this->connection->select('taxonomy_term_field_data', 'ttfd');
     $query->fields('ttfd', ['tid', 'name']);
     $query->innerJoin('taxonomy_term__field_sku_attribute_code', 'ttac', 'ttac.entity_id = ttfd.tid');

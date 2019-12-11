@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides alshaya brand carousel block.
@@ -49,7 +50,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
    */
   public function build() {
     // Get product brand details.
-    $terms = $this->brandList->loadBrandTerms();
+    $terms = $this->brandList->getBrandTerms();
 
     if (!empty($terms)) {
       foreach ($terms as $term) {
@@ -65,6 +66,19 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       '#theme' => 'alshaya_brand_carousel',
       '#brand_details' => $brand_images,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Discard cache for the block once a brand term gets updated/deleted.
+    $this->cacheTags[] = AlshayaBrandListHelper::BRAND_CACHETAG;
+
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      $this->cacheTags
+    );
   }
 
 }
