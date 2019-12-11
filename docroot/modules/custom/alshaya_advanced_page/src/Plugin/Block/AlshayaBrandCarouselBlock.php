@@ -58,7 +58,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
         $brand_images[$term->tid] = [
           'image' => $term->uri,
           'title' => $term->name,
-          'link' => '/search?keywords=' . $term->name,
+          'link' => '/search?f[0]=product_brand:' . $term->name,
         ];
       }
     }
