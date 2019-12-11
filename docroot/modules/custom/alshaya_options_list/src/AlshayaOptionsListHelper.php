@@ -299,11 +299,14 @@ class AlshayaOptionsListHelper {
     $raw_facet_results = $results->getExtraData('search_api_facets');
 
     foreach ($raw_facet_results as $attribute_code => $results) {
+      $attribute_code_key = $attribute_code;
+      if (!in_array($attribute_code, $attribute_codes) && strpos($attribute_code, 'attr_') !== FALSE) {
+        $attribute_code_key = str_replace('attr_', '', $attribute_code);
+      }
       foreach ($results as $filter) {
-        $facet_results[$attribute_code][] = trim($filter['filter'], '"');
+        $facet_results[$attribute_code_key][] = trim($filter['filter'], '"');
       }
     }
-
     return $facet_results;
   }
 
