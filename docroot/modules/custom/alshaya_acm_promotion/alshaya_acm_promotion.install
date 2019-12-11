@@ -15,7 +15,7 @@ use Drupal\field\Entity\FieldConfig;
  *
  * Re-saving the `promotion` resource to moved outside mobile app.
  */
-function alshaya_acm_promotion_update_8018() {
+function alshaya_acm_promotion_update_8019() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
@@ -25,6 +25,15 @@ function alshaya_acm_promotion_update_8018() {
 
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
   \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add Translations for Dynamic Promo Labels.
+ */
+function alshaya_acm_promotion_update_8018() {
+  _alshaya_acm_promotion_add_promotions_translations();
 }
 
 /**
@@ -255,6 +264,15 @@ function _alshaya_acm_promotion_add_promotions_translations() {
   $strings = [
     'Add @z more to get FREE item' => [
       'ar' => 'أضف @z واحصل على قطعة مجاناً',
+    ],
+    'Add @z more to get @step items for @amount' => [
+      'ar' => 'اضف المزيد من @z واحصل على  المزيد من المنتجات بسعر  @amount',
+    ],
+    'Add @z more to get @amount off' => [
+      'ar' => 'اضف المزيد من @z واحصل على خصم بقيمة @amount',
+    ],
+    'Add @z more to get @amount% off' => [
+      'ar' => 'اضف المزيد من @z واحصل على خصم % @amount',
     ],
     'Add more and keep saving' => [
       'ar' => 'أضف أكثر ووفر أكثر',
