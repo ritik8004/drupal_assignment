@@ -51,6 +51,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   public function build() {
     // Get product brand details.
     $terms = $this->brandList->getBrandTerms();
+    $brand_images = [];
 
     if (!empty($terms)) {
       foreach ($terms as $term) {
