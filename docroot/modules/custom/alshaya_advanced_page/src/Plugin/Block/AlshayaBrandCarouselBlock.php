@@ -73,12 +73,9 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
    */
   public function getCacheTags() {
     // Discard cache for the block once a brand term gets updated/deleted.
-    $this->cacheTags[] = AlshayaBrandListHelper::BRAND_CACHETAG;
-
     return Cache::mergeTags(
       parent::getCacheTags(),
-      $this->cacheTags
-    );
+      [AlshayaBrandListHelper::BRAND_CACHETAG]);
   }
 
 }
