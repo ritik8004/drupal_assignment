@@ -10,6 +10,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Create sitemap variants based on L1 categories.
+ */
+function alshaya_seo_transac_update_8408() {
+  $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
+  $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $term_data = $produt_category->getCategoryTreeCached();
+  if ($term_data) {
+    foreach ($term_data as $parent) {
+      $settings = ['type' => 'default_hreflang', 'label' => $parent['label']];
+      $sitemap_manager->addSitemapVariant('shop-' . str_replace(' ', '-', strtolower(trim($parent['label']))), $settings);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update metatag configurations.
  */
 function alshaya_seo_transac_update_8407() {

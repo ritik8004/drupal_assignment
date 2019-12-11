@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -514,4 +515,82 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
     // Add GTM data.
     $object['gtm'] = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function alshaya_seo_transac_taxonomy_term_insert(TermInterface $term) {
+  if ($term->bundle() == 'acq_product_category') {
+    _alshaya_seo_transac_add_sitemap_variant($term);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_seo_transac_entity_presave(EntityInterface $entity) {
+  if ($entity instanceof EntityInterface && $entity->bundle() == 'acq_product_category' && !empty($entity->id())) {
+    $term = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->load($entity->id());
+    _alshaya_seo_transac_remove_sitemap_variant($term);
+    _alshaya_seo_transac_add_sitemap_variant($entity);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_seo_transac_taxonomy_term_delete(TermInterface $term) {
+  if ($term->bundle() == 'acq_product_category') {
+    _alshaya_seo_transac_remove_sitemap_variant($term);
+  }
+}
+
+/**
+ * A helper function to remove variant.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   The term object.
+ */
+function _alshaya_seo_transac_remove_sitemap_variant(TermInterface $term) {
+  $variant_name = _alshaya_seo_transac_sitemap_variant_name($term);
+
+  $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
+  $variants = array_keys($sitemap_manager->getSitemapVariants());
+
+  if (in_array($variant_name, $variants)) {
+    $variants = $sitemap_manager->removeSitemapVariants($variant_name);
+  }
+
+}
+
+/**
+ * A helper function to add variant.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   The term object.
+ */
+function _alshaya_seo_transac_add_sitemap_variant(TermInterface $term) {
+  $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $parents = array_keys($produt_category->getCategoryTermParents($term));
+  $variant_name = _alshaya_seo_transac_sitemap_variant_name($term);
+
+  $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
+  $variants = array_keys($sitemap_manager->getSitemapVariants());
+
+  if (count($parents) == 1 && !in_array($variant_name, $variants)) {
+    $settings = ['type' => 'default_hreflang', 'label' => $term->getName()];
+    $sitemap_manager->addSitemapVariant($variant_name, $settings);
+  }
+}
+
+/**
+ * A helper function to return variant name.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   The term object.
+ */
+function _alshaya_seo_transac_sitemap_variant_name(TermInterface $term) {
+  $variant_name = 'shop-' . str_replace(' ', '-', strtolower(trim($term->getName())));
+  return $variant_name;
 }
