@@ -5,7 +5,9 @@
  * Module file.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -542,4 +544,26 @@ function alshaya_acm_product_category_after_build(array $element, FormStateInter
   ];
 
   return $element;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_product_category_block_access(Block $block, $operation, AccountInterface $account) {
+  // Disable category facet on group by category listing pages (panty guide).
+  if ($operation == 'view' && $block->id() == 'categoryfacetplp') {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() == 'entity.taxonomy_term.canonical') {
+      /* @var \Drupal\taxonomy\Entity\Term $term */
+      $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+
+      if (empty($term)) {
+        return AccessResult::neutral();
+      }
+
+      $result = AccessResult::forbiddenIf($term->get('field_group_by_sub_categories')->getString());
+      $result->addCacheTags($term->getCacheTags());
+      return $result;
+    }
+  }
 }

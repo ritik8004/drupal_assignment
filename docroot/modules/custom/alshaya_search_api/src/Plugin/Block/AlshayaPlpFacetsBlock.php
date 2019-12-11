@@ -100,7 +100,11 @@ class AlshayaPlpFacetsBlock extends BlockBase implements ContainerFactoryPluginI
 
     // This is to determine whether category facet will render on the page.
     $category_facet_block = $this->entityTypeManager->getStorage('block')->load('categoryfacetplp');
-    $category_facet_block_content = $category_facet_block->getPlugin()->build();
+
+    // We have cases where we disable access to category facet.
+    // For instance panty-guide page.
+    // @see alshaya_acm_product_category_block_access().
+    $category_facet_block_content = $category_facet_block->access('view') ? $category_facet_block->getPlugin()->build() : NULL;
     $class = '';
     if (empty($category_facet_block_content)) {
       $class = 'empty-category';
