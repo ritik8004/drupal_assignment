@@ -5,3 +5,24 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .c-pdp {
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        .sku-base-form {
+          .promotions-dynamic-label {
+            a {
+              &.sku-dynamic-promotion-link {
+                &::after {
+                  top: 0.5625rem;
+                  transform: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
