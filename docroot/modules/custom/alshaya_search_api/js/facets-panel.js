@@ -598,49 +598,4 @@
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);
   }
 
-  /**
-   * Calculate and add height for each product tile.
-   *
-   * @param mode
-   * full_page mode or row mode.
-   *
-   * @param element
-   * The img tag which is lazyloaded.
-   */
-  Drupal.plpListingProductTileHeight = function (mode, element) {
-    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
-      var gridCount = $('.c-products-list').hasClass('product-large') ? 3 : 4;
-      var tiles = $('.c-products__item');
-      var totalCount = $('.c-products__item').length;
-      var loopCount = Math.ceil(totalCount / gridCount);
-      // In full page mode we dont factor lazy loading as this mode is to reorganize the tiles based on the grid.
-      if (mode === 'full_page') {
-        // Run for each row.
-        for (var i = 0; i < loopCount; i++) {
-          var indexStart = gridCount * i;
-          var indexEnd = gridCount * i + gridCount - 1;
-          plpRowHeightSync(indexStart, indexEnd, tiles);
-        }
-      }
-
-      else if (mode === 'row') {
-        // Find the parent of the lazyloaded image, we dont want to take any action if the image is a swatch or
-        // hover gallery image.
-        if (!$(element).closest('*[data--color-attribute]').hasClass('hidden')
-          && $(element).parents('.alshaya_search_slider').length <= 0
-          && !$(element).hasClass('height-sync-processed')) {
-          $(element).addClass('height-sync-processed');
-          var tile = $(element).parents('.c-products__item');
-          var tileIndex = tiles.index(tile);
-          // Find the row to iterate for height.
-          var rowNumber = Math.ceil((tileIndex + 1) / gridCount);
-          var rowIndex = rowNumber - 1;
-          var indexStart = gridCount * rowIndex;
-          var indexEnd = gridCount * rowIndex + gridCount - 1;
-          plpRowHeightSync(indexStart, indexEnd, tiles);
-        }
-      }
-    }
-  };
-
 })(jQuery, Drupal);

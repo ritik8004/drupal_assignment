@@ -15,6 +15,7 @@ vendor:
   dependencies:
     - alshaya_react/react
     - alshaya_master/jquery_is_in_viewport
+    - alshaya_search_api/product_height
 
 search_insights_listing:
   js:

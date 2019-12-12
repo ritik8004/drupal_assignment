@@ -46,7 +46,6 @@ class App extends React.PureComponent {
   };
 
   onSuggestionSelected = (event, { suggestion }) => {
-    console.log(suggestion.query);
     this.setQueryValue(suggestion.query);
   };
 
