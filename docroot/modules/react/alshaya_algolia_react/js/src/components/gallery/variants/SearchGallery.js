@@ -4,18 +4,15 @@ import { updateAfter } from '../../../utils';
 import ImageElement from '../imageHelper/ImageElement';
 
 const SliderElement = props => {
-  return(
-    <div
-      onMouseEnter={props.mouseenter.bind(this)}
-      onMouseLeave={props.mouseout.bind(this)}
-    >
-      <ImageElement
-        src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-        data-src={props.src}
-        title={props.title}
-        className="b-lazy"
-      />
-    </div>
+  return (
+    <ImageElement
+      src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+      data-src={props.src}
+      title={props.title}
+      className="b-lazy"
+      onMouseOver={props.mouseenter.bind(this)}
+      onMouseOut={props.mouseout.bind(this)}
+    />
   );
 };
 
@@ -29,7 +26,6 @@ const sliderSettings = {
   touchThreshold: 1000,
   variableWidth: false,
 };
-
 
 class SearchGallery extends React.PureComponent {
 
@@ -51,7 +47,7 @@ class SearchGallery extends React.PureComponent {
     }
   };
 
-  resetImg = () => {
+  resetImg = event => {
     const obj = this;
     this.setTimeoutConst = setTimeout(function() {
       obj.mainImageRef.current.firstChild.src = obj.mainImage.url
