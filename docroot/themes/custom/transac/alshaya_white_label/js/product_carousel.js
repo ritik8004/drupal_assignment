@@ -126,7 +126,7 @@
           Drupal.blazyHorizontalLazyLoad(scrollArea);
         });
       }
-      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block', context).once().on('click', function () {
+      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').once('product-carousel').on('click', function () {
         // Adjust the positioning of the throbber as per the transform property on slick-track.
         if ($(window).width() > 1023) {
           var sliderTrackTransform = $(this).parents('.slick-track').css('transform').replace(/[^0-9\-.,]/g, '').split(',');
