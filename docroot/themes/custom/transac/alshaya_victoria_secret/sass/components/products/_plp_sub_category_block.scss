@@ -69,20 +69,20 @@
     #block-subcategoryblock {
       top: 0;
       transition: top 0.5s ease-in-out;
+      position: fixed;
+      background: $modal_bg;
+      width: 100%;
+      z-index: 1;
 
       &.mobile-sticky-sub-category {
-        position: fixed;
-        background: $modal_bg;
-        width: 100%;
         top: 8.2rem;
-        z-index: 1;
+      }
 
-        .plp-subcategory-block {
-          .sub-category {
-            .sub-category-image {
-              width: 4.375rem;
-              height: 3.25rem;
-            }
+      .plp-subcategory-block {
+        .sub-category {
+          .sub-category-image {
+            width: 4.375rem;
+            height: 3.25rem;
           }
         }
       }
@@ -92,18 +92,16 @@
   @include breakpoint($only-tablet) {
     .filter-fixed-top {
       #block-subcategoryblock {
+        position: fixed;
+        background: $modal_bg;
+        width: 100%;
+        top: 3.2rem;
+        z-index: 1;
         visibility: hidden;
         opacity: 0;
-        width: 0;
-        transition: opacity 0.5s ease-in-out;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
 
         &.mobile-sticky-sub-category {
-          display: block;
-          position: fixed;
-          background: $modal_bg;
-          width: 100%;
-          top: 3.2rem;
-          z-index: 1;
           visibility: visible;
           opacity: 1;
         }
