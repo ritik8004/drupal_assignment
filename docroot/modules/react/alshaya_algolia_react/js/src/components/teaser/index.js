@@ -13,13 +13,15 @@ const Teaser = ({hit}) => {
     const articleNode = event.target.closest('.node--view-mode-search-result');
     const queryString =  getCurrentSearchQueryString();
 
-    var storage_details = {
-      sku: articleNode.getAttribute('data-sku'),
-      grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
-      page: parseInt(queryString.page)
-    };
+    if (queryString.page !== null) {
+      var storage_details = {
+        sku: articleNode.getAttribute('data-sku'),
+        grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
+        page: parseInt(queryString.page)
+      };
 
-    localStorage.setItem(window.location.hash, JSON.stringify(storage_details));
+      localStorage.setItem(window.location.hash, JSON.stringify(storage_details));
+    }
   }
 
   return (

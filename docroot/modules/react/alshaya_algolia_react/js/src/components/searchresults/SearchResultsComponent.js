@@ -40,8 +40,6 @@ const SearchResultsComponent = props => {
   var defaultpageRender = false;
   if (storedvalues !== null && typeof storedvalues.page !== null) {
     defaultpageRender = storedvalues.page;
-    delete storedvalues.page;
-    localStorage.removeItem(window.location.hash);
   }
 
   return (
