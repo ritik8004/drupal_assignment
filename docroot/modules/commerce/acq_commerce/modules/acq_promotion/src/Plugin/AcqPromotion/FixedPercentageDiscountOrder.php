@@ -8,17 +8,17 @@ use Drupal\acq_promotion\AcqPromotionBase;
  * Provides the Buy X Get Y Free cart level promotion.
  *
  * @ACQPromotion(
- *   id = "free_shipping_order",
- *   label = @Translation("Free shipping with an order over X KD"),
+ *   id = "fixed_percentage_discount_order",
+ *   label = @Translation("Get Y% discount on order over KWD X"),
  * )
  */
-class FreeShippingOrder extends AcqPromotionBase {
+class FixedPercentageDiscountOrder extends AcqPromotionBase {
 
   /**
    * {@inheritdoc}
    */
   public function getActiveLabel() {
-    return $this->t('Your order qualifies for Free Delivery');
+    return FALSE;
   }
 
 }

@@ -13,6 +13,20 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Update alshaya_cart_promotions_block source settings to static.
+ */
+function alshaya_acm_promotion_update_8019() {
+  $alshayacartpromotionsblock = \Drupal::configFactory()->getEditable('block.block.alshayacartpromotionsblock');
+  if (!empty($alshayacartpromotionsblock)) {
+    $settings = $alshayacartpromotionsblock->get('settings');
+    $settings['source'] = 'static';
+    $alshayacartpromotionsblock->set('settings', $settings)->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-saving the `promotion` resource to moved outside mobile app.
  */
 function alshaya_acm_promotion_update_8019() {

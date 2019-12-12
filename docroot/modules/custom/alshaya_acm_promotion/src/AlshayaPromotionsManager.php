@@ -240,6 +240,7 @@ class AlshayaPromotionsManager {
         return self::SUBTYPE_FREE_SHIPPING_ORDER;
       }
     }
+
     return self::SUBTYPE_OTHER;
   }
 
@@ -533,17 +534,13 @@ class AlshayaPromotionsManager {
   }
 
   /**
-   * Return Cart Promotion Plugin mapped with nodes.
-   *
-   * @param array $subtypes
-   *   List of promotion types.
-   * @param array $exclude_nids
-   *   List of excluding nids.
+   * Get sorted cart promotions.
    *
    * @return array
-   *   Sorted list of cart promotions priority-price based.
+   *   List of promotions sorted by price and priority.
    */
-  public function getCartPromotionPluginNodes(array $subtypes, array $exclude_nids = []) {
+  public function getSortedCartPromotions() {
+    // @todo Cache sorted cart promotions.
     $allApplicablePromotions = $this->getAllPromotions(
       [
         [
@@ -552,13 +549,8 @@ class AlshayaPromotionsManager {
         ],
         [
           'field' => 'field_alshaya_promotion_subtype',
-          'value' => $subtypes,
+          'value' => array_keys($this->getAcqPromotionTypes()),
           'operator' => 'IN',
-        ],
-        [
-          'field' => 'nid',
-          'value' => $exclude_nids,
-          'operator' => 'NOT IN',
         ],
       ],
       [
@@ -570,7 +562,7 @@ class AlshayaPromotionsManager {
     );
 
     // Prepare sorted list of cart promotions based on priority, base_subtotal.
-    $cartPromotionPluginNodes = [];
+    $cartPromotions = [];
     foreach ($allApplicablePromotions as $promotion) {
       if ($promotion instanceof NodeInterface) {
         $order = $promotion->get('field_acq_promotion_sort_order')->getString();
@@ -588,11 +580,11 @@ class AlshayaPromotionsManager {
           }
         }
 
-        $cartPromotionPluginNodes[$order][$threshold_price][] = $promotion;
+        $cartPromotions[$threshold_price][$order][] = $promotion->id();
       }
     }
 
-    return $cartPromotionPluginNodes;
+    return $cartPromotions;
   }
 
   /**
@@ -657,14 +649,15 @@ class AlshayaPromotionsManager {
    *
    * @param array $appliedPromotions
    *   Currently applied promotion nodes.
+   * @param string $cartSubTotal
+   *   Cart Sub total value.
    * @param array $config
    *   Subtype configuration.
    *
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion(array $appliedPromotions, array $config) {
-    $inactiveCartPromotion = NULL;
+  public function getInactiveCartPromotion(array $appliedPromotions, $cartSubTotal, array $config) {
     $exclude_nids = [];
     foreach ($appliedPromotions as $promotion) {
       $exclude_nids[] = $promotion->id();
@@ -678,49 +671,25 @@ class AlshayaPromotionsManager {
       }
     }
 
-    // Get all inactive promotions.
     if (!empty($subtypes)) {
-      $cartPromotions = $this->getCartPromotionPluginNodes($subtypes, $exclude_nids);
+      $allCartPromotions = $this->getSortedCartPromotions();
 
-      // Now get the next eligible active promotion.
-      if (!empty($cartPromotions)) {
-        $inactiveCartPromotion = $this->getNextEligibleInactivePromotion($cartPromotions, $appliedPromotions);
+      // Extract next eligible cart promotion based on price and priority.
+      foreach ($allCartPromotions as $price => $sortedPromotions) {
+        if ($price > $cartSubTotal) {
+          krsort($sortedPromotions);
+          foreach ($sortedPromotions as $promotions) {
+            $eligiblePromotions = array_diff($promotions, $exclude_nids);
+
+            if (!empty($eligiblePromotions)) {
+              return $this->nodeStorage->load(reset($eligiblePromotions));
+            }
+          }
+        }
       }
     }
 
-    return $inactiveCartPromotion;
-  }
-
-  /**
-   * Get next eligible inactive promotion based on order and price.
-   *
-   * @param array $cartPromotions
-   *   All applicable cart promotion mapped plugin nodes.
-   * @param array $appliedPromotions
-   *   Currently applied cart promotions.
-   *
-   * @return mixed|null
-   *   Next eligible inactive promotion node.
-   */
-  protected function getNextEligibleInactivePromotion(array $cartPromotions, array $appliedPromotions) {
-    $eligiblePromotion = NULL;
-    if (!empty($appliedPromotions)) {
-      // @todo Get next promotion in case of cart already has promotion.
-    }
-    else {
-      // Highest priority promotion is the next eligible promotion.
-      krsort($cartPromotions);
-
-      // Get Top priority promotion.
-      $topPromotions = array_pop($cartPromotions);
-
-      // Sort to get Lowest price promotion.
-      ksort($topPromotions);
-      $eligiblePromotion = array_pop($topPromotions);
-      $eligiblePromotion = reset($eligiblePromotion);
-    }
-
-    return $eligiblePromotion;
+    return FALSE;
   }
 
 }

@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
-use Drupal\acq_promotion\AcqPromotionPluginManager;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -11,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Driver\Exception\Exception;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 
@@ -39,13 +39,6 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   protected $cartStorage;
 
   /**
-   * ACQ Promotion Plugin Manager.
-   *
-   * @var \Drupal\Component\Plugin\PluginManagerInterface
-   */
-  protected $acqPromotionPluginManager;
-
-  /**
    * Constructs a new AlshayaCartPromotionsBlock object.
    *
    * @param array $configuration
@@ -58,20 +51,16 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    *   The alshaya promotion manager service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartSessionStorage
    *   The cart storage service.
-   * @param \Drupal\acq_promotion\AcqPromotionPluginManager $pluginManager
-   *   ACQ Promotion Plugin Manager.
    */
   public function __construct(
         array $configuration,
         $plugin_id,
         $plugin_definition,
         AlshayaPromotionsManager $alshaya_acm_promotion_manager,
-        CartStorageInterface $cartSessionStorage,
-        AcqPromotionPluginManager $pluginManager) {
+        CartStorageInterface $cartSessionStorage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->cartStorage = $cartSessionStorage;
-    $this->acqPromotionPluginManager = $pluginManager;
   }
 
   /**
@@ -83,8 +72,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_promotion.manager'),
-      $container->get('acq_cart.cart_storage'),
-      $container->get('plugin.manager.acq_promotion')
+      $container->get('acq_cart.cart_storage')
     );
   }
 
@@ -93,10 +81,13 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function defaultConfiguration() {
     return [
-      'source' => 'static',
+      'source' => 'dynamic',
+      'promotion_types' => [
+        'free_shipping_order' => 'free_shipping_order',
+        'fixed_percentage_discount_order' => 'fixed_percentage_discount_order',
+      ],
       'promotions' => [],
     ] + parent::defaultConfiguration();
-
   }
 
   /**
@@ -107,8 +98,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       '#type' => 'select',
       '#title' => $this->t('Select Promotions Source'),
       '#options' => [
-        'static' => $this->t('Static'),
-        'dynamic' => $this->t('Dynamic'),
+        'static' => $this->t('Static Text'),
+        'dynamic' => $this->t('Dynamic Text'),
       ],
       '#default_value' => $this->configuration['source'],
       '#weight' => -1,
@@ -232,6 +223,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $active_promotions = [];
     $cartRulesApplied = $this->cartStorage->getCart(FALSE)->getCart()->cart_rules;
 
+    // Get cart applied promotion nodes.
     $appliedPromotions = [];
     if (!empty($cartRulesApplied)) {
       foreach ($cartRulesApplied as $rule_id) {
@@ -244,6 +236,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       $active_promotions = $this->getActivePromotionLabels($appliedPromotions);
     }
 
+    // Fetch inactive promotion labels.
     $inactive_promotions = $this->getInactivePromotionLabels($appliedPromotions);
 
     if (!empty($active_promotions) || !empty($inactive_promotions)) {
@@ -271,10 +264,12 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $active_promotions = [];
     foreach ($appliedPromotions as $rule_id => $promotion_node) {
       $promotion_type = $promotion_node->get('field_alshaya_promotion_subtype')->getString();
+
+      // Process based on block config to display labels.
       if (!empty($config[$promotion_type])) {
         $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($promotion_node);
 
-        if (!empty($promotion_data)) {
+        if (!empty($promotion_data['label']) && !empty($promotion_data['type'])) {
           $active_promotions[$rule_id] = [
             'type' => $promotion_data['type'],
             'label' => [
@@ -299,21 +294,25 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   protected function getInactivePromotionLabels(array $appliedPromotions = []) {
     $config = $this->configuration['promotion_types'];
+    $inactive_promotions = NULL;
 
-    // Assuming only 1 inactive cart promotion.
-    $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion($appliedPromotions, $config);
-    $inactive_promotions = [];
+    if (!empty($cart = $this->cartStorage->getCart(FALSE)->totals())) {
+      $cartValue = $cart['sub'];
+      $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion($appliedPromotions, $cartValue, $config);
 
-    if (!empty($applicableInactivePromotion)) {
-      $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
-      $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($applicableInactivePromotion, FALSE);
+      if ($applicableInactivePromotion instanceof NodeInterface) {
+        $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
+        $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($applicableInactivePromotion, FALSE);
 
-      $inactive_promotions[$rule_id] = [
-        'type' => $promotion_data['type'],
-        'label' => [
-          '#markup' => $promotion_data['label'],
-        ],
-      ];
+        if ($promotion_data['label']) {
+          $inactive_promotions[$rule_id] = [
+            'type' => $promotion_data['type'],
+            'label' => [
+              '#markup' => $promotion_data['label'],
+            ],
+          ];
+        }
+      }
     }
 
     return $inactive_promotions;
