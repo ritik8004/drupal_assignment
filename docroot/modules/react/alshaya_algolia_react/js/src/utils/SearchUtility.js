@@ -18,6 +18,7 @@ function showSearchResultContainer() {
   });
   searchResultDiv.style.display = 'block';
   searchResultDiv.className = 'show-algolia-result';
+  searchResultDiv.style.height = '26.5rem';
   pageStandard.className = searchClasses;
 }
 
