@@ -4,7 +4,8 @@ export {
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
-  isMobile
+  isMobile,
+  getAlgoliaStorageValues
 } from './QueryStringUtils';
 
 export {
