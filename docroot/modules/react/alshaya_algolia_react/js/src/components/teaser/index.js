@@ -4,9 +4,23 @@ import Price from '../price';
 import Promotions from '../promotions';
 import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
+import { getCurrentSearchQueryString } from '../../utils';
 
 const Teaser = ({hit}) => {
   const swatches = (null);
+
+  const localStorageStore = (event) => {
+    const articleNode = event.target.closest('.node--view-mode-search-result');
+    const queryString =  getCurrentSearchQueryString();
+
+    var storage_details = {
+      sku: articleNode.getAttribute('data-sku'),
+      grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
+      page: parseInt(queryString.page)
+    };
+
+    localStorage.setItem(window.location.hash, JSON.stringify(storage_details));
+  }
 
   return (
     <div className="c-products__item views-row" >
@@ -24,6 +38,7 @@ const Teaser = ({hit}) => {
           <a
             href={`${hit.url}?queryID=${hit.__queryID}`}
             data--original-url={`${hit.url}?queryID=${hit.__queryID}`}
+            onClick={(event) => localStorageStore(event)}
             className="list-product-gallery product-selected-url">
             <Gallery media={hit.media} title={hit.title} />
           </a>

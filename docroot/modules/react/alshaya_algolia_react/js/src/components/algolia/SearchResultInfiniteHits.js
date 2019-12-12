@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { connectInfiniteHits } from 'react-instantsearch-dom';
+import connectInfiniteHits from './connectors/connectInfiniteHits';
 
 import Teaser from '../teaser';
 import { updateAfter } from '../../utils';

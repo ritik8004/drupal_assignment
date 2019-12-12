@@ -1,5 +1,6 @@
 // Ref: https://github.com/algolia/react-instantsearch/blob/v5.7.0/packages/react-instantsearch-core/src/core/indexUtils.js
-import { omit } from 'lodash';
+import _objectSpread from "@babel/runtime/helpers/esm/objectSpread";
+import omit from 'lodash/omit';
 
 export function getIndexId(context) {
   return context && context.multiIndexContext
@@ -304,4 +305,23 @@ function cleanUpValueWithMutliIndex({
   }
 
   return omit(searchState, `indices.${indexId}.${id}`);
+}
+
+export function addAbsolutePositions(hits, hitsPerPage, page) {
+  return hits.map(function (hit, index) {
+    return _objectSpread({}, hit, {
+      __position: hitsPerPage * page + index + 1
+    });
+  });
+}
+export function addQueryID(hits, queryID) {
+  if (!queryID) {
+    return hits;
+  }
+
+  return hits.map(function (hit) {
+    return _objectSpread({}, hit, {
+      __queryID: queryID
+    });
+  });
 }
