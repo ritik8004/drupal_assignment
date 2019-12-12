@@ -1,7 +1,5 @@
 import React from 'react';
 import Slider from "react-slick";
-import { ImageWrapper } from '../imageHelper/ImageWrapper';
-import ImageLazyLoad from '../imageHelper/ImageLazyLoad';
 import { updateAfter } from '../../../utils';
 import ImageElement from '../imageHelper/ImageElement';
 
@@ -11,7 +9,7 @@ const SliderElement = props => {
       onMouseEnter={props.mouseenter.bind(this)}
       onMouseLeave={props.mouseout.bind(this)}
     >
-      <ImageLazyLoad
+      <ImageElement
         src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
         data-src={props.src}
         title={props.title}

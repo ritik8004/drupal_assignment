@@ -13,7 +13,7 @@ const AssetGallery = ({media, title}) => {
 
   return (
     <div className="alshaya_search_gallery">
-      <div className='alshaya_search_mainimage' ref={this.mainImageRef}>
+      <div className='alshaya_search_mainimage'>
         <ImageElement
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
           data-src={ typeof mainImage.url != 'undefined' ? mainImage.url : '' }
@@ -21,7 +21,7 @@ const AssetGallery = ({media, title}) => {
           className='b-lazy'
         />
       </div>
-      <div className='alshaya_search_hoverimage' ref={this.mainImageRef}>
+      <div className='alshaya_search_hoverimage'>
         <ImageElement
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
           data-src={ typeof hoverImage.url != 'undefined' ? hoverImage.url : '' }

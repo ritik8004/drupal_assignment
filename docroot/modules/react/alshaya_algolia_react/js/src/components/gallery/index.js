@@ -2,7 +2,7 @@ import React from 'react';
 import AssetGallery from './variants/AssetGallery';
 import SearchGallery from './variants/SearchGallery';
 import { isMobile } from '../../utils';
-import { ImageWrapper } from './imageHelper/ImageWrapper';
+import ImageElement from './imageHelper/ImageElement';
 
 const Gallery = (props) => {
   if (typeof props.media === 'undefined') {
@@ -15,12 +15,14 @@ const Gallery = (props) => {
 
     return (
       <div className="alshaya_search_gallery">
-        <ImageWrapper
-          src={ typeof mainImage.url != 'undefined' ? mainImage.url : '' }
-          title={props.title}
-          className='alshaya_search_mainimage'
-          showDefaultImage={true}
-        />
+        <div className='alshaya_search_mainimage'>
+          <ImageElement
+            src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+            data-src={ typeof mainImage.url != 'undefined' ? mainImage.url : '' }
+            title={props.title}
+            className='b-lazy'
+          />
+        </div>
       </div>
     );
   }

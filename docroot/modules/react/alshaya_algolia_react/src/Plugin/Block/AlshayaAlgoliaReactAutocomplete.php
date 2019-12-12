@@ -296,6 +296,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'label' => $block->label(),
             'name' => $facet->getName(),
             'widget' => $widget,
+            'id' => $block_id,
             'weight' => $block->getWeight(),
           ];
         }
