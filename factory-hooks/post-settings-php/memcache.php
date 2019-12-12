@@ -91,6 +91,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     $settings['cache']['bins']['product_processed_data'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['cart_history'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['google_tag'] = 'cache.backend.permanent_memcache';
+    $settings['cache']['bins']['alshaya_acm_promotion'] = 'cache.backend.permanent_memcache';
 
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;

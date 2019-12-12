@@ -223,21 +223,13 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $active_promotions = [];
     $cartRulesApplied = $this->cartStorage->getCart(FALSE)->getCart()->cart_rules;
 
-    // Get cart applied promotion nodes.
-    $appliedPromotions = [];
-    if (!empty($cartRulesApplied)) {
-      foreach ($cartRulesApplied as $rule_id) {
-        $appliedPromotions[$rule_id] = $this->alshayaAcmPromotionManager->getPromotionByRuleId($rule_id);
-      }
-    }
-
     // If cart has applied rules, fetch directly active labels.
-    if (!empty($appliedPromotions)) {
-      $active_promotions = $this->getActivePromotionLabels($appliedPromotions);
+    if (!empty($cartRulesApplied)) {
+      $active_promotions = $this->getActivePromotionLabels($cartRulesApplied);
     }
 
     // Fetch inactive promotion labels.
-    $inactive_promotions = $this->getInactivePromotionLabels($appliedPromotions);
+    $inactive_promotions = $this->getInactivePromotionLabels();
 
     if (!empty($active_promotions) || !empty($inactive_promotions)) {
       $build = [
@@ -251,18 +243,19 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * Get Active promotion labels.
    *
-   * @param array $appliedPromotions
-   *   Array of promotion nodes currently active.
+   * @param array $cartRulesApplied
+   *   Array of cart rules currently active.
    *
    * @return array
    *   Promotion Data - Label and Type.
    */
-  protected function getActivePromotionLabels(array $appliedPromotions = []) {
+  protected function getActivePromotionLabels(array $cartRulesApplied = []) {
     $config = $this->configuration['promotion_types'];
-
-    // Get active cart rules if any.
     $active_promotions = [];
-    foreach ($appliedPromotions as $rule_id => $promotion_node) {
+
+    // Get active cart labels.
+    foreach ($cartRulesApplied as $rule_id) {
+      $promotion_node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($rule_id);
       $promotion_type = $promotion_node->get('field_alshaya_promotion_subtype')->getString();
 
       // Process based on block config to display labels.
@@ -286,19 +279,16 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * Get Inactive promotion labels.
    *
-   * @param array $appliedPromotions
-   *   Array of promotion nodes currently active.
-   *
    * @return array
    *   Promotion Data - Label and Type.
    */
-  protected function getInactivePromotionLabels(array $appliedPromotions = []) {
+  protected function getInactivePromotionLabels() {
     $config = $this->configuration['promotion_types'];
-    $inactive_promotions = NULL;
+    $inactive_promotions = [];
 
     if (!empty($cart = $this->cartStorage->getCart(FALSE)->totals())) {
       $cartValue = $cart['sub'];
-      $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion($appliedPromotions, $cartValue, $config);
+      $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion($cartValue, $config);
 
       if ($applicableInactivePromotion instanceof NodeInterface) {
         $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
