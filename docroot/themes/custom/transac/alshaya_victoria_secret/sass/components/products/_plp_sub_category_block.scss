@@ -13,14 +13,21 @@
   }
 
   @include breakpoint($desktop) {
+    .filter-fixed-top .sticky-filter-wrapper {
+      transition: height 0.5s ease-in-out;
+    }
+  }
+
+  @include breakpoint($desktop) {
     .sticky-filter-wrapper {
       #block-subcategoryblock {
         .header-sticky-filter & {
           visibility: hidden;
           opacity: 0;
-          width: 0;
           top: 2.5rem;
-          transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+          transition: opacity 0.5s cubic-bezier(1, -0.17, 1, 1);
+          position: absolute;
+          width: 100%;
         }
       }
 
@@ -34,12 +41,9 @@
         }
 
         #block-subcategoryblock {
-          display: block;
-          width: 100%;
           text-align: center;
           visibility: visible;
           opacity: 1;
-          position: absolute;
           top: 3.5rem;
 
           .plp-subcategory-block {
