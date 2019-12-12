@@ -19,13 +19,23 @@
   }
 
   @include breakpoint($desktop) {
+    .filter-fixed-top {
+      #block-subcategoryblock {
+        top: 3.5rem !important;
+
+        .plp-subcategory-block {
+          margin-#{$left}: -14.625rem;
+        }
+      }
+    }
+
     .sticky-filter-wrapper {
       #block-subcategoryblock {
         .header-sticky-filter & {
           visibility: hidden;
           opacity: 0;
           top: 2.5rem;
-          transition: opacity 0.5s cubic-bezier(1, -0.17, 1, 1);
+          transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
           position: absolute;
           width: 100%;
         }
@@ -48,7 +58,6 @@
 
           .plp-subcategory-block {
             border-bottom: none;
-            margin-#{$left}: -14.625rem;
             max-width: 77.25rem;
           }
         }
