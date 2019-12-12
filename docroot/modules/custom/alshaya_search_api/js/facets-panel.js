@@ -406,8 +406,10 @@
           if ($('.show-all-filters').length > 0) {
             if ($(this).scrollTop() > filterposition) {
               filter.addClass('filter-fixed-top');
-              if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
-                subCategoryBlock.addClass('anti-ghosting');
+              if ($(this).width() > 1024) {
+                if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
+                  subCategoryBlock.addClass('anti-ghosting');
+                }
               }
               $('body').addClass('header-sticky-filter');
             }
@@ -465,9 +467,17 @@
               if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                  subCategoryBlock.removeClass('anti-ghosting');
-                  subCategoryBlock.addClass('anti-ghosting-done');
-                  $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  if ($(this).width() > 1024) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                    // This small delay to ensure the entry animations works.
+                    setTimeout(function() {
+                      $('.sticky-filter-wrapper').addClass('show-sub-category');
+                    }, 5);
+                  }
+                  else {
+                    $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  }
                 }
               } else {
                 // Action to perform when we are scrolling down.
