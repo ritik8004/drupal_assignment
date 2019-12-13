@@ -362,6 +362,7 @@
         var filter = $('.region__content');
         var nav = $('.branding__menu');
         var fixedNavHeight = 0;
+        var subCategoryBlock = $('.block-alshaya-sub-category-block');
 
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 1023) {
@@ -392,6 +393,11 @@
             $('.show-all-filters').parent().css('top', 0);
             $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
           }
+
+          // Hide the subcategory block on page load.
+          if ($('body').hasClass('subcategory-listing-enabled')) {
+            subCategoryBlock.hide();
+          }
         }
 
         $(window).once('lhnStickyFilters').on('scroll', function () {
@@ -399,10 +405,24 @@
           if ($('.show-all-filters').length > 0) {
             if ($(this).scrollTop() > filterposition) {
               filter.addClass('filter-fixed-top');
+              // Desktop & Tablet.
+              if ($(this).width() > 767 && $('body').hasClass('subcategory-listing-enabled')) {
+                if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
+                  subCategoryBlock.addClass('anti-ghosting');
+                }
+              }
               $('body').addClass('header-sticky-filter');
             }
             else {
               filter.removeClass('filter-fixed-top');
+              if ($('body').hasClass('subcategory-listing-enabled')) {
+                // Desktop & Tablet.
+                subCategoryBlock.removeClass('anti-ghosting-done');
+                // Only Mobile.
+                if ($(window).width() < 768) {
+                  subCategoryBlock.hide();
+                }
+              }
               $('body').removeClass('header-sticky-filter');
             }
           }
@@ -432,10 +452,23 @@
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
               if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
-                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
-                  $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
+                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category') && $('body').hasClass('subcategory-listing-enabled')) {
+                  // Tablet.
+                  if ($(window).width() > 767) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                  }
+                  // Mobile.
+                  else {
+                    subCategoryBlock.show();
+                  }
+                  // This small delay to ensure the entry animations works.
+                  setTimeout(function() {
+                    $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
+                  }, 5);
                 }
-              } else {
+              }
+              else {
                 // Action to perform when we are scrolling down.
                 if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                   $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
@@ -454,7 +487,17 @@
               if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                  $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  if ($(this).width() > 1024 && $('body').hasClass('subcategory-listing-enabled')) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                    // This small delay to ensure the entry animations works.
+                    setTimeout(function() {
+                      $('.sticky-filter-wrapper').addClass('show-sub-category');
+                    }, 5);
+                  }
+                  else {
+                    $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  }
                 }
               } else {
                 // Action to perform when we are scrolling down.
