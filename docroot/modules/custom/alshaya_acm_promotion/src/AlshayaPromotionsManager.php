@@ -583,7 +583,6 @@ class AlshayaPromotionsManager {
 
     // Prepare sorted list of cart promotions based on priority, base_subtotal.
     $cartPromotions = [];
-    $cacheTags = [];
     foreach ($allApplicablePromotions as $promotion) {
       if ($promotion instanceof NodeInterface) {
         $order = $promotion->get('field_acq_promotion_sort_order')->getString();
@@ -602,11 +601,10 @@ class AlshayaPromotionsManager {
         }
 
         $cartPromotions[$threshold_price][$order][] = $promotion->id();
-        $cacheTags = array_merge($cacheTags, $promotion->getCacheTags());
       }
     }
 
-    $this->alshayaAcmPromotionCache->set($cid, $cartPromotions, Cache::PERMANENT, $cacheTags);
+    $this->alshayaAcmPromotionCache->set($cid, $cartPromotions, Cache::PERMANENT, ['node:type:acq_promotion']);
 
     return $cartPromotions;
   }
@@ -649,10 +647,10 @@ class AlshayaPromotionsManager {
       try {
         $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
           $field_alshaya_promotion_subtype,
-          ['promotion_node' => $promotion]
+          [],
+          $promotion
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
-          // @todo Create promotion node part of plugin using createInstance.
           $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel();
 
           if (!empty($label)) {

@@ -1,5 +1,4 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -13,9 +12,9 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
- * Update alshaya_cart_promotions_block source settings to static.
+ * Update alshayacartpromotionsblock block configurations.
  */
-function alshaya_acm_promotion_update_8019() {
+function alshaya_acm_promotion_update_8020() {
   $alshayacartpromotionsblock = \Drupal::configFactory()->getEditable('block.block.alshayacartpromotionsblock');
   if (!empty($alshayacartpromotionsblock)) {
     $settings = $alshayacartpromotionsblock->get('settings');
@@ -200,7 +199,7 @@ function alshaya_acm_promotion_update_8006() {
 }
 
 /**
- * Implements hook_update_N()
+ * Implements hook_update_N().
  *
  * Update facets config.
  */
@@ -212,7 +211,7 @@ function alshaya_acm_promotion_update_8005() {
 }
 
 /**
- * Implements hook_update_N()
+ * Implements hook_update_N().
  *
  * Update facets config.
  */
@@ -243,14 +242,13 @@ function alshaya_acm_promotion_update_8002() {
 }
 
 /**
- * Implements hook_update_N()
+ * Implements hook_update_N().
  */
 function alshaya_acm_promotion_update_8001() {
   // Getting editable SOLR facet config.
   $facet_promotion_collection = \Drupal::configFactory()->getEditable('facets.facet.promotion_collection_facet');
   $facet_promotion_collection->set('widget.config.show_numbers', TRUE)->save();
 }
-
 
 /**
  * Implements hook_update_dependencies().
@@ -290,7 +288,7 @@ function _alshaya_acm_promotion_add_promotions_translations() {
     ],
     'Add more and keep saving' => [
       'ar' => 'أضف أكثر ووفر أكثر',
-    ]
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }

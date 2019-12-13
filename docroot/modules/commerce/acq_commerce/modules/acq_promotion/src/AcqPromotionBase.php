@@ -2,16 +2,15 @@
 
 namespace Drupal\acq_promotion;
 
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Class AcqPromotionBase.
  *
  * @package Drupal\acq_promotion
  */
-abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterface, ContainerFactoryPluginInterface {
+abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterface {
 
   /**
    * NodeInterface Definition.
@@ -29,23 +28,15 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
    *   Plugin Id.
    * @param mixed $plugin_definition
    *   Plugin Definition.
+   * @param \Drupal\node\NodeInterface $promotionNode
+   *   Promotion Node.
    */
   public function __construct(array $configuration,
                               $plugin_id,
-                              $plugin_definition) {
+                              $plugin_definition,
+                              NodeInterface $promotionNode) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->promotionNode = $configuration['promotion_node'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition
-    );
+    $this->promotionNode = $promotionNode;
   }
 
   /**
