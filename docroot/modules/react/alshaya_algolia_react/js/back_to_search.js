@@ -36,6 +36,7 @@
     var storage_value = getAlgoliaStorageValues();
     var first_visible_product = $('#alshaya-algolia-search .view-search article[data-sku="' + storage_value.sku + '"]:visible:first');
 
+    localStorage.removeItem(window.location.hash);
     if (typeof first_visible_product === 'undefined') {
       return;
     }
