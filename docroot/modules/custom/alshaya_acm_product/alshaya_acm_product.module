@@ -1054,6 +1054,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form_state->setTemporaryValue('sku', $sku_entity);
   $form['#attributes']['data-sku'] = $sku_entity->getSku();
   $form['#attributes']['data-cleaned-sku'] = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+  $form['#attributes']['data-sku-type'] = $sku_entity->getType();
 
   $form['#cache']['contexts'][] = 'url.query_args:selected';
 

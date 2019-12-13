@@ -20,11 +20,10 @@
             var currentSelectedVariant = $(form).attr('data-sku');
 
             // If sku is variant type.
-            var is_configurable = false;
+            var is_configurable = $(form).attr('data-sku-type') === 'configurable';
             // If `selected_variant_sku` available, means its configurable.
             if ($('[name="selected_variant_sku"]', form).length > 0) {
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
-              is_configurable = true;
             }
 
             var quantity = 1;
