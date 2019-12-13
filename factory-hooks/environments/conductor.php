@@ -22,7 +22,7 @@ $conductors = [
     'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
     'site_id' => 4,
   ],
-  'mckw_dev3' => [
+  'mckw_dev2' => [
     'hmac_id' => '65769d9ba82c4ffd8c26ed830de1e6c2',
     'hmac_secret' => 'Y2MyMTVlYTQtMGQ0Yi00',
   ],
@@ -179,6 +179,10 @@ $conductors = [
     'hmac_secret' => 'ODczNzNiNGItNmQwMy00',
     'site_id' => 139,
   ],
+  'pbae_dev2' => [
+    'hmac_id' => 'c1d103b9b2194fa0ba957981e566c0ce',
+    'hmac_secret' => 'YWFmOTJmODctYmMwNS00',
+  ],
   'pbae_qa' => [
     'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
     'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
@@ -211,6 +215,10 @@ $conductors = [
     'site_id' => 85,
   ],
   // BathBodyWorks SA.
+  'bbwsa_dev2' => [
+    'hmac_id' => 'b24ef03c73df4b6cac6500eabae86119',
+    'hmac_secret' => 'YjBjYTdmN2YtOGE2Ni00',
+  ],
   'bbwsa_qa' => [
     'hmac_id' => '52fd839150734f1c8afe9db8c7f688e8',
     'hmac_secret' => 'ZTFjNTIzZTUtYzI3YS00',
