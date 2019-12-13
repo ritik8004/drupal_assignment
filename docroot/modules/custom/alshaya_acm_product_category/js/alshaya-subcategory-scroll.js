@@ -24,11 +24,9 @@
         // If target is above of the current view point in that case subcategory will be visible.
         if ($('.plp-subcategory-block').offset().top > $(element).offset().top) {
           stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight() - 10;
-          console.log('if');
         }
         else {
           stickyFilterPosition = stickyFilterPosition - 20;
-          console.log('else');
         }
       }
     }
