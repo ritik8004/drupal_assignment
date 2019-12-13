@@ -19,11 +19,11 @@
     var stickyFilterPosition;
 
     if ($(window).width() < 768) {
-      stickyFilterPosition = $('#block-supercategorymenu').outerHeight() + $('#block-mobilenavigation').outerHeight() + $('.show-all-filters').outerHeight();
+      stickyFilterPosition = $('#block-supercategorymenu').outerHeight() + $('#block-mobilenavigation').outerHeight() + $('.show-all-filters').outerHeight() + $('#block-subcategoryblock').outerHeight();
       if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
         // If target is above of the current view point in that case subcategory will be visible.
         if ($('.plp-subcategory-block').offset().top > $(element).offset().top) {
-          stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight() - 10;
+          stickyFilterPosition = stickyFilterPosition + $('.mobile-sticky-sub-category').outerHeight() - 150;
         }
         else {
           stickyFilterPosition = stickyFilterPosition - $('.mobile-sticky-sub-category').outerHeight() - 20;
