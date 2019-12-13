@@ -11,3 +11,19 @@
     {% endfor %}
   </div>
 {% endif %}
+
+{% if inactive_promotions is not empty %}
+  <div class="cart-promotions-wrapper inactive-promotions" id="block-basketinactivepromotionmessage">
+    {% for id, promotion in inactive_promotions %}
+      <p class="promotion {{ promotion.type }}">{{ promotion.label }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% if active_promotions is not empty %}
+  <div class="cart-promotions-wrapper active-promotions" id="block-basketactivepromotionmessage">
+    {% for id, promotion in active_promotions %}
+      <p class="promotion {{ promotion.type }}">{{ promotion.label }}</p>
+    {% endfor %}
+  </div>
+{% endif %}

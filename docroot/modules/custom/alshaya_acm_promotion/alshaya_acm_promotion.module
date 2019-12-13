@@ -33,6 +33,8 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
     'variables' => [
       'promotions' => NULL,
       'free_shipping' => NULL,
+      'inactive_promotions' => NULL,
+      'active_promotions' => NULL,
     ],
   ];
 
