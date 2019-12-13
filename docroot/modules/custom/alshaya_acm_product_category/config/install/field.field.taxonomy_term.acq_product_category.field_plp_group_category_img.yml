@@ -11,7 +11,7 @@ field_name: field_plp_group_category_img
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Image on grouping page'
-description: 'When used in parent category it will be used to replace title and description.'
+description: 'Upload the image that should be displayed when this sub-category is displayed on a PLP grouped by sub-categories. When used in parent category it will be used to replace title and description.'
 required: false
 translatable: true
 skip_translation_check: 0
