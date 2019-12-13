@@ -401,7 +401,7 @@
           }
 
           // Hide the subcategory block on page load.
-          if (subCategoryBlock.length > 0) {
+          if ($('body').hasClass('subcategory-listing-enabled')) {
             subCategoryBlock.hide();
           }
         }
@@ -412,7 +412,7 @@
             if ($(this).scrollTop() > filterposition) {
               filter.addClass('filter-fixed-top');
               // Desktop & Tablet.
-              if ($(this).width() > 767) {
+              if ($(this).width() > 767 && $('body').hasClass('subcategory-listing-enabled')) {
                 if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
                   subCategoryBlock.addClass('anti-ghosting');
                 }
@@ -421,11 +421,13 @@
             }
             else {
               filter.removeClass('filter-fixed-top');
-              // Desktop & Tablet.
-              subCategoryBlock.removeClass('anti-ghosting-done');
-              // Only Mobile.
-              if ($(window).width() < 768) {
-                subCategoryBlock.hide();
+              if ($('body').hasClass('subcategory-listing-enabled')) {
+                // Desktop & Tablet.
+                subCategoryBlock.removeClass('anti-ghosting-done');
+                // Only Mobile.
+                if ($(window).width() < 768) {
+                  subCategoryBlock.hide();
+                }
               }
               $('body').removeClass('header-sticky-filter');
             }
@@ -456,7 +458,7 @@
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
               if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
-                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category') && $('body').hasClass('subcategory-listing-enabled')) {
                   // Tablet.
                   if ($(window).width() > 767) {
                     subCategoryBlock.removeClass('anti-ghosting');
@@ -471,7 +473,8 @@
                     $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
                   }, 5);
                 }
-              } else {
+              }
+              else {
                 // Action to perform when we are scrolling down.
                 if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                   $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
@@ -490,7 +493,7 @@
               if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                  if ($(this).width() > 1024) {
+                  if ($(this).width() > 1024 && $('body').hasClass('subcategory-listing-enabled')) {
                     subCategoryBlock.removeClass('anti-ghosting');
                     subCategoryBlock.addClass('anti-ghosting-done');
                     // This small delay to ensure the entry animations works.
