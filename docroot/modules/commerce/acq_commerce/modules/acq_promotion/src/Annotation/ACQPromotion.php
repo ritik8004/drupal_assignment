@@ -5,7 +5,7 @@ namespace Drupal\acq_promotion\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines a ACQ Promotion item annotation object.
+ * Defines a ACQ Promotion Type item annotation object.
  *
  * @see \Drupal\acq_promotion\AcqPromotionPluginManager
  * @see plugin_api

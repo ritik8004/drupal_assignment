@@ -654,10 +654,13 @@ class AlshayaPromotionsManager {
         if ($promotionPlugin instanceof AcqPromotionInterface) {
           // @todo Create promotion node part of plugin using createInstance.
           $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel();
-          $data = [
-            'type' => $field_alshaya_promotion_subtype,
-            'label' => $label,
-          ];
+
+          if (!empty($label)) {
+            $data = [
+              'type' => $field_alshaya_promotion_subtype,
+              'label' => $label,
+            ];
+          }
         }
       }
       catch (\Exception $exception) {

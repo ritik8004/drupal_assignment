@@ -18,7 +18,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase {
    * {@inheritdoc}
    */
   public function getActiveLabel() {
-    return FALSE;
+    return '';
   }
 
 }

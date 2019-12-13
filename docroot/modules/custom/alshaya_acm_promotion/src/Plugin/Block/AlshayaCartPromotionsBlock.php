@@ -262,7 +262,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       if (!empty($config[$promotion_type])) {
         $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($promotion_node);
 
-        if (!empty($promotion_data['label']) && !empty($promotion_data['type'])) {
+        if (!empty($promotion_data)) {
           $active_promotions[$rule_id] = [
             'type' => $promotion_data['type'],
             'label' => [
@@ -294,7 +294,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();
         $promotion_data = $this->alshayaAcmPromotionManager->getPromotionData($applicableInactivePromotion, FALSE);
 
-        if ($promotion_data['label']) {
+        if (!empty($promotion_data)) {
           $inactive_promotions[$rule_id] = [
             'type' => $promotion_data['type'],
             'label' => [
