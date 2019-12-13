@@ -44,7 +44,7 @@ export default class CartItem extends React.Component {
 
   render() {
     const { currency_code } = drupalSettings.alshaya_spc.currency_config;
-    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id } = this.props.item;
+    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id, final_price } = this.props.item;
 
     return (
       <div className="spc-cart-item">
@@ -57,7 +57,7 @@ export default class CartItem extends React.Component {
               <div className="spc-product-title">
                 <a href={Drupal.url.toAbsolute(link)}>{title}</a>
               </div>
-              <div className="spc-product-price">{currency_code}{original_price}</div>
+              <div className="spc-product-price">{currency_code} {final_price}</div>
             </div>
             <div className="spc-product-attributes-wrapper">
               {configurable_values.map((key, val) =>
