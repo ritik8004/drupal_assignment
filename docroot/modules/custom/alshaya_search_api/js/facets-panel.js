@@ -393,11 +393,6 @@
             $('.show-all-filters').parent().css('top', 0);
             $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
           }
-
-          // Hide the subcategory block on page load.
-          if ($('body').hasClass('subcategory-listing-enabled')) {
-            subCategoryBlock.hide();
-          }
         }
 
         $(window).once('lhnStickyFilters').on('scroll', function () {
@@ -418,10 +413,6 @@
               if ($('body').hasClass('subcategory-listing-enabled')) {
                 // Desktop & Tablet.
                 subCategoryBlock.removeClass('anti-ghosting-done');
-                // Only Mobile.
-                if ($(window).width() < 768) {
-                  subCategoryBlock.hide();
-                }
               }
               $('body').removeClass('header-sticky-filter');
             }
@@ -457,10 +448,6 @@
                   if ($(window).width() > 767) {
                     subCategoryBlock.removeClass('anti-ghosting');
                     subCategoryBlock.addClass('anti-ghosting-done');
-                  }
-                  // Mobile.
-                  else {
-                    subCategoryBlock.show();
                   }
                   // This small delay to ensure the entry animations works.
                   setTimeout(function() {
