@@ -455,8 +455,6 @@
                     subCategoryBlock.removeClass('anti-ghosting');
                     subCategoryBlock.addClass('anti-ghosting-done');
                   }
-                  // Mobile.
-                  $('#block-subcategoryblock').addClass('jit-fixed');
                   // This small delay to ensure the entry animations works.
                   setTimeout(function() {
                     $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
