@@ -401,7 +401,9 @@
           }
 
           // Hide the subcategory block on page load.
-          subCategoryBlock.hide();
+          if (subCategoryBlock.length > 0) {
+            subCategoryBlock.hide();
+          }
         }
 
         $(window, context).once().on('scroll', function () {
