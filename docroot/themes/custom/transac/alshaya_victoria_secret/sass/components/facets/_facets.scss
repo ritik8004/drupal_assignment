@@ -132,3 +132,9 @@ ul[data-drupal-facet-id=promotion_category_facet] {
     }
   }
 }
+
+.facet-all-clear {
+  li.clear-all > a {
+    line-height: 1;
+  }
+}

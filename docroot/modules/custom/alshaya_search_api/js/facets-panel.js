@@ -119,8 +119,8 @@
         showFilterCount();
       });
 
-      if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
-        var clearAll = $('.c-content__region .region__content  > div.block-facets-summary').clone();
+      if ($('.c-content__region .region__content  > div[data-drupal-facets-summary-id] li.clear-all').length > 0) {
+        var clearAll = $('.c-content__region .region__content  > div[data-drupal-facets-summary-id]').clone();
         // Remove all `li` except last.
         $(clearAll).find('li:not(:last)').remove();
         $('.facet-all-clear').html(clearAll);
