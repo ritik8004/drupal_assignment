@@ -55,7 +55,7 @@
             // and of configurable variant.
             if (is_configurable && !available_in_cart) {
               var simple = currentSelectedVariant;
-              var configurable = $(form).attr('data-sku');
+              var configurable = $(form).find('.selected-parent-sku').val();
               if (settings.configurableCombinations[configurable].bySku[simple]) {
                 Object.keys(settings.configurableCombinations[configurable].bySku[simple]).forEach(function(key) {
                   var option = {
