@@ -17,7 +17,9 @@ export {
 export {
   contentDiv,
   searchResultDiv,
-  toggleSearchResultsContainer
+  toggleSearchResultsContainer,
+  showLoader,
+  removeLoader
 } from './SearchUtility';
 
 export {

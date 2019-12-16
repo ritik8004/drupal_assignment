@@ -17,14 +17,25 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
 }
 
-class App extends React.Component {
+class App extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       query: getCurrentSearchQuery()
     };
-    toggleSearchResultsContainer(this.state.query);
   };
+
+  componentDidMount() {
+    if (this.state.query !== '') {
+      toggleSearchResultsContainer(this.state.query);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.query !==  this.state.query) {
+      toggleSearchResultsContainer(this.state.query);
+    }
+  }
 
   setQueryValue = (queryValue) => {
     this.setState({query: queryValue});

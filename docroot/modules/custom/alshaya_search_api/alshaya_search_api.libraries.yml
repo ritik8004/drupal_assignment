@@ -9,6 +9,12 @@ facets_panel:
   js:
     js/facets-panel.js: {}
   dependencies:
+    - alshaya_search_api/product_height
+
+product_height:
+  js:
+    js/product-height.js: {}
+  dependencies:
     - core/jquery
 
 back_to_list:
