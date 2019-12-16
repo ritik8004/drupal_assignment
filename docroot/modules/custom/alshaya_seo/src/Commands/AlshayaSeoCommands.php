@@ -259,7 +259,7 @@ class AlshayaSeoCommands extends DrushCommands {
    * Get all product categories.
    */
   public function getCategries() {
-    $query = $this->entityTypeManager->getStorage("taxonomy_term")->getQuery();
+    $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
     $query->condition('vid', 'acq_product_category');
 
     return $query->execute();
@@ -278,8 +278,18 @@ class AlshayaSeoCommands extends DrushCommands {
       return;
     }
 
-    foreach ($entity_ids as $entity_id) {
-      _alshaya_seo_transac_acq_product_operations($entity_id, $entity_type);
+    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+
+    if ($entity_type == 'taxonomy_term') {
+      foreach ($entity_ids as $entity_id) {
+        $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity_id);
+        $sitemap->acqProductCategoryOperation($entity_id, $entity_type, $term->get('field_commerce_status')->getString());
+      }
+    }
+    elseif ($entity_type == 'node') {
+      foreach ($entity_ids as $entity_id) {
+        $sitemap->acqProductOperation($entity_id, $entity_type);
+      }
     }
 
     self::$loggerStatic->notice(dt('Reseting sitemap index based on L1 type: @entity_type,  @items:', [

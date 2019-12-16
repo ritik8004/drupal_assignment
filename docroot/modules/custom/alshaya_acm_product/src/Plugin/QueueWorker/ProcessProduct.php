@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_seo_transac\AlshayaSitemapManager;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -65,6 +66,13 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
    */
   protected $cacheTagsInvalidator;
+
+  /**
+   * Alshaya Sitemap Manager.
+   *
+   * @var \Drupal\alshaya_seo_transac\AlshayaSitemapManager
+   */
+  protected $alshayaSitemapManager;
 
   /**
    * Works on a single queue item.
@@ -133,6 +141,11 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $this->dispatcher->dispatch(ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT, $event);
     }
 
+    // Reset sitemap index based on the L1 category.
+    if ($node) {
+      $this->alshayaSitemapManager->acqProductOperation($node->id(), 'node');
+    }
+
     $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
       '@sku' => $entity->getSku(),
     ]);
@@ -155,6 +168,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *   Event Dispatcher.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
    *   Cache Tags Invalidator.
+   * @param \Drupal\alshaya_seo_transac\AlshayaSitemapManager $alshayaSitemapManager
+   *   Alshaya Sitemap Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -162,12 +177,14 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
                               EventDispatcherInterface $dispatcher,
-                              CacheTagsInvalidatorInterface $cache_tags_invalidator) {
+                              CacheTagsInvalidatorInterface $cache_tags_invalidator,
+                              AlshayaSitemapManager $alshayaSitemapManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
     $this->imagesManager = $sku_images_manager;
     $this->dispatcher = $dispatcher;
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
+    $this->alshayaSitemapManager = $alshayaSitemapManager;
   }
 
   /**
@@ -193,7 +210,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('event_dispatcher'),
-      $container->get('cache_tags.invalidator')
+      $container->get('cache_tags.invalidator'),
+      $container->get('alshaya_seo_transac.alshaya_sitemap_manager')
     );
   }
 
