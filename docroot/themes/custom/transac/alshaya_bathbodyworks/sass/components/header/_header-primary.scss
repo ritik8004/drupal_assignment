@@ -383,30 +383,24 @@ header .block-views-exposed-filter-blocksearch-page {
         margin-#{$right}: 1.5625rem;
         padding-#{$left}: 1.125rem;
         padding-#{$right}: 1.125rem;
-
-        &::after {
-          content: '';
-          height: 0.1875rem;
-          background-color: $mm_l1_link_bg;
-          width: 100%;
-          margin-top: 0.375rem;
-          position: absolute;
-          #{$left}: 0;
-          bottom: 0.125rem;
-          transition: all 0.3s ease-out;
-          visibility: hidden;
-
-          html[lang='ar'] & {
-            margin-top: 0.5625rem;
-          }
-        }
       }
 
       &:hover {
         a.menu--one__link {
           &::after {
-            background-color: $primary_link-hover;
-            visibility: visible;
+            content: '';
+            height: 3px;
+            background: $primary_link-hover !important;
+            display: inherit;
+            width: 100%;
+            margin-top: 0.375rem;
+            position: absolute;
+            #{$left}: 0;
+            bottom: 0.125rem;
+
+            html[lang='ar'] & {
+              margin-top: 0.5625rem;
+            }
           }
         }
       }
@@ -417,8 +411,18 @@ header .block-views-exposed-filter-blocksearch-page {
           color: $mm_l1_link;
 
           &::after {
-            background-color: $primary_link-hover;
-            visibility: visible;
+            content: '';
+            height: 3px;
+            background: $primary_link-hover !important;
+            display: inherit;
+            width: 100%;
+            margin-top: 0.375rem;
+            position: absolute;
+            #{$left}: 0;
+
+            html[lang='ar'] & {
+              margin-top: 0.5625rem;
+            }
           }
         }
       }
@@ -436,7 +440,6 @@ header .block-views-exposed-filter-blocksearch-page {
             position: absolute;
             top: -0.9375rem;
             opacity: 0.24;
-            transition: all 0.3s ease-out;
             #{$left}: 0;
           }
         }
@@ -448,6 +451,30 @@ header .block-views-exposed-filter-blocksearch-page {
         transform: none;
         border-top: none;
         border-top: 0.125rem solid $header_c_menu_border;
+      }
+    }
+
+    .active--menu--links {
+      li.menu--one__list-item {
+        &:hover {
+          a.menu--one__link {
+            &::after {
+              content: '';
+              height: 3px;
+              background: $mm_l1_link_bg;
+              display: inherit;
+              width: 100%;
+              margin-top: 0.375rem;
+              position: absolute;
+              #{$left}: 0;
+
+              html[lang='ar'] & {
+                margin-top: 0.5625rem;
+                bottom: 0;
+              }
+            }
+          }
+        }
       }
     }
   }
