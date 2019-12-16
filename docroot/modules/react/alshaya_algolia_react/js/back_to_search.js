@@ -84,7 +84,7 @@
           // Set timeout because of conflict.
           setTimeout(function () {
             scrollToAlgoliaProduct();
-          }, 1);
+          }, 700);
         }
       }
     });
