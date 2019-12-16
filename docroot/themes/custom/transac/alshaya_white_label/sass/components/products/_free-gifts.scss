@@ -76,6 +76,8 @@
       .free-gift-message {
         a {
           text-decoration: underline;
+          padding-#{$right}: 0.25rem;
+          padding-#{$left}: 0.125rem;
         }
       }
     }
@@ -110,6 +112,7 @@
       font-weight: bold;
       line-height: 1.33;
       color: $free-gifts-coupon-code-text;
+      padding: 0 0.125rem;
     }
   }
 }
