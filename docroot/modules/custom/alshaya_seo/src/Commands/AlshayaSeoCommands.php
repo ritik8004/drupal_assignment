@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo\Commands;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\redirect\Entity\Redirect;
 use Drupal\redirect\RedirectRepository;
 use Drush\Commands\DrushCommands;
@@ -32,6 +33,13 @@ class AlshayaSeoCommands extends DrushCommands {
   private $redirectRepository;
 
   /**
+   * Static reference to logger object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected static $loggerStatic;
+
+  /**
    * AlshayaSeoCommands constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -47,6 +55,7 @@ class AlshayaSeoCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->redirectRepository = $redirectRepository;
     $this->logger = $loggerChannelFactory->get('alshaya_seo');
+    self::$loggerStatic = $loggerChannelFactory->get('alshaya_seo');
   }
 
   /**
@@ -163,6 +172,120 @@ class AlshayaSeoCommands extends DrushCommands {
         '@count' => $redirects_created_count,
       ]));
     }
+  }
+
+  /**
+   * Reset sitemap index based on l1 category variants.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param array $options
+   *   (optional) An array of options.
+   *
+   * @command alshaya_seo:resetIndex
+   *
+   * @aliases rs, reset-sitemap-index
+   *
+   * @option batch-size
+   *   The number of items to generate/process per batch run. If batch size is
+   *   not provided, then default `image_sitemap_batch_chunk_size` from
+   *   `alshaya_image_sitemap.settings` config will be used.
+   *
+   * @usage drush reset-sitemap
+   *   Reset Sitemap based on l1 variants.
+   * @usage drush reset-sitemap-index node --batch-size=200
+   *   Reset sitemap index based on l1 category variants with batch of 200.
+   * @usage drush reset-sitemap-index taxonomy_term --batch-size=200
+   *   Reset sitemap index based on l1 category variants with batch of 200.
+   */
+  public function resetSitemapIndex(string $entity_type, array $options = ['batch-size' => NULL]) {
+    $this->output->writeln('Re-setting sitemap indexation based on L1 category variants.');
+
+    if (empty($entity_type)) {
+      $this->logger->error(dt('Entity type i.e. node/taxonomy is missing as argument.'));
+      return;
+    }
+
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Starting sitemap index reset.....'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Sitemap index resetting has encountered an error.'),
+    ];
+
+    if ($entity_type == 'node') {
+      $entity_ids = $this->getNodes();
+    }
+    elseif ($entity_type == 'taxonomy_term') {
+      $entity_ids = $this->getCategries();
+    }
+    else {
+      $this->logger->error(dt('Entity type: @entity_type is invalid - Please use either node or taxonomy_term', [
+        '@entity_type' => $entity_type,
+      ]));
+      return;
+    }
+
+    foreach (array_chunk($entity_ids, $options['batch-size']) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'resetSitemapBatchProcess'],
+        [$entity_type, $chunk],
+      ];
+    }
+
+    // Initialize the batch.
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+
+    $this->logger->notice(dt('Process finished'));
+  }
+
+  /**
+   * Get all published product nodes.
+   */
+  public function getNodes() {
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
+
+    return $query->condition('type', 'acq_product')
+      ->condition('status', NodeInterface::PUBLISHED)
+      // Add tag to ensure this can be altered easily in custom modules.
+      ->addTag('get_display_node_for_sku')
+      ->execute();
+  }
+
+  /**
+   * Get all product categories.
+   */
+  public function getCategries() {
+    $query = $this->entityTypeManager->getStorage("taxonomy_term")->getQuery();
+    $query->condition('vid', 'acq_product_category');
+
+    return $query->execute();
+  }
+
+  /**
+   * Implements batch start function.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param array $entity_ids
+   *   Array of entity_ids.
+   */
+  public static function resetSitemapBatchProcess($entity_type, array $entity_ids) {
+    if (empty($entity_ids)) {
+      return;
+    }
+
+    foreach ($entity_ids as $entity_id) {
+      _alshaya_seo_transac_acq_product_operations($entity_id, $entity_type);
+    }
+
+    self::$loggerStatic->notice(dt('Reseting sitemap index based on L1 type: @entity_type,  @items:', [
+      '@items' => json_encode($entity_ids),
+      '@entity_type' => json_encode($entity_type),
+    ]));
   }
 
 }

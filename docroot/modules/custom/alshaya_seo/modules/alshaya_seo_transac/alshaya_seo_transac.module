@@ -521,8 +521,9 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_seo_transac_taxonomy_term_insert(TermInterface $term) {
-  if ($term->bundle() == 'acq_product_category') {
+  if ($term->bundle() == 'acq_product_category' && $term->get('field_commerce_status')->value) {
     _alshaya_seo_transac_add_sitemap_variant($term);
+    _alshaya_seo_transac_acq_product_operations($term->id(), 'taxonomy_term');
   }
 }
 
@@ -531,9 +532,13 @@ function alshaya_seo_transac_taxonomy_term_insert(TermInterface $term) {
  */
 function alshaya_seo_transac_entity_presave(EntityInterface $entity) {
   if ($entity instanceof EntityInterface && $entity->bundle() == 'acq_product_category' && !empty($entity->id())) {
-    $term = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->load($entity->id());
-    _alshaya_seo_transac_remove_sitemap_variant($term);
-    _alshaya_seo_transac_add_sitemap_variant($entity);
+    $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity->id());
+
+    if ($term->getName() != $entity->getName() && $term->get('field_commerce_status')->value) {
+      _alshaya_seo_transac_remove_sitemap_variant($term);
+      _alshaya_seo_transac_add_sitemap_variant($entity);
+      _alshaya_seo_transac_acq_product_operations($entity->id(), 'taxonomy_term');
+    }
   }
 }
 
@@ -547,21 +552,63 @@ function alshaya_seo_transac_taxonomy_term_delete(TermInterface $term) {
 }
 
 /**
+ * Implements hook_entity_insert().
+ */
+function alshaya_seo_transac_entity_insert(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'acq_product') {
+    _alshaya_seo_transac_acq_product_operations($entity->id(), 'node');
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function alshaya_seo_transac_entity_update(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'acq_product') {
+    _alshaya_seo_transac_acq_product_operations($entity->id(), 'node');
+  }
+}
+
+/**
+ * A helper function to update and remove variant based indexing.
+ *
+ * @param int $entity_id
+ *   The entity id.
+ * @param string $entity_type
+ *   The entity type.
+ */
+function _alshaya_seo_transac_acq_product_operations(int $entity_id, string $entity_type) {
+  $variants_list = [];
+  $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($entity_id);
+  if ($entity_type == 'node') {
+    $category = $entity->get('field_category')->getValue();
+
+    if (!empty($category) && isset($category)) {
+      foreach ($category as $tid) {
+        $variants_list[] = _alshaya_seo_transac_sitemap_variant_name($tid['target_id']);
+      }
+    }
+  }
+  elseif ($entity_type == 'taxonomy_term' && $entity->get('field_commerce_status')->value) {
+    $variants_list[] = _alshaya_seo_transac_sitemap_variant_name($entity_id);
+  }
+  _reset_entity_variant_settings($variants_list, $entity_type, $entity_id);
+}
+
+/**
  * A helper function to remove variant.
  *
  * @param \Drupal\taxonomy\TermInterface $term
  *   The term object.
  */
 function _alshaya_seo_transac_remove_sitemap_variant(TermInterface $term) {
-  $variant_name = _alshaya_seo_transac_sitemap_variant_name($term);
-
+  $variant_name = _alshaya_seo_transac_sitemap_variant_name($term->id(), FALSE);
   $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
   $variants = array_keys($sitemap_manager->getSitemapVariants());
 
   if (in_array($variant_name, $variants)) {
     $variants = $sitemap_manager->removeSitemapVariants($variant_name);
   }
-
 }
 
 /**
@@ -573,7 +620,7 @@ function _alshaya_seo_transac_remove_sitemap_variant(TermInterface $term) {
 function _alshaya_seo_transac_add_sitemap_variant(TermInterface $term) {
   $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
   $parents = array_keys($produt_category->getCategoryTermParents($term));
-  $variant_name = _alshaya_seo_transac_sitemap_variant_name($term);
+  $variant_name = _alshaya_seo_transac_sitemap_variant_name($term->id(), FALSE);
 
   $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
   $variants = array_keys($sitemap_manager->getSitemapVariants());
@@ -587,10 +634,72 @@ function _alshaya_seo_transac_add_sitemap_variant(TermInterface $term) {
 /**
  * A helper function to return variant name.
  *
- * @param \Drupal\taxonomy\TermInterface $term
- *   The term object.
+ * @param int $term_id
+ *   The term id.
  */
-function _alshaya_seo_transac_sitemap_variant_name(TermInterface $term) {
-  $variant_name = 'shop-' . str_replace(' ', '-', strtolower(trim($term->getName())));
+function _alshaya_seo_transac_sitemap_variant_name($term_id, $is_parent = TRUE) {
+  $variant_name = '';
+  if ($is_parent) {
+    $ancestors = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($term_id);
+    $term_id = reset(array_reverse(array_keys($ancestors)));
+  }
+
+  if ($term_id) {
+    $term = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->load($term_id);
+    $variant_name = 'shop-' . str_replace(' ', '-', strtolower(trim($term->getName())));
+  }
+
   return $variant_name;
+}
+
+/**
+ * A helper function to reset variants for an entity.
+ *
+ * @param array $active_variants
+ *   The active variants for an entity.
+ * @param string $entity_type_id
+ *   An entity type id.
+ * @param string $entity_id
+ *   An entity id.
+ */
+function _reset_entity_variant_settings(array $active_variants, $entity_type_id, $entity_id) {
+  $generator = \Drupal::service('simple_sitemap.generator');
+  $variants = array_keys($generator->getSitemapManager()->getSitemapVariants());
+
+  if (!empty($active_variants)) {
+    // Set index for active variants.
+    $generator->setVariants($active_variants);
+    $generator->setEntityInstanceSettings($entity_type_id, $entity_id, ['index' => 1]);
+
+    // Unset index for inactive variants.
+    $inactive_variants = array_diff($variants, $active_variants);
+    $generator->setVariants($inactive_variants);
+    $generator->setEntityInstanceSettings($entity_type_id, $entity_id, ['index' => 0]);
+  }
+  // Unset index if entity status is disabled.
+  else {
+    $generator->setVariants($variants);
+    $generator->setEntityInstanceSettings($entity_type_id, $entity_id, ['index' => 0]);
+  }
+}
+
+/**
+ * Implements hook_simple_sitemap_arbitrary_links_alter().
+ */
+function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
+  if ($sitemap_variant == 'default') {
+    global $base_url;
+    $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
+    $variants = array_keys($sitemap_manager->getSitemapVariants());
+    $variants = array_diff($variants, ['default']);
+    if (!empty($variants)) {
+      foreach ($variants as $variant) {
+        $url = $base_url . '/' . $variant . '/sitemap.xml';
+        $arbitrary_links[] = [
+          'url' => $url,
+          'priority' => '0.5',
+        ];
+      }
+    }
+  }
 }
