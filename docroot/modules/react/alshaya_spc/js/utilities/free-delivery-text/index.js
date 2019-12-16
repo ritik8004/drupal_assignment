@@ -7,7 +7,7 @@ export default class FreeDeliveryText extends React.Component {
       return <span className="delivery-prefix">{this.props.text}</span>
     }
 
-    return (null);
+    return <span className="delivery-prefix"/>;
   }
 
 }

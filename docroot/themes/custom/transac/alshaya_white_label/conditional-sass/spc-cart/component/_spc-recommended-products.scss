@@ -18,6 +18,21 @@
         font-size: 0.875rem;
         text-align: center;
         color: $spc-product-title;
+        white-space: normal;
+      }
+
+      .spc-promotions {
+        white-space: normal;
+        text-align: center;
+        font-size: 0.75rem;
+
+        a {
+          color: $spc-recommended-product-promotion;
+        }
+
+        &:not(:empty) {
+          margin-top: 0.3125rem;
+        }
       }
     }
   }

@@ -3,6 +3,10 @@
   height: 1.5rem;
 
   @include componentLoader(transparent, 'after');
+
+  &.loading + .spc-select {
+    display: none;
+  }
 }
 
 .spc-select {
