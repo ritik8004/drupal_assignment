@@ -273,3 +273,14 @@ app-navigation-links:
   css:
     theme:
       css/conditional-sass/app-navigation-links/app-navigation-links.ltr.css: {}
+
+megamenu_dynamic_layout:
+  js:
+    conditional-sass/megamenu-dynamic-layout/js/megamenu-dynamic-layout.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+  css:
+    theme:
+      css/conditional-sass/megamenu-dynamic-layout/megamenu-dynamic-layout.ltr.css: {}

@@ -1,0 +1,41 @@
+@include breakpoint($desktop) {
+  .megamenu-dynamic-layout {
+    &.block-alshaya-main-menu {
+      li.menu--one__list-item ul.menu--two__list {
+        width: auto;
+        #{$right}: inherit;
+        display: flex;
+        height: auto !important;
+      }
+
+      ul.menu--one__list .menu-backdrop {
+        display: none !important;
+      }
+    }
+
+    .has--three-levels .menu--two__list .menu__links__wrapper {
+      display: flex;
+      flex-direction: column;
+      width: auto;
+      flex-wrap: wrap;
+      max-width: 80rem;
+      background: $mm_bg;
+      max-height: 26rem;
+    }
+
+    .term-image__wrapper {
+      display: flex;
+      flex: 0 0 auto;
+      background: $mm_bg;
+      max-width: initial;
+    }
+
+    .has--three-levels .highlights {
+      display: flex;
+
+      .highlighted {
+        flex: 0 0 auto;
+      }
+    }
+  }
+}
