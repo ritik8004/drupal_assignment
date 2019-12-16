@@ -1,8 +1,7 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react';
 import connectInfiniteHits from './connectors/connectInfiniteHits';
-
 import Teaser from '../teaser';
-import { updateAfter, removeLoader } from '../../utils';
+import { getAlgoliaStorageValues, removeLoader } from '../../utils';
 
 export default connectInfiniteHits(props => {
   const { hits, hasMore, refineNext } = props;
@@ -13,11 +12,18 @@ export default connectInfiniteHits(props => {
   useEffect(
     () => {
       if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
-        setTimeout(() => {
-          Drupal.blazyRevalidate();
-          Drupal.algoliaReact.stickyfacetfilter();
-          removeLoader();
-        }, updateAfter);
+        Drupal.blazyRevalidate();
+        Drupal.algoliaReact.stickyfacetfilter();
+        removeLoader();
+
+        // Trigger back to search page.
+        window.onpageshow = function(){
+          var storage_value = getAlgoliaStorageValues();
+          if (typeof storage_value !== 'undefined' && storage_value !== null) {
+            Drupal.processBackToSearch(storage_value)
+          }
+        };
+
       }
     }, [hits]
   );
