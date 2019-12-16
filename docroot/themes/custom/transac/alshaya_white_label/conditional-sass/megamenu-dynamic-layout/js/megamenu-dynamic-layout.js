@@ -11,7 +11,7 @@
       var winWidth = $(window).width();
 
       function MegaMenuDynamicLayout ($this) {
-        $this.once('setListWidth').each(function(){
+        $this.once('MegaMenuDynamicLayout').each(function(){
           var eleL2Wrapper = $(this).children('.menu--two__list');
           var eleL2WrapperLinks = eleL2Wrapper.find('.menu__links__wrapper');
           var eleMainMenu = $('.menu--one__list');
