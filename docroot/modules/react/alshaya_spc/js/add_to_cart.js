@@ -18,11 +18,12 @@
             // Get closest `add to cart` form.
             var form = that.closest('form');
             var currentSelectedVariant = $(form).attr('data-sku');
+            var page_main_sku = currentSelectedVariant;
 
             // If sku is variant type.
             var is_configurable = $(form).attr('data-sku-type') === 'configurable';
             // If `selected_variant_sku` available, means its configurable.
-            if ($('[name="selected_variant_sku"]', form).length > 0) {
+            if (is_configurable && $('[name="selected_variant_sku"]', form).length > 0) {
               currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
             }
 
@@ -54,22 +55,19 @@
             // We pass configurable options if product is not available in cart
             // and of configurable variant.
             if (is_configurable && !available_in_cart) {
-              var simple = currentSelectedVariant;
-              var configurable = $(form).find('.selected-parent-sku').val();
-              if (settings.configurableCombinations[configurable].bySku[simple]) {
-                Object.keys(settings.configurableCombinations[configurable].bySku[simple]).forEach(function(key) {
-                  var option = {
-                    'option_id': settings.configurableCombinations[configurable].configurables[key].attribute_id,
-                    'option_value': settings.configurableCombinations[configurable].bySku[simple][key]
-                  };
+              currentSelectedVariant = $(form).find('.selected-parent-sku').val();
 
-                  // Skipping the psudo attributes.
-                  if (settings.psudo_attribute === undefined || settings.psudo_attribute !== option.option_id) {
-                    options.push(option);
-                  }
-                  currentSelectedVariant = configurable;
-                });
-              }
+              Object.keys(settings.configurableCombinations[page_main_sku].configurables).forEach(function(key) {
+                var option = {
+                  'option_id': settings.configurableCombinations[page_main_sku].configurables[key].attribute_id,
+                  'option_value': $(form).find('[data-configurable-code="' + key + '"]').val()
+                };
+
+                // Skipping the psudo attributes.
+                if (settings.psudo_attribute === undefined || settings.psudo_attribute !== option.option_id) {
+                  options.push(option);
+                }
+              });
             }
 
             // Prepare the POST data.
