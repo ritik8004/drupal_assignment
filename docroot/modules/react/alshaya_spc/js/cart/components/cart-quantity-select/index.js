@@ -61,6 +61,7 @@ export default class CartQuantitySelect extends React.Component {
         onMenuClose={this.onMenuClose}
         onChange={this.handleChange}
         options={options}
+        value={options[qty]}
         defaultValue={options[qty]}
         isSearchable={false}
         isDisabled={!is_disabled}
