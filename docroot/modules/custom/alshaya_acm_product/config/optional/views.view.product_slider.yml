@@ -2,12 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.matchback
     - core.entity_view_mode.node.product_category_carousel
     - core.entity_view_mode.node.teaser
     - node.type.acq_product
   module:
     - node
     - user
+_core:
+  default_config_hash: yawgNzoQqqoPgr6OKY7hRY9li5jBX6ge63FSbtT8hdg
 id: product_slider
 label: 'Product Slider'
 module: views
@@ -265,6 +268,56 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
+  block_matchback:
+    display_plugin: block
+    id: block_matchback
+    display_title: 'Block: Matchback'
+    position: 3
+    display_options:
+      display_extenders:
+        views_ajax_get:
+          ajax_get: false
+      style:
+        type: default
+        options: {  }
+      defaults:
+        style: false
+        row: false
+        title: false
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: matchback
+      title: Matchback
+      display_description: ''
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_product_slider:
+    display_plugin: block
+    id: block_product_slider
+    display_title: 'Block: Product Slider'
+    position: 1
+    display_options:
+      display_extenders: {  }
+      block_description: ''
+      display_description: ''
+      rendering_language: '***LANGUAGE_language_interface***'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
   category_product_slider:
     display_plugin: block
     id: category_product_slider
@@ -287,24 +340,6 @@ display:
         options:
           relationship: none
           view_mode: product_category_carousel
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-        - user.permissions
-      tags: {  }
-  block_product_slider:
-    display_plugin: block
-    id: block_product_slider
-    display_title: 'Block: Product Slider'
-    position: 1
-    display_options:
-      display_extenders: {  }
-      block_description: ''
-      display_description: ''
-      rendering_language: '***LANGUAGE_language_interface***'
     cache_metadata:
       max-age: -1
       contexts:
