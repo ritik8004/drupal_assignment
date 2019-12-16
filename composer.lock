@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b21a931454f55ee77d1d12489d13243f",
+    "content-hash": "5518d6059c1c0114a47aced4182e8782",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -12770,8 +12770,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014.patch",
-                    "Merge of patches of CORE-14106 and CORE-7109": "patches/simple_sitemap/simple_sitemap_CORE_7109_CORE-14106.patch"
+                    "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014_CORE_14106.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -23196,6 +23195,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "require-dev dependencies from drupal/core",
+            "abandoned": "drupal/core-dev",
             "time": "2019-07-17T16:31:47+00:00"
         },
         {

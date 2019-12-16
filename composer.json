@@ -277,8 +277,7 @@
                 "Avoid initialising subject in ResourceServer constructor": "https://www.drupal.org/files/issues/2019-11-01/3091689-2.patch"
             },
             "drupal/simple_sitemap": {
-                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014.patch",
-                "Merge of patches of CORE-14106 and CORE-7109": "patches/simple_sitemap/simple_sitemap_CORE_7109_CORE-14106.patch"
+                "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014_CORE_14106.patch"
             },
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
