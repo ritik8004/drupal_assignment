@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageWrapper } from '../imageHelper/ImageWrapper';
+import ImageElement from '../imageHelper/ImageElement';
 
 const AssetGallery = ({media, title}) => {
   if (typeof media === 'undefined') {
@@ -13,17 +13,22 @@ const AssetGallery = ({media, title}) => {
 
   return (
     <div className="alshaya_search_gallery">
-      <ImageWrapper
-        src={ typeof mainImage.url != 'undefined' ? mainImage.url : '' }
-        title={title}
-        className='alshaya_search_mainimage'
-        showDefaultImage={true}
-      />
-      <ImageWrapper
-        src={ typeof hoverImage.url != 'undefined' ? hoverImage.url : '' }
-        title={title}
-        className='alshaya_search_hoverimage'
-      />
+      <div className='alshaya_search_mainimage'>
+        <ImageElement
+          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+          data-src={ typeof mainImage.url != 'undefined' ? mainImage.url : '' }
+          title={title}
+          className='b-lazy'
+        />
+      </div>
+      <div className='alshaya_search_hoverimage'>
+        <ImageElement
+          src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+          data-src={ typeof hoverImage.url != 'undefined' ? hoverImage.url : '' }
+          title={title}
+          className='b-lazy'
+        />
+      </div>
     </div>
   );
 }

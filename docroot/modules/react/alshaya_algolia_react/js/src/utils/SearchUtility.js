@@ -18,6 +18,7 @@ function showSearchResultContainer() {
   });
   searchResultDiv.style.display = 'block';
   searchResultDiv.className = 'show-algolia-result';
+  searchResultDiv.style.minHeight = '26.5rem';
   pageStandard.className = searchClasses;
 }
 
@@ -39,4 +40,29 @@ function toggleSearchResultsContainer(query) {
     : showSearchResultContainer();
 }
 
-export {contentDiv, searchResultDiv, toggleSearchResultsContainer};
+/**
+ * Place ajax fulll screen loader.
+ */
+function showLoader() {
+  const loaderDiv = document.createElement( 'div' );
+  loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
+  document.body.appendChild( loaderDiv );
+}
+
+/**
+ * Remove ajax loader.
+ */
+function removeLoader() {
+  const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
+  if (loaderDiv.length > 0) {
+    document.body.removeChild(loaderDiv[0]);
+  }
+}
+
+export {
+  contentDiv,
+  searchResultDiv,
+  toggleSearchResultsContainer,
+  showLoader,
+  removeLoader
+};
