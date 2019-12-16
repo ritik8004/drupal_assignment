@@ -620,7 +620,7 @@ class AlshayaPromoLabelManager {
       }
     }
 
-    return $build;
+    return $build ?? [];
   }
 
   /**
