@@ -117,4 +117,22 @@ class Utility {
     return ($total % 10 == 0) ? TRUE : FALSE;
   }
 
+  /**
+   * Sort the two weights.
+   *
+   * @param int $a
+   *   Weight 1.
+   * @param int $b
+   *   Weight 2.
+   *
+   * @return int
+   *   Sort status.
+   */
+  public static function weightArraySort($a, $b) {
+    if (isset($a['weight']) && isset($b['weight'])) {
+      return $a['weight'] < $b['weight'] ? -1 : 1;
+    }
+    return 0;
+  }
+
 }
