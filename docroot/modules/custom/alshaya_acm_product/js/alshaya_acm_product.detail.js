@@ -185,14 +185,6 @@
               }
             }
           }
-
-          if(drupalSettings.configurableCombinations) {
-            var firstAttribute = $('.form-select[data-configurable-code]:first', this);
-            var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
-            $(firstAttribute).removeProp('selected').removeAttr('selected');
-            $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
-            $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
-          }
         }
 
       });
