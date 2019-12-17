@@ -2,7 +2,7 @@ import React from 'react';
 import { connectStateResults } from 'react-instantsearch-dom';
 
 const NoResults = ({ searchResults, isSearchStalled, searching }) => {
-  if (searching || isSearchStalled) {
+  if ((searching || isSearchStalled) && searchResults === null) {
     return Drupal.t('fetching results...');
   }
 
