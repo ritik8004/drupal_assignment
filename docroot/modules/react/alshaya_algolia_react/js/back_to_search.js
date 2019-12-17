@@ -32,14 +32,19 @@
       return;
     }
 
-    var elementVisible = $(first_visible_product).isElementInViewPort($('.branding__menu').height());
-
-    // If element is not visible, only then scroll.
-    if (elementVisible === false) {
-      $('html, body').animate({
-        scrollTop: ($(first_visible_product).offset().top - $('.branding__menu').height())
-      }, 400);
-    }
+    var wait_for_product = setTimeout(function () {
+      var first_visible_product = $('#alshaya-algolia-search .view-search article[data-sku="' + storage_value.sku + '"]:visible:first');
+      if (first_visible_product.length > 0) {
+        clearTimeout(wait_for_product);
+        var elementVisible = $(first_visible_product).isElementInViewPort($('.branding__menu').height());
+        // If element is not visible, only then scroll.
+        if (elementVisible === false) {
+          $('html, body').animate({
+            scrollTop: ($(first_visible_product).offset().top - $('.branding__menu').height())
+          }, 400);
+        }
+      }
+    }, 700);
   }
 
   /**
