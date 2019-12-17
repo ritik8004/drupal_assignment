@@ -352,6 +352,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_item_code_markup'] = [
+    'variables' => [
+      'title' => NULL,
+      'item_code' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -475,7 +482,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
 
       if ($view_mode == 'search_result') {
         $build['labels'] = [
@@ -653,21 +660,21 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
         }
 
+        $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
+        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery)
+          ? \Drupal::service('renderer')->renderPlain($gallery)
+          : '';
+        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
+        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
+
         if ($sku_entity->bundle() == 'configurable') {
           /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $skuInfo */
           $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
           $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
-
-          $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery) ? \Drupal::service('renderer')->renderPlain($gallery) : '';
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
           $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         }
-        else {
-          $build['gallery'] = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', TRUE);
-        }
+
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
       }
 
       if (isset($context)) {
@@ -853,6 +860,14 @@ function _alshaya_acm_product_get_items_per_page_on_listing(): int {
 function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
   // Alter number of items per page for PLP / Search pages.
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
+    // Initialise pager.
+    $view->getPager();
+
+    // If we want to show all items, we don't process per page below.
+    if ($view->getItemsPerPage() === 0) {
+      return;
+    }
+
     $per_page = _alshaya_acm_product_get_items_per_page_on_listing();
 
     $request = \Drupal::request();
@@ -881,7 +896,21 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
  */
 function alshaya_acm_product_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
+    // Dynamically set memory limit based on number of results.
+    ini_set('memory_limit', (count($view->result) + ((int) ini_get('memory_limit'))) . 'M');
+
     $view->element['#attached']['drupalSettings']['plp_slider'] = \Drupal::config('alshaya_acm_product.display_settings')->get('plp_slider');
+
+    $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    if ($display_settings->get('show_color_images_on_filter') == FALSE && $display_settings->get('color_swatches_show_product_image')) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      $view->element['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
+      $view->element['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $sku_manager->isListingDisplayModeAggregated() && $display_settings->get('show_variants_thumbnail_plp_gallery');
+    }
+    $view->element['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
+    $view->element['#attached']['library'][] = 'alshaya_acm_product/show_color_images_on_filter';
   }
 }
 
@@ -1095,6 +1124,18 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         ],
       ],
       '#value' => '',
+    ];
+
+    // Adding parent/main sku in hidden. This can be update/changed
+    // by color split if required.
+    $form['selected_parent_sku'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'class' => [
+          'selected-parent-sku',
+        ],
+      ],
+      '#value' => $sku_entity->getSku(),
     ];
 
     // Hide the form on page load, we want to allow all JS to be applied first.

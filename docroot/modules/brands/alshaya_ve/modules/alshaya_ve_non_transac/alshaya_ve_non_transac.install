@@ -11,6 +11,31 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable excerpt field to display in search results.
+ * Enabled retinal display on Arabic for Store Finder.
+ * Make mobile field optional on email subscription form.
+ */
+function alshaya_ve_non_transac_update_8002() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['search_api.index.non_transac_acquia_solr_search_index', 'views.view.non_transac_acquia_index_search'],
+    'alshaya_ve_non_transac'
+  );
+
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_email_signup'],
+    'alshaya_email_signup'
+  );
+
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_contact'],
+    'alshaya_contact'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enabled retinal display on Arabic for Store Finder.
  */
 function alshaya_ve_non_transac_update_8001() {
@@ -21,14 +46,6 @@ function alshaya_ve_non_transac_update_8001() {
       'install',
       AlshayaConfigManager::USE_FROM_REPLACE
     );
-  $manager->updateConfigs(
-    ['webform.webform.alshaya_email_signup'],
-    'alshaya_email_signup'
-  );
-  $manager->updateConfigs(
-    ['webform.webform.alshaya_contact'],
-    'alshaya_contact'
-  );
 
   // Update translations.
   $strings = [];

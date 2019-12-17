@@ -80,6 +80,9 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $steps = $this->getVisibleSteps();
 
+    // Add current step id to allow other modules to use it in alter hook.
+    $form_state->setTemporaryValue('step_id', $this->stepId);
+
     // Never cache the checkout form. We never know, anything can change here.
     $form['#cache'] = ['max-age' => 0];
 

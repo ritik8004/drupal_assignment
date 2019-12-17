@@ -346,7 +346,7 @@
           if ($(window).width() > 767) {
             if ($('.container-without-product').length < 1) {
               var site_brand = $('.site-brand-home').clone();
-              $('.region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
+              $('#block-subcategoryblock, .region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
               $(site_brand).insertBefore('.container-without-product');
             }
           }
@@ -368,10 +368,11 @@
         var filter = $('.region__content');
         var nav = $('.branding__menu');
         var fixedNavHeight = 0;
+        var subCategoryBlock = $('.block-alshaya-sub-category-block');
 
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 1023) {
-            filterposition = $('.container-without-product').offset().top;
+            filterposition = $('.sticky-filter-wrapper').offset().top + $('.sticky-filter-wrapper').height();
           }
           else if ($(window).width() > 767 && $(window).width() < 1024) {
             filterposition = $('.show-all-filters').offset().top;
@@ -405,10 +406,20 @@
           if ($('.show-all-filters').length > 0) {
             if ($(this).scrollTop() > filterposition) {
               filter.addClass('filter-fixed-top');
+              // Desktop & Tablet.
+              if ($(this).width() > 767 && $('body').hasClass('subcategory-listing-enabled')) {
+                if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
+                  subCategoryBlock.addClass('anti-ghosting');
+                }
+              }
               $('body').addClass('header-sticky-filter');
             }
             else {
               filter.removeClass('filter-fixed-top');
+              if ($('body').hasClass('subcategory-listing-enabled')) {
+                // Desktop & Tablet.
+                subCategoryBlock.removeClass('anti-ghosting-done');
+              }
               $('body').removeClass('header-sticky-filter');
             }
           }
@@ -433,6 +444,67 @@
               $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
             }
           }
+
+          if ($(window).width() < 1024) {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+              if (this.oldScroll > this.pageYOffset) {
+                // Action to perform when we scrolling up.
+                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category') && $('body').hasClass('subcategory-listing-enabled')) {
+                  // Tablet.
+                  if ($(window).width() > 767) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                  }
+                  // This small delay to ensure the entry animations works.
+                  setTimeout(function() {
+                    $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
+                  }, 5);
+                }
+              }
+              else {
+                // Action to perform when we are scrolling down.
+                if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+                  $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
+                }
+              }
+            }
+            else {
+              if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
+                $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
+              }
+            }
+            this.oldScroll = this.pageYOffset;
+          }
+          else {
+            if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('body').hasClass('subcategory-listing-enabled')) {
+              if (this.oldScroll > this.pageYOffset) {
+                // Action to perform when we scrolling up.
+                if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                  if ($(this).width() > 1024 && $('body').hasClass('subcategory-listing-enabled')) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                    // This small delay to ensure the entry animations works.
+                    setTimeout(function() {
+                      $('.sticky-filter-wrapper').addClass('show-sub-category');
+                    }, 5);
+                  }
+                  else {
+                    $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  }
+                }
+              } else {
+                // Action to perform when we are scrolling down.
+                if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                  $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                }
+              }
+            } else {
+              if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                $('.sticky-filter-wrapper').removeClass('show-sub-category');
+              }
+            }
+            this.oldScroll = this.pageYOffset;
+          }
         });
       }
 
@@ -445,6 +517,49 @@
       $(window, context).on('load', function () {
         // Calculate the filters top position now.
         stickyfacetfilter();
+      });
+    }
+  };
+
+  /**
+   * Scroll page to page title on selection of any of the facet item on PLPs except panty-guide.
+   */
+  Drupal.behaviors.alshayaAcmPlpFilterSelectionScroll = {
+    attach: function () {
+      var filterScrollPosition;
+
+      $(window).once('plp-filter-selection').on('load', function () {
+        // To get the offset top of plp Title, using title offset top.
+        var pageTitleOffset = $('#block-page-title').offset().top;
+        var brandingMenu = $('.branding__menu').height();
+        if($(window).width() < 768) {
+          var superCategoryMenuHeight = 0;
+          var mobileNavigationMenuHeight = 0;
+          if ($('.block-alshaya-super-category-menu').length > 0) {
+            superCategoryMenuHeight = $('.block-alshaya-super-category-menu').height();
+            mobileNavigationMenuHeight = $('.menu--mobile-navigation').height();
+          }
+          filterScrollPosition = pageTitleOffset - superCategoryMenuHeight - mobileNavigationMenuHeight - brandingMenu;
+        }
+        else {
+          filterScrollPosition = pageTitleOffset;
+        }
+        // on window onload so that it will check for subcategory-listing-enabled class
+        // after page load only
+        if ($('.subcategory-listing-enabled').length < 1) {
+          Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
+            var offset = $(response.selector).offset();
+
+            var scrollTarget = response.selector;
+            while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
+              scrollTarget = $(scrollTarget).parent();
+            }
+
+            if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+              $(scrollTarget).animate({ scrollTop: filterScrollPosition }, 500);
+            }
+          };
+        }
       });
     }
   };
@@ -468,7 +583,7 @@
           var active_facet_label = $(element).contents().not($('.facet-item__count')).text().trim();
           new_title += active_facet_label + ', ';
         }
-      })
+      });
 
       // Prepare the new title.
       var span_facet_title = '';
@@ -523,7 +638,7 @@
    * Calculate and add height for each product tile.
    */
   Drupal.plpListingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
+    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
       var Hgt = 0;
       $('.c-products__item').each(function () {
         var Height = $(this)

@@ -5,6 +5,48 @@
  * Install, update and uninstall hooks for alshaya_facets_pretty_paths module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\taxonomy\TermInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Use hyphen in alias for slash (punctuation).
+ * Update path aliases for terms with slash.
+ */
+function alshaya_facets_pretty_paths_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['pathauto.settings'],
+    'pathauto',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+
+  $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
+  $query->addField('ttfd', 'tid');
+  $query->condition('name', '%/%', 'LIKE');
+  $result = $query->execute()->fetchAllKeyed(0, 0);
+
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  foreach ($result as $tid) {
+    $term = $termStorage->load($tid);
+
+    // Sanity check.
+    if (!($term instanceof TermInterface)) {
+      continue;
+    }
+
+    foreach ($term->getTranslationLanguages() as $language) {
+      $translation = $term->getTranslation($language->getId());
+      $translation->path->pathauto = 1;
+      $translation->save();
+    }
+  }
+}
+
 /**
  * Implements hook_uninstall().
  */

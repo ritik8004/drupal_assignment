@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_user\Plugin\Block;
 
 use Drupal\alshaya_user\AlshayaUserInfo;
+use Drupal\user\Entity\User;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -235,7 +236,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
 
     // Get user id of user who's profile is currently visit.
     $account = $this->currentRequest->attributes->get('user');
-    if (empty($account)) {
+    if (!$account instanceof User) {
       $account = $this->currentUser;
     }
 

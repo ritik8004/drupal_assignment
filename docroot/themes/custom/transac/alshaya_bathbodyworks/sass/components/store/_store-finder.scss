@@ -514,6 +514,7 @@
 .nodetype--store .input--wrapper {
   position: absolute;
   #{$left}: 19%;
+  overflow: hidden !important;
 
   @include breakpoint($desktop) {
     width: 57% !important;

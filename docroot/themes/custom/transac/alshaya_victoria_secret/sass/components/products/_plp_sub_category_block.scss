@@ -1,0 +1,117 @@
+.c-plp {
+  .c-products-list {
+    .term-header {
+      .term-title {
+        font-family: $vs-bentonsanscomp-medium;
+        line-height: normal;
+      }
+
+      .term-desc {
+        line-height: normal;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .filter-fixed-top .sticky-filter-wrapper {
+      transition: height 0.5s ease-in-out;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .filter-fixed-top {
+      #block-subcategoryblock {
+        top: 3.5rem !important;
+
+        .plp-subcategory-block {
+          margin-#{$left}: -14.625rem;
+        }
+      }
+    }
+
+    .sticky-filter-wrapper {
+      #block-subcategoryblock {
+        .header-sticky-filter & {
+          visibility: hidden;
+          opacity: 0;
+          top: 2.5rem;
+          transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+          position: absolute;
+          width: 100%;
+        }
+      }
+
+      &.show-sub-category {
+        height: 14rem;
+
+        .container-without-product {
+          top: 0;
+          display: flex;
+          flex-flow: row wrap;
+        }
+
+        #block-subcategoryblock {
+          text-align: center;
+          visibility: visible;
+          opacity: 1;
+          top: 3.5rem;
+
+          .plp-subcategory-block {
+            border-bottom: none;
+            max-width: 77.25rem;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #block-subcategoryblock {
+      top: 0;
+      transform: translateY(0);
+      transition: transform 0.5s ease-in-out;
+      background: $modal_bg;
+      width: 100%;
+      z-index: 1;
+
+      &.mobile-sticky-sub-category {
+        transform: translateY(8.5625rem);
+      }
+
+      .plp-subcategory-block {
+        .sub-category {
+          .sub-category-image {
+            width: 4.375rem;
+            height: 3.25rem;
+          }
+        }
+      }
+    }
+
+    .filter-fixed-top {
+      #block-subcategoryblock {
+        position: fixed;
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .filter-fixed-top {
+      #block-subcategoryblock {
+        position: fixed;
+        background: $modal_bg;
+        width: 100%;
+        top: 3.2rem;
+        z-index: 1;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+
+        &.mobile-sticky-sub-category {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

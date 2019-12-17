@@ -15,6 +15,10 @@
       margin-#{$left}: 0;
       padding: 0.75rem;
     }
+
+    &:empty {
+      display: none;
+    }
   }
 
   .free-gift-image {
@@ -41,12 +45,38 @@
       width: calc(100% - (5.4375rem));
     }
 
-    .label {
+    .label,
+    .free-gift-title {
       font-size: 0.875rem;
       line-height: 1.29;
       color: $free-gifts-label;
       text-transform: capitalize;
       margin: 0.625rem 0 0.5rem;
+    }
+
+    &.free-gift-promo-list {
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+
+      .free-gift-wrapper {
+        width: calc(100% - (5.6875rem));
+
+        @include breakpoint($only-mobile) {
+          width: calc(100% - (5.4375rem));
+        }
+      }
+
+      .free-gift-title {
+        color: $free-gifts-coupon-code-text;
+        margin-top: 0;
+      }
+
+      .free-gift-message {
+        a {
+          text-decoration: underline;
+        }
+      }
     }
   }
 
@@ -131,6 +161,21 @@
           margin-bottom: 0.75rem;
         }
       }
+
+      article {
+        > .ajax-progress-throbber {
+          .throbber {
+            @include throbberLoader();
+          }
+        }
+      }
+    }
+  }
+
+  .item-list {
+    .slick-track {
+      display: flex;
+      flex-flow: row wrap;
     }
   }
 
@@ -189,6 +234,48 @@
       font-family: $alshaya-bold;
       line-height: 1.29;
       color: $free-gifts-modal-product-description-label;
+    }
+  }
+
+  .item-list {
+    width: 100%;
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      @include breakpoint($upto-desktop) {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-bottom: 1.5rem;
+      }
+    }
+
+    li {
+      @include breakpoint($upto-desktop) {
+        display: inline-block;
+        white-space: normal;
+        vertical-align: top;
+        position: relative;
+        width: 9rem;
+        margin-#{$right}: 0.625rem;
+      }
+    }
+
+    .ajax-progress-throbber {
+      .throbber {
+        @include throbberLoader();
+      }
+    }
+
+    .free-gift-title {
+      margin-top: 0.625rem;
+      color: $free-gifts-title-text;
+      font-size: 0.875rem;
+      text-align: center;
     }
   }
 }
@@ -274,6 +361,60 @@
       display: none;
     }
   }
+
+  .free-gift-promo-list {
+    .coupon-code {
+      display: inline-flex;
+
+      @include breakpoint($tablet) {
+        margin: 0 0.1875rem;
+      }
+
+      a {
+        color: $free-gifts-coupon-code-text !important;
+        text-transform: uppercase;
+      }
+    }
+
+    .gift-message {
+      > a {
+        display: inline !important;
+        text-decoration: underline;
+      }
+
+      .label {
+        color: $free-gifts-coupon-code-text;
+      }
+    }
+
+    .ajax-progress-throbber {
+      display: block !important;
+    }
+  }
+
+  #table-cart-items {
+    tr {
+      td {
+        .free-gift-promo-list {
+          a {
+            font-size: 0.75rem;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          position: relative;
+
+          .free-gift-label {
+            + .sku-promotions {
+              position: absolute;
+              bottom: 0;
+              width: 33%;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .acq-content-product-modal {
@@ -298,6 +439,117 @@
       .special--price,
       .price--discount {
         display: none;
+      }
+    }
+  }
+}
+
+.free-gift-detail-modal {
+  article {
+    > a {
+      font-size: 0.875rem;
+      line-height: 1.29;
+      color: $free-gifts-title-text;
+      text-decoration: underline;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 1.5rem;
+      }
+
+      @include icon(chevrondown, after) {
+        font-size: 1.5rem;
+        position: absolute;
+        #{$left}: 0;
+        top: 1.375rem;
+        transform: rotate(90deg);
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+
+        @include breakpoint($only-mobile) {
+          top: 0;
+        }
+      }
+    }
+  }
+
+  &#drupal-modal {
+    padding-top: 1rem;
+  }
+
+  button {
+    &.select-free-gift {
+      font-size: 0.875rem;
+      padding: 0.71875rem 1.0625rem;
+      margin: 0.875rem 0;
+      border: none;
+      background-color: $cart-free-gifts-label-background;
+      color: $cart-free-gifts-button-color;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .configurable-select {
+    padding: 0.875rem 0 0;
+
+    .list-title {
+      span {
+        font-size: 0.75rem;
+        line-height: 1.33;
+        color: $free-gifts-title-text;
+        text-transform: capitalize;
+      }
+
+      .selected-text {
+        font-weight: 700;
+      }
+    }
+
+    > label {
+      display: none;
+    }
+  }
+}
+
+.free-gift-listing-modal {
+  display: flex;
+  align-items: center;
+
+  .free-gift-view {
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+
+    .ajax-progress-throbber {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 0.625rem;
+    }
+  }
+
+  .free-gift-image {
+    width: auto;
+  }
+}
+
+.free-gift-promo-list-overlay {
+  .ui-dialog {
+    .ui-dialog-titlebar {
+      .ui-dialog-title {
+        display: block;
+        position: absolute;
+        color: $free-gifts-modal-promo-list-title-color;
+        z-index: 1;
+        #{$left}: 1.5rem;
+        top: 1.5rem;
+        text-transform: capitalize;
+
+        @include breakpoint($only-mobile) {
+          #{$left}: 0.5rem;
+        }
       }
     }
   }

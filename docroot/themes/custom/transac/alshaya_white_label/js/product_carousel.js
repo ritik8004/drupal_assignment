@@ -5,10 +5,18 @@
 
 /* global isRTL */
 
-/* global debounce */
-
 (function ($, Drupal) {
   'use strict';
+
+  /**
+   * Call blazyRevalidate() on afterChange of slick sliders.
+   */
+  function applyHorizontalLazyLoad(carousel) {
+    // Lazy Load on carousels.
+    carousel.on('afterChange', function () {
+      Drupal.blazyRevalidate();
+    });
+  }
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
@@ -50,6 +58,7 @@
         if ($(window).width() < 1024) {
           return;
         }
+
         // Get number of items.
         var itemsCount = ocObject.find('.views-row').length;
 
@@ -77,39 +86,45 @@
       var upSell = $('.horizontal-upell .owl-carousel');
       var relatedSell = $('.horizontal-related .owl-carousel');
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
+      var productCarouselClasses = ['.product-category-carousel', '.owl-carousel'];
 
       plpfeaturedproduct.each(function () {
         applyRtl($(this), optionsPlp);
+        applyHorizontalLazyLoad($(this));
       });
 
       advancedfeaturedproduct.each(function () {
         applyRtl($(this), optionshp);
+        applyHorizontalLazyLoad($(this));
       });
 
       basketHR.each(function () {
         applyRtl($(this), optionsBasket);
+        applyHorizontalLazyLoad($(this));
       });
 
       crossSell.each(function () {
         applyRtl($(this), optionsPdp);
+        applyHorizontalLazyLoad($(this));
       });
 
       upSell.each(function () {
         applyRtl($(this), optionsPdp);
+        applyHorizontalLazyLoad($(this));
       });
 
       relatedSell.each(function () {
         applyRtl($(this), optionsPdp);
+        applyHorizontalLazyLoad($(this));
       });
 
-      // To fix lazyload for horizontal scroll areas on devices.
-      // We dont use a slider in devices.
+      // We dont have carousel in tablets & phones,
+      // Enable horizontal lazy load.
       if ($(window).width() < 1024) {
-        $('.product-category-carousel').on('touchmove', debounce(function () {
-          if (typeof Drupal.blazyRevalidate !== 'undefined') {
-            Drupal.blazyRevalidate();
-          }
-        }, 350));
+        // Horizontal Lazy load for scroll areas.
+        $.each(productCarouselClasses, function (key, scrollArea) {
+          Drupal.blazyHorizontalLazyLoad(scrollArea);
+        });
       }
     }
   };

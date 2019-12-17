@@ -87,7 +87,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
 
   // Add class for products that have magazine layout.
   if ($current_route->getRouteName() == 'entity.node.canonical' && $current_route->getParameter('node')->bundle() == 'acq_product') {
-    $node = Drupal::request()->attributes->get('node');
+    $node = \Drupal::request()->attributes->get('node');
     if ($node instanceof NodeInterface) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -313,7 +313,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['brands'] = $brands;
     }
   }
-  elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
+  elseif ($variables['plugin_id'] === 'keyword_search_block') {
     $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
   }
 
@@ -352,6 +352,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
     if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_inline_layout';
     }
+  }
+
+  if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
   }
 
   // Add class for category facet.
@@ -413,6 +417,13 @@ function alshaya_white_label_theme_suggestions_views_view_unformatted_alter(arra
   elseif ($variables['view']->id() == 'stores_finder' && $variables['view']->current_display == 'page_2') {
     // If store finder glossary view.
     $suggestions[] = "views_view_unformatted__store_glossary";
+  }
+
+  if ($variables['view']->id() == 'alshaya_product_list' && $variables['view']->current_display == 'block_1') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      $suggestions[] = 'views_view_unformatted__alshaya_product_list_sub_cat';
+    }
   }
 }
 
@@ -733,7 +744,7 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
 
   // Check if we are on node page.
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
-    $node = Drupal::request()->attributes->get('node');
+    $node = \Drupal::request()->attributes->get('node');
 
     if ($node->bundle() == 'advanced_page') {
       $suggestions[] = 'page__advanced';
@@ -1578,6 +1589,10 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
  * Implements template_preprocess_image().
  */
 function alshaya_white_label_preprocess_image(&$variables) {
+  if (isset($variables['skip_lazy_loading']) && $variables['skip_lazy_loading']) {
+    return;
+  }
+
   $scheme = \Drupal::service('file_system')->uriScheme($variables['uri']);
 
   // Use lazy load only for public schema and for already relative urls.
@@ -1602,4 +1617,16 @@ function alshaya_white_label_preprocess_image_style(&$variables) {
     // Ensure we use relative urls everywhere.
     $variables['image']['#uri'] = file_url_transform_relative($variables['image']['#uri']);
   }
+
+  if (isset($variables['skip_lazy_loading'])) {
+    $variables['image']['#skip_lazy_loading'] = $variables['skip_lazy_loading'];
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
+  $theme_registry['image']['variables']['skip_lazy_loading'] = NULL;
+  $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
 }

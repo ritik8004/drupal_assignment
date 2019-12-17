@@ -65,7 +65,7 @@ header {
           position: relative;
           background-size: 1.875rem;
           margin-bottom: 0;
-          margin-top: 0.9375rem;
+          margin-top: 0.625rem;
           height: 1.75rem;
           width: 2.1875rem;
 
@@ -235,6 +235,7 @@ body {
 .c-menu-primary .store {
   @include breakpoint($only-mobile) {
     margin-#{$right}: 1.375rem;
+    top: 0.625rem;
 
     html[lang=ar] & {
       top: 0.625rem;
@@ -245,6 +246,10 @@ body {
 
 .c-menu-primary .mobile--search {
   html[lang=ar] & {
+    top: 0.625rem;
+  }
+
+  @include breakpoint($only-mobile) {
     top: 0.625rem;
   }
 }

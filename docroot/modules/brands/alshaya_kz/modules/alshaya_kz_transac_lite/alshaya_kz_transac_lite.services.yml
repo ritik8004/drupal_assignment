@@ -20,7 +20,7 @@ services:
     arguments:
       - '@alshaya_kz_transac_lite_knet.helper.inner'
       - '@config.factory'
-      - '@state'
+      - '@tempstore.shared'
       - '@logger.factory'
       - '@alshaya_kz_transac_lite.booking_payment_manager'
       - '@alshaya_kz_transac_lite.booking_manager'

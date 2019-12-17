@@ -19,6 +19,12 @@
     var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
     var windowBottom;
     var mobileCWBottom;
+    var mobileDynamicWrapper = 0;
+
+    // Only if dynamic promotion is enabled on pdp.
+    if ($('.sku-dynamic-promotion-link').length > 0) {
+      mobileDynamicWrapper = $('.promotions-dynamic-label').height() - 10;
+    }
     if (state === 'initial') {
       // Button top.
       var buttonTop = mobileContentWrapper.offset().top + mobileContentWrapper.height();
@@ -26,6 +32,10 @@
       windowBottom = $(window).scrollTop() + $(window).height();
       if (buttonTop > windowBottom) {
         button.addClass('fix-button');
+        if ($('.sku-dynamic-promotion-link').length > 0) {
+          // Add the specific class added for slide the dynamic promotion on load.
+          $('.basic-details-wrapper').addClass('fix-dynamic-promotion-button slide-dynamic-promotion-button');
+        }
       }
       else {
         button.removeClass('fix-button');
@@ -35,9 +45,9 @@
     else {
       // mobileContentWrapper bottom, based on direction we have to factor in the height of button
       // if it is already fixed.
-      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height();
+      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + 8;
       if (direction === 'up') {
-        mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + button.outerHeight() - 60;
+        mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + button.outerHeight() + mobileDynamicWrapper - 60;
       }
 
       // Screen scroll offset.
@@ -52,52 +62,60 @@
     }
   }
 
+  /**
+   * Helper function to compute height calculation of attributes wrapper.
+   */
+  function cartFormHeightCalculation() {
+    var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
+    var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
+    var mobileDynamicWrapper = 0;
+
+    // Only if dynamic promotion is enabled on pdp.
+    if ($('.sku-dynamic-promotion-link').length > 0) {
+      mobileDynamicWrapper = $('.promotions-dynamic-label').height();
+    }
+    mobileContentWrapper.css('height', 'auto');
+    mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight + mobileDynamicWrapper - 8);
+  }
+
+  /**
+   * Helper function to compute height calculation of attributes wrapper on cart form load.
+   */
+  function mobileStickyAddtobasketButtonHeightCalculation() {
+    // Only on mobile.
+    if ($(window).width() < 768) {
+      // Calculate the height of attributes wrapper.
+      cartFormHeightCalculation();
+
+      // Once add to cart form loaded recalculate the height of attributes wrapper.
+      $('.sku-base-form').once('bind-form-visible').on('form-visible', function () {
+        cartFormHeightCalculation();
+        mobileStickyAddtobasketButton('bottom', 'initial');
+      });
+
+      var lastScrollTop = 0;
+      $(window).on('scroll', function () {
+        var windowScrollTop = $(this).scrollTop();
+        var direction = 'bottom';
+        if (windowScrollTop > lastScrollTop) {
+          direction = 'bottom';
+        }
+        else {
+          direction = 'up';
+        }
+        lastScrollTop = windowScrollTop;
+        mobileStickyAddtobasketButton(direction, 'after');
+      });
+    }
+  }
+
+  mobileStickyAddtobasketButtonHeightCalculation();
+
   Drupal.behaviors.stickyAddtobasketButton = {
     attach: function (context, settings) {
-      // Only on mobile.
-      if ($(window).width() < 768) {
-        // Select the node that will be observed for mutations
-        var targetNode = document.querySelector('.acq-content-product .sku-base-form');
-        // Options for the observer (which mutations to observe)
-        var config = {attributes: true, childList: false, subtree: false};
-        // Callback function to execute when mutations are observed
-        var callback = function (mutationsList, observer) {
-          mutationsList.forEach(function (mutation) {
-            if ((mutation.type === 'attributes') &&
-                (mutation.attributeName === 'class') &&
-                (!mutation.target.classList.contains('visually-hidden'))) {
-              var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
-              var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
-              mobileContentWrapper.css('height', 'auto');
-              mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
-              mobileStickyAddtobasketButton('bottom', 'initial');
-              observer.disconnect();
-            }
-          });
-        };
-        // Create an observer instance linked to the callback function
-        var observer = new MutationObserver(callback);
-        // Start observing the target node for configured mutations
-        observer.observe(targetNode, config);
-
-        // Call only for simple product.
-        if ($('#configurable_ajax').length < 1) {
-          mobileStickyAddtobasketButton('bottom', 'initial');
-        }
-        var lastScrollTop = 0;
-        $(window).on('scroll', function () {
-          var windowScrollTop = $(this).scrollTop();
-          var direction = 'bottom';
-          if (windowScrollTop > lastScrollTop) {
-            direction = 'bottom';
-          }
-          else {
-            direction = 'up';
-          }
-          lastScrollTop = windowScrollTop;
-          mobileStickyAddtobasketButton(direction, 'after');
-        });
-      }
+      $('.basic-details-wrapper').once('bind-pdp-dynamic-promotion-enabled').on('pdp-dynamic-promotion-enabled', function () {
+        mobileStickyAddtobasketButtonHeightCalculation();
+      });
     }
   };
 

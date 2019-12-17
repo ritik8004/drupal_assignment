@@ -41,6 +41,7 @@ services:
       - '@acq_commerce.api'
       - '@redirect.repository'
       - '@alshaya_acm_product.sku_info'
+      - '@plugin.manager.block'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
     arguments:

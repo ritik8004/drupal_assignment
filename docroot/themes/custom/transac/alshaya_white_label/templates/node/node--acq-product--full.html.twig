@@ -42,7 +42,7 @@ set classes = [
             {{ content.price_block }}
           </div>
 
-          <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+          <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
           {% if vat_text %}
             <div class="vat-text">
@@ -63,11 +63,7 @@ set classes = [
             </div>
           {% endif %}
 
-          {% if content.free_gift_promotions %}
-            <div class="free-gift-promotions">
-              {{ content.free_gift_promotions }}
-            </div>
-          {% endif %}
+          <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
         </div>
       {% endblock %}
 

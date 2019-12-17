@@ -639,10 +639,24 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
       return;
     }
 
-    if (($brand = $request->query->get('brand')) && !is_numeric($brand)) {
-      $params = Url::fromUserInput("/$brand")->getRouteParameters();
-      if (!empty($params['taxonomy_term'])) {
-        $brand = $params['taxonomy_term'];
+    if (($brand = $request->query->get('brand'))) {
+      if (is_numeric($brand)) {
+        $brand = '';
+        $request->query->set('brand', '');
+      }
+      else {
+        try {
+          $params = Url::fromUserInput("/$brand")->getRouteParameters();
+          if (!empty($params['taxonomy_term'])) {
+            $brand = $params['taxonomy_term'];
+          }
+        }
+        catch (\Exception $e) {
+          // Ignore the value, someone is simply trying to mess up with system
+          // using random value in GET.
+          $brand = '';
+          $request->query->set('brand', '');
+        }
       }
     }
 

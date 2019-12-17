@@ -122,6 +122,7 @@
 
     .composition,
     .care-instructions,
+    .item-code,
     .warning,
     .concept {
       &-wrapper {
@@ -389,7 +390,7 @@
     div,
     ul,
     li {
-      display: inline;
+      display: inline-block;
     }
 
     > div {

@@ -1,0 +1,15 @@
+<div class="plp-subcategory-block">
+  {% for term in subcategories %}
+    <a href="#{{ term.title|clean_class }}">
+      <div class="sub-category" data-tid="{{ term.tid }}">
+        {% if term.image is not empty %}
+          <div class="sub-category-image">
+            <img src="{{ term.image.url }}" alt="{{ term.image.alt }}" title="{{ term.image.alt }}" />
+          </div>
+        {% endif %}
+
+        <div class="sub-category-title">{{ term.title }}</div>
+      </div>
+    </a>
+  {% endfor %}
+</div>

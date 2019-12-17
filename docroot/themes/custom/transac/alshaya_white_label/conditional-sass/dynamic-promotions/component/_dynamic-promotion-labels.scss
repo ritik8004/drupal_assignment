@@ -28,3 +28,88 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .c-pdp {
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        border-bottom: none;
+
+        .sku-base-form {
+          .promotions-dynamic-label {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: $promo_dynamic_label_txt_bg;
+            margin-#{$right}: 0;
+            margin-top: 0.5rem;
+            height: 2.5rem;
+            bottom: -3rem;
+
+            a {
+              &.sku-dynamic-promotion-link {
+                background: none;
+                margin: 0;
+                padding-top: 0.71875rem;
+                padding-bottom: 0.71875rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .dynamic-promotions-wrapper {
+      .edit-add-to-cart {
+        transition: none !important;
+      }
+    }
+
+    .fix-dynamic-promotion-button {
+      &.basic-details-wrapper {
+        .field--name-field-skus {
+          .sku-base-form {
+            button[type="submit"] {
+              &.fix-button {
+                bottom: 3rem;
+                box-shadow: 0 -1px 20px -1px $sticky-btn;
+              }
+            }
+          }
+
+          .promotions-dynamic-label {
+            position: fixed;
+            bottom: 0;
+            border: 0.5rem solid;
+            border-top: 0;
+            padding-top: 0;
+            margin-top: 0;
+            #{$left}: 0;
+            border-color: $promo-dynamic-label-border-color;
+            height: 3rem;
+            z-index: 5;
+          }
+        }
+      }
+    }
+
+    .slide-dynamic-promotion-button {
+      &.basic-details-wrapper {
+        .field--name-field-skus {
+          .promotions-dynamic-label {
+            transition: bottom 0.5s ease-in !important;
+          }
+        }
+      }
+    }
+
+    .mobile-only-dynamic-promotion {
+      &.hidden {
+        display: block;
+        visibility: hidden;
+        position: absolute;
+      }
+    }
+  }
+}

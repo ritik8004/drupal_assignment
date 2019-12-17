@@ -5,7 +5,7 @@
 
 /* global debounce */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   document.addEventListener('gesturestart', function (ee) {
@@ -182,15 +182,6 @@
         modalClasses('size-guide', 'sizeguide-modal-overlay');
       });
 
-      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
-        $('body').addClass('free-gifts-modal-overlay');
-        modalCloseBtnEvent();
-
-        $(document).ajaxComplete(function () {
-          modalCloseBtnEvent();
-        });
-      });
-
       var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
 
       $(document).on('keyup', function (evt) {
@@ -207,9 +198,26 @@
     }
   };
 
+  // For PLP we send two requests one to update the results and second to
+  // update the facets, Both takes different time to finish. We want to wait
+  // for both requests to finish before we hide the full page loader to allow
+  // user to interact with page.
+  var ajaxRequest = XMLHttpRequest.prototype.open;
+  var currentAJAXRequests = [];
+
+  if (typeof drupalSettings.alshayaSearch !== 'undefined' && drupalSettings.alshayaSearch.waitForAjax) {
+    XMLHttpRequest.prototype.open = function (method, url) {
+      if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1) {
+        currentAJAXRequests.push(url);
+        ajaxRequest.apply(this, arguments);
+      }
+    };
+  }
+
   // Add loader on plp search page.
   Drupal.behaviors.facetSearchLoader = {
     attach: function (context, settings) {
+
       $(document).ajaxSend(function (event, jqxhr, settings) {
         if (settings.url.indexOf('facets-block') > -1) {
           if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
@@ -218,7 +226,11 @@
         }
       });
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if (settings.url.indexOf('facets-block') > -1) {
+        currentAJAXRequests = currentAJAXRequests.filter(function (ele) {
+          return ele !== settings.url;
+        });
+
+        if (currentAJAXRequests.length === 0) {
           $('div.ajax-progress-fullscreen').remove();
         }
       });
@@ -273,4 +285,4 @@
       }
     }
   };
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);

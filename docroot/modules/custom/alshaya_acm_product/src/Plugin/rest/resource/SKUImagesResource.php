@@ -133,7 +133,7 @@ class SKUImagesResource extends ResourceBase {
       $sku_entity = SKU::loadFromSku($sku, $langcode);
 
       if ($sku_entity instanceof SKUInterface) {
-        $node_id = $this->skuManager->getDisplayNodeId($sku);
+        $node_id = $sku_entity->getPluginInstance()->getDisplayNodeId($sku_entity);
         // We may have some child SKUs which don't have a parent SKU / Node
         // in Drupal as they might be disabled.
         if ($node_id) {

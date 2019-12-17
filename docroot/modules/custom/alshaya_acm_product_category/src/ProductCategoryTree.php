@@ -6,6 +6,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
@@ -14,6 +15,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class ProductCategoryTree.
@@ -80,6 +82,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $routeMatch;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * The current path.
+   *
+   * @var \Drupal\Core\Path\CurrentPathStack
+   */
+  protected $currentPath;
+
+  /**
    * Database connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -141,6 +157,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route match service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
@@ -151,6 +171,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
+                              RequestStack $request_stack,
+                              CurrentPathStack $current_path,
                               Connection $connection,
                               ProductCategoryHelper $product_category_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
@@ -159,6 +181,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
+    $this->requestStack = $request_stack;
+    $this->currentPath = $current_path;
     $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->productCategoryHelper = $product_category_helper;
@@ -256,6 +280,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'depth' => (int) $term->depth_level,
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
         'move_to_right' => !is_null($term->field_move_to_right_value) ? (bool) $term->field_move_to_right_value : FALSE,
+        'app_navigation_link' => !is_null($term->field_show_in_app_navigation_value) ? (bool) $term->field_show_in_app_navigation_value : FALSE,
       ];
 
       if (!$term->display_in_desktop) {
@@ -443,6 +468,28 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $term = $this->termStorage->load($terms[0]['target_id']);
       }
     }
+    elseif (in_array($route_name, ['views.ajax', 'facets.block.ajax'])) {
+      $q = NULL;
+
+      // For facets block we get it in current request itself.
+      if ($route_name === 'facets.block.ajax') {
+        $q = $this->requestStack->getCurrentRequest()->getRequestUri();
+      }
+      // For views ajax requests it replaces current path.
+      // We get it from there.
+      else {
+        // For some reason we get double forward slash in beginning.
+        // We replace it with single forward slash.
+        $q = str_replace('//', '/', $this->currentPath->getPath());
+      }
+
+      if ($q) {
+        $route_params = Url::fromUserInput($q)->getRouteParameters();
+        if (isset($route_params['taxonomy_term'])) {
+          $term = $this->termStorage->load($route_params['taxonomy_term']);
+        }
+      }
+    }
 
     // If term is of 'acq_product_category' vocabulary.
     if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
@@ -504,7 +551,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->leftJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
-    $query->leftJoin('taxonomy_term__field_target_link', 'target_link', 'target_link.entity_id = tfd.tid AND target_link.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_target_link', 'target_link', 'target_link.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_override_target_link', 'override_target', 'override_target.entity_id = tfd.tid');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);
@@ -521,6 +568,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // For the `move to right`.
     $query->leftJoin('taxonomy_term__field_move_to_right', 'mtr', 'mtr.entity_id = tfd.tid');
     $query->fields('mtr', ['field_move_to_right_value']);
+
+    // For the `app navigation links`.
+    $query->leftJoin('taxonomy_term__field_show_in_app_navigation', 'mln', 'mln.entity_id = tfd.tid');
+    $query->fields('mln', ['field_show_in_app_navigation_value']);
 
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent_target_id', $parent_tid);
@@ -816,6 +867,30 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getExcludeNotInMenu() {
     return $this->excludeNotInMenu;
+  }
+
+  /**
+   * Check if category is a sub-category of given term.
+   *
+   * @param int $sub_category_id
+   *   Product category id.
+   * @param int $parent_category_id
+   *   Selected category id.
+   *
+   * @return bool
+   *   TRUE if $sub_category is a $sub-catgegory of $parent_category.
+   */
+  public function checkIfSubCategory($sub_category_id, $parent_category_id) {
+    if ($sub_category_id === $parent_category_id) {
+      return TRUE;
+    }
+    $ancestors = $this->termStorage->loadAllParents($sub_category_id);
+    foreach ($ancestors as $term) {
+      if ($term->id() === $parent_category_id) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
   /**

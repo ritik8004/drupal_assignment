@@ -19,5 +19,6 @@ services:
       - '@module_handler'
       - '@alshaya_acm_customer.orders_manager'
       - '@entity.repository'
+      - '@alshaya_acm_product.category_helper'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]

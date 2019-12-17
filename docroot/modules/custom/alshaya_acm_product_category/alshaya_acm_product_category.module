@@ -5,7 +5,9 @@
  * Module file.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -14,6 +16,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\ViewExecutable;
+use Drupal\views\ResultRow;
+use Drupal\file\FileInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -46,6 +52,25 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'current_term' => NULL,
         'depth_offset' => NULL,
         'current_term_parent_id' => NULL,
+      ],
+    ],
+    'alshaya_subcategory_block' => [
+      'template' => 'alshaya-subcategory-block',
+      'variables' => [
+        'subcategories' => NULL,
+      ],
+    ],
+    'alshaya_app_navigation_links' => [
+      'template' => 'alshaya-app-navigation-links',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+    'alshaya_group_by_sub_category_page_title' => [
+      'template' => 'alshaya-group-by-sub-category-page-title',
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
       ],
     ],
   ];
@@ -259,6 +284,180 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
   if (array_intersect($sale_ids, $term_ids)) {
     Cache::invalidateTags([ProductCategoryManager::CATEGORIZATION_IDS_CACHE_TAG]);
   }
+
+  // Get all selected subcategories to be displayed on PLP.
+  if ($selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue()) {
+    $children = array_keys(alshaya_acm_product_category_term_subcategories(NULL, $term));
+    foreach ($selected_subcategories as $key => $subcategory) {
+      if (!in_array($subcategory['value'], $children)) {
+        unset($selected_subcategories[$key]);
+      }
+    }
+    try {
+      $term->get('field_select_sub_categories_plp')->setValue($selected_subcategories);
+    }
+    catch (Exception $e) {
+      // Do nothing.
+    }
+  }
+
+  // Check if the term is referenced as a subcategory for grouping.
+  $connection = \Drupal::service('database');
+  $query = $connection->select('taxonomy_term__field_select_sub_categories_plp', 'sc');
+  $query->fields('sc', ['entity_id', 'field_select_sub_categories_plp_value ']);
+  $result = $query->execute()->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
+
+  foreach ($result as $row) {
+    if ($term->id() == $row['field_select_sub_categories_plp_value'] && !array_key_exists($row['entity_id'], $parents)) {
+      $parent_term = Term::load($row['entity_id']);
+      $selected_subcategories = $parent_term->get('field_select_sub_categories_plp')->getValue();
+      foreach ($selected_subcategories as $key => $subcategory) {
+        if ($subcategory['value'] == $term->id()) {
+          unset($selected_subcategories[$key]);
+        }
+      }
+      try {
+        $term->get('field_select_sub_categories_plp')->setValue($selected_subcategories);
+      }
+      catch (Exception $e) {
+        // Do nothing.
+      }
+      $parent_term->save();
+    }
+  }
+}
+
+/**
+ * Implements allowed values callback.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field for which this allowed values callback is called.
+ * @param \Drupal\taxonomy\Entity\Term $term
+ *   The term.
+ * @param bool $cacheable
+ *   Field is cacheable or not.
+ *
+ * @return array
+ *   The array of child terms.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $definition = NULL, Term $term = NULL, $cacheable = FALSE) {
+  $term_sub_categories = [];
+  if (empty($term)) {
+    $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+  }
+  if ($term instanceof TermInterface) {
+    $child_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term->id());
+    $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    foreach ($child_terms as $child) {
+      // Get current language translation if available.
+      if ($child->hasTranslation($current_language)) {
+        $child = $child->getTranslation($current_language);
+      }
+      $term_sub_categories[$child->id()] = $child->label('en');
+    }
+  }
+  return $term_sub_categories;
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
+  // Alter number of items per page for PLP / Search pages.
+  if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
+    // Initialise pager.
+    $view->getPager();
+
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+
+    // If group by sub-category is selected, disable pager.
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      $view->getPager();
+      $view->setItemsPerPage(0);
+
+      // Remove show_on_load to avoid any extra processing.
+      unset($_GET['show_on_load']);
+      \Drupal::request()->query->remove('show_on_load');
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == 'alshaya_product_list' && $view->current_display === 'block_1') {
+    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $term = $product_category_tree->getCategoryTermFromRoute();
+
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      $result_row = [];
+      // Get all selected subcategories to be displayed on PLP.
+      $selected_subcategories = array_column($term->get('field_select_sub_categories_plp')->getValue(), 'value') ?? [];
+
+      foreach ($view->result as $row) {
+        $product_categories = array_column($row->_object->getValue()->get('field_category')->getValue(), 'target_id') ?? [];
+
+        foreach ($selected_subcategories as $selected_subcategory) {
+          foreach ($product_categories as $product_category) {
+            if ($product_category_tree->checkIfSubCategory($product_category, $selected_subcategory)) {
+              $result_row[$selected_subcategory][] = $row;
+              break;
+            }
+          }
+        }
+      }
+
+      // Sort based on weight of taxonomy terms.
+      $child_terms = array_flip(array_keys(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term->id())));
+
+      try {
+        uksort($result_row, function ($a, $b) use ($child_terms) {
+          return $child_terms[$a] - $child_terms[$b] ?: $a - $b;
+        });
+      }
+      catch (Exception $e) {
+        // Do nothing.
+      }
+
+      // Empty view results to add new values.
+      $view->result = [];
+      $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      foreach ($result_row as $tid => $grouped_row) {
+        $category_term = $taxonomy_storage->load($tid);
+        // Get current language translation if available.
+        if ($category_term->hasTranslation($current_language)) {
+          $category_term = $category_term->getTranslation($current_language);
+        }
+
+        if ($category_term instanceof TermInterface) {
+          $category_row['group_details'] = [
+            'tid' => $tid,
+            'label' => $category_term->get('field_plp_group_category_title')->value ?? $category_term->label(),
+            'desc' => $category_term->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '',
+          ];
+          if ($category_term->get('field_plp_group_category_img')->first()) {
+            $file_value = $category_term->get('field_plp_group_category_img')->first()->getValue();
+            $image = \Drupal::service('entity_type.manager')->getStorage('file')->load($file_value['target_id']);
+            if ($image instanceof FileInterface) {
+              $category_row['group_details']['image'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+            }
+          }
+
+          $view->result[] = new ResultRow($category_row);
+          foreach ($grouped_row as $row) {
+            $view->result[] = $row;
+          }
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -345,4 +544,26 @@ function alshaya_acm_product_category_after_build(array $element, FormStateInter
   ];
 
   return $element;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_product_category_block_access(Block $block, $operation, AccountInterface $account) {
+  // Disable category facet on group by category listing pages (panty guide).
+  if ($operation == 'view' && $block->id() == 'categoryfacetplp') {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() == 'entity.taxonomy_term.canonical') {
+      /* @var \Drupal\taxonomy\Entity\Term $term */
+      $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+
+      if (empty($term)) {
+        return;
+      }
+
+      $result = AccessResult::forbiddenIf($term->get('field_group_by_sub_categories')->getString());
+      $result->addCacheTags($term->getCacheTags());
+      return $result;
+    }
+  }
 }

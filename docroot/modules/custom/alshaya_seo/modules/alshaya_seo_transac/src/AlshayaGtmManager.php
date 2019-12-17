@@ -4,6 +4,7 @@ namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
@@ -239,6 +240,13 @@ class AlshayaGtmManager {
   protected $entityRepository;
 
   /**
+   * Product Category Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -275,6 +283,8 @@ class AlshayaGtmManager {
    *   Orders Manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository object.
+   * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $productCategoryHelper
+   *   Product Category Helper.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -292,7 +302,8 @@ class AlshayaGtmManager {
                               SkuImagesManager $sku_images_manager,
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
-                              EntityRepositoryInterface $entityRepository) {
+                              EntityRepositoryInterface $entityRepository,
+                              ProductCategoryHelper $productCategoryHelper) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -310,6 +321,7 @@ class AlshayaGtmManager {
     $this->moduleHandler = $module_handler;
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
+    $this->productCategoryHelper = $productCategoryHelper;
   }
 
   /**
@@ -769,120 +781,42 @@ class AlshayaGtmManager {
    */
   public function fetchProductCategories(Node $product_node) {
     $terms = [];
-    if ($this->cache->get('alshaya_product_breadcrumb_terms_' . $product_node->id())) {
-      $terms = $this->cache->get('alshaya_product_breadcrumb_terms_' . $product_node->id());
+
+    // For GTM we always want English data.
+    $product_node = $this->entityRepository->getTranslationFromContext($product_node, 'en');
+    $langcode = $product_node->language()->getId();
+
+    $cid = implode(':', [
+      'alshaya_product_breadcrumb_terms',
+      $langcode,
+      $product_node->id(),
+    ]);
+
+    if ($this->cache->get($cid)) {
+      $terms = $this->cache->get($cid);
       return $terms->data;
     }
 
-    $product_term_list = $product_node->get('field_category')->getValue();
+    $cache_tags = ['node:' . $product_node->id()];
 
-    $inner_term = $this->termTreeGroup($product_term_list);
-    $taxonomy_parents = [];
-
-    if ($inner_term) {
-      $taxonomy_parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
+    $term_list = $product_node->get('field_category')->getValue();
+    foreach ($term_list as $term) {
+      $cache_tags[] = 'taxonomy_term:' . $term['target_id'];
     }
 
-    foreach ($taxonomy_parents as $taxonomy_parent) {
-      $terms[$taxonomy_parent->id()] = trim($taxonomy_parent->getName());
+    $parents = $this->productCategoryHelper->getBreadcrumbTermList($term_list);
+
+    /** @var \Drupal\taxonomy\Entity\Term $parent */
+    foreach ($parents ?? [] as $parent) {
+      // For GTM we always want English data.
+      $parent = $this->entityRepository->getTranslationFromContext($parent, 'en');
+      $terms[$parent->id()] = trim($parent->getName());
     }
 
     $terms = array_reverse($terms, TRUE);
-    $this->cache->set('alshaya_product_breadcrumb_terms_' . $product_node->id(), $terms, Cache::PERMANENT, ['node:' . $product_node->id()]);
+    $this->cache->set($cid, $terms, Cache::PERMANENT, $cache_tags);
 
     return $terms;
-  }
-
-  /**
-   * Get most inner term for the first group.
-   *
-   * @param array $terms
-   *   Terms array.
-   *
-   * @return int
-   *   Term id.
-   */
-  public function termTreeGroup(array $terms = []) {
-    if (!empty($terms)) {
-      $root_group = $this->getRootGroup($terms[0]['target_id']);
-      $root_group_terms = [];
-      foreach ($terms as $term) {
-        $root = $this->getRootGroup($term['target_id']);
-        if ($root == $root_group) {
-          $root_group_terms[] = $term['target_id'];
-        }
-      }
-
-      return $this->getInnerDepthTerm($root_group_terms);
-    }
-
-    return NULL;
-
-  }
-
-  /**
-   * Get the root level parent tid of a given term.
-   *
-   * @param int $tid
-   *   Term id.
-   *
-   * @return int
-   *   Root parent term id.
-   */
-  public function getRootGroup($tid) {
-    $roots = &drupal_static('alshaya_gtm_manager_get_root_group', []);
-
-    if (isset($roots[$tid])) {
-      return $roots[$tid];
-    }
-
-    $original = $tid;
-
-    // Recursive call to get parent root parent tid.
-    while ($tid > 0) {
-      $query = $this->database->select('taxonomy_term__parent', 'tth');
-      $query->fields('tth', ['parent_target_id']);
-      $query->condition('tth.entity_id', $tid);
-      $parent = $query->execute()->fetchField();
-      if ($parent == 0) {
-        $roots[$original] = $tid;
-        return $tid;
-      }
-
-      $tid = $parent;
-    }
-  }
-
-  /**
-   * Get the most inner term term based on the depth.
-   *
-   * @param array $terms
-   *   Array of term ids.
-   *
-   * @return int
-   *   The term id.
-   */
-  public function getInnerDepthTerm(array $terms = []) {
-    if (empty($terms)) {
-      return NULL;
-    }
-
-    $current_langcode = $this->languageManager->getDefaultLanguage()->getId();
-    $depths = $this->database->select('taxonomy_term_field_data', 'ttfd')
-      ->fields('ttfd', ['tid', 'depth_level'])
-      ->condition('ttfd.tid', $terms, 'IN')
-      ->condition('ttfd.langcode', $current_langcode)
-      ->execute()->fetchAllKeyed();
-
-    // Flip key/value.
-    $terms = array_flip($terms);
-    // Merge two array (overriding depth value).
-    $depths = array_replace($terms, $depths);
-    // Get all max values and get first one.
-    $max_depth = array_keys($depths, max($depths));
-    $most_inner_tid = $max_depth[0];
-
-    return $most_inner_tid;
   }
 
   /**

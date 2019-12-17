@@ -1,3 +1,5 @@
+{{ attach_library('alshaya_white_label/free_gifts') }}
+
 {% for id, promotion in promos %}
   {% if (promotion.sku_entity_id is not empty) and (promotion.coupon_code is not empty) %}
     <div class="free-gift-promo">
@@ -13,7 +15,7 @@
       </div>
     </div>
   {% elseif promotion.link is not empty %}
-    <div class="free-gift-promo">
+    <div class="free-gift-promo-list">
       <div class="gift-message">
         {{ promotion.link }}
       </div>

@@ -88,25 +88,40 @@ class ProductCategoryTermId extends ArgumentDefaultPluginBase implements Cacheab
    * {@inheritdoc}
    */
   public function getArgument() {
+    // This is not dependent on any external data, store in static cache.
+    static $argument = NULL;
+
     // Rely on the Request object to get the taxonomy term ids as views
     // arguments rather than Route matcher service. In case of AJAX requests
     // populating the facets, the arguments don't get populated leading to empty
     // facets on PLP/Promotion detail page post AJAX request.
-    if (($url_object = $this->pathValidator->getUrlIfValid($this->requestStack->getCurrentRequest()->getPathInfo())) &&
-      ($url_object->getRouteName() == 'entity.taxonomy_term.canonical') &&
-      ($taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term']) &&
-      (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)) {
-      $storage = $this->entityManager->getStorage('taxonomy_term');
-      $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id());
+    if (is_null($argument)
+      && ($url_object = $this->pathValidator->getUrlIfValid($this->requestStack->getCurrentRequest()->getPathInfo()))
+      && ($url_object->getRouteName() == 'entity.taxonomy_term.canonical')
+      && ($taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term'])
+      && (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)
+    ) {
+      $argument = '';
 
-      // Get the array of term ids from tree.
-      $terms = $term_items ? array_column($term_items, 'tid') : [];
+      // Support group by sub-categories.
+      if ($taxonomy_term->get('field_group_by_sub_categories')->getString()) {
+        $terms = array_column($taxonomy_term->get('field_select_sub_categories_plp')->getValue() ?? [], 'value');
+      }
+      else {
+        $storage = $this->entityManager->getStorage('taxonomy_term');
+        $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id());
 
-      // Add the main term on top.
-      array_unshift($terms, $taxonomy_term->id());
+        // Get the array of term ids from tree.
+        $terms = $term_items ? array_column($term_items, 'tid') : [];
 
-      return implode('+', $terms);
+        // Add the main term on top.
+        array_unshift($terms, $taxonomy_term->id());
+      }
+
+      $argument = implode('+', $terms);
     }
+
+    return $argument;
   }
 
   /**

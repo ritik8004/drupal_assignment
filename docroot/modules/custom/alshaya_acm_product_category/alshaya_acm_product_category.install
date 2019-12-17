@@ -16,6 +16,98 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Create 'sub category block title' for panty guide page.
+ */
+function alshaya_acm_product_category_update_8038() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.alshaya_group_by_sub_category_page_title'],
+    'alshaya_acm_product_category',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Making 'field_target_link' of category non-translatable.
+ */
+function alshaya_acm_product_category_update_8037() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['field.field.taxonomy_term.acq_product_category.field_target_link'],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new field `Show in app navigation`.
+ */
+function alshaya_acm_product_category_update_8036() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $fields = [
+    'field.storage.taxonomy_term.field_show_in_app_navigation',
+    'field.field.taxonomy_term.acq_product_category.field_show_in_app_navigation',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $fields,
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add fields for group by subcategory.
+ */
+function alshaya_acm_product_category_update_8035() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $configs = [
+    'field.storage.taxonomy_term.field_group_by_sub_categories',
+    'field.storage.taxonomy_term.field_select_sub_categories_plp',
+    'field.storage.taxonomy_term.field_plp_group_category_img',
+    'field.storage.taxonomy_term.field_plp_group_category_desc',
+    'field.storage.taxonomy_term.field_plp_group_category_title',
+    'field.field.taxonomy_term.acq_product_category.field_group_by_sub_categories',
+    'field.field.taxonomy_term.acq_product_category.field_select_sub_categories_plp',
+    'field.field.taxonomy_term.acq_product_category.field_plp_group_category_img',
+    'field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc',
+    'field.field.taxonomy_term.acq_product_category.field_plp_group_category_title',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  // Place block.
+  $manager->updateConfigs(
+    ['block.block.subcategoryblock'],
+    'alshaya_acm_product_category',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field `move to right`.
  */
 function alshaya_acm_product_category_update_8034() {
@@ -185,8 +277,7 @@ function alshaya_acm_product_category_update_8028() {
   ];
 
   foreach ($block_configs as $block) {
-    \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')
-      ->save();
+    \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')->save();
   }
 }
 
@@ -323,7 +414,9 @@ function alshaya_acm_product_category_update_8024() {
   ];
 
   foreach ($block_configs as $block) {
-    \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')
+    \Drupal::configFactory()
+      ->getEditable($block)
+      ->clear('visibility.hide_facet_condition_moschino')
       ->save();
   }
 }

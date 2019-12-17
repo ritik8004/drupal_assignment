@@ -40,4 +40,16 @@
     blazyTimeout = setTimeout(Drupal.blazy.revalidate, 100);
   };
 
+  /**
+   * Enables Blazy Lazy loading for horizontal scroll areas.
+   *
+   * @param {*} container
+   * The horizontal scroll area.
+   */
+  Drupal.blazyHorizontalLazyLoad = function (container) {
+    new Blazy({
+      container: container
+    });
+  };
+
 })(jQuery, Drupal);

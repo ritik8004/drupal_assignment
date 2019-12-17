@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product_category
+    - alshaya_super_category
+  theme:
+    - alshaya_white_label
+id: subcategoryblock
+theme: alshaya_white_label
+region: content
+weight: -39
+provider: null
+plugin: alshaya_sub_category_block
+settings:
+  id: alshaya_sub_category_block
+  label: 'Sub Category Block'
+  provider: alshaya_acm_product_category
+  label_display: '0'

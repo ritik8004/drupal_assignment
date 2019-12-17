@@ -202,7 +202,7 @@ class AlshayaConfigManager {
 
           // Some issue with array conversion in allowed values, we handle
           // exception with workaround for now.
-          if (isset($data['settings'], $data['settings']['allowed_values'])) {
+          if (isset($data['settings'], $data['settings']['allowed_values']) && !empty($data['settings']['allowed_values'])) {
             $resave_config = TRUE;
             $data['settings']['allowed_values'] = [];
           }

@@ -257,7 +257,8 @@ function alshaya_user_preprocess_page_title(&$variables) {
     if (!empty($arg[3])) {
       $back_link_route = ($arg[3] === 'order') ? 'acq_customer.orders' : 'entity.user.canonical';
 
-      $link = Url::fromRoute($back_link_route, ['user' => $user->id()])->toString();
+      $uid = $user instanceof User ? $user->id() : $user;
+      $link = Url::fromRoute($back_link_route, ['user' => $uid])->toString();
 
       $variables['title_prefix'] = [
         '#markup' => "<a href=" . $link . " class='back-link'>",

@@ -300,7 +300,7 @@
         overflow: hidden;
         margin-top: 1rem;
 
-        .js-form-wrapper {
+        .js-form-wrapper:not(.errors-container) {
           grid-column: 1 / -1;
         }
 
@@ -456,6 +456,24 @@
       span {
         &.out-of-stock {
           font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .magazine-layout-node {
+    .content__title_wrapper {
+      .promotions {
+        .promotions-dynamic-label {
+          a {
+            @include icon('chevron#{$right}', 'after') {
+              display: block !important;
+              width: auto;
+              height: auto;
+            }
+          }
         }
       }
     }

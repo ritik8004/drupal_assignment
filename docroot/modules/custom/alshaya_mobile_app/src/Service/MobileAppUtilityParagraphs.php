@@ -12,6 +12,7 @@ use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
@@ -22,6 +23,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\RedirectRepository;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Block\BlockManagerInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -71,6 +73,20 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected $entityFieldManager;
 
   /**
+   * Advanced page node object.
+   *
+   * @var \Drupal\node\NodeInterface|null
+   */
+  protected $advancedPageNode = NULL;
+
+  /**
+   * Block plugin manager.
+   *
+   * @var \Drupal\Core\Block\BlockManagerInterface
+   */
+  protected $blockPluginManager;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
@@ -109,6 +125,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Redirect repository.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_plugin_manager
+   *   Block plugin manager.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -128,13 +146,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     ConfigFactoryInterface $config_factory,
     APIWrapper $api_wrapper,
     RedirectRepository $redirect_repository,
-    SkuInfoHelper $sku_info_helper
+    SkuInfoHelper $sku_info_helper,
+    BlockManagerInterface $block_plugin_manager
   ) {
     parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
     $this->paragraphBaseFields = $this->entityFieldManager->getBaseFieldDefinitions('paragraph');
+    $this->blockPluginManager = $block_plugin_manager;
   }
 
   /**
@@ -791,9 +811,43 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           'image' => $this->getImages($block, 'field_image'),
         ];
       }
+      elseif ($item['plugin_id'] == 'alshaya_dp_navigation_link') {
+        return $this->prepareAppNavigationLinks($item);
+      }
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Get the app navigation links.
+   *
+   * @param array $item
+   *   Settings array.
+   *
+   * @return array
+   *   Block data.
+   */
+  public function prepareAppNavigationLinks(array $item) {
+    $data = [];
+
+    if (($node = $this->getAdvancedPageNode()) instanceof NodeInterface) {
+      $item['settings']['advanced_page_node'] = $node;
+
+      /** @var \Drupal\Core\Block\BlockPluginInterface $block_instance */
+      $block_instance = $this->blockPluginManager->createInstance($item['plugin_id'], $item['settings']);
+      if (!empty($block_data = $block_instance->build())) {
+        $data = [
+          'id' => 'alshaya_dp_navigation_link',
+          'label' => $item['settings']['label'],
+          'label_display' => (bool) $item['settings']['label_display'],
+          'l2' => $block_data['l2'] ?? [],
+          'l3' => $block_data['l3'] ?? [],
+        ];
+      }
+    }
+
+    return $data;
   }
 
   /**
@@ -804,6 +858,30 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function getBlockCacheTags(): array {
     return $this->cacheTags;
+  }
+
+  /**
+   * Get advanced page node object.
+   *
+   * @return \Drupal\node\NodeInterface|null
+   *   Advanced page node object.
+   */
+  public function getAdvancedPageNode() {
+    return $this->advancedPageNode;
+  }
+
+  /**
+   * Set advanced page node object.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Advanced page node object.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setAdvancedPageNode(NodeInterface $node) {
+    $this->advancedPageNode = $node;
+    return $this;
   }
 
 }

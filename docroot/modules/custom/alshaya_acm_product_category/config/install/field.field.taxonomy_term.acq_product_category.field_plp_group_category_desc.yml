@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_plp_group_category_desc
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    full_text: full_text
+    rich_text: rich_text
+    plain_text: plain_text
+    limited_options: '0'
+    mail_text: '0'
+id: taxonomy_term.acq_product_category.field_plp_group_category_desc
+field_name: field_plp_group_category_desc
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Description on grouping page'
+description: 'Enter the description that should be displayed when this sub-category is displayed on a PLP grouped by sub-categories.'
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

@@ -99,7 +99,14 @@
       };
 
       // Start the payment session.
-      applePaySessionObject = new ApplePaySession(1, paymentRequest);
+      try {
+        applePaySessionObject = new ApplePaySession(1, paymentRequest);
+      }
+      catch(e) {
+        Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+        $(document).trigger('apple_pay_cancel');
+        return false;
+      }
 
       // Merchant Validation.
       applePaySessionObject.onvalidatemerchant = function (event) {
