@@ -133,8 +133,12 @@ ul[data-drupal-facet-id=promotion_category_facet] {
   }
 }
 
-.facet-all-clear {
-  li.clear-all > a {
-    line-height: 1;
+.c-plp {
+  .region__content {
+    .block-facets-summary-blockfilter-bar-plp {
+      ul li.clear-all {
+        margin-bottom: 0;
+      }
+    }
   }
 }
