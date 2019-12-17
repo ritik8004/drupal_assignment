@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
+use Drupal\alshaya_custom\Utility;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -138,7 +138,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
 
         $subcategories[$subcategory->id()] = $data;
       }
-      uasort($subcategories, [AlshayaPlpSortSettingsForm::class, 'weightArraySort']);
+      uasort($subcategories, [Utility::class, 'weightArraySort']);
 
       return [
         '#theme' => 'alshaya_subcategory_block',
