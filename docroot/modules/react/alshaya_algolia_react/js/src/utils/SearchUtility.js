@@ -32,6 +32,7 @@ function hideSearchResultContainer() {
   searchResultDiv.style.display = 'none';
   searchResultDiv.classList.remove('show-algolia-result');
   pageStandard.className = defaultClasses;
+  Drupal.blazyRevalidate();
 }
 
 function toggleSearchResultsContainer(query) {
