@@ -10,10 +10,13 @@ interface AcqPromotionInterface {
   /**
    * Get inactive promo label.
    *
+   * @param bool $thresholdReached
+   *   Cart Total reached promotion threshold or not.
+   *
    * @return mixed
    *   Inactive promo label.
    */
-  public function getInactiveLabel();
+  public function getInactiveLabel($thresholdReached = FALSE);
 
   /**
    * Get active promo label.
