@@ -56,17 +56,17 @@
             // Get the Left postion of L2 wrapper
             var posEleL2Wrapper = eleL2Wrapper.offset().left
             // Get the Left position of the L2 links list wrapper.
-            var posL2WrapperLinks = eleL2LinksWrapper.offset().left;
+            var posL2LinksWrapper = eleL2LinksWrapper.offset().left;
 
             // Get the Right position of Main Menu.
             var posRightEleMainMenu = eleMainMenu.width() + posEleMainMenu;
             // Get the Right position of the L2 wrapper.
-            var posRightL2WrapperLinks = posL2WrapperLinks + eleL2LinksWrapper.outerWidth() + eleL2HighlightWrapper.outerWidth();
+            var posRightL2Wrapper = posL2LinksWrapper + eleL2LinksWrapper.outerWidth() + eleL2HighlightWrapper.outerWidth();
 
             // Set the position for English layout.
             if ($('html').attr('dir') === 'ltr') {
-              if (posRightEleMainMenu < posRightL2WrapperLinks) {
-                var getLeftPos = -(posRightL2WrapperLinks - posRightEleMainMenu);
+              if (posRightEleMainMenu < posRightL2Wrapper) {
+                var getLeftPos = -(posRightL2Wrapper - posRightEleMainMenu);
                 eleL2Wrapper.css('left', getLeftPos);
               }
               // Set the position for Arabic layout.
