@@ -117,6 +117,13 @@
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
+        // Also reset the sub category block if available.
+        if ($(body).hasClass('subcategory-listing-enabled')) {
+          // For mobile.
+          if ($(window).width < 768) {
+            $('.block-alshaya-sub-category-block').removeClass('mobile-sticky-sub-category');
+          }
+        }
       });
 
       if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
