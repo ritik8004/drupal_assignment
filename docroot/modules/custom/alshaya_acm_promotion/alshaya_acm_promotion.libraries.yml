@@ -1,3 +1,8 @@
+free_gift_styles:
+  version: 1.x
+  css:
+    theme:
+      css/alshaya_acm_promotion.free_gift.css: {}
 free_gift:
   version: 1.x
   js:

@@ -117,12 +117,12 @@ class SelectFreeGiftForm extends FormBase {
       '#attributes' => [
         'class' => ['select-free-gift'],
       ],
-      '#access' => !empty($coupon) && !empty($promotion_id),
     ];
 
     // Required for common js to get applied.
     $form['#attributes']['data-sku'] = $sku->getSku();
     $form['#attributes']['class'][] = 'sku-base-form';
+    $form['#attached']['library'][] = 'alshaya_acm_promotion/free_gift_styles';
 
     if ($sku->bundle() == 'configurable') {
       $form['select']['#attributes']['disabled'] = 'disabled';
@@ -197,7 +197,7 @@ class SelectFreeGiftForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
+    // Do nothing.
   }
 
 }
