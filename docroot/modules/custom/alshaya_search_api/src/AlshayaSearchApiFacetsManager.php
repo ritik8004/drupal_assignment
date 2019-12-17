@@ -267,7 +267,7 @@ class AlshayaSearchApiFacetsManager {
         uasort($blocks_list, [$this, 'sortBlocksByWeight']);
         foreach ($blocks_list as $block) {
           // If block is enabled.
-          if ($block instanceof BlockInterface && $block->status()) {
+          if ($block instanceof BlockInterface && $block->status() && $block->access('view')) {
             $blocks[] = $this->entityTypeManager->getViewBuilder('block')->view($block);
           }
         }
