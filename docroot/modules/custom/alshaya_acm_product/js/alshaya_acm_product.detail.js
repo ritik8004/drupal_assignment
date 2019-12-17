@@ -63,30 +63,14 @@
         }
       });
 
-      // Display images in case of in stock as well as out of stock products.
-      var stockOutOfStockSelecter = 'out-of-stock';
-      if($('form').hasClass('sku-base-form')) {
-        var stockOutOfStockSelecter = 'sku-base-form';
-      }
-      $('.' + stockOutOfStockSelecter).once('load').each(function () {
-        var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
-        if (stockOutOfStockSelecter == 'sku-base-form') {
-          var sku = $(this).attr('data-sku');
-        }
-
+      $('.sku-base-form').once('load').each(function () {
+        var sku = $(this).attr('data-sku');
         if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
-        // Incase if configurable product is out of stock then show their first variant images.
-        if (drupalSettings.productInfo[sku]['variants'] && (stockOutOfStockSelecter = 'out-of-stock')) {
-          var variantInfo = drupalSettings.productInfo[sku]['variants'];
-          var firstVariant = Object.keys(variantInfo)[0];
-          Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo[firstVariant].gallery);
-        }
-
 
         $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
@@ -154,13 +138,63 @@
           }
 
           var firstAttribute = $('.form-select[data-configurable-code]:first', this);
-          if (drupalSettings.configurableCombinations) {
+          var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
+          $(firstAttribute).removeProp('selected').removeAttr('selected');
+          $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
+          $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
+        }
+      });
+
+
+      // Show images for oos product on PDP.
+      $('.out-of-stock').once('load').each(function () {
+        var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
+        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
+        var node = $(this).parents('article.entity--type-node:first');
+        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        // Incase if configurable product is out of stock then show their first variant images.
+        if (drupalSettings.productInfo[sku]['variants']) {
+          var variantInfo = drupalSettings.productInfo[sku]['variants'];
+          var firstVariant = Object.keys(variantInfo)[0];
+          Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo[firstVariant].gallery);
+        }
+
+        if (drupalSettings.productInfo[sku]['variants']) {
+          var variants = drupalSettings.productInfo[sku]['variants'];
+          var selectedSku = Object.keys(variants)[0];
+          var selected = parseInt(Drupal.getQueryVariable('selected'));
+
+          if (selected > 0) {
+            for (var i in variants) {
+              if (variants[i]['id'] === selected) {
+                selectedSku = variants[i]['sku'];
+                break;
+              }
+            }
+          }
+          else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
+            // Try to get first child with parent sku matching. This could go
+            // in color split but is generic enough so added here.
+            for (var i in variants) {
+              if (variants[i]['parent_sku'] === sku) {
+                selectedSku = variants[i]['sku'];
+                break;
+              }
+            }
+          }
+
+          if(drupalSettings.configurableCombinations) {
+            var firstAttribute = $('.form-select[data-configurable-code]:first', this);
             var firstAttributeValue = drupalSettings.configurableCombinations[sku]['bySku'][selectedSku][firstAttribute.attr('data-configurable-code')];
             $(firstAttribute).removeProp('selected').removeAttr('selected');
             $('option[value="' + firstAttributeValue + '"]', firstAttribute).prop('selected', true).attr('selected', 'selected');
             $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
           }
         }
+
       });
     }
   };
