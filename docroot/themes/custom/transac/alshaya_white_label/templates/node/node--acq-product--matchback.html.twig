@@ -1,0 +1,118 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+
+<article{{ attributes }} {{ gtm_attributes }}>
+  <div class="cross-sell-product-components">
+
+    <div class="cross-sell-product-component-left {{ image_slider_position_pdp }}">
+      {% if content.gallery is not empty %}
+      {{ content.gallery }}
+      {% else %}
+      <div id="product-zoom-container"></div>
+      {% endif %}
+    </div>
+
+    <div class="cross-sell-product-component-center content__title_wrapper">
+      {% if content.brand_logo %}
+      <div class="brand-logo-wrapper">
+        {{ content.brand_logo }}
+      </div>
+      {% endif %}
+      <h1>{{ label }}</h1>
+      <div class="short-description-wrapper">
+        <div class="content--short-description">
+          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+          <div class="field__content-wrapper">
+            <div class="field__content">
+              <div class="desc-wrapper">
+                {% if content.short_desc.label|render %}
+                <div class="desc-label">
+                  {{ content.short_desc.label }}
+                </div>
+                {% endif %}
+                {% if content.short_desc.value|render %}
+                <div class="desc-value">
+                  {{ content.short_desc.value }}
+                </div>
+                {% endif %}
+              </div>
+              {% for desc in content.description %}
+              {% if desc.value|render %}
+              <div class="desc-wrapper">
+                {% if desc.label|render %}
+                <div class="desc-label">
+                  {{ desc.label }}
+                </div>
+                {% endif %}
+
+                <div class="desc-value">
+                  {{ desc.value }}
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            {% if content.description %}
+            {% if content.read_more_style.value|render %}
+            <span class="read-more-description-link"
+              style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+            <span class="read-more-description-link-mobile"
+              style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+            {% else %}
+            <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+            <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+            {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="description-wrapper">
+        <div class="content--description">
+          <span class="close"></span>
+          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+          <div class="field__content">
+            {% for desc in content.description  %}
+            {% if desc.value|render %}
+            <div class="desc-wrapper">
+              {% if desc.label|render %}
+              <div class="desc-label">
+                {{ desc.label }}
+              </div>
+              {% endif %}
+
+              <div class="desc-value">
+                {{ desc.value }}
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="gradient-holder"></div>
+      </div>
+      <div class="price-block {{ content.price_block_identifier }}">
+        {{ content.price_block }}
+      </div>
+      <div class="content--item-code">
+        <span class="field__label">{{ 'Item Code'|t }}:</span>
+        <span class="field__value">{{ content.item_code }}</span>
+      </div>
+    </div>
+
+    <div class="cross-sell-product-component-right">
+      {% block sizeVolume %}
+      {% endblock %}
+      <div class="mobile-content-wrapper">
+        <div class="basic-details-wrapper">
+          {{ content.field_skus }}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</article>

@@ -637,16 +637,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $build['mobile_add_to_cart_form'] = [];
       }
-      elseif ($view_mode == 'matchback') {
-        // Get the image.
-        $build['image'] = [];
-
-        $sku_media = $skuImagesManager->getFirstImage($sku_entity);
-
-        if (!empty($sku_media['drupal_uri'])) {
-          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
-        }
-      }
       elseif ($view_mode == 'modal') {
         $context = 'modal';
 
@@ -659,8 +649,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       }
 
-      // Process price block and gallery for modal and full view mode.
-      if (in_array($view_mode, ['modal', 'full'])) {
+      // Process price block and gallery for modal, matchback and full view mode.
+      if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
 
         $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
