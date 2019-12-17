@@ -37,7 +37,9 @@
       clearTimeout(blazyTimeout);
     }
 
-    blazyTimeout = setTimeout(Drupal.blazy.revalidate, 100);
+    if (typeof Drupal.blazy !== 'undefined') {
+      blazyTimeout = setTimeout(Drupal.blazy.revalidate, 100);
+    }
   };
 
   /**
