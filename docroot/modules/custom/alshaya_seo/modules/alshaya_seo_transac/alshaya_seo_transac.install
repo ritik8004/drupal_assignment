@@ -23,7 +23,7 @@ function alshaya_seo_transac_update_8408() {
     }
   }
 
-  // Enable variants for bundle types i.e. acq_product_category, acq_product
+  // Enable variants for bundle types i.e. acq_product_category, acq_product.
   $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
   $sitemap->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
 }
@@ -162,7 +162,7 @@ function alshaya_seo_transac_install() {
     }
   }
 
-  // Enable variants for bundle types i.e. acq_product_category, acq_product
+  // Enable variants for bundle types i.e. acq_product_category, acq_product.
   $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
   $sitemap->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
 }
