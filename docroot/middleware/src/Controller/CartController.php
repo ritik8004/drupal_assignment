@@ -6,6 +6,7 @@ use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoInfo;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,6 +37,13 @@ class CartController {
   protected $cart;
 
   /**
+   * Logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * CartController constructor.
    *
    * @param \App\Service\Cart $cart
@@ -44,11 +52,14 @@ class CartController {
    *   Drupal service.
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger service.
    */
-  public function __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info) {
+  public function __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info, LoggerInterface $logger) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
+    $this->logger = $logger;
   }
 
   /**
@@ -66,6 +77,10 @@ class CartController {
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
+      $this->logger->error('Error while getting cart', [
+        'cart_id' => $cart_id,
+        'error' => json_encode($data),
+      ]);
       return new JsonResponse($data);
     }
 
