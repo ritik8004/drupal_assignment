@@ -22,6 +22,9 @@ foreach ($users as $uid => $mail) {
 
   try {
     $customer = $api_wrapper->getCustomer($mail, FALSE);
+    if (empty($customer['customer_id'])) {
+      throw new \Exception('Empty customer');
+    }
   }
   catch (\Exception $e) {
     $customer_not_found[] = $mail;
