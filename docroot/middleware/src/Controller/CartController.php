@@ -77,7 +77,7 @@ class CartController {
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
-      $this->logger->error('Error while getting cart', [
+      $this->logger->error('Error while getting cart:{cart_id} Error:{error}', [
         'cart_id' => $cart_id,
         'error' => json_encode($data),
       ]);

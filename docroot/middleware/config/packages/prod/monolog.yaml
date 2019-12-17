@@ -23,4 +23,5 @@ monolog:
 #            channels: ["php"]
         syslog:
             type: syslog
-            level: debug
+            level: info
+            formatter: alshaya_middleware.log_fromatter

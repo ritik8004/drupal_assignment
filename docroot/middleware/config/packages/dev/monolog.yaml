@@ -20,3 +20,4 @@ monolog:
         syslog:
             type: syslog
             level: debug
+            formatter: alshaya_middleware.log_fromatter

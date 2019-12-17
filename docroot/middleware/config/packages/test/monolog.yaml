@@ -1,7 +1,12 @@
 monolog:
     handlers:
-        main:
-            type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
-            channels: ["!event"]
+#        main:
+#            type: stream
+#            path: "%kernel.logs_dir%/%kernel.environment%.log"
+#            level: debug
+#            channels: ["!event"]
+
+          syslog:
+              type: syslog
+              level: debug
+              formatter: alshaya_middleware.log_fromatter
