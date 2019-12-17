@@ -9,8 +9,6 @@ dependencies:
   module:
     - node
     - user
-_core:
-  default_config_hash: yawgNzoQqqoPgr6OKY7hRY9li5jBX6ge63FSbtT8hdg
 id: product_slider
 label: 'Product Slider'
 module: views
