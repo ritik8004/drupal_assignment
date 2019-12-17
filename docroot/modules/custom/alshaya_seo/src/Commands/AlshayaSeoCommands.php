@@ -187,9 +187,7 @@ class AlshayaSeoCommands extends DrushCommands {
    * @aliases rs, reset-sitemap-index
    *
    * @option batch-size
-   *   The number of items to generate/process per batch run. If batch size is
-   *   not provided, then default `image_sitemap_batch_chunk_size` from
-   *   `alshaya_image_sitemap.settings` config will be used.
+   *   The number of items to generate/process per batch run.
    *
    * @usage drush reset-sitemap
    *   Reset Sitemap based on l1 variants.

@@ -172,4 +172,25 @@ class AlshayaSitemapManager {
     }
   }
 
+  /**
+   * A helper function to enable variants for entity types.
+   *
+   * @param array $entity_types
+   *   The entity types.
+   */
+  public function enableEntityTypeVariants(array $entity_types) {
+    $variants = $this->generator->getSitemapManager()->getSitemapVariants();
+
+    // Skip default variant.
+    $variants = array_diff(array_keys($variants), ['default']);
+
+    foreach ($entity_types as $entity_type_id => $bundle_types) {
+      foreach ($variants as $variant) {
+        $this->generator
+          ->setVariants([$variant])
+          ->setBundleSettings($entity_type_id, $bundle_types, ['index' => TRUE]);
+      }
+    }
+  }
+
 }
