@@ -938,6 +938,9 @@ class SkuManager {
           }
           break;
       }
+
+      $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
+      $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
     }
 
     // For configurable products there are many rules like rules on product

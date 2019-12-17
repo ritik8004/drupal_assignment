@@ -431,7 +431,8 @@ class AlshayaPromotionsManager {
         ],
       ];
 
-      if (count($free_skus) > 1) {
+      // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
+      if ($promotion['promo_type'] == 1) {
         $route_parameters['node'] = $promotion_id;
         $link_coupons = Link::createFromRoute(
           reset($coupons),
