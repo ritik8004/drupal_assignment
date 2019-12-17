@@ -5,22 +5,11 @@
         width: auto;
         #{$right}: inherit;
         display: flex;
-        height: auto !important;
       }
 
       ul.menu--one__list .menu-backdrop {
         display: none !important;
       }
-    }
-
-    .has--three-levels .menu--two__list .menu__links__wrapper {
-      display: flex;
-      flex-direction: column;
-      width: auto;
-      flex-wrap: wrap;
-      max-width: 80rem;
-      background: $mm_bg;
-      max-height: 26rem;
     }
 
     .term-image__wrapper {
