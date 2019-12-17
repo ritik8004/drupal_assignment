@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -126,6 +127,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
           $data['title'] = $subcategory->label();
         }
 
+        $data['weight'] = $subcategory->getWeight();
         $data['description'] = $subcategory->get('field_plp_group_category_desc')->value ?? '';
 
         $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
@@ -136,6 +138,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
 
         $subcategories[$subcategory->id()] = $data;
       }
+      uasort($subcategories, [AlshayaPlpSortSettingsForm::class, 'weightArraySort']);
 
       return [
         '#theme' => 'alshaya_subcategory_block',
