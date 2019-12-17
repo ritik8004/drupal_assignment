@@ -6,15 +6,6 @@
 (function ($) {
   'use strict';
 
-  // For RTL, we have some code to mess with page scroll.
-  // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
-  $(window).on('pageshow', function () {
-    var storage_value = getAlgoliaStorageValues();
-    if (typeof storage_value !== 'undefined' && storage_value !== null) {
-      setTimeout(Drupal.processBackToSearch(storage_value), 10);
-    }
-  });
-
   /**
    * Get the storage values.
    *
@@ -81,10 +72,7 @@
         }
 
         if (typeof storage_value.sku !== 'undefined') {
-          // Set timeout because of conflict.
-          setTimeout(function () {
-            scrollToAlgoliaProduct();
-          }, 700);
+          scrollToAlgoliaProduct();
         }
       }
     });

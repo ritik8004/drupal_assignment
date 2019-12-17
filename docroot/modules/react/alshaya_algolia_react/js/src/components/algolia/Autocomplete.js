@@ -44,7 +44,19 @@ class Autocomplete extends React.Component {
   }
 
   componentDidMount()  {
+    window.addEventListener('popstate', this.onPopState);
     this.onKeyUp();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.onPopState);
+  }
+
+  onPopState = event => {
+    let query = getCurrentSearchQuery();
+    if (Object.keys(query).length > 0) {
+      this.onChange(null, {newValue: query});
+    }
   }
 
   toggleFocus = (action) => {
