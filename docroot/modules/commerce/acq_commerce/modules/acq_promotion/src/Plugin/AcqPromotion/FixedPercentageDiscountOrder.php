@@ -64,11 +64,11 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   /**
    * {@inheritdoc}
    */
-  public function getInactiveLabel($thresholdReached = FALSE) {
+  public function getInactiveLabel() {
     $label = parent::getInactiveLabel();
 
     // Override label to include coupon if threshold has reached.
-    if ($thresholdReached) {
+    if ($this->checkThresholdReached()) {
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
       $promotion_data = unserialize($promotion_data);
       $percent = NULL;
@@ -97,6 +97,39 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
    */
   public function getActiveLabel() {
     return '';
+  }
+
+  /**
+   * Compare cart sub total and promotion threshold price.
+   *
+   * @return bool
+   *   Flag if threshold value reached.
+   */
+  protected function checkThresholdReached() {
+    $reached = FALSE;
+    if (!empty($cart = $this->cartStorage->getCart(FALSE)->totals())) {
+      $cartValue = $cart['sub'];
+
+      $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+      $promotion_data = unserialize($promotion_data);
+      $threshold_price = 0;
+
+      if (!empty($promotion_data)
+        && !empty($promotion_data['condition'])
+        && !empty($promotion_data['condition']['conditions'])) {
+        foreach ($promotion_data['condition']['conditions'] as $condition) {
+          if ($condition['attribute'] === 'base_subtotal') {
+            $threshold_price = $condition['value'];
+          }
+        }
+      }
+
+      if ($cartValue > $threshold_price) {
+        $reached = TRUE;
+      }
+    }
+
+    return $reached;
   }
 
 }

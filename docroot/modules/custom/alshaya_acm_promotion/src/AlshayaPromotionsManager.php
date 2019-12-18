@@ -633,13 +633,11 @@ class AlshayaPromotionsManager {
    *   Promotion Node.
    * @param bool $status
    *   Active or Inactive Flag.
-   * @param bool $thresholdReached
-   *   Flag for threshold reached or not.
    *
    * @return array|null
    *   Promotion data.
    */
-  public function getPromotionData(NodeInterface $promotion, $status = TRUE, $thresholdReached = TRUE) {
+  public function getPromotionData(NodeInterface $promotion, $status = TRUE) {
     $data = NULL;
     $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
     $definitions = $this->acqPromotionPluginManager->getDefinitions();
@@ -653,7 +651,7 @@ class AlshayaPromotionsManager {
           $promotion
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
-          $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel($thresholdReached);
+          $label = $status ? $promotionPlugin->getActiveLabel() : $promotionPlugin->getInactiveLabel();
 
           if (!empty($label)) {
             $data = [
@@ -674,19 +672,15 @@ class AlshayaPromotionsManager {
   /**
    * Fetches Inactive Cart promotion.
    *
-   * @param string $cartSubTotal
-   *   Cart Sub total value.
    * @param array $config
    *   Subtype configuration.
-   * @param bool $thresholdReached
-   *   Flag for threshold reached or not.
    * @param array $cartPromotionsApplied
    *   Promotion Nid List applied to cart.
    *
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion($cartSubTotal, array $config, &$thresholdReached, array $cartPromotionsApplied = []) {
+  public function getInactiveCartPromotion(array $config, array $cartPromotionsApplied = []) {
     // Filter promotions based on block config.
     $subtypes = [];
     foreach ($config as $key => $subtype) {
@@ -702,7 +696,7 @@ class AlshayaPromotionsManager {
       foreach ($allCartPromotions as $priceSortedPromotions) {
         ksort($priceSortedPromotions);
 
-        foreach ($priceSortedPromotions as $price => $promotions) {
+        foreach ($priceSortedPromotions as $promotions) {
           foreach ($promotions as $promotion) {
             if (!in_array($promotion, $cartPromotionsApplied)) {
               $promotion = $this->nodeStorage->load($promotion);
@@ -710,10 +704,6 @@ class AlshayaPromotionsManager {
 
               // Check if this promotion meets config subtypes.
               if (in_array($subtype, $subtypes)) {
-                if ($price <= $cartSubTotal) {
-                  $thresholdReached = TRUE;
-                }
-
                 return $promotion;
               }
             }
