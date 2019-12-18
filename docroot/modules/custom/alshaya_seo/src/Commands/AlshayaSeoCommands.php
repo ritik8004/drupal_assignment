@@ -205,10 +205,11 @@ class AlshayaSeoCommands extends DrushCommands {
     }
 
     $batch = [
-      'operations' => [],
-      'init_message' => dt('Starting sitemap index reset.....'),
+      'finished' => [__CLASS__, 'batchFinish'],
+      'title' => dt('Reseting sitemap index'),
+      'init_message' => dt('Starting sitemap index reset......'),
       'progress_message' => dt('Completed @current step of @total.'),
-      'error_message' => dt('Sitemap index resetting has encountered an error.'),
+      'error_message' => dt('encountered error while reseting sitemap index.'),
     ];
 
     if ($entity_type == 'node') {
@@ -224,20 +225,107 @@ class AlshayaSeoCommands extends DrushCommands {
       return;
     }
 
+    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($entity_ids)]];
     foreach (array_chunk($entity_ids, $options['batch-size']) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'resetSitemapBatchProcess'],
         [$entity_type, $chunk],
       ];
     }
-
-    // Initialize the batch.
     batch_set($batch);
-
-    // Process the batch.
     drush_backend_batch_process();
+  }
 
-    $this->logger->notice(dt('Process finished'));
+  /**
+   * Batch callback; initialize the batch.
+   *
+   * @param int $total
+   *   The total number of entity ids to process.
+   * @param mixed|array $context
+   *   The batch current context.
+   */
+  public static function batchStart($total, &$context) {
+    $context['results']['total'] = $total;
+    $context['results']['count'] = 0;
+    $context['results']['timestart'] = microtime(TRUE);
+  }
+
+  /**
+   * Batch API callback; collect the entity data.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param array $entity_ids
+   *   Array of entity_ids.
+   * @param mixed|array $context
+   *   The batch current context.
+   */
+  public static function resetSitemapBatchProcess($entity_type, array $entity_ids, &$context) {
+    if (empty($entity_ids)) {
+      return;
+    }
+
+    $context['results']['count'] += count($entity_ids);
+
+    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+
+    if ($entity_type == 'taxonomy_term') {
+      foreach ($entity_ids as $entity_id) {
+        $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity_id);
+        $sitemap->acqProductCategoryOperation($entity_id, $entity_type, $term->get('field_commerce_status')->getString());
+      }
+    }
+    elseif ($entity_type == 'node') {
+      foreach ($entity_ids as $entity_id) {
+        $sitemap->acqProductOperation($entity_id, $entity_type);
+      }
+    }
+
+    self::$loggerStatic->notice(dt('Reset variants index for @count out of @total.', [
+      '@count' => $context['results']['count'],
+      '@total' => $context['results']['total'],
+    ]));
+  }
+
+  /**
+   * Finishes the update process and stores the results.
+   *
+   * @param bool $success
+   *   Indicate that the batch API tasks were all completed successfully.
+   * @param array $results
+   *   An array of all the results that were updated in update_do_one().
+   * @param array $operations
+   *   A list of all the operations that had not been completed by batch API.
+   */
+  public static function batchFinish($success, array $results, array $operations) {
+    if ($success) {
+      if ($results['count']) {
+        // Display Script End time.
+        $time_end = microtime(TRUE);
+        $execution_time = ($time_end - $results['timestart']) / 60;
+
+        \Drupal::service('messenger')->addMessage(
+          \Drupal::translation()
+            ->formatPlural(
+            $results['count'],
+            'Reset 1 entity variant index in time: @time.',
+            'Reset @count entities variant index in time: @time.',
+            ['@time' => $execution_time]
+            )
+          );
+      }
+      else {
+        \Drupal::service('messenger')->addMessage(t('No new entity to reset index.'));
+      }
+    }
+    else {
+      $error_operation = reset($operations);
+      \Drupal::service('messenger')
+        ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
+          '@operation' => $error_operation[0],
+          '@args' => print_r($error_operation[0]),
+        ]);
+    }
   }
 
   /**
@@ -261,39 +349,6 @@ class AlshayaSeoCommands extends DrushCommands {
     $query->condition('vid', 'acq_product_category');
 
     return $query->execute();
-  }
-
-  /**
-   * Implements batch start function.
-   *
-   * @param string $entity_type
-   *   The entity type.
-   * @param array $entity_ids
-   *   Array of entity_ids.
-   */
-  public static function resetSitemapBatchProcess($entity_type, array $entity_ids) {
-    if (empty($entity_ids)) {
-      return;
-    }
-
-    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
-
-    if ($entity_type == 'taxonomy_term') {
-      foreach ($entity_ids as $entity_id) {
-        $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity_id);
-        $sitemap->acqProductCategoryOperation($entity_id, $entity_type, $term->get('field_commerce_status')->getString());
-      }
-    }
-    elseif ($entity_type == 'node') {
-      foreach ($entity_ids as $entity_id) {
-        $sitemap->acqProductOperation($entity_id, $entity_type);
-      }
-    }
-
-    self::$loggerStatic->notice(dt('Reseting sitemap index based on L1 type: @entity_type,  @items:', [
-      '@items' => json_encode($entity_ids),
-      '@entity_type' => json_encode($entity_type),
-    ]));
   }
 
 }

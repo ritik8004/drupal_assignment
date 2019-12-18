@@ -80,17 +80,17 @@ class AlshayaSitemapManager {
    *
    * @param int $term_id
    *   The term id.
-   * @param bool $is_parent
-   *   To check parent term.
+   * @param bool $is_child
+   *   To check term status.
    */
-  public function sitemapVariantName($term_id, $is_parent = TRUE) {
+  public function sitemapVariantName(int $term_id, $is_child = TRUE) {
     $variant_name = '';
-    if ($is_parent) {
+    if ($is_child) {
       $ancestors = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($term_id);
       $term_id = reset(array_reverse(array_keys($ancestors)));
     }
 
-    if ($term_id) {
+    if (!empty($term_id)) {
       $term = $this->entityManager->getStorage('taxonomy_term')->load($term_id);
       $variant_name = 'shop-' . str_replace(' ', '-', strtolower(trim($term->getName())));
     }
@@ -135,7 +135,7 @@ class AlshayaSitemapManager {
   public function acqProductCategoryOperation(int $entity_id, string $entity_type, $entity_status) {
     $variants_list = [];
 
-    if ($entity_type == 'taxonomy_term' && $entity_status) {
+    if ($entity_status) {
       $variants_list[] = $this->sitemapVariantName($entity_id);
     }
 

@@ -10,22 +10,11 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Create sitemap variants based on L1 categories.
+ * Create and enale sitemap variants based on L1 categories.
  */
 function alshaya_seo_transac_update_8408() {
-  $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
-  $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-  $term_data = $produt_category->getCategoryTreeCached();
-  if ($term_data) {
-    foreach ($term_data as $parent) {
-      $settings = ['type' => 'default_hreflang', 'label' => $parent['label']];
-      $sitemap_manager->addSitemapVariant('shop-' . str_replace(' ', '-', strtolower(trim($parent['label']))), $settings);
-    }
-  }
-
-  // Enable variants for bundle types i.e. acq_product_category, acq_product.
-  $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
-  $sitemap->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
+  // Create and enable sitemap variants based on enabled L1 categories.
+  _alshaya_seo_transac_create_and_enable_sitemap_variants();
 }
 
 /**
@@ -151,20 +140,8 @@ function alshaya_seo_transac_install() {
   // Install metatag transalations.
   _alshaya_seo_transac_save_metatag_translations();
 
-  // Create variants based on enabled L1 categories.
-  $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
-  $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-  $term_data = $produt_category->getCategoryTreeCached();
-  if ($term_data) {
-    foreach ($term_data as $parent) {
-      $settings = ['type' => 'default_hreflang', 'label' => $parent['label']];
-      $sitemap_manager->addSitemapVariant('shop-' . str_replace(' ', '-', strtolower(trim($parent['label']))), $settings);
-    }
-  }
-
-  // Enable variants for bundle types i.e. acq_product_category, acq_product.
-  $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
-  $sitemap->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
+  // Create and enable sitemap variants based on enabled L1 categories.
+  _alshaya_seo_transac_create_and_enable_sitemap_variants();
 }
 
 /**
@@ -202,4 +179,23 @@ function _alshaya_seo_transac_save_metatag_translations() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * A helper function to create and enable sitemap variants.
+ */
+function _alshaya_seo_transac_create_and_enable_sitemap_variants() {
+  $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
+  $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $term_data = $produt_category->getCategoryTreeCached();
+  if ($term_data) {
+    foreach ($term_data as $parent) {
+      $settings = ['type' => 'default_hreflang', 'label' => $parent['label']];
+      $sitemap_manager->addSitemapVariant('shop-' . str_replace(' ', '-', strtolower(trim($parent['label']))), $settings);
+    }
+  }
+
+  // Enable variants for bundle types i.e. acq_product_category, acq_product.
+  $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+  $sitemap->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
 }
