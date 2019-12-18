@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter\SkuGalleryFormatter;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Session\AccountInterface;
@@ -375,6 +376,9 @@ function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
 
     // If group by sub-category is selected, disable pager.
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      // Set the flag to release memory so we can have the page built in one go.
+      SkuGalleryFormatter::$releaseMemory = TRUE;
+
       $view->getPager();
       $view->setItemsPerPage(0);
 

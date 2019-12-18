@@ -19,7 +19,6 @@
 
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
-
       $(window).on('blazySuccess', function(event, element) {
         Drupal.plpListingProductTileHeight('row', element);
       });
@@ -32,10 +31,29 @@
           $(facet_block).find('ul').slideUp();
         }
       });
+      $(window).on('load', function(event) {
+        $('body').once('bind-facet-item-click').on('click','.c-collapse-item .facet-item', function(event) {
+          $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
+        });
+      });
 
       if ($('#alshaya-algolia-search').length > 0) {
         Drupal.algoliaReact.facetEffects();
       }
+    }
+  };
+
+  Drupal.refreshGrids = function() {
+    var gridCount = $('#alshaya-algolia-search .c-products-list').hasClass('product-large') ? 3 : 4;
+    var tiles = $('#alshaya-algolia-search  .c-products__item');
+    var totalCount = $('#alshaya-algolia-search  .c-products__item').length;
+    var loopCount = Math.ceil(totalCount / gridCount);
+    // In full page mode we dont factor lazy loading as this mode is to reorganize the tiles based on the grid.
+    // Run for each row.
+    for (var i = 0; i < loopCount; i++) {
+      var indexStart = gridCount * i;
+      var indexEnd = gridCount * i + gridCount - 1;
+      Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
     }
   };
 

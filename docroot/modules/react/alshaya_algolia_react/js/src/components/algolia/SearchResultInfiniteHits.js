@@ -15,7 +15,7 @@ export default connectInfiniteHits(props => {
         Drupal.blazyRevalidate();
         Drupal.algoliaReact.stickyfacetfilter();
         removeLoader();
-
+        Drupal.refreshGrids();
         // Trigger back to search page.
         window.onpageshow = function(){
           var storage_value = getAlgoliaStorageValues();
@@ -23,7 +23,6 @@ export default connectInfiniteHits(props => {
             Drupal.processBackToSearch(storage_value)
           }
         };
-
       }
     }, [hits]
   );
