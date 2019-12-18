@@ -146,8 +146,7 @@ class AlshayaSocialHelper {
       $fields['field_last_name'] = $user_info->getLastName();
 
       try {
-        $customer = $this->customerHelper->updateCustomer(
-          NULL,
+        $customer = $this->customerHelper->getCustomer(
           $fields['mail'],
           $fields['field_first_name'],
           $fields['field_last_name'],
