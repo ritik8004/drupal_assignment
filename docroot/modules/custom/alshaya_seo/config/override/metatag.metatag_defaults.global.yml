@@ -1,15 +1,3 @@
-langcode: en
-status: true
-dependencies: {  }
-id: global
-label: Global
 tags:
-  title: '[current-page:title] | [site:name]'
-  canonical_url: '[current-page:url:absolute]'
-  google: ziz2vUBSlMqaPAM6Z5ayy1Dwe7R9wsfDC9Di28iaDTM
   og_type: website
-  og_locale: '[site:locale]'
   og_country_name: '[site:country_name]'
-  og_site_name: '[site:name]'
-  og_locale_alternative: '[site:locale:alternate]'
-  bing: 31FCB724CCCE9C6717B48CF453D969EF
