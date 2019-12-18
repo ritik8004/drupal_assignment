@@ -191,7 +191,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
     if (isset($tokens['country_name'])) {
       $locale = explode('_', AlshayaI18nLanguages::getLocale($langcode));
-      $country_code =  strtolower(end($locale)) . ' (https://countrycode.org/ )';
+      $country_code = strtolower(end($locale)) . ' (https://countrycode.org/ )';
       $replacements[$tokens['country_name']] = $country_code;
     }
   }
