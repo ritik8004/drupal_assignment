@@ -649,6 +649,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
 
       }
+      elseif ($view_mode == 'matchback') {
+        $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
+        $build['item_code']['#markup'] = $sku;
+      }
 
       // Process price block and gallery for modal,
       // matchback and full view mode.

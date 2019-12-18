@@ -7,22 +7,17 @@
 %}
 
 <article{{ attributes }} {{ gtm_attributes }}>
-  <div class="cross-sell-product-components">
+  <div class="cross-sell-product-components acq-content-product">
 
     <div class="cross-sell-product-component-left {{ image_slider_position_pdp }}">
       {% if content.gallery is not empty %}
-      {{ content.gallery }}
+        {{ content.gallery }}
       {% else %}
       <div id="product-zoom-container"></div>
       {% endif %}
     </div>
 
-    <div class="cross-sell-product-component-center content__title_wrapper">
-      {% if content.brand_logo %}
-      <div class="brand-logo-wrapper">
-        {{ content.brand_logo }}
-      </div>
-      {% endif %}
+    <div class="cross-sell-product-component-center">
       <h1>{{ label }}</h1>
       <div class="short-description-wrapper">
         <div class="content--short-description">
