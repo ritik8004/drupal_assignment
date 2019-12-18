@@ -2613,8 +2613,10 @@ class SkuManager {
 
       $query = $this->connection->select('acq_sku_field_data', 'asfd');
 
+      $variants = Configurable::getChildSkus($sku);
+
       // Check only for children of current parent.
-      $query->condition('asfd.sku', Configurable::getChildSkus($sku), 'IN');
+      $query->condition('asfd.sku', $variants, 'IN');
 
       // Restrict to one/default language records.
       $query->condition('asfd.default_langcode', 1);
@@ -2627,6 +2629,10 @@ class SkuManager {
       $query->innerJoin('acq_sku_stock', 'stock', 'asfd.sku = stock.sku');
       $query->condition('stock.quantity', 0, '>');
       $query->condition('stock.status', 0, '>');
+
+      // Adding this to reduce result to check from stock table.
+      // This is a work around to improve performance of the query.
+      $query->condition('stock.sku', $variants, 'IN');
 
       // Select the sku.
       $query->fields('asfd', ['sku']);
