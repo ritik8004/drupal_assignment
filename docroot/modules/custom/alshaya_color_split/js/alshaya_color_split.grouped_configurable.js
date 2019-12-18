@@ -9,7 +9,7 @@
    * @prop {Drupal~behaviorAttach} attach
    *   Js for add to cart form.
    */
-  Drupal.behaviors.alshayaColorSplitPdp = {
+  Drupal.behaviors.alshayaColorSplitGroupConfigurable = {
     attach: function (context, settings) {
       $('.sku-base-form').once('alshaya-color-split').on('variant-selected', function (event, variant, code) {
         var node = $(this).parents('article.entity--type-node:first');
@@ -19,10 +19,18 @@
         }
         var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
 
+        // We can have mix of color split and normal products.
+        // Avoid processing further if we have a product which is normal but
+        // color split module is enabled.
+        if (typeof variantInfo.url === 'undefined') {
+          return;
+        }
+
         // Updating the parent sku for selected variant.
         // @see alshaya_acm_product_form_sku_base_form_alter().
         $(this).find('.selected-parent-sku').val(variantInfo.parent_sku);
 
+        // Avoid processing again and again for variants of same color.
         if ($(node).find('.content--item-code .field__value').html() === variantInfo.parent_sku) {
           return;
         }

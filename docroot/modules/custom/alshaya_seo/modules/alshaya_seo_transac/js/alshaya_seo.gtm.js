@@ -25,6 +25,20 @@
         product.attr('gtm-price', variantInfo['gtm_price']);
       });
 
+      // For simple grouped products.
+      $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
+        var sku = $(this).attr('data-sku');
+        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
+        var variantInfo = drupalSettings.productInfo[sku]['group'][variant];
+
+        $(this).attr('gtm-main-sku', variant);
+        $(this).attr('gtm-product-sku', variant);
+        $(this).attr('gtm-price', variantInfo['gtm_price']);
+      });
+
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
         var quantity = parseInt($('.form-item-quantity select', $(this)).val());

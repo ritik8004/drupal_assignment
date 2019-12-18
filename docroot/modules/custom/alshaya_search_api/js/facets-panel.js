@@ -117,6 +117,13 @@
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
+        // Also reset the sub category block if available.
+        if ($(body).hasClass('subcategory-listing-enabled')) {
+          // For mobile.
+          if ($(window).width < 768) {
+            $('.block-alshaya-sub-category-block').removeClass('mobile-sticky-sub-category');
+          }
+        }
       });
 
       if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
@@ -322,14 +329,6 @@
           $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').hide();
           $('.all-filters #' + active_facet_sort).addClass('show-facet');
           $('.all-filters #' + active_facet_sort).show();
-        }
-
-        // If no category facet after ajax selection, add class to identify it.
-        if ($('.all-filters #block-categoryfacetplp:not(:empty)').length === 0) {
-          $('#block-alshaya-plp-facets-block-all').addClass('empty-category');
-        }
-        else {
-          $('#block-alshaya-plp-facets-block-all').removeClass('empty-category');
         }
 
         // If there any active facet filter.

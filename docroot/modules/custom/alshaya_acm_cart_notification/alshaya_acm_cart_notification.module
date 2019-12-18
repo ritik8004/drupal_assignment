@@ -45,17 +45,11 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
   // Include the utility file to get product image.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-  // Check for product type as they have different data structures.
-  if ($sku->bundle() == 'configurable') {
-    // If we have a child_sku available.
-    $variant = SKU::loadFromSku($data['selected_variant_sku']);
-    $product_name = $productInfoHelper->getTitle($variant, 'basket');
-    $image = alshaya_acm_get_product_display_image($variant, 'pdp_gallery_thumbnail', 'cart');
-  }
-  else {
-    $product_name = $productInfoHelper->getTitle($sku, 'basket');
-    $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
-  }
+  // We might be adding different product then the visited PDP.
+  // Use the product SKU from request data if available.
+  $product_added = empty($data['selected_variant_sku']) ? $sku : SKU::loadFromSku($data['selected_variant_sku']);
+  $product_name = $productInfoHelper->getTitle($product_added, 'basket');
+  $image = alshaya_acm_get_product_display_image($product_added, 'pdp_gallery_thumbnail', 'cart');
 
   // Quantity.
   $quantity = $data['quantity'] ?? 1;

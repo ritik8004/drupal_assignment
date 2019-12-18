@@ -101,7 +101,7 @@ class KnetController extends ControllerBase {
     $response['payment_id'] = $data['paymentid'];
     $response['result'] = $data['result'];
     $response['post_date'] = $data['postdate'];
-    $response['transaction_id'] = $data['tranid'];
+    $response['transaction_id'] = $data['tranid'] ?? '';
     $response['auth_code'] = $data['auth'];
     $response['ref'] = $data['ref'];
     $response['tracking_id'] = $data['trackid'];

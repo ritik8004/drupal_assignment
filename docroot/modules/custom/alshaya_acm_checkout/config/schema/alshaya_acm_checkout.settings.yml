@@ -49,3 +49,6 @@ alshaya_acm_checkout.settings:
       type: sequence
       sequence:
         type: string
+    cancel_reservation_enabled:
+      type: integer
+      label: 'Invoke Cancel Reservation API?'

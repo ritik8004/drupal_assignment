@@ -20,4 +20,5 @@ cod_surcharge_short_description: '[Additional [surcharge] Service Charge]'
 cod_surcharge_description: 'You pay for the merchandise upon delivery. <br>Cash on delivery orders will be charged an additional service charge of [surcharge] per order'
 cod_surcharge_tooltip: 'Tooltip to display the details of COD Service charge'
 exclude_payment_methods: { }
+cancel_reservation_enabled: 0
 langcode: en

@@ -288,3 +288,8 @@ body {
   opacity: 1;
   font-size: 0.75rem;
 }
+
+// Allow things to be hidden visually without changing visibility.
+.whiteout {
+  opacity: 0;
+}
