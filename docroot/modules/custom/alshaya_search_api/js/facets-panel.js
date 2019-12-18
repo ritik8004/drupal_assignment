@@ -324,14 +324,6 @@
           $('.all-filters #' + active_facet_sort).show();
         }
 
-        // If no category facet after ajax selection, add class to identify it.
-        if ($('.all-filters #block-categoryfacetplp:not(:empty)').length === 0) {
-          $('#block-alshaya-plp-facets-block-all').addClass('empty-category');
-        }
-        else {
-          $('#block-alshaya-plp-facets-block-all').removeClass('empty-category');
-        }
-
         // If there any active facet filter.
         updateFacetTitlesWithSelected();
         updateCategoryTitle();
