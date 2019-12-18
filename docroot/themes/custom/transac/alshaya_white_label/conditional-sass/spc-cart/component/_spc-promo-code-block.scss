@@ -3,6 +3,8 @@
   margin-bottom: 2.5rem;
 
   .block-content {
+    position: relative;
+
     @include breakpoint($only-mobile) {
       padding: 1.25rem;
       background: $spc-promo-code-bg;
@@ -46,10 +48,18 @@
     #{$left}: 14.5rem;
     border: none;
     background: none;
+    font-size: 0;
+    display: none;
     color: $spc-cart-promo-code-submit-enabled;
+    top: 50%;
+    transform: translateY(-50%);
 
-    @include icon('close', after) {
-      font-size: 2rem;
+    &.active {
+      display: block;
+
+      @include icon('close', after) {
+        font-size: 2rem;
+      }
     }
   }
 
