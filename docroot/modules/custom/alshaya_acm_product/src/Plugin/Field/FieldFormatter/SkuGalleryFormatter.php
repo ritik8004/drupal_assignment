@@ -18,6 +18,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,6 +34,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryPluginInterface {
+
+  /**
+   * Flag to specify if we need to release memory or not.
+   *
+   * @var bool
+   */
+  public static $releaseMemory = FALSE;
 
   /**
    * The Sku Manager service.
@@ -336,8 +344,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    * Wrapper function to release memory.
    */
   protected function releaseMemory() {
-    $this->memoryCache->deleteAll();
-    drupal_static_reset();
+    if (Settings::get('release_memory_on_listing', 0) && self::$releaseMemory) {
+      $this->memoryCache->deleteAll();
+      drupal_static_reset();
+    }
   }
 
 }
