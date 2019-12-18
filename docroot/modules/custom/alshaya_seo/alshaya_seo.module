@@ -74,7 +74,6 @@ function alshaya_seo_page_attachments(array &$attachments) {
   // As checked in current prod, following text is not to be translated.
   $gkg_data['@type'] = 'Organization';
   $gkg_data['name'] = \Drupal::config('system.site')->get('name');
-  $gkg_data['url'] = Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString();
   $gkg_data['logo'] = Url::fromUserInput(theme_get_setting('logo.url'), ['absolute' => TRUE])->toString();
 
   // Add all sameAs links as provided in Config.
