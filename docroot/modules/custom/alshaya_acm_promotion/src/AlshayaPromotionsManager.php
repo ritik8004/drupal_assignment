@@ -576,7 +576,7 @@ class AlshayaPromotionsManager {
       [
         [
           'field' => 'field_acq_promotion_sort_order',
-          'direction' => 'DESC',
+          'direction' => 'ASC',
         ],
       ]
     );
@@ -600,12 +600,10 @@ class AlshayaPromotionsManager {
           }
         }
 
-        $cartPromotions[$threshold_price][$order][] = $promotion->id();
+        $cartPromotions[$order][$threshold_price][] = $promotion->id();
       }
     }
 
-    // Sort promotions list by price.
-    ksort($cartPromotions);
     $this->alshayaAcmPromotionCache->set($cid, $cartPromotions, Cache::PERMANENT, ['node:type:acq_promotion']);
 
     return $cartPromotions;
@@ -700,39 +698,23 @@ class AlshayaPromotionsManager {
     if (!empty($subtypes)) {
       $allCartPromotions = $this->getSortedCartPromotions();
 
-      // Extract next eligible cart promotion based on price and priority.
-      foreach ($allCartPromotions as $price => $sortedPromotions) {
-        krsort($sortedPromotions);
+      // Extract next eligible cart promotion based on priority and price.
+      foreach ($allCartPromotions as $priceSortedPromotions) {
+        ksort($priceSortedPromotions);
 
-        // Based on price and cart sub total fetch inactive promotion.
-        if ($price > $cartSubTotal) {
-          foreach ($sortedPromotions as $promotions) {
-            foreach ($promotions as $promotion) {
+        foreach ($priceSortedPromotions as $price => $promotions) {
+          foreach ($promotions as $promotion) {
+            if (!in_array($promotion, $cartPromotionsApplied)) {
               $promotion = $this->nodeStorage->load($promotion);
               $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
 
               // Check if this promotion meets config subtypes.
               if (in_array($subtype, $subtypes)) {
-                $thresholdReached = FALSE;
-                return $promotion;
-              }
-            }
-          }
-        }
-        else {
-          // Check applicable cart promotions with coupon which can be applied.
-          foreach ($sortedPromotions as $promotions) {
-            foreach ($promotions as $promotion) {
-              if (!in_array($promotion, $cartPromotionsApplied)) {
-                $promotion = $this->nodeStorage->load($promotion);
-                $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
-                $coupon = $promotion->get('field_coupon_code')->getString();
-
-                // Check if this promotion meets config subtypes.
-                if (!empty($coupon) && !in_array($subtype, $subtypes)) {
+                if ($price <= $cartSubTotal) {
                   $thresholdReached = TRUE;
-                  return $promotion;
                 }
+
+                return $promotion;
               }
             }
           }

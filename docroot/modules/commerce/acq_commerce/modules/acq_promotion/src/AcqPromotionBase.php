@@ -42,13 +42,8 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
   /**
    * {@inheritdoc}
    */
-  public function getInactiveLabel($thresholdReached = FALSE) {
-    $label = '';
-    if (!$thresholdReached) {
-      $label = $this->promotionNode->get('field_acq_promotion_label')->getString();
-    }
-
-    return $label;
+  public function getInactiveLabel() {
+    return $this->promotionNode->get('field_acq_promotion_label')->getString();
   }
 
 }
