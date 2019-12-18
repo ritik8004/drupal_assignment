@@ -33,6 +33,11 @@ function alshaya_seo_token_info() {
     'description' => t('Alternate locale available for the site.'),
   ];
 
+  $info['tokens']['site']['country_name'] = [
+    'name' => 'site:country_name',
+    'description' => t('Country name in the format required for og tags.'),
+  ];
+
   $info['tokens']['node']['locale:alternate'] = [
     'name' => 'locale:alternate',
     'description' => t('Alternate locale available for the node.'),
@@ -183,6 +188,11 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         $replacements[$tokens['locale:alternate']] = implode(',', $alternates);
       }
+    }
+    if (isset($tokens['country_name'])) {
+      $locale = explode('_', AlshayaI18nLanguages::getLocale($langcode));
+      $country_code =  strtolower(end($locale)) . ' (https://countrycode.org/ )';
+      $replacements[$tokens['country_name']] = $country_code;
     }
   }
   elseif ($type == 'node' && !empty($data['node']) && $data['node'] instanceof NodeInterface) {

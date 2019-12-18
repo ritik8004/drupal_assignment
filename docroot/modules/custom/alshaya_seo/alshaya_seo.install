@@ -137,3 +137,17 @@ function alshaya_seo_install() {
   $config_factory->set('skip_untranslated', TRUE);
   $config_factory->save();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating global metatag configuration.
+ */
+function alshaya_seo_update_8011() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['metatag.metatag_defaults.global'],
+    'alshaya_seo',
+    'install'
+  );
+}
