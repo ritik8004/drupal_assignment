@@ -26,14 +26,15 @@ class TotalLineItems extends React.Component {
   }
 
   render() {
-    const discount_tooltip = this.discountToolTipContent(this.props.cart_promo);
+    // const discount_tooltip = this.discountToolTipContent(this.props.cart_promo);
+    const discount_tooltip = 'Hello';
 
     return (
       <div className="totals">
-        <TotalLineItem name="sub-total" title={Drupal.t('Subtotal')} value={this.props.totals.subtotal_incl_tax}/>
-        <TotalLineItem tooltip={true} tooltipContent={discount_tooltip} name="discount-total" title={Drupal.t('Discount')} value={this.props.totals.discount_amount}/>
+        <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={this.props.totals.subtotal_incl_tax}/>
+        <TotalLineItem tooltip={true} tooltipContent={discount_tooltip} name="discount-total" title={Drupal.t('discount')} value={10.000}/>
         <div className="hero-total">
-          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={this.props.totals.base_grand_total}/>
+          <TotalLineItem name="grand-total" title={Drupal.t('order total')} value={this.props.totals.base_grand_total}/>
           <div className="delivery-vat">
             <FreeDeliveryText freeDelivery={this.props.totals.free_delivery} text={Drupal.t('excluding delivery')} />
             <VatText />

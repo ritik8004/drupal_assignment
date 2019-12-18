@@ -10,7 +10,7 @@ export default class CartPromoBlock extends React.Component {
     this.state = {
       'promo_applied': false,
       'promo_code': '',
-      'button_text': Drupal.t('Apply'),
+      'button_text': Drupal.t('apply'),
       'disabled': false
     };
   }
@@ -20,7 +20,7 @@ export default class CartPromoBlock extends React.Component {
       this.setState({
         promo_applied: true,
         promo_code: this.props.coupon_code,
-        button_text: Drupal.t('Applied'),
+        button_text: Drupal.t('applied'),
         disabled: true
       });
 
@@ -32,7 +32,7 @@ export default class CartPromoBlock extends React.Component {
     var promo_value = document.getElementById('promo-code').value.trim();
     // If empty promo text.
     if (this.state.promo_applied === false && promo_value.length === 0) {
-      document.getElementById('promo-message').innerHTML = Drupal.t('Please enter promo code.');
+      document.getElementById('promo-message').innerHTML = Drupal.t('please enter promo code.');
       document.getElementById('promo-message').classList.add('error');
       document.getElementById('promo-code').classList.add('error');
       return;
@@ -63,7 +63,7 @@ export default class CartPromoBlock extends React.Component {
             this.setState({
               promo_applied: true,
               promo_code: promo_value,
-              button_text: Drupal.t('Applied'),
+              button_text: Drupal.t('applied'),
               disabled: true
             });
           }
@@ -72,7 +72,7 @@ export default class CartPromoBlock extends React.Component {
             this.setState({
               promo_applied: false,
               promo_code: '',
-              button_text: Drupal.t('Apply'),
+              button_text: Drupal.t('apply'),
               disabled: false
             });
 
@@ -97,7 +97,7 @@ export default class CartPromoBlock extends React.Component {
       <div className="spc-promo-code-block">
         <CheckoutSectionTitle>{Drupal.t('have a promo code?')}</CheckoutSectionTitle>
         <div className="block-content">
-          <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('Enter your promo code here')} />
+          <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('enter your promo code here')} />
           <button id="promo-remove-button" className={"promo-remove " + promo_remove_active} onClick={()=>{this.promoAction(this.state.promo_applied)}}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" disabled={this.state.disabled} className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
           <div id="promo-message"/>

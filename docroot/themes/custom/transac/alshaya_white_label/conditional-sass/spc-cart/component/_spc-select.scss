@@ -23,14 +23,14 @@
   }
 
   .spcSelect__control {
-    border: 1px solid $spc-select-text;
+    border: 1px solid $spc-select-border;
     border-radius: 0;
     height: 2.5rem;
     font-size: 0.875rem;
     box-shadow: none;
 
     &:hover {
-      border-color: $spc-select-text;
+      border-color: $spc-select-arrow-bg;
     }
 
     > div:nth-child(2) {
@@ -40,6 +40,8 @@
 
       .spcSelect__indicator {
         color: $spc-select-text;
+        background: $spc-select-arrow-bg;
+        height: 100%;
 
         svg {
           transition: transform 0.3s ease-in-out;
@@ -54,7 +56,7 @@
 
     .spcSelect__menu-list {
       padding: 0;
-      border: 1px solid $spc-select-text;
+      border: 1px solid $spc-select-border;
       border-top-width: 0;
 
       > div {

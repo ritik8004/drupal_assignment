@@ -3,4 +3,8 @@
     text-transform: uppercase;
     font-family: $alshaya-bold;
   }
+
+  #promo-code::placeholder {
+    text-transform: capitalize;
+  }
 }

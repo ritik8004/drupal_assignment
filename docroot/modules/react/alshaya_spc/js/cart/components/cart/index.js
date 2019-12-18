@@ -94,7 +94,7 @@ export default class Cart extends React.Component {
           <div className="spc-main">
             <div className="spc-content">
               <CheckoutSectionTitle>
-                {Drupal.t('My Shopping Bag (@qty items)', {'@qty': this.state.total_items})}
+                {Drupal.t('my shopping bag (@qty items)', {'@qty': this.state.total_items})}
               </CheckoutSectionTitle>
               <CartItems items={this.state.items} />
             </div>
