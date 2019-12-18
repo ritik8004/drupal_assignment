@@ -518,6 +518,14 @@
       display: none;
     }
   }
+
+  .sku-base-form {
+    .ajax-progress-throbber {
+      display: block !important;
+
+      @include fullPageLoader();
+    }
+  }
 }
 
 .free-gift-listing-modal {
