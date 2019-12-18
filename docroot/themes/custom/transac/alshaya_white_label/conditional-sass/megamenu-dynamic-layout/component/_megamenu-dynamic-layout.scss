@@ -1,10 +1,16 @@
 @include breakpoint($desktop) {
   .megamenu-dynamic-layout {
     &.block-alshaya-main-menu {
-      li.menu--one__list-item ul.menu--two__list {
-        width: auto;
-        #{$right}: inherit;
-        display: flex;
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          width: auto;
+          #{$right}: inherit;
+          display: flex;
+        }
+
+        .menu__links__wrapper {
+          padding-#{$left}: 1rem;
+        }
       }
 
       ul.menu--one__list .menu-backdrop {
