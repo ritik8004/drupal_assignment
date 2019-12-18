@@ -672,9 +672,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
 
         if ($sku_entity->bundle() == 'configurable') {
+
           /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $skuInfo */
           $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+          if (!$skuManager->isProductInStock($sku_entity) && empty($gallery)) {
+            $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
+            $variants[$child->getSku()] = $skuInfo->getVariantInfo($child, $pdp_layout);
+            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $variants;
+          }
+          else {
+            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+          }
           $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         }
 

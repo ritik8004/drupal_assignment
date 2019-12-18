@@ -161,32 +161,6 @@
           var firstVariant = Object.keys(variantInfo)[0];
           Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo[firstVariant].gallery);
         }
-
-        if (drupalSettings.productInfo[sku]['variants']) {
-          var variants = drupalSettings.productInfo[sku]['variants'];
-          var selectedSku = Object.keys(variants)[0];
-          var selected = parseInt(Drupal.getQueryVariable('selected'));
-
-          if (selected > 0) {
-            for (var i in variants) {
-              if (variants[i]['id'] === selected) {
-                selectedSku = variants[i]['sku'];
-                break;
-              }
-            }
-          }
-          else if (typeof variants[selectedSku]['parent_sku'] !== 'undefined') {
-            // Try to get first child with parent sku matching. This could go
-            // in color split but is generic enough so added here.
-            for (var i in variants) {
-              if (variants[i]['parent_sku'] === sku) {
-                selectedSku = variants[i]['sku'];
-                break;
-              }
-            }
-          }
-        }
-
       });
     }
   };
