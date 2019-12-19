@@ -18,12 +18,12 @@
   </categories>
   <short_description>
     {% if product.short_description is not empty %}
-      <![CDATA[{{ product.short_description | striptags }}]]>
+      {{ product.short_description | striptags }}
     {% endif %}
   </short_description>
   <description>
     {% if product.description is not empty %}
-      <![CDATA[{{ product.description | striptags }}]]>
+      {{ product.description | striptags }}
     {% endif %}
   </description>
   <custom_attributes>
