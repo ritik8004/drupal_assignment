@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\simple_sitemap\Simplesitemap;
-use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
@@ -42,36 +42,33 @@ class AlshayaSitemapManager {
   }
 
   /**
-   * A helper function to remove variant.
+   * A helper function to remove sitemap variant.
    *
-   * @param \Drupal\taxonomy\TermInterface $term
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The term object.
    */
-  public function removeSitemapVariant(TermInterface $term) {
-    $variant_name = $this->sitemapVariantName($term->id(), FALSE);
-    $sitemap_manager = $this->generator->getSitemapManager();
-    $variants = array_keys($sitemap_manager->getSitemapVariants());
+  public function removeSitemapVariant(EntityInterface $entity) {
+    $variant_name = $this->sitemapVariantName($entity->id(), FALSE);
+    $variants = $this->getAllVariants();
 
     if (in_array($variant_name, $variants)) {
-      $variants = $sitemap_manager->removeSitemapVariants($variant_name);
+      $this->generator->getSitemapManager()->removeSitemapVariants($variant_name);
     }
   }
 
   /**
-   * A helper function to add variant.
+   * A helper function to add sitemap variant.
    *
-   * @param \Drupal\taxonomy\TermInterface $term
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The term object.
    */
-  public function addSitemapVariant(TermInterface $term) {
-    $variant_name = $this->sitemapVariantName($term->id(), FALSE);
-
-    $sitemap_manager = $this->generator->getSitemapManager();
-    $variants = array_keys($sitemap_manager->getSitemapVariants());
+  public function addSitemapVariant(EntityInterface $entity) {
+    $variant_name = $this->sitemapVariantName($entity->id(), FALSE);
+    $variants = $this->getAllVariants();
 
     if (!in_array($variant_name, $variants)) {
-      $settings = ['type' => 'default_hreflang', 'label' => $term->getName()];
-      $sitemap_manager->addSitemapVariant($variant_name, $settings);
+      $settings = ['type' => 'default_hreflang', 'label' => $entity->getName()];
+      $this->generator->getSitemapManager()->addSitemapVariant($this->getVariantName($entity->getName()), $settings);
     }
   }
 
@@ -92,7 +89,9 @@ class AlshayaSitemapManager {
 
     if (!empty($term_id)) {
       $term = $this->entityManager->getStorage('taxonomy_term')->load($term_id);
-      $variant_name = 'shop-' . str_replace(' ', '-', strtolower(trim($term->getName())));
+      if ($term->get('field_commerce_status')->getString()) {
+        $variant_name = $this->getVariantName($term->getName());
+      }
     }
 
     return $variant_name;
@@ -153,10 +152,11 @@ class AlshayaSitemapManager {
    *   An entity id.
    */
   public function resetEntityVariantSettings(array $active_variants, $entity_type_id, $entity_id) {
-    $variants = array_keys($this->generator->getSitemapManager()->getSitemapVariants());
+    $variants = $this->getAllVariants();
 
     if (!empty($active_variants)) {
       // Set index for active variants.
+      $this->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
       $this->generator->setVariants($active_variants);
       $this->generator->setEntityInstanceSettings($entity_type_id, $entity_id, ['index' => 1]);
 
@@ -179,10 +179,8 @@ class AlshayaSitemapManager {
    *   The entity types.
    */
   public function enableEntityTypeVariants(array $entity_types) {
-    $variants = $this->generator->getSitemapManager()->getSitemapVariants();
-
     // Skip default variant.
-    $variants = array_diff(array_keys($variants), ['default']);
+    $variants = array_diff($this->getAllVariants(), ['default']);
 
     foreach ($entity_types as $entity_type_id => $bundle_types) {
       foreach ($variants as $variant) {
@@ -191,6 +189,23 @@ class AlshayaSitemapManager {
           ->setBundleSettings($entity_type_id, $bundle_types, ['index' => TRUE]);
       }
     }
+  }
+
+  /**
+   * A helper function to get variant name based on parent term name.
+   *
+   * @param string $term_name
+   *   The parent term name.
+   */
+  public function getVariantName($term_name) {
+    return str_replace(' ', '-', strtolower(trim($term_name)));
+  }
+
+  /**
+   * Get list of variants.
+   */
+  public function getAllVariants() {
+    return array_keys($this->generator->getSitemapManager()->getSitemapVariants());
   }
 
 }

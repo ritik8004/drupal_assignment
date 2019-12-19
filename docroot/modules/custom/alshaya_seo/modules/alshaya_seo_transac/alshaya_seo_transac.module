@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -520,18 +519,16 @@ function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, I
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function alshaya_seo_transac_taxonomy_term_insert(TermInterface $term) {
-  if ($term->bundle() == 'acq_product_category') {
-    $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    $parents = array_keys($produt_category->getCategoryTermParents($term));
+function alshaya_seo_transac_entity_insert(EntityInterface $entity) {
+  if ($entity->bundle() == 'acq_product_category') {
 
     $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
 
-    if (count($parents) == 1 && $term->get('field_commerce_status')->getString()) {
-      $sitemap->addSitemapVariant($term);
+    if ($entity->get('parent')->getString() == 0 && $entity->get('field_commerce_status')->getString()) {
+      $sitemap->addSitemapVariant($entity);
     }
 
-    $sitemap->acqProductCategoryOperation($term->id(), 'taxonomy_term', $term->get('field_commerce_status')->getString());
+    $sitemap->acqProductCategoryOperation($entity->id(), 'taxonomy_term', $entity->get('field_commerce_status')->getString());
   }
 }
 
@@ -540,33 +537,33 @@ function alshaya_seo_transac_taxonomy_term_insert(TermInterface $term) {
  */
 function alshaya_seo_transac_entity_presave(EntityInterface $entity) {
   if ($entity instanceof EntityInterface && $entity->bundle() == 'acq_product_category' && !empty($entity->id())) {
+
     $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity->id());
-
-    $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    $parents = array_keys($produt_category->getCategoryTermParents($term));
-
     $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
 
-    if (count($parents) == 1 && $term->getName() != $entity->getName() && $term->get('field_commerce_status')->getString()) {
-      $sitemap->removeSitemapVariant($term);
-      $sitemap->addSitemapVariant($entity);
+    if ($entity->get('parent')->getString() == 0 && $term->getName() != $entity->getName()) {
+
+      $sitemap->removeSitemapVariant($entity);
+
+      if ($entity->get('field_commerce_status')->getString()) {
+        $sitemap->addSitemapVariant($entity);
+      }
     }
 
-    $sitemap->acqProductCategoryOperation($term->id(), 'taxonomy_term', $term->get('field_commerce_status')->getString());
+    $sitemap->acqProductCategoryOperation($entity->id(), 'taxonomy_term', $entity->get('field_commerce_status')->getString());
   }
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function alshaya_seo_transac_taxonomy_term_delete(TermInterface $term) {
-  if ($term->bundle() == 'acq_product_category') {
-    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
-    $produt_category = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    $parents = array_keys($produt_category->getCategoryTermParents($term));
+function alshaya_seo_transac_entity_predelete(EntityInterface $entity) {
+  if ($entity->bundle() == 'acq_product_category') {
 
-    if (count($parents) == 1) {
-      $sitemap->removeSitemapVariant($term);
+    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+
+    if ($entity->get('parent')->getString() == 0) {
+      $sitemap->removeSitemapVariant($entity);
     }
   }
 }

@@ -197,7 +197,7 @@ class AlshayaSeoCommands extends DrushCommands {
    *   Reset sitemap index based on l1 category variants with batch of 200.
    */
   public function resetSitemapIndex(string $entity_type, array $options = ['batch-size' => NULL]) {
-    $this->output->writeln('Re-setting sitemap indexation based on L1 category variants.');
+    $this->output->writeln('Re-setting sitemap variants indexation based on L1 categories.');
 
     if (empty($entity_type)) {
       $this->logger->error(dt('Entity type i.e. node/taxonomy is missing as argument.'));
@@ -281,7 +281,7 @@ class AlshayaSeoCommands extends DrushCommands {
       }
     }
 
-    self::$loggerStatic->notice(dt('Reset variants index for @count out of @total.', [
+    self::$loggerStatic->notice(dt('@count out of @total total items have been processed.', [
       '@count' => $context['results']['count'],
       '@total' => $context['results']['total'],
     ]));
@@ -304,27 +304,22 @@ class AlshayaSeoCommands extends DrushCommands {
         $time_end = microtime(TRUE);
         $execution_time = ($time_end - $results['timestart']) / 60;
 
-        \Drupal::service('messenger')->addMessage(
-          \Drupal::translation()
-            ->formatPlural(
-            $results['count'],
-            'Reset 1 entity variant index in time: @time.',
-            'Reset @count entities variant index in time: @time.',
-            ['@time' => $execution_time]
-            )
-          );
+        self::$loggerStatic->notice(dt('@count/@total items have been re-indexed for sitemap variants in time: @time mins.', [
+          '@count' => $results['count'],
+          '@total' => $results['total'],
+          '@time' => round($execution_time, 3),
+        ]));
       }
       else {
-        \Drupal::service('messenger')->addMessage(t('No new entity to reset index.'));
+        self::$loggerStatic->notice(dt('No new item to reset sitemap variant index.'));
       }
     }
     else {
       $error_operation = reset($operations);
-      \Drupal::service('messenger')
-        ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
-          '@operation' => $error_operation[0],
-          '@args' => print_r($error_operation[0]),
-        ]);
+      self::$loggerStatic->notice(dt('An error occurred while processing @operation with arguments : @args', [
+        '@operation' => $error_operation[0],
+        '@args' => print_r($error_operation[0]),
+      ]));
     }
   }
 
