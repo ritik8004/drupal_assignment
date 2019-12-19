@@ -147,7 +147,7 @@ class AlshayaSocialHelper {
 
       try {
         // Get the customer id for existing user.
-        $existing_customer = $this->apiWrapper->getCustomer($fields['mail'], NULL);
+        $existing_customer = $this->apiWrapper->getCustomer($fields['mail'], FALSE);
 
         $customer_array = [
           'customer_id' => $existing_customer['customer_id'] ?? NULL,
