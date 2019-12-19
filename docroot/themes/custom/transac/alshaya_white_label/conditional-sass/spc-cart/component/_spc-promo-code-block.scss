@@ -61,6 +61,12 @@
         font-size: 2rem;
       }
     }
+
+    &.loading {
+      @include componentLoader(transparent, 'after') {
+        width: 2.5rem;
+      }
+    }
   }
 
   #promo-message {

@@ -1,6 +1,9 @@
 .alias--cart {
-  .page-standard {
+  .page-wrapper {
     background-color: $spc-cart-background;
+  }
+
+  .page-standard {
     padding-bottom: 5rem;
     margin-top: 0 !important;
     padding-#{$left}: 0 !important;
