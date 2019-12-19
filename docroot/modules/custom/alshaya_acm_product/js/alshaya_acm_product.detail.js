@@ -155,12 +155,6 @@
 
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
-        // Incase if configurable product is out of stock then show their first variant images.
-        if (drupalSettings.productInfo[sku]['variants']) {
-          var variantInfo = drupalSettings.productInfo[sku]['variants'];
-          var firstVariant = Object.keys(variantInfo)[0];
-          Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo[firstVariant].gallery);
-        }
       });
     }
   };
