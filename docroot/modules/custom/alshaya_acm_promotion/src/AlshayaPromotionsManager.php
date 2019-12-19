@@ -691,7 +691,7 @@ class AlshayaPromotionsManager {
    * @param array $config
    *   Subtype configuration.
    * @param array $cartPromotionsApplied
-   *   Promotion Nid List applied to cart.
+   *   Promotions List applied to cart.
    *
    * @return mixed|null
    *   Inactive promotion node.
@@ -707,6 +707,10 @@ class AlshayaPromotionsManager {
 
     if (!empty($subtypes)) {
       $allCartPromotions = $this->getSortedCartPromotions();
+      $appliedPromotionIds = [];
+      foreach ($cartPromotionsApplied as $promotion) {
+        $appliedPromotionIds[] = $promotion->id();
+      }
 
       // Extract next eligible cart promotion based on priority and price.
       foreach ($allCartPromotions as $priceSortedPromotions) {
@@ -714,7 +718,7 @@ class AlshayaPromotionsManager {
 
         foreach ($priceSortedPromotions as $promotions) {
           foreach ($promotions as $promotion) {
-            if (!in_array($promotion, $cartPromotionsApplied)) {
+            if (!in_array($promotion, $appliedPromotionIds)) {
               $promotion = $this->nodeStorage->load($promotion);
               $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
 
