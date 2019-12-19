@@ -44,12 +44,16 @@ export default class CartPromoBlock extends React.Component {
     if (promo_applied !== true) {
       document.getElementById('promo-action-button').classList.add('loading');
     }
+    else {
+      document.getElementById('promo-remove-button').classList.add('loading');
+    }
 
     var cart_data = applyRemovePromo(action, promo_value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
         // Removing button clicked class.
         document.getElementById('promo-action-button').classList.remove('loading');
+        document.getElementById('promo-remove-button').classList.remove('loading');
         // If coupon is not valid.
         if (result.response_message.status === 'error_coupon') {
           document.getElementById('promo-message').innerHTML = result.response_message.msg;

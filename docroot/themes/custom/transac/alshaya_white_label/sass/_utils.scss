@@ -311,6 +311,8 @@ body {
     background: $background-color url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
     background-size: contain;
 
+    @content;
+
     @include fullPageTransparentOverlay($pseudo-element);
   }
 }
