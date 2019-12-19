@@ -637,8 +637,8 @@ class AlshayaPromoLabelManager {
    *   Render array.
    */
   protected function getFreeGiftDisplay($promotion_id, array $free_gift_promotion, array $free_skus) {
-    // More than one available, show list modal.
-    if (count($free_skus) > 1) {
+    // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
+    if ($free_gift_promotion['promo_type'] == 1) {
       $link = Link::createFromRoute(
         $free_gift_promotion['text'],
         'alshaya_acm_promotion.free_gifts_list',
