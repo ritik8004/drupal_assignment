@@ -26,8 +26,7 @@ class TotalLineItems extends React.Component {
   }
 
   render() {
-    // const discount_tooltip = this.discountToolTipContent(this.props.cart_promo);
-    const discount_tooltip = 'Hello';
+    const discount_tooltip = this.discountToolTipContent(this.props.cart_promo);
 
     return (
       <div className="totals">
