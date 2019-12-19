@@ -258,6 +258,30 @@ class AlshayaPromotionsManager {
   }
 
   /**
+   * Get promotions threshold price.
+   *
+   * @param array $promotion_data
+   *   Promotion node data.
+   *
+   * @return mixed|null
+   *   Threshold Price.
+   */
+  public function getPromotionThresholdPrice(array $promotion_data) {
+    $threshold_price = NULL;
+
+    if (!empty($promotion_data['condition'])
+      && !empty($promotion_data['condition']['conditions'])) {
+      foreach ($promotion_data['condition']['conditions'] as $condition) {
+        if ($condition['attribute'] === 'base_subtotal') {
+          $threshold_price = $condition['value'];
+        }
+      }
+    }
+
+    return $threshold_price;
+  }
+
+  /**
    * Helper function to fetch all cart promotions.
    *
    * @param array $selected_promotions
@@ -588,19 +612,11 @@ class AlshayaPromotionsManager {
         $order = $promotion->get('field_acq_promotion_sort_order')->getString();
         $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
         $promotion_data = unserialize($promotion_data);
-        $threshold_price = 0;
+        $threshold_price = $this->getPromotionThresholdPrice($promotion_data);
 
-        if (!empty($promotion_data)
-          && !empty($promotion_data['condition'])
-          && !empty($promotion_data['condition']['conditions'])) {
-          foreach ($promotion_data['condition']['conditions'] as $condition) {
-            if ($condition['attribute'] === 'base_subtotal') {
-              $threshold_price = $condition['value'];
-            }
-          }
+        if (isset($order) && isset($threshold_price)) {
+          $cartPromotions[$order][$threshold_price][] = $promotion->id();
         }
-
-        $cartPromotions[$order][$threshold_price][] = $promotion->id();
       }
     }
 
