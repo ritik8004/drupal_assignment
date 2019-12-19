@@ -77,27 +77,4 @@ class CustomerHelper {
     ]);
   }
 
-  /**
-   * Get existing user or create user if it does not exists.
-   *
-   * @param string $email
-   *   E-Mail.
-   * @param string $first_name
-   *   First name.
-   * @param string $last_name
-   *   Last name.
-   * @param string $password
-   *   Password in plain text format.
-   *
-   * @return array|mixed
-   *   Return customer array or throw exceptions.
-   */
-  public function getCustomer($email, $first_name, $last_name, $password) {
-    $customer = $this->apiWrapper->getCustomer($email, NULL);
-    if (!empty($customer)) {
-      return $customer;
-    }
-    return $this->updateCustomer(NULL, $email, $first_name, $last_name, $password);
-  }
-
 }

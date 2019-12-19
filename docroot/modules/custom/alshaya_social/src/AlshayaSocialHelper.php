@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_social;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\alshaya_acm_customer\CustomerHelper;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\AuthManager\OAuth2ManagerInterface;
@@ -24,11 +24,11 @@ class AlshayaSocialHelper {
   protected $configFactory;
 
   /**
-   * The customer helper.
+   * API Wrapper object.
    *
-   * @var \Drupal\alshaya_acm_customer\CustomerHelper
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
    */
-  protected $customerHelper;
+  protected $apiWrapper;
 
   /**
    * The data handler.
@@ -56,8 +56,8 @@ class AlshayaSocialHelper {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config storage object.
-   * @param \Drupal\alshaya_acm_customer\CustomerHelper $customer_helper
-   *   The customer helper.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   ApiWrapper object.
    * @param \Drupal\social_auth\SocialAuthDataHandler $data_handler
    *   Used to manage session variables.
    * @param \Drupal\social_api\Plugin\NetworkManager $network_manager
@@ -67,13 +67,13 @@ class AlshayaSocialHelper {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    CustomerHelper $customer_helper,
+    APIWrapper $api_wrapper,
     SocialAuthDataHandler $data_handler,
     NetworkManager $network_manager,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->customerHelper = $customer_helper;
+    $this->apiWrapper = $api_wrapper;
     $this->dataHandler = $data_handler;
     $this->networkManager = $network_manager;
     $this->logger = $logger_factory->get('alshaya_social');
@@ -146,12 +146,19 @@ class AlshayaSocialHelper {
       $fields['field_last_name'] = $user_info->getLastName();
 
       try {
-        $customer = $this->customerHelper->getCustomer(
-          $fields['mail'],
-          $fields['field_first_name'],
-          $fields['field_last_name'],
-          $fields['pass']
-        );
+        // Get the customer id for existing user.
+        $existing_customer = $this->apiWrapper->getCustomer($fields['mail'], NULL);
+
+        $customer_array = [
+          'customer_id' => $existing_customer['customer_id'] ?? NULL,
+          'firstname' => $fields['field_first_name'],
+          'lastname' => $fields['field_last_name'],
+          'email' => $fields['mail'],
+        ];
+
+        $customer = $this->apiWrapper->updateCustomer($customer_array, [
+          'password' => $fields['pass'],
+        ]);
       }
       catch (\Exception $e) {
         // Do nothing except for downtime exception, we will do other
