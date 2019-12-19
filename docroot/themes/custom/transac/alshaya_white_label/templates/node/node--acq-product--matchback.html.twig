@@ -18,7 +18,7 @@
     </div>
 
     <div class="cross-sell-product-component-center">
-      <h1>{{ label }}</h1>
+      <h1><a class="full-prod-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ label }}</a></h1>
       <div class="short-description-wrapper">
         <div class="content--short-description">
           <h2 class="field__label">{{ 'Product Description'|t }}</h2>
