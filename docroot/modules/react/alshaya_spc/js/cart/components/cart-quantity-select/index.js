@@ -64,7 +64,7 @@ export default class CartQuantitySelect extends React.Component {
         value={options[qty]}
         defaultValue={options[qty]}
         isSearchable={false}
-        isDisabled={!is_disabled}
+        isDisabled={is_disabled}
       />
     )
   }

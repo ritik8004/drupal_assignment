@@ -32,7 +32,7 @@ class TotalLineItems extends React.Component {
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={this.props.totals.subtotal_incl_tax}/>
-        <TotalLineItem tooltip={true} tooltipContent={discount_tooltip} name="discount-total" title={Drupal.t('discount')} value={10.000}/>
+        <TotalLineItem tooltip={true} tooltipContent={discount_tooltip} name="discount-total" title={Drupal.t('discount')} value={this.props.totals.discount_amount}/>
         <div className="hero-total">
           <TotalLineItem name="grand-total" title={Drupal.t('order total')} value={this.props.totals.base_grand_total}/>
           <div className="delivery-vat">
