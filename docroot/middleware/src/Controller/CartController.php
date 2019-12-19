@@ -125,6 +125,7 @@ class CartController {
 
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
+    $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
     $data['items'] = $this->drupal->getCartItemDrupalData($sku_items);
     foreach ($data['items'] as $key => $value) {
       if (isset($items_quantity[$key])) {
@@ -134,6 +135,17 @@ class CartController {
       // For the OOS.
       if ($data['in_stock'] && !$value['in_stock']) {
         $data['in_stock'] = FALSE;
+      }
+
+      // This is to determine whether item to be shown free or not in cart.
+      $data['items'][$key]['free_item'] = FALSE;
+      foreach ($cart_data['totals']['items'] as $total_item) {
+        if (in_array($value['sku'], array_keys($items_id))
+          && $items_id[$value['sku']] == $total_item['item_id']
+          && ($total_item['price'] * $items_quantity[$value['sku']] === $total_item['discount_amount'])) {
+          $data['items'][$key]['free_item'] = TRUE;
+          break;
+        }
       }
     }
 

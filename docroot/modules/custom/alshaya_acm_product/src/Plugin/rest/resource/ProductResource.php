@@ -229,6 +229,10 @@ class ProductResource extends ResourceBase {
 
     $data = $this->getSkuData($skuEntity, $link);
 
+    $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+      '',
+      $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
+
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();

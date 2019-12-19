@@ -44,7 +44,7 @@ export default class CartItem extends React.Component {
 
   render() {
     const { currency_code } = drupalSettings.alshaya_spc.currency_config;
-    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id, final_price } = this.props.item;
+    const {title, link, relative_link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id, final_price, free_item } = this.props.item;
 
     return (
       <div className="spc-cart-item">
@@ -55,9 +55,12 @@ export default class CartItem extends React.Component {
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={Drupal.url.toAbsolute(link)}>{title}</a>
+                <a href={Drupal.url(relative_link)}>{title}</a>
               </div>
               <div className="spc-product-price">{currency_code} {final_price}</div>
+              {free_item === true &&
+                <div>{Drupal.t('FREE')}</div>
+              }
             </div>
             <div className="spc-product-attributes-wrapper">
               {configurable_values.map((key, val) =>
@@ -69,7 +72,7 @@ export default class CartItem extends React.Component {
             <button title={Drupal.t('remove this item')} id={'remove-item-' + id} className="spc-remove-btn" onClick={() => {this.removeCartItem(sku, 'remove item', id)}}>{Drupal.t('remove')}</button>
             <div className="qty">
               <div className="qty-loader-placeholder"/>
-              <CartQuantitySelect qty={qty} stock={stock} sku={sku} is_disabled={in_stock} />
+              <CartQuantitySelect qty={qty} stock={stock} sku={sku} is_disabled={!in_stock || free_item} />
             </div>
           </div>
         </div>
