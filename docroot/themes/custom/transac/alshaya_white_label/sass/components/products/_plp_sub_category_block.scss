@@ -134,12 +134,14 @@
   .filter-fixed-top {
     .c-products-list {
       .view-alshaya-product-list {
-        @include breakpoint($desktop) {
-          margin-top: 16.25rem;
+        margin-top: 9.375rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 9.625rem;
         }
 
-        @include breakpoint($only-tablet) {
-          margin-top: 9.625rem;
+        @include breakpoint($desktop) {
+          margin-top: 16.25rem;
         }
       }
     }
