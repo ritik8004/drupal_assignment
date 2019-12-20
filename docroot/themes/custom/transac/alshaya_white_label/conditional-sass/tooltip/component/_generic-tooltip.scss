@@ -44,7 +44,7 @@
 .tooltip-anchor {
   @include icon(infomation, before) {
     font-size: 1.5rem;
-    color: $tooltip_icon;
+    color: $spc_tooltip_icon;
   }
 
   &:hover .tooltip-box {

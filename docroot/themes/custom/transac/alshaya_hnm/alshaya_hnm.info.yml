@@ -54,6 +54,11 @@ libraries-override:
       theme:
         css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css: css/conditional-sass/dynamic-promotions/dynamic-promotions.ltr.css
 
+  alshaya_white_label/tooltip:
+    css:
+      theme:
+        css/conditional-sass/tooltip/tooltip.ltr.css: css/conditional-sass/tooltip/tooltip.ltr.css
+
   alshaya_white_label/spc-cart:
     css:
       theme:
