@@ -16,8 +16,8 @@ function alshaya_seo_update_8011() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['metatag.metatag_defaults.global'],
-    'alshaya_seo',
-    'override',
+    'metatag',
+    'install',
     AlshayaConfigManager::MODE_RESAVE
   );
 }
