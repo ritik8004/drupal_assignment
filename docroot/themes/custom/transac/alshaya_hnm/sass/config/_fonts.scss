@@ -121,12 +121,12 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
 
 @font-face {
   font-family: 'hnm-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?zAKZu');
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?k2mqf#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?k2mqf') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?k2mqf') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?k2mqf#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?zAKZu#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?zAKZu') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?zAKZu') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?zAKZu#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -234,7 +234,7 @@ $icons: (
   newsletter: "\e924",
   rewards: "\e926",
   language: "\e927",
-  info: "\e928",
+  infomation: "\e928",
   warning: "\2757",
   googleplus: "\1f576",
   facebook: "\1f575",
@@ -245,7 +245,11 @@ $icons: (
   filter: "\e93c",
   edit-input: "\e93d",
   arrow-left: "\e93e",
-  arrow-right: "\e93f"
+  arrow-right: "\e93f",
+  bell: "\e006",
+  marquee-plus: "\e083",
+  price-tag: "\e93a",
+  bin: "\e9ad"
 );
 
 @mixin iconbase() {

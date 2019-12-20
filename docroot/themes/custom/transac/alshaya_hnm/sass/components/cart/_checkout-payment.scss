@@ -137,7 +137,7 @@
       .tooltip-icon {
         color: $tooltip_text;
 
-        @include icon(info, after) {
+        @include icon(infomation, after) {
           font-size: 1.25rem;
         }
       }
