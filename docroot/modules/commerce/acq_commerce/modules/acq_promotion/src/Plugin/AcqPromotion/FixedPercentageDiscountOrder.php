@@ -116,8 +116,10 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
    */
   protected function checkThresholdReached(array $promotion_data) {
     $reached = FALSE;
-    if (!empty($cart = $this->cartStorage->getCart(FALSE)->totals())) {
-      $cartValue = $cart['sub'];
+    $cart = $this->cartStorage->getCart(FALSE);
+    if ($cart instanceof CartStorageInterface
+      && !empty($cartTotals = $cart->totals())) {
+      $cartValue = $cartTotals['sub'];
       $threshold_price = $this->alshayaPromotionsManager->getPromotionThresholdPrice($promotion_data);
 
       if ((isset($cartValue) && isset($threshold_price)) && $cartValue >= $threshold_price) {
