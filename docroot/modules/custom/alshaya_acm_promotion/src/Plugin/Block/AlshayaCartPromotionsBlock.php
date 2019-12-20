@@ -250,7 +250,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       if (!empty($cartRulesApplied)) {
         foreach ($cartRulesApplied as $rule_id) {
           $promotion_node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($rule_id);
-          if ($promotion_node) {
+          if ($promotion_node instanceof NodeInterface) {
             $cartPromotionsApplied[$rule_id] = $promotion_node;
           }
         }

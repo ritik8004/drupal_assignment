@@ -620,7 +620,7 @@ class AlshayaPromotionsManager {
       }
     }
 
-    $this->alshayaAcmPromotionCache->set($cid, $cartPromotions, Cache::PERMANENT, ['node:type:acq_promotion']);
+    $this->alshayaAcmPromotionCache->set($cid, $cartPromotions, Cache::PERMANENT, ['node_type:acq_promotion']);
 
     return $cartPromotions;
   }
@@ -738,11 +738,13 @@ class AlshayaPromotionsManager {
           foreach ($promotions as $promotion) {
             if (!in_array($promotion, $appliedPromotionIds)) {
               $promotion = $this->nodeStorage->load($promotion);
-              $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
+              if ($promotion instanceof NodeInterface) {
+                $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
 
-              // Check if this promotion meets config subtypes.
-              if (in_array($subtype, $subtypes)) {
-                return $promotion;
+                // Check if this promotion meets config subtypes.
+                if (in_array($subtype, $subtypes)) {
+                  return $promotion;
+                }
               }
             }
           }
