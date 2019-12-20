@@ -636,7 +636,20 @@ class AlshayaPromotionsManager {
 
     $types = [];
     foreach ($definitions as $definition) {
-      $types[$definition['id']] = $definition['label'];
+      switch ($definition['id']) {
+        case 'buy_x_get_y_cheapest_free':
+          $types[self::SUBTYPE_OTHER][] = $definition['label'];
+          break;
+
+        default:
+          $types[$definition['id']] = $definition['label'];
+      }
+    }
+
+    if (!empty($types[self::SUBTYPE_OTHER])) {
+      $types[self::SUBTYPE_OTHER] = $this->t('Others : @others', [
+        '@others' => implode(', ', $types[self::SUBTYPE_OTHER]),
+      ]);
     }
 
     return $types;
@@ -656,13 +669,18 @@ class AlshayaPromotionsManager {
   public function getPromotionData(NodeInterface $promotion, $status = TRUE) {
     $data = NULL;
     $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
-    $definitions = $this->acqPromotionPluginManager->getDefinitions();
+    $acqPromotionTypes = $this->getAcqPromotionTypes();
 
     // Get matching plugin type.
-    if (!empty($definitions[$field_alshaya_promotion_subtype])) {
+    if (!empty($acqPromotionTypes[$field_alshaya_promotion_subtype])) {
       try {
+        $plugin_id = $field_alshaya_promotion_subtype;
+        if ($field_alshaya_promotion_subtype === self::SUBTYPE_OTHER) {
+          $plugin_id = $promotion->get('field_acq_promotion_action')->getString();
+        }
+
         $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
-          $field_alshaya_promotion_subtype,
+          $plugin_id,
           [],
           $promotion
         );

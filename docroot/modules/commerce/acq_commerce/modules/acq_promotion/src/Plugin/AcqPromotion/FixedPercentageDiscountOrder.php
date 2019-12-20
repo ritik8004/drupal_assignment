@@ -106,13 +106,6 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getActiveLabel() {
-    return '';
-  }
-
-  /**
    * Compare cart sub total and promotion threshold price.
    *
    * @param array $promotion_data

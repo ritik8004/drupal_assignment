@@ -85,6 +85,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       'promotion_types' => [
         'free_shipping_order' => 'free_shipping_order',
         'fixed_percentage_discount_order' => 'fixed_percentage_discount_order',
+        'others' => 'others',
       ],
       'promotions' => [],
     ] + parent::defaultConfiguration();
@@ -249,7 +250,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       if (!empty($cartRulesApplied)) {
         foreach ($cartRulesApplied as $rule_id) {
           $promotion_node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($rule_id);
-          $cartPromotionsApplied[$rule_id] = $promotion_node;
+          if ($promotion_node) {
+            $cartPromotionsApplied[$rule_id] = $promotion_node;
+          }
         }
       }
     }
