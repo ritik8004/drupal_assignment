@@ -56,8 +56,13 @@ class Autocomplete extends React.Component {
 
   onPopState = event => {
     let query = getCurrentSearchQuery();
-    if (Object.keys(query).length > 0) {
-      this.onChange(null, {newValue: query});
+    // Update new value in textinput.
+    this.onChange(null, {newValue: query});
+    if (Object.keys(query).length == 0) {
+      // Remove the focus from text input and remove unnecessary
+      // classes.
+      this.reactSearchBlock[0].classList.remove('focused', 'clear-icon');
+      this.autosuggest.current.input.blur();
     }
   }
 
