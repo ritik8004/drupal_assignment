@@ -19,6 +19,10 @@ function alshaya_performance_views_plugins_cache_alter(array &$plugins) {
   if (isset($plugins['tag']) && isset($plugins['alshaya_tag'])) {
     $plugins['tag']['class'] = $plugins['alshaya_tag']['class'];
   }
+
+  if (isset($plugins['search_api_tag']) && isset($plugins['alshaya_search_api_tag'])) {
+    $plugins['search_api_tag']['class'] = $plugins['alshaya_search_api_tag']['class'];
+  }
 }
 
 /**
