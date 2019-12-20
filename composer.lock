@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2c075b79faddfc5f32dd97c6f77b688",
+    "content-hash": "f17ef90a84e69b14b4a04ff696c60714",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7128,7 +7128,7 @@
                     "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch",
                     "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
                     "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
-                    "Use entityQuery instead of loading children in getNestedChildIds for better performance": "https://www.drupal.org/files/issues/2019-11-20/getNestedChildIds-entityQuery-3095601-2.patch"
+                    "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2019-11-30/3095601-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12040,9 +12040,6 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-07-19/3054878-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12798,7 +12795,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014.patch"
+                    "Merge of patches of MMCPA-2433 and CORE-7109": "patches/simple_sitemap/simple_sitemap_MMCPA-2433_CORE-7109_CORE-9014_CORE_14106.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

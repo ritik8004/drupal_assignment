@@ -1,0 +1,70 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - acq_sku
+    - search_api
+    - alshaya_acm_product
+    - alshaya_product
+  config:
+    - field.storage.node.field_skus
+    - search_api.server.algolia
+id: alshaya_algolia_index
+name: 'Alshaya Algolia Index'
+description: ''
+read_only: false
+field_settings:
+  nid:
+    label: ID
+    datasource_id: 'entity:node'
+    property_path: nid
+    type: integer
+    dependencies:
+      module:
+        - node
+  sku:
+    label: SKU
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:sku'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+        - acq_sku
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    boost: !!float 3
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - acq_product
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  entity_status: {  }
+  price_from_to_facets_processor:
+    weights:
+      postprocess_query: 100
+  rendered_item: {  }
+  stock_quantity: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: false
+  cron_limit: 50
+server: algolia

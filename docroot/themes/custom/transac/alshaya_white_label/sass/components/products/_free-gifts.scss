@@ -58,6 +58,7 @@
       width: 100%;
       display: flex;
       flex-flow: row wrap;
+      align-items: center;
 
       .free-gift-wrapper {
         width: calc(100% - (5.6875rem));
@@ -75,6 +76,8 @@
       .free-gift-message {
         a {
           text-decoration: underline;
+          padding-#{$right}: 0.25rem;
+          padding-#{$left}: 0.125rem;
         }
       }
     }
@@ -101,7 +104,7 @@
   }
 
   .free-gift-coupon-code {
-    margin-top: 0.5rem;
+    margin-top: 0.5625rem;
 
     .coupon-code {
       font-family: $alshaya-bold;
@@ -109,6 +112,7 @@
       font-weight: bold;
       line-height: 1.33;
       color: $free-gifts-coupon-code-text;
+      padding: 0 0.125rem;
     }
   }
 }
@@ -281,11 +285,22 @@
 }
 
 .path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      width: 7rem;
+      float: $left;
+      margin-bottom: 1.625rem;
+    }
+  }
+
   .gift-message {
     font-size: 0.75rem;
     line-height: 1.33;
     color: $cart-free-gifts-message;
-    margin-top: 1.125rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 1.125rem;
+    }
 
     .coupon-code {
       color: $free-gifts-coupon-code-text;
@@ -325,14 +340,6 @@
             padding: 0 0 1rem;
 
             .sku-promotions {
-              display: none;
-            }
-          }
-        }
-
-        @include breakpoint($only-mobile) {
-          .sku-promotions {
-            .free-gift-promo {
               display: none;
             }
           }
@@ -509,6 +516,14 @@
 
     > label {
       display: none;
+    }
+  }
+
+  .sku-base-form {
+    .ajax-progress-throbber {
+      display: block !important;
+
+      @include fullPageLoader();
     }
   }
 }

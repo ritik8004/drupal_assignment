@@ -59,6 +59,9 @@ if [ "$process_cron" = true ]; then
     echo "Creating lock file ${file_name}" &>> ${log_file}
     touch $file_name
 
+    # Add start date in logs to analyse.
+    echo "Starting at `date`"
+
     # If a script is given, then run it. Else run drush command.
     if [ "$is_shell_script" = true ]; then
         echo "Running script ${command}"
@@ -69,6 +72,9 @@ if [ "$process_cron" = true ]; then
         cd /var/www/html/${AH_SITE_NAME}/docroot
         eval $command &>> ${log_file}
     fi
+
+    # Add finish date in logs to analyse.
+    echo "Ended at `date`"
 
     #  Releasing the lock.
     rm /tmp/cron-lock-$id.lock

@@ -132,3 +132,13 @@ ul[data-drupal-facet-id=promotion_category_facet] {
     }
   }
 }
+
+.c-plp {
+  .region__content {
+    .block-facets-summary-blockfilter-bar-plp {
+      ul li.clear-all {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

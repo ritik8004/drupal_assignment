@@ -13,24 +13,24 @@
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
         $(this).addClass('active');
-        $('body').removeClass('large-grid')
+        $('body').removeClass('large-grid');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight();
+         Drupal.plpListingProductTileHeight('full_page', null);
       });
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
         $(this).addClass('active');
-        $('body').addClass('large-grid')
+        $('body').addClass('large-grid');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight();
+         Drupal.plpListingProductTileHeight('full_page', null);
       });
 
       // On filter selection keeping the selected layout.
@@ -126,8 +126,8 @@
         }
       });
 
-      if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
-        var clearAll = $('.c-content__region .region__content  > div.block-facets-summary').clone();
+      if ($('.c-content__region .region__content  > div[data-drupal-facets-summary-id] li.clear-all').length > 0) {
+        var clearAll = $('.c-content__region .region__content  > div[data-drupal-facets-summary-id]').clone();
         // Remove all `li` except last.
         $(clearAll).find('li:not(:last)').remove();
         $('.facet-all-clear').html(clearAll);
@@ -165,14 +165,8 @@
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
 
-      // Adding timeout to do calculation after images get load on plp.
-      setTimeout(function() {
-        // Adjust height of PLP tiles.
-        Drupal.plpListingProductTileHeight();
-      }, 300);
-
-      $(window).on('blazySuccess', function() {
-        Drupal.plpListingProductTileHeight();
+      $(window).on('blazySuccess', function(event, element) {
+        Drupal.plpListingProductTileHeight('row', element);
       });
 
       // Back to PLP and loading a PLP/SRP with facets active in URL.
@@ -343,7 +337,7 @@
       function stickyfacetwrapper() {
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 767) {
-            if ($('.container-without-product').length < 1) {
+            if ($('.c-content .container-without-product').length < 1) {
               var site_brand = $('.site-brand-home').clone();
               $('#block-subcategoryblock, .region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
               $(site_brand).insertBefore('.container-without-product');
@@ -400,7 +394,7 @@
           }
         }
 
-        $(window, context).once().on('scroll', function () {
+        $(window).once('lhnStickyFilters').on('scroll', function () {
           // Sticky filter header.
           if ($('.show-all-filters').length > 0) {
             if ($(this).scrollTop() > filterposition) {
@@ -632,22 +626,5 @@
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend span.sort-for-label').remove();
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);
   }
-
-  /**
-   * Calculate and add height for each product tile.
-   */
-  Drupal.plpListingProductTileHeight = function () {
-    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
-      var Hgt = 0;
-      $('.c-products__item').each(function () {
-        var Height = $(this)
-          .find('> article')
-          .outerHeight(true);
-        Hgt = Hgt > Height ? Hgt : Height;
-      });
-
-      $('.c-products__item').css('height', Hgt);
-    }
-  };
 
 })(jQuery, Drupal);

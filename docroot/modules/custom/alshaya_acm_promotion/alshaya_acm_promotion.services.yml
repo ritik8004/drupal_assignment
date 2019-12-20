@@ -8,6 +8,8 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
       - '@acq_promotion.promotions_manager'
+      - '@plugin.manager.acq_promotion'
+      - '@cache.alshaya_acm_promotion'
   alshaya_acm_promotion.label_manager:
     class: Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
     arguments:
@@ -25,3 +27,9 @@ services:
       - '@alshaya_acm_promotion.label_manager'
     tags:
       - { name: 'event_subscriber' }
+  cache.alshaya_acm_promotion:
+    class: Drupal\Core\Cache\CacheInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [alshaya_acm_promotion]

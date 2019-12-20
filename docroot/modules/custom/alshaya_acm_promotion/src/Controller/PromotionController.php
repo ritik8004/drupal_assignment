@@ -299,6 +299,7 @@ class PromotionController extends ControllerBase {
             ]);
           }
 
+          $updated_cart->setExtension('do_direct_call', 1);
           $this->cartStorage->updateCart(FALSE);
         }
         elseif ($response_message[1] == 'error_coupon') {

@@ -66,6 +66,10 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
  * Implements hook_search_api_index_items_alter().
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  if (!in_array($index->id(), ['product', 'acquia_search_index'])) {
+    return;
+  }
+
   $logger = \Drupal::logger('alshaya_acm_product');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
