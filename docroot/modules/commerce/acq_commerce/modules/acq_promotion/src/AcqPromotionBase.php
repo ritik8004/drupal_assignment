@@ -46,4 +46,11 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
     return $this->promotionNode->get('field_acq_promotion_label')->getString();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getActiveLabel() {
+    return '';
+  }
+
 }
