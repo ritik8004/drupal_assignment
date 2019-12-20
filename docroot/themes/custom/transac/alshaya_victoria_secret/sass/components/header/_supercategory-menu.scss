@@ -11,10 +11,6 @@
     .menu--one__list {
       .menu--one__link {
         font-size: 0;
-
-        @include breakpoint($only-tablet) {
-          padding-bottom: 0.5625rem;
-        }
       }
     }
 
