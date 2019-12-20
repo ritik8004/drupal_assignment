@@ -40,7 +40,7 @@ class AlshayaSearchApiTagCache extends SearchApiTagCache {
     // We will invalidate this cache tag later in separate queue / cron.
     $list_tags = [];
     $tids = $this->view->args[0] ?? '';
-    foreach (explode('+', $tids) as $tid) {
+    foreach (array_filter(explode('+', $tids)) as $tid) {
       $list_tags[] = AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $tid;
     }
 
