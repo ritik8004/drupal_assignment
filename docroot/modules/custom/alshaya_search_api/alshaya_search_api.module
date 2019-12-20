@@ -121,21 +121,6 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
 }
 
 /**
- * Implements hook_views_post_build().
- */
-function alshaya_search_api_views_post_build(ViewExecutable $view) {
-  if ($view->id() != 'alshaya_product_list') {
-    return;
-  }
-
-  // We will invalidate this cache tag later in separate queue / cron.
-  $tids = $view->args[0] ?? '';
-  foreach (explode('+', $tids) as $tid) {
-    $view->element['#cache']['tags'][] = AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $tid;
-  }
-}
-
-/**
  * Implements hook_language_switch_links_alter().
  */
 function alshaya_search_api_language_switch_links_alter(array &$links, $type, Url $url) {
