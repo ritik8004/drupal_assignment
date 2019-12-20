@@ -1,6 +1,7 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
+import _isEqual  from 'lodash/isEqual';
 import CustomHighlight from './CustomHighlight';
 import { getCurrentSearchQuery } from '../../utils';
 import Portal from '../portal';
@@ -41,7 +42,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value);
+    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value || !_isEqual(nextProps.hits, this.props.hits));
   }
 
   componentDidMount()  {
@@ -123,7 +124,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    // Display trending searches for desktop on when searchbox is emty.
+    // Display trending searches for desktop on when searchbox is empty.
     // otherwise show it only for mobile always.
     return (value.trim() === '') || (window.innerWidth < 768);
   }
