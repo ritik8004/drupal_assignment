@@ -2,7 +2,10 @@
   <sku>{{ product.sku }}</sku>
   <name><![CDATA[{{ product.name }}]]></name>
   <url>{{ product.url }}</url>
-  <type>{{ product.type_id }}</type>
+  <product_type>{{ product.type_id }}</product_type>
+  {% if product.gender is not empty%}
+    <gender>{{ product.gender }}</gender>
+  {% endif %}
   <status>{{ product.status }}</status>
   <regular_price>{{ product.original_price }}</regular_price>
   <special_price>{{ product.special_price }}</special_price>
