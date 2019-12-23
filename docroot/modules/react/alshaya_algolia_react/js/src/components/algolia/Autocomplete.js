@@ -114,7 +114,7 @@ class Autocomplete extends React.Component {
   }
 
   renderSuggestion(hit) {
-    return (<CustomHighlight attribute="query" hit={hit} />)
+    return (<CustomHighlight attribute="query" hit={hit} suffix={<span className="populate-input">&#8598;</span>} />)
   }
 
   shouldRenderSuggestions(value) {
