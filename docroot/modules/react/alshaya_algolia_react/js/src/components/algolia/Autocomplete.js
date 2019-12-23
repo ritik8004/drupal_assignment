@@ -1,7 +1,6 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
-import _isEqual  from 'lodash/isEqual';
 import CustomHighlight from './CustomHighlight';
 import { getCurrentSearchQuery } from '../../utils';
 import Portal from '../portal';
@@ -42,7 +41,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value || !_isEqual(nextProps.hits, this.props.hits));
+    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value);
   }
 
   componentDidMount()  {
@@ -57,13 +56,8 @@ class Autocomplete extends React.Component {
 
   onPopState = event => {
     let query = getCurrentSearchQuery();
-    // Update new value in textinput.
-    this.onChange(null, {newValue: query});
-    if (Object.keys(query).length == 0) {
-      // Remove the focus from text input and remove unnecessary
-      // classes.
-      this.reactSearchBlock[0].classList.remove('focused', 'clear-icon');
-      this.autosuggest.current.input.blur();
+    if (Object.keys(query).length > 0) {
+      this.onChange(null, {newValue: query});
     }
   }
 
@@ -124,7 +118,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldRenderSuggestions(value) {
-    // Display trending searches for desktop on when searchbox is empty.
+    // Display trending searches for desktop on when searchbox is emty.
     // otherwise show it only for mobile always.
     return (value.trim() === '') || (window.innerWidth < 768);
   }
