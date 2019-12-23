@@ -26,8 +26,10 @@ export const cartAvailableInStorage = function () {
   var cart_data = JSON.parse(cart_data);
 
   // If data/cart is expired or cart has different language than
-  // currentlt selected language.
-  if ((current_time - cart_data.last_update) > expire_time || window.drupalSettings.path.currentLanguage !== cart_data.langcode) {
+  // currently selected language.
+  if ((current_time - cart_data.last_update) > expire_time
+    || cart_data.langcode === undefined
+    || window.drupalSettings.path.currentLanguage !== cart_data.langcode) {
     return cart_data.cart_id;
   }
 
