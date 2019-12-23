@@ -47,7 +47,10 @@ class Autocomplete extends React.Component {
 
   componentDidMount()  {
     window.addEventListener('popstate', this.onPopState);
+    // Change name to search for iphone devices.
     this.autosuggest.current.input.name = 'search';
+    // Change type to search for android devices.
+    this.autosuggest.current.input.type = 'search';
     this.onKeyUp();
   }
 
