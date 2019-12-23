@@ -284,25 +284,44 @@ class AlshayaAlgoliaIndexHelper {
    *     ],
    *   ],
    *   [
-   *     "lvl0": "Movie",
-   *     "lvl1": "Movie > Science Fiction",
-   *     "lvl2": "Movie > Science Fiction > Time Travel"],
+   *     "lvl0": "Movies",
+   *     "lvl1": "Movies > Science Fiction",
+   *     "lvl2": "Movies > Science Fiction > Time Travel"],
    *   ],
    * ]
+   * @endcode
+   * OR
+   * @code
+   * {
+   *   "lvl0": [
+   *     "Books",
+   *     "Movies"
+   *   ],
+   *   "lvl1": [
+   *     "Books > Science Fiction",
+   *     "Books > Literature & Fiction",
+   *     "Movie > Science Fiction"
+   *   ],
+   *   "lvl2": [
+   *     "Books > Science Fiction > Time Travel",
+   *     "Books > Literature & Fiction > Modernism ",
+   *     "Movie > Science Fiction > Time Travel"
+   *   ]
+   * }
    * @endcode
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node object for which we need to prepare hierarchy.
    * @param string $langcode
    *   The language code to use to load terms.
+   * @param bool $group_by_term
+   *   True to return hierarchy grouped by term, False to return single term
+   *   levels.
    *
    * @return array
    *   The array of hierarchy.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
+  protected function getCategoryHierarchy(NodeInterface $node, $langcode, $group_by_term = FALSE): array {
     $categories = $node->get('field_category')->referencedEntities();
 
     $list = [];
@@ -340,7 +359,22 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
-    return array_values($list);
+    if ($group_by_term) {
+      return array_values($list);
+    }
+
+    $new_list = [];
+    foreach (array_values($list) as $nesting) {
+      foreach ($nesting as $level => $level_items) {
+        if (empty($new_list[$level])) {
+          $new_list[$level] = (array) $level_items;
+        }
+        else {
+          $new_list[$level] = array_merge($new_list[$level], (array) $level_items);
+        }
+      }
+    }
+    return $new_list;
   }
 
 }
