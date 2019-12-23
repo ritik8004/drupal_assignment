@@ -19,7 +19,8 @@ function alshaya_ve_non_transac_update_8002() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['search_api.index.non_transac_acquia_solr_search_index', 'views.view.non_transac_acquia_index_search'],
-    'alshaya_ve_non_transac'
+    'alshaya_ve_non_transac',
+    'optional'
   );
 
   $manager->updateConfigs(
