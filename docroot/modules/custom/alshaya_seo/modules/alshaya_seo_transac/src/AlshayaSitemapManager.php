@@ -188,6 +188,11 @@ class AlshayaSitemapManager {
           ->setVariants([$variant])
           ->setBundleSettings($entity_type_id, $bundle_types, ['index' => TRUE]);
       }
+
+      // Disable default variant for product and product category.
+      $this->generator
+        ->setVariants(['default'])
+        ->setBundleSettings($entity_type_id, $bundle_types, ['index' => 0]);
     }
   }
 
