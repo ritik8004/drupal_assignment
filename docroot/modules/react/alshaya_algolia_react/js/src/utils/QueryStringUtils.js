@@ -22,6 +22,21 @@ function searchStateToURL(searchState) {
   return searchState.query ? qs.stringify(searchState) : '';
 }
 
+function redirectToOtherLang(queryValue) {
+  const redirectlang = drupalSettings.path.currentLanguage === 'ar' ? 'en' : 'ar';
+  // let arabicText = /[\u0600-\u06FF]/
+  let arabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(queryValue);
+  let englishText = /^[A-Za-z0-9]*$/.test(queryValue);
+  if (drupalSettings.path.currentLanguage === 'en' && arabicText) {
+    window.location.hash = "query=" + queryValue;
+    window.location.pathname = window.location.pathname.replace('en', redirectlang);
+  }
+  else if (drupalSettings.path.currentLanguage === 'ar' && englishText) {
+    window.location.hash = "query=" + queryValue;
+    window.location.pathname = window.location.pathname.replace('ar', redirectlang);
+  }
+}
+
 function isMobile() {
   return (window.innerWidth < 768);
 }
@@ -46,6 +61,7 @@ export {
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
+  redirectToOtherLang,
   isMobile,
   getAlgoliaStorageValues
 }

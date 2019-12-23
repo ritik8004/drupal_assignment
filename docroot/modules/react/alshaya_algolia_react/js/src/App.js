@@ -10,7 +10,8 @@ import {
   toggleSearchResultsContainer,
   getCurrentSearchQuery,
   isMobile,
-  updateSearchQuery
+  updateSearchQuery,
+  redirectToOtherLang
 } from './utils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
@@ -42,6 +43,9 @@ class App extends React.PureComponent {
     toggleSearchResultsContainer(queryValue);
     if (queryValue === '') {
       updateSearchQuery('');
+    }
+    else {
+      redirectToOtherLang(queryValue);
     }
   };
 
