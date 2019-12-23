@@ -20,7 +20,7 @@ const PriceFilter = (props) => {
               refine(item.value);
             }}
           >
-            {getPriceRangeLabel(item.value)}
+            {getPriceRangeLabel(item.label)}
             <span className="facet-item__count">({item.count})</span>
           </span>
         </li>
