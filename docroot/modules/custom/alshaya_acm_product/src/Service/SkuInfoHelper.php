@@ -371,29 +371,45 @@ class SkuInfoHelper {
       if (!$child instanceof SKUInterface) {
         continue;
       }
-      $stockInfo = $this->stockInfo($child);
 
-      $variant = [
-        'id' => (int) $child->id(),
-        'sku' => (string) $child->getSku(),
-        'stock' => [
-          'status' => (int) $stockInfo['in_stock'],
-          'qty' => (float) $stockInfo['stock'],
-        ],
-      ];
-
-      $price = $this->priceHelper->getPriceBlockForSku($child);
-      $variant['price'] = $this->renderer->renderPlain($price);
-
-      $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $sku->label(), FALSE);
-      $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
-
-      $this->moduleHandler->alter('sku_variant_info', $variant, $child, $sku);
-
-      $variants[$child->getSku()] = $variant;
+      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $sku);
     }
 
     return $variants;
+  }
+
+  /**
+   * Wrapper function to get variant info.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $child
+   *   Product.
+   * @param string $pdp_layout
+   *   PDP Layout.
+   * @param \Drupal\acq_commerce\SKUInterface|null $parent
+   *   Parent product if available.
+   *
+   * @return array
+   *   Variant info.
+   */
+  public function getVariantInfo(SKUInterface $child, string $pdp_layout, ?SKUInterface $parent = NULL) {
+    $stockInfo = $this->stockInfo($child);
+    $price = $this->priceHelper->getPriceBlockForSku($child);
+    $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
+
+    $variant = [];
+    $variant['id'] = (int) $child->id();
+    $variant['sku'] = (string) $child->getSku();
+    $variant['stock'] = [
+      'status' => (int) $stockInfo['in_stock'],
+      'qty' => (float) $stockInfo['stock'],
+    ];
+    $variant['price'] = $this->renderer->renderPlain($price);
+    $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
+    $variant['layout'] = $pdp_layout;
+
+    $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
+
+    return $variant;
   }
 
 }

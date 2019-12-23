@@ -10,6 +10,16 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add field grouping_attributes in SKU entity.
+ */
+function alshaya_color_split_update_8002() {
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-index search for all products.
  */
 function alshaya_color_split_update_8001() {

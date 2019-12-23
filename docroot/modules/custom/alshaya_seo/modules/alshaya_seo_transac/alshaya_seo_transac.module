@@ -64,7 +64,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 /**
  * Implements hook_sku_variant_info_alter().
  */
-function alshaya_seo_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+function alshaya_seo_transac_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   // Adding price for GTM.
   $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($child);
   $variant['gtm_price'] = _alshaya_acm_format_price_with_decimal((float) $prices['final_price']);

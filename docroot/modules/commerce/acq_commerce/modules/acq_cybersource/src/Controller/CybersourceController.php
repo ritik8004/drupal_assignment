@@ -3,6 +3,7 @@
 namespace Drupal\acq_cybersource\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_checkout\Event\AcqCheckoutPaymentFailedEvent;
 use Drupal\acq_cybersource\CybersourceAPIWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -10,6 +11,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -82,6 +84,13 @@ class CybersourceController implements ContainerInjectionInterface {
   protected $apiVersion;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+  /**
    * Constructs a new CybersourceController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -94,18 +103,22 @@ class CybersourceController implements ContainerInjectionInterface {
    *   Logger channel factory object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
   public function __construct(CartStorageInterface $cart_storage,
                               CybersourceAPIWrapper $api_wrapper,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactoryInterface $logger_factory,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              EventDispatcherInterface $dispatcher) {
     $this->cartStorage = $cart_storage;
     $this->apiWrapper = $api_wrapper;
     $this->config = $config_factory->get('acq_cybersource.settings');
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_cybersource');
     $this->moduleHandler = $module_handler;
+    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -117,7 +130,8 @@ class CybersourceController implements ContainerInjectionInterface {
       $container->get('acq_cybersource.api'),
       $container->get('config.factory'),
       $container->get('logger.factory'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -256,10 +270,12 @@ class CybersourceController implements ContainerInjectionInterface {
 
     // Anything other then accept is an issue.
     if (strtolower($post_data['decision']) != 'accept') {
-      $this->logger->info('Error while processing payment using Cybersource: %message <br> %info', [
+      $message = (string) $this->t('Error while processing payment using Cybersource: %message <br> %info', [
         '%message' => $post_data['message'],
         '%info' => print_r($post_data, TRUE),
       ]);
+
+      $this->logger->info($message);
       // @TODO: Need to check how it is handled in Magento.
       $error = $this->getGlobalErrorMarkup(
         $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.',
@@ -267,6 +283,10 @@ class CybersourceController implements ContainerInjectionInterface {
           ['langcode' => $post_data['req_locale']]
         )
       );
+
+      $event = new AcqCheckoutPaymentFailedEvent('cybersource', $message);
+      $this->dispatcher->dispatch(AcqCheckoutPaymentFailedEvent::EVENT_NAME, $event);
+
       $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
     }
     else {

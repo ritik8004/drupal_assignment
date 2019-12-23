@@ -169,7 +169,10 @@
   display: block;
 }
 
-#configurable_ajax {
+#configurable_ajax,
+.form-item-variants-in-group {
+  &.configurable-swatch,
+  &.configurable-select,
   .configurable-select,
   .form-item-configurables-color,
   .form-item-configurables-band-size,
@@ -182,6 +185,10 @@
 
         @include breakpoint($only-mobile) {
           font-size: 0.875rem;
+        }
+
+        &:first-child {
+          text-transform: capitalize;
         }
       }
     }

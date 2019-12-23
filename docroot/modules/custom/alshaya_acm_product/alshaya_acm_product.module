@@ -1091,6 +1091,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['quantity']['#attributes']['class'][] = 'edit-quantity';
   unset($form['quantity']['#size']);
 
+  $form['selected_variant_sku'] = [
+    '#type' => 'hidden',
+    '#attributes' => [
+      'class' => [
+        'selected-variant-sku',
+        'selected-variant-sku-' . $sku_identifier,
+      ],
+    ],
+    '#default_value' => ($sku_entity->bundle() === 'simple') ? $sku_entity->getSku() : '',
+  ];
+
   // We need to change the markup for submit button.
   // @see alshaya_white_label_theme_suggestions_input_alter().
   $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
@@ -1115,17 +1126,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
-    $form['selected_variant_sku'] = [
-      '#type' => 'hidden',
-      '#attributes' => [
-        'class' => [
-          'selected-variant-sku',
-          'selected-variant-sku-' . $sku_identifier,
-        ],
-      ],
-      '#value' => '',
-    ];
-
     // Adding parent/main sku in hidden. This can be update/changed
     // by color split if required.
     $form['selected_parent_sku'] = [

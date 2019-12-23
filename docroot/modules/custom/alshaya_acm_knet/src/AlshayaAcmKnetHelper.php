@@ -11,6 +11,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Drupal\Core\Url;
@@ -23,6 +24,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * @package Drupal\alshaya_acm_knet
  */
 class AlshayaAcmKnetHelper extends KnetHelper {
+
+  use MessengerTrait;
 
   /**
    * K-Net Helper class.
@@ -349,11 +352,15 @@ class AlshayaAcmKnetHelper extends KnetHelper {
   public function processKnetFailed(string $state_key) {
     $data = $this->tempStore->get($state_key);
     parent::processKnetFailed($state_key);
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+
+    $message = $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],
-    ]), 'error');
+    ]);
+    $this->messenger()->addError($message);
+
+    $this->cartHelper->cancelCartReservation((string) $message);
 
     $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
     return new RedirectResponse($url, 302);
@@ -382,9 +389,9 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       throw new AccessDeniedHttpException();
     }
 
-    $message = $this->t('User either cancelled or response url returned error.');
-
-    $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
+    // Log messages always in English.
+    $message = 'User either cancelled or response url returned error.';
+    $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
     foreach ($_GET as $key => $value) {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
@@ -393,6 +400,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       '@quote_id' => $quote_id,
       '@message' => $message,
     ]);
+
+    $this->cartHelper->cancelCartReservation($message);
 
     // Get state data from cart & order id. Use same logic used for generating
     // the state key while initiating the knet payment.

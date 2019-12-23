@@ -340,6 +340,13 @@
     }
   }
 
+  .configurable-select,
+  .configurable-swatch {
+    > label {
+      @include u-visibility(none);
+    }
+  }
+
   #configurable_ajax {
     position: relative;
 
