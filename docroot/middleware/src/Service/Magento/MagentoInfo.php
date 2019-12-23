@@ -4,6 +4,7 @@ namespace App\Service\Magento;
 
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class MagentoInfo.
@@ -18,9 +19,20 @@ class MagentoInfo {
   protected $settings;
 
   /**
-   * MagentoInfo constructor.
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
    */
-  public function __construct() {
+  protected $request;
+
+  /**
+   * MagentoInfo constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   RequestStack Object.
+   */
+  public function __construct(RequestStack $request) {
+    $this->request = $request->getCurrentRequest();
     $this->setMagentoCredentials();
   }
 
@@ -104,8 +116,7 @@ class MagentoInfo {
    *   Magento store code.
    */
   public function getMagentoStore() {
-    // @TODO Get lang dynamically passed from API request.
-    $lang = 'en';
+    $lang = $this->request->query->get('lang', 'en');
     return !empty($this->settings) ? $this->settings['magento_lang_prefix'][$lang] : NULL;
   }
 

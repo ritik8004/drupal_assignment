@@ -8,7 +8,8 @@ import {cartAvailableInStorage} from './get_cart';
  * @returns {string}
  */
 export function updateCartApiUrl() {
-  return window.drupalSettings.alshaya_spc.middleware_url + '/update-cart';
+  const langcode = window.drupalSettings.path.currentLanguage;
+  return window.drupalSettings.alshaya_spc.middleware_url + '/update-cart?lang=' + langcode;
 }
 
 /**
