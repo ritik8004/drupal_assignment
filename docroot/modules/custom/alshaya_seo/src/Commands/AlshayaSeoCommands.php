@@ -182,19 +182,15 @@ class AlshayaSeoCommands extends DrushCommands {
    * @param array $options
    *   (optional) An array of options.
    *
-   * @command alshaya_seo:resetIndex
-   *
-   * @aliases rs, reset-sitemap-index
+   * @aliases rsi, reset-sitemap-index
    *
    * @option batch-size
    *   The number of items to generate/process per batch run.
    *
-   * @usage drush reset-sitemap
-   *   Reset Sitemap based on l1 variants.
    * @usage drush reset-sitemap-index node --batch-size=200
-   *   Reset sitemap index based on l1 category variants with batch of 200.
+   *   Reset sitemap index for products with batch of 200.
    * @usage drush reset-sitemap-index taxonomy_term --batch-size=200
-   *   Reset sitemap index based on l1 category variants with batch of 200.
+   *   Reset sitemap index for product categories with batch of 200.
    */
   public function resetSitemapIndex(string $entity_type, array $options = ['batch-size' => NULL]) {
     $this->output->writeln('Re-setting sitemap variants indexation based on L1 categories.');
