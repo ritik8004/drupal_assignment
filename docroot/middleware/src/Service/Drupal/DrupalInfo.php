@@ -58,8 +58,7 @@ class DrupalInfo {
    *   Drupal langcode.
    */
   public function getDrupalLangcode() {
-    // @Todo: Make it dynamic.
-    return 'en';
+    return $this->request->query->get('lang', 'en');
   }
 
   /**

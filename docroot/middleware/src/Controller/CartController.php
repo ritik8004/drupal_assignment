@@ -9,11 +9,19 @@ use App\Service\Magento\MagentoInfo;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class CartController.
  */
 class CartController {
+
+  /**
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
 
   /**
    * Service for magento info.
@@ -46,6 +54,8 @@ class CartController {
   /**
    * CartController constructor.
    *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   RequestStack Object.
    * @param \App\Service\Cart $cart
    *   Cart service.
    * @param \App\Service\Drupal\Drupal $drupal
@@ -55,7 +65,8 @@ class CartController {
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    */
-  public function __construct(Cart $cart, Drupal $drupal, MagentoInfo $magento_info, LoggerInterface $logger) {
+  public function __construct(RequestStack $request, Cart $cart, Drupal $drupal, MagentoInfo $magento_info, LoggerInterface $logger) {
+    $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
@@ -100,6 +111,7 @@ class CartController {
    */
   private function getProcessedCartData(array $cart_data) {
     $data = [];
+    $data['langcode'] = $this->request->query->get('lang', 'en');
     $data['cart_id'] = $cart_data['cart']['id'];
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];

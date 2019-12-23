@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+/**
+ * Get the middleware get cart endpoint.
+ *
+ * @returns {string}
+ */
+export function getCartApiUrl(cart_id) {
+  const langcode = window.drupalSettings.path.currentLanguage;
+  return window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart_id + '?lang=' + langcode;
+}
+
 export const cartAvailableInStorage = function () {
   // Get data from local storage.
   var cart_data = localStorage.getItem('cart_data');
@@ -15,8 +25,9 @@ export const cartAvailableInStorage = function () {
   var current_time = new Date().getTime();
   var cart_data = JSON.parse(cart_data);
 
-  // If data/cart is expired.
-  if ((current_time - cart_data.last_update) > expire_time) {
+  // If data/cart is expired or cart has different language than
+  // currentlt selected language.
+  if ((current_time - cart_data.last_update) > expire_time || window.drupalSettings.path.currentLanguage !== cart_data.langcode) {
     return cart_data.cart_id;
   }
 
@@ -39,7 +50,7 @@ export const fetchCartData = function () {
   }
 
   // Prepare api url.
-  var api_url = window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart;
+  var api_url = getCartApiUrl(cart);
 
   return axios.get(api_url)
     .then(response => {
