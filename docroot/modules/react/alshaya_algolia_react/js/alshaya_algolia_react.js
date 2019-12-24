@@ -32,7 +32,7 @@
         }
       });
       $(window).on('load', function(event) {
-        $('body').once('bind-facet-item-click').on('click','.c-collapse-item .facet-item', function(event) {
+        $('body').once('bind-facet-item-click').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
           $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
         });
       });
