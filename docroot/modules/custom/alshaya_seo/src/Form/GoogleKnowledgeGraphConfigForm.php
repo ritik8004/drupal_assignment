@@ -67,6 +67,13 @@ class GoogleKnowledgeGraphConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('contact_option') ? $config->get('contact_option') : '',
     ];
 
+    $form['contact_url'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Contact URL'),
+      '#description' => $this->t('For instance: https://kw.hm.com/en/contact'),
+      '#default_value' => $config->get('contact_url') ? $config->get('contact_url') : '',
+    ];
+
     return $form;
   }
 
@@ -80,6 +87,7 @@ class GoogleKnowledgeGraphConfigForm extends ConfigFormBase {
     $config->set('contact_type', $form_state->getValue('contact_type'));
     $config->set('contact_areaserved', $form_state->getValue('contact_areaserved'));
     $config->set('contact_option', $form_state->getValue('contact_option'));
+    $config->set('contact_url', $form_state->getValue('contact_url'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
