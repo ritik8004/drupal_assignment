@@ -106,38 +106,6 @@
       }
     }
   }
-
-  .mobile-hover-text {
-    @include breakpoint($only-tablet) {
-      @include u-visibility(block);
-    }
-
-    @include breakpoint($desktop) {
-      @include u-visibility(none);
-    }
-
-    width: 100%;
-    padding: 1rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $cloudzoom_hovertext;
-  }
-
-  .hover-text {
-    @include breakpoint($only-tablet) {
-      @include u-visibility(none);
-    }
-
-    @include breakpoint($desktop) {
-      @include u-visibility(block);
-    }
-
-    width: 100%;
-    padding: 1.5rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $cloudzoom_hovertext;
-  }
 }
 
 #cloud-zoom-big {
@@ -552,6 +520,31 @@
           }
         }
       }
+    }
+  }
+}
+
+#product-full-screen-gallery-container {
+  height: 100vh !important;
+  overflow-y: auto;
+
+  .slick-arrow {
+    top: 50%;
+    transform: translateY(-50%);
+    position: fixed;
+  }
+
+  .slick-dots {
+    position: fixed !important;
+    bottom: 3rem !important;
+  }
+
+  #product-full-screen-gallery {
+    margin: 0;
+    padding: 0;
+
+    img {
+      margin: 0 auto;
     }
   }
 }
