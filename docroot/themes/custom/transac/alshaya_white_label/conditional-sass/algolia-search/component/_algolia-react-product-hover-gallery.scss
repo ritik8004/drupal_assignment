@@ -7,6 +7,14 @@
         .slick-slide {
           width: 2.75rem !important;
 
+          &:hover {
+            border: 1px solid $plp_tile_hover_slider_nav;
+
+            &::after {
+              content: unset;
+            }
+          }
+
           img {
             max-width: none;
             height: 2.5rem;
