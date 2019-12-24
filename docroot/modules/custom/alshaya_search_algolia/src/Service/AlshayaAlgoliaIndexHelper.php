@@ -314,14 +314,11 @@ class AlshayaAlgoliaIndexHelper {
    *   The node object for which we need to prepare hierarchy.
    * @param string $langcode
    *   The language code to use to load terms.
-   * @param bool $group_by_term
-   *   True to return hierarchy grouped by term, False to return single term
-   *   levels.
    *
    * @return array
    *   The array of hierarchy.
    */
-  protected function getCategoryHierarchy(NodeInterface $node, $langcode, $group_by_term = FALSE): array {
+  protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
 
     $list = [];
@@ -359,22 +356,18 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
-    if ($group_by_term) {
-      return array_values($list);
-    }
-
-    $new_list = [];
+    $flat_hierarchy = [];
     foreach (array_values($list) as $nesting) {
       foreach ($nesting as $level => $level_items) {
-        if (empty($new_list[$level])) {
-          $new_list[$level] = (array) $level_items;
+        if (empty($flat_hierarchy[$level])) {
+          $flat_hierarchy[$level] = (array) $level_items;
         }
         else {
-          $new_list[$level] = array_merge($new_list[$level], (array) $level_items);
+          $flat_hierarchy[$level] = array_merge($flat_hierarchy[$level], (array) $level_items);
         }
       }
     }
-    return $new_list;
+    return $flat_hierarchy;
   }
 
 }
