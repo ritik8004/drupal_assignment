@@ -27,6 +27,8 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@simple_sitemap.generator'
+      - '@config.factory'
+      - '@alshaya_acm_product_category.product_category_tree'
   alshaya_seo_transac.product_updated_event:
     class: Drupal\alshaya_seo_transac\EventSubscriber\ProductUpdatedEventSubscriber
     arguments:

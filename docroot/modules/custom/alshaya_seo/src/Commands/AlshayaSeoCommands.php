@@ -182,6 +182,8 @@ class AlshayaSeoCommands extends DrushCommands {
    * @param array $options
    *   (optional) An array of options.
    *
+   * @command alshaya_seo:resetSitemapIndex
+   *
    * @aliases rsi, reset-sitemap-index
    *
    * @option batch-size
