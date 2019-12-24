@@ -41,8 +41,12 @@ Drupal.plpRowHeightSync = function (indexStart, indexEnd, tiles) {
  * The img tag which is lazyloaded.
  */
 Drupal.plpListingProductTileHeight = function (mode, element) {
-  if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
-    var gridCount = $('.c-products-list').hasClass('product-large') ? 3 : 4;
+   if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
+     var gridCount = $('.c-products-list').hasClass('product-large') ? 3 : 4;
+   }
+   else {
+     var gridCount = $('.c-products-list').hasClass('product-large') ? 1 : 2;
+   }
     var tiles = $('.c-products__item');
     var totalCount = $('.c-products__item').length;
     var loopCount = Math.ceil(totalCount / gridCount);
@@ -73,5 +77,4 @@ Drupal.plpListingProductTileHeight = function (mode, element) {
         Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
       }
     }
-  }
 };
