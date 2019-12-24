@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 
 /**
  * Utilty Class.
@@ -83,6 +84,13 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $skuManager;
 
   /**
+   * Default Facets Summary Manager.
+   *
+   * @var \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager
+   */
+  protected $defaultFacetsSummaryManager;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [
@@ -91,6 +99,13 @@ class AlshayaFacetsPrettyPathsHelper {
     // Convert hyphen to underscore.
     '-' => '_',
   ];
+
+  /**
+   * Meta info type select list values.
+   */
+  const FACET_META_TYPE_IGNORE = 0;
+  const FACET_META_TYPE_PREFIX = 1;
+  const FACET_META_TYPE_SUFFIX = 2;
 
   /**
    * UserRecentOrders constructor.
@@ -111,6 +126,8 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Config Factory.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager $default_facets_summary_manager
+   *   Default Facets Summary Manager.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
@@ -119,16 +136,19 @@ class AlshayaFacetsPrettyPathsHelper {
                               AliasManagerInterface $alias_manager,
                               DefaultFacetManager $facets_manager,
                               ConfigFactoryInterface $config_factory,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              DefaultFacetsSummaryManager $default_facets_summary_manager) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->facetSummaryStorage = $entity_type_manager->getStorage('facets_summary');
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->facetManager = $facets_manager;
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->defaultFacetsSummaryManager = $default_facets_summary_manager;
   }
 
   /**
@@ -352,7 +372,6 @@ class AlshayaFacetsPrettyPathsHelper {
     foreach ($facets ?? [] as $facet) {
       $static[$source][$facet->getUrlAlias()] = str_replace('attr_', '', $facet->getFieldIdentifier());
     }
-
     return $static[$source];
   }
 
@@ -371,6 +390,52 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     return $prefix;
+  }
+
+  /**
+   * To get meta info type of the given facet id.
+   *
+   * @param string $facet_id
+   *   Facet id.
+   *
+   * @return int
+   *   Meta info type.
+   */
+  public function getMetaInfotypeFromFacetId($facet_id) {
+    $config = \Drupal::config('facets.facet.' . $facet_id);
+    $meta_info_type = $config->get('meta_info_type.type') ?? self::FACET_META_TYPE_IGNORE;
+    return $meta_info_type;
+  }
+
+  /**
+   * To get the active facet summary items.
+   *
+   * @return array
+   *   Active prefix/suffix facets.
+   */
+  public function getFacetSummaryItems() {
+    // Active facet items for PLP pages.
+    $facet_summary = $this->facetSummaryStorage->load('filter_bar_plp');
+    $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
+    $active_facet_items = $alshaya_facet_summary['#items'];
+    $active_prefix_facet = [];
+    $active_suffix_facet = [];
+    foreach ($active_facet_items as $value) {
+      if (isset($value['#title']) && isset($value['#attributes'])) {
+        $active_facet_id = $value['#attributes']['data-drupal-facet-id'];
+        $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
+        if ($meta_info_type == self::FACET_META_TYPE_PREFIX) {
+          // Strip tags to get the value from price markup.
+          $active_prefix_facet[] = strip_tags($value['#title']['#value']);
+        }
+        elseif ($meta_info_type == self::FACET_META_TYPE_SUFFIX) {
+          // Strip tags to get the value from price markup.
+          $active_suffix_facet[] = strip_tags($value['#title']['#value']);
+        }
+      }
+    }
+
+    return [$active_prefix_facet, $active_suffix_facet];
   }
 
 }

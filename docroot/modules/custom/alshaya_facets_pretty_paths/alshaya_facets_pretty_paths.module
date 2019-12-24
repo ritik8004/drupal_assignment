@@ -5,6 +5,9 @@
  * Module file.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
+
 /**
  * Mappings for specific listing page type to make updates dynamic.
  *
@@ -46,4 +49,30 @@ function _alshaya_facets_pretty_paths_get_mappings() {
   ];
 
   return $mappings;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form_build_info = $form_state->getBuildInfo();
+  $facet = $form_build_info['callback_object']->getEntity();
+  $options = [
+    AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_IGNORE => t('Ignore'),
+    AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX => t('Prefix'),
+    AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX => t('Suffix'),
+  ];
+
+  $form['meta_info_type'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Meta Info Type'),
+  ];
+
+  $form['meta_info_type']['type'] = [
+    '#type' => 'select',
+    '#title' => t('Select Meta Info Type'),
+    '#options' => $options,
+    '#default_value' => ($facet->meta_info_type['type']) ? $facet->meta_info_type['type'] : AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_IGNORE,
+    '#description' => t('Select an option to set the facet value in the meta title of a PLP page'),
+  ];
 }
