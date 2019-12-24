@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ACQPromotion(
  *   id = "fixed_percentage_discount_order",
  *   label = @Translation("Get Y% discount on order over KWD X"),
+ *   status = TRUE,
  * )
  */
 class FixedPercentageDiscountOrder extends AcqPromotionBase implements ContainerFactoryPluginInterface {
