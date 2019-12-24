@@ -102,6 +102,11 @@ function getLimit(_ref) {
   return showMore ? showMoreLimit : limit;
 }
 
+function getValue(name, props, searchState, context) {
+  const currentRefinement = getCurrentRefinement(props, searchState, context);
+  return (currentRefinement !== name) ? name : '';
+}
+
 const sortBy = ['isRefined', 'count:desc'];
 
 export default createConnector({
@@ -151,7 +156,7 @@ export default createConnector({
       if (typeof key === 'undefined') {
         var object = {
           label: rangeKey,
-          value: rangeKey,
+          value: getValue(rangeKey, props, searchState, this.context),
           sort: range.start == null ? 0 : parseInt(range.start),
           count: parseInt(v.count),
           isRefined: rangeKey === currentRefinement
