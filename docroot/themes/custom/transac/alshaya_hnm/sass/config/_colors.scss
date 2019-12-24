@@ -363,8 +363,6 @@ $user_block_title: $black-three;
 $user_block_link: $hnm-black-two;
 
 // Basket
-$basket_header_promo_bg: $hnm-black-two;
-$basket_header_promo_txt: $white-five;
 $basket_block_title: $hnm-black-two;
 $basket_promo_wrapper: $info;
 $basket_promo_wrapper_link: $hnm-black-two;
@@ -372,6 +370,12 @@ $basket_continue_shopping_btn: $hnm-black-two;
 $basket_continue_shopping_text: $hnm-black-two;
 $basket_header_oos_txt: $_white-four;
 $basket_header_oos_bg: $error;
+
+// Basket top promotions.
+$basket_free_delivery_inactive_header_promo_bg: $hnm-black-two;
+$basket_free_delivery_inactive_header_promo_txt: $white-five;
+$basket_free_delivery_active_header_promo_bg: $white-five;
+$basket_free_delivery_active_header_promo_txt: $hnm-black-two;
 
 // Mini cart
 $mobile_continue_shopping_btn_text: $white-five;
