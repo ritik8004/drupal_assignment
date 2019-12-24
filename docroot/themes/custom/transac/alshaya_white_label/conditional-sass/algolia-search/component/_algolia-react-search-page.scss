@@ -64,10 +64,13 @@
 
   #sort_by {
     li {
+      line-height: normal;
+      display: flex;
+
       a {
         display: inline-flex;
         align-items: center;
-        margin-top: 0.1875rem;
+        margin-top: 0;
         text-transform: capitalize;
         color: $algolia_react-facet-item-color;
         font-weight: normal;
