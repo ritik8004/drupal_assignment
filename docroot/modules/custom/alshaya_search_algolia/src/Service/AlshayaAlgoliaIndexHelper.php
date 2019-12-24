@@ -300,12 +300,12 @@ class AlshayaAlgoliaIndexHelper {
    *   "lvl1": [
    *     "Books > Science Fiction",
    *     "Books > Literature & Fiction",
-   *     "Movie > Science Fiction"
+   *     "Movies > Science Fiction"
    *   ],
    *   "lvl2": [
    *     "Books > Science Fiction > Time Travel",
    *     "Books > Literature & Fiction > Modernism ",
-   *     "Movie > Science Fiction > Time Travel"
+   *     "Movies > Science Fiction > Time Travel"
    *   ]
    * }
    * @endcode
