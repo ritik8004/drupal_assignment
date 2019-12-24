@@ -203,7 +203,14 @@ class AlshayaSitemapManager {
    *   The parent term name.
    */
   public function getVariantName($term_name) {
-    return str_replace(' ', '-', strtolower(trim($term_name)));
+    // Replaces all spaces with hyphens.
+    $term_name = str_replace(' ', '-', strtolower(trim($term_name)));
+
+    // Removes special chars.
+    $term_name = preg_replace('/[^A-Za-z0-9\-]/', '', $term_name);
+
+    // Replaces multiple hyphens with single one.
+    return preg_replace('/-+/', '-', $term_name);
   }
 
   /**
