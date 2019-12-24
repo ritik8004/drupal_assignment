@@ -637,13 +637,15 @@ class AlshayaPromotionsManager {
 
     $types = [];
     foreach ($definitions as $definition) {
-      switch ($definition['id']) {
-        case 'buy_x_get_y_cheapest_free':
-          $types[self::SUBTYPE_OTHER][] = $definition['label'];
-          break;
+      if (!empty($definition['status'])) {
+        switch ($definition['id']) {
+          case 'buy_x_get_y_cheapest_free':
+            $types[self::SUBTYPE_OTHER][] = $definition['label'];
+            break;
 
-        default:
-          $types[$definition['id']] = $definition['label'];
+          default:
+            $types[$definition['id']] = $definition['label'];
+        }
       }
     }
 
