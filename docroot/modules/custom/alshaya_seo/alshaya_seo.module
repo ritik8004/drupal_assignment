@@ -98,6 +98,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
   // config to show the whole object.
   if ($gkg_config->get('contact_telephone') && $content_type != 'acq_product') {
     $contact['@type'] = 'ContactPoint';
+    $contact['url'] = $gkg_config->get('contact_url');
     $contact['telephone'] = $gkg_config->get('contact_telephone');
     $contact['contactType'] = $gkg_config->get('contact_type');
     $contact['areaServed'] = $gkg_config->get('contact_areaserved');
@@ -105,7 +106,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
     // Add all site languages as available language.
     foreach (\Drupal::languageManager()->getLanguages() as $language) {
-      $contact['availableLanguage'][] = $language->getName();
+      $contact['availableLanguage'][] = 'https://en.wikipedia.org/wiki/' . $language->getName();
     }
 
     // As required, we want it to be array of objects.
