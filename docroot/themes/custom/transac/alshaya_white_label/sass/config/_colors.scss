@@ -899,8 +899,14 @@ $basket_promotion_input_border: $white;
 $basket_remove_link: $cerulean-two;
 $basket_horizontal_recommendation_slider_dots: $marine-blue-two;
 // Basket top promotions.
-$basket_header_promo_bg: $rosy-pink;
-$basket_header_promo_txt: $white-four;
+$basket_fixed_percentage_inactive_header_promo_bg: $rosy-pink;
+$basket_fixed_percentage_inactive_header_promo_txt: $white-five;
+$basket_fixed_percentage_active_header_promo_bg: $white-five;
+$basket_fixed_percentage_active_header_promo_txt: $rosy-pink;
+$basket_free_delivery_inactive_header_promo_bg: $peacock-blue;
+$basket_free_delivery_inactive_header_promo_txt: $white-five;
+$basket_free_delivery_active_header_promo_bg: $white-five;
+$basket_free_delivery_active_header_promo_txt: $peacock-blue;
 // Basket top OOS.
 $basket_header_oos_bg: $cherry;
 $basket_header_oos_txt: $white-four;
