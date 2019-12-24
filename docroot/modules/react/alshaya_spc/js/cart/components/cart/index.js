@@ -9,6 +9,7 @@ import CheckoutMessage from '../../../utilities/checkout-message';
 import CartPromoBlock from "../cart-promo-block";
 import EmptyResult from "../../../utilities/empty-result";
 import Loading from "../../../utilities/loading";
+import VatFooterText from "../../../utilities/vat-footer";
 
 export default class Cart extends React.Component {
 
@@ -97,6 +98,7 @@ export default class Cart extends React.Component {
                 {Drupal.t('my shopping bag (@qty items)', {'@qty': this.state.total_items})}
               </CheckoutSectionTitle>
               <CartItems items={this.state.items} />
+              <VatFooterText />
             </div>
             <div className="spc-sidebar">
               <CartPromoBlock coupon_code={this.state.coupon_code} />

@@ -26,8 +26,9 @@ function alshaya_spc_preprocess_html(&$variables) {
 
   $variables['#attached']['drupalSettings']['alshaya_spc']['currency_config'] = $currency_config;
 
-  $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
-  $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text'] = $vat_text;
+  $product_config = \Drupal::config('alshaya_acm_product.settings');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text'] = $product_config->get('vat_text');
+  $variables['#attached']['drupalSettings']['alshaya_spc']['vat_text_footer'] = $product_config->get('vat_text_footer');
   $variables['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
   $variables['#attached']['drupalSettings']['alshaya_spc']['max_cart_qty'] = \Drupal::config('alshaya_acm.cart_config')->get('max_cart_qty');
 

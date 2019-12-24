@@ -266,8 +266,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
   }
 
-  // Adding vat text footer to the page.
-  $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
+  // Adding vat text footer to the page if SPC not enabled.
+  if (!\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
+  }
 
   // Attach the plp search js library to the promotion product listing page.
   if ($node_bundle === 'acq_promotion') {
