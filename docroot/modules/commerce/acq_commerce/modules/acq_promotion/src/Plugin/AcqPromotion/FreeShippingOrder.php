@@ -10,6 +10,7 @@ use Drupal\acq_promotion\AcqPromotionBase;
  * @ACQPromotion(
  *   id = "free_shipping_order",
  *   label = @Translation("Free shipping with an order over X KD"),
+ *   status = TRUE,
  * )
  */
 class FreeShippingOrder extends AcqPromotionBase {

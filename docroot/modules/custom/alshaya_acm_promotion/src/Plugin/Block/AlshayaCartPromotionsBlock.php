@@ -85,7 +85,6 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       'promotion_types' => [
         'free_shipping_order' => 'free_shipping_order',
         'fixed_percentage_discount_order' => 'fixed_percentage_discount_order',
-        'others' => 'others',
       ],
       'promotions' => [],
     ] + parent::defaultConfiguration();

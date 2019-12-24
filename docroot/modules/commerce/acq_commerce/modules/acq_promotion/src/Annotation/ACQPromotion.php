@@ -29,4 +29,11 @@ class ACQPromotion extends Plugin {
    */
   public $label;
 
+  /**
+   * Status flag for promotion type.
+   *
+   * @var bool
+   */
+  public $status;
+
 }

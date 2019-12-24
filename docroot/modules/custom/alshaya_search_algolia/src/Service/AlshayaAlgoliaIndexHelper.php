@@ -284,11 +284,30 @@ class AlshayaAlgoliaIndexHelper {
    *     ],
    *   ],
    *   [
-   *     "lvl0": "Movie",
-   *     "lvl1": "Movie > Science Fiction",
-   *     "lvl2": "Movie > Science Fiction > Time Travel"],
+   *     "lvl0": "Movies",
+   *     "lvl1": "Movies > Science Fiction",
+   *     "lvl2": "Movies > Science Fiction > Time Travel"],
    *   ],
    * ]
+   * @endcode
+   * OR
+   * @code
+   * {
+   *   "lvl0": [
+   *     "Books",
+   *     "Movies"
+   *   ],
+   *   "lvl1": [
+   *     "Books > Science Fiction",
+   *     "Books > Literature & Fiction",
+   *     "Movies > Science Fiction"
+   *   ],
+   *   "lvl2": [
+   *     "Books > Science Fiction > Time Travel",
+   *     "Books > Literature & Fiction > Modernism ",
+   *     "Movies > Science Fiction > Time Travel"
+   *   ]
+   * }
    * @endcode
    *
    * @param \Drupal\node\NodeInterface $node
@@ -298,9 +317,6 @@ class AlshayaAlgoliaIndexHelper {
    *
    * @return array
    *   The array of hierarchy.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
@@ -340,7 +356,18 @@ class AlshayaAlgoliaIndexHelper {
       }
     }
 
-    return array_values($list);
+    $flat_hierarchy = [];
+    foreach (array_values($list) as $nesting) {
+      foreach ($nesting as $level => $level_items) {
+        if (empty($flat_hierarchy[$level])) {
+          $flat_hierarchy[$level] = (array) $level_items;
+        }
+        else {
+          $flat_hierarchy[$level] = array_merge($flat_hierarchy[$level], (array) $level_items);
+        }
+      }
+    }
+    return $flat_hierarchy;
   }
 
 }
