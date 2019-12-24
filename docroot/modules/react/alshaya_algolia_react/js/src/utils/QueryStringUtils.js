@@ -1,5 +1,6 @@
 import qs from 'qs';
 import { createBrowserHistory } from 'history';
+import { toggleSearchResultsContainer, showLoader } from './SearchUtility';
 
 const updateAfter = 700;
 const history = createBrowserHistory();
@@ -23,6 +24,11 @@ function searchStateToURL(searchState) {
 }
 
 function redirectToOtherLang(queryValue) {
+  if (queryValue.length === 0) {
+    toggleSearchResultsContainer(queryValue);
+    return;
+  }
+
   const redirectlang = drupalSettings.path.currentLanguage === 'ar' ? 'en' : 'ar';
   // let arabicText = /[\u0600-\u06FF]/
   let arabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(queryValue);
@@ -33,9 +39,14 @@ function redirectToOtherLang(queryValue) {
   else if (drupalSettings.path.currentLanguage === 'ar' && englishText) {
     redirectToUrl(queryValue, 'ar', redirectlang);
   }
+  else {
+    toggleSearchResultsContainer(queryValue);
+  }
 }
 
 function redirectToUrl(queryValue, currentLang, redirectlang) {
+  showLoader();
+  localStorage.setItem('algoliaLangRedirect', true);
   window.location.hash = "query=" + queryValue;
   window.location.pathname = window.location.pathname.replace(currentLang, redirectlang);
 }

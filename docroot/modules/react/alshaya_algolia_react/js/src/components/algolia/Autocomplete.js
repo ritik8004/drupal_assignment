@@ -51,11 +51,21 @@ class Autocomplete extends React.Component {
     this.autosuggest.current.input.name = 'search';
     // Change type to search for android devices.
     this.autosuggest.current.input.type = 'search';
+    this.blurORFocus();
     this.onKeyUp();
   }
 
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
+  }
+
+  blurORFocus() {
+    if (localStorage.getItem('algoliaLangRedirect') === true){
+      this.autosuggest.current.input.focus();
+    }
+    else {
+      this.autosuggest.current.input.blur();
+    }
   }
 
   onPopState = event => {
@@ -66,7 +76,7 @@ class Autocomplete extends React.Component {
       // Remove the focus from text input and remove unnecessary
       // classes.
       this.reactSearchBlock[0].classList.remove('focused', 'clear-icon');
-      this.autosuggest.current.input.blur();
+      this.blurORFocus();
     }
   }
 
@@ -135,14 +145,13 @@ class Autocomplete extends React.Component {
   clearSearchFieldInput = (event) => {
     // Empty State & Input.
     this.reactSearchBlock[0].classList.remove('clear-icon');
-    let searchInput = this.reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
     // Clear sate value and suggestions.
     this.setState({value: ''});
     this.onSuggestionsClearRequested();
     // Set query to empty to hide the search results and update the browser hash.
     this.props.onChange('');
     // Keep focus.
-    searchInput[0].focus();
+    this.autosuggest.current.input.focus();
   };
 
   backIconClickEvent = (event) => {

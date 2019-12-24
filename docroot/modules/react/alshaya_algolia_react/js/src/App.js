@@ -28,19 +28,18 @@ class App extends React.PureComponent {
 
   componentDidMount() {
     if (this.state.query !== '') {
-      toggleSearchResultsContainer(this.state.query);
+      redirectToOtherLang(this.state.query);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !==  this.state.query) {
-      toggleSearchResultsContainer(this.state.query);
+      redirectToOtherLang(this.state.query);
     }
   }
 
   setQueryValue = (queryValue) => {
     this.setState({query: queryValue});
-    toggleSearchResultsContainer(queryValue);
     if (queryValue === '') {
       updateSearchQuery('');
     }
