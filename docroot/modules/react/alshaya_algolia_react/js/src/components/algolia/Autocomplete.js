@@ -60,7 +60,8 @@ class Autocomplete extends React.Component {
   }
 
   blurORFocus() {
-    if (localStorage.getItem('algoliaLangRedirect') === true){
+    if (localStorage.getItem('algoliaLangRedirect') == '1') {
+      localStorage.removeItem('algoliaLangRedirect');
       this.autosuggest.current.input.focus();
     }
     else {

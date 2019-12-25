@@ -46,7 +46,7 @@ function redirectToOtherLang(queryValue) {
 
 function redirectToUrl(queryValue, currentLang, redirectlang) {
   showLoader();
-  localStorage.setItem('algoliaLangRedirect', true);
+  localStorage.setItem('algoliaLangRedirect', 1);
   window.location.hash = "query=" + queryValue;
   window.location.pathname = window.location.pathname.replace(currentLang, redirectlang);
 }
