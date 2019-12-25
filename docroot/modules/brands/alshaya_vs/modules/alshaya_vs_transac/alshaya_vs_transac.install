@@ -12,17 +12,6 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
- * Update the parent depth.
- */
-function alshaya_vs_transac_update_8012() {
-  \Drupal::configFactory()->getEditable('alshaya_seo_transac.settings')
-    ->set('parent_depth_level', 1)
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable catalog restructuring.
  */
 function alshaya_vs_transac_update_8011() {

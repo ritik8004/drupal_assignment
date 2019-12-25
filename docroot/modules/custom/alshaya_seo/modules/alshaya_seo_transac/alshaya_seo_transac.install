@@ -13,11 +13,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Create and enale sitemap variants based on L1 categories.
  */
 function alshaya_seo_transac_update_8408() {
-  // Enable depth level for parent category.
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(['alshaya_seo_transac.settings'], 'alshaya_seo_transac');
-
-  // Create and enable sitemap variants based on enabled L1 categories.
   _alshaya_seo_transac_create_and_enable_sitemap_variants();
 }
 
@@ -193,5 +188,5 @@ function _alshaya_seo_transac_create_and_enable_sitemap_variants() {
   $sitemap->variantWithParentDepth();
 
   // Enable variants for bundle types i.e. acq_product_category, acq_product.
-  $sitemap->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
+  $sitemap->enableEntityTypeVariants();
 }
