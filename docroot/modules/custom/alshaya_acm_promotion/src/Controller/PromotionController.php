@@ -230,7 +230,6 @@ class PromotionController extends ControllerBase {
     $build['items'] = [
       '#theme' => 'item_list',
       '#items' => $items,
-      '#attached' => ['library' => ['alshaya_acm_promotion/free_gift_styles']],
     ];
 
     if ($request->query->get('replace')) {
