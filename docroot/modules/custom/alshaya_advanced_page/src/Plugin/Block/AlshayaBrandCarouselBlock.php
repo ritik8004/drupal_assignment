@@ -76,6 +76,8 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     if (!empty($terms)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
       $link = '/' . $langcode . '/search?f[0]=product_brand:';
+      // Incase of algolia search we have different links for brands.
+      // Change links if algolia search is active.
       if ($this->moduleHandler->moduleExists('alshaya_search_algolia')) {
         $link = '/' . $langcode . '/#query= &refinementList[attr_product_brand][0]=';
       }

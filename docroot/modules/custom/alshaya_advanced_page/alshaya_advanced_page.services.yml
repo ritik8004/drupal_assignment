@@ -22,4 +22,3 @@ services:
     class: Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper
     arguments:
       - '@database'
-      - '@config.factory'

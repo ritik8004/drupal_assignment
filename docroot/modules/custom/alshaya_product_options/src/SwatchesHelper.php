@@ -171,6 +171,7 @@ class SwatchesHelper {
     elseif ($term->get('field_attribute_swatch_value')->getString() != $swatch_info['swatch']) {
       $save_term = TRUE;
     }
+    // Save again if swatch original image is not avaialable.
     elseif (($swatch_info['swatch_type'] == self::SWATCH_TYPE_VISUAL_IMAGE) && empty($term->get('field_attribute_swatch_org_image')->getString())) {
       $save_term = TRUE;
     }
