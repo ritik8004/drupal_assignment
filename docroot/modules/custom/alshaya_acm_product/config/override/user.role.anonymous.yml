@@ -1,0 +1,3 @@
+permissions:
+  - 'restful get product'
+  - 'restful get product_linked_skus'

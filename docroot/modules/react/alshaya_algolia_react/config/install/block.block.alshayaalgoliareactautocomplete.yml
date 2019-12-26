@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_algolia_react
+  theme:
+    - alshaya_white_label
+id: alshayaalgoliareactautocomplete
+theme: alshaya_white_label
+region: header
+weight: -50
+provider: alshaya_algolia_react
+plugin: alshaya_algolia_react_autocomplete
+settings:
+  id: alshaya_algolia_react_autocomplete
+  label: 'Alshaya Algolia Autocomplete'
+  provider: alshaya_algolia_react
+  label_display: '0'
+  hits: '4'
+  top_results: '4'
+  items_per_page: '36'
+  application_id: ''
+  search_api_key: ''
+visibility: {  }

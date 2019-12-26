@@ -8,12 +8,14 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Cache\CacheableAjaxResponse;
 
@@ -26,7 +28,12 @@ class AlshayaPromoLabelManager {
 
   use StringTranslationTrait;
 
-  const DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS = ['buy_x_get_y_cheapest_free'];
+  const DYNAMIC_PROMOTION_ELIGIBLE_ACTIONS = [
+    'buy_x_get_y_cheapest_free',
+    'groupn',
+    'groupn_fixdisc',
+    'groupn_disc',
+  ];
   const ALSHAYA_PROMOTIONS_STATIC_PROMO = 0;
   const ALSHAYA_PROMOTIONS_DYNAMIC_PROMO = 1;
 
@@ -416,17 +423,75 @@ class AlshayaPromoLabelManager {
         $eligible_cart_qty += $item['qty'];
       }
     }
-    // Calculate X and Y.
+
+    $promotion_subtype = $promotion->get('field_acq_promotion_action')->getString();
     $promotion_data = unserialize($promotion->get('field_acq_promotion_data')->getString());
-    if (isset($promotion_data['step']) && isset($promotion_data['discount'])) {
+
+    if (!empty($promotion_subtype) && isset($promotion_data['step']) && isset($promotion_data['discount'])) {
+      // Calculate X and Y.
       $discount_step = $promotion_data['step'];
       $discount_amount = $promotion_data['discount'];
-      $z = ($discount_step + $discount_amount) - $eligible_cart_qty;
-      // Apply z-logic to generate label.
-      if ($z >= 1) {
-        $label['dynamic_label'] = $this->t('Add @z more to get FREE item', ['@z' => $z]);
+      $z = NULL;
+
+      // Generate dynamic promotion label based on promotion subtype.
+      switch ($promotion_subtype) {
+        case 'buy_x_get_y_cheapest_free':
+          $z = ($discount_step + $discount_amount) - $eligible_cart_qty;
+
+          // Apply z-logic to generate label.
+          if ($z >= 1) {
+            $label['dynamic_label'] = $this->t('Add @z more to get FREE item', ['@z' => $z]);
+          }
+          break;
+
+        case 'groupn':
+          $z = $discount_step - $eligible_cart_qty;
+          $amount = strip_tags(alshaya_acm_price_format($discount_amount));
+
+          if ($z >= 1) {
+            $label['dynamic_label'] = $this->t(
+              'Add @z more to get @step items for @amount',
+              [
+                '@z' => $z,
+                '@step' => $discount_step,
+                '@amount' => $amount,
+              ]
+            );
+          }
+          break;
+
+        case 'groupn_fixdisc':
+          $z = $discount_step - $eligible_cart_qty;
+          $amount = strip_tags(alshaya_acm_price_format($discount_amount));
+
+          if ($z >= 1) {
+            $label['dynamic_label'] = $this->t(
+              'Add @z more to get @amount off',
+              [
+                '@z' => $z,
+                '@amount' => $amount,
+              ]
+            );
+          }
+          break;
+
+        case 'groupn_disc':
+          $z = $discount_step - $eligible_cart_qty;
+
+          if ($z >= 1) {
+            $label['dynamic_label'] = $this->t(
+              'Add @z more to get @amount% off',
+              [
+                '@z' => $z,
+                '@amount' => $discount_amount,
+              ]
+            );
+          }
+          break;
       }
-      else {
+
+      // Default label if promotion is applied.
+      if (isset($z) && ($z < 1)) {
         $label['dynamic_label'] = $this->t('Add more and keep saving');
       }
     }
@@ -453,6 +518,7 @@ class AlshayaPromoLabelManager {
     if ($response instanceof AjaxResponse) {
       $dynamic_label_selector = '.acq-content-product .promotions .promotions-dynamic-label.sku-' . $skuId;
       $response->addCommand(new HtmlCommand($dynamic_label_selector, $label));
+      $response->addCommand(new SettingsCommand(['alshayaAcmPromotionslabels' => [$skuId => $label]], TRUE));
     }
 
     return $response;
@@ -554,7 +620,7 @@ class AlshayaPromoLabelManager {
       }
     }
 
-    return $build;
+    return $build ?? [];
   }
 
   /**
@@ -571,8 +637,8 @@ class AlshayaPromoLabelManager {
    *   Render array.
    */
   protected function getFreeGiftDisplay($promotion_id, array $free_gift_promotion, array $free_skus) {
-    // More than one available, show list modal.
-    if (count($free_skus) > 1) {
+    // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
+    if ($free_gift_promotion['promo_type'] == 1) {
       $link = Link::createFromRoute(
         $free_gift_promotion['text'],
         'alshaya_acm_promotion.free_gifts_list',

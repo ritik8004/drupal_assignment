@@ -19,6 +19,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use http\Exception\InvalidArgumentException;
@@ -188,6 +189,22 @@ class PromotionController extends ControllerBase {
             );
           }
 
+          $item['#select_link'] = Link::createFromRoute(
+            $this->t('select'),
+            'alshaya_acm_promotion.select_free_gift',
+            [],
+            [
+              'attributes' => [
+                'class' => ['use-ajax', 'select-free-gift'],
+              ],
+              'query' => [
+                'promotion_id' => $node->id(),
+                'coupon' => $request->query->get('coupon'),
+                'sku' => $free_gift->getSku(),
+              ],
+            ]
+          );
+
           break;
 
         case 'configurable':
@@ -234,9 +251,9 @@ class PromotionController extends ControllerBase {
    *   Response.
    */
   public function selectFreeGift(Request $request) {
-    $coupon = $request->request->get('coupon') ?? '';
-    $sku = SKU::loadFromSku($request->request->get('sku') ?? '');
-    $promotion_id = $request->request->get('promotion_id') ?? '';
+    $coupon = $request->request->get('coupon') ?? $request->query->get('coupon');
+    $sku = SKU::loadFromSku($request->request->get('sku') ?? $request->query->get('sku'));
+    $promotion_id = $request->request->get('promotion_id') ?? $request->query->get('promotion_id');
 
     if (empty($coupon) || empty($promotion_id) || !($sku instanceof SKUInterface)) {
       throw new InvalidArgumentException();
@@ -299,6 +316,7 @@ class PromotionController extends ControllerBase {
             ]);
           }
 
+          $updated_cart->setExtension('do_direct_call', 1);
           $this->cartStorage->updateCart(FALSE);
         }
         elseif ($response_message[1] == 'error_coupon') {

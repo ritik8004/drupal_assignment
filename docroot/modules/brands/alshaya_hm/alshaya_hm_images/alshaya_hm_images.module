@@ -9,10 +9,10 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
@@ -96,16 +96,6 @@ function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existi
   }
 
   return serialize($assets);
-}
-
-/**
- * Implements hook_views_pre_render().
- */
-function alshaya_hm_images_views_pre_render(ViewExecutable $view) {
-  // Override the 'result summary' header for PLP and Search.
-  if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
-    $view->element['#attached']['library'][] = 'alshaya_hm_images/hm_images';
-  }
 }
 
 /**
@@ -352,9 +342,14 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
 }
 
 /**
- * Implements hook_alshaya_mobile_app_light_product_data_alter().
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
-function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku, array &$data) {
+function alshaya_hm_images_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  // If not light product, no need to process further.
+  if ($type != 'light') {
+    return;
+  }
+
   $data['swatches'] = [];
 
   $swatches_display_status = (bool) \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
@@ -392,4 +387,13 @@ function alshaya_hm_images_alshaya_acm_switch_magento_configs_alter(array &$conf
   // We need pims_base_url to be set per Magento instance.
   // We add below for configs to be switched so it is set for Magento instance.
   $configs['alshaya_hm_images.settings'] = 'pims_base_url';
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_hm_images_block_view_alter(array &$build, BlockPluginInterface $block) {
+  if ($build['#configuration']['id'] == 'alshaya_algolia_react_autocomplete') {
+    $build['#attached']['library'][] = 'alshaya_hm_images/hm_images';
+  }
 }

@@ -4,13 +4,16 @@ namespace Drupal\alshaya_acm_product\Service;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\metatag\MetatagManager;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -63,6 +66,27 @@ class SkuInfoHelper {
   protected $moduleHandler;
 
   /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * Stock manager.
+   *
+   * @var \Drupal\acq_sku\StockManager
+   */
+  protected $acqSkuStockManager;
+
+  /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -77,6 +101,12 @@ class SkuInfoHelper {
    *   Renderer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database object.
+   * @param \Drupal\acq_sku\StockManager $acq_stock_manager
+   *   The stock manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -84,7 +114,10 @@ class SkuInfoHelper {
     MetatagManager $metatagManager,
     SkuPriceHelper $price_helper,
     RendererInterface $renderer,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    Connection $database,
+    StockManager $acq_stock_manager,
+    LanguageManagerInterface $language_manager
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -92,6 +125,9 @@ class SkuInfoHelper {
     $this->priceHelper = $price_helper;
     $this->renderer = $renderer;
     $this->moduleHandler = $module_handler;
+    $this->database = $database;
+    $this->acqSkuStockManager = $acq_stock_manager;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -302,12 +338,14 @@ class SkuInfoHelper {
    *
    * @param object $entity
    *   The entity object.
+   * @param bool $absolute
+   *   (Optional) true to get absolute url, otherwise false.
    *
    * @return mixed
    *   Return the generate url of the entity.
    */
-  public function getEntityUrl($entity) {
-    return $entity->toUrl('canonical', ['absolute' => TRUE])
+  public function getEntityUrl($entity, $absolute = TRUE) {
+    return $entity->toUrl('canonical', ['absolute' => $absolute])
       ->toString(TRUE)
       ->getGeneratedUrl();
   }
@@ -371,29 +409,132 @@ class SkuInfoHelper {
       if (!$child instanceof SKUInterface) {
         continue;
       }
-      $stockInfo = $this->stockInfo($child);
 
-      $variant = [
-        'id' => (int) $child->id(),
-        'sku' => (string) $child->getSku(),
-        'stock' => [
-          'status' => (int) $stockInfo['in_stock'],
-          'qty' => (float) $stockInfo['stock'],
-        ],
-      ];
-
-      $price = $this->priceHelper->getPriceBlockForSku($child);
-      $variant['price'] = $this->renderer->renderPlain($price);
-
-      $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $sku->label(), FALSE);
-      $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
-
-      $this->moduleHandler->alter('sku_variant_info', $variant, $child, $sku);
-
-      $variants[$child->getSku()] = $variant;
+      $variants[$child->getSku()] = $this->getVariantInfo($child, $pdp_layout, $sku);
     }
 
     return $variants;
+  }
+
+  /**
+   * Wrapper function to get variant info.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $child
+   *   Product.
+   * @param string $pdp_layout
+   *   PDP Layout.
+   * @param \Drupal\acq_commerce\SKUInterface|null $parent
+   *   Parent product if available.
+   *
+   * @return array
+   *   Variant info.
+   */
+  public function getVariantInfo(SKUInterface $child, string $pdp_layout, ?SKUInterface $parent = NULL) {
+    $stockInfo = $this->stockInfo($child);
+    $price = $this->priceHelper->getPriceBlockForSku($child);
+    $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
+
+    $variant = [];
+    $variant['id'] = (int) $child->id();
+    $variant['sku'] = (string) $child->getSku();
+    $variant['stock'] = [
+      'status' => (int) $stockInfo['in_stock'],
+      'qty' => (float) $stockInfo['stock'],
+    ];
+    $variant['price'] = $this->renderer->renderPlain($price);
+    $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
+    $variant['layout'] = $pdp_layout;
+
+    $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
+
+    return $variant;
+  }
+
+  /**
+   * Return stock for given sku entity.
+   */
+  public function calculateStock(SKU $sku) {
+    $sku_string = $sku->getSku();
+
+    $static = &drupal_static(__METHOD__, []);
+    if (isset($static[$sku_string])) {
+      return $static[$sku_string];
+    }
+
+    // Return quantity of given SKU.
+    switch ($sku->bundle()) {
+      case 'configurable':
+        $configured_skus = $sku->get('field_configured_skus')->getValue();
+        $child_skus = array_map(function ($item) {
+          return $item['value'];
+        }, $configured_skus);
+
+        $query = $this->database->select('acq_sku_stock', 'stock');
+        $query->addExpression('SUM(stock.quantity)', 'final_quantity');
+        $query->condition('stock.sku', $child_skus, 'IN');
+        $query->condition('stock.status', 1);
+        $static[$sku_string] = $query->execute()->fetchField();
+        break;
+
+      case 'simple':
+        $static[$sku_string] = $this->acqSkuStockManager->getStockQuantity($sku->getSku());
+        break;
+    }
+    return $static[$sku_string];
+  }
+
+  /**
+   * Get Light Product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $color
+   *   Color value.
+   *
+   * @return array
+   *   Light Product.
+   */
+  public function getLightProduct(SKUInterface $sku, string $color = ''): array {
+    $node = $this->skuManager->getDisplayNode($sku);
+    if (!($node instanceof NodeInterface) || !($node->hasTranslation($this->languageManager->getCurrentLanguage()->getId()))) {
+      return [];
+    }
+    // Get the prices.
+    $prices = $this->skuManager->getMinPrices($sku, $color);
+    // Get the promotion data.
+    $promotions = $this->skuManager->getPromotions($sku);
+    // Get promo labels.
+    $promo_label = $this->skuManager->getDiscountedPriceMarkup($prices['price'], $prices['final_price']);
+    if ($promo_label) {
+      $promotions[] = [
+        'text' => $promo_label,
+      ];
+    }
+    // Get label for the SKU.
+    $labels = $this->skuManager->getSkuLabels($sku, 'plp');
+    // Get media (images/video) for the SKU.
+    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
+    $images = $this->getMedia($sku_for_gallery, 'search');
+    $data = [
+      'id' => (int) $sku->id(),
+      'title' => $sku->label(),
+      'sku' => $sku->getSku(),
+      'link' => $this->getEntityUrl($node),
+      'original_price' => $this->formatPriceDisplay($prices['price']),
+      'final_price' => $this->formatPriceDisplay($prices['final_price']),
+      'in_stock' => $this->skuManager->isProductInStock($sku),
+      'promo' => $promotions,
+      'medias' => $images,
+      'labels' => $labels,
+      'color' => NULL,
+    ];
+    if ($color) {
+      $data['color'] = $color;
+    }
+    // Allow other modules to alter light product data.
+    $type = 'light';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+    return $data;
   }
 
 }

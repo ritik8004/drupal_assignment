@@ -3,6 +3,8 @@ global:
   css:
     theme:
       dist/css/global.ltr.css: {}
+  js:
+    js/detectIE.js: {}
 
 menu-logo-navigation:
   version: VERSION

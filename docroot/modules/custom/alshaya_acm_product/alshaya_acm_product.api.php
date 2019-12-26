@@ -43,6 +43,24 @@ function hook_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $s
 }
 
 /**
+ * Alter light product data.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU object.
+ * @param array $data
+ *   Light product data that needs to be altered.
+ * @param mixed $type
+ *   Type of product - `light` or `full`.
+ *
+ * @see \Drupal\alshaya_acm_product\Service\SkuInfoHelper::getLightProduct()
+ * @see \Drupal\alshaya_acm_product\Plugin\rest\resource\ProductResource::getSkuData()
+ */
+function hook_alshaya_acm_product_light_product_data_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$data, $type) {
+  $test_data = [];
+  $data['test'] = $test_data;
+}
+
+/**
  * Allow other modules to alter media items array for products.
  *
  * @param array $media
@@ -61,10 +79,10 @@ function hook_alshaya_acm_product_media_items_alter(array $media, SKUInterface $
  *   Variant data.
  * @param \Drupal\acq_commerce\SKUInterface $child
  *   Variant SKU Entity.
- * @param \Drupal\acq_commerce\SKUInterface $parent
- *   Parent SKU Entity.
+ * @param \Drupal\acq_commerce\SKUInterface|null $parent
+ *   Parent SKU Entity if available.
  */
-function hook_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+function hook_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $variant['click_collect'] = alshaya_acm_product_available_click_collect($child);
 }

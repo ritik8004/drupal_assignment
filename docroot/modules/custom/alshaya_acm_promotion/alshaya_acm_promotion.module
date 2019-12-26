@@ -12,7 +12,6 @@ use Drupal\alshaya_acm_promotion\Form\SelectFreeGiftForm;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormState;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
@@ -34,6 +33,8 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
     'variables' => [
       'promotions' => NULL,
       'free_shipping' => NULL,
+      'inactive_promotions' => NULL,
+      'active_promotions' => NULL,
     ],
   ];
 
@@ -68,6 +69,7 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'image' => NULL,
       'url' => NULL,
+      'select_link' => NULL,
     ],
   ];
 
@@ -250,49 +252,6 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
 
   if (!empty($promotion_label['free_gift_promotions'])) {
     $build['free_gift_promotions'] = $promotion_label['free_gift_promotions'];
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
-  if (empty($form['cart'])) {
-    return;
-  }
-
-  // Get coupon applied on cart.
-  $cart_storage = \Drupal::service('acq_cart.cart_storage');
-  /** @var \Drupal\acq_cart\Cart $cart */
-  $cart = $cart_storage->getCart(FALSE);
-
-  if (empty($cart)) {
-    return;
-  }
-
-  $coupon_applied_on_cart = $cart->getCoupon();
-
-  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $manager */
-  $manager = \Drupal::service('alshaya_acm_promotion.manager');
-
-  foreach ($form['cart'] as $id => $item) {
-    if (is_array($item) && isset($item['quantity'])) {
-      $free_gift_promos = $manager->getPromotionsToShowForSkuInCart(
-        $item['name']['#item_code'],
-        $coupon_applied_on_cart
-      );
-
-      if (empty($free_gift_promos)) {
-        continue;
-      }
-
-      $form['cart'][$id]['promo_text'] = [
-        '#theme' => 'free_gift_cart_label',
-        '#promos' => $free_gift_promos,
-      ];
-
-      $form['cart'][$id]['promo_text']['#wrapper_attributes'] = ['class' => ['free-gifts-wrapper']];
-    }
   }
 }
 

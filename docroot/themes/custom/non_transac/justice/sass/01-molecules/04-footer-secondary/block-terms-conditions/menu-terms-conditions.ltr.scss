@@ -9,6 +9,11 @@
     color: $footer_terms_condition;
     text-decoration: underline;
 
+    @include breakpoint($upto-palm) {
+      margin-#{$left}: 0;
+      margin-#{$right}: 0.625rem;
+    }
+
     &:hover {
       color: $footer_terms_condition_hover;
     }

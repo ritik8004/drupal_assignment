@@ -1,0 +1,10 @@
+{
+  "name": "alshaya_algolia_react",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "../node_modules/.bin/webpack",
+    "build:dev": "../node_modules/.bin/webpack --mode=development",
+    "watch": "../node_modules/.bin/webpack --watch"
+  }
+}

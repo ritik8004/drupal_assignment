@@ -55,6 +55,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     $view->header['result']->options['content'] = $format_plural;
 
     $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
+    $view->element['#attached']['drupalSettings']['alshayaSearch']['waitForAjax'] = TRUE;
   }
 }
 
@@ -208,12 +209,6 @@ function alshaya_search_ajax_render_alter(array &$data) {
             'method' => 'alshayaSearchHeaderUpdate',
             'args' => [],
           ];
-          $data[] = [
-            'selector' => NULL,
-            'command' => 'invoke',
-            'method' => 'alshayaAttachSearchSlider',
-            'args' => [],
-          ];
         }
       }
     }
@@ -337,22 +332,6 @@ function _alshaya_search_translate_search_view_config() {
 }
 
 /**
- * Implements hook_alshaya_profile_installed_final_task().
- */
-function alshaya_search_alshaya_profile_installed_final_task() {
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    // Enable alshaya_search_acquia_search to ensure config are overridden to
-    // use solr on cloud.
-    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
-  }
-  else {
-    // Enable alshaya_search_local_search to ensure config are overridden to
-    // use solr in local.
-    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
-  }
-}
-
-/**
  * Helper function to clear all indexed items resave indexes.
  *
  * Since we will add/update lot of attributes, best to re-use the code.
@@ -413,40 +392,6 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
         }
       }
       break;
-  }
-}
-
-/**
- * Implements hook_acquia_search_get_list_of_possible_cores_alter().
- */
-function alshaya_search_acquia_search_get_list_of_possible_cores_alter(&$possible_core_ids, $core_service) {
-  $use_brand_specific_core = \Drupal::config('alshaya_search.settings')->get('use_brand_specific_core');
-
-  if (!empty($use_brand_specific_core)) {
-    // @codingStandardsIgnoreLine
-    global $acsf_site_code;
-
-    $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service->ah_env);
-
-    // We want to use SOLR from 01 stack all the time.
-    if (substr($ah_env, 0, 2) !== '01') {
-      $ah_env = '01' . substr($ah_env, 2);
-    }
-
-    // During the production deployment, `01update` env is used and there we
-    // don't have appropriate solr cores. So use `01live` solr.
-    if ($ah_env == '01update') {
-      $ah_env = '01live';
-    }
-    // For non-prod env, we have env likes `01dev3up`, `01qaup` which are used
-    // during release/deployment. We just remove last `up` from the env name
-    // to use the original env. For example - original env for `01dev3up` will
-    // be `01dev3`.
-    elseif (substr($ah_env, -2) == 'up') {
-      $ah_env = substr($ah_env, 0, -2);
-    }
-
-    array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $acsf_site_code);
   }
 }
 

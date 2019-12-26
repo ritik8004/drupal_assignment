@@ -18,7 +18,7 @@
   }
 
   .ui-button-icon-only {
-    @include breakpoint($lap) {
+    @include breakpoint($upto-lap) {
       background: transparent;
     }
 
@@ -45,7 +45,7 @@
       font-size: 2.875rem;
       #{$right}: 1rem;
 
-      @include breakpoint($lap) {
+      @include breakpoint($upto-lap) {
         color: $popup_modal_icon;
       }
 

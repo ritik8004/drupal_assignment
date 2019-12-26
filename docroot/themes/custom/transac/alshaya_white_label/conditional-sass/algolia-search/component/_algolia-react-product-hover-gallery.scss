@@ -1,0 +1,32 @@
+#hits {
+  .c-products__item {
+    .alshaya_search_gallery {
+      .alshaya_search_slider {
+        width: 12.5rem !important;
+
+        .slick-slide {
+          width: 2.75rem !important;
+
+          &:hover {
+            border: 1px solid $plp_tile_hover_slider_nav;
+
+            &::after {
+              content: unset;
+            }
+          }
+
+          img {
+            max-width: none;
+            height: 2.5rem;
+          }
+        }
+
+        &[data-slider-status=false] {
+          .slick-track {
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+  }
+}

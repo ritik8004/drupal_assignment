@@ -6,6 +6,25 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Make mobile field optional on newsletter signup & contact form.
+ */
+function alshaya_jus_non_transac_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_email_signup'],
+    'alshaya_email_signup'
+  );
+
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_contact'],
+    'alshaya_contact'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_jus_non_transac_install() {

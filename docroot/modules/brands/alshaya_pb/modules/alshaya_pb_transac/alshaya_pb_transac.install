@@ -12,6 +12,19 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall alshaya_pb_free_design_services module.
+ * Install alshaya furniture and free design services module.
+ */
+function alshaya_pb_transac_update_8015() {
+  \Drupal::service('module_installer')->uninstall(['alshaya_pb_free_design_services']);
+
+  \Drupal::service('module_installer')->install(['alshaya_furnitures']);
+  \Drupal::service('module_installer')->install(['alshaya_furnitures_free_design_services']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update meta variables.
  */
 function alshaya_pb_transac_update_8014() {

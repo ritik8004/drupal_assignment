@@ -112,12 +112,15 @@ class SelectFreeGiftForm extends FormBase {
       '#value' => $this->t('ADD FREE GIFT'),
       '#ajax' => [
         'url' => Url::fromRoute('alshaya_acm_promotion.select_free_gift'),
+        'progress' => [
+          'type' => 'throbber',
+          'message' => NULL,
+        ],
       ],
       '#weight' => 100,
       '#attributes' => [
         'class' => ['select-free-gift'],
       ],
-      '#access' => !empty($coupon) && !empty($promotion_id),
     ];
 
     // Required for common js to get applied.
@@ -197,7 +200,7 @@ class SelectFreeGiftForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    parent::submitForm($form, $form_state);
+    // Do nothing.
   }
 
 }

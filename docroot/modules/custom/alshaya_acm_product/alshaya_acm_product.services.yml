@@ -143,3 +143,6 @@ services:
       - '@alshaya_acm_product.price_helper'
       - '@renderer'
       - '@module_handler'
+      - '@database'
+      - '@acq_sku.stock_manager'
+      - '@language_manager'

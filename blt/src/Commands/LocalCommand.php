@@ -25,6 +25,8 @@ class LocalCommand extends BltTasks {
    * @description Syncs DB from remote and set stage file proxy.
    */
   public function localSync($site = '', $env = 'dev', $mode = 'reuse') {
+    $env = is_numeric(substr($env, 0, 2)) ? $env : '01' . $env;
+
     $info = $this->validateAndPrepareInfo($site, $env);
 
     if (empty($info)) {
@@ -67,15 +69,12 @@ class LocalCommand extends BltTasks {
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield')
+      ->drush('pmu purge acquia_search acquia_connector shield')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
     $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
-    if ($info['profile'] == 'alshaya_transac') {
-      $modules_to_enable .= ' alshaya_search_local_search';
-    }
 
     $this->say('Enable local only modules');
     $this->taskDrush()
@@ -83,25 +82,6 @@ class LocalCommand extends BltTasks {
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
-
-    // @TODO Remove this and alshaya_search_* modules after we use new approach.
-    if ($info['profile'] == 'alshaya_transac') {
-      $this->say('Save server config again to ensure local solr is used.');
-      $this->taskDrush()
-        ->drush('php-eval')
-        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');")
-        ->alias($info['local']['alias'])
-        ->uri($info['local']['url'])
-        ->run();
-
-      $this->say('Clear solr index');
-      $this->taskDrush()
-        ->drush('search-api-clear')
-        ->arg('acquia_search_index')
-        ->alias($info['local']['alias'])
-        ->uri($info['local']['url'])
-        ->run();
-    }
 
     $this->say('Configure stage_file_proxy');
     $this->taskDrush()
@@ -125,7 +105,7 @@ class LocalCommand extends BltTasks {
     // Now the last thing, dev script, I love it :).
     $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
-      $this->_exec('sh ' . $dev_script_path . ' ' . $site);
+      $this->_exec('sh ' . $dev_script_path . ' ' . preg_replace('/\d/', '', $site));
     }
 
   }
@@ -232,6 +212,8 @@ class LocalCommand extends BltTasks {
    *   Fully prepared array or 0.
    */
   private function validateAndPrepareInfo($site, $env) {
+    $remote_site = $site;
+    $site = preg_replace('/\d/', '', $site);
     static $static;
 
     if (isset($static[$env][$site])) {
@@ -246,20 +228,22 @@ class LocalCommand extends BltTasks {
       return 0;
     }
 
+    $site_data = $sites[$site];
+
     $info = [];
 
-    $info['profile'] = $sites[$site]['type'];
+    $info['profile'] = $site_data['type'];
 
     $info['local']['url'] = 'local.alshaya-' . $site . '.com';
     $info['local']['alias'] = 'self';
-    $info['remote']['alias'] = $site . '.01' . $env;
+    $info['remote']['alias'] = 'alshaya.' . $env;
 
     // Get remote data to confirm site code is valid and we can get db role
     // and remote url.
     $remote_data = $this->getSitesData($info['remote']['alias']);
 
-    $info['remote']['db_role'] = $this->extractInfo($remote_data, $site, 'db_role');
-    $info['remote']['url'] = $this->extractInfo($remote_data, $site, 'url');
+    $info['remote']['db_role'] = $this->extractInfo($remote_data, $remote_site, 'db_role');
+    $info['remote']['url'] = $this->extractInfo($remote_data, $remote_site, 'url');
 
     $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'];
     $info['origin'] = 'https://' . $info['remote']['url'];
@@ -343,6 +327,37 @@ class LocalCommand extends BltTasks {
     }
 
     return '';
+  }
+
+  /**
+   * Pause ACM Queue for unavailable sites on particular ENV.
+   *
+   * @param string $env
+   *   Environment code.
+   *
+   * @command local:pause-unavailable
+   *
+   * @description Pause ACM Queue for unavailable sites on particular ENV.
+   */
+  public function pauseUnavailableSites(string $env) {
+    $data = $this->getSitesData('mckw.01' . $env);
+    $sites = [];
+    foreach ($data ?? [] as $line) {
+      if (strpos($line, ' ') < -1) {
+        $sites[] = $line;
+      }
+    }
+
+    // First pause for all the sites in particular ENV.
+    $this->_exec('php tests/apis/conductor_v2/pauseQueues.php ' . $env . ' all all pause');
+
+    // Unpause for the sites which are currently available.
+    // We do so as we don't have a way to know current status of queue.
+    foreach ($sites as $site) {
+      $country = substr($site, -2);
+      $brand = substr($site, 0, -2);
+      $this->_exec("php tests/apis/conductor_v2/pauseQueues.php $env $brand $country resume");
+    }
   }
 
 }

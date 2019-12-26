@@ -5,7 +5,8 @@
  * Module file.
  */
 
-use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
+use Drupal\alshaya_performance\Plugin\QueueWorker\InvalidateCacheTags;
+use Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
@@ -76,6 +77,31 @@ function _alshaya_search_api_reindex(array $indexes = ['product', 'acquia_search
 
     // Save index to reflect new category field.
     $index->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete() for node entities.
+ */
+function alshaya_search_api_node_predelete(EntityInterface $node) {
+  if ($node->bundle() !== 'acq_product') {
+    return;
+  }
+
+  /** @var \Drupal\Core\Queue\QueueInterface $queue */
+  $queue = \Drupal::service('queue')->get(InvalidateCacheTags::QUEUE_NAME);
+
+  // Invalidate associated category listing pages.
+  $category_ids = array_column($node->get('field_category')->getValue(), 'target_id');
+  foreach ($category_ids ?? [] as $category_id) {
+    $queue->createItem(AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $category_id);
+  }
+
+  // Invalidate associated promotion nodes.
+  $item_id = 'entity:node/' . $node->id() . ':' . $node->language()->getId();
+  $promotion_nids = \Drupal::service('alshaya_search_api.data_helper')->getIndexedData($item_id, 'promotion_nid');
+  foreach ($promotion_nids as $nid) {
+    $queue->createItem('node:' . $nid);
   }
 }
 
@@ -225,15 +251,4 @@ function alshaya_search_api_modules_uninstalled($modules) {
   // Reset configs overridden by alshaya_search_algolia module.
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
   alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_search_api_node_presave(EntityInterface $entity) {
-  // We will indexation manually while processing product.
-  // Skip tracking by default.
-  if ($entity->bundle() == 'acq_product' && empty(ProcessProduct::$processingItem)) {
-    $entity->search_api_skip_tracking = TRUE;
-  }
 }

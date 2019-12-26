@@ -12,6 +12,24 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Re-saving the linked sku and PDP resource to moved outside mobile app.
+ */
+function alshaya_acm_product_update_8054() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'rest.resource.product_linked_skus',
+    'rest.resource.product',
+  ];
+  $manager->updateConfigs($configs, 'alshaya_acm_product');
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove empty images to avoid 500 error.
  */
 function alshaya_acm_product_update_8053() {

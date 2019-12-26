@@ -5,6 +5,33 @@
  * Install file.
  */
 
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_search_algolia_update_8001() {
+  // Install algolia index.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['search_api.index.alshaya_algolia_index'],
+    'alshaya_search_algolia',
+    'install'
+  );
+
+  // Rebuild tracker info to index products.
+  $index = Index::load('alshaya_algolia_index');
+  $index->rebuildTracker();
+  $index->save();
+
+  // Remove unnecessary autocomplete block.
+  alshaya_block_delete_blocks(['autocompletewidgetofalgolia']);
+
+  // Installing module, for sites where alshaya_search_algolia is already
+  // enabled.
+  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
+}
+
 /**
  * Implements hook_install().
  */
@@ -15,21 +42,10 @@ function alshaya_search_algolia_install() {
     'alshaya_white_label'
   );
 
-  // Update block weight of search bar to match what was there for existing
-  // keywords exposed form block.
-  $existing = \Drupal::configFactory()->get('block.block.keywordsearchblock');
-  $new = \Drupal::configFactory()->getEditable('block.block.autocompletewidgetofalgolia');
-  $new->set('weight', $existing->get('weight'));
-  $new->save();
-
   // Reset Algolia keys in configs.
   /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
   $config_check = \Drupal::service('alshaya_acm.config_check');
   $config_check->checkConfig(TRUE, 'search_api.server.algolia');
-  $config_check->checkConfig(TRUE, 'block.block.autocompletewidgetofalgolia');
-
-  // Mark everything for reindexation for search index.
-  _alshaya_search_api_reindex(['acquia_search_index']);
 
   $strings = [
     'Search' => [
@@ -43,6 +59,11 @@ function alshaya_search_algolia_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
+
+  // Installing module here, alshaya_algolia_react has a dependency on
+  // this (alshaya_search_algolia) module. to avoid recursion not adding
+  // alshaya_algolia_react as dependency in this module.
+  \Drupal::service('module_installer')->install(['alshaya_algolia_react']);
 }
 
 /**
@@ -51,5 +72,4 @@ function alshaya_search_algolia_install() {
 function alshaya_search_algolia_uninstall() {
   // Reset configs overridden by this module.
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
-  alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
 }

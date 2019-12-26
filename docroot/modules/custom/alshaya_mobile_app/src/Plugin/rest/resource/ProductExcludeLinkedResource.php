@@ -289,7 +289,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     foreach ($label_contexts as $key => $context) {
       $data['labels'][] = [
         'context' => $context,
-        'labels' => $this->mobileAppUtility->getLabels($sku, $key),
+        'labels' => $this->skuManager->getSkuLabels($sku, $key),
       ];
     }
 

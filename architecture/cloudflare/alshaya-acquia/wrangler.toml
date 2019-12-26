@@ -1,0 +1,8 @@
+name = "alshaya-acquia"
+type = "webpack"
+account_id = "712b5dd353dfc12aca7b342b28d5118f"
+route = "www.mothercare.com.kw/panic-on"
+zone_id = "6248c72a8c4d258b68db678a921af0f1"
+kv-namespaces = [
+         { binding = "AlshayaAcquiaStability", id = "f21217b14e244ad7ba54f11c6b70e087" }
+]

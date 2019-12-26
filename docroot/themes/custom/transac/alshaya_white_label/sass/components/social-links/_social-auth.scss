@@ -144,7 +144,8 @@
     .social-signin-enabled {
       .checkout-login-actions-wrapper {
         &.form-actions {
-          float: none;
+          float: $left;
+          clear: $left;
         }
       }
     }

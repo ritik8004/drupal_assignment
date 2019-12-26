@@ -177,6 +177,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
           'class' => [
             'product-default-image',
           ],
+          '#skip_lazy_loading' => TRUE,
         ],
       ];
     }

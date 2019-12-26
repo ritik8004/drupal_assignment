@@ -6,5 +6,6 @@ core: 8.x
 dependencies:
   - alshaya_vs:alshaya_vs
   - alshaya_vs:alshaya_vs_search
+  - alshaya_color_split:alshaya_color_split
 themes:
   - alshaya_victoria_secret

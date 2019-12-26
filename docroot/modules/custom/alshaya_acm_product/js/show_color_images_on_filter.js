@@ -67,9 +67,6 @@
         $(this).parents('article').find('a.product-selected-url').attr('href', selectedUrl);
       }
     });
-
-    // At the end, let's make sure sliders work fine.
-    $('.search-lightSlider').slick('refresh');
   }
 
 })(jQuery, Drupal);

@@ -13,24 +13,24 @@
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
         $(this).addClass('active');
-        $('body').removeClass('large-grid')
+        $('body').removeClass('large-grid');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight();
+         Drupal.plpListingProductTileHeight('full_page', null);
       });
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
         $(this).addClass('active');
-        $('body').addClass('large-grid')
+        $('body').addClass('large-grid');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight();
+         Drupal.plpListingProductTileHeight('full_page', null);
       });
 
       // On filter selection keeping the selected layout.
@@ -117,10 +117,17 @@
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
+        // Also reset the sub category block if available.
+        if ($(body).hasClass('subcategory-listing-enabled')) {
+          // For mobile.
+          if ($(window).width < 768) {
+            $('.block-alshaya-sub-category-block').removeClass('mobile-sticky-sub-category');
+          }
+        }
       });
 
-      if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
-        var clearAll = $('.c-content__region .region__content  > div.block-facets-summary').clone();
+      if ($('.c-content__region .region__content  > div[data-drupal-facets-summary-id] li.clear-all').length > 0) {
+        var clearAll = $('.c-content__region .region__content  > div[data-drupal-facets-summary-id]').clone();
         // Remove all `li` except last.
         $(clearAll).find('li:not(:last)').remove();
         $('.facet-all-clear').html(clearAll);
@@ -158,14 +165,8 @@
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
 
-      // Adding timeout to do calculation after images get load on plp.
-      setTimeout(function() {
-        // Adjust height of PLP tiles.
-        Drupal.plpListingProductTileHeight();
-      }, 300);
-
-      $(window).on('blazySuccess', function() {
-        Drupal.plpListingProductTileHeight();
+      $(window).on('blazySuccess', function(event, element) {
+        Drupal.plpListingProductTileHeight('row', element);
       });
 
       // Back to PLP and loading a PLP/SRP with facets active in URL.
@@ -324,14 +325,6 @@
           $('.all-filters #' + active_facet_sort).show();
         }
 
-        // If no category facet after ajax selection, add class to identify it.
-        if ($('.all-filters #block-categoryfacetplp:not(:empty)').length === 0) {
-          $('#block-alshaya-plp-facets-block-all').addClass('empty-category');
-        }
-        else {
-          $('#block-alshaya-plp-facets-block-all').removeClass('empty-category');
-        }
-
         // If there any active facet filter.
         updateFacetTitlesWithSelected();
         updateCategoryTitle();
@@ -344,7 +337,7 @@
       function stickyfacetwrapper() {
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 767) {
-            if ($('.container-without-product').length < 1) {
+            if ($('.c-content .container-without-product').length < 1) {
               var site_brand = $('.site-brand-home').clone();
               $('#block-subcategoryblock, .region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
               $(site_brand).insertBefore('.container-without-product');
@@ -368,6 +361,7 @@
         var filter = $('.region__content');
         var nav = $('.branding__menu');
         var fixedNavHeight = 0;
+        var subCategoryBlock = $('.block-alshaya-sub-category-block');
 
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 1023) {
@@ -400,15 +394,25 @@
           }
         }
 
-        $(window, context).once().on('scroll', function () {
+        $(window).once('lhnStickyFilters').on('scroll', function () {
           // Sticky filter header.
           if ($('.show-all-filters').length > 0) {
             if ($(this).scrollTop() > filterposition) {
               filter.addClass('filter-fixed-top');
+              // Desktop & Tablet.
+              if ($(this).width() > 767 && $('body').hasClass('subcategory-listing-enabled')) {
+                if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
+                  subCategoryBlock.addClass('anti-ghosting');
+                }
+              }
               $('body').addClass('header-sticky-filter');
             }
             else {
               filter.removeClass('filter-fixed-top');
+              if ($('body').hasClass('subcategory-listing-enabled')) {
+                // Desktop & Tablet.
+                subCategoryBlock.removeClass('anti-ghosting-done');
+              }
               $('body').removeClass('header-sticky-filter');
             }
           }
@@ -436,31 +440,50 @@
 
           if ($(window).width() < 1024) {
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
-              if (this.oldScroll > this.scrollY) {
+              if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
-                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
-                  $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
+                if (!$('#block-subcategoryblock').hasClass('mobile-sticky-sub-category') && $('body').hasClass('subcategory-listing-enabled')) {
+                  // Tablet.
+                  if ($(window).width() > 767) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                  }
+                  // This small delay to ensure the entry animations works.
+                  setTimeout(function() {
+                    $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
+                  }, 5);
                 }
-              } else {
+              }
+              else {
                 // Action to perform when we are scrolling down.
                 if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                   $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
                 }
               }
-              this.oldScroll = this.scrollY;
             }
             else {
               if ($('#block-subcategoryblock').hasClass('mobile-sticky-sub-category')) {
                 $('#block-subcategoryblock').removeClass('mobile-sticky-sub-category');
               }
             }
+            this.oldScroll = this.pageYOffset;
           }
           else {
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('body').hasClass('subcategory-listing-enabled')) {
-              if (this.oldScroll > this.scrollY) {
+              if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                  $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  if ($(this).width() > 1024 && $('body').hasClass('subcategory-listing-enabled')) {
+                    subCategoryBlock.removeClass('anti-ghosting');
+                    subCategoryBlock.addClass('anti-ghosting-done');
+                    // This small delay to ensure the entry animations works.
+                    setTimeout(function() {
+                      $('.sticky-filter-wrapper').addClass('show-sub-category');
+                    }, 5);
+                  }
+                  else {
+                    $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  }
                 }
               } else {
                 // Action to perform when we are scrolling down.
@@ -468,12 +491,12 @@
                   $('.sticky-filter-wrapper').removeClass('show-sub-category');
                 }
               }
-              this.oldScroll = this.scrollY;
             } else {
               if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                 $('.sticky-filter-wrapper').removeClass('show-sub-category');
               }
             }
+            this.oldScroll = this.pageYOffset;
           }
         });
       }
@@ -487,6 +510,49 @@
       $(window, context).on('load', function () {
         // Calculate the filters top position now.
         stickyfacetfilter();
+      });
+    }
+  };
+
+  /**
+   * Scroll page to page title on selection of any of the facet item on PLPs except panty-guide.
+   */
+  Drupal.behaviors.alshayaAcmPlpFilterSelectionScroll = {
+    attach: function () {
+      var filterScrollPosition;
+
+      $(window).once('plp-filter-selection').on('load', function () {
+        // To get the offset top of plp Title, using title offset top.
+        var pageTitleOffset = $('#block-page-title').offset().top;
+        var brandingMenu = $('.branding__menu').height();
+        if($(window).width() < 768) {
+          var superCategoryMenuHeight = 0;
+          var mobileNavigationMenuHeight = 0;
+          if ($('.block-alshaya-super-category-menu').length > 0) {
+            superCategoryMenuHeight = $('.block-alshaya-super-category-menu').height();
+            mobileNavigationMenuHeight = $('.menu--mobile-navigation').height();
+          }
+          filterScrollPosition = pageTitleOffset - superCategoryMenuHeight - mobileNavigationMenuHeight - brandingMenu;
+        }
+        else {
+          filterScrollPosition = pageTitleOffset;
+        }
+        // on window onload so that it will check for subcategory-listing-enabled class
+        // after page load only
+        if ($('.subcategory-listing-enabled').length < 1) {
+          Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
+            var offset = $(response.selector).offset();
+
+            var scrollTarget = response.selector;
+            while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
+              scrollTarget = $(scrollTarget).parent();
+            }
+
+            if (offset.top - 10 < $(scrollTarget).scrollTop()) {
+              $(scrollTarget).animate({ scrollTop: filterScrollPosition }, 500);
+            }
+          };
+        }
       });
     }
   };
@@ -560,22 +626,5 @@
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend span.sort-for-label').remove();
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);
   }
-
-  /**
-   * Calculate and add height for each product tile.
-   */
-  Drupal.plpListingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
-      var Hgt = 0;
-      $('.c-products__item').each(function () {
-        var Height = $(this)
-          .find('> article')
-          .outerHeight(true);
-        Hgt = Hgt > Height ? Hgt : Height;
-      });
-
-      $('.c-products__item').css('height', Hgt);
-    }
-  };
 
 })(jQuery, Drupal);

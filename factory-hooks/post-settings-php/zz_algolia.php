@@ -13,7 +13,8 @@ global $_acsf_site_name;
 $algolia_env = $settings['env'];
 
 // We want to use Algolia index name with 01 prefix all the time.
-if (substr($algolia_env, 0, 2) !== '01') {
+$env_number = substr($algolia_env, 0, 2);
+if (is_numeric($env_number) && $env_number !== '01') {
   $algolia_env = '01' . substr($algolia_env, 2);
 }
 
@@ -31,12 +32,12 @@ elseif (substr($algolia_env, -2) == 'up') {
 }
 
 // Ensure we never connect to Index of another ENV.
-$config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $settings['env'] . '_' . $_acsf_site_name;
-$config['block.block.autocompletewidgetofalgolia']['settings']['index'] = $settings['env'] . '_' . $_acsf_site_name;
+$config['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
+$config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
 
 // Values for developer machine here. This will need to be overridden in brand
 // specific settings files on each env for each brand.
 $settings['search_api.server.algolia']['backend_config']['application_id'] = 'testing24192T8KHZ';
 $settings['search_api.server.algolia']['backend_config']['api_key'] = '628e74a9b6f3817cdd868278c8b8656e';
-$settings['block.block.autocompletewidgetofalgolia']['settings']['application_id'] = 'testing24192T8KHZ';
-$settings['block.block.autocompletewidgetofalgolia']['settings']['search_api_key'] = 'afeb84ab13757e11fbe8765142e2d7ad';
+$settings['block.block.alshayaalgoliareactautocomplete']['settings']['application_id'] = 'testing24192T8KHZ';
+$settings['block.block.alshayaalgoliareactautocomplete']['settings']['search_api_key'] = 'afeb84ab13757e11fbe8765142e2d7ad';

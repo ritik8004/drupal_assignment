@@ -346,7 +346,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   // Add transaction & payment details to confirmation data in case of KNET.
   if (!empty($order['payment']) &&
     ($order['payment']['method_code'] === 'knet')) {
-    $knet_transac_data = \Drupal::state()->get('knet:' . md5($order['increment_id']));
+    $state = \Drupal::service('tempstore.shared');
+    $knet_transac_data = $state->get('knet')->get('knet:' . md5($order['increment_id']));
     $orderDetails['transaction_id'] = $knet_transac_data['transaction_id'];
     $orderDetails['payment_id'] = $knet_transac_data['payment_id'];
     $orderDetails['result_code'] = $knet_transac_data['result_code'];
@@ -460,6 +461,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
       // Load the first image.
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
+      $product['image']['#skip_lazy_loading'] = TRUE;
 
       $products[] = $product;
     }

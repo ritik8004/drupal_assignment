@@ -4,6 +4,8 @@
 .individual--store {
   .individual-store--detail {
     width: 34%;
+    padding-#{$left}: 1%;
+    margin-#{$left}: 1%;
 
     @include breakpoint($upto-palm) {
       width: 100%;
@@ -13,10 +15,11 @@
 
 .back-link {
   a {
-    @include icon(chevron#{direction(left)}, after) {
+    @include icon(chevron#{$left}, after) {
       color: $store_finder_icon;
       font-size: 3rem;
       top: -0.3125rem;
+      #{$left}: 0.125rem;
 
       @include breakpoint($upto-palm) {
         color: $store_finder_mobile_backline_icon;

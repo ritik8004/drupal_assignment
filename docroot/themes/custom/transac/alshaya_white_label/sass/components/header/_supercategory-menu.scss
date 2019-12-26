@@ -80,7 +80,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        height: 2.8125rem;
+        height: 2.875rem;
       }
 
       li {
@@ -88,7 +88,7 @@
 
         @include breakpoint($upto-desktop) {
           background: $header_top_bg;
-          height: 2.8125rem;
+          height: 2.875rem;
         }
       }
     }
