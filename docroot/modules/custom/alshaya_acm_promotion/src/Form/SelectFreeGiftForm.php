@@ -122,7 +122,6 @@ class SelectFreeGiftForm extends FormBase {
     // Required for common js to get applied.
     $form['#attributes']['data-sku'] = $sku->getSku();
     $form['#attributes']['class'][] = 'sku-base-form';
-    $form['#attached']['library'][] = 'alshaya_acm_promotion/free_gift_styles';
 
     if ($sku->bundle() == 'configurable') {
       $form['select']['#attributes']['disabled'] = 'disabled';

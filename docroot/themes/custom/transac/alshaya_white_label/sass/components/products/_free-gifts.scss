@@ -1,4 +1,8 @@
 .nodetype--acq_product {
+  .select-free-gift {
+    display: none !important;
+  }
+
   .free-gift-promotions {
     display: flex;
     flex-flow: row wrap;
