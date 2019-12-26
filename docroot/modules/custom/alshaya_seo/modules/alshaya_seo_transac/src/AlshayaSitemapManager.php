@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\simple_sitemap\Simplesitemap;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
@@ -28,17 +30,39 @@ class AlshayaSitemapManager {
   protected $generator;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * The product category.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $productCategory;
+
+  /**
    * AlshayaSitemapManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   Entity manager.
    * @param \Drupal\simple_sitemap\Simplesitemap $generator
    *   Simple sitemap generator.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category
+   *   Product category.
    */
   public function __construct(EntityTypeManagerInterface $entity_manager,
-                              Simplesitemap $generator) {
+                              Simplesitemap $generator,
+                              ConfigFactoryInterface $config_factory,
+                              ProductCategoryTree $product_category) {
     $this->entityManager = $entity_manager;
     $this->generator = $generator;
+    $this->configFactory = $config_factory;
+    $this->productCategory = $product_category;
   }
 
   /**
@@ -48,7 +72,7 @@ class AlshayaSitemapManager {
    *   The term object.
    */
   public function removeSitemapVariant(EntityInterface $entity) {
-    $variant_name = $this->sitemapVariantName($entity->id(), FALSE);
+    $variant_name = $this->sitemapVariantName($entity->id());
     $variants = $this->getAllVariants();
 
     if (in_array($variant_name, $variants)) {
@@ -63,7 +87,7 @@ class AlshayaSitemapManager {
    *   The term object.
    */
   public function addSitemapVariant(EntityInterface $entity) {
-    $variant_name = $this->sitemapVariantName($entity->id(), FALSE);
+    $variant_name = $this->sitemapVariantName($entity->id());
     $variants = $this->getAllVariants();
 
     if (!in_array($variant_name, $variants)) {
@@ -77,21 +101,14 @@ class AlshayaSitemapManager {
    *
    * @param int $term_id
    *   The term id.
-   * @param bool $is_child
-   *   To check term status.
    */
-  public function sitemapVariantName(int $term_id, $is_child = TRUE) {
+  public function sitemapVariantName(int $term_id) {
     $variant_name = '';
-    if ($is_child) {
-      $ancestors = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($term_id);
-      $term_id = reset(array_reverse(array_keys($ancestors)));
-    }
+    $term = $this->entityManager->getStorage('taxonomy_term')->load($term_id);
+    $term = $this->productCategory->getL1Category($term);
 
-    if (!empty($term_id)) {
-      $term = $this->entityManager->getStorage('taxonomy_term')->load($term_id);
-      if ($term->get('field_commerce_status')->getString()) {
-        $variant_name = $this->getVariantName($term->getName());
-      }
+    if ($term->get('field_commerce_status')->getString()) {
+      $variant_name = $this->getVariantName($term->getName());
     }
 
     return $variant_name;
@@ -156,7 +173,6 @@ class AlshayaSitemapManager {
 
     if (!empty($active_variants)) {
       // Set index for active variants.
-      $this->enableEntityTypeVariants(['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product']);
       $this->generator->setVariants($active_variants);
       $this->generator->setEntityInstanceSettings($entity_type_id, $entity_id, ['index' => 1]);
 
@@ -174,13 +190,11 @@ class AlshayaSitemapManager {
 
   /**
    * A helper function to enable variants for entity types.
-   *
-   * @param array $entity_types
-   *   The entity types.
    */
-  public function enableEntityTypeVariants(array $entity_types) {
-    // Skip default variant.
-    $variants = array_diff($this->getAllVariants(), ['default']);
+  public function enableEntityTypeVariants() {
+    // Get variants.
+    $variants = $this->getAllVariants();
+    $entity_types = ['taxonomy_term' => 'acq_product_category', 'node' => 'acq_product'];
 
     foreach ($entity_types as $entity_type_id => $bundle_types) {
       foreach ($variants as $variant) {
@@ -188,7 +202,6 @@ class AlshayaSitemapManager {
           ->setVariants([$variant])
           ->setBundleSettings($entity_type_id, $bundle_types, ['index' => TRUE]);
       }
-
       // Disable default variant for product and product category.
       $this->generator
         ->setVariants(['default'])
@@ -217,7 +230,40 @@ class AlshayaSitemapManager {
    * Get list of variants.
    */
   public function getAllVariants() {
-    return array_keys($this->generator->getSitemapManager()->getSitemapVariants());
+    $variants = array_keys($this->generator->getSitemapManager()->getSitemapVariants());
+    return array_diff($variants, ['default']);
+  }
+
+  /**
+   * Get the parent depth.
+   */
+  public function variantWithParentDepth() {
+    $super_category_status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+    $term_data = $this->productCategory->getCategoryTreeCached();
+
+    if ($super_category_status) {
+      if (!empty($term_data)) {
+        foreach ($term_data as $parent) {
+          $this->addVariantWithParentDepth($parent['child']);
+        }
+      }
+    }
+    else {
+      $this->addVariantWithParentDepth($term_data);
+    }
+  }
+
+  /**
+   * Create variant as per parent depth.
+   */
+  public function addVariantWithParentDepth($term_data) {
+    if (!empty($term_data)) {
+      foreach ($term_data as $parent) {
+        $settings = ['type' => 'default_hreflang', 'label' => $parent['label']];
+        $variant_name = $this->getVariantName($parent['label']);
+        $this->generator->getSitemapManager()->addSitemapVariant($variant_name, $settings);
+      }
+    }
   }
 
 }
