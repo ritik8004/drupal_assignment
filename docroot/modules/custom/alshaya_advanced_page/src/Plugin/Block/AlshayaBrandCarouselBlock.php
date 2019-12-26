@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 
 /**
  * Provides alshaya brand carousel block.
@@ -42,13 +43,21 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   protected $languageManager;
 
   /**
+   * Alshaya Options List Service.
+   *
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
+   */
+  protected $alshayaOptionsService;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AlshayaBrandListHelper $brand_list, ModuleHandlerInterface $module_handler, LanguageManagerInterface $languageManager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AlshayaBrandListHelper $brand_list, ModuleHandlerInterface $module_handler, LanguageManagerInterface $languageManager, AlshayaOptionsListHelper $alshaya_options_service) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->brandList = $brand_list;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $languageManager;
+    $this->alshayaOptionsService = $alshaya_options_service;
   }
 
   /**
@@ -61,7 +70,8 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_definition,
       $container->get('alshaya.brand_list_helper'),
       $container->get('module_handler'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_options_list.alshaya_options_service')
     );
   }
 
@@ -75,18 +85,25 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
 
     if (!empty($terms)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
-      $link = '/' . $langcode . '/search?f[0]=product_brand:';
-      // Incase of algolia search we have different links for brands.
-      // Change links if algolia search is active.
+      $attributeName = 'product_brand';
+      $link = '/' . $langcode . '/search?f[0]=' . $attributeName . ':';
+      // Incase of algolia we don't have search page.
+      // So adding a algolia suitable link.
       if ($this->moduleHandler->moduleExists('alshaya_search_algolia')) {
-        $link = '/' . $langcode . '/#query= &refinementList[attr_product_brand][0]=';
+        $attributeName = 'attr_product_brand';
+        $link = '/' . $langcode . '/#query= &refinementList[' . $attributeName . '][0]=';
       }
-      foreach ($terms as $term) {
-        $brand_images[$term->tid] = [
-          'image' => $term->uri,
-          'title' => $term->name,
-          'link' => $link . $term->name,
-        ];
+      $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
+      if (!empty($facet_results)) {
+        foreach ($terms as $term) {
+          if (in_array($term->name, $facet_results[$attributeName])) {
+            $brand_images[$term->tid] = [
+              'image' => $term->uri,
+              'title' => $term->name,
+              'link' => $link . $term->name,
+            ];
+          }
+        }
       }
     }
 
