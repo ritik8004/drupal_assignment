@@ -695,6 +695,12 @@ class AlshayaPromotionsManager {
               'type' => $field_alshaya_promotion_subtype,
               'label' => $label,
             ];
+
+            // Add threshold_reached flag to update promotion label classes.
+            $promotionCartStatus = $promotionPlugin->getPromotionCartStatus();
+            if ($promotionCartStatus === AcqPromotionInterface::STATUS_CAN_BE_APPLIED) {
+              $data['threshold_reached'] = TRUE;
+            }
           }
         }
       }

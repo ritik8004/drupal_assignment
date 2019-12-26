@@ -15,7 +15,7 @@
 {% if inactive_promotions is not empty %}
   <div class="cart-promotions-wrapper inactive-promotions" id="block-basketinactivepromotionmessage">
     {% for id, promotion in inactive_promotions %}
-      <p class="promotion {{ promotion.type }}">{{ promotion.label }}</p>
+      <p class="promotion {{ promotion.type }} {{ promotion.extra_classes }}">{{ promotion.label }}</p>
     {% endfor %}
   </div>
 {% endif %}

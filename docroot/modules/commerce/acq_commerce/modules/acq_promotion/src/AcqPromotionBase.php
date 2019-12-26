@@ -53,4 +53,11 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
     return '';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotionCartStatus() {
+    return NULL;
+  }
+
 }
