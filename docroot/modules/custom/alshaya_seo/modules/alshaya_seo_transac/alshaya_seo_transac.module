@@ -523,8 +523,12 @@ function alshaya_seo_transac_entity_insert(EntityInterface $entity) {
   if ($entity->bundle() == 'acq_product_category') {
 
     $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+    $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
 
-    if ($entity->get('parent')->getString() == 0 && $entity->get('field_commerce_status')->getString()) {
+    if (!$super_category_status && $entity->get('parent')->getString() == 0 && $entity->get('field_commerce_status')->getString()) {
+      $sitemap->addSitemapVariant($entity);
+    }
+    elseif ($super_category_status && $entity->get('parent')->getString() != 0 && $entity->get('field_commerce_status')->getString()) {
       $sitemap->addSitemapVariant($entity);
     }
 
@@ -540,9 +544,16 @@ function alshaya_seo_transac_entity_presave(EntityInterface $entity) {
 
     $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity->id());
     $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+    $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
 
-    if ($entity->get('parent')->getString() == 0 && $term->getName() != $entity->getName()) {
+    if (!$super_category_status && $entity->get('parent')->getString() == 0 && $term->getName() != $entity->getName()) {
+      $sitemap->removeSitemapVariant($entity);
 
+      if ($entity->get('field_commerce_status')->getString()) {
+        $sitemap->addSitemapVariant($entity);
+      }
+    }
+    elseif ($super_category_status && $entity->get('parent')->getString() != 0 && $term->getName() != $entity->getName()) {
       $sitemap->removeSitemapVariant($entity);
 
       if ($entity->get('field_commerce_status')->getString()) {
@@ -560,9 +571,13 @@ function alshaya_seo_transac_entity_presave(EntityInterface $entity) {
 function alshaya_seo_transac_entity_predelete(EntityInterface $entity) {
   if ($entity->bundle() == 'acq_product_category') {
 
+    $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
     $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
 
-    if ($entity->get('parent')->getString() == 0) {
+    if (!$super_category_status && $entity->get('parent')->getString() == 0) {
+      $sitemap->removeSitemapVariant($entity);
+    }
+    elseif ($super_category_status && $entity->get('parent')->getString() != 0) {
       $sitemap->removeSitemapVariant($entity);
     }
   }
