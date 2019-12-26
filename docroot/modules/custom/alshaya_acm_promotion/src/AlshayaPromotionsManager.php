@@ -649,11 +649,18 @@ class AlshayaPromotionsManager {
     foreach ($allApplicablePromotions as $promotion) {
       if ($promotion instanceof NodeInterface) {
         $order = $promotion->get('field_acq_promotion_sort_order')->getString();
+        $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
         $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
         $promotion_data = unserialize($promotion_data);
         $threshold_price = $this->getPromotionThresholdPrice($promotion_data);
 
-        if (isset($order) && isset($threshold_price)) {
+        // Free Shipping promotions needs to be prioritized for display.
+        if ($subtype === self::SUBTYPE_FREE_SHIPPING_ORDER) {
+          if (isset($order) && isset($threshold_price)) {
+            $cartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER][$order][$threshold_price][] = $promotion->id();
+          }
+        }
+        elseif (isset($order) && isset($threshold_price)) {
           $cartPromotions[$order][$threshold_price][] = $promotion->id();
         }
       }
@@ -770,7 +777,27 @@ class AlshayaPromotionsManager {
       $appliedPromotionIds[] = $promotion->id();
     }
 
+    // Extract next eligible cart free shipping promotion.
+    if (!empty($freeShippingPromotions = $allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER])) {
+      foreach ($freeShippingPromotions as $priceSortedPromotions) {
+        ksort($priceSortedPromotions);
+
+        foreach ($priceSortedPromotions as $promotions) {
+          foreach ($promotions as $promotion) {
+            if (!in_array($promotion, $appliedPromotionIds)) {
+              $promotion = $this->nodeStorage->load($promotion);
+              if ($promotion instanceof NodeInterface) {
+                $inactiveCartPromotion = $promotion;
+                return $promotion;
+              }
+            }
+          }
+        }
+      }
+    }
+
     // Extract next eligible cart promotion based on priority and price.
+    unset($allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER]);
     foreach ($allCartPromotions as $priceSortedPromotions) {
       ksort($priceSortedPromotions);
 
