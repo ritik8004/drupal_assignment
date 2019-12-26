@@ -158,4 +158,34 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     return $status;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotionCodeLabel($status) {
+    $label = '';
+    if ($this->checkThresholdReached()) {
+      $coupon = $this->promotionNode->get('field_coupon_code')->getString();
+
+      if ($status) {
+        $label = '<div class="applied code">' . $coupon . '</div>';
+      }
+      else {
+        $label = '<div class="available code">' . $coupon . '</div>';
+      }
+
+      $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+      $promotion_data = unserialize($promotion_data);
+      $percent = NULL;
+
+      if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
+        $percent = $promotion_data['discount'];
+        $label .= $this->t('Use and get @percent% off', [
+          '@percent' => $percent,
+        ])->__toString();
+      }
+    }
+
+    return $label;
+  }
+
 }

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_promotion;
 
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_promotion\AcqPromotionInterface;
 use Drupal\acq_promotion\AcqPromotionPluginManager;
@@ -98,6 +99,13 @@ class AlshayaPromotionsManager {
   protected $alshayaAcmPromotionCache;
 
   /**
+   * The cart storage service.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
+
+  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -116,6 +124,8 @@ class AlshayaPromotionsManager {
    *   Promotion Plugin Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $alshayaAcmPromotionCache
    *   Alshaya Acm Promotion Cache Bin.
+   * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
+   *   The cart storage service.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
                               LanguageManager $languageManager,
@@ -124,7 +134,8 @@ class AlshayaPromotionsManager {
                               SkuImagesManager $images_manager,
                               AcqPromotionsManager $acq_promotions_manager,
                               AcqPromotionPluginManager $acqPromotionPluginManager,
-                              CacheBackendInterface $alshayaAcmPromotionCache) {
+                              CacheBackendInterface $alshayaAcmPromotionCache,
+                              CartStorageInterface $cartStorage) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
@@ -133,6 +144,7 @@ class AlshayaPromotionsManager {
     $this->acqPromotionsManager = $acq_promotions_manager;
     $this->acqPromotionPluginManager = $acqPromotionPluginManager;
     $this->alshayaAcmPromotionCache = $alshayaAcmPromotionCache;
+    $this->cartStorage = $cartStorage;
   }
 
   /**
@@ -572,6 +584,32 @@ class AlshayaPromotionsManager {
   }
 
   /**
+   * Get cart promotions.
+   *
+   * @return array
+   *   List of promotions.
+   */
+  public function getCartPromotions() {
+    $cartPromotionsApplied = &drupal_static(__FUNCTION__);
+
+    if (!isset($cartPromotionsApplied)
+      && $cart = $this->cartStorage->getCart(FALSE)) {
+      $cartRulesApplied = $cart->getCart()->cart_rules;
+
+      if (!empty($cartRulesApplied)) {
+        foreach ($cartRulesApplied as $rule_id) {
+          $promotion_node = $this->getPromotionByRuleId($rule_id);
+          if ($promotion_node instanceof NodeInterface) {
+            $cartPromotionsApplied[$rule_id] = $promotion_node;
+          }
+        }
+      }
+    }
+
+    return $cartPromotionsApplied;
+  }
+
+  /**
    * Get sorted cart promotions.
    *
    * @return array
@@ -715,46 +753,29 @@ class AlshayaPromotionsManager {
   /**
    * Fetches Inactive Cart promotion.
    *
-   * @param array $config
-   *   Subtype configuration.
    * @param array $cartPromotionsApplied
    *   Promotions List applied to cart.
    *
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion(array $config, array $cartPromotionsApplied = []) {
-    // Filter promotions based on block config.
-    $subtypes = [];
-    foreach ($config as $key => $subtype) {
-      if (!empty($subtype)) {
-        $subtypes[] = $key;
-      }
+  public function getInactiveCartPromotion(array $cartPromotionsApplied = []) {
+    $allCartPromotions = $this->getSortedCartPromotions();
+    $appliedPromotionIds = [];
+    foreach ($cartPromotionsApplied as $promotion) {
+      $appliedPromotionIds[] = $promotion->id();
     }
 
-    if (!empty($subtypes)) {
-      $allCartPromotions = $this->getSortedCartPromotions();
-      $appliedPromotionIds = [];
-      foreach ($cartPromotionsApplied as $promotion) {
-        $appliedPromotionIds[] = $promotion->id();
-      }
+    // Extract next eligible cart promotion based on priority and price.
+    foreach ($allCartPromotions as $priceSortedPromotions) {
+      ksort($priceSortedPromotions);
 
-      // Extract next eligible cart promotion based on priority and price.
-      foreach ($allCartPromotions as $priceSortedPromotions) {
-        ksort($priceSortedPromotions);
-
-        foreach ($priceSortedPromotions as $promotions) {
-          foreach ($promotions as $promotion) {
-            if (!in_array($promotion, $appliedPromotionIds)) {
-              $promotion = $this->nodeStorage->load($promotion);
-              if ($promotion instanceof NodeInterface) {
-                $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
-
-                // Check if this promotion meets config subtypes.
-                if (in_array($subtype, $subtypes)) {
-                  return $promotion;
-                }
-              }
+      foreach ($priceSortedPromotions as $promotions) {
+        foreach ($promotions as $promotion) {
+          if (!in_array($promotion, $appliedPromotionIds)) {
+            $promotion = $this->nodeStorage->load($promotion);
+            if ($promotion instanceof NodeInterface) {
+              return $promotion;
             }
           }
         }
@@ -762,6 +783,85 @@ class AlshayaPromotionsManager {
     }
 
     return FALSE;
+  }
+
+  /**
+   * Get available cart promotion code.
+   *
+   * @return string
+   *   Promotion code label.
+   */
+  public function getAvailableCartCode() {
+    $applicablePromotion = NULL;
+    $active = FALSE;
+    $label = '';
+
+    // Get cart promotions to check active promotion with code.
+    if ($cartPromotionsApplied = $this->getCartPromotions()) {
+      foreach ($cartPromotionsApplied as $promotion) {
+        $coupon = $promotion->get('field_coupon_code')->getString();
+
+        if (!empty($coupon)) {
+          $applicablePromotion = $promotion;
+          $active = TRUE;
+          break;
+        }
+      }
+    }
+
+    if (is_null($applicablePromotion)) {
+      // Get inactive cart promotion.
+      $cartPromotionsApplied = $cartPromotionsApplied ?? [];
+      $applicablePromotion = $this->getInactiveCartPromotion($cartPromotionsApplied);
+    }
+
+    // Generate label for the applicable promotion.
+    if ($applicablePromotion instanceof NodeInterface) {
+      $label = $this->getPromotionCodeLabel($applicablePromotion, $active);
+    }
+
+    return $label;
+  }
+
+  /**
+   * Get promotion code label using AcqPromotion plugin.
+   *
+   * @param \Drupal\node\NodeInterface $promotion
+   *   Promotion Node.
+   * @param bool $active
+   *   Promotion Cart Status.
+   *
+   * @return mixed
+   *   Promotion Cart Label.
+   */
+  private function getPromotionCodeLabel(NodeInterface $promotion, $active) {
+    $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
+    $acqPromotionTypes = $this->getAcqPromotionTypes();
+    $label = '';
+
+    // Get matching plugin type.
+    if (!empty($acqPromotionTypes[$field_alshaya_promotion_subtype])) {
+      try {
+        $plugin_id = $field_alshaya_promotion_subtype;
+        if ($field_alshaya_promotion_subtype === self::SUBTYPE_OTHER) {
+          $plugin_id = $promotion->get('field_acq_promotion_action')->getString();
+        }
+
+        $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
+          $plugin_id,
+          [],
+          $promotion
+        );
+        if ($promotionPlugin instanceof AcqPromotionInterface) {
+          $label = $promotionPlugin->getPromotionCodeLabel($active);
+        }
+      }
+      catch (\Exception $exception) {
+        watchdog_exception('alshaya_acm_promotion', $exception);
+      }
+    }
+
+    return $label;
   }
 
 }

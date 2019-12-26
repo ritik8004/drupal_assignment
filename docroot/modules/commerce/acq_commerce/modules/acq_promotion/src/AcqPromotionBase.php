@@ -60,4 +60,11 @@ abstract class AcqPromotionBase extends PluginBase implements AcqPromotionInterf
     return NULL;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotionCodeLabel($status) {
+    return '';
+  }
+
 }
