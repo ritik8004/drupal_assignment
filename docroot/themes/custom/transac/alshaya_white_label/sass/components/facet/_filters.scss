@@ -692,6 +692,16 @@ body {
       }
     }
   }
+
+  .c-products-list {
+    @include breakpoint($desktop) {
+      padding-top: 7.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-top: 1rem;
+    }
+  }
 }
 
 .filters-active {
