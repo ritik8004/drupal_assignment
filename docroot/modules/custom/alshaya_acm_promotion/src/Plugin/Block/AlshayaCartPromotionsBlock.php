@@ -255,10 +255,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    *   Promotion Data - Label and Type.
    */
   protected function getInactivePromotionLabels() {
-    $cartPromotionsApplied = $this->alshayaAcmPromotionManager->getCartPromotions() ?: [];
     $inactive_promotions = [];
 
-    $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion($cartPromotionsApplied);
+    $applicableInactivePromotion = $this->alshayaAcmPromotionManager->getInactiveCartPromotion();
 
     if ($applicableInactivePromotion instanceof NodeInterface) {
       $rule_id = $applicableInactivePromotion->get('field_acq_promotion_rule_id')->getString();

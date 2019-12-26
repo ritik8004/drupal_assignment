@@ -753,15 +753,19 @@ class AlshayaPromotionsManager {
   /**
    * Fetches Inactive Cart promotion.
    *
-   * @param array $cartPromotionsApplied
-   *   Promotions List applied to cart.
-   *
    * @return mixed|null
    *   Inactive promotion node.
    */
-  public function getInactiveCartPromotion(array $cartPromotionsApplied = []) {
+  public function getInactiveCartPromotion() {
+    $inactiveCartPromotion = &drupal_static(__FUNCTION__);
+
+    if (isset($inactiveCartPromotion)) {
+      return $inactiveCartPromotion;
+    }
+
     $allCartPromotions = $this->getSortedCartPromotions();
     $appliedPromotionIds = [];
+    $cartPromotionsApplied = $this->getCartPromotions() ?? [];
     foreach ($cartPromotionsApplied as $promotion) {
       $appliedPromotionIds[] = $promotion->id();
     }
@@ -775,6 +779,7 @@ class AlshayaPromotionsManager {
           if (!in_array($promotion, $appliedPromotionIds)) {
             $promotion = $this->nodeStorage->load($promotion);
             if ($promotion instanceof NodeInterface) {
+              $inactiveCartPromotion = $promotion;
               return $promotion;
             }
           }
@@ -811,8 +816,7 @@ class AlshayaPromotionsManager {
 
     if (is_null($applicablePromotion)) {
       // Get inactive cart promotion.
-      $cartPromotionsApplied = $cartPromotionsApplied ?? [];
-      $applicablePromotion = $this->getInactiveCartPromotion($cartPromotionsApplied);
+      $applicablePromotion = $this->getInactiveCartPromotion();
     }
 
     // Generate label for the applicable promotion.
