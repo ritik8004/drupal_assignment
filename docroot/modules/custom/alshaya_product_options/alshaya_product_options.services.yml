@@ -23,6 +23,7 @@ services:
       - '@language_manager'
       - '@acq_sku.fields_manager'
       - '@http_client'
+      - '@config.factory'
 
   logger.channel.alshaya_product_options:
     parent: logger.channel_base
