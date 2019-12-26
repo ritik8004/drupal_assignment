@@ -1,0 +1,7 @@
+facets.facet.*:
+  type: config_entity
+  label : 'Meta Info Type'
+  mapping:
+    id:
+      type: integer
+      label: 'Select Meta Info Type'
