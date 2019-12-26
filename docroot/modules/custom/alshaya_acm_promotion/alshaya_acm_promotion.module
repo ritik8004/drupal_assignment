@@ -69,6 +69,7 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'image' => NULL,
       'url' => NULL,
+      'select_link' => NULL,
     ],
   ];
 
