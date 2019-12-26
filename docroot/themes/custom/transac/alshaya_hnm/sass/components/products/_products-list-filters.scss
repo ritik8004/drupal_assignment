@@ -1,4 +1,5 @@
-.c-plp .c-content__region .all-filters {
+.c-plp .c-content__region .all-filters,
+.c-plp .c-content__region .all-filters-algolia {
   .filter__inner {
     .views-exposed-form.c-accordion,
     .c-facet.c-accordion {
@@ -34,7 +35,8 @@
       text-transform: uppercase;
     }
 
-    .facet-all-apply {
+    .facet-all-apply,
+    .all-filters-close {
       &::before {
         font-size: 2.125rem;
       }

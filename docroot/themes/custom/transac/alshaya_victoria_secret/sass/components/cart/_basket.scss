@@ -96,7 +96,7 @@
       &.quantity {
         @include breakpoint($only-mobile) {
           padding-#{$left}: 0 !important;
-          margin-top: -2rem !important;
+          margin-top: 0;
           margin-#{$left}: 9.1875rem;
         }
       }
@@ -126,12 +126,19 @@
           }
         }
 
-        .items {
-          @include breakpoint($only-mobile) {
-            width: 53%;
+        div {
+          .items {
+            @include breakpoint($only-mobile) {
+              margin-bottom: 0;
 
-            .price-type__wrapper {
-              font-size: 0.875rem;
+              .price-type__wrapper {
+                font-size: 0.875rem;
+                margin: 0.625rem 0;
+              }
+            }
+
+            .mobile-only.dark {
+              margin-bottom: 0;
             }
           }
         }

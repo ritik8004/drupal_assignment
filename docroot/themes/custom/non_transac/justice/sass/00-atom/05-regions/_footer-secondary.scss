@@ -8,11 +8,40 @@
   }
 
   .region__wrapper {
+    position: relative;
+
     @include breakpoint($desk) {
       display: flex;
       align-items: center;
       max-width: 64rem;
       margin: 0 auto;
+    }
+
+    .block-language-switcher__tablet {
+      &.device__tablet {
+        display: block;
+        position: absolute;
+        #{$right}: 0.9375rem;
+        top: 0.125rem;
+        background: transparent;
+        #{$left}: inherit;
+
+        li {
+          padding: 0;
+
+          &.is-hidden {
+            display: none !important;
+          }
+
+          a {
+            position: static;
+
+            @include breakpoint($upto-palm) {
+              margin-top: 1.5625rem;
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo\Commands;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\redirect\Entity\Redirect;
 use Drupal\redirect\RedirectRepository;
 use Drush\Commands\DrushCommands;
@@ -32,6 +33,13 @@ class AlshayaSeoCommands extends DrushCommands {
   private $redirectRepository;
 
   /**
+   * Static reference to logger object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected static $loggerStatic;
+
+  /**
    * AlshayaSeoCommands constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -47,6 +55,7 @@ class AlshayaSeoCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->redirectRepository = $redirectRepository;
     $this->logger = $loggerChannelFactory->get('alshaya_seo');
+    self::$loggerStatic = $loggerChannelFactory->get('alshaya_seo');
   }
 
   /**
@@ -163,6 +172,176 @@ class AlshayaSeoCommands extends DrushCommands {
         '@count' => $redirects_created_count,
       ]));
     }
+  }
+
+  /**
+   * Reset sitemap index based on l1 category variants.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param array $options
+   *   (optional) An array of options.
+   *
+   * @command alshaya_seo:resetSitemapIndex
+   *
+   * @aliases rsi, reset-sitemap-index
+   *
+   * @option batch-size
+   *   The number of items to generate/process per batch run.
+   *
+   * @usage drush reset-sitemap-index node --batch-size=200
+   *   Reset sitemap index for products with batch of 200.
+   * @usage drush reset-sitemap-index taxonomy_term --batch-size=200
+   *   Reset sitemap index for product categories with batch of 200.
+   */
+  public function resetSitemapIndex(string $entity_type, array $options = ['batch-size' => NULL]) {
+    $this->output->writeln('Re-setting sitemap variants indexation based on L1 categories.');
+
+    if (empty($entity_type)) {
+      $this->logger->error(dt('Entity type i.e. node/taxonomy is missing as argument.'));
+      return;
+    }
+
+    $batch = [
+      'finished' => [__CLASS__, 'batchFinish'],
+      'title' => dt('Reseting sitemap index'),
+      'init_message' => dt('Starting sitemap index reset......'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('encountered error while reseting sitemap index.'),
+    ];
+
+    if ($entity_type == 'node') {
+      $entity_ids = $this->getNodes();
+    }
+    elseif ($entity_type == 'taxonomy_term') {
+      $entity_ids = $this->getCategries();
+    }
+    else {
+      $this->logger->error(dt('Entity type: @entity_type is invalid - Please use either node or taxonomy_term', [
+        '@entity_type' => $entity_type,
+      ]));
+      return;
+    }
+
+    $batch['operations'][] = [[__CLASS__, 'batchStart'], [count($entity_ids)]];
+    foreach (array_chunk($entity_ids, $options['batch-size']) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'resetSitemapBatchProcess'],
+        [$entity_type, $chunk],
+      ];
+    }
+    batch_set($batch);
+    drush_backend_batch_process();
+  }
+
+  /**
+   * Batch callback; initialize the batch.
+   *
+   * @param int $total
+   *   The total number of entity ids to process.
+   * @param mixed|array $context
+   *   The batch current context.
+   */
+  public static function batchStart($total, &$context) {
+    $context['results']['total'] = $total;
+    $context['results']['count'] = 0;
+    $context['results']['timestart'] = microtime(TRUE);
+  }
+
+  /**
+   * Batch API callback; collect the entity data.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param array $entity_ids
+   *   Array of entity_ids.
+   * @param mixed|array $context
+   *   The batch current context.
+   */
+  public static function resetSitemapBatchProcess($entity_type, array $entity_ids, &$context) {
+    if (empty($entity_ids)) {
+      return;
+    }
+
+    $context['results']['count'] += count($entity_ids);
+
+    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+
+    if ($entity_type == 'taxonomy_term') {
+      foreach ($entity_ids as $entity_id) {
+        $term = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term')->load($entity_id);
+        $sitemap->acqProductCategoryOperation($entity_id, $entity_type, $term->get('field_commerce_status')->getString());
+      }
+    }
+    elseif ($entity_type == 'node') {
+      foreach ($entity_ids as $entity_id) {
+        $sitemap->acqProductOperation($entity_id, $entity_type);
+      }
+    }
+
+    self::$loggerStatic->notice(dt('@count out of @total total items have been processed.', [
+      '@count' => $context['results']['count'],
+      '@total' => $context['results']['total'],
+    ]));
+  }
+
+  /**
+   * Finishes the update process and stores the results.
+   *
+   * @param bool $success
+   *   Indicate that the batch API tasks were all completed successfully.
+   * @param array $results
+   *   An array of all the results that were updated in update_do_one().
+   * @param array $operations
+   *   A list of all the operations that had not been completed by batch API.
+   */
+  public static function batchFinish($success, array $results, array $operations) {
+    if ($success) {
+      if ($results['count']) {
+        // Display Script End time.
+        $time_end = microtime(TRUE);
+        $execution_time = ($time_end - $results['timestart']) / 60;
+
+        self::$loggerStatic->notice(dt('@count/@total items have been re-indexed for sitemap variants in time: @time mins.', [
+          '@count' => $results['count'],
+          '@total' => $results['total'],
+          '@time' => round($execution_time, 3),
+        ]));
+      }
+      else {
+        self::$loggerStatic->notice(dt('No new item to reset sitemap variant index.'));
+      }
+    }
+    else {
+      $error_operation = reset($operations);
+      self::$loggerStatic->notice(dt('An error occurred while processing @operation with arguments : @args', [
+        '@operation' => $error_operation[0],
+        '@args' => print_r($error_operation[0]),
+      ]));
+    }
+  }
+
+  /**
+   * Get all published product nodes.
+   */
+  public function getNodes() {
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
+
+    return $query->condition('type', 'acq_product')
+      ->condition('status', NodeInterface::PUBLISHED)
+      // Add tag to ensure this can be altered easily in custom modules.
+      ->addTag('get_display_node_for_sku')
+      ->execute();
+  }
+
+  /**
+   * Get all product categories.
+   */
+  public function getCategries() {
+    $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
+    $query->condition('vid', 'acq_product_category');
+
+    return $query->execute();
   }
 
 }

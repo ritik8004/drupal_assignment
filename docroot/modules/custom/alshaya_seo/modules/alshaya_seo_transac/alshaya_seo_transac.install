@@ -10,6 +10,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Create and enale sitemap variants based on L1 categories.
+ */
+function alshaya_seo_transac_update_8408() {
+  _alshaya_seo_transac_create_and_enable_sitemap_variants();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update metatag configurations.
  */
 function alshaya_seo_transac_update_8407() {
@@ -129,6 +138,9 @@ function alshaya_seo_transac_update_8401() {
 function alshaya_seo_transac_install() {
   // Install metatag transalations.
   _alshaya_seo_transac_save_metatag_translations();
+
+  // Create and enable sitemap variants based on enabled L1 categories.
+  _alshaya_seo_transac_create_and_enable_sitemap_variants();
 }
 
 /**
@@ -166,4 +178,15 @@ function _alshaya_seo_transac_save_metatag_translations() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * A helper function to create and enable sitemap variants.
+ */
+function _alshaya_seo_transac_create_and_enable_sitemap_variants() {
+  $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+  $sitemap->variantWithParentDepth();
+
+  // Enable variants for bundle types i.e. acq_product_category, acq_product.
+  $sitemap->enableEntityTypeVariants();
 }

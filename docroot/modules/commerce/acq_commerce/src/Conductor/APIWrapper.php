@@ -38,14 +38,14 @@ class APIWrapper implements APIWrapperInterface {
    *
    * @var bool
    */
-  private $routeEvents = TRUE;
+  protected $routeEvents = TRUE;
 
   /**
    * API Helper service object.
    *
    * @var \Drupal\acq_commerce\APIHelper
    */
-  private $helper;
+  protected $helper;
 
   /**
    * Event Dispatcher.

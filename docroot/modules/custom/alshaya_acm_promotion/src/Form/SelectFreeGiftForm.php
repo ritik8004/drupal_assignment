@@ -112,6 +112,10 @@ class SelectFreeGiftForm extends FormBase {
       '#value' => $this->t('ADD FREE GIFT'),
       '#ajax' => [
         'url' => Url::fromRoute('alshaya_acm_promotion.select_free_gift'),
+        'progress' => [
+          'type' => 'throbber',
+          'message' => NULL,
+        ],
       ],
       '#weight' => 100,
       '#attributes' => [

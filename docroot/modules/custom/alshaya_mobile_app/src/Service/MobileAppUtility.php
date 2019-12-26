@@ -4,7 +4,6 @@ namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
@@ -670,64 +669,6 @@ class MobileAppUtility {
   }
 
   /**
-   * Wrapper function get promotions.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Promotions.
-   */
-  public function getPromotions(SKUInterface $sku) {
-    $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
-    foreach ($promotions_data as $nid => $promotion) {
-      $promotion_node = $this->entityTypeManager->getStorage('node')->load($nid);
-      $promotions[] = [
-        'text' => $promotion['text'],
-        'deeplink' => $this->getDeepLink($promotion_node, 'promotion'),
-      ];
-    }
-    return $promotions;
-  }
-
-  /**
-   * Wrapper function get labels and make the urls absolute.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $context
-   *   Context.
-   *
-   * @return array
-   *   Labels data.
-   */
-  public function getLabels(SKUInterface $sku, string $context): array {
-    $labels = $this->skuManager->getLabels($sku, $context);
-
-    if (empty($labels)) {
-      return [];
-    }
-
-    foreach ($labels as &$label) {
-      $doc = new \DOMDocument();
-      $doc->loadHTML((string) $label['image']);
-      $xpath = new \DOMXPath($doc);
-      // We are using `data-src` attribute as we are using blazy for images.
-      // If blazy is disabled, then we need to revert back to `src` attribute.
-      $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
-
-      // Checking if the image path is relative or absolute. If image path is
-      // absolute, we are using the same path.
-      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
-        ? $promo_image_path
-        : $this->requestStack->getSchemeAndHttpHost() . $promo_image_path;
-    }
-
-    return $labels;
-  }
-
-  /**
    * Get light product data using give nid.
    *
    * @param int $nid
@@ -754,97 +695,9 @@ class MobileAppUtility {
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      return $this->getLightProduct($sku_entity, $color);
+      return $this->skuInfoHelper->getLightProduct($sku_entity, $color);
     }
     return [];
-  }
-
-  /**
-   * Get Light Product.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $color
-   *   Color value.
-   *
-   * @return array
-   *   Light Product.
-   */
-  public function getLightProduct(SKUInterface $sku, string $color = ''): array {
-    $node = $this->skuManager->getDisplayNode($sku);
-    if (!($node instanceof NodeInterface) || !($node->hasTranslation($this->currentLanguage()))) {
-      return [];
-    }
-
-    // Get the prices.
-    $prices = $this->skuManager->getMinPrices($sku, $color);
-
-    // Get the promotion data.
-    $promotions = $this->getPromotions($sku);
-
-    // Get promo labels.
-    $promo_label = $this->skuManager->getDiscountedPriceMarkup($prices['price'], $prices['final_price']);
-    if ($promo_label) {
-      $promotions[] = [
-        'text' => $promo_label,
-      ];
-    }
-
-    // Get label for the SKU.
-    $labels = $this->getLabels($sku, 'plp');
-
-    // Get media (images/video) for the SKU.
-    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
-    $images = $this->skuInfoHelper->getMedia($sku_for_gallery, 'search');
-
-    $data = [
-      'id' => (int) $sku->id(),
-      'title' => $sku->label(),
-      'sku' => $sku->getSku(),
-      'deeplink' => $this->getDeepLink($sku),
-      'link' => $this->skuInfoHelper->getEntityUrl($node),
-      'original_price' => $this->skuInfoHelper->formatPriceDisplay($prices['price']),
-      'final_price' => $this->skuInfoHelper->formatPriceDisplay($prices['final_price']),
-      'in_stock' => $this->skuManager->isProductInStock($sku),
-      'promo' => $promotions,
-      'medias' => $images,
-      'labels' => $labels,
-      'color' => NULL,
-    ];
-
-    if ($color) {
-      $data['color'] = $color;
-    }
-
-    // Allow other modules to alter light product data.
-    $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);
-
-    return $data;
-  }
-
-  /**
-   * Wrapper function get fully loaded linked skus.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $linked_type
-   *   Linked type.
-   *
-   * @return array
-   *   Linked SKUs.
-   */
-  public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
-    $return = [];
-    $linkedSkus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
-
-    foreach (array_keys($linkedSkus) as $linkedSku) {
-      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-      if ($lightProduct = $this->getLightProduct($linkedSkuEntity)) {
-        $return[] = $lightProduct;
-      }
-    }
-
-    return $return;
   }
 
   /**

@@ -1,0 +1,6 @@
+alshaya_social_popup:
+  js:
+    js/alshaya_social_popup.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

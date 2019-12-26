@@ -86,6 +86,7 @@ $_plp_clear_all_btn_disabled: #8d8d8d;
 $light-blue-border: #b3d3f0;
 $_algolia_search_icon_bg: #0072ce;
 $_algolia_suggestion_list_bg: #f7fafe;
+$_algolia_search_page_sidebar_count: #707070;
 $_peackock_blue_10: rgba(0, 86, 153, 0.1);
 $_dynamic_promo_text: #04599b;
 $_dynamic_promo_text_bg: #e7effc;
@@ -898,8 +899,14 @@ $basket_promotion_input_border: $white;
 $basket_remove_link: $cerulean-two;
 $basket_horizontal_recommendation_slider_dots: $marine-blue-two;
 // Basket top promotions.
-$basket_header_promo_bg: $rosy-pink;
-$basket_header_promo_txt: $white-four;
+$basket_fixed_percentage_inactive_header_promo_bg: $rosy-pink;
+$basket_fixed_percentage_inactive_header_promo_txt: $white-five;
+$basket_fixed_percentage_active_header_promo_bg: $white-five;
+$basket_fixed_percentage_active_header_promo_txt: $rosy-pink;
+$basket_free_delivery_inactive_header_promo_bg: $peacock-blue;
+$basket_free_delivery_inactive_header_promo_txt: $white-five;
+$basket_free_delivery_active_header_promo_bg: $white-five;
+$basket_free_delivery_active_header_promo_txt: $peacock-blue;
 // Basket top OOS.
 $basket_header_oos_bg: $cherry;
 $basket_header_oos_txt: $white-four;
@@ -1066,6 +1073,15 @@ $algolia-search-icon-background: $_algolia_search_icon_bg;
 $algolia-input-text: $grey-ash;
 $algolia-search-clear-text-icon: $_algolia_search_icon_bg;
 $algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
+$algolia-react-progressbar: $warm-grey-two;
+$algolia-react-progressbar-text: $brownish-grey;
+$algolia-react-progressbar-fill: $marine-blue-two;
+$algolia-react-search-page-title: $marine-blue;
+$algolia-react-sidebar-label-color: $marine-blue-two;
+$algolia_react-search_page_sidebar_count: $_algolia_search_page_sidebar_count;
+$algolia_react-facet-item-color: $brownish-grey;
+$algolia-react-highlighted-bg: $primary_btn_bg;
+$algolia-react-highlighted-text: $primary_btn_text;
 
 // Option list filter.
 $options-page-title: $black;

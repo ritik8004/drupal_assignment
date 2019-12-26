@@ -159,7 +159,7 @@ function alshaya_color_split_acq_sku_configurable_variants_alter(array &$childre
     $variant_children = Configurable::getChildSkus($variant);
 
     foreach ($variant_children as $child_sku_code) {
-      $child = SKU::loadFromSku($child_sku_code);
+      $child = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
       if (!($child instanceof SKU)) {
         continue;
       }

@@ -209,8 +209,8 @@
     XMLHttpRequest.prototype.open = function (method, url) {
       if (url.indexOf('/views/ajax') > -1 || url.indexOf('/facets-block/ajax') > -1) {
         currentAJAXRequests.push(url);
-        ajaxRequest.apply(this, arguments);
       }
+      ajaxRequest.apply(this, arguments);
     };
   }
 

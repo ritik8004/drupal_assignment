@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
@@ -917,6 +918,8 @@ class SkuManager {
           foreach ($free_gift_skus as $free_gift_sku) {
             $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
           }
+          $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
+          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
           break;
 
         default:
@@ -935,6 +938,8 @@ class SkuManager {
           if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
             $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
           }
+          $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
+          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
           break;
       }
     }
@@ -1001,6 +1006,104 @@ class SkuManager {
    *
    * @return array
    *   Array of media files.
+   */
+  public function getLabelsData(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+    static $static_labels_cache = [];
+
+    $sku = $sku_entity->getSku();
+
+    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
+      return $static_labels_cache[$sku][$type];
+    }
+
+    $static_labels_cache[$sku][$type] = [];
+
+    $labels_data = $this->getSkuLabel($sku_entity);
+
+    if (empty($labels_data)) {
+      return [];
+    }
+    else {
+      $image_key = $type . '_image';
+      $text_key = $type . '_image_text';
+      $position_key = $type . '_position';
+
+      foreach ($labels_data as &$data) {
+        $row = [];
+
+        // Check if label is available for desired type.
+        if (empty($data[$image_key])) {
+          continue;
+        }
+
+        // Check if label is currently active.
+        $from = strtotime($data['from']);
+        $to = strtotime($data['to']);
+
+        // First check if we have date filter.
+        if ($from > 0 && $to > 0) {
+          $now = REQUEST_TIME;
+
+          // Now, check if current date lies between from and to dates.
+          if ($from > $now || $to < $now) {
+            continue;
+          }
+        }
+
+        $fid = $this->productLabelsCache->get($data[$image_key]);
+
+        if (empty($fid)) {
+          try {
+            // Prepare the File object when we access it the first time.
+            $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+            $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
+          }
+          catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            continue;
+          }
+        }
+        else {
+          $fid = $fid->data;
+        }
+
+        $image_file = $this->fileStorage->load($fid);
+        $uri = $image_file->getFileUri();
+
+        $row['image'] = [
+          'uri' => $uri,
+          'url' => file_create_url($uri),
+          'title' => $data[$text_key],
+          'alt' => $data[$text_key],
+        ];
+        $row['position'] = $data[$position_key];
+
+        $static_labels_cache[$sku][$type][] = $row;
+
+        // Disable subsequent images if flag is true.
+        if ($data['disable_subsequents']) {
+          break;
+        }
+      }
+    }
+
+    return $static_labels_cache[$sku][$type];
+  }
+
+  /**
+   * Function to return labels files for a SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Sku Entity.
+   * @param string $type
+   *   Type of image required - plp or pdp.
+   * @param bool $reset
+   *   Flag to reset cache and generate array again from serialized string.
+   *
+   * @return array
+   *   Array of media files.
+   *
+   * @todo: Use self::getLabelsData() to get data and prepare images.
    */
   public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     static $static_labels_cache = [];
@@ -3083,15 +3186,9 @@ class SkuManager {
     // We will use node.sticky to map stock status in index.
     // For stock index, we use only in stock (1) or out of stock (0).
     // We will use 1 for not-buyable products too.
-    $in_stock = 0;
+    $in_stock = $this->getStockStatusForIndex($sku);
 
-    if (!alshaya_acm_product_is_buyable($sku)) {
-      $in_stock = 2;
-    }
-    elseif ($this->isProductInStock($sku)) {
-      $in_stock = 2;
-    }
-    else {
+    if ($in_stock === 0) {
       // If product is not in stock, remove all attributes data.
       // Get indexed fields.
       $fields = $item->getFields();
@@ -3110,6 +3207,22 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get stock status for index item.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   *
+   * @return int
+   *   Return 2 if product is buyable or in-stock else 0.
+   */
+  public function getStockStatusForIndex(SKUInterface $sku) {
+    if (!alshaya_acm_product_is_buyable($sku) || $this->isProductInStock($sku)) {
+      return 2;
+    }
+    return 0;
+  }
+
+  /**
    * Process index item for configurable product.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -3122,8 +3235,46 @@ class SkuManager {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   private function processIndexItemConfigurable(SKUInterface $sku, ItemInterface $item, $product_color) {
-    $mode = $this->getListingDisplayMode();
+    $attributes = $this->getConfigurableAttributesData($sku, $product_color);
 
+    // Load all item fields.
+    $itemFields = $item->getFields();
+
+    // Set gathered data into parent.
+    foreach ($attributes as $key => $values) {
+      $field_key = 'attr_' . $key;
+
+      // There is an issue with color field in indexes.
+      // It is color in solr and attr_color in database index.
+      // For all other fields it is attr_field in both indexes.
+      if (isset($itemFields[$field_key])) {
+        $item->getField($field_key)->setValues(array_keys($values));
+      }
+      elseif (isset($itemFields[$key])) {
+        $item->getField($key)->setValues(array_keys($values));
+      }
+    }
+  }
+
+  /**
+   * Helper method to get attributes for configurable product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $product_color
+   *   Product color.
+   *
+   * @return array
+   *   Return associative array with attributes data.
+   *   keys:
+   *   - is_product_in_stock: Is product in stock status.
+   *   - has_color_data: Has sku color data.
+   *   - data: Associative array contains configurable attributes with array of
+   *     labels.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function getConfigurableAttributesData(SKUInterface $sku, $product_color) {
     $is_product_in_stock = $this->isProductInStock($sku);
 
     if (!$is_product_in_stock && $product_color) {
@@ -3173,29 +3324,14 @@ class SkuManager {
       throw new \Exception('No valid children found for color ' . $product_color);
     }
 
-    // Load all item fields.
-    $itemFields = $item->getFields();
-
     // Do not index main parent if product is in stock and has color data.
+    $mode = $this->getListingDisplayMode();
     if ($mode === self::NON_AGGREGATED_LISTING && $is_product_in_stock && empty($product_color) && $has_color_data) {
       // We use the code 200 as it is normal with the configuration.
       throw new \Exception('Product has color, we do not index main node when doing group by color', 200);
     }
 
-    // Set gathered data into parent.
-    foreach ($data as $key => $values) {
-      $field_key = 'attr_' . $key;
-
-      // There is an issue with color field in indexes.
-      // It is color in solr and attr_color in database index.
-      // For all other fields it is attr_field in both indexes.
-      if (isset($itemFields[$field_key])) {
-        $item->getField($field_key)->setValues(array_keys($values));
-      }
-      elseif (isset($itemFields[$key])) {
-        $item->getField($key)->setValues(array_keys($values));
-      }
-    }
+    return $data;
   }
 
   /**
@@ -3360,6 +3496,60 @@ class SkuManager {
     }
 
     return $combination;
+  }
+
+  /**
+   * Wrapper function get labels and make the urls absolute.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Labels data.
+   */
+  public function getSkuLabels(SKUInterface $sku, string $context): array {
+    $labels = $this->getLabels($sku, $context);
+    if (empty($labels)) {
+      return [];
+    }
+    foreach ($labels as &$label) {
+      $doc = new \DOMDocument();
+      $doc->loadHTML((string) $label['image']);
+      $xpath = new \DOMXPath($doc);
+      // We are using `data-src` attribute as we are using blazy for images.
+      // If blazy is disabled, then we need to revert back to `src` attribute.
+      $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
+      // Checking if the image path is relative or absolute. If image path is
+      // absolute, we are using the same path.
+      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
+        ? $promo_image_path
+        : $this->currentRequest->getSchemeAndHttpHost() . $promo_image_path;
+    }
+    return $labels;
+  }
+
+  /**
+   * Wrapper function get promotions.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Promotions.
+   */
+  public function getPromotions(SKUInterface $sku) {
+    $promotions = [];
+    $promotions_data = $this->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    foreach ($promotions_data as $nid => $promotion) {
+      $promotions[] = [
+        'text' => $promotion['text'],
+        'promo_node' => $nid,
+        'promo_web_url' => Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl(),
+      ];
+    }
+    return $promotions;
   }
 
 }

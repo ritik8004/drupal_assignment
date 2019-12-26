@@ -5,7 +5,6 @@ global_styles:
   js:
     vendor/js/calc.min.js: {}
     js/custom.js: {}
-    js/accordion.js: {}
     js/menu.js: {}
     js/form.js: {}
     js/one_time_language_slider.js: {}
@@ -85,11 +84,15 @@ convert_to_select2:
     - alshaya_white_label/select2
 
 slick:
+  js:
+    vendor/js/slick.min.js: {}
+  dependencies:
+    - alshaya_white_label/slick_css
+
+slick_css:
   css:
     theme:
       vendor/css/slick.css: {}
-  js:
-    vendor/js/slick.min.js: {}
 
 select2:
   css:
@@ -222,9 +225,30 @@ optionlist_menu:
     theme:
       css/conditional-sass/optionlist-menu/optionlist-menu.ltr.css: {}
 
-back_to_top:
+footer_js:
   js:
     js/back_to_top.js: {}
+    js/footer-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
+cart_js:
+  js:
+    js/cart-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
+pdp_js:
+  js:
+    js/pdp.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
 
 megamenu_inline_layout:
   js:

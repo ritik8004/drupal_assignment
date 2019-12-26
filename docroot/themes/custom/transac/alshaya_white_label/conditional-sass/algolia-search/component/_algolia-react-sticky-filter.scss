@@ -1,0 +1,13 @@
+#alshaya-algolia-search {
+  .filter-fixed-top {
+    .show-all-filters-algolia {
+      @include breakpoint($only-mobile) {
+        position: fixed;
+        background: $algolia-search-bar-background;
+        z-index: 1;
+        width: 100%;
+        top: 3.625rem;
+      }
+    }
+  }
+}
