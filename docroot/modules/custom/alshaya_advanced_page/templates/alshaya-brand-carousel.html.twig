@@ -2,13 +2,11 @@
   <h2{{ title_attributes }}>{{ label }}</h2>
 {% endif %}
 {% if brand_details %}
-  <ul{{ attributes }}>
+  <main class="grid">
     {% for brand in brand_details %}
-      <li>
-        <a href="{{ brand.link }}">
-          <img src="{{ file_url(brand.image) }}" alt="{{ brand.title }}"/>
-        </a>
-      </li>
+      <a href="{{ brand.link }}">
+        <img src="{{ file_url(brand.image) }}" alt="{{ brand.title }}"/>
+      </a>
     {% endfor %}
-  </ul>
+  </main>
 {% endif %}
