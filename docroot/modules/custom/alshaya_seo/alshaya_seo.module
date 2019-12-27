@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -75,6 +76,11 @@ function alshaya_seo_page_attachments(array &$attachments) {
   $gkg_data['@type'] = 'Organization';
   $gkg_data['name'] = \Drupal::config('system.site')->get('name');
   $gkg_data['logo'] = Url::fromUserInput(theme_get_setting('logo.url'), ['absolute' => TRUE])->toString();
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $content_type = NULL;
+  if ($node instanceof NodeInterface) {
+    $content_type = $node->bundle();
+  }
 
   // Add all sameAs links as provided in Config.
   if ($same_as = $gkg_config->get('same_as')) {
@@ -90,9 +96,8 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
   // Add all contact options. Basic check added to have contact_type set in
   // config to show the whole object.
-  if ($gkg_config->get('contact_telephone')) {
+  if ($gkg_config->get('contact_telephone') && $content_type != 'acq_product') {
     $contact['@type'] = 'ContactPoint';
-    $contact['url'] = $gkg_config->get('contact_url');
     $contact['telephone'] = $gkg_config->get('contact_telephone');
     $contact['contactType'] = $gkg_config->get('contact_type');
     $contact['areaServed'] = $gkg_config->get('contact_areaserved');
@@ -100,7 +105,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
     // Add all site languages as available language.
     foreach (\Drupal::languageManager()->getLanguages() as $language) {
-      $contact['availableLanguage'][] = 'https://en.wikipedia.org/wiki/' . $language->getName();
+      $contact['availableLanguage'][] = $language->getName();
     }
 
     // As required, we want it to be array of objects.
