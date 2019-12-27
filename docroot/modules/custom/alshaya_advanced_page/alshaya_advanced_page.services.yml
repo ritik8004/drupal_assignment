@@ -17,8 +17,3 @@ services:
       - '@current_route_match'
     tags:
       - { name: 'event_subscriber' }
-
-  alshaya.brand_list_helper:
-    class: Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper
-    arguments:
-      - '@database'
