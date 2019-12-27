@@ -5,7 +5,9 @@
  * Module file.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_theme().
