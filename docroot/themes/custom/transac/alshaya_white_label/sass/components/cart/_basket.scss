@@ -905,14 +905,13 @@
         background: $basket_free_delivery_inactive_header_promo_bg;
         color: $basket_free_delivery_inactive_header_promo_txt;
 
-        &.threshold-reached {
-          background: none;
-          color: $basket_free_delivery_inactive_header_promo_bg;
-          border: 2px solid $basket_free_delivery_inactive_header_promo_bg;
-
-          svg #fill-value {
-            fill: $basket_free_delivery_inactive_header_promo_bg;
-          }
+        @include icon(delivery, before) {
+          margin: 0 0.5rem;
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: bold;
+          font-size: 2.125rem;
+          color: $basket_free_delivery_inactive_header_promo_txt;
         }
       }
 
