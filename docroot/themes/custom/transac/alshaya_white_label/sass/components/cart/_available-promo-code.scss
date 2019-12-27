@@ -1,0 +1,21 @@
+.promotion-available-code {
+  margin-top: 1.875rem;
+
+  .code {
+    display: inline;
+    padding: 0.625rem 1rem;
+    border: 2px dashed $basket_available_code;
+    color: $basket_available_code;
+    margin-#{$right}: 0.625rem;
+    font-family: $alshaya-bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    @include link-ripple;
+
+    &:hover {
+      border-style: solid;
+    }
+  }
+}
