@@ -165,9 +165,8 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
       $promotion_data = unserialize($promotion_data);
 
       if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
-        $percent = $promotion_data['discount'];
         $label .= $this->t('Use and get @percent% off', [
-          '@percent' => $percent,
+          '@percent' => $promotion_data['discount'],
         ])->__toString();
       }
     }
