@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_advanced_page\Brand;
+namespace Drupal\alshaya_product_options\Brand;
 
 use Drupal\Core\Database\Connection;
 

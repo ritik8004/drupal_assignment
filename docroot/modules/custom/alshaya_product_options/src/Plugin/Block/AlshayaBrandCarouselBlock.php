@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\alshaya_advanced_page\Plugin\Block;
+namespace Drupal\alshaya_product_options\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper;
+use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
@@ -24,7 +24,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   /**
    * Brand list helper.
    *
-   * @var \Drupal\alshaya_advanced_page\Brand\AlshayaBrandListHelper
+   * @var \Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper
    */
   protected $brandList;
 
