@@ -12,30 +12,28 @@
   </div>
 {% endif %}
 
-{% block priceTagSVG %}
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
-    <defs>
-      <path id="a" d="M28.96 7.573a2.793 2.793 0 0 1 2.489-.933c.69.055 1.296.47 1.597 1.093.878 1.639.559 4.503-.759 7.048l-4.657-2.678a7.557 7.557 0 0 1 1.33-4.53zm-2.488 10.073a2.92 2.92 0 0 0-1.208 3.945 2.913 2.913 0 0 0 3.94 1.21 2.92 2.92 0 0 0-1.162-5.488 27.222 27.222 0 0 1-.346-2.665l5.257 2.944.958 5.436-10.513 18.2-11.55-6.661L22.307 16.3l3.82-1.532c.172 1.012.239 1.985.398 2.878h-.053zm.36 1.745v.107a.799.799 0 0 0 .785.613h.173a.798.798 0 0 0 .598-.958v-.002a.363.363 0 0 0 0-.12 1.333 1.333 0 0 1-.545 2.545c-.735 0-1.33-.595-1.33-1.332.016-.32.15-.622.372-.853h-.054zm7.984-3.078v-.066l-1.145-.666c1.597-3.052 1.93-6.476.772-8.608a3.54 3.54 0 0 0-2.821-1.945 4.392 4.392 0 0 0-3.82 1.492 9.336 9.336 0 0 0-1.69 5.983L20.87 14.58 9 35.18l.08.28L23.97 44l.28-.08L36 23.375l-1.184-7.062z"/>
-    </defs>
-    <g fill="none" fill-rule="evenodd">
-      <path d="M0 0h48v48H0z"/>
-      <mask id="b" fill="#fff">
-        <use xlink:href="#a"/>
-      </mask>
-      <use fill="#fff" xlink:href="#a"/>
-      <g id="fill-value" mask="url(#b)">
-        <path d="M0 0h48v48H0z"/>
-      </g>
-    </g>
-  </svg>
-{% endblock %}
-
 {% if inactive_promotions is not empty %}
   <div class="cart-promotions-wrapper inactive-promotions" id="block-basketinactivepromotionmessage">
     {% for id, promotion in inactive_promotions %}
       <div class="promotion {{ promotion.type }} {{ promotion.extra_classes }}">
         {% if promotion.type == 'fixed_percentage_discount_order' %}
-          {{ block('priceTagSVG') }}
+          {% block priceTagSVG %}
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
+              <defs>
+                <path id="a" d="M28.96 7.573a2.793 2.793 0 0 1 2.489-.933c.69.055 1.296.47 1.597 1.093.878 1.639.559 4.503-.759 7.048l-4.657-2.678a7.557 7.557 0 0 1 1.33-4.53zm-2.488 10.073a2.92 2.92 0 0 0-1.208 3.945 2.913 2.913 0 0 0 3.94 1.21 2.92 2.92 0 0 0-1.162-5.488 27.222 27.222 0 0 1-.346-2.665l5.257 2.944.958 5.436-10.513 18.2-11.55-6.661L22.307 16.3l3.82-1.532c.172 1.012.239 1.985.398 2.878h-.053zm.36 1.745v.107a.799.799 0 0 0 .785.613h.173a.798.798 0 0 0 .598-.958v-.002a.363.363 0 0 0 0-.12 1.333 1.333 0 0 1-.545 2.545c-.735 0-1.33-.595-1.33-1.332.016-.32.15-.622.372-.853h-.054zm7.984-3.078v-.066l-1.145-.666c1.597-3.052 1.93-6.476.772-8.608a3.54 3.54 0 0 0-2.821-1.945 4.392 4.392 0 0 0-3.82 1.492 9.336 9.336 0 0 0-1.69 5.983L20.87 14.58 9 35.18l.08.28L23.97 44l.28-.08L36 23.375l-1.184-7.062z"/>
+              </defs>
+              <g fill="none" fill-rule="evenodd">
+                <path d="M0 0h48v48H0z"/>
+                <mask id="b" fill="#fff">
+                  <use xlink:href="#a"/>
+                </mask>
+                <use fill="#fff" xlink:href="#a"/>
+                <g id="fill-value" mask="url(#b)">
+                  <path d="M0 0h48v48H0z"/>
+                </g>
+              </g>
+            </svg>
+          {% endblock %}
         {% endif %}
         {{ promotion.label }}
       </div>
