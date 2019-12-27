@@ -88,15 +88,11 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
 
       // Override label to include coupon if threshold has reached.
       if ($this->checkThresholdReached($promotion_data)) {
-        $percent = NULL;
-
         if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
-          $percent = $promotion_data['discount'];
+          $label = $this->t('Your order qualifies for @percent% OFF', [
+            '@percent' => $promotion_data['discount'],
+          ])->__toString();
         }
-
-        $label = $this->t('Your order qualifies for @percent% OFF', [
-          '@percent' => $percent,
-        ])->__toString();
       }
 
       // Add coupon code.
@@ -149,13 +145,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
    * {@inheritdoc}
    */
   public function getPromotionCartStatus() {
-    $status = NULL;
-
-    if ($this->checkThresholdReached()) {
-      $status = self::STATUS_CAN_BE_APPLIED;
-    }
-
-    return $status;
+    return $this->checkThresholdReached() ? self::STATUS_CAN_BE_APPLIED : NULL;
   }
 
   /**
@@ -166,16 +156,13 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     if ($this->checkThresholdReached()) {
       $coupon = $this->promotionNode->get('field_coupon_code')->getString();
 
+      $label = '<div class="available code">' . $coupon . '</div>';
       if ($status) {
         $label = '<div class="applied code">' . $coupon . '</div>';
-      }
-      else {
-        $label = '<div class="available code">' . $coupon . '</div>';
       }
 
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
       $promotion_data = unserialize($promotion_data);
-      $percent = NULL;
 
       if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
         $percent = $promotion_data['discount'];

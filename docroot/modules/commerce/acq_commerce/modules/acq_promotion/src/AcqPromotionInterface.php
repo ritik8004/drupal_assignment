@@ -31,7 +31,7 @@ interface AcqPromotionInterface {
   /**
    * Get promotion status based on cart.
    *
-   * @return mixed
+   * @return bool
    *   Promotion status.
    */
   public function getPromotionCartStatus();
@@ -42,7 +42,7 @@ interface AcqPromotionInterface {
    * @param bool $status
    *   Promotion cart status.
    *
-   * @return mixed
+   * @return string
    *   Label.
    */
   public function getPromotionCodeLabel($status);

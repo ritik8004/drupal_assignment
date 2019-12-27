@@ -269,12 +269,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
           'label' => [
             '#markup' => $promotion_data['label'],
           ],
-          'extra_classes' => '',
+          'extra_classes' => !empty($promotion_data['threshold_reached']) ? 'threshold-reached' : '',
         ];
-
-        if (!empty($promotion_data['threshold_reached'])) {
-          $inactive_promotions[$rule_id]['extra_classes'] = 'threshold-reached';
-        }
       }
     }
 
