@@ -10,6 +10,7 @@ services:
       - '@acq_promotion.promotions_manager'
       - '@plugin.manager.acq_promotion'
       - '@cache.alshaya_acm_promotion'
+      - '@acq_cart.cart_storage'
   alshaya_acm_promotion.label_manager:
     class: Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
     arguments:
