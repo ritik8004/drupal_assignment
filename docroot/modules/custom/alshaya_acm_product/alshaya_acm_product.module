@@ -676,8 +676,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // push into drupal settings.
         if (!$skuManager->isProductInStock($sku_entity) && empty($gallery)) {
           $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
-          $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+          if (!empty($child)) {
+            $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
+            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+          }
         }
 
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
