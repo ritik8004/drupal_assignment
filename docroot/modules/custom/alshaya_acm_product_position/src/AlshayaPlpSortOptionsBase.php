@@ -2,11 +2,13 @@
 
 namespace Drupal\alshaya_acm_product_position;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaPlpSortOptionsBase.
@@ -69,6 +71,13 @@ class AlshayaPlpSortOptionsBase {
   protected $routeMatch;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * AlshayaPlpSortOptionsBase constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -77,6 +86,8 @@ class AlshayaPlpSortOptionsBase {
    *   Route match service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -84,11 +95,13 @@ class AlshayaPlpSortOptionsBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     RouteMatchInterface $route_match,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    RequestStack $request_stack
   ) {
     $this->configSortOptions = $config_factory->get(self::CONFIG_SORT_OPTIONS);
     $this->routeMatch = $route_match;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -99,11 +112,24 @@ class AlshayaPlpSortOptionsBase {
    */
   protected function getTermForRoute() {
     if (($route_name = $this->routeMatch->getRouteName())
-      && in_array($route_name, ['entity.taxonomy_term.canonical', 'rest.category_product_list.GET'])
+      && in_array($route_name, [
+        'entity.taxonomy_term.canonical',
+        'rest.category_product_list.GET',
+        'views.ajax',
+      ])
     ) {
 
-      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-      $term = $this->routeMatch->getParameter(self::TERM_ROUTE_PARAM[$route_name]);
+      if ($route_name == 'views.ajax') {
+        $views_args = UrlHelper::parse($this->requestStack->getCurrentRequest()->getRequestUri());
+        if ($views_args['query']['view_name'] == 'alshaya_product_list' && !empty($views_args['query']['view_args'])) {
+          $term = $views_args['query']['view_args'];
+        }
+      }
+      else {
+        /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+        $term = $this->routeMatch->getParameter(self::TERM_ROUTE_PARAM[$route_name]);
+      }
+
       if (is_numeric($term)) {
         $term = $this->termStorage->load($term);
       }

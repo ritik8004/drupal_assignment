@@ -290,8 +290,14 @@ $mobile_continue_shopping_btn_border: $black;
 $desktop_continue_shopping_btn_text: $white-two;
 $desktop_continue_shopping_btn_bg: $black;
 $desktop_continue_shopping_btn_border: $black;
-$basket_header_promo_bg: $info-blue;
 $basket_sell_hover_link: $black;
+$basket_available_code: $black;
+
+// Basket top promotions.
+$basket_free_delivery_inactive_header_promo_bg: $info-blue;
+$basket_free_delivery_inactive_header_promo_txt: $white-two;
+$basket_free_delivery_active_header_promo_bg: $white-two;
+$basket_free_delivery_active_header_promo_txt: $info-blue;
 
 // Store finder page.
 // Store finder header form.

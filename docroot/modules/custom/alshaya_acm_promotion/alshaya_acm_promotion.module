@@ -15,6 +15,7 @@ use Drupal\Core\Form\FormState;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_views_data_alter().
@@ -69,6 +70,7 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'image' => NULL,
       'url' => NULL,
+      'select_link' => NULL,
     ],
   ];
 
@@ -331,4 +333,19 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     SelectFreeGiftForm::class,
     $form_state
   );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $available_code = \Drupal::service('alshaya_acm_promotion.manager')->getAvailableCartCode();
+  if (!empty($available_code)) {
+    $form['promotion_code_wrapper']['available_code'] = [
+      '#type' => '#markup',
+      '#markup' => '<div class="promotion-available-code">' . $available_code . '</div>',
+    ];
+
+    $form['#attached']['library'][] = 'alshaya_acm_promotion/cart_promotions';
+  }
 }

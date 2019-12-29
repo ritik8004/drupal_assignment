@@ -465,6 +465,7 @@ $basket_continue_shopping_link: $peacock-blue;
 $basket_content_link_color: $peacock-blue;
 $basket_empty_continue_shopping_link: $white;
 $basket_empty_continue_shopping_btn_bg: $black;
+$basket_available_code: $peacock-blue;
 
 // Sec text is Size, color, item code attributes.
 $basket_td_sec_txt: $warm-grey-one;
@@ -569,3 +570,11 @@ $options-page-menu-title: $peacock-blue;
 
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $peacock-blue;
+
+// Basket top promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $hot-pink;
+$basket_fixed_percentage_inactive_header_promo_txt: $white;
+$basket_fixed_percentage_active_header_promo_bg: $white;
+$basket_fixed_percentage_active_header_promo_txt: $hot-pink;
+$basket_free_delivery_inactive_header_promo_txt: $white;
+$basket_free_delivery_active_header_promo_bg: $white;

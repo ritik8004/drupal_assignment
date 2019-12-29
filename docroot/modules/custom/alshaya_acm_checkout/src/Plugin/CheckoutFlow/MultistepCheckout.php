@@ -229,6 +229,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       }
     }
 
+    // When user tries to load the login page, check if the user is
+    // authenticated user and redirect it to delivery page.
+    if ($step_id == 'login' && \Drupal::currentUser()->isAuthenticated()) {
+      $first_step = reset($step_ids);
+      return $this->redirectToStep($first_step);
+    }
+
     return $step_id;
   }
 

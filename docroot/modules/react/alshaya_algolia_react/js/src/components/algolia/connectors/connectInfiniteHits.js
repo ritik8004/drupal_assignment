@@ -35,7 +35,7 @@ function getCurrentRefinement(props, searchState, context) {
 
 function diffObject(obj1, obj2) {
   return _reduce(obj1, function(result, value, key) {
-    if (_isPlainObject(value)) {
+    if (_isPlainObject(value) && (typeof obj2 !== 'undefined' && typeof obj2[key] !== 'undefined')) {
       result[key] = diffObject(value, obj2[key]);
     } else if ((typeof obj2 !== 'undefined' && typeof obj2[key] !== 'undefined') && !_isEqual(value, obj2[key])) {
       result[key] = value;

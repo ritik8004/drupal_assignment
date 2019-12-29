@@ -37,6 +37,7 @@ class Autocomplete extends React.Component {
     this.state = {
       value: searchQuery !== null && searchQuery !== '' ? searchQuery : props.currentRefinement,
     };
+    this.autosuggest = React.createRef();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -45,6 +46,10 @@ class Autocomplete extends React.Component {
 
   componentDidMount()  {
     window.addEventListener('popstate', this.onPopState);
+    // Change name to search for iphone devices.
+    this.autosuggest.current.input.name = 'search';
+    // Change type to search for android devices.
+    this.autosuggest.current.input.type = 'search';
     this.onKeyUp();
   }
 
@@ -100,6 +105,12 @@ class Autocomplete extends React.Component {
       value: newValue,
     });
   };
+
+  onSubmitCall = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  }
 
   getSuggestionValue(hit) {
     return hit.query;
@@ -158,7 +169,9 @@ class Autocomplete extends React.Component {
 
     return (
       <React.Fragment>
+        <form action="#" onSubmit={event => this.onSubmitCall(event)}>
         <Autosuggest
+          ref={this.autosuggest}
           suggestions={hits}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -170,6 +183,7 @@ class Autocomplete extends React.Component {
           inputProps={inputProps}
           focusInputOnSuggestionClick={false}
         />
+        </form>
         <InputButtons backCallback={this.backIconClickEvent} clearCallback={this.clearSearchFieldInput} />
       </React.Fragment>
     );
