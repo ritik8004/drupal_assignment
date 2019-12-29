@@ -167,17 +167,10 @@ class AlshayaFeedSkuInfoHelper {
       $short_desc = $this->skuManager->getShortDescription($sku, 'full');
       $description = $this->skuManager->getDescription($sku, 'full');
 
-      // Get the gender.
-      $gender = '';
-      if ($sku->hasField('attr_gender') && $sku->get('attr_gender')->getString()) {
-        $gender = $sku->get('attr_gender')->getString();
-      }
-
       $product[$lang] = [
         'sku' => $sku->getSku(),
         'name' => $node->label(),
-        'type_id' => $sku->bundle(),
-        'gender' => $gender,
+        'product_type' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
         'url' => $this->skuInfoHelper->getEntityUrl($node),
         'short_description' => !empty($short_desc['value']) ? $this->renderer->renderPlain($short_desc['value']) : '',
