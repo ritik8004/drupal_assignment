@@ -1115,19 +1115,6 @@ html[lang=ar] {
       }
     }
 
-    .image {
-      @include breakpoint($only-mobile) {
-        border: 1px solid $basket_img_border;
-        background: $basket_img_bg;
-        overflow: hidden;
-
-        img {
-          border: 0;
-          max-width: 100% !important;
-        }
-      }
-    }
-
     .tooltip--wrap {
       @include breakpoint($tablet) {
         margin-top: 0.3125rem;
@@ -1170,10 +1157,6 @@ html[lang=ar] {
         }
 
         td.delivery-option {
-          @include breakpoint($only-mobile) {
-            margin-top: -0.5rem;
-          }
-
           @include breakpoint($only-tablet) {
             padding-top: 1.35rem;
           }
