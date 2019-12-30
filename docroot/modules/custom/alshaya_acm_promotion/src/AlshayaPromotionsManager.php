@@ -727,6 +727,8 @@ class AlshayaPromotionsManager {
           $plugin_id = $promotion->get('field_acq_promotion_action')->getString();
         }
 
+        // Get translated version of promotion node.
+        $promotion = $this->entityRepository->getTranslationFromContext($promotion);
         $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
           $plugin_id,
           [],
