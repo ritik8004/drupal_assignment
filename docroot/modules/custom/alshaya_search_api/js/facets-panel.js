@@ -335,9 +335,10 @@
 
       // Function to call in ajax command on facet selection.
       // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
-      $.fn.updateMetaTitle = function ($meta_title) {
+      $.fn.updateMetaTitle = function (meta_title) {
         // Update meta title of the page.
-        document.title = $meta_title;
+        var site_name = document.title.split('|')[1];
+        document.title = meta_title + ' |' + site_name;
       };
 
       /**
