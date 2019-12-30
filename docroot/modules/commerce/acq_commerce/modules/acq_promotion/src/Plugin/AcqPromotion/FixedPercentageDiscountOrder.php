@@ -84,26 +84,16 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
     $promotion_data = unserialize($promotion_data);
 
-    if (!empty($promotion_data)) {
-
-      // Override label to include coupon if threshold has reached.
-      if ($this->checkThresholdReached($promotion_data)) {
-        if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
-          $label = $this->t('Your order qualifies for @percent% OFF', [
-            '@percent' => $promotion_data['discount'],
-          ])->__toString();
-        }
+    // Override label to include coupon if threshold has reached.
+    $coupon = $this->promotionNode->get('field_coupon_code')->getString();
+    if (!empty($coupon)) {
+      if ($this->checkThresholdReached($promotion_data) && !empty($promotion_data) && !empty($promotion_data['discount'])) {
+        $label = $this->t('Your order qualifies for @percent% OFF', [
+          '@percent' => $promotion_data['discount'],
+        ]);
       }
 
-      // Add coupon code.
-      $coupon = $this->promotionNode->get('field_coupon_code')->getString();
-      if (!empty($coupon)) {
-        $label .= $this->t('<div class="promotion-coupon-details"> Use the code: <span class="promotion-coupon-code">@code</span></div>',
-          [
-            '@code' => $coupon,
-          ]
-        );
-      }
+      $label .= '<div class="promotion-coupon-details">' . $this->t('Use the code:') . '<div class="promotion-coupon-code">' . $coupon . '</div></div>';
     }
 
     return $label;

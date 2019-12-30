@@ -12,6 +12,24 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Add translations for cart level promotions.
+ */
+function alshaya_acm_promotion_update_8021() {
+  // Add Translations.
+  $strings = [
+    'Use the code:' => [
+      'ar' => 'استخدم هذا الرمز',
+    ],
+    'Your order qualifies for @percent% OFF' => [
+      'ar' => '@percent% طلبيتك تؤهلك للحصول على خصم',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update alshayacartpromotionsblock block configurations.
  */
 function alshaya_acm_promotion_update_8020() {
@@ -288,6 +306,15 @@ function _alshaya_acm_promotion_add_promotions_translations() {
     ],
     'Add more and keep saving' => [
       'ar' => 'أضف أكثر ووفر أكثر',
+    ],
+    'Your order qualifies for free delivery.' => [
+      'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
+    ],
+    'Use the code:' => [
+      'ar' => 'استخدم هذا الرمز',
+    ],
+    'Your order qualifies for @percent% OFF' => [
+      'ar' => '@percent% طلبيتك تؤهلك للحصول على خصم',
     ],
   ];
   alshaya_i18n_save_translations($strings);
