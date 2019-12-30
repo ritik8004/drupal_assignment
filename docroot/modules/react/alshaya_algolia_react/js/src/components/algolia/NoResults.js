@@ -1,9 +1,15 @@
 import React from 'react';
 import { connectStateResults } from 'react-instantsearch-dom';
+import { toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
 
-const NoResults = ({ searchResults, isSearchStalled, searching }) => {
+const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFacetValues }) => {
   if (!searchResults || searchResults.nbHits > 0) {
     return null;
+  }
+
+  if (!searching && !isSearchStalled && !searchingForFacetValues) {
+    toggleSearchResultsContainer('show');
+    toggleSortByFilter('hide');
   }
 
   return (

@@ -18,6 +18,7 @@ export {
   contentDiv,
   searchResultDiv,
   toggleSearchResultsContainer,
+  toggleSortByFilter,
   showLoader,
   removeLoader
 } from './SearchUtility';

@@ -2,11 +2,13 @@ import React from 'react'
 import { connectStats } from 'react-instantsearch-dom';
 
 import ProgressBar from './widgets/ProgressBar';
-import { showLoader, toggleSearchResultsContainer } from '../../utils';
+import { showLoader, toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({nbHits, currentResults}) => {
   toggleSearchResultsContainer('show');
+  toggleSortByFilter('show');
+
   return (
     <React.Fragment>
       <span className="ais-Stats-text">
