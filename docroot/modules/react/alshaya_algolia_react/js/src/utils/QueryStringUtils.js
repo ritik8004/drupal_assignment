@@ -30,9 +30,8 @@ function redirectToOtherLang(queryValue) {
   }
 
   const redirectlang = drupalSettings.path.currentLanguage === 'ar' ? 'en' : 'ar';
-  // let arabicText = /[\u0600-\u06FF]/
   let arabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(queryValue);
-  let englishText = /^[A-Za-z0-9]*$/.test(queryValue);
+  let englishText = /[A-Za-z\s]/.test(queryValue);
   if (drupalSettings.path.currentLanguage === 'en' && arabicText) {
     redirectToUrl(queryValue, 'en', redirectlang);
   }
