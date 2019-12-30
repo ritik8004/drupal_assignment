@@ -354,6 +354,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
     }
     elseif ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_DYNAMIC_LAYOUT) {
       $variables['attributes']['class'][] = 'megamenu-dynamic-layout';
+      $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_dynamic_layout';
     }
   }
 
