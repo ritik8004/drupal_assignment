@@ -470,7 +470,7 @@
           }
           else {
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && $('body').hasClass('subcategory-listing-enabled')) {
-              if (this.oldScroll > this.pageYOffset) {
+              if (this.oldScroll >= this.pageYOffset) {
                 // Action to perform when we scrolling up.
                 if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
                   if ($(this).width() > 1024 && $('body').hasClass('subcategory-listing-enabled')) {
