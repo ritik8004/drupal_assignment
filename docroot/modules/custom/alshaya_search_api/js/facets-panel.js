@@ -118,7 +118,7 @@
         // Show filter count if applicable.
         showFilterCount();
         // Also reset the sub category block if available.
-        if ($(body).hasClass('subcategory-listing-enabled')) {
+        if ($('body').hasClass('subcategory-listing-enabled')) {
           // For mobile.
           if ($(window).width < 768) {
             $('.block-alshaya-sub-category-block').removeClass('mobile-sticky-sub-category');
@@ -256,7 +256,7 @@
        */
       function addSlideEventhandlers() {
         // Add active classes on facet dropdown content.
-        $('.c-facet__title.c-accordion__title').once().on('click', function () {
+        $('.c-facet__title.c-accordion__title').once('facet-title').on('click', function () {
           if ($(this).hasClass('active')) {
             $(this).removeClass('active');
             // We want to run this only on main page facets.
@@ -282,27 +282,29 @@
         });
 
         var sortSelector = '.c-content__region .region__content .container-without-product .bef-exposed-form legend';
-        $(sortSelector).once().on('click', function () {
+        $(sortSelector).once('facet-title').on('click', function () {
           $(this).toggleClass('active');
           if ($(this).parents('.filter__inner').length === 0) {
             $(this).siblings('.fieldset-wrapper').slideToggle();
           }
         });
 
-        // Close the sort and facets on click outside of them.
-        document.addEventListener('click', function(event) {
-          var sortBy = $('.c-content .region__content .container-without-product .views-exposed-form.bef-exposed-form').first();
-          if ($(sortBy).find(event.target).length == 0) {
-            $(sortBy).find('legend').removeClass('active');
-            $(sortBy).find('.fieldset-wrapper').slideUp();
-          }
+        // Close the sort and facet dropdowns on click outside on desktop.
+        if ($(window).width() > 1024) {
+          document.addEventListener('click', function (event) {
+            var sortBy = $('.c-content .region__content .container-without-product .views-exposed-form.bef-exposed-form').first();
+            if ($(sortBy).find(event.target).length == 0) {
+              $(sortBy).find('legend').removeClass('active');
+              $(sortBy).find('.fieldset-wrapper').slideUp();
+            }
 
-          var facet_block = $('.c-content .region__content .container-without-product div.block-facets-ajax');
-          if ($(facet_block).find(event.target).length == 0) {
-            $(facet_block).find('.c-facet__title').removeClass('active');
-            $(facet_block).find('ul').slideUp();
-          }
-        });
+            var facet_block = $('.c-content .region__content .container-without-product div.block-facets-ajax');
+            if ($(facet_block).find(event.target).length == 0) {
+              $(facet_block).find('.c-facet__title').removeClass('active');
+              $(facet_block).find('ul').slideUp();
+            }
+          });
+        }
       }
 
       // Function to call in ajax command on facet refresh.
@@ -417,28 +419,28 @@
             }
           }
 
-          // Sticky primary header on mobile.
-          if ($(window).width() < 768) {
-            if ($(this).scrollTop() > position) {
-              nav.addClass('navbar-fixed-top');
-              $('body').addClass('header--fixed');
-            }
-            else {
-              nav.removeClass('navbar-fixed-top');
-              $('body').removeClass('header--fixed');
-            }
-
-            if (filter.hasClass('filter-fixed-top')) {
-              $('.show-all-filters').parent().css('top', fixedNavHeight);
-              $('.filter-fixed-top > .block-facet-blockcategory-facet-plp, .filter-fixed-top > .block-facet-blockcategory-facet-promo, .filter-fixed-top > .block-facet-blockcategory-facet-search').css('top', fixedNavHeight);
-            }
-            else {
-              $('.show-all-filters').parent().css('top', 0);
-              $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
-            }
-          }
-
           if ($(window).width() < 1024) {
+            // Sticky primary header on mobile.
+            if ($(window).width() < 768) {
+              if ($(this).scrollTop() > position) {
+                nav.addClass('navbar-fixed-top');
+                $('body').addClass('header--fixed');
+              }
+              else {
+                nav.removeClass('navbar-fixed-top');
+                $('body').removeClass('header--fixed');
+              }
+
+              if (filter.hasClass('filter-fixed-top')) {
+                $('.show-all-filters').parent().css('top', fixedNavHeight);
+                $('.filter-fixed-top > .block-facet-blockcategory-facet-plp, .filter-fixed-top > .block-facet-blockcategory-facet-promo, .filter-fixed-top > .block-facet-blockcategory-facet-search').css('top', fixedNavHeight);
+              }
+              else {
+                $('.show-all-filters').parent().css('top', 0);
+                $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
+              }
+            }
+
             if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
               if (this.oldScroll > this.pageYOffset) {
                 // Action to perform when we scrolling up.
@@ -502,10 +504,6 @@
       }
 
       addSlideEventhandlers();
-
-      if ($(window).width() < 768 && $('.filter-fixed-top').length > 0) {
-        stickyfacetfilter();
-      }
 
       $(window, context).on('load', function () {
         // Calculate the filters top position now.
