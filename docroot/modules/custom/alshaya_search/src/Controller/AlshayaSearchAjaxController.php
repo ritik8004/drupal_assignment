@@ -136,7 +136,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
         'class' => 'facets-hidden-container',
       ],
     ];
-    $term = [];
+    $term = NULL;
 
     $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
     if (!empty($parameters) && isset($parameters['f'])) {
@@ -197,7 +197,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   TRUE if current page is promotion content-type.
    * @param bool $is_search_page
    *   TRUE if current page is search page.
-   * @param array $term
+   * @param object $term
    *   Returns taxonomy term object.
    */
   protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page, &$term) {
