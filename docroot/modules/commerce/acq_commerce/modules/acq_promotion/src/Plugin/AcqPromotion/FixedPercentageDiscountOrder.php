@@ -98,7 +98,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
       // Add coupon code.
       $coupon = $this->promotionNode->get('field_coupon_code')->getString();
       if (!empty($coupon)) {
-        $label .= $this->t('<div class="promotion-coupon-details"> Use the code: <div class="promotion-coupon-code">@code</div></div>',
+        $label .= $this->t('<div class="promotion-coupon-details"> Use the code: <span class="promotion-coupon-code">@code</span></div>',
           [
             '@code' => $coupon,
           ]
@@ -165,9 +165,9 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
       $promotion_data = unserialize($promotion_data);
 
       if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
-        $label .= $this->t('Use and get @percent% off', [
+        $label .= '<span class="code-desc">' . $this->t('Use and get @percent% off', [
           '@percent' => $promotion_data['discount'],
-        ])->__toString();
+        ])->__toString() . '</span>';
       }
     }
 
