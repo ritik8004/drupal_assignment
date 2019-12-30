@@ -19,7 +19,7 @@
         {% if promotion.type == 'fixed_percentage_discount_order' %}
           {% include '@alshaya_acm_promotion/price-tag-svg-partial.html.twig' %}
         {% endif %}
-        {{ promotion.label }}
+        <span class="promotion-label">{{ promotion.label }}</span>
       </div>
     {% endfor %}
   </div>
@@ -32,7 +32,7 @@
         {% if promotion.type == 'fixed_percentage_discount_order' %}
           {% include '@alshaya_acm_promotion/price-tag-svg-partial.html.twig' %}
         {% endif %}
-        {{ promotion.label }}
+        <span class="promotion-label">{{ promotion.label }}</span>
       </div>
     {% endfor %}
   </div>

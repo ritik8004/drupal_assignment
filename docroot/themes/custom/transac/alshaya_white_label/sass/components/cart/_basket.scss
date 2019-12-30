@@ -966,26 +966,35 @@
     align-items: center;
     width: 100%;
 
-    @include breakpoint($tablet) {
-      margin-top: -1em;
-    }
-
     @include breakpoint($desktop) {
       margin-top: 0;
       margin-bottom: 1.3rem;
     }
 
     .promotion-coupon-details {
-      margin-#{$left}: 1.5rem;
+      display: inline-block;
+      font-family: $alshaya-thin;
 
       .promotion-coupon-code {
-        display: inline;
+        font-family: $alshaya-bold;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0.3125rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$left}: 1.5rem;
       }
     }
 
     svg {
       width: 2.1875rem;
       margin: 0 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        align-self: flex-start;
+      }
     }
   }
 
