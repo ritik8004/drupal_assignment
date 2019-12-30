@@ -19,7 +19,7 @@ class FreeShippingOrder extends AcqPromotionBase {
    * {@inheritdoc}
    */
   public function getActiveLabel() {
-    return $this->t('Your order qualifies for free delivery');
+    return $this->t('Your order qualifies for free delivery.');
   }
 
 }
