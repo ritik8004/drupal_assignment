@@ -14,7 +14,8 @@
 
     @include link-ripple;
 
-    &:hover {
+    &:hover,
+    &.applied {
       border-style: solid;
     }
   }
