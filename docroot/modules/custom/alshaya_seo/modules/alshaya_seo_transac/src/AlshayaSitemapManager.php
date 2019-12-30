@@ -4,6 +4,7 @@ namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\simple_sitemap\Simplesitemap;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -105,10 +106,13 @@ class AlshayaSitemapManager {
   public function sitemapVariantName(int $term_id) {
     $variant_name = '';
     $term = $this->entityManager->getStorage('taxonomy_term')->load($term_id);
-    $term = $this->productCategory->getL1Category($term);
 
-    if ($term->get('field_commerce_status')->getString()) {
-      $variant_name = $this->getVariantName($term->getName());
+    if ($term instanceof TermInterface) {
+      $term = $this->productCategory->getL1Category($term);
+
+      if ($term->get('field_commerce_status')->getString()) {
+        $variant_name = $this->getVariantName($term->getName());
+      }
     }
 
     return $variant_name;
