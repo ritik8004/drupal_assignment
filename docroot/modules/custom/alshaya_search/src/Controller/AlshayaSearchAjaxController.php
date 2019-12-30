@@ -17,6 +17,8 @@ use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Utility\Token;
 
 /**
  * Override facets AJAX controller to add selected filters as hidden fields.
@@ -45,6 +47,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $requestStack;
 
   /**
+   * Token utility.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $tokenUtility;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -65,6 +74,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   The current route matcher service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\Core\Utility\Token $token
+   *   Token utility.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -74,11 +85,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               LoggerChannelFactoryInterface $logger,
                               BlockManager $blockManager,
                               CurrentRouteMatch $currentRouteMatch,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              Token $token) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->requestStack = $request_stack;
+    $this->tokenUtility = $token;
   }
 
   /**
@@ -94,7 +107,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('logger.factory'),
       $container->get('plugin.manager.block'),
       $container->get('current_route_match'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('token')
     );
   }
 
@@ -147,7 +161,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // Refresh/Re-add the class on list views as selected by grid.
     $response->addCommand(new InvokeCommand(NULL, 'refreshListGridClass'));
 
-    $this->setPageType($is_plp_page, $is_promo_page, $is_search_page);
+    $this->setPageType($is_plp_page, $is_promo_page, $is_search_page, $term);
 
     // If page is search, inject hidden field into search page exposed form.
     if ($is_search_page) {
@@ -157,6 +171,12 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // If page is PLP, inject hidden field into product_list exposed form.
     if ($is_plp_page) {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facet_fields));
+      $meta_title = NULL;
+      if ($term instanceof TermInterface) {
+        $meta_title = $this->tokenUtility->replace('[alshaya_seo:term_name]', ['taxonomy_term' => $term]);
+        $response->addCommand(new InvokeCommand(NULL, 'updateMetaTitle', [$meta_title]));
+      }
+
     }
 
     // If page is PLP, inject hidden field into product_list exposed form.
@@ -177,7 +197,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    * @param bool $is_search_page
    *   TRUE if current page is search page.
    */
-  protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page) {
+  protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page, &$term) {
     $current_route_name = $this->currentRouteMatch->getRouteName();
 
     // If facet ajax request.

@@ -333,6 +333,13 @@
         showFilterCount();
       };
 
+      // Function to call in ajax command on facet selection.
+      // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
+      $.fn.updateMetaTitle = function ($meta_title) {
+        // Update meta title of the page.
+        document.title = $meta_title;
+      };
+
       /**
        * Wrapping all the filters inside a div to make it sticky.
        */
