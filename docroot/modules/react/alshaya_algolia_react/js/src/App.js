@@ -31,17 +31,11 @@ class App extends React.PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !==  this.state.query) {
-      toggleSearchResultsContainer(this.state.query);
-    }
-  }
-
   setQueryValue = (queryValue) => {
     this.setState({query: queryValue});
-    toggleSearchResultsContainer(queryValue);
     if (queryValue === '') {
       updateSearchQuery('');
+      toggleSearchResultsContainer('');
     }
   };
 
