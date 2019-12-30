@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
