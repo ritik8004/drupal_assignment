@@ -38,13 +38,13 @@ class App extends React.PureComponent {
     }
   }
 
-  setQueryValue = (queryValue) => {
+  setQueryValue = (queryValue, inputTag = null) => {
     this.setState({query: queryValue});
     if (queryValue === '') {
       updateSearchQuery('');
     }
     else {
-      redirectToOtherLang(queryValue);
+      redirectToOtherLang(queryValue, inputTag);
     }
   };
 
@@ -56,8 +56,8 @@ class App extends React.PureComponent {
     this.setQueryValue('');
   };
 
-  onChange = (newValue) => {
-    this.setQueryValue(newValue);
+  onChange = (newValue, inputTag) => {
+    this.setQueryValue(newValue, inputTag);
   };
 
   render() {

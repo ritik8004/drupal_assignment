@@ -23,7 +23,7 @@ function searchStateToURL(searchState) {
   return searchState.query ? qs.stringify(searchState) : '';
 }
 
-function redirectToOtherLang(queryValue) {
+function redirectToOtherLang(queryValue, inputTag) {
   if (queryValue.length === 0) {
     toggleSearchResultsContainer(queryValue);
     return;
@@ -33,17 +33,20 @@ function redirectToOtherLang(queryValue) {
   let arabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(queryValue);
   let englishText = /[A-Za-z\s]/.test(queryValue);
   if (drupalSettings.path.currentLanguage === 'en' && arabicText) {
-    redirectToUrl(queryValue, 'en', redirectlang);
+    redirectToUrl(queryValue, 'en', redirectlang, inputTag);
+
   }
   else if (drupalSettings.path.currentLanguage === 'ar' && englishText) {
-    redirectToUrl(queryValue, 'ar', redirectlang);
-  }
-  else {
-    toggleSearchResultsContainer(queryValue);
+    redirectToUrl(queryValue, 'ar', redirectlang, inputTag);
   }
 }
 
-function redirectToUrl(queryValue, currentLang, redirectlang) {
+function redirectToUrl(queryValue, currentLang, redirectlang, inputTag) {
+  // Disable input tag while redirecting to other language;
+  if (inputTag !== null && typeof inputTag !== 'undefined') {
+    inputTag.disabled = true;
+  }
+
   showLoader();
   localStorage.setItem('algoliaLangRedirect', 1);
   window.location.hash = "query=" + queryValue;

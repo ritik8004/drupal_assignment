@@ -113,9 +113,10 @@ class Autocomplete extends React.Component {
     // Wait for sometime for user to finish typing, before we do update
     // query and do api call to algolia.
     clearTimeout(this.timerId);
+    const inputTag = this.autosuggest.current.input;
     this.timerId = setTimeout(() => {
-      this.props.refine(newValue)
-      this.props.onChange(newValue);
+      this.props.refine(newValue);
+      this.props.onChange(newValue, inputTag);
     }, 300);
 
     this.setState({
