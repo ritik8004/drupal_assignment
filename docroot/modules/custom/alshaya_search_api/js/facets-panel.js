@@ -291,7 +291,7 @@
 
         // Close the sort and facet dropdowns on click outside on desktop.
         if ($(window).width() > 1024) {
-          document.addEventListener('click', function (event) {
+          $(document).once('dom-click').on('click', function (event) {
             var sortBy = $('.c-content .region__content .container-without-product .views-exposed-form.bef-exposed-form').first();
             if ($(sortBy).find(event.target).length == 0) {
               $(sortBy).find('legend').removeClass('active');
