@@ -93,7 +93,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
         ]);
       }
 
-      $label .= '<div class="promotion-coupon-details">' . $this->t('Use the code:') . '<div class="promotion-coupon-code">' . $coupon . '</div></div>';
+      $label .= '<span class="promotion-coupon-details">' . $this->t('Use the code:') . '<span class="promotion-coupon-code">' . $coupon . '</span></span>';
     }
 
     return $label;
