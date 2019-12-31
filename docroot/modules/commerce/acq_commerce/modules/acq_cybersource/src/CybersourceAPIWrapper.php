@@ -24,7 +24,7 @@ class CybersourceAPIWrapper extends APIWrapper {
    *
    * @var \Drupal\acq_commerce\APIHelper
    */
-  private $helper;
+  protected $helper;
 
   /**
    * Constructor.
