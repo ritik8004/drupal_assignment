@@ -498,7 +498,7 @@
                 $('.sticky-filter-wrapper').removeClass('show-sub-category');
               }
             }
-            this.oldScroll = this.pageYOffset + 1;
+            this.oldScroll = this.pageYOffset - 3;
           }
         });
       }
