@@ -45,7 +45,7 @@
    */
   Drupal.plpListingProductTileHeight = function (mode, element) {
     var gridCount = 0;
-    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
+    if ($(window).width() > 1024) {
       gridCount = $('.c-products-list').hasClass('product-large') ? 3 : 4;
     }
     else if ($(window).width() < 1024 && $(window).width() >= 768) {
@@ -54,6 +54,16 @@
     else {
       gridCount = $('.c-products-list').hasClass('product-large') ? 1 : 2;
     }
+
+    if ($('.subcategory-listing-enabled').length > 0) {
+      Drupal.subCategoryListingPage(gridCount);
+    }
+    else {
+      Drupal.plpListingPage(gridCount);
+    }
+  };
+
+  Drupal.plpListingPage = function(gridCount) {
     var tiles = $('.c-products__item');
     var totalCount = $('.c-products__item').length;
     var loopCount = Math.ceil(totalCount / gridCount);
@@ -84,6 +94,37 @@
         indexStart = gridCount * rowIndex;
         indexEnd = gridCount * rowIndex + gridCount - 1;
         Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
+      }
+    }
+  };
+
+  Drupal.subCategoryListingPage = function(gridCount) {
+    var sections = [];
+    $('.term-header').each(function() {
+      sections.push($(this).get(0))
+    });
+
+    if (sections.length > 0) {
+      for (var index in sections) {
+        var currentTiles = [];
+        var nextIndex = parseInt(index) + 1;
+        if (typeof sections[nextIndex] == 'undefined') {
+          currentTiles = $(sections[index]).nextAll();
+        }
+        else {
+          currentTiles = $(sections[index]).nextUntil(sections[nextIndex]);
+        }
+
+        console.log(currentTiles);
+
+        var totalCount = currentTiles.length;
+        var loopCount = Math.ceil(totalCount / gridCount);
+        var indexStart, indexEnd = 0;
+        for (var i = 0; i < loopCount; i++) {
+          indexStart = gridCount * i;
+          indexEnd = gridCount * i + gridCount - 1;
+          Drupal.plpRowHeightSync(indexStart, indexEnd, currentTiles);
+        }
       }
     }
   };
