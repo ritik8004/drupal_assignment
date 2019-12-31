@@ -64,7 +64,7 @@
 
   Drupal.behaviors.alshayaAcmProductCategorySubCategoryScroll = {
     attach: function () {
-      $('.sub-category').once().on('click', function() {
+      $('.sub-category').once('category-scroll').on('click', function() {
         var tid = $(this).attr('data-tid');
         setTimeout(function() {
           scrollToCategoryHeader(tid);
