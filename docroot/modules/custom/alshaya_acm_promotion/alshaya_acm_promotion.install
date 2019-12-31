@@ -24,7 +24,7 @@ function alshaya_acm_promotion_update_8021() {
       'ar' => '@percent% طلبيتك تؤهلك للحصول على خصم',
     ],
     'Use and get @percent% off' => [
-      'ar' => 'استخدم واحصل على خصم %percent@',
+      'ar' => 'استخدم واحصل على خصم %@percent',
     ],
   ];
   alshaya_i18n_save_translations($strings);
@@ -320,7 +320,7 @@ function _alshaya_acm_promotion_add_promotions_translations() {
       'ar' => '@percent% طلبيتك تؤهلك للحصول على خصم',
     ],
     'Use and get @percent% off' => [
-      'ar' => 'استخدم واحصل على خصم %percent@',
+      'ar' => 'استخدم واحصل على خصم %@percent',
     ],
   ];
   alshaya_i18n_save_translations($strings);
