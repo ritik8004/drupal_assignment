@@ -7,10 +7,6 @@
     padding-top: 0;
   }
 
-  .block-views-blockproduct-category-level-3-block-2 {
-    display: none;
-  }
-
   .c-sidebar-first {
     @include breakpoint($desktop) {
       .c-facet__label,
@@ -715,8 +711,9 @@ html[lang=ar] {
         text-decoration: none;
         color: $mm_l3_link;
         display: block;
-        padding: 0.9375rem 0;
-        border-top: 1px solid $mm_l1_border;
+        border-top: 0;
+        border-bottom: 1px solid $mm_l1_border;
+        padding: 0.9375rem;
       }
     }
   }
