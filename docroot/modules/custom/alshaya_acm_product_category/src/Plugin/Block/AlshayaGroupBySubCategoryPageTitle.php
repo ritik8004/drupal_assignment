@@ -6,12 +6,12 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\FileInterface;
 
 /**
@@ -32,18 +32,18 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
   protected $productCategoryTree;
 
   /**
-   * The entity repository.
-   *
-   * @var \Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
-
-  /**
    * File Storage.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $fileStorage;
+
+  /**
+   * User Settings config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
 
   /**
    * AlshayaGroupBySubCategoryPageTitle constructor.
@@ -58,8 +58,8 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
    *   Product category tree.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity type manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(
     array $configuration,
@@ -67,12 +67,12 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
     $plugin_definition,
     ProductCategoryTree $product_category_tree,
     EntityRepositoryInterface $entity_repository,
-    EntityTypeManagerInterface $entity_type_manager
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->entityRepository = $entity_repository;
-    $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->config = $config_factory->get('alshaya_acm_product_category.settings');
   }
 
   /**
@@ -85,7 +85,7 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
       $plugin_definition,
       $container->get('alshaya_acm_product_category.product_category_tree'),
       $container->get('entity.repository'),
-      $container->get('entity_type.manager')
+      $container->get('config.factory')
     );
   }
 
@@ -111,14 +111,10 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
           ? $term->get('description')->getValue()[0]['value']
           : NULL);
 
-      if ($term->get('field_plp_group_category_img')->first()) {
-        $file_value = $term->get('field_plp_group_category_img')->first()->getValue();
-        $image = $this->fileStorage->load($file_value['target_id']);
-        if ($image instanceof FileInterface) {
-          $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
-          $data['image']['alt'] = $file_value['alt'];
-        }
-      }
+      $header_style = ($this->config->get('grouping_page_header_style'))
+        ? $this->config->get('grouping_page_header_style')
+        : 'left_aligned';
+      $data['header_style'] = ($header_style == 'center_aligned') ? 'center-aligned' : NULL;
 
       return [
         '#theme' => 'alshaya_group_by_sub_category_page_title',
