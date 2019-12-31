@@ -826,31 +826,12 @@ class AlshayaPromotionsManager {
    *   Promotion code label.
    */
   public function getAvailableCartCode() {
-    $applicablePromotion = NULL;
-    $active = FALSE;
     $label = '';
 
-    // Get cart promotions to check active promotion with code.
-    if ($cartPromotionsApplied = $this->getCartPromotions()) {
-      foreach ($cartPromotionsApplied as $promotion) {
-        $coupon = $promotion->get('field_coupon_code')->getString();
-
-        if (!empty($coupon)) {
-          $applicablePromotion = $promotion;
-          $active = TRUE;
-          break;
-        }
-      }
-    }
-
-    if (is_null($applicablePromotion)) {
-      // Get inactive cart promotion.
-      $applicablePromotion = $this->getInactiveCartPromotion();
-    }
-
     // Generate label for the applicable promotion.
+    $applicablePromotion = $this->getInactiveCartPromotion();
     if ($applicablePromotion instanceof NodeInterface) {
-      $label = $this->getPromotionCodeLabel($applicablePromotion, $active);
+      $label = $this->getPromotionCodeLabel($applicablePromotion);
     }
 
     return $label;
@@ -861,13 +842,11 @@ class AlshayaPromotionsManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param bool $active
-   *   Promotion Cart Status.
    *
    * @return mixed
    *   Promotion Cart Label.
    */
-  private function getPromotionCodeLabel(NodeInterface $promotion, $active) {
+  private function getPromotionCodeLabel(NodeInterface $promotion) {
     $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
     $acqPromotionTypes = $this->getAcqPromotionTypes();
     $label = '';
@@ -886,7 +865,7 @@ class AlshayaPromotionsManager {
           $promotion
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
-          $label = $promotionPlugin->getPromotionCodeLabel($active);
+          $label = $promotionPlugin->getPromotionCodeLabel();
         }
       }
       catch (\Exception $exception) {
