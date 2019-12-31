@@ -14,7 +14,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  */
 function alshaya_seo_update_8010() {
   $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
-  $config_factory->set('max_links', 5000);
+  $config_factory->set('max_links', 4000);
   $config_factory->save();
 }
 
