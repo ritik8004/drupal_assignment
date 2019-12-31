@@ -757,24 +757,20 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
         ];
       }
     }
-
-    // Recalculate price as here we display total_price.
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
-    $total_price = [
-      '#theme' => 'acq_commerce_price',
-      '#price' => $item_cart_price['price'] * $item['quantity']['#default_value'],
-    ];
-    if (!empty($item_cart_price['discount'])) {
-      $total_price['#discount'] = $item_cart_price['discount'];
-      // Remove comma if there in final price as this causes problem and comma
-      // will be added again by the `number_format()`.
-      $item_cart_price['final_price'] = str_replace(',', '', $item_cart_price['final_price']);
-      $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
-    }
   }
-  else {
-    $total_price = $item['price'];
+
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
+  $total_price = [
+    '#theme' => 'acq_commerce_price',
+    '#price' => $item_cart_price['price'] * $item['quantity']['#default_value'],
+  ];
+  if (!empty($item_cart_price['discount'])) {
+    $total_price['#discount'] = $item_cart_price['discount'];
+    // Remove comma if there in final price as this causes problem and comma
+    // will be added again by the `number_format()`.
+    $item_cart_price['final_price'] = str_replace(',', '', $item_cart_price['final_price']);
+    $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
   }
 
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotions_manager */

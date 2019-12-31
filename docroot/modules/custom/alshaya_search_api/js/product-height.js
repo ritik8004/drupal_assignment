@@ -56,20 +56,22 @@
     }
 
     if ($('.subcategory-listing-enabled').length > 0) {
+      // For subcategory listing page we will always adjust height of full page,
+      // that's why it does not require mode and element.
       Drupal.subCategoryListingPage(gridCount);
     }
     else {
-      Drupal.plpListingPage(gridCount);
+      Drupal.plpListingPage(gridCount, (mode === 'row') ? element : null);
     }
   };
 
-  Drupal.plpListingPage = function(gridCount) {
+  Drupal.plpListingPage = function(gridCount, element) {
     var tiles = $('.c-products__item');
     var totalCount = $('.c-products__item').length;
     var loopCount = Math.ceil(totalCount / gridCount);
     var indexStart, indexEnd = 0;
     // In full page mode we dont factor lazy loading as this mode is to reorganize the tiles based on the grid.
-    if (mode === 'full_page') {
+    if (element === null) {
       // Run for each row.
       for (var i = 0; i < loopCount; i++) {
         indexStart = gridCount * i;
@@ -77,8 +79,7 @@
         Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
       }
     }
-
-    else if (mode === 'row') {
+    else {
       // Find the parent of the lazyloaded image, we dont want to take any action if the image is a swatch or
       // hover gallery image.
       if (!$(element).closest('*[data--color-attribute]').hasClass('hidden')
@@ -114,8 +115,6 @@
         else {
           currentTiles = $(sections[index]).nextUntil(sections[nextIndex]);
         }
-
-        console.log(currentTiles);
 
         var totalCount = currentTiles.length;
         var loopCount = Math.ceil(totalCount / gridCount);
