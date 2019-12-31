@@ -132,7 +132,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#required' => FALSE,
       '#options' => [
         'left_aligned' => 'Left Aligned',
-        'center_aligned' => 'Center Aligned'
+        'center_aligned' => 'Center Aligned',
       ],
       '#default_value' => $config->get('grouping_page_header_style'),
     ];

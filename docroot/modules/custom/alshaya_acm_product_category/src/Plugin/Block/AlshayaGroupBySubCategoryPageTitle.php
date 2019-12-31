@@ -12,7 +12,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\file\FileInterface;
 
 /**
  * Provides Sub Category Title Block.
