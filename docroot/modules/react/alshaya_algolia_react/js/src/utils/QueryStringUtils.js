@@ -31,23 +31,22 @@ function redirectToOtherLang(queryValue, inputTag) {
 
   const redirectlang = drupalSettings.path.currentLanguage === 'ar' ? 'en' : 'ar';
   let arabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(queryValue);
-  let englishText = /[A-Za-z\s]/.test(queryValue);
-  if (drupalSettings.path.currentLanguage === 'en' && arabicText) {
-    redirectToUrl(queryValue, 'en', redirectlang, inputTag);
-
+  if ((drupalSettings.path.currentLanguage === 'en' && arabicText)
+    || (drupalSettings.path.currentLanguage === 'ar' && !arabicText)
+  ) {
+    redirectToUrl(queryValue, drupalSettings.path.currentLanguage, redirectlang, inputTag);
   }
-  else if (drupalSettings.path.currentLanguage === 'ar' && englishText) {
-    redirectToUrl(queryValue, 'ar', redirectlang, inputTag);
+  else {
+    toggleSearchResultsContainer('show');
   }
 }
 
 function redirectToUrl(queryValue, currentLang, redirectlang, inputTag) {
+  showLoader();
   // Disable input tag while redirecting to other language;
   if (inputTag !== null && typeof inputTag !== 'undefined') {
     inputTag.disabled = true;
   }
-
-  showLoader();
   localStorage.setItem('algoliaLangRedirect', 1);
   window.location.hash = "query=" + queryValue;
   window.location.pathname = window.location.pathname.replace(currentLang, redirectlang);
