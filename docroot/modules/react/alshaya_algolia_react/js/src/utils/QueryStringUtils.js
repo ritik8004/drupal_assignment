@@ -29,27 +29,25 @@ function redirectToOtherLang(queryValue, inputTag) {
     return;
   }
 
-  const redirectlang = drupalSettings.path.currentLanguage === 'ar' ? 'en' : 'ar';
   let arabicText = /[\u0600-\u06FF\u0750-\u077F]/.test(queryValue);
-  if ((drupalSettings.path.currentLanguage === 'en' && arabicText)
-    || (drupalSettings.path.currentLanguage === 'ar' && !arabicText)
-  ) {
-    redirectToUrl(queryValue, drupalSettings.path.currentLanguage, redirectlang, inputTag);
+  const redirectlang = arabicText ? 'ar' : 'en';
+  redirectToUrl(queryValue, redirectlang, inputTag);
+}
+
+function redirectToUrl(queryValue, redirectlang, inputTag) {
+  if (drupalSettings.path.currentLanguage !== redirectlang) {
+    showLoader();
+    // Disable input tag while redirecting to other language.
+    if (inputTag !== null && typeof inputTag !== 'undefined') {
+      inputTag.disabled = true;
+    }
+    localStorage.setItem('algoliaLangRedirect', 1);
+    window.location.hash = "query=" + queryValue;
+    window.location.pathname = window.location.pathname.replace(drupalSettings.path.currentLanguage, redirectlang);
   }
   else {
     toggleSearchResultsContainer('show');
   }
-}
-
-function redirectToUrl(queryValue, currentLang, redirectlang, inputTag) {
-  showLoader();
-  // Disable input tag while redirecting to other language;
-  if (inputTag !== null && typeof inputTag !== 'undefined') {
-    inputTag.disabled = true;
-  }
-  localStorage.setItem('algoliaLangRedirect', 1);
-  window.location.hash = "query=" + queryValue;
-  window.location.pathname = window.location.pathname.replace(currentLang, redirectlang);
 }
 
 function isMobile() {
