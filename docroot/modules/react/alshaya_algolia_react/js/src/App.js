@@ -10,7 +10,8 @@ import {
   toggleSearchResultsContainer,
   getCurrentSearchQuery,
   isMobile,
-  updateSearchQuery
+  updateSearchQuery,
+  redirectToOtherLang
 } from './utils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
@@ -27,15 +28,18 @@ class App extends React.PureComponent {
 
   componentDidMount() {
     if (this.state.query !== '') {
-      toggleSearchResultsContainer(this.state.query);
+      redirectToOtherLang(this.state.query);
     }
   }
 
-  setQueryValue = (queryValue) => {
+  setQueryValue = (queryValue, inputTag = null) => {
     this.setState({query: queryValue});
     if (queryValue === '') {
       updateSearchQuery('');
       toggleSearchResultsContainer('');
+    }
+    else {
+      redirectToOtherLang(queryValue, inputTag);
     }
   };
 
@@ -47,8 +51,8 @@ class App extends React.PureComponent {
     this.setQueryValue('');
   };
 
-  onChange = (newValue) => {
-    this.setQueryValue(newValue);
+  onChange = (newValue, inputTag) => {
+    this.setQueryValue(newValue, inputTag);
   };
 
   render() {

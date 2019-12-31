@@ -68,7 +68,8 @@ function showLoader() {
  */
 function removeLoader() {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
-  if (loaderDiv.length > 0) {
+  // Check if loader div is present algolia is not redirecting to other language.
+  if (loaderDiv.length > 0 && localStorage.getItem('algoliaLangRedirect') !== '1') {
     document.body.removeChild(loaderDiv[0]);
   }
 }
