@@ -39,12 +39,9 @@ interface AcqPromotionInterface {
   /**
    * Get promotion code label for cart promotions.
    *
-   * @param bool $status
-   *   Promotion cart status.
-   *
    * @return string
    *   Label.
    */
-  public function getPromotionCodeLabel($status);
+  public function getPromotionCodeLabel();
 
 }
