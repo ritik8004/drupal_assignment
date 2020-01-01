@@ -111,6 +111,28 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
 }
 
 /**
+ * Implements hook_sku_attributes_data_alter().
+ */
+function alshaya_color_split_sku_attributes_data_alter(&$data, $child, $sku) {
+  if (!empty($data)) {
+    $color_split_settings = \Drupal::config('alshaya_color_split.settings');
+    $attribute_code_color_id = $color_split_settings->get('attribute_code_color_id');
+    $attribute_code_color_label = $color_split_settings->get('attribute_code_color_label');
+
+    $attributes = $child->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+    if (!empty($data['color']) && !empty($attributes[$attribute_code_color_id])) {
+      $field_data = $child->get('attr_color')->first();
+      if (!empty($field_data)) {
+        $field_value = $field_data->getString();
+      }
+
+      $data['color'][$field_value] = $child->get($attribute_code_color_label)->getString();
+    }
+  }
+}
+
+/**
  * Implements hook_acq_sku_configurable_variants_alter().
  */
 function alshaya_color_split_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
