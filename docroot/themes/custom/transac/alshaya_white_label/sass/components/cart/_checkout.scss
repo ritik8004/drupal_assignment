@@ -766,9 +766,8 @@ body.alias--cart {
 
         @include breakpoint($only-mobile) {
           position: relative;
-          display: inline-block;
+          display: block;
           min-height: 4.5rem;
-          margin-top: -0.5rem;
         }
 
         @include breakpoint($upto-tablet) {

@@ -13,7 +13,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -153,16 +152,19 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
-    if (is_numeric($value) && !$is_swatch) {
-      $static[$alias][$value] = $value;
-      return $value;
-    }
-
     $encoded = $value;
 
     $storage = $this->termStorage;
-    if ($attribute_code == 'field_acq_promotion_label') {
+    $entity_type = 'term';
+
+    // We use ids only for category.
+    if ($attribute_code === 'field_category') {
+      $static[$alias][$value] = $value;
+      return $value;
+    }
+    elseif ($attribute_code == 'field_acq_promotion_label') {
       $storage = $this->nodeStorage;
+      $entity_type = 'node';
       $query = $storage->getQuery();
       $query->condition('type', 'acq_promotion');
       $query->condition('status', NodeInterface::PUBLISHED);
@@ -181,27 +183,30 @@ class AlshayaFacetsPrettyPathsHelper {
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
     $ids = $query->execute();
+    $langcode = 'en';
+
     foreach ($ids ?? [] as $id) {
-      $entity = $storage->load($id);
-      if ($entity instanceof EntityInterface) {
-        if ($entity->language()->getId() != 'en' && $entity->hasTranslation('en')) {
-          $entity = $entity->getTranslation('en');
+      if ($entity_type == 'term') {
+        $alias = $this->aliasManager->getAliasByPath('/taxonomy/term/' . $id, $langcode);
+        $alias = trim($alias, '/');
+
+        if (strpos($alias, 'taxonomy/term') === FALSE) {
+          $encoded = str_replace($this->getProductOptionAliasPrefix() . '/', '', $alias);
+
+          // Decode it once, it will be encoded again later.
+          $encoded = urldecode($encoded);
+          break;
         }
+      }
+      else {
+        $alias = $this->aliasManager->getAliasByPath('/node/' . $id, $langcode);
+        $alias = trim($alias, '/');
 
-        $alias = trim($entity->toUrl()->toString(), '/');
-
-        // Use the alias only if we have proper alias available.
-        if ($entity instanceof TermInterface && strpos($alias, 'taxonomy/term') === FALSE) {
-          $encoded = str_replace('en/' . $this->getProductOptionAliasPrefix() . '/', '', $alias);
+        if (strpos($alias, 'node/') === FALSE) {
+          // Decode it once, it will be encoded again later.
+          $encoded = urldecode($alias);
+          break;
         }
-        elseif ($entity instanceof NodeInterface && strpos($alias, 'node/') === FALSE) {
-          $encoded = str_replace('en/', '', $alias);
-        }
-
-        // Decode it once, it will be encoded again later.
-        $encoded = urldecode($encoded);
-
-        break;
       }
     }
 
@@ -234,7 +239,9 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
-    if (is_numeric($value) && !$is_swatch) {
+
+    // We use ids only for category.
+    if ($attribute_code === 'field_category') {
       $static[$value] = $value;
       return $value;
     }
@@ -312,6 +319,10 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     $alshaya_active_facet_filter_string = rtrim($alshaya_active_facet_filter_string, '/');
+
+    // For example, if we received: "/--price-0/any-radom-string"
+    // We need to remove "/any-radom-string", from active filter's string.
+    $alshaya_active_facet_filter_string = !empty($alshaya_active_facet_filter_string) ? explode('/', $alshaya_active_facet_filter_string)[0] : $alshaya_active_facet_filter_string;
 
     $alshaya_active_facet_filters = array_filter(explode('--', $alshaya_active_facet_filter_string));
 

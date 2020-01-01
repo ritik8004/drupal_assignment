@@ -919,6 +919,8 @@ class SkuManager {
           foreach ($free_gift_skus as $free_gift_sku) {
             $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
           }
+          $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
+          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
           break;
 
         default:
@@ -937,6 +939,8 @@ class SkuManager {
           if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
             $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
           }
+          $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
+          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
           break;
       }
     }
@@ -2435,7 +2439,9 @@ class SkuManager {
     $availableOptions = [];
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
-      if ($this->isAttributeOptionToExclude($value)) {
+
+      // @TODO: CORE-13213, temporarily disabling this.
+      if ($this->isAttributeOptionToExclude($value) && 1 == 2) {
         $configurable['#options_attributes'][$id]['class'][] = 'hidden';
         $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
         $notRequiredValue = $id;
@@ -2612,8 +2618,10 @@ class SkuManager {
 
       $query = $this->connection->select('acq_sku_field_data', 'asfd');
 
+      $variants = Configurable::getChildSkus($sku);
+
       // Check only for children of current parent.
-      $query->condition('asfd.sku', Configurable::getChildSkus($sku), 'IN');
+      $query->condition('asfd.sku', $variants, 'IN');
 
       // Restrict to one/default language records.
       $query->condition('asfd.default_langcode', 1);
@@ -2626,6 +2634,10 @@ class SkuManager {
       $query->innerJoin('acq_sku_stock', 'stock', 'asfd.sku = stock.sku');
       $query->condition('stock.quantity', 0, '>');
       $query->condition('stock.status', 0, '>');
+
+      // Adding this to reduce result to check from stock table.
+      // This is a work around to improve performance of the query.
+      $query->condition('stock.sku', $variants, 'IN');
 
       // Select the sku.
       $query->fields('asfd', ['sku']);

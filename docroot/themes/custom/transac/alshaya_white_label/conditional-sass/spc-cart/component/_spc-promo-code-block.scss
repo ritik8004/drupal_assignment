@@ -3,6 +3,8 @@
   margin-bottom: 2.5rem;
 
   .block-content {
+    position: relative;
+
     @include breakpoint($only-mobile) {
       padding: 1.25rem;
       background: $spc-promo-code-bg;
@@ -36,12 +38,7 @@
     letter-spacing: 1.14px;
     font-size: 1rem;
 
-    &.loading {
-      color: transparent;
-      background: $primary_btn_bg url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
-
-      @include fullPageTransparentOverlay('after');
-    }
+    @include componentLoader($primary_btn_bg, 'after');
   }
 
   .promo-remove {
@@ -51,10 +48,24 @@
     #{$left}: 14.5rem;
     border: none;
     background: none;
+    font-size: 0;
+    display: none;
     color: $spc-cart-promo-code-submit-enabled;
+    top: 50%;
+    transform: translateY(-50%);
 
-    @include icon('close', after) {
-      font-size: 2rem;
+    &.active {
+      display: block;
+
+      @include icon('close', after) {
+        font-size: 2rem;
+      }
+    }
+
+    &.loading {
+      @include componentLoader(transparent, 'after') {
+        width: 2.5rem;
+      }
     }
   }
 

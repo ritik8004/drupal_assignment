@@ -19,6 +19,10 @@
 
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
+      $(window).on('blazySuccess', function(event, element) {
+        Drupal.plpListingProductTileHeight('row', element);
+      });
+
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
         var facet_block = $('.container-without-product .c-collapse-item');
@@ -27,11 +31,20 @@
           $(facet_block).find('ul').slideUp();
         }
       });
+      $(window).on('load', function(event) {
+        $('body').once('bind-facet-item-click').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
+          $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
+        });
+      });
 
       if ($('#alshaya-algolia-search').length > 0) {
         Drupal.algoliaReact.facetEffects();
       }
     }
+  };
+
+  Drupal.refreshGrids = function() {
+    Drupal.plpListingProductTileHeight('full_page', null);
   };
 
   /**
@@ -96,7 +109,7 @@
       $('body').removeClass('large-grid')
       $('.c-products-list', algolia_wrapper).removeClass('product-large').addClass('product-small');
       // Adjust height of PLP tiles.
-      Drupal.listingProductTileHeight();
+      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     $('#alshaya-algolia-search .large-col-grid').once('algolia-search').on('click', function () {
@@ -106,7 +119,7 @@
       $('body').addClass('large-grid')
       $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
       // Adjust height of PLP tiles.
-      Drupal.listingProductTileHeight();
+      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
 

@@ -26,11 +26,26 @@ function isMobile() {
   return (window.innerWidth < 768);
 }
 
+/**
+ * Get the storage values.
+ *
+ * @returns {null}
+ */
+function getAlgoliaStorageValues() {
+  var value = localStorage.getItem(window.location.hash);
+  if (typeof value !== 'undefined' && value !== null) {
+    return JSON.parse(value);
+  }
+
+  return null;
+}
+
 export {
   searchStateToURL,
   getCurrentSearchQueryString,
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
-  isMobile
+  isMobile,
+  getAlgoliaStorageValues
 }

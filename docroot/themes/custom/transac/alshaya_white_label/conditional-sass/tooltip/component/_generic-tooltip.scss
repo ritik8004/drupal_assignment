@@ -8,9 +8,11 @@
   line-height: 1.33;
   font-size: 0.75rem;
   border-radius: 0.25rem;
-  display: none;
   bottom: 2rem;
   #{$left}: -4.9rem;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
 
   &::before,
   &::after {
@@ -42,10 +44,11 @@
 .tooltip-anchor {
   @include icon(infomation, before) {
     font-size: 1.5rem;
-    color: $tooltip_icon;
+    color: $spc_tooltip_icon;
   }
 
   &:hover .tooltip-box {
-    display: block;
+    opacity: 1;
+    visibility: visible;
   }
 }

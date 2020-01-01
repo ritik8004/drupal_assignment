@@ -1,0 +1,40 @@
+//ie fixes
+.ie .block-store-finder-form__current-location,
+.edge .block-store-finder-form__current-location {
+  display: inline;
+  text-indent: -1.2rem;
+
+  &::before {
+    display: inline;
+  }
+}
+
+.ie .region-secondary-header,
+.edge .region-secondary-header {
+  .site__logo {
+    a {
+      display: inline-block;
+    }
+
+    img {
+      @include breakpoint($desk) {
+        max-height: none;
+        max-width: 6rem;
+      }
+    }
+  }
+}
+
+.ie .store--map,
+.edge .store--map {
+  @include breakpoint($desk) {
+    width: 65%;
+  }
+}
+
+.ie .block-content--latest-fashion-update .latest-update,
+.edge .block-content--latest-fashion-update .latest-update {
+  @include breakpoint($above-palm) {
+    justify-content: flex-start;
+  }
+}

@@ -9,6 +9,117 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update search placeholder.
+ */
+function alshaya_ve_non_transac_update_8003() {
+  // Set Country specific placeholder for store finder search.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'Search Area / City')
+    ->save();
+
+  // Make configuration value translatable.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'البحث المنطقة / المدينة')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable excerpt field to display in search results.
+ * Enabled retinal display on Arabic for Store Finder.
+ * Make mobile field optional on email subscription form.
+ */
+function alshaya_ve_non_transac_update_8002() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['search_api.index.non_transac_acquia_solr_search_index', 'views.view.non_transac_acquia_index_search'],
+    'alshaya_ve_non_transac',
+    'optional'
+  );
+
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_email_signup'],
+    'alshaya_email_signup'
+  );
+
+  $manager->updateConfigs(
+    ['webform.webform.alshaya_contact'],
+    'alshaya_contact'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabled retinal display on Arabic for Store Finder.
+ */
+function alshaya_ve_non_transac_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+      ['views.view.stores_finder'],
+      'alshaya_stores_finder',
+      'install',
+      AlshayaConfigManager::USE_FROM_REPLACE
+    );
+
+  // Update translations.
+  $strings = [];
+
+  $strings['Retina photography'] = [
+    'ar' => 'صورة الشبكية',
+  ];
+
+  $strings['Middle East'] = [
+    'ar' => 'الشرق الأوسط',
+  ];
+
+  $strings['Kuwait'] = [
+    'ar' => 'الكويت',
+  ];
+
+  $strings['UAE'] = [
+    'ar' => 'الإمارات',
+  ];
+
+  $strings['KSA'] = [
+    'ar' => 'السعودية',
+  ];
+
+  $strings['Qatar'] = [
+    'ar' => 'قطر',
+  ];
+
+  $strings['Displaying stores in'] = [
+    'ar' => 'المنتجات المعروضة في المحلات',
+  ];
+
+  $strings['Area / City'] = [
+    'ar' => 'المنطقة / المدينة',
+  ];
+
+  $strings['Book an Appointment'] = [
+    'ar' => 'احجز موعد',
+  ];
+
+  $strings['Stores with retinal photography'] = [
+    'ar' => 'الفروع التي تقدم خدمة تصوير الشبكية',
+  ];
+
+  $strings['Map View'] = [
+    'ar' => 'عرض الخريطة',
+  ];
+
+  $strings['List of all Stores'] = [
+    'ar' => 'قائمة جميع الفروع',
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_ve_non_transac_install() {
@@ -49,9 +160,14 @@ function alshaya_ve_non_transac_install() {
   $settings = Settings::get('alshaya_ve_non_transac.settings')['book_appointment_url'];
   \Drupal::configFactory()->getEditable('alshaya_ve_non_transac.settings')->set('book_appointment_url', $settings)->save();
 
-  // Country code and timezone for Kuwait.
-  alshaya_country_set_default_regional_info('KW');
-
   // Update search placeholder.
-  alshaya_country_set_default_store_search_placeholder('Search Area / City', 'البحث المنطقة / المدينة');
+  // Set Country specific placeholder for store finder search.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'Search Area / City')
+    ->save();
+
+  // Make configuration value translatable.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', 'البحث المنطقة / المدينة')
+    ->save();
 }

@@ -60,7 +60,7 @@
     font-family: $hnm-regular;
     color: $tooltip_text;
 
-    @include icon(info, after) {
+    @include icon(infomation, after) {
       color: $tooltip_icon;
     }
 
@@ -131,14 +131,14 @@
 
       font-family: $hnm-bold;
       text-transform: uppercase;
-      background: $basket_header_promo_bg;
-      color: $basket_header_promo_txt;
+      background: $basket_free_delivery_inactive_header_promo_bg;
+      color: $basket_free_delivery_inactive_header_promo_txt;
       font-size: 0.8125rem;
       letter-spacing: 1px;
     }
 
     &.remove {
-      color: $basket_header_promo_bg;
+      color: $basket_free_delivery_inactive_header_promo_bg;
       font-family: $hnm-bold;
     }
   }

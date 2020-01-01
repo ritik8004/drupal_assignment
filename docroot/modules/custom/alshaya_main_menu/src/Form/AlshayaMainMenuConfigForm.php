@@ -23,6 +23,11 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
   const MAIN_MENU_INLINE_LAYOUT = 'menu_inline_display';
 
   /**
+   * Dynamic width main menu layout.
+   */
+  const MAIN_MENU_DYNAMIC_LAYOUT = 'menu_dynamic_display';
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -56,6 +61,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
       '#options' => [
         self::MAIN_MENU_DEFAULT_LAYOUT => $this->t('Default menu display'),
         self::MAIN_MENU_INLINE_LAYOUT => $this->t('Inline menu display'),
+        self::MAIN_MENU_DYNAMIC_LAYOUT => $this->t('Dynamic Width Mega Menu'),
       ],
       '#default_value' => $config->get('desktop_main_menu_layout'),
       '#title' => $this->t('Main menu display on desktop.'),

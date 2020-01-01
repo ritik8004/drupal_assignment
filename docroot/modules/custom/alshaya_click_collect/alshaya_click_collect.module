@@ -163,7 +163,7 @@ function alshaya_click_collect_get_config() {
 /**
  * Implements hook_sku_variant_info_alter().
  */
-function alshaya_click_collect_sku_variant_info_alter(array &$variant, SKUInterface $child, SKUInterface $parent) {
+function alshaya_click_collect_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
   // Adding shipping options.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $variant['click_collect'] = alshaya_acm_product_available_click_collect($child);

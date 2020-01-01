@@ -22,7 +22,7 @@ class AlshayaAcmKnetServiceProvider implements ServiceProviderInterface {
         ->setDecoratedService('alshaya_knet.helper', 'alshaya_acm_knet.helper.inner')
         ->addArgument(new Reference('alshaya_acm_knet.helper.inner'))
         ->addArgument(new Reference('config.factory'))
-        ->addArgument(new Reference('state'))
+        ->addArgument(new Reference('tempstore.shared'))
         ->addArgument(new Reference('logger.channel.alshaya_acm_knet'))
         ->addArgument(new Reference('acq_commerce.api'))
         ->addArgument(new Reference('alshaya_api.api'))

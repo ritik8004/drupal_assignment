@@ -14,3 +14,8 @@ label_manager:
     - core/drupal
     - core/drupal.ajax
     - core/drupalSettings
+    - alshaya_white_label/dynamic-promotions
+cart_promotions:
+  version: 1.x
+  js:
+    assets/js/alshaya_promotions_cart.js: {}

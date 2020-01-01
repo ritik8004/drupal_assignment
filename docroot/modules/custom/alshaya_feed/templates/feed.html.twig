@@ -18,12 +18,12 @@
   </categories>
   <short_description>
     {% if product.short_description is not empty %}
-      <![CDATA[{{ product.short_description }}]]>
+      {{ product.short_description | striptags }}
     {% endif %}
   </short_description>
   <description>
     {% if product.description is not empty %}
-      <![CDATA[{{ product.description }}]]>
+      {{ product.description | striptags }}
     {% endif %}
   </description>
   <custom_attributes>
@@ -35,8 +35,8 @@
   </custom_attributes>
   {% if product.type_id == 'simple' %}
     <stock>
-      <qty>{{ product.stock.qty }}</qty>
-      <is_in_stock>{{ product.stock.status }}</is_in_stock>
+      <quantity>{{ product.stock.qty }}</quantity>
+      <availability>{{ product.stock.status }}</availability>
     </stock>
     <images>
       {% for image in product.images %}
@@ -72,8 +72,8 @@
           {% endfor %}
         </images>
         <stock>
-          <qty>{{ variant.stock.qty }}</qty>
-          <is_in_stock>{{ variant.stock.status }}</is_in_stock>
+          <quantity>{{ variant.stock.qty }}</quantity>
+          <availability>{{ variant.stock.status }}</availability>
         </stock>
       </variant>
       {% endif %}

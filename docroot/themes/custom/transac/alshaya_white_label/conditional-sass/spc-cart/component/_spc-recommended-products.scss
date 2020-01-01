@@ -1,0 +1,71 @@
+.spc-recommended-products {
+  position: relative;
+  background: white;
+  padding: 1.25rem;
+
+  .block-content {
+    white-space: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+
+    .recommended-product {
+      display: inline-block;
+      margin-#{$right}: 0.625rem;
+      scroll-snap-align: center;
+      max-width: 8.275rem;
+
+      .product-title {
+        font-size: 0.875rem;
+        text-align: center;
+        color: $spc-product-title;
+        white-space: normal;
+      }
+
+      .spc-promotions {
+        white-space: normal;
+        text-align: center;
+        font-size: 0.75rem;
+
+        a {
+          color: $spc-recommended-product-promotion;
+        }
+
+        &:not(:empty) {
+          margin-top: 0.3125rem;
+        }
+      }
+    }
+  }
+
+  .nav-next,
+  .nav-prev {
+    border: none;
+    background: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0;
+  }
+
+  .nav-prev {
+    @include icon(chevron#{$left}) {
+      font-size: 4rem;
+      width: 3.75rem;
+      height: 3.75rem;
+      color: $spc-product-title;
+    }
+
+    #{$left}: -4.0625rem;
+  }
+
+  .nav-next {
+    @include icon(chevron#{$right}) {
+      font-size: 4rem;
+      width: 3.75rem;
+      height: 3.75rem;
+      color: $spc-product-title;
+    }
+
+    #{$right}: -4.0625rem;
+  }
+}

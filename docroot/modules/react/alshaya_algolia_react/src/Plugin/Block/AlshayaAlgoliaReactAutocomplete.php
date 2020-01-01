@@ -172,6 +172,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
               'showHoverImage' => (bool) $display_settings->get('gallery_show_hover_image'),
               'showThumbnails' => ($display_settings->get('gallery_show_hover_image') === TRUE) ? FALSE : $display_settings->get('image_thumb_gallery'),
               'defaultImage' => $default_image ?? FALSE,
+              'lazy_load_placeholder' => $this->configFactory->get('alshaya_master.settings')->get('lazy_load_placeholder'),
               'plp_slider' => $display_settings->get('plp_slider'),
             ],
             'swatches' => [
@@ -295,6 +296,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'label' => $block->label(),
             'name' => $facet->getName(),
             'widget' => $widget,
+            'id' => $block_id,
             'weight' => $block->getWeight(),
           ];
         }

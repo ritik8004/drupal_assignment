@@ -46,9 +46,8 @@ processor_settings:
   highlight:
     highlight: always
     highlight_partial: true
-    excerpt: false
-    excerpt_length: 256
-    exclude_fields: {  }
+    excerpt: true
+    excerpt_length: 400
     prefix: '<strong>'
     suffix: '</strong>'
     weights:

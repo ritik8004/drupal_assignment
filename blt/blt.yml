@@ -11,6 +11,7 @@ git:
   default_branch: develop
   remotes:
     - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
+    - 'alshaya2@svn-25.enterprise-g1.hosting.acquia.com:alshaya2.git'
 deploy:
   tag_source: true
   gitignore_file: '${repo.root}/blt/config/.gitignore'

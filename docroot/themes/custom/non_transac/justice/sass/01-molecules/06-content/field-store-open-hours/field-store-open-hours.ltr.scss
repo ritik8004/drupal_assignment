@@ -81,6 +81,7 @@
 .hours--wrapper {
   .open--hours {
     margin-#{$left}: 1.25rem;
+    margin-#{$right}: 1.25rem;
   }
 
   .hours--label {
@@ -94,6 +95,10 @@
       color: $store_finder_icon;
       top: 0.0625rem;
 
+      @include breakpoint($desk) {
+        margin-#{$right}: -0.9375rem;
+      }
+
       @include breakpoint($upto-palm) {
         #{$right}: -0.3125rem;
       }
@@ -103,6 +108,8 @@
 
 .view-on--map {
   a {
+    padding-#{$left}: 1.75rem;
+
     @include icon(map, after) {
       color: $store_finder_icon;
 

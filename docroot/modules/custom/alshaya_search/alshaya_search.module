@@ -55,6 +55,7 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     $view->header['result']->options['content'] = $format_plural;
 
     $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
+    $view->element['#attached']['drupalSettings']['alshayaSearch']['waitForAjax'] = TRUE;
   }
 }
 
@@ -206,12 +207,6 @@ function alshaya_search_ajax_render_alter(array &$data) {
             'selector' => NULL,
             'command' => 'invoke',
             'method' => 'alshayaSearchHeaderUpdate',
-            'args' => [],
-          ];
-          $data[] = [
-            'selector' => NULL,
-            'command' => 'invoke',
-            'method' => 'alshayaAttachSearchSlider',
             'args' => [],
           ];
         }

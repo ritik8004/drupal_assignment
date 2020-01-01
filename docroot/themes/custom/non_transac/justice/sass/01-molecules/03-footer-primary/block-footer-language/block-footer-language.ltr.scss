@@ -13,27 +13,50 @@
       font-size: 1.125rem;
       font-family: $jus_bold;
 
+      @include breakpoint($upto-palm) {
+        height: 3.125rem;
+        line-height: 1;
+        min-width: 6.25rem;
+      }
+
       &.is-active {
         background: $language_switcher_active_btn_bg;
       }
     }
 
-    a[hreflang="ar"] {
-      font-family: $jus_arabic_regular;
-      font-size: 0.9375rem;
-      font-weight: bold;
-      padding: 0;
-      padding: 0.875rem 3.125rem 0.75rem;
+    a {
+      @include breakpoint($upto-palm) {
+        padding: 1rem !important;
+      }
+
+      &[hreflang="ar"] {
+        font-family: $jus_arabic_regular;
+        font-size: 0.9375rem;
+        font-weight: bold;
+        padding: 0;
+        padding: 0.875rem 3.125rem 0.75rem;
+      }
     }
 
     &:first-child::after {
       display: none;
+    }
+
+    &[hreflang="ar"] {
+      @include breakpoint($upto-palm) {
+        top: -0.1875rem;
+      }
     }
   }
 }
 
 .block-language-switcher--cookies--content {
   text-align: $left;
+
+  @include breakpoint($upto-palm) {
+    padding-#{$right}: 2.5rem;
+    background: $white;
+  }
 
   .language-switcher-close {
     background: $language_switcher-close-btn_bg;
@@ -46,6 +69,16 @@
       font-weight: bold;
       vertical-align: -0.375rem;
       padding: 0 0.1875rem;
+
+      @include breakpoint($upto-palm) {
+        vertical-align: top;
+      }
+    }
+  }
+
+  .menu-language-switcher--desktop {
+    @include breakpoint($upto-palm) {
+      text-align: center;
     }
   }
 }

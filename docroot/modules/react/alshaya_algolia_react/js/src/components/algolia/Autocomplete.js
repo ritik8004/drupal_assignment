@@ -30,14 +30,38 @@ const InputButtons = React.memo((props) => {
 class Autocomplete extends React.Component {
   timerId = null;
   reactSearchBlock = document.getElementsByClassName('block-alshaya-algolia-react-autocomplete');
-  searchQuery = getCurrentSearchQuery();
 
-  state = {
-    value: this.searchQuery !== null && this.searchQuery !== '' ? this.searchQuery : this.props.currentRefinement,
-  };
+  constructor(props)  {
+    super(props);
+    const searchQuery = getCurrentSearchQuery();
+    this.state = {
+      value: searchQuery !== null && searchQuery !== '' ? searchQuery : props.currentRefinement,
+    };
+    this.autosuggest = React.createRef();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value);
+  }
 
   componentDidMount()  {
+    window.addEventListener('popstate', this.onPopState);
+    // Change name to search for iphone devices.
+    this.autosuggest.current.input.name = 'search';
+    // Change type to search for android devices.
+    this.autosuggest.current.input.type = 'search';
     this.onKeyUp();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.onPopState);
+  }
+
+  onPopState = event => {
+    let query = getCurrentSearchQuery();
+    if (Object.keys(query).length > 0) {
+      this.onChange(null, {newValue: query});
+    }
   }
 
   toggleFocus = (action) => {
@@ -81,6 +105,12 @@ class Autocomplete extends React.Component {
       value: newValue,
     });
   };
+
+  onSubmitCall = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  }
 
   getSuggestionValue(hit) {
     return hit.query;
@@ -139,7 +169,9 @@ class Autocomplete extends React.Component {
 
     return (
       <React.Fragment>
+        <form action="#" onSubmit={event => this.onSubmitCall(event)}>
         <Autosuggest
+          ref={this.autosuggest}
           suggestions={hits}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -151,6 +183,7 @@ class Autocomplete extends React.Component {
           inputProps={inputProps}
           focusInputOnSuggestionClick={false}
         />
+        </form>
         <InputButtons backCallback={this.backIconClickEvent} clearCallback={this.clearSearchFieldInput} />
       </React.Fragment>
     );

@@ -4,7 +4,8 @@ export {
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
-  isMobile
+  isMobile,
+  getAlgoliaStorageValues
 } from './QueryStringUtils';
 
 export {
@@ -16,7 +17,9 @@ export {
 export {
   contentDiv,
   searchResultDiv,
-  toggleSearchResultsContainer
+  toggleSearchResultsContainer,
+  showLoader,
+  removeLoader
 } from './SearchUtility';
 
 export {

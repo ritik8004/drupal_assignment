@@ -8,19 +8,21 @@
 (function ($, Drupal) {
   'use strict';
 
+  var css = document.createElement('style');
+  css.type = 'text/css';
+  document.head.appendChild(css);
+  function setMenuWidth() {
+    var menuWidth = $('.menu--one__list').width();
+    css.innerHTML = '.menu--two__list, .menu--three__list, .menu--four__list { width: ' + menuWidth + 'px}';
+  }
+
+  $(window).resize(function () {
+    setMenuWidth();
+  });
+
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
-
-      var css = document.createElement('style');
-      css.type = 'text/css';
-      document.head.appendChild(css);
-      function setMenuWidth() {
-        var menuWidth = $('.menu--one__list').width();
-        css.innerHTML = '.menu--two__list, .menu--three__list, .menu--four__list { width: ' + menuWidth + 'px}';
-      }
-
-      setMenuWidth();
-      $(window).resize(function () {
+      $('html').once('setMenuWidth').each(function () {
         setMenuWidth();
       });
 
@@ -80,7 +82,7 @@
         $('body').addClass('mobile--overlay');
       });
 
-      $('.c-menu-primary .mobile--search').off().on('click', function (e) {
+      $('.c-menu-primary .mobile--search').once('mainMenu').on('click', function (e) {
         e.preventDefault();
         $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
         $('.c-header__region .block-views-exposed-filter-blocksearch-page input.ui-autocomplete-input').focus();

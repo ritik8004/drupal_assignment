@@ -3,7 +3,8 @@ import {
   updateAfter,
   getCurrentSearchQueryString,
   updateSearchQuery,
-  searchStateToURL
+  searchStateToURL,
+  toggleSearchResultsContainer
 } from '../../utils';
 
 const withURLSync = SearchResultsComponent =>
@@ -30,10 +31,16 @@ const withURLSync = SearchResultsComponent =>
       window.removeEventListener('popstate', this.onPopState);
     }
 
-    onPopState = ({ state }) => {
-      this.setState({
-        searchState: state || {},
-      });
+    onPopState = event => {
+      let state = getCurrentSearchQueryString();
+      if (Object.keys(state).length > 0) {
+        this.setState({
+          searchState: state || {},
+        });
+      }
+      else {
+        toggleSearchResultsContainer('');
+      }
     }
 
     onSearchStateChange = searchState => {

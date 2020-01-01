@@ -11,7 +11,7 @@ echo $summary | mail -s "Alshaya: ClamAV results for www repository" sylvain.del
 
 startTime=`date`
 echo "Running ClamAV against home repository at" ${startTime} &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-clamav.log
-summary=$(/usr/bin/clamscan -ri /home/alshaya --follow-dir-symlinks=0 --exclude='\.(jpg|jpeg|png|gif)$')
+summary=$(/usr/bin/clamscan -ri $HOME --follow-dir-symlinks=0 --exclude='\.(jpg|jpeg|png|gif)$')
 echo $summary &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-clamav.log
 echo $summary | mail -s "Alshaya: ClamAV results for home repository" sylvain.delbosc@acquia.com,prafful.nagwani@acquia.com
 

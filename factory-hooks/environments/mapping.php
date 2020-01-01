@@ -66,7 +66,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // To override this default behavior, define the specific mapping in the
   // $mapping array following this structure:
   // '<site-code>' => [
-  //   '01<env>' => [
+  //   '<env>' => [
   //     'magento' => '<magento-key>',
   //     'conductor' => '<conductor-key>'
   //   ]
@@ -77,14 +77,14 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // <conductor-key> is an ACM instance listed in conductor.php.
 
   $default = [
-    '01dev' => 'qa',
-    '01dev2' => 'qa',
-    '01dev3' => 'qa',
-    '01test' => 'qa',
-    '01qa2' => 'qa',
-    '01uat' => 'uat',
-    '01pprod' => 'prod',
-    '01live' => 'prod',
+    'dev' => 'qa',
+    'dev2' => 'qa',
+    'dev3' => 'qa',
+    'test' => 'qa',
+    'qa2' => 'qa',
+    'uat' => 'uat',
+    'pprod' => 'prod',
+    'live' => 'prod',
     'local' => 'qa',
     'travis' => 'qa'
   ];
@@ -92,43 +92,57 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // Fill this variable to override the default mapping.
   $mapping = [
     'hmkw' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'hm_qa',
         'conductor' => 'hmkw_dev',
       ],
     ],
     'flsa' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'fl_qa',
         'conductor' => 'flsa_dev',
       ],
     ],
     'bbwae' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'bbw_qa',
         'conductor' => 'bbwae_dev',
       ],
     ],
+    'bbwsa' => [
+      'dev2' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwsa_dev2',
+      ],
+    ],
     'mckw' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'mc_upgrade',
         'conductor' => 'mckw_dev',
       ],
+      'dev2' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mckw_dev2',
+      ],
     ],
     'mcsa' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'mc_qa',
         'conductor' => 'mcsa_dev',
       ],
     ],
     'pbae' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbae_dev',
       ],
+      'dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_dev2',
+      ],
     ],
     'vsae' => [
-      '01dev' => [
+      'dev' => [
         'magento' => 'vs_qa',
         'conductor' => 'vsae_dev',
       ],
@@ -138,8 +152,8 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.
   foreach ($mapping as $key => $value) {
-    if (isset($mapping[$key]['01live'])) {
-      $mapping[$key]['01update'] = $mapping[$key]['01live'];
+    if (isset($mapping[$key]['live'])) {
+      $mapping[$key]['update'] = $mapping[$key]['live'];
     }
   }
 

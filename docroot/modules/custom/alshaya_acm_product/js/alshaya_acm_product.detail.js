@@ -166,17 +166,20 @@
     if (layout === 'pdp-magazine') {
       // Set timeout so that original behavior attachment is not affected.
       setTimeout(function () {
-        Drupal.behaviors.magazine_gallery.attach(product);
+        Drupal.behaviors.magazine_gallery.attach(document);
       }, 1);
     }
     else {
       // Hide the thumbnails till JS is applied.
-      $('#product-zoom-container', product).addClass('hidden-important');
+      // We use opacity through a class on parent to ensure JS get's applied
+      // properly and heights are calculated properly.
+      $('#product-zoom-container', product).addClass('whiteout');
       setTimeout(function () {
-        Drupal.behaviors.alshaya_product_zoom.attach(product);
+        Drupal.behaviors.alshaya_product_zoom.attach(document);
+        Drupal.behaviors.alshaya_product_mobile_zoom.attach(document);
 
         // Show thumbnails again.
-        $('#product-zoom-container', product).removeClass('hidden-important');
+        $('#product-zoom-container', product).removeClass('whiteout');
       }, 1);
     }
   };

@@ -5,40 +5,46 @@ import CartPromotion from '../cart-promotion';
 import CartItemOOS from '../cart-item-oos';
 import ItemLowQuantity from '../item-low-quantity';
 import CartItemImage from '../cart-item-image';
-import Select from 'react-select';
-
-// @TODO: For demo only, qty values should be dynamic.
-const options = [
-  { value: '1', label: '1' },
-  { value: '2', label: '2', isDisabled: true },
-  { value: '3', label: '3' },
-  { value: '4', label: '4' },
-  { value: '5', label: '5' },
-  { value: '6', label: '6' },
-];
+import CartQuantitySelect from '../cart-quantity-select';
+import {updateCartItemData} from '../../../utilities/update_cart';
 
 export default class CartItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.selectRef = React.createRef();
-  }
 
+  /**
+   * Remove item from the cart.
+   */
+  removeCartItem = (sku, action, id) => {
+    // Adding class on remove button for showing progress when click.
+    document.getElementById('remove-item-' + id).classList.add('loading');
+    var cart_data = updateCartItemData(action, sku, 0);
+    if (cart_data instanceof Promise) {
+      cart_data.then((result) => {
+        // Refreshing mini-cart.
+        var event = new CustomEvent('refreshMiniCart', {bubbles: true, detail: { data: () => result }});
+        document.dispatchEvent(event);
 
-  removeCartItem = () => {
-    alert('product-removed');
-  };
+        if (result.error !== undefined) {
+          result.message = {
+            'type': 'error',
+            'message': result.error_message
+          }
+        } else {
+          result.message = {
+            'type': 'success',
+            'message': Drupal.t('The product has been removed from your cart.')
+          }
+        }
 
-  onMenuOpen = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-select').classList.add('open');
-  };
-
-  onMenuClose = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-select').classList.remove('open');
+        // Refreshing cart components.
+        var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
+        document.dispatchEvent(event);
+      });
+    }
   };
 
   render() {
     const { currency_code } = drupalSettings.alshaya_spc.currency_config;
-    const {title, link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data } = this.props.item;
+    const {title, link, relative_link, stock, qty, in_stock, original_price, configurable_values, promotions, extra_data, sku, id, final_price, free_item } = this.props.item;
 
     return (
       <div className="spc-cart-item">
@@ -49,9 +55,12 @@ export default class CartItem extends React.Component {
           <div className="spc-product-container">
             <div className="spc-product-title-price">
               <div className="spc-product-title">
-                <a href={Drupal.url.toAbsolute(link)}>{title}</a>
+                <a href={Drupal.url(relative_link)}>{title}</a>
               </div>
-              <div className="spc-product-price">{currency_code}{original_price}</div>
+              <div className="spc-product-price">{currency_code} {final_price}</div>
+              {free_item === true &&
+                <div>{Drupal.t('FREE')}</div>
+              }
             </div>
             <div className="spc-product-attributes-wrapper">
               {configurable_values.map((key, val) =>
@@ -60,9 +69,10 @@ export default class CartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-tile-actions">
-            <button className="spc-remove-btn" onClick={() => {this.removeCartItem()}}>{Drupal.t('remove')}</button>
+            <button title={Drupal.t('remove this item')} id={'remove-item-' + id} className="spc-remove-btn" onClick={() => {this.removeCartItem(sku, 'remove item', id)}}>{Drupal.t('remove')}</button>
             <div className="qty">
-              <Select ref={this.selectRef} classNamePrefix="spcSelect" className="spc-select" onMenuOpen={this.onMenuOpen} onMenuClose={this.onMenuClose} options={options} defaultValue={options[0]} isSearchable={false} />
+              <div className="qty-loader-placeholder"/>
+              <CartQuantitySelect qty={qty} stock={stock} sku={sku} is_disabled={!in_stock || free_item} />
             </div>
           </div>
         </div>
@@ -72,7 +82,7 @@ export default class CartItem extends React.Component {
           )}
         </div>
         <CartItemOOS in_stock={in_stock} />
-        <ItemLowQuantity stock={stock} qty={qty} />
+        <ItemLowQuantity stock={stock} qty={qty} in_stock={in_stock} />
       </div>
     );
   }

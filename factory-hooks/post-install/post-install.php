@@ -45,10 +45,11 @@ $country_code = $site_country_code['country_code'];
  * If the file exists and no action is configured, "disable" will be
  * considered the default action.
  */
-if (file_exists('/home/alshaya/post-install-override.txt')) {
+$post_install_override_file = $_SERVER['home'] . '/post-install-override.txt';
+if (file_exists($post_install_override_file)) {
   $action = ACTION_DISABLE;
 
-  $fh = fopen('/home/alshaya/post-install-override.txt','r');
+  $fh = fopen($post_install_override_file,'r');
   while ($line = fgets($fh)) {
     list($key, $value) = array_map('trim', explode(':', $line));
     switch ($key) {

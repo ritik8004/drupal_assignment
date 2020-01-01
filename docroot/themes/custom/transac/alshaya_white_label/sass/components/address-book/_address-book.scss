@@ -802,6 +802,17 @@
     }
   }
 
+  .form-item-guest-delivery-home-address-shipping-postal-code,
+  .form-item-member-delivery-home-address-form-form-postal-code,
+  .form-item-field-address-0-address-postal-code {
+    input[type=text] ~ label.error {
+      font-size: 0.75rem !important;
+      color: $red-error !important;
+      position: relative !important;
+      line-height: 1;
+    }
+  }
+
   .form-item.form-type-select {
     padding-bottom: 1rem;
     margin-top: 2.75rem !important;

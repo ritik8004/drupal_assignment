@@ -59,6 +59,20 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+        arguments:
+            $logger: '@monolog.logger.middleware'
+
+    # This formats the log messages as per drupal like.
+    alshaya_middleware.log_fromatter:
+        class: App\Logger\Formatter\MiddlewareLogFormatter
+
+    # This process and add extra info like ip, uri etc to logs.
+    # No class for this as this is built in monolog processor.
+    Monolog\Processor\WebProcessor:
+        tags: ['monolog.processor']
+
+    Monolog\Processor\PsrLogMessageProcessor:
+        tags: ['monolog.processor']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

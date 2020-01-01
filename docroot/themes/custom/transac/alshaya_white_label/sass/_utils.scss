@@ -303,3 +303,21 @@ body {
     cursor: progress;
   }
 }
+
+// Add a component level loader which shall add a loader in place of the component.
+@mixin componentLoader($background-color, $pseudo-element) {
+  &.loading {
+    color: transparent;
+    background: $background-color url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+    background-size: contain;
+
+    @content;
+
+    @include fullPageTransparentOverlay($pseudo-element);
+  }
+}
+
+// Allow things to be hidden visually without changing visibility.
+.whiteout {
+  opacity: 0;
+}

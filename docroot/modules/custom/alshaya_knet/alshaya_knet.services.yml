@@ -3,7 +3,7 @@ services:
     class: Drupal\alshaya_knet\Helper\KnetHelper
     arguments:
       - '@config.factory'
-      - '@state'
+      - '@tempstore.shared'
       - '@logger.channel.knet'
 
   logger.channel.knet:

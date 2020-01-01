@@ -10,7 +10,8 @@ export default class CartPromoBlock extends React.Component {
     this.state = {
       'promo_applied': false,
       'promo_code': '',
-      'button_text': Drupal.t('Apply')
+      'button_text': Drupal.t('apply'),
+      'disabled': false
     };
   }
 
@@ -19,7 +20,8 @@ export default class CartPromoBlock extends React.Component {
       this.setState({
         promo_applied: true,
         promo_code: this.props.coupon_code,
-        button_text: Drupal.t('Remove')
+        button_text: Drupal.t('applied'),
+        disabled: true
       });
 
       document.getElementById('promo-code').value = this.props.coupon_code;
@@ -30,7 +32,7 @@ export default class CartPromoBlock extends React.Component {
     var promo_value = document.getElementById('promo-code').value.trim();
     // If empty promo text.
     if (this.state.promo_applied === false && promo_value.length === 0) {
-      document.getElementById('promo-message').innerHTML = Drupal.t('Please enter promo code.');
+      document.getElementById('promo-message').innerHTML = Drupal.t('please enter promo code.');
       document.getElementById('promo-message').classList.add('error');
       document.getElementById('promo-code').classList.add('error');
       return;
@@ -38,14 +40,20 @@ export default class CartPromoBlock extends React.Component {
 
     var action = (promo_applied === true) ? 'remove coupon' : 'apply coupon';
 
-    // Adding class on promo button for showing progress when click.
-    document.getElementById('promo-action-button').classList.add('loading');
+    // Adding class on promo button for showing progress when click and applying promo.
+    if (promo_applied !== true) {
+      document.getElementById('promo-action-button').classList.add('loading');
+    }
+    else {
+      document.getElementById('promo-remove-button').classList.add('loading');
+    }
 
     var cart_data = applyRemovePromo(action, promo_value);
     if (cart_data instanceof Promise) {
       cart_data.then((result) => {
         // Removing button clicked class.
         document.getElementById('promo-action-button').classList.remove('loading');
+        document.getElementById('promo-remove-button').classList.remove('loading');
         // If coupon is not valid.
         if (result.response_message.status === 'error_coupon') {
           document.getElementById('promo-message').innerHTML = result.response_message.msg;
@@ -53,15 +61,14 @@ export default class CartPromoBlock extends React.Component {
           document.getElementById('promo-code').classList.add('error');
         }
         else if(result.response_message.status === 'success') {
-          document.getElementById('promo-message').innerHTML = result.response_message.msg;
-          document.getElementById('promo-message').classList.remove('error');
-          document.getElementById('promo-code').classList.add('success');
-          // I initially promo_applied was false, means promo is applied now.
+          document.getElementById('promo-message').innerHTML = '';
+          // Initially promo_applied was false, means promo is applied now.
           if (promo_applied === false) {
             this.setState({
               promo_applied: true,
               promo_code: promo_value,
-              button_text: Drupal.t('Remove')
+              button_text: Drupal.t('applied'),
+              disabled: true
             });
           }
           else {
@@ -69,7 +76,8 @@ export default class CartPromoBlock extends React.Component {
             this.setState({
               promo_applied: false,
               promo_code: '',
-              button_text: Drupal.t('Apply')
+              button_text: Drupal.t('apply'),
+              disabled: false
             });
 
             document.getElementById('promo-code').value = '';
@@ -88,12 +96,14 @@ export default class CartPromoBlock extends React.Component {
   };
 
   render() {
+    var promo_remove_active = this.state.promo_applied ? 'active' : '';
     return (
       <div className="spc-promo-code-block">
         <CheckoutSectionTitle>{Drupal.t('have a promo code?')}</CheckoutSectionTitle>
         <div className="block-content">
-          <input id="promo-code" type="text" placeholder={Drupal.t('Enter your promo code here')} />
-          <button id="promo-action-button" className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
+          <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('enter your promo code here')} />
+          <button id="promo-remove-button" className={"promo-remove " + promo_remove_active} onClick={()=>{this.promoAction(this.state.promo_applied)}}>{Drupal.t('Remove')}</button>
+          <button id="promo-action-button" disabled={this.state.disabled} className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
           <div id="promo-message"/>
         </div>
       </div>

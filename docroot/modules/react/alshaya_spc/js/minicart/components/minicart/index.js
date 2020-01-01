@@ -21,8 +21,8 @@ export default class MiniCart extends React.Component {
     try {
       var cart_data = fetchCartData();
       if (cart_data instanceof Promise) {
-          cart_data.then((result) => {
-            this.setState({
+        cart_data.then((result) => {
+          this.setState({
             wait: false,
             qty: result.items_qty,
             amount: result.cart_total
@@ -35,6 +35,11 @@ export default class MiniCart extends React.Component {
           var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
           document.dispatchEvent(event);
 
+          if (result.items.length == 0) {
+            this.setState({
+              wait: true
+            });
+          }
         });
       }
 
@@ -42,14 +47,23 @@ export default class MiniCart extends React.Component {
       // PDP item add or from the update from cart page.
       document.addEventListener('refreshMiniCart', (e) => {
         var data = e.detail.data();
-        this.setState({
-          qty: data.items_qty,
-          amount: data.cart_total,
-          wait: false
-        });
+        // If no error from MDC.
+        if (data.error === undefined) {
+          this.setState({
+            qty: data.items_qty,
+            amount: data.cart_total,
+            wait: false
+          });
 
-        // Store info in storage.
-        addInfoInStorage(data);
+          // Store info in storage.
+          addInfoInStorage(data);
+
+          if (data.items.length === 0) {
+            this.setState({
+              wait: true
+            });
+          }
+        }
       }, false);
     } catch (error) {
       // In case of error, do nothing.

@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_facets_pretty_paths\Plugin\facets\url_processor;
 
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
@@ -45,13 +46,27 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
   protected $facetsManager;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
+  protected $entityTypeManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request, AlshayaFacetsPrettyPathsHelper $pretty_path_helper, DefaultFacetManager $facets_manager) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              Request $request,
+                              AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
+                              DefaultFacetManager $facets_manager,
+                              EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $request);
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->initializeActiveFilters($configuration);
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -64,7 +79,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       $plugin_definition,
       $container->get('request_stack')->getMasterRequest(),
       $container->get('alshaya_facets_pretty_paths.pretty_paths_helper'),
-      $container->get('facets.manager')
+      $container->get('facets.manager'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -86,33 +102,39 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     if (empty($facet_weights)) {
       // Get all facets of the given source.
-      $block_facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId($facet->getFacetSourceId());
-      $block_ids = [];
+      $block_facets = $this->facetsManager->getFacetsByFacetSourceId($facet->getFacetSourceId());
+
       if (!empty($block_facets)) {
+        $block_ids = [];
+        $mapping = [];
         foreach ($block_facets as $block_facet) {
-          $block_ids[$block_facet->getUrlAlias()] = str_replace('_', '', $block_facet->id());
+          $block_facet_id = str_replace('_', '', $block_facet->id());
+          $block_ids[] = $block_facet_id;
+          $mapping[$block_facet_id] = $block_facet->getUrlAlias();
         }
 
         if (!empty($block_ids)) {
-          /* @var \Drupal\block\Entity\Block[] $block*/
-          $blocks_list = \Drupal::entityTypeManager()->getStorage('block')->loadMultiple($block_ids);
+          $block_ids = $this->entityTypeManager->getStorage('block')->getQuery()
+            ->condition('id', $block_ids, 'IN')
+            ->sort('weight', 'ASC')
+            ->execute();
 
-          // Sort the blocks.
-          uasort($block_ids, function ($a, $b) use ($blocks_list) {
-            $a_weight = $blocks_list[$a]->getWeight();
-            $b_weight = $blocks_list[$b]->getWeight();
-            if ($a_weight == $b_weight) {
-              return 0;
-            }
-            return ($a_weight < $b_weight) ? -1 : 1;
-          });
+          foreach ($block_ids as $block_id) {
+            $facet_weights[] = $mapping[$block_id];
+          }
         }
       }
-      $facet_weights = array_keys($block_ids);
+    }
+
+    $active_results = [];
+    foreach ($results as $key => $result) {
+      if ($result->isActive()) {
+        $active_results[$key] = $result;
+      }
     }
 
     /** @var \Drupal\facets\Result\ResultInterface $result */
-    foreach ($results as &$result) {
+    foreach ($results as $result_key => &$result) {
       $filters_current_result_array = [];
       foreach ($filters_array as $filters) {
         $array = explode('-', $filters);
@@ -122,8 +144,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $filter_key = $facet->getUrlAlias();
       $raw_value = $result->getRawValue();
+
       // If the value is active, remove the filter string from the parameters.
-      if ($result->isActive()) {
+      if (!empty($active_results[$result_key])) {
         $active_facet = [];
 
         foreach ($filters_current_result_array[$filter_key] as $value) {
@@ -154,10 +177,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         // Exclude currently active results from the filter params if we are in
         // the show_only_one_result mode.
         if ($facet->getShowOnlyOneResult()) {
-          foreach ($results as $result2) {
-            if ($result2->isActive()) {
-              unset($filters_current_result_array[array_search($result2->getRawValue(), $filters_current_result_array[$filter_key])]);
-            }
+          foreach ($active_results as $result2) {
+            unset($filters_current_result_array[array_search($result2->getRawValue(), $filters_current_result_array[$filter_key])]);
           }
         }
       }
@@ -169,11 +190,13 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $current_path = substr($current_path, 0, strpos($current_path, '/--'));
       }
 
+      $filters_count = 0;
       if (count($filters_current_result_array)) {
         foreach ($filters_current_result_array as $key => $values) {
           $encoded = [];
           foreach ($values as $value) {
             $encoded[] = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $key, $value);
+            $filters_count++;
           }
           $filters_current_result_array[$key] = $key . '-' . implode('-', $encoded);
         }
@@ -187,7 +210,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url = Url::fromUri('base:' . $current_path . '/');
       }
 
-      if (count($filters_current_result_array, COUNT_RECURSIVE) - count($filters_current_result_array) > 2) {
+      // If more than 2 filters are selected, don't index.
+      if ($filters_count >= 2) {
         $url->setOption('attributes', ['rel' => 'nofollow noindex ']);
       }
       else {

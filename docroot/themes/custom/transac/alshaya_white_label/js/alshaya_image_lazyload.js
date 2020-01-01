@@ -24,8 +24,8 @@
         // Initialize.
         Drupal.blazy = new Blazy({
           offset: $(window).height(),
-          success: function () {
-            $(window).trigger('blazySuccess');
+          success: function (element) {
+            $(window).trigger('blazySuccess', element);
           }
         });
       });
@@ -37,7 +37,9 @@
       clearTimeout(blazyTimeout);
     }
 
-    blazyTimeout = setTimeout(Drupal.blazy.revalidate, 100);
+    if (typeof Drupal.blazy !== 'undefined') {
+      blazyTimeout = setTimeout(Drupal.blazy.revalidate, 100);
+    }
   };
 
   /**

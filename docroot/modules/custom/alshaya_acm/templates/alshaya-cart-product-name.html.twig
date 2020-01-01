@@ -27,7 +27,9 @@
                 <div class="mobile-only dark">{{ total_price }}</div>
             {% endif %}
         {% endif %}
-        <div class="free-gift-label">{{ free_gift_label }}</div>
+        {% if free_gift_label is not empty %}
+          <div class="free-gift-label">{{ free_gift_label }}</div>
+        {% endif %}
         {%  if  promotions is not empty %}
             <div class="sku-promotions">
               {% for id, promotion in promotions %}
@@ -50,7 +52,7 @@
         {% endif %}
     </div>
     {% if free_gift_promos is not empty %}
-      <div class="sku-promotions">
+      <div class="sku-promotions free-gift-container">
         {{ free_gift_promos }}
       </div>
     {% endif %}

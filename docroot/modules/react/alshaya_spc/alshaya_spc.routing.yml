@@ -1,8 +1,0 @@
-alshaya_spc.sku_details:
-  path: '/sku-details/{sku}'
-  defaults:
-    _controller: \Drupal\alshaya_spc\Controller\AlshayaSpcController::skuDetails
-  methods: [GET]
-  requirements:
-    _format: 'json'
-    _permission: 'access content'

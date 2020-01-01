@@ -39,12 +39,28 @@
       }
 
       .spc-remove-btn {
-        background: url(#{$base_theme_img_directory_path}/icons/ic-trashbin.svg) center center no-repeat;
-        width: 1.5rem;
-        height: 1.5rem;
         border: none;
         font-size: 0;
-        background-size: contain;
+        width: 1.5rem;
+        height: 1.5rem;
+        position: relative;
+        color: $spc-cart-item-trash-icon;
+        transition: color 0.3s ease-in-out;
+
+        &:hover {
+          color: $spc-cart-item-trash-icon-hover;
+        }
+
+        @include icon('bin', after) {
+          width: 100%;
+          height: 100%;
+          font-size: 1.4375rem;
+          position: absolute;
+          #{$left}: 0;
+          top: 0;
+        }
+
+        @include componentLoader(transparent, 'after');
       }
     }
 

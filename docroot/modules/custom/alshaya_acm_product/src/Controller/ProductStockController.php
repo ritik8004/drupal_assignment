@@ -112,48 +112,45 @@ class ProductStockController extends ControllerBase {
     }
 
     $return = new AjaxResponse();
-    $response = $this->cartHelper->addItemToCart(
-      $entity,
-      $data
-    );
+    try {
+      $response = $this->cartHelper->addItemToCart(
+        $entity,
+        $data
+      );
 
-    if ($response === TRUE) {
-      $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
-      try {
-        $response = $this->cartHelper->addItemToCart(
-          $entity,
-          $data
-        );
+      if ($response === TRUE) {
+        $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
 
-        if ($response === TRUE) {
-          $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
+        // Use the variant sku for event if configurable product added.
+        $variant_sku = $data['selected_variant_sku'] ?? '';
+        if (!empty($variant_sku)) {
+          $variant = SKU::loadFromSku($variant_sku);
         }
-        else {
-          $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
-          $error = [
-            '#message' => $response,
-            '#theme' => 'global_error',
-          ];
-          $return->addCommand(new HtmlCommand($class, $error));
-          $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-failed']));
-        }
-
         // Instantiate and Dispatch add_to_cart_submit event.
         $this->eventDispatcher->dispatch(
           AddToCartFormSubmitEvent::EVENT_NAME,
-          new AddToCartFormSubmitEvent($entity, $return)
+          new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
         );
       }
-      catch (\Exception $e) {
-        $this->getLogger('AddToCartSubmit')->warning('Failed while trying to add to cart: @message', [
-          '@message' => $e->getMessage(),
-        ]);
+      else {
+        $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
+        $error = [
+          '#message' => $response,
+          '#theme' => 'global_error',
+        ];
+        $return->addCommand(new HtmlCommand($class, $error));
+        $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-failed']));
       }
-
-      $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
-
-      return $return;
     }
+    catch (\Exception $e) {
+      $this->getLogger('AddToCartSubmit')->warning('Failed while trying to add to cart: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    $return->addCommand(new InvokeCommand(NULL, 'hideLoader'));
+
+    return $return;
   }
 
 }

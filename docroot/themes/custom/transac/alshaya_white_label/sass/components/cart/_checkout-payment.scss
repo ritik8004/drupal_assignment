@@ -576,3 +576,9 @@
 #edit-acm-analytics {
   display: inline;
 }
+
+#cardNumber-error:not(:empty) {
+  ~ .form-item--error-message {
+    display: none;
+  }
+}

@@ -11,7 +11,7 @@ elements: |
     '#title': 'Mobile number'
     '#placeholder': 'Mobile number'
     '#verify': none
-    '#required': true
+    '#required': false
   email:
     '#title': 'Email Address'
     '#placeholder': 'Email Address'

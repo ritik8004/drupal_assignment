@@ -5,7 +5,10 @@
  * Module file.
  */
 
+use Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter\SkuGalleryFormatter;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -62,6 +65,12 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-app-navigation-links',
       'variables' => [
         'data' => NULL,
+      ],
+    ],
+    'alshaya_group_by_sub_category_page_title' => [
+      'template' => 'alshaya-group-by-sub-category-page-title',
+      'variables' => [
+        'group_category_header' => NULL,
       ],
     ],
   ];
@@ -366,6 +375,9 @@ function alshaya_acm_product_category_views_pre_build(ViewExecutable $view) {
 
     // If group by sub-category is selected, disable pager.
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_categories')->getString()) {
+      // Set the flag to release memory so we can have the page built in one go.
+      SkuGalleryFormatter::$releaseMemory = TRUE;
+
       $view->getPager();
       $view->setItemsPerPage(0);
 
@@ -535,4 +547,26 @@ function alshaya_acm_product_category_after_build(array $element, FormStateInter
   ];
 
   return $element;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_product_category_block_access(Block $block, $operation, AccountInterface $account) {
+  // Disable category facet on group by category listing pages (panty guide).
+  if ($operation == 'view' && $block->id() == 'categoryfacetplp') {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() == 'entity.taxonomy_term.canonical') {
+      /* @var \Drupal\taxonomy\Entity\Term $term */
+      $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+
+      if (empty($term)) {
+        return;
+      }
+
+      $result = AccessResult::forbiddenIf($term->get('field_group_by_sub_categories')->getString());
+      $result->addCacheTags($term->getCacheTags());
+      return $result;
+    }
+  }
 }

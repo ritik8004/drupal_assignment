@@ -151,7 +151,7 @@ function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
-  static $attr_to_skip;
+  static $attr_to_skip = NULL;
 
   // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
@@ -159,7 +159,7 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   }
 
   // Skip additional attributes specified in config.
-  if (empty($attr_to_skip)) {
+  if (!isset($attr_to_skip)) {
     $attr_to_skip = \Drupal::configFactory()
       ->getEditable('alshaya_acm_product.settings')
       ->get('acq_sku__attributes_skip') ?? [];
@@ -174,6 +174,8 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     }
   }
 
+  // Flag to determine if there any change in attribute values.
+  $attr_changed = FALSE;
   // Get configurable fields/attributes.
   $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $attributes = $sku->get('attributes')->getValue();
@@ -181,11 +183,17 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     // If attribute is not configurable (not available in fields), remove it.
     if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
       unset($attributes[$key]);
+      $attr_changed = TRUE;
     }
   }
 
+  // If there any change in attribute.
+  if ($attr_changed) {
+    $sku->get('attributes')->setValue($attributes);
+  }
+
   // Price is only available on simple skus.
-  if ($sku->get('type')->first()->getString() == 'simple') {
+  if ($sku->bundle() == 'simple') {
     $price = (float) $sku->get('price')->first()->getString();
     $final_price = (float) $sku->get('final_price')->first()->getString();
     $max_discount = (int) \Drupal::config('alshaya_acm_product.settings')
@@ -199,8 +207,6 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
       ]);
     }
   }
-
-  $sku->get('attributes')->setValue($attributes);
 }
 
 /**
@@ -605,7 +611,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
-        if ($sku_media) {
+        if (!empty($sku_media['drupal_uri'])) {
           $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
         }
 
@@ -1048,6 +1054,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form_state->setTemporaryValue('sku', $sku_entity);
   $form['#attributes']['data-sku'] = $sku_entity->getSku();
   $form['#attributes']['data-cleaned-sku'] = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+  $form['#attributes']['data-sku-type'] = $sku_entity->getType();
 
   $form['#cache']['contexts'][] = 'url.query_args:selected';
 
@@ -1098,6 +1105,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['quantity']['#attributes']['class'][] = 'edit-quantity';
   unset($form['quantity']['#size']);
 
+  $form['selected_variant_sku'] = [
+    '#type' => 'hidden',
+    '#attributes' => [
+      'class' => [
+        'selected-variant-sku',
+        'selected-variant-sku-' . $sku_identifier,
+      ],
+    ],
+    '#default_value' => ($sku_entity->bundle() === 'simple') ? $sku_entity->getSku() : '',
+  ];
+
   // We need to change the markup for submit button.
   // @see alshaya_white_label_theme_suggestions_input_alter().
   $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
@@ -1122,15 +1140,16 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
-    $form['selected_variant_sku'] = [
+    // Adding parent/main sku in hidden. This can be update/changed
+    // by color split if required.
+    $form['selected_parent_sku'] = [
       '#type' => 'hidden',
       '#attributes' => [
         'class' => [
-          'selected-variant-sku',
-          'selected-variant-sku-' . $sku_identifier,
+          'selected-parent-sku',
         ],
       ],
-      '#value' => '',
+      '#value' => $sku_entity->getSku(),
     ];
 
     // Hide the form on page load, we want to allow all JS to be applied first.
@@ -1152,6 +1171,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['bySku'] = $product_tree['combinations']['by_sku'];
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['combinations'] = $combinations;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['configurables'] = $product_tree['configurables'];
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 

@@ -1,4 +1,8 @@
 .nodetype--acq_product {
+  .select-free-gift {
+    display: none !important;
+  }
+
   .free-gift-promotions {
     display: flex;
     flex-flow: row wrap;
@@ -14,6 +18,10 @@
     @include breakpoint($only-mobile) {
       margin-#{$left}: 0;
       padding: 0.75rem;
+    }
+
+    &:empty {
+      display: none;
     }
   }
 
@@ -54,6 +62,7 @@
       width: 100%;
       display: flex;
       flex-flow: row wrap;
+      align-items: center;
 
       .free-gift-wrapper {
         width: calc(100% - (5.6875rem));
@@ -71,6 +80,8 @@
       .free-gift-message {
         a {
           text-decoration: underline;
+          padding-#{$right}: 0.25rem;
+          padding-#{$left}: 0.125rem;
         }
       }
     }
@@ -97,7 +108,7 @@
   }
 
   .free-gift-coupon-code {
-    margin-top: 0.5rem;
+    margin-top: 0.5625rem;
 
     .coupon-code {
       font-family: $alshaya-bold;
@@ -105,6 +116,7 @@
       font-weight: bold;
       line-height: 1.33;
       color: $free-gifts-coupon-code-text;
+      padding: 0 0.125rem;
     }
   }
 }
@@ -239,25 +251,41 @@
     ul {
       list-style: none;
       padding: 0;
+      margin-top: 3.8875rem;
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+        margin-top: 5.8875rem;
+        justify-content: space-between;
+        overflow-y: scroll;
+      }
 
       @include breakpoint($upto-desktop) {
-        display: block;
-        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        overflow-y: hidden;
         white-space: nowrap;
         padding-bottom: 1.5rem;
       }
     }
 
     li {
+      @include breakpoint($only-mobile) {
+        flex-basis: calc(50% - 10px);
+        margin-bottom: 2rem;
+      }
+
       @include breakpoint($upto-desktop) {
         display: inline-block;
         white-space: normal;
         vertical-align: top;
         position: relative;
-        width: 9rem;
-        margin-#{$right}: 0.625rem;
+      }
+
+      @include breakpoint($tablet) {
+        flex: 1;
+        height: auto;
+        float: none;
       }
     }
 
@@ -277,11 +305,22 @@
 }
 
 .path--cart {
+  .free-gift-container {
+    @include breakpoint($only-mobile) {
+      width: 7rem;
+      float: $left;
+      margin-bottom: 1.625rem;
+    }
+  }
+
   .gift-message {
     font-size: 0.75rem;
     line-height: 1.33;
     color: $cart-free-gifts-message;
-    margin-top: 1.125rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 1.125rem;
+    }
 
     .coupon-code {
       color: $free-gifts-coupon-code-text;
@@ -321,14 +360,6 @@
             padding: 0 0 1rem;
 
             .sku-promotions {
-              display: none;
-            }
-          }
-        }
-
-        @include breakpoint($only-mobile) {
-          .sku-promotions {
-            .free-gift-promo {
               display: none;
             }
           }
@@ -400,10 +431,12 @@
         @include breakpoint($only-mobile) {
           position: relative;
 
-          .sku-promotions {
-            position: absolute;
-            bottom: 0;
-            width: 33%;
+          .free-gift-label {
+            + .sku-promotions {
+              position: absolute;
+              bottom: 0;
+              width: 33%;
+            }
           }
         }
       }
@@ -505,22 +538,53 @@
       display: none;
     }
   }
+
+  .sku-base-form {
+    .ajax-progress-throbber {
+      display: block !important;
+
+      @include fullPageLoader();
+    }
+  }
 }
 
 .free-gift-listing-modal {
   display: flex;
-  align-items: center;
 
   .free-gift-view {
     display: flex;
     justify-content: center;
     flex-flow: row wrap;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    a:first-child {
+      flex-grow: 1;
+    }
 
     .ajax-progress-throbber {
       width: 100%;
       display: flex;
       justify-content: center;
       margin-top: 0.625rem;
+    }
+
+    .select-free-gift-link {
+      text-align: center;
+
+      a {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        margin-top: 1.125rem;
+        background: #ef5f96;
+        border-radius: 5px;
+        color: #fff;
+        border: 0;
+        text-transform: uppercase;
+        padding: 0.5rem 1.3701rem;
+        display: inline-block;
+      }
     }
   }
 

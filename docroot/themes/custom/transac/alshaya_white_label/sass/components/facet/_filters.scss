@@ -192,9 +192,7 @@
 
   ul {
     li {
-      .facet-item__value {
-        cursor: pointer;
-      }
+      cursor: pointer;
     }
   }
 }
@@ -613,7 +611,6 @@
 
     .block-alshaya-plp-facets-block-all,
     .block-alshaya-promo-facets-block-all,
-    .block-alshaya-search-facets-block-all,
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
@@ -714,6 +711,16 @@ body {
           margin-#{$left}: 1.5rem;
         }
       }
+    }
+  }
+
+  .c-products-list {
+    @include breakpoint($desktop) {
+      padding-top: 7.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-top: 1rem;
     }
   }
 }

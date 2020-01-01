@@ -1,14 +1,12 @@
 .block-alshaya-sub-category-block {
   .plp-subcategory-block {
-    display: flex;
-    align-items: flex-start;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    white-space: nowrap;
     overflow-x: auto;
     padding: 1.25rem 0 2.5rem;
     border-bottom: 1px solid $primary_border;
-
-    @include breakpoint($desktop) {
-      justify-content: center;
-    }
 
     .sub-category {
       display: inline-block;
@@ -40,6 +38,7 @@
         letter-spacing: 1px;
         color: $plp_sub_cat_block_cat_title;
         white-space: normal;
+        margin-top: 0.4375rem;
 
         @include breakpoint($only-tablet) {
           font-size: 0.75rem;
@@ -51,12 +50,23 @@
       }
 
       .sub-category-image {
-        width: 6.75rem;
-        height: 5.03125rem;
-        margin-bottom: 0.4375rem;
+        width: 5.625rem;
+        height: 4.1875rem;
+        margin: 0 auto;
+
+        @include breakpoint($tablet) {
+          width: 5.275rem;
+          height: 3.925rem;
+        }
+
+        @include breakpoint($desktop) {
+          width: 6.75rem;
+          height: 5.03125rem;
+        }
 
         img {
           height: inherit;
+          width: 100%;
         }
       }
     }
@@ -113,7 +123,7 @@
 
         @include breakpoint($only-mobile) {
           margin: 0;
-          max-width: 6.75rem;
+          max-width: 12.5rem;
         }
       }
     }
@@ -124,12 +134,14 @@
   .filter-fixed-top {
     .c-products-list {
       .view-alshaya-product-list {
-        @include breakpoint($desktop) {
-          margin-top: 16.25rem;
+        margin-top: 9.375rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 9.625rem;
         }
 
-        @include breakpoint($only-tablet) {
-          margin-top: 9.625rem;
+        @include breakpoint($desktop) {
+          margin-top: 16.25rem;
         }
       }
     }
@@ -159,4 +171,82 @@
       }
     }
   }
+
+  #block-page-title {
+    display: none;
+  }
+
+  .block-alshaya-group-by-sub-category-page-title {
+    h1 {
+      font-family: $alshaya-thin;
+      font-weight: normal;
+      margin: 0 0 0.3125rem;
+      font-size: 1.5rem;
+      line-height: 1.17;
+      color: $plp_sub_cat_page_cat_title;
+
+      @include breakpoint($only-mobile) {
+        margin: 0.875rem 0.5rem 0.3125rem;
+        font-size: 1rem;
+        line-height: 1.25;
+      }
+    }
+
+    .sub-category-page-description {
+      font-family: $alshaya-thin;
+      line-height: 1.28;
+      font-size: 0.875rem;
+      color: $plp_sub_cat_page_cat_desc;
+      padding-bottom: 0.5625rem;
+      border-bottom: 1px solid $plp_sub_cat_page_cat_separator;
+      margin-bottom: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.4375rem;
+        margin: 0 0.5rem 0.875rem;
+      }
+    }
+  }
+
+  .c-plp {
+    .c-products__item {
+      @include breakpoint($desktop) {
+        height: 33.75rem;
+      }
+    }
+
+    .c-products-list {
+      &.product-large {
+        .c-products__item {
+          @include breakpoint($desktop) {
+            height: 41.25rem;
+          }
+        }
+
+        .alshaya_search_gallery {
+          @include breakpoint($only-tablet) {
+            height: 29.125rem;
+          }
+        }
+      }
+
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($only-tablet) {
+            height: 19.375rem;
+          }
+        }
+      }
+    }
+  }
+
+  .view-plp-promotional-banner {
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+  }
+}
+
+.anti-ghosting {
+  display: none;
 }

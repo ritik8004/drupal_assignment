@@ -11,8 +11,11 @@ vendor:
     dist/promise.js: {}
     dist/object.js: {}
     js/alshaya_algolia_react.js: {}
+    js/back_to_search.js: {}
   dependencies:
     - alshaya_react/react
+    - alshaya_master/jquery_is_in_viewport
+    - alshaya_search_api/product_height
 
 search_insights_listing:
   js:
@@ -31,5 +34,7 @@ search_insights_detail:
 search_insights:
   js:
     js/algolia/search-insights.js: { scope: footer }
+    js/search-insights.common.js: {}
   dependencies:
     - core/drupalSettings
+    - core/jquery.cookie

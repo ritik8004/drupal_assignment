@@ -1,20 +1,28 @@
 {{ attach_library('alshaya_white_label/free_gifts') }}
 
-<div class="free-gift-image">
-  {{ sku_image }}
-</div>
-<div class="free-gift-promo-wrapper">
-  <div class="label">{{ 'Free Gift'|t }}</div>
-  <div class="free-gift-title">
-    <span class="title">{{ free_sku_title }}</span> {{ 'with this product'|t }}
-  </div>
-  {% if promo_code is not empty %}
-    <div class="free-gift-coupon-code">
-      {{ 'Use Code ' | t }}
-      {% for id, coupon in promo_code %}
-        <span class="coupon-code">{{ coupon.value }}</span>
-      {% endfor %}
-      {{ 'with this product' | t }}
+<div class="free-gift-promo-wrapper free-gift-promo-list">
+  {% if sku_image is not empty %}
+    <div class="free-gift-image">
+      {{ sku_image }}
     </div>
   {% endif %}
+
+  <div class="free-gift-wrapper">
+    <div class="free-gift-title">
+      {{ 'Free Gift'|t }}
+    </div>
+    <div class="free-gift-message">
+      {{ free_sku_title }}{{ 'with this product'|t }}
+    </div>
+
+    {% if promo_code is not empty %}
+      <div class="free-gift-coupon-code">
+        {{ 'Use Code ' | t }}
+        {% for id, coupon in promo_code %}
+          <span class="coupon-code">{{ coupon.value }}</span>
+        {% endfor %}
+        {{ 'with this product' | t }}
+      </div>
+    {% endif %}
+  </div>
 </div>

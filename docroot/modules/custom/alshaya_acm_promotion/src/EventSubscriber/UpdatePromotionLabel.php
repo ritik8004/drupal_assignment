@@ -41,14 +41,23 @@ class UpdatePromotionLabel implements EventSubscriberInterface {
   /**
    * Add Promo Label Update Commands.
    *
-   * @param \Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent $addToCartFormSubmitEvent
+   * @param \Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent $event
    *   Add to Cart Submit Event.
    */
-  public function postAddToCartFormSubmit(AddToCartFormSubmitEvent $addToCartFormSubmitEvent) {
+  public function postAddToCartFormSubmit(AddToCartFormSubmitEvent $event) {
     if ($this->labelManager->isDynamicLabelsEnabled()) {
-      $sku = $addToCartFormSubmitEvent->getSku();
-      $response = $addToCartFormSubmitEvent->getResponse();
-      $label = $this->labelManager->getSkuPromoDynamicLabel($sku);
+      $sku = $event->getSku();
+      $variant = $event->getVariant();
+
+      if ($sku->bundle() === 'configurable') {
+        // Load the parent again to ensure we keep adding the product for
+        // first parent when multiple parents are available and also to
+        // ensure we select proper parent when using alshaya_color_split.
+        $sku = $variant->getPluginInstance()->getParentSku($variant);
+      }
+
+      $response = $event->getResponse();
+      $label = $this->labelManager->getSkuPromoDynamicLabel($variant ?? $sku);
 
       // Prepare response if label is present.
       if (!empty($label)) {

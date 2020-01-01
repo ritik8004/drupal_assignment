@@ -21,7 +21,8 @@
 
         var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
 
-        window.aa('clickedObjectIDsAfterSearch', {
+        window.aa('convertedObjectIDsAfterSearch', {
+          userToken: Drupal.getAlgoliaUserToken(),
           eventName: 'Add to cart',
           index: "...",
           queryID: $('html').attr('data-algolia-query-id'),
