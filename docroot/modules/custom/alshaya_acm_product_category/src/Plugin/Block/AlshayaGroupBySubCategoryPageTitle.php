@@ -135,6 +135,9 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
       $tags = Cache::mergeTags($tags, $term->getCacheTags());
     }
 
+    // Adding cache tag to reflect chenges on layout change.
+    $tags = Cache::mergeTags($tags, $this->config->getCacheTags());
+
     return $tags;
   }
 
