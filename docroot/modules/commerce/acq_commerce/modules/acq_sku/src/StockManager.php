@@ -124,8 +124,8 @@ class StockManager {
     // Initialise static value with FALSE.
     $static[$sku_string] = FALSE;
 
-    $stock = $this->getStock($sku_string);
-    if (empty($stock['status'])) {
+    $stock = !empty($sku_string) ? $this->getStock($sku_string) : '';
+    if (!empty($stock) && empty($stock['status'])) {
       return FALSE;
     }
 
