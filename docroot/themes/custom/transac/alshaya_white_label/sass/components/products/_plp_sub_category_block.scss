@@ -214,6 +214,10 @@
     }
   }
 
+  .block-alshaya-sub-category-block .plp-subcategory-block {
+    display: none;
+  }
+
   .c-plp {
     .c-products__item {
       @include breakpoint($desktop) {
