@@ -235,7 +235,7 @@
                 "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch",
                 "CORE-9356 Dynamic landing pages": "patches/facets/CORE-9356-changes-for-facets-pretty-paths.patch",
                 "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
-                "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2019-12-24/3095601-5.patch"
+                "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2019-12-30/3095601-7.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
