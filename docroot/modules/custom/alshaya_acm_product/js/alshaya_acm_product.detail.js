@@ -144,6 +144,18 @@
           $(firstAttribute).val(firstAttributeValue).trigger('refresh').trigger('change');
         }
       });
+
+
+      // Show images for oos product on PDP.
+      $('.out-of-stock').once('load').each(function () {
+        var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
+        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
+          return;
+        }
+
+        var node = $(this).parents('article.entity--type-node:first');
+        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+      });
     }
   };
 

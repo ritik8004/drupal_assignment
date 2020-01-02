@@ -1,0 +1,38 @@
+.promotion-available-code {
+  margin-top: 1.875rem;
+
+  .promotion-coupon-code {
+    display: inline;
+    padding: 0.625rem 1rem;
+    border: 2px dashed $basket_available_code;
+    color: $basket_available_code;
+    margin-#{$right}: 0.625rem;
+    font-family: $alshaya-bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    @include link-ripple;
+
+    &:hover {
+      border-style: solid;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 1.875rem;
+  }
+
+  &.promotion-coupon-details {
+    @include breakpoint($only-mobile) {
+      margin: 1.25rem 0 !important;
+    }
+
+    @include breakpoint($tablet) {
+      margin: 0.75rem 1.875rem;
+    }
+  }
+}
