@@ -133,7 +133,7 @@ function alshaya_seo_install() {
   // Update simple_sitemap config.
   $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
   $config_factory->set('cron_generate', FALSE);
-  $config_factory->set('max_links', 5000);
+  $config_factory->set('max_links', 4000);
   $config_factory->set('skip_untranslated', TRUE);
   $config_factory->save();
 }
