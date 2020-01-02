@@ -1,7 +1,7 @@
 .promotion-available-code {
   margin-top: 1.875rem;
 
-  .code {
+  .promotion-coupon-code {
     display: inline;
     padding: 0.625rem 1rem;
     border: 2px dashed $basket_available_code;
@@ -14,8 +14,7 @@
 
     @include link-ripple;
 
-    &:hover,
-    &.applied {
+    &:hover {
       border-style: solid;
     }
   }
@@ -25,5 +24,13 @@
     align-items: center;
     justify-content: flex-start;
     margin-bottom: 1.875rem;
+  }
+
+  &.promotion-coupon-details {
+    margin: 1.25rem 0;
+
+    @include breakpoint($tablet) {
+      margin: 0 1.875rem;
+    }
   }
 }
