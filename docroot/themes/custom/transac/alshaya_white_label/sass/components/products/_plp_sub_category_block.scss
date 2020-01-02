@@ -206,6 +206,12 @@
         margin: 0 0.5rem 0.875rem;
       }
     }
+
+    .sub-category-page-title-desc-wrapper {
+      &.center-aligned {
+        text-align: center;
+      }
+    }
   }
 
   .c-plp {
