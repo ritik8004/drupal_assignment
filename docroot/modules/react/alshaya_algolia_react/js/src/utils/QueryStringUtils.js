@@ -45,9 +45,6 @@ function redirectToUrl(queryValue, redirectlang, inputTag) {
     window.location.hash = "query=" + queryValue;
     window.location.pathname = window.location.pathname.replace(drupalSettings.path.currentLanguage, redirectlang);
   }
-  else {
-    toggleSearchResultsContainer('show');
-  }
 }
 
 function isMobile() {

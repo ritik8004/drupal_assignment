@@ -32,16 +32,11 @@ class App extends React.PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !==  this.state.query) {
-      redirectToOtherLang(this.state.query);
-    }
-  }
-
   setQueryValue = (queryValue, inputTag = null) => {
     this.setState({query: queryValue});
     if (queryValue === '') {
       updateSearchQuery('');
+      toggleSearchResultsContainer('');
     }
     else {
       redirectToOtherLang(queryValue, inputTag);

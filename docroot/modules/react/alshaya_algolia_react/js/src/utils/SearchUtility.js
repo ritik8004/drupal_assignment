@@ -41,6 +41,19 @@ function toggleSearchResultsContainer(query) {
     : showSearchResultContainer();
 }
 
+// Show or hide sort by filter, when no results found.
+function toggleSortByFilter(action) {
+  const searchWrapper = document.getElementById('alshaya-algolia-search');
+
+  if (action == 'hide') {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-facet-block')
+  }
+  else {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block')
+  }
+
+}
+
 /**
  * Place ajax fulll screen loader.
  */
@@ -65,6 +78,7 @@ export {
   contentDiv,
   searchResultDiv,
   toggleSearchResultsContainer,
+  toggleSortByFilter,
   showLoader,
   removeLoader
 };

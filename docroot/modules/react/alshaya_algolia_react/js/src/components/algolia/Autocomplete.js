@@ -117,7 +117,7 @@ class Autocomplete extends React.Component {
     this.timerId = setTimeout(() => {
       this.props.refine(newValue);
       this.props.onChange(newValue, inputTag);
-    }, 300);
+    }, 100);
 
     this.setState({
       value: newValue,
