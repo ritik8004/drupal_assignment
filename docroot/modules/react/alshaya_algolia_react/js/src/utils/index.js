@@ -4,6 +4,7 @@ export {
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
+  redirectToOtherLang,
   isMobile,
   getAlgoliaStorageValues
 } from './QueryStringUtils';
@@ -18,6 +19,7 @@ export {
   contentDiv,
   searchResultDiv,
   toggleSearchResultsContainer,
+  toggleSortByFilter,
   showLoader,
   removeLoader
 } from './SearchUtility';

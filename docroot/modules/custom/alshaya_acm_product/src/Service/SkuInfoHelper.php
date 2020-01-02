@@ -221,7 +221,7 @@ class SkuInfoHelper {
       // the text beyond the limit for description, and some of fields have key
       // stored instead of value, value is saved in it's separate table.
       if (isset($skuData["attr_{$row['key']}"])) {
-        $row['value'] = $skuData["attr_{$row['key']}"][0]['value'];
+        $row['value'] = $sku->get("attr_{$row['key']}")->getString();
       }
       // Remove un-wanted description key.
       unset($row['description']);

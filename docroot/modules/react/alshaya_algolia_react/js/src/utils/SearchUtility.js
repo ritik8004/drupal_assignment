@@ -41,6 +41,19 @@ function toggleSearchResultsContainer(query) {
     : showSearchResultContainer();
 }
 
+// Show or hide sort by filter, when no results found.
+function toggleSortByFilter(action) {
+  const searchWrapper = document.getElementById('alshaya-algolia-search');
+
+  if (action == 'hide') {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-facet-block')
+  }
+  else {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block')
+  }
+
+}
+
 /**
  * Place ajax fulll screen loader.
  */
@@ -55,7 +68,8 @@ function showLoader() {
  */
 function removeLoader() {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
-  if (loaderDiv.length > 0) {
+  // Check if loader div is present algolia is not redirecting to other language.
+  if (loaderDiv.length > 0 && localStorage.getItem('algoliaLangRedirect') !== '1') {
     document.body.removeChild(loaderDiv[0]);
   }
 }
@@ -64,6 +78,7 @@ export {
   contentDiv,
   searchResultDiv,
   toggleSearchResultsContainer,
+  toggleSortByFilter,
   showLoader,
   removeLoader
 };
