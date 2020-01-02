@@ -890,10 +890,24 @@
         background: $basket_fixed_percentage_inactive_header_promo_bg;
         color: $basket_fixed_percentage_inactive_header_promo_txt;
 
+        .promotion-available-code {
+          .promotion-coupon-code {
+            border-color: $basket_fixed_percentage_inactive_header_promo_txt;
+            color: $basket_fixed_percentage_inactive_header_promo_txt;
+          }
+        }
+
         &.threshold-reached {
           background: none;
           color: $basket_fixed_percentage_inactive_header_promo_bg;
           border: 2px solid $basket_fixed_percentage_inactive_header_promo_bg;
+
+          .promotion-available-code {
+            .promotion-coupon-code {
+              border-color: $basket_fixed_percentage_inactive_header_promo_bg;
+              color: $basket_fixed_percentage_inactive_header_promo_bg;
+            }
+          }
 
           svg #fill-value {
             fill: $basket_fixed_percentage_inactive_header_promo_bg;
