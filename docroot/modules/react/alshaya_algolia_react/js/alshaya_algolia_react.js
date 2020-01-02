@@ -47,23 +47,6 @@
     Drupal.plpListingProductTileHeight('full_page', null);
   };
 
-  /**
-   * Calculate and add height for each product tile.
-   */
-  Drupal.listingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
-      var maxHeight = 0;
-      $('.c-products__item').each(function () {
-        var currentHeight = $(this)
-          .find('> article')
-          .outerHeight(true);
-        maxHeight = maxHeight > currentHeight ? maxHeight : currentHeight;
-      });
-
-      $('.c-products__item').css('height', maxHeight);
-    }
-  };
-
   Drupal.algoliaReact = Drupal.algoliaReact || {};
 
   // Show all filters blocks.
