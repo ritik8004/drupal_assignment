@@ -300,10 +300,6 @@
       padding-bottom: 9px;
       border-bottom: 1px solid $content_pagetitle_border;
       font-family: $alshaya-thin;
-
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
     }
 
     &.product-large {
@@ -786,6 +782,15 @@ html[lang=ar] {
   &.view-search {
     width: 100%;
     clear: both;
+  }
+}
+
+.c-products-list {
+  &.view-search {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
+      padding-#{$right}: 1.25rem;
+    }
   }
 }
 
