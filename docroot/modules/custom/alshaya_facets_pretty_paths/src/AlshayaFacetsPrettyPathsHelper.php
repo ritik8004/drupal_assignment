@@ -91,6 +91,13 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $defaultFacetsSummaryManager;
 
   /**
+   * Facet Summary Object.
+   *
+   * @var \Drupal\facets_summary\FacetsSummaryInterface
+   */
+  protected $facetSummaryStorage;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [

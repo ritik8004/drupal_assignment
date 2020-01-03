@@ -136,7 +136,6 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
         'class' => 'facets-hidden-container',
       ],
     ];
-    $term = NULL;
 
     $parameters = UrlHelper::filterQueryParameters(\Drupal::request()->query->all());
     if (!empty($parameters) && isset($parameters['f'])) {
@@ -162,7 +161,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // Refresh/Re-add the class on list views as selected by grid.
     $response->addCommand(new InvokeCommand(NULL, 'refreshListGridClass'));
 
-    $this->setPageType($is_plp_page, $is_promo_page, $is_search_page, $term);
+    $term = $this->setPageType($is_plp_page, $is_promo_page, $is_search_page);
 
     // If page is search, inject hidden field into search page exposed form.
     if ($is_search_page) {
@@ -197,10 +196,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   TRUE if current page is promotion content-type.
    * @param bool $is_search_page
    *   TRUE if current page is search page.
-   * @param object $term
-   *   Returns taxonomy term object.
    */
-  protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page, &$term) {
+  protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page) {
     $current_route_name = $this->currentRouteMatch->getRouteName();
 
     // If facet ajax request.
@@ -231,7 +228,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $vocabId = $term->getVocabularyId();
       if ($vocabId === 'acq_product_category') {
         $is_plp_page = TRUE;
-        return;
+        return $term;
       }
     }
     // If already not set by master request.
