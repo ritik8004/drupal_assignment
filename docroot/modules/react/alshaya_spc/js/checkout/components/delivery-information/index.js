@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CheckoutSectionTitle from '../../../cart/components/spc-checkout-section-title';
-import EmptyDeliveryText from '../delivery-information';
+import EmptyDeliveryText from '../empty-delivery';
 
 export default class DeliveryInformation extends React.Component {
 
