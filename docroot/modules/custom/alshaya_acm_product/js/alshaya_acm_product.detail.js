@@ -34,6 +34,13 @@
         }
       });
 
+      // Adding class to identify that matchback product color is manually updated.
+      $('.acq-content-product-matchback .select2Option a').click(function () {
+        if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
+          $(this).closest('.select2Option').addClass('matchback-color-processed');
+        }
+      });
+
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
         var form = $(this).closest('form');
         var sku = $(form).attr('data-sku');
@@ -61,6 +68,23 @@
             ]
           );
         }
+        // Trigger matchback color change on main product color change.
+        if (code == 'color') {
+          var matchbackProduct = form.closest('article[data-vmode="matchback"]').length;
+          if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
+            $('article[data-vmode="matchback"] form').trigger(
+              'product-color-changed',
+              [
+                combinations['byAttribute'][selectedCombination],
+                code
+              ]
+            );
+            var selectedList = $('article[data-vmode="matchback"] select[data-configurable-code="color"] option[value="' + selected + '"]');
+            var selectedIndex = selectedList.index();
+            selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
+          }
+        }
+
       });
 
       $('.sku-base-form').once('load').each(function () {
@@ -72,7 +96,7 @@
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
 
-        $(this).on('variant-selected', function (event, variant, code) {
+        $(this).on('variant-selected product-color-changed', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
@@ -165,7 +189,9 @@
     }
 
     if ($(product).find('.gallery-wrapper').length > 0) {
-      $(product).find('.gallery-wrapper').replaceWith(gallery);
+      //@TODO: This needs to be fixed.
+      //$(product).find('.gallery-wrapper').replaceWith(gallery);
+      $(product).find('#product-zoom-container').replaceWith(gallery);
     }
     else {
       $(product).find('#product-zoom-container').replaceWith(gallery);
