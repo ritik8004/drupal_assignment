@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -63,6 +64,24 @@ function _alshaya_seo_process_gtm() {
  * Implements hook_page_attachments().
  */
 function alshaya_seo_page_attachments(array &$attachments) {
+  // Add script for sitelink searchbox.
+  if (_alshaya_seo_process_sitelink_searchbox()) {
+    $attachments['#attached']['html_head']['alshaya_seo_search'] = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#attributes' => [
+          'type' => 'application/ld+json',
+        ],
+        // Adding PHP_EOL on both sides to make it look exactly
+        // same as expected.
+        '#value' => PHP_EOL . json_encode(_alshaya_seo_prepare_sitelink_searchbox_metadata(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+        '#weight' => 100,
+      ],
+      'sitelinkSearchbox',
+    ];
+  }
+
   if (!_alshaya_seo_process_gtm()) {
     return;
   }
@@ -325,4 +344,59 @@ function alshaya_seo_module_implements_alter(&$implementations, $hook) {
       unset($implementations['simple_sitemap']);
     }
   }
+}
+
+/**
+ * Get the meta tag description.
+ *
+ * @return string
+ *   Meta tag description.
+ */
+function _alshaya_seo_prepare_sitelink_searchbox_metadata() {
+  $searchLink = 'search?keywords={search_term_string}';
+
+  // Incase of algolia we don't have search page.
+  // So adding a algolia suitable search link.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_search_algolia')) {
+    $searchLink = '#query={search_term_string}';
+  }
+
+  $ss_data = [];
+  $ss_data['@context'] = 'http://schema.org';
+  // As checked in current prod, following text is not to be translated.
+  $ss_data['@type'] = 'WebSite';
+  $ss_data['url'] = Url::fromRoute('<front>')->setAbsolute()->toString();
+  $ss_data['potentialAction']['@type'] = 'SearchAction';
+  $ss_data['potentialAction']['target'] = Url::fromRoute('<front>')->setAbsolute()->toString() . $searchLink;
+  $ss_data['potentialAction']['query-input'] = 'required name=search_term_string';
+
+  return $ss_data;
+}
+
+/**
+ * Function to check process sitelink search script for current request.
+ *
+ * @return bool
+ *   Whether to process or not.
+ */
+function _alshaya_seo_process_sitelink_searchbox() {
+  static $process = NULL;
+
+  if ($process !== NULL) {
+    return $process;
+  }
+
+  $process = FALSE;
+  // Enable sitelink searchbox for live sites only.
+  if (!Settings::get('alshaya_seo.google_sitelink_searchbox_enable')) {
+    return $process;
+  }
+
+  $sitelink_enable = \Drupal::config('alshaya_seo.sitelink_search')->get('enable_sitelink_searchbox');
+  // Enable sitelink searchbox script on home page.
+  if ($sitelink_enable && \Drupal::service('path.matcher')->isFrontPage()) {
+    $process = TRUE;
+  }
+
+  return $process;
 }
