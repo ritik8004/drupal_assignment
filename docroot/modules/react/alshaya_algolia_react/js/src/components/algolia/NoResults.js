@@ -12,6 +12,8 @@ const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFace
     toggleSortByFilter('hide');
   }
 
+  // Trigger GTM for no results found.
+  Drupal.algoliaReact.triggerGTMSearchResults(0);
   return (
     <div className="hits-empty-state">
       <div className="view-empty">

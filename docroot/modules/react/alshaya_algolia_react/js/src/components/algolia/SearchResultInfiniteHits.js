@@ -23,6 +23,10 @@ export default connectInfiniteHits(props => {
             Drupal.processBackToSearch(storage_value)
           }
         };
+        // Trigger gtm event one time, only when search we have search results.
+        if (hits.length > 0) {
+          Drupal.algoliaReact.triggerGTMSearchResults(hits.length);
+        }
       }
     }, [hits]
   );
