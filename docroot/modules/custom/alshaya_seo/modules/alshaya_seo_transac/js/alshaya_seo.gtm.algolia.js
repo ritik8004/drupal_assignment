@@ -7,14 +7,14 @@
   'use strict';
 
   var searchQuery = [];
-  var initnNoOfResult = '';
+  var initNoOfResults = null;
 
   // Bind for Algolia Search page. No impact if Algolia search not enabled
   // as selector won't be available.
   $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
-    if (_.indexOf(searchQuery, currentsearch) < 0 && initnNoOfResult !== noOfResult) {
+    if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
       // Store all search queries in a temp array, so we don't trigger
       // event twice for the same keyword, while user repeats the search query
       // intermittently.

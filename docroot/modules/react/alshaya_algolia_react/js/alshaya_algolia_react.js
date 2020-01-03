@@ -38,7 +38,7 @@
   Drupal.algoliaReact = Drupal.algoliaReact || {};
 
   // Trigger events when Algolia finishes loading search results.
-  Drupal.algoliaReact.triggerGTMSearchResults = function(resultCount) {
+  Drupal.algoliaReact.triggerSearchResultsUpdatedEvent = function(resultCount) {
     $('#alshaya-algolia-search').trigger('search-results-updated', [resultCount]);
   };
 

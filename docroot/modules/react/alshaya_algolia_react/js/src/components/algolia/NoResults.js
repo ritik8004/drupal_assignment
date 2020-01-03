@@ -13,7 +13,7 @@ const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFace
   }
 
   // Trigger GTM for no results found.
-  Drupal.algoliaReact.triggerGTMSearchResults(0);
+  Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(0);
   return (
     <div className="hits-empty-state">
       <div className="view-empty">

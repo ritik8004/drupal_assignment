@@ -8,7 +8,6 @@ export default connectInfiniteHits(props => {
   // Create ref to get element after it gets rendered.
   const teaserRef = useRef();
 
-  // Get height of each article and set the max height to all article tags.
   useEffect(
     () => {
       if (typeof teaserRef.current === 'object' && teaserRef.current !== null) {
@@ -25,7 +24,7 @@ export default connectInfiniteHits(props => {
         };
         // Trigger gtm event one time, only when search we have search results.
         if (hits.length > 0) {
-          Drupal.algoliaReact.triggerGTMSearchResults(hits.length);
+          Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(hits.length);
         }
       }
     }, [hits]
