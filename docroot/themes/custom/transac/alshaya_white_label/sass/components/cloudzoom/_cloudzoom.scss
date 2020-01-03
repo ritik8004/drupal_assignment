@@ -528,15 +528,29 @@
   height: 100vh !important;
   overflow-y: auto;
 
+  @include breakpoint($only-mobile) {
+    padding: 0;
+  }
+
   .slick-arrow {
-    top: 50%;
-    transform: translateY(-50%);
-    position: fixed;
+    @include breakpoint($tablet) {
+      top: 50%;
+      transform: translateY(-50%);
+      position: fixed;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+    }
   }
 
   .slick-dots {
-    position: fixed !important;
-    bottom: 3rem !important;
+    @include breakpoint($tablet) {
+      position: fixed !important;
+      bottom: 3rem !important;
+    }
   }
 
   #product-full-screen-gallery {

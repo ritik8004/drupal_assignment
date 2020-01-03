@@ -86,52 +86,10 @@
                   <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                 </a>
               </li>
-              <li>
-                <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                  <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-                </a>
-              </li>
-              <li>
-                <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                  <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-                </a>
-              </li>
             {% endif %}
           {% endfor %}
         </ul>
       </div>
     </div>
-  {% endblock %}
-  {% block modalMobileGallery %}
-  <div id="product-image-gallery-container-mobile" class="mob-imagegallery" style="display: none;">
-    <div class="mob-imagegallery__wrapper">
-      <ul id="product-image-gallery-mob" class="mob-imagegallery__thumbnails {{ pager_flag }}">
-        {% for thumbs in thumbnails %}
-          {% if thumbs.type == 'youtube' %}
-            <li class="mob-imagegallery__thumbnails__video youtube">
-              <div class="mobileplayer-wrapper">
-                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-              </div>
-            </li>
-          {% elseif thumbs.type == 'vimeo' %}
-            <li data-iframe="{{ thumbs.url }}" class="mob-imagegallery__thumbnails__video vimeo">
-              <div class="mobileplayer-wrapper">
-                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-              </div>
-            </li>
-          {% else %}
-            <li class="mob-imagegallery__thumbnails__image">
-              <img src="{{ thumbs.zoomurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-            </li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-      {%  if labels|length > 0 %}
-        <div class="product-labels">
-          {{ labels }}
-        </div>
-      {% endif %}
-    </div>
-  </div>
   {% endblock %}
 </div>
