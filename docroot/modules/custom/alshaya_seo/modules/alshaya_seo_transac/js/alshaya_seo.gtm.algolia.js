@@ -6,22 +6,25 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
-  var searchQuery = '';
+  var searchQuery = [];
+  var initNoOfResults = null;
 
   // Bind for Algolia Search page. No impact if Algolia search not enabled
   // as selector won't be available.
-  $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function () {
+  $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
     // Avoid triggering again for each page.
-    if (searchQuery !== $('#alshaya-algolia-autocomplete input:text').val()) {
-      searchQuery = $('#alshaya-algolia-autocomplete input:text').val();
-      var noOfResult = parseInt($('.view-header', $(this)).text().replace(Drupal.t('items'), '').trim());
-      noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
+    var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
+    if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
+      // Store all search queries in a temp array, so we don't trigger
+      // event twice for the same keyword, while user repeats the search query
+      // intermittently.
+      searchQuery.push(currentsearch);
 
       dataLayer.push({
         event: 'eventTracker',
         eventCategory: 'Internal Site Search',
         eventAction: noOfResult === 0 ? '404 Results' : 'Successful Search',
-        eventLabel: searchQuery,
+        eventLabel: currentsearch,
         eventValue: noOfResult,
         nonInteraction: noOfResult === 0 ? noOfResult : 1,
       });
