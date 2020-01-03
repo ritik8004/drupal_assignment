@@ -6,22 +6,9 @@
       }
     }
   }
-
-  #product-image-gallery-container-mobile {
-    .mob-imagegallery__wrapper {
-      .slick-dots {
-        bottom: 0;
-      }
-
-      > ul {
-        padding-bottom: 3rem;
-      }
-    }
-  }
 }
 
 .mobilegallery .mobilegallery__thumbnails,
-#product-image-gallery,
 #lightSlider {
   .slick-prev,
   .slick-next {
@@ -40,39 +27,6 @@
         height: 3rem;
         width: 3rem;
       }
-    }
-  }
-}
-
-@include breakpoint($only-tablet) {
-  #product-image-gallery-container {
-    .imagegallery__wrapper {
-      > .imagegallery__full,
-      > .cloudzoom__video_modal {
-        height: 27rem !important;
-      }
-
-      #product-image-gallery {
-        margin-top: 2.5rem;
-      }
-    }
-
-    .button__wrapper {
-      bottom: 10.5rem;
-    }
-  }
-}
-
-#product-image-gallery-container {
-  .button__wrapper {
-    .zoomout {
-      background: url("../imgs/assets/ic-zoomout.svg") no-repeat;
-      background-size: contain;
-    }
-
-    .zoomin {
-      background: url("../imgs/assets/ic-zoomin.svg") no-repeat;
-      background-size: contain;
     }
   }
 }

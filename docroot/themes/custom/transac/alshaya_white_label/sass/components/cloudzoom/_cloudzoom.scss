@@ -153,12 +153,6 @@
   }
 }
 
-#product-image-gallery {
-  .slick-list {
-    padding: 0 !important;
-  }
-}
-
 .cloudzoom .cloud-zoom-lens {
   cursor: zoom-in;
 }
@@ -245,7 +239,6 @@
     }
   }
 
-  #product-image-gallery,
   #lightSlider {
     position: relative;
     height: 6.25rem;
@@ -302,18 +295,6 @@
     }
   }
 
-  #product-image-gallery {
-    margin-top: 1rem;
-
-    &.pager-yes {
-      padding: 0 2.5rem;
-    }
-
-    .slick-slide {
-      margin-#{$right}: 0.4375rem;
-    }
-  }
-
   #drupal-modal #lightSlider.pager-yes {
     .slick-slide {
       width: 6.3rem !important;
@@ -327,7 +308,6 @@
 }
 
 @include breakpoint($desktop) {
-  #product-image-gallery,
   #lightSlider {
     height: 32.5rem;
     margin: 0 0.625rem 0 0;
@@ -476,7 +456,6 @@
     }
   }
 
-  #product-image-gallery,
   #lightSlider {
     &.pager-no {
       height: auto;
@@ -492,17 +471,6 @@
         text-align: center;
         margin: 0 auto;
         width: auto !important;
-      }
-    }
-  }
-}
-
-#product-image-gallery-container {
-  .imagegallery__wrapper {
-    & > .imagegallery__full {
-      .imagegallery__full__image {
-        height: auto;
-        width: 100%;
       }
     }
   }

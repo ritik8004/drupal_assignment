@@ -48,86 +48,10 @@
   }
 }
 
-#product-image-gallery {
-  &.pager-no {
-    .slick-track {
-      transform: none !important;
-    }
-  }
-}
-
 #lightSlider {
   @include breakpoint($only-tablet) {
     padding-#{$left}: 3rem;
     padding-#{$right}: 3rem;
-  }
-}
-
-#product-image-gallery-container {
-  @include breakpoint($tablet) {
-    height: 40.5rem !important;
-    margin: 0 auto;
-    padding: 1.5em;
-  }
-
-  @include breakpoint($desktop) {
-    height: 34.5rem !important;
-    padding: 1.5em;
-    overflow: hidden;
-  }
-
-  .imagegallery__wrapper {
-    #product-image-gallery {
-      position: relative;
-
-      @include breakpoint($desktop) {
-        width: 5.625rem;
-        float: $left;
-      }
-    }
-
-    & > .imagegallery__full {
-      text-align: center;
-
-      @include breakpoint($tablet) {
-        height: 30rem !important;
-      }
-
-      @include breakpoint($desktop) {
-        height: 31.5rem !important;
-        float: $right;
-        width: calc(100% - (6.75rem)) !important;
-        padding-right: 2.1875rem;
-      }
-
-      .imagegallery__full__image {
-        height: 100%;
-        width: auto;
-      }
-    }
-
-    &.thumbnail-count-1 {
-      ul.imagegallery__thumbnails {
-        @include breakpoint($tablet) {
-          display: none;
-        }
-      }
-
-      .imagegallery__full,
-      .cloudzoom__video_modal {
-        width: 100% !important;
-      }
-
-      + .button__wrapper {
-        @include breakpoint($desktop) {
-          #{$left}: 42%;
-        }
-
-        @include breakpoint($only-tablet) {
-          #{$left}: 43%;
-        }
-      }
-    }
   }
 }
 
