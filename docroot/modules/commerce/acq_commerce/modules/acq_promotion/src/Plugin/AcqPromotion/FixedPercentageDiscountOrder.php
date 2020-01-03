@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ACQPromotion(
  *   id = "fixed_percentage_discount_order",
  *   label = @Translation("Get Y% discount on order over KWD X"),
+ *   status = TRUE,
  * )
  */
 class FixedPercentageDiscountOrder extends AcqPromotionBase implements ContainerFactoryPluginInterface {
@@ -84,23 +85,17 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     $promotion_data = unserialize($promotion_data);
 
     // Override label to include coupon if threshold has reached.
-    if (!empty($promotion_data) && $this->checkThresholdReached($promotion_data)) {
-      $percent = NULL;
-
-      if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
-        $percent = $promotion_data['discount'];
+    $coupon = $this->promotionNode->get('field_coupon_code')->getString();
+    if (!empty($coupon)) {
+      $classes = 'promotion-coupon-code';
+      if ($this->checkThresholdReached($promotion_data) && !empty($promotion_data) && !empty($promotion_data['discount'])) {
+        $label = $this->t('Your order qualifies for @percent% OFF', [
+          '@percent' => $promotion_data['discount'],
+        ]);
+        $classes .= ' available';
       }
 
-      $coupon = $this->promotionNode->get('field_coupon_code')->getString();
-      if (!empty($coupon)) {
-        $label = $this->t(
-          'Your order qualifies for @percent% OFF <div class="promotion-coupon-details"> Use code: <div class="promotion-coupon-code">@code</div></div>',
-          [
-            '@percent' => $percent,
-            '@code' => $coupon,
-          ]
-        );
-      }
+      $label .= '<span class="promotion-coupon-details promotion-available-code"> ' . $this->t('Use the code: ') . '<span class="' . $classes . '">' . $coupon . '</span></span>';
     }
 
     return $label;
@@ -115,7 +110,12 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
    * @return bool
    *   Flag if threshold value reached.
    */
-  protected function checkThresholdReached(array $promotion_data) {
+  public function checkThresholdReached(array $promotion_data = NULL) {
+    if (is_null($promotion_data)) {
+      $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+      $promotion_data = unserialize($promotion_data);
+    }
+
     $reached = FALSE;
     $cart = $this->cartStorage->getCart(FALSE);
 
@@ -131,6 +131,35 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     }
 
     return $reached;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotionCartStatus() {
+    return $this->checkThresholdReached() ? self::STATUS_CAN_BE_APPLIED : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPromotionCodeLabel() {
+    $label = '';
+    if ($this->checkThresholdReached()) {
+      $coupon = $this->promotionNode->get('field_coupon_code')->getString();
+
+      $label = '<div class="promotion-coupon-code available">' . $coupon . '</div>';
+      $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
+      $promotion_data = unserialize($promotion_data);
+
+      if (!empty($promotion_data) && !empty($promotion_data['discount'])) {
+        $label .= '<span class="code-desc">' . $this->t('Use and get @percent% off', [
+          '@percent' => $promotion_data['discount'],
+        ])->__toString() . '</span>';
+      }
+    }
+
+    return $label;
   }
 
 }

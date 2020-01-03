@@ -170,7 +170,7 @@ class AlshayaFeedSkuInfoHelper {
       $product[$lang] = [
         'sku' => $sku->getSku(),
         'name' => $node->label(),
-        'type_id' => $sku->bundle(),
+        'product_type' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
         'url' => $this->skuInfoHelper->getEntityUrl($node),
         'short_description' => !empty($short_desc['value']) ? $this->renderer->renderPlain($short_desc['value']) : '',

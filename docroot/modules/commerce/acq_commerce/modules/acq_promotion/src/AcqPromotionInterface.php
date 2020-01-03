@@ -8,6 +8,11 @@ namespace Drupal\acq_promotion;
 interface AcqPromotionInterface {
 
   /**
+   * Promotion is eligible to be applied on cart.
+   */
+  const STATUS_CAN_BE_APPLIED = 1;
+
+  /**
    * Get inactive promo label.
    *
    * @return mixed
@@ -22,5 +27,21 @@ interface AcqPromotionInterface {
    *   Active promo label.
    */
   public function getActiveLabel();
+
+  /**
+   * Get promotion status based on cart.
+   *
+   * @return bool
+   *   Promotion status.
+   */
+  public function getPromotionCartStatus();
+
+  /**
+   * Get promotion code label for cart promotions.
+   *
+   * @return string
+   *   Label.
+   */
+  public function getPromotionCodeLabel();
 
 }

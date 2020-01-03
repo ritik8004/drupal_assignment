@@ -32,7 +32,7 @@
         }
       });
       $(window).on('load', function(event) {
-        $('body').once('bind-facet-item-click').on('click','.c-collapse-item .facet-item', function(event) {
+        $('body').once('bind-facet-item-click').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
           $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
         });
       });
@@ -44,34 +44,7 @@
   };
 
   Drupal.refreshGrids = function() {
-    var gridCount = $('#alshaya-algolia-search .c-products-list').hasClass('product-large') ? 3 : 4;
-    var tiles = $('#alshaya-algolia-search  .c-products__item');
-    var totalCount = $('#alshaya-algolia-search  .c-products__item').length;
-    var loopCount = Math.ceil(totalCount / gridCount);
-    // In full page mode we dont factor lazy loading as this mode is to reorganize the tiles based on the grid.
-    // Run for each row.
-    for (var i = 0; i < loopCount; i++) {
-      var indexStart = gridCount * i;
-      var indexEnd = gridCount * i + gridCount - 1;
-      Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
-    }
-  };
-
-  /**
-   * Calculate and add height for each product tile.
-   */
-  Drupal.listingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
-      var maxHeight = 0;
-      $('.c-products__item').each(function () {
-        var currentHeight = $(this)
-          .find('> article')
-          .outerHeight(true);
-        maxHeight = maxHeight > currentHeight ? maxHeight : currentHeight;
-      });
-
-      $('.c-products__item').css('height', maxHeight);
-    }
+    Drupal.plpListingProductTileHeight('full_page', null);
   };
 
   Drupal.algoliaReact = Drupal.algoliaReact || {};
@@ -119,7 +92,7 @@
       $('body').removeClass('large-grid')
       $('.c-products-list', algolia_wrapper).removeClass('product-large').addClass('product-small');
       // Adjust height of PLP tiles.
-      Drupal.listingProductTileHeight();
+      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     $('#alshaya-algolia-search .large-col-grid').once('algolia-search').on('click', function () {
@@ -129,7 +102,7 @@
       $('body').addClass('large-grid')
       $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
       // Adjust height of PLP tiles.
-      Drupal.listingProductTileHeight();
+      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
 

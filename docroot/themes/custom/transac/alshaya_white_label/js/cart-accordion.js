@@ -26,6 +26,7 @@
             active: active
           });
         }
+        $(this).trigger('accordion:initialized');
       });
     }
   };

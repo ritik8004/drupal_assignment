@@ -884,35 +884,136 @@
 }
 
 .cart-promotions-wrapper {
-  background: $basket_header_promo_bg;
-  color: $basket_header_promo_txt;
-  padding: 0.85rem 1rem;
-  margin-bottom: 0.875rem;
-  letter-spacing: 0.0125rem;
-  position: relative;
+  &.inactive-promotions {
+    .promotion {
+      &.fixed_percentage_discount_order {
+        background: $basket_fixed_percentage_inactive_header_promo_bg;
+        color: $basket_fixed_percentage_inactive_header_promo_txt;
+
+        .promotion-available-code {
+          .promotion-coupon-code {
+            border-color: $basket_fixed_percentage_inactive_header_promo_txt;
+            color: $basket_fixed_percentage_inactive_header_promo_txt;
+          }
+        }
+
+        &.threshold-reached {
+          background: none;
+          color: $basket_fixed_percentage_inactive_header_promo_bg;
+          border: 2px solid $basket_fixed_percentage_inactive_header_promo_bg;
+
+          .promotion-available-code {
+            .promotion-coupon-code {
+              border-color: $basket_fixed_percentage_inactive_header_promo_bg;
+              color: $basket_fixed_percentage_inactive_header_promo_bg;
+            }
+          }
+
+          svg #fill-value {
+            fill: $basket_fixed_percentage_inactive_header_promo_bg;
+          }
+        }
+      }
+
+      &.free_shipping_order {
+        background: $basket_free_delivery_inactive_header_promo_bg;
+        color: $basket_free_delivery_inactive_header_promo_txt;
+
+        @include icon(delivery, before) {
+          margin: 0 0.5rem;
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: bold;
+          font-size: 2.125rem;
+          color: $basket_free_delivery_inactive_header_promo_txt;
+        }
+      }
+
+      &.fixed_percentage_discount_order,
+      &.free_shipping_order {
+        svg #fill-value {
+          fill: $basket_active_promotion_icon;
+        }
+      }
+    }
+  }
+
+  &.active-promotions {
+    .promotion {
+      &.fixed_percentage_discount_order {
+        background: $basket_fixed_percentage_active_header_promo_bg;
+        color: $basket_fixed_percentage_active_header_promo_txt;
+        border: 2px solid $basket_fixed_percentage_active_header_promo_txt;
+
+        svg #fill-value {
+          fill: $basket_fixed_percentage_active_header_promo_txt;
+        }
+      }
+
+      &.free_shipping_order {
+        background: $basket_free_delivery_active_header_promo_bg;
+        color: $basket_free_delivery_active_header_promo_txt;
+        border: 2px solid $basket_free_delivery_active_header_promo_txt;
+
+        @include icon(delivery, before) {
+          margin: 0 0.5rem;
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: bold;
+          font-size: 2.125rem;
+          color: $peacock-blue;
+        }
+      }
+    }
+  }
+
+  .promotion {
+    padding: 0.5rem 0;
+    padding-#{$right}: 1.5625rem;
+    margin-bottom: 0.875rem;
+    letter-spacing: 0.0125rem;
+    position: relative;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    font-family: $alshaya-bold;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+      margin-bottom: 1.3rem;
+    }
+
+    .promotion-coupon-details {
+      display: inline-block;
+      font-family: $alshaya-thin;
+
+      .promotion-coupon-code {
+        font-family: $alshaya-bold;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0.3125rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$left}: 1.5rem;
+      }
+    }
+
+    svg {
+      width: 2.1875rem;
+      margin: 0 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        align-self: flex-start;
+      }
+    }
+  }
 
   html[lang=ar] & {
     line-height: normal;
-  }
-
-  @include breakpoint($tablet) {
-    margin-top: -1em;
-  }
-
-  @include breakpoint($desktop) {
-    padding: 0.8125rem 1.5625rem;
-    margin-top: 0;
-    margin-bottom: 1.3rem;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.75rem;
-    font-family: $arial;
-
-    @include breakpoint($desktop) {
-      font-size: 0.9375rem;
-    }
   }
 }
 
@@ -1037,19 +1138,6 @@ html[lang=ar] {
       }
     }
 
-    .image {
-      @include breakpoint($only-mobile) {
-        border: 1px solid $basket_img_border;
-        background: $basket_img_bg;
-        overflow: hidden;
-
-        img {
-          border: 0;
-          max-width: 100% !important;
-        }
-      }
-    }
-
     .tooltip--wrap {
       @include breakpoint($tablet) {
         margin-top: 0.3125rem;
@@ -1092,10 +1180,6 @@ html[lang=ar] {
         }
 
         td.delivery-option {
-          @include breakpoint($only-mobile) {
-            margin-top: -0.5rem;
-          }
-
           @include breakpoint($only-tablet) {
             padding-top: 1.35rem;
           }
@@ -1135,7 +1219,6 @@ html[lang=ar] {
 
   .promo-continue-shopping-wrapper summary,
   .alias--cart #table-cart-totals td:first-child,
-  .cart-promotions-wrapper p,
   .alias--cart #table-cart-items tr th {
     font-size: 0.75rem;
   }

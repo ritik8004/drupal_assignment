@@ -526,6 +526,20 @@
       font-size: 0.8125rem !important;
       padding-bottom: 0 !important;
       margin: 0 !important;
+
+      &.only-mobile {
+        @include breakpoint($only-mobile) {
+          border-bottom: 1px solid;
+        }
+      }
+    }
+
+    .view-empty {
+      padding-top: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        padding-top: 1rem;
+      }
     }
   }
 }

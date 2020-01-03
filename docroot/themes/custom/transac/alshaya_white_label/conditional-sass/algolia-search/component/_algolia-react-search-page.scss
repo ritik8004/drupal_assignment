@@ -64,11 +64,17 @@
 
   #sort_by {
     li {
+      line-height: normal;
+      display: flex;
+
       a {
-        margin-top: 0.1875rem;
+        display: inline-flex;
+        align-items: center;
+        margin-top: 0;
         text-transform: capitalize;
         color: $algolia_react-facet-item-color;
         font-weight: normal;
+        line-height: 1.5rem;
 
         &::before {
           content: '';
@@ -80,7 +86,7 @@
           border-radius: 100%;
           border: 1px solid $primary_radiobtn_empty;
           margin-#{$right}: 1rem;
-          top: 0.375rem;
+          vertical-align: middle;
         }
       }
 
@@ -150,7 +156,7 @@
     #sort_by {
       li {
         a {
-          line-height: 1.25rem;
+          line-height: 2.9375rem;
           text-transform: capitalize;
 
           &::before {

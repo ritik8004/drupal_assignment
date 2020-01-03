@@ -12,14 +12,17 @@
         });
       });
 
-      // Hide apply coupon button on page load.
-      $('.customer-cart-form', context).once('bind-events').each(function () {
+      $('.coupon-code-wrapper').once('coupon-code').on('accordion:initialized', function() {
         // Activate the accordion in case we have a coupon code applied to the
         // cart.
         if (($('input.cancel-promocode').length > 0) &&
           ($('input.cancel-promocode').val() !== '')) {
-          $('.coupon-code-wrapper.ui-accordion').accordion( "option", "active", 0 );
+          $('.coupon-code-wrapper').accordion('option', 'active', 0 );
         }
+      });
+
+      // Hide apply coupon button on page load.
+      $('.customer-cart-form', context).once('bind-events').each(function () {
         $('#coupon-button', $(this)).on('click', function (e) {
           if ($(this).hasClass('remove')) {
             e.preventDefault();

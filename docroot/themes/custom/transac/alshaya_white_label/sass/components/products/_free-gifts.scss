@@ -1,4 +1,8 @@
 .nodetype--acq_product {
+  .select-free-gift {
+    display: none !important;
+  }
+
   .free-gift-promotions {
     display: flex;
     flex-flow: row wrap;
@@ -247,25 +251,41 @@
     ul {
       list-style: none;
       padding: 0;
+      margin-top: 3.8875rem;
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+        margin-top: 5.8875rem;
+        justify-content: space-between;
+        overflow-y: scroll;
+      }
 
       @include breakpoint($upto-desktop) {
-        display: block;
-        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-        overflow-y: hidden;
         white-space: nowrap;
         padding-bottom: 1.5rem;
       }
     }
 
     li {
+      @include breakpoint($only-mobile) {
+        flex-basis: calc(50% - 10px);
+        margin-bottom: 2rem;
+      }
+
       @include breakpoint($upto-desktop) {
         display: inline-block;
         white-space: normal;
         vertical-align: top;
         position: relative;
-        width: 9rem;
-        margin-#{$right}: 0.625rem;
+      }
+
+      @include breakpoint($tablet) {
+        flex: 1;
+        height: auto;
+        float: none;
       }
     }
 
@@ -530,18 +550,41 @@
 
 .free-gift-listing-modal {
   display: flex;
-  align-items: center;
 
   .free-gift-view {
     display: flex;
     justify-content: center;
     flex-flow: row wrap;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+
+    a:first-child {
+      flex-grow: 1;
+    }
 
     .ajax-progress-throbber {
       width: 100%;
       display: flex;
       justify-content: center;
       margin-top: 0.625rem;
+    }
+
+    .select-free-gift-link {
+      text-align: center;
+
+      a {
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        margin-top: 1.125rem;
+        background: #ef5f96;
+        border-radius: 5px;
+        color: #fff;
+        border: 0;
+        text-transform: uppercase;
+        padding: 0.5rem 1.3701rem;
+        display: inline-block;
+      }
     }
   }
 

@@ -10,6 +10,7 @@ use Drupal\acq_promotion\AcqPromotionBase;
  * @ACQPromotion(
  *   id = "free_shipping_order",
  *   label = @Translation("Free shipping with an order over X KD"),
+ *   status = TRUE,
  * )
  */
 class FreeShippingOrder extends AcqPromotionBase {
@@ -18,7 +19,7 @@ class FreeShippingOrder extends AcqPromotionBase {
    * {@inheritdoc}
    */
   public function getActiveLabel() {
-    return $this->t('Your order qualifies for Free Delivery');
+    return $this->t('Your order qualifies for free delivery.');
   }
 
 }
