@@ -668,12 +668,24 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
+
+        /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $skuInfo */
+        $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
+        // In case of oos product if parent product don't have gallery info
+        // then get gallery info from their first child and
+        // push into drupal settings.
+        if (!$skuManager->isProductInStock($sku_entity) && empty($gallery)) {
+          $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
+          if (!empty($child)) {
+            $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
+            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+          }
+        }
+
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
         $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
 
         if ($sku_entity->bundle() == 'configurable') {
-          /** @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper $skuInfo */
-          $skuInfo = \Drupal::service('alshaya_acm_product.sku_info');
           $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
           $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         }

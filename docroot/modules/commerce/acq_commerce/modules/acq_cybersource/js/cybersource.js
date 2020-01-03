@@ -39,6 +39,7 @@
         }
         else {
           month.find('option').prop('disabled', false);
+          month.val(month.find('option:first').val());
         }
 
         // Let other JS libraries know options are changed.
