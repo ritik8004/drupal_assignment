@@ -8,7 +8,11 @@
 /**
  * Implements hook_simple_sitemap_arbitrary_links_alter().
  */
-function alshaya_image_sitemap_simple_sitemap_arbitrary_links_alter(&$arbitrary_links) {
+function alshaya_image_sitemap_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
+  if ($sitemap_variant !== 'default') {
+    return;
+  }
+
   global $base_url;
   $url = $base_url . '/image-sitemap';
   $arbitrary_links[] = [
