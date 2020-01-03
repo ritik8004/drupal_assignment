@@ -35,7 +35,7 @@
       });
 
       // Adding class to identify that matchback product color is manually updated.
-      $('.acq-content-product-matchback .select2Option a').click(function () {
+      $('.acq-content-product-matchback').on('click', '.select2Option a', function () {
         if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
           $(this).closest('.select2Option').addClass('matchback-color-processed');
         }
@@ -70,7 +70,6 @@
         }
         // Trigger matchback color change on main product color change.
         if (code == 'color') {
-          var matchbackProduct = form.closest('article[data-vmode="matchback"]').length;
           if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
             $('article[data-vmode="matchback"] form').trigger(
               'product-color-changed',
@@ -189,9 +188,7 @@
     }
 
     if ($(product).find('.gallery-wrapper').length > 0) {
-      //@TODO: This needs to be fixed.
-      //$(product).find('.gallery-wrapper').replaceWith(gallery);
-      $(product).find('#product-zoom-container').replaceWith(gallery);
+      $(product).find('.gallery-wrapper').replaceWith(gallery);
     }
     else {
       $(product).find('#product-zoom-container').replaceWith(gallery);
