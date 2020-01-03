@@ -197,13 +197,6 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
       return $data_sets;
     }
 
-    foreach ($children as $child) {
-      $data_sets[] = [
-        'entity_type' => 'taxonomy_term',
-        'id' => $child,
-      ];
-    }
-
     $entityTypeStorage = $this->entityTypeManager->getStorage('node');
     $query = $entityTypeStorage->getQuery();
     $query->sort('nid', 'ASC');
@@ -227,15 +220,8 @@ class AlshayaEntityUrlGenerator extends EntityUrlGenerator {
   protected function processDataSet($data_set) {
     $entity = $this->entityTypeManager->getStorage($data_set['entity_type'])->load($data_set['id']);
     if ($entity instanceof ContentEntityInterface) {
-      if ($entity->bundle() === 'acq_product_category') {
-        if (!($entity->get('field_commerce_status')->getString())) {
-          return FALSE;
-        }
-
-        // For default only L1 is allowed.
-        if ($this->sitemapVariant === 'default' && !($this->productCategory->isCategoryL1($entity))) {
-          return FALSE;
-        }
+      if ($entity->bundle() === 'acq_product_category' && !($entity->get('field_commerce_status')->getString())) {
+        return FALSE;
       }
       elseif ($entity->bundle() === 'acq_product') {
         $terms = $this->productCategoryHelper->getBreadcrumbTermList($entity->get('field_category')->getValue());
