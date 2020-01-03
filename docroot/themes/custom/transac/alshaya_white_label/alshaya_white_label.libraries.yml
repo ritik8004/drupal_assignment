@@ -71,6 +71,16 @@ product_carousel:
     - alshaya_white_label/slick
     - alshaya_white_label/alshaya_image_lazy_load
 
+alshaya_brand_carousel:
+  version: 1.x
+  js:
+    js/alshaya_brand_carousel.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - alshaya_white_label/slick
+
 autosize_textarea:
   js:
     js/autosize_textarea.js: {}
