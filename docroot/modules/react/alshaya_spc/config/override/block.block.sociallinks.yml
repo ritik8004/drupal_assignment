@@ -1,0 +1,5 @@
+visibility:
+  request_path:
+    id: request_path
+    pages: "/cart/checkout\r\n/cart/checkout/*\r\n/checkout"
+    negate: true
