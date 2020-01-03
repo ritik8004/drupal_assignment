@@ -123,7 +123,7 @@ class CartController {
     ];
 
     // Store delivery method when required.
-    if (isset($delivery_method = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping']['extension_attributes']['click_and_collect_type'])) {
+    if (!empty($delivery_method = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping']['extension_attributes']['click_and_collect_type'])) {
       $data['delivery_method'] = $delivery_method == 'home_delivery' ? 'hd' : 'cnc';
     }
 
