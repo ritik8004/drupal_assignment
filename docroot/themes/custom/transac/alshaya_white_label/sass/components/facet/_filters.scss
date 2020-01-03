@@ -528,8 +528,10 @@
       margin: 0 !important;
 
       &.only-mobile {
-        @include breakpoint($only-mobile) {
-          border-bottom: 1px solid;
+        .item-list {
+          @include breakpoint($only-mobile) {
+            border-bottom: 1px solid;
+          }
         }
       }
     }
