@@ -108,23 +108,32 @@ class AlshayaSitemapManager {
   public function configureVariants() {
     $term_data = $this->productCategory->getCategoryTreeCached();
 
-    if (empty($term_data)) {
-      // Throw some error? Delete existing extra variants?
-      return;
+    $existing_variants = $this->getAllVariants();
+
+    $variants = [];
+    if (!empty($term_data)) {
+      foreach ($term_data as $l1) {
+        $term_variants = $this->createVariantForL1($l1);
+        $variants = array_merge($variants, $term_variants);
+      }
     }
 
-    foreach ($term_data as $l1) {
-      $this->createVariantForL1($l1);
+    // Remove the variants which are no longer available.
+    $obsolete_variants = array_diff($existing_variants, $variants);
+    foreach ($obsolete_variants as $variant) {
+      $this->generator->getSitemapManager()->removeSitemapVariants($variant);
     }
-
-    // @TODO: Delete obsolete variants for the case where term name changed
-    // may be?
   }
 
   /**
    * Create variant as per parent depth.
+   *
+   * @return array
+   *   Array of variant names created for the L1.
    */
   private function createVariantForL1($term_data) {
+    $variants = [];
+
     /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $this->entityManager->getStorage('taxonomy_term')->load($term_data['id']);
     if ($term->language()->getId() != 'en' && $term->hasTranslation('en')) {
@@ -132,13 +141,16 @@ class AlshayaSitemapManager {
     }
 
     if ($this->productCategory->isCategoryL1($term)) {
-      $this->addSitemapVariant($term);
+      $variants[] = $this->addSitemapVariant($term);
     }
     else {
       foreach ($term_data['child'] as $l1) {
-        $this->createVariantForL1($l1);
+        $child_variants = $this->createVariantForL1($l1);
+        $variants = array_merge($variants, $child_variants);
       }
     }
+
+    return $variants;
   }
 
   /**
@@ -146,6 +158,9 @@ class AlshayaSitemapManager {
    *
    * @param \Drupal\taxonomy\TermInterface $term
    *   The term object.
+   *
+   * @return string
+   *   Variant name.
    */
   private function addSitemapVariant(TermInterface $term) {
     $variant_name = $this->getVariantName($term->toUrl()->toString());
@@ -159,6 +174,8 @@ class AlshayaSitemapManager {
       ];
       $this->generator->getSitemapManager()->addSitemapVariant($this->getVariantName($term->toUrl()->toString()), $settings);
     }
+
+    return $variant_name;
   }
 
 }
