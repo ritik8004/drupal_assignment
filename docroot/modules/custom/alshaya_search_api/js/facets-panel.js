@@ -341,6 +341,13 @@
         document.title = meta_title + ' |' + site_name;
       };
 
+      // Function to call in ajax command on facet selection.
+      // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
+      $.fn.updatePageTitle = function (active_facets, page_title) {
+        // Update page title of the page.
+        $('h1.c-page-title').text(active_facets[0].join(' ') + ' ' + page_title);
+      };
+
       /**
        * Wrapping all the filters inside a div to make it sticky.
        */

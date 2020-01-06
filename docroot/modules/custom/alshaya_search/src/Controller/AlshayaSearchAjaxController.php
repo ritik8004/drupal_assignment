@@ -174,7 +174,9 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $meta_title = NULL;
       if ($term instanceof TermInterface) {
         $meta_title = $this->tokenUtility->replace('[alshaya_seo:term_name]', ['taxonomy_term' => $term]);
+        $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems();
         $response->addCommand(new InvokeCommand(NULL, 'updateMetaTitle', [$meta_title]));
+        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$active_facets, $term->label()]));
       }
 
     }
