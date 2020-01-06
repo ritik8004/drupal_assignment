@@ -127,6 +127,7 @@ class Autocomplete extends React.Component {
   onSubmitCall = event => {
     event.preventDefault();
     event.stopPropagation();
+    this.autosuggest.current.input.blur();
     return false;
   }
 
