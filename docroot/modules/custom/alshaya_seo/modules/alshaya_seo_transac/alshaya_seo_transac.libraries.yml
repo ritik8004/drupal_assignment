@@ -6,6 +6,7 @@ gtm:
     - core/drupal
     - core/jquery
     - core/jquery.once
+    - core/underscore
     - alshaya_master/common_functions
 
 gtm_algolia:
