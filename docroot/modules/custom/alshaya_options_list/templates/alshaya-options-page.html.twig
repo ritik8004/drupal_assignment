@@ -4,7 +4,7 @@
     <div class='options-page-description'>{{ description }}</div>
   </div>
   {% for key,option in options_list %}
-    <div class='attribute-option attribute-filter-option {{ key }}'>
+    <div class='attribute-option-list-shop-by attribute-option attribute-filter-option {{ key }}'>
       <div class='attribute-title'> {{ option.title }} </div>
       <div class='attribute-filter-header-container'>
         <div class='attribute-filter-header'>
@@ -24,7 +24,7 @@
     </div>
     {% if option.search %}
       <div class="mobile-only-block">
-        <div class='attribute-option {{ key }}'>
+        <div class='attribute-option-details-shop-by attribute-option {{ key }}'>
           <div class='attribute-title'> {{ option.title }} </div>
           <div class='attribute-description'> {{ option.description }} </div>
           {% if option.mobile_title %}
