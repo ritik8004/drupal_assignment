@@ -143,6 +143,24 @@
     }
   }
 
+  &:not(.slug-banner-processed) {
+    .filter-fixed-top {
+      .c-products-list {
+        .view-alshaya-product-list {
+          margin-top: 7.375rem;
+
+          @include breakpoint($tablet) {
+            margin-top: 9.4375rem;
+          }
+
+          @include breakpoint($desktop) {
+            margin-top: 13.3125rem;
+          }
+        }
+      }
+    }
+  }
+
   @include breakpoint($only-mobile) {
     .view-alshaya-product-list {
       .view-content {
