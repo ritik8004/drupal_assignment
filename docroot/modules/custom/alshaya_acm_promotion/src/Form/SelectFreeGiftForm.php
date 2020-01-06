@@ -8,6 +8,7 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Service\AddToCartFormHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -42,13 +43,21 @@ class SelectFreeGiftForm extends FormBase {
   private $formHelper;
 
   /**
+   * Node storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('alshaya_acm_product.add_to_cart_form_helper')
+      $container->get('alshaya_acm_product.add_to_cart_form_helper'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -61,13 +70,17 @@ class SelectFreeGiftForm extends FormBase {
    *   Sku Manager.
    * @param \Drupal\alshaya_acm_product\Service\AddToCartFormHelper $add_to_cart_form_helper
    *   Add to cart form helper.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager service.
    */
   public function __construct(AlshayaPromotionsManager $promotions_manager,
                               SkuManager $sku_manager,
-                              AddToCartFormHelper $add_to_cart_form_helper) {
+                              AddToCartFormHelper $add_to_cart_form_helper,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->promotionsManager = $promotions_manager;
     $this->skuManager = $sku_manager;
     $this->formHelper = $add_to_cart_form_helper;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
   }
 
   /**
@@ -88,8 +101,20 @@ class SelectFreeGiftForm extends FormBase {
     $sku = SKU::loadFromSku($storage['sku'] ?? '');
     $promotion_id = $storage['promotion_id'] ?? '';
 
-    if (!($sku instanceof SKUInterface)) {
+    if (!($sku instanceof SKUInterface) || empty($coupon) || empty($promotion_id)) {
+      // Return empty form if coupon, promotion_id or sku is missing.
+      // Typically used for modal window of free gift from cart page.
       return $form;
+    }
+
+    if ($promotion_node = $this->nodeStorage->load($promotion_id)) {
+      $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
+      $promo_type = $data['extension']['promo_type'] ?? 0;
+
+      // Return empty form for single auto add free gift.
+      if ($promo_type != SkuManager::FREE_GIFT_SUB_TYPE_ALL_SKUS) {
+        return $form;
+      }
     }
 
     $form['coupon'] = [
