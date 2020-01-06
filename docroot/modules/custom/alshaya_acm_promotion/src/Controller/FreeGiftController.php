@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_promotion\Controller;
 
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
