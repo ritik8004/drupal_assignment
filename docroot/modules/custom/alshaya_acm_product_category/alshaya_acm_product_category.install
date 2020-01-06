@@ -16,22 +16,6 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
- * Update image field description.
- */
-function alshaya_acm_product_category_update_8039() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['field.field.taxonomy_term.acq_product_category.field_plp_group_category_img'],
-    'alshaya_acm_product_category',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Create 'sub category block title' for panty guide page.
  */
 function alshaya_acm_product_category_update_8038() {
