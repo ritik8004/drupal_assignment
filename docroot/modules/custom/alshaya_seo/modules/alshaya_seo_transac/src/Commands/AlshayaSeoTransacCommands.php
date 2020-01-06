@@ -19,7 +19,7 @@ class AlshayaSeoTransacCommands extends DrushCommands {
    *
    * @var \Drupal\alshaya_seo_transac\AlshayaSitemapManager
    */
-  private $sitemapManager;
+  protected $sitemapManager;
 
   /**
    * Simple sitemap generator.
