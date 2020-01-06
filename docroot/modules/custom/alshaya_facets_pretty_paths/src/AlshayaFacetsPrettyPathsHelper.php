@@ -432,8 +432,20 @@ class AlshayaFacetsPrettyPathsHelper {
         $active_facet_id = $value['#attributes']['data-drupal-facet-id'];
         $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
         if ($meta_info_type == self::FACET_META_TYPE_PREFIX) {
-          // Strip tags to get the value from price markup.
-          $active_prefix_facet[] = strip_tags($value['#title']['#value']);
+          // Add text 'Size' prefix to the size facet.
+          if (strpos($active_facet_id, 'size')) {
+            $langcode = $this->languageManager->getCurrentLanguage()->getId();
+            if ($langcode == 'en') {
+              $active_prefix_facet[] = 'Size ' . $value['#title']['#value'];
+            }
+            if ($langcode == 'ar') {
+              $active_prefix_facet[] = 'بحجم ' . $value['#title']['#value'];
+            }
+          }
+          else {
+            // Strip tags to get the value from price markup.
+            $active_prefix_facet[] = strip_tags($value['#title']['#value']);
+          }
         }
         elseif ($meta_info_type == self::FACET_META_TYPE_SUFFIX) {
           // Strip tags to get the value from price markup.
