@@ -20,7 +20,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\alshaya_color_split\AlshayaColorSplitManager
    */
-  protected $manager;
+  protected $colorSplitManager;
 
   /**
    * Cache Tags Invalidator.
@@ -32,14 +32,14 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   /**
    * ProductUpdatedEventSubscriber constructor.
    *
-   * @param \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager
+   * @param \Drupal\alshaya_color_split\AlshayaColorSplitManager $color_split_manager
    *   Color Split Manager.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
    *   Cache Tags Invalidator.
    */
-  public function __construct(AlshayaColorSplitManager $manager,
+  public function __construct(AlshayaColorSplitManager $color_split_manager,
                               CacheTagsInvalidatorInterface $cache_tags_invalidator) {
-    $this->manager = $manager;
+    $this->colorSplitManager = $color_split_manager;
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
   }
 
@@ -61,7 +61,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   public function onProductProcessed(ProductUpdatedEvent $event) {
     // Invalidate cache tags for all the products in same style.
     $entity = $event->getSku();
-    $variants = $this->manager->getProductsInStyle($entity, TRUE);
+    $variants = $this->colorSplitManager->getProductsInStyle($entity, TRUE);
     foreach ($variants as $variant) {
       $this->cacheTagsInvalidator->invalidateTags($variant->getCacheTagsToInvalidate());
       $node = $variant->getPluginInstance()->getDisplayNode($variant, FALSE, FALSE);
