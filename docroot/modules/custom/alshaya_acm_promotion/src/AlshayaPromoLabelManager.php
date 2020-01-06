@@ -638,7 +638,7 @@ class AlshayaPromoLabelManager {
    */
   protected function getFreeGiftDisplay($promotion_id, array $free_gift_promotion, array $free_skus) {
     // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
-    if ($free_gift_promotion['promo_type'] == 1) {
+    if ($free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
       $link = Link::createFromRoute(
         $free_gift_promotion['text'],
         'alshaya_acm_promotion.free_gifts_list',
@@ -647,6 +647,9 @@ class AlshayaPromoLabelManager {
           'js' => 'nojs',
         ],
         [
+          'query' => [
+            'coupon' => $free_gift_promotion['coupon_code'][0]['value'] ?? '',
+          ],
           'attributes' => [
             'class' => ['use-ajax'],
             'data-dialog-type' => 'modal',
