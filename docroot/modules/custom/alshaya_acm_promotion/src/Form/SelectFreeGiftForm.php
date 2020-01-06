@@ -109,10 +109,10 @@ class SelectFreeGiftForm extends FormBase {
 
     if ($promotion_node = $this->nodeStorage->load($promotion_id)) {
       $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
-      $promo_type = $data['extension']['promo_type'] ?? 0;
+      $promo_type = $data['extension']['promo_type'] ?? SkuManager::FREE_GIFT_SUB_TYPE_ALL_SKUS;
 
       // Return empty form for single auto add free gift.
-      if ($promo_type != SkuManager::FREE_GIFT_SUB_TYPE_ALL_SKUS) {
+      if ($promo_type != SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
         return $form;
       }
     }
