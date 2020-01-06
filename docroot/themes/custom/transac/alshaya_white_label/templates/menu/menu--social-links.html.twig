@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Theme override to display a social menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ */
+#}
+{% if items %}
+<span itemscope itemtype="https://schema.org/Organization">
+  <link itemprop="url" href="{{ url('<front>') }}">
+  <ul class="menu">
+    {% for item in items %}
+      <li>
+        {{ link(item.title, item.url, { 'itemprop':['sameAs']}) }}
+      </li>
+    {% endfor %}
+  </ul>
+</span>
+{% endif %}
