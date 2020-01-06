@@ -196,7 +196,7 @@ class ProductCategoryHelper {
       }
     }
 
-    return NULL;
+    return [];
   }
 
 }
