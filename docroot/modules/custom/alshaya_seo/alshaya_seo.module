@@ -64,21 +64,26 @@ function _alshaya_seo_process_gtm() {
  */
 function alshaya_seo_page_attachments(array &$attachments) {
   // Add script for sitelink searchbox.
-  if (_alshaya_seo_process_sitelink_searchbox()) {
-    $attachments['#attached']['html_head']['alshaya_seo_search'] = [
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'script',
-        '#attributes' => [
-          'type' => 'application/ld+json',
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    if (_alshaya_seo_process_sitelink_searchbox()) {
+      $attachments['#attached']['html_head']['alshaya_seo_search'] = [
+        [
+          '#type' => 'html_tag',
+          '#tag' => 'script',
+          '#attributes' => [
+            'type' => 'application/ld+json',
+          ],
+          // Adding PHP_EOL on both sides to make it look exactly
+          // same as expected.
+          '#value' => PHP_EOL . json_encode(_alshaya_seo_prepare_sitelink_searchbox_metadata(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+          '#weight' => 100,
         ],
-        // Adding PHP_EOL on both sides to make it look exactly
-        // same as expected.
-        '#value' => PHP_EOL . json_encode(_alshaya_seo_prepare_sitelink_searchbox_metadata(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
-        '#weight' => 100,
-      ],
-      'sitelinkSearchbox',
-    ];
+        'sitelinkSearchbox',
+      ];
+    }
+
+    // Adding cache tag as alshaya_seo.sitelink_search.
+    $attachments['#cache']['tags'][] = 'config:alshaya_seo.sitelink_search';
   }
 
   if (!_alshaya_seo_process_gtm()) {
@@ -352,14 +357,16 @@ function alshaya_seo_module_implements_alter(&$implementations, $hook) {
  *   Meta tag description.
  */
 function _alshaya_seo_prepare_sitelink_searchbox_metadata() {
-  $searchLink = (\Drupal::config('alshaya_seo.sitelink_search')->get('sitelink_searchbox_url')) ?? 'search?keywords={search_term_string}';
+  $searchUrl = (\Drupal::config('alshaya_seo.sitelink_search')->get('sitelink_searchbox_url')) ?? 'search?keywords={search_term_string}';
+  // Invoke the alter hook to allow all modules to set search url.
+  \Drupal::moduleHandler()->alter('alshaya_seo_google_sitelink_searchbox_url', $searchUrl);
   $ss_data = [];
   $ss_data['@context'] = 'http://schema.org';
   // As checked in current prod, following text is not to be translated.
   $ss_data['@type'] = 'WebSite';
   $ss_data['url'] = Url::fromRoute('<front>')->setAbsolute()->toString();
   $ss_data['potentialAction']['@type'] = 'SearchAction';
-  $ss_data['potentialAction']['target'] = Url::fromRoute('<front>')->setAbsolute()->toString() . $searchLink;
+  $ss_data['potentialAction']['target'] = Url::fromRoute('<front>')->setAbsolute()->toString() . $searchUrl;
   $ss_data['potentialAction']['query-input'] = 'required name=search_term_string';
 
   return $ss_data;
@@ -385,10 +392,8 @@ function _alshaya_seo_process_sitelink_searchbox() {
   }
 
   // Enable sitelink searchbox script on home page.
-  if (\Drupal::service('path.matcher')->isFrontPage()) {
-    if (\Drupal::config('alshaya_seo.sitelink_search')->get('enable_sitelink_searchbox')) {
-      $process = TRUE;
-    }
+  if (\Drupal::config('alshaya_seo.sitelink_search')->get('enable_sitelink_searchbox')) {
+    $process = TRUE;
   }
 
   return $process;
