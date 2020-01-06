@@ -6,6 +6,33 @@
  */
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_magazine_update_dependencies() {
+  return [
+    'alshaya_magazine' => [
+      8001 => [
+        'alshaya_seo_transac' => 8408,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Configure sitemap bundle settings again for magazine_article.
+ */
+function alshaya_magazine_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['simple_sitemap.bundle_settings.default.node.magazine_article'],
+    'alshaya_magazine'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_magazine_install() {
