@@ -1,0 +1,9 @@
+services:
+  alshaya_seo_transac.commands:
+    class: Drupal\alshaya_seo_transac\Commands\AlshayaSeoTransacCommands
+    arguments:
+      - '@alshaya_seo_transac.alshaya_sitemap_manager'
+      - '@simple_sitemap.generator'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command}
