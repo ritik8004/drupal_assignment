@@ -5,6 +5,7 @@ import Loading from '../../../utilities/loading';
 import {fetchCartData} from '../../../utilities/get_cart';
 import DeliveryMethods from '../delivery-methods';
 import DeliveryInformation from '../delivery-information';
+import OrderSummaryBlock from '../../../utilities/order-summary-block';
 
 export default class Checkout extends React.Component {
 
@@ -52,7 +53,8 @@ export default class Checkout extends React.Component {
       return (
         <React.Fragment>
           <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.cart.delivery_method} />
-          <DeliveryInformation />
+          <DeliveryInformation delivery_type={this.state.cart.delivery_method} />
+          <OrderSummaryBlock totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
         </React.Fragment>
       );
   }
