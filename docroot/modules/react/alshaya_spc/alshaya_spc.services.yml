@@ -3,3 +3,7 @@ services:
     class: Drupal\alshaya_spc\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  plugin.manager.alshaya_spc_payment_method:
+    class: Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager
+    parent: default_plugin_manager
