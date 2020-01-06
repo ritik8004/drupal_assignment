@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Site\Settings;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -353,14 +352,7 @@ function alshaya_seo_module_implements_alter(&$implementations, $hook) {
  *   Meta tag description.
  */
 function _alshaya_seo_prepare_sitelink_searchbox_metadata() {
-  $searchLink = 'search?keywords={search_term_string}';
-
-  // Incase of algolia we don't have search page.
-  // So adding a algolia suitable search link.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_search_algolia')) {
-    $searchLink = '#query={search_term_string}';
-  }
-
+  $searchLink = (\Drupal::config('alshaya_seo.sitelink_search')->get('sitelink_searchbox_url')) ?? 'search?keywords={search_term_string}';
   $ss_data = [];
   $ss_data['@context'] = 'http://schema.org';
   // As checked in current prod, following text is not to be translated.
@@ -388,14 +380,15 @@ function _alshaya_seo_process_sitelink_searchbox() {
 
   $process = FALSE;
   // Enable sitelink searchbox for live sites only.
-  if (!Settings::get('alshaya_seo.google_sitelink_searchbox_enable')) {
+  if (!alshaya_is_env_prod()) {
     return $process;
   }
 
-  $sitelink_enable = \Drupal::config('alshaya_seo.sitelink_search')->get('enable_sitelink_searchbox');
   // Enable sitelink searchbox script on home page.
-  if ($sitelink_enable && \Drupal::service('path.matcher')->isFrontPage()) {
-    $process = TRUE;
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    if (\Drupal::config('alshaya_seo.sitelink_search')->get('enable_sitelink_searchbox')) {
+      $process = TRUE;
+    }
   }
 
   return $process;
