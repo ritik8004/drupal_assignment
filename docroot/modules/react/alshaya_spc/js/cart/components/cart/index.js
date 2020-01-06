@@ -102,7 +102,7 @@ export default class Cart extends React.Component {
             </div>
             <div className="spc-sidebar">
               <CartPromoBlock coupon_code={this.state.coupon_code} />
-              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo}/>
+              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button={true} />
             </div>
           </div>
           <div className="spc-post-content">

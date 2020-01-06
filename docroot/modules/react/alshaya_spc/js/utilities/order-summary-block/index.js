@@ -13,11 +13,13 @@ class OrderSummaryBlock extends React.Component {
          <div className="products"/>
          <TotalLineItems totals={this.props.totals} cart_promo={promo_data}/>
          {/*To Be used later on Checkout Delivery pages.*/}
-         <div className="actions">
+         {this.props.show_checkout_button &&
+          <div className="actions">
            <div className="checkout-link">
              <a href={Drupal.url('cart')} className="checkout-link">{Drupal.t('continue to checkout')}</a>
            </div>
          </div>
+         }
        </div>
      </div>
    );
