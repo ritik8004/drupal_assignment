@@ -131,8 +131,8 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#description' => $this->t('Select header style that should be displayed in selected manner when any sub-category is displayed on a PLP grouped by sub-categories.'),
       '#required' => FALSE,
       '#options' => [
-        'left_aligned' => 'Left Aligned',
-        'center_aligned' => 'Center Aligned',
+        'left_aligned' => $this->t('Left Aligned'),
+        'center_aligned' => $this->t('Center Aligned'),
       ],
       '#default_value' => $config->get('grouping_page_header_style'),
     ];

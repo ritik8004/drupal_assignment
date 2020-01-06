@@ -110,9 +110,8 @@ class AlshayaGroupBySubCategoryPageTitle extends BlockBase implements ContainerF
           ? $term->get('description')->getValue()[0]['value']
           : NULL);
 
-      $header_style = ($this->config->get('grouping_page_header_style'))
-        ? $this->config->get('grouping_page_header_style')
-        : 'left_aligned';
+      $header_style = $this->config->get('grouping_page_header_style')
+        ?? 'left_aligned';
       $data['header_style'] = ($header_style == 'center_aligned') ? 'center-aligned' : NULL;
 
       return [
