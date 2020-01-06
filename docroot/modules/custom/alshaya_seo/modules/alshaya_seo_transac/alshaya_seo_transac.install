@@ -10,10 +10,30 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Create and enale sitemap variants based on L1 categories.
+ * Change type for default variant and configure bundle settings again.
+ * Also add the fields for sitemap variant.
  */
 function alshaya_seo_transac_update_8408() {
-  _alshaya_seo_transac_create_and_enable_sitemap_variants();
+  _alshaya_seo_transac_configure_default_variant();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'simple_sitemap.bundle_settings.default.node.acq_product',
+      'simple_sitemap.bundle_settings.default.taxonomy_term.acq_product_category',
+    ],
+    'alshaya_seo_transac'
+  );
+
+  $manager->updateConfigs(
+    [
+      'simple_sitemap.bundle_settings.default.node.advanced_page',
+      'simple_sitemap.bundle_settings.default.node.department_page',
+      'simple_sitemap.bundle_settings.default.node.store',
+    ],
+    'alshaya_seo'
+  );
 }
 
 /**
@@ -139,8 +159,8 @@ function alshaya_seo_transac_install() {
   // Install metatag transalations.
   _alshaya_seo_transac_save_metatag_translations();
 
-  // Create and enable sitemap variants based on enabled L1 categories.
-  _alshaya_seo_transac_create_and_enable_sitemap_variants();
+  // Configure default variant.
+  _alshaya_seo_transac_configure_default_variant();
 }
 
 /**
@@ -181,12 +201,18 @@ function _alshaya_seo_transac_save_metatag_translations() {
 }
 
 /**
- * A helper function to create and enable sitemap variants.
+ * Wrapper function to configure default variant.
  */
-function _alshaya_seo_transac_create_and_enable_sitemap_variants() {
-  $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
-  $sitemap->variantWithParentDepth();
+function _alshaya_seo_transac_configure_default_variant() {
+  $variants = \Drupal::service('simple_sitemap.generator')->getSitemapManager()->getSitemapVariants();
+  if ($variants['default']['type'] !== 'alshaya_hreflang') {
+    $variants['default']['type'] = 'alshaya_hreflang';
+    $variants['default']['weight'] = -1;
+    \Drupal::service('simple_sitemap.generator')->getSitemapManager()->addSitemapVariant('default', $variants['default']);
+  }
 
-  // Enable variants for bundle types i.e. acq_product_category, acq_product.
-  $sitemap->enableEntityTypeVariants();
+  // Set the default variant again.
+  \Drupal::configFactory()->getEditable('simple_sitemap.settings')
+    ->set('default_variant', 'default')
+    ->save();
 }
