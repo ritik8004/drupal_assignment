@@ -2,6 +2,8 @@
 
 namespace Drupal\alshaya_seo_transac\Plugin\simple_sitemap\SitemapType;
 
+use Drupal\simple_sitemap\Plugin\simple_sitemap\SitemapType\SitemapTypeBase;
+
 /**
  * Class AlshayaHreflangSitemapType.
  *
