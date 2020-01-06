@@ -64,6 +64,7 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkout() {
     $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-checkout"></div>',
@@ -74,6 +75,7 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
+          'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
         ],
       ],
     ];
