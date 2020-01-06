@@ -2,3 +2,4 @@ sale_category_ids: { }
 new_arrival_category_ids: { }
 old_categorization_enabled: true
 enable_lhn_tree: true
+grouping_page_header_style: 'left_aligned'
