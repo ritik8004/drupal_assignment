@@ -1,0 +1,7 @@
+alshaya_spc.checkout:
+  path: '/checkout'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkout'
+    _title: 'Secure Checkout'
+  requirements:
+    _permission: 'access content'

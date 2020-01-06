@@ -122,6 +122,11 @@ class CartController {
       'free_delivery' => FALSE,
     ];
 
+    // Store delivery method when required.
+    if (!empty($delivery_method = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping']['extension_attributes']['click_and_collect_type'])) {
+      $data['delivery_method'] = $delivery_method == 'home_delivery' ? 'hd' : 'cnc';
+    }
+
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
 
     // Set the status message if we get from magento.
@@ -135,6 +140,9 @@ class CartController {
     // For determining global OOS for cart.
     $data['in_stock'] = TRUE;
 
+    // Whether CnC enabled or not.
+    $data['cnc_enabled'] = TRUE;
+
     $sku_items = array_column($cart_data['cart']['items'], 'sku');
     $items_quantity = array_column($cart_data['cart']['items'], 'qty', 'sku');
     $items_id = array_column($cart_data['cart']['items'], 'item_id', 'sku');
@@ -142,6 +150,12 @@ class CartController {
     foreach ($data['items'] as $key => $value) {
       if (isset($items_quantity[$key])) {
         $data['items'][$key]['qty'] = $items_quantity[$key];
+      }
+
+      // If CnC is disabled for any item, we don't process and consider
+      // CnC disabled.
+      if ($data['cnc_enabled'] && isset($data['items'][$key]['delivery_options']['click_and_collect'])) {
+        $data['cnc_enabled'] = $data['items'][$key]['delivery_options']['click_and_collect']['status'];
       }
 
       // For the OOS.

@@ -1,0 +1,3 @@
+visibility:
+  request_path:
+    pages: "/cart/checkout\r\n/cart/checkout/*\r\n/checkout"

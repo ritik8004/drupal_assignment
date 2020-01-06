@@ -14,6 +14,14 @@ cart:
   dependencies:
     - alshaya_react/react
 
+checkout:
+  version: 1.x
+  footer: true
+  js:
+    dist/checkout.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
+
 add_to_cart:
   version: 1.x
   footer: true

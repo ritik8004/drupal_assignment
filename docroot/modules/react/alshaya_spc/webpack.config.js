@@ -3,7 +3,8 @@ var path  = require("path");
 var config = {
   entry: {
     cart: './js/cart',
-    minicart: './js/minicart'
+    minicart: './js/minicart',
+    checkout: './js/checkout'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

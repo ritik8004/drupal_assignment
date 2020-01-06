@@ -26,6 +26,15 @@ function alshaya_spc_install() {
   $horizontal_recommendation = Block::load('baskethorizontalproductrecommendation');
   $horizontal_recommendation->disable();
   $horizontal_recommendation->save();
+
+  // Override located /config/override/block.block.footerlogos.
+  \Drupal::configFactory()->getEditable('block.block.footerlogos')->save();
+  // Override located /config/override/block.block.customerservice.
+  \Drupal::configFactory()->getEditable('block.block.customerservice')->save();
+  // Override located /config/override/block.block.sociallinks.
+  \Drupal::configFactory()->getEditable('block.block.sociallinks')->save();
+  // Override located /config/override/block.block.copyright.
+  \Drupal::configFactory()->getEditable('block.block.copyright')->save();
 }
 
 /**
