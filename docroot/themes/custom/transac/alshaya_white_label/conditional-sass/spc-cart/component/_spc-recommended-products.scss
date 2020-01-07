@@ -2,17 +2,20 @@
   position: relative;
   background: white;
   padding: 1.25rem;
+  padding-#{$right}: 0;
 
   .block-content {
     white-space: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    display: flex;
+    align-items: flex-start;
 
     .recommended-product {
       display: inline-block;
       margin-#{$right}: 0.625rem;
       scroll-snap-align: center;
-      max-width: 8.275rem;
+      min-width: 8.75rem;
 
       .product-title {
         font-size: 0.875rem;
@@ -26,7 +29,7 @@
         text-align: center;
         font-size: 0.75rem;
 
-        a {
+        .promotion-label {
           color: $spc-recommended-product-promotion;
         }
 
