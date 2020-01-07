@@ -20,5 +20,14 @@ function hook_alshaya_seo_brandname_alter(string &$brand_name) {
 }
 
 /**
+ * Alter the sitelink searchbox url.
+ *
+ * @param string $searchUrl
+ *   Siteink searchbox url.
+ */
+function hook_alshaya_seo_google_sitelink_searchbox_url_alter(string &$searchUrl) {
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

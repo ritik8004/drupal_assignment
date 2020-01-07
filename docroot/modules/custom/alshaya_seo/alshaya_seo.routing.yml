@@ -12,3 +12,10 @@ alshaya_seo.settings:
     _title: 'SEO Settings'
   requirements:
     _role: 'seo_admin'
+alshaya_seo.sitelink_search_form:
+  path: '/admin/config/search/sitelink-search'
+  defaults:
+    _form: '\Drupal\alshaya_seo\Form\SitelinkSearchConfigForm'
+    _title: 'Sitelink Search'
+  requirements:
+    _permission: 'administer site configurations'
