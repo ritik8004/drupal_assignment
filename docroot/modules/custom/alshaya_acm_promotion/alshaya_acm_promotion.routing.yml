@@ -19,7 +19,7 @@ alshaya_acm_promotion.select_free_gift:
 alshaya_acm_promotion.free_gift_modal:
   path: '/free-gift/{acq_sku}/{js}'
   defaults:
-    _title_callback: '\Drupal\alshaya_acm_promotion\Controller\FreeGiftController::titleCallback'
+    _title: ''
     _controller: '\Drupal\alshaya_acm_promotion\Controller\FreeGiftController::viewProduct'
   requirements:
     _permission: 'access content'

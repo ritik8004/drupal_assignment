@@ -84,19 +84,6 @@ class FreeGiftController extends ControllerBase {
   }
 
   /**
-   * Title callback for the modal.
-   */
-  public function titleCallback($acq_sku) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-
-    if (!($sku instanceof SKUInterface)) {
-      throw new NotFoundHttpException();
-    }
-
-    return $sku->get('name')->getString();
-  }
-
-  /**
    * Page callback for the modal.
    */
   public function viewProduct(Request $request, $acq_sku, $js) {
