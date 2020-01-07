@@ -11973,11 +11973,17 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "dev-1.x",
+            "version": "1.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "7a3553b2ce0b6beae55bc14f4927025e3b45fa8c"
+                "reference": "8.x-1.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-8.x-1.0-alpha3.zip",
+                "reference": "8.x-1.0-alpha3",
+                "shasum": "d64ad9174c518b73b80252816a7da3b2a3f2fd5c"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^1.0",
@@ -11990,11 +11996,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha2+6-dev",
-                    "datestamp": "1559637481",
+                    "version": "8.x-1.0-alpha3",
+                    "datestamp": "1578377889",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -12033,8 +12039,7 @@
             "support": {
                 "source": "http://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
-            },
-            "time": "2019-06-07T13:02:31+00:00"
+            }
         },
         {
             "name": "drupal/search_api_autocomplete",
@@ -23176,6 +23181,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "require-dev dependencies from drupal/core",
+            "abandoned": "drupal/core-dev",
             "time": "2019-07-17T16:31:47+00:00"
         },
         {
