@@ -47,8 +47,12 @@
     color: $spc_tooltip_icon;
   }
 
-  &:hover .tooltip-box {
-    opacity: 1;
-    visibility: visible;
+  &:hover {
+    cursor: help;
+
+    .tooltip-box {
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }

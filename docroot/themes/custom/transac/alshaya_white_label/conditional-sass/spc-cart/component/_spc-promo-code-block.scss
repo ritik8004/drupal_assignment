@@ -45,7 +45,7 @@
     padding: 0;
     height: 3.25rem;
     position: absolute;
-    #{$left}: 14.5rem;
+    #{$right}: 9rem;
     border: none;
     background: none;
     font-size: 0;
@@ -53,6 +53,10 @@
     color: $spc-cart-promo-code-submit-enabled;
     top: 50%;
     transform: translateY(-50%);
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 10rem;
+    }
 
     &.active {
       display: block;
