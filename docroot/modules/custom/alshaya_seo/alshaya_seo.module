@@ -75,7 +75,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
           ],
           // Adding PHP_EOL on both sides to make it look exactly
           // same as expected.
-          '#value' => PHP_EOL . json_encode(_alshaya_seo_prepare_sitelink_searchbox_metadata(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+          '#value' => _alshaya_seo_prepare_sitelink_searchbox_metadata(),
           '#weight' => 100,
         ],
         'sitelinkSearchbox',
@@ -357,7 +357,7 @@ function alshaya_seo_module_implements_alter(&$implementations, $hook) {
  *   Meta tag description.
  */
 function _alshaya_seo_prepare_sitelink_searchbox_metadata() {
-  $searchUrl = (\Drupal::config('alshaya_seo.sitelink_search')->get('sitelink_searchbox_url')) ?? 'search?keywords={search_term_string}';
+  $searchUrl = 'search?keywords={search_term_string}';
   // Invoke the alter hook to allow all modules to set search url.
   \Drupal::moduleHandler()->alter('alshaya_seo_google_sitelink_searchbox_url', $searchUrl);
   $ss_data = [];
@@ -369,7 +369,7 @@ function _alshaya_seo_prepare_sitelink_searchbox_metadata() {
   $ss_data['potentialAction']['target'] = Url::fromRoute('<front>')->setAbsolute()->toString() . $searchUrl;
   $ss_data['potentialAction']['query-input'] = 'required name=search_term_string';
 
-  return $ss_data;
+  return PHP_EOL . json_encode($ss_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL;
 }
 
 /**

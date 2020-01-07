@@ -65,13 +65,6 @@ class SitelinkSearchConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('enable_sitelink_searchbox'),
       '#description' => $this->t('This setting will work only with search enabled production sites.'),
     ];
-    $form['sitelink_searchbox_url'] = [
-      '#type' => 'textfield',
-      '#required' => TRUE,
-      '#title' => $this->t('Search Url for Sitelink Searchbox'),
-      '#default_value' => $config->get('sitelink_searchbox_url'),
-      '#description' => $this->t('Enter site search url eg. search?keywords={search_term_string}, #query={search_term_string}'),
-    ];
     return $form;
   }
 
@@ -81,7 +74,6 @@ class SitelinkSearchConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_seo.sitelink_search');
     $config->set('enable_sitelink_searchbox', $form_state->getValue('enable_sitelink_searchbox'));
-    $config->set('sitelink_searchbox_url', $form_state->getValue('sitelink_searchbox_url'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
