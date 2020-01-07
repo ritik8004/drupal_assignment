@@ -480,9 +480,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
    * @aliases cleanup-duplicate-skus
    */
   public function cleanDuplicateSkus() {
-    // Disable ONLY_FULL_GROUP_BY temporarily.
-    $this->connection->query('SET session sql_mode=""');
-    $query = 'SELECT sku, count(*) cnt FROM {acq_sku_field_data} fd1 GROUP BY sku WHERE cnt > 2';
+    $query = 'SELECT sku FROM {acq_sku_field_data} fd1 GROUP BY sku HAVING COUNT(*) > 2';
     $result = $this->connection->query($query)->fetchAllKeyed(0, 0);
 
     if (empty($result)) {
