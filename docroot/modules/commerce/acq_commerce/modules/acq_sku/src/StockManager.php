@@ -116,6 +116,13 @@ class StockManager {
   public function isProductInStock(SKU $sku) {
     $sku_string = $sku->getSku();
 
+    if (empty($sku_string)) {
+      $langcode = $sku->language()->getId();
+      $this->logger->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku->id(), '@langcode' => $langcode]);
+
+      return FALSE;
+    }
+
     $static = &drupal_static(self::class . '_' . __FUNCTION__, []);
     if (isset($static[$sku_string])) {
       return $static[$sku_string];
@@ -124,8 +131,8 @@ class StockManager {
     // Initialise static value with FALSE.
     $static[$sku_string] = FALSE;
 
-    $stock = !empty($sku_string) ? $this->getStock($sku_string) : '';
-    if (!empty($stock) && empty($stock['status'])) {
+    $stock = $this->getStock($sku_string);
+    if (empty($stock['status'])) {
       return FALSE;
     }
 
