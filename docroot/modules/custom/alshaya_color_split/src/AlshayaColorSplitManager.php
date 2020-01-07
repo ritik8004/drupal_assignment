@@ -129,7 +129,8 @@ class AlshayaColorSplitManager {
    *   Grouping attribute.
    */
   public function getGroupingAttribute(SKU $sku) {
-    return $sku->get('attr_grouping_attributes')->getString();
+    $attribute = $sku->get('attr_grouping_attributes')->getString();
+    return $sku->hasField('attr_' . $attribute) ? $attribute : '';
   }
 
 }
