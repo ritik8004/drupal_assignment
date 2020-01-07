@@ -470,7 +470,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
             $tree = ($sub_category_to_show > 0)
               ? array_slice($tree, 0, $sub_category_to_show)
-              : $sub_category_to_show;
+              : $tree;
 
             foreach ($tree as $child) {
               $sub_categories[] = $child['label'];
