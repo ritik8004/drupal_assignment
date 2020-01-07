@@ -480,7 +480,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
    * @aliases cleanup-duplicate-skus
    */
   public function cleanDuplicateSkus() {
-    $query = 'SELECT fd1.sku FROM {acq_sku_field_data} fd1 INNER JOIN {acq_sku_field_data} fd2 ON fd1.sku = fd2.sku WHERE fd1.id != fd2.id';
+    $query = 'SELECT sku FROM {acq_sku_field_data} fd1 GROUP BY sku HAVING COUNT(*) > 2';
     $result = $this->connection->query($query)->fetchAllKeyed(0, 0);
 
     if (empty($result)) {
