@@ -28,9 +28,10 @@
     height: 2.5rem;
     font-size: 0.875rem;
     box-shadow: none;
+    cursor: pointer;
 
     &:hover {
-      border-color: $spc-select-arrow-bg;
+      border-color: $spc-select-border;
     }
 
     > div:nth-child(2) {
