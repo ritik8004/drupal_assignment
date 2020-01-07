@@ -7,6 +7,7 @@ import ItemLowQuantity from '../item-low-quantity';
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
 import {updateCartItemData} from '../../../utilities/update_cart';
+import SpecialPrice from '../../../utilities/special-price';
 
 export default class CartItem extends React.Component {
 
@@ -57,7 +58,9 @@ export default class CartItem extends React.Component {
               <div className="spc-product-title">
                 <a href={Drupal.url(relative_link)}>{title}</a>
               </div>
-              <div className="spc-product-price">{currency_code} {final_price}</div>
+              <div className="spc-product-price">
+                <SpecialPrice price={original_price} final_price={final_price} />
+              </div>
               {free_item === true &&
                 <div>{Drupal.t('FREE')}</div>
               }
@@ -78,7 +81,7 @@ export default class CartItem extends React.Component {
         </div>
         <div className="spc-promotions">
           {promotions.map((key, val) =>
-            <CartPromotion key={val} promo={key} />
+            <CartPromotion key={val} promo={key} link={true}/>
           )}
         </div>
         <CartItemOOS in_stock={in_stock} />
