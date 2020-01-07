@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {applyRemovePromo} from '../../../utilities/update_cart';
-import CheckoutSectionTitle from "../spc-checkout-section-title";
+import SectionTitle from "../../../utilities/section-title";
 
 export default class CartPromoBlock extends React.Component {
 
@@ -99,7 +99,7 @@ export default class CartPromoBlock extends React.Component {
     var promo_remove_active = this.state.promo_applied ? 'active' : '';
     return (
       <div className="spc-promo-code-block">
-        <CheckoutSectionTitle>{Drupal.t('have a promo code?')}</CheckoutSectionTitle>
+        <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
           <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('enter your promo code here')} />
           <button id="promo-remove-button" className={"promo-remove " + promo_remove_active} onClick={()=>{this.promoAction(this.state.promo_applied)}}>{Drupal.t('Remove')}</button>

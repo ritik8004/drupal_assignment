@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class CartItemImage extends React.Component {
+export default class CheckoutItemImage extends React.Component {
 
   render() {
     if (this.props.img_data !== undefined) {

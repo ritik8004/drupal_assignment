@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CheckoutSectionTitle from '../../../cart/components/spc-checkout-section-title';
+import SectionTitle from '../../../utilities/section-title';
 import EmptyDeliveryText from '../empty-delivery';
 
 export default class DeliveryInformation extends React.Component {
@@ -11,7 +11,7 @@ export default class DeliveryInformation extends React.Component {
   	  : Drupal.t('Delivery information');
     return (
       <div>
-        <CheckoutSectionTitle>{title}</CheckoutSectionTitle>
+        <SectionTitle>{title}</SectionTitle>
         <EmptyDeliveryText delivery_type={this.props.delivery_type} />
       </div>
     );

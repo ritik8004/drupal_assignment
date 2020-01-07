@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CheckoutSectionTitle from '../../../cart/components/spc-checkout-section-title';
+import SectionTitle from '../../../utilities/section-title';
 
 export default class DeliveryMethods extends React.Component {
 
@@ -34,7 +34,7 @@ export default class DeliveryMethods extends React.Component {
 
     return (
       <div>
-        <CheckoutSectionTitle>{Drupal.t('Delivery method')}</CheckoutSectionTitle>
+        <SectionTitle>{Drupal.t('Delivery method')}</SectionTitle>
         <div>
           <input id="delivery-method" checked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" onChange={this.handleChange} />
           {Drupal.t('Home delivery')} <span>{hd_subtitle}</span>

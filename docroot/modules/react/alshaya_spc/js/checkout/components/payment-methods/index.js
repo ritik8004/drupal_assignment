@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CheckoutSectionTitle from '../../../cart/components/spc-checkout-section-title';
+import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
 
 export default class PaymentMethods extends React.Component {
@@ -17,7 +17,7 @@ export default class PaymentMethods extends React.Component {
 
     return(
       <div>
-      	<CheckoutSectionTitle>{Drupal.t('Payment methods')}</CheckoutSectionTitle>
+      	<SectionTitle>{Drupal.t('Payment methods')}</SectionTitle>
       	<div className={'payment-method ' + active_class}>{methods}</div>
       </div>
     );

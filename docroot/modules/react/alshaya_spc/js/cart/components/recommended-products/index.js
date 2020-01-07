@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RecommendedProduct from '../../../utilities/recommended-product';
-import CheckoutSectionTitle from "../spc-checkout-section-title";
+import SectionTitle from "../../../utilities/section-title";
 
 export default class CartRecommendedProducts extends React.Component {
 
@@ -24,9 +24,9 @@ export default class CartRecommendedProducts extends React.Component {
     if (Object.keys(recommended_products).length > 0) {
       return (
         <React.Fragment>
-          <CheckoutSectionTitle>
+          <SectionTitle>
             {Drupal.t('you may also like')}
-          </CheckoutSectionTitle>
+          </SectionTitle>
           <div className="spc-recommended-products">
             <button className="nav-prev" onClick={() => {this.listHorizontalScroll('prev')}}/>
             <div className="block-content">

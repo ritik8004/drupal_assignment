@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class CartConfigurableOption extends React.Component {
+export default class CheckoutConfigurableOption extends React.Component {
 
   render() {
     const { label, value } = this.props.label;
