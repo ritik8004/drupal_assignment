@@ -995,6 +995,7 @@
 
       @include breakpoint($only-mobile) {
         margin-top: 0.3125rem;
+        display: block;
       }
 
       @include breakpoint($tablet) {
