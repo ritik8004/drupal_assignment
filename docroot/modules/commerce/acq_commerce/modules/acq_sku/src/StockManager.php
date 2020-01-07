@@ -116,6 +116,13 @@ class StockManager {
   public function isProductInStock(SKU $sku) {
     $sku_string = $sku->getSku();
 
+    if (empty($sku_string)) {
+      $langcode = $sku->language()->getId();
+      $this->logger->error('Empty SKU string in SKU entity with @id and language @langcode.', ['@id' => $sku->id(), '@langcode' => $langcode]);
+
+      return FALSE;
+    }
+
     $static = &drupal_static(self::class . '_' . __FUNCTION__, []);
     if (isset($static[$sku_string])) {
       return $static[$sku_string];
