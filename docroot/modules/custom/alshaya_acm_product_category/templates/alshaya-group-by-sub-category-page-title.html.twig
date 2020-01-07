@@ -1,12 +1,4 @@
-{% if group_category_header.image is not empty %}
-  <div class="group-category-page-title-image-wrapper">
-      <div class="group-category-image">
-        <img src="{{ group_category_header.image.url }}" alt="{{ group_category_header.image.alt }}" title="{{ group_category_header.image.alt }}" />
-      </div>
-  </div>
-{% else %}
-  <div class="sub-category-page-title-desc-wrapper">
-    <h1>{{ group_category_header.title }}</h1>
-    <div class="sub-category-page-description">{{ group_category_header.description }}</div>
-  </div>
-{% endif %}
+<div class="sub-category-page-title-desc-wrapper {{ group_category_header.header_style }}">
+  <h1>{{ group_category_header.title }}</h1>
+  <div class="sub-category-page-description">{{ group_category_header.description }}</div>
+</div>

@@ -8,12 +8,12 @@ use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
-use Drupal\Core\Url;
 use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -59,6 +59,10 @@ class SkuManager {
   const AGGREGATED_LISTING = 'aggregated';
 
   const NON_AGGREGATED_LISTING = 'non_aggregated';
+
+  const FREE_GIFT_SUB_TYPE_ALL_SKUS = 0;
+
+  const FREE_GIFT_SUB_TYPE_ONE_SKU = 1;
 
   /**
    * Flag to allow merge children in alshaya_color_split.
@@ -920,7 +924,7 @@ class SkuManager {
             $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
           }
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
-          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
+          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           break;
 
         default:
@@ -940,7 +944,7 @@ class SkuManager {
             $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
           }
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
-          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? 0;
+          $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           break;
       }
     }

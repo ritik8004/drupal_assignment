@@ -215,7 +215,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Add sub total price of product.
       if ($is_item_free) {
         $item['sub_total'] = [
-          '#markup' => '<div class="final-price">' . t('FREE') . '</div>',
+          '#markup' => '',
+        ];
+        $item['price'] = [
+          '#markup' => '<div class="price-free">' . t('FREE') . '</div>',
         ];
       }
       else {
@@ -796,6 +799,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   // If line item's price is 0, its a free item & set the label for it.
   if ($is_free_sku_item &&
     isset($total_price['#final_price']) && $total_price['#final_price'] == 0) {
+    $total_price = '';
     $free_gift_label['#markup'] = t('Free Gift with Purchase');
   }
 

@@ -468,7 +468,7 @@ class AlshayaPromotionsManager {
       ];
 
       // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
-      if ($promotion['promo_type'] == 1) {
+      if ($promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
         $route_parameters['node'] = $promotion_id;
         $link_coupons = Link::createFromRoute(
           reset($coupons),
@@ -649,11 +649,18 @@ class AlshayaPromotionsManager {
     foreach ($allApplicablePromotions as $promotion) {
       if ($promotion instanceof NodeInterface) {
         $order = $promotion->get('field_acq_promotion_sort_order')->getString();
+        $subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
         $promotion_data = $promotion->get('field_acq_promotion_data')->getString();
         $promotion_data = unserialize($promotion_data);
         $threshold_price = $this->getPromotionThresholdPrice($promotion_data);
 
-        if (isset($order) && isset($threshold_price)) {
+        // Free Shipping promotions needs to be prioritized for display.
+        if ($subtype === self::SUBTYPE_FREE_SHIPPING_ORDER) {
+          if (isset($order) && isset($threshold_price)) {
+            $cartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER][$order][$threshold_price][] = $promotion->id();
+          }
+        }
+        elseif (isset($order) && isset($threshold_price)) {
           $cartPromotions[$order][$threshold_price][] = $promotion->id();
         }
       }
@@ -720,6 +727,8 @@ class AlshayaPromotionsManager {
           $plugin_id = $promotion->get('field_acq_promotion_action')->getString();
         }
 
+        // Get translated version of promotion node.
+        $promotion = $this->entityRepository->getTranslationFromContext($promotion);
         $promotionPlugin = $this->acqPromotionPluginManager->createInstance(
           $plugin_id,
           [],
@@ -770,7 +779,27 @@ class AlshayaPromotionsManager {
       $appliedPromotionIds[] = $promotion->id();
     }
 
+    // Extract next eligible cart free shipping promotion.
+    if (!empty($freeShippingPromotions = $allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER])) {
+      foreach ($freeShippingPromotions as $priceSortedPromotions) {
+        ksort($priceSortedPromotions);
+
+        foreach ($priceSortedPromotions as $promotions) {
+          foreach ($promotions as $promotion) {
+            if (!in_array($promotion, $appliedPromotionIds)) {
+              $promotion = $this->nodeStorage->load($promotion);
+              if ($promotion instanceof NodeInterface) {
+                $inactiveCartPromotion = $promotion;
+                return $promotion;
+              }
+            }
+          }
+        }
+      }
+    }
+
     // Extract next eligible cart promotion based on priority and price.
+    unset($allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER]);
     foreach ($allCartPromotions as $priceSortedPromotions) {
       ksort($priceSortedPromotions);
 
@@ -797,31 +826,12 @@ class AlshayaPromotionsManager {
    *   Promotion code label.
    */
   public function getAvailableCartCode() {
-    $applicablePromotion = NULL;
-    $active = FALSE;
     $label = '';
 
-    // Get cart promotions to check active promotion with code.
-    if ($cartPromotionsApplied = $this->getCartPromotions()) {
-      foreach ($cartPromotionsApplied as $promotion) {
-        $coupon = $promotion->get('field_coupon_code')->getString();
-
-        if (!empty($coupon)) {
-          $applicablePromotion = $promotion;
-          $active = TRUE;
-          break;
-        }
-      }
-    }
-
-    if (is_null($applicablePromotion)) {
-      // Get inactive cart promotion.
-      $applicablePromotion = $this->getInactiveCartPromotion();
-    }
-
     // Generate label for the applicable promotion.
+    $applicablePromotion = $this->getInactiveCartPromotion();
     if ($applicablePromotion instanceof NodeInterface) {
-      $label = $this->getPromotionCodeLabel($applicablePromotion, $active);
+      $label = $this->getPromotionCodeLabel($applicablePromotion);
     }
 
     return $label;
@@ -832,13 +842,11 @@ class AlshayaPromotionsManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion Node.
-   * @param bool $active
-   *   Promotion Cart Status.
    *
    * @return mixed
    *   Promotion Cart Label.
    */
-  private function getPromotionCodeLabel(NodeInterface $promotion, $active) {
+  private function getPromotionCodeLabel(NodeInterface $promotion) {
     $field_alshaya_promotion_subtype = $promotion->get('field_alshaya_promotion_subtype')->getString();
     $acqPromotionTypes = $this->getAcqPromotionTypes();
     $label = '';
@@ -857,7 +865,7 @@ class AlshayaPromotionsManager {
           $promotion
         );
         if ($promotionPlugin instanceof AcqPromotionInterface) {
-          $label = $promotionPlugin->getPromotionCodeLabel($active);
+          $label = $promotionPlugin->getPromotionCodeLabel();
         }
       }
       catch (\Exception $exception) {

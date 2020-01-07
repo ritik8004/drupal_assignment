@@ -5,18 +5,6 @@
 (function ($, Drupal) {
   'use strict';
 
-  // Plug into XHR requests to identify and trigger events when Algolia
-  // finishes loading search results.
-  var origOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, url) {
-    this.addEventListener('load', function () {
-      if (url.indexOf('algolia') > -1 && url.indexOf('instantsearch') > -1) {
-        $('#alshaya-algolia-search').trigger('search-results-updated');
-      }
-    });
-    origOpen.apply(this, arguments);
-  };
-
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
       $(window).on('blazySuccess', function(event, element) {
@@ -47,24 +35,12 @@
     Drupal.plpListingProductTileHeight('full_page', null);
   };
 
-  /**
-   * Calculate and add height for each product tile.
-   */
-  Drupal.listingProductTileHeight = function () {
-    if ($(window).width() > 1024) {
-      var maxHeight = 0;
-      $('.c-products__item').each(function () {
-        var currentHeight = $(this)
-          .find('> article')
-          .outerHeight(true);
-        maxHeight = maxHeight > currentHeight ? maxHeight : currentHeight;
-      });
-
-      $('.c-products__item').css('height', maxHeight);
-    }
-  };
-
   Drupal.algoliaReact = Drupal.algoliaReact || {};
+
+  // Trigger events when Algolia finishes loading search results.
+  Drupal.algoliaReact.triggerSearchResultsUpdatedEvent = function(resultCount) {
+    $('#alshaya-algolia-search').trigger('search-results-updated', [resultCount]);
+  };
 
   // Show all filters blocks.
   Drupal.algoliaReact.facetEffects = function () {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
+import _isEqual  from 'lodash/isEqual';
 import CustomHighlight from './CustomHighlight';
 import { getCurrentSearchQuery } from '../../utils';
 import Portal from '../portal';
@@ -41,7 +42,7 @@ class Autocomplete extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value);
+    return (nextProps.currentRefinement !== this.props.currentRefinement || nextState.value !== this.state.value || !_isEqual(nextProps.hits, this.props.hits));
   }
 
   componentDidMount()  {
@@ -50,6 +51,7 @@ class Autocomplete extends React.Component {
     this.autosuggest.current.input.name = 'search';
     // Change type to search for android devices.
     this.autosuggest.current.input.type = 'search';
+    this.blurORFocus();
     this.onKeyUp();
   }
 
@@ -57,10 +59,25 @@ class Autocomplete extends React.Component {
     window.removeEventListener('popstate', this.onPopState);
   }
 
+  blurORFocus() {
+    if (localStorage.getItem('algoliaLangRedirect') == '1') {
+      localStorage.removeItem('algoliaLangRedirect');
+      this.autosuggest.current.input.focus();
+    }
+    else {
+      this.autosuggest.current.input.blur();
+    }
+  }
+
   onPopState = event => {
     let query = getCurrentSearchQuery();
-    if (Object.keys(query).length > 0) {
-      this.onChange(null, {newValue: query});
+    // Update new value in textinput.
+    this.onChange(null, {newValue: query});
+    if (Object.keys(query).length == 0) {
+      // Remove the focus from text input and remove unnecessary
+      // classes.
+      this.reactSearchBlock[0].classList.remove('focused', 'clear-icon');
+      this.blurORFocus();
     }
   }
 
@@ -96,10 +113,11 @@ class Autocomplete extends React.Component {
     // Wait for sometime for user to finish typing, before we do update
     // query and do api call to algolia.
     clearTimeout(this.timerId);
+    const inputTag = this.autosuggest.current.input;
     this.timerId = setTimeout(() => {
-      this.props.refine(newValue)
-      this.props.onChange(newValue);
-    }, 300);
+      this.props.refine(newValue);
+      this.props.onChange(newValue, inputTag);
+    }, 100);
 
     this.setState({
       value: newValue,
@@ -109,6 +127,7 @@ class Autocomplete extends React.Component {
   onSubmitCall = event => {
     event.preventDefault();
     event.stopPropagation();
+    this.autosuggest.current.input.blur();
     return false;
   }
 
@@ -117,11 +136,11 @@ class Autocomplete extends React.Component {
   }
 
   renderSuggestion(hit) {
-    return (<CustomHighlight attribute="query" hit={hit} suffix={<span className="populate-input">&#8598;</span>} />)
+    return (<CustomHighlight attribute="query" hit={hit} />)
   }
 
   shouldRenderSuggestions(value) {
-    // Display trending searches for desktop on when searchbox is emty.
+    // Display trending searches for desktop on when searchbox is empty.
     // otherwise show it only for mobile always.
     return (value.trim() === '') || (window.innerWidth < 768);
   }
@@ -129,14 +148,13 @@ class Autocomplete extends React.Component {
   clearSearchFieldInput = (event) => {
     // Empty State & Input.
     this.reactSearchBlock[0].classList.remove('clear-icon');
-    let searchInput = this.reactSearchBlock[0].getElementsByClassName('react-autosuggest__input');
     // Clear sate value and suggestions.
     this.setState({value: ''});
     this.onSuggestionsClearRequested();
     // Set query to empty to hide the search results and update the browser hash.
     this.props.onChange('');
     // Keep focus.
-    searchInput[0].focus();
+    this.autosuggest.current.input.focus();
   };
 
   backIconClickEvent = (event) => {

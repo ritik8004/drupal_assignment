@@ -1,10 +1,10 @@
 import React from 'react';
 
-import CartConfigurableOption from '../cart-configurable-option';
+import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
 import CartPromotion from '../cart-promotion';
 import CartItemOOS from '../cart-item-oos';
 import ItemLowQuantity from '../item-low-quantity';
-import CartItemImage from '../cart-item-image';
+import CheckoutItemImage from '../../../utilities/checkout-item-image';
 import CartQuantitySelect from '../cart-quantity-select';
 import {updateCartItemData} from '../../../utilities/update_cart';
 
@@ -50,7 +50,7 @@ export default class CartItem extends React.Component {
       <div className="spc-cart-item">
         <div className="spc-product-tile">
           <div className="spc-product-image">
-            <CartItemImage img_data={extra_data.cart_image} />
+            <CheckoutItemImage img_data={extra_data.cart_image} />
           </div>
           <div className="spc-product-container">
             <div className="spc-product-title-price">
@@ -64,7 +64,7 @@ export default class CartItem extends React.Component {
             </div>
             <div className="spc-product-attributes-wrapper">
               {configurable_values.map((key, val) =>
-                <CartConfigurableOption key={val} label={key} />
+                <CheckoutConfigurableOption key={val} label={key} />
               )}
             </div>
           </div>

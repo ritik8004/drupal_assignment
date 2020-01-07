@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CheckoutSectionTitle from '../spc-checkout-section-title';
+import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
 import MobileCartPreview from '../mobile-cart-preview';
@@ -94,15 +94,15 @@ export default class Cart extends React.Component {
           </div>
           <div className="spc-main">
             <div className="spc-content">
-              <CheckoutSectionTitle>
+              <SectionTitle>
                 {Drupal.t('my shopping bag (@qty items)', {'@qty': this.state.total_items})}
-              </CheckoutSectionTitle>
+              </SectionTitle>
               <CartItems items={this.state.items} />
               <VatFooterText />
             </div>
             <div className="spc-sidebar">
               <CartPromoBlock coupon_code={this.state.coupon_code} />
-              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo}/>
+              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button={true} />
             </div>
           </div>
           <div className="spc-post-content">

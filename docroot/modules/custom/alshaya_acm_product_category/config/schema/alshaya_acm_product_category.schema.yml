@@ -19,3 +19,6 @@ alshaya_acm_product_category.settings:
       sequence:
         type: integer
         label: 'Taxonomy term ids'
+    grouping_page_header_style:
+      type: string
+      label: 'Grouping Page Header Style'

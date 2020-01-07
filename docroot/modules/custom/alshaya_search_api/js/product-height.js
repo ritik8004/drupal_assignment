@@ -45,7 +45,7 @@
    */
   Drupal.plpListingProductTileHeight = function (mode, element) {
     var gridCount = 0;
-    if ($(window).width() > 1024 && $('.subcategory-listing-enabled').length < 1) {
+    if ($(window).width() > 1024) {
       gridCount = $('.c-products-list').hasClass('product-large') ? 3 : 4;
     }
     else if ($(window).width() < 1024 && $(window).width() >= 768) {
@@ -54,12 +54,24 @@
     else {
       gridCount = $('.c-products-list').hasClass('product-large') ? 1 : 2;
     }
+
+    if ($('.subcategory-listing-enabled').length > 0) {
+      // For subcategory listing page we will always adjust height of full page,
+      // that's why it does not require mode and element.
+      Drupal.subCategoryListingPage(gridCount);
+    }
+    else {
+      Drupal.plpListingPage(gridCount, (mode === 'row') ? element : null);
+    }
+  };
+
+  Drupal.plpListingPage = function(gridCount, element) {
     var tiles = $('.c-products__item');
     var totalCount = $('.c-products__item').length;
     var loopCount = Math.ceil(totalCount / gridCount);
     var indexStart, indexEnd = 0;
     // In full page mode we dont factor lazy loading as this mode is to reorganize the tiles based on the grid.
-    if (mode === 'full_page') {
+    if (element === null) {
       // Run for each row.
       for (var i = 0; i < loopCount; i++) {
         indexStart = gridCount * i;
@@ -67,8 +79,7 @@
         Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
       }
     }
-
-    else if (mode === 'row') {
+    else {
       // Find the parent of the lazyloaded image, we dont want to take any action if the image is a swatch or
       // hover gallery image.
       if (!$(element).closest('*[data--color-attribute]').hasClass('hidden')
@@ -84,6 +95,35 @@
         indexStart = gridCount * rowIndex;
         indexEnd = gridCount * rowIndex + gridCount - 1;
         Drupal.plpRowHeightSync(indexStart, indexEnd, tiles);
+      }
+    }
+  };
+
+  Drupal.subCategoryListingPage = function(gridCount) {
+    var sections = [];
+    $('.term-header').each(function() {
+      sections.push($(this).get(0))
+    });
+
+    if (sections.length > 0) {
+      for (var index in sections) {
+        var currentTiles = [];
+        var nextIndex = parseInt(index) + 1;
+        if (typeof sections[nextIndex] == 'undefined') {
+          currentTiles = $(sections[index]).nextAll();
+        }
+        else {
+          currentTiles = $(sections[index]).nextUntil(sections[nextIndex]);
+        }
+
+        var totalCount = currentTiles.length;
+        var loopCount = Math.ceil(totalCount / gridCount);
+        var indexStart, indexEnd = 0;
+        for (var i = 0; i < loopCount; i++) {
+          indexStart = gridCount * i;
+          indexEnd = gridCount * i + gridCount - 1;
+          Drupal.plpRowHeightSync(indexStart, indexEnd, currentTiles);
+        }
       }
     }
   };

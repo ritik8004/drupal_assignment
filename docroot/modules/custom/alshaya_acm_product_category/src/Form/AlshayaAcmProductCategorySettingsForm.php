@@ -67,6 +67,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       ->set('new_arrival_category_ids', $form_state->getValue('new_arrival_category_ids'))
       ->set('old_categorization_enabled', $form_state->getValue('old_categorization_enabled'))
       ->set('enable_lhn_tree', $form_state->getValue('enable_lhn_tree'))
+      ->set('grouping_page_header_style', $form_state->getValue('grouping_page_header_style'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -122,6 +123,18 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#title' => $this->t('Enable LHN'),
       '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on PLP pages for Desktop.'),
       '#default_value' => $config->get('enable_lhn_tree'),
+    ];
+
+    $form['grouping_page_header_style'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Grouping Page Header Style'),
+      '#description' => $this->t('Select header style that should be displayed in selected manner when any sub-category is displayed on a PLP grouped by sub-categories.'),
+      '#required' => FALSE,
+      '#options' => [
+        'left_aligned' => $this->t('Left Aligned'),
+        'center_aligned' => $this->t('Center Aligned'),
+      ],
+      '#default_value' => $config->get('grouping_page_header_style'),
     ];
 
     return parent::buildForm($form, $form_state);
