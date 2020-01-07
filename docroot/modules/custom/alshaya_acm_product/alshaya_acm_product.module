@@ -531,21 +531,21 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $acm_settings = \Drupal::config('alshaya_acm.settings');
         if ($acm_settings->get('display_crosssell')) {
           if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
+            $cross_sell_related_skus = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
             $build['cross_sell'] = [
               '#theme' => 'products_horizontal_slider',
-              '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
+              '#data' => $cross_sell_related_skus,
               '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
               '#views_name' => 'product_slider',
               '#views_display_id' => $acm_settings->get('show_crosssell_as_matchback') ? 'block_matchback' : 'block_product_slider',
             ];
             $build['cross_sell_mobile'] = [
               '#theme' => 'products_horizontal_slider',
-              '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
+              '#data' => $cross_sell_related_skus,
               '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
               '#views_name' => 'product_slider',
               '#views_display_id' => 'block_product_slider',
             ];
-
             // Weight will have no effect later once template is modified.
             $build['cross_sell']['#weight'] = 11;
           }
