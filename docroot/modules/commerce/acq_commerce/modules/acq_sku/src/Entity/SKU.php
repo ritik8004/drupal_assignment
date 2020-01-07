@@ -482,10 +482,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $sku_id = $sku_static[$sku];
     }
     else {
-      $database = \Drupal::database();
-      $sku_records = $database->query('SELECT id FROM {acq_sku_field_data} WHERE sku=:sku', [
-        ':sku' => $sku,
-      ])->fetchAllKeyed(0, 0);
+      $query = \Drupal::database()->select('acq_sku_field_data', 'fd');
+      $query->fields('fd', ['id']);
+      $query->join('acq_sku', 'entity', 'entity.id = fd.id');
+      $query->condition('default_langcode', 1);
+      $query->condition('sku', $sku);
+      $sku_records = $query->execute()->fetchAllKeyed(0, 0);
 
       // First check if we have some result before doing anything else.
       if (empty($sku_records)) {
