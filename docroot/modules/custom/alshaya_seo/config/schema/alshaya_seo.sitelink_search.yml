@@ -1,0 +1,7 @@
+alshaya_seo.sitelink_search:
+  type: config_object
+  label: 'Sitelink Search'
+  mapping:
+    enable_sitelink_searchbox:
+      type: boolean
+      label: 'Enable Sitelink Searchbox'
