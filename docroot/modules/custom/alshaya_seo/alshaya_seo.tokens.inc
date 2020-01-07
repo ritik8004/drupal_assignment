@@ -260,6 +260,9 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
       }
     }
 
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $categoryManager */
+    $categoryManager = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+
     foreach ($tokens as $name => $original) {
       // Find the desired token by name.
       switch ($name) {
@@ -366,8 +369,6 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'term_name':
-          /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $categoryManager */
-          $categoryManager = \Drupal::service('alshaya_acm_product_category.product_category_tree');
           $is_l1 = $categoryManager->isCategoryL1($category_term);
 
           if (isset($sale) && $sale === TRUE) {
@@ -446,17 +447,26 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
           break;
 
         case 'sub_categories':
-          $parent_id = $category_term->get('parent')->getValue()[0]['target_id'];
-          if (!empty($parent_id)) {
-            $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($parent_id);
+          $parent_id = $category_term->get('parent')->getString();
+          $parent_id = empty($parent_id) ? $term_id : $parent_id;
+          $tree = $categoryManager->getCategoryTreeCached($parent_id, $current_langcode);
+
+          if (!empty($tree)) {
+            // Show only limited sub categories to stay within limit of 420
+            // characters.
+            $sub_category_to_show = (int) \Drupal::configFactory()
+              ->get('alshaya_seo.settings')
+              ->get('sub_category_to_show');
+
+            $tree = ($sub_category_to_show > 0)
+              ? array_slice($tree, 0, $sub_category_to_show)
+              : $sub_category_to_show;
+
+            foreach ($tree as $child) {
+              $sub_categories[] = $child['label'];
+            }
           }
-          else {
-            $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term_id);
-          }
-          foreach ($children as $child) {
-            $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($child, $current_langcode);
-            $sub_categories[] = $taxonomy_term_trans->name->value;
-          }
+
           $replacements[$original] = isset($sub_categories) ? implode(', ', $sub_categories) : '';
           break;
 
