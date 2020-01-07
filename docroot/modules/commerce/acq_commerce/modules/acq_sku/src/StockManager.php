@@ -118,7 +118,7 @@ class StockManager {
 
     if (empty($sku_string)) {
       $langcode = $sku->language()->getId();
-      $this->logger->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku->id(), '@langcode' => $langcode]);
+      $this->logger->error('Empty SKU string in SKU entity with @id and language @langcode.', ['@id' => $sku->id(), '@langcode' => $langcode]);
 
       return FALSE;
     }
