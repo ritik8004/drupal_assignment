@@ -119,6 +119,29 @@ class CartController {
   }
 
   /**
+   * Restore cart.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Cart response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function restoreCart() {
+    if (!$this->session->isStarted()) {
+      $this->session->start();
+    }
+
+    $cart_id = $this->session->get(self::STORAGE_KEY);
+    if (!empty($cart_id)) {
+      return $this->getCart($cart_id);
+    }
+
+    // If there are not cart available.
+    $data = $this->cart->getErrorResponse('could not find any cart', 404);
+    return new JsonResponse($data);
+  }
+
+  /**
    * Process cart data.
    *
    * @param array $cart_data
