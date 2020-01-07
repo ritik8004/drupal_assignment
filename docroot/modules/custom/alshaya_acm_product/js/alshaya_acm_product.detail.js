@@ -16,7 +16,9 @@
       $('.product-out-of-stock').once('page-load').each(function () {
         $(this).find('.sharethis-wrapper').addClass('out-of-stock');
         $(this).find('.c-accordion-delivery-options').each(function () {
-          $(this).accordion('option', 'disabled', true);
+          if ($(this).accordion()) {
+            $(this).accordion('option', 'disabled', true);
+          }
         })
       });
 
