@@ -9,6 +9,14 @@ import PaymentMethods from '../payment-methods';
 import CompletePurchase from '../complete-purchase';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import TermsConditions from '../terms-conditions';
+import CheckoutMessage from "../../../utilities/checkout-message";
+import MobileCartPreview from "../../../cart/components/mobile-cart-preview";
+import SectionTitle from "../../../utilities/section-title";
+import CartItems from "../../../cart/components/cart-items";
+import VatFooterText from "../../../utilities/vat-footer";
+import CartPromoBlock from "../../../cart/components/cart-promo-block";
+import CartRecommendedProducts
+  from "../../../cart/components/recommended-products";
 
 export default class Checkout extends React.Component {
 
@@ -55,12 +63,20 @@ export default class Checkout extends React.Component {
 
       return (
         <React.Fragment>
-          <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.cart.delivery_method} />
-          <DeliveryInformation delivery_type={this.state.cart.delivery_method} />
-          <OrderSummaryBlock items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
-          <PaymentMethods cart={this.state.cart} is_active={false} />
-          <TermsConditions/>
-          <CompletePurchase enable={false}/>
+          <div className="spc-pre-content"/>
+          <div className="spc-main">
+            <div className="spc-content">
+              <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.cart.delivery_method} />
+              <DeliveryInformation delivery_type={this.state.cart.delivery_method} />
+              <PaymentMethods cart={this.state.cart} is_active={false} />
+              <TermsConditions/>
+              <CompletePurchase enable={false}/>
+            </div>
+            <div className="spc-sidebar">
+              <OrderSummaryBlock items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
+            </div>
+          </div>
+          <div className="spc-post-content"/>
         </React.Fragment>
       );
   }

@@ -28,6 +28,12 @@ export default class Cart extends React.Component {
     };
   }
 
+  getPosition = (element) => {
+    let clientRect = element.getBoundingClientRect();
+    return {left: clientRect.left + document.body.scrollLeft,
+      top: clientRect.top + document.body.scrollTop};
+  };
+
   componentDidMount() {
     // Listen to `refreshCart` event triggered from `mini-cart/index.js`.
     document.addEventListener('refreshCart', (e) => {
@@ -51,6 +57,23 @@ export default class Cart extends React.Component {
         if (data.items.length === 0) {
           this.setState({
             wait: false
+          });
+        }
+
+        if (window.innerWidth < 768) {
+          window.addEventListener('scroll', () => {
+            var cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
+            var cartPreviewOffset = this.getPosition(cartPreview[0]);
+            if (window.pageYOffset > cartPreviewOffset.top) {
+              if (!cartPreview[0].classList.contains('sticky')) {
+                cartPreview[0].classList.add('sticky');
+                document.getElementsByClassName('spc-main')[0].style.paddingTop = cartPreview[0].offsetHeight + 'px';
+              }
+            }
+            else {
+              cartPreview[0].classList.remove('sticky');
+              document.getElementsByClassName('spc-main')[0].style.paddingTop = 0;
+            }
           });
         }
       }
