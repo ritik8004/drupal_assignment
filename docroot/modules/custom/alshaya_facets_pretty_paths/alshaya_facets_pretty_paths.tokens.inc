@@ -7,6 +7,7 @@
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 
 /**
  * Implements hook_tokens_alter().
@@ -18,7 +19,7 @@ use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
   if ($context['type'] == 'alshaya_seo') {
     if (isset($context['tokens']['term_name'])) {
-      $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems();
+      $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE);
       $first_word = strtok($replacements[$context['tokens']['term_name']], ' ');
       $meta_title_prefix = preg_replace('/' . $first_word . '/', implode(' ', array_filter($facet_summary_items[0])), $replacements[$context['tokens']['term_name']], 1);
       $meta_title_suffix = implode(' ', $facet_summary_items[1]);
@@ -31,7 +32,7 @@ function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $c
     if (isset($context['tokens']['desc_start'])) {
       $request = \Drupal::request();
       $title = '';
-      $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems();
+      $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION);
       if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
         $title_object = \Drupal::service('title_resolver')->getTitle($request, $route);
         $title = $title_object['#markup'];

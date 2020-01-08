@@ -88,6 +88,7 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
     '#type' => 'textfield',
     '#title' => t('Prefix Text'),
     '#description' => t('Enter the prefix text to be added before the facet value'),
+    '#default_value' => isset($facet->meta_info_type['prefix_text']) ? $facet->meta_info_type['prefix_text'] : NULL,
     '#states' => [
       // Show this textfield only if the type is prefix/suffix.
       'visible' => [
@@ -101,6 +102,7 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
     '#type' => 'textfield',
     '#title' => t('Suffix Text'),
     '#description' => t('Enter the suffix text to be added after the facet value'),
+    '#default_value' => isset($facet->meta_info_type['suffix_text']) ? $facet->meta_info_type['suffix_text'] : NULL,
     '#states' => [
       // Show this textfield only if the type is prefix/suffix.
       'visible' => [
@@ -115,6 +117,7 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
     '#title' => t('To be shown in:'),
     '#options' => $visibility,
     '#description' => t('Check to allow the facet to be visible in the mentioned areas.'),
+    '#default_value' => isset($facet->meta_info_type['visibility']) ? $facet->meta_info_type['visibility'] : NULL,
     '#required' => TRUE,
     '#states' => [
       // Show this textfield only if the type is prefix/suffix.
@@ -132,7 +135,7 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
 function alshaya_facets_pretty_paths_preprocess_page_title(&$variables) {
   $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
   if ($term instanceof TermInterface && \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getActiveFacetFilters()) {
-    $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems();
+    $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE);
     $new_title = implode(' ', array_filter($active_facets[0])) . strip_tags($variables['title']) . implode(' ', array_filter($active_facets[1]));
     $variables['title'] = $new_title;
   }

@@ -19,6 +19,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Utility\Token;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 
 /**
  * Override facets AJAX controller to add selected filters as hidden fields.
@@ -174,7 +175,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $meta_title = NULL;
       if ($term instanceof TermInterface) {
         $meta_title = $this->tokenUtility->replace('[alshaya_seo:term_name]', ['taxonomy_term' => $term]);
-        $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems();
+        $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE);
         $response->addCommand(new InvokeCommand(NULL, 'updateMetaTitle', [$meta_title]));
         $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$active_facets, $term->label()]));
       }

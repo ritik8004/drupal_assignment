@@ -408,22 +408,31 @@ class AlshayaFacetsPrettyPathsHelper {
    * @param string $facet_id
    *   Facet id.
    *
-   * @return int
-   *   Meta info type.
+   * @return array
+   *   Meta info type array.
    */
   public function getMetaInfotypeFromFacetId($facet_id) {
     $config = \Drupal::config('facets.facet.' . $facet_id);
     $meta_info_type = $config->get('meta_info_type.type') ?? self::FACET_META_TYPE_IGNORE;
-    return $meta_info_type;
+    $facet_prefix_text = $config->get('meta_info_type.prefix_text');
+    $facet_visibility = $config->get('meta_info_type.visibility');
+    return [
+      'type' => $meta_info_type,
+      'prefix_text' => $facet_prefix_text,
+      'visibility' => $facet_visibility,
+    ];
   }
 
   /**
    * To get the active facet summary items.
    *
+   * @param int $visibility
+   *   Visibility constant.
+   *
    * @return array
    *   Active prefix/suffix facets.
    */
-  public function getFacetSummaryItems() {
+  public function getFacetSummaryItems($visibility) {
     // Active facet items for PLP pages.
     $facet_summary = $this->facetSummaryStorage->load('filter_bar_plp');
     $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
@@ -434,29 +443,18 @@ class AlshayaFacetsPrettyPathsHelper {
       if (isset($value['#title']) && isset($value['#attributes'])) {
         $active_facet_id = $value['#attributes']['data-drupal-facet-id'];
         $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
-        if ($meta_info_type == self::FACET_META_TYPE_PREFIX) {
-          // Add text 'Size' prefix to the size facet.
-          if (strpos($active_facet_id, 'size')) {
-            $langcode = $this->languageManager->getCurrentLanguage()->getId();
-            if ($langcode == 'en') {
-              $active_prefix_facet[] = 'Size ' . $value['#title']['#value'];
-            }
-            if ($langcode == 'ar') {
-              $active_prefix_facet[] = 'بحجم ' . $value['#title']['#value'];
-            }
-          }
-          else {
+        if (in_array($visibility, $meta_info_type['visibility'])) {
+          if ($meta_info_type['type'] == self::FACET_META_TYPE_PREFIX) {
             // Strip tags to get the value from price markup.
-            $active_prefix_facet[] = strip_tags($value['#title']['#value']);
+            $active_prefix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
           }
-        }
-        elseif ($meta_info_type == self::FACET_META_TYPE_SUFFIX) {
-          // Strip tags to get the value from price markup.
-          $active_suffix_facet[] = strip_tags($value['#title']['#value']);
+          elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
+            // Strip tags to get the value from price markup.
+            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
+          }
         }
       }
     }
-
     return [$active_prefix_facet, $active_suffix_facet];
   }
 
