@@ -8,13 +8,19 @@
 
   Drupal.behaviors.footerSpaceFiller = {
     attach: function (context, settings) {
+      // Blacklisted pages.
+      if ($('.page-standard').hasClass('disable-footerspace-fill')) {
+        return false;
+      }
+
       // Check if we have empty space below the footer,
       // Add that much space above it so that footer is touches the screen bottom.
       var checkoutFooter = false;
       var footerBottom;
       var difference;
       if ($('body').hasClass('alias--cart-checkout-login') || $('body').hasClass('alias--cart-checkout-delivery')
-       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')) {
+       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')
+       || $('body').hasClass('alias--checkout')) {
         checkoutFooter = true;
       }
 
