@@ -9,14 +9,6 @@ import PaymentMethods from '../payment-methods';
 import CompletePurchase from '../complete-purchase';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import TermsConditions from '../terms-conditions';
-import CheckoutMessage from "../../../utilities/checkout-message";
-import MobileCartPreview from "../../../cart/components/mobile-cart-preview";
-import SectionTitle from "../../../utilities/section-title";
-import CartItems from "../../../cart/components/cart-items";
-import VatFooterText from "../../../utilities/vat-footer";
-import CartPromoBlock from "../../../cart/components/cart-promo-block";
-import CartRecommendedProducts
-  from "../../../cart/components/recommended-products";
 
 export default class Checkout extends React.Component {
 
