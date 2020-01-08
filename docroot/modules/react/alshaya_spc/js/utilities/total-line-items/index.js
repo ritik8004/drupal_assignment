@@ -1,7 +1,7 @@
 import React from "react";
 import TotalLineItem from "../total-line-item";
-import VatText from '../../../utilities/vat-text';
-import FreeDeliveryText from '../../../utilities/free-delivery-text';
+import VatText from '../vat-text';
+import FreeDeliveryText from '../free-delivery-text';
 
 class TotalLineItems extends React.Component {
 
