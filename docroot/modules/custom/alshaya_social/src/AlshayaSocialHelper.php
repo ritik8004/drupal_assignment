@@ -173,7 +173,8 @@ class AlshayaSocialHelper {
             '@message' => $e->getMessage(),
           ]);
         }
-        return NULL;
+
+        throw $e;
       }
       $fields['acq_customer_id'] = $customer['customer_id'];
       return $fields;
