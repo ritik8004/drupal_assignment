@@ -17,6 +17,7 @@ use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 function alshaya_facets_pretty_paths_update_8002() {
   $facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_1');
   $config_factory = \Drupal::configFactory();
+  $visibility = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE];
   foreach ($facets as $facet) {
     $facet_id = $facet->id();
     if (strpos($facet->id(), 'price')) {
@@ -30,13 +31,13 @@ function alshaya_facets_pretty_paths_update_8002() {
       $config = $config_factory->getEditable('facets.facet.' . $facet_id);
       $config->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
       $config->set('meta_info_type.prefix_text', t('Size'));
-      $config->set('meta_info_type.visibility', [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE]);
+      $config->set('meta_info_type.visibility', $visibility);
       $config->save();
     }
     else {
       $config = $config_factory->getEditable('facets.facet.' . $facet_id);
       $config->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
-      $config->set('meta_info_type.visibility', [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE]);
+      $config->set('meta_info_type.visibility', $visibility);
       $config->save();
     }
   }
