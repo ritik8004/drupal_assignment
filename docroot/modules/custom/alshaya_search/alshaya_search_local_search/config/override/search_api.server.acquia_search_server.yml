@@ -1,8 +1,0 @@
-name: 'Local Solr server'
-backend_config:
-  connector_config:
-    host: localhost
-    port: '8983'
-    path: /solr
-    core: ''
-    commit_within: 1000

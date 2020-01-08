@@ -22,3 +22,10 @@ services:
       - '@alshaya_acm_product.category_helper'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]
+  alshaya_seo_transac.alshaya_sitemap_manager:
+    class: Drupal\alshaya_seo_transac\AlshayaSitemapManager
+    arguments:
+      - '@entity_type.manager'
+      - '@simple_sitemap.generator'
+      - '@config.factory'
+      - '@alshaya_acm_product_category.product_category_tree'

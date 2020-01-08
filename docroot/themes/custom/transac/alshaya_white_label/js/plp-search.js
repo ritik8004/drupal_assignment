@@ -32,7 +32,7 @@
         if ($(window).width() < 768) {
           $('.block-page-title-block').addClass('mobile');
           searchCount.removeClass('tablet');
-          if (viewHeader.length) {
+          if (viewHeader.length && viewHeader.get(0).getElementsByClassName('item-list').length === 0) {
             searchCount.remove();
             selector.html(viewHeader);
           }
@@ -42,7 +42,7 @@
         else {
           $('.block-page-title-block').removeClass('mobile');
           searchCount.removeClass('only-mobile');
-          if (viewHeader.length) {
+          if (viewHeader.length && viewHeader.get(0).getElementsByClassName('item-list').length === 0) {
             searchCount.remove();
             selector.html(viewHeader);
           }

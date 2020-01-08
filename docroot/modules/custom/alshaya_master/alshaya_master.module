@@ -949,3 +949,34 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
 }
+
+/**
+ * Implements hook_acquia_search_get_list_of_possible_cores_alter().
+ */
+function alshaya_master_acquia_search_get_list_of_possible_cores_alter(&$possible_core_ids, $core_service) {
+
+  // @codingStandardsIgnoreLine
+  global $acsf_site_code;
+
+  $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service->ah_env);
+
+  // We want to use SOLR from 01 stack all the time.
+  if (substr($ah_env, 0, 2) !== '01') {
+    $ah_env = '01' . substr($ah_env, 2);
+  }
+
+  // During the production deployment, `01update` env is used and there we
+  // don't have appropriate solr cores. So use `01live` solr.
+  if ($ah_env == '01update') {
+    $ah_env = '01live';
+  }
+  // For non-prod env, we have env likes `01dev3up`, `01qaup` which are used
+  // during release/deployment. We just remove last `up` from the env name
+  // to use the original env. For example - original env for `01dev3up` will
+  // be `01dev3`.
+  elseif (substr($ah_env, -2) == 'up') {
+    $ah_env = substr($ah_env, 0, -2);
+  }
+
+  array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $acsf_site_code);
+}

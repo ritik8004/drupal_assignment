@@ -134,14 +134,28 @@
   .filter-fixed-top {
     .c-products-list {
       .view-alshaya-product-list {
-        margin-top: 9.375rem;
-
-        @include breakpoint($tablet) {
-          margin-top: 9.625rem;
-        }
+        margin-top: 7.375rem;
 
         @include breakpoint($desktop) {
-          margin-top: 16.25rem;
+          margin-top: 11.25rem;
+        }
+      }
+    }
+  }
+
+  &:not(.slug-banner-processed) {
+    .filter-fixed-top {
+      .c-products-list {
+        .view-alshaya-product-list {
+          margin-top: 7.375rem;
+
+          @include breakpoint($tablet) {
+            margin-top: 9.4375rem;
+          }
+
+          @include breakpoint($desktop) {
+            margin-top: 13.3125rem;
+          }
         }
       }
     }
@@ -204,6 +218,12 @@
       @include breakpoint($only-mobile) {
         padding-bottom: 0.4375rem;
         margin: 0 0.5rem 0.875rem;
+      }
+    }
+
+    .sub-category-page-title-desc-wrapper {
+      &.center-aligned {
+        text-align: center;
       }
     }
   }

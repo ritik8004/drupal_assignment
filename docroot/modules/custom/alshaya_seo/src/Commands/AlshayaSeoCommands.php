@@ -32,6 +32,13 @@ class AlshayaSeoCommands extends DrushCommands {
   private $redirectRepository;
 
   /**
+   * Static reference to logger object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected static $loggerStatic;
+
+  /**
    * AlshayaSeoCommands constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -47,6 +54,7 @@ class AlshayaSeoCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->redirectRepository = $redirectRepository;
     $this->logger = $loggerChannelFactory->get('alshaya_seo');
+    self::$loggerStatic = $loggerChannelFactory->get('alshaya_seo');
   }
 
   /**

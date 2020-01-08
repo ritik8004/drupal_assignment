@@ -352,6 +352,9 @@ function alshaya_white_label_preprocess_block(&$variables) {
     if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_inline_layout';
     }
+    elseif ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_DYNAMIC_LAYOUT) {
+      $variables['attributes']['class'][] = 'megamenu-dynamic-layout';
+    }
   }
 
   if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {

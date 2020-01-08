@@ -1,0 +1,40 @@
+autocomplete:
+  js:
+    dist/autocomplete.js: {}
+  dependencies:
+    - alshaya_algolia_react/vendor
+    - alshaya_algolia_react/search_insights_listing
+
+vendor:
+  js:
+    dist/algolia.bundle.js: {}
+    dist/promise.js: {}
+    dist/object.js: {}
+    js/alshaya_algolia_react.js: {}
+    js/back_to_search.js: {}
+  dependencies:
+    - alshaya_react/react
+    - alshaya_master/jquery_is_in_viewport
+    - alshaya_search_api/product_height
+
+search_insights_listing:
+  js:
+    js/search-insights.listing.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_algolia_react/search_insights
+
+search_insights_detail:
+  js:
+    js/search-insights.detail.js: {}
+  dependencies:
+    - alshaya_master/common_functions
+    - alshaya_algolia_react/search_insights
+
+search_insights:
+  js:
+    js/algolia/search-insights.js: { scope: footer }
+    js/search-insights.common.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery.cookie

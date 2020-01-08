@@ -12,6 +12,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_seo_transac\AlshayaGtmManager;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -37,6 +39,10 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
   if (_alshaya_seo_process_gtm()) {
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
+
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_algolia_react')) {
+      $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia';
+    }
   }
 }
 
@@ -105,7 +111,6 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         $product_title = "";
         $product_image = $skuImagesManager->getFirstImageUrl($sku_entity, TRUE);
         $product_description = _alshaya_seo_get_node_meta_description();
-        $final_price = "";
         $currency = $gtm_manager->getGtmCurrency();
 
         // If sku name is available.
@@ -113,16 +118,16 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
           $product_title = $sku_entity->get('name')->getString();
         }
 
-        // If final price is available.
-        if ($sku_entity->get('final_price')) {
-          $final_price = (float) $sku_entity->get('final_price')->getString();
-        }
+        $min_prices = $skuManager->getMinPrices($sku_entity);
+        $final_price = (float) $min_prices['final_price'];
+        $availability = $skuManager->isProductInStock($sku_entity);
 
         // Prepare rich snippet.
         $snippet['@type'] = 'Product';
         $snippet['name'] = $product_title;
         $snippet['description'] = $product_description;
         $snippet['image'] = $product_image;
+        $snippet['sku'] = $sku_id;
         // @Todo: Change this once brand field is available.
         $snippet['brand'] = [
           '@type' => 'Thing',
@@ -132,6 +137,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
           '@type' => "Offer",
           'priceCurrency' => $currency,
           'price' => $final_price,
+          'availability' => ($availability === TRUE) ? "http://schema.org/InStock" : "http://schema.org/OutOfStock",
         ];
       }
     }
@@ -477,5 +483,67 @@ function alshaya_seo_transac_entity_delete(EntityInterface $entity) {
   ) {
     // Execute delete query only for the ones we have in sitemap.
     simple_sitemap_entity_delete($entity);
+  }
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+  $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+
+  AlshayaGtmManager::$gtmContainer = [
+    'route_name' => 'view.search.page',
+    'route_params' => [],
+    'pathinfo' => NULL,
+    'query' => [],
+  ];
+
+  foreach ($objects as $id => &$object) {
+    $node = $items[$id]->getOriginalObject()->getValue();
+
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
+      continue;
+    }
+
+    // Add GTM data.
+    $object['gtm'] = $gtmManager->fetchProductGtmAttributes($node, 'search_result');
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_seo_transac_taxonomy_term_delete(EntityInterface $entity) {
+  if ($entity->bundle() == 'acq_product_category') {
+    /** @var \Drupal\alshaya_seo_transac\AlshayaSitemapManager $sitemap */
+    $sitemap = \Drupal::service('alshaya_seo_transac.alshaya_sitemap_manager');
+    $sitemap->removeSitemapVariant($entity);
+  }
+}
+
+/**
+ * Implements hook_simple_sitemap_arbitrary_links_alter().
+ */
+function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_links, $sitemap_variant) {
+  if ($sitemap_variant == 'default') {
+    global $base_url;
+    $sitemap_manager = \Drupal::service('simple_sitemap.generator')->getSitemapManager();
+    $variants = array_keys($sitemap_manager->getSitemapVariants());
+    $variants = array_diff($variants, ['default']);
+    if (!empty($variants)) {
+      foreach ($variants as $variant) {
+        $url = $base_url . '/' . $variant . '/sitemap.xml';
+        $arbitrary_links[] = [
+          'url' => $url,
+          'priority' => '0.5',
+        ];
+      }
+    }
   }
 }

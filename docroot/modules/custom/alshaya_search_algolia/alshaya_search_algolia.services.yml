@@ -1,0 +1,11 @@
+services:
+  alshaya_search_algolia.index_helper:
+    class: Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@renderer'
+      - '@alshaya_acm_product.sku_info'
+      - '@logger.factory'
+      - '@entity_type.manager'
+      - '@entity.repository'

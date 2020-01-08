@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -74,8 +75,12 @@ function alshaya_seo_page_attachments(array &$attachments) {
   // As checked in current prod, following text is not to be translated.
   $gkg_data['@type'] = 'Organization';
   $gkg_data['name'] = \Drupal::config('system.site')->get('name');
-  $gkg_data['url'] = Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString();
   $gkg_data['logo'] = Url::fromUserInput(theme_get_setting('logo.url'), ['absolute' => TRUE])->toString();
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $content_type = NULL;
+  if ($node instanceof NodeInterface) {
+    $content_type = $node->bundle();
+  }
 
   // Add all sameAs links as provided in Config.
   if ($same_as = $gkg_config->get('same_as')) {
@@ -91,7 +96,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
 
   // Add all contact options. Basic check added to have contact_type set in
   // config to show the whole object.
-  if ($gkg_config->get('contact_telephone')) {
+  if ($gkg_config->get('contact_telephone') && $content_type != 'acq_product') {
     $contact['@type'] = 'ContactPoint';
     $contact['telephone'] = $gkg_config->get('contact_telephone');
     $contact['contactType'] = $gkg_config->get('contact_type');

@@ -1,4 +1,5 @@
-.c-facet.c-accordion {
+.c-facet.c-accordion,
+.c-facet.c-collapse-item {
   float: $left;
   margin: 0;
   margin-#{$left}: 0.5rem;
@@ -8,7 +9,8 @@
     margin: 0;
   }
 
-  .c-accordion__title {
+  .c-accordion__title,
+  .c-collapse__title {
     border: none;
     font-size: 0.875rem;
     padding-#{$right}: 2.6875rem;
@@ -113,7 +115,8 @@
       display: none;
     }
 
-    .c-accordion__title + ul {
+    .c-accordion__title + ul,
+    .c-collapse__title + ul {
       @include breakpoint($only-mobile) {
         width: 100vw;
         border-left: 0;
@@ -157,7 +160,8 @@
     }
 
     @include breakpoint($upto-desktop) {
-      .c-accordion__title {
+      .c-accordion__title,
+      .c-collapse__title {
         display: block;
 
         .cateogry-active-title {
@@ -173,6 +177,23 @@
 
   @include breakpoint($only-mobile) {
     display: none;
+  }
+}
+
+.c-facet.c-collapse-item {
+  .sticky-filter-wrapper & {
+    ul {
+      li {
+        margin-bottom: 0;
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  ul {
+    li {
+      cursor: pointer;
+    }
   }
 }
 
@@ -268,7 +289,8 @@
   }
 }
 
-.show-all-filters {
+.show-all-filters,
+.show-all-filters-algolia {
   font-size: 0.875rem;
   position: relative;
   padding-#{$left}: 1.875rem;
@@ -504,6 +526,22 @@
       font-size: 0.8125rem !important;
       padding-bottom: 0 !important;
       margin: 0 !important;
+
+      &.only-mobile {
+        .item-list {
+          @include breakpoint($only-mobile) {
+            border-bottom: 1px solid;
+          }
+        }
+      }
+    }
+
+    .view-empty {
+      padding-top: 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        padding-top: 1rem;
+      }
     }
   }
 }
@@ -589,7 +627,6 @@
 
     .block-alshaya-plp-facets-block-all,
     .block-alshaya-promo-facets-block-all,
-    .block-alshaya-search-facets-block-all,
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
@@ -695,8 +732,10 @@ body {
 }
 
 .filters-active {
-  .c-facet.c-accordion {
-    .c-accordion__title {
+  .c-facet.c-accordion,
+  .c-facet.c-collapse-item {
+    .c-accordion__title,
+    .c-collapse__title {
       margin: 0;
     }
   }

@@ -10,6 +10,35 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Change type for default variant and configure bundle settings again.
+ * Also add the fields for sitemap variant.
+ */
+function alshaya_seo_transac_update_8408() {
+  _alshaya_seo_transac_configure_default_variant();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'simple_sitemap.bundle_settings.default.node.acq_product',
+      'simple_sitemap.bundle_settings.default.taxonomy_term.acq_product_category',
+    ],
+    'alshaya_seo_transac'
+  );
+
+  $manager->updateConfigs(
+    [
+      'simple_sitemap.bundle_settings.default.node.advanced_page',
+      'simple_sitemap.bundle_settings.default.node.department_page',
+      'simple_sitemap.bundle_settings.default.node.store',
+    ],
+    'alshaya_seo'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update metatag configurations.
  */
 function alshaya_seo_transac_update_8407() {
@@ -129,6 +158,9 @@ function alshaya_seo_transac_update_8401() {
 function alshaya_seo_transac_install() {
   // Install metatag transalations.
   _alshaya_seo_transac_save_metatag_translations();
+
+  // Configure default variant.
+  _alshaya_seo_transac_configure_default_variant();
 }
 
 /**
@@ -166,4 +198,21 @@ function _alshaya_seo_transac_save_metatag_translations() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Wrapper function to configure default variant.
+ */
+function _alshaya_seo_transac_configure_default_variant() {
+  $variants = \Drupal::service('simple_sitemap.generator')->getSitemapManager()->getSitemapVariants();
+  if ($variants['default']['type'] !== 'alshaya_hreflang') {
+    $variants['default']['type'] = 'alshaya_hreflang';
+    $variants['default']['weight'] = -1;
+    \Drupal::service('simple_sitemap.generator')->getSitemapManager()->addSitemapVariant('default', $variants['default']);
+  }
+
+  // Set the default variant again.
+  \Drupal::configFactory()->getEditable('simple_sitemap.settings')
+    ->set('default_variant', 'default')
+    ->save();
 }

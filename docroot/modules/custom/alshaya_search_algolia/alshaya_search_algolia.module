@@ -5,8 +5,24 @@
  * Module file.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use AlgoliaSearch\Client;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_search_algolia_module_implements_alter(&$implementations, $hook) {
+  // Call the alshaya_search_algolia_search_api_algolia_objects_alter first.
+  if ($hook == 'search_api_algolia_objects_alter') {
+    $group = $implementations['alshaya_search_algolia'];
+    unset($implementations['alshaya_search_algolia']);
+    $implementations = ['alshaya_search_algolia' => $group] + $implementations;
+  }
+}
 
 /**
  * Implements hook_search_api_algolia_sorts_alter().
@@ -27,7 +43,6 @@ function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, In
  */
 function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $reset[] = 'search_api.server.algolia';
-  $reset[] = 'block.block.autocompletewidgetofalgolia';
 }
 
 /**
@@ -35,7 +50,7 @@ function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(arra
  */
 function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
   $backend_config = \Drupal::configFactory()->get('search_api.server.algolia')->get('backend_config');
-  $client_config = \Drupal::configFactory()->get('search_api.index.acquia_search_index')->get('options');
+  $client_config = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options');
   $client = new Client($backend_config['application_id'], $backend_config['api_key']);
   $index_name = $client_config['algolia_index_name'];
 
@@ -68,4 +83,84 @@ function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op =
       break;
   }
 
+}
+
+/**
+ * Implements hook_search_api_index_items_alter().
+ *
+ * Use this hook to unset items which we don't want to index. using
+ * hook_search_api_algolia_objects_alter to unset items, may sometimes unset all
+ * objects in current batch, and that will return empty array. And index process
+ * assumes the indexing is finished and won't process further.
+ */
+function alshaya_search_algolia_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  $logger = \Drupal::logger('alshaya_search_algolia');
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  // Disable alshaya_color_split hook calls.
+  SkuManager::$colorSplitMergeChildren = FALSE;
+  foreach ($items as $item_id => $item) {
+    /** @var \Drupal\node\NodeInterface $object */
+    $node = $item->getOriginalObject()->getValue();
+
+    if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
+      try {
+        $langcode = $node->language()->getId();
+
+        $sku_string = $skuManager->getSkuForNode($node);
+        $sku = SKU::loadFromSku($sku_string, $langcode);
+
+        if (!($sku instanceof SKUInterface)) {
+          throw new \Exception('Not able to load sku from node.');
+        }
+        elseif ($sku->language()->getId() != $langcode) {
+          throw new \Exception('SKU not available for language of Node');
+        }
+      }
+      catch (\Throwable $e) {
+        $logger->warning('Indexing failed for the node:@nid message:@message', [
+          '@nid' => $node->id(),
+          '@message' => $e->getMessage(),
+        ]);
+        unset($items[$item_id]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  $logger = \Drupal::logger('alshaya_search_algolia');
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+  foreach ($objects as $id => &$object) {
+    $node = $items[$id]->getOriginalObject()->getValue();
+
+    if (!$node instanceof NodeInterface || $node->bundle() != 'acq_product') {
+      continue;
+    }
+
+    try {
+      $algolia_index->processIndexItem($object, $node);
+    }
+    catch (\Throwable $e) {
+      $logger->warning('Indexing failed for the node:@nid message:@message', [
+        '@nid' => $object['nid'],
+        '@message' => $e->getMessage(),
+      ]);
+      unset($objects[$id]);
+    }
+  }
 }

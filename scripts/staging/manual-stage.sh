@@ -5,6 +5,7 @@
 # ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae,vsae,vskw,bbwae" 01dev3
 # ./manual-stage.sh "mckw,mcsa,hmkw,hmae,pbae" 01dev3 reset
 # ./manual-stage.sh "hmkw,hmae,pbae" 01dev3 iso
+# ./manual-stage.sh "hmkw,hmae,pbae" 01dev3 proxy
 
 sites="$1"
 target_env="$2"
@@ -20,8 +21,8 @@ if [[ -z "$type" ]]; then
   type="iso"
 fi
 
-if [[ ! "$type" == "reset" && ! "$type" == "iso" ]]; then
-  echo "3rd parameter is either 'iso' or 'reset'"
+if [[ ! "$type" == "reset" && ! "$type" == "iso" && ! "$type" == "proxy" ]]; then
+  echo "3rd parameter is either 'iso' or 'reset' or 'proxy'"
   exit
 fi
 
@@ -127,10 +128,18 @@ do
 
   if [[ "$type" == "iso" ]]; then
     echo
-    echo "Enabling stage file proxy for $current_site"
+    echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder"
+    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder"
+  fi
+
+  if [[ "$type" == "proxy" ]]; then
+    echo
+    echo "Enabling stage file proxy for $current_site to https://${siteUri}"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri pm:enable stage_file_proxy"
-    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin $siteUri -y"
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin https://${siteUri} -y"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin_dir $files_folder -y"
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings hotlink 1 -y"
   fi
 done
 ssh $target 'rm -rf /tmp/manual-stage'

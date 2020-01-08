@@ -126,6 +126,32 @@
           Drupal.blazyHorizontalLazyLoad(scrollArea);
         });
       }
+      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').once('product-carousel').on('click', function () {
+        // Adjust the positioning of the throbber as per the transform property on slick-track.
+        if ($(window).width() > 1023) {
+          var sliderTrackTransform = $(this).parents('.slick-track').css('transform').replace(/[^0-9\-.,]/g, '').split(',');
+          var sliderWrapperWidth = $(this).parents('.owl-carousel').css('width');
+          if (isRTL()) {
+            $('.ajax-progress-throbber').css({'transform': 'translate3d(' + -Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
+          }
+          else {
+            $('.ajax-progress-throbber').css({'transform': 'translate3d(' + Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
+          }
+        }
+      });
+
+      // Accordion for department page category for mobile.
+      $('.paragraph--type--product-carousel-category').find('.c-accordion-delivery-options').each(function () {
+        if ($(this).find('ul').length > 0) {
+          Drupal.convertIntoAccordion($(this));
+        }
+        else {
+          $(this).addClass('empty-accordion-delivery-options');
+        }
+        // Add class on parent of c-accordion-delivery-options so we can hide
+        // the paragraph with margin in desktop.
+        $(this).parents('.c-promo__item').addClass('c-accordion-delivery-option-parent');
+      });
     }
   };
 })(jQuery, Drupal);
