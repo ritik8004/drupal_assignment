@@ -1,6 +1,6 @@
 import React from 'react';
 import SectionTitle from '../section-title';
-import TotalLineItems from '../../cart/components/total-line-items';
+import TotalLineItems from '../total-line-items';
 import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 
 class OrderSummaryBlock extends React.Component {

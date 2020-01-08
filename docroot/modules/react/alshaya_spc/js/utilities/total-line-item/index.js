@@ -1,6 +1,6 @@
 import React from 'react';
-import Price from "../../../utilities/price";
-import ToolTip from "../../../utilities/tooltip";
+import Price from "../price";
+import ToolTip from "../tooltip";
 
 class TotalLineItem extends React.Component {
   render() {
