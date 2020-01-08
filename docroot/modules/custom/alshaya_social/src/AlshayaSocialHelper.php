@@ -161,18 +161,9 @@ class AlshayaSocialHelper {
         ]);
       }
       catch (\Exception $e) {
-        // Do nothing except for downtime exception, we will do other
-        // validations after try/catch.
-        if (acq_commerce_is_exception_api_down_exception($e)) {
-          $this->logger->error('Error occurred during customer registration @message', [
-            '@message' => $e->getMessage(),
-          ]);
-        }
-        else {
-          $this->logger->error('Error occurred during customer registration @message', [
-            '@message' => $e->getMessage(),
-          ]);
-        }
+        $this->logger->error('Error occurred during customer registration @message', [
+          '@message' => $e->getMessage(),
+        ]);
 
         throw $e;
       }
