@@ -10,11 +10,17 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class CartController.
  */
 class CartController {
+
+  /**
+   * The cart storage key.
+   */
+  const STORAGE_KEY = 'acq_cart_middleware';
 
   /**
    * RequestStack Object.
@@ -52,6 +58,13 @@ class CartController {
   protected $logger;
 
   /**
+   * Service for session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+   */
+  protected $session;
+
+  /**
    * CartController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -64,13 +77,16 @@ class CartController {
    *   Magento info service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+   *   Service for session.
    */
-  public function __construct(RequestStack $request, Cart $cart, Drupal $drupal, MagentoInfo $magento_info, LoggerInterface $logger) {
+  public function __construct(RequestStack $request, Cart $cart, Drupal $drupal, MagentoInfo $magento_info, LoggerInterface $logger, SessionInterface $session) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
     $this->logger = $logger;
+    $this->session = $session;
   }
 
   /**
@@ -81,6 +97,8 @@ class CartController {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Cart response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart(int $cart_id) {
     $data = $this->cart->getCart($cart_id);
@@ -97,6 +115,29 @@ class CartController {
 
     // Here we will do the processing of cart to make it in required format.
     $data = $this->getProcessedCartData($data);
+    return new JsonResponse($data);
+  }
+
+  /**
+   * Restore cart.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Cart response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function restoreCart() {
+    if (!$this->session->isStarted()) {
+      $this->session->start();
+    }
+
+    $cart_id = $this->session->get(self::STORAGE_KEY);
+    if (!empty($cart_id)) {
+      return $this->getCart($cart_id);
+    }
+
+    // If there are not cart available.
+    $data = $this->cart->getErrorResponse('could not find any cart', 404);
     return new JsonResponse($data);
   }
 
@@ -159,7 +200,7 @@ class CartController {
       }
 
       // For the OOS.
-      if ($data['in_stock'] && !$value['in_stock']) {
+      if ($data['in_stock'] && (isset($value['in_stock']) && !$value['in_stock'])) {
         $data['in_stock'] = FALSE;
       }
 
@@ -218,7 +259,25 @@ class CartController {
       $data['recommended_products'] = $recommended_products_data;
     }
 
+    $this->session->set(self::STORAGE_KEY, $data['cart_id']);
     return $data;
+  }
+
+  /**
+   * Retrieve cart from session on trying to create a new cart.
+   *
+   * @return int
+   *   Return cart id from session if cart data exists else create new cart id.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  protected function createCart() {
+    $cart_id = $this->session->get(self::STORAGE_KEY);
+    if (!empty($cart_id)) {
+      return $cart_id;
+    }
+    $this->session->remove(self::STORAGE_KEY);
+    return $this->cart->createCart();
   }
 
   /**
@@ -229,10 +288,15 @@ class CartController {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updateCart(Request $request) {
-
     $request_content = json_decode($request->getContent(), TRUE);
+
+    if (!$this->session->isStarted()) {
+      $this->session->start();
+    }
 
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
@@ -244,8 +308,9 @@ class CartController {
 
     switch ($action) {
       case CartActions::CART_CREATE_NEW:
-        // First create a new cart.
-        $cart_id = $this->cart->createCart();
+        // Get cart id from session or create a new cart id.
+        $cart_id = $this->createCart();
+
         // Then add item to the cart.
         $cart = $this->cart->addUpdateRemoveItem($cart_id, $request_content['sku'], $request_content['quantity'], CartActions::CART_ADD_ITEM, $request_content['options']);
 
