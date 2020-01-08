@@ -17,27 +17,29 @@ use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 function alshaya_facets_pretty_paths_update_8002() {
   $facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_1');
   $config_factory = \Drupal::configFactory();
-  $visibility = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE];
+  $description = AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION;
+  $title = AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE;
+  $h1 = AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE;
   foreach ($facets as $facet) {
     $facet_id = $facet->id();
     if (strpos($facet->id(), 'price')) {
       $config = $config_factory->getEditable('facets.facet.' . $facet_id);
       $config->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX);
       $config->set('meta_info_type.prefix_text', t('at'));
-      $config->set('meta_info_type.visibility', [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION]);
+      $config->set('meta_info_type.visibility', [$description]);
       $config->save();
     }
     elseif (strpos($facet->id(), 'size')) {
       $config = $config_factory->getEditable('facets.facet.' . $facet_id);
       $config->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
       $config->set('meta_info_type.prefix_text', t('Size'));
-      $config->set('meta_info_type.visibility', $visibility);
+      $config->set('meta_info_type.visibility', [$h1, $title, $description]);
       $config->save();
     }
     else {
       $config = $config_factory->getEditable('facets.facet.' . $facet_id);
       $config->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
-      $config->set('meta_info_type.visibility', $visibility);
+      $config->set('meta_info_type.visibility', [$h1, $title, $description]);
       $config->save();
     }
   }
