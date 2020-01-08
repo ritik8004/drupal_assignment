@@ -7,7 +7,12 @@
 
       @include breakpoint($only-mobile) {
         padding: 1.25rem;
-        border-top: 0.625rem solid $spc-cart-background;
+        background: $spc-order-summary-totals-bg;
+        position: fixed;
+        bottom: 0;
+        box-shadow: 0 -1px 20px 9px $sticky-btn;
+        width: 100%;
+        z-index: 1;
       }
     }
   }

@@ -295,4 +295,12 @@ spc-cart:
     theme:
       css/conditional-sass/spc-cart/spc-cart.ltr.css: {}
   dependencies:
+    - alshaya_white_label/spc-utils
+
+
+spc-utils:
+  css:
+    theme:
+      css/conditional-sass/spc-utils/spc-utils.ltr.css: {}
+  dependencies:
     - alshaya_white_label/tooltip

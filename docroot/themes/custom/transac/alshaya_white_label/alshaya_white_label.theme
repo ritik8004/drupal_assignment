@@ -771,6 +771,11 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     || $routmatch->getRouteName() == 'alshaya_acm_customer.print_last_order') {
     $suggestions[] = 'page__orderprint';
   }
+
+  // SPC checkout.
+  if ($routmatch->getRouteName() == 'alshaya_spc.checkout') {
+    $suggestions[] = 'page__spc_checkout';
+  }
 }
 
 /**
