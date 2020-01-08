@@ -19,8 +19,7 @@
       var footerBottom;
       var difference;
       if ($('body').hasClass('alias--cart-checkout-login') || $('body').hasClass('alias--cart-checkout-delivery')
-       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')
-       || $('body').hasClass('alias--checkout')) {
+       || $('body').hasClass('alias--cart-checkout-payment') || $('body').hasClass('alias--cart-checkout-confirmation')) {
         checkoutFooter = true;
       }
 
