@@ -14,13 +14,6 @@
       $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
 
-      // Initialize Product Zoom using CloudZoom library.
-      // Initialize lightSliders.
-      var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
-      if (items.length) {
-        items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
-      }
-
       // Process main pdp gallery only once.
       var zoomContainer = $('.acq-content-product #product-zoom-container');
       if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
@@ -53,11 +46,11 @@
         }
         // Modal view on image click in desktop and tablet.
         // Modal view for PDP Slider, when clicking on main image.
-        var element = $(zoomContainer.find('#product-image-gallery-container'));
+        var element = $(zoomContainer.find('#product-full-screen-gallery-container'));
 
         // Open Gallery modal when we click on the zoom image.
         var myDialog = Drupal.dialog(element, dialogsettings);
-        $('.acq-content-product .cloudzoom #cloud-zoom-wrap').off().on('click', function () {
+        $('.acq-content-product .cloudzoom #cloud-zoom-wrap img').off().on('click', function () {
           $('body').addClass('pdp-modal-overlay');
           myDialog.show();
           myDialog.showModal();
@@ -73,6 +66,13 @@
             $('.acq-content-product #cloud-zoom-wrap').hide();
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
+          }
+          else {
+            // Handle click on image thumbnails.
+            var imageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('href');
+            if (imageUrl !== null || imageUrl !== 'undefined') {
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl);
+            }
           }
           // Hide Product labels on video slides.
           Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
@@ -180,7 +180,8 @@
   });
 
   /**
-   * Use the beforeChange event of slick to pause videos when scrolling from video slides.
+   * Use the beforeChange event of slick to pause videos when scrolling from
+   * video slides.
    *
    * @param {object} slickSelector
    *   Slick slider selcetor.
@@ -250,7 +251,8 @@
   }
 
   /**
-   * Get the vertical parameter for slick slider on the basis of the drupalsetting image_slider_position_pdp.
+   * Get the vertical parameter for slick slider on the basis of the
+   * drupalsetting image_slider_position_pdp.
    *
    * Get the slidesToShow parameter for slick slider on the basis of the
    * drupalsetting pdp_slider_items.
@@ -323,9 +325,16 @@
       currentSlide = $('.slick-current', lightSlider).attr('data-slick-index');
     }
 
-    var gallery = $('#product-image-gallery');
+    var gallery = $('#product-full-screen-gallery');
     slickModalOptions.currentSlide = currentSlide;
     Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
+    // Create Instagram Dots.
+    if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
+      // Do initial setup again for slick dots.
+      Drupal.behaviors.pdpInstagranDots.initialSetup(gallery);
+      // Attach the change event explicitly.
+      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
+    }
 
     if (gallery.hasClass('pager-no')) {
       $('li[data-slick-index="' + currentSlide + '"]', gallery).addClass('slick-current', function () {
@@ -344,7 +353,7 @@
     $('#full-image-wrapper img').show();
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
-      var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
       // Closing modal window before slick library gets removed.
       $(this).click();
       productGallery.slick('unslick');
@@ -569,18 +578,19 @@
   };
 
   var slickModalOptions = {
-    slidesToShow: getPDPSliderParameter('slidesToShow'),
-    vertical: true,
+    slidesToShow: 1,
+    vertical: false,
     arrows: true,
+    dots: true,
     infinite: false,
-    centerMode: true,
+    centerMode: false,
     focusOnSelect: false,
     touchThreshold: 1000,
     responsive: [
       {
         breakpoint: 1025,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 1,
           vertical: false,
           touchThreshold: 1000,
           centerMode: false
