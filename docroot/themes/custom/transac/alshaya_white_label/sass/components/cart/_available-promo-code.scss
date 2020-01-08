@@ -6,7 +6,7 @@
     padding: 0.625rem 1rem;
     border: 2px dashed $basket_available_code;
     color: $basket_available_code;
-    margin-#{$right}: 0.625rem;
+    margin-#{$left}: 0.625rem;
     font-family: $alshaya-bold;
     text-transform: uppercase;
     cursor: pointer;
@@ -16,6 +16,10 @@
 
     &:hover {
       border-style: solid;
+    }
+
+    html[lang=ar] & {
+      padding: 0.375rem 1rem;
     }
   }
 
