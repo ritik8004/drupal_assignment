@@ -63,6 +63,11 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
     AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX => t('Prefix'),
     AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX => t('Suffix'),
   ];
+  $visibility = [
+    AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE => t('H1'),
+    AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE => t('Title'),
+    AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION => t('Description'),
+  ];
 
   $form['meta_info_type'] = [
     '#type' => 'fieldset',
@@ -73,8 +78,51 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
     '#type' => 'select',
     '#title' => t('Select Meta Info Type'),
     '#options' => $options,
-    '#default_value' => ($facet->meta_info_type['type']) ? $facet->meta_info_type['type'] : AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_IGNORE,
+    '#attributes' => [
+      'name' => 'meta_info_type',
+    ],
+    '#default_value' => isset($facet->meta_info_type['type']) ? $facet->meta_info_type['type'] : AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_IGNORE,
     '#description' => t('Select an option to set the facet value in the meta title of a PLP page'),
+  ];
+  $form['meta_info_type']['prefix_text'] = [
+    '#type' => 'textfield',
+    '#title' => t('Prefix Text'),
+    '#description' => t('Enter the prefix text to be added before the facet value'),
+    '#states' => [
+      // Show this textfield only if the type is prefix/suffix.
+      'visible' => [
+        ['select[name="meta_info_type"]' => ['value' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX]],
+        ['select[name="meta_info_type"]' => ['value' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX]],
+      ],
+    ],
+  ];
+
+  $form['meta_info_type']['suffix_text'] = [
+    '#type' => 'textfield',
+    '#title' => t('Suffix Text'),
+    '#description' => t('Enter the suffix text to be added after the facet value'),
+    '#states' => [
+      // Show this textfield only if the type is prefix/suffix.
+      'visible' => [
+        ['select[name="meta_info_type"]' => ['value' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX]],
+        ['select[name="meta_info_type"]' => ['value' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX]],
+      ],
+    ],
+  ];
+
+  $form['meta_info_type']['visibility'] = [
+    '#type' => 'checkboxes',
+    '#title' => t('To be shown in:'),
+    '#options' => $visibility,
+    '#description' => t('Check to allow the facet to be visible in the mentioned areas.'),
+    '#required' => TRUE,
+    '#states' => [
+      // Show this textfield only if the type is prefix/suffix.
+      'visible' => [
+        ['select[name="meta_info_type"]' => ['value' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX]],
+        ['select[name="meta_info_type"]' => ['value' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX]],
+      ],
+    ],
   ];
 }
 
