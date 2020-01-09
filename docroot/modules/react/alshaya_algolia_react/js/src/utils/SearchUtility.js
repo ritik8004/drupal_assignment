@@ -27,7 +27,7 @@ function hideSearchResultContainer() {
     Drupal.blazy.revalidate();
   }
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
-    element.style.display = 'block';
+    element.style.display = null;
   });
   searchResultDiv.style.display = 'none';
   searchResultDiv.classList.remove('show-algolia-result');
