@@ -82,6 +82,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     // Get product brand details.
     $terms = $this->brandList->getBrandTerms();
     $brand_images = [];
+    $brand_carousel_settings = \Drupal::config('alshaya_brand_carousel.settings')->get('brand_carousel_items_settings');
 
     if (!empty($terms)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -110,6 +111,14 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     return [
       '#theme' => 'alshaya_brand_carousel',
       '#brand_details' => $brand_images,
+      '#attached' => [
+        'drupalSettings' => [
+          'brand_carousel_items_settings' => [
+            'brand_carousel_slidesToShow' => $brand_carousel_settings['brand_carousel_slidesToShow'],
+            'brand_carousel_slidesToScroll' => $brand_carousel_settings['brand_carousel_slidesToScroll'],
+          ]
+        ]
+      ]
     ];
   }
 

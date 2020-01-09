@@ -11,11 +11,12 @@
    Drupal.behaviors.alshayaBrandCarousel = {
      attach: function (context, settings) {
 
+       var brandCarouselSettings = drupalSettings.brand_carousel_items_settings;
        var alshayaBrandCarousel = {
          arrows: true,
          useTransform: false,
-         slidesToShow: 5,
-         slidesToScroll: 3,
+         slidesToShow: brandCarouselSettings.brand_carousel_slidesToShow,
+         slidesToScroll: brandCarouselSettings.brand_carousel_slidesToScroll,
          focusOnSelect: false,
          touchThreshold: 1000,
          infinite: false
