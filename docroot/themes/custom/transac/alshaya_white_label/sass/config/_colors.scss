@@ -93,6 +93,7 @@ $_dynamic_promo_text_bg: #e7effc;
 $_promo_code_error: #ff3030;
 $_promotion_link: #ce262c;
 $_gray: #c8c8c8;
+$_gray_1: #eaeaea;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1166,3 +1167,7 @@ $spc-checkout-page-title-border: $greyish;
 $spc-checkout-delivery-method-bg: $white-five;
 $spc-checkout-radio-empty: $greyish;
 $spc-checkout-radio-filled: $cerulean-two;
+$spc-checkout-delivery-method-txt: $grey-light;
+$spc-checkout-delivery-method-impress: $marine-blue-two;
+$spc-checkout-delivery-info-txt: $marine-blue-two;
+$spc-order-summary-product-area-bg: $_gray_1;

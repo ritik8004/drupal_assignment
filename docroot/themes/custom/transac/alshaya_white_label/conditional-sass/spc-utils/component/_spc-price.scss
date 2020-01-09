@@ -1,0 +1,14 @@
+.spc-product-price {
+  font-size: 0.875rem;
+  color: $spc-product-title;
+
+  .price-currency {
+    margin-#{$right}: 0.1875rem;
+  }
+
+  .special--price {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0.3125rem;
+    }
+  }
+}

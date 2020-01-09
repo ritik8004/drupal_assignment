@@ -1,0 +1,22 @@
+.spc-checkout-delivery-information {
+  margin-bottom: 2.5rem;
+
+  .spc-checkout-empty-delivery-text {
+    height: 3.25rem;
+    background: $spc-checkout-delivery-method-bg;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: $spc-checkout-delivery-info-txt;
+    position: relative;
+    padding-#{$left}: 1.25rem;
+
+    @include icon('chevron#{$right}', before) {
+      position: absolute;
+      #{$right}: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+    }
+  }
+}
