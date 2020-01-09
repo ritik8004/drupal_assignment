@@ -8,6 +8,7 @@
 
   Drupal.behaviors.categoryAccordion = {
     attach: function (context, settings) {
+
       /**
        * Function to create accordion.
        *
