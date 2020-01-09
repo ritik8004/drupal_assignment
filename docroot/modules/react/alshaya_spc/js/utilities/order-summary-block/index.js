@@ -22,7 +22,7 @@ class OrderSummaryBlock extends React.Component {
          {/*To Be used on cart page only.*/}
          {this.props.show_checkout_button &&
           <div className="actions">
-           <div className="checkout-link">
+           <div className="checkout-link submit">
              <a href={Drupal.url('cart')} className="checkout-link">{Drupal.t('continue to checkout')}</a>
            </div>
          </div>

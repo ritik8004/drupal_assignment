@@ -6,7 +6,7 @@ export default class PaymentMethod extends React.Component {
 
     let default_val = this.props.method.default
       ? this.props.method.code
-      : ''; 
+      : '';
     this.state = {
       'selectedOption': default_val
     };
@@ -25,7 +25,7 @@ export default class PaymentMethod extends React.Component {
 
   render() {
   	return(
-      <div>
+      <div className="payment-method">
       	<input
       	  id="payment-method"
       	  className={this.props.method.code}
@@ -34,8 +34,11 @@ export default class PaymentMethod extends React.Component {
       	  checked={this.state.selectedOption === this.props.method.code}
       	  value={this.props.method.code}
       	  name="payment-method" />
-      	{this.props.method.name}
-      	<div dangerouslySetInnerHTML={this.getHtmlMarkup(this.props.method.description)}/>
+
+        <label className="radio-sim radio-label">
+          {this.props.method.name}
+          <div className="spc-payment-method-desc" dangerouslySetInnerHTML={this.getHtmlMarkup(this.props.method.description)}/>
+        </label>
       </div>
     );
   }

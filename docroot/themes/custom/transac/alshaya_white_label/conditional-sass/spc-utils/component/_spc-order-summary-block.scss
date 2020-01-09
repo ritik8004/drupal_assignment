@@ -78,22 +78,6 @@
     }
   }
 
-  .checkout-link {
-    background: $primary_btn_bg;
-    height: 3.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    a {
-      color: $primary_btn_text;
-      font-family: $alshaya-bold;
-      font-weight: normal;
-      font-size: 1rem;
-      letter-spacing: 1.14px;
-    }
-  }
-
   .product-content {
     max-height: 17.5rem;
     overflow-y: auto;

@@ -18,44 +18,5 @@
     @include breakpoint($tablet) {
       height: 3.875rem;
     }
-
-    input[type=radio] {
-      display: none;
-
-      ~ .radio-sim::before {
-        content: '';
-        position: absolute;
-        #{$left}: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 3.125rem;
-      }
-
-      ~ .radio-sim {
-        @include icon(radio-empty, before) {
-          color: $spc-checkout-radio-empty;
-        }
-      }
-
-      &:checked {
-        ~ .radio-sim {
-          @include icon(radio-filled, before) {
-            color: $spc-checkout-radio-filled;
-          }
-        }
-      }
-    }
-
-    .delivery-label {
-      font-size: 0.875rem;
-      font-family: $alshaya-thin;
-      color: $spc-checkout-delivery-method-txt;
-
-      .impress {
-        font-family: $alshaya-bold;
-        margin-#{$right}: 0.3125rem;
-        color: $spc-checkout-delivery-method-impress;
-      }
-    }
   }
 }
