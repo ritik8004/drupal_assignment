@@ -69,7 +69,7 @@
           );
         }
         // Trigger matchback color change on main product color change.
-        if (code == 'color') {
+        if ($(this).hasClass('form-item-configurable-swatch')) {
           if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
             $('article[data-vmode="matchback"] form').trigger(
               'product-color-changed',
