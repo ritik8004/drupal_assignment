@@ -10,7 +10,7 @@ export default class DeliveryInformation extends React.Component {
   	  ? Drupal.t('Collection store')
   	  : Drupal.t('Delivery information');
     return (
-      <div>
+      <div className="spc-checkout-delivery-information">
         <SectionTitle>{title}</SectionTitle>
         <EmptyDeliveryText delivery_type={this.props.delivery_type} />
       </div>

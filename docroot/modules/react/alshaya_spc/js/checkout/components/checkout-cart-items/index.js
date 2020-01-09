@@ -12,7 +12,9 @@ export default class CheckoutCartItems extends React.Component {
     });
 
     return (
-      <div>{productItems}</div>
+      <React.Fragment>
+        {productItems}
+      </React.Fragment>
     );
   }
 

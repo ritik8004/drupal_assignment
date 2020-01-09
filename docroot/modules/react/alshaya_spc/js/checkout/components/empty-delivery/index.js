@@ -5,12 +5,12 @@ export default class EmptyDeliveryText extends React.Component {
   render() {
   	if (this.props.delivery_type === 'cnc') {
   	  return (
-      	<div>{Drupal.t('Select your prefered collection store')}</div>
+      	<div className="spc-checkout-empty-delivery-text">{Drupal.t('Select your preferred collection store')}</div>
       );
   	}
 
   	return (
-      <div>{Drupal.t('Add your address and contact details')}</div>
+      <div className="spc-checkout-empty-delivery-text">{Drupal.t('Add your address and contact details')}</div>
     );
   }
 

@@ -39,7 +39,7 @@ export default class DeliveryMethods extends React.Component {
           <input id="delivery-method" checked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" onChange={this.handleChange} />
           <label className="radio-sim delivery-label">
             <span className="icon"></span>
-            <span className="impress">{Drupal.t('Home delivery')}</span>
+            <span className="impress">{Drupal.t('home delivery')}</span>
             {hd_subtitle}
           </label>
         </div>
@@ -47,7 +47,7 @@ export default class DeliveryMethods extends React.Component {
           <input id="delivery-method" checked={this.state.selectedOption === 'cnc'} disabled={this.props.cnc_disabled} value="cnc" name="delivery-method" type="radio" onChange={this.handleChange} />
           <label className="radio-sim delivery-label">
             <span className="icon"></span>
-            <span className="impress">{Drupal.t('Click & Collect')}</span>
+            <span className="impress">{Drupal.t('click & collect')}</span>
             {cnc_subtitle}
           </label>
         </div>

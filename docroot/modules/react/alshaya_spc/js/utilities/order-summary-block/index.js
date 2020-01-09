@@ -11,7 +11,7 @@ class OrderSummaryBlock extends React.Component {
        <SectionTitle>{Drupal.t('order summary')}</SectionTitle>
        {/*To Be used on Checkout Delivery pages.*/}
          {!this.props.show_checkout_button &&
-          <div>
+          <div className="product-content">
             <CheckoutCartItems items={this.props.items}/>
           </div>
          }
