@@ -96,7 +96,7 @@ export default class Cart extends React.Component {
 
   render() {
       if (this.state.wait) {
-        return <Loading loadingMessage={Drupal.t('loading your cart.')}/>
+        return <Loading loadingMessage={Drupal.t('loading your cart ...')}/>
       }
 
       if (this.state.items.length === 0) {

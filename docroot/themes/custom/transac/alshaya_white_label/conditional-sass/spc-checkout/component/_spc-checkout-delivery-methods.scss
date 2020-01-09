@@ -1,0 +1,47 @@
+.spc-checkout-delivery-methods {
+  .delivery-method {
+    height: 4.75rem;
+    background: $spc-checkout-delivery-method-bg;
+    margin-bottom: 0.3125rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-#{$left}: 3rem;
+    position: relative;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include  breakpoint($tablet) {
+      height: 3.875rem;
+    }
+
+    input[type=radio] {
+      display: none;
+
+      ~ .radio-sim::before {
+        content:'';
+        position: absolute;
+        #{$left}: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 3.125rem;
+      }
+
+      ~ .radio-sim {
+        @include icon(radio-empty, before) {
+          color: $spc-checkout-radio-empty;
+        }
+      }
+
+      &:checked {
+        ~ .radio-sim {
+          @include icon(radio-filled, before) {
+            color: $spc-checkout-radio-filled;
+          }
+        }
+      }
+    }
+  }
+}

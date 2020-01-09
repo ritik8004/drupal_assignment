@@ -1,0 +1,14 @@
+.alias--checkout {
+  .block-page-title-block {
+    max-width: 64.125rem;
+    margin: 0 auto;
+    margin-bottom: 2.5rem;
+    padding-top: 2.5rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid $spc-checkout-page-title-border;
+
+    h1 {
+      letter-spacing: 1px;
+    }
+  }
+}
