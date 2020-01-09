@@ -136,6 +136,64 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       ->get('alshaya_main_menu.settings')
       ->get('desktop_main_menu_highlight_timing');
 
+    foreach ($term_data as $key => $value) {
+      $l1 = $value['label'];
+      $l1_child[$l1] = $value['child'];
+      foreach ($l1_child as $key => $value) {
+        foreach ($value as $l2) {
+          $l2_label = $l2['label'];
+          $l2_child[$key][$l2_label] = [];
+          foreach ($l2['child'] as $l3) {
+            $l2_child[$key][$l2_label][$l3['label']] = $l3['label'];
+          }
+        }
+      }
+    }
+
+    // Will add fields AlshayaMainMenuConfigForm.
+    $max_nb_col = 6;
+    $ideal_max_col_length = 10;
+
+    foreach ($l2_child as $key => $l2s) {
+      do {
+        $columns = [];
+        $col = 0;
+        $col_total = 0;
+        $reprocess = FALSE;
+
+        foreach ($l2s as $l2 => $l3s) {
+          // 2 below means L2 item + one blank line for spacing).
+          $l2_cost = 2 + count($l3s);
+
+          // If we are detecting a longer column than the expected size we iterate with new max.
+          if ($l2_cost > $ideal_max_col_length) {
+            $ideal_max_col_length = $l2_cost;
+            $reprocess = TRUE;
+            break;
+          }
+
+          if ($col_total + $l2_cost > $ideal_max_col_length) {
+            $col++;
+            $col_total = 0;
+          }
+
+          // If we have too many columns we try with more items per column.
+          if ($col >= $max_nb_col) {
+            $ideal_max_col_length++;
+            break;
+          }
+
+          $columns[$col][] = $l2;
+          foreach ($l3s as $l3 => $l4s) {
+            $columns[$col][] = $l3;
+          }
+          $columns[$col][] = '';
+
+          $col_total += $l2_cost;
+        }
+      } while ($reprocess || $col >= $max_nb_col);
+    }
+
     return [
       '#theme' => 'alshaya_main_menu_level1',
       '#settings' => [
@@ -143,6 +201,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       ],
       '#term_tree' => $term_data,
     ];
+
   }
 
   /**
