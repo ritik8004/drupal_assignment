@@ -1,12 +1,12 @@
 export {
-  searchStateToURL,
   getCurrentSearchQueryString,
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
   redirectToOtherLang,
   isMobile,
-  getAlgoliaStorageValues
+  getAlgoliaStorageValues,
+  searchStateHasFilter
 } from './QueryStringUtils';
 
 export {

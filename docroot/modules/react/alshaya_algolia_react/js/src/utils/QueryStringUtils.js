@@ -5,24 +5,52 @@ import { toggleSearchResultsContainer, showLoader } from './SearchUtility';
 const updateAfter = 700;
 const history = createBrowserHistory();
 
+/**
+ * Get current raw search query string from brwoser hash and convert it to object.
+ */
 function getCurrentSearchQueryString() {
   return qs.parse(window.location.hash.substr(1));
 }
 
+/**
+ * Get search query from current browser hash.
+ */
 function getCurrentSearchQuery() {
   const parsedHash = getCurrentSearchQueryString();
   return parsedHash && parsedHash.query ? parsedHash.query : '';
 }
 
-// Push query to browser histroy to ga back and see previous results.
-function updateSearchQuery(queryValue) {
-  history.push({hash: queryValue});
+/**
+ * Push query to browser histroy to go back and see previous results.
+ *
+ * @param {*} queryValue
+ *   The search string to push to browser hash.
+ */
+function updateSearchQuery(queryString) {
+  history.push({hash: queryString});
 }
 
-function searchStateToURL(searchState) {
-  return searchState.query ? qs.stringify(searchState) : '';
+/**
+ * Check if search state contains a filter or not.
+ *
+ * @param {*} searchState
+ *   current search state.
+ */
+function searchStateHasFilter(searchState) {
+  if (Object.keys(searchState).length > 0 && Object.keys(searchState).includes('refinementList')) {
+    return Object.values(searchState.refinementList).filter(v => v.length !== 0).length > 0;
+  }
+  return false;
 }
 
+/**
+ * Try to redirect to other langauge if required.
+ *
+ * @param {*} queryValue
+ *   The current text of query value.
+ * @param {*} inputTag
+ *   The search input element.
+ */
 function redirectToOtherLang(queryValue, inputTag) {
   if (queryValue.length === 0) {
     toggleSearchResultsContainer(queryValue);
@@ -34,6 +62,16 @@ function redirectToOtherLang(queryValue, inputTag) {
   redirectToUrl(queryValue, redirectlang, inputTag);
 }
 
+/**
+ * Redirect to given redirectlang with query value.
+ *
+ * @param {*} queryValue
+ *   The current text of query value.
+ * @param {*} redirectlang
+ *   The language string to replace with current one and redirect to.
+ * @param {*} inputTag
+ *   The search input element.
+ */
 function redirectToUrl(queryValue, redirectlang, inputTag) {
   if (drupalSettings.path.currentLanguage !== redirectlang) {
     showLoader();
@@ -47,6 +85,9 @@ function redirectToUrl(queryValue, redirectlang, inputTag) {
   }
 }
 
+/**
+ * Return true if current view is mobile otherwise false.
+ */
 function isMobile() {
   return (window.innerWidth < 768);
 }
@@ -66,12 +107,12 @@ function getAlgoliaStorageValues() {
 }
 
 export {
-  searchStateToURL,
   getCurrentSearchQueryString,
   getCurrentSearchQuery,
   updateSearchQuery,
   updateAfter,
   redirectToOtherLang,
   isMobile,
-  getAlgoliaStorageValues
+  getAlgoliaStorageValues,
+  searchStateHasFilter
 }

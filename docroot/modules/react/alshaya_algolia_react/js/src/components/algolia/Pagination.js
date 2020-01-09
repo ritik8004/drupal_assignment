@@ -6,7 +6,7 @@ import { showLoader, toggleSearchResultsContainer, toggleSortByFilter } from '..
 
 // Stats with pagination.
 const PaginationStats = connectStats(({nbHits, currentResults}) => {
-  toggleSearchResultsContainer('show');
+  // toggleSearchResultsContainer('show');
   toggleSortByFilter('show');
 
   return (

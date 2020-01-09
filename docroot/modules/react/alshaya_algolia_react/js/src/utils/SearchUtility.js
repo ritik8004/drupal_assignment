@@ -1,4 +1,5 @@
 import { hasCategoryFilter } from './FilterUtils';
+import { getCurrentSearchQueryString, searchStateHasFilter } from './QueryStringUtils';
 
 const contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
@@ -12,14 +13,21 @@ var defaultClasses = pageStandard.className;
 var searchClasses = "page-standard c-plp c-plp-only ";
 searchClasses += hasCategoryFilter() ? "l-two--sf l-container" : "l-one--w lhn-without-sidebar l-container";
 
-function showSearchResultContainer() {
-  Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
-    element.style.display = 'none';
-  });
-  searchResultDiv.style.display = 'block';
-  searchResultDiv.className = 'show-algolia-result';
-  searchResultDiv.style.minHeight = '26.5rem';
-  pageStandard.className = searchClasses;
+function showSearchResultContainer(query) {
+  let searchState = getCurrentSearchQueryString();
+  let hasFilter = searchStateHasFilter(searchState);
+  if (query !== false && ((query !== 'show' && query !== '')
+    || hasFilter
+    || (Object.keys(searchState).length > 0 && searchState.query !== ''))
+  ) {
+    Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
+      element.style.display = 'none';
+    });
+    searchResultDiv.style.display = 'block';
+    searchResultDiv.className = 'show-algolia-result';
+    searchResultDiv.style.minHeight = '26.5rem';
+    pageStandard.className = searchClasses;
+  }
 }
 
 function hideSearchResultContainer() {
@@ -38,7 +46,7 @@ function hideSearchResultContainer() {
 function toggleSearchResultsContainer(query) {
   (typeof query === 'undefined' || query === '')
     ? hideSearchResultContainer()
-    : showSearchResultContainer();
+    : showSearchResultContainer(query);
 }
 
 // Show or hide sort by filter, when no results found.
@@ -51,7 +59,6 @@ function toggleSortByFilter(action) {
   else {
     searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block')
   }
-
 }
 
 /**
