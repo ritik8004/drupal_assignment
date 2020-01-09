@@ -1,0 +1,91 @@
+{% set attributes = attributes.addClass('spc-checkout', 'disable-footerspace-fill') %}
+<div>
+
+  <!-- ______________________ MAIN _______________________ -->
+  <div class="site-brand-wrapper">
+    <div class="site-brand-home">
+      <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home" class="logo">
+        <img src="{{ site_logo }}" alt="{{ site_name }}"/>
+      </a>
+    </div>
+  </div>
+
+  <!-- ______________________ HERO CONTENT _______________________ -->
+
+  {% if page.hero_content %}
+    <div class="c-hero-content">
+      <div class="l-container">
+        <div class="c-hero-content__region">
+          {{ page.hero_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <!-- /hero content -->
+
+  <div class="clearfix page-wrapper">
+    <div{{ attributes.addClass('l-container') }}>
+      <main>
+        <div class="c-content">
+          <a class="back-link" href="javascript:window.history.back()"></a>
+          <div class="c-content__region">
+            {{ page.content }}
+          </div>
+        </div>
+
+        {{ feed_icons }}
+
+      </main>
+      <!-- /content-inner /content -->
+
+      <!-- /sidebar-second -->
+      {% if page.sidebar_second %}
+        <aside class="c-sidebar-second">
+          <div class="c-sidebar-second__region">
+            {{ page.sidebar_second }}
+          </div>
+        </aside>
+      {% endif %}
+      <!-- /sidebar-first -->
+
+    </div>
+  </div>
+  <!-- /main -->
+
+  <!-- ______________________ Vat text _______________________ -->
+  {% if vat_text_footer %}
+    <div class="vat-container">
+      <div class = 'vat-text-footer'>
+        {{ vat_text_footer }}
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- ______________________ Post content _______________________ -->
+
+  {% if page.post_content %}
+    <div class="c-post-content">
+      <div class="l-container">
+        <div class="c-post-content__region">
+          {{ page.post_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- ______________________ FOOTER SECONDARY _______________________ -->
+  <footer class="c-footer">
+    {% if page.footer_secondary %}
+      <div class="c-footer-secondary">
+        <div class="l-container">
+          <div class="c-footer-secondary__region">
+            {{ page.footer_secondary }}
+          </div>
+        </div>
+      </div>
+      <!-- /footer-secondary -->
+    {% endif %}
+  </footer>
+
+</div>
+<!-- /page -->
