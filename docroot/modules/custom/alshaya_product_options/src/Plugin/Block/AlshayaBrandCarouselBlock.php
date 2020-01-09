@@ -10,6 +10,7 @@ use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides alshaya brand carousel block.
@@ -36,11 +37,18 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   protected $moduleHandler;
 
   /**
-   * THe language manager service.
+   * The language manager service.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
+
+  /**
+   * Brand Carousel config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
 
   /**
    * Alshaya Options List Service.
@@ -52,11 +60,12 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AlshayaBrandListHelper $brand_list, ModuleHandlerInterface $module_handler, LanguageManagerInterface $languageManager, AlshayaOptionsListHelper $alshaya_options_service) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AlshayaBrandListHelper $brand_list, ModuleHandlerInterface $module_handler, LanguageManagerInterface $languageManager, ConfigFactoryInterface $config_factory, AlshayaOptionsListHelper $alshaya_options_service) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->brandList = $brand_list;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $languageManager;
+    $this->config = $config_factory->get('alshaya_brand_carousel.settings');
     $this->alshayaOptionsService = $alshaya_options_service;
   }
 
@@ -71,6 +80,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       $container->get('alshaya.brand_list_helper'),
       $container->get('module_handler'),
       $container->get('language_manager'),
+      $container->get('config.factory'),
       $container->get('alshaya_options_list.alshaya_options_service')
     );
   }
@@ -82,7 +92,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     // Get product brand details.
     $terms = $this->brandList->getBrandTerms();
     $brand_images = [];
-    $brand_carousel_settings = \Drupal::config('alshaya_brand_carousel.settings')->get('brand_carousel_items_settings');
+    $brand_carousel_settings = $this->config->get('brand_carousel_items_settings');
 
     if (!empty($terms)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -116,9 +126,9 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
           'brand_carousel_items_settings' => [
             'brand_carousel_slidesToShow' => $brand_carousel_settings['brand_carousel_slidesToShow'],
             'brand_carousel_slidesToScroll' => $brand_carousel_settings['brand_carousel_slidesToScroll'],
-          ]
-        ]
-      ]
+          ],
+        ],
+      ],
     ];
   }
 
