@@ -77,7 +77,6 @@ class AlshayaSpcController extends ControllerBase {
         'library' => [
           'alshaya_spc/cart',
           'alshaya_spc/cart-sticky-header',
-          'alshaya_white_label/spc-utils',
           'alshaya_white_label/spc-cart',
         ],
       ],
@@ -116,7 +115,7 @@ class AlshayaSpcController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_spc/checkout',
-          'alshaya_white_label/spc-utils',
+          'alshaya_white_label/spc-checkout',
         ],
         'drupalSettings' => [
           'cnc_subtitle_available' => $cc_config->get('checkout_click_collect_available'),

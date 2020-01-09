@@ -290,6 +290,13 @@ tooltip:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
 
+spc-utils:
+  css:
+    theme:
+      css/conditional-sass/spc-utils/spc-utils.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/tooltip
+
 spc-cart:
   css:
     theme:
@@ -297,10 +304,9 @@ spc-cart:
   dependencies:
     - alshaya_white_label/spc-utils
 
-
-spc-utils:
+spc-checkout:
   css:
     theme:
-      css/conditional-sass/spc-utils/spc-utils.ltr.css: {}
+      css/conditional-sass/spc-checkout/spc-checkout.ltr.css: {}
   dependencies:
-    - alshaya_white_label/tooltip
+    - alshaya_white_label/spc-utils

@@ -33,15 +33,23 @@ export default class DeliveryMethods extends React.Component {
     }
 
     return (
-      <div>
-        <SectionTitle>{Drupal.t('Delivery method')}</SectionTitle>
-        <div>
+      <div className="spc-checkout-delivery-methods">
+        <SectionTitle>{Drupal.t('delivery method')}</SectionTitle>
+        <div className="delivery-method">
           <input id="delivery-method" checked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" onChange={this.handleChange} />
-          {Drupal.t('Home delivery')} <span>{hd_subtitle}</span>
+          <label className="radio-sim delivery-label">
+            <span className="icon"></span>
+            <span className="impress">{Drupal.t('Home delivery')}</span>
+            {hd_subtitle}
+          </label>
         </div>
-        <div>
+        <div className="delivery-method">
           <input id="delivery-method" checked={this.state.selectedOption === 'cnc'} disabled={this.props.cnc_disabled} value="cnc" name="delivery-method" type="radio" onChange={this.handleChange} />
-          {Drupal.t('Click & Collect')} <span>{cnc_subtitle}</span>
+          <label className="radio-sim delivery-label">
+            <span className="icon"></span>
+            <span className="impress">{Drupal.t('Click & Collect')}</span>
+            {cnc_subtitle}
+          </label>
         </div>
       </div>
     )

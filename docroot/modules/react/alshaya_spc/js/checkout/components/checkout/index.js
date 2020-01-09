@@ -41,7 +41,7 @@ export default class Checkout extends React.Component {
   render() {
       // While page loads and all info available.
       if (this.state.wait) {
-        return <Loading loadingMessage={Drupal.t('loading...')}/>
+        return <Loading loadingMessage={Drupal.t('loading checkout ...')}/>
       }
 
       // If cart not available.
