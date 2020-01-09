@@ -36,6 +36,13 @@
         }
       });
 
+      // Adding class to identify that matchback product color is manually updated.
+      $('.acq-content-product-matchback').on('click', '.select2Option a', function () {
+        if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
+          $(this).closest('.select2Option').addClass('matchback-color-processed');
+        }
+      });
+
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
         var form = $(this).closest('form');
         var sku = $(form).attr('data-sku');
@@ -63,6 +70,22 @@
             ]
           );
         }
+        // Trigger matchback color change on main product color change.
+        if ($(this).hasClass('form-item-configurable-swatch')) {
+          if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
+            $('article[data-vmode="matchback"] form').trigger(
+              'product-color-changed',
+              [
+                combinations['byAttribute'][selectedCombination],
+                code
+              ]
+            );
+            var selectedList = $('article[data-vmode="matchback"] select[data-configurable-code="color"] option[value="' + selected + '"]');
+            var selectedIndex = selectedList.index();
+            selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
+          }
+        }
+
       });
 
       $('.sku-base-form').once('load').each(function () {
@@ -74,7 +97,7 @@
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
 
-        $(this).on('variant-selected', function (event, variant, code) {
+        $(this).on('variant-selected product-color-changed', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];

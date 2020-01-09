@@ -520,12 +520,14 @@ function alshaya_white_label_preprocess_node(&$variables) {
       $variables['attributes']['class'][] = 'color-swatches-hover';
     }
     $settings = \Drupal::config('alshaya_acm_product.settings');
+    $acm_settings = \Drupal::config('alshaya_acm.settings');
 
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
     $variables['vat_text'] = $settings->get('vat_text');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
     $variables['pdp_layout'] = $settings->get('pdp_layout');
+    $variables['show_crosssell_as_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
 
     // Cross sell/ Up sell items count on carousel on pdp page.
     $variables['#attached']['drupalSettings']['pdp_items_mob'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');

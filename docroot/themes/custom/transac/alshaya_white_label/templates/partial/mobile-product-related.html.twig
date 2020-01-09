@@ -1,8 +1,8 @@
 {% if content.up_sell or content.related or content.cross_sell %}
   <div class="mobile-related-wrapper">
-    {% if content.cross_sell is not empty %}
+    {% if content.cross_sell_mobile is not empty %}
       <div class="horizontal-crossell mobile-only-block">
-        {{ content.cross_sell }}
+        {{ content.cross_sell_mobile }}
       </div>
     {% endif %}
 
