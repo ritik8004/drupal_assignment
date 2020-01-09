@@ -110,13 +110,12 @@ class Autocomplete extends React.Component {
 
     if (valueToCheck !== '') {
       this.reactSearchBlock[0].classList.add('clear-icon');
+      if (isMobile()) {
+        this.reactSearchBlock[0].classList.add('show-algolia-search-bar');
+      }
     }
     else if (valueToCheck === '') {
       this.reactSearchBlock[0].classList.remove('clear-icon');
-    }
-
-    if (isMobile() && valueToCheck !== '') {
-      this.reactSearchBlock[0].classList.add('show-algolia-search-bar');
     }
   }
 
