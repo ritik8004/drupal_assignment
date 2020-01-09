@@ -43,7 +43,7 @@ function alshaya_product_options_theme() {
  */
 function alshaya_product_options_taxonomy_term_presave(TermInterface $term) {
   if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
-    if ($term->get('field_sku_attribute_code')->value === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
+    if ($term->get('field_sku_attribute_code')->getString() === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
       // Invalidate page cache.
       Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
     }
@@ -55,7 +55,7 @@ function alshaya_product_options_taxonomy_term_presave(TermInterface $term) {
  */
 function alshaya_product_options_taxonomy_term_delete(TermInterface $term) {
   if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
-    if ($term->get('field_sku_attribute_code')->value === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
+    if ($term->get('field_sku_attribute_code')->getString() === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
       // Invalidate page cache.
       Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
     }
