@@ -11,7 +11,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use AlgoliaSearch\Client;
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_module_implements_alter().
@@ -169,7 +168,7 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 /**
  * Implements hook_brand_carousel_link_alter().
  */
-function alshaya_search_algolia_brand_carousel_link_alter(&$link) {
+function alshaya_search_algolia_brand_carousel_link_alter(&$link, $attribute) {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $link = '/' . $langcode . '/search#refinementList[' . Settings::get('brand_logo_block')['brand_attribute'] . '][0]=';
+  $link = '/' . $langcode . '/search#refinementList[' . $attribute . '][0]=';
 }

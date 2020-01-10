@@ -18,7 +18,7 @@ skip_translation_check: 0
 default_value: {  }
 default_value_callback: ''
 settings:
-  file_directory: 'swatches/[date:custom:Y]-[date:custom:m]'
+  file_directory: 'swatches/original/[date:custom:Y]-[date:custom:m]'
   file_extensions: 'png gif jpg jpeg'
   max_filesize: ''
   max_resolution: ''

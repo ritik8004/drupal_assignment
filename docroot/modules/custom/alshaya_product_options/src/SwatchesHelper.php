@@ -15,6 +15,7 @@ use Drupal\facets\FacetInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
+use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
 
 /**
  * Class SwatchesHelper.
@@ -162,6 +163,7 @@ class SwatchesHelper {
    */
   public function updateAttributeOptionSwatch(TermInterface $term, array $swatch_info) {
     $save_term = FALSE;
+    $logo_attribute = AlshayaBrandListHelper::getLogoAttribute();
 
     // Save again if type changed.
     if ($swatch_info['swatch_type'] != $term->get('field_attribute_swatch_type')->getString()) {
@@ -172,7 +174,7 @@ class SwatchesHelper {
       $save_term = TRUE;
     }
     // Save again if swatch original image is not avaialable.
-    elseif (($swatch_info['swatch_type'] == self::SWATCH_TYPE_VISUAL_IMAGE) && empty($term->get('field_attribute_swatch_org_image')->getString())) {
+    elseif (($swatch_info['swatch_type'] == self::SWATCH_TYPE_VISUAL_IMAGE) && $term->get('field_sku_attribute_code')->getString() === $logo_attribute && empty($term->get('field_attribute_swatch_org_image')->getString())) {
       $save_term = TRUE;
     }
 
@@ -211,18 +213,16 @@ class SwatchesHelper {
         case self::SWATCH_TYPE_VISUAL_IMAGE:
           try {
             $file = $this->downloadSwatchImage($swatch_info['swatch']);
-            if ($term->get('field_sku_attribute_code')->getString() === Settings::get('brand_logo_block')['logo_attribute']) {
-              // We will allow to store swatch original image
-              // If it's settings mdc_swatch_image_style is available.
-              $mdcSwatchImageStyle = $this->configFactory
-                ->get('alshaya_product_options.settings')
-                ->get('mdc_swatch_image_style') ?? '';
-              if (!empty($mdcSwatchImageStyle)) {
-                $swatchOriginalImageUrl = str_replace($mdcSwatchImageStyle . '/', '', $swatch_info['swatch']);
-                $swatchOriginalImagefile = $this->downloadSwatchImage($swatchOriginalImageUrl);
-                if (!empty($swatchOriginalImagefile)) {
-                  $term->get('field_attribute_swatch_org_image')->setValue($swatchOriginalImagefile);
-                }
+            // We will allow to store swatch original image
+            // If it's settings mdc_swatch_image_style is available.
+            $mdcSwatchImageStyle = $this->configFactory
+              ->get('alshaya_product_options.settings')
+              ->get('mdc_swatch_image_style') ?? '';
+            if (!empty($mdcSwatchImageStyle)) {
+              $swatchOriginalImageUrl = str_replace($mdcSwatchImageStyle . '/', '', $swatch_info['swatch']);
+              $swatchOriginalImagefile = $this->downloadSwatchImage($swatchOriginalImageUrl);
+              if (!empty($swatchOriginalImagefile)) {
+                $term->get('field_attribute_swatch_org_image')->setValue($swatchOriginalImagefile);
               }
             }
           }

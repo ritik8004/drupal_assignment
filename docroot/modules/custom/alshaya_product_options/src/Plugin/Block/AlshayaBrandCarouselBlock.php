@@ -11,7 +11,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 
@@ -96,13 +95,12 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     $terms = $this->brandList->getBrandTerms();
     $brand_images = [];
     $brand_carousel_settings = $this->config->get('brand_carousel_items_settings');
-
-    if (!empty($terms)) {
+    $attributeName = AlshayaBrandListHelper::getBrandAttribute();
+    if (!empty($terms) && $attributeName) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
-      $attributeName = Settings::get('brand_logo_block')['brand_attribute'];
       $link = '/' . $langcode . '/search?f[0]=' . $attributeName . ':';
       // Allow other modules to alter link.
-      $this->moduleHandler->invokeAll('brand_carousel_link_alter', [&$link]);
+      $this->moduleHandler->alter('brand_carousel_link', $link, $attributeName);
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
       if (!empty($facet_results)) {
         $facet_results_lowercase = array_map('strtolower', $facet_results[$attributeName]);
@@ -146,7 +144,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
-    return AccessResult::allowedIf(!empty(Settings::get('brand_logo_block')));
+    return AccessResult::allowedIf(!empty(AlshayaBrandListHelper::getLogoAttribute()));
   }
 
 }
