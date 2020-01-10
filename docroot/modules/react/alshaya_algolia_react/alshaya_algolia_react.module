@@ -38,7 +38,8 @@ function alshaya_algolia_react_alshaya_reset_config_configs_to_reset_alter(array
  * Implements hook_block_access().
  */
 function alshaya_algolia_react_block_access(Block $block, $operation, AccountInterface $account) {
-  // Disable category facet on group by category listing pages (panty guide).
+  // Disable solr facets blocks and search views exposed blocks for /search
+  // page, which is created for algolia.
   if ($operation == 'view' &&
       (strpos($block->getPluginId(), 'facet') !== FALSE
        || strpos($block->id(), 'exposedformsearchpage') !== FALSE)
