@@ -14,8 +14,8 @@ function alshaya_algolia_react_update_8001() {
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       ['views.view.search'],
-      'alshaya_algolia_react',
-      'override',
+      'alshaya_search',
+      'optional',
       AlshayaConfigManager::MODE_MERGE
     );
 }
