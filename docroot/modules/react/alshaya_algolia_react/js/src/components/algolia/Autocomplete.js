@@ -3,7 +3,12 @@ import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
 import _isEqual  from 'lodash/isEqual';
 import CustomHighlight from './CustomHighlight';
-import { getCurrentSearchQuery, isMobile } from '../../utils';
+import {
+  getCurrentSearchQuery,
+  isMobile,
+  removeLangRedirect,
+  getLangRedirect
+} from '../../utils';
 import Portal from '../portal';
 
 const InputButtons = React.memo((props) => {
@@ -61,8 +66,8 @@ class Autocomplete extends React.Component {
   }
 
   blurORFocus() {
-    if (localStorage.getItem('algoliaLangRedirect') == '1') {
-      localStorage.removeItem('algoliaLangRedirect');
+    if (getLangRedirect() == '1') {
+      removeLangRedirect();
       this.autosuggest.current.input.focus();
     }
     else {

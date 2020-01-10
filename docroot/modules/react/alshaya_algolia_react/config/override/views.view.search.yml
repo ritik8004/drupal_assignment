@@ -6,3 +6,6 @@ display:
         options:
           role:
             administrator: administrator
+  page:
+    display_options:
+      path: search-old
