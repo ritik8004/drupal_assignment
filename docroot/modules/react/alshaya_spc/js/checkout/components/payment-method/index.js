@@ -23,21 +23,28 @@ export default class PaymentMethod extends React.Component {
     });
   };
 
-  render() {
-  	return(
-      <div className="payment-method">
-      	<input
-      	  id="payment-method"
-      	  className={this.props.method.code}
-      	  type="radio"
-      	  onChange={this.handleChange}
-      	  checked={this.state.selectedOption === this.props.method.code}
-      	  value={this.props.method.code}
-      	  name="payment-method" />
+  changePaymentMethod = (method) => {
+    this.setState({
+      selectedOption: method
+    });
 
-        <label className="radio-sim radio-label">
+    document.getElementById('payment-method-' + method).checked = true;
+  }
+
+  render() {
+    let method = this.props.method.code;
+  	return(
+      <div className='payment-method' onClick={() => this.changePaymentMethod(method)}>
+      	<input
+      	  id={'payment-method-' + method}
+      	  className={method}
+      	  type='radio'
+      	  checked={this.state.selectedOption === method}
+      	  value={method}
+      	  name='payment-method' />
+
+        <label className='radio-sim radio-label'>
           {this.props.method.name}
-          <div className="spc-payment-method-desc" dangerouslySetInnerHTML={this.getHtmlMarkup(this.props.method.description)}/>
         </label>
       </div>
     );
