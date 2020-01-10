@@ -8,6 +8,7 @@ const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFace
   }
 
   if (!searching && !isSearchStalled && !searchingForFacetValues) {
+    toggleSearchResultsContainer();
     toggleSortByFilter('hide');
   }
 

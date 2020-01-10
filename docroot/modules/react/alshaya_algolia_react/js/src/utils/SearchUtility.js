@@ -1,5 +1,6 @@
 import { hasCategoryFilter } from './FilterUtils';
 import { getCurrentSearchQueryString, searchStateHasFilter } from './QueryStringUtils';
+import { get_lang_redirect, get_search_query } from './localStorage';
 
 const contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
@@ -13,21 +14,14 @@ var defaultClasses = pageStandard.className;
 var searchClasses = "page-standard c-plp c-plp-only ";
 searchClasses += hasCategoryFilter() ? "l-two--sf l-container" : "l-one--w lhn-without-sidebar l-container";
 
-function showSearchResultContainer(query) {
-  let searchState = getCurrentSearchQueryString();
-  let hasFilter = searchStateHasFilter(searchState);
-  if (query !== false && ((query !== 'show' && query !== '')
-    || hasFilter
-    || (Object.keys(searchState).length > 0 && searchState.query !== ''))
-  ) {
-    Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
-      element.style.display = 'none';
-    });
-    searchResultDiv.style.display = 'block';
-    searchResultDiv.className = 'show-algolia-result';
-    searchResultDiv.style.minHeight = '26.5rem';
-    pageStandard.className = searchClasses;
-  }
+function showSearchResultContainer() {
+  Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
+    element.style.display = 'none';
+  });
+  searchResultDiv.style.display = 'block';
+  searchResultDiv.className = 'show-algolia-result';
+  searchResultDiv.style.minHeight = '26.5rem';
+  pageStandard.className = searchClasses;
 }
 
 function hideSearchResultContainer() {
@@ -43,10 +37,19 @@ function hideSearchResultContainer() {
   Drupal.blazyRevalidate();
 }
 
-function toggleSearchResultsContainer(query) {
-  (typeof query === 'undefined' || query === '')
-    ? hideSearchResultContainer()
-    : showSearchResultContainer(query);
+function toggleSearchResultsContainer() {
+  // When user is on search page, we always want to display search results,
+  // As search links are used internally with filters
+  let search_query = get_search_query();
+  if (drupalSettings.algoliaSearch.showSearchResults) {
+    showSearchResultContainer();
+  }
+  else if (search_query === '' || search_query === null) {
+    hideSearchResultContainer();
+  }
+  else {
+    showSearchResultContainer();
+  }
 }
 
 // Show or hide sort by filter, when no results found.
@@ -59,6 +62,7 @@ function toggleSortByFilter(action) {
   else {
     searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block')
   }
+
 }
 
 /**
@@ -76,7 +80,7 @@ function showLoader() {
 function removeLoader() {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
   // Check if loader div is present algolia is not redirecting to other language.
-  if (loaderDiv.length > 0 && localStorage.getItem('algoliaLangRedirect') !== '1') {
+  if (loaderDiv.length > 0 && get_lang_redirect !== '1') {
     document.body.removeChild(loaderDiv[0]);
   }
 }

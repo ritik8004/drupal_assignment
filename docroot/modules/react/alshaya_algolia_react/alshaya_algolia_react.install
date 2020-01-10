@@ -5,6 +5,21 @@
  * Install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_algolia_react_update_8001() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['views.view.search'],
+      'alshaya_algolia_react',
+      'override',
+      AlshayaConfigManager::MODE_MERGE
+    );
+}
+
 /**
  * Implements hook_install().
  */

@@ -5,7 +5,8 @@ import {
   getCurrentSearchQueryString,
   updateSearchQuery,
   toggleSearchResultsContainer,
-  searchStateHasFilter
+  searchStateHasFilter,
+  set_search_query
 } from '../../utils';
 
 /**
@@ -28,13 +29,10 @@ const withURLSync = SearchResultsComponent =>
       if (!Object.keys(searchState).length && props.query !== '') {
         searchState = {'query': props.query};
         this.updateBrowserHash({'query': props.query});
-        // toggleSearchResultsContainer('show');
       }
-      else if (searchStateHasFilter(searchState)) {
-        // toggleSearchResultsContainer('show');
-      }
-      else {
-        // toggleSearchResultsContainer('');
+
+      if (Object.keys(searchState).length > 0 && searchState.query != '') {
+        set_search_query(props.query);
       }
 
       this.state = {
@@ -59,7 +57,7 @@ const withURLSync = SearchResultsComponent =>
         });
       }
       else {
-        toggleSearchResultsContainer('');
+        toggleSearchResultsContainer();
       }
     }
 
@@ -74,7 +72,6 @@ const withURLSync = SearchResultsComponent =>
         searchState = {};
       }
       this.updateBrowserHash(searchState);
-      toggleSearchResultsContainer(searchState.query || searchStateHasFilter(searchState));
       this.setState({ searchState });
     };
 

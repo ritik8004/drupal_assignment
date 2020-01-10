@@ -1,0 +1,8 @@
+alshaya_algolia_react.search:
+  path: '/search'
+  defaults:
+    _controller: '\Drupal\alshaya_algolia_react\Controller\AlgoliaController::search'
+    _title: ''
+  requirements:
+    # All user should able to access search page.
+    _access: 'TRUE'

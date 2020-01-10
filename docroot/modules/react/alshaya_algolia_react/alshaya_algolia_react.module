@@ -5,8 +5,11 @@
  * Module file.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -29,4 +32,20 @@ function alshaya_algolia_react_node_view(array &$build, EntityInterface $entity,
  */
 function alshaya_algolia_react_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
   $reset[] = 'block.block.alshayaalgoliareactautocomplete';
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_algolia_react_block_access(Block $block, $operation, AccountInterface $account) {
+  // Disable category facet on group by category listing pages (panty guide).
+  if ($operation == 'view' &&
+      (strpos($block->getPluginId(), 'facet') !== FALSE
+       || strpos($block->id(), 'exposedformsearchpage') !== FALSE)
+  ) {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() == 'alshaya_algolia_react.search') {
+      return AccessResult::forbidden();
+    }
+  }
 }

@@ -11,7 +11,8 @@ import {
   getCurrentSearchQuery,
   isMobile,
   updateSearchQuery,
-  redirectToOtherLang
+  redirectToOtherLang,
+  set_search_query
 } from './utils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
@@ -34,6 +35,7 @@ class App extends React.PureComponent {
 
   setQueryValue = (queryValue, inputTag = null) => {
     this.setState({query: queryValue});
+    set_search_query(queryValue);
     if (queryValue !== '') {
       redirectToOtherLang(queryValue, inputTag);
     }
