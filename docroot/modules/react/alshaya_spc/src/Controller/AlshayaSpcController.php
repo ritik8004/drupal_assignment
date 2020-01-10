@@ -150,8 +150,6 @@ class AlshayaSpcController extends ControllerBase {
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'payment_methods' => $payment_methods,
           'address_fields' => $this->spcHelper->getAddressFields(),
-          'area_list' => $this->spcHelper->getAreaList(),
-          'area_parent_list' => $this->spcHelper->getAreaParentList(),
         ],
       ],
     ];
@@ -194,8 +192,30 @@ class AlshayaSpcController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    */
-  public function getAreaList($area) {
+  public function getAreaListByParent($area) {
     $data = $this->spcHelper->getAllAreasOfParent($area);
+    return new JsonResponse($data);
+  }
+
+  /**
+   * Get areas list.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getAreaList() {
+    $data = $this->spcHelper->getAreaList();
+    return new JsonResponse($data);
+  }
+
+  /**
+   * Get parent areas list.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getParentAreaList() {
+    $data = $this->spcHelper->getAreaParentList();
     return new JsonResponse($data);
   }
 

@@ -8,23 +8,9 @@ export default class AreaSelect extends React.Component {
   constructor(props) {
     super(props);
     this.selectRef = React.createRef();
-  }
-
-  // Get parent area list.
-  getAreaList = (key, field) => {
-    let data = new Array();
-    data[0] = {
-      value: '',
-      label: Drupal.t('Select @field', {'@field': field.label})
-    }
-    Object.entries(window.drupalSettings.area_parent_list).forEach(([tid, tname]) => {
-      data[tid] = {
-        value: tid,
-        label: tname,
-      };
-    });
-
-    return data;
+    this.state = {
+      'areas': {}
+    };
   }
 
   onMenuOpen = () => {
@@ -35,23 +21,48 @@ export default class AreaSelect extends React.Component {
     this.selectRef.current.select.inputRef.closest('.spc-select').classList.remove('open');
   };
 
-  handleChange = (selectedOption) => {
-    // Only on change of area_parent, get area list.
-    if (this.props.field_key === 'area_parent') {
-      var api_url = 'area-list/' + selectedOption.value;
+  componentDidMount() {
+    this.getAreasList();
+  }
 
-      return axios.get(api_url)
-        .then(response => {
-          this.props.areasUpdate(response.data);
-      })
-      .catch(error => {
-        // Processing of error here.
+  getAreasList = () => {
+    return axios.get('parent-areas')
+    .then(response => {
+      let data = new Array();
+      data[0] = {
+        value: '',
+        label: Drupal.t('Select @field', {'@field': this.props.field.label})
+      }
+      Object.entries(response.data).forEach(([key, term]) => {
+        data[key] = {
+          value: key,
+          label: term,
+        };
       });
-    }
+
+      this.setState({
+        areas: data
+      });
+    })
+    .catch(error => {
+    // Processing of error here.
+    });
+  }
+
+  // Handle change of 'area_parent' list.
+  handleChange = (selectedOption) => {
+    var api_url = 'area-list/' + selectedOption.value;
+    return axios.get(api_url)
+      .then(response => {
+        this.props.areasUpdate(response.data);
+    })
+    .catch(error => {
+      // Processing of error here.
+    });
   };
 
   render() {
-    let options = this.getAreaList(this.props.field_key, this.props.field);
+    let options = this.state.areas;
 
     return (
         <div>
