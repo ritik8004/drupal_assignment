@@ -17,6 +17,7 @@ export default class Checkout extends React.Component {
     this.state = {
       'wait': true,
       'cart': null,
+      'delivery_method': 'hd'
     };
   }
 
@@ -36,6 +37,13 @@ export default class Checkout extends React.Component {
     catch(error) {
       // In case of error, do nothing.
     }
+  }
+
+  // On delivery method change.
+  updateDeliveryMethod = (method) => {
+    this.setState({
+      delivery_method: method
+    });
   }
 
   render() {
@@ -58,14 +66,14 @@ export default class Checkout extends React.Component {
           <div className="spc-pre-content"/>
           <div className="spc-main">
             <div className="spc-content">
-              <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.cart.delivery_method} />
-              <DeliveryInformation delivery_type={this.state.cart.delivery_method} />
+              <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.delivery_method} updateMethod={this.updateDeliveryMethod} />
+              <DeliveryInformation delivery_type={this.state.delivery_method} />
               <PaymentMethods cart={this.state.cart} is_active={false} />
               <TermsConditions/>
               <CompletePurchase enable={false}/>
             </div>
             <div className="spc-sidebar">
-              <OrderSummaryBlock items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
+              <OrderSummaryBlock item_qty={this.state.cart.items_qty} items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
             </div>
           </div>
           <div className="spc-post-content"/>
