@@ -211,17 +211,18 @@ class SwatchesHelper {
         case self::SWATCH_TYPE_VISUAL_IMAGE:
           try {
             $file = $this->downloadSwatchImage($swatch_info['swatch']);
-
-            // We will allow to store swatch original image
-            // If it's settings mdc_swatch_image_style is available.
-            $mdcSwatchImageStyle = $this->configFactory
-              ->get('alshaya_product_options.settings')
-              ->get('mdc_swatch_image_style') ?? '';
-            if (!empty($mdcSwatchImageStyle)) {
-              $swatchOriginalImageUrl = str_replace($mdcSwatchImageStyle . '/', '', $swatch_info['swatch']);
-              $swatchOriginalImagefile = $this->downloadSwatchImage($swatchOriginalImageUrl);
-              if (!empty($swatchOriginalImagefile)) {
-                $term->get('field_attribute_swatch_org_image')->setValue($swatchOriginalImagefile);
+            if ($term->get('field_sku_attribute_code')->getString() === Settings::get('brand_logo_block')['logo_attribute']) {
+              // We will allow to store swatch original image
+              // If it's settings mdc_swatch_image_style is available.
+              $mdcSwatchImageStyle = $this->configFactory
+                ->get('alshaya_product_options.settings')
+                ->get('mdc_swatch_image_style') ?? '';
+              if (!empty($mdcSwatchImageStyle)) {
+                $swatchOriginalImageUrl = str_replace($mdcSwatchImageStyle . '/', '', $swatch_info['swatch']);
+                $swatchOriginalImagefile = $this->downloadSwatchImage($swatchOriginalImageUrl);
+                if (!empty($swatchOriginalImagefile)) {
+                  $term->get('field_attribute_swatch_org_image')->setValue($swatchOriginalImagefile);
+                }
               }
             }
           }

@@ -47,7 +47,7 @@ services:
       - '@plugin.manager.facets.facet_source'
       - '@plugin.manager.facets_summary.processor'
       - '@facets.manager'
-  alshaya.brand_list_helper:
+  alshaya_product_options.brand_list_helper:
     class: Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper
     arguments:
       - '@database'

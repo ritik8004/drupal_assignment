@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_product_options\Brand;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Site\Settings;
 
 /**
  * Class AlshayaBrandListHelper.
@@ -18,11 +19,6 @@ class AlshayaBrandListHelper {
    * Taxonomy used for product brand.
    */
   const BRAND_VID = 'sku_product_option';
-
-  /**
-   * Attribute code of the product brand.
-   */
-  const BRAND_ATTRIBUTE_CODE = 'brand_logo';
 
   /**
    * Database Connection.
@@ -51,7 +47,7 @@ class AlshayaBrandListHelper {
     $query->innerJoin('taxonomy_term__field_attribute_swatch_org_image', 'ttasoi', 'ttasoi.entity_id = ttfd.tid');
     $query->innerJoin('file_managed', 'fm', 'ttasoi.field_attribute_swatch_org_image_target_id = fm.fid AND fm.status = 1');
     $query->addField('fm', 'uri');
-    $query->condition('ttac.field_sku_attribute_code_value', self::BRAND_ATTRIBUTE_CODE);
+    $query->condition('ttac.field_sku_attribute_code_value', Settings::get('brand_logo_block')['logo_attribute']);
     $query->condition('ttfd.default_langcode', 1);
     $query->condition('ttfd.vid', self::BRAND_VID);
     $query->orderBy('ttfd.weight', 'ASC');

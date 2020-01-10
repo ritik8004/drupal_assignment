@@ -11,6 +11,9 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides alshaya brand carousel block.
@@ -77,7 +80,7 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya.brand_list_helper'),
+      $container->get('alshaya_product_options.brand_list_helper'),
       $container->get('module_handler'),
       $container->get('language_manager'),
       $container->get('config.factory'),
@@ -96,20 +99,20 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
 
     if (!empty($terms)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
-      $attributeName = 'product_brand';
+      $attributeName = Settings::get('brand_logo_block')['brand_attribute'];
       $link = '/' . $langcode . '/search?f[0]=' . $attributeName . ':';
       // Incase of algolia we don't have search page.
       // So adding a algolia suitable link.
       if ($this->moduleHandler->moduleExists('alshaya_search_algolia')) {
-        $attributeName = 'attr_product_brand';
         $link = '/' . $langcode . '/#query= &refinementList[' . $attributeName . '][0]=';
       }
       // Allow other modules to alter link.
       $this->moduleHandler->invokeAll('brand_carousel_link_alter', [&$link]);
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
       if (!empty($facet_results)) {
+        $facet_results_lowercase = array_map('strtolower', $facet_results[$attributeName]);
         foreach ($terms as $term) {
-          if (in_array($term->name, $facet_results[$attributeName])) {
+          if (in_array(strtolower($term->name), $facet_results_lowercase)) {
             $brand_images[$term->tid] = [
               'image' => $term->uri,
               'title' => $term->name,
@@ -142,6 +145,13 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     return Cache::mergeTags(
       parent::getCacheTags(),
       [AlshayaBrandListHelper::BRAND_CACHETAG]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    return AccessResult::allowedIf(!empty(Settings::get('brand_logo_block')));
   }
 
 }

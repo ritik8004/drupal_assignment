@@ -8,6 +8,7 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_theme().
@@ -43,7 +44,7 @@ function alshaya_product_options_theme() {
  */
 function alshaya_product_options_taxonomy_term_presave(TermInterface $term) {
   if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
-    if ($term->get('field_sku_attribute_code')->getString() === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
+    if (in_array($term->get('field_sku_attribute_code')->getString(), Settings::get('brand_logo_block'))) {
       // Invalidate page cache.
       Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
     }
@@ -55,7 +56,7 @@ function alshaya_product_options_taxonomy_term_presave(TermInterface $term) {
  */
 function alshaya_product_options_taxonomy_term_delete(TermInterface $term) {
   if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
-    if ($term->get('field_sku_attribute_code')->getString() === AlshayaBrandListHelper::BRAND_ATTRIBUTE_CODE) {
+    if (in_array($term->get('field_sku_attribute_code')->getString(), Settings::get('brand_logo_block'))) {
       // Invalidate page cache.
       Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
     }
