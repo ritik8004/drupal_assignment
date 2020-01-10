@@ -1,4 +1,6 @@
 .spc-checkout-delivery-methods {
+  margin-bottom: 2.5rem;
+
   .delivery-method {
     height: 4.75rem;
     background: $spc-checkout-delivery-method-bg;
@@ -13,35 +15,8 @@
       margin-bottom: 0;
     }
 
-    @include  breakpoint($tablet) {
+    @include breakpoint($tablet) {
       height: 3.875rem;
-    }
-
-    input[type=radio] {
-      display: none;
-
-      ~ .radio-sim::before {
-        content:'';
-        position: absolute;
-        #{$left}: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 3.125rem;
-      }
-
-      ~ .radio-sim {
-        @include icon(radio-empty, before) {
-          color: $spc-checkout-radio-empty;
-        }
-      }
-
-      &:checked {
-        ~ .radio-sim {
-          @include icon(radio-filled, before) {
-            color: $spc-checkout-radio-filled;
-          }
-        }
-      }
     }
   }
 }

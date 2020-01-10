@@ -9,8 +9,8 @@ export default class TermsConditions extends React.Component {
 
   render() {
     return (
-      <div dangerouslySetInnerHTML={this.getHtmlMarkup()}/>
-    ); 	
+      <div className="spc-checkout-terms-conditions" dangerouslySetInnerHTML={this.getHtmlMarkup()}/>
+    );
   }
 
 }
