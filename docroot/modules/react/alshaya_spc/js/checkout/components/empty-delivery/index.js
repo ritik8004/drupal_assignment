@@ -1,5 +1,7 @@
 import React from 'react';
 
+import AddressForm from '../address-form';
+
 export default class EmptyDeliveryText extends React.Component {
 
   render() {
@@ -10,7 +12,9 @@ export default class EmptyDeliveryText extends React.Component {
   	}
 
   	return (
-      <div className="spc-checkout-empty-delivery-text">{Drupal.t('Add your address and contact details')}</div>
+      <div className="spc-checkout-empty-delivery-text">
+      <AddressForm/>
+      {Drupal.t('Add your address and contact details')}</div>
     );
   }
 
