@@ -16,12 +16,14 @@ export default class DeliveryMethods extends React.Component {
     };
   }
 
+  // On delivery method change.
   changeDeliveryMethod = (method) => {
     this.setState({
       selectedOption: method
     });
 
     document.getElementById('delivery-method-' + method).checked = true;
+    this.props.updateMethod(method);
   }
 
   render() {
