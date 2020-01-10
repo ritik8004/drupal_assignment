@@ -4,7 +4,7 @@ import Price from '../price';
 import Promotions from '../promotions';
 import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
-import { getCurrentSearchQueryString } from '../../utils';
+import { getCurrentSearchQueryString, setClickedItem } from '../../utils';
 
 const Teaser = ({hit}) => {
   const swatches = (null);
@@ -23,7 +23,7 @@ const Teaser = ({hit}) => {
       storage_details.page = parseInt(queryString.page);
     }
 
-    localStorage.setItem(window.location.hash, JSON.stringify(storage_details));
+    setClickedItem(storage_details);
   }
 
   return (
