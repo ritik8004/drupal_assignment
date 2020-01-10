@@ -101,11 +101,6 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
       $attributeName = Settings::get('brand_logo_block')['brand_attribute'];
       $link = '/' . $langcode . '/search?f[0]=' . $attributeName . ':';
-      // Incase of algolia we don't have search page.
-      // So adding a algolia suitable link.
-      if ($this->moduleHandler->moduleExists('alshaya_search_algolia')) {
-        $link = '/' . $langcode . '/#query= &refinementList[' . $attributeName . '][0]=';
-      }
       // Allow other modules to alter link.
       $this->moduleHandler->invokeAll('brand_carousel_link_alter', [&$link]);
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
