@@ -51,3 +51,4 @@ magazine_gallery:
   dependencies:
   - core/drupalSettings
   - alshaya_white_label/slick
+  - alshaya_product_zoom/instagram_dots
