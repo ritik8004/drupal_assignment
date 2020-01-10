@@ -82,8 +82,9 @@ class Autocomplete extends React.Component {
     }
   }
 
-  addFocus = (action) => {
+  addFocus = () => {
     this.reactSearchBlock[0].classList.add('focused');
+    this.showMobileElements(this.state.value);
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
