@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { createBrowserHistory } from 'history';
 import { toggleSearchResultsContainer, showLoader } from './SearchUtility';
-import { set_lang_redirect } from './localStorage';
+import { setLangRedirect } from './localStorage';
 
 const updateAfter = 700;
 const history = createBrowserHistory();
@@ -80,7 +80,7 @@ function redirectToUrl(queryValue, redirectlang, inputTag) {
     if (inputTag !== null && typeof inputTag !== 'undefined') {
       inputTag.disabled = true;
     }
-    set_lang_redirect(1);
+    setLangRedirect(1);
     window.location.hash = "query=" + queryValue;
     window.location.pathname = window.location.pathname.replace(drupalSettings.path.currentLanguage, redirectlang);
   }

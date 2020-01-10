@@ -5,8 +5,7 @@ import {
   getCurrentSearchQueryString,
   updateSearchQuery,
   toggleSearchResultsContainer,
-  searchStateHasFilter,
-  set_search_query
+  setSearchQuery
 } from '../../utils';
 
 /**
@@ -32,7 +31,7 @@ const withURLSync = SearchResultsComponent =>
       }
 
       if (Object.keys(searchState).length > 0 && searchState.query != '') {
-        set_search_query(props.query);
+        setSearchQuery(props.query);
       }
 
       this.state = {

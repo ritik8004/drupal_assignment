@@ -30,11 +30,11 @@ export {
 } from './FilterUtils';
 
 export {
-  set_search_query,
-  remove_search_query,
-  get_search_query,
-  set_lang_redirect,
-  remove_lang_redirect,
-  get_lang_redirect,
-  set_clicked_item
+  setSearchQuery,
+  removeSearchQuery,
+  getSearchQuery,
+  setLangRedirect,
+  removeLangRedirect,
+  getLangRedirect,
+  setClickedItem
 } from './localStorage';

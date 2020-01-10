@@ -1,6 +1,5 @@
 import { hasCategoryFilter } from './FilterUtils';
-import { getCurrentSearchQueryString, searchStateHasFilter } from './QueryStringUtils';
-import { get_lang_redirect, get_search_query } from './localStorage';
+import { getSearchQuery, getLangRedirect } from './localStorage';
 
 const contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
@@ -40,7 +39,7 @@ function hideSearchResultContainer() {
 function toggleSearchResultsContainer() {
   // When user is on search page, we always want to display search results,
   // As search links are used internally with filters
-  let search_query = get_search_query();
+  let search_query = getSearchQuery();
   if (drupalSettings.algoliaSearch.showSearchResults) {
     showSearchResultContainer();
   }
@@ -80,7 +79,7 @@ function showLoader() {
 function removeLoader() {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
   // Check if loader div is present algolia is not redirecting to other language.
-  if (loaderDiv.length > 0 && get_lang_redirect !== '1') {
+  if (loaderDiv.length > 0 && getLangRedirect() !== '1') {
     document.body.removeChild(loaderDiv[0]);
   }
 }

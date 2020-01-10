@@ -6,8 +6,8 @@ import CustomHighlight from './CustomHighlight';
 import {
   getCurrentSearchQuery,
   isMobile,
-  remove_lang_redirect,
-  get_lang_redirect
+  removeLangRedirect,
+  getLangRedirect
 } from '../../utils';
 import Portal from '../portal';
 
@@ -66,8 +66,8 @@ class Autocomplete extends React.Component {
   }
 
   blurORFocus() {
-    if (get_lang_redirect() == '1') {
-      remove_lang_redirect();
+    if (getLangRedirect() == '1') {
+      removeLangRedirect();
       this.autosuggest.current.input.focus();
     }
     else {

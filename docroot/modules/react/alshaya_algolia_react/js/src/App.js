@@ -7,12 +7,10 @@ import SearchResults from './components/searchresults';
 import Portal from './components/portal';
 import Teaser from './components/teaser';
 import {
-  toggleSearchResultsContainer,
   getCurrentSearchQuery,
   isMobile,
-  updateSearchQuery,
   redirectToOtherLang,
-  set_search_query
+  setSearchQuery
 } from './utils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
@@ -35,7 +33,7 @@ class App extends React.PureComponent {
 
   setQueryValue = (queryValue, inputTag = null) => {
     this.setState({query: queryValue});
-    set_search_query(queryValue);
+    setSearchQuery(queryValue);
     if (queryValue !== '') {
       redirectToOtherLang(queryValue, inputTag);
     }
