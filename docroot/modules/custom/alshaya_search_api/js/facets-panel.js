@@ -488,9 +488,11 @@
                   }
                 }
               } else {
-                // Action to perform when we are scrolling down.
-                if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                  $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                if (this.oldScroll < this.pageYOffset || this.oldScroll != this.pageYOffset) {
+                  // Action to perform when we are scrolling down.
+                  if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                    $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                  }
                 }
               }
             } else {
