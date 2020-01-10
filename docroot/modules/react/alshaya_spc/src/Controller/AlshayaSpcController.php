@@ -5,7 +5,10 @@ namespace Drupal\alshaya_spc\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
+use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\mobile_number\MobileNumberUtilInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,6 +38,20 @@ class AlshayaSpcController extends ControllerBase {
   protected $paymentMethodManager;
 
   /**
+   * SPC helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
+   * Mobile utility.
+   *
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
+   */
+  protected $mobileUtil;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -43,13 +60,21 @@ class AlshayaSpcController extends ControllerBase {
    *   Payment method manager.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
    *   Checkout option manager.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   SPC helper.
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
+   *   Mobile utility.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               AlshayaSpcPaymentMethodManager $payment_method_manager,
-                              CheckoutOptionsManager $checkout_options_manager) {
+                              CheckoutOptionsManager $checkout_options_manager,
+                              AlshayaSpcHelper $spc_helper,
+                              MobileNumberUtilInterface $mobile_util) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
+    $this->spcHelper = $spc_helper;
+    $this->mobileUtil = $mobile_util;
   }
 
   /**
@@ -59,7 +84,9 @@ class AlshayaSpcController extends ControllerBase {
     return new static(
       $container->get('config.factory'),
       $container->get('plugin.manager.alshaya_spc_payment_method'),
-      $container->get('alshaya_acm_checkout.options_manager')
+      $container->get('alshaya_acm_checkout.options_manager'),
+      $container->get('alshaya_spc.helper'),
+      $container->get('mobile_number.util')
     );
   }
 
@@ -122,9 +149,74 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'payment_methods' => $payment_methods,
+          'address_fields' => $this->spcHelper->getAddressFields(),
         ],
       ],
     ];
+  }
+
+  /**
+   * Verifies the mobile number.
+   *
+   * @param string $mobile
+   *   Mobile number to verify.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function verifyMobileNumber(string $mobile) {
+    if (empty($mobile)) {
+      return new JsonResponse(['status' => FALSE]);
+    }
+
+    try {
+      $country_code = _alshaya_custom_get_site_level_country_code();
+      $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
+      if ($this->mobileUtil->testMobileNumber('+' . $country_mobile_code . $mobile)) {
+        return new JsonResponse(['status' => TRUE]);
+      }
+    }
+    catch (\Exception $e) {
+      return new JsonResponse(['status' => FALSE]);
+    }
+
+    return new JsonResponse(['status' => FALSE]);
+  }
+
+  /**
+   * Get area list for a given parent area.
+   *
+   * @param mixed $area
+   *   Parent area id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getAreaListByParent($area) {
+    $data = $this->spcHelper->getAllAreasOfParent($area);
+    return new JsonResponse($data);
+  }
+
+  /**
+   * Get areas list.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getAreaList() {
+    $data = $this->spcHelper->getAreaList();
+    return new JsonResponse($data);
+  }
+
+  /**
+   * Get parent areas list.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getParentAreaList() {
+    $data = $this->spcHelper->getAreaParentList();
+    return new JsonResponse($data);
   }
 
 }
