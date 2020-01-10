@@ -1,1 +1,5 @@
 status: false
+display:
+  page:
+    display_options:
+      path: acquia-search
