@@ -104,6 +104,8 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
         $attributeName = 'attr_product_brand';
         $link = '/' . $langcode . '/#query= &refinementList[' . $attributeName . '][0]=';
       }
+      // Allow other modules to alter link.
+      $this->moduleHandler->invokeAll('brand_carousel_link_alter', [&$link]);
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
       if (!empty($facet_results)) {
         foreach ($terms as $term) {
