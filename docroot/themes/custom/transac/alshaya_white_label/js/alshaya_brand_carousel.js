@@ -23,7 +23,7 @@
        };
 
        if ($(window).width() > 1025) {
-         if ($('.alshaya_brand_carousel .brand_logos').length > 5) {
+         if ($('.alshaya_brand_carousel .brand_logos').length > brandCarouselSettings.brand_carousel_slidesToShow) {
            if (isRTL()) {
              $('.alshaya_brand_carousel').once().slick(
                $.extend({}, alshayaBrandCarousel, {rtl: true})
