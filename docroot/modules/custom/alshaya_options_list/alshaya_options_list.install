@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_options_list module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change the options list page settings data structure for attribute details.
+ */
+function alshaya_options_list_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_options_list.settings');
+  if ($attribute_options = $config->get('alshaya_options_pages')) {
+    foreach ($attribute_options as $key => $attribute_option) {
+      foreach ($attribute_option['attribute_details'] as $attrubute_name => $attrubute_details) {
+        unset($attribute_options[$key]['attribute_details'][$attrubute_name]);
+        $attribute_options[$key]['attribute_details'][$attrubute_name][] = $attrubute_details;
+      }
+    }
+    $config->set('alshaya_options_pages', $attribute_options);
+    $config->save();
+  }
+}

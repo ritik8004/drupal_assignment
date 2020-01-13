@@ -117,30 +117,33 @@ class AlshayaOptionsPageController extends ControllerBase {
     }
     else {
       foreach ($attributeCodes as $attributeCode) {
-        $option = [];
-        $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
-        if ($attribute_options[$request]['attribute_details'][$attributeCode]['show-search']) {
-          $option['search'] = $options_list[$attributeCode]['search'] = TRUE;
-          $options_list[$attributeCode]['search_placeholder'] = $attribute_options[$request]['attribute_details'][$attributeCode]['search-placeholder'];
+        foreach ($attribute_options[$request]['attribute_details'][$attributeCode] as $key => $attributeOptions) {
+          $option = [];
+          $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $attributeOptions['show-images'], $attributeOptions['group']);
+          if ($attributeOptions['show-search']) {
+            $option['search'] = $options_list[$attributeCode][$key]['search'] = TRUE;
+            $options_list[$attributeCode][$key]['search_placeholder'] = $attributeOptions['search-placeholder'];
+          }
+
+          if ($attributeOptions['group']) {
+            $option['group'] = $options_list[$attributeCode][$key]['group'] = TRUE;
+            $option['terms'] = $this->alshayaOptionsService->groupAlphabetically($option['terms']);
+          }
+
+          $options_list[$attributeCode][$key]['options_markup'] = [
+            '#theme' => 'alshaya_options_attribute',
+            '#option' => $option,
+            '#attribute_code' => $attributeCode,
+          ];
+
+          $options_list[$attributeCode][$key]['title'] = $attributeOptions['title'];
+          $options_list[$attributeCode][$key]['description'] = $attributeOptions['description'];
+
+          if ($attributeOptions['mobile_title_toggle']) {
+            $options_list[$attributeCode][$key]['mobile_title'] = $attributeOptions['mobile_title'];
+          }
         }
 
-        if ($attribute_options[$request]['attribute_details'][$attributeCode]['group']) {
-          $option['group'] = $options_list[$attributeCode]['group'] = TRUE;
-          $option['terms'] = $this->alshayaOptionsService->groupAlphabetically($option['terms']);
-        }
-
-        $options_list[$attributeCode]['options_markup'] = [
-          '#theme' => 'alshaya_options_attribute',
-          '#option' => $option,
-          '#attribute_code' => $attributeCode,
-        ];
-
-        $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
-        $options_list[$attributeCode]['description'] = $attribute_options[$request]['attribute_details'][$attributeCode]['description'];
-
-        if ($attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title_toggle']) {
-          $options_list[$attributeCode]['mobile_title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title'];
-        }
       }
       $this->cache->set($cid, $options_list, Cache::PERMANENT, $cache_tags);
     }
@@ -148,20 +151,22 @@ class AlshayaOptionsPageController extends ControllerBase {
     // Only show those facets that have values.
     $facet_results = $this->alshayaOptionsService->loadFacetsData($attributeCodes);
     foreach ($options_list as $attribute_key => $attribute_details) {
-      if (isset($attribute_details['group'])) {
-        foreach ($attribute_details['options_markup']['#option']['terms'] as $group_key => $grouped_term) {
-          foreach ($grouped_term as $group_term_key => $grouped_term_value) {
-            if (!in_array($grouped_term_value['title'], $facet_results[$attribute_key])) {
-              unset($options_list[$attribute_key]['options_markup']['#option']['terms'][$group_key][$group_term_key]);
+      foreach ($attribute_details as $no => $attribute_detail) {
+        if (isset($attribute_detail['group'])) {
+          foreach ($attribute_detail['options_markup']['#option']['terms'] as $group_key => $grouped_term) {
+            foreach ($grouped_term as $group_term_key => $grouped_term_value) {
+              if (!in_array($grouped_term_value['title'], $facet_results[$attribute_key])) {
+                unset($options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$group_key][$group_term_key]);
+              }
             }
           }
+          $options_list[$attribute_key][$no]['options_markup']['#option']['terms'] = array_filter($options_list[$attribute_key][$no]['options_markup']['#option']['terms']);
         }
-        $options_list[$attribute_key]['options_markup']['#option']['terms'] = array_filter($options_list[$attribute_key]['options_markup']['#option']['terms']);
-      }
-      else {
-        foreach ($attribute_details['options_markup']['#option']['terms'] as $term_key => $term) {
-          if (!in_array($term['title'], $facet_results[$attribute_key])) {
-            unset($options_list[$attribute_key]['options_markup']['#option']['terms'][$term_key]);
+        else {
+          foreach ($attribute_detail['options_markup']['#option']['terms'] as $term_key => $term) {
+            if (!in_array($term['title'], $facet_results[$attribute_key])) {
+              unset($options_list[$attribute_key][$no]['options_markup']['#option']['terms'][$term_key]);
+            }
           }
         }
       }
