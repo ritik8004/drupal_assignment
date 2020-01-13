@@ -25,12 +25,12 @@
        if ($(window).width() > 1025) {
          if ($('.alshaya_brand_carousel .brand_logos').length > 5) {
            if (isRTL()) {
-             $('.alshaya_brand_carousel').slick(
+             $('.alshaya_brand_carousel').once().slick(
                $.extend({}, alshayaBrandCarousel, {rtl: true})
              );
            }
            else {
-             $('.alshaya_brand_carousel').slick(alshayaBrandCarousel);
+             $('.alshaya_brand_carousel').once().slick(alshayaBrandCarousel);
            }
          }
        }
