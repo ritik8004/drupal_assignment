@@ -115,6 +115,16 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       return [];
     }
 
+    $desktop_main_menu_highlight_timing = (int) $this->configFactory
+      ->get('alshaya_main_menu.settings')
+      ->get('desktop_main_menu_highlight_timing');
+
+    $desktop_main_menu_layout = $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
+
+    if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
+      $columns_tree = $this->getColumnDataMenuAlgo($term_data);
+    }
+
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
       $parents = $this->productCategoryTree->getCategoryTermParents($term);
@@ -131,16 +141,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Allow other module to alter links.
     $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
-
-    $desktop_main_menu_highlight_timing = (int) $this->configFactory
-      ->get('alshaya_main_menu.settings')
-      ->get('desktop_main_menu_highlight_timing');
-
-    $desktop_main_menu_layout = $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
-
-    if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
-      $columns_tree = $this->getColumnDataMenuAlgo($term_data);
-    }
 
     return [
       '#theme' => 'alshaya_main_menu_level1',
