@@ -19,10 +19,10 @@
          slidesToScroll: brandCarouselSettings.brand_carousel_slidesToScroll,
          focusOnSelect: false,
          touchThreshold: 1000,
-         infinite: false
+         infinite: true
        };
 
-       if ($(window).width() > 1025) {
+       if ($(window).width() > 767) {
          if ($('.alshaya_brand_carousel .brand_logos').length > brandCarouselSettings.brand_carousel_slidesToShow) {
            if (isRTL()) {
              $('.alshaya_brand_carousel').once().slick(
