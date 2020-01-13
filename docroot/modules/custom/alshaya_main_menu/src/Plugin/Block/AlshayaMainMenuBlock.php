@@ -140,17 +140,16 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
     $columns_tree = [];
 
-    foreach ($term_data as $key => $l2s) {
+    foreach ($term_data as $l2s) {
       $max_nb_col = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_highlight_timing');
-      $ideal_max_col_length = 10;
-      // $ideal_max_col_length = round(count($l2s, COUNT_RECURSIVE) / $max_nb_col);
+      $ideal_max_col_length = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('ideal_max_col_length');
       do {
         $columns = [];
-         $col = 0;
+        $col = 0;
         $col_total = 0;
         $reprocess = FALSE;
 
-        foreach ($l2s['child'] as $l2 => $l3s) {
+        foreach ($l2s['child'] as $l3s) {
           // 2 below means L2 item + one blank line for spacing).
           $l2_cost = 2 + count($l3s['child']);
 

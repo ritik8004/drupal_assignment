@@ -8,7 +8,7 @@
                 {% if level2.depth == 2 %}
                 <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
                     <div class="menu__link-wrapper menu-two__link-wrapper">
-                        <a class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" href="{{ level2.path }}">{{ level2.label }}</a>
+                        <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" {{ level2.tag_attr }}">{{ level2.label }}</{{ level2.tag }}>
                     </div>
                     {% if level2.child is not empty %}
                         <ul class="menu__list menu--three__list">
@@ -17,8 +17,8 @@
                                 {% for key3, level3 in level2.child %}
                                 <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
                                     <div class="menu__link-wrapper menu-two__link-wrapper">
-                                        <a class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub_nav_class }}" href="{{ level3.path }}">{{ level3.label }}
-                                        </a>
+                                        <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub_nav_class }}" {{ level3.tag_attr }}>{{ level3.label }}
+                                        </{{ level3.tag }}>
                                     </div>
                                     {% if level3.child is not empty %}
                                         {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}

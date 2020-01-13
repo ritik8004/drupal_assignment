@@ -129,8 +129,20 @@ function _alshaya_main_menu_process_tag_attributes(array &$data) {
         $record['l1_object']['tag_attr'] = "href={$record['l1_object']['path']}";
       }
 
-      if (!empty($record['child'])) {
-        _alshaya_main_menu_process_tag_attributes($record['child']);
+      if (!empty($record['columns'])) {
+        foreach ($record['columns'] as $key => $value) {
+          foreach ($value as $key1 => $l2) {
+            $record['columns'][$key][$key1]['tag'] = 'div';
+            $record['columns'][$key][$key1]['tag_attr'] = '';
+            if (isset($l2['clickable']) && $l2['clickable']) {
+              $record['columns'][$key][$key1]['tag'] = 'a';
+              $record['columns'][$key][$key1]['tag_attr'] = "href={$l2['path']}";
+            }
+            if (!empty($l2['child'])) {
+              _alshaya_main_menu_process_tag_attributes_columns($record['columns'][$key][$key1]['child']);
+            }
+          }
+        }
       }
     }
     else {
@@ -252,6 +264,24 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
           break;
         }
       }
+    }
+  }
+}
+
+/**
+ * Prepares href for anchor tag for given term data in columns.
+ */
+function _alshaya_main_menu_process_tag_attributes_columns(array &$data) {
+  foreach ($data as $key => $value) {
+    $data[$key]['tag'] = 'div';
+    $data[$key]['tag_attr'] = '';
+    if (isset($value['clickable']) && $value['clickable']) {
+      $data[$key]['tag'] = 'a';
+      $data[$key]['tag_attr'] = "href={$value['path']}";
+    }
+
+    if (isset($value['child'])) {
+      _alshaya_main_menu_process_tag_attributes_columns($value['child']);
     }
   }
 }
