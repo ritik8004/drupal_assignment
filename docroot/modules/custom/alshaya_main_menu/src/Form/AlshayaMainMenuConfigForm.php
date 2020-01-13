@@ -68,6 +68,13 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
       '#description' => $this->t('Select inline menu display option to display the l3 option inline to l2 otherwise it will follow the core.'),
     ];
 
+    $form['max_nb_col'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Maxinum number of columns to show'),
+      '#description' => $this->t('Set the maximum number of columns to show.'),
+      '#default_value' => (!empty($config->get('max_nb_col'))) ? $config->get('max_nb_col') : NULL,
+    ];
+
     return $form;
   }
 
@@ -78,6 +85,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_main_menu.settings');
     $config->set('mobile_main_menu_max_depth', $form_state->getValue('mobile_main_menu_max_depth'));
     $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
+    $config->set('max_nb_col', $form_state->getValue('max_nb_col'));
     $config->save();
     Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
 

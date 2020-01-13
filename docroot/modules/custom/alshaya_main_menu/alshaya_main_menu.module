@@ -21,6 +21,8 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-main-menu-level1',
       'variables' => [
         'term_tree' => NULL,
+        'column_tree' => NULL,
+        'menu_type' => NULL,
         'settings' => [],
       ],
     ],
@@ -70,7 +72,12 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
  *   An associative array containing menu items.
  */
 function template_preprocess_alshaya_main_menu_level1(array &$variables) {
-  _alshaya_main_menu_process_tag_attributes($variables['term_tree']);
+  if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
+    _alshaya_main_menu_process_tag_attributes($variables['column_tree']);
+  }
+  else {
+    _alshaya_main_menu_process_tag_attributes($variables['term_tree']);
+  }
 }
 
 /**
@@ -114,15 +121,29 @@ function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
  */
 function _alshaya_main_menu_process_tag_attributes(array &$data) {
   foreach ($data as &$record) {
-    $record['tag'] = 'div';
-    $record['tag_attr'] = '';
-    if (isset($record['clickable']) && $record['clickable']) {
-      $record['tag'] = 'a';
-      $record['tag_attr'] = "href={$record['path']}";
-    }
+    if (isset($record['l1_object'])) {
+      $record['l1_object']['tag'] = 'div';
+      $record['l1_object']['tag_attr'] = '';
+      if (isset($record['l1_object']['clickable']) && $record['l1_object']['clickable']) {
+        $record['l1_object']['tag'] = 'a';
+        $record['l1_object']['tag_attr'] = "href={$record['l1_object']['path']}";
+      }
 
-    if (!empty($record['child'])) {
-      _alshaya_main_menu_process_tag_attributes($record['child']);
+      if (!empty($record['child'])) {
+        _alshaya_main_menu_process_tag_attributes($record['child']);
+      }
+    }
+    else {
+      $record['tag'] = 'div';
+      $record['tag_attr'] = '';
+      if (isset($record['clickable']) && $record['clickable']) {
+        $record['tag'] = 'a';
+        $record['tag_attr'] = "href={$record['path']}";
+      }
+
+      if (!empty($record['child'])) {
+        _alshaya_main_menu_process_tag_attributes($record['child']);
+      }
     }
   }
 }
@@ -186,7 +207,7 @@ function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$
  */
 function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) {
   $variables['title_class'] = '';
-  foreach ($variables['data']['highlight_paragraph'] as $highlight_paragraph) {
+  foreach ($variables['data']['l1_object']['highlight_paragraph'] as $highlight_paragraph) {
     if (($highlight_paragraph['paragraph_type'] == 'main_menu_highlight')
       && ($highlight_paragraph['highlight_type'] == 'promo_block' || $highlight_paragraph['highlight_type'] == 'title_subtitle')) {
       // Adding the class only if promo block or combination of
@@ -205,12 +226,31 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) 
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
-  if (!empty($variables['data']['highlight_paragraph'])) {
-    foreach ($variables['data']['highlight_paragraph'] as $highlight_para) {
-      // If there is at least one paragraph of type 'text_links'.
-      if ($highlight_para['paragraph_type'] == 'text_links') {
-        $variables['data']['text_links_paragraph'] = TRUE;
-        break;
+  $variables['menu_type'] = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
+
+  if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
+    foreach ($variables['data']['columns'] as $value) {
+      foreach ($value as $column) {
+        if (!empty($column['highlight_paragraph'])) {
+          foreach ($column['highlight_paragraph'] as $highlight_para) {
+            // If there is at least one paragraph of type 'text_links'.
+            if ($column['paragraph_type'] == 'text_links') {
+              $column['text_links_paragraph'] = TRUE;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+  else {
+    if (!empty($variables['data']['highlight_paragraph'])) {
+      foreach ($variables['data']['highlight_paragraph'] as $highlight_para) {
+        // If there is at least one paragraph of type 'text_links'.
+        if ($highlight_para['paragraph_type'] == 'text_links') {
+          $variables['data']['text_links_paragraph'] = TRUE;
+          break;
+        }
       }
     }
   }
