@@ -138,8 +138,27 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
     $desktop_main_menu_layout = $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
 
-    $columns_tree = [];
+    if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
+      $columns_tree = $this->getColumnDataMenuAlgo($term_data);
+    }
 
+    return [
+      '#theme' => 'alshaya_main_menu_level1',
+      '#settings' => [
+        'desktop_main_menu_highlight_timing' => $desktop_main_menu_highlight_timing,
+      ],
+      '#term_tree' => $term_data,
+      '#column_tree' => (!empty($columns_tree)) ? $columns_tree : NULL,
+      '#menu_type' => $desktop_main_menu_layout,
+    ];
+
+  }
+
+  /**
+   * Column data after menu algo is applied.
+   */
+  public function getColumnDataMenuAlgo($term_data) {
+    $columns_tree = [];
     foreach ($term_data as $l2s) {
       $max_nb_col = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_highlight_timing');
       $ideal_max_col_length = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('ideal_max_col_length');
@@ -183,17 +202,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         'columns' => $columns,
       ];
     }
-
-    return [
-      '#theme' => 'alshaya_main_menu_level1',
-      '#settings' => [
-        'desktop_main_menu_highlight_timing' => $desktop_main_menu_highlight_timing,
-      ],
-      '#term_tree' => $term_data,
-      '#column_tree' => $columns_tree,
-      '#menu_type' => $desktop_main_menu_layout,
-    ];
-
+    return $columns_tree;
   }
 
   /**

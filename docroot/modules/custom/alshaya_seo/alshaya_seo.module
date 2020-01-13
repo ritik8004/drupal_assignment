@@ -251,7 +251,7 @@ function alshaya_seo_preprocess_alshaya_main_menu_level2(&$variables) {
     }
   }
   else {
-    foreach ($variables['data']  as $value) {
+    foreach ($variables['data'] as $value) {
       foreach ($value as $column) {
         $sub_nav_label = str_replace(' ', '-', strtolower($column['label']));
         $sub_nav_class = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
