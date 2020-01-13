@@ -102,8 +102,10 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       // Allow other modules to alter link.
       $this->moduleHandler->alter('brand_carousel_link', $link, $attributeName);
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
-      if (!empty($facet_results)) {
-        $facet_results_lowercase = array_map('strtolower', $facet_results[$attributeName]);
+      $attribute_key = key($facet_results);
+      // If there are facet results.
+      if (!empty($facet_results) && isset($facet_results[$attribute_key])) {
+        $facet_results_lowercase = array_map('strtolower', $facet_results[$attribute_key]);
         foreach ($terms as $term) {
           if (in_array(strtolower($term->name), $facet_results_lowercase)) {
             $brand_images[$term->tid] = [
