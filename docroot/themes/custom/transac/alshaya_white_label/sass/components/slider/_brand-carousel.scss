@@ -12,6 +12,8 @@
 
   .alshaya_brand_carousel {
     @include breakpoint($desktop) {
+      display: flex;
+      justify-content: center;
       padding: 0 2.5rem;
 
       .slick-arrow {
