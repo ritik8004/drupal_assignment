@@ -5,6 +5,10 @@
  * Module file.
  */
 
+use Drupal\Core\Cache\Cache;
+use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
+use Drupal\taxonomy\TermInterface;
+
 /**
  * Implements hook_theme().
  */
@@ -24,5 +28,38 @@ function alshaya_product_options_theme() {
     'template' => 'facets-result-item-with-swatch',
   ];
 
+  $items['alshaya_brand_carousel'] = [
+    'render element' => 'elements',
+    'variables' => [
+      'brand_details' => [],
+    ],
+  ];
+
   return $items;
+}
+
+/**
+ * Implements hook_taxonomy_term_presave().
+ */
+function alshaya_product_options_taxonomy_term_presave(TermInterface $term) {
+  if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
+    $term_code = $term->get('field_sku_attribute_code')->getString();
+    if ($term_code === AlshayaBrandListHelper::getLogoAttribute() || $term_code === AlshayaBrandListHelper::getBrandAttribute()) {
+      // Invalidate page cache.
+      Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
+    }
+  }
+}
+
+/**
+ * Implements hook_taxonomy_term_delete().
+ */
+function alshaya_product_options_taxonomy_term_delete(TermInterface $term) {
+  if ($term->bundle() === AlshayaBrandListHelper::BRAND_VID) {
+    $term_code = $term->get('field_sku_attribute_code')->getString();
+    if ($term_code === AlshayaBrandListHelper::getLogoAttribute() || $term_code === AlshayaBrandListHelper::getBrandAttribute()) {
+      // Invalidate page cache.
+      Cache::invalidateTags([AlshayaBrandListHelper::BRAND_CACHETAG]);
+    }
+  }
 }

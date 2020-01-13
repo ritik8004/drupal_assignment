@@ -2,6 +2,7 @@ dependencies:
   config:
     - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_color
     - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_image
+    - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_org_image
     - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_text
     - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_type
     - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_value
@@ -44,6 +45,14 @@ content:
   field_attribute_swatch_image:
     type: image_image
     weight: 7
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_attribute_swatch_org_image:
+    type: image_image
+    weight: 8
     settings:
       preview_image_style: thumbnail
       progress_indicator: throbber
