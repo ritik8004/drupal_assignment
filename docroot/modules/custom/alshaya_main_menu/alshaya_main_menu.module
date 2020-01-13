@@ -219,7 +219,7 @@ function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$
  */
 function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) {
   $variables['title_class'] = '';
-  foreach ($variables['data']['l1_object']['highlight_paragraph'] as $highlight_paragraph) {
+  foreach ($variables['data']['highlight_paragraph'] as $highlight_paragraph) {
     if (($highlight_paragraph['paragraph_type'] == 'main_menu_highlight')
       && ($highlight_paragraph['highlight_type'] == 'promo_block' || $highlight_paragraph['highlight_type'] == 'title_subtitle')) {
       // Adding the class only if promo block or combination of
@@ -241,16 +241,12 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
   $variables['menu_type'] = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
 
   if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
-    foreach ($variables['data']['columns'] as $value) {
-      foreach ($value as $column) {
-        if (!empty($column['highlight_paragraph'])) {
-          foreach ($column['highlight_paragraph'] as $highlight_para) {
-            // If there is at least one paragraph of type 'text_links'.
-            if ($column['paragraph_type'] == 'text_links') {
-              $column['text_links_paragraph'] = TRUE;
-              break;
-            }
-          }
+    if (!empty($variables['data']['l1_object']['highlight_paragraph'])) {
+      foreach ($variables['data']['l1_object']['highlight_paragraph'] as $highlight_para) {
+        // If there is at least one paragraph of type 'text_links'.
+        if ($highlight_para['paragraph_type'] == 'text_links') {
+          $variables['data']['l1_object']['text_links_paragraph'] = TRUE;
+          break;
         }
       }
     }
