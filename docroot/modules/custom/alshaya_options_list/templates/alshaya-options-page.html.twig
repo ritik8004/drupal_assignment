@@ -4,7 +4,11 @@
     <div class='options-page-description'>{{ description }}</div>
   </div>
   {% for key,option in options_list %}
-    <div class='attribute-option-list-shop-by attribute-option attribute-filter-option {{ key }}'>
+  {% if option.group %}
+  <div class='above-mobile-block attribute-option-list-shop-by attribute-option attribute-filter-option {{ key }}'>
+  {% else %}
+  <div class='attribute-option-list-shop-by attribute-option attribute-filter-option {{ key }}'>
+  {% endif %}
       <div class='attribute-title'> {{ option.title }} </div>
       <div class='attribute-filter-header-container'>
         <div class='attribute-filter-header'>
@@ -19,14 +23,18 @@
           <input type='text' id='alshaya-options-list-autocomplete-form' value='' placeholder="{{ option.search_placeholder }}">
         </div>
       {% endif %}
+      {% if option.description %}
       <div class='attribute-description'> {{ option.description }} </div>
+      {% endif %}
         {{ option.options_markup }}
     </div>
     {% if option.search %}
       <div class="mobile-only-block">
         <div class='attribute-option-details-shop-by attribute-option {{ key }}'>
           <div class='attribute-title'> {{ option.title }} </div>
+          {% if option.description %}
           <div class='attribute-description'> {{ option.description }} </div>
+          {% endif %}
           {% if option.mobile_title %}
             <div class='attribute-detail-link mobile-only-block'> {{ option.mobile_title }} </div>
           {% endif %}

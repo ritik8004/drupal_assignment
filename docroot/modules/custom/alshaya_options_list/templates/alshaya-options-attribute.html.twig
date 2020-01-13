@@ -6,8 +6,8 @@
       </div>
     </ul>
   {% endif %}
-    <ul class='attribute-filter-name-list'>
   {% if option.group %}
+    <ul class='attribute-filter-name-list'>
     {% for key,array_terms in option.terms %}
       {% if key|trim|length > 0 %}
         <li class='level-1'>
@@ -23,6 +23,7 @@
       {% endif %}
     {% endfor %}
   {% else %}
+    <ul class='attribute-filter-name-thumbnile'>
     {% for value in option.terms %}
       {% if value.title|trim|length > 0 %}
         <li class='title'>
