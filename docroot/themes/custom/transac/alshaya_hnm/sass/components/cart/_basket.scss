@@ -183,8 +183,6 @@
 .cart-promotions-wrapper {
   @include arabic-letter-spacing;
 
-  background: $basket_promo_wrapper;
-
   .continue-shopping a {
     font-family: $hnm-bold;
     text-transform: uppercase;
