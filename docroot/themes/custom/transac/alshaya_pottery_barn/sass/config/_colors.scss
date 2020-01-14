@@ -45,7 +45,6 @@ $_gray_fifteen: #acacac;
 $_grey_sixteen: #696969;
 $_grey_seventeen: #b4b3b3;
 $_grey_eighteen: #4a4a4a;
-$_pb_promo: #990000;
 
 // Overrides for variables.
 // Global elements.
@@ -134,8 +133,8 @@ $basket_empty_message: $PB_black_one;
 $basket_available_code: $PB_black_one;
 
 // Basket Promotions.
-$basket_fixed_percentage_inactive_header_promo_bg: $_pb_promo;
-$basket_fixed_percentage_active_header_promo_txt: $_pb_promo;
+$basket_fixed_percentage_inactive_header_promo_bg: $PB_deep_red;
+$basket_fixed_percentage_active_header_promo_txt: $PB_deep_red;
 $basket_free_delivery_inactive_header_promo_bg: $PB_grey_one;
 $basket_free_delivery_active_header_promo_txt: $PB_grey_one;
 
