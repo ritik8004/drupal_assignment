@@ -11,6 +11,13 @@ window.onbeforeunload = function(event) {
   removeSearchQuery();
 };
 
+window.addEventListener('DOMContentLoaded', (event) => {
+  let query = window.location.hash;
+  if (query.indexOf('#query') < 0 && query.indexOf('#refinementList') < 0) {
+    removeSearchQuery();
+  }
+});
+
 function setSearchQuery(queryValue) {
   localStorage.setItem('algolia_search_query', queryValue);
 }
