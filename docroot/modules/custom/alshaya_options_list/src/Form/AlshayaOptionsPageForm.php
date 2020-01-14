@@ -74,15 +74,19 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             '#prefix' => '<div id="options-fieldset-wrapper-' . $key . '-' . $selected_attribute . '">',
             '#suffix' => '</div>',
           ];
+          // Attribute displays count.
           $existingCount = 0;
           if (!empty($attribute_options[$key]['attribute_details'][$selected_attribute])) {
-            foreach ($attribute_options[$key]['attribute_details'][$selected_attribute] as $no => $selected_attribue_val) {
+            foreach ($attribute_options[$key]['attribute_details'][$selected_attribute] as $attribute_data_index => $attribute_data) {
               $existingCount++;
-              $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$no] = [
+              $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$attribute_data_index] = [
                 '#type' => 'fieldset',
                 '#Collapsible' => TRUE,
               ];
-              $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$no] += $this->attributeOptionsFields($key, $selected_attribute, $no, $selected_attribue_val);
+              $attribute_data['index'] = $attribute_data_index;
+              $attribute_data['key'] = $key;
+              $attribute_data['selected_attribute'] = $selected_attribute;
+              $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$attribute_data_index] += $this->attributeOptionsFields($attribute_data);
             }
             if ($form_state->get('temp_count_' . $key . '_' . $selected_attribute) === NULL) {
               $form_state->set('temp_count_' . $key . '_' . $selected_attribute, $existingCount);
@@ -101,7 +105,12 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
                 '#type' => 'fieldset',
                 '#Collapsible' => TRUE,
               ];
-              $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$i] += $this->attributeOptionsFields($key, $selected_attribute, $i, []);
+              $attribute_data = [
+                'index' => $i,
+                'key' => $key,
+                'selected_attribute' => $selected_attribute,
+              ];
+              $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$i] += $this->attributeOptionsFields($attribute_data);
             }
           }
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['actions'] = [
@@ -195,28 +204,30 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
 
   /**
    * Attribute options form fields.
+   *
+   * Formset of displaying options settings for attributes.
    */
-  public function attributeOptionsFields($key, $selected_attribute, $no, $selected_attribue_val) {
+  public function attributeOptionsFields($attribute_data) {
     $form['title'] = [
       '#type' => 'textfield',
-      '#default_value' => $selected_attribue_val['title'] ?? '',
-      '#title' => $this->t('Title for %attribute', ['%attribute' => $selected_attribute]),
+      '#default_value' => $attribute_data['title'] ?? '',
+      '#title' => $this->t('Title for %attribute', ['%attribute' => $attribute_data['selected_attribute']]),
     ];
     $form['description'] = [
       '#type' => 'textfield',
-      '#default_value' => $selected_attribue_val['description'] ?? '',
-      '#title' => $this->t('Description for %attribute', ['%attribute' => $selected_attribute]),
+      '#default_value' => $attribute_data['description'] ?? '',
+      '#title' => $this->t('Description for %attribute', ['%attribute' => $attribute_data['selected_attribute']]),
     ];
     $form['show-search'] = [
       '#type' => 'checkbox',
-      '#default_value' => $selected_attribue_val['show-search'] ?? '',
-      '#title' => $this->t('Enable search for %attribute', ['%attribute' => $selected_attribute]),
+      '#default_value' => $attribute_data['show-search'] ?? '',
+      '#title' => $this->t('Enable search for %attribute', ['%attribute' => $attribute_data['selected_attribute']]),
     ];
-    $search_name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][' . $no . '][show-search]';
+    $search_name = 'alshaya_options_page_settings[' . $attribute_data['key'] . '][alshaya_options_page_attributes][' . $attribute_data['selected_attribute'] . '][' . $attribute_data['index'] . '][show-search]';
     $form['search-placeholder'] = [
       '#type' => 'textfield',
-      '#default_value' => $selected_attribue_val['search-placeholder'] ?? '',
-      '#title' => $this->t('Search placeholder for %attribute', ['%attribute' => $selected_attribute]),
+      '#default_value' => $attribute_data['search-placeholder'] ?? '',
+      '#title' => $this->t('Search placeholder for %attribute', ['%attribute' => $attribute_data['selected_attribute']]),
       '#prefix' => '<div id="options-search-placeholder">',
       '#suffix' => '</div>',
       '#states' => [
@@ -230,28 +241,28 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
     ];
     $form['show-images'] = [
       '#type' => 'checkbox',
-      '#default_value' => $selected_attribue_val['show-images'] ?? '',
-      '#title' => $this->t('Show images for %attribute', ['%attribute' => $selected_attribute]),
+      '#default_value' => $attribute_data['show-images'] ?? '',
+      '#title' => $this->t('Show images for %attribute', ['%attribute' => $attribute_data['selected_attribute']]),
       '#description' => $this->t('Check to display attribute with images. Images need to be added to the attribute taxonomy term. You cannot group the terms alphabetically if this option is selected.'),
     ];
     $form['group'] = [
       '#type' => 'checkbox',
-      '#default_value' => $selected_attribue_val['group'] ?? '',
-      '#title' => $this->t('Group %attribute alphabetically.', ['%attribute' => $selected_attribute]),
+      '#default_value' => $attribute_data['group'] ?? '',
+      '#title' => $this->t('Group %attribute alphabetically.', ['%attribute' => $attribute_data['selected_attribute']]),
       '#description' => $this->t('Check to group the attributes by alphabet. keep unchecked, if the previous option "show images" is checked.'),
     ];
     $form['mobile_title_toggle'] = [
       '#type' => 'checkbox',
-      '#default_value' => $selected_attribue_val['mobile_title_toggle'] ?? '',
+      '#default_value' => $attribute_data['mobile_title_toggle'] ?? '',
       '#title' => $this->t('Show button on mobile.'),
       '#attributes' => ['class' => ['mobile-title-toggle']],
       '#description' => $this->t('If checked, a button will be visible in mobile display. The attribute options will be displayed on clicking this button.'),
     ];
 
-    $name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][' . $no . '][mobile_title_toggle]';
+    $name = 'alshaya_options_page_settings[' . $attribute_data['key'] . '][alshaya_options_page_attributes][' . $attribute_data['selected_attribute'] . '][' . $attribute_data['index'] . '][mobile_title_toggle]';
     $form['mobile_title'] = [
       '#type' => 'textfield',
-      '#default_value' => $selected_attribue_val['mobile_title'] ?? '',
+      '#default_value' => $attribute_data['mobile_title'] ?? '',
       '#title' => $this->t('Mobile button title.'),
       '#prefix' => '<div id="options-mobile-title">',
       '#suffix' => '</div>',
@@ -265,15 +276,15 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
       ],
     ];
     // Don't add remove for first option.
-    if ($no != 0) {
+    if ($attribute_data['index'] != 0) {
       $form['actions']['remove_name'] = [
         '#type' => 'submit',
         '#value' => $this->t('Remove one'),
-        '#name' => $key . '-' . $selected_attribute . '-' . $no,
+        '#name' => $attribute_data['key'] . '-' . $attribute_data['selected_attribute'] . '-' . $attribute_data['index'],
         '#submit' => ['::removeCallback'],
         '#ajax' => [
           'callback' => '::addRemoveCallback',
-          'wrapper' => 'options-fieldset-wrapper-' . $key . '-' . $selected_attribute,
+          'wrapper' => 'options-fieldset-wrapper-' . $attribute_data['key'] . '-' . $attribute_data['selected_attribute'],
         ],
       ];
     }
