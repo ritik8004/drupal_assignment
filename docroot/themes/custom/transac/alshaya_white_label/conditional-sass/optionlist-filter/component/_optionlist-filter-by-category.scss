@@ -151,12 +151,6 @@
       }
     }
   }
-
-  .above-mobile-block.attribute-option-list-shop-by {
-    &.attribute-option {
-      margin-top: 0;
-    }
-  }
 }
 
 .optionlist-filter-overlay {
@@ -298,7 +292,7 @@
   @include breakpoint($tablet) {
     column-count: 4;
     column-gap: 1.875rem;
-    margin: 2.875rem 0 1.75rem;
+    margin: 2.875rem 0 0;
     padding: 0 3rem;
   }
 

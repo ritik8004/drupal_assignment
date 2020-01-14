@@ -76,7 +76,6 @@
 
     span {
       text-transform: uppercase;
-      //padding: 0.0625rem 0.875rem 0;
       font-size: 1.125rem;
       line-height: 1.22;
       text-align: center;
@@ -100,7 +99,9 @@
 
   .attribute-option-list-shop-by {
     &.attribute-option {
-      margin-top: 3.75rem;
+      @include breakpoint($tablet) {
+        margin-top: 3.75rem;
+      }
     }
   }
 
