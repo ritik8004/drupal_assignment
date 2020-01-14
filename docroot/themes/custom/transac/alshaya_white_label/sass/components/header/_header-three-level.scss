@@ -1,21 +1,18 @@
 .has--three-levels {
   @include breakpoint($desktop) {
     .menu--two__list .menu__links__wrapper {
-      -webkit-column-count: auto;
-      -moz-column-count: auto;
-      column-count: auto;
-      column-width: 12.5rem;
-      max-height: 24rem;
       padding-#{$left}: 1rem;
       padding-bottom: 1.5rem;
-      column-fill: auto;
-      min-height: 24rem;
-      float: $left;
 
       .menu--two__list-item .menu--three__list {
         padding-#{$left}: 0;
         padding-top: 0;
         position: static;
+      }
+      .column:last-child {
+        .menu--two__list-item {
+          padding-#{$right}: 0.5rem;
+        }
       }
     }
 
@@ -105,6 +102,22 @@
           @include breakpoint($desktop) {
             border-bottom: 1px solid transparent;
           }
+        }
+      }
+    }
+  }
+  &.megamenu-inline-layout {
+    .has--three-levels {
+      @include breakpoint($desktop) {
+        .menu--two__list .menu__links__wrapper {
+          -webkit-column-count: auto;
+          -moz-column-count: auto;
+          column-count: auto;
+          column-width: 12.5rem;
+          max-height: 24rem;
+          column-fill: auto;
+          min-height: 24rem;
+          float: $left;
         }
       }
     }
