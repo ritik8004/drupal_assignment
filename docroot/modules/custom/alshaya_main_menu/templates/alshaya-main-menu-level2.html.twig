@@ -1,7 +1,7 @@
 <ul class="menu__list menu--two__list">
     <div class="menu__links__wrapper">
-        <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
         {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
+        <span class="back--link"><span class="menu__back"></span> <span>{{ data.l1_object.label }}</span></span>
             {% for key, columns in data.columns %}
                 <div class="column {{ key }}">
                     {% for key1, level2 in columns %}
@@ -33,6 +33,7 @@
                 </div>
             {% endfor %}
         {% elseif menu_type == 'menu_inline_display' %}
+        <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
             {% for key, level2 in data.child %}
               <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
                 {#Show the term tree only when term image is not available.#}
