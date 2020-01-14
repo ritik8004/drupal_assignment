@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
@@ -120,17 +119,7 @@ class ProductStockController extends ControllerBase {
 
       if ($response === TRUE) {
         $return->addCommand(new InvokeCommand('.sku-base-form[data-sku="' . $entity->getSku() . '"]', 'trigger', ['product-add-to-cart-success']));
-
-        // Use the variant sku for event if configurable product added.
-        $variant_sku = $data['selected_variant_sku'] ?? '';
-        if (!empty($variant_sku)) {
-          $variant = SKU::loadFromSku($variant_sku);
-        }
-        // Instantiate and Dispatch add_to_cart_submit event.
-        $this->eventDispatcher->dispatch(
-          AddToCartFormSubmitEvent::EVENT_NAME,
-          new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
-        );
+        $this->moduleHandler()->alter('alshaya_acm_product_add_to_cart_submit_ajax_response', $return, $entity, $data);
       }
       else {
         $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));

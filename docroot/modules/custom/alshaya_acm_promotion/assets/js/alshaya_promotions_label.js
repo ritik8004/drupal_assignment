@@ -38,6 +38,15 @@
   Drupal.behaviors.alshayaPromotionsLabelManager = {
     attach: function (context) {
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
+      // Update promotion label after cart notification is complete.
+      $('.promotions-dynamic-label', context).once('js-process-promo-label').on('cart:notification:animation:complete', function () {
+        var alshayaAcmPromotions = drupalSettings.alshayaAcmPromotions;
+        // Unset any existing promo label for an update on cart changes.
+        drupalSettings.alshayaAcmPromotionslabels = undefined;
+        if (alshayaAcmPromotions !== undefined) {
+          updateAlshayaPromotionsLabel(alshayaAcmPromotions);
+        }
+      });
     }
   };
 
