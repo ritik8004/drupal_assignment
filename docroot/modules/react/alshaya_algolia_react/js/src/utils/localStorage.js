@@ -11,6 +11,10 @@ window.onbeforeunload = function(event) {
   removeSearchQuery();
 };
 
+/**
+ * Remove search query from local storage to not render search results when
+ * no #query or #refinement in url.
+ */
 window.addEventListener('DOMContentLoaded', (event) => {
   let query = window.location.hash;
   if (query.indexOf('#query') < 0 && query.indexOf('#refinementList') < 0) {
