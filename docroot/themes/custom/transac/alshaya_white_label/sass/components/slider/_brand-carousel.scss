@@ -11,20 +11,24 @@
   }
 
   .alshaya_brand_carousel {
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet) {
       display: flex;
       justify-content: center;
       padding: 0 2.5rem;
 
+      .slick-track {
+        display: flex;
+      }
+
       .slick-arrow {
-        top: 35% !important;
+        top: 38% !important;
 
         &.slick-prev {
-          #{$left}: 0;
+          left: 0;
         }
 
-        &.slick-arrow {
-          #{$right}: 0;
+        &.slick-next {
+          right: 0;
         }
       }
     }
@@ -32,10 +36,10 @@
     .brand_logos {
       padding-#{$left}: 1.25rem;
       padding-#{$right}: 1.25rem;
-      max-width: 11.125rem;
+      align-self: center;
     }
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($upto-tablet) {
       display: flex;
       align-items: center;
       overflow-x: auto;
