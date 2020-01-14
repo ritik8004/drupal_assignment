@@ -35,7 +35,9 @@
                   {{ level1.label }}
                 </{{ level1.tag }}>
               {% else %}
+                {% if level1.tag is not empty %}
                 <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
+                {% endif %}
               {% endif %}
             </div>
             {% if level1.child is not empty %}

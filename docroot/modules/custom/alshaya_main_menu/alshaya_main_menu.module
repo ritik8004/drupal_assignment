@@ -107,11 +107,30 @@ function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $par
  */
 function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
   foreach ($data as &$item) {
-    if ($item['depth'] == $max_depth) {
-      $item['class'][] = 'max-depth';
+    if (isset($item['l1_object'])) {
+      if ($item['l1_object']['depth'] == $max_depth) {
+        $item['l1_object']['class'][] = 'max-depth';
+      }
+      if (!empty($item['l1_object']['child'])) {
+        foreach ($item['columns'] as $key => $column) {
+          foreach ($column as $key1 => $value) {
+            if ($value['depth'] == $max_depth) {
+              $item['columns'][$key][$key1]['class'][] = 'max-depth';
+            }
+            if (!empty($value['child'])) {
+              _alshaya_main_menu_process_max_depth($item['columns'][$key][$key1]['child'], $max_depth);
+            }
+          }
+        }
+      }
     }
-    if (!empty($item['child'])) {
-      _alshaya_main_menu_process_max_depth($item['child'], $max_depth);
+    else {
+      if ($item['depth'] == $max_depth) {
+        $item['class'][] = 'max-depth';
+      }
+      if (!empty($item['child'])) {
+        _alshaya_main_menu_process_max_depth($item['child'], $max_depth);
+      }
     }
   }
 }
