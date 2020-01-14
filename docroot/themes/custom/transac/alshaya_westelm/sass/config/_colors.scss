@@ -32,6 +32,7 @@ $tomato: #e6591b;
 $WE_deep_blue: #4285f4;
 $WE_light_blue: #e0eaf2;
 $roman_coffee: #81644b;
+$_we_gray_one: #666;
 
 // Overrides for variables.
 // Global elements.
@@ -275,11 +276,11 @@ $basket_header_promo_bg: $WE_deep_blue;
 $basket_empty_message: $WE_black_one;
 $basket_available_code: $WE_black_one;
 
-// Basket top promotions.
-$basket_free_delivery_inactive_header_promo_bg: $WE_deep_blue;
-$basket_free_delivery_inactive_header_promo_txt: $white-two;
-$basket_free_delivery_active_header_promo_bg: $white-two;
-$basket_free_delivery_active_header_promo_txt: $WE_deep_blue;
+// Basket Promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $WE_deep_red;
+$basket_fixed_percentage_active_header_promo_txt: $WE_deep_red;
+$basket_free_delivery_inactive_header_promo_bg: $_we_gray_one;
+$basket_free_delivery_active_header_promo_txt: $_we_gray_one;
 
 // Totals.
 $total_td_2nd_child_bg: $WE_white_two;

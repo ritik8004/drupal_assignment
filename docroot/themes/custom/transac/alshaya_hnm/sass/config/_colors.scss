@@ -63,6 +63,7 @@ $_grey_11: #f2f2f2;
 $_greenish_1: #a3a1a1;
 $_algolia_suggestion_list_bg: rgba(51, 51, 51, 0.06);
 $_greenish_1: #a3a1a1;
+$_hm_promo: #3680cb;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -362,7 +363,9 @@ $myaccountneedhelp_text: $white-five;
 $user_block_title: $black-three;
 $user_block_link: $hnm-black-two;
 
-// Basket
+// Basket.
+$basket_header_promo_bg: $hnm-black-two;
+$basket_header_promo_txt: $white-five;
 $basket_block_title: $hnm-black-two;
 $basket_promo_wrapper: $info;
 $basket_promo_wrapper_link: $hnm-black-two;
@@ -372,11 +375,11 @@ $basket_header_oos_txt: $_white-four;
 $basket_header_oos_bg: $error;
 $basket_available_code: $hnm-black-two;
 
-// Basket top promotions.
-$basket_free_delivery_inactive_header_promo_bg: $hnm-black-two;
-$basket_free_delivery_inactive_header_promo_txt: $white-five;
-$basket_free_delivery_active_header_promo_bg: $white-five;
-$basket_free_delivery_active_header_promo_txt: $hnm-black-two;
+// Basket Promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $_hm_promo;
+$basket_fixed_percentage_active_header_promo_txt: $_hm_promo;
+$basket_free_delivery_inactive_header_promo_bg: $grey7;
+$basket_free_delivery_active_header_promo_txt: $grey7;
 
 // Mini cart
 $mobile_continue_shopping_btn_text: $white-five;
