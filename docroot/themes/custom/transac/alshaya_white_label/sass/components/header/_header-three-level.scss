@@ -9,6 +9,7 @@
         padding-top: 0;
         position: static;
       }
+
       .column:last-child {
         .menu--two__list-item {
           padding-#{$right}: 0.5rem;
@@ -106,6 +107,7 @@
       }
     }
   }
+
   &.megamenu-inline-layout {
     .has--three-levels {
       @include breakpoint($desktop) {
