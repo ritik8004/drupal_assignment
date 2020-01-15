@@ -18,6 +18,13 @@
         if (($('input.cancel-promocode').length > 0) &&
           ($('input.cancel-promocode').val() !== '')) {
           $('.coupon-code-wrapper').accordion('option', 'active', 0 );
+          return;
+        }
+        // Also check if user is eligible for applying a promo code based on
+        // promotions.
+        if ($('.promotion-available-code .promotion-coupon-code').hasClass('available')) {
+          $('.coupon-code-wrapper').accordion('option', 'active', 0 );
+          return;
         }
       });
 
