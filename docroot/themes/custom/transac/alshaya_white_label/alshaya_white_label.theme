@@ -80,7 +80,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $node = \Drupal::routeMatch()->getParameter('node');
   foreach ($html_head as $index => $val) {
     if ($val[1] == 'viewport') {
-      if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'acq_product') {
+      if ($node instanceof NodeInterface && $node->bundle() === 'acq_product') {
         $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=yes';
       }
       else {
