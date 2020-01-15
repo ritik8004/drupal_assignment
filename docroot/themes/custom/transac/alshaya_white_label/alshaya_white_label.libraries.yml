@@ -71,6 +71,16 @@ product_carousel:
     - alshaya_white_label/slick
     - alshaya_white_label/alshaya_image_lazy_load
 
+alshaya_brand_carousel:
+  version: 1.x
+  js:
+    js/alshaya_brand_carousel.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - alshaya_white_label/slick
+
 autosize_textarea:
   js:
     js/autosize_textarea.js: {}
@@ -273,3 +283,14 @@ app-navigation-links:
   css:
     theme:
       css/conditional-sass/app-navigation-links/app-navigation-links.ltr.css: {}
+
+megamenu_dynamic_layout:
+  js:
+    conditional-sass/megamenu-dynamic-layout/js/megamenu-dynamic-layout.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+  css:
+    theme:
+      css/conditional-sass/megamenu-dynamic-layout/megamenu-dynamic-layout.ltr.css: {}

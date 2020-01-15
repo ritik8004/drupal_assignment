@@ -164,3 +164,11 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     }
   }
 }
+
+/**
+ * Implements hook_brand_carousel_link_alter().
+ */
+function alshaya_search_algolia_brand_carousel_link_alter(&$link, $attribute) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $link = '/' . $langcode . '/search#refinementList[' . $attribute . '][0]=';
+}

@@ -1,0 +1,15 @@
+{{ attach_library('alshaya_white_label/alshaya_brand_carousel') }}
+{% if label %}
+  <h3{{ title_attributes }}>{{ label }}</h3>
+{% endif %}
+{% if brand_details %}
+  <div class="alshaya_brand_carousel">
+    {% for brand in brand_details %}
+      <div class="brand_logos">
+        <a href="{{ brand.link }}">
+          <img src="{{ file_url(brand.image) }}" alt="{{ brand.title }}"/>
+          </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
