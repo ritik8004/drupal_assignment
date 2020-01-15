@@ -166,6 +166,7 @@
     &.above-mobile-block {
       @include breakpoint($only-mobile) {
         display: block;
+        z-index: 13;
       }
     }
   }
