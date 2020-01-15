@@ -1,14 +1,4 @@
 .path--cart {
-  &.alias--cart {
-    h1 {
-      margin-bottom: 1.25rem;
-
-      @include breakpoint($only-mobile) {
-        margin-bottom: 0;
-      }
-    }
-  }
-
   .customer-cart-form {
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
@@ -149,12 +139,6 @@
       min-width: 10.625rem;
       text-align: center;
     }
-  }
-}
-
-.cart-promotions-wrapper {
-  @include breakpoint($only-mobile) {
-    margin: 0.875rem 0 0;
   }
 }
 
