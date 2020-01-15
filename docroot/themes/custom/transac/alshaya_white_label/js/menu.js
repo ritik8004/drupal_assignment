@@ -224,6 +224,10 @@
 
       function setMenuHeight() {
         if (menuLevel2.length > 0 && windowWidth > 1024) {
+          var calcMaxHeight;
+          if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
+            calcMaxHeight = $('.block-alshaya-main-menu').height() + $('.block-alshaya-main-menu').offset().top;
+          }
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
@@ -235,6 +239,9 @@
           menuBackdrop.height(maxHeight);
           menuLevel2.each(function () {
             $(this).height(maxHeight);
+            if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
+              $(this).css('max-height', 'calc(100vh - ' + calcMaxHeight + 'px)');
+            }
           });
         }
       }
