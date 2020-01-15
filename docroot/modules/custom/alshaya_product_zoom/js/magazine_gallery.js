@@ -13,7 +13,7 @@
       var desktop_sidebar_width = $('.content__sidebar').width();
       $('#cloud-zoom-big').css('width', desktop_sidebar_width + 'px');
 
-      var desktopElement = $('#product-image-gallery-container');
+      var desktopElement = $('#product-full-screen-gallery-container');
       var mobileElement = $('#product-image-gallery-container-mobile');
 
       // Open Gallery mobile modal when we click on the image.
@@ -78,10 +78,18 @@
    * Zoom modal dialog.
    */
   function _magazine_dialog_open() {
-    var gallery = $('#product-image-gallery');
+    var gallery = $('#product-full-screen-gallery');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
     slickModalOptions.initialSlide = currentSlide;
     Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
+
+    // Create Instagram Dots.
+    if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
+      // Do initial setup again for slick dots.
+      Drupal.behaviors.pdpInstagranDots.initialSetup(gallery);
+      // Attach the change event explicitly.
+      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
+    }
 
     if (gallery.hasClass('pager-no')) {
       $('li[data-slick-index="' + currentSlide + '"]', gallery).addClass('slick-current', function () {
@@ -92,7 +100,7 @@
       gallery.slick('slickGoTo', currentSlide);
     }
 
-    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="' + currentSlide + '"]');
+    var defaultMainImage = $('#product-full-screen-gallery-container li[data-slick-index="' + currentSlide + '"]');
     var bigImgUrl = defaultMainImage.children('a').attr('href');
     $('#full-image-wrapper img').attr('src', bigImgUrl);
     $('#full-image-wrapper img').css('transform', 'scale(1)');
@@ -100,7 +108,7 @@
     $('#full-image-wrapper img').show();
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
-      var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
       // Closing modal window before slick library gets removed.
       $(this).click();
       productGallery.slick('unslick');
@@ -234,6 +242,14 @@
     slickMobileModalOptions.initialSlide = parseInt(currentSlide);
     Drupal.productZoomApplyRtl(gallery, slickMobileModalOptions, document);
 
+    // Create Instagram Dots.
+    if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
+      // Do initial setup again for slick dots.
+      Drupal.behaviors.pdpInstagranDots.initialSetup(gallery);
+      // Attach the change event explicitly.
+      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
+    }
+
     gallery.on('swipe', function (event, slick) {
       var image = '.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img';
       if (!($(image).attr('data-scale') === 1 || $(image).attr('data-translate-x') === 0 || $(image).attr('data-translate-y') === 0)) {
@@ -297,18 +313,19 @@
   };
 
   var slickModalOptions = {
-    slidesToShow: 3,
-    vertical: true,
+    slidesToShow: 1,
+    vertical: false,
+    dots: true,
     arrows: true,
     infinite: false,
-    centerMode: true,
+    centerMode: false,
     focusOnSelect: false,
     touchThreshold: 1000,
     responsive: [
       {
         breakpoint: 1025,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 1,
           vertical: false,
           touchThreshold: 1000,
           centerMode: false
