@@ -16,7 +16,7 @@
          arrows: true,
          useTransform: false,
          slidesToShow: brandCarouselSettings.brand_carousel_slidesToShow,
-         slidesToScroll: brandCarouselSettings.brand_carousel_slidesToScroll,
+         slidesToScroll: brandCarouselSettings.brand_carousel_slidesToShow,
          focusOnSelect: false,
          touchThreshold: 1000,
          infinite: true
