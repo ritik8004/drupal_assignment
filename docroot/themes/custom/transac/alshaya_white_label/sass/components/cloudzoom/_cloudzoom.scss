@@ -525,6 +525,12 @@
     margin: 0;
     padding: 0;
 
+    &.slick-slider {
+      @include breakpoint($only-mobile) {
+        touch-action: pan-y pinch-zoom;
+      }
+    }
+
     img {
       margin: 0 auto;
     }
