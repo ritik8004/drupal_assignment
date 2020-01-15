@@ -85,7 +85,7 @@ class AlshayaSpcHelper {
     $field_list = $this->getAddressFields();
     // If `area_parent` is not available in the fields.
     if (!isset($field_list['area_parent'])) {
-      $area_list = $this->areaTermsHelper->getAllAreas();
+      $area_list = $this->areaTermsHelper->getAllAreas(TRUE);
     }
 
     return $area_list;
@@ -101,7 +101,7 @@ class AlshayaSpcHelper {
    *   Area term array.
    */
   public function getAllAreasOfParent(int $parent_id) {
-    return $this->areaTermsHelper->getAllAreasWithParent($parent_id);
+    return $this->areaTermsHelper->getAllAreasWithParent($parent_id, TRUE);
   }
 
   /**
@@ -115,7 +115,7 @@ class AlshayaSpcHelper {
     $field_list = $this->getAddressFields();
     // If `area_parent` is available in the fields.
     if (isset($field_list['area_parent'])) {
-      return $this->areaTermsHelper->getAllGovernates();
+      return $this->areaTermsHelper->getAllGovernates(TRUE);
     }
 
     return $list;
