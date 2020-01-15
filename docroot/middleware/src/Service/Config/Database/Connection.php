@@ -55,21 +55,43 @@ class Connection extends DoctrineConnection {
     }
     else {
       // Get database settings for acsf.
-      require $params['path'] . '/sites/g/sites.inc';
+      require_once $params['path'] . 'sites/g/sites.inc';
       $host = rtrim($_SERVER['HTTP_HOST'], '.');
       $data = gardens_site_data_refresh_one($host);
       $site_settings = $data['gardens_site_settings'];
       $_acsf_include_file = "/var/www/site-php/{$site_settings['site']}.{$site_settings['env']}/D8-{$site_settings['env']}-{$site_settings['conf']['acsf_db_name']}-settings.inc";
 
       if (file_exists($_acsf_include_file)) {
-        include $_acsf_include_file;
+        $db_con_info = [
+          '"database"' => '',
+          '"username"' => '',
+          '"password"' => '',
+          '"host"' => '',
+          '"port"' => '',
+        ];
+
+        // Read the file and get db info.
+        $fn = fopen($_acsf_include_file, 'r');
+        while (!feof($fn)) {
+          $result = fgets($fn);
+          foreach ($db_con_info as $key => $val) {
+            if (strpos($result, $key) !== FALSE) {
+              $result = trim(str_replace(['"', ','], ['', ''], $result));
+              $info = explode('=>', $result);
+              $db_con_info[$key] = trim($info[1]);
+            }
+          }
+        }
+
+        // Close the connection.
+        fclose($fn);
+
         // @codingStandardsIgnoreLine
-        $db = $databases['default']['default'];
-        $params['dbname'] = $db['database'];
-        $params['user'] = $db['username'];
-        $params['password'] = $db['password'];
-        $params['host'] = $db['host'];
-        $params['port'] = $db['port'];
+        $params['dbname'] = $db_con_info['"database"'];
+        $params['user'] = $db_con_info['"username"'];
+        $params['password'] = $db_con_info['"password"'];
+        $params['host'] = $db_con_info['"host"'];
+        $params['port'] = $db_con_info['"port"'];
       }
     }
 
