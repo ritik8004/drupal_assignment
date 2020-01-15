@@ -3,6 +3,8 @@
  * Mega menu dynamic layout.
  */
 
+/* global isRTL */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -29,7 +31,8 @@
         $(this).css('position', 'relative');
         var eleL2LinksWrapperWidth = eleL2LinksWrapper.outerWidth();
         var highlightWrapperWidth = eleL2HighlightWrapper.outerWidth();
-        var l2WrapperWidth = (eleL2LinksWrapperWidth + highlightWrapperWidth + 24);
+        var l2WrapperWidth = highlightWrapperWidth ? (eleL2LinksWrapperWidth + highlightWrapperWidth + 24) : eleL2LinksWrapperWidth;
+
         // Assigning the width to the L2 wrapper
         eleL2Wrapper.css('width', l2WrapperWidth);
 
@@ -43,7 +46,7 @@
         // Get the Right position of Main Menu.
         var posRightEleMainMenu = eleMainMenu.width() + posEleMainMenu;
         // Get the Right position of the L2 wrapper.
-        var posRightL2Wrapper = posL2LinksWrapper + eleL2LinksWrapper.outerWidth() + eleL2HighlightWrapper.outerWidth();
+        var posRightL2Wrapper = eleL2HighlightWrapper.outerWidth() ? posL2LinksWrapper + eleL2LinksWrapper.outerWidth() + eleL2HighlightWrapper.outerWidth() : posL2LinksWrapper + eleL2LinksWrapper.outerWidth();
 
         // Set the position for Arabic layout.
         if (isRTL()) {
