@@ -259,7 +259,7 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) 
 function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
   $variables['menu_type'] = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
   if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
-     $highlight_paragraph = $variables['data']['l1_object']['highlight_paragraph'];
+    $highlight_paragraph = $variables['data']['l1_object']['highlight_paragraph'];
   }
   else {
     $highlight_paragraph = $variables['data']['highlight_paragraph'];
