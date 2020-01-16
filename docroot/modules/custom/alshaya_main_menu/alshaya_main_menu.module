@@ -21,6 +21,8 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-main-menu-level1',
       'variables' => [
         'term_tree' => NULL,
+        'column_tree' => NULL,
+        'menu_type' => NULL,
         'settings' => [],
       ],
     ],
@@ -70,7 +72,12 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
  *   An associative array containing menu items.
  */
 function template_preprocess_alshaya_main_menu_level1(array &$variables) {
-  _alshaya_main_menu_process_tag_attributes($variables['term_tree']);
+  if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
+    _alshaya_main_menu_process_tag_attributes($variables['column_tree']);
+  }
+  else {
+    _alshaya_main_menu_process_tag_attributes($variables['term_tree']);
+  }
 }
 
 /**
@@ -100,11 +107,30 @@ function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $par
  */
 function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
   foreach ($data as &$item) {
-    if ($item['depth'] == $max_depth) {
-      $item['class'][] = 'max-depth';
+    if (isset($item['l1_object'])) {
+      if ($item['l1_object']['depth'] == $max_depth) {
+        $item['l1_object']['class'][] = 'max-depth';
+      }
+      if (!empty($item['l1_object']['child'])) {
+        foreach ($item['columns'] as $key => $column) {
+          foreach ($column as $key1 => $value) {
+            if ($value['depth'] == $max_depth) {
+              $item['columns'][$key][$key1]['class'][] = 'max-depth';
+            }
+            if (!empty($value['child'])) {
+              _alshaya_main_menu_process_max_depth($item['columns'][$key][$key1]['child'], $max_depth);
+            }
+          }
+        }
+      }
     }
-    if (!empty($item['child'])) {
-      _alshaya_main_menu_process_max_depth($item['child'], $max_depth);
+    else {
+      if ($item['depth'] == $max_depth) {
+        $item['class'][] = 'max-depth';
+      }
+      if (!empty($item['child'])) {
+        _alshaya_main_menu_process_max_depth($item['child'], $max_depth);
+      }
     }
   }
 }
@@ -114,15 +140,41 @@ function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
  */
 function _alshaya_main_menu_process_tag_attributes(array &$data) {
   foreach ($data as &$record) {
-    $record['tag'] = 'div';
-    $record['tag_attr'] = '';
-    if (isset($record['clickable']) && $record['clickable']) {
-      $record['tag'] = 'a';
-      $record['tag_attr'] = "href={$record['path']}";
-    }
+    if (isset($record['l1_object'])) {
+      $record['l1_object']['tag'] = 'div';
+      $record['l1_object']['tag_attr'] = '';
+      if (isset($record['l1_object']['clickable']) && $record['l1_object']['clickable']) {
+        $record['l1_object']['tag'] = 'a';
+        $record['l1_object']['tag_attr'] = "href={$record['l1_object']['path']}";
+      }
 
-    if (!empty($record['child'])) {
-      _alshaya_main_menu_process_tag_attributes($record['child']);
+      if (!empty($record['columns'])) {
+        foreach ($record['columns'] as $key => $value) {
+          foreach ($value as $key1 => $l2) {
+            $record['columns'][$key][$key1]['tag'] = 'div';
+            $record['columns'][$key][$key1]['tag_attr'] = '';
+            if (isset($l2['clickable']) && $l2['clickable']) {
+              $record['columns'][$key][$key1]['tag'] = 'a';
+              $record['columns'][$key][$key1]['tag_attr'] = "href={$l2['path']}";
+            }
+            if (!empty($l2['child'])) {
+              _alshaya_main_menu_process_tag_attributes_columns($record['columns'][$key][$key1]['child']);
+            }
+          }
+        }
+      }
+    }
+    else {
+      $record['tag'] = 'div';
+      $record['tag_attr'] = '';
+      if (isset($record['clickable']) && $record['clickable']) {
+        $record['tag'] = 'a';
+        $record['tag_attr'] = "href={$record['path']}";
+      }
+
+      if (!empty($record['child'])) {
+        _alshaya_main_menu_process_tag_attributes($record['child']);
+      }
     }
   }
 }
@@ -205,13 +257,36 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) 
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
-  if (!empty($variables['data']['highlight_paragraph'])) {
-    foreach ($variables['data']['highlight_paragraph'] as $highlight_para) {
-      // If there is at least one paragraph of type 'text_links'.
-      if ($highlight_para['paragraph_type'] == 'text_links') {
-        $variables['data']['text_links_paragraph'] = TRUE;
-        break;
-      }
+  $variables['menu_type'] = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
+  if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
+    $highlight_paragraph = $variables['data']['l1_object']['highlight_paragraph'];
+  }
+  else {
+    $highlight_paragraph = $variables['data']['highlight_paragraph'];
+  }
+  foreach ($highlight_paragraph as $highlight_para) {
+    // If there is at least one paragraph of type 'text_links'.
+    if ($highlight_para['paragraph_type'] == 'text_links') {
+      $highlight_paragraph['text_links_paragraph'] = TRUE;
+      break;
+    }
+  }
+}
+
+/**
+ * Prepares href for anchor tag for given term data in columns.
+ */
+function _alshaya_main_menu_process_tag_attributes_columns(array &$data) {
+  foreach ($data as $key => $value) {
+    $data[$key]['tag'] = 'div';
+    $data[$key]['tag_attr'] = '';
+    if (isset($value['clickable']) && $value['clickable']) {
+      $data[$key]['tag'] = 'a';
+      $data[$key]['tag_attr'] = "href={$value['path']}";
+    }
+
+    if (isset($value['child'])) {
+      _alshaya_main_menu_process_tag_attributes_columns($value['child']);
     }
   }
 }
