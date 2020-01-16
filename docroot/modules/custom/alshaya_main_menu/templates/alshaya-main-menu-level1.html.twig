@@ -12,72 +12,48 @@
     {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
       {% for key1, level1menu in column_tree %}
         {% set level1 = level1menu.l1_object %}
-        {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
-        {% set level_class = level1.term_bg_color == true ? level1.class|merge(['has-bg-color']) : level1.class %}
-        {% set level_class = level_class|join(' ') %}
-        {% if level_class is not empty %}
-          <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
-        {% else %}
-          <li class="menu__list-item menu--one__list-item {{ promopanel_class }}">
-        {% endif %}
-            <div class="menu__link-wrapper menu-two__link-wrapper">
-              {% set style = '' %}
-              {% if level1.term_bg_color %}
-                  {% set style = style ~ 'background-color:' ~ level1.term_bg_color ~ ';' %}
-              {% endif %}
-              {% if level1.term_font_color %}
-                  {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
-              {% endif %}
-
-              {% if level1.icon is not empty %}
-                <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>
-                  <span class="icon"><img src="{{ level1.icon.url }}"/></span>
-                  {{ level1.label }}
-                </{{ level1.tag }}>
-              {% else %}
-                {% if level1.tag is not empty %}
-                <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
-                {% endif %}
-              {% endif %}
-            </div>
-            {% if level1.child is not empty %}
-              {{ alshaya_main_menu('alshaya_main_menu_level2', level1menu) }}
-            {% endif %}
-          </li>
+        {{ _self.getlevel1items(level1,level1menu) }}
       {% endfor %}
     {% elseif menu_type == 'menu_inline_display' %}
       {% for key1, level1 in term_tree %}
-        {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
-        {% set level_class = level1.term_bg_color == true ? level1.class|merge(['has-bg-color']) : level1.class %}
-        {% set level_class = level_class|join(' ') %}
-        {% if level_class is not empty %}
-          <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
-        {% else %}
-          <li class="menu__list-item menu--one__list-item {{ promopanel_class }}">
-        {% endif %}
-            <div class="menu__link-wrapper menu-two__link-wrapper">
-              {% set style = '' %}
-              {% if level1.term_bg_color %}
-                  {% set style = style ~ 'background-color:' ~ level1.term_bg_color ~ ';' %}
-              {% endif %}
-              {% if level1.term_font_color %}
-                  {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
-              {% endif %}
-
-              {% if level1.icon is not empty %}
-                <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>
-                  <span class="icon"><img src="{{ level1.icon.url }}"/></span>
-                  {{ level1.label }}
-                </{{ level1.tag }}>
-              {% else %}
-                <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
-              {% endif %}
-            </div>
-            {% if level1.child is not empty %}
-              {{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}
-            {% endif %}
-          </li>
+        {{ _self.getlevel1items(level1,level1) }}
       {% endfor %}
     {% endif %}
   </ul>
 </div>
+
+
+{% macro getlevel1items(level1,level1menu) %}
+  {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
+  {% set level_class = level1.term_bg_color == true ? level1.class|merge(['has-bg-color']) : level1.class %}
+  {% set level_class = level_class|join(' ') %}
+  {% if level_class is not empty %}
+    <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
+  {% else %}
+    <li class="menu__list-item menu--one__list-item {{ promopanel_class }}">
+  {% endif %}
+      <div class="menu__link-wrapper menu-two__link-wrapper">
+        {% set style = '' %}
+        {% if level1.term_bg_color %}
+            {% set style = style ~ 'background-color:' ~ level1.term_bg_color ~ ';' %}
+        {% endif %}
+        {% if level1.term_font_color %}
+            {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
+        {% endif %}
+
+        {% if level1.icon is not empty %}
+          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>
+            <span class="icon"><img src="{{ level1.icon.url }}"/></span>
+            {{ level1.label }}
+          </{{ level1.tag }}>
+        {% else %}
+          {% if level1.tag is not empty %}
+          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
+          {% endif %}
+        {% endif %}
+      </div>
+      {% if level1.child is not empty %}
+        {{ alshaya_main_menu('alshaya_main_menu_level2', level1menu) }}
+      {% endif %}
+    </li>
+{% endmacro %}
