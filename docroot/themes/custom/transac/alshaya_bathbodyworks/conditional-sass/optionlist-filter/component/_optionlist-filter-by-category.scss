@@ -20,10 +20,6 @@
     @include breakpoint($only-mobile) {
       border: none;
     }
-
-    .attribute-title {
-      margin-top: -0.4375rem;
-    }
   }
 
   .attribute-detail-link {
@@ -54,7 +50,6 @@
       position: absolute;
       z-index: 1;
       top: 0.6875rem;
-      //border-top-color: $divider-separator-border;
 
       @include breakpoint($only-mobile) {
         top: 0.5rem;
@@ -67,7 +62,6 @@
 
     .attribute-title {
       width: auto;
-      margin-top: -0.75rem;
     }
 
     &:last-child {
@@ -104,10 +98,6 @@
       }
     }
   }
-
-  .attribute-description {
-    margin-top: 1.5rem;
-  }
 }
 
 .group-heading {
@@ -116,7 +106,7 @@
 
 .attribute-search-form {
   max-width: 27.75rem;
-  margin: 1.5rem auto 0;
+  margin: 1.75rem auto 0;
 
   @include icon(search, after) {
     width: 2.5rem;
@@ -135,8 +125,8 @@
   }
 
   #alshaya-options-list-autocomplete-form {
-    border: 1px solid #dadada !important;
-    height: 2.75rem;
+    border-width: 0.0625rem;
+    height: 2.5rem;
     border-radius: 0;
   }
 }

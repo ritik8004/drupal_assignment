@@ -46,7 +46,7 @@
 
   .attribute-title {
     font-size: 1.125rem;
-    line-height: 1.22;
+    line-height: 0.45;
     text-align: center;
     color: $divider-text;
     position: relative;
@@ -102,7 +102,6 @@
 
     .attribute-title {
       width: auto;
-      margin-top: -0.75rem;
     }
 
     li {
