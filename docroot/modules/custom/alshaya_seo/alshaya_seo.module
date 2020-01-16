@@ -237,28 +237,13 @@ function alshaya_seo_preprocess_menu(&$variables) {
  * Implements template_preprocess_alshaya_main_menu_level2().
  */
 function alshaya_seo_preprocess_alshaya_main_menu_level2(&$variables) {
-  if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
-    $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['l1_object']['label']));
-    $sub_nav_class = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
-    $variables['data']['l1_object']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
-    foreach ($variables['data']['columns'] as $key1 => $value) {
-      foreach ($value as $key2 => $level2) {
-        $variables['data']['columns'][$key1][$key2]['sub_nav_class'] = $sub_nav_class;
-        foreach ($level2['child'] as $key3 => $value2) {
-          $variables['data']['columns'][$key1][$key2]['child'][$key3]['sub_nav_class'] = $sub_nav_class;
-        }
-      }
-    }
-  }
-  else {
-    $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['label']));
-    $sub_nav_class = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
-    $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
-    foreach ($variables['data']['child'] as $key1 => $value) {
-      $variables['data']['child'][$key1]['sub_nav_class'] = $sub_nav_class;
-      foreach ($value['child'] as $key2 => $value2) {
-        $variables['data']['child'][$key1]['child'][$key2]['sub_nav_class'] = $sub_nav_class;
-      }
+  $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['label']));
+  $sub_nav_class = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
+  $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
+  foreach ($variables['data']['child'] as $key1 => $value) {
+    $variables['data']['child'][$key1]['sub_nav_class'] = $sub_nav_class;
+    foreach ($value['child'] as $key2 => $value2) {
+      $variables['data']['child'][$key1]['child'][$key2]['sub_nav_class'] = $sub_nav_class;
     }
   }
 }
