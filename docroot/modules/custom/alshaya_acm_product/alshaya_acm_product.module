@@ -35,6 +35,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\alshaya_acm_product\Controller\ProductController;
 
 /**
  * Implements hook_module_implements_alter().
@@ -525,54 +526,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if (!$skuManager->isProductInStock($sku_entity)) {
           $build['#attributes']['class'][] = 'product-out-of-stock';
-        }
-
-        // Get cross-sell block for the product.
-        $acm_settings = \Drupal::config('alshaya_acm.settings');
-        if ($acm_settings->get('display_crosssell')) {
-          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
-            $cross_sell_related_skus = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
-            $build['cross_sell'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => $cross_sell_related_skus,
-              '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-              '#views_name' => 'product_slider',
-              '#views_display_id' => $acm_settings->get('show_crosssell_as_matchback') ? 'block_matchback' : 'block_product_slider',
-            ];
-            $build['cross_sell_mobile'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => $cross_sell_related_skus,
-              '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-              '#views_name' => 'product_slider',
-              '#views_display_id' => 'block_product_slider',
-            ];
-            // Weight will have no effect later once template is modified.
-            $build['cross_sell']['#weight'] = 11;
-          }
-        }
-
-        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL))) {
-          $build['up_sell'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
-            '#section_title' => t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
-            '#views_name' => 'product_slider',
-            '#views_display_id' => 'block_product_slider',
-          ];
-          // Weight will have no effect later once template is modified.
-          $build['up_sell']['#weight'] = 10;
-        }
-
-        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED))) {
-          $build['related'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
-            '#section_title' => t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
-            '#views_name' => 'product_slider',
-            '#views_display_id' => 'block_product_slider',
-          ];
-          // Weight will have no effect later once template is modified.
-          $build['related']['#weight'] = 11;
         }
 
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;

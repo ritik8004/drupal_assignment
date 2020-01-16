@@ -181,6 +181,32 @@
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
       });
+
+      // Add related products on pdp.
+      var sku = $('article[data-vmode="full"]').attr('data-sku');
+      var type = 'desktop';
+      if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        var type = 'mobile';
+      }
+      $(window).once().on('scroll', function () {
+        var scrollBottom = $(this).scrollTop() + $(this).height();
+        var matchback = $('.horizontal-crossell.above-mobile-block');
+        var upsell = $('.horizontal-upell.above-mobile-block');
+        var related = $('.horizontal-related.above-mobile-block');
+
+        if (!matchback.hasClass('matchback-processed') && (scrollBottom > matchback.offset().top)) {
+          matchback.addClass('matchback-processed');
+          Drupal.updateRelatedProducts(Drupal.url('get_matchback_products/' + sku + '/' + type + '?cacheable=1'));
+        }
+        if (!upsell.hasClass('upsell-processed') && scrollBottom > upsell.offset().top) {
+          upsell.addClass('upsell-processed');
+          Drupal.updateRelatedProducts(Drupal.url('get_upsell_products/' + sku + '?cacheable=1'));
+        }
+        if (!related.hasClass('related-processed') && scrollBottom > related.offset().top) {
+          related.addClass('related-processed');
+          Drupal.updateRelatedProducts(Drupal.url('get_related_products/' + sku + '?cacheable=1'));
+        }
+      });
     }
   };
 
@@ -294,6 +320,13 @@
 
     return selectedCombination;
   };
+
+  Drupal.updateRelatedProducts = function (url) {
+    Drupal.ajax({
+      url: url,
+      progress: {type: 'throbber'},
+    }).execute();
+  }
 
   $(window).on('load', function () {
     // Show add to cart form now.

@@ -1,17 +1,16 @@
-{% if content.cross_sell is not empty %}
+{% if display_crosssell %}
   <div class="horizontal-crossell above-mobile-block">
-    {{ content.cross_sell }}
+    <div id="matchback-products">
+    </div>
   </div>
 {% endif %}
 
-{% if content.up_sell is not empty %}
   <div class="horizontal-upell above-mobile-block">
-    {{ content.up_sell }}
+    <div id="upsell-products">
+    </div>
   </div>
-{% endif %}
 
-{% if content.related is not empty %}
   <div class="horizontal-related above-mobile-block">
-    {{ content.related }}
+    <div id="related-products">
+    </div>
   </div>
-{% endif %}

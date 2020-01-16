@@ -10,6 +10,11 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Cache\CacheableAjaxResponse;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class ProductController.
@@ -32,12 +37,20 @@ class ProductController extends ControllerBase {
   protected $request;
 
   /**
+   * ACM config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $acmConfig;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('config.factory')
     );
   }
 
@@ -49,9 +62,10 @@ class ProductController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
    */
-  public function __construct(SkuManager $sku_manager, RequestStack $request_stack) {
+  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
+    $this->acmConfig = $config_factory->get('alshaya_acm.settings');
   }
 
   /**
@@ -118,5 +132,85 @@ class ProductController extends ControllerBase {
     }
     return $build;
   }
+
+  /**
+   * Get matchback products.
+   */
+  public function getMatchbackProducts($sku, $type) {
+    $response = new CacheableAjaxResponse();
+
+    // Get matchback block for the product.
+    if ($this->acmConfig->get('display_crosssell')) {
+      $sku_entity = SKU::loadFromSku($sku);
+      if ($sku_entity instanceof SKU) {
+        if (!empty($cross_sell_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
+          $cross_sell_related_skus = $this->skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+          $build['cross_sell'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $cross_sell_related_skus,
+            '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => $this->acmConfig->get('show_crosssell_as_matchback') ? 'block_matchback' : 'block_product_slider',
+          ];
+          $build['cross_sell_mobile'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $cross_sell_related_skus,
+            '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => 'block_product_slider',
+          ];
+          $response->addCommand(new ReplaceCommand('.above-mobile-block #matchback-products', render($build['cross_sell'])));
+          $response->addCommand(new ReplaceCommand('.mobile-only-block #matchback-products', render($build['cross_sell_mobile'])));
+        }
+      }
+    }
+
+    return $response;
+  }
+
+  /**
+   * Get upsell products.
+   */
+  public function getUpsellProducts($sku) {
+    $response = new CacheableAjaxResponse();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if (!empty($up_sell_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL))) {
+      $build['up_sell'] = [
+        '#theme' => 'products_horizontal_slider',
+        '#data' => $this->skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
+        '#section_title' => t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
+        '#views_name' => 'product_slider',
+        '#views_display_id' => 'block_product_slider',
+      ];
+      $response->addCommand(new ReplaceCommand('.above-mobile-block #upsell-products', render($build)));
+      $response->addCommand(new ReplaceCommand('.mobile-only-block #upsell-products', render($build)));
+    }
+
+    return $response;
+  }
+
+  /**
+   * Get related products.
+   */
+  public function getRelatedProducts($sku) {
+    $response = new CacheableAjaxResponse();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if (!empty($related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED))) {
+      $build['related'] = [
+        '#theme' => 'products_horizontal_slider',
+        '#data' => $this->skuManager->filterRelatedSkus(array_unique($related_skus)),
+        '#section_title' => t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+        '#views_name' => 'product_slider',
+        '#views_display_id' => 'block_product_slider',
+      ];
+      $response->addCommand(new ReplaceCommand('.above-mobile-block #related-products', render($build)));
+      $response->addCommand(new ReplaceCommand('.mobile-only-block #related-products', render($build)));
+    }
+
+    return $response;
+  }
+
 
 }
