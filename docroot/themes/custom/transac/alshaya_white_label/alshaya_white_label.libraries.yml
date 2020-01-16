@@ -291,3 +291,6 @@ megamenu_dynamic_layout:
     - core/jquery
     - core/jquery.once
     - core/drupal
+  css:
+    theme:
+      css/conditional-sass/megamenu-dynamic-layout/megamenu-dynamic-layout.ltr.css: {}
