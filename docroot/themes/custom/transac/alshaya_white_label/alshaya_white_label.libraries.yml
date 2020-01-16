@@ -252,6 +252,14 @@ cart_js:
     - core/jquery.once
     - core/drupal
 
+product-category-accordion:
+  js:
+    js/product-category-accordion.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
 pdp_js:
   js:
     js/pdp.js: {}
