@@ -35,6 +35,20 @@
             Drupal.blazy.revalidate();
           }
         });
+
+        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
+          // Closing modal window on click of the full screen slider images.
+          $('#product-image-gallery-mob img').once('attached').on('click', function (e) {
+            var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
+
+            // Closing modal window before slick library gets removed.
+            mobileDialog.close();
+            productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
+            $('#product-image-gallery-mob').find('img').css('transform', 'none');
+            e.preventDefault();
+          });
+        });
       }
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
@@ -54,6 +68,19 @@
               Drupal.blazy.revalidate();
             }
           }, 700);
+        });
+
+        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
+          // Closing modal window on click of the full screen slider images.
+          $('#product-full-screen-gallery img').once('attached').on('click', function (e) {
+            var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+
+            // Closing modal window before slick library gets removed.
+            desktopDialog.close();
+            productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
+            e.preventDefault();
+          });
         });
       }
     }
