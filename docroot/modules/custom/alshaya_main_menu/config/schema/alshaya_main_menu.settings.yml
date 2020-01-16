@@ -10,6 +10,12 @@ alshaya_main_menu.settings:
     desktop_main_menu_highlight_timing:
       type: integer
       label: 'Main menu transition timing for desktop'
+    desktop_main_menu_layout:
+      type: integer
+      label: 'Main menu display on desktop'
     max_nb_col:
       type: integer
       label: 'Maxinum number of columns to show'
+    ideal_max_col_length:
+      type: integer
+      label: 'Ideal length of the column'

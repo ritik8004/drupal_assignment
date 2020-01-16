@@ -139,8 +139,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
+    $desktop_main_menu_highlight_timing = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_highlight_timing');
+
     return [
       '#theme' => 'alshaya_main_menu_level1',
+      '#settings' => [
+        'desktop_main_menu_highlight_timing' => $desktop_main_menu_highlight_timing,
+      ],
       '#term_tree' => $term_data,
       '#column_tree' => $columns_tree ?? NULL,
       '#menu_type' => $desktop_main_menu_layout,
@@ -156,6 +161,9 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     foreach ($term_data as $l2s) {
       $max_nb_col = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('max_nb_col');
       $ideal_max_col_length = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('ideal_max_col_length');
+      $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;
+      $ideal_max_col_length = $ideal_max_col_length > 0 ? $ideal_max_col_length : 10;
+
       do {
         $columns = [];
         $col = 0;
