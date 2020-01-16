@@ -3322,7 +3322,6 @@ class SkuManager {
           $data[$key][$field_value] = $field_value;
         }
       }
-      $this->moduleHandler->alter('sku_attributes_data', $data, $child, $sku);
     }
 
     // We do not index for color node with no variant in stock.
