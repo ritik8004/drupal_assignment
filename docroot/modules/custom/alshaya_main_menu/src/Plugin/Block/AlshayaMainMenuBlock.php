@@ -115,6 +115,16 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       return [];
     }
 
+    $desktop_main_menu_layout = $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
+
+    if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
+      $columns_tree = $this->getColumnDataMenuAlgo($term_data);
+    }
+
+    $columns = $columns_tree ?? $term_data;
+    // Allow other module to alter links.
+    $this->moduleHandler->alter('alshaya_main_menu_links', $columns, $parent_id, $context);
+
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
       $parents = $this->productCategoryTree->getCategoryTermParents($term);
@@ -129,12 +139,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
-    // Allow other module to alter links.
-    $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
-
-    $desktop_main_menu_highlight_timing = (int) $this->configFactory
-      ->get('alshaya_main_menu.settings')
-      ->get('desktop_main_menu_highlight_timing');
+    $desktop_main_menu_highlight_timing = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('desktop_main_menu_highlight_timing');
 
     return [
       '#theme' => 'alshaya_main_menu_level1',
@@ -142,7 +147,64 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         'desktop_main_menu_highlight_timing' => $desktop_main_menu_highlight_timing,
       ],
       '#term_tree' => $term_data,
+      '#column_tree' => $columns_tree ?? NULL,
+      '#menu_type' => $desktop_main_menu_layout,
     ];
+
+  }
+
+  /**
+   * Column data after menu algo is applied.
+   */
+  public function getColumnDataMenuAlgo($term_data) {
+    $columns_tree = [];
+    foreach ($term_data as $l2s) {
+      $max_nb_col = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('max_nb_col');
+      $ideal_max_col_length = (int) $this->configFactory->get('alshaya_main_menu.settings')->get('ideal_max_col_length');
+      $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;
+      $ideal_max_col_length = $ideal_max_col_length > 0 ? $ideal_max_col_length : 10;
+
+      do {
+        $columns = [];
+        $col = 0;
+        $col_total = 0;
+        $reprocess = FALSE;
+
+        foreach ($l2s['child'] as $l3s) {
+          // 2 below means L2 item + one blank line for spacing).
+          $l2_cost = 2 + count($l3s['child']);
+
+          // If we are detecting a longer column than the expected size
+          // we iterate with new max.
+          if ($l2_cost > $ideal_max_col_length) {
+            $ideal_max_col_length = $l2_cost;
+            $reprocess = TRUE;
+            break;
+          }
+
+          if ($col_total + $l2_cost > $ideal_max_col_length) {
+            $col++;
+            $col_total = 0;
+          }
+
+          // If we have too many columns we try with more items per column.
+          if ($col >= $max_nb_col) {
+            $ideal_max_col_length++;
+            break;
+          }
+
+          $columns[$col][] = $l3s;
+
+          $col_total += $l2_cost;
+
+        }
+      } while ($reprocess || $col >= $max_nb_col);
+      $columns_tree[$l2s['label']] = [
+        'l1_object' => $l2s,
+        'columns' => $columns,
+      ];
+    }
+    return $columns_tree;
   }
 
   /**
