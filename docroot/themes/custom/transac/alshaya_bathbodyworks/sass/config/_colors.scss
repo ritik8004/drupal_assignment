@@ -479,6 +479,12 @@ $basket_horizontal_recommendation_slider_dots: $peacock-blue;
 $privilege_earn_txt: $black;
 $privilege_earn_icon: $peacock-blue;
 
+// Basket Promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $hot-pink;
+$basket_fixed_percentage_active_header_promo_txt: $hot-pink;
+$basket_free_delivery_inactive_header_promo_bg: $peacock-blue;
+$basket_free_delivery_active_header_promo_txt: $peacock-blue;
+
 // My Account Pages
 $user_order_help_bg: $info-blue;
 $user_order_help_text : $white;
@@ -570,11 +576,3 @@ $options-page-menu-title: $peacock-blue;
 
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $peacock-blue;
-
-// Basket top promotions.
-$basket_fixed_percentage_inactive_header_promo_bg: $hot-pink;
-$basket_fixed_percentage_inactive_header_promo_txt: $white;
-$basket_fixed_percentage_active_header_promo_bg: $white;
-$basket_fixed_percentage_active_header_promo_txt: $hot-pink;
-$basket_free_delivery_inactive_header_promo_txt: $white;
-$basket_free_delivery_active_header_promo_bg: $white;

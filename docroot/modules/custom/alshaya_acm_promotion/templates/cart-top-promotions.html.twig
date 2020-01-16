@@ -16,9 +16,7 @@
   <div class="cart-promotions-wrapper inactive-promotions" id="block-basketinactivepromotionmessage">
     {% for id, promotion in inactive_promotions %}
       <div class="promotion {{ promotion.type }} {{ promotion.extra_classes }}">
-        {% if promotion.type == 'fixed_percentage_discount_order' %}
-          {% include '@alshaya_acm_promotion/price-tag-svg-partial.html.twig' %}
-        {% endif %}
+        {% include '@alshaya_acm_promotion/price-tag-svg-partial.html.twig' %}
         <span class="promotion-label">{{ promotion.label }}</span>
       </div>
     {% endfor %}

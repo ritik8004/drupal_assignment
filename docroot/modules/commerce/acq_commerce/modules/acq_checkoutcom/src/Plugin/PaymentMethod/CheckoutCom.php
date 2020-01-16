@@ -6,7 +6,6 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -310,9 +309,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     if (empty($payment_card) && empty($cko_card_token)) {
       $form_state->setErrorByName('custom', $this->t('Transaction has been declined. Please try again later.'));
       $this->messenger()->addError($this->t('Transaction has been declined. Please try again later.'));
-      $this->getLogger('CheckoutComPaymentPlugin')->warning('Payment form was submitted without card info. Form data: @data', [
-        '@data' => Json::encode($form_state->getValues()),
-      ]);
+      $this->getLogger('CheckoutComPaymentPlugin')->warning('Payment form was submitted without card info.');
     }
   }
 
