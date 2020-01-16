@@ -119,14 +119,11 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
     if ($desktop_main_menu_layout == 'default' || $desktop_main_menu_layout == 'menu_dynamic_display') {
       $columns_tree = $this->getColumnDataMenuAlgo($term_data);
-      // Allow other module to alter links.
-      $this->moduleHandler->alter('alshaya_main_menu_links', $columns_tree, $parent_id, $context);
     }
 
-    elseif ($desktop_main_menu_layout == 'menu_inline_display') {
-      // Allow other module to alter links.
-      $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
-    }
+    $columns = $columns_tree ?? $term_data;
+    // Allow other module to alter links.
+    $this->moduleHandler->alter('alshaya_main_menu_links', $columns, $parent_id, $context);
 
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {

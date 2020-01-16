@@ -406,7 +406,7 @@ function alshaya_seo_transac_alshaya_seo_google_knowledge_graph_alter(&$gkg_data
 function alshaya_seo_transac_preprocess_alshaya_main_menu_level2(&$variables) {
   if ($variables['menu_type'] == 'default' || $variables['menu_type'] == 'menu_dynamic_display') {
     $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['l1_object']['label']));
-    $sub_nav_class = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
+    $sub_nav_class = 'sub-nav-' . $sub_nav_label;
     $variables['data']['l1_object']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
     foreach ($variables['data']['columns'] as $key1 => $value) {
       foreach ($value as $key2 => $level2) {
