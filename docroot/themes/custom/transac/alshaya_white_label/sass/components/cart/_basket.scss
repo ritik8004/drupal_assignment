@@ -976,6 +976,11 @@
     align-items: center;
     width: 100%;
 
+    .ie & {
+      // Added height intentionally to fix the IE issue, though it won't affect styling anywhere else.
+      height: 3.25rem;
+    }
+
     @include breakpoint($desktop) {
       margin-top: 0;
       margin-bottom: 1.3rem;
