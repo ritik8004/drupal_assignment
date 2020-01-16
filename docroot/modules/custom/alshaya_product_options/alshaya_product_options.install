@@ -8,6 +8,34 @@
 /**
  * Implements hook_update_N().
  *
+ * Create new field (Swatch original image) for product options taxonomy.
+ */
+function alshaya_product_options_update_8006() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    [
+      'field.storage.taxonomy_term.field_attribute_swatch_org_image',
+      'field.field.taxonomy_term.sku_product_option.field_attribute_swatch_org_image',
+      'alshaya_product_options.settings',
+      'alshaya_brand_carousel.settings',
+    ],
+    'alshaya_product_options'
+  );
+
+  $manager->updateConfigs(
+    [
+      'core.entity_view_display.taxonomy_term.sku_product_option.default',
+      'core.entity_form_display.taxonomy_term.sku_product_option.default',
+    ],
+    'acq_sku'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update alias pattern for sku_product_option vocabulary.
  */
 function alshaya_product_options_update_8005() {
