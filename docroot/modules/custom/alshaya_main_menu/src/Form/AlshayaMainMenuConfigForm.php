@@ -50,7 +50,7 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
 
     $form['mobile_main_menu_max_depth'] = [
       '#type' => 'select',
-      '#title' => $this->t('Main menu maximum depth for mobile.'),
+      '#title' => $this->t('Main menu maximum depth for mobile'),
       '#description' => $this->t('Set the maixmum depth to display menu levels for mobile. 0 for not to restrict.'),
       '#options' => range(0, 6),
       '#default_value' => $config->get('mobile_main_menu_max_depth'),
@@ -64,8 +64,22 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
         self::MAIN_MENU_DYNAMIC_LAYOUT => $this->t('Dynamic Width Mega Menu'),
       ],
       '#default_value' => $config->get('desktop_main_menu_layout'),
-      '#title' => $this->t('Main menu display on desktop.'),
+      '#title' => $this->t('Main menu display on desktop'),
       '#description' => $this->t('Select inline menu display option to display the l3 option inline to l2 otherwise it will follow the core.'),
+    ];
+
+    $form['max_nb_col'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Maxinum number of columns to show'),
+      '#description' => $this->t('Set the maximum number of columns to show.'),
+      '#default_value' => (!empty($config->get('max_nb_col'))) ? $config->get('max_nb_col') : 6,
+    ];
+
+    $form['ideal_max_col_length'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Ideal length of the column'),
+      '#description' => $this->t('Set ideal length of a column'),
+      '#default_value' => (!empty($config->get('ideal_max_col_length'))) ? $config->get('ideal_max_col_length') : 10,
     ];
 
     return $form;
@@ -78,6 +92,8 @@ class AlshayaMainMenuConfigForm extends ConfigFormBase {
     $config = $this->config('alshaya_main_menu.settings');
     $config->set('mobile_main_menu_max_depth', $form_state->getValue('mobile_main_menu_max_depth'));
     $config->set('desktop_main_menu_layout', $form_state->getValue('desktop_main_menu_layout'));
+    $config->set('max_nb_col', $form_state->getValue('max_nb_col'));
+    $config->set('ideal_max_col_length', $form_state->getValue('ideal_max_col_length'));
     $config->save();
     Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
 

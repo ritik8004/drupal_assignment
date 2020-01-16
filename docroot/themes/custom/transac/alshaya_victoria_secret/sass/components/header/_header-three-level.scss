@@ -9,11 +9,8 @@
   .menu--two__list {
     .menu__links__wrapper {
       @include breakpoint($desktop) {
-        column-width: 13.2rem;
         padding-#{$left}: 5.75rem;
         padding-bottom: 2.5rem;
-        height: 18rem;
-        min-height: 0;
       }
     }
   }
@@ -104,24 +101,25 @@
         min-height: 0;
       }
     }
-
-    & > ul.menu--two__list {
-      @include breakpoint($desktop) {
-        &::before {
-          content: " ";
-          display: block;
-          height: 1px;
-          background: $mm_top_border;
-          position: relative;
-          top: -1.5rem;
-        }
-      }
-    }
   }
 }
 
 .first--child_open {
   & > .menu-two__link-wrapper::after {
     content: none;
+  }
+}
+
+.megamenu-inline-layout {
+  .has--three-levels {
+    @include breakpoint($desktop) {
+      .menu--two__list {
+        .menu__links__wrapper {
+          column-width: 13.2rem;
+          height: 18rem;
+          min-height: 0;
+        }
+      }
+    }
   }
 }
