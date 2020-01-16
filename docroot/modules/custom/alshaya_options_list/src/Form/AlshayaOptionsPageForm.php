@@ -80,7 +80,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
               $existingCount++;
               $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$attribute_data_index] = [
                 '#type' => 'details',
-                '#title' => t('Display') . ' ' . $existingCount,
+                '#title' => $this->t('Display') . ' ' . $existingCount,
               ];
               $attribute_data['index'] = $attribute_data_index;
               $attribute_data['key'] = $key;
@@ -140,14 +140,12 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
   }
 
   /**
-   * Function to increase the fieldset temp count &
-   * rebuild the form on add more.
+   * Increase fieldset temp count.
    *
    * @param array $form
-   *   form element array.
-   *
-   * @param array $form_state
-   *   form data.
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function addOne(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
@@ -157,14 +155,12 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
   }
 
   /**
-   * Function to decrease the fieldset temp count &
-   * rebuild the form on remove.
+   * Decrease fieldset temp count.
    *
    * @param array $form
-   *   form element array.
-   *
-   * @param array $form_state
-   *   form data.
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function removeCallback(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_options_list.settings');
@@ -185,16 +181,15 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
   }
 
   /**
-   * Callback function to refresh the fieldset after add/remove.
+   * Refresh fieldset after add/remove.
    *
    * @param array $form
-   *   form element array.
-   *
-   * @param array $form_state
-   *   form data.
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    *
    * @return array
-   *   form element
+   *   Form element
    */
   public function addRemoveCallback(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
