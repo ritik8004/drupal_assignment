@@ -1,0 +1,8 @@
+services:
+  alshaya_search_algolia.commands:
+    class: Drupal\alshaya_search_algolia\Commands\AlshayaSearchAlgoliaCommands
+    arguments:
+      - '@config.factory'
+      - '@alshaya_master.entity_helper'
+    tags:
+      - { name: drush.command }
