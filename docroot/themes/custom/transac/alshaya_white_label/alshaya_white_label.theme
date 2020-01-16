@@ -356,7 +356,6 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if ($variables['plugin_id'] == 'alshaya_main_menu') {
     $mega_menu_display = \Drupal::config('alshaya_main_menu.settings')->get('desktop_main_menu_layout');
     if ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_INLINE_LAYOUT) {
-      $variables['attributes']['class'][] = 'megamenu-inline-layout';
       $variables['#attached']['library'][] = 'alshaya_white_label/megamenu_inline_layout';
     }
     elseif ($mega_menu_display === AlshayaMainMenuConfigForm::MAIN_MENU_DYNAMIC_LAYOUT) {
