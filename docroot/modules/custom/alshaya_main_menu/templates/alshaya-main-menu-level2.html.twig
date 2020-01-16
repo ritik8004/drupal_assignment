@@ -1,42 +1,91 @@
 <ul class="menu__list menu--two__list">
     <div class="menu__links__wrapper">
-        <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
-        {% for key, level2 in data.child %}
-          <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
-            {#Show the term tree only when term image is not available.#}
-            <div class="menu__link-wrapper menu-two__link-wrapper">
-                <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{data.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
-            </div>
-            {% if level2.child is not empty %}
-                <ul class="menu__list menu--three__list">
-                    <div class="level-three__wrapper">
-                        <span class="back--link"><span class="menu__back"></span> <span>{{ level2.label }}</span></span>
-                        {% for key3, level3 in level2.child %}
-                            <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
-                                <div class="menu__link-wrapper menu-two__link-wrapper">
-                                    <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub_nav_class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
+        {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
+        <span class="back--link"><span class="menu__back"></span> <span>{{ data.l1_object.label }}</span></span>
+            {% for key, columns in data.columns %}
+                <div class="column {{ key }}">
+                    {% for key1, level2 in columns %}
+                    <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
+                        <div class="menu__link-wrapper menu-two__link-wrapper">
+                            <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" {{ level2.tag_attr }}">{{ level2.label }}</{{ level2.tag }}>
+                        </div>
+                        {% set level2_label = level2.label %}
+                        {% if level2.child is not empty %}
+                            <ul class="menu__list menu--three__list">
+                                <div class="level-three__wrapper">
+                                    <span class="back--link"><span class="menu__back"></span> <span>{{ level2_label }}</span></span>
+                                    {% for key3, level3 in level2.child %}
+                                    <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
+                                        <div class="menu__link-wrapper menu-two__link-wrapper">
+                                            <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ level3.sub_nav_class }}" {{ level3.tag_attr }}>{{ level3.label }}
+                                            </{{ level3.tag }}>
+                                        </div>
+                                        {% if level3.child is not empty %}
+                                            {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
+                                        {% endif %}
+                                    </li>
+                                    {% endfor %}
                                 </div>
-                                {% if level3.child is not empty %}
-                                    {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </div>
-                </ul>
-            {% endif %}
-          </li>
-        {% endfor %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% elseif menu_type == 'menu_inline_display' %}
+        <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
+            {% for key, level2 in data.child %}
+              <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
+                {#Show the term tree only when term image is not available.#}
+                <div class="menu__link-wrapper menu-two__link-wrapper">
+                    <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{data.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
+                </div>
+                {% if level2.child is not empty %}
+                    <ul class="menu__list menu--three__list">
+                        <div class="level-three__wrapper">
+                            <span class="back--link"><span class="menu__back"></span> <span>{{ level2.label }}</span></span>
+                            {% for key3, level3 in level2.child %}
+                                <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
+                                    <div class="menu__link-wrapper menu-two__link-wrapper">
+                                        <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub_nav_class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
+                                    </div>
+                                    {% if level3.child is not empty %}
+                                        {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </div>
+                    </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+        {% endif %}
     </div>
-    {% if data.text_links_paragraph is not empty %}
-    <div class="term-image__wrapper text-link-para">
-    {% else %}
-    <div class="term-image__wrapper">
+    {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
+        {% if data.l1_object.text_links_paragraph is not empty %}
+        <div class="term-image__wrapper text-link-para">
+        {% else %}
+        <div class="term-image__wrapper">
+        {% endif %}
+            {#Term image starts#}
+            {{ alshaya_main_menu('alshaya_main_menu_category_image', data.l1_object) }}
+            {#Term image ends#}
+            {#Highlight image starts#}
+            {{ alshaya_main_menu('alshaya_main_menu_highlights', data.l1_object) }}
+            {#Highlight image end#}
+        </div>
+    {% elseif menu_type == 'menu_inline_display' %}
+        {% if data.text_links_paragraph is not empty %}
+        <div class="term-image__wrapper text-link-para">
+        {% else %}
+        <div class="term-image__wrapper">
+        {% endif %}
+            {#Term image starts#}
+            {{ alshaya_main_menu('alshaya_main_menu_category_image', data) }}
+            {#Term image ends#}
+            {#Highlight image starts#}
+            {{ alshaya_main_menu('alshaya_main_menu_highlights', data) }}
+            {#Highlight image end#}
+        </div>
     {% endif %}
-        {#Term image starts#}
-        {{ alshaya_main_menu('alshaya_main_menu_category_image', data) }}
-        {#Term image ends#}
-        {#Highlight image starts#}
-        {{ alshaya_main_menu('alshaya_main_menu_highlights', data) }}
-        {#Highlight image end#}
-    </div>
 </ul>
