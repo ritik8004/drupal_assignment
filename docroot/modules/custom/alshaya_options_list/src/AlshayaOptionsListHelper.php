@@ -261,36 +261,38 @@ class AlshayaOptionsListHelper {
    * @throws \Drupal\search_api\SearchApiException
    */
   public function loadFacetsData(array $attribute_codes) {
-    $facet_results = [];
     $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_page__search__page');
-    $index = Index::load('acquia_search_index');
-    $query = $index->query();
-    // Change the parse mode for the search.
-    $parse_mode = $this->parseModeManager->createInstance('terms');
-    $parse_mode->setConjunction('OR');
-    $query->setParseMode($parse_mode);
-    $query->setLanguages([
-      $this->languageManager->getCurrentLanguage()
-        ->getId(),
-    ]);
-    $query->keys('');
-    $query->setFulltextFields($index->getFulltextFields());
-    $server = $index->getServerInstance();
-    if ($server->supportsFeature('search_api_facets')) {
-      $facet_data = [];
-      foreach ($facets as $facet) {
-        if (in_array($facet->id(), $attribute_codes)) {
-          $facet_data[$facet->id()] = [
-            'field' => $facet->getFieldIdentifier(),
-            'operator' => $facet->getQueryOperator(),
-            'limit' => 0,
-            'min_count' => $facet->getMinCount(),
-            'missing' => FALSE,
-          ];
-        }
+
+    $facet_to_load = [];
+    foreach ($facets ?? [] as $facet) {
+      if (in_array($facet->id(), $attribute_codes)) {
+        $facet_to_load[$facet->id()] = [
+          'field' => $facet->getFieldIdentifier(),
+          'operator' => $facet->getQueryOperator(),
+          'limit' => 0,
+          'min_count' => $facet->getMinCount(),
+          'missing' => FALSE,
+        ];
       }
-      $query->setOption('search_api_facets', $facet_data);
     }
+
+    // Sanity check.
+    if (empty($facet_to_load)) {
+      return [];
+    }
+
+    // Load the search index.
+    $index = Index::load('acquia_search_index');
+
+    /** @var \Drupal\search_api\Query\QueryInterface $query */
+    $query = $index->query();
+    $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
+
+    // Set the facets data to load.
+    $query->setOption('search_api_facets', $facet_to_load);
+
+    // Limit to only one result, we want only facets data.
+    $query->range(0, 1);
 
     // Execute the search.
     $results = $query->execute();
@@ -298,6 +300,7 @@ class AlshayaOptionsListHelper {
     // Set the facet results data in static.
     $raw_facet_results = $results->getExtraData('search_api_facets');
 
+    $facet_results = [];
     foreach ($raw_facet_results as $attribute_code => $results) {
       $attribute_code_key = $attribute_code;
       // Remove 'attr_' from facet result key
