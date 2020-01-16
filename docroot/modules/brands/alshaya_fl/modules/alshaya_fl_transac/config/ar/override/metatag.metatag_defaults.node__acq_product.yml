@@ -1,3 +1,5 @@
 tags:
-  description: 'اشتري [alshaya_seo:brand_name] ،[node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] في [alshaya_seo:cities] وجميع انحاء [alshaya_seo:country]، كما يمكنك الاستمتاع بخاصية الإرجاع المجاني والدفع عند الاستلام. اكتشف اكثر.'
-  og_description: 'اشتري [alshaya_seo:brand_name] ،[node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] في [alshaya_seo:cities] وجميع انحاء [alshaya_seo:country]، كما يمكنك الاستمتاع بخاصية الإرجاع المجاني والدفع عند الاستلام. اكتشف اكثر.'
+  title: 'شراء [node:title] اون لاين | [site:name]'
+  og_title: 'شراء [node:title] اون لاين | [site:name]'
+  description: 'اشتري [node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] في [alshaya_seo:cities] وجميع انحاء [alshaya_seo:country]، كما يمكنك الاستمتاع بخاصية الإرجاع المجاني والدفع عند الاستلام. اكتشف اكثر.'
+  og_description: 'اشتري [node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] في [alshaya_seo:cities] وجميع انحاء [alshaya_seo:country]، كما يمكنك الاستمتاع بخاصية الإرجاع المجاني والدفع عند الاستلام. اكتشف اكثر.'

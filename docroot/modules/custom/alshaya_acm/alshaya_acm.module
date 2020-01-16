@@ -215,7 +215,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Add sub total price of product.
       if ($is_item_free) {
         $item['sub_total'] = [
-          '#markup' => '<div class="final-price">' . t('FREE') . '</div>',
+          '#markup' => '',
+        ];
+        $item['price'] = [
+          '#markup' => '<div class="price-free">' . t('FREE') . '</div>',
         ];
       }
       else {
@@ -757,24 +760,20 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
         ];
       }
     }
-
-    // Recalculate price as here we display total_price.
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
-    $total_price = [
-      '#theme' => 'acq_commerce_price',
-      '#price' => $item_cart_price['price'] * $item['quantity']['#default_value'],
-    ];
-    if (!empty($item_cart_price['discount'])) {
-      $total_price['#discount'] = $item_cart_price['discount'];
-      // Remove comma if there in final price as this causes problem and comma
-      // will be added again by the `number_format()`.
-      $item_cart_price['final_price'] = str_replace(',', '', $item_cart_price['final_price']);
-      $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
-    }
   }
-  else {
-    $total_price = $item['price'];
+
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
+  $total_price = [
+    '#theme' => 'acq_commerce_price',
+    '#price' => $item_cart_price['price'] * $item['quantity']['#default_value'],
+  ];
+  if (!empty($item_cart_price['discount'])) {
+    $total_price['#discount'] = $item_cart_price['discount'];
+    // Remove comma if there in final price as this causes problem and comma
+    // will be added again by the `number_format()`.
+    $item_cart_price['final_price'] = str_replace(',', '', $item_cart_price['final_price']);
+    $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
   }
 
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotions_manager */
@@ -800,6 +799,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
   // If line item's price is 0, its a free item & set the label for it.
   if ($is_free_sku_item &&
     isset($total_price['#final_price']) && $total_price['#final_price'] == 0) {
+    $total_price = '';
     $free_gift_label['#markup'] = t('Free Gift with Purchase');
   }
 

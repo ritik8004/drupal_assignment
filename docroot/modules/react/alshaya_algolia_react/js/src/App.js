@@ -7,10 +7,10 @@ import SearchResults from './components/searchresults';
 import Portal from './components/portal';
 import Teaser from './components/teaser';
 import {
-  toggleSearchResultsContainer,
   getCurrentSearchQuery,
   isMobile,
-  updateSearchQuery
+  redirectToOtherLang,
+  setSearchQuery
 } from './utils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
@@ -27,21 +27,15 @@ class App extends React.PureComponent {
 
   componentDidMount() {
     if (this.state.query !== '') {
-      toggleSearchResultsContainer(this.state.query);
+      redirectToOtherLang(this.state.query);
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.query !==  this.state.query) {
-      toggleSearchResultsContainer(this.state.query);
-    }
-  }
-
-  setQueryValue = (queryValue) => {
+  setQueryValue = (queryValue, inputTag = null) => {
     this.setState({query: queryValue});
-    toggleSearchResultsContainer(queryValue);
-    if (queryValue === '') {
-      updateSearchQuery('');
+    setSearchQuery(queryValue);
+    if (queryValue !== '') {
+      redirectToOtherLang(queryValue, inputTag);
     }
   };
 
@@ -53,15 +47,15 @@ class App extends React.PureComponent {
     this.setQueryValue('');
   };
 
-  onChange = (newValue) => {
-    this.setQueryValue(newValue);
+  onChange = (newValue, inputTag) => {
+    this.setQueryValue(newValue, inputTag);
   };
 
   render() {
     const { query } = this.state;
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
-    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null) && query !== ''
+    const searchResultsDiv = (typeof searchWrapper != 'undefined' && searchWrapper != null)
       ? (<SearchResults query={query} />)
       : '';
 

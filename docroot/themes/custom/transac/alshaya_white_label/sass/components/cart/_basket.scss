@@ -575,7 +575,7 @@
 
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
-    border-top: 1px solid $white;
+    border-top: 1px solid $accordion_border;
     margin-top: 1.25rem;
     float: $left;
     width: 17.56rem;
@@ -890,10 +890,28 @@
         background: $basket_fixed_percentage_inactive_header_promo_bg;
         color: $basket_fixed_percentage_inactive_header_promo_txt;
 
+        @include breakpoint($only-mobile) {
+          padding: 0.625rem 0;
+        }
+
+        .promotion-available-code {
+          .promotion-coupon-code {
+            border-color: $basket_fixed_percentage_inactive_header_promo_txt;
+            color: $basket_fixed_percentage_inactive_header_promo_txt;
+          }
+        }
+
         &.threshold-reached {
           background: none;
           color: $basket_fixed_percentage_inactive_header_promo_bg;
           border: 2px solid $basket_fixed_percentage_inactive_header_promo_bg;
+
+          .promotion-available-code {
+            .promotion-coupon-code {
+              border-color: $basket_fixed_percentage_inactive_header_promo_bg;
+              color: $basket_fixed_percentage_inactive_header_promo_bg;
+            }
+          }
 
           svg #fill-value {
             fill: $basket_fixed_percentage_inactive_header_promo_bg;
@@ -905,12 +923,7 @@
         background: $basket_free_delivery_inactive_header_promo_bg;
         color: $basket_free_delivery_inactive_header_promo_txt;
 
-        @include icon(delivery, before) {
-          margin: 0 0.5rem;
-          display: inline-block;
-          vertical-align: middle;
-          font-weight: bold;
-          font-size: 2.125rem;
+        svg #fill-value {
           color: $basket_free_delivery_inactive_header_promo_txt;
         }
       }
@@ -945,30 +958,36 @@
           margin: 0 0.5rem;
           display: inline-block;
           vertical-align: middle;
-          font-weight: bold;
           font-size: 2.125rem;
-          color: $peacock-blue;
         }
       }
     }
   }
 
   .promotion {
-    padding: 0.5rem 0;
     padding-#{$right}: 1.5625rem;
     margin-bottom: 0.875rem;
     letter-spacing: 0.0125rem;
     position: relative;
     font-size: 0.875rem;
-    line-height: 1.125rem;
+    min-height: 3.25rem;
     font-family: $alshaya-bold;
     display: inline-flex;
     align-items: center;
     width: 100%;
 
+    .ie & {
+      // Added height intentionally to fix the IE issue, though it won't affect styling anywhere else.
+      height: 3.25rem;
+    }
+
     @include breakpoint($desktop) {
       margin-top: 0;
       margin-bottom: 1.3rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0.3125rem 0;
     }
 
     .promotion-coupon-details {
@@ -980,7 +999,9 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-top: 0.3125rem;
+        margin: 0;
+        display: block;
+        padding-top: 0.625rem;
       }
 
       @include breakpoint($tablet) {
@@ -991,10 +1012,7 @@
     svg {
       width: 2.1875rem;
       margin: 0 0.5rem;
-
-      @include breakpoint($only-mobile) {
-        align-self: flex-start;
-      }
+      align-self: center;
     }
   }
 

@@ -1,4 +1,5 @@
 import { hasCategoryFilter } from './FilterUtils';
+import { getSearchQuery, getLangRedirect } from './localStorage';
 
 const contentDiv = document.querySelector('.page-standard main');
 // Create Search result div wrapper to render results.
@@ -27,7 +28,7 @@ function hideSearchResultContainer() {
     Drupal.blazy.revalidate();
   }
   Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
-    element.style.display = 'block';
+    element.style.display = null;
   });
   searchResultDiv.style.display = 'none';
   searchResultDiv.classList.remove('show-algolia-result');
@@ -35,10 +36,32 @@ function hideSearchResultContainer() {
   Drupal.blazyRevalidate();
 }
 
-function toggleSearchResultsContainer(query) {
-  (typeof query === 'undefined' || query === '')
-    ? hideSearchResultContainer()
-    : showSearchResultContainer();
+function toggleSearchResultsContainer() {
+  // When user is on search page, we always want to display search results,
+  // As search links are used internally with filters
+  let search_query = getSearchQuery();
+  if (drupalSettings.algoliaSearch.showSearchResults) {
+    showSearchResultContainer();
+  }
+  else if (search_query === '' || search_query === null) {
+    hideSearchResultContainer();
+  }
+  else {
+    showSearchResultContainer();
+  }
+}
+
+// Show or hide sort by filter, when no results found.
+function toggleSortByFilter(action) {
+  const searchWrapper = document.getElementById('alshaya-algolia-search');
+
+  if (action == 'hide') {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-facet-block')
+  }
+  else {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block')
+  }
+
 }
 
 /**
@@ -55,7 +78,8 @@ function showLoader() {
  */
 function removeLoader() {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
-  if (loaderDiv.length > 0) {
+  // Check if loader div is present algolia is not redirecting to other language.
+  if (loaderDiv.length > 0 && getLangRedirect() !== '1') {
     document.body.removeChild(loaderDiv[0]);
   }
 }
@@ -64,6 +88,7 @@ export {
   contentDiv,
   searchResultDiv,
   toggleSearchResultsContainer,
+  toggleSortByFilter,
   showLoader,
   removeLoader
 };

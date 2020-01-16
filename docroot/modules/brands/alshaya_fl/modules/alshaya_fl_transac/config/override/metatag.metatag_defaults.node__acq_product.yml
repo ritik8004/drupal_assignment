@@ -1,3 +1,5 @@
 tags:
-  description: 'Buy [alshaya_seo:brand_name] [node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] online at best price in [alshaya_seo:cities] and the whole [alshaya_seo:country]. Enjoy Free Returns and Cash on Delivery!'
-  og_description: 'Buy [alshaya_seo:brand_name] [node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] online at best price in [alshaya_seo:cities] and the whole [alshaya_seo:country]. Enjoy Free Returns and Cash on Delivery!'
+  title: 'Buy [node:title] online | [site:name]'
+  og_title: 'Buy [node:title] online | [site:name]'
+  description: 'Buy [node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] online at best price in [alshaya_seo:cities] and the whole [alshaya_seo:country]. Enjoy Free Returns and Cash on Delivery!'
+  og_description: 'Buy [node:title] [alshaya_fl_transac:product_color_text] [alshaya_fl_transac:product_material_text] online at best price in [alshaya_seo:cities] and the whole [alshaya_seo:country]. Enjoy Free Returns and Cash on Delivery!'

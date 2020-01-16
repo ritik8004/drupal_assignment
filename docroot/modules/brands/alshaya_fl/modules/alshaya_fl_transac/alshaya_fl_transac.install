@@ -10,6 +10,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Remove brand name from description.
+ * Update title tag data.
+ */
+function alshaya_fl_transac_update_8007() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['metatag.metatag_defaults.node__acq_product'],
+    'alshaya_seo_transac'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update product meta configuration.
  */
 function alshaya_fl_transac_update_8006() {

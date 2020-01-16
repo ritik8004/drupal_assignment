@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_promotion\Controller;
 
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -82,19 +81,6 @@ class FreeGiftController extends ControllerBase {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->promotionsManager = $promotions_manager;
-  }
-
-  /**
-   * Title callback for the modal.
-   */
-  public function titleCallback($acq_sku) {
-    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
-
-    if (!($sku instanceof SKUInterface)) {
-      throw new NotFoundHttpException();
-    }
-
-    return $sku->get('name')->getString();
   }
 
   /**

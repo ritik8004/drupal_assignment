@@ -12,7 +12,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Updating global metatag configuration.
  */
-function alshaya_seo_update_8011() {
+function alshaya_seo_update_8012() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['metatag.metatag_defaults.global'],
@@ -25,11 +25,25 @@ function alshaya_seo_update_8011() {
 /**
  * Implements hook_update_N().
  *
+ * Add SEO settings config.
+ */
+function alshaya_seo_update_8011() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_seo.settings'],
+    'alshaya_seo'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update max-links for sitemap.
  */
 function alshaya_seo_update_8010() {
   $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
-  $config_factory->set('max_links', 5000);
+  $config_factory->set('max_links', 4000);
   $config_factory->save();
 }
 
@@ -148,7 +162,7 @@ function alshaya_seo_install() {
   // Update simple_sitemap config.
   $config_factory = \Drupal::configFactory()->getEditable('simple_sitemap.settings');
   $config_factory->set('cron_generate', FALSE);
-  $config_factory->set('max_links', 5000);
+  $config_factory->set('max_links', 4000);
   $config_factory->set('skip_untranslated', TRUE);
   $config_factory->save();
 }

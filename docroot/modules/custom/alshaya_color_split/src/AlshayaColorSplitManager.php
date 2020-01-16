@@ -64,21 +64,29 @@ class AlshayaColorSplitManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product.
+   * @param bool $include_oos
+   *   Flag to specify if we need to include Out Of Stock products or not.
    *
    * @return \Drupal\acq_sku\Entity\SKU[]
    *   Products in group.
    */
-  public function getProductsInStyle(SKU $sku) {
+  public function getProductsInStyle(SKU $sku, $include_oos = FALSE) {
     $style_code = $this->fetchStyleCode($sku);
     if (empty($style_code)) {
       return [];
     }
 
     $static = &drupal_static(__METHOD__, []);
+    $static_key = implode(':', [
+      $style_code,
+      $sku->language()->getId(),
+      (int) $include_oos,
+    ]);
+
     $langcode = $sku->language()->getId();
 
-    if (isset($static[$style_code][$langcode])) {
-      return $static[$style_code][$langcode];
+    if (isset($static[$static_key])) {
+      return $static[$static_key];
     }
 
     /** @var \Drupal\acq_sku\Entity\SKU[] $variants */
@@ -91,14 +99,14 @@ class AlshayaColorSplitManager {
 
     foreach ($variants as $variant) {
       // Skip OOS variants.
-      if (!($variant->getPluginInstance()->isProductInStock($variant))) {
+      if (!($include_oos) && !($variant->getPluginInstance()->isProductInStock($variant))) {
         continue;
       }
 
-      $static[$style_code][$langcode][$variant->getSku()] = $this->entityRepository->getTranslationFromContext($variant, $langcode);
+      $static[$static_key][$variant->getSku()] = $this->entityRepository->getTranslationFromContext($variant, $langcode);
     }
 
-    return $static[$style_code][$langcode];
+    return $static[$static_key];
   }
 
   /**
@@ -129,7 +137,8 @@ class AlshayaColorSplitManager {
    *   Grouping attribute.
    */
   public function getGroupingAttribute(SKU $sku) {
-    return $sku->get('attr_grouping_attributes')->getString();
+    $attribute = $sku->get('attr_grouping_attributes')->getString();
+    return $sku->hasField('attr_' . $attribute) ? $attribute : '';
   }
 
 }

@@ -1,15 +1,19 @@
 import React from 'react';
 import { connectStateResults } from 'react-instantsearch-dom';
+import { toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
 
-const NoResults = ({ searchResults, isSearchStalled, searching }) => {
-  if ((searching || isSearchStalled) && searchResults === null) {
-    return Drupal.t('fetching results...');
-  }
-
+const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFacetValues }) => {
   if (!searchResults || searchResults.nbHits > 0) {
     return null;
   }
 
+  if (!searching && !isSearchStalled && !searchingForFacetValues) {
+    toggleSearchResultsContainer();
+    toggleSortByFilter('hide');
+  }
+
+  // Trigger GTM for no results found.
+  Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(0);
   return (
     <div className="hits-empty-state">
       <div className="view-empty">
