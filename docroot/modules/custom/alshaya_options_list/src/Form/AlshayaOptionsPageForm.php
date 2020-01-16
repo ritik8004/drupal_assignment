@@ -68,8 +68,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
 
         foreach (array_filter($attribute_option['attributes']) as $selected_attribute) {
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute] = [
-            '#type' => 'fieldset',
-            '#Collapsible' => TRUE,
+            '#type' => 'details',
             '#title' => 'Settings for ' . $selected_attribute,
             '#prefix' => '<div id="options-fieldset-wrapper-' . $key . '-' . $selected_attribute . '">',
             '#suffix' => '</div>',
@@ -80,8 +79,8 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             foreach ($attribute_options[$key]['attribute_details'][$selected_attribute] as $attribute_data_index => $attribute_data) {
               $existingCount++;
               $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute][$attribute_data_index] = [
-                '#type' => 'fieldset',
-                '#Collapsible' => TRUE,
+                '#type' => 'details',
+                '#title' => t('Display') . ' ' . $existingCount,
               ];
               $attribute_data['index'] = $attribute_data_index;
               $attribute_data['key'] = $key;
@@ -141,7 +140,14 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Function to increase the fieldset temp count &
+   * rebuild the form on add more.
+   *
+   * @param array $form
+   *   form element array.
+   *
+   * @param array $form_state
+   *   form data.
    */
   public function addOne(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
@@ -151,7 +157,14 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Function to decrease the fieldset temp count &
+   * rebuild the form on remove.
+   *
+   * @param array $form
+   *   form element array.
+   *
+   * @param array $form_state
+   *   form data.
    */
   public function removeCallback(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_options_list.settings');
@@ -172,7 +185,16 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Callback function to refresh the fieldset after add/remove.
+   *
+   * @param array $form
+   *   form element array.
+   *
+   * @param array $form_state
+   *   form data.
+   *
+   * @return array
+   *   form element
    */
   public function addRemoveCallback(array &$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
@@ -239,17 +261,21 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
         ],
       ],
     ];
+
+    $module_path = drupal_get_path('module', 'alshaya_options_list');
     $form['show-images'] = [
       '#type' => 'checkbox',
       '#default_value' => $attribute_data['show-images'] ?? '',
       '#title' => $this->t('Show images for %attribute', ['%attribute' => $attribute_data['selected_attribute']]),
       '#description' => $this->t('Check to display attribute with images. Images need to be added to the attribute taxonomy term. You cannot group the terms alphabetically if this option is selected.'),
+      '#suffix' => '<img src="' . base_path() . $module_path . '/images/shop-by-brand-image-small.png" alt="Shop by brand image">',
     ];
     $form['group'] = [
       '#type' => 'checkbox',
       '#default_value' => $attribute_data['group'] ?? '',
       '#title' => $this->t('Group %attribute alphabetically.', ['%attribute' => $attribute_data['selected_attribute']]),
       '#description' => $this->t('Check to group the attributes by alphabet. keep unchecked, if the previous option "show images" is checked.'),
+      '#suffix' => '<img src="' . base_path() . $module_path . '/images/shop-by-brand-group-search-small.png" alt="Shop by brand group search" style="height:100%;max-height:100px">',
     ];
     $form['mobile_title_toggle'] = [
       '#type' => 'checkbox',
