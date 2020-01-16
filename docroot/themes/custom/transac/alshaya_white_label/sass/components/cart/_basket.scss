@@ -575,7 +575,7 @@
 
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
-    border-top: 1px solid $white;
+    border-top: 1px solid $accordion_border;
     margin-top: 1.25rem;
     float: $left;
     width: 17.56rem;
