@@ -575,7 +575,7 @@
 
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
-    border-top: 1px solid $white;
+    border-top: 1px solid $accordion_border;
     margin-top: 1.25rem;
     float: $left;
     width: 17.56rem;
@@ -975,6 +975,11 @@
     display: inline-flex;
     align-items: center;
     width: 100%;
+
+    .ie & {
+      // Added height intentionally to fix the IE issue, though it won't affect styling anywhere else.
+      height: 3.25rem;
+    }
 
     @include breakpoint($desktop) {
       margin-top: 0;
