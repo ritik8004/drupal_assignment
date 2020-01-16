@@ -5,20 +5,20 @@
  * Contains install, update, uninstall hooks for alshaya_product_options module.
  */
 
- /**
-  * Implements hook_update_N().
-  *
-  * Update alshaya_brand_carousel settings.
-  */
- function alshaya_product_options_update_8007() {
-   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-   $manager = \Drupal::service('alshaya_config.manager');
+/**
+ * Implements hook_update_N().
+ *
+ * Update alshaya_brand_carousel settings.
+ */
+function alshaya_product_options_update_8007() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
 
-   $manager->updateConfigs(
+  $manager->updateConfigs(
      ['alshaya_brand_carousel.settings'],
      'alshaya_product_options'
    );
- }
+}
 
 /**
  * Implements hook_update_N().
