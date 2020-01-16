@@ -767,6 +767,7 @@ header {
           display: flex;
           max-width: none;
           justify-content: space-between;
+          overflow: scroll;
         }
 
         .menu__links__wrapper {
