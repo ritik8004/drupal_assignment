@@ -60,14 +60,14 @@
         });
 
       // Initialize checkout.kit with public key.
-      $('.payment_card_new', context)
-        .once('initialize-checkoutkit')
-        .each(function() {
+      if (typeof CheckoutKit !== 'undefined') {
+        $('.payment_card_new', context).once('initialize-checkoutkit').each(function () {
           CheckoutKit.configure({
             debugMode: (drupalSettings.checkoutCom.debug === 'true'),
             publicKey: drupalSettings.checkoutCom.public_key,
           });
         });
+      }
 
       // Bind this only once after every ajax call.
       $('.checkoutcom-credit-card-input')
@@ -177,19 +177,29 @@
     return formHasErrors;
   };
 
-  // Handle api error which triggered on card tokenisation fail.
-  CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
-    if (event.data.errorCode === '70000') {
-      Drupal.checkoutComTokenisesd = false;
-      Drupal.checkoutComShowGlobalError(Drupal.t('Transaction has been declined. Please try again later.'));
-    }
-    else {
-      Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
-    }
-  });
+  if (typeof CheckoutKit !== 'undefined') {
+    // Handle api error which triggered on card tokenisation fail.
+    CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
+      if (event.data.errorCode === '70000') {
+        Drupal.checkoutComTokenisesd = false;
+        Drupal.checkoutComShowGlobalError(Drupal.t('Transaction has been declined. Please try again later.'));
+      }
+      else {
+        Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      }
+    });
+  }
 
   // Try to create card token for checkout.com if it's not already generated.
   $.fn.checkoutComCreateCardToken = function() {
+    // Handle case when not able to load JS plugin.
+    if (typeof CheckoutKit === 'undefined') {
+      Drupal.checkoutComTokenised = false;
+      Drupal.checkoutComShowGlobalError(Drupal.t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      $(document).trigger('checkoutcom_form_error');
+      return;
+    }
+
     if (!$('#cardNumber').is(':visible') || $('#cardToken').length === 0) {
       // When using tokenised card, we don't need to check for validations.
       Drupal.checkoutComTokenisationProcessed = true;
