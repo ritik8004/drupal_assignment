@@ -4,6 +4,7 @@ namespace Drupal\alshaya_search_algolia\Commands;
 
 use AlgoliaSearch\Client;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Site\Settings;
@@ -142,6 +143,8 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     $languages = \Drupal::languageManager()->getLanguages();
 
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    SkuManager::$colorSplitMergeChildren = FALSE;
     foreach ($languages as $language) {
       $name = $index_name . '_' . $language->getId();
       $index = $client->initIndex($name);
@@ -149,11 +152,11 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       // Create object ids from node id and language to fetch results from
       // algolia.
       $objetIDs = array_map(function ($nid) use ($language) {
-          return "entity:node/{$nid}:{$language->getId()}";
+        return "entity:node/{$nid}:{$language->getId()}";
       }, $nids);
 
       try {
-        $objects = $index->getObjects($objetIDs, 'final_price,original_price,price,sku,nid');
+        $objects = $index->getObjects($objetIDs, 'final_price,original_price,sku,nid');
       }
       catch (\Exception $e) {
         continue;
@@ -161,6 +164,10 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
 
       // Loop through only the available results to ignore not indexed data.
       foreach (array_filter($objects['results']) as $object) {
+        if (empty($object)) {
+          continue;
+        }
+
         $node = \Drupal::entityTypeManager()->getStorage('node')->load($object['nid']);
         if (!$node instanceof NodeInterface) {
           continue;
@@ -173,6 +180,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
             'title' => 'sku mismatch',
             'nid' => $object['nid'],
             'sku' => $sku,
+            'lang' => $language->getId(),
             'sku_diff' => $object,
           ];
           continue;
@@ -183,24 +191,14 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
           continue;
         }
 
-        if (empty($object)) {
-          continue;
-        }
-
-        $product_color = '';
-        if ($skuManager->isListingModeNonAggregated()) {
-          $product_color = $node->get('field_product_color')->getString();
-        }
-
-        $prices = $skuManager->getMinPrices($sku, $product_color);
-        $prices['final_price'] = 20;
-        if (($object['original_price'] !== (float) $prices['price'])
-            || ($object['price'] !== (float) $prices['price'])
-            || ($object['final_price'] !== (float) $prices['final_price'])
+        $prices = $skuManager->getMinPrices($sku);
+        if (((float) $object['original_price'] !== (float) $prices['price'])
+            || ((float) $object['final_price'] !== (float) $prices['final_price'])
         ) {
           $context['results']['products'][$language->getId()][$object['nid']] = [
             'nid' => $object['nid'],
             'sku' => $sku->getSku(),
+            'lang' => $language->getId(),
             'price_diff' => [$object, $prices],
           ];
         }
@@ -224,25 +222,19 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       return;
     }
 
-    foreach ($context['results']['products'] as $lang => $products) {
+    foreach ($context['results']['products'] as $products) {
       if (empty($products)) {
         continue;
       }
 
-      $path = file_create_url(\Drupal::service('file_system')->realpath(file_default_scheme() . "://price_diff_{$lang}.txt"));
-      if ($fp = fopen($path, 'a')) {
-        $context['results']['files'][] = $path;
-        $context['results']['faulty'] += count(array_values($products));
-        // Encode each result to dump into text file.
-        $records = array_map(function ($item) {
-          return json_encode($item);
-        }, array_values($products));
-        fwrite($fp, implode(PHP_EOL, $records));
-        fclose($fp);
-      }
-      else {
-        \Drupal::logger('alshaya_search_algolia')->error('could not create a file: @file', ['@file' => $path]);
-      }
+      $context['results']['faulty'] += count(array_values($products));
+
+      // Encode each result to dump into text file.
+      $records = array_map(function ($item) {
+        return json_encode($item);
+      }, array_values($products));
+
+      $context['message'] = implode(PHP_EOL, $records);
     }
   }
 
@@ -267,12 +259,11 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
           \Drupal::translation()
             ->formatPlural(
               $results['count'],
-              'Verified 1 product and found @faulty result in time: @time. check file at @files.',
-              'Verified @count products and found @faulty results in time: @time. check files at @files',
+              'Verified 1 product and found @faulty result in time: @time.',
+              'Verified @count products and found @faulty results in time: @time.',
               [
                 '@time' => $execution_time,
                 '@faulty' => $results['faulty'],
-                '@files' => implode(',', $results['files']),
               ]
             )
         );
