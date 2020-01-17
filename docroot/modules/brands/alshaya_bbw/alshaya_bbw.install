@@ -14,9 +14,9 @@ function alshaya_bbw_update_8106() {
   $config = \Drupal::configFactory()->getEditable('alshaya_options_list.settings');
   if ($attribute_options = $config->get('alshaya_options_pages')) {
     foreach ($attribute_options as $key => $attribute_option) {
-      foreach ($attribute_option['attribute_details'] as $attrubute_name => $attrubute_details) {
-        unset($attribute_options[$key]['attribute_details'][$attrubute_name]);
-        $attribute_options[$key]['attribute_details'][$attrubute_name][] = $attrubute_details;
+      foreach ($attribute_option['attribute_details'] as $attribute_name => $attribute_details) {
+        unset($attribute_options[$key]['attribute_details'][$attribute_name]);
+        $attribute_options[$key]['attribute_details'][$attribute_name][] = $attribute_details;
       }
     }
     $config->set('alshaya_options_pages', $attribute_options);

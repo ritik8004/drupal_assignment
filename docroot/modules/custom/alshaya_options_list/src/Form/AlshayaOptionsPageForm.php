@@ -68,7 +68,8 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
 
         foreach (array_filter($attribute_option['attributes']) as $selected_attribute) {
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute] = [
-            '#type' => 'details',
+            '#type' => 'fieldset',
+            '#Collapsible' => TRUE,
             '#title' => 'Settings for ' . $selected_attribute,
             '#prefix' => '<div id="options-fieldset-wrapper-' . $key . '-' . $selected_attribute . '">',
             '#suffix' => '</div>',
@@ -135,7 +136,6 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
         '#suffix' => '</strong>',
       ];
     }
-    $form_state->setCached(FALSE);
     return $form;
   }
 

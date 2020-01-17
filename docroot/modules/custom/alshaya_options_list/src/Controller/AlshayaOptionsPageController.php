@@ -143,7 +143,6 @@ class AlshayaOptionsPageController extends ControllerBase {
             $options_list[$attributeCode][$key]['mobile_title'] = $attributeOptions['mobile_title'];
           }
         }
-
       }
       $this->cache->set($cid, $options_list, Cache::PERMANENT, $cache_tags);
     }
