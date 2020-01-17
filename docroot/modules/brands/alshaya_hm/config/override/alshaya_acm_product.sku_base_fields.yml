@@ -8,6 +8,7 @@ fields:
     type: 'string'
     configurable: 1
     display_configurable_for: 'article_castor_id'
+    index: 1
 
   concept:
     label: 'Concept'
