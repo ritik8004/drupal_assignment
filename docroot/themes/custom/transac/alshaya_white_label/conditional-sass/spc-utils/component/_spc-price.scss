@@ -11,4 +11,28 @@
       margin-#{$left}: 0.3125rem;
     }
   }
+
+  .price--discount {
+    font-size: 0.75rem;
+  }
+}
+
+.spc-recommended-products {
+  .spc-product-price {
+    text-align: center;
+    white-space: normal;
+
+    .has--special--price {
+      display: inline-block;
+
+      + .special--price {
+        display: inline-block;
+      }
+    }
+
+    .has--special--price,
+    .special--price, {
+      margin-bottom: 0.3125rem;
+    }
+  }
 }

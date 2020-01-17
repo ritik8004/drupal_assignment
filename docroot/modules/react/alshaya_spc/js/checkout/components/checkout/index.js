@@ -9,6 +9,7 @@ import PaymentMethods from '../payment-methods';
 import CompletePurchase from '../complete-purchase';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import TermsConditions from '../terms-conditions';
+import { stickySidebar } from "../../../utilities/stickyElements/stickyElements";
 
 export default class Checkout extends React.Component {
 
@@ -37,6 +38,9 @@ export default class Checkout extends React.Component {
     catch(error) {
       // In case of error, do nothing.
     }
+
+    // Make sidebar sticky.
+    stickySidebar();
   }
 
   // On delivery method change.

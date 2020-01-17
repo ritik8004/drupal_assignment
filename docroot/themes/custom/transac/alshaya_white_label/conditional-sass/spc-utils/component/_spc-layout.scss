@@ -40,6 +40,7 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    position: relative;
 
     @include breakpoint($only-tablet) {
       max-width: calc(100% - 2.5rem);
@@ -63,6 +64,24 @@
       @include breakpoint($only-mobile) {
         width: 100%;
         margin-top: 1.5625rem;
+      }
+    }
+  }
+
+  .spc-sidebar {
+    &.sticky {
+      @include breakpoint($tablet) {
+        position: fixed;
+        top: 2.2rem;
+      }
+    }
+
+    &.sticky.fluid {
+      @include breakpoint($tablet) {
+        position: absolute;
+        top: auto;
+        bottom: 0;
+        #{$right}: 0;
       }
     }
   }

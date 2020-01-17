@@ -10,6 +10,7 @@ import CartPromoBlock from "../cart-promo-block";
 import EmptyResult from "../../../utilities/empty-result";
 import Loading from "../../../utilities/loading";
 import VatFooterText from "../../../utilities/vat-footer";
+import { stickyMobileCartPreview, stickySidebar } from "../../../utilities/stickyElements/stickyElements";
 
 export default class Cart extends React.Component {
 
@@ -27,12 +28,6 @@ export default class Cart extends React.Component {
       'in_stock': true
     };
   }
-
-  getPosition = (element) => {
-    let clientRect = element.getBoundingClientRect();
-    return {left: clientRect.left + document.body.scrollLeft,
-      top: clientRect.top + document.body.scrollTop};
-  };
 
   componentDidMount() {
     // Listen to `refreshCart` event triggered from `mini-cart/index.js`.
@@ -60,22 +55,11 @@ export default class Cart extends React.Component {
           });
         }
 
-        if (window.innerWidth < 768) {
-          window.addEventListener('scroll', () => {
-            var cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
-            var cartPreviewOffset = this.getPosition(cartPreview[0]);
-            if (window.pageYOffset > cartPreviewOffset.top) {
-              if (!cartPreview[0].classList.contains('sticky')) {
-                cartPreview[0].classList.add('sticky');
-                document.getElementsByClassName('spc-main')[0].style.paddingTop = cartPreview[0].offsetHeight + 'px';
-              }
-            }
-            else {
-              cartPreview[0].classList.remove('sticky');
-              document.getElementsByClassName('spc-main')[0].style.paddingTop = 0;
-            }
-          });
-        }
+        // Make cart preview sticky.
+        stickyMobileCartPreview();
+
+        // Make side bar sticky.
+        stickySidebar();
       }
 
       // To show the success/error message on cart top.
