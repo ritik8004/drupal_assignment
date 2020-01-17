@@ -135,6 +135,8 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
 
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
+    $logger = \Drupal::logger('alshaya_search_algolia');
+
     SkuManager::$colorSplitMergeChildren = FALSE;
     foreach ($languages as $language) {
       $name = $index_name . '_' . $language->getId();
@@ -164,21 +166,11 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
           continue;
         }
 
-        // Get SKU attached with node.
-        $sku = $skuManager->getSkuForNode($node);
-        if ($sku !== $object['sku']) {
-          $context['results']['products'][$language->getId()][$object['nid']] = [
-            'title' => 'sku mismatch',
-            'nid' => $object['nid'],
-            'sku' => $sku,
-            'lang' => $language->getId(),
-            'sku_diff' => $object,
-          ];
-          continue;
-        }
-
-        $sku = SKU::loadFromSku($sku, $language->getId());
+        $sku = SKU::loadFromSku($object['sku'], $language->getId());
         if (!$sku instanceof SKU) {
+          $logger->error('Not able to load sku: @sku', [
+            '@sku' => $object['sku'],
+          ]);
           continue;
         }
 
