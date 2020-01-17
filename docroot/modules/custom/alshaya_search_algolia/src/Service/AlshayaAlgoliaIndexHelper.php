@@ -7,6 +7,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -72,6 +73,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $entityRepository;
 
   /**
+   * The date time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $dateTime;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -88,6 +96,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity Repository object.
+   * @param \Drupal\Component\Datetime\TimeInterface $date_time
+   *   The date time service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -99,7 +109,8 @@ class AlshayaAlgoliaIndexHelper {
     SkuInfoHelper $sku_info_helper,
     LoggerChannelFactoryInterface $logger_factory,
     EntityTypeManagerInterface $entity_type_manager,
-    EntityRepositoryInterface $entity_repository
+    EntityRepositoryInterface $entity_repository,
+    TimeInterface $date_time
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -108,6 +119,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->logger = $logger_factory->get('alshaya_search_algolia');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->entityRepository = $entity_repository;
+    $this->dateTime = $date_time;
   }
 
   /**
@@ -220,6 +232,7 @@ class AlshayaAlgoliaIndexHelper {
     if ($object['stock'] === 0) {
       $this->removeAttributesFromIndex($object);
     }
+    $object['changed'] = $this->dateTime->getRequestTime();
   }
 
   /**

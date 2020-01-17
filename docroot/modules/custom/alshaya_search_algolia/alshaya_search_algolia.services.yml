@@ -9,3 +9,4 @@ services:
       - '@logger.factory'
       - '@entity_type.manager'
       - '@entity.repository'
+      - '@datetime.time'
