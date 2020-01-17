@@ -10,10 +10,18 @@ export default class CartRecommendedProducts extends React.Component {
     // if doesnt work out this has to be a slider.
     var container = document.querySelector('.spc-recommended-products .block-content');
     if (direction === 'next') {
-      container.scrollLeft += 167;
+      container.scrollBy({
+        top: 0,
+        left: 320,
+        behavior: 'smooth'
+      });
     }
     else {
-      container.scrollLeft -= 167;
+      container.scrollBy({
+        top: 0,
+        left: -320,
+        behavior: 'smooth'
+      });
     }
   };
 

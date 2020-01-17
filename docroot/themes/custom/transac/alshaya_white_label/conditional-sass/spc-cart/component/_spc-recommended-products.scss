@@ -21,7 +21,10 @@
         font-size: 0.875rem;
         text-align: center;
         color: $spc-product-title;
-        white-space: normal;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-bottom: 0.3125rem;
       }
 
       .spc-promotions {
