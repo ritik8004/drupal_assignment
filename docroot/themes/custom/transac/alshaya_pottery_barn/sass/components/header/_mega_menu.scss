@@ -178,7 +178,7 @@
 
     .menu--three__list {
       @include breakpoint($desktop) {
-        margin-bottom: 2rem;
+        padding-bottom: 2rem;
       }
 
       li {
