@@ -2,6 +2,7 @@ import React from 'react';
 
 import RecommendedProduct from '../../../utilities/recommended-product';
 import SectionTitle from "../../../utilities/section-title";
+import { isRTL } from "../../../utilities/rtl";
 
 export default class CartRecommendedProducts extends React.Component {
 
@@ -12,15 +13,15 @@ export default class CartRecommendedProducts extends React.Component {
     if (direction === 'next') {
       container.scrollBy({
         top: 0,
-        left: 320,
-        behavior: 'smooth'
+        left: isRTL() === true ? -320 : 320,
+        behavior: 'smooth',
       });
     }
     else {
       container.scrollBy({
         top: 0,
-        left: -320,
-        behavior: 'smooth'
+        left: isRTL() === true ? 320 : -320,
+        behavior: 'smooth',
       });
     }
   };
