@@ -15,6 +15,8 @@ require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
 
 // Set the env in settings to allow re-using in custom code.
 $env = alshaya_get_site_environment();
+$env_name = !in_array($env, ['travis', 'local']) ? substr($env, 2) : $env;
+
 $settings['env'] = $env;
 $settings['env_name'] = $env_name;
 

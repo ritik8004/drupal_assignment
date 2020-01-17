@@ -5,3 +5,35 @@ alshaya_spc.checkout:
     _title: 'Secure Checkout'
   requirements:
     _permission: 'access content'
+
+alshaya_spc.mobile_number_verfication:
+  path: '/verify-mobile/{mobile}'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::verifyMobileNumber'
+  methods:  [GET]
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.area_list_by_parent:
+  path: '/area-list/{area}'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getAreaListByParent'
+  methods:  [GET]
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.area_list:
+  path: '/areas'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getAreaList'
+  methods:  [GET]
+  requirements:
+    _permission: 'access content'
+
+alshaya_spc.get_parent_area_list:
+  path: '/parent-areas'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getParentAreaList'
+  methods:  [GET]
+  requirements:
+    _permission: 'access content'

@@ -1,16 +1,46 @@
 import React from 'react';
 
+import Popup from 'reactjs-popup';
+import AddressForm from '../address-form';
+
 export default class EmptyDeliveryText extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { open: false };
+  }
+
+  openModal = () => {
+    this.setState({ open: true });
+  }
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
   render() {
-  	if (this.props.delivery_type === 'cnc') {
+    if (this.props.delivery_type === 'cnc') {
   	  return (
-      	<div>{Drupal.t('Select your prefered collection store')}</div>
+      	<div className="spc-checkout-empty-delivery-text">{Drupal.t('Select your preferred collection store')}</div>
       );
   	}
 
   	return (
-      <div>{Drupal.t('Add your address and contact details')}</div>
+      <div>
+        <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
+          {Drupal.t('Please add yor contact details and address.')}
+        </div>
+        <Popup
+          open={this.state.open}
+          onClose={this.closeModal}
+          closeOnDocumentClick={false}
+        >
+        <div className="modal">
+          <a className="close" onClick={this.closeModal}>&times;</a>
+        <AddressForm/>
+        </div>
+        </Popup>
+      </div>  
     );
   }
 

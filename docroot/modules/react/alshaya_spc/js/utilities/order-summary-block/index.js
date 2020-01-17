@@ -6,12 +6,18 @@ import CheckoutCartItems from '../../checkout/components/checkout-cart-items';
 class OrderSummaryBlock extends React.Component {
  render() {
    const promo_data = this.props.cart_promo ? this.props.cart_promo : null;
+   let order_summary_title = Drupal.t('order summary');
+   if (this.props.item_qty !== undefined) {
+     // Thi to be used on checkout page.
+     order_summary_title = Drupal.t('order summary (@qty items)', {'@qty': this.props.item_qty});
+   }
+
    return (
      <div className="spc-order-summary-block">
-       <SectionTitle>{Drupal.t('order summary')}</SectionTitle>
+       <SectionTitle>{order_summary_title}</SectionTitle>
        {/*To Be used on Checkout Delivery pages.*/}
          {!this.props.show_checkout_button &&
-          <div>
+          <div className="product-content">
             <CheckoutCartItems items={this.props.items}/>
           </div>
          }
@@ -22,7 +28,7 @@ class OrderSummaryBlock extends React.Component {
          {/*To Be used on cart page only.*/}
          {this.props.show_checkout_button &&
           <div className="actions">
-           <div className="checkout-link">
+           <div className="checkout-link submit">
              <a href={Drupal.url('cart')} className="checkout-link">{Drupal.t('continue to checkout')}</a>
            </div>
          </div>

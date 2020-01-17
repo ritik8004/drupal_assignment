@@ -92,6 +92,8 @@ $_dynamic_promo_text: #04599b;
 $_dynamic_promo_text_bg: #e7effc;
 $_promo_code_error: #ff3030;
 $_promotion_link: #ce262c;
+$_gray: #c8c8c8;
+$_gray_1: #eaeaea;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1158,3 +1160,19 @@ $spc-promo-code-border: $warm-grey-two;
 $spc-recommended-product-promotion: $cherry;
 $spc-cart-item-trash-icon: $warm-grey-two;
 $spc-cart-item-trash-icon-hover: $marine-blue-two;
+
+// SPC Checkout.
+$spc-checkout-header-border: $_gray;
+$spc-checkout-page-title-border: $greyish;
+$spc-checkout-delivery-method-bg: $white-five;
+$spc-checkout-radio-empty: $greyish;
+$spc-checkout-radio-filled: $cerulean-two;
+$spc-checkout-delivery-method-txt: $grey-light;
+$spc-checkout-delivery-method-impress: $marine-blue-two;
+$spc-checkout-delivery-info-txt: $marine-blue-two;
+$spc-order-summary-product-area-bg: $_gray_1;
+$spc-checkout-payment-method-bg: $white-five;
+$spc-checkout-payment-method-txt: $marine-blue-two;
+$spc-checkout-payment-method-desc: $grey-light;
+$spc-checkout-terms-conditions: $grey-light;
+$spc-checkout-terms-conditions-link: $cerulean-two;

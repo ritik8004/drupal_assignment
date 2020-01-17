@@ -16,12 +16,15 @@ export default class DeliveryMethods extends React.Component {
     };
   }
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
+  // On delivery method change.
+  changeDeliveryMethod = (method) => {
     this.setState({
-      selectedOption: value
+      selectedOption: method
     });
-  };
+
+    document.getElementById('delivery-method-' + method).checked = true;
+    this.props.updateMethod(method);
+  }
 
   render() {
     let hd_subtitle = Drupal.t('Standard delivery for purchases over KD 250');
@@ -33,18 +36,25 @@ export default class DeliveryMethods extends React.Component {
     }
 
     return (
-      <div>
-        <SectionTitle>{Drupal.t('Delivery method')}</SectionTitle>
-        <div>
-          <input id="delivery-method" checked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio" onChange={this.handleChange} />
-          {Drupal.t('Home delivery')} <span>{hd_subtitle}</span>
+      <div className="spc-checkout-delivery-methods">
+        <SectionTitle>{Drupal.t('delivery method')}</SectionTitle>
+        <div className='delivery-method' onClick={() => this.changeDeliveryMethod('hd')}>
+          <input id='delivery-method-hd' checked={this.state.selectedOption === 'hd'} value="hd" name="delivery-method" type="radio"/>
+          <label className='radio-sim radio-label'>
+            <span className='icon'></span>
+            <span className='impress'>{Drupal.t('home delivery')}</span>
+            {hd_subtitle}
+          </label>
         </div>
-        <div>
-          <input id="delivery-method" checked={this.state.selectedOption === 'cnc'} disabled={this.props.cnc_disabled} value="cnc" name="delivery-method" type="radio" onChange={this.handleChange} />
-          {Drupal.t('Click & Collect')} <span>{cnc_subtitle}</span>
+        <div className='delivery-method' onClick={() => this.changeDeliveryMethod('cnc')}>
+          <input id='delivery-method-cnc' checked={this.state.selectedOption === 'cnc'} disabled={this.props.cnc_disabled} value="cnc" name="delivery-method" type="radio"/>
+          <label className='radio-sim radio-label'>
+            <span className='icon'></span>
+            <span className='impress'>{Drupal.t('click & collect')}</span>
+            {cnc_subtitle}
+          </label>
         </div>
       </div>
     )
   }
-
 }

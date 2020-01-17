@@ -8,6 +8,11 @@
 
   Drupal.behaviors.footerSpaceFiller = {
     attach: function (context, settings) {
+      // Blacklisted pages.
+      if ($('.page-standard').hasClass('disable-footerspace-fill')) {
+        return false;
+      }
+
       // Check if we have empty space below the footer,
       // Add that much space above it so that footer is touches the screen bottom.
       var checkoutFooter = false;

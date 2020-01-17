@@ -16,9 +16,9 @@ export default class PaymentMethods extends React.Component {
       : 'in-active';
 
     return(
-      <div>
+      <div className="spc-checkout-payment-options">
       	<SectionTitle>{Drupal.t('Payment methods')}</SectionTitle>
-      	<div className={'payment-method ' + active_class}>{methods}</div>
+      	<div className={'payment-methods ' + active_class}>{methods}</div>
       </div>
     );
   }

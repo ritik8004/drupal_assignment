@@ -10,6 +10,7 @@ import CartPromoBlock from "../cart-promo-block";
 import EmptyResult from "../../../utilities/empty-result";
 import Loading from "../../../utilities/loading";
 import VatFooterText from "../../../utilities/vat-footer";
+import { stickyMobileCartPreview, stickySidebar } from "../../../utilities/stickyElements/stickyElements";
 
 export default class Cart extends React.Component {
 
@@ -56,6 +57,12 @@ export default class Cart extends React.Component {
             wait: false
           });
         }
+
+        // Make cart preview sticky.
+        stickyMobileCartPreview();
+
+        // Make side bar sticky.
+        stickySidebar();
       }
 
       // To show the success/error message on cart top.
@@ -78,7 +85,7 @@ export default class Cart extends React.Component {
 
   render() {
       if (this.state.wait) {
-        return <Loading loadingMessage={Drupal.t('loading your cart.')}/>
+        return <Loading loadingMessage={Drupal.t('loading your cart ...')}/>
       }
 
       if (!this.state.wait && this.state.items.length === 0) {

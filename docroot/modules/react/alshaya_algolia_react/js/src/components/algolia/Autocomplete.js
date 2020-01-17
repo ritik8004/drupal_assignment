@@ -3,7 +3,12 @@ import { connectAutoComplete } from 'react-instantsearch-dom';
 import Autosuggest from 'react-autosuggest';
 import _isEqual  from 'lodash/isEqual';
 import CustomHighlight from './CustomHighlight';
-import { getCurrentSearchQuery } from '../../utils';
+import {
+  getCurrentSearchQuery,
+  isMobile,
+  removeLangRedirect,
+  getLangRedirect
+} from '../../utils';
 import Portal from '../portal';
 
 const InputButtons = React.memo((props) => {
@@ -53,6 +58,7 @@ class Autocomplete extends React.Component {
     this.autosuggest.current.input.type = 'search';
     this.blurORFocus();
     this.onKeyUp();
+    this.showMobileElements();
   }
 
   componentWillUnmount() {
@@ -60,8 +66,8 @@ class Autocomplete extends React.Component {
   }
 
   blurORFocus() {
-    if (localStorage.getItem('algoliaLangRedirect') == '1') {
-      localStorage.removeItem('algoliaLangRedirect');
+    if (getLangRedirect() == '1') {
+      removeLangRedirect();
       this.autosuggest.current.input.focus();
     }
     else {
@@ -81,8 +87,9 @@ class Autocomplete extends React.Component {
     }
   }
 
-  toggleFocus = (action) => {
-    this.reactSearchBlock[0].classList[action]('focused');
+  addFocus = () => {
+    this.reactSearchBlock[0].classList.add('focused');
+    this.showMobileElements(this.state.value);
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -104,6 +111,20 @@ class Autocomplete extends React.Component {
     }
   };
 
+  showMobileElements = (newvalue = '') => {
+    const valueToCheck = (newvalue !== '') ? newvalue : this.state.value;
+
+    if (valueToCheck !== '') {
+      this.reactSearchBlock[0].classList.add('clear-icon');
+      if (isMobile()) {
+        this.reactSearchBlock[0].classList.add('show-algolia-search-bar');
+      }
+    }
+    else if (valueToCheck === '') {
+      this.reactSearchBlock[0].classList.remove('clear-icon');
+    }
+  }
+
   // On change send value to parent component to update search results.
   onChange = (event, { newValue }) => {
     if (!newValue) {
@@ -122,6 +143,7 @@ class Autocomplete extends React.Component {
     this.setState({
       value: newValue,
     });
+    this.showMobileElements(newValue);
   };
 
   onSubmitCall = event => {
@@ -163,6 +185,7 @@ class Autocomplete extends React.Component {
     if (mobileSearchInNav.length !== 0) {
       mobileSearchInNav[0].classList.remove('search-active');
     }
+    this.reactSearchBlock[0].classList.remove('focused');
   };
 
   renderSuggestionsContainer = ({ containerProps, children, query }) => (
@@ -179,8 +202,7 @@ class Autocomplete extends React.Component {
     const inputProps = {
       placeholder: Drupal.t('Search', {}, {'context': "algolia_search_block_placeholder"}),
       onChange: this.onChange,
-      onFocus: () => this.toggleFocus('add'),
-      onBlur: () => this.toggleFocus('remove'),
+      onFocus: () => this.addFocus(),
       onKeyUp: this.onKeyUp,
       value,
     };

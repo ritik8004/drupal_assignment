@@ -5,6 +5,10 @@
     margin-bottom: 0.9375rem;
     min-height: 10.625rem;
 
+    &:last-child {
+      margin-bottom: 0;
+    }
+
     .spc-product-tile {
       display: grid;
       grid-template-columns: 5.4375rem 1fr 4.8125rem;
@@ -88,13 +92,9 @@
     }
 
     .spc-product-attributes-wrapper {
+      margin-top: 1rem;
       font-size: 0.75rem;
       color: $spc-product-attributes;
-    }
-
-    .spc-product-price {
-      font-size: 0.875rem;
-      color: $spc-product-title;
     }
   }
 }

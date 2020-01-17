@@ -89,11 +89,15 @@ class AddressBookAreasTermsHelper {
   /**
    * Returns list of governates for a given country.
    *
+   * @param bool $location_key
+   *   Determines if use location id as the array key or tid as array key.
+   *
    * @return array
    *   List or governates.
    */
-  public function getAllGovernates() {
-    $governate = $this->getAddressCachedData('getAllGovernates');
+  public function getAllGovernates(bool $location_key = FALSE) {
+    $cache_key = $location_key ? 'getAllGovernatesKeyedLocation' : 'getAllGovernates';
+    $governate = $this->getAddressCachedData($cache_key);
     if (is_array($governate)) {
       return $governate;
     }
@@ -106,13 +110,18 @@ class AddressBookAreasTermsHelper {
       foreach ($term_tree as $term) {
         /* \Drupal\taxonomy\Entity\Term $term */
         $term = $this->entityRepository->getTranslationFromContext($term);
-        $term_list[$term->id()] = $term->getName();
+        if ($location_key) {
+          $term_list[$term->get('field_location_id')->getString()] = $term->getName();
+        }
+        else {
+          $term_list[$term->id()] = $term->getName();
+        }
       }
     }
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'getAllGovernates');
+    $this->setAddressCachedData($term_list, $cache_key);
 
     return $term_list;
   }
@@ -122,19 +131,29 @@ class AddressBookAreasTermsHelper {
    *
    * @param int $parent
    *   Parent TID for which terms are to be fetched.
+   * @param bool $location_key
+   *   Determines if we use location id as key or term id as key.
    *
    * @return array
    *   List or areas.
    */
-  public function getAllAreasWithParent($parent = NULL) {
+  public function getAllAreasWithParent($parent = NULL, bool $location_key = FALSE) {
     if (empty($parent) && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       // Parent is required in DM_VERSION_2, not throwing error though.
       return [];
     }
 
-    $area_withparent = $this->getAddressCachedData('getAllAreasWithParent:' . $parent);
+    $cache_key = $location_key ? 'getAllAreasWithParentKeyedByLocationID' : 'getAllAreasWithParent';
+    $area_withparent = $this->getAddressCachedData($cache_key . ':' . $parent);
     if (is_array($area_withparent)) {
       return $area_withparent;
+    }
+
+    if ($location_key) {
+      $term_by_location = $this->getLocationTermFromLocationId($parent);
+      if ($term_by_location) {
+        $parent = $term_by_location->id();
+      }
     }
 
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, $parent, 1, TRUE);
@@ -147,7 +166,12 @@ class AddressBookAreasTermsHelper {
         $term = $this->entityRepository->getTranslationFromContext($term);
 
         if ($this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-          $term_list[$term->id()] = $term->label();
+          if ($location_key) {
+            $term_list[$term->get('field_location_id')->getString()] = $term->label();
+          }
+          else {
+            $term_list[$term->id()] = $term->label();
+          }
         }
         else {
           $term_list[$term->label()] = $term->label();
@@ -157,7 +181,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'getAllAreasWithParent:' . $parent);
+    $this->setAddressCachedData($term_list, $cache_key . ':' . $parent);
 
     return $term_list;
   }
@@ -165,11 +189,15 @@ class AddressBookAreasTermsHelper {
   /**
    * Returns list of all areas.
    *
+   * @param bool $location_key
+   *   Determines if use the term location id as key or tid as key.
+   *
    * @return array
    *   List or areas.
    */
-  public function getAllAreas() {
-    $area = $this->getAddressCachedData('getAllAreas');
+  public function getAllAreas(bool $location_key = FALSE) {
+    $cache_key = $location_key ? 'getAllAreasKeyedByLocation' : 'getAllAreas';
+    $area = $this->getAddressCachedData($cache_key);
     if (is_array($area)) {
       return $area;
     }
@@ -188,13 +216,18 @@ class AddressBookAreasTermsHelper {
 
         /* \Drupal\taxonomy\Entity\Term $term */
         $term = $this->entityRepository->getTranslationFromContext($term);
-        $term_list[$term->id()] = $term->label();
+        if ($location_key) {
+          $term_list[$term->get('field_location_id')->getString()] = $term->label();
+        }
+        else {
+          $term_list[$term->id()] = $term->label();
+        }
       }
     }
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'getAllAreas');
+    $this->setAddressCachedData($term_list, $cache_key);
 
     return $term_list;
   }

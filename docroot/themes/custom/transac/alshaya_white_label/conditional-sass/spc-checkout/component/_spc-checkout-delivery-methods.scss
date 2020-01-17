@@ -1,0 +1,22 @@
+.spc-checkout-delivery-methods {
+  margin-bottom: 2.5rem;
+
+  .delivery-method {
+    height: 4.75rem;
+    background: $spc-checkout-delivery-method-bg;
+    margin-bottom: 0.3125rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-#{$left}: 3rem;
+    position: relative;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include breakpoint($tablet) {
+      height: 3.875rem;
+    }
+  }
+}

@@ -7,7 +7,12 @@
 
       @include breakpoint($only-mobile) {
         padding: 1.25rem;
-        border-top: 0.625rem solid $spc-cart-background;
+        background: $spc-order-summary-totals-bg;
+        position: fixed;
+        bottom: 0;
+        box-shadow: 0 -1px 20px 9px $sticky-btn;
+        width: 100%;
+        z-index: 1;
       }
     }
   }
@@ -73,19 +78,44 @@
     }
   }
 
-  .checkout-link {
-    background: $primary_btn_bg;
-    height: 3.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .product-content {
+    max-height: 17.5rem;
+    overflow-y: auto;
+    padding: 1.25rem;
+    background: $spc-order-summary-product-area-bg;
 
-    a {
-      color: $primary_btn_text;
-      font-family: $alshaya-bold;
-      font-weight: normal;
-      font-size: 1rem;
-      letter-spacing: 1.14px;
+    .product-item {
+      background: $spc-order-summary-totals-bg;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      display: grid;
+      grid-template-columns: 4.8125rem 1fr;
+      grid-gap: 0.625rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .spc-product-image {
+        max-width: 4.8125rem;
+      }
+
+      .spc-product-meta-data {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .spc-product-title {
+        font-size: 0.875rem;
+        margin-bottom: 0.4375rem;
+      }
+
+      .spc-product-attributes {
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        color: $spc-product-attributes;
+      }
     }
   }
 }

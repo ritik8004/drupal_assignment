@@ -9,6 +9,7 @@ import PaymentMethods from '../payment-methods';
 import CompletePurchase from '../complete-purchase';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import TermsConditions from '../terms-conditions';
+import { stickySidebar } from "../../../utilities/stickyElements/stickyElements";
 
 export default class Checkout extends React.Component {
 
@@ -17,6 +18,7 @@ export default class Checkout extends React.Component {
     this.state = {
       'wait': true,
       'cart': null,
+      'delivery_method': 'hd'
     };
   }
 
@@ -36,12 +38,22 @@ export default class Checkout extends React.Component {
     catch(error) {
       // In case of error, do nothing.
     }
+
+    // Make sidebar sticky.
+    stickySidebar();
+  }
+
+  // On delivery method change.
+  updateDeliveryMethod = (method) => {
+    this.setState({
+      delivery_method: method
+    });
   }
 
   render() {
       // While page loads and all info available.
       if (this.state.wait) {
-        return <Loading loadingMessage={Drupal.t('loading...')}/>
+        return <Loading loadingMessage={Drupal.t('loading checkout ...')}/>
       }
 
       // If cart not available.
@@ -55,12 +67,20 @@ export default class Checkout extends React.Component {
 
       return (
         <React.Fragment>
-          <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.cart.delivery_method} />
-          <DeliveryInformation delivery_type={this.state.cart.delivery_method} />
-          <OrderSummaryBlock items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
-          <PaymentMethods cart={this.state.cart} is_active={false} />
-          <TermsConditions/>
-          <CompletePurchase enable={false}/>
+          <div className="spc-pre-content"/>
+          <div className="spc-main">
+            <div className="spc-content">
+              <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.delivery_method} updateMethod={this.updateDeliveryMethod} />
+              <DeliveryInformation delivery_type={this.state.delivery_method} />
+              <PaymentMethods cart={this.state.cart} is_active={false} />
+              <TermsConditions/>
+              <CompletePurchase enable={false}/>
+            </div>
+            <div className="spc-sidebar">
+              <OrderSummaryBlock item_qty={this.state.cart.items_qty} items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
+            </div>
+          </div>
+          <div className="spc-post-content"/>
         </React.Fragment>
       );
   }

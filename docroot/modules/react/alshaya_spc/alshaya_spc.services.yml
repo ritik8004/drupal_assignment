@@ -7,3 +7,9 @@ services:
   plugin.manager.alshaya_spc_payment_method:
     class: Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager
     parent: default_plugin_manager
+
+  alshaya_spc.helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+    arguments:
+      - '@alshaya_addressbook.manager'
+      - '@alshaya_addressbook.area_terms_helper'

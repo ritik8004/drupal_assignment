@@ -1,0 +1,38 @@
+.spc-product-price {
+  font-size: 0.875rem;
+  color: $spc-product-title;
+
+  .price-currency {
+    margin-#{$right}: 0.1875rem;
+  }
+
+  .special--price {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 0.3125rem;
+    }
+  }
+
+  .price--discount {
+    font-size: 0.75rem;
+  }
+}
+
+.spc-recommended-products {
+  .spc-product-price {
+    text-align: center;
+    white-space: normal;
+
+    .has--special--price {
+      display: inline-block;
+
+      + .special--price {
+        display: inline-block;
+      }
+    }
+
+    .has--special--price,
+    .special--price, {
+      margin-bottom: 0.3125rem;
+    }
+  }
+}

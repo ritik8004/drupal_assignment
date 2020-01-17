@@ -4,7 +4,13 @@ export default class CompletePurchase extends React.Component {
 
   render() {
     let class_name = this.props.enable ? 'active' : 'in-active';
-    return <div className={class_name}>{Drupal.t('Complete purchase')}</div>  	
+    return (
+      <div className={"checkout-link submit " + class_name}>
+        <a href={Drupal.url('checkout')} className="checkout-link">
+          {Drupal.t('complete purchase')}
+        </a>
+      </div>
+    );
   }
 
 }

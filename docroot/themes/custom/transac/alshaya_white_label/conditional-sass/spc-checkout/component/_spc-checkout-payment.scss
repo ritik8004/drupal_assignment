@@ -1,0 +1,33 @@
+.spc-checkout-payment-options {
+  margin-bottom: 2.5rem;
+
+  .payment-method {
+    height: 3.25rem;
+    background: $spc-checkout-payment-method-bg;
+    margin-bottom: 0.3125rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-#{$left}: 3rem;
+    position: relative;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .radio-label {
+      color: $spc-checkout-payment-method-txt;
+
+      .spc-payment-method-desc {
+        color: $spc-checkout-payment-method-desc;
+        display: inline;
+        padding-#{$left}: 0.3125rem;
+
+        p {
+          margin: 0;
+          display: inline;
+        }
+      }
+    }
+  }
+}
