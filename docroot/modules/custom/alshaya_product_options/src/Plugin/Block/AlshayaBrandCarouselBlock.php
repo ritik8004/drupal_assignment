@@ -97,10 +97,9 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
     $brand_carousel_settings = $this->config->get('brand_carousel_items_settings');
     $attributeName = AlshayaBrandListHelper::getBrandAttribute();
     if (!empty($terms) && $attributeName) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-      $link = '/' . $langcode . '/search?f[0]=' . $attributeName . ':';
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
       $attribute_key = key($facet_results);
+      $link = $this->alshayaOptionsService->getAttributeUrl($attribute_key);
       // Allow other modules to alter link.
       $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attribute_key);
       // If there are facet results.

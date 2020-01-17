@@ -340,7 +340,7 @@ class AlshayaOptionsListHelper {
    *
    * @todo When DLP is enabled on search, add condition to generate pretty url.
    */
-  public function getAttributeUrl($attributeCode, $value) {
+  public function getAttributeUrl($attributeCode, $value = '') {
     $url_options = [
       'query' => [
         'f[0]' => $attributeCode . ':',
