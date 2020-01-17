@@ -24,8 +24,12 @@ function alshaya_hm_update_8041() {
   );
 
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
-  $sku_fields_manager->updateFieldMetaInfo('color', ['index' => 0]);
   $sku_fields_manager->updateFieldMetaInfo('color_label', ['index' => 1]);
+
+  // Rebuild tracker info to index products.
+  $index = Index::load('alshaya_algolia_index');
+  $index->rebuildTracker();
+  $index->save();
 }
 
 /**
