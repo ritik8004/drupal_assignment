@@ -89,6 +89,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
         [$chunk],
       ];
     }
+    // Prepare the output of faulty results and show.
     $batch['operations'][] = [[__CLASS__, 'batchGenerate'], []];
     batch_set($batch);
     drush_backend_batch_process();
@@ -103,16 +104,6 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
    *   The batch current context.
    */
   public static function batchStart($total, &$context) {
-    $languages = \Drupal::languageManager()->getLanguages();
-    $file_system = \Drupal::service('file_system');
-    // Delete any existing file to dump new results.
-    foreach ($languages as $language) {
-      $wip_file = $file_system->realpath(file_default_scheme() . "://price_diff_{$language->getId()}.txt");
-      if (file_exists($wip_file)) {
-        $file_system->delete($wip_file);
-      }
-    }
-
     $context['results']['total'] = $total;
     $context['results']['count'] = 0;
     $context['results']['products'] = [];
@@ -151,12 +142,12 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
 
       // Create object ids from node id and language to fetch results from
       // algolia.
-      $objetIDs = array_map(function ($nid) use ($language) {
+      $objectIDs = array_map(function ($nid) use ($language) {
         return "entity:node/{$nid}:{$language->getId()}";
       }, $nids);
 
       try {
-        $objects = $index->getObjects($objetIDs, 'final_price,original_price,sku,nid');
+        $objects = $index->getObjects($objectIDs, 'final_price,original_price,sku,nid');
       }
       catch (\Exception $e) {
         continue;
@@ -212,7 +203,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
   }
 
   /**
-   * Batch API callback; Write the txt file.
+   * Batch API callback; Write output in message.
    *
    * @param mixed|array $context
    *   The batch current context.
@@ -229,7 +220,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
 
       $context['results']['faulty'] += count(array_values($products));
 
-      // Encode each result to dump into text file.
+      // Encode each result to dump.
       $records = array_map(function ($item) {
         return json_encode($item);
       }, array_values($products));
@@ -277,7 +268,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       \Drupal::service('messenger')
         ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
           '@operation' => $error_operation[0],
-          '@args' => print_r($error_operation[0]),
+          '@args' => print_r($error_operation[0], TRUE),
         ]);
     }
   }
