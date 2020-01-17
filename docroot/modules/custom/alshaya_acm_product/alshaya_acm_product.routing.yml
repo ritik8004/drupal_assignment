@@ -82,20 +82,8 @@ alshaya_acm_product.product_sku_export_category:
     _title: ''
   requirements:
     _role: 'webmaster+administrator'
-alshaya_acm_product.get_matchback_products:
-  path: '/get_matchback_products/{sku}/{type}'
-  defaults:
-    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::getMatchbackProducts'
-  requirements:
-    _permission: 'access content'
-alshaya_acm_product.get_upsell_products:
-  path: '/get_upsell_products/{sku}'
-  defaults:
-    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::getUpsellProducts'
-  requirements:
-    _permission: 'access content'
 alshaya_acm_product.get_related_products:
-  path: '/get_related_products/{sku}'
+  path: '/related-products/{sku}/{type}/{device}'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::getRelatedProducts'
   requirements:

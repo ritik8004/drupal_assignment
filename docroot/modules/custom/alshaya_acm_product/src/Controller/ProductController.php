@@ -15,11 +15,14 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\CacheableAjaxResponse;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class ProductController.
  */
 class ProductController extends ControllerBase {
+
+  use StringTranslationTrait;
 
   /**
    * SKU Manager.
@@ -61,6 +64,8 @@ class ProductController extends ControllerBase {
    *   SKU Manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
     $this->skuManager = $sku_manager;
@@ -136,81 +141,47 @@ class ProductController extends ControllerBase {
   /**
    * Get matchback products.
    */
-  public function getMatchbackProducts($sku, $type) {
+  public function getRelatedProducts($sku, $type, $device) {
     $response = new CacheableAjaxResponse();
+    $sku_entity = SKU::loadFromSku($sku);
 
-    // Get matchback block for the product.
-    if ($this->acmConfig->get('display_crosssell')) {
-      $sku_entity = SKU::loadFromSku($sku);
-      if ($sku_entity instanceof SKU) {
-        if (!empty($cross_sell_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
-          $cross_sell_related_skus = $this->skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
-          $build['cross_sell'] = [
+    if ($sku_entity instanceof SKU) {
+      if (!empty($related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
+        $related_skus = $this->skuManager->filterRelatedSkus(array_unique($related_skus)); 
+        $selector = ($device == 'mobile') ? '.mobile-only-block ' : '.above-mobile-block ';
+
+        if ($type === 'crosssell') {
+          if ($this->acmConfig->get('display_crosssell')) {
+            $build['cross_sell'] = [
+              '#theme' => 'products_horizontal_slider',
+              '#data' => $related_skus,
+              '#section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+              '#views_name' => 'product_slider',
+              '#views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
+            ];
+          }
+        } elseif ($type === 'upsell') {
+          $build['up_sell'] = [
             '#theme' => 'products_horizontal_slider',
-            '#data' => $cross_sell_related_skus,
-            '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-            '#views_name' => 'product_slider',
-            '#views_display_id' => $this->acmConfig->get('show_crosssell_as_matchback') ? 'block_matchback' : 'block_product_slider',
-          ];
-          $build['cross_sell_mobile'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $cross_sell_related_skus,
-            '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+            '#data' => $related_skus,
+            '#section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
             '#views_name' => 'product_slider',
             '#views_display_id' => 'block_product_slider',
           ];
-          $response->addCommand(new ReplaceCommand('.above-mobile-block #matchback-products', render($build['cross_sell'])));
-          $response->addCommand(new ReplaceCommand('.mobile-only-block #matchback-products', render($build['cross_sell_mobile'])));
+        } elseif ($type === 'related') {
+          $build['related'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $related_skus,
+            '#section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => 'block_product_slider',
+          ];
         }
       }
     }
+    $response->addCommand(new ReplaceCommand($selector . '#' . $type . '-products', render($build)));
 
     return $response;
   }
-
-  /**
-   * Get upsell products.
-   */
-  public function getUpsellProducts($sku) {
-    $response = new CacheableAjaxResponse();
-    $sku_entity = SKU::loadFromSku($sku);
-
-    if (!empty($up_sell_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL))) {
-      $build['up_sell'] = [
-        '#theme' => 'products_horizontal_slider',
-        '#data' => $this->skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
-        '#section_title' => t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
-        '#views_name' => 'product_slider',
-        '#views_display_id' => 'block_product_slider',
-      ];
-      $response->addCommand(new ReplaceCommand('.above-mobile-block #upsell-products', render($build)));
-      $response->addCommand(new ReplaceCommand('.mobile-only-block #upsell-products', render($build)));
-    }
-
-    return $response;
-  }
-
-  /**
-   * Get related products.
-   */
-  public function getRelatedProducts($sku) {
-    $response = new CacheableAjaxResponse();
-    $sku_entity = SKU::loadFromSku($sku);
-
-    if (!empty($related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED))) {
-      $build['related'] = [
-        '#theme' => 'products_horizontal_slider',
-        '#data' => $this->skuManager->filterRelatedSkus(array_unique($related_skus)),
-        '#section_title' => t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
-        '#views_name' => 'product_slider',
-        '#views_display_id' => 'block_product_slider',
-      ];
-      $response->addCommand(new ReplaceCommand('.above-mobile-block #related-products', render($build)));
-      $response->addCommand(new ReplaceCommand('.mobile-only-block #related-products', render($build)));
-    }
-
-    return $response;
-  }
-
 
 }

@@ -184,27 +184,26 @@
 
       // Add related products on pdp.
       var sku = $('article[data-vmode="full"]').attr('data-sku');
-      var type = 'desktop';
-      if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        var type = 'mobile';
-      }
-      $(window).once().on('scroll', function () {
+      var device = (window.innerWidth < 768) ? "mobile" : "desktop";
+
+      $(window).once('updateRelatedProducts').on('scroll', function () {
         var scrollBottom = $(this).scrollTop() + $(this).height();
-        var matchback = $('.horizontal-crossell.above-mobile-block');
-        var upsell = $('.horizontal-upell.above-mobile-block');
-        var related = $('.horizontal-related.above-mobile-block');
+        var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
+        var matchback = $('.horizontal-crossell' + selector);
+        var upsell =  $('.horizontal-upell' + selector);
+        var related = $('.horizontal-related' + selector);
 
         if (!matchback.hasClass('matchback-processed') && (scrollBottom > matchback.offset().top)) {
           matchback.addClass('matchback-processed');
-          Drupal.updateRelatedProducts(Drupal.url('get_matchback_products/' + sku + '/' + type + '?cacheable=1'));
+          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
         }
         if (!upsell.hasClass('upsell-processed') && scrollBottom > upsell.offset().top) {
           upsell.addClass('upsell-processed');
-          Drupal.updateRelatedProducts(Drupal.url('get_upsell_products/' + sku + '?cacheable=1'));
+          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
         }
         if (!related.hasClass('related-processed') && scrollBottom > related.offset().top) {
           related.addClass('related-processed');
-          Drupal.updateRelatedProducts(Drupal.url('get_related_products/' + sku + '?cacheable=1'));
+          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
         }
       });
     }
