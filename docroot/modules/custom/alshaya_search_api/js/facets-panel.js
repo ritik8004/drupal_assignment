@@ -335,17 +335,17 @@
 
       // Function to call in ajax command on facet selection.
       // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
-      $.fn.updateMetaTitle = function (meta_title) {
-        // Update meta title of the page.
-        var site_name = document.title.split('|')[1];
-        document.title = meta_title + ' |' + site_name;
+      $.fn.updateMetaData = function (meta_title, meta_description) {
+        // Update meta data of the page.
+        document.title = meta_title;
+        document.getElementsByTagName('meta')['description'].content = meta_description;
       };
 
       // Function to call in ajax command on facet selection.
       // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
-      $.fn.updatePageTitle = function (active_facets, page_title) {
+      $.fn.updatePageTitle = function (page_title) {
         // Update page title of the page.
-        $('h1.c-page-title').text(active_facets[0].join(' ') + ' ' + page_title);
+        $('h1.c-page-title').text(page_title);
       };
 
       /**

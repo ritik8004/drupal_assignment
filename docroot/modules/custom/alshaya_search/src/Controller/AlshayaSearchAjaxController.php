@@ -174,10 +174,15 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facet_fields));
       $meta_title = NULL;
       if ($term instanceof TermInterface) {
-        $meta_title = $this->tokenUtility->replace('[alshaya_seo:term_name]', ['taxonomy_term' => $term]);
-        $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE);
-        $response->addCommand(new InvokeCommand(NULL, 'updateMetaTitle', [$meta_title]));
-        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$active_facets, $term->label()]));
+        // Get meta tags of the current page.
+        $metatags = metatag_generate_entity_metatags($term);
+        $meta_title = $metatags['title']['#attributes']['content'];
+        $meta_description = $metatags['description']['#attributes']['content'];
+        $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE, 'plp');
+        $page_title = implode(' ', $active_facets[0]);
+
+        $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [$meta_title, $meta_description]));
+        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$page_title . ' ' . $term->label()]));
       }
 
     }

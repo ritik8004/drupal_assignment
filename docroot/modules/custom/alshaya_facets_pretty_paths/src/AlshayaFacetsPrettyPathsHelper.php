@@ -428,15 +428,14 @@ class AlshayaFacetsPrettyPathsHelper {
    *
    * @param int $visibility
    *   Visibility constant.
+   * @param int $page
+   *   Current page.
    *
    * @return array
    *   Active prefix/suffix facets.
    */
-  public function getFacetSummaryItems($visibility) {
-    // Active facet items for PLP pages.
-    $facet_summary = $this->facetSummaryStorage->load('filter_bar_plp');
-    $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
-    $active_facet_items = $alshaya_facet_summary['#items'];
+  public function getFacetSummaryItems($visibility, $page) {
+    $active_facet_items = $this->getFacetSummary($page);
     $active_prefix_facet = [];
     $active_suffix_facet = [];
     foreach ($active_facet_items as $value) {
@@ -456,6 +455,28 @@ class AlshayaFacetsPrettyPathsHelper {
       }
     }
     return [$active_prefix_facet, $active_suffix_facet];
+  }
+
+  /**
+   * To get the active facet summary.
+   *
+   * @param string $page
+   *   Current page.
+   *
+   * @return array
+   *   Active facet summary.
+   */
+  public function getFacetSummary($page) {
+    $active_facet_items = &drupal_static(__FUNCTION__);
+    if (isset($active_facet_items)) {
+      return $active_facet_items;
+    }
+    // Active facet items for PLP pages.
+    $summary = _alshaya_facets_pretty_paths_get_mappings()[$page]['summary'];
+    $facet_summary = $this->facetSummaryStorage->load($summary);
+    $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
+    $active_facet_items = $alshaya_facet_summary['#items'];
+    return $active_facet_items;
   }
 
 }

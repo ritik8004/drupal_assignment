@@ -6,10 +6,10 @@ facets.facet.*:
       type: integer
       label: 'Select Meta Info Type'
     prefix_text:
-      type: string
+      type: label
       label: 'Prefix Text'
     suffix_text:
-      type: string
+      type: label
       label: 'Suffix Text'
     visibility:
       type: integer
