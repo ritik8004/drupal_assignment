@@ -337,8 +337,8 @@
       // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
       $.fn.updateMetaData = function (meta_title, meta_description) {
         // Update meta data of the page.
-        document.title = meta_title;
-        document.getElementsByTagName('meta')['description'].content = meta_description;
+        $("meta[name='title']").attr('content', meta_title);
+        $("meta[name='description']").attr('content', meta_description);
       };
 
       // Function to call in ajax command on facet selection.
