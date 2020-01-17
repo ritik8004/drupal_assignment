@@ -337,7 +337,7 @@
       // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
       $.fn.updateMetaData = function (meta_title, meta_description) {
         // Update meta data of the page.
-        $("meta[name='title']").attr('content', meta_title);
+        document.title = meta_title;
         $("meta[name='description']").attr('content', meta_description);
       };
 
