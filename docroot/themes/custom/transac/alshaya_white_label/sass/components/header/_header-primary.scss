@@ -736,7 +736,7 @@ header {
           img {
             opacity: 0;
             transition: all 300ms ease-in 0.3s;
-            height: 100%;
+            width: 100%;
           }
         }
       }
@@ -767,7 +767,7 @@ header {
           display: flex;
           max-width: none;
           justify-content: space-between;
-          overflow: scroll;
+          overflow: auto;
         }
 
         .menu__links__wrapper {
@@ -903,7 +903,7 @@ header {
         max-width: 80.25rem;
         min-height: 100%;
         vertical-align: top;
-        margin-bottom: 1.563rem;
+        padding-bottom: 1.563rem;
         position: absolute;
         background: $mm_l3_link_bg;
         top: 0;
