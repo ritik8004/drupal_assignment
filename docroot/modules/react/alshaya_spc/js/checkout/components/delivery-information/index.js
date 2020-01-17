@@ -13,10 +13,10 @@ export default class DeliveryInformation extends React.Component {
     let empty = true;
     let hd_data = [];
     if (this.props.cart.delivery_method !== null) {
-      empty = false;
       if (this.props.cart.delivery_method === 'hd' &&
       this.props.cart.shipping_address !== null) {
         hd_data = this.props.cart.shipping_address;
+        empty = false;
       }
     }
 
@@ -37,13 +37,17 @@ export default class DeliveryInformation extends React.Component {
       }
     });
 
+    let temp_data = data;
+    let static_data = temp_data['static'];
+    delete temp_data['static'];
+    let add_data = {...temp_data, ...static_data};
     // Get shipping methods.
     var shipping_methods = getShippingMethods(this.props.cart.cart_id, data);
     if (shipping_methods instanceof Promise) {
       shipping_methods.then((result) => {
         this.setState({
           empty: false,
-          hd_data: data,
+          hd_data: add_data,
           shipping_methods: result
         });
 

@@ -165,15 +165,22 @@ class CartController {
 
     // Store delivery method when required.
     if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
-      $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
-      $data['carrier_info'] = $shipping_info['method'];
-      $custom_shipping_attributes = [];
-      $data['shipping_address'] = $shipping_info['address'];
-      foreach ($shipping_info['address']['custom_attributes'] as $key => $value) {
-        $custom_shipping_attributes[$value['attribute_code']] = $value['value'];
+      $data['delivery_method'] = 'hd';
+      if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
+        $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
       }
-      unset($data['shipping_address']['custom_attributes']);
-      $data['shipping_address'] += $custom_shipping_attributes;
+      $data['carrier_info'] = $shipping_info['method'];
+
+      $data['shipping_address'] = NULL;
+      if (!empty($shipping_info['method'])) {
+        $custom_shipping_attributes = [];
+        $data['shipping_address'] = $shipping_info['address'];
+        foreach ($shipping_info['address']['custom_attributes'] as $key => $value) {
+          $custom_shipping_attributes[$value['attribute_code']] = $value['value'];
+        }
+        unset($data['shipping_address']['custom_attributes']);
+        $data['shipping_address'] += $custom_shipping_attributes;
+      }
     }
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
