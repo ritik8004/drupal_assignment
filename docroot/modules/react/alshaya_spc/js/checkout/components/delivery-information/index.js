@@ -12,11 +12,13 @@ export default class DeliveryInformation extends React.Component {
     super(props);
     let empty = true;
     let hd_data = [];
+    let shipping_methods = [];
     if (this.props.cart.delivery_method !== null) {
       if (this.props.cart.delivery_method === 'hd' &&
       this.props.cart.shipping_address !== null) {
         hd_data = this.props.cart.shipping_address;
         empty = false;
+        shipping_methods = this.props.cart.carrier_info;
       }
     }
 
@@ -25,7 +27,7 @@ export default class DeliveryInformation extends React.Component {
       'empty': empty,
       'hd_data': hd_data,
       'cnc_data': [],
-      'shipping_methods': []
+      'shipping_methods': shipping_methods
     };
   }
 
@@ -37,7 +39,7 @@ export default class DeliveryInformation extends React.Component {
       }
     });
 
-    let temp_data = data;
+    let temp_data = JSON.parse(JSON.stringify(data));;
     let static_data = temp_data['static'];
     delete temp_data['static'];
     let add_data = {...temp_data, ...static_data};
@@ -78,7 +80,7 @@ export default class DeliveryInformation extends React.Component {
           <EmptyDeliveryText handleAddressData={this.handleAddressData} cart={this.props.cart} delivery_type={this.props.delivery_type} />
         }
         {!this.state.empty && this.props.delivery_type === 'hd' &&
-          <HomeDeliveryInfo handleAddressData={this.handleAddressData} hd_info={this.state.hd_data} methods={this.state.shipping_methods}/>
+          <HomeDeliveryInfo cart={this.props.cart} handleAddressData={this.handleAddressData} hd_info={this.state.hd_data} methods={this.state.shipping_methods}/>
         }
       </div>
     );

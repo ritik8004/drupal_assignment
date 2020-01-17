@@ -39,7 +39,7 @@ export default class HomeDeliveryInfo extends React.Component {
         </div>
         </Popup>
         <div>
-          <ShippingMethods shipping_methods={this.props.methods}/>
+          <ShippingMethods cart={this.props.cart} shipping_methods={this.props.methods}/>
         </div>
       </div>
     );

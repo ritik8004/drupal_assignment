@@ -11,7 +11,7 @@ export default class AddressForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'area_list': null
+      'area_list': null,
     };
   }
 
@@ -79,6 +79,7 @@ export default class AddressForm extends React.Component {
       'firstname': e.target.elements.fname.value,
       'lastname': e.target.elements.lname.value,
       'email': e.target.elements.email.value,
+      'city': 'Dummy Value',
       'telephone': e.target.elements.mobile.value,
       'country_id': window.drupalSettings.country_code
     };
