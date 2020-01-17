@@ -240,36 +240,29 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
    *   A list of all the operations that had not been completed by batch API.
    */
   public static function batchFinish($success, array $results, array $operations) {
+    $logger = \Drupal::logger('alshaya_search_algolia');
     if ($success) {
       if ($results['count']) {
         // Display Script End time.
         $time_end = microtime(TRUE);
         $execution_time = ($time_end - $results['timestart']) / 60;
 
-        \Drupal::service('messenger')->addMessage(
-          \Drupal::translation()
-            ->formatPlural(
-              $results['count'],
-              'Verified 1 product and found @faulty result in time: @time.',
-              'Verified @count products and found @faulty results in time: @time.',
-              [
-                '@time' => $execution_time,
-                '@faulty' => $results['faulty'],
-              ]
-            )
-        );
+        $logger->notice('Verified @count products and found @faulty results in time: @time.', [
+          '@count' => $results['count'],
+          '@time' => $execution_time,
+          '@faulty' => $results['faulty'],
+        ]);
       }
       else {
-        \Drupal::service('messenger')->addMessage(t('No new products to verify.'));
+        $logger->notice(t('No new products to verify.'));
       }
     }
     else {
       $error_operation = reset($operations);
-      \Drupal::service('messenger')
-        ->addMessage(t('An error occurred while processing @operation with arguments : @args'), [
-          '@operation' => $error_operation[0],
-          '@args' => print_r($error_operation[0], TRUE),
-        ]);
+      $logger->error('An error occurred while processing @operation with arguments : @args', [
+        '@operation' => $error_operation[0],
+        '@args' => print_r($error_operation[0], TRUE),
+      ]);
     }
   }
 
