@@ -17,3 +17,8 @@ payment_methods:
     path: /cart/{cart_id}/payment-methods
     controller: App\Controller\CartController::getPaymentMethods
     methods: GET
+
+place_order:
+    path: /cart/place-order
+    controller: App\Controller\CartController::placeOrder
+    methods: POST

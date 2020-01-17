@@ -23,7 +23,11 @@ export default class DynamicFormField extends React.Component {
         <label>
            {this.props.field.label}
         </label>
-        <input type='text' name={this.props.field_key} defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''}/>
+        <input
+          type='text'
+          name={this.props.field_key}
+          defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''}
+        />
         <div id={this.props.field_key + '-error'}></div>
       </div>
     );

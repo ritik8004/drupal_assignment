@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Service\Magento\MagentoInfo;
+use App\Service\Magento\CartActions;
 
 /**
  * Class Cart.
@@ -157,6 +158,105 @@ class Cart {
   }
 
   /**
+   * Adding shipping on the cart.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   * @param array $shipping_data
+   *   Shipping address info.
+   * @param string $action
+   *   Action to perform.
+   *
+   * @return array
+   *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function addShippingInfo(int $cart_id, array $shipping_data, string $action) {
+    $data = [
+      'extension' => (object) [
+        'action' => $action,
+      ],
+    ];
+
+    $static_fields = $shipping_data['static'];
+    $carrier_info = $shipping_data['carrier_info'];
+    unset($shipping_data['carrier_info']);
+    unset($shipping_data['static']);
+    $custom_attributes = [];
+    foreach ($shipping_data as $field_name => $val) {
+      $custom_attributes[] = [
+        'attributeCode' => $field_name,
+        'value' => $val,
+      ];
+    }
+
+    $fields_data = [];
+    foreach ($static_fields as $key => $field) {
+      $fields_data[$key] = $field;
+    }
+
+    $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
+    $data['shipping']['shipping_address'] = $fields_data;
+    $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
+    $data['shipping']['shipping_method_code'] = $carrier_info['method'];
+    $this->updateCart($data, $cart_id);
+    return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
+  }
+
+  /**
+   * Update billing info on cart.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   * @param array $billing_data
+   *   Billing data.
+   *
+   * @return array
+   *   Response data.
+   */
+  public function updateBilling(int $cart_id, array $billing_data) {
+    $data = [
+      'extension' => (object) [
+        'action' => CartActions::CART_BILLING_UPDATE,
+      ],
+    ];
+
+    $data['billing'] = $billing_data;
+
+    return $this->updateCart($data, $cart_id);
+  }
+
+  /**
+   * Adding payment on the cart.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   * @param array $payment_data
+   *   Payment info.
+   * @param string $action
+   *   Action to perform.
+   *
+   * @return array
+   *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function updatePayment(int $cart_id, array $payment_data, string $action) {
+    $data = [
+      'extension' => (object) [
+        'action' => $action,
+      ],
+    ];
+
+    $data['payment'] = [
+      'method' => $payment_data['payment']['method'],
+      'additional_data' => $payment_data['payment']['additional_data'],
+    ];
+    return $this->updateCart($data, $cart_id);
+  }
+
+  /**
    * Common function for updating cart.
    *
    * @param array $data
@@ -241,6 +341,33 @@ class Cart {
       $result = $response->getBody()->getContents();
       $payment_methods = json_decode($result, TRUE);
       return $payment_methods;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
+   * Place order.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   * @param array $data
+   *   Post data.
+   *
+   * @return mixed
+   *   Status.
+   */
+  public function placeOrder(int $cart_id, array $data) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/order', $cart_id);
+
+    try {
+      $response = $client->request('PUT', $url, ['json' => $data]);
+      $result = $response->getBody()->getContents();
+      $data = json_decode($result, TRUE);
+      return $data;
     }
     catch (\Exception $e) {
       // Exception handling here.

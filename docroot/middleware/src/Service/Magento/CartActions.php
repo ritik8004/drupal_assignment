@@ -39,4 +39,19 @@ final class CartActions {
    */
   const CART_REMOVE_COUPON = 'remove coupon';
 
+  /**
+   * Action used for adding/updating shipping on cart.
+   */
+  const CART_SHIPPING_UPDATE = 'update shipping';
+
+  /**
+   * Action used for adding/updating billing on cart.
+   */
+  const CART_BILLING_UPDATE = 'update billing';
+
+  /**
+   * Action used for adding/updating payment on cart.
+   */
+  const CART_PAYMENT_UPDATE = 'update payment';
+
 }

@@ -4,7 +4,7 @@ export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
 
-    let default_val = this.props.method.default
+    let default_val = this.props.selected_payment_method
       ? this.props.method.code
       : '';
     this.state = {

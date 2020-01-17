@@ -4,22 +4,32 @@ import SectionTitle from '../../../utilities/section-title';
 import EmptyDeliveryText from '../empty-delivery';
 import HomeDeliveryInfo from '../home-delivery';
 import {getShippingMethods} from '../../../utilities/checkout_util';
+import {addShippingInCart} from '../../../utilities/update_cart';
 
 export default class DeliveryInformation extends React.Component {
 
   constructor(props) {
     super(props);
+    let empty = true;
+    let hd_data = [];
+    if (this.props.cart.delivery_method !== null) {
+      empty = false;
+      if (this.props.cart.delivery_method === 'hd' &&
+      this.props.cart.shipping_address !== null) {
+        hd_data = this.props.cart.shipping_address;
+      }
+    }
+
     this.state = {
       'areas': [],
-      'empty': true,
-      'hd_data': [],
+      'empty': empty,
+      'hd_data': hd_data,
       'cnc_data': [],
       'shipping_methods': []
     };
   }
 
   handleAddressData = (data) => {
-    let temp_data = data;
     Object.entries(data).forEach(([key, val]) => {
       if (key !== 'static') {
         data[window.drupalSettings.address_fields[key].key] = val;
@@ -37,7 +47,17 @@ export default class DeliveryInformation extends React.Component {
           shipping_methods: result
         });
 
-        this.props.paymentMethodRefresh();
+        data['carrier_info'] = {
+          'code': result[0].carrier_code,
+          'method': result[0].method_code
+        };
+        var cart = addShippingInCart('update shipping', data);
+        if (cart instanceof Promise) {
+          cart.then((cart_result) => {
+            this.props.paymentMethodRefresh();
+            this.props.refreshCart(cart_result);
+          });
+        }
       });
     }
   }

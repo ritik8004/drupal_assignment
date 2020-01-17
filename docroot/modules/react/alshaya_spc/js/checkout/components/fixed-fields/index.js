@@ -8,7 +8,7 @@ export default class FixedFields extends React.Component {
     let country_mobile_code = window.drupalSettings.country_mobile_code;
     let default_val = '';
     if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
-      default_val = this.props.default_val.static;
+      default_val = this.props.default_val;
     }
     
     return(

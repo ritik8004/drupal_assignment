@@ -20,7 +20,7 @@ export default class HomeDeliveryInfo extends React.Component {
   }
 
   render() {
-    let static_hd_info = this.props.hd_info.static;
+    let static_hd_info = this.props.hd_info;
     return (
       <div>
         <div>{static_hd_info.firstname} {static_hd_info.lastname}</div>
