@@ -341,23 +341,14 @@ class AlshayaOptionsListHelper {
    * @todo When DLP is enabled on search, add condition to generate pretty url.
    */
   public function getAttributeUrl($attributeCode, $value) {
-    static $if_algolia_enabled = FALSE;
-    if ($this->moduleHandler->moduleExists('search_api_algolia')) {
-      $if_algolia_enabled = TRUE;
-    }
-    // Make algolia specific url.
-    if ($if_algolia_enabled) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-      $link = '/' . $langcode . '/search#query=&refinementList[attr_' . $attributeCode . '][0]=' . $value;
-      return $link;
-    }
-
     $url_options = [
       'query' => [
-        'f[0]' => $attributeCode . ':' . $value,
+        'f[0]' => $attributeCode . ':',
       ],
     ];
-    return Url::fromUri('internal:/search', $url_options);
+    $link = Url::fromUri('internal:/search', $url_options)->toString();
+    $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
+    return $link . $value;
   }
 
 }
