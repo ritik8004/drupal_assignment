@@ -44,7 +44,9 @@
           items.addClass('cloud-zoom-processed').CloudZoom();
         }
 
-        $('.pdp-image').off().on('click', function (e) {
+        $('.pdp-image')
+        .off()
+        .on('click', function (e) {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
           $(this).addClass('clicked');
@@ -85,6 +87,30 @@
             e.preventDefault();
           });
         });
+      }
+
+      // Zoom effect on image hover for desktop.
+      if ($(window).width() > 1025) {
+        $('.pdp-image')
+        .on('mouseover', function(){
+          $(this).addClass('magazine-image-zoomed');
+          $(this).children('.magazine-image-zoom-placeholder').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
+        })
+        .on('mouseout', function(){
+          $(this).removeClass('magazine-image-zoomed');
+          $(this).children('.magazine-image-zoom-placeholder').css({'transform': 'scale(1)'});
+        })
+        .on('mousemove', function(e){
+          $(this).children('.magazine-image-zoom-placeholder').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
+        })
+        .each(function(){
+          $(this)
+          .once('magazine-image-zoom-placeholder-appended')
+          // Add a magazine image zoom placeholder.
+          .append('<div class="magazine-image-zoom-placeholder"></div>')
+          // Set up a background image for each magazine image zoom placeholder based on data-src attribute.
+          .children('.magazine-image-zoom-placeholder').css({'background-image': 'url('+ $(this).find('img').attr('data-src') +')'});
+        })
       }
     }
   };
