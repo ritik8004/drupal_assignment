@@ -174,7 +174,7 @@ class Cart {
     $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/updateCart', $cart_id);
 
     try {
-      $response = $client->request('POST', $url, ['json' => $data]);
+      $response = $client->request('POST', $url, ['json' => (object) $data]);
       $result = $response->getBody()->getContents();
       $cart = json_decode($result, TRUE);
 
@@ -188,6 +188,59 @@ class Cart {
       }
 
       return $cart;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
+   * Gets shipping methods.
+   *
+   * @param array $data
+   *   Data for getting shipping method.
+   * @param int $cart_id
+   *   Cart id.
+   *
+   * @return array
+   *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function shippingMethods(array $data, int $cart_id) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $shipping_method_url = '/carts/' . $cart_id . '/estimate-shipping-methods';
+    $url = $this->magentoInfo->getMagentoUrl() . $shipping_method_url;
+    try {
+      $response = $client->request('POST', $url, ['json' => $data]);
+      $result = $response->getBody()->getContents();
+      return json_decode($result, TRUE);
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
+   * Gets payment methods.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   *
+   * @return array
+   *   Payment method list.
+   */
+  public function getPaymentMethods(int $cart_id) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/payment-methods', $cart_id);
+
+    try {
+      $response = $client->request('GET', $url);
+      $result = $response->getBody()->getContents();
+      $payment_methods = json_decode($result, TRUE);
+      return $payment_methods;
     }
     catch (\Exception $e) {
       // Exception handling here.

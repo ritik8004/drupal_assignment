@@ -8,8 +8,13 @@ export default class AreaSelect extends React.Component {
   constructor(props) {
     super(props);
     this.selectRef = React.createRef();
+    let current_option = new Array();
+    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
+      current_option = this.props.default_val[this.props.field.key];
+    }
     this.state = {
-      'areas': {}
+      'areas': {},
+      'current_option': current_option
     };
   }
 
@@ -23,6 +28,11 @@ export default class AreaSelect extends React.Component {
 
   componentDidMount() {
     this.getAreasList();
+    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
+      this.handleChange({
+        value: this.props.default_val[this.props.field.key]
+      }); 
+    }
   }
 
   getAreasList = () => {
@@ -51,6 +61,9 @@ export default class AreaSelect extends React.Component {
 
   // Handle change of 'area_parent' list.
   handleChange = (selectedOption) => {
+    this.setState({
+      current_option: selectedOption.value
+    });
     var api_url = 'area-list/' + selectedOption.value;
     return axios.get(api_url)
       .then(response => {
@@ -78,8 +91,7 @@ export default class AreaSelect extends React.Component {
             onMenuClose={this.onMenuClose}
             onChange={this.handleChange}
             options={options}
-            value={options[1]}
-            defaultValue={options[1]}
+            value={options[this.state.current_option]}
             isSearchable={true}
           />
           <div id={this.props.field_key + '-error'}></div>

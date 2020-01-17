@@ -29,6 +29,11 @@ export default class PaymentMethod extends React.Component {
     });
 
     document.getElementById('payment-method-' + method).checked = true;
+
+    // If payment method has no form.
+    if (window.drupalSettings.payment_methods[method].has_form === false) {
+      this.props.payment_method_select(method);
+    }
   }
 
   render() {

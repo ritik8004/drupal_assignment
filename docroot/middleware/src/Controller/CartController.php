@@ -356,6 +356,61 @@ class CartController {
   }
 
   /**
+   * Gets shipping methods.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function shippingMethods(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    if (!isset($request_content['cart_id'], $request_content['data'])) {
+      return new JsonResponse($this->cart->getErrorResponse('Invalid request', '500'));
+    }
+
+    $static_fields = $request_content['data']['static'];
+    unset($request_content['data']['static']);
+    $custom_attributes = [];
+    foreach ($request_content['data'] as $field_name => $val) {
+      $custom_attributes[] = [
+        'attribute_code' => $field_name,
+        'value' => $val,
+      ];
+    }
+
+    $fields_data = [];
+    foreach ($static_fields as $key => $field) {
+      $fields_data[$key] = $field;
+    }
+
+    $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
+    $data = [
+      'address' => $fields_data,
+    ];
+
+    $methods = $this->cart->shippingMethods($data, $request_content['cart_id']);
+    return new JsonResponse($methods);
+  }
+
+  /**
+   * Gets list of payment methods.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Payment method response.
+   */
+  public function getPaymentMethods(int $cart_id) {
+    $data = $this->cart->getPaymentMethods($cart_id);
+    return new JsonResponse($data);
+  }
+
+  /**
    * Validate incoming request.
    *
    * @param array $request_content

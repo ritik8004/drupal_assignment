@@ -1,5 +1,6 @@
 import React from 'react';
 
+import axios from 'axios';
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
@@ -17,9 +18,17 @@ export default class AddressForm extends React.Component {
   // Submit handler for form.
   handleSubmit = (e) => {
     e.preventDefault();
-    this.validateForm(e);
+    let form_data = this.validateForm(e);
+
+    if (form_data !== false) {
+      // Caller component pass the method as props so that
+      // we return form info and thus that can be utilized
+      // as per requirements.
+      this.props.handleAddressData(form_data);
+    }
   }
 
+  // Refresh areas list.
   refreshAreas = (area_list) => {
     let data = new Array();
     Object.entries(area_list).forEach(([tid, tname]) => {
@@ -39,6 +48,7 @@ export default class AddressForm extends React.Component {
   	// Validation for fixed fields.
   	let valid_form = fixedFieldValidation(e);
 
+    let form_data = {};
     // Validation for dynamic fields.
   	Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
       // If field is required.
@@ -56,18 +66,36 @@ export default class AddressForm extends React.Component {
           document.getElementById(key + '-error').classList.remove('error');
         }
       }
+
+      form_data[key] = e.target.elements[key].value
     });
 
   	// If there is any validation fail for form.
   	if (!valid_form) {
   	  return;
   	}
+
+    form_data['static'] = {
+      'firstname': e.target.elements.fname.value,
+      'lastname': e.target.elements.lname.value,
+      'email': e.target.elements.email.value,
+      'telephone': e.target.elements.mobile.value,
+      'country_id': window.drupalSettings.country_code
+    };
+
+    return form_data;
+
   };
 
   render() {
-  	let dynamicFields = [];
+    let dynamicFields = [];
+    let default_val = [];
+    if (this.props.default_val) {
+      default_val = this.props.default_val;
+    }
+
     Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-      dynamicFields.push(<DynamicFormField areasUpdate={this.refreshAreas} area_list={this.state.area_list} field_key={key} field={field}/>);
+      dynamicFields.push(<DynamicFormField default_val={default_val} areasUpdate={this.refreshAreas} area_list={this.state.area_list} field_key={key} field={field}/>);
     });
 
     return(
@@ -76,7 +104,7 @@ export default class AddressForm extends React.Component {
         <div>{Drupal.t('Deliver to my location')}</div>
       	<form onSubmit={this.handleSubmit}>
           {dynamicFields}
-          <FixedFields />
+          <FixedFields default_val={default_val} />
           <input type="submit" value={Drupal.t('Save')} />
       </form>
       </div> 

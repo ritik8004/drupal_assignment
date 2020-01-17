@@ -6,11 +6,16 @@ import ParentAreaSelect from '../parent-area-select';
 export default class DynamicFormField extends React.Component {
 
   render() {
+    let default_val = '';
+    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
+      default_val = this.props.default_val;
+    }
+
     if (this.props.field_key === 'administrative_area') {
-      return <AreaSelect  area_list={this.props.area_list} field_key={this.props.field_key} field={this.props.field}/>
+      return <AreaSelect default_val={default_val} area_list={this.props.area_list} field_key={this.props.field_key} field={this.props.field}/>
     }
     else if(this.props.field_key === 'area_parent') {
-      return <ParentAreaSelect field_key={this.props.field_key} field={this.props.field} areasUpdate={this.props.areasUpdate}/>
+      return <ParentAreaSelect default_val={default_val} field_key={this.props.field_key} field={this.props.field} areasUpdate={this.props.areasUpdate}/>
     }
 
     return (
@@ -18,7 +23,7 @@ export default class DynamicFormField extends React.Component {
         <label>
            {this.props.field.label}
         </label>
-        <input type='text' name={this.props.field_key}/>
+        <input type='text' name={this.props.field_key} defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''}/>
         <div id={this.props.field_key + '-error'}></div>
       </div>
     );
