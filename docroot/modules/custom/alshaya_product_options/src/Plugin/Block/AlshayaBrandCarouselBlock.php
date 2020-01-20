@@ -100,8 +100,6 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       $facet_results = $this->alshayaOptionsService->loadFacetsData([$attributeName]);
       $attribute_key = key($facet_results);
       $link = $this->alshayaOptionsService->getAttributeUrl($attribute_key);
-      // Allow other modules to alter link.
-      $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attribute_key);
       // If there are facet results.
       if (!empty($facet_results) && isset($facet_results[$attribute_key])) {
         $facet_results_lowercase = array_map('strtolower', $facet_results[$attribute_key]);
