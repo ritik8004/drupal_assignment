@@ -36,3 +36,15 @@
     }
   }
 }
+
+.spc-order-summary-block {
+  .spc-product-price {
+    .has--special--price {
+      display: inline-block;
+
+      + .special--price {
+        display: inline-block;
+      }
+    }
+  }
+}

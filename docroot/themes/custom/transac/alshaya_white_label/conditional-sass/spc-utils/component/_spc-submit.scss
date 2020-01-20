@@ -3,6 +3,7 @@
   height: 3.25rem;
   display: flex;
   align-items: center;
+  cursor: pointer;
   justify-content: center;
 
   a {
@@ -10,6 +11,21 @@
     font-family: $alshaya-bold;
     font-weight: normal;
     font-size: 1rem;
-    letter-spacing: 1.14px;
+  }
+
+  &.in-active {
+    position: relative;
+    cursor: default;
+
+    &::before {
+      content: '';
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: $_white_five_alpha_80;
+      z-index: 3;
+      position: absolute;
+    }
   }
 }
