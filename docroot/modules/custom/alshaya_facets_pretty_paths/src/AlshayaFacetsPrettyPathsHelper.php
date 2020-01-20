@@ -443,6 +443,12 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Active prefix/suffix facets.
    */
   public function getFacetSummaryItems($visibility, $page) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$visibility][$page])) {
+      return $static[$visibility][$page];
+    }
+
     $active_facet_items = $this->getFacetSummary($page);
     $active_prefix_facet = [];
     $active_suffix_facet = [];
@@ -462,7 +468,9 @@ class AlshayaFacetsPrettyPathsHelper {
         }
       }
     }
-    return [$active_prefix_facet, $active_suffix_facet];
+
+    $static[$visibility][$page] = [$active_prefix_facet, $active_suffix_facet];
+    return $static[$visibility][$page];
   }
 
   /**
