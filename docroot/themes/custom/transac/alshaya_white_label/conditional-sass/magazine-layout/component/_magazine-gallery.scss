@@ -52,7 +52,6 @@
 
   figure {
     margin: 0;
-    overflow: hidden;
 
     img {
       width: 100%;
@@ -60,6 +59,8 @@
     }
 
     &.magazine-image-zoomed {
+      overflow: hidden;
+
       .magazine-image-zoom-placeholder {
         z-index: 1;
       }
