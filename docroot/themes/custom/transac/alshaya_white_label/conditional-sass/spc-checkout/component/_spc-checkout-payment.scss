@@ -32,6 +32,8 @@
   }
 
   .payment-methods.in-active {
+    position: relative;
+
     .payment-method::before {
       content: '';
       background: $_white_five_alpha_80;
