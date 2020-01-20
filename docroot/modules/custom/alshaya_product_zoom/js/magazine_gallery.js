@@ -36,19 +36,7 @@
           }
         });
 
-        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
-          // Closing modal window on click of the full screen slider images.
-          $('#product-image-gallery-mob img').once('attached').on('click', function (e) {
-            var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
-
-            // Closing modal window before slick library gets removed.
-            mobileDialog.close();
-            productGallery.slick('unslick');
-            $('body').removeClass('pdp-modal-overlay');
-            $('#product-image-gallery-mob').find('img').css('transform', 'none');
-            e.preventDefault();
-          });
-        });
+        attachMagazineDialogClose('mobile');
       }
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
@@ -70,14 +58,29 @@
           }, 700);
         });
 
-        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
-          // Closing modal window on click of the full screen slider images.
-          $('#product-full-screen-gallery img').once('attached').on('click', function (e) {
-            var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+        attachMagazineDialogClose('desktop');
+      }
 
-            // Closing modal window before slick library gets removed.
-            desktopDialog.close();
-            productGallery.slick('unslick');
+      // Attach 'dialog close on click' event for product full screen gallery image.
+      function attachMagazineDialogClose(device) {
+        var productGallerySelector;
+        if (device === 'mobile') {
+          productGallerySelector = '#product-image-gallery-mob';
+        }
+        else {
+          productGallerySelector = '#product-full-screen-gallery';
+        }
+        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
+          var $productGallery = $(productGallerySelector);
+          // Closing modal window on click of the full screen slider images.
+          $productGallery.find('img').once('attached').on('click', function (e) {
+            if ($(window).width() < 768) {
+              mobileDialog.close();
+            }
+            else {
+              desktopDialog.close();
+            }
+            $productGallery.slick('unslick');
             $('body').removeClass('pdp-modal-overlay');
             e.preventDefault();
           });
