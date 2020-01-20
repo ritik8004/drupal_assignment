@@ -141,14 +141,20 @@ export default class Checkout extends React.Component {
               <DeliveryMethods cnc_disabled={!this.state.cart.cnc_enabled} delivery_type={this.state.delivery_method} updateMethod={this.updateDeliveryMethod} />
               <DeliveryInformation refreshCart={this.refreshCart} paymentMethodRefresh={this.refreshPaymentMethods} cart={this.state.cart} delivery_type={this.state.delivery_method} />
               <PaymentMethods selected_payment_method={this.state.selected_payment_method} payment_methods={this.state.payment_methods} cart={this.state.cart} is_active={this.state.payment_active} payment_method_select={this.onPaymentMethodSelect} />
-              <TermsConditions/>
+              {window.innerWidth > 768 &&
+                <TermsConditions/>
+              }
               <CompletePurchase cart={this.state.cart} selected_payment_method={this.state.selected_payment_method}/>
             </div>
             <div className="spc-sidebar">
               <OrderSummaryBlock item_qty={this.state.cart.items_qty} items={this.state.cart.items} totals={this.state.cart.totals} in_stock={this.state.cart.in_stock} cart_promo={this.state.cart.cart_promo} show_checkout_button={false} />
             </div>
           </div>
-          <div className="spc-post-content"/>
+          <div className="spc-post-content">
+          {window.innerWidth < 768 &&
+            <TermsConditions/>
+          }
+          </div>
         </React.Fragment>
       );
   }

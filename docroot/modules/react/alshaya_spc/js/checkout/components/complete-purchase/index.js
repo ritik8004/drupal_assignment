@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {placeOrder} from '../../../utilities/checkout_util';
+import Price from '../../../utilities/price';
 
 export default class CompletePurchase extends React.Component {
 
@@ -16,6 +17,12 @@ export default class CompletePurchase extends React.Component {
       : 'in-active';
     return (
       <div className={"checkout-link submit " + class_name}>
+        {window.innerWidth < 768 &&
+          <div>
+            {Drupal.t('Order total (@count items)', {'@count': this.props.cart.items_qty})}
+            <Price price={this.props.cart.cart_total}/>
+          </div>
+        }
         <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>
           {Drupal.t('complete purchase')}
         </a>
