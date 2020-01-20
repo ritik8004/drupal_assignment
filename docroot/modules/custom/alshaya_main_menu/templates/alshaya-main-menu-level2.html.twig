@@ -7,7 +7,7 @@
                     {% for key1, level2 in columns %}
                     <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
                         <div class="menu__link-wrapper menu-two__link-wrapper">
-                            <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" {{ level2.tag_attr }}">{{ level2.label }}</{{ level2.tag }}>
+                            <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
                         </div>
                         {% set level2_label = level2.label %}
                         {% if level2.child is not empty %}
