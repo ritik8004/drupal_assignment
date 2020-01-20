@@ -30,4 +30,30 @@
       }
     }
   }
+
+  .payment-methods.in-active {
+    position: relative;
+
+    .payment-method::before {
+      content: '';
+      background: $_white_five_alpha_80;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: $_transparent_overlay;
+      z-index: 3;
+    }
+  }
 }
