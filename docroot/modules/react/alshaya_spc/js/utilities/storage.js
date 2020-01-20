@@ -7,4 +7,5 @@ export const addInfoInStorage = function (cart) {
 
 export const removeCartFromStorage = function () {
   localStorage.removeItem('cart_data');
+  alert("order placed");
 }
