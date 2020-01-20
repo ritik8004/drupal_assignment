@@ -164,8 +164,23 @@ class CartController {
     ];
 
     // Store delivery method when required.
-    if (!empty($delivery_method = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping']['extension_attributes']['click_and_collect_type'])) {
-      $data['delivery_method'] = $delivery_method == 'home_delivery' ? 'hd' : 'cnc';
+    if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
+      $data['delivery_method'] = 'hd';
+      if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
+        $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
+      }
+      $data['carrier_info'] = $shipping_info['method'];
+
+      $data['shipping_address'] = NULL;
+      if (!empty($shipping_info['method'])) {
+        $custom_shipping_attributes = [];
+        $data['shipping_address'] = $shipping_info['address'];
+        foreach ($shipping_info['address']['custom_attributes'] as $key => $value) {
+          $custom_shipping_attributes[$value['attribute_code']] = $value['value'];
+        }
+        unset($data['shipping_address']['custom_attributes']);
+        $data['shipping_address'] += $custom_shipping_attributes;
+      }
     }
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
@@ -352,7 +367,107 @@ class CartController {
         // Here we will do the processing of cart to make it in required format.
         $cart = $this->getProcessedCartData($cart);
         return new JsonResponse($cart);
+
+      case CartActions::CART_SHIPPING_UPDATE:
+        $cart_id = $request_content['cart_id'];
+        $cart = $this->cart->addShippingInfo($cart_id, $request_content['shipping_info'], $action);
+
+        if (!empty($cart['error'])) {
+          return new JsonResponse($cart);
+        }
+
+        // Here we will do the processing of cart to make it in required format.
+        $cart = $this->getProcessedCartData($cart);
+        return new JsonResponse($cart);
+
+      case CartActions::CART_PAYMENT_UPDATE:
+        $cart_id = $request_content['cart_id'];
+        $cart = $this->cart->updatePayment($cart_id, $request_content['payment_info'], $action);
+
+        if (!empty($cart['error'])) {
+          return new JsonResponse($cart);
+        }
+
+        // Here we will do the processing of cart to make it in required format.
+        $cart = $this->getProcessedCartData($cart);
+        return new JsonResponse($cart);
     }
+  }
+
+  /**
+   * Gets shipping methods.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function shippingMethods(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    if (!isset($request_content['cart_id'], $request_content['data'])) {
+      return new JsonResponse($this->cart->getErrorResponse('Invalid request', '500'));
+    }
+
+    $static_fields = $request_content['data']['static'];
+    unset($request_content['data']['static']);
+    $custom_attributes = [];
+    foreach ($request_content['data'] as $field_name => $val) {
+      $custom_attributes[] = [
+        'attribute_code' => $field_name,
+        'value' => $val,
+      ];
+    }
+
+    $fields_data = [];
+    foreach ($static_fields as $key => $field) {
+      $fields_data[$key] = $field;
+    }
+
+    $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
+    $data = [
+      'address' => $fields_data,
+    ];
+
+    $methods = $this->cart->shippingMethods($data, $request_content['cart_id']);
+    return new JsonResponse($methods);
+  }
+
+  /**
+   * Place order.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function placeOrder(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    if (!isset($request_content['cart_id'], $request_content['data'])) {
+      return new JsonResponse($this->cart->getErrorResponse('Invalid request', '500'));
+    }
+
+    $result = $this->cart->placeOrder($request_content['cart_id'], $request_content['data']);
+    return new JsonResponse($result);
+  }
+
+  /**
+   * Gets list of payment methods.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Payment method response.
+   */
+  public function getPaymentMethods(int $cart_id) {
+    $data = $this->cart->getPaymentMethods($cart_id);
+    return new JsonResponse($data);
   }
 
   /**

@@ -11,7 +11,7 @@ export const fixedFieldValidation = function (e) {
     }
     else{
       // Remove error class and any error message.
-    document.getElementById('fname-error').innerHTML = '';
+      document.getElementById('fname-error').innerHTML = '';
       document.getElementById('fname-error').classList.remove('error');
     }
 
@@ -23,7 +23,7 @@ export const fixedFieldValidation = function (e) {
     }
     else {
       // Remove error class and any error message.
-    document.getElementById('lname-error').innerHTML = '';
+      document.getElementById('lname-error').innerHTML = '';
       document.getElementById('lname-error').classList.remove('error');
     }
 

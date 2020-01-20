@@ -136,6 +136,9 @@ class AlshayaSpcController extends ControllerBase {
       ];
     }
 
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-checkout"></div>',
@@ -150,6 +153,8 @@ class AlshayaSpcController extends ControllerBase {
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'payment_methods' => $payment_methods,
           'address_fields' => $this->spcHelper->getAddressFields(),
+          'country_code' => $country_code,
+          'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
         ],
       ],
     ];

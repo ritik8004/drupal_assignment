@@ -7,3 +7,18 @@ update_cart:
     path: /update-cart
     controller: App\Controller\CartController::updateCart
     methods: POST
+
+get_shipping_methods:
+    path: /cart/shipping-methods
+    controller: App\Controller\CartController::shippingMethods
+    methods: POST
+
+payment_methods:
+    path: /cart/{cart_id}/payment-methods
+    controller: App\Controller\CartController::getPaymentMethods
+    methods: GET
+
+place_order:
+    path: /cart/place-order
+    controller: App\Controller\CartController::placeOrder
+    methods: POST
