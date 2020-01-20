@@ -22,7 +22,7 @@
 .horizontal-upell,
 .horizontal-related,
 .horizontal-crossell {
-  .view-product-slider {
+  .view-product-slider:not(.view-display-id-block_matchback) {
     .views-row {
       @include breakpoint($desktop) {
         margin: 0 0.3125rem;

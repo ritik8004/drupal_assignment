@@ -658,6 +658,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       }
       elseif ($view_mode == 'matchback') {
+        $context = 'matchback';
+
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
         $build['item_code']['#markup'] = $sku;
       }
@@ -667,14 +669,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
 
-        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
-        if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
-          $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
-        }
-        else {
-          $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+        // To attach these libraries for full and modal view mode.
+        if (in_array($view_mode, ['modal', 'full'])) {
+          $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+          $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
+          $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
+          if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
+            $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
+          }
+          else {
+            $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+          }
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
