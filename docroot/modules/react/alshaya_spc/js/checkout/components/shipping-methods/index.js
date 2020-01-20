@@ -14,7 +14,8 @@ export default class ShippingMethods extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.shipping_methods.length !== 0) {
+    if (this.props.shipping_methods.length !== 0 &&
+      this.props.cart.shipping_address !== null) {
       let address = this.prepareAddressObject(this.props.cart.shipping_address);
       let data = getShippingMethods(this.props.cart.cart_id, address);
       if (data instanceof Promise) {
