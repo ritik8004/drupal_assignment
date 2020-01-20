@@ -412,15 +412,23 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Meta info type array.
    */
   public function getMetaInfotypeFromFacetId($facet_id) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (!empty($static[$facet_id])) {
+      return $static[$facet_id];
+    }
+
     $config = \Drupal::config('facets.facet.' . $facet_id);
     $meta_info_type = $config->get('meta_info_type.type') ?? self::FACET_META_TYPE_IGNORE;
-    $facet_prefix_text = $config->get('meta_info_type.prefix_text');
+    $facet_prefix_text = $config->get('meta_info_type.prefix_text') ?? '';
     $facet_visibility = $config->get('meta_info_type.visibility');
-    return [
+    $static[$facet_id] = [
       'type' => $meta_info_type,
       'prefix_text' => $facet_prefix_text,
       'visibility' => $facet_visibility,
     ];
+
+    return $static[$facet_id];
   }
 
   /**
@@ -477,6 +485,28 @@ class AlshayaFacetsPrettyPathsHelper {
     $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
     $active_facet_items = $alshaya_facet_summary['#items'];
     return $active_facet_items;
+  }
+
+  /**
+   * Wrapper function to check if pretty path is enabled or not.
+   *
+   * @param string $type
+   *   Page type - plp / search / promo.
+   *
+   * @return bool
+   *   TRUE if enabled.
+   */
+  public function isPrettyPathEnabled(string $type) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$type])) {
+      return $static[$type];
+    }
+
+    $mapping = _alshaya_facets_pretty_paths_get_mappings()[$type];
+    $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
+    $static[$type] = ($source->get('url_processor') === 'alshaya_facets_pretty_paths');
+    return $static[$type];
   }
 
 }
