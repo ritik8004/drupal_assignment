@@ -121,6 +121,17 @@ class MagentoInfo {
   }
 
   /**
+   * Get the magento store id.
+   *
+   * @return int
+   *   Magento store id.
+   */
+  public function getMagentoStoreId() {
+    $lang = $this->request->query->get('lang', 'en');
+    return !empty($this->settings) ? $this->settings['store_id'][$lang] : NULL;
+  }
+
+  /**
    * Get the magento secret info.
    *
    * @return array

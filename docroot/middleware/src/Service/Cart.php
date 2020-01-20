@@ -200,6 +200,9 @@ class Cart {
     $data['shipping']['shipping_address'] = $fields_data;
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];
+
+    $customer = $this->createCustomer($data['shipping']['shipping_address']);
+    $this->associateCartToCustomer($cart_id, $customer['id']);
     $this->updateCart($data, $cart_id);
     return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
   }
@@ -225,6 +228,74 @@ class Cart {
     $data['billing'] = $billing_data;
 
     return $this->updateCart($data, $cart_id);
+  }
+
+  /**
+   * Create customer in magento.
+   *
+   * @param array $customer_data
+   *   Customer data.
+   *
+   * @return array|mixed
+   *   Json decoded response.
+   */
+  public function createCustomer(array $customer_data) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/customers';
+
+    try {
+      $data['customer'] = [
+        'email' => $customer_data['email'],
+        'firstname' => $customer_data['firstname'] ?? '',
+        'lastname' => $customer_data['lastname'] ?? '',
+        'prefix' => $customer_data['prefix'] ?? '',
+        'dob' => $customer_data['dob'] ?? '',
+        'groupId' => $customer_data['group_id'] ?? 1,
+        'store_id' => $this->magentoInfo->getMagentoStoreId(),
+      ];
+
+      $response = $client->request('POST', $url, ['json' => (object) $data]);
+      $result = $response->getBody()->getContents();
+      $rs = json_decode($result, TRUE);
+
+      return $rs;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
+   * Adds a customer to cart.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   * @param int $customer_id
+   *   Customer id.
+   * @return mixed
+   *   Response.
+   */
+  public function associateCartToCustomer(int $cart_id, int $customer_id) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/associate-cart', $cart_id);
+
+    try {
+      $data = [
+        'customerId' => $customer_id,
+        'cartId' => $cart_id,
+        'store_id' => $this->magentoInfo->getMagentoStoreId(),
+      ];
+      $response = $client->request('POST', $url, ['json' => (object) $data]);
+      $result = $response->getBody()->getContents();
+      $rs = json_decode($result, TRUE);
+
+      return $rs;
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+    }
   }
 
   /**
