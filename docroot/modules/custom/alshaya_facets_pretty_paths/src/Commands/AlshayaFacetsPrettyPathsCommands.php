@@ -2,8 +2,10 @@
 
 namespace Drupal\alshaya_facets_pretty_paths\Commands;
 
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\RouteBuilderInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets_summary\Entity\FacetsSummary;
 use Drush\Commands\DrushCommands;
@@ -14,6 +16,8 @@ use Drush\Commands\DrushCommands;
  * @package Drupal\alshaya_facets_pretty_paths\Commands
  */
 class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
+
+  use StringTranslationTrait;
 
   /**
    * Facet manager.
@@ -122,6 +126,31 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
         $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->getUrlAlias());
         $alias = $mapping['alias'][$facet->id()] ?? strtolower(str_replace(' ', '_', $facet->get('name')));
         $facet->setUrlAlias($alias);
+
+        if (strpos($facet->id(), 'price') > -1) {
+          $facet->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX);
+          $facet->set('meta_info_type.prefix_text', $this->t('at'));
+          $facet->set('meta_info_type.visibility', [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION]);
+          $facet->save();
+        }
+        elseif (strpos($facet->id(), 'size') > -1) {
+          $facet->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
+          $facet->set('meta_info_type.prefix_text', $this->t('Size'));
+          $facet->set('meta_info_type.visibility', [
+            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE,
+            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
+            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
+          ]);
+        }
+        else {
+          $facet->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
+          $facet->set('meta_info_type.visibility', [
+            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE,
+            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
+            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
+          ]);
+        }
+
         $facet->save();
       }
     }
