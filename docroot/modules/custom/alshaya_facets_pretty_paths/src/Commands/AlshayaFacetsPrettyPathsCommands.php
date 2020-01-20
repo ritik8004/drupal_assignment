@@ -131,7 +131,6 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
           $facet->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX);
           $facet->set('meta_info_type.prefix_text', $this->t('at'));
           $facet->set('meta_info_type.visibility', [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION]);
-          $facet->save();
         }
         elseif (strpos($facet->id(), 'size') > -1) {
           $facet->set('meta_info_type.type', AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX);
