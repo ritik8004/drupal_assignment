@@ -1,0 +1,5 @@
+input[type=radio] {
+  ~ .radio-sim::before {
+    font-size: 3.125rem;
+  }
+}
