@@ -56,6 +56,19 @@
           myDialog.showModal();
         });
 
+        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
+          // Closing modal window on click of the full screen slider images.
+          $('#product-full-screen-gallery img').once('attached').on('click', function (e) {
+            var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+
+            // Closing modal window before slick library gets removed.
+            myDialog.close();
+            productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
+            e.preventDefault();
+          });
+        });
+
         // Videos inside main PDP slider.
         // For Desktop slider, we add a iframe on click on the image.
         $('li', lightSlider).once('bind-js').on('click', function (e) {

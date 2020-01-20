@@ -35,6 +35,8 @@
             Drupal.blazy.revalidate();
           }
         });
+
+        attachMagazineDialogClose('mobile');
       }
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
@@ -54,6 +56,34 @@
               Drupal.blazy.revalidate();
             }
           }, 700);
+        });
+
+        attachMagazineDialogClose('desktop');
+      }
+
+      // Attach 'dialog close on click' event for product full screen gallery image.
+      function attachMagazineDialogClose(device) {
+        var productGallerySelector;
+        if (device === 'mobile') {
+          productGallerySelector = '#product-image-gallery-mob';
+        }
+        else {
+          productGallerySelector = '#product-full-screen-gallery';
+        }
+        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
+          var $productGallery = $(productGallerySelector);
+          // Closing modal window on click of the full screen slider images.
+          $productGallery.find('img').once('attached').on('click', function (e) {
+            if ($(window).width() < 768) {
+              mobileDialog.close();
+            }
+            else {
+              desktopDialog.close();
+            }
+            $productGallery.slick('unslick');
+            $('body').removeClass('pdp-modal-overlay');
+            e.preventDefault();
+          });
         });
       }
     }
