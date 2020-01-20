@@ -50,7 +50,6 @@ export default class PaymentMethod extends React.Component {
 
         <label className='radio-sim radio-label'>
           {this.props.method.name}
-          <span>{this.props.method.description}</span>
         </label>
       </div>
     );

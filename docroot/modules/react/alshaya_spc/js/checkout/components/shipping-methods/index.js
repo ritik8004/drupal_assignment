@@ -48,9 +48,11 @@ export default class ShippingMethods extends React.Component {
 
   render() {
     let methods = [];
-    Object.entries(this.state.shipping_methods).forEach(([key, method]) => {
-      methods.push(<ShippingMethod key={key} method={method}/>);
-    });
+    if (this.state.shipping_methods.length !== 0) {
+      Object.entries(this.state.shipping_methods).forEach(([key, method]) => {
+        methods.push(<ShippingMethod key={key} method={method}/>);
+      });
+    }
 
     // For single shipping method case.
     if (methods.length === 1) {
@@ -63,7 +65,7 @@ export default class ShippingMethods extends React.Component {
 
     return (
       <div className='shipping-methods'>
-      	<div>{methods}</div>
+      	{methods}
       </div>
     );
   }
