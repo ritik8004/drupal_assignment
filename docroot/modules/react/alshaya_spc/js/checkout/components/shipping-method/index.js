@@ -11,6 +11,12 @@ export default class ShippingMethod extends React.Component {
     };
   }
 
+  changeShippingMethod = (method) => {
+    this.setState({
+      selectedOption: method
+    });
+  }
+
   render () {
     let method = this.props.method;
     let price = Drupal.t('FREE');

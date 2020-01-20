@@ -181,8 +181,7 @@ class Cart {
 
     $static_fields = $shipping_data['static'];
     $carrier_info = $shipping_data['carrier_info'];
-    unset($shipping_data['carrier_info']);
-    unset($shipping_data['static']);
+    unset($shipping_data['carrier_info'], $shipping_data['static']);
     $custom_attributes = [];
     foreach ($shipping_data as $field_name => $val) {
       $custom_attributes[] = [
@@ -273,6 +272,7 @@ class Cart {
    *   Cart id.
    * @param int $customer_id
    *   Customer id.
+   *
    * @return mixed
    *   Response.
    */
