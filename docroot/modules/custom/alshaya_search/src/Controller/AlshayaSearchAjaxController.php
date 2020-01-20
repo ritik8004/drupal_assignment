@@ -55,6 +55,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $tokenUtility;
 
   /**
+   * Facets Pretty Path helper.
+   *
+   * @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper
+   */
+  protected $facetsPrettyPathHelper;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -77,6 +84,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   Request stack.
    * @param \Drupal\Core\Utility\Token $token
    *   Token utility.
+   * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper
+   *   Facets Pretty Path helper.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -87,12 +96,14 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               BlockManager $blockManager,
                               CurrentRouteMatch $currentRouteMatch,
                               RequestStack $request_stack,
-                              Token $token) {
+                              Token $token,
+                              AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->requestStack = $request_stack;
     $this->tokenUtility = $token;
+    $this->facetsPrettyPathHelper = $facets_pretty_path_helper;
   }
 
   /**
@@ -109,7 +120,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('plugin.manager.block'),
       $container->get('current_route_match'),
       $container->get('request_stack'),
-      $container->get('token')
+      $container->get('token'),
+      $container->get('alshaya_facets_pretty_paths.pretty_paths_helper')
     );
   }
 
@@ -172,13 +184,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // If page is PLP, inject hidden field into product_list exposed form.
     if ($is_plp_page) {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facet_fields));
-      $meta_title = NULL;
-      if ($term instanceof TermInterface) {
+
+      if ($term instanceof TermInterface && $this->facetsPrettyPathHelper->isPrettyPathEnabled('plp')) {
         // Get meta tags of the current page.
         $metatags = metatag_generate_entity_metatags($term);
         $meta_title = $metatags['title']['#attributes']['content'];
         $meta_description = $metatags['description']['#attributes']['content'];
-        $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE, 'plp');
+        $active_facets = $this->facetsPrettyPathHelper->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE, 'plp');
         $page_title = implode(' ', $active_facets[0]);
 
         $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [$meta_title, $meta_description]));

@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable the alshaya facets pretty paths module.
+ */
+function alshaya_search_api_update_8007() {
+  \Drupal::service('module_installer')->install(['alshaya_facets_pretty_paths']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete facet configs if facet is not enabled.
  * Product brand facet was added through update hooks,
  * even where it wasn't enabled.

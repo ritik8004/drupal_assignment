@@ -17,9 +17,12 @@ use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
  * facet value selected by the user.
  */
 function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
+  /** @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper */
+  $facets_pretty_path_helper = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper');
+
   if ($context['type'] == 'alshaya_seo') {
-    if (isset($context['tokens']['term_name'])) {
-      $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, 'plp');
+    if (isset($context['tokens']['term_name']) && $facets_pretty_path_helper->isPrettyPathEnabled('plp')) {
+      $facet_summary_items = $facets_pretty_path_helper->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, 'plp');
       $first_word = strtok($replacements[$context['tokens']['term_name']], ' ');
       $meta_title_prefix = preg_replace('/' . $first_word . '/', implode(' ', array_filter($facet_summary_items[0])), $replacements[$context['tokens']['term_name']], 1);
       $meta_title_suffix = implode(' ', $facet_summary_items[1]);
@@ -29,7 +32,8 @@ function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $c
         $meta_title_suffix,
       ]));
     }
-    if (isset($context['tokens']['desc_start'])) {
+
+    if (isset($context['tokens']['desc_start']) && $facets_pretty_path_helper->isPrettyPathEnabled('plp')) {
       $request = \Drupal::request();
       $title = '';
       $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, 'plp');
