@@ -109,6 +109,10 @@
       .spc-product-title {
         font-size: 0.875rem;
         margin-bottom: 0.4375rem;
+
+        a {
+          color: $spc-product-title;
+        }
       }
 
       .spc-product-attributes {
