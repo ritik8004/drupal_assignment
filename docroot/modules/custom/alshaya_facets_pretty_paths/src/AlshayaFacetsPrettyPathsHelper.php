@@ -419,15 +419,16 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     $config = \Drupal::config('facets.facet.' . $facet_id);
-    $meta_info_type = $config->get('meta_info_type.type') ?? self::FACET_META_TYPE_IGNORE;
-    $facet_prefix_text = $config->get('meta_info_type.prefix_text') ?? '';
-    $facet_visibility = $config->get('meta_info_type.visibility');
+    $data = $config->getRawData();
+    $meta_info_type = $data['third_party_settings']['alshaya_facets_pretty_paths']['meta_info_type'];
+    $type = $meta_info_type['type'] ?? self::FACET_META_TYPE_IGNORE;
+    $facet_prefix_text = $meta_info_type['prefix_text'] ?? '';
+    $facet_visibility = $meta_info_type['visibility'] ?? '';
     $static[$facet_id] = [
-      'type' => $meta_info_type,
+      'type' => $type,
       'prefix_text' => $facet_prefix_text,
       'visibility' => $facet_visibility,
     ];
-
     return $static[$facet_id];
   }
 
