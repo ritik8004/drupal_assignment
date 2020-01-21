@@ -39,13 +39,6 @@ function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, In
 }
 
 /**
- * Implements hook_alshaya_reset_config_configs_to_reset_alter().
- */
-function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
-  $reset[] = 'search_api.server.algolia';
-}
-
-/**
  * Implements hook_acq_sku_base_fields_updated().
  */
 function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
