@@ -33,7 +33,7 @@
       {% endfor %}
     {% endif %}
   </custom_attributes>
-  {% if product.type_id == 'simple' %}
+  {% if product.product_type == 'simple' %}
     <stock>
       <quantity>{{ product.stock.qty }}</quantity>
       <availability>{{ product.stock.status }}</availability>
