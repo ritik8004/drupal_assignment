@@ -1,0 +1,61 @@
+.spc-checkout {
+  .checkout-link {
+    @include breakpoint($only-mobile) {
+      background: $spc-checkout-delivery-method-bg;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 4;
+      box-shadow: 0 -1px 20px 9px $sticky-btn;
+
+      a {
+        background: $primary_btn_bg;
+        height: 3.25rem;
+        width: 100%;
+      }
+
+      .order-preview {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        color: $spc-totals-line-item-color;
+
+        .total-price {
+          font-family: $alshaya-bold;
+
+          .price-currency {
+            padding-#{$right}: 0.3125rem;
+          }
+        }
+      }
+
+      &.in-active {
+        &::before {
+          content: none;
+        }
+
+        a {
+          position: relative;
+
+          &::before {
+            content: '';
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: $_white_five_alpha_80;
+            z-index: 3;
+            position: absolute;
+          }
+        }
+      }
+    }
+  }
+}
