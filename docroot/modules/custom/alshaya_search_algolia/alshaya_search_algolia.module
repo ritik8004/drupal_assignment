@@ -173,9 +173,9 @@ function alshaya_search_algolia_alshaya_seo_google_sitelink_searchbox_url_alter(
 }
 
 /**
- * Implements hook_brand_carousel_link_alter().
+ * Implements hook_alshaya_search_filter_link_alter().
  */
-function alshaya_search_algolia_brand_carousel_link_alter(&$link, $attribute) {
+function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, $attribute) {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $link = '/' . $langcode . '/search#refinementList[' . $attribute . '][0]=';
+  $link = '/' . $langcode . '/search#refinementList[attr_' . $attribute . '][0]=';
 }
