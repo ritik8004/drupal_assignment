@@ -177,13 +177,21 @@
     }
 
     .menu--three__list {
-      @include breakpoint($desktop) {
-        padding-bottom: 2rem;
-      }
-
       li {
         @include breakpoint($desktop) {
           padding-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-main-menu.megamenu-inline-layout {
+  .menu--two__list {
+    .menu--two__list-item {
+      .menu--three__list {
+        @include breakpoint($desktop) {
+          padding-bottom: 2rem;
         }
       }
     }
