@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 15rem;
 
   .spc-loader {
     background: url(#{$base_theme_loader_img_directory_path}) #{$left} center no-repeat;
