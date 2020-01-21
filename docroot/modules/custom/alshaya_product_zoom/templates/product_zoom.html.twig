@@ -3,7 +3,7 @@
     <div class="cloudzoom thumbnail-count-{{ thumbnails|length }}">
     <div class="cloudzoom__herocontainer">
       <div id="cloud-zoom-wrap" class="cloudzoom__image">
-        <div class="img-wrap"><img src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" /></div>
+        <div class="img-wrap" data-scale="2"><img src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" /></div>
       </div>
       <div class="yt-vi-container cloudzoom__video_main"></div>
       {%  if labels|length > 0 %}

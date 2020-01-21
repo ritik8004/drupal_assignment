@@ -11,8 +11,8 @@
             <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </div>
         {% elseif loop.first %}
-          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
-            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
+            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             {%  if labels|length > 0 %}
               <div class="product-labels">
                 {{ labels }}
@@ -20,8 +20,8 @@
             {% endif %}
           </figure>
         {% else %}
-          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
-            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }} data-scale="2">
+            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
           </figure>
         {% endif %}
       {% endfor %}

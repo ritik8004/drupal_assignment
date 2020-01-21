@@ -99,6 +99,8 @@
     @include breakpoint($desktop) {
       height: 32.5rem;
       overflow: hidden;
+      position: relative;
+      line-height: 0;
 
       img {
         height: 100%;
@@ -536,3 +538,36 @@
     }
   }
 }
+
+#product-zoom-container {
+  .img-wrap {
+    &.product-image-zoomed {
+      position: relative;
+
+      .product-image-zoom-placeholder {
+        z-index: 1;
+      }
+    }
+ 
+    .product-image-zoom-placeholder {
+      position: absolute;
+      top: 0;
+      overflow: hidden;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .product-image-zoom-placeholder-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      background-position: center center;
+      background-color: white;
+    }
+  }
+}
+
