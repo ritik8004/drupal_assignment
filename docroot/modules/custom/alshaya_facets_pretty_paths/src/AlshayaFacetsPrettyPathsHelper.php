@@ -413,14 +413,12 @@ class AlshayaFacetsPrettyPathsHelper {
    */
   public function getMetaInfotypeFromFacetId($facet_id) {
     $static = &drupal_static(__FUNCTION__, []);
-
     if (!empty($static[$facet_id])) {
       return $static[$facet_id];
     }
 
     $config = \Drupal::config('facets.facet.' . $facet_id);
-    $data = $config->getRawData();
-    $meta_info_type = $data['third_party_settings']['alshaya_facets_pretty_paths']['meta_info_type'];
+    $meta_info_type = $config->get('third_party_settings.alshaya_facets_pretty_paths.meta_info_type');
     $type = $meta_info_type['type'] ?? self::FACET_META_TYPE_IGNORE;
     $facet_prefix_text = $meta_info_type['prefix_text'] ?? '';
     $facet_visibility = $meta_info_type['visibility'] ?? '';
