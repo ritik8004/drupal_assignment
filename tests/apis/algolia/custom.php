@@ -114,6 +114,8 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $settings['attributesForFaceting'] = $facets;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
+  unset($settings['replicas']);
+
   $index->setSettings($settings, TRUE);
 
   foreach ($sorts as $sort) {
