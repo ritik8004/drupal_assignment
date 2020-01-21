@@ -17,7 +17,6 @@ use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 function alshaya_facets_pretty_paths_update_8002() {
   // We do it only for PLP here, live sites only have it for PLP.
   $facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_1');
-  $config_factory = \Drupal::configFactory();
 
   // Done in drush pretty-paths-toggle --action=en for new sites.
   foreach ($facets as $facet) {
