@@ -84,6 +84,12 @@
     padding: 1.25rem;
     background: $spc-order-summary-product-area-bg;
 
+    @include breakpoint($only-mobile) {
+      overflow-x: auto;
+      overflow-y: visible;
+      white-space: nowrap;
+    }
+
     .product-item {
       background: $spc-order-summary-totals-bg;
       padding: 1.25rem;
@@ -91,6 +97,17 @@
       display: grid;
       grid-template-columns: 4.8125rem 1fr;
       grid-gap: 0.625rem;
+
+      @include breakpoint($only-mobile) {
+        display: inline-grid;
+        margin-bottom: 0;
+        margin-#{$right}: 0.625rem;
+        white-space: normal;
+
+        &:last-child {
+          margin-#{$right}: 0;
+        }
+      }
 
       &:last-child {
         margin-bottom: 0;

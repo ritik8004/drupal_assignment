@@ -18,9 +18,9 @@ export default class CompletePurchase extends React.Component {
     return (
       <div className={"checkout-link submit " + class_name}>
         {window.innerWidth < 768 &&
-          <div>
-            {Drupal.t('Order total (@count items)', {'@count': this.props.cart.items_qty})}
-            <Price price={this.props.cart.cart_total}/>
+          <div className='order-preview'>
+            <span className='total-count'> {Drupal.t('Order total (@count items)', {'@count': this.props.cart.items_qty})} </span>
+            <span className='total-price'> <Price price={this.props.cart.cart_total}/> </span>
           </div>
         }
         <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>

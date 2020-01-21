@@ -10,5 +10,16 @@
     h1 {
       letter-spacing: 1px;
     }
+
+    @include breakpoint($only-mobile) {
+      margin: 0 1.25rem;
+      padding-top: 1.25rem;
+      padding-bottom: 0.5rem;
+      text-align: center;
+
+      h1 {
+        font-size: 1.25rem;
+      }
+    }
   }
 }

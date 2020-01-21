@@ -18,5 +18,11 @@
     @include breakpoint($tablet) {
       height: 3.875rem;
     }
+
+    .sub-title {
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
   }
 }

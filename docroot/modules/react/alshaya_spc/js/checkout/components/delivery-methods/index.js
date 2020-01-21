@@ -43,7 +43,7 @@ export default class DeliveryMethods extends React.Component {
           <label className='radio-sim radio-label'>
             <span className='icon'></span>
             <span className='impress'>{Drupal.t('home delivery')}</span>
-            {hd_subtitle}
+            <span className='sub-title'>{hd_subtitle}</span>
           </label>
         </div>
         <div className='delivery-method' onClick={() => this.changeDeliveryMethod('cnc')}>
@@ -51,7 +51,7 @@ export default class DeliveryMethods extends React.Component {
           <label className='radio-sim radio-label'>
             <span className='icon'></span>
             <span className='impress'>{Drupal.t('click & collect')}</span>
-            {cnc_subtitle}
+            <span className='sub-title'>{cnc_subtitle}</span>
           </label>
         </div>
       </div>

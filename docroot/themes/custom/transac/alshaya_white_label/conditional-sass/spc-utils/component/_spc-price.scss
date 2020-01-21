@@ -2,6 +2,14 @@
   font-size: 0.875rem;
   color: $spc-product-title;
 
+  .has--special--price {
+    display: inline-block;
+
+    + .special--price {
+      display: inline-block;
+    }
+  }
+
   .price-currency {
     margin-#{$right}: 0.1875rem;
   }
@@ -22,14 +30,6 @@
     text-align: center;
     white-space: normal;
 
-    .has--special--price {
-      display: inline-block;
-
-      + .special--price {
-        display: inline-block;
-      }
-    }
-
     .has--special--price,
     .special--price, {
       margin-bottom: 0.3125rem;
@@ -37,14 +37,3 @@
   }
 }
 
-.spc-order-summary-block {
-  .spc-product-price {
-    .has--special--price {
-      display: inline-block;
-
-      + .special--price {
-        display: inline-block;
-      }
-    }
-  }
-}
