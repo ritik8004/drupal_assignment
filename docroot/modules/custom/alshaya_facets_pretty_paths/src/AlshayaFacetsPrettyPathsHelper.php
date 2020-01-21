@@ -344,6 +344,10 @@ class AlshayaFacetsPrettyPathsHelper {
         }
       }
     }
+    elseif ($this->routeMatch->getRouteName() === 'facets.block.ajax') {
+      $alshaya_active_facet_filter_string = $this->currentRequest->query->get('facet_link');
+      $alshaya_active_facet_filter_string = substr($alshaya_active_facet_filter_string, strpos($alshaya_active_facet_filter_string, "/--") + 3);
+    }
     elseif (strpos($this->currentRequest->getPathInfo(), "/--") !== FALSE) {
       $alshaya_active_facet_filter_string = substr($this->currentRequest->getPathInfo(), strpos($this->currentRequest->getPathInfo(), "/--") + 3);
     }
