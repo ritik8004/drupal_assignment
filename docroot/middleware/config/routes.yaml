@@ -3,6 +3,11 @@ get_cart:
     controller: App\Controller\CartController::getCart
     methods: GET
 
+restore_cart:
+    path: /restore-cart
+    controller: App\Controller\CartController::restoreCart
+    methods: GET
+
 update_cart:
     path: /update-cart
     controller: App\Controller\CartController::updateCart
