@@ -28,13 +28,6 @@ function alshaya_algolia_react_node_view(array &$build, EntityInterface $entity,
 }
 
 /**
- * Implements hook_alshaya_reset_config_configs_to_reset_alter().
- */
-function alshaya_algolia_react_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
-  $reset[] = 'block.block.alshayaalgoliareactautocomplete';
-}
-
-/**
  * Implements hook_block_access().
  */
 function alshaya_algolia_react_block_access(Block $block, $operation, AccountInterface $account) {
