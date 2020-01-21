@@ -22,10 +22,14 @@ function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $c
 
   if ($context['type'] == 'alshaya_seo' && $facets_pretty_path_helper->isPrettyPathEnabled('plp')) {
     if (isset($context['tokens']['term_name'])) {
+      // Getting the active facet items.
       $facet_summary_items = $facets_pretty_path_helper->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE, 'plp');
       $first_word = strtok($replacements[$context['tokens']['term_name']], ' ');
       $meta_title_prefix = preg_replace('/' . $first_word . '/', implode(' ', array_filter($facet_summary_items[0])), $replacements[$context['tokens']['term_name']], 1);
       $meta_title_suffix = implode(' ', $facet_summary_items[1]);
+      // Concaniting first word(Shop)
+      // $meta_title_prefix (green)
+      // Shop black Mini Dresses Collection for Ladies Online.
       $replacements[$context['tokens']['term_name']] = implode(' ', array_filter([
         $first_word,
         $meta_title_prefix,
@@ -37,11 +41,13 @@ function alshaya_facets_pretty_paths_tokens_alter(array &$replacements, array $c
       $request = \Drupal::request();
       $title = '';
       $facet_summary_items = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION, 'plp');
+      // Getting the page title. (Mini Dresses)
       if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
         $title_object = \Drupal::service('title_resolver')->getTitle($request, $route);
         $title = $title_object['#markup'];
       }
-      // Replacing page title with the new value.
+      // Replacing page title by adding facets
+      // (Shop exclusive and luxury H&M green Mini Dresses for Ladies).
       $meta_title_prefix = preg_replace('/' . $title . '/', implode(' ', array_filter($facet_summary_items[0])) . ' ' . $title, $replacements[$context['tokens']['desc_start']], 1);
       $meta_title_suffix = implode(' ', $facet_summary_items[1]);
       $replacements[$context['tokens']['desc_start']] = implode(' ', array_filter([
