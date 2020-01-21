@@ -19,7 +19,7 @@
 .menu--two__list {
   .menu--two__list-item {
     @include breakpoint($desktop) {
-      margin-bottom: 1.563rem;
+      padding-bottom: 1.563rem;
 
       &.has-child {
         margin-bottom: 0.3125rem;
@@ -95,7 +95,7 @@
 
 .block-alshaya-main-menu {
   li.menu--one__list-item {
-    &:hover > ul.menu--two__list {
+    & > ul.menu--two__list {
       @include breakpoint($desktop) {
         padding-top: 1.5rem;
         min-height: 0;
