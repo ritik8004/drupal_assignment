@@ -33,32 +33,35 @@ alshaya_options_list.settings:
             type: sequence
             label: 'Page attributes'
             sequence:
-              type: mapping
-              mapping:
-                title:
-                  type: label
-                  label: 'Title'
-                description:
-                  type: label
-                  label: 'Description'
-                show-search:
-                  type: boolean
-                  label: 'Show search'
-                search-placeholder:
-                  type: label
-                  label: 'Search placeholder'
-                show-images:
-                  type: boolean
-                  label: 'Show images'
-                group:
-                  type: boolean
-                  label: 'Group alphabetically'
-                mobile_title_toggle:
-                  type: boolean
-                  label: 'Show mobile button'
-                mobile_title:
-                  type: label
-                  label: 'Mobile title'
+              type: sequence
+              label: 'Page attribute'
+              sequence:
+                type: mapping
+                mapping:
+                  title:
+                    type: label
+                    label: 'Title'
+                  description:
+                    type: label
+                    label: 'Description'
+                  show-search:
+                    type: boolean
+                    label: 'Show search'
+                  search-placeholder:
+                    type: label
+                    label: 'Search placeholder'
+                  show-images:
+                    type: boolean
+                    label: 'Show images'
+                  group:
+                    type: boolean
+                    label: 'Group alphabetically'
+                  mobile_title_toggle:
+                    type: boolean
+                    label: 'Show mobile button'
+                  mobile_title:
+                    type: label
+                    label: 'Mobile title'
 
 block.settings.alshaya_options_list_menu:
   type: block_settings
