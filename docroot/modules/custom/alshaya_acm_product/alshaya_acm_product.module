@@ -6,7 +6,6 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;

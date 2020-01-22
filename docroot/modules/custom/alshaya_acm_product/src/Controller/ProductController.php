@@ -147,7 +147,7 @@ class ProductController extends ControllerBase {
 
     if ($sku_entity instanceof SKU) {
       if (!empty($related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
-        $related_skus = $this->skuManager->filterRelatedSkus(array_unique($related_skus)); 
+        $related_skus = $this->skuManager->filterRelatedSkus(array_unique($related_skus));
         $selector = ($device == 'mobile') ? '.mobile-only-block ' : '.above-mobile-block ';
 
         if ($type === 'crosssell') {
@@ -160,7 +160,8 @@ class ProductController extends ControllerBase {
               '#views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
             ];
           }
-        } elseif ($type === 'upsell') {
+        }
+        elseif ($type === 'upsell') {
           $build['up_sell'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $related_skus,
@@ -168,7 +169,8 @@ class ProductController extends ControllerBase {
             '#views_name' => 'product_slider',
             '#views_display_id' => 'block_product_slider',
           ];
-        } elseif ($type === 'related') {
+        }
+        elseif ($type === 'related') {
           $build['related'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $related_skus,
