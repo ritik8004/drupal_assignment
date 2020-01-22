@@ -94,6 +94,22 @@
         dataLayer.push(productData);
       });
 
+      // Push GTM event on add to cart failure.
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function () {
+        var url = window.location.href;
+        var label = 'Update cart failed on ' + url;
+        var errorMessage = $('.errors-container .error .message').text();
+        var productData = {
+          event: 'eventTracker',
+          eventCategory: 'Update cart error',
+          eventAction: errorMessage,
+          eventLabel: label,
+          eventValue: 0,
+          nonInteraction: 0,
+        };
+        dataLayer.push(productData);
+      });
+
       // Global variables & selectors.
       var impressions = [];
       var body = $('body');
