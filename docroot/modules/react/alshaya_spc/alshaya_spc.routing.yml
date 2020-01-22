@@ -6,6 +6,14 @@ alshaya_spc.checkout:
   requirements:
     _permission: 'access content'
 
+alshaya_spc.login:
+  path: '/cart/login'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::login'
+    _title: 'Secure Checkout'
+  requirements:
+    _permission: 'access content'
+
 alshaya_spc.mobile_number_verfication:
   path: '/verify-mobile/{mobile}'
   defaults:

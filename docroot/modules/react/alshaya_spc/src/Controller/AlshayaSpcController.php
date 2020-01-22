@@ -226,4 +226,11 @@ class AlshayaSpcController extends ControllerBase {
     return new JsonResponse($data);
   }
 
+  /**
+   * Cart login page.
+   */
+  public function login() {
+
+  }
+
 }
