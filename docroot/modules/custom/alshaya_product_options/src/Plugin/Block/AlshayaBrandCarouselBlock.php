@@ -125,7 +125,6 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
         'drupalSettings' => [
           'brand_carousel_items_settings' => [
             'brand_carousel_slidesToShow' => $brand_carousel_settings['brand_carousel_slidesToShow'],
-            'brand_carousel_slidesToScroll' => $brand_carousel_settings['brand_carousel_slidesToScroll'],
           ],
         ],
       ],

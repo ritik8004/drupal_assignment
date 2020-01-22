@@ -88,14 +88,18 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     $coupon = $this->promotionNode->get('field_coupon_code')->getString();
     if (!empty($coupon)) {
       $classes = 'promotion-coupon-code';
-      if ($this->checkThresholdReached($promotion_data) && !empty($promotion_data) && !empty($promotion_data['discount'])) {
+      if (!empty($promotion_data) && !empty($promotion_data['discount']) && $this->checkThresholdReached($promotion_data)) {
         $label = $this->t('Your order qualifies for @percent% OFF', [
           '@percent' => $promotion_data['discount'],
         ]);
-        $classes .= ' available';
-      }
 
-      $label .= '<span class="promotion-coupon-details promotion-available-code"> ' . $this->t('Use the code: ') . '<span class="' . $classes . '">' . $coupon . '</span></span>';
+        $classes .= ' available';
+
+        $label .= '<span class="promotion-coupon-details promotion-available-code"> ';
+        $label .= $this->t('Use the code:')->__toString();
+        $label .= '<span class="' . $classes . '" data-coupon-code="' . $coupon . '">' . $coupon . '</span>';
+        $label .= '</span>';
+      }
     }
 
     return $label;
@@ -148,7 +152,7 @@ class FixedPercentageDiscountOrder extends AcqPromotionBase implements Container
     if ($this->checkThresholdReached()) {
       $coupon = $this->promotionNode->get('field_coupon_code')->getString();
 
-      $label = '<div class="promotion-coupon-code available">' . $coupon . '</div>';
+      $label = '<div class="promotion-coupon-code available" data-coupon-code="' . $coupon . '">' . $coupon . '</div>';
       $promotion_data = $this->promotionNode->get('field_acq_promotion_data')->getString();
       $promotion_data = unserialize($promotion_data);
 

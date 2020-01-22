@@ -19,3 +19,7 @@ cart_promotions:
   version: 1.x
   js:
     assets/js/alshaya_promotions_cart.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
