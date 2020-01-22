@@ -149,39 +149,41 @@ class ProductController extends ControllerBase {
       if (!empty($related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
         $related_skus = $this->skuManager->filterRelatedSkus(array_unique($related_skus));
         $selector = ($device == 'mobile') ? '.mobile-only-block ' : '.above-mobile-block ';
+        $data = [];
 
         if ($type === 'crosssell') {
           if ($this->acmConfig->get('display_crosssell')) {
-            $build['cross_sell'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => $related_skus,
-              '#section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-              '#views_name' => 'product_slider',
-              '#views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
+            $data = [
+              'section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+              'views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
             ];
           }
         }
         elseif ($type === 'upsell') {
-          $build['up_sell'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $related_skus,
-            '#section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
-            '#views_name' => 'product_slider',
-            '#views_display_id' => 'block_product_slider',
+          $data = [
+            'section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
+            'views_display_id' => 'block_product_slider',
           ];
         }
         elseif ($type === 'related') {
+          $data = [
+            'section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+            'views_display_id' => 'block_product_slider',
+          ];
+        }
+
+        if (!empty($data)) {
           $build['related'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $related_skus,
-            '#section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+            '#section_title' => $data['section_title'],
             '#views_name' => 'product_slider',
-            '#views_display_id' => 'block_product_slider',
+            '#views_display_id' => $data['views_display_id'],
           ];
+          $response->addCommand(new ReplaceCommand($selector . '.' . $type . '-products', render($build)));
         }
       }
     }
-    $response->addCommand(new ReplaceCommand($selector . '#' . $type . '-products', render($build)));
 
     return $response;
   }

@@ -184,7 +184,7 @@
 
       // Add related products on pdp.
       var sku = $('article[data-vmode="full"]').attr('data-sku');
-      var device = (window.innerWidth < 768) ? "mobile" : "desktop";
+      var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
 
       $(window).once('updateRelatedProducts').on('scroll', function () {
         var scrollBottom = $(this).scrollTop() + $(this).height();
