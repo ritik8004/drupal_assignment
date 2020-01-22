@@ -1,21 +1,18 @@
-{% if content.up_sell or content.related or content.cross_sell %}
   <div class="mobile-related-wrapper">
-    {% if content.cross_sell_mobile is not empty %}
+    {% if display_crosssell %}
       <div class="horizontal-crossell mobile-only-block">
-        {{ content.cross_sell_mobile }}
+        <div id="crosssell-products">
+        </div>
       </div>
     {% endif %}
 
-    {% if content.up_sell is not empty %}
       <div class="horizontal-upell mobile-only-block">
-        {{ content.up_sell }}
+        <div id="upsell-products">
+        </div>
       </div>
-    {% endif %}
 
-    {% if content.related is not empty %}
       <div class="horizontal-related mobile-only-block">
-        {{ content.related }}
+        <div id="related-products">
+        </div>
       </div>
-    {% endif %}
   </div>
-{% endif %}

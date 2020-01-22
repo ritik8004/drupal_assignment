@@ -10,11 +10,19 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Cache\CacheableAjaxResponse;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class ProductController.
  */
 class ProductController extends ControllerBase {
+
+  use StringTranslationTrait;
 
   /**
    * SKU Manager.
@@ -32,12 +40,20 @@ class ProductController extends ControllerBase {
   protected $request;
 
   /**
+   * ACM config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $acmConfig;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('config.factory')
     );
   }
 
@@ -48,10 +64,13 @@ class ProductController extends ControllerBase {
    *   SKU Manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
-  public function __construct(SkuManager $sku_manager, RequestStack $request_stack) {
+  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
+    $this->acmConfig = $config_factory->get('alshaya_acm.settings');
   }
 
   /**
@@ -117,6 +136,56 @@ class ProductController extends ControllerBase {
       ];
     }
     return $build;
+  }
+
+  /**
+   * Get matchback products.
+   */
+  public function getRelatedProducts($sku, $type, $device) {
+    $response = new CacheableAjaxResponse();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU) {
+      if (!empty($related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
+        $related_skus = $this->skuManager->filterRelatedSkus(array_unique($related_skus));
+        $selector = ($device == 'mobile') ? '.mobile-only-block ' : '.above-mobile-block ';
+        $data = [];
+
+        if ($type === 'crosssell') {
+          if ($this->acmConfig->get('display_crosssell')) {
+            $data = [
+              'section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+              'views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
+            ];
+          }
+        }
+        elseif ($type === 'upsell') {
+          $data = [
+            'section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
+            'views_display_id' => 'block_product_slider',
+          ];
+        }
+        elseif ($type === 'related') {
+          $data = [
+            'section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+            'views_display_id' => 'block_product_slider',
+          ];
+        }
+
+        if (!empty($data)) {
+          $build['related'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $related_skus,
+            '#section_title' => $data['section_title'],
+            '#views_name' => 'product_slider',
+            '#views_display_id' => $data['views_display_id'],
+          ];
+          $response->addCommand(new ReplaceCommand($selector . '.' . $type . '-products', render($build)));
+        }
+      }
+    }
+
+    return $response;
   }
 
 }
