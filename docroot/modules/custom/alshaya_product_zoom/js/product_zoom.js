@@ -578,6 +578,7 @@
     slidesToShow: 1,
     vertical: false,
     dots: true,
+    arrows: false,
     centerMode: false,
     infinite: false,
     focusOnSelect: true,
