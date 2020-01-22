@@ -121,10 +121,20 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
+    static $build = NULL;
+
+    // Adding static cache as this block is invoked in
+    // alshaya_white_label_preprocess_page().
+    if (isset($build)) {
+      return $build;
+    }
+
+    $build = [];
+
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     if (!$term instanceof TermInterface) {
-      return [];
+      return $build;
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -144,7 +154,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
-      return [];
+      return $build;
     }
 
     $lhn_tree = [];
@@ -181,16 +191,18 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
     });
 
     if (empty($lhn_tree)) {
-      return [];
+      return $build;
     }
 
-    return [
+    $build = [
       '#theme' => 'alshaya_lhn_tree',
       '#lhn_cat_tree' => $lhn_tree,
       '#current_term' => $term->id(),
       '#depth_offset' => $context['depth_offset'],
       '#current_term_parent_id' => $term->get('parent')->getString(),
     ];
+
+    return $build;
   }
 
   /**
