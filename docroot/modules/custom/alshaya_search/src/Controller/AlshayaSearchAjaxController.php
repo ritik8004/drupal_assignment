@@ -17,6 +17,9 @@ use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Utility\Token;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 
 /**
  * Override facets AJAX controller to add selected filters as hidden fields.
@@ -45,6 +48,20 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $requestStack;
 
   /**
+   * Token utility.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $tokenUtility;
+
+  /**
+   * Facets Pretty Path helper.
+   *
+   * @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper
+   */
+  protected $facetsPrettyPathHelper;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -65,6 +82,10 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   The current route matcher service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\Core\Utility\Token $token
+   *   Token utility.
+   * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper
+   *   Facets Pretty Path helper.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -74,11 +95,15 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               LoggerChannelFactoryInterface $logger,
                               BlockManager $blockManager,
                               CurrentRouteMatch $currentRouteMatch,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              Token $token,
+                              AlshayaFacetsPrettyPathsHelper $facets_pretty_path_helper) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->requestStack = $request_stack;
+    $this->tokenUtility = $token;
+    $this->facetsPrettyPathHelper = $facets_pretty_path_helper;
   }
 
   /**
@@ -94,7 +119,9 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('logger.factory'),
       $container->get('plugin.manager.block'),
       $container->get('current_route_match'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('token'),
+      $container->get('alshaya_facets_pretty_paths.pretty_paths_helper')
     );
   }
 
@@ -147,7 +174,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // Refresh/Re-add the class on list views as selected by grid.
     $response->addCommand(new InvokeCommand(NULL, 'refreshListGridClass'));
 
-    $this->setPageType($is_plp_page, $is_promo_page, $is_search_page);
+    $term = $this->setPageType($is_plp_page, $is_promo_page, $is_search_page);
 
     // If page is search, inject hidden field into search page exposed form.
     if ($is_search_page) {
@@ -157,6 +184,19 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // If page is PLP, inject hidden field into product_list exposed form.
     if ($is_plp_page) {
       $response->addCommand(new InsertCommand('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container', $facet_fields));
+
+      if ($term instanceof TermInterface && $this->facetsPrettyPathHelper->isPrettyPathEnabled('plp')) {
+        // Get meta tags of the current page.
+        $metatags = metatag_generate_entity_metatags($term);
+        $meta_title = $metatags['title']['#attributes']['content'];
+        $meta_description = $metatags['description']['#attributes']['content'];
+        $active_facets = $this->facetsPrettyPathHelper->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE, 'plp');
+        $page_title = implode(' ', $active_facets[0]);
+
+        $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [$meta_title, $meta_description]));
+        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$page_title . ' ' . $term->label()]));
+      }
+
     }
 
     // If page is PLP, inject hidden field into product_list exposed form.
@@ -208,7 +248,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $vocabId = $term->getVocabularyId();
       if ($vocabId === 'acq_product_category') {
         $is_plp_page = TRUE;
-        return;
+        return $term;
       }
     }
     // If already not set by master request.
