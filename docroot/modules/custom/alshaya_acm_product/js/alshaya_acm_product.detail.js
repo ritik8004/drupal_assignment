@@ -183,15 +183,14 @@
       });
 
       // Add related products on pdp.
-      var sku = $('article[data-vmode="full"]').attr('data-sku');
-      var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-      var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
-      var matchback = $('.horizontal-crossell' + selector);
-      var upsell =  $('.horizontal-upell' + selector);
-      var related = $('.horizontal-related' + selector);
-
-
       $(window).once('updateRelatedProducts').on('load', function () {
+        var sku = $('article[data-vmode="full"]').attr('data-sku');
+        var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
+        var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
+        var matchback = $('.horizontal-crossell' + selector);
+        var upsell =  $('.horizontal-upell' + selector);
+        var related = $('.horizontal-related' + selector);
+
         if (!matchback.hasClass('matchback-processed')) {
           matchback.addClass('matchback-processed');
           Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
