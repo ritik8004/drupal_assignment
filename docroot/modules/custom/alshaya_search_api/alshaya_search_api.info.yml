@@ -6,5 +6,6 @@ dependencies:
   - facets:facets_summary
   - search_api:search_api
   - views_ajax_get:views_ajax_get
+  - alshaya_facets_pretty_paths:alshaya_facets_pretty_paths
 
 package: Alshaya
