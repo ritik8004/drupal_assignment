@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 
 /**
  * Utilty Class.
@@ -83,6 +84,20 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $skuManager;
 
   /**
+   * Default Facets Summary Manager.
+   *
+   * @var \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager
+   */
+  protected $defaultFacetsSummaryManager;
+
+  /**
+   * Facet Summary Object.
+   *
+   * @var \Drupal\facets_summary\FacetsSummaryInterface
+   */
+  protected $facetSummaryStorage;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [
@@ -91,6 +106,16 @@ class AlshayaFacetsPrettyPathsHelper {
     // Convert hyphen to underscore.
     '-' => '_',
   ];
+
+  /**
+   * Meta info type select list values.
+   */
+  const FACET_META_TYPE_IGNORE = 0;
+  const FACET_META_TYPE_PREFIX = 1;
+  const FACET_META_TYPE_SUFFIX = 2;
+  const VISIBLE_IN_PAGE_TITLE = 3;
+  const VISIBLE_IN_META_TITLE = 4;
+  const VISIBLE_IN_META_DESCRIPTION = 5;
 
   /**
    * UserRecentOrders constructor.
@@ -111,6 +136,8 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Config Factory.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager $default_facets_summary_manager
+   *   Default Facets Summary Manager.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
@@ -119,16 +146,19 @@ class AlshayaFacetsPrettyPathsHelper {
                               AliasManagerInterface $alias_manager,
                               DefaultFacetManager $facets_manager,
                               ConfigFactoryInterface $config_factory,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              DefaultFacetsSummaryManager $default_facets_summary_manager) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->facetSummaryStorage = $entity_type_manager->getStorage('facets_summary');
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->facetManager = $facets_manager;
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->defaultFacetsSummaryManager = $default_facets_summary_manager;
   }
 
   /**
@@ -314,6 +344,10 @@ class AlshayaFacetsPrettyPathsHelper {
         }
       }
     }
+    elseif ($this->routeMatch->getRouteName() === 'facets.block.ajax') {
+      $alshaya_active_facet_filter_string = $this->currentRequest->query->get('facet_link');
+      $alshaya_active_facet_filter_string = substr($alshaya_active_facet_filter_string, strpos($alshaya_active_facet_filter_string, "/--") + 3);
+    }
     elseif (strpos($this->currentRequest->getPathInfo(), "/--") !== FALSE) {
       $alshaya_active_facet_filter_string = substr($this->currentRequest->getPathInfo(), strpos($this->currentRequest->getPathInfo(), "/--") + 3);
     }
@@ -352,7 +386,6 @@ class AlshayaFacetsPrettyPathsHelper {
     foreach ($facets ?? [] as $facet) {
       $static[$source][$facet->getUrlAlias()] = str_replace('attr_', '', $facet->getFieldIdentifier());
     }
-
     return $static[$source];
   }
 
@@ -371,6 +404,120 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     return $prefix;
+  }
+
+  /**
+   * To get meta info type of the given facet id.
+   *
+   * @param string $facet_id
+   *   Facet id.
+   *
+   * @return array
+   *   Meta info type array.
+   */
+  public function getMetaInfotypeFromFacetId($facet_id) {
+    $static = &drupal_static(__FUNCTION__, []);
+    if (!empty($static[$facet_id])) {
+      return $static[$facet_id];
+    }
+
+    $config = \Drupal::config('facets.facet.' . $facet_id);
+    $meta_info_type = $config->get('third_party_settings.alshaya_facets_pretty_paths.meta_info_type');
+    $type = $meta_info_type['type'] ?? self::FACET_META_TYPE_IGNORE;
+    $facet_prefix_text = $meta_info_type['prefix_text'] ?? '';
+    $facet_visibility = $meta_info_type['visibility'] ?? '';
+    $static[$facet_id] = [
+      'type' => $type,
+      'prefix_text' => $facet_prefix_text,
+      'visibility' => $facet_visibility,
+    ];
+    return $static[$facet_id];
+  }
+
+  /**
+   * To get the active facet summary items.
+   *
+   * @param int $visibility
+   *   Visibility constant.
+   * @param int $page
+   *   Current page.
+   *
+   * @return array
+   *   Active prefix/suffix facets.
+   */
+  public function getFacetSummaryItems($visibility, $page) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$visibility][$page])) {
+      return $static[$visibility][$page];
+    }
+
+    $active_facet_items = $this->getFacetSummary($page);
+    $active_prefix_facet = [];
+    $active_suffix_facet = [];
+    foreach ($active_facet_items as $value) {
+      if (isset($value['#title']) && isset($value['#attributes'])) {
+        $active_facet_id = $value['#attributes']['data-drupal-facet-id'];
+        $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
+        if (in_array($visibility, $meta_info_type['visibility'])) {
+          if ($meta_info_type['type'] == self::FACET_META_TYPE_PREFIX) {
+            // Strip tags to get the value from price markup.
+            $active_prefix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
+          }
+          elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
+            // Strip tags to get the value from price markup.
+            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
+          }
+        }
+      }
+    }
+
+    $static[$visibility][$page] = [$active_prefix_facet, $active_suffix_facet];
+    return $static[$visibility][$page];
+  }
+
+  /**
+   * To get the active facet summary.
+   *
+   * @param string $page
+   *   Current page.
+   *
+   * @return array
+   *   Active facet summary.
+   */
+  public function getFacetSummary($page) {
+    $active_facet_items = &drupal_static(__FUNCTION__);
+    if (isset($active_facet_items)) {
+      return $active_facet_items;
+    }
+    // Active facet items for PLP pages.
+    $summary = _alshaya_facets_pretty_paths_get_mappings()[$page]['summary'];
+    $facet_summary = $this->facetSummaryStorage->load($summary);
+    $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
+    $active_facet_items = $alshaya_facet_summary['#items'];
+    return $active_facet_items;
+  }
+
+  /**
+   * Wrapper function to check if pretty path is enabled or not.
+   *
+   * @param string $type
+   *   Page type - plp / search / promo.
+   *
+   * @return bool
+   *   TRUE if enabled.
+   */
+  public function isPrettyPathEnabled(string $type) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (isset($static[$type])) {
+      return $static[$type];
+    }
+
+    $mapping = _alshaya_facets_pretty_paths_get_mappings()[$type];
+    $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
+    $static[$type] = ($source->get('url_processor') === 'alshaya_facets_pretty_paths');
+    return $static[$type];
   }
 
 }
