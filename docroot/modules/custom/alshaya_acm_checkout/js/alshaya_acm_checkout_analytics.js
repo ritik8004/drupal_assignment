@@ -16,6 +16,12 @@
   Drupal.behaviors.alshayaAcmCheckoutAnalytics = {
     attach: function (context, settings) {
       Drupal.alshayaPopulateDataFromGA();
+
+      // Do it again once after page load finishes.
+      // At times GA script loads late.
+      $(window).once('alshayaAcmCheckoutAnalytics').on('load', function () {
+        Drupal.alshayaPopulateDataFromGA();
+      })
     }
   };
 
@@ -29,6 +35,8 @@
       $('#acm-ga-client-id').val(ga.getAll()[0].get('clientId'));
       $('#acm-ga-tracking-id').val(ga.getAll()[0].get('trackingId'));
     } catch (e) {
+      // Try to do again if we face an error.
+      setTimeout(Drupal.alshayaPopulateDataFromGA, 1000);
     }
   };
 
