@@ -100,15 +100,20 @@ export default class AddressForm extends React.Component {
     });
 
     return(
-      <div>
-        <SectionTitle>{Drupal.t('Delivery information')}</SectionTitle>
-        <div>{Drupal.t('Deliver to my location')}</div>
-      	<form onSubmit={this.handleSubmit}>
-          {dynamicFields}
-          <FixedFields default_val={default_val} />
-          <input type="submit" value={Drupal.t('Save')} />
-      </form>
-      </div> 
+      <div className="spc-address-form">
+        <div className='spc-address-form-map'/>
+        <div className='spc-address-form-sidebar'>
+          <SectionTitle>{Drupal.t('Delivery information')}</SectionTitle>
+          <div className='spc-address-form-wrapper'>
+            <div className='spc-deliver-button'>{Drupal.t('Deliver to my location')}</div>
+            <form className='spc-address-add' onSubmit={this.handleSubmit}>
+              {dynamicFields}
+              <FixedFields default_val={default_val} />
+              <input type="submit" value={Drupal.t('Save')} />
+            </form>
+          </div>
+        </div>
+      </div>
     );
   }
 
