@@ -20,16 +20,19 @@
   };
 
   Drupal.alshayaPopulateDataFromGA = function () {
-    if (typeof ga == 'undefined') {
-      setTimeout(Drupal.alshayaPopulateDataFromGA, 500);
+    // Check if ga is loaded.
+    if (typeof window.ga === 'function' && window.ga.loaded) {
+      // Use GA function queue.
+      ga(function () {
+        $('#acm-ga-client-id').val(ga.getAll()[0].get('clientId'));
+        $('#acm-ga-tracking-id').val(ga.getAll()[0].get('trackingId'));
+      });
+
       return;
     }
 
-    try {
-      $('#acm-ga-client-id').val(ga.getAll()[0].get('clientId'));
-      $('#acm-ga-tracking-id').val(ga.getAll()[0].get('trackingId'));
-    } catch (e) {
-    }
+    // Try to read again.
+    setTimeout(Drupal.alshayaPopulateDataFromGA, 500);
   };
 
 })(jQuery, Drupal);
