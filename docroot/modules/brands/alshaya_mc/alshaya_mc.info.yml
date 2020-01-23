@@ -9,3 +9,4 @@ themes:
 
 dependencies:
   - alshaya_white_label:alshaya_mobile_app
+  - metatag_twitter_cards:metatag_twitter_cards

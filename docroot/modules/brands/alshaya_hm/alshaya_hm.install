@@ -14,6 +14,43 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Enable metatag_twitter_cards module.
+ */
+function alshaya_hm_update_8042() {
+  // Set default value for twitter cards creator.
+  \Drupal::service('module_installer')->install(['metatag_twitter_cards']);
+  // Set default value for twitter cards creator, site & type.
+  $country_code = Unicode::strtolower(Settings::get('country_code'));
+  $metatag_default_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
+  $metatag_default_config->set('tags.twitter_cards_type', 'summary');
+
+  switch ($country_code) {
+    case 'ae':
+      $metatag_default_config->set('tags.twitter_cards_creator', '@hmuae');
+      $metatag_default_config->set('tags.twitter_cards_site', '@hmuae');
+      break;
+
+    case 'sa':
+      $metatag_default_config->set('tags.twitter_cards_creator', '@hmsaudiarabia');
+      $metatag_default_config->set('tags.twitter_cards_site', '@hmsaudiarabia');
+      break;
+
+    case 'kw':
+      $metatag_default_config->set('tags.twitter_cards_creator', '@hmkuwait');
+      $metatag_default_config->set('tags.twitter_cards_site', '@hmkuwait');
+      break;
+
+    case 'eg':
+      $metatag_default_config->set('tags.twitter_cards_creator', '@hmegypt');
+      $metatag_default_config->set('tags.twitter_cards_site', '@hmegypt');
+      break;
+  }
+  $metatag_default_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add color label field for index and facets.
  */
 function alshaya_hm_update_8041() {
