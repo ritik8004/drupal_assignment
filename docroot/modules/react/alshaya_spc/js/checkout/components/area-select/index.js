@@ -72,10 +72,8 @@ export default class AreaSelect extends React.Component {
     }
 
     return (
-      <div>
-        <label>
-         {this.props.field.label}
-        </label>
+      <div className='form-item form-type-spc-select'>
+        <label>{this.props.field.label}</label>
         <Select
           ref={this.selectRef}
           name={this.props.field_key}

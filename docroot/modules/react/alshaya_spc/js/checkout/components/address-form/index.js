@@ -5,6 +5,7 @@ import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import {fixedFieldValidation} from '../fixed-fields/validation';
+import GoogleMap from "../../../utilities/map/GoogleMap";
 
 export default class AddressForm extends React.Component {
 
@@ -101,13 +102,13 @@ export default class AddressForm extends React.Component {
 
     return(
       <div className="spc-address-form">
-        <div className='spc-address-form-map'/>
+        <div className='spc-address-form-map'></div>
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Delivery information')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
             <div className='spc-deliver-button'>{Drupal.t('Deliver to my location')}</div>
             <form className='spc-address-add' onSubmit={this.handleSubmit}>
-              {dynamicFields}
+              <div className='delivery-address-fields'> {dynamicFields} </div>
               <FixedFields default_val={default_val} />
               <input type="submit" value={Drupal.t('Save')} />
             </form>

@@ -10,32 +10,32 @@ export default class FixedFields extends React.Component {
     if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
       default_val = this.props.default_val;
     }
-    
+
     return(
-      <div>
-          <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
-          <label>
-           {Drupal.t('First Name')}
+      <div className='spc-checkout-information'>
+        <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
+        <div className='form-item form-type-textfield'>
+          <label>{Drupal.t('First Name')}</label>
           <input type='text' name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''}/>
-          <div id='fname-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Last Name')}
+          <div id='fname-error' className='error'/>
+        </div>
+        <div className='form-item form-type-textfield'>
+          <label>{Drupal.t('Last Name')}</label>
           <input type='text' name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''}/>
-          <div id='lname-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Email')}
+          <div id='lname-error' className='error'/>
+        </div>
+        <div className='form-item form-type-textfield'>
+          <label>{Drupal.t('Email')}</label>
           <input type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''}/>
-          <div id='email-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Mobile number')}
-           <div>{'+' + country_mobile_code}</div>
+          <div id='email-error' className='error'/>
+        </div>
+        <div className='form-item form-type-textfield'>
+          <label>{Drupal.t('Mobile number')}</label>
+          <span className='country-code'>{'+' + country_mobile_code}</span>
           <input type='text' name='mobile' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
-          <div id='mobile-error'></div>
-          </label>
-      </div> 
+          <div id='mobile-error' className='error'/>
+        </div>
+      </div>
     );
   }
 
