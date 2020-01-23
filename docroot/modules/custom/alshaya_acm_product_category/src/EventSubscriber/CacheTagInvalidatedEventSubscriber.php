@@ -35,7 +35,7 @@ class CacheTagInvalidatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[CacheTagInvalidatedEvent::EVENT_NAME][] = ['onEvent', 100];
+    $events[CacheTagInvalidatedEvent::PRE_INVALIDATION][] = ['onPreCacheInvalidationEvent', 100];
     return $events;
   }
 
@@ -45,7 +45,7 @@ class CacheTagInvalidatedEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\alshaya_performance\Event\CacheTagInvalidatedEvent $event
    *   Event object.
    */
-  public function onEvent(CacheTagInvalidatedEvent $event) {
+  public function onPreCacheInvalidationEvent(CacheTagInvalidatedEvent $event) {
     if ($event->getTag() === ProductCategoryTree::CACHE_TAG) {
       // Refresh mega menu cache if any category term is updated.
       $this->productCategoryTree->refreshCategoryTreeCache();

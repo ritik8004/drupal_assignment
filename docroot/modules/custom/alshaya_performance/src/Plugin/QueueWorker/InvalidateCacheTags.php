@@ -95,17 +95,17 @@ class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPlu
       return;
     }
 
+    $event = new CacheTagInvalidatedEvent($tag);
+    $this->dispatcher->dispatch(CacheTagInvalidatedEvent::PRE_INVALIDATION, $event);
+
     // Invalid cache tags for node and sku.
     $this->cacheTagsInvalidator->invalidateTags([$tag]);
+
+    $this->dispatcher->dispatch(CacheTagInvalidatedEvent::POST_INVALIDATION, $event);
 
     $this->getLogger('InvalidateCacheTags')->notice('Invalidated cache tag @tag', [
       '@tag' => $tag,
     ]);
-
-    $this->dispatcher->dispatch(
-      CacheTagInvalidatedEvent::EVENT_NAME,
-      (new CacheTagInvalidatedEvent($tag))
-    );
   }
 
   /**
