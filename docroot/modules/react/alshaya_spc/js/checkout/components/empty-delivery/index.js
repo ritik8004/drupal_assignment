@@ -37,7 +37,7 @@ export default class EmptyDeliveryText extends React.Component {
         >
         <div className="modal">
           <a className="close" onClick={this.closeModal}>&times;</a>
-          <AddressForm default_val={null} handleAddressData={this.props.handleAddressData} cart={this.props.cart}/>
+        <AddressForm default_val={null} handleAddressData={this.props.handleAddressData} cart={this.props.cart}/>
         </div>
         </Popup>
       </div>  
