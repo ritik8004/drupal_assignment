@@ -2,11 +2,14 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\alshaya_social\AlshayaSocialHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -52,6 +55,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $mobileUtil;
 
   /**
+   * Social helper.
+   *
+   * @var \Drupal\alshaya_social\AlshayaSocialHelper
+   */
+  protected $socialHelper;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -64,17 +74,23 @@ class AlshayaSpcController extends ControllerBase {
    *   SPC helper.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
+   *   Social helper.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              AlshayaSpcPaymentMethodManager $payment_method_manager,
-                              CheckoutOptionsManager $checkout_options_manager,
-                              AlshayaSpcHelper $spc_helper,
-                              MobileNumberUtilInterface $mobile_util) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    AlshayaSpcPaymentMethodManager $payment_method_manager,
+    CheckoutOptionsManager $checkout_options_manager,
+    AlshayaSpcHelper $spc_helper,
+    MobileNumberUtilInterface $mobile_util,
+    AlshayaSocialHelper $social_helper
+  ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->spcHelper = $spc_helper;
     $this->mobileUtil = $mobile_util;
+    $this->socialHelper = $social_helper;
   }
 
   /**
@@ -86,7 +102,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('alshaya_spc.helper'),
-      $container->get('mobile_number.util')
+      $container->get('mobile_number.util'),
+      $container->get('alshaya_social.helper')
     );
   }
 
@@ -230,7 +247,80 @@ class AlshayaSpcController extends ControllerBase {
    * Cart login page.
    */
   public function login() {
+    $build['login_form'] = [
+      '#parents' => ['login_form'],
+      '#type' => 'fieldset',
+      '#title' => $this->t('sign in with email address'),
+    ];
 
+    $build['login_form']['form'] = $this->formBuilder()->getForm('\Drupal\alshaya_spc\Form\AlshayaSpcLoginForm');
+
+    $build['social_media'] = [
+      '#parents' => ['social_media_auth_links'],
+      '#type' => 'fieldset',
+      '#title' => $this->t('sign in with email address'),
+      '#attributes' => [
+        'class' => ['social-signin-enabled', 'social-signup-form'],
+      ],
+      '#prefix' => '<div class="checkout-login-separator order-1"><span>' . $this->t('or') . '</span></div>',
+    ];
+
+    $build['social_media']['auth_links'] = [
+      '#theme' => 'alshaya_social',
+      '#social_networks' => $this->socialHelper->getSocialNetworks(),
+      '#weight' => -1000,
+    ];
+
+    $config = $this->config('alshaya_acm_checkout.settings');
+
+    $link = Link::createFromRoute(
+      $this->t('checkout as guest'),
+      'alshaya_spc.checkout',
+      [],
+      [
+        'attributes' => [
+          'gtm-type' => 'checkout-as-guest',
+        ],
+      ]
+    );
+
+    $build['checkout_as_guest'] = $link->toRenderable();
+    $build['checkout_as_guest']['#prefix'] = '<div class="above-mobile-block">';
+    $build['checkout_as_guest']['#suffix'] = '</div>';
+
+    if (!empty($config->get('checkout_guest_email_usage.value'))) {
+      $build['checkout_as_guest']['email_usage'] = [
+        '#markup' => '<div class="checkout-guest-email-usage">' . $config->get('checkout_guest_email_usage.value') . '</div>',
+      ];
+    }
+
+    if (!empty($config->get('checkout_guest_summary.value'))) {
+      $build['checkout_as_guest']['summary'] = [
+        '#markup' => '<div class="checkout-guest-summary">' . $config->get('checkout_guest_summary.value') . '</div>',
+      ];
+    }
+
+    $build['actions'] = [
+      '#type' => 'actions',
+      '#weight' => 100,
+      '#attributes' => [
+        'class' => ['checkout-login-actions-wrapper'],
+      ],
+    ];
+
+    $build['actions']['back_to_basket'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Back to basket'),
+      '#url' => Url::fromRoute('acq_cart.cart'),
+      '#attributes' => [
+        'class' => ['back-to-basket'],
+      ],
+      '#weight' => 99,
+    ];
+
+    $build['#cache']['tags'][] = 'config:alshaya_social.settings';
+    $build['#cache']['tags'][] = 'config:alshaya_acm_checkout.settings';
+    return $build;
   }
 
 }
