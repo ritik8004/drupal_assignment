@@ -432,6 +432,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $facet_visibility = $meta_info_type['visibility'] ?? '';
     $static[$facet_id] = [
       'type' => $type,
+      // @codingStandardsIgnoreLine
       'prefix_text' => (string) $this->t($facet_prefix_text),
       'visibility' => $facet_visibility,
     ];
