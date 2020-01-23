@@ -16,21 +16,8 @@ export default class GoogleMap extends React.Component {
   }
 
   componentDidMount() {
-    // This is dummy data, can be passed from caller in props.
-    let data = [
-      {
-        'lat': -25.363,
-        'lng': 131.044,
-        'content': 'This is first content'
-      },
-      {
-        'lat': -25.300,
-        'lng': 131.000,
-        'content': 'This is second content'
-      },
-    ];
-
-    data = [];
+    // This data can be passed from caller in props.
+    let data = [];
 
     // This can be called conditionally from props
     // if map points for current location.
