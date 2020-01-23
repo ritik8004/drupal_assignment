@@ -1,6 +1,7 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
+  // The threshold for how far you should reach before loading related products.
   var scrollThreshold = 200;
 
   /**
@@ -184,29 +185,11 @@
         Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
       });
 
-      // Add related products on pdp.
-      $(window).once('updateRelatedProducts').on('scroll', function () {
-        var sku = $('article[data-vmode="full"]').attr('data-sku');
-        var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-        var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
-        var matchback = $('.horizontal-crossell' + selector);
-        var upsell =  $('.horizontal-upell' + selector);
-        var related = $('.horizontal-related' + selector);
-        var scrollPoint = window.innerHeight + window.pageYOffset;
-
-        if (!matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
-          matchback.addClass('matchback-processed');
-          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
-        }
-        if (!upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
-          upsell.addClass('upsell-processed');
-          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
-        }
-        if (!related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
-          related.addClass('related-processed');
-          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
-        }
+      // Add related products on pdp on load and scroll.
+      $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
+        Drupal.getRelatedProductPosition();
       });
+
     }
   };
 
@@ -326,6 +309,29 @@
       url: url,
       progress: {type: 'throbber'},
     }).execute();
+  }
+
+  Drupal.getRelatedProductPosition = function () {
+    var sku = $('article[data-vmode="full"]').attr('data-sku');
+    var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
+    var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
+    var matchback = $('.horizontal-crossell' + selector);
+    var upsell =  $('.horizontal-upell' + selector);
+    var related = $('.horizontal-related' + selector);
+    var scrollPoint = window.innerHeight + window.pageYOffset;
+
+    if (!matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
+      matchback.addClass('matchback-processed');
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
+    }
+    if (!upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
+      upsell.addClass('upsell-processed');
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
+    }
+    if (!related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
+      related.addClass('related-processed');
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
+    }
   }
 
   $(window).on('load', function () {
