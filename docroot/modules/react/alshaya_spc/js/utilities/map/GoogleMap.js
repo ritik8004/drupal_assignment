@@ -234,7 +234,10 @@ export default class GoogleMap extends React.Component {
       disableDefaultUI: false,
       mapTypeControl: false,
       streetViewControl: false,
-      fullscreenControl: false
+      fullscreenControl: false,
+      zoomControlOptions: {
+        position: window.google.maps.ControlPosition.LEFT_BOTTOM
+      },
     })
   }
 
@@ -244,7 +247,7 @@ export default class GoogleMap extends React.Component {
         <div className='spc-location-g-map-search form-type-textfield'>
           <input placeholder={Drupal.t('Enter a location')} ref={ref => (this.autocomplete = ref)} id='searchTextField' type='text'/>
         </div>
-        <div id='google-map' ref={this.googleMapRef} style={{width: '100%', height: '500px'}}/>
+        <div id='google-map' ref={this.googleMapRef} style={{width: '100%', height: '600px'}}/>
       </div>
     );
   }

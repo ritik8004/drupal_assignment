@@ -1,0 +1,75 @@
+@mixin spc-placeholder-label() {
+  font-size: 0.875rem;
+  color: $spc-input-label;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@mixin spc-placeholder-active() {
+  top: -1.05em;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.spc-type-textfield,
+.spc-type-select,
+.spc-type-tel {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+// Type = Text.
+.spc-type-textfield {
+  input[type=text] {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: $spc-form-input;
+  }
+
+  label {
+    @include spc-placeholder-label;
+  }
+
+  input:focus ~ label,
+  input:active ~ label,
+  input:valid ~ label {
+    @include spc-placeholder-active;
+  }
+}
+
+// Type = Select.
+.spc-type-select {
+  label {
+    font-size: 0.75rem;
+    color: $spc-input-label;
+  }
+}
+
+// Type = Telephone.
+.spc-type-tel {
+  label {
+    font-size: 0.75rem;
+    color: $spc-input-label;
+  }
+
+  .country-code {
+    position: absolute;
+    #{$left}: 0;
+    top: 22px;
+    z-index: 1;
+    color: $spc-form-input;
+  }
+
+  input[type=text] {
+    height: 1.5rem;
+    padding-#{$left}: 2.75rem;
+    background: transparent;
+    color: $spc-form-input;
+  }
+}
