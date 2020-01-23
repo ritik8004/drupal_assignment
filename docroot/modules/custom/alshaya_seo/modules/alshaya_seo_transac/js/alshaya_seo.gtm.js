@@ -96,9 +96,19 @@
 
       // Push GTM event on add to cart failure.
       $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function () {
-        var url = window.location.href;
-        var label = 'Update cart failed on ' + url;
-        var errorMessage = $('.errors-container .error .message').text();
+        var sku = $('.selected-variant-sku', $(this)).val();
+        var errorMessage = $('.errors-container .error .message', $(this)).text();
+        // Get selected attributes.
+        var attributes = [];
+        $('#configurable_ajax select', $(this)).each(function() {
+          var configLabel = $(this).attr('data-default-title');
+          var configValue = $('option:selected', $(this)).text();
+          var attribute = configLabel + ': ' + configValue;
+          attributes.push(attribute);
+        });
+        // Set Event label.
+        var label = 'Update cart failed for Product [' + sku + '] ';
+        label = label + attributes.join(', ');
         var productData = {
           event: 'eventTracker',
           eventCategory: 'Update cart error',
