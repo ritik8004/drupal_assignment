@@ -145,6 +145,7 @@ class AlshayaSpcController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_spc/checkout',
+          'alshaya_spc/spc.google_map',
           'alshaya_white_label/spc-checkout',
         ],
         'drupalSettings' => [
@@ -155,6 +156,7 @@ class AlshayaSpcController extends ControllerBase {
           'address_fields' => $this->spcHelper->getAddressFields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+          'map_marker_icon' => $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url'),
         ],
       ],
     ];
