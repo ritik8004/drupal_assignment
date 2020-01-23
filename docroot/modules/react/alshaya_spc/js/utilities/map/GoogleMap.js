@@ -30,13 +30,20 @@ export default class GoogleMap extends React.Component {
       },
     ];
 
+    // This can be called conditionally from props
+    // if map points for current location.
+    this.setCurrentLocationCoords();
+
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     this.googleMap = this.createGoogleMap(data[0]);
 
-    // This will be used only for HD as there we will have
-    // only one marker on map and thus props can be used here.
-    this.googleMap.addListener('click', this.onMapClick);
+    // This can be passed from props if click on
+    // map is allowed or not.
+    let mapClickable = true;
+    if (mapClickable) {
+      this.googleMap.addListener('click', this.onMapClick);
+    }
 
     // If there are multiple markers.
     // This will be the case of CnC and thus can be used
@@ -62,6 +69,39 @@ export default class GoogleMap extends React.Component {
 
     // Initialize geocoder object.
     this.geocoder = new window.google.maps.Geocoder();
+  }
+
+  /**
+   * Get current location coordinates.
+   */
+  setCurrentLocationCoords = () => {
+    // This can be passed from props if map needs
+    // to be centered around current location.
+    let centerAroundCurrentLocation = true;
+    if (centerAroundCurrentLocation) {
+      // If location access is enabled by user.
+      if (navigator && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          let currentCoords = {
+            'lat': pos.coords.latitude,
+            'lng': pos.coords.longitude,
+          };
+
+          this.panMapToGivenCoords(currentCoords);
+        });
+      }
+    }
+  }
+
+  /**
+   * Pan map to given location with coords and marker.
+   */
+  panMapToGivenCoords = (coords) => {
+    this.removeAllMarkersFromMap();
+    // Keep only currently selected marker.
+    var marker = this.createMarker(coords, this.googleMap);
+    this.googleMap.panTo(marker.getPosition());
+    this.markers.push(marker);
   }
 
   /**
@@ -138,13 +178,7 @@ export default class GoogleMap extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
-    this.removeAllMarkersFromMap();
-    // Create a new marker object.
-    let marker = this.createMarker(place.geometry.location, this.googleMap);
-    // Center the map to selected place.
-    this.googleMap.panTo(marker.getPosition());
-    this.markers.push(marker);
-
+    this.panMapToGivenCoords(place.geometry.location);
     // Get geocode details for address.
     this.geocodeFromLatLng(place.geometry.location);    
   }
@@ -153,11 +187,7 @@ export default class GoogleMap extends React.Component {
    * When click on map.
    */
   onMapClick = (e) => {
-    this.removeAllMarkersFromMap();
-    // Keep only currently selected marker.
-    var marker = this.createMarker(e.latLng, this.googleMap);
-    this.googleMap.panTo(marker.getPosition());
-    this.markers.push(marker);
+    this.panMapToGivenCoords(e.latLng);
   }
 
   /**
