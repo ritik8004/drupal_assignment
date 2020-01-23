@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {createMarker, createInfoWindow} from './map_utils';
+
 export default class GoogleMap extends React.Component {
 
   constructor(props) {
@@ -25,6 +27,9 @@ export default class GoogleMap extends React.Component {
     // can be provided from the caller in props.
     this.googleMap = this.createGoogleMap(data[0]);
 
+    // Storing in global so that can be accessed byt parent and others.
+    window.spcMap = this.googleMap;
+
     // This can be passed from props if click on
     // map is allowed or not.
     let mapClickable = false;
@@ -36,8 +41,8 @@ export default class GoogleMap extends React.Component {
     // This will be the case of CnC and thus can be used
     // conditionally and can be determined by props.
     for (var i = 0; i < data.length; i++) {
-      let marker = this.createMarker({lat: data[i]['lat'], lng: data[i]['lng']}, this.googleMap);
-      let infowindow = this.createInfoWindow(data[i]['content']);
+      let marker = createMarker({lat: data[i]['lat'], lng: data[i]['lng']}, this.googleMap);
+      let infowindow = createInfoWindow(data[i]['content']);
       // When marker is clicked.
       marker.addListener('click', function () {
         infowindow.open(this.googleMap, marker);
@@ -83,7 +88,7 @@ export default class GoogleMap extends React.Component {
   panMapToGivenCoords = (coords) => {
     this.removeAllMarkersFromMap();
     // Keep only currently selected marker.
-    var marker = this.createMarker(coords, this.googleMap);
+    var marker = createMarker(coords, this.googleMap);
     this.googleMap.panTo(marker.getPosition());
     this.markers.push(marker);
   }
@@ -126,26 +131,6 @@ export default class GoogleMap extends React.Component {
    */
   autocompleteTextField = () => {
     return document.getElementById('searchTextField');
-  }
-
-  /**
-   * Create info window.
-   */
-  createInfoWindow = (content) => {
-    return new window.google.maps.InfoWindow({
-      content: content
-    });
-  }
-
-  /**
-   * Create marker.
-   */
-  createMarker = (position, map) => {
-    return new window.google.maps.Marker({
-      position: position,
-      map: map,
-      icon: '' // This can be later dynamic based on HD or CnC.
-    })
   }
 
   /**
