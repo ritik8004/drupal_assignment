@@ -96,7 +96,8 @@
 
       // Push GTM event on add to cart failure.
       $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function () {
-        var sku = $('.selected-variant-sku', $(this)).val();
+        var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
+        var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
         var errorMessage = $('.errors-container .error .message', $(this)).text();
         // Get selected attributes.
         var attributes = [];
@@ -107,7 +108,7 @@
           attributes.push(attribute);
         });
         // Set Event label.
-        var label = 'Update cart failed for Product [' + sku + '] ';
+        var label = 'Update cart failed for Product [' + product.id + '] ';
         label = label + attributes.join(', ');
         var productData = {
           event: 'eventTracker',
