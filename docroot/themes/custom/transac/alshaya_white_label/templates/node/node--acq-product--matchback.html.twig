@@ -7,7 +7,7 @@
 %}
 
 <article{{ attributes }} {{ gtm_attributes }}>
-  <div class="cross-sell-product-components acq-content-product-matchback">
+  <div class="cross-sell-product-components acq-content-product acq-content-product-matchback">
 
     <div class="cross-sell-product-component-left {{ image_slider_position_pdp }}">
       {% if content.gallery is not empty %}
@@ -15,21 +15,21 @@
       {% else %}
       <div id="product-zoom-container"></div>
       {% endif %}
+      <div class="matchback-hover-text">{{ 'Tap Image to Enlarge'|t }}</div>
     </div>
 
     <div class="cross-sell-product-component-center">
+      {% if content.matchback_product_collection %}
+        <div class="matchback-prod-collection-label">
+          {{ content.matchback_product_collection.value }}
+        </div>
+      {% endif %}
       <h1><a class="full-prod-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ label }}</a></h1>
-      <div class="short-description-wrapper">
+      <div class="short-description-wrapper matchback-description-wrapper">
         <div class="content--short-description">
-          <h2 class="field__label">{{ 'Product Description'|t }}</h2>
           <div class="field__content-wrapper">
             <div class="field__content">
               <div class="desc-wrapper">
-                {% if content.short_desc.label|render %}
-                <div class="desc-label">
-                  {{ content.short_desc.label }}
-                </div>
-                {% endif %}
                 {% if content.short_desc.value|render %}
                 <div class="desc-value">
                   {{ content.short_desc.value }}
@@ -37,31 +37,27 @@
                 {% endif %}
               </div>
               {% for desc in content.description %}
-              {% if desc.value|render %}
-              <div class="desc-wrapper">
-                {% if desc.label|render %}
-                <div class="desc-label">
-                  {{ desc.label }}
-                </div>
-                {% endif %}
+                {% if desc.value|render %}
+                  <div class="desc-wrapper">
+                    {% if desc.label|render %}
+                      <div class="desc-label">
+                        {{ desc.label }}
+                      </div>
+                    {% endif %}
 
-                <div class="desc-value">
-                  {{ desc.value }}
-                </div>
-              </div>
-              {% endif %}
+                    <div class="desc-value">
+                      {{ desc.value }}
+                    </div>
+                  </div>
+                {% endif %}
               {% endfor %}
             </div>
             {% if content.description %}
-            {% if content.read_more_style.value|render %}
-            <span class="read-more-description-link"
-              style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-            <span class="read-more-description-link-mobile"
-              style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-            {% else %}
-            <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-            <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
-            {% endif %}
+              {% if content.read_more_style.value|render %}
+                <span class="read-more-description-link-mobile matchback-readmore" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+              {% else %}
+                <span class="read-more-description-link-mobile matchback-readmore">{{ 'Read more'|t }}</span>
+              {% endif %}
             {% endif %}
           </div>
         </div>

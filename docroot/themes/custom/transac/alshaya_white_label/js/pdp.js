@@ -56,10 +56,16 @@
             $(this).parent().toggleClass('show-detail');
             $(this).parent().find('.desc-wrapper:first-child').show();
             $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
-            $(this).replaceWith('<span class="read-more-description-link-mobile">' + Drupal.t('Read more') + '</span>');
-            $('html,body').animate({
-              scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
-            }, 'slow');
+            var animate = $(this).parents('.matchback-description-wrapper') ? false : true;
+            if (animate) {
+              $(this).replaceWith('<span class="read-more-description-link-mobile">' + Drupal.t('Read more') + '</span>');
+              $('html,body').animate({
+                scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
+              }, 'slow');
+            }
+            else {
+              $(this).replaceWith('<span class="read-more-description-link-mobile matchback-readmore">' + Drupal.t('Read more') + '</span>');
+            }
           });
         });
 

@@ -299,3 +299,16 @@ megamenu_dynamic_layout:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+matchback_layout:
+  js:
+    conditional-sass/matchback-layout/js/matchback-layout.js: {}
+  css:
+    theme:
+      css/conditional-sass/matchback-layout/matchback-layout.ltr.css: {}
+  dependencies:
+  - core/jquery
+  - core/drupal
+  - alshaya_white_label/slick
+  - alshaya_white_label/alshaya_image_lazy_load
+  - alshaya_product_zoom/instagram_dots

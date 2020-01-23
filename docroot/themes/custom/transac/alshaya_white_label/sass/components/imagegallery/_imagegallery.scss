@@ -5,12 +5,14 @@
   left: 0 !important;
   background: rgba(0, 0, 0, 0.5);
 
-  @include breakpoint($tablet) {
-    padding: calc((100vh - 40.5rem) / 2) calc((100vw - 45rem) / 2);
-  }
+  &:not(.dialog-matchback-image-gallery-container) {
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 40.5rem) / 2) calc((100vw - 45rem) / 2);
+    }
 
-  @include breakpoint($desktop) {
-    padding: calc((100vh - 34.5rem) / 2) calc((100vw - 49.5625rem) / 2);
+    @include breakpoint($desktop) {
+      padding: calc((100vh - 34.5rem) / 2) calc((100vw - 49.5625rem) / 2);
+    }
   }
 
   .ui-dialog-titlebar {
