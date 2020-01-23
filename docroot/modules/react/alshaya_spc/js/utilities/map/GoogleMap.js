@@ -214,7 +214,8 @@ export default class GoogleMap extends React.Component {
       center: centerPosition,
       disableDefaultUI: false,
       mapTypeControl: false,
-      streetViewControl: false
+      streetViewControl: false,
+      fullscreenControl: false
     })
   }
 
