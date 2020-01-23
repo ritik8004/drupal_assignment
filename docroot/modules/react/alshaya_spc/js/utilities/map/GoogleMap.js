@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {createMarker, createInfoWindow} from './map_utils';
+
 export default class GoogleMap extends React.Component {
 
   constructor(props) {
@@ -11,8 +13,6 @@ export default class GoogleMap extends React.Component {
     this.markers = [];
     // Global object for autocomplete.
     this.autocomplete = null;
-    // Global geocoder object,
-    this.geocoder = null;
   }
 
   componentDidMount() {
@@ -27,9 +27,12 @@ export default class GoogleMap extends React.Component {
     // can be provided from the caller in props.
     this.googleMap = this.createGoogleMap(data[0]);
 
+    // Storing in global so that can be accessed byt parent and others.
+    window.spcMap = this.googleMap;
+
     // This can be passed from props if click on
     // map is allowed or not.
-    let mapClickable = true;
+    let mapClickable = false;
     if (mapClickable) {
       this.googleMap.addListener('click', this.onMapClick);
     }
@@ -38,8 +41,8 @@ export default class GoogleMap extends React.Component {
     // This will be the case of CnC and thus can be used
     // conditionally and can be determined by props.
     for (var i = 0; i < data.length; i++) {
-      let marker = this.createMarker({lat: data[i]['lat'], lng: data[i]['lng']}, this.googleMap);
-      let infowindow = this.createInfoWindow(data[i]['content']);
+      let marker = createMarker({lat: data[i]['lat'], lng: data[i]['lng']}, this.googleMap);
+      let infowindow = createInfoWindow(data[i]['content']);
       // When marker is clicked.
       marker.addListener('click', function () {
         infowindow.open(this.googleMap, marker);
@@ -55,9 +58,6 @@ export default class GoogleMap extends React.Component {
       componentRestrictions: {country: window.drupalSettings.country_code}
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
-
-    // Initialize geocoder object.
-    this.geocoder = new window.google.maps.Geocoder();
   }
 
   /**
@@ -88,78 +88,9 @@ export default class GoogleMap extends React.Component {
   panMapToGivenCoords = (coords) => {
     this.removeAllMarkersFromMap();
     // Keep only currently selected marker.
-    var marker = this.createMarker(coords, this.googleMap);
+    var marker = createMarker(coords, this.googleMap);
     this.googleMap.panTo(marker.getPosition());
     this.markers.push(marker);
-  }
-
-  /**
-   * Get address info from lat/lng.
-   */
-  geocodeFromLatLng = (latlng) => {
-    this.geocoder.geocode({'location': latlng}, function(results, status) {
-      if (status === 'OK') {
-        if (results[0]) {
-          // Use this address info.
-          const address = results[0].address_components;
-        }
-      }
-    });
-  }
-
-  /**
-  * Get the city and set the city input value to the one selected
-  *
-  * @param addressArray
-  * @return {string}
-  */
-  getCity = ( addressArray ) => {
-    let city = '';
-    for( let i = 0; i < addressArray.length; i++ ) {
-      if ( addressArray[ i ].types[0] && 'administrative_area_level_2' === addressArray[ i ].types[0] ) {
-        city = addressArray[ i ].long_name;
-        return city;
-      }
-    }
-  }
-
-  /**
-  * Get the area and set the area input value to the one selected
-  *
-  * @param addressArray
-  * @return {string}
-  */
-
-  getArea = ( addressArray ) => {
-    let area = '';
-    for( let i = 0; i < addressArray.length; i++ ) {
-      if ( addressArray[ i ].types[0]  ) {
-        for ( let j = 0; j < addressArray[ i ].types.length; j++ ) {
-          if ( 'sublocality_level_1' === addressArray[ i ].types[j] || 'locality' === addressArray[ i ].types[j] ) {
-            area = addressArray[ i ].long_name;
-            return area;
-          }
-        }
-      }
-    }
-  }
-
-  /**
-  * Get the address and set the address input value to the one selected
-  *
-  * @param addressArray
-  * @return {string}
-  */
-  getState = ( addressArray ) => {
-    let state = '';
-    for( let i = 0; i < addressArray.length; i++ ) {
-      for( let i = 0; i < addressArray.length; i++ ) {
-        if ( addressArray[ i ].types[0] && 'administrative_area_level_1' === addressArray[ i ].types[0] ) {
-          state = addressArray[ i ].long_name;
-          return state;
-        }
-      }
-    }
   }
 
   /**
@@ -202,26 +133,6 @@ export default class GoogleMap extends React.Component {
    */
   autocompleteTextField = () => {
     return document.getElementById('searchTextField');
-  }
-
-  /**
-   * Create info window.
-   */
-  createInfoWindow = (content) => {
-    return new window.google.maps.InfoWindow({
-      content: content
-    });
-  }
-
-  /**
-   * Create marker.
-   */
-  createMarker = (position, map) => {
-    return new window.google.maps.Marker({
-      position: position,
-      map: map,
-      icon: '' // This can be later dynamic based on HD or CnC.
-    })
   }
 
   /**
