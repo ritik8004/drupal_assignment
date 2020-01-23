@@ -30,6 +30,8 @@ export default class GoogleMap extends React.Component {
       },
     ];
 
+    data = [];
+
     // This can be called conditionally from props
     // if map points for current location.
     this.setCurrentLocationCoords();
