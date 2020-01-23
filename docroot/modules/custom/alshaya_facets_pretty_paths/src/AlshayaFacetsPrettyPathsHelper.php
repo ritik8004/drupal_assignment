@@ -15,11 +15,15 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Utilty Class.
  */
 class AlshayaFacetsPrettyPathsHelper {
+
+  use StringTranslationTrait;
+
   /**
    * The route match service.
    *
@@ -428,7 +432,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $facet_visibility = $meta_info_type['visibility'] ?? '';
     $static[$facet_id] = [
       'type' => $type,
-      'prefix_text' => (string) t($facet_prefix_text),
+      'prefix_text' => (string) $this->t($facet_prefix_text),
       'visibility' => $facet_visibility,
     ];
     return $static[$facet_id];
