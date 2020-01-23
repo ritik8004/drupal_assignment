@@ -428,7 +428,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $config = \Drupal::config('facets.facet.' . $facet_id);
     $meta_info_type = $config->get('third_party_settings.alshaya_facets_pretty_paths.meta_info_type');
     $type = $meta_info_type['type'] ?? self::FACET_META_TYPE_IGNORE;
-    $facet_prefix_text = $meta_info_type['prefix_text'] ?? '';
+    $facet_prefix_text = (string) $meta_info_type['prefix_text'] ?? '';
     $facet_visibility = $meta_info_type['visibility'] ?? '';
     $static[$facet_id] = [
       'type' => $type,
