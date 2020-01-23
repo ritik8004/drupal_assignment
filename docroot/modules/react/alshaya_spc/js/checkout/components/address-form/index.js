@@ -1,10 +1,11 @@
 import React from 'react';
 
-import axios from 'axios';
 import SectionTitle from '../../../utilities/section-title';
 import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import {fixedFieldValidation} from '../fixed-fields/validation';
+import GoogleMap from '../../../utilities/map/GoogleMap';
+import {getArea, getBlock, createMarker, getMap} from '../../../utilities/map/map_utils';
 
 export default class AddressForm extends React.Component {
 
@@ -88,6 +89,38 @@ export default class AddressForm extends React.Component {
 
   };
 
+  /**
+   * When user click on deliver to current location.
+   */
+  deliverToCurrentLocation = () => {
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        let currentCoords = {
+          'lat': pos.coords.latitude,
+          'lng': pos.coords.longitude,
+        };
+
+        let geocoder = new window.google.maps.Geocoder()
+        geocoder.geocode({'location': currentCoords}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              // Use this address info.
+              const address = results[0].address_components;
+              let area = getArea(address);
+              let block = getBlock(address);
+              // Fill the address form.
+              document.getElementById('address_line2').value = area;
+              document.getElementById('locality').value = block;
+              // Pan the map to location.
+              let marker = createMarker(currentCoords, getMap());
+              getMap().panTo(marker.getPosition());
+            }
+          }
+        });
+      });
+    }
+  }
+
   render() {
     let dynamicFields = [];
     let default_val = [];
@@ -101,11 +134,15 @@ export default class AddressForm extends React.Component {
 
     return(
       <div className="spc-address-form">
-        <div className='spc-address-form-map'/>
+        <div className='spc-address-form-map'>
+          <GoogleMap/>
+        </div>
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Delivery information')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
-            <div className='spc-deliver-button'>{Drupal.t('Deliver to my location')}</div>
+            <div className='spc-deliver-button' onClick={() => this.deliverToCurrentLocation()}>
+              {Drupal.t('Deliver to my location')}
+            </div>
             <form className='spc-address-add' onSubmit={this.handleSubmit}>
               {dynamicFields}
               <FixedFields default_val={default_val} />
