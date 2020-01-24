@@ -1,0 +1,7 @@
+dynamic_yield.settings_form:
+  path: '/admin/config/system/dynamic_yield'
+  defaults:
+    _form: '\Drupal\dynamic_yield\Form\DynamicYieldSettingsForm'
+    _title: 'Dynamic yield'
+  requirements:
+    _permission: 'administer dynamic yield'
