@@ -3,7 +3,7 @@
     attach: function (context, settings) {
       $("#alshaya-options-list-autocomplete-form").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        $('.fragrance_name .attribute-filter-name-list .title').filter(function() {
+        $('.attribute-option-list-shop-by .attribute-filter-name-list .title').filter(function() {
           var parent = $(this).parents('li.level-1');
           var noResults = $('.attribute-filter-name-list.no-result-container');
           // By default, show parents and hide no results.

@@ -39,13 +39,6 @@ function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, In
 }
 
 /**
- * Implements hook_alshaya_reset_config_configs_to_reset_alter().
- */
-function alshaya_search_algolia_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
-  $reset[] = 'search_api.server.algolia';
-}
-
-/**
  * Implements hook_acq_sku_base_fields_updated().
  */
 function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
@@ -166,9 +159,9 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 }
 
 /**
- * Implements hook_brand_carousel_link_alter().
+ * Implements hook_alshaya_search_filter_link_alter().
  */
-function alshaya_search_algolia_brand_carousel_link_alter(&$link, $attribute) {
+function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, $attribute) {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $link = '/' . $langcode . '/search#refinementList[' . $attribute . '][0]=';
+  $link = '/' . $langcode . '/search#refinementList[attr_' . $attribute . '][0]=';
 }

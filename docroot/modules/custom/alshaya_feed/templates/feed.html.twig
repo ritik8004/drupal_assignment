@@ -2,7 +2,7 @@
   <sku>{{ product.sku }}</sku>
   <name><![CDATA[{{ product.name }}]]></name>
   <url>{{ product.url }}</url>
-  <type>{{ product.type_id }}</type>
+  <product_type>{{ product.product_type }}</product_type>
   <status>{{ product.status }}</status>
   <regular_price>{{ product.original_price }}</regular_price>
   <special_price>{{ product.special_price }}</special_price>
@@ -18,12 +18,12 @@
   </categories>
   <short_description>
     {% if product.short_description is not empty %}
-      <![CDATA[{{ product.short_description }}]]>
+      {{ product.short_description | spaceless | striptags }}
     {% endif %}
   </short_description>
   <description>
     {% if product.description is not empty %}
-      <![CDATA[{{ product.description }}]]>
+      {{ product.description | spaceless | striptags }}
     {% endif %}
   </description>
   <custom_attributes>
@@ -33,10 +33,10 @@
       {% endfor %}
     {% endif %}
   </custom_attributes>
-  {% if product.type_id == 'simple' %}
+  {% if product.product_type == 'simple' %}
     <stock>
-      <qty>{{ product.stock.qty }}</qty>
-      <is_in_stock>{{ product.stock.status }}</is_in_stock>
+      <quantity>{{ product.stock.qty }}</quantity>
+      <availability>{{ product.stock.status }}</availability>
     </stock>
     <images>
       {% for image in product.images %}
@@ -72,8 +72,8 @@
           {% endfor %}
         </images>
         <stock>
-          <qty>{{ variant.stock.qty }}</qty>
-          <is_in_stock>{{ variant.stock.status }}</is_in_stock>
+          <quantity>{{ variant.stock.qty }}</quantity>
+          <availability>{{ variant.stock.status }}</availability>
         </stock>
       </variant>
       {% endif %}

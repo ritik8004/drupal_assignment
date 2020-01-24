@@ -42,11 +42,6 @@ function alshaya_search_algolia_install() {
     'alshaya_white_label'
   );
 
-  // Reset Algolia keys in configs.
-  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
-  $config_check = \Drupal::service('alshaya_acm.config_check');
-  $config_check->checkConfig(TRUE, 'search_api.server.algolia');
-
   $strings = [
     'Search' => [
       'en' => 'What are you looking for?',

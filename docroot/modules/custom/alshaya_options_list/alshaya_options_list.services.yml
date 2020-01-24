@@ -9,6 +9,7 @@ services:
       - '@acq_sku.fields_manager'
       - '@plugin.manager.search_api.parse_mode'
       - '@facets.manager'
+      - '@module_handler'
 
   alshaya_options_list.breadcrumb:
     class: Drupal\alshaya_options_list\Breadcrumb\AlshayaOptionsBreadcrumbBuilder
