@@ -6,21 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Enable metatag_twitter_cards module & their default configs.
- */
-function alshaya_fl_update_8002() {
-  \Drupal::service('module_installer')->install(['metatag_twitter_cards']);
-  // Set default value for twitter cards creator.
-  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global')
-    ->set('tags.twitter_cards_creator', '@footlocker')
-    ->set('tags.twitter_cards_site', '@footlocker')
-    ->set('tags.twitter_cards_type', 'summary')
-    ->save();
-}
-
-/**
  * Implements hook_update_n().
  *
  * Update translation of meta content.
