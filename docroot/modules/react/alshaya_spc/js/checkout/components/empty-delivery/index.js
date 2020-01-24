@@ -31,7 +31,7 @@ export default class EmptyDeliveryText extends React.Component {
           {Drupal.t('Please add yor contact details and address.')}
         </div>
         <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-          <a className="close" onClick={this.closeModal}>&times;</a>
+          <a className='close' onClick={this.closeModal}>&times;</a>
           <AddressForm default_val={null} handleAddressData={this.props.handleAddressData} cart={this.props.cart}/>
         </Popup>
       </div>

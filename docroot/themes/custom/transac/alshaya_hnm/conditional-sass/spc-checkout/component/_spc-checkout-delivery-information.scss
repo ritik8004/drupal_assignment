@@ -1,0 +1,19 @@
+.spc-checkout-delivery-information {
+  .delivery-information-preview {
+    .spc-delivery-customer-info {
+      .delivery-name {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .spc-delivery-shipping-methods {
+      .shipping-methods {
+        .shipping-method {
+          .carrier-title {
+            font-family: $hnm-demibold;
+          }
+        }
+      }
+    }
+  }
+}

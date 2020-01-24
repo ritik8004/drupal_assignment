@@ -12,9 +12,10 @@ export default class SingleShippingMethod extends React.Component {
     }
 
   	return(
-      <div className='single-shipping-method'>
-        <span>{method.carrier_title} {method.method_title}</span>
-        <span>{price}</span>
+      <div className='single-shipping-method shipping-method'>
+        <span className='carrier-title'>{method.carrier_title}</span>
+        <span className='method-title'>{method.method_title}</span>
+        <span className='spc-price'>{price}</span>
       </div>
     );
   }

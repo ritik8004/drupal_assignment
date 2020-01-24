@@ -34,8 +34,9 @@ export default class ShippingMethod extends React.Component {
       	  name='shipping-method' />
 
         <label className='radio-sim radio-label'>
-          <span>{this.props.method.carrier_title} {this.props.method.method_title}</span>
-          <span>{price}</span>
+          <span className='carrier-title'>{this.props.method.carrier_title}</span>
+          <span className='method-title'>{this.props.method.method_title}</span>
+          <span className='spc-price'>{price}</span>
         </label>
       </div>
     );

@@ -61,14 +61,14 @@
   .country-code {
     position: absolute;
     #{$left}: 0;
-    top: 22px;
+    top: 1.25rem;
     z-index: 1;
     color: $spc-form-input;
   }
 
   input[type=text] {
     height: 1.5rem;
-    padding-#{$left}: 2.75rem;
+    padding-#{$left}: 2.25rem !important;
     background: transparent;
     color: $spc-form-input;
   }

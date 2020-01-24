@@ -23,10 +23,17 @@ export default class HomeDeliveryInfo extends React.Component {
     let static_hd_info = this.props.hd_info;
     return (
       <div className='delivery-information-preview'>
-        <div className='delivery-name'>{static_hd_info.firstname} {static_hd_info.lastname}</div>
-        <span className='delivery-email'>{static_hd_info.email}</span> <span className='delivery-tel'>{static_hd_info.telephone}</span>
-        <div className='spc-address-form-edit-link' onClick={this.openModal}>
-          {Drupal.t('Change')}
+        <div className='spc-delivery-customer-info'>
+          <div className='delivery-name'>{static_hd_info.firstname} {static_hd_info.lastname}</div>
+          <div className='delivery-address'>
+            {static_hd_info.address_block_segment}
+            , {static_hd_info.address_building_segment}
+            , {static_hd_info.address_apartment_segment}
+            , {static_hd_info.city}
+          </div>
+          <div className='spc-address-form-edit-link' onClick={this.openModal}>
+            {Drupal.t('Change')}
+          </div>
         </div>
         <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
           <a className="close" onClick={this.closeModal}></a>
