@@ -212,17 +212,17 @@
         grid-column: 1 / 2;
       }
 
+      &:nth-child(3n+2):not(:nth-child(2)) {
+        width: 47%;
+        margin: 0 auto;
+      }
+
       &.last {
         &:nth-child(2n+1) {
           grid-column: 1 / -1;
 
-          #wrap {
-            width: 47%;
-            margin: 0 auto;
-
-            #cloud-zoom-big {
-              #{$left}: calc(150% + 3.125rem) !important;
-            }
+          #cloud-zoom-big {
+            #{$left}: calc(150% + 3.125rem) !important;
           }
         }
       }
