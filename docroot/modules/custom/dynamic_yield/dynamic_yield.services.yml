@@ -1,0 +1,4 @@
+services:
+  dynamic_yield.dynamic_yield:
+    class: Drupal\dynamic_yield\DynamicYieldService
+    arguments: ['@config.factory']
