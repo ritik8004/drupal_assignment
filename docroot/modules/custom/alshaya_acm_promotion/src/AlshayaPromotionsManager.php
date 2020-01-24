@@ -397,8 +397,28 @@ class AlshayaPromotionsManager {
     foreach ($free_skus ?? [] as $free_sku) {
       $sku_entity = SKU::loadFromSku($free_sku);
 
-      if ($sku_entity instanceof SKUInterface) {
-        $free_sku_entities[] = $sku_entity;
+      if (!($sku_entity instanceof SKUInterface)) {
+        continue;
+      }
+
+      switch ($sku_entity->bundle()) {
+        case 'simple':
+          if ($this->skuManager->isSkuFreeGift($sku_entity)) {
+            $free_sku_entities[] = $sku_entity;
+          }
+          break;
+
+        case 'configurable':
+          // Add if we have at-least one variant available as free.
+          foreach (Configurable::getChildSkus($sku_entity) as $child_sku) {
+            $child = SKU::loadFromSku($child_sku);
+
+            if ($child instanceof SKUInterface && $this->skuManager->isSkuFreeGift($child)) {
+              $free_sku_entities[] = $sku_entity;
+              break;
+            }
+          }
+          break;
       }
     }
 
@@ -447,9 +467,13 @@ class AlshayaPromotionsManager {
         continue;
       }
 
-      $free_gift_promos[$promotion_id] = $promotion;
-
       $free_skus = $this->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
+
+      if (empty($free_skus)) {
+        continue;
+      }
+
+      $free_gift_promos[$promotion_id] = $promotion;
 
       $route_parameters = [
         'node' => $promotion_id,
