@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for - at.
+ */
+function alshaya_master_update_8034() {
+  $strings = [
+    'at' => [
+      'ar' => ' تبدأ من',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding arabic translations for - Your search did not return any results.
  */
 function alshaya_master_update_8033() {
