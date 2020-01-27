@@ -134,16 +134,23 @@ export default class AddressForm extends React.Component {
 
     return(
       <div className="spc-address-form">
-        <div className='spc-address-form-map'><GoogleMap/></div>
+        { window.innerWidth > 768 &&
+          <div className='spc-address-form-map'><GoogleMap/></div>
+        }
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Delivery information')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
             <div className='spc-deliver-button' onClick={() => this.deliverToCurrentLocation()}>{Drupal.t('Deliver to my location')}</div>
+            { window.innerWidth < 768 &&
+              <div className='spc-address-form-map'><GoogleMap/></div>
+            }
             <div className='spc-address-form-content'>
               <form className='spc-address-add' onSubmit={this.handleSubmit}>
                 <div className='delivery-address-fields'> {dynamicFields} </div>
                 <FixedFields default_val={default_val} />
-                <button className='spc-address-form-submit' type="submit">{Drupal.t('Save')}</button>
+                <div className='spc-address-form-actions'>
+                  <button className='spc-address-form-submit' type="submit">{Drupal.t('Save')}</button>
+                </div>
               </form>
             </div>
           </div>
