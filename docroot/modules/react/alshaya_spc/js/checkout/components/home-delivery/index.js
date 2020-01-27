@@ -28,9 +28,9 @@ export default class HomeDeliveryInfo extends React.Component {
   componentDidMount() {
     document.addEventListener('refreshCartOnAddress', (e) => {
       var data = e.detail.data();
+      this.props.refreshCart(data);
       // Close the modal.
       this.closeModal();
-      this.props.refreshCart(data);
     }, false);
   }
 
