@@ -27,7 +27,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@mothercareuk',
             'tags.twitter_cards_site' => '@mothercareuk',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
@@ -62,9 +61,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'social_auth_google.settings' => [
             'client_id' => '162325944786-f1go0fiukfja1rs44ajk5341r2omgocr.apps.googleusercontent.com',
             'client_secret' => '_C_obvqFmy2YHs6n2o-9hMgg',
-          ],
-          'metatag.metatag_defaults.global' => [
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
@@ -131,7 +127,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@BBWMENA',
             'tags.twitter_cards_site' => '@BBWMENA',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
@@ -167,7 +162,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@footlocker',
             'tags.twitter_cards_site' => '@footlocker',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
@@ -203,7 +197,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@potterybarn',
             'tags.twitter_cards_site' => '@potterybarn',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
@@ -239,7 +232,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@VictoriasSecret',
             'tags.twitter_cards_site' => '@VictoriasSecret',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
@@ -273,6 +265,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
           'google_tag.container.primary' => [
             'container_id' => '',
+          ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
