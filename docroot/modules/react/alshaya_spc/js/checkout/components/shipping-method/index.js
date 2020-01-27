@@ -7,7 +7,7 @@ export default class ShippingMethod extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'selectedOption': ''
+      'selectedOption': this.props.selected
     };
   }
 
@@ -17,7 +17,7 @@ export default class ShippingMethod extends React.Component {
     });
 
     document.getElementById('shipping-method-' + method.method_code).checked = true;
-  };
+  }
 
   render () {
     let method = this.props.method;

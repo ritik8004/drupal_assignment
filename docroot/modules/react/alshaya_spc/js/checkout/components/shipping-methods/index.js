@@ -1,7 +1,6 @@
 import React from 'react';
 
 import ShippingMethod from '../shipping-method';
-import SingleShippingMethod from '../single-shipping-method';
 
 export default class ShippingMethods extends React.Component {
 
@@ -13,23 +12,19 @@ export default class ShippingMethods extends React.Component {
   }
 
   render() {
-    const shipping_methods = this.props.cart.shipping_methods;
-    // For single shipping method case.
-    if (shipping_methods.length === 1) {
-      return (
-         <div className='shipping-methods'>
-           <SingleShippingMethod method={shipping_methods[0]}/>
-         </div>
-      );
-    }
-
+    const { cart } = this.props;
+    const shipping_methods = cart.shipping_methods;
     let methods = [];
     Object.entries(shipping_methods).forEach(([key, method]) => {
-      methods.push(<ShippingMethod key={key} method={method} refreshCart={this.props.refreshCart}/>);
+      let carrirer_info = method.carrier_code + '_' + method.method_code;
+      let selected = cart.cart.carrier_info === carrirer_info
+        ? method.method_code
+        : '';
+      methods.push(<ShippingMethod selected={selected} key={key} method={method} refreshCart={this.props.refreshCart}/>);
     });
 
     return (
-      <div className='shipping-methods'>
+      <div className={'shipping-methods shipping-methods-' + shipping_methods.length}>
       	{methods}
       </div>
     );
