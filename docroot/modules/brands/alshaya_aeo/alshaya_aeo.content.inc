@@ -25,7 +25,7 @@ function alshaya_aeo_create_copyright_block_content() {
     'info' => 'Copyright',
     'machine_name' => 'copyright',
     'body' => [
-      'value' => "<p>&copy; 2019 AEO Management Co. All Rights Reserved</p>",
+      'value' => "<p>&copy; 2020 AEO Management Co. All Rights Reserved</p>",
       'format' => 'rich_text',
     ],
     'type' => 'basic',
@@ -36,7 +36,7 @@ function alshaya_aeo_create_copyright_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "&copy; 2019 شركة أمريكان إيجل أونلاين للإدارة جميع الحقوق محفوظة",
+      'value' => "&copy; 2020 شركة أمريكان إيجل أونلاين للإدارة جميع الحقوق محفوظة",
       'format' => 'rich_text',
     ],
   ]);

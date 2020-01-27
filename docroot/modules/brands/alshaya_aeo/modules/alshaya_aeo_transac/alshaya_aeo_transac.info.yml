@@ -4,7 +4,7 @@ description: 'The dedicated module for transac American Eagle brand.'
 package: Alshaya
 core: 8.x
 dependencies:
-  - alshaya_fl:alshaya_aeo
+  - alshaya_aeo:alshaya_aeo
   - alshaya_color_split:alshaya_color_split
 themes:
   - alshaya_american_eagle
