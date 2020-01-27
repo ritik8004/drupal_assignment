@@ -38,9 +38,6 @@ function alshaya_hm_update_8041() {
 
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->updateFieldMetaInfo('color_label', ['index' => 1]);
-
-  // Re-index all indexed items of algolia.
-  _alshaya_search_api_reindex(['alshaya_algolia_index']);
 }
 
 /**
