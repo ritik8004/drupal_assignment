@@ -13,7 +13,7 @@ use Drupal\Core\Site\Settings;
  *
  * Enable metatag_twitter_cards module & their default configs.
  */
-function alshaya_seo_transac_update_8409() {
+function alshaya_seo_transac_update_8411() {
   // Install metatag_twitter_cards module.
   \Drupal::service('module_installer')->install(['metatag_twitter_cards']);
   // Set default value for twitter cards creator.
