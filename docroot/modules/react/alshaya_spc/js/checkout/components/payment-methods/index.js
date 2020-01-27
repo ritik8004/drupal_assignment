@@ -47,14 +47,14 @@ export default class PaymentMethods extends React.Component {
     let i = 0;
     Object.entries(this.state.payment_methods).forEach(([key, method]) => {
       let isSelected = false;
-      if (this.props.cart.selected_payment_method !== undefined
+      if (!isSelected && this.props.cart.selected_payment_method !== undefined
         && this.props.cart.selected_payment_method === key) {
-          isSelected = true;
+          isSelected = key;
       }
-      else {
-        isSelected = (i === 0);
-        i++;
+      else if (i === 0 && !isSelected) {
+        isSelected = key;
       }
+      i++;
       methods.push(<PaymentMethod cart={this.props.cart} refreshCart={this.props.refreshCart} isSelected={isSelected} key={key} method={method} />);
     });
 

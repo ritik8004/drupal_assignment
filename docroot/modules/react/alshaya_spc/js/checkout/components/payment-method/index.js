@@ -4,8 +4,14 @@ export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'selectedOption': null
+      'selectedOption': this.props.isSelected
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selectedOption: nextProps.isSelected
+    });
   }
 
   getHtmlMarkup(content) {
