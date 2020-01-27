@@ -279,6 +279,8 @@ class StockManager {
    *   Quantity.
    * @param int $status
    *   Stock status.
+   * @param int $max_sale_qty
+   *   Stock max sale quantity.
    *
    * @return bool
    *   TRUE if stock status changed.

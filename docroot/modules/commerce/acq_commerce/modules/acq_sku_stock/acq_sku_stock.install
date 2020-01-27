@@ -14,7 +14,7 @@ function acq_sku_stock_update_8001() {
   $schema = $database->schema();
   $max_sale_qty = [
     'type' => 'int',
-    'description' => "Max Sale Quantity.",
+    'description' => 'Max Sale Quantity.',
   ];
   $schema->addField('acq_sku_stock', 'max_sale_qty', $max_sale_qty);
 }
@@ -42,6 +42,10 @@ function acq_sku_stock_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+      ],
+      'max_sale_qty' => [
+        'type' => 'int',
+        'description' => 'Max Sale Quantity.',
       ],
     ],
     'primary key' => ['sku'],
