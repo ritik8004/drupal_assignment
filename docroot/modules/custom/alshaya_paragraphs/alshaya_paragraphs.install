@@ -13,6 +13,18 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Update description of promo block paragraph field.
+ */
+function alshaya_paragraphs_update_8126() {
+  $configs = [
+    'field.field.paragraph.promo_block.field_margin_d_t',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable jquery_minicolors module.
  */
 function alshaya_paragraphs_update_8125() {
