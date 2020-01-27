@@ -7,8 +7,9 @@ export default class FixedFields extends React.Component {
   render() {
     let country_mobile_code = window.drupalSettings.country_mobile_code;
     let default_val = '';
-    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
-      default_val = this.props.default_val;
+    if (this.props.default_val.length !== 0
+      && this.props.default_val.length !== 'undefined') {
+      default_val = this.props.default_val['static'];
     }
 
     return(
@@ -36,7 +37,7 @@ export default class FixedFields extends React.Component {
           <div className='spc-type-tel'>
             <label>{Drupal.t('Mobile number')}</label>
             <span className='country-code'>{'+' + country_mobile_code}</span>
-            <input type='text' name='mobile' required='required' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
+            <input maxlength={window.drupalSettings.mobile_maxlength} type='text' name='mobile' required='required' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
             <div className='c-input__bar'/>
             <div id='mobile-error' className='error'/>
           </div>

@@ -3,25 +3,20 @@ import React from 'react';
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
-
-    let default_val = this.props.selected_payment_method
-      ? this.props.method.code
-      : '';
     this.state = {
-      'selectedOption': default_val
+      'selectedOption': this.props.isSelected
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selectedOption: nextProps.isSelected
+    });
   }
 
   getHtmlMarkup(content) {
     return { __html: content };
   }
-
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({
-      selectedOption: value
-    });
-  };
 
   changePaymentMethod = (method) => {
     this.setState({
@@ -30,15 +25,14 @@ export default class PaymentMethod extends React.Component {
 
     document.getElementById('payment-method-' + method).checked = true;
 
-    // If payment method has no form.
-    if (window.drupalSettings.payment_methods[method].has_form === false) {
-      this.props.payment_method_select(method);
-    }
+    let cart = this.props.cart;
+    cart['selected_payment_method'] = method;
+    this.props.refreshCart(cart);
   }
 
   render() {
     let method = this.props.method.code;
-  	return(
+    return(
       <div className='payment-method' onClick={() => this.changePaymentMethod(method)}>
       	<input
       	  id={'payment-method-' + method}

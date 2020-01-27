@@ -47,7 +47,10 @@ export default class MiniCart extends React.Component {
           }
 
           // Store info in storage.
-          addInfoInStorage(result);
+          let data_to_store = {
+            'cart': result
+          }
+          addInfoInStorage(data_to_store);
 
           // Trigger event so that data can be passed to other components.
           this.dispatchRefereshCart(result);
@@ -71,7 +74,10 @@ export default class MiniCart extends React.Component {
           });
 
           // Store info in storage.
-          addInfoInStorage(data);
+          let data_to_store = {
+            'cart': data
+          };
+          addInfoInStorage(data_to_store);
 
           if (data.items.length === 0) {
             this.setState({

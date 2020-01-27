@@ -5,22 +5,27 @@ import Price from '../../../utilities/price';
 
 export default class CompletePurchase extends React.Component {
 
+  /**
+   * Place order.
+   */
   placeOrder = (e) => {
     e.preventDefault();
-    let payment_method = this.props.selected_payment_method;
-    placeOrder(this.props.cart.cart_id, payment_method);
+    const { cart } = this.props;
+    placeOrder(cart.cart.cart_id, cart.selected_payment_method);
   }
 
   render() {
-    let class_name = this.props.selected_payment_method !== null
+    const { cart } = this.props;
+    let class_name = cart.selected_payment_method !== undefined
       ? 'active'
       : 'in-active';
+
     return (
       <div className={"checkout-link submit " + class_name}>
         {window.innerWidth < 768 &&
           <div className='order-preview'>
-            <span className='total-count'> {Drupal.t('Order total (@count items)', {'@count': this.props.cart.items_qty})} </span>
-            <span className='total-price'> <Price price={this.props.cart.cart_total}/> </span>
+            <span className='total-count'> {Drupal.t('Order total (@count items)', {'@count': cart.cart.items_qty})} </span>
+            <span className='total-price'> <Price price={cart.cart.cart_total}/> </span>
           </div>
         }
         <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>

@@ -9,7 +9,9 @@ export default class AreaSelect extends React.Component {
     super(props);
     this.selectRef = React.createRef();
     let current_option = new Array();
-    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
+    // If default value is available, process that.
+    if (this.props.default_val.length !== 0
+      && this.props.default_val.length !== 'undefined') {
       current_option = this.props.default_val[this.props.field.key];
     }
     this.state = {
@@ -28,13 +30,18 @@ export default class AreaSelect extends React.Component {
 
   componentDidMount() {
     this.getAreasList();
-    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
+    if (this.props.default_val.length !== 0
+      && this.props.default_val.length !== 'undefined') {
+      // Once we get parent areas list, get corresponding child areas.
       this.handleChange({
         value: this.props.default_val[this.props.field.key]
-      }); 
+      });
     }
   }
 
+  /**
+   * Get the areas list.
+   */
   getAreasList = () => {
     return axios.get('parent-areas')
     .then(response => {
@@ -64,9 +71,12 @@ export default class AreaSelect extends React.Component {
     this.setState({
       current_option: selectedOption.value
     });
+
+    // Get child areas list.
     var api_url = 'area-list/' + selectedOption.value;
     return axios.get(api_url)
       .then(response => {
+        // Refresh child select list.
         this.props.areasUpdate(response.data);
     })
     .catch(error => {
