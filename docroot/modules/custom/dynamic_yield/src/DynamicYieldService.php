@@ -14,12 +14,12 @@ class DynamicYieldService {
   /**
    * Dynamic yield dynamic base code.
    */
-  const DYNAMIC_YEILD_DYNAMIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{site_id}}/api_dynamic.js';
+  const DYNAMIC_YEILD_DYNAMIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{section_id}}/api_dynamic.js';
 
   /**
    * Dynamic yield static base code.
    */
-  const DYNAMIC_YEILD_STATIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{site_id}}/api_static.js';
+  const DYNAMIC_YEILD_STATIC_SCRIPT_CODE = '//cdn-eu.dynamicyield.com/api/{{section_id}}/api_static.js';
 
   /**
    * The config factory.
@@ -39,35 +39,44 @@ class DynamicYieldService {
   }
 
   /**
-   * {@inheritdoc}
+   * Get Dynamic yield, dynamic script url.
+   *
+   * @return string|string[]
+   *   Dynamic script url.
    */
   public function getDynamicYieldDynamicScriptCode() {
-    $siteId = $this->getSiteId();
-    if ($siteId) {
-      $dynamic_yield_dynamic_script_code = str_replace('{{site_id}}', $siteId, self::DYNAMIC_YEILD_DYNAMIC_SCRIPT_CODE);
+    $sectionId = $this->getSectionId();
+    if ($sectionId) {
+      $dynamic_yield_dynamic_script_code = str_replace('{{section_id}}', $sectionId, self::DYNAMIC_YEILD_DYNAMIC_SCRIPT_CODE);
       return $dynamic_yield_dynamic_script_code;
     }
-    return FALSE;
+    return '';
   }
 
   /**
-   * {@inheritdoc}
+   * Get Dynamic yield, static script url.
+   *
+   * @return string|string[]
+   *   Static script url.
    */
   public function getDynamicYieldStaticScriptCode() {
-    $siteId = $this->getSiteId();
-    if ($siteId) {
-      $dynamic_yield_static_script_code = str_replace('{{site_id}}', $siteId, self::DYNAMIC_YEILD_STATIC_SCRIPT_CODE);
+    $sectionId = $this->getSectionId();
+    if ($sectionId) {
+      $dynamic_yield_static_script_code = str_replace('{{section_id}}', $sectionId, self::DYNAMIC_YEILD_STATIC_SCRIPT_CODE);
       return $dynamic_yield_static_script_code;
     }
-    return FALSE;
+    return '';
   }
 
   /**
-   * {@inheritdoc}
+   * Get DY Sectioin ID.
+   *
+   * @return string|null
+   *   Site Id or empty.
    */
-  public function getSiteId() {
-    $siteId = $this->configFactory->get('dynamic_yield.settings')->get('site_id');
-    return (isset($siteId) && !empty($siteId)) ? $siteId : FALSE;
+  public function getSectionId() {
+    $sectionId = $this->configFactory->get('dynamic_yield.settings')->get('section_id');
+    return (!empty($sectionId)) ? $sectionId : '';
   }
 
 }
