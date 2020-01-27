@@ -16,6 +16,10 @@ use Drupal\Component\Utility\Unicode;
  */
 function alshaya_vs_transac_update_8012() {
   \Drupal::service('module_installer')->install(['dynamic_yield']);
+  // Set env specific Section ID for DY scripts.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'dynamic_yield.settings');
 }
 
 /**
