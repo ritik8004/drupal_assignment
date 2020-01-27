@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable Dynamic yield module.
+ */
+function alshaya_bbw_update_8107() {
+  \Drupal::service('module_installer')->install(['dynamic_yield']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change the options list page settings data structure for attribute details.
  */
 function alshaya_bbw_update_8106() {
