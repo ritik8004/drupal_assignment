@@ -1783,6 +1783,9 @@ function alshaya_master_install() {
     'continue as a guest' => [
       'ar' => 'إتمام عملية الشراء كزبون زائر',
     ],
+    'at' => [
+      'ar' => ' تبدأ من',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
