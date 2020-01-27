@@ -12,6 +12,19 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Enable Dynamic yield module.
+ */
+function alshaya_vs_transac_update_8012() {
+  \Drupal::service('module_installer')->install(['dynamic_yield']);
+  // Set env specific Section ID for DY scripts.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'dynamic_yield.settings');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable catalog restructuring.
  */
 function alshaya_vs_transac_update_8011() {

@@ -62,6 +62,14 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '162325944786-f1go0fiukfja1rs44ajk5341r2omgocr.apps.googleusercontent.com',
             'client_secret' => '_C_obvqFmy2YHs6n2o-9hMgg',
           ],
+          'dynamic_yield.settings' => [
+            'section_id' => '9876643',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9876644',
+          ],
         ],
       ],
       'kw' => [
@@ -127,6 +135,14 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@BBWMENA',
             'tags.twitter_cards_site' => '@BBWMENA',
+          ],
+          'dynamic_yield.settings' => [
+            'section_id' => '9876649',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9876648',
           ],
         ],
       ],
@@ -232,6 +248,14 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@VictoriasSecret',
             'tags.twitter_cards_site' => '@VictoriasSecret',
+          ],
+          'dynamic_yield.settings' => [
+            'section_id' => '9876647',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9876645',
           ],
         ],
       ],
