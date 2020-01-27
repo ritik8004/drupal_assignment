@@ -37,7 +37,7 @@ export default class FixedFields extends React.Component {
           <div className='spc-type-tel'>
             <label>{Drupal.t('Mobile number')}</label>
             <span className='country-code'>{'+' + country_mobile_code}</span>
-            <input type='text' name='mobile' required='required' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
+            <input maxlength={window.drupalSettings.mobile_maxlength} type='text' name='mobile' required='required' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
             <div className='c-input__bar'/>
             <div id='mobile-error' className='error'/>
           </div>

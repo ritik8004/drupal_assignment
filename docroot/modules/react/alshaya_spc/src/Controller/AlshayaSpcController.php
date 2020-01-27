@@ -157,6 +157,7 @@ class AlshayaSpcController extends ControllerBase {
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'map_marker_icon' => $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url'),
+          'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
         ],
       ],
     ];
