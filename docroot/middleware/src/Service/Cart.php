@@ -200,9 +200,14 @@ class Cart {
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];
 
-    $customer = $this->createCustomer($data['shipping']['shipping_address']);
-    $this->associateCartToCustomer($cart_id, $customer['id']);
-    $this->updateCart($data, $cart_id);
+    $cart = $this->updateCart($data, $cart_id);
+    // If cart has no customer or email provided is different,
+    // then create and assign customer to the cart.
+    if (empty($cart['cart']['customer']['id']) ||
+      $cart['cart']['customer']['email'] !== $data['shipping']['shipping_address']['email']) {
+      $customer = $this->createCustomer($data['shipping']['shipping_address']);
+      $this->associateCartToCustomer($cart_id, $customer['id']);
+    }
     return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
   }
 
