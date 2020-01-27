@@ -63,6 +63,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '162325944786-f1go0fiukfja1rs44ajk5341r2omgocr.apps.googleusercontent.com',
             'client_secret' => '_C_obvqFmy2YHs6n2o-9hMgg',
           ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_type' => 'summary',
+          ],
         ],
       ],
       'kw' => [
@@ -70,7 +73,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@hmkuwait',
             'tags.twitter_cards_site' => '@hmkuwait',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
         'live' => [
@@ -89,7 +91,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@hmuae',
             'tags.twitter_cards_site' => '@hmuae',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
         'uat' => [
@@ -103,7 +104,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@hmsaudiarabia',
             'tags.twitter_cards_site' => '@hmsaudiarabia',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
         'uat' => [
@@ -117,7 +117,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@hmegypt',
             'tags.twitter_cards_site' => '@hmegypt',
-            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],
