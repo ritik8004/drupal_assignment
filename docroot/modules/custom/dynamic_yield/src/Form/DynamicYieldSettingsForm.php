@@ -38,10 +38,10 @@ class DynamicYieldSettingsForm extends ConfigFormBase {
       '#open' => FALSE,
     ];
 
-    $form['basic_settings']['site_id'] = [
+    $form['basic_settings']['section_id'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Site ID'),
-      '#default_value' => $config->get('site_id'),
+      '#title' => $this->t('Section ID'),
+      '#default_value' => $config->get('section_id'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -54,7 +54,7 @@ class DynamicYieldSettingsForm extends ConfigFormBase {
     $values = $form_state->getValues();
 
     $this->config('dynamic_yield.settings')
-      ->set('site_id', $values['site_id'])
+      ->set('section_id', $values['section_id'])
       ->save();
 
     parent::submitForm($form, $form_state);

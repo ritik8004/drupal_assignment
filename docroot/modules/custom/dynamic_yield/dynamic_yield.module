@@ -16,27 +16,94 @@ function dynamic_yield_page_attachments(array &$page) {
   /** @var \Drupal\dynamic_yield\DynamicYieldService $dynamic_yield */
   $dynamic_yield = \Drupal::service('dynamic_yield.dynamic_yield');
 
-  $dpath = $dynamic_yield->getDynamicYieldDynamicScriptCode();
-  $spath = $dynamic_yield->getDynamicYieldStaticScriptCode();
-
-  if ($dynamic_yield->getSiteId() && !(\Drupal::service('router.admin_context')->isAdminRoute())) {
-    $page['#attached']['html_head'][] = [[
+  if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && $dynamic_yield->getSectionId()) {
+    // Add DY script tags to header.
+    $static_script = [[
       '#tag' => 'script',
       '#attributes' => [
-        'src' => $dpath,
-      ],
-    ],
-      'dpath',
-    ];
-
-    $page['#attached']['html_head'][] = [[
-      '#tag' => 'script',
-      '#attributes' => [
-        'src' => $spath,
+        'src' => $dynamic_yield->getDynamicYieldStaticScriptCode(),
       ],
     ],
       'spath',
     ];
+    array_unshift($page['#attached']['html_head'], $static_script);
+    $dynamic_script = [[
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => $dynamic_yield->getDynamicYieldDynamicScriptCode(),
+      ],
+    ],
+      'dpath',
+    ];
+    array_unshift($page['#attached']['html_head'], $dynamic_script);
+
+    // Add DY preconnect and dns-prefetch link tags to header.
+    $dns_prefetch1 = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'dns-prefetch',
+          'href' => '//rcom-eu.dynamicyield.com',
+        ],
+      ],
+      'dy_dns_prefetch1',
+    ];
+    array_unshift($page['#attached']['html_head'], $dns_prefetch1);
+    $dns_prefetch2 = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'dns-prefetch',
+          'href' => '//st-eu.dynamicyield.com',
+        ],
+      ],
+      'dy_dns_prefetch2',
+    ];
+    array_unshift($page['#attached']['html_head'], $dns_prefetch2);
+    $dns_prefetch3 = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'dns-prefetch',
+          'href' => '//cdn-eu.dynamicyield.com',
+        ],
+      ],
+      'dy_dns_prefetch3',
+    ];
+    array_unshift($page['#attached']['html_head'], $dns_prefetch3);
+    $preconnect1 = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'preconnect',
+          'href' => '//rcom-eu.dynamicyield.com',
+        ],
+      ],
+      'dy_preconnect1',
+    ];
+    array_unshift($page['#attached']['html_head'], $preconnect1);
+    $preconnect2 = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'preconnect',
+          'href' => '//st-eu.dynamicyield.com',
+        ],
+      ],
+      'dy_preconnect2',
+    ];
+    array_unshift($page['#attached']['html_head'], $preconnect2);
+    $preconnect3 = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'preconnect',
+          'href' => '//cdn-eu.dynamicyield.com',
+        ],
+      ],
+      'dy_preconnect3',
+    ];
+    array_unshift($page['#attached']['html_head'], $preconnect3);
   }
   $page['#cache']['tags'][] = 'config:dynamic_yield.settings';
 }
