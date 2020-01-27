@@ -1282,7 +1282,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#view_all' => $link,
             '#cache' => [
               'tags' => [
-                "node:taxonomy_term.accordion",
+                ProductCategoryTree::CACHE_TAG,
               ],
             ],
             '#attached' => [
