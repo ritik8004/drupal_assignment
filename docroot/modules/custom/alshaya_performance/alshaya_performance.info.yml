@@ -6,3 +6,4 @@ description: 'Contains all code related to performance improvement.'
 
 dependencies:
   - 'memcache:memcache'
+  - queue_unique:queue_unique
