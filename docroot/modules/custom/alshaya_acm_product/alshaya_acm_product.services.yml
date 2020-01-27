@@ -118,7 +118,7 @@ services:
   alshaya_acm_product.product_updated_event:
     class: Drupal\alshaya_acm_product\EventSubscriber\ProductUpdatedEventSubscriber
     arguments:
-      - '@queue'
+      - '@alshaya_acm_product.product_queue_utility'
     tags:
       - { name: 'event_subscriber' }
   alshaya_acm_product.process_finish_event:
@@ -146,3 +146,9 @@ services:
       - '@database'
       - '@acq_sku.stock_manager'
       - '@language_manager'
+
+  alshaya_acm_product.product_queue_utility:
+    class: Drupal\alshaya_acm_product\Service\ProductQueueUtility
+    arguments:
+      - '@queue'
+      - '@database'
