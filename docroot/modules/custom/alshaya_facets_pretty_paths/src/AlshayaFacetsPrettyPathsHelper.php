@@ -432,8 +432,9 @@ class AlshayaFacetsPrettyPathsHelper {
     $facet_visibility = $meta_info_type['visibility'] ?? '';
     $static[$facet_id] = [
       'type' => $type,
+      // Since prefix text is dynamic - Size/at. we use t() with variable.
       // @codingStandardsIgnoreLine
-      'prefix_text' => (string) $this->t($facet_prefix_text),
+      'prefix_text' => $this->t($facet_prefix_text),
       'visibility' => $facet_visibility,
     ];
     return $static[$facet_id];
