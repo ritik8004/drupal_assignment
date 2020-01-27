@@ -22,6 +22,14 @@ function alshaya_bbw_update_8106() {
     $config->set('alshaya_options_pages', $attribute_options);
     $config->save();
   }
+  // We are just creating arabic settings for 'alshaya_options_list.settings'
+  // because it was creating issue due to changes in schema.
+  // Rest values we will update using drush command cset.
+  $config_ar = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_options_list.settings');
+  if ($attribute_options_ar = $config_ar->get('alshaya_options_pages')) {
+    $config_ar->set('alshaya_options_pages', $attribute_options_ar);
+    $config_ar->save();
+  }
 }
 
 /**
