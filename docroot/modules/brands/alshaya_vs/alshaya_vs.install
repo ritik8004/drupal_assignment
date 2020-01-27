@@ -8,15 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Enable Dynamic yield module.
- */
-function alshaya_vs_update_8104() {
-  \Drupal::service('module_installer')->install(['dynamic_yield']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable transac/non-transac specific brand module.
  */
 function alshaya_vs_update_8103() {

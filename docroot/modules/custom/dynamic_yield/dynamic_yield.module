@@ -46,13 +46,13 @@ function dynamic_yield_page_attachments(array &$page) {
     foreach ($prefetch_urls as $key => $prefetch_url) {
       $rel = 'dns-prefetch';
       $tag = 'dy_dns_prefetch' . $key;
-      $link_tag = dynamic_yield_link_tags($rel, $prefetch_url, $tag);
+      $link_tag = _dynamic_yield_get_head_link_tag($rel, $prefetch_url, $tag);
       array_unshift($page['#attached']['html_head'], $link_tag);
     }
     foreach ($prefetch_urls as $key => $prefetch_url) {
       $rel = 'preconnect';
       $tag = 'dy_preconnect' . $key;
-      $link_tag = dynamic_yield_link_tags($rel, $prefetch_url, $tag);
+      $link_tag = _dynamic_yield_get_head_link_tag($rel, $prefetch_url, $tag);
       array_unshift($page['#attached']['html_head'], $link_tag);
     }
 
@@ -73,7 +73,7 @@ function dynamic_yield_page_attachments(array &$page) {
  * @return array
  *   Link tag array.
  */
-function dynamic_yield_link_tags($rel, $href, $tag) {
+function _dynamic_yield_get_head_link_tag($rel, $href, $tag) {
   return [
     [
       '#tag' => 'link',

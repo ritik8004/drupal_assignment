@@ -12,6 +12,15 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Enable Dynamic yield module.
+ */
+function alshaya_vs_transac_update_8012() {
+  \Drupal::service('module_installer')->install(['dynamic_yield']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable catalog restructuring.
  */
 function alshaya_vs_transac_update_8011() {

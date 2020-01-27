@@ -11,6 +11,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Enable Dynamic yield module.
+ */
+function alshaya_bbw_transac_update_8010() {
+  \Drupal::service('module_installer')->install(['dynamic_yield']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_mobile_app module.
  */
 function alshaya_bbw_transac_update_8009() {

@@ -67,7 +67,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
         'live' => [
-          'section_id' => '9876644',
+          'dynamic_yield.settings' => [
+            'section_id' => '9876644',
+          ],
         ],
       ],
       'kw' => [
