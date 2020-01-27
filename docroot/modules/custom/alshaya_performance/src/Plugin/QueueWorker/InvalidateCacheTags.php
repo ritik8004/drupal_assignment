@@ -2,11 +2,13 @@
 
 namespace Drupal\alshaya_performance\Plugin\QueueWorker;
 
+use Drupal\alshaya_performance\Event\CacheTagInvalidatedEvent;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * InvalidateCacheTags.
@@ -25,13 +27,19 @@ class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPlu
    */
   const QUEUE_NAME = 'alshaya_invalidate_cache_tags';
 
-
   /**
    * Cache Tags Invalidator.
    *
    * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
    */
   protected $cacheTagsInvalidator;
+
+  /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
 
   /**
    * InvalidateCategoryListingCache constructor.
@@ -44,13 +52,17 @@ class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPlu
    *   Plugin definition.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
    *   Cache Tags Invalidator.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              CacheTagsInvalidatorInterface $cache_tags_invalidator) {
+                              CacheTagsInvalidatorInterface $cache_tags_invalidator,
+                              EventDispatcherInterface $dispatcher) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
+    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -83,8 +95,13 @@ class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPlu
       return;
     }
 
+    $event = new CacheTagInvalidatedEvent($tag);
+    $this->dispatcher->dispatch(CacheTagInvalidatedEvent::PRE_INVALIDATION, $event);
+
     // Invalid cache tags for node and sku.
     $this->cacheTagsInvalidator->invalidateTags([$tag]);
+
+    $this->dispatcher->dispatch(CacheTagInvalidatedEvent::POST_INVALIDATION, $event);
 
     $this->getLogger('InvalidateCacheTags')->notice('Invalidated cache tag @tag', [
       '@tag' => $tag,
@@ -111,7 +128,8 @@ class InvalidateCacheTags extends QueueWorkerBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('cache_tags.invalidator')
+      $container->get('cache_tags.invalidator'),
+      $container->get('event_dispatcher')
     );
   }
 
