@@ -1,13 +1,26 @@
 .spc-google-map {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 22.5rem;
+  overflow: hidden;
+
+  @include breakpoint($only-tablet) {
+    height: 31.25rem;
+  }
+
+  @include breakpoint($desktop) {
+    height: 37.5rem;
+  }
 
   .spc-location-g-map-search {
     position: absolute;
-    z-index: 2;
+    z-index: 1;
     top: 1.25rem;
     #{$left}: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      width: calc(100% - 2.5rem);
+    }
 
     input[type=text] {
       height: 2.25rem;
@@ -17,6 +30,10 @@
       border: none;
       padding-#{$left}: 2.75rem;
       font-size: 0.875rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
     }
 
     @include icon(search, after) {
