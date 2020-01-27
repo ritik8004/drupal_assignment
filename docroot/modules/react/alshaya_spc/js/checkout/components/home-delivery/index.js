@@ -22,23 +22,24 @@ export default class HomeDeliveryInfo extends React.Component {
   render() {
     let static_hd_info = this.props.hd_info;
     return (
-      <div>
-        <div>{static_hd_info.firstname} {static_hd_info.lastname}</div>
-        <span>{static_hd_info.email}</span> <span>{static_hd_info.telephone}</span>
-        <div onClick={this.openModal}>
-          {Drupal.t('Change')}
+      <div className='delivery-information-preview'>
+        <div className='spc-delivery-customer-info'>
+          <div className='delivery-name'>{static_hd_info.firstname} {static_hd_info.lastname}</div>
+          <div className='delivery-address'>
+            {static_hd_info.address_block_segment}
+            , {static_hd_info.address_building_segment}
+            , {static_hd_info.address_apartment_segment}
+            , {static_hd_info.city}
+          </div>
+          <div className='spc-address-form-edit-link' onClick={this.openModal}>
+            {Drupal.t('Change')}
+          </div>
         </div>
-        <Popup
-          open={this.state.open}
-          onClose={this.closeModal}
-          closeOnDocumentClick={false}
-        >
-        <div className="modal">
-          <a className="close" onClick={this.closeModal}>&times;</a>
-        <AddressForm default_val={this.props.hd_info} handleAddressData={this.props.handleAddressData} cart={this.props.cart}/>
-        </div>
+        <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+          <a className="close" onClick={this.closeModal}></a>
+          <AddressForm default_val={this.props.hd_info} handleAddressData={this.props.handleAddressData} cart={this.props.cart}/>
         </Popup>
-        <div>
+        <div className='spc-delivery-shipping-methods'>
           <ShippingMethods cart={this.props.cart} shipping_methods={this.props.methods}/>
         </div>
       </div>

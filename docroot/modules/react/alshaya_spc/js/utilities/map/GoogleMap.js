@@ -47,7 +47,7 @@ export default class GoogleMap extends React.Component {
       marker.addListener('click', function () {
         infowindow.open(this.googleMap, marker);
       });
- 
+
       // Add marker to the array.
       this.markers.push(marker);
     }
@@ -99,6 +99,8 @@ export default class GoogleMap extends React.Component {
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
     this.panMapToGivenCoords(place.geometry.location);
+    // Get geocode details for address.
+    this.geocodeFromLatLng(place.geometry.location);
   }
 
   /**
@@ -143,26 +145,20 @@ export default class GoogleMap extends React.Component {
       disableDefaultUI: false,
       mapTypeControl: false,
       streetViewControl: false,
-      fullscreenControl: false
+      fullscreenControl: false,
+      zoomControlOptions: {
+        position: window.google.maps.ControlPosition.LEFT_BOTTOM
+      },
     })
   }
 
   render () {
     return (
-      <div>
-        <div>
-          <input
-            placeholder={Drupal.t('Enter a location')}
-            ref={ref => (this.autocomplete = ref)}
-            id='searchTextField'
-            type='text'
-          />
+      <div className='spc-google-map'>
+        <div className='spc-location-g-map-search form-type-textfield'>
+          <input placeholder={Drupal.t('Enter a location')} ref={ref => (this.autocomplete = ref)} id='searchTextField' type='text'/>
         </div>
-        <div
-          id='google-map'
-          ref={this.googleMapRef}
-          style={{width: '100%', height: '500px'}}
-        />
+        <div id='google-map' ref={this.googleMapRef} style={{width: '100%', height: '600px'}}/>
       </div>
     );
   }

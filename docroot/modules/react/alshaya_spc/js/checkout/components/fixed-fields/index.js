@@ -10,32 +10,38 @@ export default class FixedFields extends React.Component {
     if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
       default_val = this.props.default_val;
     }
-    
+
     return(
-      <div>
-          <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
-          <label>
-           {Drupal.t('First Name')}
-          <input type='text' name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''}/>
-          <div id='fname-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Last Name')}
-          <input type='text' name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''}/>
-          <div id='lname-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Email')}
-          <input type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''}/>
-          <div id='email-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Mobile number')}
-           <div>{'+' + country_mobile_code}</div>
-          <input type='text' name='mobile' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
-          <div id='mobile-error'></div>
-          </label>
-      </div> 
+      <div className='spc-checkout-contact-information'>
+        <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
+        <div className='spc-checkout-contact-information-fields'>
+          <div className='spc-type-textfield'>
+            <input type='text' name='fname' required='required' defaultValue={default_val !== '' ? default_val['firstname'] : ''}/>
+            <div className='c-input__bar'/>
+            <label>{Drupal.t('First Name')}</label>
+            <div id='fname-error' className='error'/>
+          </div>
+          <div className='spc-type-textfield'>
+            <input type='text' name='lname' required='required' defaultValue={default_val !== '' ? default_val['lastname'] : ''}/>
+            <div className='c-input__bar'/>
+            <label>{Drupal.t('Last Name')}</label>
+            <div id='lname-error' className='error'/>
+          </div>
+          <div className='spc-type-textfield'>
+            <input type='email' name='email' required='required' defaultValue={default_val !== '' ? default_val['email'] : ''}/>
+            <div className='c-input__bar'/>
+            <label>{Drupal.t('Email')}</label>
+            <div id='email-error' className='error'/>
+          </div>
+          <div className='spc-type-tel'>
+            <label>{Drupal.t('Mobile number')}</label>
+            <span className='country-code'>{'+' + country_mobile_code}</span>
+            <input type='text' name='mobile' required='required' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
+            <div className='c-input__bar'/>
+            <div id='mobile-error' className='error'/>
+          </div>
+        </div>
+      </div>
     );
   }
 
