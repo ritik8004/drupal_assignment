@@ -16,3 +16,4 @@ dependencies:
   - alshaya_stores_finder:alshaya_stores_finder
   - metatag:metatag_verification
   - external_hreflang:external_hreflang
+  - metatag_twitter_cards:metatag_twitter_cards
