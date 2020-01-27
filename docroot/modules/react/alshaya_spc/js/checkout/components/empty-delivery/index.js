@@ -2,6 +2,7 @@ import React from 'react';
 
 import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
+import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
 
 export default class EmptyDeliveryText extends React.Component {
 
@@ -18,10 +19,28 @@ export default class EmptyDeliveryText extends React.Component {
     this.setState({ open: false });
   }
 
+  componentDidMount() {
+    document.addEventListener('refreshCartOnAddress', (e) => {
+      var data = e.detail.data();
+      // Close the modal.
+      this.closeModal();
+      this.props.refreshCart(data);
+    }, false);
+  }
+
+  /**
+   * Process the address form data on sumbit.
+   */
+  processAddress = (e) => {
+    const { cart } = this.props.cart;
+    checkoutAddressProcess(e, cart.cart_id);
+  }
+
   render() {
-    if (this.props.delivery_type === 'cnc') {
+    const { delivery_type } = this.props.cart;
+    if (delivery_type === 'cnc') {
   	  return (
-      	<div className="spc-checkout-empty-delivery-text">{Drupal.t('Select your preferred collection store')}</div>
+      	<div className='spc-checkout-empty-delivery-text'>{Drupal.t('Select your preferred collection store')}</div>
       );
   	}
 
@@ -32,7 +51,7 @@ export default class EmptyDeliveryText extends React.Component {
         </div>
         <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
           <a className='close' onClick={this.closeModal}>&times;</a>
-          <AddressForm default_val={null} handleAddressData={this.props.handleAddressData} cart={this.props.cart}/>
+          <AddressForm default_val={null} processAddress={this.processAddress}/>
         </Popup>
       </div>
     );

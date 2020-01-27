@@ -8,3 +8,9 @@ export const addInfoInStorage = function (cart) {
 export const removeCartFromStorage = function () {
   localStorage.removeItem('cart_data');
 }
+
+export const getInfoFromStorage = function () {
+  let cart_data = localStorage.getItem('cart_data');
+  cart_data = JSON.parse(cart_data);
+  return cart_data;
+}

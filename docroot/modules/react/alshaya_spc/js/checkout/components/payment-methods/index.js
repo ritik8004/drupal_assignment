@@ -8,17 +8,21 @@ export default class PaymentMethods extends React.Component {
 
   constructor(props) {
     super(props);
+
+    const { cart } = this.props;
+    let is_active = (cart.cart.carrier_info !== null);
+
     this.state = {
       'payment_methods': this.props.payment_methods,
-      'selected_payment_method': this.props.selected_payment_method
+      'active': is_active,
     };
   }
 
   componentDidMount() {
     // If shipping info is set for cart, only then get payment
     // methods for the cart.
-    if (this.props.cart.carrier_info !== null) {
-      let methods = getPaymentMethods(this.props.cart.cart_id);
+    if (this.props.cart.cart.carrier_info !== null) {
+      let methods = getPaymentMethods(this.props.cart.cart.cart_id);
       if (methods instanceof Promise) {
         methods.then((result) => {
           let payment_methods = new Array();
@@ -29,7 +33,7 @@ export default class PaymentMethods extends React.Component {
               payment_methods[method['code']] = this.props.payment_methods[method['code']];
             }
           });
-          
+
           this.setState({
             payment_methods: payment_methods
           });
@@ -40,11 +44,21 @@ export default class PaymentMethods extends React.Component {
 
   render() {
     let methods = [];
+    let i = 0;
     Object.entries(this.state.payment_methods).forEach(([key, method]) => {
-      methods.push(<PaymentMethod selected_payment_method={this.props.selected_payment_method} key={key} method={method} payment_method_select={this.props.payment_method_select} />);
+      let isSelected = false;
+      if (this.props.cart.selected_payment_method !== undefined
+        && this.props.cart.selected_payment_method === key) {
+          isSelected = true;
+      }
+      else {
+        isSelected = (i === 0);
+        i++;
+      }
+      methods.push(<PaymentMethod cart={this.props.cart} refreshCart={this.props.refreshCart} isSelected={isSelected} key={key} method={method} />);
     });
 
-    let active_class = this.props.is_active
+    let active_class = this.state.active
       ? 'active'
       : 'in-active';
 

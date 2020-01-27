@@ -11,10 +11,10 @@ import {removeCartFromStorage} from './storage';
  */
 export const getShippingMethods = function (cart_id, data) {
   var middleware_url = window.drupalSettings.alshaya_spc.middleware_url;
- 
+
   return axios.post(middleware_url + '/cart/shipping-methods' , {
     data: data,
-    cart_id: cart_id 
+    cart_id: cart_id
   })
     .then((response) => {
       return response.data;
@@ -31,7 +31,7 @@ export const getShippingMethods = function (cart_id, data) {
  */
 export const getPaymentMethods = function (cart_id) {
   var middleware_url = window.drupalSettings.alshaya_spc.middleware_url;
- 
+
   return axios.get(middleware_url + '/cart/' + cart_id + '/payment-methods')
     .then((response) => {
       return response.data;
@@ -49,7 +49,7 @@ export const getPaymentMethods = function (cart_id) {
  */
 export const placeOrder = function (cart_id , payment_method) {
   var middleware_url = window.drupalSettings.alshaya_spc.middleware_url;
- 
+
   let data = {
     'paymentMethod': {
       'method': payment_method
