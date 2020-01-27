@@ -37,3 +37,8 @@
   }
 }
 
+.spc-price {
+  .price-currency {
+    padding-#{$right}: 0.3125rem;
+  }
+}

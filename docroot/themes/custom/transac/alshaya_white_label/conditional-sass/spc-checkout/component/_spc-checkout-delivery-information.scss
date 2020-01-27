@@ -52,37 +52,5 @@
         border-radius: 0.25rem;
       }
     }
-
-    .spc-delivery-shipping-methods {
-      padding-top: 1.25rem;
-      border-top: 1px solid $spc-delivery-info-separator;
-      margin-top: 1.25rem;
-
-      .shipping-methods {
-        .shipping-method {
-          position: relative;
-
-          .carrier-title,
-          .spc-price {
-            color: $spc-delivery-customer-info-highlight;
-          }
-
-          .carrier-title {
-            font-family: $alshaya-bold;
-            margin-#{$right}: 0.25rem;
-          }
-
-          .method-title {
-            display: block;
-          }
-
-          .spc-price {
-            position: absolute;
-            top: 0;
-            #{$right}: 0;
-          }
-        }
-      }
-    }
   }
 }
