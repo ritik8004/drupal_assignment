@@ -1,7 +1,11 @@
 .spc-google-map {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 31.25rem;
+
+  @include breakpoint($desktop) {
+    height: 37.5rem;
+  }
 
   .spc-location-g-map-search {
     position: absolute;
