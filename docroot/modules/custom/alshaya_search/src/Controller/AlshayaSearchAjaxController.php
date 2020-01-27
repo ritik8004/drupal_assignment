@@ -194,7 +194,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
         $page_title = implode(' ', $active_facets[0]);
 
         $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [$meta_title, $meta_description]));
-        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$page_title . ' ' . $term->label()]));
+        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [htmlspecialchars_decode($page_title) . ' ' . $term->label()]));
       }
 
     }
