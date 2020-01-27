@@ -8,6 +8,7 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\file\Entity\File;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
@@ -75,6 +76,13 @@ class AlshayaOptionsListHelper {
   protected $facetManager;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaOptionsListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -91,6 +99,8 @@ class AlshayaOptionsListHelper {
    *   Parse mode plugin manager.
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager
    *   Facet manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -101,7 +111,8 @@ class AlshayaOptionsListHelper {
                               ConfigFactoryInterface $config_factory,
                               SKUFieldsManager $sku_fields_manager,
                               ParseModePluginManager $parse_mode_manager,
-                              DefaultFacetManager $facet_manager) {
+                              DefaultFacetManager $facet_manager,
+                              ModuleHandlerInterface $module_handler) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->fileStorage = $entity_type_manager->getStorage('file');
@@ -109,6 +120,7 @@ class AlshayaOptionsListHelper {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->parseModeManager = $parse_mode_manager;
     $this->facetManager = $facet_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -328,13 +340,15 @@ class AlshayaOptionsListHelper {
    *
    * @todo When DLP is enabled on search, add condition to generate pretty url.
    */
-  public function getAttributeUrl($attributeCode, $value) {
+  public function getAttributeUrl($attributeCode, $value = '') {
     $url_options = [
       'query' => [
-        'f[0]' => $attributeCode . ':' . $value,
+        'f[0]' => $attributeCode . ':',
       ],
     ];
-    return Url::fromUri('internal:/search', $url_options);
+    $link = Url::fromUri('internal:/search', $url_options)->toString();
+    $this->moduleHandler->alter('alshaya_search_filter_link', $link, $attributeCode);
+    return $link . $value;
   }
 
 }

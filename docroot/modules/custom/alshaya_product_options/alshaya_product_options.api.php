@@ -11,14 +11,14 @@
  */
 
 /**
- * Allow other modules to alter brand link.
+ * Allow other modules to alter search filter link.
  *
  * @param string $link
  *   Brand link to alter.
  * @param string $attributeName
  *   Brand Attribute name.
  */
-function hook_brand_carousel_link_alter(string &$link, string $attributeName) {
+function hook_alshaya_search_filter_link_alter(string &$link, string $attributeName) {
 }
 
 /**

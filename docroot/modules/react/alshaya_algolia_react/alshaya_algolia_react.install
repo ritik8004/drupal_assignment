@@ -37,11 +37,6 @@ function alshaya_algolia_react_install() {
   $new->set('weight', $existing->get('weight'));
   $new->save();
 
-  // Reset Algolia keys in configs.
-  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
-  $config_check = \Drupal::service('alshaya_acm.config_check');
-  $config_check->checkConfig(TRUE, 'block.block.alshayaalgoliareactautocomplete');
-
   $strings = [
     'top suggestions' => [
       'ar' => 'أفضل الإقتراحات',

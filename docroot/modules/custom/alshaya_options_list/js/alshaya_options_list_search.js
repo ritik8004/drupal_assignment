@@ -1,33 +1,35 @@
 (function ($, Drupal) {
   Drupal.behaviors.alshaya_options_list_filter = {
     attach: function (context, settings) {
-      $("#alshaya-options-list-autocomplete-form").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $('.attribute-option-list-shop-by .attribute-filter-name-list .title').filter(function() {
-          var parent = $(this).parents('li.level-1');
-          var noResults = $('.attribute-filter-name-list.no-result-container');
-          // By default, show parents and hide no results.
-          parent.show();
-          noResults.hide();
+      $('.attribute-option-list-shop-by').each(function () {
+        $(this).find('input').on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $(this).parents('.attribute-option-list-shop-by').find('.attribute-filter-name-list .title').filter(function() {
+            var parent = $(this).parents('li.level-1');
+            var noResults = $('.attribute-filter-name-list.no-result-container');
+            // By default, show parents and hide no results.
+            parent.show();
+            noResults.hide();
 
-          // Toggle values based on input.
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            // Toggle values based on input.
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
 
-          // Now find all visible children.
-          var child = parent.find('li:visible');
+            // Now find all visible children.
+            var child = parent.find('li:visible');
 
-          // If all children of the element are hidden, hide parent.
-          if(!child.length){
-            parent.hide();
-            var siblings = parent.siblings().filter(':visible');
+            // If all children of the element are hidden, hide parent.
+            if(!child.length){
+              parent.hide();
+              var siblings = parent.siblings().filter(':visible');
 
-            // If all siblings are not visible, show no results.
-            if(!siblings.length){
-              noResults.show();
+              // If all siblings are not visible, show no results.
+              if(!siblings.length){
+                noResults.show();
+              }
             }
-          }
+          });
         });
       });
     }
-  }
+  };
 })(jQuery, Drupal);

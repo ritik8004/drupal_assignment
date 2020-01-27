@@ -767,7 +767,12 @@ header {
           display: flex;
           max-width: none;
           justify-content: space-between;
-          overflow: auto;
+          overflow-y: auto;
+          overflow-x: hidden;
+
+          .menu--two__list-item {
+            padding-bottom: 1.563rem;
+          }
         }
 
         .menu__links__wrapper {
@@ -787,14 +792,6 @@ header {
         background: $mm_bg;
         flex-shrink: 0;
         max-width: none;
-      }
-
-      .has--three-levels .highlights {
-        height: 100%;
-
-        .highlighted {
-          height: 100%;
-        }
       }
     }
   }
@@ -903,7 +900,6 @@ header {
         max-width: 80.25rem;
         min-height: 100%;
         vertical-align: top;
-        padding-bottom: 1.563rem;
         position: absolute;
         background: $mm_l3_link_bg;
         top: 0;
