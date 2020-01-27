@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_aeo_transac.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_aeo_transac_install() {
+  // Enable and set alshaya_american_eagle as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_american_eagle');
+
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE);
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_aeo_transac');
+  }
+
+  // Add string translations.
+  $strings = [
+    'our company' => [
+      'ar' => 'شركتنا',
+    ],
+    'Connect with us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'I would like to receive exclusive deals from American Eagle Online.' => [
+      'ar' => 'أود الحصول على عروض حصرية من النسر الأمريكيعبر الانترنت',
+    ],
+    '@group_name/@sku_name' => [
+      'ar' => '@sku_name/@group_name',
+    ],
+    'seo_brand_name' => [
+      'en' => 'American Eagle Online',
+      'ar' => 'النسر الاميركي اون لاين',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
