@@ -44,25 +44,23 @@ export default class HomeDeliveryInfo extends React.Component {
             {address.address_block_segment}
             , {address.address_building_segment}
             , {address.address_apartment_segment}
-            , {address.city}
+            , {address.street}
           </div>
           <div className='spc-address-form-edit-link' onClick={this.openModal}>
             {Drupal.t('Change')}
           </div>
+        </div>
         <Popup
           open={this.state.open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-        <div className="modal">
           <a className="close" onClick={this.closeModal}>&times;</a>
           <AddressForm default_val={address}  processAddress={this.processAddress}/>
-        </div>
+        </Popup>
         <div className='spc-delivery-shipping-methods'>
           <ShippingMethods cart={this.props.cart} refreshCart={this.props.refreshCart}/>
-      </div>
-      </Popup>
-      </div>
+        </div>
       </div>
     );
   }

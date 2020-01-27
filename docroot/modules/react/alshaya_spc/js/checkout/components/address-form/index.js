@@ -104,12 +104,6 @@ export default class AddressForm extends React.Component {
                 </div>
               </form>
             </div>
-
-            <form className='spc-address-add' onSubmit={this.handleSubmit}>
-              {dynamicFields}
-              <FixedFields default_val={default_val} />
-              <input type='submit' value={Drupal.t('Save')} />
-            </form>
           </div>
         </div>
       </div>
