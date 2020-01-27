@@ -8,19 +8,28 @@ export default class DeliveryInformation extends React.Component {
 
   constructor(props) {
     super(props);
-
-    let showEmpty = true;
-    if (this.props.cart.delivery_type === 'hd'
-      && this.props.cart.address !== undefined) {
-        showEmpty = false;
-    }
-    else if(this.props.cart.delivery_type === 'cnc'
-      && this.props.cart.storeInfo !== undefined) {
-        showEmpty = false;
-    }
     this.state = {
-      'showEmpty': showEmpty
+      'showEmpty': this.showEmpty(this.props)
     };
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({
+      showEmpty: this.showEmpty(nextProps)
+    });
+  }
+
+  showEmpty = (props) => {
+    let showEmpty = true;
+    if (props.cart.delivery_type === 'hd' &&
+      props.cart.address !== undefined) {
+      showEmpty = false;
+    } else if (props.cart.delivery_type === 'cnc' &&
+      props.cart.storeInfo !== undefined) {
+      showEmpty = false;
+    }
+
+    return showEmpty;
   }
 
   render() {
