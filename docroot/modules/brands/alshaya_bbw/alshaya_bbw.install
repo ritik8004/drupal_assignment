@@ -22,6 +22,20 @@ function alshaya_bbw_update_8106() {
     $config->set('alshaya_options_pages', $attribute_options);
     $config->save();
   }
+  // We have to update arabic settings to run drush cset/cget.
+  $config_ar = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_options_list.settings');
+  if ($attribute_options_ar = $config_ar->get('alshaya_options_pages')) {
+    foreach ($attribute_options_ar as $key => $attribute_option) {
+      if ($attribute_option['attribute_details']) {
+        foreach ($attribute_option['attribute_details'] as $attribute_name => $attribute_details) {
+          unset($attribute_options_ar[$key]['attribute_details'][$attribute_name]);
+          $attribute_options_ar[$key]['attribute_details'][$attribute_name][] = $attribute_details;
+        }
+      }
+    }
+    $config_ar->set('alshaya_options_pages', $attribute_options_ar);
+    $config_ar->save();
+  }
 }
 
 /**
