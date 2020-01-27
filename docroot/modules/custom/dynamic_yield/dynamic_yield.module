@@ -38,72 +38,50 @@ function dynamic_yield_page_attachments(array &$page) {
     array_unshift($page['#attached']['html_head'], $dynamic_script);
 
     // Add DY preconnect and dns-prefetch link tags to header.
-    $dns_prefetch1 = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'dns-prefetch',
-          'href' => '//rcom-eu.dynamicyield.com',
-        ],
-      ],
-      'dy_dns_prefetch1',
+    $prefetch_urls = [
+      '//rcom-eu.dynamicyield.com',
+      '//st-eu.dynamicyield.com',
+      '//cdn-eu.dynamicyield.com',
     ];
-    array_unshift($page['#attached']['html_head'], $dns_prefetch1);
-    $dns_prefetch2 = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'dns-prefetch',
-          'href' => '//st-eu.dynamicyield.com',
-        ],
-      ],
-      'dy_dns_prefetch2',
-    ];
-    array_unshift($page['#attached']['html_head'], $dns_prefetch2);
-    $dns_prefetch3 = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'dns-prefetch',
-          'href' => '//cdn-eu.dynamicyield.com',
-        ],
-      ],
-      'dy_dns_prefetch3',
-    ];
-    array_unshift($page['#attached']['html_head'], $dns_prefetch3);
-    $preconnect1 = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'preconnect',
-          'href' => '//rcom-eu.dynamicyield.com',
-        ],
-      ],
-      'dy_preconnect1',
-    ];
-    array_unshift($page['#attached']['html_head'], $preconnect1);
-    $preconnect2 = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'preconnect',
-          'href' => '//st-eu.dynamicyield.com',
-        ],
-      ],
-      'dy_preconnect2',
-    ];
-    array_unshift($page['#attached']['html_head'], $preconnect2);
-    $preconnect3 = [
-      [
-        '#tag' => 'link',
-        '#attributes' => [
-          'rel' => 'preconnect',
-          'href' => '//cdn-eu.dynamicyield.com',
-        ],
-      ],
-      'dy_preconnect3',
-    ];
-    array_unshift($page['#attached']['html_head'], $preconnect3);
+    foreach ($prefetch_urls as $key => $prefetch_url) {
+      $rel = 'dns-prefetch';
+      $tag = 'dy_dns_prefetch' . $key;
+      $link_tag = dynamic_yield_link_tags($rel, $prefetch_url, $tag);
+      array_unshift($page['#attached']['html_head'], $link_tag);
+    }
+    foreach ($prefetch_urls as $key => $prefetch_url) {
+      $rel = 'preconnect';
+      $tag = 'dy_preconnect' . $key;
+      $link_tag = dynamic_yield_link_tags($rel, $prefetch_url, $tag);
+      array_unshift($page['#attached']['html_head'], $link_tag);
+    }
+
   }
   $page['#cache']['tags'][] = 'config:dynamic_yield.settings';
+}
+
+/**
+ * Get prefetch link tags.
+ *
+ * @param string $rel
+ *   Rel attribute.
+ * @param string $href
+ *   Link tag href.
+ * @param string $tag
+ *   HTML head tag for alter.
+ *
+ * @return array
+ *   Link tag array.
+ */
+function dynamic_yield_link_tags($rel, $href, $tag) {
+  return [
+    [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => $rel,
+        'href' => $href,
+      ],
+    ],
+    $tag,
+  ];
 }
