@@ -30,6 +30,7 @@
       }
 
       .close {
+        cursor: pointer;
         position: absolute;
         #{$right}: 0;
         color: transparent;
