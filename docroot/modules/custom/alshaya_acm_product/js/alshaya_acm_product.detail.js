@@ -40,9 +40,20 @@
       });
 
       // Adding class to identify that matchback product color is manually updated.
-      $('.acq-content-product-matchback').on('click', '.select2Option a', function () {
-        if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
-          $(this).closest('.select2Option').addClass('matchback-color-processed');
+      $('.acq-content-product-matchback .select2Option a').on('click', function (event) {
+        if (event.originalEvent != undefined) {
+          if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
+            $(this).closest('.select2Option').addClass('matchback-color-processed');
+          }
+        }
+      });
+      // Trigger matchback color change on main product color change.
+      $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
+        if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
+          var selected = $(this).val();
+          var selectedList = $('article[data-vmode="matchback"] select[data-configurable-code="color"] option[value="' + selected + '"]');
+          var selectedIndex = selectedList.index();
+          selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
         }
       });
 
@@ -73,22 +84,6 @@
             ]
           );
         }
-        // Trigger matchback color change on main product color change.
-        if ($(this).hasClass('form-item-configurable-swatch')) {
-          if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
-            $('article[data-vmode="matchback"] form').trigger(
-              'product-color-changed',
-              [
-                combinations['byAttribute'][selectedCombination],
-                code
-              ]
-            );
-            var selectedList = $('article[data-vmode="matchback"] select[data-configurable-code="color"] option[value="' + selected + '"]');
-            var selectedIndex = selectedList.index();
-            selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
-          }
-        }
-
       });
 
       $('.sku-base-form').once('load').each(function () {
