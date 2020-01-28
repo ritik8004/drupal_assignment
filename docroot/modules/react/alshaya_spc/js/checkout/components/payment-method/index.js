@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { addPaymentMethodInCart } from '../../../utilities/update_cart';
+
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
@@ -25,9 +27,21 @@ export default class PaymentMethod extends React.Component {
 
     document.getElementById('payment-method-' + method).checked = true;
 
-    let cart = this.props.cart;
-    cart['selected_payment_method'] = method;
-    this.props.refreshCart(cart);
+    let data = {
+      'payment' : {
+        'method': method,
+        'additional_data': {}
+      }
+    };
+    let cart = addPaymentMethodInCart('update payment', data);
+    if (cart instanceof Promise) {
+      cart.then((result) => {
+        let cart_data = this.props.cart;
+        cart_data['selected_payment_method'] = method;
+        cart_data['cart'] = result;
+        this.props.refreshCart(cart_data);
+      });
+    }
   }
 
   render() {
