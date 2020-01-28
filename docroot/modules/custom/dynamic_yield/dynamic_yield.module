@@ -8,6 +8,10 @@
  * yield.
  */
 
+use Drupal\dynamic_yield\Event\DyPageType;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Component\Serialization\Json;
+
 /**
  * Implements hook_page_attachments().
  */
@@ -17,6 +21,7 @@ function dynamic_yield_page_attachments(array &$page) {
   $dynamic_yield = \Drupal::service('dynamic_yield.dynamic_yield');
 
   if (!(\Drupal::service('router.admin_context')->isAdminRoute()) && $dynamic_yield->getSectionId()) {
+
     // Add DY script tags to header.
     $static_script = [[
       '#tag' => 'script',
@@ -36,6 +41,23 @@ function dynamic_yield_page_attachments(array &$page) {
       'dpath',
     ];
     array_unshift($page['#attached']['html_head'], $dynamic_script);
+
+    // Dispatch the DyPageType event to set the context.
+    $request = \Drupal::request();
+    \Drupal::service('event_dispatcher')->dispatch(DyPageType::DY_SET_CONTEXT, new DyPageType($request, $dynamic_yield));
+    $language = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    $js = [
+      'type' => $dynamic_yield->getDyContext(),
+      'lng' => $language,
+    ];
+    $context_script = [[
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => 'DY.recommendationContext = ' . Json::encode($js) . ';',
+    ],
+      'dycontext',
+    ];
+    array_unshift($page['#attached']['html_head'], $context_script);
 
     // Add DY preconnect and dns-prefetch link tags to header.
     $prefetch_urls = [

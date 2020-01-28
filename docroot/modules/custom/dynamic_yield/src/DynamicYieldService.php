@@ -29,6 +29,13 @@ class DynamicYieldService {
   protected $configFactory;
 
   /**
+   * Dynamic yield Context.
+   *
+   * @var string
+   */
+  protected $dycontext;
+
+  /**
    * DynamicYieldService constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -69,7 +76,7 @@ class DynamicYieldService {
   }
 
   /**
-   * Get DY Sectioin ID.
+   * Get DY Section ID.
    *
    * @return string|null
    *   Site Id or empty.
@@ -77,6 +84,26 @@ class DynamicYieldService {
   public function getSectionId() {
     $sectionId = $this->configFactory->get('dynamic_yield.settings')->get('section_id');
     return (!empty($sectionId)) ? $sectionId : '';
+  }
+
+  /**
+   * Set Dynamic yield page context.
+   *
+   * @param string $context
+   *   Page context as required by DY.
+   */
+  public function setDyContext($context) {
+    $this->dycontext = $context;
+  }
+
+  /**
+   * Get Dynamic yield page context.
+   *
+   * @return string
+   *   Page context as required by DY.
+   */
+  public function getDyContext() {
+    return $this->dycontext;
   }
 
 }
