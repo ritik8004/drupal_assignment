@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {createMarker, createInfoWindow} from './map_utils';
+import {isRTL} from '../rtl';
 
 export default class GoogleMap extends React.Component {
 
@@ -19,16 +20,21 @@ export default class GoogleMap extends React.Component {
     // This data can be passed from caller in props.
     let data = [];
 
+    let control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
+
     // This can be called conditionally from props
     // if map points for current location.
     this.setCurrentLocationCoords();
 
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    this.googleMap = this.createGoogleMap(data[0]);
+    this.googleMap = this.createGoogleMap(data[0], control_position);
 
     // Storing in global so that can be accessed byt parent and others.
     window.spcMap = this.googleMap;
+
+    // Add My location button.
+    this.addMyLocationButton(window.spcMap, control_position);
 
     // This can be passed from props if click on
     // map is allowed or not.
@@ -133,12 +139,100 @@ export default class GoogleMap extends React.Component {
    */
   autocompleteTextField = () => {
     return document.getElementById('searchTextField');
-  }
+  };
+
+  /**
+   * Adds my location button on the map.
+   *
+   * @param map
+   * The google map object.
+   *
+   * @param control_position
+   * The position of controls on Google Map.
+   */
+  addMyLocationButton = (map, control_position) => {
+    // We create a div > button > div markup for the custom button.
+    // The wrapper div.
+    var controlDiv = document.createElement('div');
+
+    // The button element.
+    var firstChild = document.createElement('button');
+    firstChild.style.backgroundColor = '#fff';
+    firstChild.style.border = 'none';
+    firstChild.style.outline = 'none';
+    firstChild.style.width = '28px';
+    firstChild.style.height = '28px';
+    firstChild.style.borderRadius = '2px';
+    firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+    firstChild.style.cursor = 'pointer';
+    firstChild.style.padding = '0px';
+    firstChild.title = Drupal.t('Your Location');
+    if (isRTL()) {
+      firstChild.style.marginRight = '15px';
+    }
+    else {
+      firstChild.style.marginLeft = '15px';
+    }
+
+    controlDiv.appendChild(firstChild);
+
+    // The child div.
+    var secondChild = document.createElement('div');
+    secondChild.style.margin = '5px';
+    secondChild.style.width = '18px';
+    secondChild.style.height = '18px';
+    secondChild.style.backgroundImage = 'url(/themes/custom/transac/alshaya_white_label/imgs/icons/mylocation-sprite-1x.png)';
+    secondChild.style.backgroundSize = '180px 18px';
+    secondChild.style.backgroundPosition = '0px 0px';
+    secondChild.style.backgroundRepeat = 'no-repeat';
+    secondChild.id = 'you_location_img';
+    firstChild.appendChild(secondChild);
+
+    // Add dragend event listener on map to fade the button once map is not
+    // showing the current location.
+    window.google.maps.event.addListener(map, 'dragend', function() {
+      $('#you_location_img').css('background-position', '0px 0px');
+    });
+
+    // Add click event listener on button to get user's location from
+    // browser.
+    firstChild.addEventListener('click', function() {
+      let imgX = '0';
+      let animationInterval = setInterval( function () {
+        let imgX = imgX === '-18' ? imgX = '0' : imgX = '-18';
+        $('#you_location_img').css('background-position', imgX + 'px 0px');
+      }, 500);
+
+      // Geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var latlng = new window.google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+          // Center map on user's location.
+          map.setCenter(latlng);
+          // Stop animation.
+          clearInterval(animationInterval);
+          // Change icon color.
+          $('#you_location_img').css('background-position', '-144px 0px');
+        });
+      }
+      else {
+        // Stop animation.
+        clearInterval(animationInterval);
+        // Change icon color to disabled.
+        $('#you_location_img').css('background-position', '0px 0px');
+      }
+    });
+
+    // Add to map.
+    controlDiv.index = 1;
+    map.controls[control_position].push(controlDiv);
+  };
 
   /**
    * Create google map.
    */
-  createGoogleMap = (centerPosition) => {
+  createGoogleMap = (centerPosition, control_position) => {
     return new window.google.maps.Map(this.googleMapDiv(), {
       zoom: 14,
       center: centerPosition,
@@ -147,7 +241,7 @@ export default class GoogleMap extends React.Component {
       streetViewControl: false,
       fullscreenControl: false,
       zoomControlOptions: {
-        position: window.google.maps.ControlPosition.LEFT_BOTTOM
+        position: control_position
       },
     })
   }
