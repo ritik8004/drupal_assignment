@@ -2,10 +2,7 @@ cloud_zoom:
   version: 1.0.3
   css:
     theme:
-      js/cloud-zoom/cloud-zoom.css: {}
       css/alshaya_product_zoom.css: {}
-  js:
-    js/cloud-zoom/cloud-zoom.1.0.3.js: {}
   dependencies:
     - core/drupal
     - core/jquery
@@ -19,7 +16,6 @@ product.cloud_zoom:
 cloud_zoom_common:
   version: 1.x
   js:
-    js/doubletap/directive.js: {}
     js/product_mobile_zoom.js: {}
   dependencies:
     - core/drupal.dialog
@@ -45,6 +41,7 @@ cloud_zoom_pdp_gallery:
   dependencies:
     - core/drupalSettings
     - alshaya_product_zoom/cloud_zoom_common
+    - alshaya_product_zoom/instagram_dots
 
 magazine_gallery:
   version: 1.x
@@ -54,3 +51,4 @@ magazine_gallery:
   dependencies:
   - core/drupalSettings
   - alshaya_white_label/slick
+  - alshaya_product_zoom/instagram_dots

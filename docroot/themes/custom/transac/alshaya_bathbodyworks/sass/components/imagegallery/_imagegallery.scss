@@ -1,30 +1,3 @@
-#product-image-gallery-container {
-  .button__wrapper {
-    .zoomout,
-    .zoomin {
-      border-radius: 0;
-      height: 1.5rem;
-      width: 1.5rem;
-    }
-
-    .zoomout {
-      background: $gallary-icon-bg url(#{$bbw_theme_img_directory_path}/assets/zoomout.svg) no-repeat;
-    }
-
-    .zoomin {
-      background: $gallary-icon-bg url(#{$bbw_theme_img_directory_path}/assets/zoomin.svg) no-repeat;
-    }
-  }
-
-  .imagegallery__wrapper {
-    & > .imagegallery__full {
-      @include breakpoint($tablet) {
-        height: 29rem !important;
-      }
-    }
-  }
-}
-
 .ui-dialog .ui-dialog-titlebar-close {
   width: 2.125rem;
   height: 2.125rem;
@@ -33,20 +6,5 @@
     #{$right}: -0.25rem;
     top: -0.1875rem;
     font-size: 2.5rem;
-  }
-}
-
-#product-image-gallery {
-  &.pager-no {
-    .slick-track {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin: 0 auto;
-
-      @include breakpoint($only-tablet) {
-        flex-direction: row;
-      }
-    }
   }
 }
