@@ -93,29 +93,31 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+
+        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
-        $(this).on('variant-selected product-color-changed', function (event, variant, code) {
+        $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
-          var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+          var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
           if (typeof variantInfo === 'undefined') {
             return;
           }
 
-          $('.price-block-' + drupalSettings.productInfo[sku].identifier, node).html(variantInfo.price);
+          $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+            Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
           }
           else {
-            Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+            Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
 
           // Update quantity dropdown based on stock available for the variant.
@@ -141,8 +143,8 @@
           }
         });
 
-        if (drupalSettings.productInfo[sku]['variants']) {
-          var variants = drupalSettings.productInfo[sku]['variants'];
+        if (drupalSettings[productKey][sku]['variants']) {
+          var variants = drupalSettings[productKey][sku]['variants'];
           var selectedSku = Object.keys(variants)[0];
           var selected = parseInt(Drupal.getQueryVariable('selected'));
 
@@ -177,12 +179,14 @@
       // Show images for oos product on PDP.
       $('.out-of-stock').once('load').each(function () {
         var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
-        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+
+        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
       });
 
       // Add related products on pdp on load and scroll.
@@ -199,7 +203,7 @@
     }
 
     if ($(product).find('.gallery-wrapper').length > 0) {
-      $(product).find('.gallery-wrapper').replaceWith(gallery);
+      $(product).find('.gallery-wrapper').first().replaceWith(gallery);
     }
     else {
       $(product).find('#product-zoom-container').replaceWith(gallery);

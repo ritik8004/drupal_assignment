@@ -634,7 +634,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery)
+        $settingsKey = ($view_mode == 'matchback') ? 'matchback' : 'productInfo';
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
 
@@ -647,15 +648,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
           if (!empty($child)) {
             $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
-            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+            $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
           }
         }
 
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['layout'] = $pdp_layout;
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['identifier'] = $sku_identifier;
 
         if ($sku_entity->bundle() == 'configurable') {
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
           $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         }
 
