@@ -118,9 +118,16 @@
         float: $left;
         width: calc(100% - 2.5rem);
         cursor: pointer;
+        transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 
         @include breakpoint($tablet) {
           margin-bottom: 0;
+        }
+
+        &:hover,
+        &.active {
+          background: $spc-deliver-button;
+          color: $primary_btn_text;
         }
       }
 
