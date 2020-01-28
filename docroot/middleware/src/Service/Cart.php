@@ -452,6 +452,32 @@ class Cart {
   }
 
   /**
+   * Check if a customer by given email exists or not.
+   *
+   * @param string $email
+   *   Email address.
+   *
+   * @return mixed
+   *   Response.
+   */
+  public function customerCheckByMail(string $email) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/customers/search';
+    $query['query'] = [
+      'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
+      'searchCriteria[filterGroups][0][filters][0][value]' => $email,
+      'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
+      'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
+      'searchCriteria[filterGroups][1][filters][0][value]' => $this->magentoInfo->getMagentoStoreId(),
+      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
+    ];
+
+    $response = $client->request('GET', $url, $query);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
    * Method for error response.
    *
    * @param string $message

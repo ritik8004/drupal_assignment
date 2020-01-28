@@ -22,7 +22,7 @@ export default class HomeDeliveryInfo extends React.Component {
 
   processAddress = (e) => {
     const { cart } = this.props.cart;
-    checkoutAddressProcess(e, cart.cart_id);
+    checkoutAddressProcess(e, cart);
   }
 
   componentDidMount() {

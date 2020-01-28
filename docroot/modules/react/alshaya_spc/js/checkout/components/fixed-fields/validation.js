@@ -51,28 +51,3 @@ export const fixedFieldValidation = function (e) {
 
   return valid_form;
 }
-
-/**
- * Verify if mobile number is valid or not.
- *
- * @returns {boolen}
- */
-export const verifyValidMobileNumber = function (mobile) {
-	var api_url = 'verify-mobile/' + mobile;
-
-  return axios.get(api_url)
-    .then(response => {
-    	if (response.data.status === true) {
-    		// Remove error class and any error message.
-      	document.getElementById('mobile-error').innerHTML = '';
-      	document.getElementById('mobile-error').classList.remove('error');
-    	}
-    	else {
-    		document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
-      	document.getElementById('mobile-error').classList.add('error');
-    	}
-  })
-  .catch(error => {
-    // Processing of error here.
-  });
-}

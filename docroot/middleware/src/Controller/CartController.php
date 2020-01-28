@@ -477,6 +477,21 @@ class CartController {
   }
 
   /**
+   * Check if a customer by given email exists or not.
+   *
+   * @param string $email
+   *   Email address.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Payment method response.
+   */
+  public function customerCheckByMail(string $email) {
+    $customer = $this->cart->customerCheckByMail($email);
+    $customer_exists = ($customer['total_count'] > 0);
+    return new JsonResponse(['exists' => $customer_exists]);
+  }
+
+  /**
    * Validate incoming request.
    *
    * @param array $request_content
