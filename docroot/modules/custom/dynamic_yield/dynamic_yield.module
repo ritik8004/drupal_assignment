@@ -46,14 +46,16 @@ function dynamic_yield_page_attachments(array &$page) {
     $request = \Drupal::request();
     \Drupal::service('event_dispatcher')->dispatch(DyPageType::DY_SET_CONTEXT, new DyPageType($request, $dynamic_yield));
     $language = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
-    $js = [
+    $context = [
       'type' => $dynamic_yield->getDyContext(),
       'lng' => $language,
     ];
+    $js = 'window​.DY = ​window​.DY || {};';
+    $js = $js . 'DY.recommendationContext = ' . Json::encode($context) . ';';
     $context_script = [[
       '#type' => 'html_tag',
       '#tag' => 'script',
-      '#value' => 'DY.recommendationContext = ' . Json::encode($js) . ';',
+      '#value' => $js,
     ],
       'dycontext',
     ];
