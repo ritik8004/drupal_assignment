@@ -3,6 +3,7 @@
 namespace Acquia\Blt\Custom\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
+use Robo\Contract\VerbosityThresholdInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -25,6 +26,9 @@ class LocalCommand extends BltTasks {
    * @description Syncs DB from remote and set stage file proxy.
    */
   public function localSync($site = '', $env = 'dev', $mode = 'reuse') {
+    // Reset local settings file.
+    $this->invokeCommand('local:reset-local-settings');
+
     $env = is_numeric(substr($env, 0, 2)) ? $env : '01' . $env;
 
     $info = $this->validateAndPrepareInfo($site, $env);
@@ -195,6 +199,12 @@ class LocalCommand extends BltTasks {
         $taskFilesystemStack = $this->taskFilesystemStack();
         $taskFilesystemStack->mkdir($path);
       }
+
+      // Ensure the directory is writable.
+      $taskFilesystemStack = $this->taskFilesystemStack();
+      $taskFilesystemStack->stopOnFail()
+        ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE)
+        ->chmod($path, 0755);
     }
 
     return $path;
