@@ -16,6 +16,37 @@ use Drupal\block\Entity\Block;
  *
  * Add color label field for index and facets.
  */
+function alshaya_hm_update_8042() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  $fields = [
+    'article_visual_description',
+    'article_pattern',
+    'article_license_company',
+    'article_license_item',
+    'article_fragrance_description',
+    'product_designer_collection',
+    'product_feature',
+  ];
+
+  foreach ($fields as $field) {
+    $sku_fields_manager->updateFieldMetaInfo($field, ['index' => 1]);
+  }
+
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add color label field for index and facets.
+ */
 function alshaya_hm_update_8041() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(

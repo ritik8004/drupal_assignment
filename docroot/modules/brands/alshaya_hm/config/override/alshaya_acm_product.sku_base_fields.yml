@@ -27,14 +27,17 @@ fields:
     label: 'Visual description'
     description: 'A visual description of the article.'
     type: 'string'
+    index: 1
 
   product_designer_collection:
     label: 'Product Designer Collection'
     cardinality: -1
+    index: 1
 
   product_feature:
     label: 'Product Feature'
     cardinality: -1
+    index: 1
 
   product_environment:
     label: 'Product Environment'
@@ -47,18 +50,22 @@ fields:
   article_pattern:
     label: 'Article Pattern'
     cardinality: -1
+    index: 1
 
   article_license_company:
     label: 'Article License Company'
     cardinality: -1
+    index: 1
 
   article_license_item:
     label: 'Article License Item'
     cardinality: -1
+    index: 1
 
   article_fragrance_description:
     label: 'Article Fragrance Description'
     cardinality: -1
+    index: 1
 
   article_warning:
     label: 'Article Warning'
