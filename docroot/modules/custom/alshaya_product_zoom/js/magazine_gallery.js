@@ -17,26 +17,26 @@
       var mobileElement = $('#product-image-gallery-container-mobile');
 
       // Open Gallery mobile modal when we click on the image.
-      var desktopDialog = Drupal.dialog(desktopElement, desktopdialogsettings);
-      var mobileDialog = Drupal.dialog(mobileElement, mobiledialogsettings);
+      this.desktopDialog = Drupal.dialog(desktopElement, desktopdialogsettings);
+      this.mobileDialog = Drupal.dialog(mobileElement, mobiledialogsettings);
 
       if ($(window).width() < 768) {
         $('#product-zoom-container .pdp-image a').on('click', function (e) {
           e.preventDefault();
         });
 
-        $('.pdp-image').off().on('click', function () {
+        $('.pdp-image').once('modal-overlay').on('click', function () {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
           $(this).addClass('clicked');
-          mobileDialog.show();
-          mobileDialog.showModal();
+          Drupal.behaviors.magazine_gallery.mobileDialog.show();
+          Drupal.behaviors.magazine_gallery.mobileDialog.showModal();
           if (typeof Drupal.blazy !== 'undefined') {
             Drupal.blazy.revalidate();
           }
         });
 
-        attachMagazineDialogClose('mobile');
+        this.attachMagazineDialogClose('mobile', context);
       }
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
@@ -45,13 +45,13 @@
         }
 
         $('.pdp-image')
-        .off()
+        .once('modal-overlay')
         .on('click', function (e) {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
           $(this).addClass('clicked');
-          desktopDialog.show();
-          desktopDialog.showModal();
+          Drupal.behaviors.magazine_gallery.desktopDialog.show();
+          Drupal.behaviors.magazine_gallery.desktopDialog.showModal();
           // Adding timeout to revalidate blazy once modal is completely loaded.
           setTimeout(function () {
             if (typeof Drupal.blazy !== 'undefined') {
@@ -60,33 +60,7 @@
           }, 700);
         });
 
-        attachMagazineDialogClose('desktop');
-      }
-
-      // Attach 'dialog close on click' event for product full screen gallery image.
-      function attachMagazineDialogClose(device) {
-        var productGallerySelector;
-        if (device === 'mobile') {
-          productGallerySelector = '#product-image-gallery-mob';
-        }
-        else {
-          productGallerySelector = '#product-full-screen-gallery';
-        }
-        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
-          var $productGallery = $(productGallerySelector);
-          // Closing modal window on click of the full screen slider images.
-          $productGallery.find('img').once('attached').on('click', function (e) {
-            if ($(window).width() < 768) {
-              mobileDialog.close();
-            }
-            else {
-              desktopDialog.close();
-            }
-            $productGallery.slick('unslick');
-            $('body').removeClass('pdp-modal-overlay');
-            e.preventDefault();
-          });
-        });
+        this.attachMagazineDialogClose('desktop', context);
       }
 
       // Zoom effect on image hover for desktop.
@@ -112,6 +86,25 @@
           .children('.magazine-image-zoom-placeholder').css({'background-image': 'url('+ $(this).find('img').attr('data-src') +')'});
         })
       }
+    },
+
+    // Attach 'dialog close on click' event for product full screen gallery image.
+    attachMagazineDialogClose: function (device, context) {
+      $(window).once('dialogopened').on('dialog:aftercreate', function (event) {
+        var $productGallery = (device === 'mobile') ? $('#product-image-gallery-mob', context) : $('#product-full-screen-gallery', context);
+        // Closing modal window on click of the full screen slider images.
+        $productGallery.find('img').once('attached').on('click', function (e) {
+          if ($(window).width() < 768) {
+            Drupal.behaviors.magazine_gallery.mobileDialog.close();
+          }
+          else {
+            Drupal.behaviors.magazine_gallery.desktopDialog.close();
+          }
+          $productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
+        });
+      });
     }
   };
 
