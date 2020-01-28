@@ -14,6 +14,19 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Enable Dynamic yield module.
+ */
+function alshaya_hm_update_8042() {
+  \Drupal::service('module_installer')->install(['dynamic_yield']);
+  // Set env specific Section ID for DY scripts.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'dynamic_yield.settings');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add color label field for index and facets.
  */
 function alshaya_hm_update_8041() {
@@ -25,9 +38,6 @@ function alshaya_hm_update_8041() {
 
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->updateFieldMetaInfo('color_label', ['index' => 1]);
-
-  // Re-index all indexed items of algolia.
-  _alshaya_search_api_reindex(['alshaya_algolia_index']);
 }
 
 /**
