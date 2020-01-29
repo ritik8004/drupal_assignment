@@ -4,6 +4,6 @@ services:
     arguments: ['@config.factory']
   dynamic_yield.default:
     class: Drupal\dynamic_yield\EventSubscriber\DefaultSubscriber
-    arguments: ['@path.matcher', '@dynamic_yield.dynamic_yield']
+    arguments: ['@path.matcher']
     tags:
       - { name: event_subscriber }

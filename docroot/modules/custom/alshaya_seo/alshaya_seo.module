@@ -154,6 +154,58 @@ function alshaya_seo_page_attachments(array &$attachments) {
 }
 
 /**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_seo_page_attachments_alter(array &$page) {
+  // Replace en_US in DY context with site specific locale.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $ids = array_search_id('dycontext', $page['#attached']['html_head'], ['$']);
+  $keys = explode('-', $ids);
+  if (!empty($keys[1])) {
+    $dycontext = $page['#attached']['html_head'][$keys[1]][0]['#value'];
+    $locale = AlshayaI18nLanguages::getLocale($langcode);
+    $dycontext = str_replace('en_US', $locale, $dycontext);
+    $page['#attached']['html_head'][$keys[1]][0]['#value'] = $dycontext;
+  }
+}
+
+/**
+ * Function to recursively search for a given value.
+ *
+ * @param string $search_value
+ *   Search string.
+ * @param array $array
+ *   Array for search.
+ * @param array $id_path
+ *   Initial path.
+ *
+ * @return string|null
+ *   string with ids separated by hyphen and initial path symbol.
+ */
+function array_search_id($search_value, array $array, array $id_path) {
+  if (is_array($array) && count($array) > 0) {
+    foreach ($array as $key => $value) {
+      $temp_path = $id_path;
+      // Adding current key to search path.
+      array_push($temp_path, $key);
+      // Check if this value is an array.
+      // with atleast one element.
+      if (is_array($value) && count($value) > 0) {
+        $res_path = array_search_id(
+          $search_value, $value, $temp_path);
+        if ($res_path != NULL) {
+          return $res_path;
+        }
+      }
+      elseif ($value == $search_value) {
+        return implode("-", $temp_path);
+      }
+    }
+  }
+  return NULL;
+}
+
+/**
  * Implements hook_simple_sitemap_links_alter().
  */
 function alshaya_seo_simple_sitemap_links_alter(&$links) {

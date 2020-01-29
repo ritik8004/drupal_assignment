@@ -2,9 +2,7 @@
 
 namespace Drupal\dynamic_yield\Event;
 
-use Drupal\dynamic_yield\DynamicYieldService;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DyPageType.
@@ -15,50 +13,58 @@ class DyPageType extends Event {
   const DY_SET_CONTEXT = 'dy.set.context';
 
   /**
-   * Request definition.
+   * Dynamic yield Context.
    *
-   * @var \Symfony\Component\HttpFoundation\Request
+   * @var string
    */
-  protected $request;
+  protected $dycontext;
 
   /**
-   * DynamicYieldService definition.
+   * Dynamic yield Context Data.
    *
-   * @var \Drupal\dynamic_yield\DynamicYieldService
+   * @var array
    */
-  protected $dyService;
+  protected $dyContextData;
 
   /**
-   * DyPageType constructor.
+   * Set Dynamic yield page context.
    *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request service.
-   * @param \Drupal\dynamic_yield\DynamicYieldService $dynamicYieldService
-   *   Dynamic yield service.
+   * @param string $context
+   *   Page context as required by DY.
    */
-  public function __construct(Request $request, DynamicYieldService $dynamicYieldService) {
-    $this->request = $request;
-    $this->dyService = $dynamicYieldService;
+  public function setDyContext($context) {
+    $this->dycontext = $context;
   }
 
   /**
-   * Get the current request.
+   * Get Dynamic yield page context.
    *
-   * @return \Symfony\Component\HttpFoundation\Request
-   *   Request service.
+   * @return string
+   *   Page context as required by DY.
    */
-  public function getRequest() {
-    return $this->request;
+  public function getDyContext() {
+    return $this->dycontext;
   }
 
   /**
-   * Get the inserted dynamic yield service.
+   * Get Dynamic Yield Context data.
    *
-   * @return \Drupal\dynamic_yield\DynamicYieldService
-   *   Dynamic yield service.
+   * @return array
+   *   Dynamic yield Context data.
    */
-  public function getDyService() {
-    return $this->dyService;
+  public function getDyContextData() {
+    return $this->dyContextData;
+  }
+
+  /**
+   * Set Dynamic Yield Context data.
+   *
+   * @param array $data
+   *   Dynamic yield Context data.
+   */
+  public function setDyContextData(array $data) {
+    $this->dyContextData = $data;
+    $this->stopPropagation();
   }
 
 }
