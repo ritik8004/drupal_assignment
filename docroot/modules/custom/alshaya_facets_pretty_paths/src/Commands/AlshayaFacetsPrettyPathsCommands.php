@@ -130,7 +130,6 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
           'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
           'prefix_text' => '',
           'visibility' => [
-            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE,
             AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
             AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
           ],
