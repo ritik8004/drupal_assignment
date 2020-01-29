@@ -287,6 +287,10 @@ class PromotionController extends ControllerBase {
               ];
             }
 
+            // Allow other modules to update the options info sent to ACM.
+            // Duplicate here for now, done in Drupal\alshaya_acm\CartHelper.
+            $this->moduleHandler()->alter('acq_sku_configurable_cart_options', $options, $sku);
+
             $updated_cart->addRawItemToCart([
               'name' => $sku->label(),
               'sku' => $sku->getSKU(),

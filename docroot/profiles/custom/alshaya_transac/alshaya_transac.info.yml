@@ -32,3 +32,4 @@ exclude:
   - lightning_scheduler
   - moderation_sidebar
   - update
+  - image_widget_crop

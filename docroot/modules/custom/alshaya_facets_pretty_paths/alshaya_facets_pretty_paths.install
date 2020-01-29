@@ -24,7 +24,6 @@ function alshaya_facets_pretty_paths_update_8002() {
       'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
       'prefix_text' => '',
       'visibility' => [
-        AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE,
         AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
         AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
       ],

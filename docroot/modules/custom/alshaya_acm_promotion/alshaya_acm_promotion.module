@@ -267,6 +267,9 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     return;
   }
 
+  // Disable the default add to cart form.
+  $build['#no_add_to_cart'] = TRUE;
+
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
