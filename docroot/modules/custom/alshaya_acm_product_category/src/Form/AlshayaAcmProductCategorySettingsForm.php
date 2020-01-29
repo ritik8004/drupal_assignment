@@ -80,7 +80,6 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product_category.settings');
 
     $options = $this->getChildTermIds();
-
     $form['sale_category_ids'] = [
       '#type' => 'select',
       '#title' => $this->t('SALE Categories'),
@@ -91,6 +90,15 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#size' => count($options) + 1,
       '#default_value' => $config->get('sale_category_ids'),
     ];
+
+    if (empty($config->get('sale_category_ids'))) {
+      $form['enable_auto_sale_categorisation'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Enable Auto Sale Categorization.'),
+        '#description' => $this->t('Enable auto sale categorization if sale category is not selected.'),
+        '#default_value' => $config->get('enable_auto_sale_categorisation'),
+      ];
+    }
 
     $new_arrivals = [];
 
