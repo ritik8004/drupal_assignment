@@ -7,7 +7,6 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Mappings for specific listing page type to make updates dynamic.
