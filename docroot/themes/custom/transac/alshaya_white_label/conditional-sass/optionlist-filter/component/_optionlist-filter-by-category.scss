@@ -293,12 +293,12 @@
   @include breakpoint($tablet) {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 1.9375rem;;
+    grid-gap: 1.9375rem;
   }
 
   @include breakpoint($only-tablet) {
     padding: 0 1.4375rem;
-    grid-gap: 1.5rem;;
+    grid-gap: 1.5rem;
   }
 
   @include breakpoint($only-mobile) {
