@@ -2,6 +2,7 @@ import React from 'react';
 
 import AreaSelect from '../area-select';
 import ParentAreaSelect from '../parent-area-select';
+import TextField from "../../../utilities/textfield";
 
 export default class DynamicFormField extends React.Component {
 
@@ -21,12 +22,7 @@ export default class DynamicFormField extends React.Component {
     }
 
     return (
-      <div className='spc-type-textfield'>
-        <input id={this.props.field_key} type='text' required='required' name={this.props.field_key} defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''}/>
-        <div className='c-input__bar'/>
-        <label>{this.props.field.label}</label>
-        <div id={this.props.field_key + '-error'} className='error'></div>
-      </div>
+      <TextField id={this.props.field_key} type='text' label={this.props.field.label} name={this.props.field_key} defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''}/>
     );
   }
 
