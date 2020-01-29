@@ -153,7 +153,9 @@
   }
 
   button.slick-arrow {
-    bottom: -0.125rem;
+    @include breakpoint($tablet) {
+      bottom: 0;
+    }
   }
 }
 

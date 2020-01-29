@@ -22,7 +22,7 @@
       }
 
       // Process main pdp gallery only once.
-      var zoomContainer = $('.acq-content-product #product-zoom-container');
+      var zoomContainer = $('.acq-content-product .content__main #product-zoom-container');
       if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
         zoomContainer.addClass('product-zoom-processed');
 

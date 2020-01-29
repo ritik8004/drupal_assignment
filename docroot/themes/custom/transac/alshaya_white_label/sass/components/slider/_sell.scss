@@ -176,9 +176,9 @@
   }
 
   &.view-display-id-block_matchback {
-    @include breakpoint($tablet) {
-      .slick-slider .slick-slide img {
-        max-width: none;
+    .slick-slider .slick-slide img {
+      @include breakpoint($tablet) {
+        max-width: 100%;
       }
     }
   }
