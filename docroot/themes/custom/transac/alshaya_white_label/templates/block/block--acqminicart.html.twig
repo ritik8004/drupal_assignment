@@ -8,3 +8,9 @@
     {% endif %}
   </a>
 </div>
+
+{% if show_matchback %}
+  <div id="cart_notification" class="matchback-cart-notification"></div>
+{% else %}
+  <div id="cart_notification"></div>
+{% endif %}

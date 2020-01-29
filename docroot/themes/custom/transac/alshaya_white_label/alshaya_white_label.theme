@@ -89,6 +89,11 @@ function alshaya_white_label_preprocess_html(&$variables) {
   if ($current_route->getRouteName() == 'entity.node.canonical' && $current_route->getParameter('node')->bundle() == 'acq_product') {
     $node = \Drupal::request()->attributes->get('node');
     if ($node instanceof NodeInterface) {
+      $acm_settings = \Drupal::config('alshaya_acm.settings');
+      $variables['show_cart_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
+      if ($variables['show_cart_matchback']) {
+        $variables['#attached']['library'][] = 'alshaya_white_label/matchback_cart_notification';
+      }
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');

@@ -54,6 +54,9 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
   // Quantity.
   $quantity = $data['quantity'] ?? 1;
 
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
+  $show_crosssell_as_matchback = $acm_settings->get('show_crosssell_as_matchback');
+
   // Use the template to render the HTML.
   $output = [
     '#theme' => 'cart_notification',
@@ -62,17 +65,21 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
     '#product_name' => $product_name,
     '#link' => $url,
     '#link_text' => t('view cart'),
+    '#show_cart_matchback' => $show_crosssell_as_matchback,
   ];
 
   // Update mini cart Block.
   $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
+  if ($show_crosssell_as_matchback) {
+    $mini_cart_html['#suffix'] = '</div><div id="cart_notification" class="matchback-cart-notification"></div>';
+  }
 
   $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku->getSku()));
 
   $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
   $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
-  $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
   $response->addCommand(new HtmlCommand('#cart_notification', render($output)));
+  $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
 }
 
 /**
@@ -87,6 +94,7 @@ function alshaya_acm_cart_notification_theme($existing, $type, $theme, $path) {
         'product_name' => '',
         'link' => '',
         'link_text' => '',
+        'show_cart_matchback' => '',
       ],
       'template' => 'cart-notification',
     ],
