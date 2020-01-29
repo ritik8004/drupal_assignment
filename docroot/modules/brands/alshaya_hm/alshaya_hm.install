@@ -15,6 +15,7 @@ use Drupal\block\Entity\Block;
  * Implements hook_update_N().
  *
  * Enable Dynamic yield module.
+ * Add more fields for indexing.
  */
 function alshaya_hm_update_8042() {
   \Drupal::service('module_installer')->install(['dynamic_yield']);
@@ -22,14 +23,7 @@ function alshaya_hm_update_8042() {
   /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
   $config_check = \Drupal::service('alshaya_acm.config_check');
   $config_check->checkConfig(TRUE, 'dynamic_yield.settings');
-}
 
-/**
- * Implements hook_update_N().
- *
- * Add color label field for index and facets.
- */
-function alshaya_hm_update_8042() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.sku_base_fields'],
