@@ -16,6 +16,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableAjaxResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -346,30 +347,26 @@ class PromotionController extends ControllerBase {
    *   Ajax command to update promo label.
    */
   public function getPromotionDynamicLabel(SKUInterface $sku) {
-    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
+    $response = new CacheableAjaxResponse();
 
-    $response = [];
-    if (!empty($label)) {
-      $response = $this->promoLabelManager->prepareResponse($label, $sku->id());
-      $promotionLabel = '.promotions-dynamic-label';
-      $response->addCommand(new InvokeCommand($promotionLabel, 'trigger', ['dynamic:promotion:label:ajax:complete']));
+    // Add cache metadata.
+    $cache_array = [
+      'tags' => ['node_type:acq_promotion'],
+      'contexts' => ['cookies:Drupal_visitor_acq_cart_id'],
+    ];
 
-      // Add cache metadata.
-      $cache_array = [
-        'tags' => [
-          'node_type:acq_promotion',
-        ],
-        'contexts' => [
-          'cookies:Drupal_visitor_acq_cart_id',
-        ],
-      ];
-      $cart_id = $this->cartStorage->getCartId(FALSE);
-      if ($cart_id) {
-        $cache_array['tags'][] = 'cart:' . $cart_id;
-      }
-      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+    $cart_id = $this->cartStorage->getCartId(FALSE);
+    if (!empty($cart_id)) {
+      $cache_array['tags'][] = 'cart:' . $cart_id;
     }
 
+    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
+    if (!empty($label)) {
+      $response = $this->promoLabelManager->prepareResponse($label, $sku->id(), $response);
+      $response->addCommand(new InvokeCommand('.promotions-dynamic-label', 'trigger', ['dynamic:promotion:label:ajax:complete']));
+    }
+
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
   }
 
