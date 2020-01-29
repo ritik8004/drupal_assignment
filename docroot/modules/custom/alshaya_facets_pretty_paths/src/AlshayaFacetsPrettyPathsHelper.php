@@ -472,6 +472,8 @@ class AlshayaFacetsPrettyPathsHelper {
           }
           elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
             $facet_value = strip_tags($value['#title']['#value']);
+            // Condition added for the price range filter order
+            // right to left for Arabic site.
             if (strpos($active_facet_id, 'price') > -1) {
               $prices = explode(' - ', $facet_value);
               array_map('trim', $prices);
