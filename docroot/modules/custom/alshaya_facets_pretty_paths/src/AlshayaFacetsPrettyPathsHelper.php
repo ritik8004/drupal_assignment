@@ -16,6 +16,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Utilty Class.
@@ -470,8 +471,19 @@ class AlshayaFacetsPrettyPathsHelper {
             $active_prefix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
           }
           elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
+            $facet_value = strip_tags($value['#title']['#value']);
+            if (strpos($active_facet_id, 'price') > -1) {
+              $prices = explode(' - ', $facet_value);
+              array_map('trim', $prices);
+
+              if (count($prices) > 1 && $this->languageManager->getCurrentLanguage()->getDirection() === LanguageInterface::DIRECTION_RTL) {
+                $prices = array_reverse($prices);
+              }
+
+              $facet_value = implode(' - ', $prices);
+            }
             // Strip tags to get the value from price markup.
-            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
+            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . $facet_value : $facet_value;
           }
         }
       }
