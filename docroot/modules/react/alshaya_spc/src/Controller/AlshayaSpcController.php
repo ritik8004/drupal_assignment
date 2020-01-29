@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\alshaya_click_collect\Service\AlshayaClickCollect;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
@@ -52,6 +53,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $mobileUtil;
 
   /**
+   * Alshaya click and collect helper.
+   *
+   * @var \Drupal\alshaya_click_collect\Service\AlshayaClickCollect
+   */
+  protected $clickCollect;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -64,17 +72,23 @@ class AlshayaSpcController extends ControllerBase {
    *   SPC helper.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\alshaya_click_collect\Service\AlshayaClickCollect $clickCollect
+   *   Alshaya click and collect helper.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              AlshayaSpcPaymentMethodManager $payment_method_manager,
-                              CheckoutOptionsManager $checkout_options_manager,
-                              AlshayaSpcHelper $spc_helper,
-                              MobileNumberUtilInterface $mobile_util) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    AlshayaSpcPaymentMethodManager $payment_method_manager,
+    CheckoutOptionsManager $checkout_options_manager,
+    AlshayaSpcHelper $spc_helper,
+    MobileNumberUtilInterface $mobile_util,
+    AlshayaClickCollect $clickCollect
+  ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->spcHelper = $spc_helper;
     $this->mobileUtil = $mobile_util;
+    $this->clickCollect = $clickCollect;
   }
 
   /**
@@ -86,7 +100,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('alshaya_spc.helper'),
-      $container->get('mobile_number.util')
+      $container->get('mobile_number.util'),
+      $container->get('alshaya_click_collect.helper')
     );
   }
 
@@ -225,6 +240,27 @@ class AlshayaSpcController extends ControllerBase {
   public function getParentAreaList() {
     $data = $this->spcHelper->getAreaParentList();
     return new JsonResponse($data);
+  }
+
+  /**
+   * Function to get the cart stores.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   * @param float $lat
+   *   The latitude.
+   * @param float $lon
+   *   The longitude.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getCncStoresJson($cart_id, $lat = NULL, $lon = NULL) {
+    $stores = $this->clickCollect->getCartStores($cart_id, $lat, $lon);
+
+    // Sort the stores first by distance and then by name.
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
+    return new JsonResponse($stores);
   }
 
 }

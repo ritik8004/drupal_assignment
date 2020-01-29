@@ -197,12 +197,39 @@ class StoresFinderUtility {
   }
 
   /**
+   * Return store extra data info for given store codes.
+   *
+   * @param array $store_codes
+   *   The array of store codes.
+   *
+   * @return array
+   *   Return array of stores.
+   */
+  public function getStoresExtraData(array $store_codes) {
+    $query = $this->nodeStorage->getQuery();
+    $query->condition('field_store_locator_id', $store_codes, 'IN');
+    $query->condition('langcode', $this->languageManager->getCurrentLanguage()->getId());
+    $ids = $query->execute()->fetchAllAssoc('field_store_locator_id', \PDO::FETCH_ASSOC);
+
+    $nodes = $this->nodeStorage->loadMultiple($ids);
+    $stores = [];
+    foreach ($nodes as $node) {
+      $stores[] = $this->getStoreExtraData($store_codes, $node);
+    }
+
+    return $stores;
+  }
+
+  /**
    * Function to create/update single store.
    *
    * @param array $store
    *   Store array.
    * @param string $langcode
    *   Language code.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Drupal\Core\TypedData\Exception\ReadOnlyException
    */
   public function updateStore(array $store, $langcode) {
     static $user;
