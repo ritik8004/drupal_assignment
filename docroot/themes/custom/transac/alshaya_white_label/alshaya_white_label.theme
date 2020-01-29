@@ -568,6 +568,9 @@ function alshaya_white_label_preprocess_node(&$variables) {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
         }
+        if ($variables['show_crosssell_as_matchback']) {
+          $variables['#attached']['library'][] = 'alshaya_white_label/matchback_layout';
+        }
       }
     }
     elseif ($variables['elements']['#view_mode'] == 'teaser') {

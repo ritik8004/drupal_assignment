@@ -15,6 +15,16 @@
   Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
 
+      $('.sku-base-form.visually-hidden').once('sku-base-form-processed').on('select-to-option-conversion-completed', function () {
+        // Show add to cart form now.
+        $(this).removeClass('visually-hidden');
+        $(this).trigger('form-visible');
+
+        if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
+          $('.content__title_wrapper').addClass('show-sticky-wrapper');
+        }
+      });
+
       // Disable sharing and deliver blocks for OOS.
       $('.product-out-of-stock').once('page-load').each(function () {
         $(this).find('.sharethis-wrapper').addClass('out-of-stock');
@@ -22,7 +32,7 @@
           if ($(this).accordion()) {
             $(this).accordion('option', 'disabled', true);
           }
-        })
+        });
       });
 
       $('.edit-add-to-cart').once('js-to-move-error-message').on('click', function () {
@@ -58,7 +68,7 @@
       });
 
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
-        var form = $(this).closest('form');
+        var form = $(this).parents('form');
         var sku = $(form).attr('data-sku');
         var combinations = drupalSettings.configurableCombinations[sku];
         var code = $(this).attr('data-configurable-code');
@@ -76,7 +86,7 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          $(this).closest('.sku-base-form').trigger(
+          form.trigger(
             'variant-selected',
             [
               combinations['byAttribute'][selectedCombination],
@@ -332,17 +342,5 @@
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
     }
   }
-
-  $(window).on('load', function () {
-    // Show add to cart form now.
-    $('.sku-base-form').each(function () {
-      $(this).removeClass('visually-hidden');
-      $(this).trigger('form-visible');
-    });
-
-    if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
-      $('.content__title_wrapper').addClass('show-sticky-wrapper');
-    }
-  });
 
 })(jQuery, Drupal, drupalSettings);
