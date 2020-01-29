@@ -46,7 +46,6 @@ export default class EmptyDeliveryText extends React.Component {
           </div>
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <a className='close' onClick={this.closeModal}>&times;</a>
-            <AddressForm default_val={null} processAddress={this.processAddress}/>
           </Popup>
         </div>
       );
