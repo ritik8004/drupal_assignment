@@ -117,7 +117,6 @@ class AlshayaFacetsPrettyPathsHelper {
   const FACET_META_TYPE_IGNORE = 0;
   const FACET_META_TYPE_PREFIX = 1;
   const FACET_META_TYPE_SUFFIX = 2;
-  const VISIBLE_IN_PAGE_TITLE = 3;
   const VISIBLE_IN_META_TITLE = 4;
   const VISIBLE_IN_META_DESCRIPTION = 5;
 
