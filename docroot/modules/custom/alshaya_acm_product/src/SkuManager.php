@@ -3281,11 +3281,25 @@ class SkuManager {
       // Loop through the indexable fields.
       foreach ($this->getAttributesToIndex() as $key => $field) {
         $field_key = 'attr_' . $key;
-        $field_data = $child->get($field_key)->first();
+        $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
-          $field_value = $field_data->getString();
-          $data[$key][$field_value] = $field_value;
+          foreach ($field_data as $field_value) {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
+        }
+      }
+    }
+
+    // Loop through the indexable fields for parent.
+    // If we get data at parent level, let's index that too.
+    foreach ($this->getAttributesToIndex() as $key => $field) {
+      $field_key = 'attr_' . $key;
+      $field_data = $sku->get($field_key)->getValue();
+
+      if (!empty($field_data)) {
+        foreach ($field_data as $field_value) {
+          $data[$key][$field_value['value']] = $field_value['value'];
         }
       }
     }
