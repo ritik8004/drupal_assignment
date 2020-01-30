@@ -12,14 +12,13 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
-use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_update_N().
  *
  * Create new field (Google Category) for acq_product_category taxonomy.
  */
-function alshaya_acm_product_category_update_8039() {
+function alshaya_acm_product_category_update_8042() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
@@ -36,10 +35,9 @@ function alshaya_acm_product_category_update_8039() {
     AlshayaConfigManager::MODE_MERGE
   );
 
-  // Allow google category mapping to manage 'webmaster' & 'administrator'.
-  $role = Role::load('webmaster');
-  $role->grantPermission('manage google category mapping');
-  $role->save();
+  // Allow google category mapping to manage 'webmaster'.
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['webmaster']);
 }
 
 /**

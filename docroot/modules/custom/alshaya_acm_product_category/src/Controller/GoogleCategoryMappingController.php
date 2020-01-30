@@ -132,7 +132,6 @@ class GoogleCategoryMappingController extends ControllerBase {
       $filename
     );
 
-    $response->headers->set('X-Drupal-Cache-Tags', 'taxonomy_term:acq_product_category');
     $response->headers->set('Content-Disposition', $disposition);
     return $response;
   }
