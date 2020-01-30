@@ -8,6 +8,26 @@ export const getMap = function () {
 }
 
 /**
+ * Get the markers available on the map.
+ *
+ * See <GoogleMap> for more details.
+ */
+export const getMarkers = function () {
+  return window.spcMarkers;
+}
+
+/**
+ * Removes all markers from map.
+ */
+export const removeAllMarkersFromMap = function () {
+  // First clear all existing marker on map.
+  for (var i = 0; i < window.spcMarkers.length; i++) {
+    window.spcMarkers[i].setMap(null);
+  }
+  window.spcMarkers = [];
+}
+
+/**
  * Create a marker.
  *
  * @param {*} position
