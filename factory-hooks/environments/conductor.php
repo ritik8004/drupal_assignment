@@ -22,9 +22,10 @@ $conductors = [
     'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
     'site_id' => 4,
   ],
-  'mckw_dev3' => [
+  'mckw_dev2' => [
     'hmac_id' => '65769d9ba82c4ffd8c26ed830de1e6c2',
     'hmac_secret' => 'Y2MyMTVlYTQtMGQ0Yi00',
+    'site_id' => 133,
   ],
   'mckw_uat' => [
     'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
@@ -77,6 +78,7 @@ $conductors = [
   'hmkw_dev' => [
     'hmac_id' => '03551dee94ad4f91a20bf41459c02bdd',
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
+    'site_id' => 135,
   ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
@@ -280,6 +282,11 @@ $conductors = [
     'site_id' => 83,
   ],
   // VictoriaSecret AE.
+  'vsae_dev3' => [
+    'hmac_id' => '235f0ce579f6439c97e928b0ffa37224',
+    'hmac_secret' => 'MzU0ZWQ5YWYtNjYwNi00',
+    'site_id' => 147,
+  ],
   'vsae_dev' => [
     'hmac_id' => 'fcf0bc0e491a4d5d8c615973f4cd91ec',
     'hmac_secret' => 'NWJmNjRlODItN2JkZi00',
