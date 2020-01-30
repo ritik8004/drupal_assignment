@@ -147,20 +147,14 @@ class PromotionController extends ControllerBase {
     $build['#cache']['tags'] = $node->getCacheTags();
     $node = $this->entityRepository->getTranslationFromContext($node);
 
-    $free_gifts = [];
-    foreach ($node->get('field_free_gift_skus')->getValue() as $free_gift) {
-      $sku = SKU::loadFromSku($free_gift['value']);
-
-      if ($sku instanceof SKUInterface) {
-        $free_gifts[] = $sku;
-        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $sku->getCacheTags());
-      }
-    }
+    $free_gifts = $this->promotionsManager->getFreeGiftSkuEntitiesByPromotionId($node->id());
 
     $items = [];
 
     /** @var \Drupal\acq_sku\Entity\SKU $free_gift */
     foreach ($free_gifts as $free_gift) {
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $free_gift->getCacheTags());
+
       $item = [];
 
       $item['#title']['#markup'] = $free_gift->label();

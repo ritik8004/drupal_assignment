@@ -66,18 +66,9 @@ function _alshaya_search_api_remove_field_from_indexes($field_code, $index) {
  *
  * @throws \Exception
  */
-function _alshaya_search_api_reindex(array $indexes = ['product', 'acquia_search_index']) {
-  foreach ($indexes as $index_name) {
-    // Queue items for re-indexing. Required specifically for search_api_db to
-    // avoid creating tables with numeric prefixes when indexing content.
-    $index = Index::load($index_name);
-
-    // Re-index all items.
-    $index->reindex();
-
-    // Save index to reflect new category field.
-    $index->save();
-  }
+function _alshaya_search_api_reindex(array $indexes = []) {
+  // Queue all products again for processing.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**

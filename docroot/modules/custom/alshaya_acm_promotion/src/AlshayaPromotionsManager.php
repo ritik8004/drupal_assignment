@@ -397,8 +397,28 @@ class AlshayaPromotionsManager {
     foreach ($free_skus ?? [] as $free_sku) {
       $sku_entity = SKU::loadFromSku($free_sku);
 
-      if ($sku_entity instanceof SKUInterface) {
-        $free_sku_entities[] = $sku_entity;
+      if (!($sku_entity instanceof SKUInterface)) {
+        continue;
+      }
+
+      switch ($sku_entity->bundle()) {
+        case 'simple':
+          if ($this->skuManager->isSkuFreeGift($sku_entity)) {
+            $free_sku_entities[] = $sku_entity;
+          }
+          break;
+
+        case 'configurable':
+          // Add if we have at-least one variant available as free.
+          foreach (Configurable::getChildSkus($sku_entity) as $child_sku) {
+            $child = SKU::loadFromSku($child_sku);
+
+            if ($child instanceof SKUInterface && $this->skuManager->isSkuFreeGift($child)) {
+              $free_sku_entities[] = $sku_entity;
+              break;
+            }
+          }
+          break;
       }
     }
 
@@ -447,9 +467,13 @@ class AlshayaPromotionsManager {
         continue;
       }
 
-      $free_gift_promos[$promotion_id] = $promotion;
-
       $free_skus = $this->getFreeGiftSkuEntitiesByPromotionId($promotion_id);
+
+      if (empty($free_skus)) {
+        continue;
+      }
+
+      $free_gift_promos[$promotion_id] = $promotion;
 
       $route_parameters = [
         'node' => $promotion_id,
@@ -468,7 +492,7 @@ class AlshayaPromotionsManager {
       ];
 
       // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
-      if ($promotion['promo_type'] == 1) {
+      if ($promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
         $route_parameters['node'] = $promotion_id;
         $link_coupons = Link::createFromRoute(
           reset($coupons),
@@ -780,8 +804,8 @@ class AlshayaPromotionsManager {
     }
 
     // Extract next eligible cart free shipping promotion.
-    if (!empty($freeShippingPromotions = $allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER])) {
-      foreach ($freeShippingPromotions as $priceSortedPromotions) {
+    if (!empty($allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER])) {
+      foreach ($allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER] as $priceSortedPromotions) {
         ksort($priceSortedPromotions);
 
         foreach ($priceSortedPromotions as $promotions) {
@@ -796,10 +820,10 @@ class AlshayaPromotionsManager {
           }
         }
       }
+      unset($allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER]);
     }
 
     // Extract next eligible cart promotion based on priority and price.
-    unset($allCartPromotions[self::SUBTYPE_FREE_SHIPPING_ORDER]);
     foreach ($allCartPromotions as $priceSortedPromotions) {
       ksort($priceSortedPromotions);
 

@@ -333,6 +333,14 @@
         showFilterCount();
       };
 
+      // Function to call in ajax command on facet selection.
+      // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
+      $.fn.updateMetaData = function (meta_title, meta_description) {
+        // Update meta data of the page.
+        document.title = meta_title;
+        $("meta[name='description']").attr('content', meta_description);
+      };
+
       /**
        * Wrapping all the filters inside a div to make it sticky.
        */
@@ -488,9 +496,11 @@
                   }
                 }
               } else {
-                // Action to perform when we are scrolling down.
-                if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                  $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                if (this.oldScroll < this.pageYOffset || this.oldScroll != this.pageYOffset) {
+                  // Action to perform when we are scrolling down.
+                  if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                    $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                  }
                 }
               }
             } else {

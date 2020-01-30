@@ -5,8 +5,7 @@ namespace Drupal\alshaya_acm_product\EventSubscriber;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
-use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
-use Drupal\Core\Queue\QueueFactory;
+use Drupal\alshaya_acm_product\Service\ProductQueueUtility;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -17,20 +16,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * Queue factory service.
+   * Utility to queue products for processing.
    *
-   * @var \Drupal\Core\Queue\QueueFactory
+   * @var \Drupal\alshaya_acm_product\Service\ProductQueueUtility
    */
-  protected $queueFactory;
+  protected $queueUtility;
 
   /**
    * ProductUpdatedEventSubscriber constructor.
    *
-   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
-   *   Queue factory service.
+   * @param \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queue_utility
+   *   Utility to queue products for processing.
    */
-  public function __construct(QueueFactory $queue_factory) {
-    $this->queueFactory = $queue_factory;
+  public function __construct(ProductQueueUtility $queue_utility) {
+    $this->queueUtility = $queue_utility;
   }
 
   /**
@@ -87,7 +86,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
     // Create multiple items if we have multiple parents.
     foreach ($skus as $sku) {
-      $this->queueFactory->get(ProcessProduct::QUEUE_NAME)->createItem($sku);
+      $this->queueUtility->queueProduct($sku);
     }
   }
 

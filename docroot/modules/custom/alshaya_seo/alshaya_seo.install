@@ -10,6 +10,21 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Updating global metatag configuration.
+ */
+function alshaya_seo_update_8012() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['metatag.metatag_defaults.global'],
+    'metatag',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add SEO settings config.
  */
 function alshaya_seo_update_8011() {

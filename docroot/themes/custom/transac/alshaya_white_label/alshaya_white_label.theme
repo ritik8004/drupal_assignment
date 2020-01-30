@@ -1282,6 +1282,11 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
                 "node:taxonomy_term.accordion",
               ],
             ],
+            '#attached' => [
+              'library' => [
+                'alshaya_white_label/product-category-accordion',
+              ],
+            ],
           ];
         }
         else {

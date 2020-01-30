@@ -6,8 +6,8 @@
       </div>
     </ul>
   {% endif %}
-    <ul class='attribute-filter-name-list'>
   {% if option.group %}
+    <ul class='attribute-filter-name-list'>
     {% for key,array_terms in option.terms %}
       {% if key|trim|length > 0 %}
         <li class='level-1'>
@@ -15,7 +15,7 @@
           <ul class='list'>
             {% for value in array_terms %}
               <li class='title'>
-                <a href={{ value.url }}> {{ value.title }} </a>
+                <a href="{{ value.url }}"> {{ value.title }} </a>
               </li>
             {% endfor %}
           </ul>
@@ -23,10 +23,11 @@
       {% endif %}
     {% endfor %}
   {% else %}
+    <ul class='attribute-filter-name-thumbnile'>
     {% for value in option.terms %}
       {% if value.title|trim|length > 0 %}
         <li class='title'>
-          <a href={{ value.url }}>
+          <a href="{{ value.url }}">
             {% if value.image_url %}
               <img src="{{ file_url(value.image_url) }}"/>
             {% endif %}
