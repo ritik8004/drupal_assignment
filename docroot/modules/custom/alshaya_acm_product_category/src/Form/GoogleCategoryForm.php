@@ -234,7 +234,14 @@ class GoogleCategoryForm extends FormBase {
         }
         catch (\Exception $e) {
           // If any exception.
-          drupal_set_message(t('There was some problem in updating category @category.', ['@category' => $category[2]]));
+          \Drupal::messenger()->addWarning(t('There was some problem in updating category @category. exception: @message.', [
+            '@category' => $category[2],
+            '@message' => $e->getMessage(),
+          ]), 'error');
+          \Drupal::logger('alshaya_acm_product_category')->error(t('There was some problem in updating category @category. exception: @message.', [
+            '@category' => $category[2],
+            '@message' => $e->getMessage(),
+          ]));
         }
       }
     }
@@ -257,12 +264,12 @@ class GoogleCategoryForm extends FormBase {
   public static function finishBatch($success, array $results = [], array $operations = []) {
     if ($success) {
       $message = t('Google category mapping imported successfully.');
-      drupal_set_message($message, 'success');
+      \Drupal::messenger()->addStatus($message);
       \Drupal::logger('alshaya_acm_product_category')->info(t('File used for google category mapping import was @filename', ['@filename' => $results['filename']]));
     }
     else {
       $message = t('There was some error while importing google category mapping.');
-      drupal_set_message($message, 'error');
+      \Drupal::messenger()->addError($message);
       \Drupal::logger('alshaya_acm_product_category')->error(t('File used for google category mapping import was @filename', ['@filename' => $results['filename']]));
     }
   }
