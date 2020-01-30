@@ -52,6 +52,8 @@ function dynamic_yield_page_attachments(array &$page) {
         $context['data'] = $event->getDyContextData();
       }
     }
+    // Allow other module to alter the DY context.
+    \Drupal::moduleHandler()->invokeAll('dynamic_yield_context_alter', [&$context]);
     $js = 'window​.DY = ​window​.DY || {};';
     $js = $js . 'DY.recommendationContext = ' . Json::encode($context) . ';';
     $context_script = [[
