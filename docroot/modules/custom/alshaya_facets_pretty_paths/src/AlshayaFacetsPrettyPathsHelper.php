@@ -474,6 +474,9 @@ class AlshayaFacetsPrettyPathsHelper {
             $facet_value = strip_tags($value['#title']['#value']);
             // Condition added for the price range filter order
             // right to left for Arabic site.
+            // Ex. If filtered by the facet '5 KWD - 10 KWD':
+            // 1. For en site the value will be 5 KWD - 10 KWD.
+            // 2. Reversing the value for ar site 10 KWD - 5 KWD.
             if (strpos($active_facet_id, 'price') > -1) {
               $prices = explode(' - ', $facet_value);
               array_map('trim', $prices);
