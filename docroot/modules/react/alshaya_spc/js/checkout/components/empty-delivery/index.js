@@ -2,6 +2,7 @@ import React from 'react';
 
 import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
+import AddressList from '../address-list';
 import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
 
 export default class EmptyDeliveryText extends React.Component {
@@ -50,8 +51,10 @@ export default class EmptyDeliveryText extends React.Component {
           {Drupal.t('Please add yor contact details and address.')}
         </div>
         <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-          <a className='close' onClick={this.closeModal}>&times;</a>
-          <AddressForm default_val={null} processAddress={this.processAddress}/>
+          <React.Fragment>
+            <a className='close' onClick={this.closeModal}>&times;</a>
+            <AddressForm default_val={null} processAddress={this.processAddress}/>
+          </React.Fragment>
         </Popup>
       </div>
     );

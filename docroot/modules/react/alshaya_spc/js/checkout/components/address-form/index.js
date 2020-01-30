@@ -80,7 +80,7 @@ export default class AddressForm extends React.Component {
     }
 
     Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-      dynamicFields.push(<DynamicFormField default_val={default_val} areasUpdate={this.refreshAreas} area_list={this.state.area_list} field_key={key} field={field}/>);
+      dynamicFields.push(<DynamicFormField key={key} default_val={default_val} areasUpdate={this.refreshAreas} area_list={this.state.area_list} field_key={key} field={field}/>);
     });
 
     return(
@@ -98,6 +98,12 @@ export default class AddressForm extends React.Component {
             <div className='spc-address-form-content'>
               <form className='spc-address-add' onSubmit={this.handleSubmit}>
                 <div className='delivery-address-fields'> {dynamicFields} </div>
+                {this.props.show_prefered &&
+                  <div>
+                    <input type='checkbox' name='prefered-address'/>
+                    {Drupal.t('Preferred address')}
+                  </div>
+                }
                 <FixedFields default_val={default_val} />
                 <div className='spc-address-form-actions'>
                   <button id='save-address' className='spc-address-form-submit' type="submit">{Drupal.t('Save')}</button>

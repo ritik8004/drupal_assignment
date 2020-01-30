@@ -38,7 +38,7 @@ export default class GoogleMap extends React.Component {
 
     // This can be passed from props if click on
     // map is allowed or not.
-    let mapClickable = false;
+    let mapClickable = true;
     if (mapClickable) {
       this.googleMap.addListener('click', this.onMapClick);
     }
