@@ -188,7 +188,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
-    if ($sku_entity instanceof SKU && $view_mode == 'full' || $view_mode == 'matchback') {
+    if ($sku_entity instanceof SKU && ($view_mode == 'full' || $view_mode == 'matchback')) {
       $return = _alshaya_vs_transac_get_product_description($sku_entity);
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];

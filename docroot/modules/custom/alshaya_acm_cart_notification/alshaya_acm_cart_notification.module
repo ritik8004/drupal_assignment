@@ -54,8 +54,7 @@ function alshaya_acm_cart_notification_alshaya_acm_product_add_to_cart_submit_aj
   // Quantity.
   $quantity = $data['quantity'] ?? 1;
 
-  $acm_settings = \Drupal::config('alshaya_acm.settings');
-  $show_crosssell_as_matchback = $acm_settings->get('show_crosssell_as_matchback');
+  $show_crosssell_as_matchback = \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
 
   // Use the template to render the HTML.
   $output = [
