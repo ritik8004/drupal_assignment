@@ -279,13 +279,15 @@ class StockManager {
    *   Quantity.
    * @param int $status
    *   Stock status.
+   * @param int $max_sale_qty
+   *   Stock max sale quantity.
    *
    * @return bool
    *   TRUE if stock status changed.
    *
    * @throws \Exception
    */
-  public function updateStock($sku, $quantity, $status) {
+  public function updateStock($sku, $quantity, $status, $max_sale_qty) {
     // Update the stock now.
     $this->acquireLock($sku);
 
@@ -297,10 +299,11 @@ class StockManager {
     $new = [
       'quantity' => $quantity,
       'status' => $status,
+      'max_sale_qty' => $max_sale_qty,
     ];
 
     // Update only if value changed.
-    if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity) {
+    if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity || $current['max_sale_qty'] != $max_sale_qty) {
       $this->connection->merge('acq_sku_stock')
         ->key(['sku' => $sku])
         ->fields($new)
@@ -370,7 +373,7 @@ class StockManager {
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
 
-    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status);
+    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status, $stock['max_sale_qty']);
 
     $this->logger->info('@operation stock for sku @sku. Message: @message', [
       '@operation' => $changed ? 'Updated' : 'Processed',
