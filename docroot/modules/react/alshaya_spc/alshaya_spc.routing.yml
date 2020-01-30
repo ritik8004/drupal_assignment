@@ -53,3 +53,11 @@ alshaya_spc.set_default_address:
   methods:  [POST]
   requirements:
     _role: 'authenticated'
+
+alshaya_spc.delete_address:
+  path: '/delete-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::deleteAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'
