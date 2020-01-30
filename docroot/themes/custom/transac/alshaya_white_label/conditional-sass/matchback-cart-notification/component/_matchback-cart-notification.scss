@@ -75,8 +75,11 @@
         }
       }
 
-      .horizontal-crossell .view-product-slider {
-        margin-bottom: 0;
+      .horizontal-crossell {
+        margin-top: 0;
+        .view-product-slider {
+          margin-bottom: 0;
+        }
       }
 
       .notification-qty,
