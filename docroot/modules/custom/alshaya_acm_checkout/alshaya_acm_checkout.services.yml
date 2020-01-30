@@ -40,3 +40,11 @@ services:
       - '@alshaya_acm_checkout.checkout_helper'
     tags:
       - { name: 'event_subscriber' }
+
+  alshaya_acm_checkout.cart_dy_page_type_event:
+    class: Drupal\alshaya_acm_checkout\EventSubscriber\CartDyPageTypeEventSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@acq_cart.cart_storage'
+    tags:
+      - { name: 'event_subscriber' }

@@ -8,6 +8,9 @@
  * yield.
  */
 
+use Drupal\dynamic_yield\Event\DyPageType;
+use Drupal\Component\Serialization\Json;
+
 /**
  * Implements hook_page_attachments().
  */
@@ -36,6 +39,31 @@ function dynamic_yield_page_attachments(array &$page) {
       'dpath',
     ];
     array_unshift($page['#attached']['html_head'], $dynamic_script);
+
+    // Dispatch the DyPageType event to set the context.
+    $event = new DyPageType();
+    \Drupal::service('event_dispatcher')->dispatch(DyPageType::DY_SET_CONTEXT, $event);
+    if ($event && $event instanceof DyPageType) {
+      $context = [
+        'type' => $event->getDyContext(),
+        'lng' => 'en_US',
+      ];
+      if (!empty($event->getDyContextData())) {
+        $context['data'] = $event->getDyContextData();
+      }
+    }
+    // Allow other module to alter the DY context.
+    \Drupal::moduleHandler()->alter('dynamic_yield_context', $context['lng']);
+    $js = PHP_EOL . 'window.DY = window.DY || {};' . PHP_EOL;
+    $js = $js . 'DY.recommendationContext = ' . Json::encode($context) . ';' . PHP_EOL;
+    $context_script = [[
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => $js,
+    ],
+      'dycontext',
+    ];
+    array_unshift($page['#attached']['html_head'], $context_script);
 
     // Add DY preconnect and dns-prefetch link tags to header.
     $prefetch_urls = [
