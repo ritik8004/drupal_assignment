@@ -38,7 +38,7 @@ export default class GoogleMap extends React.Component {
 
     // This can be passed from props if click on
     // map is allowed or not.
-    let mapClickable = false;
+    let mapClickable = true;
     if (mapClickable) {
       this.googleMap.addListener('click', this.onMapClick);
     }
@@ -57,6 +57,9 @@ export default class GoogleMap extends React.Component {
       // Add marker to the array.
       this.markers.push(marker);
     }
+
+    // Storing all markers in global so that can be accessed from anywhere.
+    window.spcMarkers = this.markers;
 
     // For autocomplete textfield.
     this.autocomplete = new window.google.maps.places.Autocomplete(this.autocompleteTextField(), {
@@ -97,6 +100,7 @@ export default class GoogleMap extends React.Component {
     var marker = createMarker(coords, this.googleMap);
     this.googleMap.panTo(marker.getPosition());
     this.markers.push(marker);
+    window.spcMarkers = this.markers;
   }
 
   /**
@@ -104,16 +108,27 @@ export default class GoogleMap extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
-    this.panMapToGivenCoords(place.geometry.location);
-    // Get geocode details for address.
-    this.geocodeFromLatLng(place.geometry.location);
+    let event = new CustomEvent('mapClicked', {
+      bubbles: true,
+      detail: {
+        coords: () => place.geometry.location
+      }
+    });
+    document.dispatchEvent(event);
   }
 
   /**
    * When click on map.
    */
   onMapClick = (e) => {
-    this.panMapToGivenCoords(e.latLng);
+    // Dispatch event so that other can use this.
+    let event = new CustomEvent('mapClicked', {
+      bubbles: true,
+      detail: {
+        coords: () => e.latLng
+      }
+    });
+    document.dispatchEvent(event);
   }
 
   /**
@@ -125,6 +140,7 @@ export default class GoogleMap extends React.Component {
       this.markers[i].setMap(null);
     }
     this.markers = [];
+    window.spcMarkers = this.markers;
   }
 
   /**

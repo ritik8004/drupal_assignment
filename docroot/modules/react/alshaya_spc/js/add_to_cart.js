@@ -41,6 +41,7 @@
             var available_in_cart = false;
             if (cart_data) {
               cart_data = JSON.parse(cart_data);
+              cart_data = cart_data.cart;
               if (cart_data.cart_id !== null) {
                 cart_id = cart_data.cart_id;
                 cart_action = 'add item';
