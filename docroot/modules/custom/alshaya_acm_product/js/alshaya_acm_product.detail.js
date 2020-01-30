@@ -51,6 +51,7 @@
 
       // Adding class to identify that matchback product color is manually updated.
       $('.acq-content-product-matchback .select2Option a').on('click', function (event) {
+        // Add a class if click is a native event and not triggered from somewhere.
         if (event.originalEvent != undefined) {
           if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
             $(this).closest('.select2Option').addClass('matchback-color-processed');
