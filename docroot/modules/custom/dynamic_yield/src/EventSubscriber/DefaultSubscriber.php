@@ -44,7 +44,6 @@ class DefaultSubscriber implements EventSubscriberInterface {
   public function setContextHomepage(Event $event) {
     if ($this->pathMatcher->isFrontPage()) {
       $event->setDyContext('HOMEPAGE');
-      $event->stopPropagation();
     }
   }
 
