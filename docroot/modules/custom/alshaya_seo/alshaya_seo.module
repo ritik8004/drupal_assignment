@@ -156,11 +156,10 @@ function alshaya_seo_page_attachments(array &$attachments) {
 /**
  * Implements hook_page_attachments_alter().
  */
-function alshaya_seo_dynamic_yield_context_alter(array &$context) {
+function alshaya_seo_dynamic_yield_context_alter(&$lng) {
   // Replace en_US in DY context with site specific locale.
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $locale = AlshayaI18nLanguages::getLocale($langcode);
-  $context['lng'] = $locale;
+  $lng = AlshayaI18nLanguages::getLocale($langcode);
 }
 
 /**

@@ -11,11 +11,11 @@
  */
 
 /**
- * Allow other modules to alter DY context.
+ * Allow other modules to alter DY context locale.
  *
- * @param array $context
- *   DY context.
+ * @param string $lng
+ *   DY context locale.
  */
-function hook_dynamic_yield_context_alter(array &$context) {
-
+function hook_dynamic_yield_context_alter(&$lng) {
+  $lng = 'en_US';
 }
