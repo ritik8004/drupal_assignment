@@ -132,6 +132,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'vs_qa',
         'conductor' => 'vsae_dev',
       ],
+      'dev3' => [
+        'magento' => 'vs_qa',
+        'conductor' => 'vsae_dev3',
+      ],
     ],
   ];
 
