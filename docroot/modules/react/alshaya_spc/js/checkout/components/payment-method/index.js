@@ -1,27 +1,24 @@
 import React from 'react';
 
+import { addPaymentMethodInCart } from '../../../utilities/update_cart';
+
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
-
-    let default_val = this.props.selected_payment_method
-      ? this.props.method.code
-      : '';
     this.state = {
-      'selectedOption': default_val
+      'selectedOption': this.props.isSelected
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selectedOption: nextProps.isSelected
+    });
   }
 
   getHtmlMarkup(content) {
     return { __html: content };
   }
-
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({
-      selectedOption: value
-    });
-  };
 
   changePaymentMethod = (method) => {
     this.setState({
@@ -30,21 +27,32 @@ export default class PaymentMethod extends React.Component {
 
     document.getElementById('payment-method-' + method).checked = true;
 
-    // If payment method has no form.
-    if (window.drupalSettings.payment_methods[method].has_form === false) {
-      this.props.payment_method_select(method);
+    let data = {
+      'payment' : {
+        'method': method,
+        'additional_data': {}
+      }
+    };
+    let cart = addPaymentMethodInCart('update payment', data);
+    if (cart instanceof Promise) {
+      cart.then((result) => {
+        let cart_data = this.props.cart;
+        cart_data['selected_payment_method'] = method;
+        cart_data['cart'] = result;
+        this.props.refreshCart(cart_data);
+      });
     }
   }
 
   render() {
     let method = this.props.method.code;
-  	return(
+    return(
       <div className='payment-method' onClick={() => this.changePaymentMethod(method)}>
       	<input
       	  id={'payment-method-' + method}
       	  className={method}
       	  type='radio'
-      	  checked={this.state.selectedOption === method}
+      	  defaultChecked={this.state.selectedOption === method}
       	  value={method}
       	  name='payment-method' />
 

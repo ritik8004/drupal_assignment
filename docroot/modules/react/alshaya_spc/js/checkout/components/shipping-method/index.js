@@ -7,14 +7,16 @@ export default class ShippingMethod extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'selectedOption': ''
+      'selectedOption': this.props.selected
     };
   }
 
   changeShippingMethod = (method) => {
     this.setState({
-      selectedOption: method
+      selectedOption: method.method_code
     });
+
+    document.getElementById('shipping-method-' + method.method_code).checked = true;
   }
 
   render () {
@@ -34,8 +36,9 @@ export default class ShippingMethod extends React.Component {
       	  name='shipping-method' />
 
         <label className='radio-sim radio-label'>
-          <span>{this.props.method.carrier_title} {this.props.method.method_title}</span>
-          <span>{price}</span>
+          <span className='carrier-title'>{this.props.method.carrier_title}</span>
+          <span className='method-title'>{this.props.method.method_title}</span>
+          <span className='spc-price'>{price}</span>
         </label>
       </div>
     );

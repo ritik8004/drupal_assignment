@@ -20,4 +20,38 @@
       font-size: 2rem;
     }
   }
+
+  .delivery-information-preview {
+    background: $spc-checkout-delivery-method-bg;
+    padding: 1.25rem;
+    font-size: 0.875rem;
+    color: $spc-delivery-info-text;
+
+    .spc-delivery-customer-info {
+      position: relative;
+
+      .delivery-name {
+        font-family: $alshaya-bold;
+        color: $spc-delivery-customer-info-highlight;
+        margin-bottom: 0.3125rem;
+      }
+
+      .spc-address-form-edit-link {
+        position: absolute;
+        #{$right}: 0;
+        top: 0;
+        cursor: pointer;
+        height: 2.25rem;
+        min-width: 6.1875rem;
+        padding: 0 0.625rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $spc-deliver-button;
+        color: $spc-deliver-button;
+        font-size: 0.8125rem;
+        border-radius: 0.25rem;
+      }
+    }
+  }
 }

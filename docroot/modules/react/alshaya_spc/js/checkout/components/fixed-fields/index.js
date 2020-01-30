@@ -1,41 +1,27 @@
 import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
+import TextField from '../../../utilities/textfield';
 
 export default class FixedFields extends React.Component {
 
   render() {
-    let country_mobile_code = window.drupalSettings.country_mobile_code;
     let default_val = '';
-    if (this.props.default_val.length !== 0 && this.props.default_val.length !== 'undefined') {
-      default_val = this.props.default_val;
+    if (this.props.default_val.length !== 0
+      && this.props.default_val.length !== 'undefined') {
+      default_val = this.props.default_val['static'];
     }
-    
-    return(
-      <div>
-          <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
-          <label>
-           {Drupal.t('First Name')}
-          <input type='text' name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''}/>
-          <div id='fname-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Last Name')}
-          <input type='text' name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''}/>
-          <div id='lname-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Email')}
-          <input type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''}/>
-          <div id='email-error'></div>
-          </label>
-          <label>
-           {Drupal.t('Mobile number')}
-           <div>{'+' + country_mobile_code}</div>
-          <input type='text' name='mobile' defaultValue={default_val !== '' ? default_val['telephone'] : ''}/>
-          <div id='mobile-error'></div>
-          </label>
-      </div> 
+
+    return (
+      <div className='spc-checkout-contact-information'>
+        <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
+        <div className='spc-checkout-contact-information-fields'>
+          <TextField type='text' name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''} label={Drupal.t('First Name')}/>
+          <TextField type='text' name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''} label={Drupal.t('Last Name')}/>
+          <TextField type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''} label={Drupal.t('Email')}/>
+          <TextField type='tel' name='mobile' defaultValue={default_val !== '' ? default_val['telephone'] : ''} label={Drupal.t('Mobile Number')}/>
+        </div>
+      </div>
     );
   }
 

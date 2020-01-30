@@ -200,9 +200,14 @@ class Cart {
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];
 
-    $customer = $this->createCustomer($data['shipping']['shipping_address']);
-    $this->associateCartToCustomer($cart_id, $customer['id']);
-    $this->updateCart($data, $cart_id);
+    $cart = $this->updateCart($data, $cart_id);
+    // If cart has no customer or email provided is different,
+    // then create and assign customer to the cart.
+    if (empty($cart['cart']['customer']['id']) ||
+      $cart['cart']['customer']['email'] !== $data['shipping']['shipping_address']['email']) {
+      $customer = $this->createCustomer($data['shipping']['shipping_address']);
+      $this->associateCartToCustomer($cart_id, $customer['id']);
+    }
     return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
   }
 
@@ -444,6 +449,32 @@ class Cart {
       // Exception handling here.
       return $this->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Check if a customer by given email exists or not.
+   *
+   * @param string $email
+   *   Email address.
+   *
+   * @return mixed
+   *   Response.
+   */
+  public function customerCheckByMail(string $email) {
+    $client = $this->magentoInfo->getMagentoApiClient();
+    $url = $this->magentoInfo->getMagentoUrl() . '/customers/search';
+    $query['query'] = [
+      'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
+      'searchCriteria[filterGroups][0][filters][0][value]' => $email,
+      'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
+      'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
+      'searchCriteria[filterGroups][1][filters][0][value]' => $this->magentoInfo->getMagentoStoreId(),
+      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
+    ];
+
+    $response = $client->request('GET', $url, $query);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
   }
 
   /**

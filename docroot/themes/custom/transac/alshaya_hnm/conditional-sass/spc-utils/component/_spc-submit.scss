@@ -1,7 +1,7 @@
-.checkout-link {
-  a {
-    font-family: $alshaya-bold;
-    text-transform: uppercase;
-    letter-spacing: 1.14px;
-  }
+.checkout-link a,
+.spc-address-form-submit {
+  font-family: $alshaya-bold;
+  text-transform: uppercase;
+  letter-spacing: 1.14px;
 }
+

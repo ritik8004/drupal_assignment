@@ -11,6 +11,8 @@ use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
+use Drupal\Core\Session\AccountProxyInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -55,6 +57,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $mobileUtil;
 
   /**
+   * Current user.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * Social helper.
    *
    * @var \Drupal\alshaya_social\AlshayaSocialHelper
@@ -74,6 +83,8 @@ class AlshayaSpcController extends ControllerBase {
    *   SPC helper.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   Current user.
    * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
    *   Social helper.
    */
@@ -83,6 +94,7 @@ class AlshayaSpcController extends ControllerBase {
     CheckoutOptionsManager $checkout_options_manager,
     AlshayaSpcHelper $spc_helper,
     MobileNumberUtilInterface $mobile_util,
+    AccountProxyInterface $current_user,
     AlshayaSocialHelper $social_helper
   ) {
     $this->configFactory = $config_factory;
@@ -90,6 +102,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->paymentMethodManager = $payment_method_manager;
     $this->spcHelper = $spc_helper;
     $this->mobileUtil = $mobile_util;
+    $this->currentUser = $current_user;
     $this->socialHelper = $social_helper;
   }
 
@@ -103,6 +116,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('alshaya_spc.helper'),
       $container->get('mobile_number.util'),
+      $container->get('current_user'),
       $container->get('alshaya_social.helper')
     );
   }
@@ -174,6 +188,7 @@ class AlshayaSpcController extends ControllerBase {
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'map_marker_icon' => $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url'),
+          'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
         ],
       ],
     ];
@@ -241,6 +256,49 @@ class AlshayaSpcController extends ControllerBase {
   public function getParentAreaList() {
     $data = $this->spcHelper->getAreaParentList();
     return new JsonResponse($data);
+  }
+
+  /**
+   * Get all address list of the current user.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getUserAddressList() {
+    $uid = $this->currentUser->getAccount()->id();
+    $addressList = $this->spcHelper->getAddressListByUid($uid);
+
+    return new JsonResponse($addressList);
+  }
+
+  /**
+   * Set address as default address for the user.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function setDefaultAddress(Request $request) {
+    $data = json_decode($request->getContent(), TRUE);
+    $request->request->replace(is_array($data) ? $data : []);
+    $response = [];
+    try {
+      $uid = $this->currentUser->getAccount()->id();
+      if ($this->spcHelper->setDefaultAddress($data['address_id'], $uid)) {
+        $response['data'] = $this->spcHelper->getAddressListByUid($uid);
+        $response['status'] = TRUE;
+      }
+      else {
+        $response['status'] = FALSE;
+      }
+    }
+    catch (\Exception $e) {
+      $response['status'] = FALSE;
+    }
+
+    return new JsonResponse($response);
   }
 
   /**

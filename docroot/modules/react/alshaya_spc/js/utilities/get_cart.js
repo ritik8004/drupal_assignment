@@ -27,13 +27,13 @@ export const cartAvailableInStorage = function () {
 
   // If data/cart is expired or cart has different language than
   // currently selected language.
-  if ((current_time - cart_data.last_update) > expire_time
-    || cart_data.langcode === undefined
-    || window.drupalSettings.path.currentLanguage !== cart_data.langcode) {
-    return cart_data.cart_id;
+  if ((current_time - cart_data.cart.last_update) > expire_time
+    || cart_data.cart.langcode === undefined
+    || window.drupalSettings.path.currentLanguage !== cart_data.cart.langcode) {
+    return cart_data.cart.cart_id;
   }
 
-  return cart_data;
+  return cart_data.cart;
 }
 
 export const fetchCartData = function () {

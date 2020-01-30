@@ -45,3 +45,19 @@ alshaya_spc.get_parent_area_list:
   methods:  [GET]
   requirements:
     _permission: 'access content'
+
+alshaya_spc.get_user_address_list:
+  path: '/user-address-list'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getUserAddressList'
+  methods:  [GET]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.set_default_address:
+  path: '/set-default-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::setDefaultAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'

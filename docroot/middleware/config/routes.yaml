@@ -13,6 +13,11 @@ update_cart:
     controller: App\Controller\CartController::updateCart
     methods: POST
 
+validate_customer:
+    path: /customer/{email}
+    controller: App\Controller\CartController::customerCheckByMail
+    methods: GET
+
 get_shipping_methods:
     path: /cart/shipping-methods
     controller: App\Controller\CartController::shippingMethods
