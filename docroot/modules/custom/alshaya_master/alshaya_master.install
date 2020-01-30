@@ -1816,6 +1816,12 @@ function alshaya_master_install() {
     'continue as a guest' => [
       'ar' => 'إتمام عملية الشراء كزبون زائر',
     ],
+    'Tap Image to Enlarge' => [
+      'ar' => ' اضغط على الصورة للتكبير',
+    ],
+    'Large view' => [
+      'ar' => 'وضعية التكبير',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
