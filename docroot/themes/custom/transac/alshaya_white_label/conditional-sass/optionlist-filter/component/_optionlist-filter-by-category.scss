@@ -294,6 +294,26 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 1.9375rem;
+
+    .ie & {
+      column-count: 4;
+      column-gap: 1.875rem;
+      margin: 2.875rem 0 0;
+      padding: 0 3rem;
+
+      li.title {
+        width: calc((100% - 5.8125rem) / 4);
+        margin-#{$right}: 1.9375rem;
+        margin-bottom: 1.9375rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:nth-child(4n) {
+          margin-#{$right}: 0;
+        }
+      }
+    }
   }
 
   @include breakpoint($only-tablet) {
