@@ -39,6 +39,15 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  alshaya_acm_product_category.dy_page_context:
+    class: Drupal\alshaya_acm_product_category\EventSubscriber\ProductCategoryDyPageTypeEventSubscriber
+    arguments:
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@entity_type.manager'
+      - '@entity.repository'
+    tags:
+      - { name: 'event_subscriber' }
+
   alshaya_acm_product_category.sales_category_manager:
     class: Drupal\alshaya_acm_product_category\Service\ProductCategoryManager
     arguments:

@@ -69,7 +69,7 @@ class DynamicYieldService {
   }
 
   /**
-   * Get DY Sectioin ID.
+   * Get DY Section ID.
    *
    * @return string|null
    *   Site Id or empty.
