@@ -341,13 +341,6 @@
         $("meta[name='description']").attr('content', meta_description);
       };
 
-      // Function to call in ajax command on facet selection.
-      // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
-      $.fn.updatePageTitle = function (page_title) {
-        // Update page title of the page.
-        $('h1.c-page-title').text(page_title);
-      };
-
       /**
        * Wrapping all the filters inside a div to make it sticky.
        */

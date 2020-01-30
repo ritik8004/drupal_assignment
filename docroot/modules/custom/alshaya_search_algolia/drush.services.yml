@@ -6,3 +6,10 @@ services:
       - '@alshaya_master.entity_helper'
     tags:
       - { name: drush.command }
+
+  alshaya_search_algolia.setup_commands:
+    class: Drupal\alshaya_search_algolia\Commands\AlshayaSearchAlgoliaSetupCommands
+    arguments:
+      - '@facets.manager'
+    tags:
+      - { name: drush.command }

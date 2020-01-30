@@ -36,7 +36,6 @@
 }
 
 @include breakpoint($only-tablet) {
-  #product-image-gallery,
   #lightSlider {
     height: 9.875rem;
 
@@ -47,7 +46,6 @@
 }
 
 @include breakpoint($desktop) {
-  #product-image-gallery,
   #lightSlider {
     height: 30.75rem;
 
@@ -65,7 +63,6 @@
 @include breakpoint($only-tablet) {
   .pdp-modal-overlay {
     .dialog-product-image-gallery-container {
-      #product-image-gallery,
       #lightSlider {
         height: 6.375rem !important;
 
