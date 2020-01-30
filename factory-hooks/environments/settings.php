@@ -252,31 +252,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876647',
           ],
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KLZ3ZQR',
+          ],
         ],
         'live' => [
           'dynamic_yield.settings' => [
             'section_id' => '9876645',
-          ],
-        ],
-      ],
-      'ae' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KLZ3ZQR',
-          ],
-        ],
-      ],
-      'kw' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KLZ3ZQR',
-          ],
-        ],
-      ],
-      'sa' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
       ],
