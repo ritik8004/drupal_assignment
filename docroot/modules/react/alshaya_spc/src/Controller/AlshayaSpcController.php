@@ -243,7 +243,7 @@ class AlshayaSpcController extends ControllerBase {
   }
 
   /**
-   * Function to get the cart stores.
+   * Get the click n collect stores for given cart and lat/long.
    *
    * @param int $cart_id
    *   The cart id.
@@ -257,9 +257,6 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function getCncStoresJson($cart_id, $lat = NULL, $lon = NULL) {
     $stores = $this->clickCollect->getCartStores($cart_id, $lat, $lon);
-
-    // Sort the stores first by distance and then by name.
-    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
     return new JsonResponse($stores);
   }
 

@@ -63,7 +63,7 @@ class AlshayaClickCollect {
     $this->apiWrapper = $api_wrapper;
     $this->storesFinderUtility = $stores_finder_utility;
     $this->configFactory = $config_factory;
-    $this->logger = $logger_factory->get('alshaya_acm_product');
+    $this->logger = $logger_factory->get('alshaya_click_collect');
   }
 
   /**
@@ -82,30 +82,14 @@ class AlshayaClickCollect {
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
     // Get the stores from Magento.
     if ($stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
-      $config = $this->configFactory->get('alshaya_click_collect.settings');
-
-      foreach ($stores as $index => &$store) {
-        $store['rnc_available'] = (int) $store['rnc_available'];
-        $store['sts_available'] = (int) $store['sts_available'];
-
-        if ($extra_data = $this->storesFinderUtility->getStoreExtraData($store)) {
-          $store = array_merge($store, $extra_data);
-
-          if (!empty($store['rnc_available'])) {
-            $store['delivery_time'] = $config->get('click_collect_rnc');
-          }
-        }
-        else {
-          // We don't display the stores which are not in our system.
-          unset($stores[$index]);
-
-          // Log into Drupal for admins to check and take required action.
-          $this->logger->warning('Received a store in Cart Stores API response which is not yet available in Drupal. Store code: %store_code', [
-            '%store_code' => $store['code'],
-          ]);
-        }
+      $stores_by_code = [];
+      foreach ($stores as $store) {
+        $stores_by_code[$store['code']] = $store;
       }
+      $stores = $this->storesFinderUtility->getMultipleStoresExtraData($stores_by_code);
 
+      // Sort the stores first by distance and then by name.
+      alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
       return $stores;
     }
 
