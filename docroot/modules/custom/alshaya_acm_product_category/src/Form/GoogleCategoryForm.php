@@ -223,10 +223,10 @@ class GoogleCategoryForm extends FormBase {
       if ($term && $term instanceof TermInterface) {
         try {
           if (!empty($category[3])) {
-            $field_category_google = $term->get('field_category_google')->getValue();
+            $field_category_google = $term->get('field_category_google')->getString();
             // Update if not available or
             // there any changes in google category.
-            if (!isset($field_category_google[0]['value']) || ($field_category_google[0]['value'] != $category[3])) {
+            if (!isset($field_category_google) || ($field_category_google != $category[3])) {
               $term->get('field_category_google')->setValue($category[3]);
               $term->save();
             }

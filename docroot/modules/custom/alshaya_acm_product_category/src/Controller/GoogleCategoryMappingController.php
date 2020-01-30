@@ -131,6 +131,8 @@ class GoogleCategoryMappingController extends ControllerBase {
       ResponseHeaderBag::DISPOSITION_ATTACHMENT,
       $filename
     );
+
+    $response->headers->set('X-Drupal-Cache-Tags', 'taxonomy_term:acq_product_category');
     $response->headers->set('Content-Disposition', $disposition);
     return $response;
   }

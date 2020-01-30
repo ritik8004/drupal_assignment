@@ -12,6 +12,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_update_N().
@@ -34,6 +35,11 @@ function alshaya_acm_product_category_update_8039() {
     'install',
     AlshayaConfigManager::MODE_MERGE
   );
+
+  // Allow google category mapping to manage 'webmaster' & 'administrator'.
+  $role = Role::load('webmaster');
+  $role->grantPermission('manage google category mapping');
+  $role->save();
 }
 
 /**

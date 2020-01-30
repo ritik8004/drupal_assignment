@@ -325,7 +325,7 @@ class SkuInfoHelper {
         $term = $this->getEntityTranslation($term, $lang);
         $terms[] = [
           'name' => $term->label(),
-          'google_product_category' => !empty($term->get('field_category_google')->getValue()) ? $term->get('field_category_google')->getValue()[0]['value'] : '',
+          'google_product_category' => $term->get('field_category_google')->getString(),
           'id' => $term->id(),
           'url' => $this->getEntityUrl($term),
         ];
