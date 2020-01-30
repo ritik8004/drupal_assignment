@@ -4,3 +4,9 @@ alshaya_acm_product_category.settings_form:
   parent: 'acq_commerce.configuration'
   description: 'Configure Category related settings.'
   weight: 11
+alshaya_acm_product_category.google_category_mapping:
+  title: 'Google Category Mapping'
+  route_name: alshaya_acm_product_category.google_category
+  parent: 'acq_commerce.admin_commerce'
+  description: 'Import/Export Google category mapping.'
+  weight: 12

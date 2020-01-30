@@ -16,6 +16,29 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Create new field (Google Category) for acq_product_category taxonomy.
+ */
+function alshaya_acm_product_category_update_8039() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $fields = [
+    'field.storage.taxonomy_term.field_category_google',
+    'field.field.taxonomy_term.acq_product_category.field_category_google',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $fields,
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create 'sub category block title' for panty guide page.
  */
 function alshaya_acm_product_category_update_8038() {
