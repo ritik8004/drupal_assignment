@@ -34,6 +34,7 @@ class DyPageType extends Event {
    */
   public function setDyContext($context) {
     $this->dycontext = $context;
+    $this->stopPropagation();
   }
 
   /**
@@ -64,7 +65,6 @@ class DyPageType extends Event {
    */
   public function setDyContextData(array $data) {
     $this->dyContextData = $data;
-    $this->stopPropagation();
   }
 
 }
