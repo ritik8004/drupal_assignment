@@ -93,6 +93,9 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     $settings['cache']['bins']['google_tag'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['alshaya_acm_promotion'] = 'cache.backend.permanent_memcache';
 
+    // Use database for some, we replace heavy queries with simple one here.
+    $settings['cache']['bins']['pretty_paths'] = 'cache.backend.permanent_database';
+
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
 

@@ -16,3 +16,11 @@
     text-align: center;
   }
 }
+
+#product-image-gallery-container-mobile {
+  .slick-slider {
+    @include breakpoint($only-mobile) {
+      touch-action: pan-y pinch-zoom;
+    }
+  }
+}

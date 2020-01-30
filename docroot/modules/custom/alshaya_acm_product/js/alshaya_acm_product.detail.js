@@ -240,7 +240,10 @@
   };
 
   Drupal.refreshConfigurables = function (form, selectedCode, selectedValue) {
-    var sku = $(form).parents('article.entity--type-node:first').attr('data-sku');
+    var sku = ($(form).parents('article.entity--type-node:first').length > 0)
+      ? $(form).parents('article.entity--type-node:first').attr('data-sku')
+      : $(form).attr('data-sku');
+
     var combinations = drupalSettings.configurableCombinations[sku]['combinations'];
 
     var selectedValues = Drupal.getSelectedValues(form);

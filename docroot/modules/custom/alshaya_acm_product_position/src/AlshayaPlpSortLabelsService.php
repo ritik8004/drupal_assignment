@@ -19,14 +19,28 @@ class AlshayaPlpSortLabelsService extends AlshayaPlpSortOptionsBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  public function getSortOptionsLabels():array {
-    if (($term = $this->getTermForRoute()) && $labels = $this->getPlpSortConfigForTerm($term, 'labels')) {
-      return array_filter($labels);
+  public function getSortOptionsLabels(): array {
+    static $labels;
+
+    if (!empty($labels)) {
+      return $labels;
     }
 
-    return array_filter(AlshayaDynamicConfigValueBase::schemaArrayToKeyValue(
-      (array) $this->configSortOptions->get('sort_options_labels')
-    ));
+    // Try to load from term in Route.
+    if (($term = $this->getTermForRoute())) {
+      $labels = $this->getPlpSortConfigForTerm($term, 'labels');
+    }
+
+    // Load defaults from config.
+    if (empty($labels)) {
+      $labels = AlshayaDynamicConfigValueBase::schemaArrayToKeyValue(
+        (array) $this->configSortOptions->get('sort_options_labels')
+      );
+    }
+
+    $labels = array_filter($labels);
+
+    return $labels;
   }
 
   /**
