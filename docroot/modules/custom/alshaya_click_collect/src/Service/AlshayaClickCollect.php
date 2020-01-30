@@ -5,7 +5,6 @@ namespace Drupal\alshaya_click_collect\Service;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class AlshayaClickCollect.
@@ -36,13 +35,6 @@ class AlshayaClickCollect {
   protected $configFactory;
 
   /**
-   * Logger service object.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
    * AlshayaClickCollect constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -51,19 +43,15 @@ class AlshayaClickCollect {
    *   The config factory.
    * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $stores_finder_utility
    *   Stores Finder Utility service object.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   Logger service object.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
-    StoresFinderUtility $stores_finder_utility,
-    LoggerChannelFactoryInterface $logger_factory
+    StoresFinderUtility $stores_finder_utility
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->storesFinderUtility = $stores_finder_utility;
     $this->configFactory = $config_factory;
-    $this->logger = $logger_factory->get('alshaya_click_collect');
   }
 
   /**

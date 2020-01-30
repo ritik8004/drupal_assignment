@@ -5,4 +5,3 @@ services:
       - '@alshaya_api.api'
       - '@config.factory'
       - '@alshaya_stores_finder_transac.utility'
-      - '@logger.factory'
