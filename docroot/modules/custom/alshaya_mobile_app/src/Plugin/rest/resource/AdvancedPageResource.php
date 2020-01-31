@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -204,7 +205,7 @@ class AdvancedPageResource extends ResourceBase {
           'url.query_args:url',
         ],
         'tags' => array_merge([
-          'node:taxonomy_term.accordion',
+          ProductCategoryTree::CACHE_TAG,
           'node_view',
           'paragraph_view',
         ], $this->mobileAppUtility->getBlockCacheTags()),

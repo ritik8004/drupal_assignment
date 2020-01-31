@@ -88,8 +88,21 @@
       $.fn.cartNotificationScroll = function () {
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
+        if ($(window).width() < 768 && $('.matchback-cart-notification').length > 0) {
+          var element = $('.horizontal-crossell.mobile-only-block').clone();
+          $('.matchback-cart-notification').append(element);
+          $('body').addClass('matchback-notification-overlay');
+          if (typeof Drupal.blazy !== 'undefined') {
+            setTimeout(Drupal.blazy.revalidate, 500);
+          }
+          $('.matchback-cart-notification .matchback-cart-notification-close').on('mousedown', function () {
+            $('#cart_notification').removeClass('has--notification');
+            $('body').removeClass('matchback-notification-overlay');
+            $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
+          });
+        }
         // If magazine layout is enabled.
-        if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
+        else if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
           $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
         }

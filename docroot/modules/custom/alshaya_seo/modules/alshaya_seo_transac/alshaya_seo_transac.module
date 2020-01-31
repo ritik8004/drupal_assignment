@@ -562,3 +562,10 @@ function alshaya_seo_transac_simple_sitemap_arbitrary_links_alter(&$arbitrary_li
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_reset_config_configs_to_reset_alter().
+ */
+function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &$reset) {
+  $reset[] = 'dynamic_yield.settings';
+}

@@ -166,7 +166,6 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
   $new = $sku->get('attr_sku_definition')->getString();
   $collection = $sku->get('attr_product_collection')->getString();
   $short_description = $sku->label();
-
   if ($context === 'pdp' || $context === 'modal') {
     $title = '<span class="title--sub">' . $collection . '</span>';
     $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
@@ -189,11 +188,14 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
-    if ($sku_entity instanceof SKU && $view_mode == 'full' || $view_mode == 'matchback') {
+    if ($sku_entity instanceof SKU && ($view_mode == 'full' || $view_mode == 'matchback')) {
       $return = _alshaya_vs_transac_get_product_description($sku_entity);
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];
       $build['read_more_style']['value'] = $return['read_more'] ? 'display:block;' : 'display:none;';
+    }
+    if ($sku_entity instanceof SKU && $sku_entity->get('attr_product_collection')->getString() && $view_mode == 'matchback') {
+      $build['matchback_product_collection']['value'] = $sku_entity->get('attr_product_collection')->getString();
     }
   }
 }

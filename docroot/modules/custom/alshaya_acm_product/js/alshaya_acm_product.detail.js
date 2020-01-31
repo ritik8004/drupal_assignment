@@ -1,6 +1,9 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
+  // The threshold for how far you should reach before loading related products.
+  var scrollThreshold = 200;
+
   /**
    * All custom js for product detail page.
    *
@@ -12,6 +15,16 @@
   Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
 
+      $('.sku-base-form.visually-hidden').once('sku-base-form-processed').on('select-to-option-conversion-completed', function () {
+        // Show add to cart form now.
+        $(this).removeClass('visually-hidden');
+        $(this).trigger('form-visible');
+
+        if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
+          $('.content__title_wrapper').addClass('show-sticky-wrapper');
+        }
+      });
+
       // Disable sharing and deliver blocks for OOS.
       $('.product-out-of-stock').once('page-load').each(function () {
         $(this).find('.sharethis-wrapper').addClass('out-of-stock');
@@ -19,7 +32,7 @@
           if ($(this).accordion()) {
             $(this).accordion('option', 'disabled', true);
           }
-        })
+        });
       });
 
       $('.edit-add-to-cart').once('js-to-move-error-message').on('click', function () {
@@ -37,14 +50,29 @@
       });
 
       // Adding class to identify that matchback product color is manually updated.
-      $('.acq-content-product-matchback').on('click', '.select2Option a', function () {
-        if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
-          $(this).closest('.select2Option').addClass('matchback-color-processed');
+      $('.acq-content-product-matchback .select2Option a').on('click', function (event) {
+        // This can be triggered from two places:
+        //   1. User click on matchback product.
+        //   2. User click on main product and triggered from code to update matchback.
+        // We want following to be executed only in #1 case, so the condition below.
+        if (event.originalEvent !== undefined) {
+          if (!$(this).closest('.select2Option').hasClass('matchback-color-processed')) {
+            $(this).closest('.select2Option').addClass('matchback-color-processed');
+          }
+        }
+      });
+      // Trigger matchback color change on main product color change.
+      $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
+        if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
+          var selected = $(this).val();
+          var selectedList = $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]');
+          var selectedIndex = selectedList.index();
+          selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
         }
       });
 
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
-        var form = $(this).closest('form');
+        var form = $(this).parents('form');
         var sku = $(form).attr('data-sku');
         var combinations = drupalSettings.configurableCombinations[sku];
         var code = $(this).attr('data-configurable-code');
@@ -62,7 +90,7 @@
         }
 
         if (currentSelectedVariant != $('[name="selected_variant_sku"]', form).val()) {
-          $(this).closest('.sku-base-form').trigger(
+          form.trigger(
             'variant-selected',
             [
               combinations['byAttribute'][selectedCombination],
@@ -70,49 +98,35 @@
             ]
           );
         }
-        // Trigger matchback color change on main product color change.
-        if ($(this).hasClass('form-item-configurable-swatch')) {
-          if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
-            $('article[data-vmode="matchback"] form').trigger(
-              'product-color-changed',
-              [
-                combinations['byAttribute'][selectedCombination],
-                code
-              ]
-            );
-            var selectedList = $('article[data-vmode="matchback"] select[data-configurable-code="color"] option[value="' + selected + '"]');
-            var selectedIndex = selectedList.index();
-            selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
-          }
-        }
-
       });
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+
+        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
-        $(this).on('variant-selected product-color-changed', function (event, variant, code) {
+        $(this).on('variant-selected', function (event, variant, code) {
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
-          var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+          var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
           if (typeof variantInfo === 'undefined') {
             return;
           }
 
-          $('.price-block-' + drupalSettings.productInfo[sku].identifier, node).html(variantInfo.price);
+          $('.price-block-' + drupalSettings[productKey][sku].identifier, node).html(variantInfo.price);
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
-            Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+            Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
           }
           else {
-            Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, variantInfo.gallery);
+            Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
 
           // Update quantity dropdown based on stock available for the variant.
@@ -138,8 +152,8 @@
           }
         });
 
-        if (drupalSettings.productInfo[sku]['variants']) {
-          var variants = drupalSettings.productInfo[sku]['variants'];
+        if (drupalSettings[productKey][sku]['variants']) {
+          var variants = drupalSettings[productKey][sku]['variants'];
           var selectedSku = Object.keys(variants)[0];
           var selected = parseInt(Drupal.getQueryVariable('selected'));
 
@@ -174,37 +188,19 @@
       // Show images for oos product on PDP.
       $('.out-of-stock').once('load').each(function () {
         var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
-        if (typeof drupalSettings.productInfo === 'undefined' || typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+
+        if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
         var node = $(this).parents('article.entity--type-node:first');
-        Drupal.updateGallery(node, drupalSettings.productInfo[sku].layout, drupalSettings.productInfo[sku].gallery);
+        Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
       });
 
-      // Add related products on pdp.
-      var sku = $('article[data-vmode="full"]').attr('data-sku');
-      var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-
-      $(window).once('updateRelatedProducts').on('scroll', function () {
-        var scrollBottom = $(this).scrollTop() + $(this).height();
-        var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
-        var matchback = $('.horizontal-crossell' + selector);
-        var upsell =  $('.horizontal-upell' + selector);
-        var related = $('.horizontal-related' + selector);
-
-        if (!matchback.hasClass('matchback-processed') && (scrollBottom > matchback.offset().top)) {
-          matchback.addClass('matchback-processed');
-          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
-        }
-        if (!upsell.hasClass('upsell-processed') && scrollBottom > upsell.offset().top) {
-          upsell.addClass('upsell-processed');
-          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
-        }
-        if (!related.hasClass('related-processed') && scrollBottom > related.offset().top) {
-          related.addClass('related-processed');
-          Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
-        }
+      // Add related products on pdp on load and scroll.
+      $(window).once('updateRelatedProductsLoad').on('load scroll', function () {
+        Drupal.getRelatedProductPosition();
       });
 
       // Add 'each' with price on change of quantity.
@@ -229,7 +225,7 @@
     }
 
     if ($(product).find('.gallery-wrapper').length > 0) {
-      $(product).find('.gallery-wrapper').replaceWith(gallery);
+      $(product).find('.gallery-wrapper').first().replaceWith(gallery);
     }
     else {
       $(product).find('#product-zoom-container').replaceWith(gallery);
@@ -261,7 +257,10 @@
   };
 
   Drupal.refreshConfigurables = function (form, selectedCode, selectedValue) {
-    var sku = $(form).parents('article.entity--type-node:first').attr('data-sku');
+    var sku = ($(form).parents('article.entity--type-node:first').length > 0)
+      ? $(form).parents('article.entity--type-node:first').attr('data-sku')
+      : $(form).attr('data-sku');
+
     var combinations = drupalSettings.configurableCombinations[sku]['combinations'];
 
     var selectedValues = Drupal.getSelectedValues(form);
@@ -341,16 +340,27 @@
     }).execute();
   }
 
-  $(window).on('load', function () {
-    // Show add to cart form now.
-    $('.sku-base-form').each(function () {
-      $(this).removeClass('visually-hidden');
-      $(this).trigger('form-visible');
-    });
+  Drupal.getRelatedProductPosition = function () {
+    var sku = $('article[data-vmode="full"]').attr('data-sku');
+    var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
+    var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
+    var matchback = $('.horizontal-crossell' + selector);
+    var upsell =  $('.horizontal-upell' + selector);
+    var related = $('.horizontal-related' + selector);
+    var scrollPoint = window.innerHeight + window.pageYOffset;
 
-    if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
-      $('.content__title_wrapper').addClass('show-sticky-wrapper');
+    if (!matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
+      matchback.addClass('matchback-processed');
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
     }
-  });
+    if (!upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
+      upsell.addClass('upsell-processed');
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
+    }
+    if (!related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
+      related.addClass('related-processed');
+      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
+    }
+  }
 
 })(jQuery, Drupal, drupalSettings);

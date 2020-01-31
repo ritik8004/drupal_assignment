@@ -644,8 +644,10 @@
     color: $pdp_sidebar_link;
     cursor: pointer;
 
-    @include breakpoint($tablet) {
-      display: none !important;
+    &:not(.matchback-readmore) {
+      @include breakpoint($tablet) {
+        display: none !important;
+      }
     }
   }
 }
@@ -2061,6 +2063,10 @@ html[lang=ar] {
   .mobilegallery {
     #product-image-gallery-mobile {
       min-height: 18rem;
+
+      &.slick-slider {
+        touch-action: pan-y pinch-zoom;
+      }
     }
   }
 }

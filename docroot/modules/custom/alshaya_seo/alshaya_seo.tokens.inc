@@ -259,7 +259,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
     }
 
     if (isset($category_term)) {
-      $term_id = !empty($category_term) ? $category_term->get('tid')->getValue()[0]['value'] : '';
+      $term_id = !empty($category_term) ? $category_term->id() : '';
       $sale_ids = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds();
 
       if (isset($sale_ids['sale']) && in_array($term_id, $sale_ids['sale'])) {
@@ -458,26 +458,22 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'sub_categories':
           $parent_id = $category_term->get('parent')->getString();
-          $parent_id = empty($parent_id) ? $term_id : $parent_id;
-          $tree = $categoryManager->getCategoryTreeCached($parent_id, $current_langcode);
+          $parent_id = empty($parent_id) ? $category_term->id() : $parent_id;
+          $sub_categories = $categoryManager->getSubCategories($current_langcode, $parent_id);
 
-          if (!empty($tree)) {
+          if (!empty($sub_categories)) {
             // Show only limited sub categories to stay within limit of 420
             // characters.
             $sub_category_to_show = (int) \Drupal::configFactory()
               ->get('alshaya_seo.settings')
               ->get('sub_category_to_show');
 
-            $tree = ($sub_category_to_show > 0)
-              ? array_slice($tree, 0, $sub_category_to_show)
-              : $tree;
-
-            foreach ($tree as $child) {
-              $sub_categories[] = $child['label'];
-            }
+            $sub_categories = ($sub_category_to_show > 0)
+              ? array_slice($sub_categories, 0, $sub_category_to_show)
+              : $sub_categories;
           }
 
-          $replacements[$original] = isset($sub_categories) ? implode(', ', $sub_categories) : '';
+          $replacements[$original] = implode(', ', $sub_categories);
           break;
 
         case 'desc_free_delivery_n_cod':

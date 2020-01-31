@@ -8,10 +8,6 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  document.addEventListener('gesturestart', function (ee) {
-    ee.preventDefault();
-  });
-
   $(window).on('pageshow', function (event) {
     if (event.originalEvent.persisted) {
       window.location.reload();

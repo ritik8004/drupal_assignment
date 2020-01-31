@@ -609,6 +609,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       }
       elseif ($view_mode == 'matchback') {
+        $context = 'matchback';
+
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
         $build['item_code']['#markup'] = $sku;
       }
@@ -618,18 +620,22 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
 
-        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
-        if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
-          $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
-        }
-        else {
-          $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+        // To attach these libraries for full and modal view mode.
+        if (in_array($view_mode, ['modal', 'full'])) {
+          $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+          $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
+          $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
+          if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
+            $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
+          }
+          else {
+            $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+          }
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery)
+        $settingsKey = ($view_mode == 'matchback') ? 'matchback' : 'productInfo';
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
 
@@ -642,15 +648,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
           if (!empty($child)) {
             $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
-            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+            $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
           }
         }
 
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['layout'] = $pdp_layout;
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['identifier'] = $sku_identifier;
 
         if ($sku_entity->bundle() == 'configurable') {
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
           $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         }
 

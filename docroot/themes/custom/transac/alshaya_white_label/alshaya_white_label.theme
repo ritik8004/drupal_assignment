@@ -77,9 +77,15 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $variables['attributes']['class'][] = $variables['logged_in'] ? 'logged-in' : 'logged-out';
   // Update the meta to include noscalable for iphone.
   $html_head = &$variables['page']['#attached']['html_head'];
+  $node = \Drupal::routeMatch()->getParameter('node');
   foreach ($html_head as $index => $val) {
     if ($val[1] == 'viewport') {
-      $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=no';
+      if ($node instanceof NodeInterface && $node->bundle() === 'acq_product') {
+        $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=yes';
+      }
+      else {
+        $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=no';
+      }
     }
   }
 
@@ -89,6 +95,11 @@ function alshaya_white_label_preprocess_html(&$variables) {
   if ($current_route->getRouteName() == 'entity.node.canonical' && $current_route->getParameter('node')->bundle() == 'acq_product') {
     $node = \Drupal::request()->attributes->get('node');
     if ($node instanceof NodeInterface) {
+      $acm_settings = \Drupal::config('alshaya_acm.settings');
+      $variables['show_cart_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
+      if ($variables['show_cart_matchback']) {
+        $variables['#attached']['library'][] = 'alshaya_white_label/matchback_cart_notification';
+      }
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
@@ -567,6 +578,9 @@ function alshaya_white_label_preprocess_node(&$variables) {
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
+        }
+        if ($variables['show_crosssell_as_matchback']) {
+          $variables['#attached']['library'][] = 'alshaya_white_label/matchback_layout';
         }
       }
     }
@@ -1282,7 +1296,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#view_all' => $link,
             '#cache' => [
               'tags' => [
-                "node:taxonomy_term.accordion",
+                ProductCategoryTree::CACHE_TAG,
               ],
             ],
             '#attached' => [

@@ -1367,46 +1367,18 @@ class SkuManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion for which we need to fetch SKUs.
-   * @param bool $includeChildSkus
-   *   Flag to consider child SKUs while preparing SKU list.
    *
    * @return array
    *   List of skus related with a promotion.
    */
-  public function getSkutextsForPromotion(NodeInterface $promotion, $includeChildSkus = FALSE) {
+  public function getSkutextsForPromotion(NodeInterface $promotion) {
     $static = &drupal_static(__METHOD__, []);
 
-    if (!$includeChildSkus) {
-      $cid = implode(':', [
-        'promotion_sku',
-        $promotion->language()->getId(),
-        $promotion->id(),
-      ]);
+    $cid = implode(':', ['promotion_sku', $promotion->id()]);
 
-      if (!isset($static[$cid])) {
-        // Fetch corresponding SKUs for promotion.
-        $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
-      }
-    }
-    else {
-      $cid = implode(':', [
-        'promotions_all_sku',
-        $promotion->language()->getId(),
-        $promotion->id(),
-      ]);
-
-      if (!isset($static[$cid])) {
-        // Fetch corresponding SKUs for promotion.
-        $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
-        if (!empty($static[$cid])) {
-          // Fetch child SKUs based on configurable parent SKUs.
-          $childSkus = $this->fetchChildSkuTexts($static[$cid]);
-          if (!empty($childSkus)) {
-            // Merge the list of SKUs.
-            $static[$cid] = array_unique(array_merge($static[$cid], $childSkus));
-          }
-        }
-      }
+    if (!isset($static[$cid])) {
+      // Fetch corresponding SKUs for promotion.
+      $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
     }
 
     return $static[$cid];
@@ -1471,7 +1443,11 @@ class SkuManager {
     $query->condition('asfd.sku', $skus, 'IN');
     $query->fields('asfcs', ['field_configured_skus_value']);
     $query->distinct();
-    $childSkus = $query->execute()->fetchCol();
+    $childSkus = $query->execute()->fetchAll();
+
+    if (!empty($childSkus)) {
+      $childSkus = array_column($childSkus, 'field_configured_skus_value');
+    }
 
     return $childSkus;
   }
@@ -1686,7 +1662,7 @@ class SkuManager {
    *   Filtered skus.
    */
   public function filterRelatedSkus(array $skus) {
-    $related_items_size = $this->configFactory->get('alshaya_acm_product.settings')->get('related_items_size');
+    $related_items_size = $this->getConfig('alshaya_acm_product.settings')->get('related_items_size');
     $related = [];
 
     foreach ($skus as $sku) {
@@ -2102,13 +2078,9 @@ class SkuManager {
    *   Mode to use for displaying content on listing pages.
    */
   public function getListingDisplayMode() {
-    $static = &drupal_static(__FUNCTION__, NULL);
-
-    if ($static === NULL) {
-      $static = $this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
-    }
-
-    return $static;
+    static $value = NULL;
+    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('listing_display_mode');
+    return $value;
   }
 
   /**
@@ -2118,17 +2090,9 @@ class SkuManager {
    *   TRUE if price mode is set to from to.
    */
   public function isPriceModeFromTo() {
-    $static = &drupal_static(__FUNCTION__, NULL);
-
-    if ($static === NULL) {
-      $display_mode = $this->configFactory
-        ->get('alshaya_acm_product.display_settings')
-        ->get('price_display_mode');
-
-      $static = $display_mode === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO;
-    }
-
-    return $static;
+    static $value = NULL;
+    $value = $value ?? ($this->getConfig('alshaya_acm_product.display_settings')->get('price_display_mode') === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO);
+    return $value;
   }
 
   /**
@@ -2148,9 +2112,9 @@ class SkuManager {
    *   Array containing attributes used for swatch on Listing.
    */
   public function getProductListingSwatchAttributes() {
-    return $this->configFactory
-      ->get('alshaya_acm_product.display_settings')
-      ->get('swatches')['plp'] ?? ['actual_color_label_code'];
+    static $value = NULL;
+    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('swatches')['plp'] ?? ['actual_color_label_code'];
+    return $value;
   }
 
   /**
@@ -2160,15 +2124,9 @@ class SkuManager {
    *   Array containing attributes used for swatch on PDP.
    */
   public function getPdpSwatchAttributes() {
-    $static = &drupal_static(__FUNCTION__, NULL);
-
-    if ($static === NULL) {
-      $static = $this->configFactory
-        ->get('alshaya_acm_product.display_settings')
-        ->get('swatches')['pdp'] ?? ['color'];
-    }
-
-    return $static;
+    static $value = NULL;
+    $value = $value ?? $this->getConfig('alshaya_acm_product.display_settings')->get('swatches')['pdp'] ?? ['color'];
+    return $value;
   }
 
   /**
@@ -2384,17 +2342,9 @@ class SkuManager {
    *   TRUE if we need to process and hide not required options.
    */
   public function isNotRequiredOptionsToBeRemoved() {
-    $static = &drupal_static('isNotRequiredOptionsToBeRemoved', NULL);
-
-    if ($static === NULL) {
-      $hide_not_required_option = $this->configFactory
-        ->get('alshaya_acm_product.display_settings')
-        ->get('hide_not_required_option');
-
-      $static = (bool) $hide_not_required_option;
-    }
-
-    return $static;
+    static $value = NULL;
+    $value = $value ?? (bool) $this->getConfig('alshaya_acm_product.display_settings')->get('hide_not_required_option');
+    return $value;
   }
 
   /**
@@ -2404,17 +2354,9 @@ class SkuManager {
    *   TRUE if we need to show from child only after all options are selected.
    */
   public function showImagesFromChildrenAfterAllOptionsSelected(): bool {
-    $static = &drupal_static('showImagesFromChildrenAfterAllOptionsSelected', NULL);
-
-    if ($static === NULL) {
-      $value = $this->configFactory
-        ->get('alshaya_acm_product.display_settings')
-        ->get('show_child_images_after_selecting');
-
-      $static = ($value == 'all');
-    }
-
-    return $static;
+    static $value = NULL;
+    $value = $value ?? ($this->getConfig('alshaya_acm_product.display_settings')->get('show_child_images_after_selecting') == 'all');
+    return $value;
   }
 
   /**
@@ -2427,7 +2369,7 @@ class SkuManager {
    *   TRUE if value matches options value to exclude.
    */
   public function isAttributeOptionToExclude($value) {
-    return in_array($value, $this->configFactory->get('alshaya_acm_product.settings')->get('excluded_attribute_options'));
+    return in_array($value, $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options'));
   }
 
   /**
@@ -2470,7 +2412,7 @@ class SkuManager {
    *   Image slider position type for the sku.
    */
   public function getImageSliderPosition(EntityInterface $entity) {
-    $default_pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')
+    $default_pdp_image_slider_position = $this->getConfig('alshaya_acm_product.settings')
       ->get('image_slider_position_pdp');
     if ($entity instanceof SKUInterface) {
       $entity = $this->getDisplayNode($entity);
@@ -2811,7 +2753,7 @@ class SkuManager {
 
     // Load default from config.
     if (!isset($static['default'])) {
-      $static['default'] = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+      $static['default'] = $this->getConfig('alshaya_acm_product.settings')->get('pdp_layout');
     }
 
     // If we don't have product node, let's just return default.
@@ -2884,7 +2826,7 @@ class SkuManager {
    *   PDP layout to be used.
    */
   public function getPdpLayoutFromTermId($tid) {
-    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    $default_pdp_layout = $this->getConfig('alshaya_acm_product.settings')->get('pdp_layout');
 
     $term = $this->termStorage->load($tid);
     if ($term instanceof TermInterface && $term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
@@ -3315,11 +3257,25 @@ class SkuManager {
       // Loop through the indexable fields.
       foreach ($this->getAttributesToIndex() as $key => $field) {
         $field_key = 'attr_' . $key;
-        $field_data = $child->get($field_key)->first();
+        $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
-          $field_value = $field_data->getString();
-          $data[$key][$field_value] = $field_value;
+          foreach ($field_data as $field_value) {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
+        }
+      }
+    }
+
+    // Loop through the indexable fields for parent.
+    // If we get data at parent level, let's index that too.
+    foreach ($this->getAttributesToIndex() as $key => $field) {
+      $field_key = 'attr_' . $key;
+      $field_data = $sku->get($field_key)->getValue();
+
+      if (!empty($field_data)) {
+        foreach ($field_data as $field_value) {
+          $data[$key][$field_value['value']] = $field_value['value'];
         }
       }
     }
@@ -3430,7 +3386,7 @@ class SkuManager {
    *   TRUE if listing mode is set to non-aggregated.
    */
   public function isListingModeNonAggregated() {
-    return $this->getListingDisplayMode() == self::NON_AGGREGATED_LISTING;
+    return ($this->getListingDisplayMode() === self::NON_AGGREGATED_LISTING);
   }
 
   /**
@@ -3555,6 +3511,27 @@ class SkuManager {
       ];
     }
     return $promotions;
+  }
+
+  /**
+   * Wrapper function to get config.
+   *
+   * @param string $key
+   *   Config key / id.
+   *
+   * @return \Drupal\Core\Config\ImmutableConfig
+   *   Config.
+   */
+  protected function getConfig(string $key) {
+    static $config = [];
+
+    if (empty($config[$key])) {
+      // Adding static cache to avoid applying overrides and other code
+      // every-time we try to get config.
+      $config[$key] = $this->configFactory->get($key);
+    }
+
+    return $config[$key];
   }
 
 }

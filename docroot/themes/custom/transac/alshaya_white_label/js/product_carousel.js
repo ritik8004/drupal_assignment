@@ -57,6 +57,7 @@
       };
 
       function applyRtl(ocObject, options) {
+
         // For tablets and mobile we don't want to apply OwlCarousel.
         if ($(window).width() < 1024) {
           return;
@@ -68,18 +69,18 @@
         // Check dynamically if looping is required and at which breakpoint.
         for (var i in options.responsive) {
           if (options.responsive[i]) {
-            options.responsive[i].loop = (options.responsive[i].items < itemsCount);
+            options.responsive[i].loop = options.responsive[i].items < itemsCount;
           }
         }
 
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');
-          ocObject.once().slick(
-            $.extend({}, options, {rtl: true})
-          );
+          ocObject.once().slick($.extend({}, options, {
+            rtl: true
+          }));
         }
         else {
-          ocObject.once().slick(options);
+          ocObject.once('product-carousel').slick(options);
         }
       }
 

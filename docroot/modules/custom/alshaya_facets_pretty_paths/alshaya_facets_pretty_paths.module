@@ -7,7 +7,6 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Mappings for specific listing page type to make updates dynamic.
@@ -65,7 +64,6 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
     AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX => t('Suffix'),
   ];
   $visibility = [
-    AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE => t('H1'),
     AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE => t('Title'),
     AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION => t('Description'),
   ];
@@ -128,16 +126,4 @@ function alshaya_facets_pretty_paths_form_facets_facet_edit_form_alter(&$form, F
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function alshaya_facets_pretty_paths_preprocess_page_title(&$variables) {
-  $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
-  if ($term instanceof TermInterface && \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getActiveFacetFilters()) {
-    $active_facets = \Drupal::service('alshaya_facets_pretty_paths.pretty_paths_helper')->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE, 'plp');
-    $new_title = implode(' ', array_filter($active_facets[0])) . strip_tags($variables['title']) . implode(' ', array_filter($active_facets[1]));
-    $variables['title'] = $new_title;
-  }
 }

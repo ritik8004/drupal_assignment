@@ -130,18 +130,17 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
           'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
           'prefix_text' => '',
           'visibility' => [
-            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE,
             AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
             AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
           ],
         ];
         if (strpos($facet->id(), 'price') > -1) {
           $meta_info_type['type'] = AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX;
-          $meta_info_type['prefix_text'] = $this->t('at');
+          $meta_info_type['prefix_text'] = 'at';
           $meta_info_type['visibility'] = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION];
         }
         elseif (strpos($facet->id(), 'size') > -1) {
-          $meta_info_type['prefix_text'] = $this->t('Size');
+          $meta_info_type['prefix_text'] = 'Size';
         }
         $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'meta_info_type', $meta_info_type);
         $facet->save();

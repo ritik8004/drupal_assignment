@@ -190,11 +190,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
         $metatags = metatag_generate_entity_metatags($term);
         $meta_title = $metatags['title']['#attributes']['content'];
         $meta_description = $metatags['description']['#attributes']['content'];
-        $active_facets = $this->facetsPrettyPathHelper->getFacetSummaryItems(AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_PAGE_TITLE, 'plp');
-        $page_title = implode(' ', $active_facets[0]);
 
         $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [$meta_title, $meta_description]));
-        $response->addCommand(new InvokeCommand(NULL, 'updatePageTitle', [$page_title . ' ' . $term->label()]));
       }
 
     }

@@ -1,0 +1,235 @@
+.cross-sell-product-components {
+  @include breakpoint($tablet) {
+    display: flex;
+  }
+
+  .cross-sell-product-component-left {
+    @include breakpoint($tablet) {
+      width: 23%;
+    }
+
+    .cloudzoom-matchback_gallery {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  .cross-sell-product-component-center {
+    @include breakpoint($tablet) {
+      width: 27%;
+      text-align: $left;
+      margin-#{$left}: 0.625rem;
+    }
+
+    .matchback-prod-collection-label {
+      font-size: 0.875rem;
+      line-height: 1.125rem;
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.25rem;
+    }
+
+    .matchback-prod-collection-label,
+    .short-description-wrapper,
+    .description-wrapper,
+    .content--item-code {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+
+    .short-description-wrapper {
+      .field__content {
+        @include breakpoint($tablet) {
+          margin-top: 0.625rem;
+          font-size: 0.75rem;
+          line-height: 1rem;
+          color: $black;
+        }
+      }
+    }
+
+    .price-block {
+      .price-wrapper {
+        .price {
+          margin-top: 0.625rem;
+          font-size: 1rem;
+          line-height: 1.25rem;
+        }
+      }
+    }
+
+    .content--item-code {
+      font-size: 0.625rem;
+      line-height: 0.75rem;
+      color: $matchback_item_code_color;
+      margin-top: 0.625rem;
+    }
+  }
+
+  .cross-sell-product-component-right {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    @include breakpoint($tablet) {
+      width: 50%;
+      padding-#{$left}: 1.3125rem;
+    }
+
+    .form-item-configurables-color {
+      @include breakpoint($tablet) {
+        padding-top: 0 !important;
+      }
+    }
+  }
+}
+
+#machbackSlider {
+  padding: 0;
+  margin: 0;
+
+  ul.slick-dots {
+    position: absolute;
+    #{$left}: 0;
+    text-align: center;
+    bottom: 0;
+    transform: none;
+    width: 4.4975rem !important;
+
+    &.i-dots {
+      height: 0.5rem;
+      bottom: -0.125rem !important;
+
+      .slick-dots-container {
+        height: 0.5rem;
+
+        li {
+          height: 0.5rem !important;
+          width: 0.5rem !important;
+          color: $mothercare-black;
+          background: currentColor !important;
+          margin-#{$left}: 0.2185rem !important;
+          margin-#{$right}: 0.2185rem !important;
+
+          &.n-small-1 {
+            width: 0.3125rem !important;
+            height: 0.3125rem !important;
+          }
+        }
+      }
+    }
+  }
+
+  .slick-prev,
+  .slick-next {
+    &::before {
+      width: 0.3125rem;
+      height: 0.5rem;
+      font-size: 1rem;
+
+      @include breakpoint($tablet) {
+        padding: 0;
+      }
+    }
+  }
+
+  .slick-prev {
+    @include breakpoint($desktop) {
+      left: 3.65rem;
+    }
+  }
+
+  .slick-next {
+    @include breakpoint($desktop) {
+      right: 3.65rem;
+    }
+  }
+
+  button.slick-arrow {
+    @include breakpoint($tablet) {
+      bottom: 0;
+    }
+  }
+}
+
+.matchback-container {
+  & > .views-row {
+    padding-bottom: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+.dialog-matchback-image-gallery-container {
+  overflow: scroll !important;
+}
+
+.imagezoom-dialog-container {
+  background: white !important;
+  height: 51.5625rem !important;
+
+  .matchback-imagegallery__full {
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .matchback-imagegallery__full__image {
+    max-width: 31.5rem;
+  }
+}
+
+.mobilematchback-image {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+}
+
+@include breakpoint($tablet) {
+  .nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+    &.dialog-matchback-image-gallery-container {
+      padding: 2.5rem calc((100vw - 43.75rem) / 2);
+
+      .imagezoom-dialog-container {
+        padding: 0;
+      }
+
+      .imagezoom-dialog-header {
+        padding: 1.25rem;
+        border-bottom: 1px solid $modal_header_border;
+        font-size: 1.375rem;
+        line-height: 1.6875rem;
+        color: $mothercare-black;
+      }
+    }
+  }
+
+  .matchback-hover-text {
+    font-family: $alshaya-thin;
+    font-size: 0.75rem;
+    line-height: 1.33;
+    letter-spacing: normal;
+    text-align: center;
+    color: $grey-light;
+    margin-top: 1.3125rem;
+  }
+}
+
+.horizontal-crossell {
+  .view-product-slider {
+    .ajax-progress-throbber .throbber {
+      background-position: center center !important;
+    }
+  }
+}
+
+.acq-content-product.acq-content-product-matchback {
+  .gallery-wrapper {
+    padding-bottom: 0;
+  }
+}
