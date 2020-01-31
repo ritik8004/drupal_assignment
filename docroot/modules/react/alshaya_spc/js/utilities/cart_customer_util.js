@@ -2,7 +2,7 @@ import { getInfoFromStorage, addInfoInStorage } from "./storage";
 import Axios from "axios";
 
 export function checkCartCustomer() {
-  var cart_data = getInfoFromStorage();
+  let cart_data = getInfoFromStorage();
 
   if (cart_data.uid !== window.drupalSettings.user.uid) {
     cart_data.uid = window.drupalSettings.user.uid;
@@ -15,12 +15,12 @@ const associateCart = (cart_data) => {
   Axios.get(url)
   .then(response => {
     if (response.data) {
-      console.log(response.data);
-      // addInfoInStorage(cart_data);
+      let cart_data = getInfoFromStorage();
+      cart_data.cart.customer_id = response.data.customer_id;
+      addInfoInStorage(cart_data);
     }
   })
   .catch(error => {
-  // Processing of error here.
+    // Processing of error here.
   });
-
 }
