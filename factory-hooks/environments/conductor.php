@@ -353,29 +353,41 @@ $conductors = [
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
     'site_id' => 129,
   ],
-  // Westelm KW.
+  // West Elm.
   'wekw_qa' => [
     'hmac_id' => '2546a170c84c49248207de3a8665a920',
     'hmac_secret' => 'N2Q4ZjhlY2YtMTA1Yy00',
     'site_id' => 165,
   ],
-  // Westelm SA.
   'wesa_qa' => [
     'hmac_id' => 'f8415a9cef1d46aeb0ffeafb5937682f',
     'hmac_secret' => 'ZjI2YjYzZWItZDYyZi00',
     'site_id' => 166,
   ],
-  // Westelm AE.
   'weae_qa' => [
     'hmac_id' => '868bd73816b6425987a7d43b96c0ed84',
     'hmac_secret' => 'OGY5ODFiM2MtYTk0Mi00',
     'site_id' => 167,
   ],
-  // Westelm AE.
   'weae_dev2' => [
     'hmac_id' => '82e9dce9da1e4cc7a25a61658f359576',
     'hmac_secret' => 'YzI0ZjNmNzUtMzgyNS00',
     'site_id' => 159,
+  ],
+  'wekw_uat' => [
+    'hmac_id' => '4d673878644c45a0908049f5e26be993',
+    'hmac_secret' => 'NDIzZDBkOTktZGJiNi00',
+    'site_id' => 171,
+  ],
+  'wesa_uat' => [
+    'hmac_id' => '0d0a24af21ef4399b7dc5b3eae90bd69',
+    'hmac_secret' => 'NjgyMDA1MDMtYzUxOC00',
+    'site_id' => 172,
+  ],
+  'weae_uat' => [
+    'hmac_id' => 'cb7192b7d39840f8b72aa5393c6034fe',
+    'hmac_secret' => 'NzI5M2M1MjYtMTE5ZS00',
+    'site_id' => 173,
   ],
 ];
 
