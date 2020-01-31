@@ -457,7 +457,7 @@ class AlshayaFacetsPrettyPathsHelper {
     if (isset($static[$visibility][$page])) {
       return $static[$visibility][$page];
     }
-
+    // Reusing the facet summary block values.
     $active_facet_items = $this->getFacetSummary($page);
     $active_prefix_facet = [];
     $active_suffix_facet = [];
@@ -467,7 +467,8 @@ class AlshayaFacetsPrettyPathsHelper {
         $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
         if (in_array($visibility, $meta_info_type['visibility'])) {
           if ($meta_info_type['type'] == self::FACET_META_TYPE_PREFIX) {
-            // Strip tags to get the value from price markup.
+            // Strip tags to get text from the price range markup.
+            // Language direction left to right (5 KWD - 10 KWD).
             $active_prefix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
           }
           elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
@@ -480,8 +481,15 @@ class AlshayaFacetsPrettyPathsHelper {
             if (strpos($active_facet_id, 'price') > -1) {
               $prices = explode(' - ', $facet_value);
               array_map('trim', $prices);
-
+              // Checking if the current language's direction
+              // is right to left.
               if (count($prices) > 1 && $this->languageManager->getCurrentLanguage()->getDirection() === LanguageInterface::DIRECTION_RTL) {
+                // Reversing the array as it will be used in string(meta description)
+                // Ex: Shop an exclusive and luxurious range of short dresses for women
+                // from H&M starting from 5,000D0K0-10,000D0K0 online in Kuwait City
+                // and throughout Kuwait. Compare specifications and prices
+                // for 2020 short dresses and more. Enjoy free returns
+                // and cash on delivery! (translated ar text).
                 $prices = array_reverse($prices);
               }
 
