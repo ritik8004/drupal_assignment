@@ -39,6 +39,7 @@ use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class SkuManager.
@@ -3068,7 +3069,6 @@ class SkuManager {
     $sku_string = $this->getSkuForNode($node);
     $sku = SKU::loadFromSku($sku_string, $langcode);
 
-
     if (!($sku instanceof SKUInterface)) {
       throw new \Exception('Not able to load sku from node.');
     }
@@ -3082,6 +3082,7 @@ class SkuManager {
     if (!($original instanceof NodeInterface)) {
       throw new \Exception('Unable to load original node.');
     }
+
     $nid_field = $item->getField('original_nid');
     if ($nid_field) {
       $nid_field->setValues([$original->id()]);
@@ -3107,7 +3108,6 @@ class SkuManager {
         $item->getField('final_price')->setValues([min($selling_prices)]);
       }
     }
-
 
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
