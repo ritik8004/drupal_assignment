@@ -18,6 +18,12 @@ use Drupal\taxonomy\Entity\Term;
  * Uninstall un-wanted crop modules.
  */
 function alshaya_transac_update_8125() {
+  $crops = \Drupal::entityTypeManager()->getStorage('crop')->loadMultiple();
+  foreach ($crops as $crop) {
+    \Drupal::logger('alshaya_transac')->warning('Deleting crop entity with id @id', ['@id' => $crop->id()]);
+    $crop->delete();
+  }
+
   \Drupal::service('module_installer')->uninstall(['image_widget_crop', 'crop']);
 }
 
