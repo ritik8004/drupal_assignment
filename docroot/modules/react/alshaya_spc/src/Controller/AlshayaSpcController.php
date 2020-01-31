@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\alshaya_click_collect\Service\AlshayaClickCollect;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
@@ -11,7 +10,6 @@ use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -70,13 +68,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
-   * Alshaya click and collect helper.
-   *
-   * @var \Drupal\alshaya_click_collect\Service\AlshayaClickCollect
-   */
-  protected $clickCollect;
-
-  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -93,8 +84,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\alshaya_click_collect\Service\AlshayaClickCollect $clickCollect
-   *   Alshaya click and collect helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -103,8 +92,7 @@ class AlshayaSpcController extends ControllerBase {
     AlshayaSpcHelper $spc_helper,
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
-    EntityTypeManagerInterface $entity_type_manager,
-    AlshayaClickCollect $clickCollect
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -113,7 +101,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
-    $this->clickCollect = $clickCollect;
   }
 
   /**
@@ -127,8 +114,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.helper'),
       $container->get('mobile_number.util'),
       $container->get('current_user'),
-      $container->get('entity_type.manager'),
-      $container->get('alshaya_click_collect.helper')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -231,108 +217,6 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     return new JsonResponse(['status' => FALSE]);
-  }
-
-  /**
-   * Get all address list of the current user.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getUserAddressList() {
-    $uid = $this->currentUser->getAccount()->id();
-    $addressList = $this->spcHelper->getAddressListByUid($uid);
-
-    return new JsonResponse($addressList);
-  }
-
-  /**
-   * Set address as default address for the user.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function setDefaultAddress(Request $request) {
-    $data = json_decode($request->getContent(), TRUE);
-    $request->request->replace(is_array($data) ? $data : []);
-    $response = [];
-    try {
-      $uid = $this->currentUser->getAccount()->id();
-      if ($this->spcHelper->setDefaultAddress($data['address_id'], $uid)) {
-        $response['data'] = $this->spcHelper->getAddressListByUid($uid);
-        $response['status'] = TRUE;
-      }
-      else {
-        $response['status'] = FALSE;
-      }
-    }
-    catch (\Exception $e) {
-      $response['status'] = FALSE;
-    }
-
-    return new JsonResponse($response);
-  }
-
-  /**
-   * Delete the address of the user.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Reauest object.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function deleteAddress(Request $request) {
-    $response = [];
-    $data = json_decode($request->getContent(), TRUE);
-    $request->request->replace(is_array($data) ? $data : []);
-
-    try {
-      $uid = $this->currentUser->getAccount()->id();
-      $profile = $this->entityTypeManager->getStorage('profile')->load($data['address_id']);
-      // If address belongs to the current user.
-      if ($profile && $profile->getOwnerId() == $uid) {
-        // If user tyring to delete default address.
-        if ($profile->isDefault()) {
-          $response['status'] = FALSE;
-        }
-        else {
-          // Delete the address.
-          $profile->delete();
-          $response['status'] = TRUE;
-          $response['data'] = $this->spcHelper->getAddressListByUid($uid);
-        }
-      }
-      else {
-        $response['status'] = FALSE;
-      }
-    }
-    catch (\Exception $e) {
-      $response['status'] = FALSE;
-    }
-
-    return new JsonResponse($response);
-  }
-
-  /**
-   * Get the click n collect stores for given cart and lat/long.
-   *
-   * @param int $cart_id
-   *   The cart id.
-   * @param float $lat
-   *   The latitude.
-   * @param float $lon
-   *   The longitude.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getCncStoresJson($cart_id, $lat = NULL, $lon = NULL) {
-    $stores = $this->clickCollect->getCartStores($cart_id, $lat, $lon);
-    return new JsonResponse($stores);
   }
 
 }

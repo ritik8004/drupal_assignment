@@ -41,7 +41,7 @@ alshaya_spc.get_parent_area_list:
 alshaya_spc.get_user_address_list:
   path: '/user-address-list'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getUserAddressList'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getCustomerAddressList'
   methods:  [GET]
   requirements:
     _role: 'authenticated'
@@ -49,7 +49,7 @@ alshaya_spc.get_user_address_list:
 alshaya_spc.set_default_address:
   path: '/set-default-address'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::setDefaultAddress'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::setCustomerDefaultAddress'
   methods:  [POST]
   requirements:
     _role: 'authenticated'
@@ -57,7 +57,7 @@ alshaya_spc.set_default_address:
 alshaya_spc.delete_address:
   path: '/delete-address'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::deleteAddress'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::deleteCustomerAddress'
   methods:  [POST]
   requirements:
     _role: 'authenticated'
@@ -65,6 +65,6 @@ alshaya_spc.delete_address:
 alshaya_spc.click_and_collect_json:
   path: '/cnc/stores/{cart_id}/{lat}/{lon}'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getCncStoresJson'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::getCncStoresJson'
   requirements:
     _permission: 'access content'
