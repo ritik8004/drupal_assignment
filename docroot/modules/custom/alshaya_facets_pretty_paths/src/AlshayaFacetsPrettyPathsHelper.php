@@ -489,7 +489,7 @@ class AlshayaFacetsPrettyPathsHelper {
                 // Ex: "Shop an exclusive and luxurious range of
                 // short dresses for women
                 // from H&M starting from
-                // 5,000D0K0-10,000D0K0..."
+                // 5,000D0K0-10,000D0K0...".
                 $prices = array_reverse($prices);
               }
 
