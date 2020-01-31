@@ -6,6 +6,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
@@ -22,13 +23,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class ProductCategoryTree implements ProductCategoryTreeInterface {
 
+  use LoggerChannelTrait;
+
   const CACHE_BIN = 'alshaya';
 
   const CACHE_ID = 'product_category_tree';
 
   const VOCABULARY_ID = 'acq_product_category';
 
-  const CACHE_TAG = 'acq_product_category_list';
+  const CACHE_TAG = 'taxonomy_term:acq_product_category';
 
   const PLP_LAYOUT_1 = 'campaign-plp-style-1';
 
@@ -45,13 +48,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @var \Drupal\taxonomy\TermStorageInterface
    */
   protected $termStorage;
-
-  /**
-   * Node storage object.
-   *
-   * @var \Drupal\node\NodeStorageInterface
-   */
-  protected $nodeStorage;
 
   /**
    * Entity Repository.
@@ -176,7 +172,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
                               Connection $connection,
                               ProductCategoryHelper $product_category_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
     $this->cache = $cache;
@@ -195,28 +190,27 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   The term parent id, default 0.
    * @param string $langcode
    *   (optional) The language code.
+   * @param bool $reset_cache
+   *   (optional) Flag to reset the cache.
    *
    * @return array
    *   Processed term data from cache if available or fresh.
    */
-  public function getCategoryTreeCached($parent_id = 0, $langcode = NULL) {
+  public function getCategoryTreeCached($parent_id = 0, $langcode = NULL, $reset_cache = FALSE) {
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
 
     $cid = self::CACHE_ID . '_' . $langcode . '_' . $parent_id;
 
-    if ($term_data = $this->cache->get($cid)) {
+    if (!($reset_cache) && $term_data = $this->cache->get($cid)) {
       return $term_data->data;
     }
 
     $term_data = $this->getCategoryTree($langcode, $parent_id);
 
-    $cache_tags = [
-      self::CACHE_TAG,
-    ];
-
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
+    // We will invalidate cache for this only from queue.
+    $this->cache->set($cid, $term_data);
 
     return $term_data;
   }
@@ -836,7 +830,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     else {
       // Child terms of given parent term id.
       $term_data = $this->getCategoryTree($langcode, $parent_id);
-      $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
+      $this->cache->set($cid, $term_data, Cache::PERMANENT, ['taxonomy_term:' . self::VOCABULARY_ID]);
     }
 
     // Reset `$excludeNotInMenu` to default value.
@@ -935,6 +929,78 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel() - 1];
     return $this->entityRepository->getTranslationFromContext($parent);
+  }
+
+  /**
+   * Refresh caches used for mega menu.
+   */
+  public function refreshCategoryTreeCache() {
+    $parents = [];
+
+    // If the L1 depth level is greater than one, invalidate cache for all the
+    // parents for that level. This is mainly used for super category feature.
+    if ($this->getL1DepthLevel() > 1) {
+      $tree = $this->termStorage->loadTree(self::VOCABULARY_ID, 0, $this->getL1DepthLevel() - 1);
+      foreach ($tree ?? [] as $term) {
+        $parents[] = $term->tid;
+      }
+    }
+    else {
+      $parents = [0];
+    }
+
+    foreach ($parents as $parent) {
+      foreach ($this->languageManager->getLanguages() as $language) {
+        $this->getCategoryTreeCached($parent, $language->getId(), TRUE);
+      }
+
+      $this->getLogger('ProductCategoryTree')->notice('Cache refreshed for product category tree for id @id.', [
+        '@id' => $parent,
+      ]);
+    }
+  }
+
+  /**
+   * Get sub categories label and id in current language.
+   *
+   * Use cache to share the data across multiple sub categories
+   * sharing same parent.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param int|string $parent_id
+   *   Parent id.
+   *
+   * @return array
+   *   Array of sub category labels in requested language.
+   */
+  public function getSubCategories(string $langcode, $parent_id = 0) {
+    $cid = 'sub_categories:' . $langcode . ':' . $parent_id;
+
+    if ($term_data = $this->cache->get($cid)) {
+      return $term_data->data;
+    }
+
+    $sub_categories = [];
+    $cache_tags = [
+      'taxonomy_term:' . $parent_id,
+      'taxonomy_term:' . self::VOCABULARY_ID . ':new',
+    ];
+
+    $tree = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_id, 1, TRUE);
+    foreach ($tree ?? [] as $term) {
+      // Use only the terms which are enabled.
+      if (empty($term->get('field_commerce_status')->getString())) {
+        continue;
+      }
+
+      $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
+      $sub_categories[$term->id()] = $term->label();
+      $cache_tags = Cache::mergeTags($cache_tags, $term->getCacheTags());
+    }
+
+    $this->cache->set($cid, $sub_categories, Cache::PERMANENT, $cache_tags);
+    return $sub_categories;
   }
 
 }

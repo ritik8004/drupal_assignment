@@ -48,6 +48,11 @@ $databases = array(
     ),
 );
 
+// @see CORE-3188 for details on workaround below to support 5.7 in local.
+$databases['default']['default'] ['init_commands'] = [
+  'sql_mode' => "SET sql_mode = ''",
+];
+
 // Use development service parameters.
 $settings['container_yamls'][] = $dir . '/docroot/sites/development.services.yml';
 

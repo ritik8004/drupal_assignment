@@ -5,3 +5,17 @@ alshaya_acm_product_category.settings_form:
     _title: 'ACM Category Settings'
   requirements:
     _permission: 'access commerce product settings'
+alshaya_acm_product_category.export_google_category_mapping:
+  path: '/admin/commerce/manage-google-category-mapping'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product_category\Controller\GoogleCategoryMappingController::downloadGoogleCategoryMapping'
+    _title: 'Download category mapping'
+  requirements:
+    _permission: 'manage google category mapping'
+alshaya_acm_product_category.google_category:
+  path: '/admin/commerce/google-category'
+  defaults:
+    _form: '\Drupal\alshaya_acm_product_category\Form\GoogleCategoryForm'
+    _title: 'Google category Import/Export'
+  requirements:
+    _permission: 'manage google category mapping'

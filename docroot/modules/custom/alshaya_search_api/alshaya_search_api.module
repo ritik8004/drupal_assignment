@@ -5,7 +5,6 @@
  * Module file.
  */
 
-use Drupal\alshaya_performance\Plugin\QueueWorker\InvalidateCacheTags;
 use Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
@@ -79,20 +78,17 @@ function alshaya_search_api_node_predelete(EntityInterface $node) {
     return;
   }
 
-  /** @var \Drupal\Core\Queue\QueueInterface $queue */
-  $queue = \Drupal::service('queue')->get(InvalidateCacheTags::QUEUE_NAME);
-
   // Invalidate associated category listing pages.
   $category_ids = array_column($node->get('field_category')->getValue(), 'target_id');
   foreach ($category_ids ?? [] as $category_id) {
-    $queue->createItem(AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $category_id);
+    _alshaya_performance_queue_cache_tag_for_invalidation(AlshayaSearchApiProductProcessedEventSubscriber::CACHE_TAG_PREFIX . $category_id);
   }
 
   // Invalidate associated promotion nodes.
   $item_id = 'entity:node/' . $node->id() . ':' . $node->language()->getId();
   $promotion_nids = \Drupal::service('alshaya_search_api.data_helper')->getIndexedData($item_id, 'promotion_nid');
   foreach ($promotion_nids as $nid) {
-    $queue->createItem('node:' . $nid);
+    _alshaya_performance_queue_cache_tag_for_invalidation('node:' . $nid);
   }
 }
 

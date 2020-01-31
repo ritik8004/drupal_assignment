@@ -2061,6 +2061,10 @@ html[lang=ar] {
   .mobilegallery {
     #product-image-gallery-mobile {
       min-height: 18rem;
+
+      &.slick-slider {
+        touch-action: pan-y pinch-zoom;
+      }
     }
   }
 }

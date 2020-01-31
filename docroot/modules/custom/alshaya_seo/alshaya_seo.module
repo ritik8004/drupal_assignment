@@ -63,6 +63,29 @@ function _alshaya_seo_process_gtm() {
  * Implements hook_page_attachments().
  */
 function alshaya_seo_page_attachments(array &$attachments) {
+  // Add script for sitelink searchbox.
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    if (_alshaya_seo_process_sitelink_searchbox()) {
+      $attachments['#attached']['html_head']['alshaya_seo_search'] = [
+        [
+          '#type' => 'html_tag',
+          '#tag' => 'script',
+          '#attributes' => [
+            'type' => 'application/ld+json',
+          ],
+          // Adding PHP_EOL on both sides to make it look exactly
+          // same as expected.
+          '#value' => _alshaya_seo_prepare_sitelink_searchbox_metadata(),
+          '#weight' => 100,
+        ],
+        'sitelinkSearchbox',
+      ];
+    }
+
+    // Adding cache tag as alshaya_seo.sitelink_search.
+    $attachments['#cache']['tags'][] = 'config:alshaya_seo.sitelink_search';
+  }
+
   if (!_alshaya_seo_process_gtm()) {
     return;
   }
@@ -128,6 +151,15 @@ function alshaya_seo_page_attachments(array &$attachments) {
     ],
     'gpg',
   ];
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_seo_dynamic_yield_context_alter(&$lng) {
+  // Replace en_US in DY context with site specific locale.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $lng = AlshayaI18nLanguages::getLocale($langcode);
 }
 
 /**
@@ -340,4 +372,64 @@ function alshaya_seo_module_implements_alter(&$implementations, $hook) {
       unset($implementations['simple_sitemap']);
     }
   }
+}
+
+/**
+ * Get the meta tag description.
+ *
+ * @return string
+ *   Meta tag description.
+ */
+function _alshaya_seo_prepare_sitelink_searchbox_metadata() {
+  $searchUrl = 'search?keywords={search_term_string}';
+  // Invoke the alter hook to allow all modules to set search url.
+  \Drupal::moduleHandler()->alter('alshaya_seo_google_sitelink_searchbox_url', $searchUrl);
+  $ss_data = [];
+  $ss_data['@context'] = 'http://schema.org';
+  // As checked in current prod, following text is not to be translated.
+  $ss_data['@type'] = 'WebSite';
+  $ss_data['url'] = Url::fromRoute('<front>')->setAbsolute()->toString();
+  $ss_data['potentialAction']['@type'] = 'SearchAction';
+  $ss_data['potentialAction']['target'] = Url::fromRoute('<front>')->setAbsolute()->toString() . $searchUrl;
+  $ss_data['potentialAction']['query-input'] = 'required name=search_term_string';
+
+  return PHP_EOL . json_encode($ss_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL;
+}
+
+/**
+ * Function to check process sitelink search script for current request.
+ *
+ * @return bool
+ *   Whether to process or not.
+ */
+function _alshaya_seo_process_sitelink_searchbox() {
+  static $process = NULL;
+
+  if ($process !== NULL) {
+    return $process;
+  }
+
+  $process = FALSE;
+  // Enable sitelink searchbox for live sites only.
+  if (!alshaya_is_env_prod()) {
+    return $process;
+  }
+
+  // Enable sitelink searchbox script on home page.
+  if (\Drupal::config('alshaya_seo.sitelink_search')->get('enable_sitelink_searchbox')) {
+    $process = TRUE;
+  }
+
+  return $process;
+}
+
+/**
+ * Implements hook_metatags_alter().
+ */
+function alshaya_seo_metatags_alter(array &$metatags, array $context) {
+  // Copy title & description into metatag twitter cards.
+  $metatags['twitter_cards_page_url'] = ($metatags['canonical_url']) ?? '';
+  $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
+  $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
+  $metatags['twitter_cards_image'] = ($metatags['image']) ?? '';
 }

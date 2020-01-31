@@ -55,6 +55,26 @@
 
     img {
       width: 100%;
+      cursor: pointer;
+    }
+
+    &.magazine-image-zoomed {
+      overflow: hidden;
+
+      .magazine-image-zoom-placeholder {
+        z-index: 1;
+      }
+    }
+
+    .magazine-image-zoom-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-repeat: no-repeat;
+      z-index: -1;
+      background-size: cover;
     }
   }
 
@@ -192,17 +212,17 @@
         grid-column: 1 / 2;
       }
 
+      &:nth-child(3n+2):not(:nth-child(2)) {
+        width: 47%;
+        margin: 0 auto;
+      }
+
       &.last {
         &:nth-child(2n+1) {
           grid-column: 1 / -1;
 
-          #wrap {
-            width: 47%;
-            margin: 0 auto;
-
-            #cloud-zoom-big {
-              #{$left}: calc(150% + 3.125rem) !important;
-            }
+          #cloud-zoom-big {
+            #{$left}: calc(150% + 3.125rem) !important;
           }
         }
       }
@@ -383,6 +403,10 @@
       }
     }
   }
+}
+
+.magazine-layout-node .gallery-wrapper .pdp-image {
+  position: relative;
 }
 
 @include breakpoint($mobile) {
