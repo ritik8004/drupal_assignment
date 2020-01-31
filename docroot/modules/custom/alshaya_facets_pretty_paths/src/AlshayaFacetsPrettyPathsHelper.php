@@ -18,6 +18,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Utilty Class.
@@ -458,7 +459,7 @@ class AlshayaFacetsPrettyPathsHelper {
     if (isset($static[$visibility][$page])) {
       return $static[$visibility][$page];
     }
-
+    // Reusing the facet summary block values.
     $active_facet_items = $this->getFacetSummary($page);
     $active_prefix_facet = [];
     $active_suffix_facet = [];
@@ -468,12 +469,36 @@ class AlshayaFacetsPrettyPathsHelper {
         $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
         if (in_array($visibility, $meta_info_type['visibility'])) {
           if ($meta_info_type['type'] == self::FACET_META_TYPE_PREFIX) {
-            // Strip tags to get the value from price markup.
+            // Strip tags to get text from the price range markup.
+            // Language direction left to right (5 KWD - 10 KWD).
             $active_prefix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
           }
           elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
+            $facet_value = strip_tags($value['#title']['#value']);
+            // Condition added for the price range filter order
+            // right to left for Arabic site.
+            // Ex. If filtered by the facet '5 KWD - 10 KWD':
+            // 1. For en site the value will be 5 KWD - 10 KWD.
+            // 2. Reversing the value for ar site 10 KWD - 5 KWD.
+            if (strpos($active_facet_id, 'price') > -1) {
+              $prices = explode(' - ', $facet_value);
+              array_map('trim', $prices);
+              // Checking if the current language's direction
+              // is right to left.
+              if (count($prices) > 1 && $this->languageManager->getCurrentLanguage()->getDirection() === LanguageInterface::DIRECTION_RTL) {
+                // Reversing the array as it will be used
+                // in string(meta description)
+                // Ex: "Shop an exclusive and luxurious range of
+                // short dresses for women
+                // from H&M starting from
+                // 5,000D0K0-10,000D0K0...".
+                $prices = array_reverse($prices);
+              }
+
+              $facet_value = implode(' - ', $prices);
+            }
             // Strip tags to get the value from price markup.
-            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
+            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . $facet_value : $facet_value;
           }
         }
       }
