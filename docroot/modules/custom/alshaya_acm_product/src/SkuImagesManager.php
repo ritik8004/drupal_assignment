@@ -823,9 +823,7 @@ class SkuImagesManager {
             '#mainImage' => $main_image,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
-            '#properties' => $this->getRelCloudZoom($settings),
             '#labels' => $labels,
-            '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
               'library' => $library_array,
             ],
@@ -839,7 +837,6 @@ class SkuImagesManager {
 
         // If thumbnails available.
         if (!empty($thumbnails)) {
-          $settings = $this->getCloudZoomDefaultSettings();
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
@@ -865,10 +862,8 @@ class SkuImagesManager {
 
           $gallery['alshaya_magazine'] = [
             '#theme' => 'alshaya_magazine',
-            '#sku' => $sku,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
-            '#properties' => $this->getRelCloudZoom($settings),
             '#labels' => $labels,
             '#attached' => [
               'library' => [
@@ -896,41 +891,7 @@ class SkuImagesManager {
       'slide_style' => 'product_zoom_medium_606x504',
       'zoom_style' => 'product_zoom_large_800x800',
       'thumb_style' => 'pdp_gallery_thumbnail',
-      'zoom_width' => 'auto',
-      'zoom_height' => 'auto',
-      'zoom_position' => 'right',
-      'adjust_x' => '0',
-      'adjust_y' => '0',
-      'tint' => '',
-      'tint_opacity' => '0.25',
-      'lens_opacity' => '0.85',
-      'soft_focus' => 'false',
-      'smooth_move' => '3',
     ];
-  }
-
-  /**
-   * Get the rel attribute for Alshaya Product zoom.
-   *
-   * @param array $settings
-   *   Product CloudZoom settings.
-   *
-   * @return string
-   *   return the rel attribute.
-   */
-  protected function getRelCloudZoom(array $settings) {
-    $string = '';
-    $string .= "zoomWidth:'" . $settings['zoom_width'] . "'";
-    $string .= ",zoomHeight:'" . $settings['zoom_height'] . "'";
-    $string .= ",position:'" . $settings['zoom_position'] . "'";
-    $string .= ",adjustX:'" . $settings['adjust_x'] . "'";
-    $string .= ",adjustY:'" . $settings['adjust_y'] . "'";
-    $string .= ",tint:'" . $settings['tint'] . "'";
-    $string .= ",tintOpacity:'" . $settings['tint_opacity'] . "'";
-    $string .= ",lensOpacity:'" . $settings['lens_opacity'] . "'";
-    $string .= ",softFocus:" . $settings['soft_focus'];
-    $string .= ",smoothMove:'" . $settings['smooth_move'] . "'";
-    return $string;
   }
 
   /**
