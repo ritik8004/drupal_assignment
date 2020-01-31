@@ -231,7 +231,7 @@ class AlshayaApiCommands extends DrushCommands {
       $query = $this->connection->select('acq_sku_field_data', 'asfd');
       $query->join('acq_sku_stock', 'stock', 'stock.sku = asfd.sku');
       $query->fields('asfd', ['sku', 'price', 'final_price']);
-      $query->fields('stock', ['quantity', 'status']);
+      $query->fields('stock', ['quantity', 'status', 'max_sale_qty']);
       $query->condition('default_langcode', 1);
       $this->drupalData = $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
     }
@@ -412,16 +412,17 @@ class AlshayaApiCommands extends DrushCommands {
       if (empty($mdata)) {
         continue;
       }
-
       // If stock in Drupal does not match with stock in Magento.
-      if (($mdata['type_id'] == 'simple' && $data['quantity'] != (int) $mdata['qty'])
-        || ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status'])) {
+      if (($mdata['type_id'] == 'simple' && ($data['quantity'] != (int) $mdata['qty'] || $data['max_sale_qty'] != (int) $mdata['max_sale_qty']))
+         || ($data['quantity'] > 0 && $data['status'] != $mdata['stock_status'])) {
 
         $message = $sku . ' | ';
         $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
         $message .= 'MDC stock:' . (int) $mdata['qty'] . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
-        $message .= 'MDC stock status:' . $mdata['stock_status'];
+        $message .= 'MDC stock status:' . $mdata['stock_status'] . ' | ';
+        $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
+        $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
         $to_sync[] = $sku;
