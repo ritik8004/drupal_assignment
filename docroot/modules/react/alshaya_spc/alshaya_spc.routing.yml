@@ -69,3 +69,12 @@ alshaya_spc.delete_address:
   methods:  [POST]
   requirements:
     _role: 'authenticated'
+
+alshaya_spc.customer:
+  path: '/spc/customer'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getUserCustomerId'
+  methods: [GET]
+  requirements:
+    _permission: 'access content'
+    _format: 'json'

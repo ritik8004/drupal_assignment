@@ -2,6 +2,9 @@
 
 namespace App\Service\Drupal;
 
+use GuzzleHttp\Cookie\SetCookie;
+use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * Class Drupal.
  */
@@ -15,13 +18,26 @@ class Drupal {
   private $drupalInfo;
 
   /**
+   * The request stack object.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $request;
+
+  /**
    * Drupal constructor.
    *
    * @param \AlshayaMiddleware\Drupal\DrupalInfo $drupal_info
    *   Drupal info service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    */
-  public function __construct(DrupalInfo $drupal_info) {
+  public function __construct(
+    DrupalInfo $drupal_info,
+    RequestStack $request_stack
+  ) {
     $this->drupalInfo = $drupal_info;
+    $this->request = $request_stack;
   }
 
   /**
@@ -78,6 +94,23 @@ class Drupal {
     $client = $this->drupalInfo->getDrupalApiClient();
     $url = sprintf('/%s/rest/v1/promotion/all', $this->drupalInfo->getDrupalLangcode());
     $response = $client->request('GET', $url, ['headers' => ['Host' => $this->drupalInfo->getDrupalBaseUrl()]]);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
+  /**
+   * Get customer id from drupal.
+   */
+  public function getCustomerId() {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $url = sprintf('/%s/spc/customer', $this->drupalInfo->getDrupalLangcode());
+    $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
+    $response = $client->request('GET', $url, [
+      'headers' => [
+        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
+        'Cookie' => $cookies->__toString(),
+      ],
+    ]);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }

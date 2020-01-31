@@ -435,4 +435,21 @@ class AlshayaSpcController extends ControllerBase {
     return $build;
   }
 
+  /**
+   * Get user customer id.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getUserCustomerId() {
+    $response = [
+      'customer_id' => NULL,
+    ];
+
+    if (!$this->currentUser->isAnonymous()) {
+      $response['customer_id'] = $this->currentUser->getAccount()->acq_customer_id;
+    }
+    return new JsonResponse($response);
+  }
+
 }
