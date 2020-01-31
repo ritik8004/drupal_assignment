@@ -10,6 +10,7 @@
     attach: function (context) {
       $('#alshaya-algolia-search').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
         var hit = $(this).closest('[data-insights-query-id]');
+        localStorage.setItem(hit.attr('gtm-main-sku'), hit.attr('data-insights-query-id'));
 
         window.aa('clickedObjectIDsAfterSearch', {
           userToken: Drupal.getAlgoliaUserToken(),
