@@ -2,18 +2,17 @@
 
 namespace Drupal\alshaya_spc\Helper;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class AlshayaSpcLoginHelper.
+ * Class AlshayaSpcCustomerHelper.
  */
-class AlshayaSpcLoginHelper {
+class AlshayaSpcCustomerHelper {
 
   /**
    * The api wrapper.
    *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper
    */
   protected $apiWrapper;
 
@@ -25,15 +24,15 @@ class AlshayaSpcLoginHelper {
   protected $moduleHandler;
 
   /**
-   * AlshayaSpcLoginHelper constructor.
+   * AlshayaSpcCustomerHelper constructor.
    *
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_wrapper
    *   The api wrapper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    */
   public function __construct(
-    APIWrapper $api_wrapper,
+    AlshayaSpcApiHelper $api_wrapper,
     ModuleHandlerInterface $module_handler
   ) {
     $this->apiWrapper = $api_wrapper;
@@ -57,7 +56,7 @@ class AlshayaSpcLoginHelper {
     global $_alshaya_acm_custom_cart_association_processed;
 
     try {
-      $customer = $this->apiWrapper->authenticateCustomer($mail, $pass);
+      $customer = $this->apiWrapper->authenticateCustomerOnMagento($mail, $pass);
 
       if (!empty($customer) && !empty($customer['customer_id'])) {
         $_alshaya_acm_custom_cart_association_processed = TRUE;

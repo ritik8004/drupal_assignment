@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_spc\Form;
 
-use Drupal\alshaya_spc\Helper\AlshayaSpcLoginHelper;
+use Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper;
 use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -35,9 +35,9 @@ class AlshayaSpcLoginForm extends FormBase {
   /**
    * The login helper.
    *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcLoginHelper
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
    */
-  protected $loginHelper;
+  protected $customerHelper;
 
   /**
    * AlshayaSpcLoginForm constructor.
@@ -46,17 +46,17 @@ class AlshayaSpcLoginForm extends FormBase {
    *   The email validator.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcLoginHelper $login_helper
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper
    *   The login helper.
    */
   public function __construct(
     EmailValidatorInterface $email_validator,
     EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSpcLoginHelper $login_helper
+    AlshayaSpcCustomerHelper $customer_helper
   ) {
     $this->emailValidator = $email_validator;
     $this->entityTypeManager = $entity_type_manager;
-    $this->loginHelper = $login_helper;
+    $this->customerHelper = $customer_helper;
   }
 
   /**
@@ -66,7 +66,7 @@ class AlshayaSpcLoginForm extends FormBase {
     return new static(
       $container->get('email.validator'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_spc.login_helper')
+      $container->get('alshaya_spc.customer_helper')
     );
   }
 
@@ -181,7 +181,7 @@ class AlshayaSpcLoginForm extends FormBase {
     $pass = $values['pass'];
 
     try {
-      if ($uid = $this->loginHelper->authenticateCustomer($mail, $pass)) {
+      if ($uid = $this->customerHelper->authenticateCustomer($mail, $pass)) {
         $account = $this->entityTypeManager->getStorage('user')->load($uid);
 
         if ($account->isActive()) {
