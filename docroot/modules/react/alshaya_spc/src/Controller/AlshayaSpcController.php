@@ -12,6 +12,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -64,6 +65,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $currentUser;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Social helper.
    *
    * @var \Drupal\alshaya_social\AlshayaSocialHelper
@@ -85,6 +93,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Mobile utility.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
    *   Social helper.
    */
@@ -95,6 +105,7 @@ class AlshayaSpcController extends ControllerBase {
     AlshayaSpcHelper $spc_helper,
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
+    EntityTypeManagerInterface $entity_type_manager,
     AlshayaSocialHelper $social_helper
   ) {
     $this->configFactory = $config_factory;
@@ -103,6 +114,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->spcHelper = $spc_helper;
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
+    $this->entityTypeManager = $entity_type_manager;
     $this->socialHelper = $social_helper;
   }
 
@@ -117,6 +129,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.helper'),
       $container->get('mobile_number.util'),
       $container->get('current_user'),
+      $container->get('entity_type.manager'),
       $container->get('alshaya_social.helper')
     );
   }
@@ -289,6 +302,47 @@ class AlshayaSpcController extends ControllerBase {
       if ($this->spcHelper->setDefaultAddress($data['address_id'], $uid)) {
         $response['data'] = $this->spcHelper->getAddressListByUid($uid);
         $response['status'] = TRUE;
+      }
+      else {
+        $response['status'] = FALSE;
+      }
+    }
+    catch (\Exception $e) {
+      $response['status'] = FALSE;
+    }
+
+    return new JsonResponse($response);
+  }
+
+  /**
+   * Delete the address of the user.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Reauest object.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function deleteAddress(Request $request) {
+    $response = [];
+    $data = json_decode($request->getContent(), TRUE);
+    $request->request->replace(is_array($data) ? $data : []);
+
+    try {
+      $uid = $this->currentUser->getAccount()->id();
+      $profile = $this->entityTypeManager->getStorage('profile')->load($data['address_id']);
+      // If address belongs to the current user.
+      if ($profile && $profile->getOwnerId() == $uid) {
+        // If user tyring to delete default address.
+        if ($profile->isDefault()) {
+          $response['status'] = FALSE;
+        }
+        else {
+          // Delete the address.
+          $profile->delete();
+          $response['status'] = TRUE;
+          $response['data'] = $this->spcHelper->getAddressListByUid($uid);
+        }
       }
       else {
         $response['status'] = FALSE;

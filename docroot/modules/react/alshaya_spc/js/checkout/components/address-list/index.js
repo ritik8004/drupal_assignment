@@ -3,7 +3,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import AddressItem from '../address-item';
 import AddressForm from '../address-form';
-import { getUserAddressList } from '../../../utilities/checkout_util';
+import { getUserAddressList } from '../../../utilities/address_util';
 
 export default class AddressList extends React.Component {
 

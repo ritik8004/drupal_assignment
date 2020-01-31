@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { updateUserDefaultAddress } from '../../../utilities/checkout_util';
+import {
+  updateUserDefaultAddress,
+  deleteUserAddress
+} from '../../../utilities/address_util';
 
 export default class AddressItem extends React.Component {
 
@@ -18,6 +21,28 @@ export default class AddressItem extends React.Component {
         }
       });
     }
+  }
+
+  /**
+   * Deletes the user address.
+   */
+  deleteAddress = (id) => {
+    let addressList = deleteUserAddress(id);
+    if (addressList instanceof Promise) {
+      addressList.then((response) => {
+        if (response.status === true) {
+          // Refresh the address list.
+          this.props.refreshAddressList(response.data);
+        }
+      });
+    }
+  }
+
+  /**
+   * Edit address handler.
+   */
+  editAddress = (id) => {
+    // Address edit will be here.
   }
 
   render() {
@@ -44,9 +69,13 @@ export default class AddressItem extends React.Component {
             {Drupal.t('Preferred address')}
           </label>
         </div>
-        <div>{Drupal.t('Edit')}</div>
+        <div>
+          <button title={Drupal.t('Edit')} id={'address-edit-' + address['address_id']} onClick={() => {this.editAddress(address['address_id'])}}>{Drupal.t('Edit')}</button>
+        </div>
         {address['is_default'] === false &&
-          <div>{Drupal.t('Delete')}</div>
+          <div>
+            <button title={Drupal.t('Delete')} id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
+          </div>
         }
       </React.Fragment>
     );
