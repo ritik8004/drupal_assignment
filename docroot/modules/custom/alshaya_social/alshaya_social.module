@@ -107,7 +107,12 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
     $variables['destination'] = Url::fromRoute($route_name, ['step' => 'delivery'])->toString();
   }
 
-  if (in_array($route_name, ['user.login', 'acq_checkout.form', 'user.register'])) {
+  if (in_array($route_name, [
+    'user.login',
+    'acq_checkout.form',
+    'user.register',
+    'alshaya_spc.login',
+  ])) {
     foreach ($variables['social_networks'] as $network => &$network_info) {
       \Drupal::moduleHandler()->alter(
         'alshaya_social_' . $network,
