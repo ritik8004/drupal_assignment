@@ -114,8 +114,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.helper'),
       $container->get('mobile_number.util'),
       $container->get('current_user'),
-      $container->get('entity_type.manager'),
-      $container->get('alshaya_social.helper')
+      $container->get('entity_type.manager')
     );
   }
 
