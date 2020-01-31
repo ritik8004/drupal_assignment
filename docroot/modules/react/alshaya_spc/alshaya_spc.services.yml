@@ -14,3 +14,9 @@ services:
       - '@alshaya_addressbook.manager'
       - '@alshaya_addressbook.area_terms_helper'
       - '@entity_type.manager'
+
+  alshaya_spc.login_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcLoginHelper
+    arguments:
+      - '@acq_commerce.api'
+      - '@module_handler'

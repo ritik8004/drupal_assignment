@@ -31,3 +31,11 @@ add_to_cart:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+
+cart_validate:
+  js:
+    js/spc-cart-validate.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
