@@ -203,19 +203,20 @@
         Drupal.getRelatedProductPosition();
       });
 
-      // Add 'each' with price on change of quantity.
-      $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
-        var quantity = $(this).val();
-        var identifier = drupalSettings.productInfo[$(this).closest('form').attr('data-sku')].identifier;
-        var eachSelector = $('.price-block-' + identifier + ' .price-suffix');
-        var eachSelectorLength = eachSelector.length;
+      // Add 'each' with price on change of quantity if matchback is enabled.
+      if ($('.price-suffix-matchback').length) {
+        $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
+          var quantity = $(this).val();
+          var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+          var eachSelector = $('.price-block-' + drupalSettings[productKey][$(this).closest('form').attr('data-sku')].identifier + ' .price-suffix-matchback');
 
-        if (quantity > 1 && !eachSelectorLength) {
-          $('.price-block-' + identifier + ' .price-amount').append('<span class=price-suffix> each</span>');
-        } else if (quantity <= 1 && eachSelectorLength) {
-          eachSelector.remove();
-        }
-      });
+          if (quantity > 1) {
+            eachSelector.show();
+          } else if (quantity <= 1) {
+            eachSelector.hide();
+          }
+        });
+      }
     }
   };
 
