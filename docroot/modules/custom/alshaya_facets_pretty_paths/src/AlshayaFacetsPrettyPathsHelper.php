@@ -485,8 +485,9 @@ class AlshayaFacetsPrettyPathsHelper {
               // is right to left.
               if (count($prices) > 1 && $this->languageManager->getCurrentLanguage()->getDirection() === LanguageInterface::DIRECTION_RTL) {
                 // Reversing the array as it will be used in string(meta description)
-                // Ex: Shop an exclusive and luxurious range of short dresses for women
-                // from H&M starting from 5,000D0K0-10,000D0K0 online in Kuwait City
+                // Ex: Shop an exclusive and luxurious range of
+                // short dresses for women from H&M starting from
+                // 5,000D0K0-10,000D0K0 online in Kuwait City
                 // and throughout Kuwait. Compare specifications and prices
                 // for 2020 short dresses and more. Enjoy free returns
                 // and cash on delivery! (translated ar text).
