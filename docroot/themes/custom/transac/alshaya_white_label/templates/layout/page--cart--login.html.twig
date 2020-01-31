@@ -1,0 +1,208 @@
+{{ attach_library('alshaya_white_label/cart_js') }}
+<div>
+    <!-- ______________________ MENU SECONDARY _______________________ -->
+  {% block header_precontent %}
+    <!-- ______________________ Banner Top _______________________ -->
+    {% if page.banner_top %}
+      {{ page.banner_top }}
+    {% endif %}
+    <!-- /Banner Top -->
+
+    <div class="header--wrapper">
+        {% if page.menu_secondary %}
+            <div class="c-menu-secondary">
+                <div class="l-container">
+                    <div class="c-menu-secondary__region">
+                        {{ page.menu_secondary }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <!-- /menu-secondary -->
+
+    <!-- ______________________ HEADER _______________________ -->
+    <div class="branding__menu">
+        {% include directory ~ '/../alshaya_white_label/templates/partial/nojs.html.twig' %}
+
+        {% if page.header %}
+            <header class="c-header">
+                <div class="l-container">
+                    <div class="c-header__region">
+                        {{ page.header }}
+                    </div>
+                </div>
+            </header>
+        {% endif %}
+        <!-- /header -->
+
+        <!-- ______________________ MENU PRIMARY _______________________ -->
+
+        {% if page.menu_primary %}
+            <div class="c-menu-primary">
+                <div class="l-container">
+                    <div id="c-menu-primary__region">
+                        {{ page.menu_primary }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <!-- /menu-primary -->
+
+        <!-- ______________________ Pre content _______________________ -->
+        {% if page.pre_content %}
+            <div class="c-pre-content">
+                <div class="l-container">
+                    <div class="c-pre-content__region">
+                        {{ page.pre_content }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    {% endblock %}
+
+    <!-- ______________________ BREADCRUMB _______________________ -->
+
+    {% if page.breadcrumb %}
+        <div class="c-breadcrumb">
+            <div class="l-container">
+                <div class="c-breadcrumb__region">
+                    {{ page.breadcrumb }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <!-- /breadcrumb -->
+
+    <!-- ______________________ HERO CONTENT _______________________ -->
+
+    {% if page.hero_content %}
+        <div class="c-hero-content">
+            <div class="l-container">
+                <div class="c-hero-content__region">
+                    {{ page.hero_content }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <!-- /hero content -->
+
+    <!-- ______________________ MAIN _______________________ -->
+
+    <div class="clearfix page-wrapper">
+        <div{{ attributes.addClass('l-container l-one--w') }}>
+
+            {% if page.sidebar_first %}
+                <aside class="c-sidebar-first">
+                    <div class="c-sidebar-first__region">
+                        {{ page.sidebar_first }}
+                    </div>
+                </aside>
+            {% endif %}
+            <!-- /sidebar-first -->
+
+            <main>
+
+                {% if title or messages or tabs or action_links %}
+                    <div class="c-content__header">
+
+                        {% if page.highlighted %}
+                            <div class="c-content__highlighted">
+                                {{ page.highlighted }}
+                            </div>
+                        {% endif %}
+
+                        {{ title_prefix }}
+
+                        {% if title %}
+                            <h1 class="c-content__title">
+                                {{ title }}
+                            </h1>
+                        {% endif %}
+
+                        {{ title_suffix }}
+                        {{ messages }}
+                        {{ page.help }}
+
+                        {% if tabs %}
+                            <div class="c-content__tabs">{{ tabs }}</div>
+                        {% endif %}
+
+                        {% if action_links %}
+                            <ul class="c-content__action-links">{{ action_links }}</ul>
+                        {% endif %}
+
+                    </div>
+                    <!-- /#content-header -->
+                {% endif %}
+
+                <div class="c-content">
+                    <div class="c-content__region">
+                        {{ page.content }}
+                    </div>
+                </div>
+
+                {{ feed_icons }}
+
+            </main>
+            <!-- /content-inner /content -->
+
+            {% if page.sidebar_second %}
+                <aside class="c-sidebar-second">
+                    <div class="c-sidebar-second__region">
+                        {{ page.sidebar_second }}
+                    </div>
+                </aside>
+            {% endif %}
+            <!-- /sidebar-first -->
+
+        </div>
+    </div>
+    <!-- /main -->
+
+    <!-- ______________________ Post content _______________________ -->
+
+    {% if page.post_content %}
+        <div class="c-post-content">
+            <div class="l-container">
+                <div class="c-post-content__region">
+                    {{ page.post_content }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- ______________________ FOOTER PRIMARY _______________________ -->
+    <footer class="c-footer">
+        {% if vat_text_footer %}
+            <div class="vat-container">
+                <div class = 'vat-text-footer'>
+                    {{ vat_text_footer }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% block footerPrimaryPartial %}
+          {% if page.footer_primary %}
+              {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
+              <!-- /footer-primary -->
+          {% endif %}
+        {% endblock %}
+
+        <!-- ______________________ FOOTER SECONDARY _______________________ -->
+
+        {% if page.footer_secondary %}
+            <div class="c-footer-secondary">
+                <div class="l-container">
+                    <div class="c-footer-secondary__region">
+                        {{ page.footer_secondary }}
+                    </div>
+                </div>
+            </div>
+            <!-- /footer-secondary -->
+        {% endif %}
+    </footer>
+
+</div>
+<!-- /page -->

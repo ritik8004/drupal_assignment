@@ -363,6 +363,10 @@ class AlshayaSpcController extends ControllerBase {
       '#parents' => ['login_form'],
       '#type' => 'fieldset',
       '#title' => $this->t('sign in with email address'),
+      '#prefix' => '<div class="checkout-login-wrapper"><div class="multistep-login">',
+      '#attributes' => [
+        'class' => ['edit-checkout-login'],
+      ],
     ];
 
     $build['login_form']['form'] = $this->formBuilder()->getForm('\Drupal\alshaya_spc\Form\AlshayaSpcLoginForm');
@@ -370,11 +374,11 @@ class AlshayaSpcController extends ControllerBase {
     $build['social_media'] = [
       '#parents' => ['social_media_auth_links'],
       '#type' => 'fieldset',
-      '#title' => $this->t('sign in with email address'),
+      '#title' => $this->t('sign in with social media'),
       '#attributes' => [
         'class' => ['social-signin-enabled', 'social-signup-form'],
       ],
-      '#prefix' => '<div class="checkout-login-separator order-1"><span>' . $this->t('or') . '</span></div>',
+      '#prefix' => '<div class="checkout-login-separator order-5"><span>' . $this->t('or') . '</span></div>',
     ];
 
     $build['social_media']['auth_links'] = [
@@ -392,6 +396,7 @@ class AlshayaSpcController extends ControllerBase {
       [
         'attributes' => [
           'gtm-type' => 'checkout-as-guest',
+          'class' => 'edit-checkout-as-guest',
         ],
       ]
     );
@@ -428,10 +433,12 @@ class AlshayaSpcController extends ControllerBase {
         'class' => ['back-to-basket'],
       ],
       '#weight' => 99,
+      '#suffix' => '</div></div>',
     ];
 
     $build['#cache']['tags'][] = 'config:alshaya_social.settings';
     $build['#cache']['tags'][] = 'config:alshaya_acm_checkout.settings';
+    $build['#attached']['library'][] = 'alshaya_white_label/spc-login';
     return $build;
   }
 
