@@ -5,7 +5,7 @@ import DynamicFormField from '../dynamic-form-field';
 import FixedFields from '../fixed-fields';
 import {fixedFieldValidation} from '../fixed-fields/validation';
 import GoogleMap from '../../../utilities/map/GoogleMap';
-import {getArea, getBlock, createMarker, getMap} from '../../../utilities/map/map_utils';
+import {getArea, getBlock, createMarker, getMap, removeAllMarkersFromMap} from '../../../utilities/map/map_utils';
 
 export default class AddressForm extends React.Component {
 
@@ -20,6 +20,14 @@ export default class AddressForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.processAddress(e);
+  }
+
+  componentDidMount() {
+    // Listen to the map click event.
+    document.addEventListener('mapClicked', (e) => {
+      var coords = e.detail.coords();
+      this.positionMapAndUpdateAddress(coords);
+    }, false);
   }
 
   /**
@@ -41,6 +49,34 @@ export default class AddressForm extends React.Component {
   }
 
   /**
+   * Fills the address form with the geocode info and pan map.
+   */
+  positionMapAndUpdateAddress = (coords) => {
+    let geocoder = new window.google.maps.Geocoder()
+    geocoder.geocode({
+      'location': coords
+    }, function (results, status) {
+      if (status === 'OK') {
+        if (results[0]) {
+          // Use this address info.
+          const address = results[0].address_components;
+          let area = getArea(address);
+          let block = getBlock(address);
+          // Fill the address form.
+          document.getElementById('address_line2').value = area;
+          document.getElementById('locality').value = block;
+          // Remove all markers from the map.
+          removeAllMarkersFromMap();
+          // Pan the map to location.
+          let marker = createMarker(coords, getMap());
+          getMap().panTo(marker.getPosition());
+          window.spcMarkers.push(marker);
+        }
+      }
+    });
+  }
+
+  /**
    * When user click on deliver to current location.
    */
   deliverToCurrentLocation = () => {
@@ -51,23 +87,7 @@ export default class AddressForm extends React.Component {
           'lng': pos.coords.longitude,
         };
 
-        let geocoder = new window.google.maps.Geocoder()
-        geocoder.geocode({'location': currentCoords}, function(results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
-              // Use this address info.
-              const address = results[0].address_components;
-              let area = getArea(address);
-              let block = getBlock(address);
-              // Fill the address form.
-              document.getElementById('address_line2').value = area;
-              document.getElementById('locality').value = block;
-              // Pan the map to location.
-              let marker = createMarker(currentCoords, getMap());
-              getMap().panTo(marker.getPosition());
-            }
-          }
-        });
+        this.positionMapAndUpdateAddress(currentCoords);
       });
     }
   }
@@ -80,7 +100,7 @@ export default class AddressForm extends React.Component {
     }
 
     Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-      dynamicFields.push(<DynamicFormField default_val={default_val} areasUpdate={this.refreshAreas} area_list={this.state.area_list} field_key={key} field={field}/>);
+      dynamicFields.push(<DynamicFormField key={key} default_val={default_val} areasUpdate={this.refreshAreas} area_list={this.state.area_list} field_key={key} field={field}/>);
     });
 
     return(
@@ -98,7 +118,13 @@ export default class AddressForm extends React.Component {
             <div className='spc-address-form-content'>
               <form className='spc-address-add' onSubmit={this.handleSubmit}>
                 <div className='delivery-address-fields'> {dynamicFields} </div>
-                <FixedFields default_val={default_val} />
+                {this.props.show_prefered &&
+                  <div>
+                    <input type='checkbox' name='prefered-address'/>
+                    {Drupal.t('Preferred address')}
+                  </div>
+                }
+                <FixedFields showEmail={this.props.showEmail} default_val={default_val} />
                 <div className='spc-address-form-actions'>
                   <button id='save-address' className='spc-address-form-submit' type="submit">{Drupal.t('Save')}</button>
                 </div>

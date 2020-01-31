@@ -22,10 +22,12 @@ export default class AreaSelect extends React.Component {
 
   onMenuOpen = () => {
     this.selectRef.current.select.inputRef.closest('.spc-select').classList.add('open');
+    this.selectRef.current.select.inputRef.closest('.popup-content').classList.add('overlay');
   };
 
   onMenuClose = () => {
     this.selectRef.current.select.inputRef.closest('.spc-select').classList.remove('open');
+    this.selectRef.current.select.inputRef.closest('.popup-content').classList.remove('overlay');
   };
 
   componentDidMount() {
@@ -65,7 +67,7 @@ export default class AreaSelect extends React.Component {
     this.setState({
       current_option: selectedOption.value
     });
-  }
+  };
 
   render() {
     let options = this.state.areas;

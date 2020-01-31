@@ -8,6 +8,18 @@
       border: none !important;
       padding: 0 !important;
 
+      &.overlay::before {
+        content: '';
+        background: $header_mobile_menu_overlay;
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+      }
+
       @include breakpoint($desktop) {
         height: 37.5rem;
         width: calc(100% - 19.75rem);
@@ -157,6 +169,34 @@
           padding-top: 1.25rem;
           z-index: 1;
           box-shadow: 0 -1px 20px 9px $sticky-btn;
+        }
+      }
+
+      .spc-select {
+        .spcSelect__control {
+          &--menu-is-open {
+            z-index: 4;
+            background: $spc-select-area-bg;
+
+            + .spcSelect__menu {
+              z-index: 4;
+            }
+
+            .spcSelect__value-container {
+              padding-#{$left}: 2.125rem;
+
+              @include icon('search', 'before') {
+                font-size: 2rem;
+                color: $spc-select-text;
+                position: absolute;
+                #{$left}: 0;
+              }
+            }
+
+            .spcSelect__indicators {
+              visibility: hidden;
+            }
+          }
         }
       }
     }

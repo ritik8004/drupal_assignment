@@ -38,6 +38,30 @@ alshaya_spc.get_parent_area_list:
   requirements:
     _permission: 'access content'
 
+alshaya_spc.get_user_address_list:
+  path: '/user-address-list'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getUserAddressList'
+  methods:  [GET]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.set_default_address:
+  path: '/set-default-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::setDefaultAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'
+
+alshaya_spc.delete_address:
+  path: '/delete-address'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::deleteAddress'
+  methods:  [POST]
+  requirements:
+    _role: 'authenticated'
+
 alshaya_spc.click_and_collect_json:
   path: '/cnc/stores/{cart_id}/{lat}/{lon}'
   defaults:

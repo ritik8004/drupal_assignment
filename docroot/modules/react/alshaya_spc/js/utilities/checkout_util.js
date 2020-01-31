@@ -66,5 +66,3 @@ export const placeOrder = function (cart_id , payment_method) {
     // Processing of error here.
   });
 }
-
-

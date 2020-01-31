@@ -52,7 +52,7 @@ export default class PaymentMethod extends React.Component {
       	  id={'payment-method-' + method}
       	  className={method}
       	  type='radio'
-      	  checked={this.state.selectedOption === method}
+      	  defaultChecked={this.state.selectedOption === method}
       	  value={method}
       	  name='payment-method' />
 
