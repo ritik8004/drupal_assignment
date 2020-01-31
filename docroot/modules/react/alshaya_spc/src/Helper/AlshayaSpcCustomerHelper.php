@@ -186,10 +186,7 @@ class AlshayaSpcCustomerHelper {
       }
     }
     catch (\Exception $e) {
-      // Could be admin user, do nothing except for downtime exception.
-      if (acq_commerce_is_exception_api_down_exception($e)) {
-        throw $e;
-      }
+      throw $e;
     }
 
     return NULL;

@@ -109,7 +109,6 @@ class AlshayaSpcApiHelper {
       'firstname' => (string) ($customer['firstname'] ?? ''),
       'lastname' => (string) ($customer['lastname'] ?? ''),
       'title' => (string) ($customer['prefix'] ?? ''),
-      'dob' => (string) ($customer['dob'] ?? ''),
       'created' => (string) ($customer['created_at'] ?? ''),
       'updated' => (string) ($customer['updated_at'] ?? ''),
       'addresses' => $addresses,
