@@ -153,6 +153,15 @@ class AlshayaSpcHelper {
       $addressList[$profile->id()]['mobile'] = $profile->get('field_mobile_number')->first()->getValue();
       $addressList[$profile->id()]['is_default'] = $profile->isDefault();
       $addressList[$profile->id()]['address_id'] = $profile->id();
+      // We get the area as term id but we need the location id
+      // of that term.
+      if ($addressList[$profile->id()]['administrative_area']) {
+        $term = $this->entityTypeManager->getStorage('taxonomy_term')
+          ->load($addressList[$profile->id()]['administrative_area']);
+        if ($term) {
+          $addressList[$profile->id()]['administrative_area'] = $term->get('field_location_id')->first()->getValue()['value'];
+        }
+      }
     }
 
     return $addressList;
