@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\alshaya_social\AlshayaSocialHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
@@ -70,13 +69,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
-   * Social helper.
-   *
-   * @var \Drupal\alshaya_social\AlshayaSocialHelper
-   */
-  protected $socialHelper;
-
-  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -93,8 +85,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
-   *   Social helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -103,8 +93,7 @@ class AlshayaSpcController extends ControllerBase {
     AlshayaSpcHelper $spc_helper,
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
-    EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSocialHelper $social_helper
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -113,7 +102,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
-    $this->socialHelper = $social_helper;
   }
 
   /**
