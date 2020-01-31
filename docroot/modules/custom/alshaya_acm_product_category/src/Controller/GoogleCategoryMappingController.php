@@ -107,9 +107,8 @@ class GoogleCategoryMappingController extends ControllerBase {
     $select->join('node__field_category', 'nfc', 'ttfd.tid = nfc.field_category_target_id');
     $select->condition('ttfd.langcode', 'en');
     $select->condition('ttfd.status', 1);
-    $select->groupBy('nfc.field_category_target_id');
     $select->orderBy('ttfci.field_commerce_id_value', 'asc');
-    $result = $select->execute();
+    $result = $select->distinct()->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
       fputcsv(
