@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - entity_browser.browser.image_browser
+    - field.field.taxonomy_term.acq_product_category.field_category_google
     - field.field.taxonomy_term.acq_product_category.field_category_image
     - field.field.taxonomy_term.acq_product_category.field_category_include_menu
     - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
@@ -113,6 +114,7 @@ third_party_settings:
         - name
         - langcode
         - field_commerce_status
+        - field_category_google
         - field_group_by_sub_categories
         - field_select_sub_categories_plp
         - field_pdp_layout
@@ -318,6 +320,14 @@ content:
       placeholder: ''
       rows: 5
     third_party_settings: {  }
+    region: content
+  field_category_google:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_category_image:
     type: image_image

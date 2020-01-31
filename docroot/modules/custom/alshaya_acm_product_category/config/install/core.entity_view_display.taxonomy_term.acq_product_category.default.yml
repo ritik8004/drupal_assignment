@@ -29,6 +29,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_include_in_mobile_tablet
   - field.field.taxonomy_term.acq_product_category.field_override_target_link
   - field.field.taxonomy_term.acq_product_category.field_target_link
+  - field.field.taxonomy_term.acq_product_category.field_category_google
   module:
   - metatag
 id: taxonomy_term.acq_product_category.default
@@ -80,6 +81,7 @@ hidden:
   field_term_background_color: true
   field_term_font_color: true
   langcode: true
+  field_category_google: true
   field_pdp_image_slider_position: true
   field_mobile_plp_video_links: true
   field_group_by_sub_categories: true
