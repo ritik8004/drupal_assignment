@@ -1366,46 +1366,18 @@ class SkuManager {
    *
    * @param \Drupal\node\NodeInterface $promotion
    *   Promotion for which we need to fetch SKUs.
-   * @param bool $includeChildSkus
-   *   Flag to consider child SKUs while preparing SKU list.
    *
    * @return array
    *   List of skus related with a promotion.
    */
-  public function getSkutextsForPromotion(NodeInterface $promotion, $includeChildSkus = FALSE) {
+  public function getSkutextsForPromotion(NodeInterface $promotion) {
     $static = &drupal_static(__METHOD__, []);
 
-    if (!$includeChildSkus) {
-      $cid = implode(':', [
-        'promotion_sku',
-        $promotion->language()->getId(),
-        $promotion->id(),
-      ]);
+    $cid = implode(':', ['promotion_sku', $promotion->id()]);
 
-      if (!isset($static[$cid])) {
-        // Fetch corresponding SKUs for promotion.
-        $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
-      }
-    }
-    else {
-      $cid = implode(':', [
-        'promotions_all_sku',
-        $promotion->language()->getId(),
-        $promotion->id(),
-      ]);
-
-      if (!isset($static[$cid])) {
-        // Fetch corresponding SKUs for promotion.
-        $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
-        if (!empty($static[$cid])) {
-          // Fetch child SKUs based on configurable parent SKUs.
-          $childSkus = $this->fetchChildSkuTexts($static[$cid]);
-          if (!empty($childSkus)) {
-            // Merge the list of SKUs.
-            $static[$cid] = array_unique(array_merge($static[$cid], $childSkus));
-          }
-        }
-      }
+    if (!isset($static[$cid])) {
+      // Fetch corresponding SKUs for promotion.
+      $static[$cid] = $this->fetchSkuTextsForPromotion($promotion);
     }
 
     return $static[$cid];
@@ -1470,7 +1442,11 @@ class SkuManager {
     $query->condition('asfd.sku', $skus, 'IN');
     $query->fields('asfcs', ['field_configured_skus_value']);
     $query->distinct();
-    $childSkus = $query->execute()->fetchCol();
+    $childSkus = $query->execute()->fetchAll();
+
+    if (!empty($childSkus)) {
+      $childSkus = array_column($childSkus, 'field_configured_skus_value');
+    }
 
     return $childSkus;
   }
@@ -3281,11 +3257,25 @@ class SkuManager {
       // Loop through the indexable fields.
       foreach ($this->getAttributesToIndex() as $key => $field) {
         $field_key = 'attr_' . $key;
-        $field_data = $child->get($field_key)->first();
+        $field_data = $child->get($field_key)->getValue();
 
         if (!empty($field_data)) {
-          $field_value = $field_data->getString();
-          $data[$key][$field_value] = $field_value;
+          foreach ($field_data as $field_value) {
+            $data[$key][$field_value['value']] = $field_value['value'];
+          }
+        }
+      }
+    }
+
+    // Loop through the indexable fields for parent.
+    // If we get data at parent level, let's index that too.
+    foreach ($this->getAttributesToIndex() as $key => $field) {
+      $field_key = 'attr_' . $key;
+      $field_data = $sku->get($field_key)->getValue();
+
+      if (!empty($field_data)) {
+        foreach ($field_data as $field_value) {
+          $data[$key][$field_value['value']] = $field_value['value'];
         }
       }
     }

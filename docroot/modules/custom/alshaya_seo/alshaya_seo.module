@@ -154,6 +154,15 @@ function alshaya_seo_page_attachments(array &$attachments) {
 }
 
 /**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_seo_dynamic_yield_context_alter(&$lng) {
+  // Replace en_US in DY context with site specific locale.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $lng = AlshayaI18nLanguages::getLocale($langcode);
+}
+
+/**
  * Implements hook_simple_sitemap_links_alter().
  */
 function alshaya_seo_simple_sitemap_links_alter(&$links) {
@@ -419,6 +428,7 @@ function _alshaya_seo_process_sitelink_searchbox() {
  */
 function alshaya_seo_metatags_alter(array &$metatags, array $context) {
   // Copy title & description into metatag twitter cards.
+  $metatags['twitter_cards_page_url'] = ($metatags['canonical_url']) ?? '';
   $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
   $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
   $metatags['twitter_cards_image'] = ($metatags['image']) ?? '';

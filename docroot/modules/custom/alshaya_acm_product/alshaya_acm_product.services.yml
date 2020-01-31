@@ -134,6 +134,13 @@ services:
       - '@logger.factory'
     tags:
       - { name: event_subscriber }
+  alshaya_acm_product.product_dy_page_type_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProductDyPageTypeEventSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@alshaya_acm_product.skumanager'
+    tags:
+      - { name: event_subscriber }
   alshaya_acm_product.sku_info:
     class: Drupal\alshaya_acm_product\Service\SkuInfoHelper
     arguments:
