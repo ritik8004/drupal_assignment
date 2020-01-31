@@ -74,16 +74,43 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  /** @var \Drupal\alshaya_acm_product_category\Service $product_category_manager */
+  $product_category_manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
+  /** @var \Drupal\Core\Entity\EntityManager $entity_type_manager */
+  $entity_type_manager = \Drupal::service('entity_type.manager');
+  $term_storage = $entity_type_manager->getStorage('taxonomy_term');
+
 
   foreach ($items as $item_id => $item) {
     /** @var \Drupal\node\NodeInterface $object */
     $object = $item->getOriginalObject()->getValue();
+    $l1 = [];
+    $l2 = [];
 
     // Deal with all indexable fields not available by default in configurable
     // parent but available in the variants.
     // Deal with final price of configurable that needs to come from variants.
     if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
       try {
+        $node_field_category = $object->get('field_category')->getValue();
+        $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+        // Check if the product is not a sale category.
+        if (!($product_category_manager->isProductWithSalesOrNewArrival($object, ['attr_is_sale']))) {
+          foreach ($node_field_category as $value) {
+            $term = $term_storage->load($value['target_id']);
+            $l1[] = $product_category_tree->getL1Category($term)->id();
+          }
+          $item->getField('field_category')->setValues(array_unique($l1));
+        }
+        else {
+          foreach ($node_field_category as $value) {
+            $term = $term_storage->load($value['target_id']);
+            $l2[] = $product_category_tree->getL2Category($term)->id();
+          }
+          $item->getField('field_category')->setValues(array_unique($l2));
+        }
         $skuManager->processIndexItem($object, $item);
       }
       catch (\Throwable $e) {

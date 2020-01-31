@@ -39,7 +39,6 @@ use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class SkuManager.
@@ -246,13 +245,6 @@ class SkuManager {
   protected $productCacheManager;
 
   /**
-   * Product Category Tree.
-   *
-   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
-   */
-  protected $productCategoryTree;
-
-  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -299,8 +291,6 @@ class SkuManager {
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
    *   Alshaya array utility service.
-   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
-   *   Product Category Tree.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -326,8 +316,7 @@ class SkuManager {
                               Simplesitemap $generator,
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
-                              AlshayaArrayUtils $alshayaArrayUtils,
-                              ProductCategoryTree $product_category_tree) {
+                              AlshayaArrayUtils $alshayaArrayUtils) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -353,7 +342,6 @@ class SkuManager {
     $this->productInfoHelper = $product_info_helper;
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
-    $this->productCategoryTree = $product_category_tree;
   }
 
   /**
@@ -3103,8 +3091,7 @@ class SkuManager {
 
     $sku_string = $this->getSkuForNode($node);
     $sku = SKU::loadFromSku($sku_string, $langcode);
-    $l1 = [];
-    $l2 = [];
+
 
     if (!($sku instanceof SKUInterface)) {
       throw new \Exception('Not able to load sku from node.');
@@ -3145,22 +3132,6 @@ class SkuManager {
       }
     }
 
-    $node_field_category = $node->get('field_category')->getValue();
-    // Check if the product is not a sale category.
-    if (!(\Drupal::service('alshaya_acm_product_category.sales_category_manager')->isProductWithSalesOrNewArrival($node, ['attr_is_sale']))) {
-      foreach ($node_field_category as $value) {
-        $term = $this->termStorage->load($value['target_id']);
-        $l1[] = $this->productCategoryTree->getL1Category($term)->id();
-      }
-      $item->getField('field_category')->setValues([array_unique($l1)]);
-    }
-    else {
-      foreach ($node_field_category as $value) {
-        $term = $this->termStorage->load($value['target_id']);
-        $l2[] = $this->productCategoryTree->getL2Category($term)->id();
-      }
-      $item->getField('field_category')->setValues([array_unique($l2)]);
-    }
 
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);

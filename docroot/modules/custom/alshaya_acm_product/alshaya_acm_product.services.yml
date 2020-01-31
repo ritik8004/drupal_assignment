@@ -51,7 +51,6 @@ services:
       - '@acq_sku.product_info_helper'
       - '@alshaya_acm_product.cache_manager'
       - '@alshaya.alshaya_array_utils'
-      - '@alshaya_acm_product_category.product_category_tree'
   alshaya_acm_product.add_to_cart_form_helper:
     class: Drupal\alshaya_acm_product\Service\AddToCartFormHelper
     arguments:
