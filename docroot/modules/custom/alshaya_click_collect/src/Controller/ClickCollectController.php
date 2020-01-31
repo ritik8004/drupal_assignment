@@ -132,7 +132,6 @@ class ClickCollectController extends ControllerBase {
    *   Return the array of all available stores.
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
-
     // Get the stores from Magento.
     if ($stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
       $config = $this->configFactory->get('alshaya_click_collect.settings');
@@ -179,6 +178,8 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
+    // @todo: replace this with:
+    // Drupal\alshaya_click_collect\Service\AlshayaClickCollect::getCartStores
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
     // Sort the stores first by distance and then by name.

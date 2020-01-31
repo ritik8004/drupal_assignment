@@ -61,3 +61,10 @@ alshaya_spc.delete_address:
   methods:  [POST]
   requirements:
     _role: 'authenticated'
+
+alshaya_spc.click_and_collect_json:
+  path: '/cnc/stores/{cart_id}/{lat}/{lon}'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getCncStoresJson'
+  requirements:
+    _permission: 'access content'
