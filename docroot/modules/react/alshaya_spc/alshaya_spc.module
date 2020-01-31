@@ -128,6 +128,44 @@ function alshaya_spc_alshaya_acm_product_light_product_data_alter(SKU $sku, arra
 }
 
 /**
+ * Get the address form fields with the render order.
+ *
+ * @return array
+ *   Address form fields.
+ */
+function _alshaya_spc_get_address_fields() {
+  /* @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+  $magento_form_fields = $address_book_manager->getMagentoFormFields();
+  $field_mapping = array_flip($address_book_manager->getMagentoFieldMappings());
+  $fields = [];
+  $all_fields = [
+    'address_line1',
+    'address_line2',
+    'postal_code',
+    'sorting_code',
+    'locality',
+    'dependent_locality',
+    'administrative_area',
+    'area_parent',
+  ];
+
+  foreach ($magento_form_fields as $field) {
+    if (!isset($field_mapping[$field['attribute_code']]) || !in_array($field_mapping[$field['attribute_code']], $all_fields)) {
+      continue;
+    }
+
+    $fields[$field_mapping[$field['attribute_code']]] = [
+      'key' => $field['attribute_code'],
+      'label' => $field['store_label'],
+      'required' => $field['required'],
+    ];
+  }
+
+  return $fields;
+}
+
+/**
  * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
  */
 function alshaya_spc_alshaya_social_social_auth_facebook_alter(&$network, $route_name) {
