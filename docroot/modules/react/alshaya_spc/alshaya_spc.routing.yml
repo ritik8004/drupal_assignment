@@ -17,7 +17,7 @@ alshaya_spc.mobile_number_verfication:
 alshaya_spc.area_list_by_parent:
   path: '/area-list/{area}'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getAreaListByParent'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcAddressController::getAreaListByParent'
   methods:  [GET]
   requirements:
     _permission: 'access content'
@@ -25,7 +25,7 @@ alshaya_spc.area_list_by_parent:
 alshaya_spc.area_list:
   path: '/areas'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getAreaList'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcAddressController::getAreaList'
   methods:  [GET]
   requirements:
     _permission: 'access content'
@@ -33,7 +33,7 @@ alshaya_spc.area_list:
 alshaya_spc.get_parent_area_list:
   path: '/parent-areas'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::getParentAreaList'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcAddressController::getParentAreaList'
   methods:  [GET]
   requirements:
     _permission: 'access content'
