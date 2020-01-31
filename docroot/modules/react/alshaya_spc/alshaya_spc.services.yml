@@ -12,3 +12,8 @@ services:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
     arguments:
       - '@entity_type.manager'
+
+  alshaya_spc.customer_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
+    arguments:
+      - '@entity_type.manager'

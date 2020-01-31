@@ -11,7 +11,6 @@ use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -231,90 +230,6 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     return new JsonResponse(['status' => FALSE]);
-  }
-
-  /**
-   * Get all address list of the current user.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getUserAddressList() {
-    $uid = $this->currentUser->getAccount()->id();
-    $addressList = $this->spcHelper->getAddressListByUid($uid);
-
-    return new JsonResponse($addressList);
-  }
-
-  /**
-   * Set address as default address for the user.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function setDefaultAddress(Request $request) {
-    $data = json_decode($request->getContent(), TRUE);
-    $request->request->replace(is_array($data) ? $data : []);
-    $response = [];
-    try {
-      $uid = $this->currentUser->getAccount()->id();
-      if ($this->spcHelper->setDefaultAddress($data['address_id'], $uid)) {
-        $response['data'] = $this->spcHelper->getAddressListByUid($uid);
-        $response['status'] = TRUE;
-      }
-      else {
-        $response['status'] = FALSE;
-      }
-    }
-    catch (\Exception $e) {
-      $response['status'] = FALSE;
-    }
-
-    return new JsonResponse($response);
-  }
-
-  /**
-   * Delete the address of the user.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Reauest object.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function deleteAddress(Request $request) {
-    $response = [];
-    $data = json_decode($request->getContent(), TRUE);
-    $request->request->replace(is_array($data) ? $data : []);
-
-    try {
-      $uid = $this->currentUser->getAccount()->id();
-      $profile = $this->entityTypeManager->getStorage('profile')->load($data['address_id']);
-      // If address belongs to the current user.
-      if ($profile && $profile->getOwnerId() == $uid) {
-        // If user tyring to delete default address.
-        if ($profile->isDefault()) {
-          $response['status'] = FALSE;
-        }
-        else {
-          // Delete the address.
-          $profile->delete();
-          $response['status'] = TRUE;
-          $response['data'] = $this->spcHelper->getAddressListByUid($uid);
-        }
-      }
-      else {
-        $response['status'] = FALSE;
-      }
-    }
-    catch (\Exception $e) {
-      $response['status'] = FALSE;
-    }
-
-    return new JsonResponse($response);
   }
 
   /**
