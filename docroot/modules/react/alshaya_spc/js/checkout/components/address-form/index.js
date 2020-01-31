@@ -124,7 +124,7 @@ export default class AddressForm extends React.Component {
                     {Drupal.t('Preferred address')}
                   </div>
                 }
-                <FixedFields default_val={default_val} />
+                <FixedFields showEmail={this.props.showEmail} default_val={default_val} />
                 <div className='spc-address-form-actions'>
                   <button id='save-address' className='spc-address-form-submit' type="submit">{Drupal.t('Save')}</button>
                 </div>
