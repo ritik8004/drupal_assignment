@@ -801,9 +801,6 @@ class SkuImagesManager {
             '#type' => 'pdp',
           ];
 
-          // Add PDP slider position class in template.
-          $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
-
           $library_array = [
             'alshaya_product_zoom/cloud_zoom_pdp_gallery',
             'alshaya_product_zoom/product.cloud_zoom',
