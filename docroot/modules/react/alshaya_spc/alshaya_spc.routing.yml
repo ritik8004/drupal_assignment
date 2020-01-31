@@ -12,7 +12,7 @@ alshaya_spc.login:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcLoginController::login'
     _title: 'Secure Checkout'
   requirements:
-    _custom_access: '\Drupal\alshaya_spc\Controller\AlshayaSpcLoginController::checkAccess'
+    _custom_access: '\Drupal\alshaya_spc\Access\AlshayaSpcAccess::checkAccess'
     _role: 'anonymous'
 
 alshaya_spc.mobile_number_verfication:

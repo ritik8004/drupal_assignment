@@ -3,17 +3,12 @@
 namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\alshaya_social\AlshayaSocialHelper;
-use Drupal\Component\Utility\Crypt;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Link;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaSpcLoginController.
@@ -44,20 +39,6 @@ class AlshayaSpcLoginController extends ControllerBase {
   protected $socialHelper;
 
   /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $request;
-
-  /**
-   * The database connection object.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
    * AlshayaSpcLoginController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -66,23 +47,15 @@ class AlshayaSpcLoginController extends ControllerBase {
    *   Entity type manager.
    * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
    *   Social helper.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The database connection object.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSocialHelper $social_helper,
-    RequestStack $request_stack,
-    Connection $connection
+    AlshayaSocialHelper $social_helper
   ) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->socialHelper = $social_helper;
-    $this->request = $request_stack;
-    $this->connection = $connection;
   }
 
   /**
@@ -92,43 +65,8 @@ class AlshayaSpcLoginController extends ControllerBase {
     return new static(
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_social.helper'),
-      $container->get('request_stack'),
-      $container->get('database')
+      $container->get('alshaya_social.helper')
     );
-  }
-
-  /**
-   * Checks access for the form page.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The current user account.
-   *
-   * @return \Drupal\Core\Access\AccessResult
-   *   The access result.
-   */
-  public function checkAccess(AccountInterface $account) {
-    $cookies = $this->request->getCurrentRequest()->cookies->all();
-    if (empty($cookies['PHPSESSID'])) {
-      return AccessResult::forbidden();
-    }
-
-    $query = $this->connection->select('sessions')
-      ->fields('sessions')
-      ->condition('sid', Crypt::hashBase64($cookies['PHPSESSID']));
-    $result = $query->execute()->fetchAssoc();
-
-    if (empty($result)) {
-      return AccessResult::forbidden();
-    }
-
-    $session_data = explode('|', $result['session']);
-    $cart_data = unserialize(end($session_data));
-    if (empty($cart_data['cart_id'])) {
-      return AccessResult::forbidden();
-    }
-
-    return AccessResult::allowedIf($account->isAnonymous());
   }
 
   /**
@@ -216,7 +154,6 @@ class AlshayaSpcLoginController extends ControllerBase {
     $build['#cache']['tags'][] = 'config:alshaya_acm_checkout.settings';
     $build['#attached'] = [
       'library' => [
-        'alshaya_spc/cart_validate',
         'alshaya_white_label/spc-login',
       ],
     ];

@@ -166,7 +166,7 @@ class AlshayaSpcLoginForm extends FormBase {
 
     // If not valid email address.
     if (!$this->emailValidator->isValid($values['name'])) {
-      drupal_set_message($this->t('Username does not contain a valid email.'), 'error');
+      $this->messenger()->addError('Username does not contain a valid email.');
       $form_state->setErrorByName('custom', $this->t('Username does not contain a valid email.'));
       return;
     }
@@ -185,7 +185,7 @@ class AlshayaSpcLoginForm extends FormBase {
         $account = $this->entityTypeManager->getStorage('user')->load($uid);
 
         if ($account->isActive()) {
-          $form_state->setRedirect('acq_checkout.form', ['step' => 'delivery']);
+          $form_state->setRedirect('alshaya_spc.checkout');
           user_login_finalize($account);
         }
         else {
@@ -199,9 +199,7 @@ class AlshayaSpcLoginForm extends FormBase {
       }
     }
     catch (\Exception $e) {
-      if (acq_commerce_is_exception_api_down_exception($e)) {
-        $form_state->setErrorByName('custom', $e->getMessage());
-      }
+      $form_state->setErrorByName('custom', $e->getMessage());
     }
   }
 
