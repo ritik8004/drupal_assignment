@@ -21,6 +21,9 @@ function alshaya_master_update_8035() {
     'Large view' => [
       'ar' => 'وضعية التكبير',
     ],
+    'each' => [
+      'ar' => 'كل منتج',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1821,6 +1824,9 @@ function alshaya_master_install() {
     ],
     'Large view' => [
       'ar' => 'وضعية التكبير',
+    ],
+    'each' => [
+      'ar' => 'كل منتج',
     ],
   ];
 
