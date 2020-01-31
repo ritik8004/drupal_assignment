@@ -195,7 +195,7 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'payment_methods' => $payment_methods,
-          'address_fields' => $this->spcHelper->getAddressFields(),
+          'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'map_marker_icon' => $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url'),
@@ -231,42 +231,6 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     return new JsonResponse(['status' => FALSE]);
-  }
-
-  /**
-   * Get area list for a given parent area.
-   *
-   * @param mixed $area
-   *   Parent area id.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getAreaListByParent($area) {
-    $data = $this->spcHelper->getAllAreasOfParent($area);
-    return new JsonResponse($data);
-  }
-
-  /**
-   * Get areas list.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getAreaList() {
-    $data = $this->spcHelper->getAreaList();
-    return new JsonResponse($data);
-  }
-
-  /**
-   * Get parent areas list.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getParentAreaList() {
-    $data = $this->spcHelper->getAreaParentList();
-    return new JsonResponse($data);
   }
 
   /**

@@ -11,6 +11,4 @@ services:
   alshaya_spc.helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
     arguments:
-      - '@alshaya_addressbook.manager'
-      - '@alshaya_addressbook.area_terms_helper'
       - '@entity_type.manager'
