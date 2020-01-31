@@ -82,7 +82,6 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
   $entity_type_manager = \Drupal::service('entity_type.manager');
   $term_storage = $entity_type_manager->getStorage('taxonomy_term');
 
-
   foreach ($items as $item_id => $item) {
     /** @var \Drupal\node\NodeInterface $object */
     $object = $item->getOriginalObject()->getValue();
