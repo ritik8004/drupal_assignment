@@ -393,7 +393,8 @@
 
 .has--special--price {
   .price-amount,
-  .price-currency {
+  .price-currency,
+  .price-suffix-matchback {
     text-decoration: line-through;
   }
 }
