@@ -38,3 +38,7 @@ search_insights:
   dependencies:
     - core/drupalSettings
     - core/jquery.cookie
+
+search_algolia_ga:
+  js:
+    js/search-algolia-ga.js: {}

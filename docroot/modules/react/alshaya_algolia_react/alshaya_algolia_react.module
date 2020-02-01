@@ -43,3 +43,12 @@ function alshaya_algolia_react_block_access(Block $block, $operation, AccountInt
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_algolia_react_preprocess_page(&$variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'alshaya_algolia_react.search') {
+    $variables['#attached']['library'][] = 'alshaya_algolia_react/search_algolia_ga';
+  }
+}
