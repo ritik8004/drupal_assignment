@@ -1717,6 +1717,9 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
  */
 function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
   $show_crosssell_as_matchback = \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
+  // With matchback enabled, we will have 'each' word added to price
+  // based on the quantity for main product as well as matchback products
+  // following the host site implementation.
   if ($show_crosssell_as_matchback) {
     $variables['show_crosssell_as_matchback'] = $show_crosssell_as_matchback;
   }
