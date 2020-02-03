@@ -11,6 +11,7 @@ import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import TermsConditions from '../terms-conditions';
 import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { addInfoInStorage, getInfoFromStorage } from '../../../utilities/storage';
+import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 
 export default class Checkout extends React.Component {
 
@@ -30,14 +31,19 @@ export default class Checkout extends React.Component {
       if (cart_data instanceof Promise) {
         cart_data.then((result) => {
             let cart_data = getInfoFromStorage();
-            cart_data['cart'] = result;
+            if (cart_data === null) {
+              cart_data = {cart: result};
+            }
+
             addInfoInStorage(cart_data);
+            checkCartCustomer(cart_data);
             this.setState({
               wait: false,
               cart: cart_data
             });
         });
       }
+
     }
     catch(error) {
       // In case of error, do nothing.

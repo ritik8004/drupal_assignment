@@ -5,6 +5,7 @@ import {fetchCartData} from '../../../utilities/get_cart';
 import {addInfoInStorage} from '../../../utilities/storage';
 import EmptyMiniCartContent from '../empty-mini-cart-content';
 import MiniCartContent from "../mini-cart-content";
+import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 
 export default class MiniCart extends React.Component {
 
@@ -78,6 +79,7 @@ export default class MiniCart extends React.Component {
             'cart': data
           };
           addInfoInStorage(data_to_store);
+          checkCartCustomer(data_to_store);
 
           if (data.items.length === 0) {
             this.setState({

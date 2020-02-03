@@ -13,6 +13,7 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_library_info_build().
@@ -181,4 +182,30 @@ function alshaya_spc_alshaya_social_social_auth_google_alter(&$network, $route_n
   $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
     ? t('sign in with Google')
     : t('sign up with Google');
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_spc_user_login(UserInterface $account) {
+  // We do not want to process the acm cart association while on spc we can
+  // set the variable to true here and make this hook to execute before
+  // alshaya_acm_customer_user_login to avoid acm cart association.
+  global $_alshaya_acm_custom_cart_association_processed;
+
+  if (isset($_alshaya_acm_custom_cart_association_processed) && $_alshaya_acm_custom_cart_association_processed) {
+    return;
+  }
+  $_alshaya_acm_custom_cart_association_processed = TRUE;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_spc_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'user_login') {
+    $group = ['alshaya_spc' => $implementations['alshaya_spc']];
+    unset($implementations['alshaya_spc']);
+    $implementations = $group + $implementations;
+  }
 }

@@ -163,22 +163,15 @@ class AlshayaSpcLoginForm extends FormBase {
     }
 
     $values = $form_state->cleanValues()->getValues();
+    $mail = $values['name'];
+    $pass = $values['pass'];
 
     // If not valid email address.
-    if (!$this->emailValidator->isValid($values['name'])) {
+    if (!$this->emailValidator->isValid($mail)) {
       $this->messenger()->addError('Username does not contain a valid email.');
       $form_state->setErrorByName('custom', $this->t('Username does not contain a valid email.'));
       return;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $values = $form_state->cleanValues()->getValues();
-    $mail = $values['name'];
-    $pass = $values['pass'];
 
     try {
       if ($uid = $this->customerHelper->authenticateCustomer($mail, $pass)) {
@@ -201,6 +194,12 @@ class AlshayaSpcLoginForm extends FormBase {
     catch (\Exception $e) {
       $form_state->setErrorByName('custom', $e->getMessage());
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
   }
 
 }
