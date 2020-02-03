@@ -2,18 +2,14 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
-use Drupal\alshaya_social\AlshayaSocialHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -72,13 +68,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
-   * Social helper.
-   *
-   * @var \Drupal\alshaya_social\AlshayaSocialHelper
-   */
-  protected $socialHelper;
-
-  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -95,8 +84,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\alshaya_social\AlshayaSocialHelper $social_helper
-   *   Social helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -105,8 +92,7 @@ class AlshayaSpcController extends ControllerBase {
     AlshayaSpcHelper $spc_helper,
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
-    EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSocialHelper $social_helper
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -115,7 +101,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
-    $this->socialHelper = $social_helper;
   }
 
   /**
@@ -129,8 +114,7 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_spc.helper'),
       $container->get('mobile_number.util'),
       $container->get('current_user'),
-      $container->get('entity_type.manager'),
-      $container->get('alshaya_social.helper')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -197,7 +181,7 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_subtitle_unavailable' => $cc_config->get('checkout_click_collect_unavailable'),
           'terms_condition' => $checkout_settings->get('checkout_terms_condition.value'),
           'payment_methods' => $payment_methods,
-          'address_fields' => $this->spcHelper->getAddressFields(),
+          'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'map_marker_icon' => $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url'),
@@ -233,206 +217,6 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     return new JsonResponse(['status' => FALSE]);
-  }
-
-  /**
-   * Get area list for a given parent area.
-   *
-   * @param mixed $area
-   *   Parent area id.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getAreaListByParent($area) {
-    $data = $this->spcHelper->getAllAreasOfParent($area);
-    return new JsonResponse($data);
-  }
-
-  /**
-   * Get areas list.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getAreaList() {
-    $data = $this->spcHelper->getAreaList();
-    return new JsonResponse($data);
-  }
-
-  /**
-   * Get parent areas list.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getParentAreaList() {
-    $data = $this->spcHelper->getAreaParentList();
-    return new JsonResponse($data);
-  }
-
-  /**
-   * Get all address list of the current user.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function getUserAddressList() {
-    $uid = $this->currentUser->getAccount()->id();
-    $addressList = $this->spcHelper->getAddressListByUid($uid);
-
-    return new JsonResponse($addressList);
-  }
-
-  /**
-   * Set address as default address for the user.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function setDefaultAddress(Request $request) {
-    $data = json_decode($request->getContent(), TRUE);
-    $request->request->replace(is_array($data) ? $data : []);
-    $response = [];
-    try {
-      $uid = $this->currentUser->getAccount()->id();
-      if ($this->spcHelper->setDefaultAddress($data['address_id'], $uid)) {
-        $response['data'] = $this->spcHelper->getAddressListByUid($uid);
-        $response['status'] = TRUE;
-      }
-      else {
-        $response['status'] = FALSE;
-      }
-    }
-    catch (\Exception $e) {
-      $response['status'] = FALSE;
-    }
-
-    return new JsonResponse($response);
-  }
-
-  /**
-   * Delete the address of the user.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Reauest object.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response.
-   */
-  public function deleteAddress(Request $request) {
-    $response = [];
-    $data = json_decode($request->getContent(), TRUE);
-    $request->request->replace(is_array($data) ? $data : []);
-
-    try {
-      $uid = $this->currentUser->getAccount()->id();
-      $profile = $this->entityTypeManager->getStorage('profile')->load($data['address_id']);
-      // If address belongs to the current user.
-      if ($profile && $profile->getOwnerId() == $uid) {
-        // If user tyring to delete default address.
-        if ($profile->isDefault()) {
-          $response['status'] = FALSE;
-        }
-        else {
-          // Delete the address.
-          $profile->delete();
-          $response['status'] = TRUE;
-          $response['data'] = $this->spcHelper->getAddressListByUid($uid);
-        }
-      }
-      else {
-        $response['status'] = FALSE;
-      }
-    }
-    catch (\Exception $e) {
-      $response['status'] = FALSE;
-    }
-
-    return new JsonResponse($response);
-  }
-
-  /**
-   * Cart login page.
-   */
-  public function login() {
-    $build['login_form'] = [
-      '#parents' => ['login_form'],
-      '#type' => 'fieldset',
-      '#title' => $this->t('sign in with email address'),
-    ];
-
-    $build['login_form']['form'] = $this->formBuilder()->getForm('\Drupal\alshaya_spc\Form\AlshayaSpcLoginForm');
-
-    $build['social_media'] = [
-      '#parents' => ['social_media_auth_links'],
-      '#type' => 'fieldset',
-      '#title' => $this->t('sign in with email address'),
-      '#attributes' => [
-        'class' => ['social-signin-enabled', 'social-signup-form'],
-      ],
-      '#prefix' => '<div class="checkout-login-separator order-1"><span>' . $this->t('or') . '</span></div>',
-    ];
-
-    $build['social_media']['auth_links'] = [
-      '#theme' => 'alshaya_social',
-      '#social_networks' => $this->socialHelper->getSocialNetworks(),
-      '#weight' => -1000,
-    ];
-
-    $config = $this->config('alshaya_acm_checkout.settings');
-
-    $link = Link::createFromRoute(
-      $this->t('checkout as guest'),
-      'alshaya_spc.checkout',
-      [],
-      [
-        'attributes' => [
-          'gtm-type' => 'checkout-as-guest',
-        ],
-      ]
-    );
-
-    $build['checkout_as_guest'] = $link->toRenderable();
-    $build['checkout_as_guest']['#prefix'] = '<div class="above-mobile-block">';
-    $build['checkout_as_guest']['#suffix'] = '</div>';
-
-    if (!empty($config->get('checkout_guest_email_usage.value'))) {
-      $build['checkout_as_guest']['email_usage'] = [
-        '#markup' => '<div class="checkout-guest-email-usage">' . $config->get('checkout_guest_email_usage.value') . '</div>',
-      ];
-    }
-
-    if (!empty($config->get('checkout_guest_summary.value'))) {
-      $build['checkout_as_guest']['summary'] = [
-        '#markup' => '<div class="checkout-guest-summary">' . $config->get('checkout_guest_summary.value') . '</div>',
-      ];
-    }
-
-    $build['actions'] = [
-      '#type' => 'actions',
-      '#weight' => 100,
-      '#attributes' => [
-        'class' => ['checkout-login-actions-wrapper'],
-      ],
-    ];
-
-    $build['actions']['back_to_basket'] = [
-      '#type' => 'link',
-      '#title' => $this->t('Back to basket'),
-      '#url' => Url::fromRoute('acq_cart.cart'),
-      '#attributes' => [
-        'class' => ['back-to-basket'],
-      ],
-      '#weight' => 99,
-    ];
-
-    $build['#cache']['tags'][] = 'config:alshaya_social.settings';
-    $build['#cache']['tags'][] = 'config:alshaya_acm_checkout.settings';
-    return $build;
   }
 
   /**

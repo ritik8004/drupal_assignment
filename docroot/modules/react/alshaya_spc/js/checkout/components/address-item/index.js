@@ -1,11 +1,32 @@
 import React from 'react';
 
+import Popup from 'reactjs-popup';
+import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
   deleteUserAddress
 } from '../../../utilities/address_util';
 
 export default class AddressItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+  }
+
+  openModal = () => {
+    this.setState({
+      open: true
+    });
+  }
+
+  closeModal = () => {
+    this.setState({
+      open: false
+    });
+  }
 
   /**
    * When user changes address.
@@ -38,19 +59,19 @@ export default class AddressItem extends React.Component {
     }
   }
 
-  /**
-   * Edit address handler.
-   */
-  editAddress = (id) => {
-    // Address edit will be here.
-  }
-
   render() {
     const { address } = this.props;
     let addressData = [];
+    let editAddressData = {};
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
       addressData.push(<span key={key}>{address[key]}</span>)
+      editAddressData[val['key']] = address[key];
     })
+
+    editAddressData['static'] = {};
+    editAddressData['static']['firstname'] = address['given_name'];
+    editAddressData['static']['lastname'] = address['family_name'];
+    editAddressData['static']['telephone'] = address['mobile']['local_number'];
 
     return (
       <React.Fragment>
@@ -70,7 +91,15 @@ export default class AddressItem extends React.Component {
           </label>
         </div>
         <div>
-          <button title={Drupal.t('Edit')} id={'address-edit-' + address['address_id']} onClick={() => {this.editAddress(address['address_id'])}}>{Drupal.t('Edit')}</button>
+          <div onClick={this.openModal}>
+            {Drupal.t('Edit')}
+          </div>
+          <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+            <React.Fragment>
+              <a className='close' onClick={this.closeModal}>&times;</a>
+              <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData}/>
+            </React.Fragment>
+          </Popup>
         </div>
         {address['is_default'] === false &&
           <div>

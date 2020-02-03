@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Form;
 
+use Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper;
 use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -29,7 +30,14 @@ class AlshayaSpcLoginForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $entityTypeManager;
+  protected $entityTypeManager;
+
+  /**
+   * The login helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
+   */
+  protected $customerHelper;
 
   /**
    * AlshayaSpcLoginForm constructor.
@@ -38,13 +46,17 @@ class AlshayaSpcLoginForm extends FormBase {
    *   The email validator.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper
+   *   The login helper.
    */
   public function __construct(
     EmailValidatorInterface $email_validator,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    AlshayaSpcCustomerHelper $customer_helper
   ) {
     $this->emailValidator = $email_validator;
     $this->entityTypeManager = $entity_type_manager;
+    $this->customerHelper = $customer_helper;
   }
 
   /**
@@ -53,7 +65,8 @@ class AlshayaSpcLoginForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('email.validator'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_spc.customer_helper')
     );
   }
 
@@ -153,7 +166,7 @@ class AlshayaSpcLoginForm extends FormBase {
 
     // If not valid email address.
     if (!$this->emailValidator->isValid($values['name'])) {
-      drupal_set_message($this->t('Username does not contain a valid email.'), 'error');
+      $this->messenger()->addError('Username does not contain a valid email.');
       $form_state->setErrorByName('custom', $this->t('Username does not contain a valid email.'));
       return;
     }
@@ -168,11 +181,11 @@ class AlshayaSpcLoginForm extends FormBase {
     $pass = $values['pass'];
 
     try {
-      if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass, TRUE)) {
+      if ($uid = $this->customerHelper->authenticateCustomer($mail, $pass)) {
         $account = $this->entityTypeManager->getStorage('user')->load($uid);
 
         if ($account->isActive()) {
-          $form_state->setRedirect('acq_checkout.form', ['step' => 'delivery']);
+          $form_state->setRedirect('alshaya_spc.checkout');
           user_login_finalize($account);
         }
         else {
@@ -186,9 +199,7 @@ class AlshayaSpcLoginForm extends FormBase {
       }
     }
     catch (\Exception $e) {
-      if (acq_commerce_is_exception_api_down_exception($e)) {
-        $form_state->setErrorByName('custom', $e->getMessage());
-      }
+      $form_state->setErrorByName('custom', $e->getMessage());
     }
   }
 
