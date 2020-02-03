@@ -1658,9 +1658,3 @@ function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
   $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
 }
 
-/**
- * Implements hook_preprocess_acq_commerce_price().
- */
-function alshaya_white_label_preprocess_acq_commerce_price(&$variables) {
-  $variables['show_crosssell_as_matchback'] = \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
-}

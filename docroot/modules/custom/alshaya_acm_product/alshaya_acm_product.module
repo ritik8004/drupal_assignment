@@ -1711,3 +1711,13 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_acq_commerce_price().
+ */
+function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
+  $show_crosssell_as_matchback = \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
+  if ($show_crosssell_as_matchback) {
+    $variables['show_crosssell_as_matchback'] = $show_crosssell_as_matchback;
+  }
+}
