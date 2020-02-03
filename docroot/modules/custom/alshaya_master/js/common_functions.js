@@ -52,10 +52,20 @@
   /**
    * Helper function to fetch value for a hash string.
    *
+   * @param variable
+   *
    * @returns {string}
    */
-  Drupal.getHashValue = function () {
-    return window.location.hash.split('&')[0].split('=')[1];
+  Drupal.getHashValue = function (variable) {
+    var hash = window.location.hash.substring(1);
+    var vars = hash.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (decodeURIComponent(pair[0]) === variable) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
+    return '';
   };
 
 })(jQuery, Drupal);
