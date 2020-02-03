@@ -13,7 +13,14 @@ services:
     arguments:
       - '@entity_type.manager'
 
+  alshaya_spc.api_helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper
+    arguments:
+      - '@alshaya_api.api'
+
   alshaya_spc.customer_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
     arguments:
       - '@entity_type.manager'
+      - '@alshaya_spc.api_helper'
+      - '@module_handler'

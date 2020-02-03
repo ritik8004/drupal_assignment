@@ -164,3 +164,21 @@ function _alshaya_spc_get_address_fields() {
 
   return $fields;
 }
+
+/**
+ * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
+ */
+function alshaya_spc_alshaya_social_social_auth_facebook_alter(&$network, $route_name) {
+  $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
+    ? t('sign in with Facebook')
+    : t('sign up with Facebook');
+}
+
+/**
+ * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
+ */
+function alshaya_spc_alshaya_social_social_auth_google_alter(&$network, $route_name) {
+  $network['text_link'] = in_array($route_name, ['alshaya_spc.login'])
+    ? t('sign in with Google')
+    : t('sign up with Google');
+}

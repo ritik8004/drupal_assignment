@@ -1,0 +1,27 @@
+.alias--cart-login {
+  .multistep-login {
+    fieldset {
+      .fieldset-legend {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          font-family: $hnm-demibold;
+        }
+      }
+
+      .request-password-link {
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .checkout-login-actions-wrapper {
+      a {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}
