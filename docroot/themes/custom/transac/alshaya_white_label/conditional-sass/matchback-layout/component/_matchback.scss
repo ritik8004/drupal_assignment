@@ -101,27 +101,14 @@
     text-align: center;
     bottom: 0;
     transform: none;
-    width: 4.4975rem !important;
 
     &.i-dots {
-      height: 0.5rem;
       bottom: -0.125rem !important;
 
       .slick-dots-container {
-        height: 0.5rem;
-
         li {
-          height: 0.5rem !important;
-          width: 0.5rem !important;
           color: $mothercare-black;
           background: currentColor !important;
-          margin-#{$left}: 0.2185rem !important;
-          margin-#{$right}: 0.2185rem !important;
-
-          &.n-small-1 {
-            width: 0.3125rem !important;
-            height: 0.3125rem !important;
-          }
         }
       }
     }
@@ -130,9 +117,10 @@
   .slick-prev,
   .slick-next {
     &::before {
-      width: 0.3125rem;
-      height: 0.5rem;
-      font-size: 1rem;
+      height: 1rem;
+      width: 0.625rem;
+      line-height: 1rem;
+      flex-direction: column;
 
       @include breakpoint($tablet) {
         padding: 0;
@@ -141,20 +129,28 @@
   }
 
   .slick-prev {
+    @include breakpoint($tablet) {
+      #{$left}: 1rem;
+    }
+
     @include breakpoint($desktop) {
-      left: 3.65rem;
+      #{$left}: 2.65rem;
     }
   }
 
   .slick-next {
+    @include breakpoint($tablet) {
+      #{$right}: 1rem;
+    }
+
     @include breakpoint($desktop) {
-      right: 3.65rem;
+      #{$right}: 2.65rem;
     }
   }
 
   button.slick-arrow {
     @include breakpoint($tablet) {
-      bottom: 0;
+      bottom: -0.25rem;
     }
   }
 }
@@ -194,6 +190,7 @@
   .nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
     &.dialog-matchback-image-gallery-container {
       padding: 2.5rem calc((100vw - 43.75rem) / 2);
+      background: rgba(0, 0, 0, 0.5);
 
       .imagezoom-dialog-container {
         padding: 0;

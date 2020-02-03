@@ -14,7 +14,8 @@
     slidesToScroll: 1,
     focusOnSelect: false,
     touchThreshold: 1000,
-    dots: true
+    dots: true,
+    infinite: false
   };
 
   // Matchback zoom image dialog options
@@ -72,22 +73,19 @@
 
   // Call matchbackSlider() to apply slick and instagram dots.
   function matchbackSlider(ocObject) {
-    ocObject.on('init', function (event, slick) {
-      Drupal.behaviors.pdpInstagranDots.initialSetup($(this));
-    });
-    Drupal.behaviors.pdpInstagranDots.attachBeforeChange($(this));
     applyMatchbackRtl(ocObject, optionMatchback);
-    applyMatchbackHorizontalLazyLoad($(this));
+    applyMatchbackHorizontalLazyLoad(ocObject);
+    ocObject.on('init', function (event, slick) {
+      Drupal.behaviors.pdpInstagranDots.initialSetup(ocObject);
+    });
+    Drupal.behaviors.pdpInstagranDots.attachBeforeChange(ocObject);
     if ($(window).width() > 767) {
-      var currentSlide = parseInt($(this).find('.slick-current').attr('data-slick-index'));
       // Create Instagram Dots.
       if (!ocObject.find('ul.slick-dots').hasClass('i-dots')) {
         // Do initial setup again for slick dots.
         Drupal.behaviors.pdpInstagranDots.initialSetup(ocObject);
         // Attach the change event explicitly.
         Drupal.behaviors.pdpInstagranDots.attachBeforeChange(ocObject);
-        // Sync dots.
-        Drupal.behaviors.pdpInstagranDots.syncDots(ocObject, currentSlide, true);
       }
     }
   }
