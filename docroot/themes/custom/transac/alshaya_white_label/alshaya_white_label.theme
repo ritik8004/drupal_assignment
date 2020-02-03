@@ -1657,4 +1657,3 @@ function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
   $theme_registry['image']['variables']['skip_lazy_loading'] = NULL;
   $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
 }
-
