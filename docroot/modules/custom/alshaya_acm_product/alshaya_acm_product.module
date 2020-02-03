@@ -1711,3 +1711,17 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_acq_commerce_price().
+ */
+function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
+  $append_each_to_price = $acm_settings->get('append_each_to_price');
+  // With matchback enabled, we will have 'each' word added to price
+  // based on the quantity for main product as well as matchback products
+  // following the host site implementation.
+  if ($acm_settings->get('show_crosssell_as_matchback') && $append_each_to_price) {
+    $variables['append_each_to_price'] = $append_each_to_price;
+  }
+}
