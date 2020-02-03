@@ -95,36 +95,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
     }
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
-
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
-
-    $facet_weights = &drupal_static('facetPrettyWeights', []);
-
-    if (empty($facet_weights)) {
-      // Get all facets of the given source.
-      $block_facets = $this->facetsManager->getFacetsByFacetSourceId($facet->getFacetSourceId());
-
-      if (!empty($block_facets)) {
-        $block_ids = [];
-        $mapping = [];
-        foreach ($block_facets as $block_facet) {
-          $block_facet_id = str_replace('_', '', $block_facet->id());
-          $block_ids[] = $block_facet_id;
-          $mapping[$block_facet_id] = $block_facet->getUrlAlias();
-        }
-
-        if (!empty($block_ids)) {
-          $block_ids = $this->entityTypeManager->getStorage('block')->getQuery()
-            ->condition('id', $block_ids, 'IN')
-            ->sort('weight', 'ASC')
-            ->execute();
-
-          foreach ($block_ids as $block_id) {
-            $facet_weights[] = $mapping[$block_id];
-          }
-        }
-      }
-    }
 
     $active_results = [];
     foreach ($results as $key => $result) {
@@ -133,14 +104,16 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       }
     }
 
+    $filters_current_result = [];
+    foreach ($filters_array as $filters) {
+      $array = explode('-', $filters);
+      $key = array_shift($array);
+      $filters_current_result[$key] = $array;
+    }
+
     /** @var \Drupal\facets\Result\ResultInterface $result */
     foreach ($results as $result_key => &$result) {
-      $filters_current_result_array = [];
-      foreach ($filters_array as $filters) {
-        $array = explode('-', $filters);
-        $key = array_shift($array);
-        $filters_current_result_array[$key] = $array;
-      }
+      $filters_current_result_array = $filters_current_result;
 
       $filter_key = $facet->getUrlAlias();
       $raw_value = $result->getRawValue();
@@ -183,7 +156,6 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         }
       }
 
-      $filters_current_result_array = array_replace(array_intersect_key(array_flip($facet_weights), $filters_current_result_array), $filters_current_result_array);
       $filters_current_result_array = array_filter($filters_current_result_array);
 
       if (strpos($current_path, "/--") !== FALSE) {
@@ -218,20 +190,8 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url->setOption('attributes', ['rel' => 'follow index']);
       }
 
-      // First get the current list of get parameters.
-      $get_params = $this->request->query;
-      // When adding/removing a filter the number of pages may have changed,
-      // possibly resulting in an invalid page parameter.
-      if ($get_params->has('page')) {
-        $current_page = $get_params->get('page');
-        $get_params->remove('page');
-      }
-      $url->setOption('query', $get_params->all());
+      $url->setOption('query', $this->getQueryParams());
       $result->setUrl($url);
-      // Restore page parameter again. See https://www.drupal.org/node/2726455.
-      if (isset($current_page)) {
-        $get_params->set('page', $current_page);
-      }
     }
 
     return $results;
@@ -272,6 +232,27 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $this->activeFilters[$key] = $new_parts;
     }
+  }
+
+  /**
+   * Wrapper function to get query params for facet url.
+   *
+   * It removes page and returns rest.
+   *
+   * @return array
+   *   Query params.
+   */
+  protected function getQueryParams() {
+    static $query;
+
+    if (empty($query)) {
+      $query = $this->request->query->all();
+      if (isset($query['page'])) {
+        unset($query['page']);
+      }
+    }
+
+    return $query;
   }
 
 }

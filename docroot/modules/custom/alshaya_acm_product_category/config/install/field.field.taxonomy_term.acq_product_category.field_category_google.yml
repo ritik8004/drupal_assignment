@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_category_google
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_category_google
+field_name: field_category_google
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Google Category'
+description: 'Google product category that will be used in feeds.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

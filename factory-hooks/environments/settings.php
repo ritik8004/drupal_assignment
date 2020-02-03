@@ -24,6 +24,10 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '333631634865-b8neo4gqdr65nld1rgo9ffngq4fh4go3.apps.googleusercontent.com',
             'client_secret' => 'nrDGHEmKXzwcZU4LtzxLOhpF',
           ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@mothercareuk',
+            'tags.twitter_cards_site' => '@mothercareuk',
+          ],
         ],
       ],
       'kw' => [
@@ -58,9 +62,23 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '162325944786-f1go0fiukfja1rs44ajk5341r2omgocr.apps.googleusercontent.com',
             'client_secret' => '_C_obvqFmy2YHs6n2o-9hMgg',
           ],
+          'dynamic_yield.settings' => [
+            'section_id' => '9876643',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9876644',
+          ],
         ],
       ],
       'kw' => [
+        'default' => [
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@hmkuwait',
+            'tags.twitter_cards_site' => '@hmkuwait',
+          ],
+        ],
         'live' => [
           'alshaya_knet.settings' => [
             'alias' => 'hm',
@@ -73,6 +91,12 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'ae' => [
+        'default' => [
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@hmuae',
+            'tags.twitter_cards_site' => '@hmuae',
+          ],
+        ],
         'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-5ZNGJRP',
@@ -80,9 +104,23 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
       'sa' => [
+        'default' => [
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@hmsaudiarabia',
+            'tags.twitter_cards_site' => '@hmsaudiarabia',
+          ],
+        ],
         'uat' => [
           'google_tag.container.primary' => [
             'container_id' => 'GTM-PXGWK9J',
+          ],
+        ],
+      ],
+      'eg' => [
+        'default' => [
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@hmegypt',
+            'tags.twitter_cards_site' => '@hmegypt',
           ],
         ],
       ],
@@ -93,6 +131,18 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'social_auth_google.settings' => [
             'client_id' => '979778569503-3a6dfbjcfvm5er41fd4s46d27oqe8efl.apps.googleusercontent.com',
             'client_secret' => 'kSiVHuw6W4AGXnqW_aXWRFS9',
+          ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@BBWMENA',
+            'tags.twitter_cards_site' => '@BBWMENA',
+          ],
+          'dynamic_yield.settings' => [
+            'section_id' => '9876649',
+          ],
+        ],
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9876648',
           ],
         ],
       ],
@@ -125,6 +175,10 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '489743492796-4euishl08asap26893fooomkqgi8ketl.apps.googleusercontent.com',
             'client_secret' => 'mT47obTKfcKzXIJSRcXyjdkx',
           ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@footlocker',
+            'tags.twitter_cards_site' => '@footlocker',
+          ],
         ],
       ],
       'ae' => [
@@ -155,6 +209,10 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'social_auth_google.settings' => [
             'client_id' => '290156815523-4pqhofs87lrj62gucij8rko1dj61od0q.apps.googleusercontent.com',
             'client_secret' => 'YE8Y9NX3mli9p-ivnstUzBpG',
+          ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@potterybarn',
+            'tags.twitter_cards_site' => '@potterybarn',
           ],
         ],
       ],
@@ -187,26 +245,20 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'client_id' => '764146281003-4qh0d2dgj3cjfotf5fr8307bp0l0248g.apps.googleusercontent.com',
             'client_secret' => 'ZEZJZTxz9mmY0H0sAB03iJdo',
           ],
-        ],
-      ],
-      'ae' => [
-        'uat' => [
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_creator' => '@VictoriasSecret',
+            'tags.twitter_cards_site' => '@VictoriasSecret',
+          ],
+          'dynamic_yield.settings' => [
+            'section_id' => '9876647',
+          ],
           'google_tag.container.primary' => [
             'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
-      ],
-      'kw' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KLZ3ZQR',
-          ],
-        ],
-      ],
-      'sa' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KLZ3ZQR',
+        'live' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9876645',
           ],
         ],
       ],
@@ -219,6 +271,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
           'google_tag.container.primary' => [
             'container_id' => '',
+          ],
+          'metatag.metatag_defaults.global' => [
+            'tags.twitter_cards_type' => 'summary',
           ],
         ],
       ],

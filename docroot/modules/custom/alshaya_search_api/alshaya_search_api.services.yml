@@ -1,4 +1,16 @@
 services:
+  alshaya_search_api.alshaya_facets_manager:
+    decorates: facets.manager
+    decoration_priority: 9
+    public: false
+    class: Drupal\alshaya_search_api\FacetManager\AlshayaSearchApiFacetsManager
+    arguments:
+      - '@plugin.manager.facets.query_type'
+      - '@plugin.manager.facets.widget'
+      - '@plugin.manager.facets.facet_source'
+      - '@plugin.manager.facets.processor'
+      - '@entity_type.manager'
+
   alshaya_search_api.facets_manager:
     class: Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager
     arguments:
