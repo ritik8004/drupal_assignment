@@ -11,7 +11,7 @@
     {% for category in product.categoryCollection %}
     <category>
       <name><![CDATA[{{ category.name }}]]></name>
-      <google_product_category><![CDATA[{{ category.google_product_category }}]]></google_product_category>
+      <google_product_category>{{ category.google_product_category }}</google_product_category>
       <id>{{ category.id }}</id>
       <url>{{ category.url }}</url>
     </category>
