@@ -18,18 +18,15 @@ class AlshayaSpcAccess {
   const MIDDLEWARE_COOKIE_KEY = 'PHPSESSID';
 
   /**
-   * Checks access for the form page.
+   * Get the cart id for current session.
    *
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The current user account.
-   *
-   * @return \Drupal\Core\Access\AccessResult
-   *   The access result.
+   * @return array|mixed|null
+   *   Return null or array of session data.
    */
-  public static function checkAccess(AccountInterface $account) {
+  public static function getSessionCartId() {
     $cookies = \Drupal::request()->cookies->all();
     if (empty($cookies[self::MIDDLEWARE_COOKIE_KEY])) {
-      return AccessResult::forbidden();
+      return NULL;
     }
 
     $query = \Drupal::database()->select('sessions')
@@ -38,7 +35,7 @@ class AlshayaSpcAccess {
     $result = $query->execute()->fetchAssoc();
 
     if (empty($result)) {
-      return AccessResult::forbidden();
+      return NULL;
     }
 
     // Get the middleware session key from the record.
@@ -53,11 +50,51 @@ class AlshayaSpcAccess {
       }
     }
 
-    if (empty($session_data)) {
-      return AccessResult::forbidden();
+    return $session_data;
+  }
+
+  /**
+   * Checks access for the login page.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result.
+   */
+  public static function checkLoginAccess(AccountInterface $account) {
+    $session_data = self::getSessionCartId();
+
+    if (empty($session_data) || empty($session_data['cart_id'])) {
+      $access = AccessResult::forbidden();
+    }
+    else {
+      $access = AccessResult::allowedIf($account->isAnonymous());
     }
 
-    return AccessResult::allowedIf($account->isAnonymous());
+    return $access->addCacheContexts(['user', 'session']);
+  }
+
+  /**
+   * Check access for the checkout page.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   *
+   * @return \Drupal\Core\Access\AccessResultAllowed|\Drupal\Core\Access\AccessResultForbidden
+   *   The access result.
+   */
+  public static function checkCheckoutAccess(AccountInterface $account) {
+    $session_data = self::getSessionCartId();
+
+    if (empty($session_data) || empty($session_data['cart_id'])) {
+      $access = AccessResult::forbidden();
+    }
+    else {
+      $access = AccessResult::allowed();
+    }
+
+    return $access->addCacheContexts(['user', 'session']);
   }
 
 }

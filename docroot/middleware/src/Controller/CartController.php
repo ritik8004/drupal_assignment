@@ -90,6 +90,20 @@ class CartController {
   }
 
   /**
+   * Start session and return cart data.
+   *
+   * @return mixed
+   *   return array of cart data from session or null.
+   */
+  protected function getCartFromSession() {
+    if (!$this->session->isStarted()) {
+      $this->session->start();
+    }
+
+    return $this->session->get(self::STORAGE_KEY);
+  }
+
+  /**
    * Get cart data.
    *
    * @param int $cart_id
@@ -127,13 +141,10 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    if (!$this->session->isStarted()) {
-      $this->session->start();
-    }
+    $cart = $this->getCartFromSession();
 
-    $cart_id = $this->session->get(self::STORAGE_KEY);
-    if (!empty($cart_id)) {
-      return $this->getCart($cart_id);
+    if (!empty($cart['cart_id'])) {
+      return $this->getCart($cart['cart_id']);
     }
 
     // If there are not cart available.
@@ -275,7 +286,9 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->session->set(self::STORAGE_KEY, $data['cart_id']);
+      $this->session->set(self::STORAGE_KEY, [
+        'cart_id' => $data['cart_id'],
+      ]);
     }
     catch (\Exception $e) {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
@@ -293,9 +306,9 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   protected function createCart() {
-    $cart_id = $this->session->get(self::STORAGE_KEY);
-    if (!empty($cart_id)) {
-      return $cart_id;
+    $cart = $this->getCartFromSession();
+    if (!empty($cart['cart_id'])) {
+      return $cart['cart_id'];
     }
     $this->session->remove(self::STORAGE_KEY);
     return $this->cart->createCart();
@@ -315,9 +328,7 @@ class CartController {
   public function updateCart(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
 
-    if (!$this->session->isStarted()) {
-      $this->session->start();
-    }
+    $this->getCartFromSession();
 
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
@@ -513,6 +524,37 @@ class CartController {
     }
 
     return $valid;
+  }
+
+  /**
+   * Associate cart with active user.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function associateCart() {
+    $cart = $this->getCartFromSession();
+
+    if (!empty($cart['customer_id'])) {
+      return new JsonResponse($cart['customer_id']);
+    }
+
+    try {
+      $customer = $this->drupal->getCustomerId();
+      if ($customer !== NULL) {
+        $this->cart->associateCartToCustomer($cart['cart_id'], $customer['customer_id']);
+        $this->session->set(self::STORAGE_KEY, [
+          'cart_id' => $cart['cart_id'],
+          'customer_id' => $customer['customer_id'],
+        ]);
+      }
+    }
+    catch (\Exception $e) {
+      // Exception handling here.
+      return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+
+    return new JsonResponse($customer);
   }
 
 }

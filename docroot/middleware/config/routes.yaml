@@ -32,3 +32,8 @@ place_order:
     path: /cart/place-order
     controller: App\Controller\CartController::placeOrder
     methods: POST
+
+associate_cart:
+    path: /associate-cart
+    controller: App\Controller\CartController::associateCart
+    methods: GET

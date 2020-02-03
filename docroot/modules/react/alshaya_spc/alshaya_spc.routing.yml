@@ -4,7 +4,7 @@ alshaya_spc.checkout:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkout'
     _title: 'Secure Checkout'
   requirements:
-    _permission: 'access content'
+    _custom_access: '\Drupal\alshaya_spc\Access\AlshayaSpcAccess::checkCheckoutAccess'
 
 alshaya_spc.login:
   path: '/cart/login'
@@ -12,7 +12,7 @@ alshaya_spc.login:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcLoginController::login'
     _title: 'Secure Checkout'
   requirements:
-    _custom_access: '\Drupal\alshaya_spc\Access\AlshayaSpcAccess::checkAccess'
+    _custom_access: '\Drupal\alshaya_spc\Access\AlshayaSpcAccess::checkLoginAccess'
     _role: 'anonymous'
 
 alshaya_spc.mobile_number_verfication:
@@ -77,3 +77,11 @@ alshaya_spc.click_and_collect_json:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCnCController::getCncStoresJson'
   requirements:
     _permission: 'access content'
+
+alshaya_spc.customer:
+  path: '/spc/customer'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getUserCustomerId'
+  methods: [GET]
+  requirements:
+    _role: 'authenticated'
