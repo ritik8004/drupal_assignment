@@ -109,6 +109,28 @@
         li {
           color: $mothercare-black;
           background: currentColor !important;
+
+          @include breakpoint($desktop) {
+            .ie & {
+              min-width: 0.6875rem;
+            }
+          }
+
+          &.slick-active {
+            @include breakpoint($desktop) {
+              .ie & {
+                min-width: 0.75rem;
+              }
+            }
+          }
+
+          &.n-small-1 {
+            @include breakpoint($desktop) {
+              .ie & {
+                min-width: 0.4375rem;
+              }
+            }
+          }
         }
       }
     }
