@@ -14,10 +14,11 @@
       $('.sku-base-form').once('alshaya-color-split').on('variant-selected', function (event, variant, code) {
         var node = $(this).parents('article.entity--type-node:first');
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
-        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
         // We can have mix of color split and normal products.
         // Avoid processing further if we have a product which is normal but

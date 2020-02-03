@@ -76,6 +76,13 @@
         margin-#{$left}: 0.25rem;
       }
     }
+
+    .matchback-notification-qty,
+    .matchback-prod-added-text {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
   }
 }
 
