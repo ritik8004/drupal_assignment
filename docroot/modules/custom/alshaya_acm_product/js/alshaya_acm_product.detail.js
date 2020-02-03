@@ -212,6 +212,9 @@
     }
 
     if ($(product).find('.gallery-wrapper').length > 0) {
+      // Since matchback products are also inside main PDP, when we change the variant
+      // of the main PDP we'll get multiple .gallery-wrapper, so we are taking only the
+      // first one which will be of main PDP to update main PDP gallery only.
       $(product).find('.gallery-wrapper').first().replaceWith(gallery);
     }
     else {
