@@ -37,17 +37,22 @@
 
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {
-      $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
-      $('.form-item-configurable-select').parent().addClass('configurable-select');
+      $('.form-item-configurable-swatch').once('configurableAttributeBoxes').parent().addClass('configurable-swatch');
+      $('.form-item-configurable-select').once('configurableAttributeBoxes').parent().addClass('configurable-select');
 
       // Show mobile slider only on mobile resolution.
       Drupal.select2OptionConvert();
+
+      // Trigger event for other scripts to act after select options conversion
+      // is completed.
+      $('.sku-base-form.visually-hidden').trigger('select-to-option-conversion-completed');
+
       $(window).on('resize', function (e) {
         Drupal.select2OptionConvert();
       });
 
       if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
-        $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
+        $('.form-item-configurable-select, .form-item-configurable-swatch').once('configurableAttributeBoxes').on('change', function () {
           $(this).closest('form').find('div.error, label.error, span.error').remove();
         });
       }

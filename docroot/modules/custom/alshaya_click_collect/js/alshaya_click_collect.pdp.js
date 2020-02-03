@@ -39,7 +39,8 @@
         }
 
         var sku = $(this).attr('data-sku');
-        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
         $('#pdp-stores-container', node).data('sku', variant);
 
         if (variantInfo.click_collect) {
