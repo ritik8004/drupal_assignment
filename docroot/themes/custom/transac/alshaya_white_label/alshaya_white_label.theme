@@ -95,6 +95,11 @@ function alshaya_white_label_preprocess_html(&$variables) {
   if ($current_route->getRouteName() == 'entity.node.canonical' && $current_route->getParameter('node')->bundle() == 'acq_product') {
     $node = \Drupal::request()->attributes->get('node');
     if ($node instanceof NodeInterface) {
+      $acm_settings = \Drupal::config('alshaya_acm.settings');
+      $variables['show_cart_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
+      if ($variables['show_cart_matchback']) {
+        $variables['#attached']['library'][] = 'alshaya_white_label/matchback_cart_notification';
+      }
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
@@ -527,12 +532,15 @@ function alshaya_white_label_preprocess_node(&$variables) {
       $variables['attributes']['class'][] = 'color-swatches-hover';
     }
     $settings = \Drupal::config('alshaya_acm_product.settings');
+    $acm_settings = \Drupal::config('alshaya_acm.settings');
 
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
     $variables['vat_text'] = $settings->get('vat_text');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
     $variables['pdp_layout'] = $settings->get('pdp_layout');
+    $variables['display_crosssell'] = $acm_settings->get('display_crosssell');
+    $variables['show_crosssell_as_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
 
     // Cross sell/ Up sell items count on carousel on pdp page.
     $variables['#attached']['drupalSettings']['pdp_items_mob'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
@@ -570,6 +578,9 @@ function alshaya_white_label_preprocess_node(&$variables) {
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
+        }
+        if ($variables['show_crosssell_as_matchback']) {
+          $variables['#attached']['library'][] = 'alshaya_white_label/matchback_layout';
         }
       }
     }

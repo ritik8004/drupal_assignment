@@ -14,7 +14,8 @@
       $('[data-drupal-selector="edit-variants-in-group"]').once('alshaya-color-split').on('change', function () {
         var node = $(this).parents('article.entity--type-node:first');
         var sku = $(node).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
@@ -24,7 +25,7 @@
 
         $('[name="selected_variant_sku"]', node).val($(this).val());
 
-        var variantInfo = drupalSettings.productInfo[sku]['group'][$(this).val()];
+        var variantInfo = drupalSettings[productKey][sku]['group'][$(this).val()];
         Drupal.updateGallery(node, variantInfo.layout,variantInfo.gallery);
 
         // Trigger event for other modules to hook into.

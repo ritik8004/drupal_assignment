@@ -1,0 +1,25 @@
+<div id="product-zoom-container matchback_gallery">
+  {% block defaultGallery %}
+    <div class="cloudzoom-matchback_gallery thumbnail-count-{{ thumbnails|length }}">
+      <div class="cloudzoom__thumbnails-matchback_gallery">
+        <ul id="machbackSlider" class="{{ pager_flag }} machbackSlider">
+          {% for thumbs in thumbnails %}
+              <li class="views-row">
+                <div data-zoom-src="{{ thumbs.zoomurl }}" class="imagezoom-wrap">
+                  <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                </div>
+              </li>
+          {% endfor %}
+        </ul>
+        <div class="imagezoom-dialog-container" style="display: none;">
+          <div class="imagezoom-dialog-wrapper">
+            <div class="imagezoom-dialog-header"> {{ 'Large view'|t }} </div>
+            <div id="matchback-full-image-wrapper" class="matchback-imagegallery__full">
+              <img class="matchback-imagegallery__full__image" id="matchback-full-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+</div>
