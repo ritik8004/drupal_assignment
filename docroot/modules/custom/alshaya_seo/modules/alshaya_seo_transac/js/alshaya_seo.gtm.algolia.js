@@ -14,6 +14,15 @@
   $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
+
+    // Send VirtualPageview event for each search with keywords as query parameter.
+    if (currentsearch !== '' && (currentsearch !== searchQuery[searchQuery.length-1])) {
+      dataLayer.push({
+        event: 'VirtualPageview',
+        virtualPageURL: location.pathname + '?keywords=' + currentsearch,
+      });
+    }
+
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
       // Store all search queries in a temp array, so we don't trigger
       // event twice for the same keyword, while user repeats the search query
