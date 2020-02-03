@@ -6,7 +6,12 @@ export function checkCartCustomer() {
 
   if (cart_data.uid !== window.drupalSettings.user.uid) {
     cart_data.uid = window.drupalSettings.user.uid;
-    associateCart(cart_data);
+    if (window.drupalSettings.user.uid === 0) {
+      addInfoInStorage(cart_data);
+    }
+    else {
+      associateCart(cart_data);
+    }
   }
 }
 
