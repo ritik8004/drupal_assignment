@@ -541,11 +541,13 @@ class CartController {
 
     try {
       $customer = $this->drupal->getCustomerId();
-      $this->cart->associateCartToCustomer($cart['cart_id'], $customer['customer_id']);
-      $this->session->set(self::STORAGE_KEY, [
-        'cart_id' => $cart['cart_id'],
-        'customer_id' => $customer['customer_id'],
-      ]);
+      if ($customer !== NULL) {
+        $this->cart->associateCartToCustomer($cart['cart_id'], $customer['customer_id']);
+        $this->session->set(self::STORAGE_KEY, [
+          'cart_id' => $cart['cart_id'],
+          'customer_id' => $customer['customer_id'],
+        ]);
+      }
     }
     catch (\Exception $e) {
       // Exception handling here.
