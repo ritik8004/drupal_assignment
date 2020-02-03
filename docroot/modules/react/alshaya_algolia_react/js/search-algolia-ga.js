@@ -8,25 +8,23 @@
 
   Drupal.behaviors.setAlgoliaSearchGA = {
     attach: function (context) {
-      var hash = window.location.hash;
-      if (hash) {
-        Drupal.sendPageviewEvent(hash);
-      }
-      $("input.react-autosuggest__input").on('change', function() { 
-        var newHash = window.location.hash;
-        if (hash !== newHash) {
-          Drupal.sendPageviewEvent(newHash);
-          hash = newHash;
-        }
+      var hashValue = Drupal.getHashValue();
+      $('input.react-autosuggest__input').once('AlgoliaSearchGA').on('change', function() {
+        var newHashValue = Drupal.sendPageviewEvent(hashValue);
+        hashValue = newHashValue;
       }); 
     }
   };
 
-  Drupal.sendPageviewEvent = function (newHash) {
-    dataLayer.push({
-      event: 'VirtualPageview',
-      virtualPageURL: location.pathname + '?keywords=' + newHash.split('=')[1],
-    });
+  Drupal.sendPageviewEvent = function (hashValue) {
+    var newHashValue = Drupal.getHashValue();
+    if (hashValue !== newHashValue) {
+      dataLayer.push({
+        event: 'VirtualPageview',
+        virtualPageURL: location.pathname + '?keywords=' + newHashValue,
+      });
+    }
+    return newHashValue;
   }
 
 }(jQuery, Drupal, dataLayer));

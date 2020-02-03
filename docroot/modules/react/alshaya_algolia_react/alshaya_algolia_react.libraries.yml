@@ -42,3 +42,6 @@ search_insights:
 search_algolia_ga:
   js:
     js/search-algolia-ga.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - alshaya_master/common_functions

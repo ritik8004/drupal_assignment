@@ -49,4 +49,13 @@
     $('.ajax-progress, .ajax-progress-throbber').remove();
   };
 
+  /**
+   * Helper function to fetch value for a hash string.
+   *
+   * @returns {string}
+   */
+  Drupal.getHashValue = function () {
+    return window.location.hash.split('&')[0].split('=')[1];
+  };
+
 })(jQuery, Drupal);
