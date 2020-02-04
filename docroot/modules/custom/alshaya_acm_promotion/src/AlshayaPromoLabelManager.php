@@ -400,7 +400,7 @@ class AlshayaPromoLabelManager {
         $eligible_parents = array_intersect($parents, $eligibleSKUs);
         if (!empty($eligible_parents)) {
           $eligible_children = $this->skuManager->fetchChildSkuTexts($eligible_parents);
-          $eligibleSKUs += $eligible_children;
+          $eligibleSKUs = array_merge($eligibleSKUs, $eligible_children);
         }
 
         if (in_array($currentSKU->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
