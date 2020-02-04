@@ -353,7 +353,7 @@
     var related = $('.horizontal-related' + selector);
     var scrollPoint = window.innerHeight + window.pageYOffset;
 
-    if (!matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
+    if ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
       matchback.addClass('matchback-processed');
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
     }
