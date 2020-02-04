@@ -10,8 +10,9 @@
   // This is to ensure we have queryID even after we update URL in cases
   // where color split is enabled.
   var sku = $('.sku-base-form').closest('article[gtm-type="gtm-product-link"]').attr('gtm-main-sku');
-  if (localStorage.getItem(sku) !== null) {
-    $('html').attr('data-algolia-query-id', localStorage.getItem(sku));
+  if (localStorage.getItem('algolia_search_clicks') !== null) {
+    var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
+    $('html').attr('data-algolia-query-id', algolia_clicks[sku]);
   }
 
   Drupal.behaviors.alshayaAlgoliaInsightsDetail = {
