@@ -104,6 +104,24 @@ class CartController {
   }
 
   /**
+   * Update cart id to middleware session.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   *
+   * @return mixed
+   *   Return the associated user.
+   */
+  protected function updateSessionCartId($cart_id) {
+    $data = $this->session->get(self::STORAGE_KEY);
+    if (empty($data['cart_id'])) {
+      $data['cart_id'] = $cart_id;
+      $this->session->set(self::STORAGE_KEY, $data);
+    }
+    return $data['uid'];
+  }
+
+  /**
    * Get cart data.
    *
    * @param int $cart_id
@@ -286,9 +304,7 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->session->set(self::STORAGE_KEY, [
-        'cart_id' => $data['cart_id'],
-      ]);
+      $data['uid'] = $this->updateSessionCartId($data['cart_id']);
     }
     catch (\Exception $e) {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
@@ -536,7 +552,7 @@ class CartController {
     $cart = $this->getCartFromSession();
 
     if (!empty($cart['customer_id'])) {
-      return new JsonResponse($cart['customer_id']);
+      return new JsonResponse($cart);
     }
 
     try {
@@ -546,6 +562,7 @@ class CartController {
         $this->session->set(self::STORAGE_KEY, [
           'cart_id' => $cart['cart_id'],
           'customer_id' => $customer['customer_id'],
+          'uid' => $customer['uid'],
         ]);
       }
     }

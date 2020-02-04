@@ -31,7 +31,7 @@ export default class Checkout extends React.Component {
       if (cart_data instanceof Promise) {
         cart_data.then((result) => {
             let cart_data = getInfoFromStorage();
-            if (cart_data === null) {
+            if (!cart_data) {
               cart_data = {cart: result};
             }
 
