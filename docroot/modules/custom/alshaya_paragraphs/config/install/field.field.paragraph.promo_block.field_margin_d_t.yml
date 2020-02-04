@@ -9,7 +9,7 @@ field_name: field_margin_d_t
 entity_type: paragraph
 bundle: promo_block
 label: 'Margin - Desktop/Tablet'
-description: "The margin for Desktop/Tablet in shorthand format: top right bottom left. ex: 10px 10x 10px 10px.\r\n"
+description: "The margin for Desktop/Tablet in shorthand format: top right bottom left. ex: 10px 10px 10px 10px.\r\n"
 required: false
 translatable: true
 default_value: {  }

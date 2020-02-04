@@ -4,6 +4,8 @@ namespace Drupal\alshaya_facets_pretty_paths;
 
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -16,6 +18,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Utilty Class.
@@ -39,18 +42,11 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $currentRequest;
 
   /**
-   * Term Storage object.
+   * Entity Type Manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $termStorage;
-
-  /**
-   * Node Storage object.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $nodeStorage;
+  protected $entityTypeManager;
 
   /**
    * Language Manager.
@@ -95,11 +91,11 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $defaultFacetsSummaryManager;
 
   /**
-   * Facet Summary Object.
+   * Cache Backend for bin pretty_paths.
    *
-   * @var \Drupal\facets_summary\FacetsSummaryInterface
+   * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $facetSummaryStorage;
+  protected $cache;
 
   /**
    * Replacement characters for facet values.
@@ -141,6 +137,8 @@ class AlshayaFacetsPrettyPathsHelper {
    *   SKU Manager.
    * @param \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager $default_facets_summary_manager
    *   Default Facets Summary Manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache backend for bin pretty_paths.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
@@ -150,18 +148,18 @@ class AlshayaFacetsPrettyPathsHelper {
                               DefaultFacetManager $facets_manager,
                               ConfigFactoryInterface $config_factory,
                               SkuManager $sku_manager,
-                              DefaultFacetsSummaryManager $default_facets_summary_manager) {
+                              DefaultFacetsSummaryManager $default_facets_summary_manager,
+                              CacheBackendInterface $cache) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
-    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->nodeStorage = $entity_type_manager->getStorage('node');
-    $this->facetSummaryStorage = $entity_type_manager->getStorage('facets_summary');
+    $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->facetManager = $facets_manager;
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
     $this->defaultFacetsSummaryManager = $default_facets_summary_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -178,43 +176,50 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Encoded element.
    */
   public function encodeFacetUrlComponents(string $source, string $alias, string $value) {
-    $static = &drupal_static(__FUNCTION__, []);
-    if (isset($static[$alias][$value])) {
-      return $static[$alias][$value];
-    }
+    $cid = implode(':', [
+      'encode',
+      $alias,
+      $value,
+    ]);
 
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$alias];
+
+    if ($attribute_code === 'field_category') {
+      return $value;
+    }
+
+    $cache = $this->cache->get($cid);
+    if (!empty($cache)) {
+      return $cache->data;
+    }
+
+    $tags = [];
     $is_swatch = in_array($attribute_code, $this->skuManager->getProductListingSwatchAttributes());
     $encoded = $value;
 
-    $storage = $this->termStorage;
     $entity_type = 'term';
 
     // We use ids only for category.
-    if ($attribute_code === 'field_category') {
-      $static[$alias][$value] = $value;
-      return $value;
-    }
-    elseif ($attribute_code == 'field_acq_promotion_label') {
-      $storage = $this->nodeStorage;
+    if ($attribute_code == 'field_acq_promotion_label') {
       $entity_type = 'node';
-      $query = $storage->getQuery();
+      $query = $this->entityTypeManager->getStorage('node')->getQuery();
       $query->condition('type', 'acq_promotion');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->condition($attribute_code, $value);
     }
     elseif ($is_swatch) {
-      $query = $storage->getQuery();
+      $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('field_sku_option_id', $value);
       $query->condition('field_sku_attribute_code', $attribute_code);
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
     else {
-      $query = $storage->getQuery();
+      $query = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery();
       $query->condition('name', $value);
       $query->condition('field_sku_attribute_code', $attribute_code);
       $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
     }
+
     $ids = $query->execute();
     $langcode = 'en';
 
@@ -224,6 +229,7 @@ class AlshayaFacetsPrettyPathsHelper {
         $alias = trim($alias, '/');
 
         if (strpos($alias, 'taxonomy/term') === FALSE) {
+          $tags[] = 'taxonomy_term:' . $id;
           $encoded = str_replace($this->getProductOptionAliasPrefix() . '/', '', $alias);
 
           // Decode it once, it will be encoded again later.
@@ -236,6 +242,8 @@ class AlshayaFacetsPrettyPathsHelper {
         $alias = trim($alias, '/');
 
         if (strpos($alias, 'node/') === FALSE) {
+          $tags[] = 'node:' . $id;
+
           // Decode it once, it will be encoded again later.
           $encoded = urldecode($alias);
           break;
@@ -247,7 +255,7 @@ class AlshayaFacetsPrettyPathsHelper {
       $encoded = str_replace($original, $replacement, $encoded);
     }
 
-    $static[$alias][$value] = $encoded;
+    $this->cache->set($cid, $encoded, Cache::PERMANENT, $tags);
     return $encoded;
   }
 
@@ -286,18 +294,13 @@ class AlshayaFacetsPrettyPathsHelper {
 
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    $type = 'term';
-    $storage = $this->termStorage;
-
-    if ($alias == 'promotions') {
-      $type = 'node';
-      $storage = $this->nodeStorage;
-    }
+    $type = ($alias == 'promotions') ? 'node' : 'taxonomy_term';
+    $storage = $this->entityTypeManager->getStorage($type);
 
     $id = str_replace(
-      $type == 'term' ? '/taxonomy/term/' : '/node/',
+      $type === 'taxonomy_term' ? '/taxonomy/term/' : '/node/',
       '',
-      $this->aliasManager->getPathByAlias($type == 'term' ? '/' . $this->getProductOptionAliasPrefix() . '/' . $decoded : '/' . $decoded, $current_langcode)
+      $this->aliasManager->getPathByAlias($type === 'taxonomy_term' ? '/' . $this->getProductOptionAliasPrefix() . '/' . $decoded : '/' . $decoded, $current_langcode)
     );
 
     if ($id) {
@@ -308,7 +311,7 @@ class AlshayaFacetsPrettyPathsHelper {
           $entity = $entity->getTranslation($current_langcode);
         }
 
-        if ($type === 'term') {
+        if ($type === 'taxonomy_term') {
           $decoded = $is_swatch ? $entity->get('field_sku_option_id')->getString() : $entity->label();
         }
         else {
@@ -376,7 +379,7 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Mapping with alias as key and field as value.
    */
   public function getFacetAliasFieldMapping(string $source) {
-    $static = &drupal_static(__FUNCTION__, []);
+    static $static = [];
 
     if (isset($static[$source])) {
       return $static[$source];
@@ -456,7 +459,7 @@ class AlshayaFacetsPrettyPathsHelper {
     if (isset($static[$visibility][$page])) {
       return $static[$visibility][$page];
     }
-
+    // Reusing the facet summary block values.
     $active_facet_items = $this->getFacetSummary($page);
     $active_prefix_facet = [];
     $active_suffix_facet = [];
@@ -466,12 +469,36 @@ class AlshayaFacetsPrettyPathsHelper {
         $meta_info_type = $this->getMetaInfotypeFromFacetId($active_facet_id);
         if (in_array($visibility, $meta_info_type['visibility'])) {
           if ($meta_info_type['type'] == self::FACET_META_TYPE_PREFIX) {
-            // Strip tags to get the value from price markup.
+            // Strip tags to get text from the price range markup.
+            // Language direction left to right (5 KWD - 10 KWD).
             $active_prefix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
           }
           elseif ($meta_info_type['type'] == self::FACET_META_TYPE_SUFFIX) {
+            $facet_value = strip_tags($value['#title']['#value']);
+            // Condition added for the price range filter order
+            // right to left for Arabic site.
+            // Ex. If filtered by the facet '5 KWD - 10 KWD':
+            // 1. For en site the value will be 5 KWD - 10 KWD.
+            // 2. Reversing the value for ar site 10 KWD - 5 KWD.
+            if (strpos($active_facet_id, 'price') > -1) {
+              $prices = explode(' - ', $facet_value);
+              array_map('trim', $prices);
+              // Checking if the current language's direction
+              // is right to left.
+              if (count($prices) > 1 && $this->languageManager->getCurrentLanguage()->getDirection() === LanguageInterface::DIRECTION_RTL) {
+                // Reversing the array as it will be used
+                // in string(meta description)
+                // Ex: "Shop an exclusive and luxurious range of
+                // short dresses for women
+                // from H&M starting from
+                // 5,000D0K0-10,000D0K0...".
+                $prices = array_reverse($prices);
+              }
+
+              $facet_value = implode(' - ', $prices);
+            }
             // Strip tags to get the value from price markup.
-            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . strip_tags($value['#title']['#value']) : strip_tags($value['#title']['#value']);
+            $active_suffix_facet[] = (!empty($meta_info_type['prefix_text'])) ? $meta_info_type['prefix_text'] . ' ' . $facet_value : $facet_value;
           }
         }
       }
@@ -497,7 +524,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
     // Active facet items for PLP pages.
     $summary = _alshaya_facets_pretty_paths_get_mappings()[$page]['summary'];
-    $facet_summary = $this->facetSummaryStorage->load($summary);
+    $facet_summary = $this->entityTypeManager->getStorage('facets_summary')->load($summary);
     $alshaya_facet_summary = $this->defaultFacetsSummaryManager->build($facet_summary);
     $active_facet_items = $alshaya_facet_summary['#items'];
     return $active_facet_items;

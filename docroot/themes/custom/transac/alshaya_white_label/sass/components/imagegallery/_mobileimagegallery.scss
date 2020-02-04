@@ -3,62 +3,6 @@
   padding: 0 !important;
 }
 
-#product-image-gallery-container-mobile {
-  padding: 0;
-  height: 100% !important;
-  width: 100% !important;
-  background: $modal_bg;
-  touch-action: none;
-
-  .subtext {
-    width: 100%;
-    padding: 1rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $modal_subtext;
-    line-height: 1;
-    background: $modal_subtext_bg;
-    margin-top: 0;
-    opacity: 0.62;
-    position: absolute;
-    bottom: 3.125rem;
-
-    p {
-      margin: 0.1875rem;
-    }
-  }
-
-  .mob-imagegallery__wrapper {
-    position: relative;
-
-    .slick-dots {
-      @include breakpoint($only-mobile) {
-        position: absolute;
-        width: 100%;
-        bottom: 0.75rem;
-      }
-    }
-  }
-
-  .button__wrapper {
-    display: none;
-  }
-
-  .slick-initialized .slick-slide {
-    display: flex;
-    align-items: center;
-  }
-}
-
-#product-image-gallery-mob {
-  margin: 0;
-  padding: 0;
-
-  .slick-dots {
-    text-align: center;
-  }
-}
-
 .mob-imagegallery__thumbnails__image {
   overflow: auto;
 

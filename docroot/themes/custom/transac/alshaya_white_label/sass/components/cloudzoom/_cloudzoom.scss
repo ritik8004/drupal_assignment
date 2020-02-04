@@ -99,44 +99,14 @@
     @include breakpoint($desktop) {
       height: 32.5rem;
       overflow: hidden;
+      position: relative;
+      line-height: 0;
 
       img {
         height: 100%;
         width: auto;
       }
     }
-  }
-
-  .mobile-hover-text {
-    @include breakpoint($only-tablet) {
-      @include u-visibility(block);
-    }
-
-    @include breakpoint($desktop) {
-      @include u-visibility(none);
-    }
-
-    width: 100%;
-    padding: 1rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $cloudzoom_hovertext;
-  }
-
-  .hover-text {
-    @include breakpoint($only-tablet) {
-      @include u-visibility(none);
-    }
-
-    @include breakpoint($desktop) {
-      @include u-visibility(block);
-    }
-
-    width: 100%;
-    padding: 1.5rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $cloudzoom_hovertext;
   }
 }
 
@@ -182,12 +152,6 @@
 .cloud-zoom-lens {
   @include breakpoint($only-tablet) {
     @include u-visibility(none, true);
-  }
-}
-
-#product-image-gallery {
-  .slick-list {
-    padding: 0 !important;
   }
 }
 
@@ -277,7 +241,6 @@
     }
   }
 
-  #product-image-gallery,
   #lightSlider {
     position: relative;
     height: 6.25rem;
@@ -334,18 +297,6 @@
     }
   }
 
-  #product-image-gallery {
-    margin-top: 1rem;
-
-    &.pager-yes {
-      padding: 0 2.5rem;
-    }
-
-    .slick-slide {
-      margin-#{$right}: 0.4375rem;
-    }
-  }
-
   #drupal-modal #lightSlider.pager-yes {
     .slick-slide {
       width: 6.3rem !important;
@@ -359,7 +310,6 @@
 }
 
 @include breakpoint($desktop) {
-  #product-image-gallery,
   #lightSlider {
     height: 32.5rem;
     margin: 0 0.625rem 0 0;
@@ -508,7 +458,6 @@
     }
   }
 
-  #product-image-gallery,
   #lightSlider {
     &.pager-no {
       height: auto;
@@ -529,17 +478,6 @@
   }
 }
 
-#product-image-gallery-container {
-  .imagegallery__wrapper {
-    & > .imagegallery__full {
-      .imagegallery__full__image {
-        height: auto;
-        width: 100%;
-      }
-    }
-  }
-}
-
 #drupal-modal {
   .acq-content-product-modal {
     .slider-position-bottom {
@@ -555,3 +493,82 @@
     }
   }
 }
+
+#product-full-screen-gallery-container {
+  height: 100vh !important;
+  overflow-y: auto;
+
+  @include breakpoint($only-mobile) {
+    padding: 0;
+  }
+
+  .slick-arrow {
+    @include breakpoint($tablet) {
+      top: 50%;
+      transform: translateY(-50%);
+      position: fixed;
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+    }
+  }
+
+  .slick-dots {
+    @include breakpoint($tablet) {
+      position: fixed !important;
+      bottom: 3rem !important;
+    }
+  }
+
+  #product-full-screen-gallery {
+    margin: 0;
+    padding: 0;
+
+    &.slick-slider {
+      @include breakpoint($only-mobile) {
+        touch-action: pan-y pinch-zoom;
+      }
+    }
+
+    img {
+      margin: 0 auto;
+    }
+  }
+}
+
+#product-zoom-container {
+  .img-wrap {
+    &.product-image-zoomed {
+      position: relative;
+
+      .product-image-zoom-placeholder {
+        z-index: 1;
+      }
+    }
+
+    .product-image-zoom-placeholder {
+      position: absolute;
+      top: 0;
+      overflow: hidden;
+      height: 100%;
+      z-index: -1;
+      cursor: pointer;
+    }
+
+    .product-image-zoom-placeholder-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      background-position: center center;
+      background-color: $white-five;
+    }
+  }
+}
+

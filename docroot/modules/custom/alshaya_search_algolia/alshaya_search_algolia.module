@@ -159,6 +159,13 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 }
 
 /**
+ * Implements hook_alshaya_seo_google_sitelink_searchbox_url_alter().
+ */
+function alshaya_search_algolia_alshaya_seo_google_sitelink_searchbox_url_alter(&$searchUrl) {
+  $searchUrl = '#query={search_term_string}';
+}
+
+/**
  * Implements hook_alshaya_search_filter_link_alter().
  */
 function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, $attribute) {

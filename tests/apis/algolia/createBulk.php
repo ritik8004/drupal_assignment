@@ -8,13 +8,9 @@ $app_id = 'testing24192T8KHZ';
 $app_secret_admin = '81c93293993d87fb67f2af22749ecbeb';
 
 $brands = [
-  'mckw',
-  'mcsa',
-  'mcae',
-  'hmkw',
-  'hmsa',
-  'hmae',
-  'hmeg',
+  'bbwkw',
+  'bbwsa',
+  'bbwae',
 ];
 
 $envs = [
@@ -23,7 +19,18 @@ $envs = [
   '01dev2',
   '01dev3',
   '01qa2',
+];
+
+// Settings for live app.
+
+$app_id = '6TOQSJY0O6';
+$app_secret_admin = ''; // Admin Key.
+
+$envs = [
   '01test',
+  '01uat',
+  '01pprod',
+  '01live',
 ];
 
 global $languages;

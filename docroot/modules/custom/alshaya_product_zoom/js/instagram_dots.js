@@ -19,7 +19,7 @@
   Drupal.behaviors.pdpInstagranDots = {
     attach: function (context, settings) {
       // Slick Selector.
-      var slickSlider = $('#product-image-gallery-mobile, #product-image-gallery-mob', context);
+      var slickSlider = $('#product-image-gallery-mobile, #product-image-gallery-mob, #product-full-screen-gallery', context);
 
       // After slider is loaded, add a wrapper for dots.
       // We need a wrapper with fixed width and overflow hidden.
