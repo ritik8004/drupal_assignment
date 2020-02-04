@@ -209,3 +209,13 @@ function alshaya_spc_module_implements_alter(&$implementations, $hook) {
     $implementations = $group + $implementations;
   }
 }
+
+/**
+ * Implements hook_user_logout().
+ */
+function alshaya_spc_user_logout(AccountInterface $account) {
+  $cookies = \Drupal::request()->cookies->all();
+  if (isset($cookies['PHPSESSID'])) {
+    setrawcookie('PHPSESSID', '', REQUEST_TIME - 3600, '/');
+  }
+}

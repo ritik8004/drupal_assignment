@@ -23,6 +23,7 @@ export default class MiniCart extends React.Component {
     // Trigger event so that data can be passed to other components.
     var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
     document.dispatchEvent(event);
+    checkCartCustomer(result);
   }
 
   componentDidMount() {
@@ -50,7 +51,7 @@ export default class MiniCart extends React.Component {
           // Store info in storage.
           let data_to_store = {
             'cart': result
-          }
+          };
           addInfoInStorage(data_to_store);
 
           // Trigger event so that data can be passed to other components.
@@ -58,7 +59,7 @@ export default class MiniCart extends React.Component {
         });
       }
       else {
-        // Trigger event so that data can be passed to other components.s
+        // Trigger event so that data can be passed to other components.
         this.dispatchRefereshCart(this.emptyResult);
       }
 
@@ -67,7 +68,7 @@ export default class MiniCart extends React.Component {
       document.addEventListener('refreshMiniCart', (e) => {
         var data = e.detail.data();
         // If no error from MDC.
-        if (data.error === undefined) {
+        if (data && data.error === undefined) {
           this.setState({
             qty: data.items_qty,
             amount: data.cart_total,
@@ -79,13 +80,13 @@ export default class MiniCart extends React.Component {
             'cart': data
           };
           addInfoInStorage(data_to_store);
-          checkCartCustomer(data_to_store);
 
           if (data.items.length === 0) {
             this.setState({
               wait: true
             });
           }
+          checkCartCustomer(data);
         }
       }, false);
     } catch (error) {
