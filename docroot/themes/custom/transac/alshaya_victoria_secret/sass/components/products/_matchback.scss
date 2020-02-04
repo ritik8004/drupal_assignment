@@ -1,0 +1,13 @@
+@include breakpoint($tablet) {
+  .nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+    &.dialog-matchback-image-gallery-container {
+      .imagezoom-dialog-header {
+        font-family: $vs-bentonsans-light;
+      }
+    }
+  }
+
+  .matchback-hover-text {
+    color: $matchback_hover_text;
+  }
+}

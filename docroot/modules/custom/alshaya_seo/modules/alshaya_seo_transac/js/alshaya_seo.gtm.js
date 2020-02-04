@@ -15,11 +15,12 @@
       $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
         var product = $(this).closest('article[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
@@ -28,11 +29,12 @@
       // For simple grouped products.
       $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings.productInfo[sku]['group'][variant];
+        var variantInfo = drupalSettings[productKey][sku]['group'][variant];
 
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
