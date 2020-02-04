@@ -15,16 +15,6 @@
   Drupal.behaviors.alshayaAcmProductPdp = {
     attach: function (context, settings) {
 
-      $('.sku-base-form.visually-hidden').once('sku-base-form-processed').on('select-to-option-conversion-completed', function () {
-        // Show add to cart form now.
-        $(this).removeClass('visually-hidden');
-        $(this).trigger('form-visible');
-
-        if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
-          $('.content__title_wrapper').addClass('show-sticky-wrapper');
-        }
-      });
-
       // Disable sharing and deliver blocks for OOS.
       $('.product-out-of-stock').once('page-load').each(function () {
         $(this).find('.sharethis-wrapper').addClass('out-of-stock');
@@ -366,5 +356,19 @@
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
     }
   }
+
+  // This event is triggered on page load itself in attach (Drupal.behaviors.configurableAttributeBoxes)
+  // once size boxes are shown properly
+  // but since we can't control which attach is triggered first,
+  // at times this event was getting bound after it was triggered. So keeping this outside attach.
+  $(document).on('select-to-option-conversion-completed', '.sku-base-form.visually-hidden', function () {
+    // Show add to cart form now.
+    $(this).removeClass('visually-hidden');
+    $(this).trigger('form-visible');
+
+    if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
+      $('.content__title_wrapper').addClass('show-sticky-wrapper');
+    }
+  });
 
 })(jQuery, Drupal, drupalSettings);
