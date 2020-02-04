@@ -176,6 +176,7 @@ $modal_subtext: $white-five;
 $modal_subtext_bg: $black;
 $modal_close_bg: $marine-blue;
 $modal_close_icon: $white-two;
+$modal_header_border: $warm-grey-two;
 
 // VAT text
 $vat: $grey-light;
@@ -1122,3 +1123,7 @@ $megamenu-inline-layout-right-category-seperator: $white-two;
 
 // App navigation links
 $app-navigation-link-seperator-border: $white-smoke-light;
+
+// Matchback Block.
+$matchback_item_code_color: #777;
+$matchback_cart_notification_bg: #f6f6f6;

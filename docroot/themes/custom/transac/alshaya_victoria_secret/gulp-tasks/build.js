@@ -8,10 +8,12 @@ module.exports = function (gulp, plugins, options) {
 
   gulp.task('build', [
     'compile:sass',
+    'compile:module-component-libraries-rtl',
+    'compile:module-component-libraries-ltr'
     // 'compile:styleguide'
   ], function (cb) {
-  // Run linting last, otherwise its output gets lost.
-    plugins.runSequence(['lint:js-with-fail', 'lint:css-with-fail'], cb);
+    // Run linting last, otherwise its output gets lost.
+    plugins.runSequence(['lint:js-with-fail', 'lint:css-with-fail', 'lint:module-component-libraries-css-with-fail'], cb);
   });
 
   gulp.task('build:dev', [
