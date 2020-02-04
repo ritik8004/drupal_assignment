@@ -99,6 +99,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
       $variables['show_cart_matchback'] = $acm_settings->get('show_crosssell_as_matchback');
       if ($variables['show_cart_matchback']) {
         $variables['#attached']['library'][] = 'alshaya_white_label/matchback_cart_notification';
+        $variables['#cache']['tags'] = $acm_settings->getCacheTags();
       }
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');

@@ -16,6 +16,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\CacheableAjaxResponse;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Cache\CacheableMetadata;
 
 /**
  * Class ProductController.
@@ -184,6 +185,12 @@ class ProductController extends ControllerBase {
         }
       }
     }
+    // Add cache metadata.
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
+      '#cache' => [
+        'tags' => $this->acmConfig->getCacheTags(),
+      ],
+    ]));
 
     return $response;
   }
