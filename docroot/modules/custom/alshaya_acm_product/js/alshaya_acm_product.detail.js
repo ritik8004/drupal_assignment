@@ -353,9 +353,11 @@
     var related = $('.horizontal-related' + selector);
     var scrollPoint = window.innerHeight + window.pageYOffset;
 
-    if (!matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
-      matchback.addClass('matchback-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
+    if (matchback.length > 0) {
+      if (!matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
+        matchback.addClass('matchback-processed');
+        Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
+     }
     }
     if (!upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
       upsell.addClass('upsell-processed');
