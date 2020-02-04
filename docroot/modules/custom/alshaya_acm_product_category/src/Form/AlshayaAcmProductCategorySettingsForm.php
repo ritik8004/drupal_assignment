@@ -68,6 +68,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       ->set('old_categorization_enabled', $form_state->getValue('old_categorization_enabled'))
       ->set('enable_lhn_tree', $form_state->getValue('enable_lhn_tree'))
       ->set('grouping_page_header_style', $form_state->getValue('grouping_page_header_style'))
+      ->set('enable_auto_sale_categorisation', $form_state->getValue('enable_auto_sale_categorisation'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -91,14 +92,19 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('sale_category_ids'),
     ];
 
-    if (empty($config->get('sale_category_ids'))) {
-      $form['enable_auto_sale_categorisation'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Enable Auto Sale Categorization.'),
-        '#description' => $this->t('Enable auto sale categorization if sale category is not selected.'),
-        '#default_value' => $config->get('enable_auto_sale_categorisation'),
-      ];
-    }
+    $form['enable_auto_sale_categorisation'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Auto Sale Categorization.'),
+      '#description' => $this->t('Enable auto sale categorization if sale category is not selected.'),
+      '#states' => [
+        'unchecked' => [
+          ':input[name="sale_category_ids[]"]' => ['!value' => []],
+        ],
+        'checked' => [
+          ':input[name="sale_category_ids[]"]' => ['value' => $config->get('sale_category_ids')],
+        ],
+      ],
+    ];
 
     $new_arrivals = [];
 
