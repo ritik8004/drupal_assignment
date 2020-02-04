@@ -333,6 +333,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
               'field_margin_mobile' => [
                 'label' => 'margin',
               ] + $default_values,
+              'field_promo_block_visible_on' => [
+                'label' => 'visibility',
+              ] + $default_values,
             ],
           ],
           'promo_block_button' => [
@@ -566,6 +569,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           // We are interested in paragraph types that are stored inside
           // layout paragraph items.
           if (!empty($paragraph_data = $this->processParagraphReferenceField($entity, $field_name))) {
+            // Promo block should be dispayed only on mobile if its visibility
+            // field is set to mobile or all devices.
+            if ($field_name === 'field_promo_block') {
+              $visibility = $paragraph_data[0]['visibility'] ?? NULL;
+              if ($visibility && (!in_array($visibility, ['all', 'mobile_app']))) {
+                continue;
+              }
+            }
+
             $data = array_merge($paragraph_data, $data);
             continue;
           }
@@ -655,8 +667,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function paragraphPrepareData(ParagraphInterface $entity, array $fields) {
     $data = [];
+    $entity_type_id = $entity->getEntityTypeId();
     foreach ($fields as $field => $field_info) {
       if (!empty($field_info['callback'])) {
+
         $result = call_user_func_array(
           [$this, $field_info['callback']],
           [
@@ -686,6 +700,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           return $value['value'];
         }, $entity->get($field)->getValue())
         : $entity->get($field)->getString();
+      }
+      elseif ($entity->hasField($field)) {
+        // Get default value of field.
+        $field_storage = $this->entityTypeManager->getStorage('field_config')->load($entity_type_id . '.' . $entity->bundle() . '.' . $field);
+        $default_value = $field_storage->getDefaultValue($entity);
+
+        if (!empty($default_value) && is_array($default_value)) {
+          $data[$field_info['label']] = $default_value[0]['value'];
+        }
       }
     }
     return $data;
