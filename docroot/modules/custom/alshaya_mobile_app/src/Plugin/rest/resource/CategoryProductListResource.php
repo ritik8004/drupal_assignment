@@ -216,7 +216,8 @@ class CategoryProductListResource extends ResourceBase {
     $terms = $this->productCategoryTree->allChildTerms($this->languageManager->getCurrentLanguage()->getId(), $id, FALSE, TRUE);
     $data = [];
     foreach ($terms as $term) {
-      $data[$term->tid] = [
+      $data[] = [
+        'id' => $term->tid,
         'label' => $term->name,
         'deeplink' => $this->mobileAppUtility->getDeepLink($term),
       ];
