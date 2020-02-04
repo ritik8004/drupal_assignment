@@ -644,8 +644,10 @@
     color: $pdp_sidebar_link;
     cursor: pointer;
 
-    @include breakpoint($tablet) {
-      display: none !important;
+    &:not(.matchback-readmore) {
+      @include breakpoint($tablet) {
+        display: none !important;
+      }
     }
   }
 }
