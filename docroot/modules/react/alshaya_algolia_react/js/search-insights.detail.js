@@ -14,6 +14,9 @@
     var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
     $('html').attr('data-algolia-query-id', algolia_clicks[sku]);
   }
+  else {
+    $('html').attr('data-algolia-query-id', '');
+  }
 
   Drupal.behaviors.alshayaAlgoliaInsightsDetail = {
     attach: function (context) {
