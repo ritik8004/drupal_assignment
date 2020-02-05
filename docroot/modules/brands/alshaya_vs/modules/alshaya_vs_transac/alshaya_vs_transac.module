@@ -204,7 +204,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($view_mode == 'modal') {
+  if ($view_mode == 'modal' || $view_mode == 'free_gift') {
     $return = _alshaya_vs_transac_get_product_description($sku_entity);
     $build['short_desc'] = $return['short_desc'];
     $build['description'] = $return['description'];
