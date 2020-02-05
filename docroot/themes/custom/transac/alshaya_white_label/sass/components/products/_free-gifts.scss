@@ -1,5 +1,6 @@
 .nodetype--acq_product {
-  .select-free-gift.form-submit {
+  .select-free-gift.form-submit,
+  .select-free-gift-link {
     display: none !important;
   }
 
@@ -256,8 +257,8 @@
       @include breakpoint($only-mobile) {
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 0;
-        margin-top: 5.8875rem;
+        margin-bottom: 1.875rem;
+        margin-top: 0;
         justify-content: space-between;
         overflow-y: scroll;
       }
@@ -477,6 +478,8 @@
       line-height: 1.29;
       color: $free-gifts-title-text;
       text-decoration: underline;
+      margin-bottom: 1.4375rem;
+      display: inline-block;
 
       @include breakpoint($only-mobile) {
         margin-#{$left}: 1.5rem;
@@ -538,12 +541,10 @@
     }
   }
 
-  .sku-base-form {
-    .ajax-progress-throbber {
-      display: block !important;
+  .ajax-progress-throbber {
+    display: block !important;
 
-      @include fullPageLoader();
-    }
+    @include fullPageLoader();
   }
 }
 
@@ -560,13 +561,19 @@
 
     a:first-child {
       flex-grow: 1;
+      display: block;
+      width: 100%;
+
+      img {
+        @include breakpoint($desktop) {
+          width: 18.1875rem;
+          margin: auto;
+        }
+      }
     }
 
     .ajax-progress-throbber {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 0.625rem;
+      @include fullPageLoader();
     }
 
     .select-free-gift-link {
@@ -576,9 +583,9 @@
         font-family: $alshaya-bold;
         font-size: 0.875rem;
         margin-top: 1.125rem;
-        background: #ef5f96;
-        border-radius: 5px;
-        color: #fff;
+        background: $free-gifts-select-button-bg;
+        border-radius: 0.3125rem;
+        color: $white-five;
         border: 0;
         text-transform: uppercase;
         padding: 0.5rem 1.3701rem;
@@ -592,8 +599,20 @@
   }
 }
 
-.free-gift-promo-list-overlay {
+.path--cart.free-gift-promo-list-overlay {
   .ui-dialog {
+    @include breakpoint($only-mobile) {
+      background: $modal_bg !important;
+    }
+
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 27.2rem) / 2) calc((100vw - 45rem) / 2) !important;
+    }
+
+    @include breakpoint($desktop) {
+      padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+    }
+
     .ui-dialog-titlebar {
       .ui-dialog-title {
         display: block;
@@ -606,8 +625,21 @@
 
         @include breakpoint($only-mobile) {
           #{$left}: 0.5rem;
+          padding: 1.25rem 0.625rem 2.5rem;
+          float: none;
+          position: static;
         }
       }
+
+      .ui-dialog-titlebar-close {
+        @include breakpoint($only-mobile) {
+          top: 0;
+        }
+      }
+    }
+
+    #drupal-modal {
+      height: 100% !important;
     }
   }
 }
