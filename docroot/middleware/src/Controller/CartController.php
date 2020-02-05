@@ -69,7 +69,7 @@ class CartController {
    *
    * @var array
    */
-  protected $sessionCartInfo;
+  protected $sessionCartInfo = [];
 
   /**
    * CartController constructor.
@@ -107,7 +107,7 @@ class CartController {
       $this->session->start();
     }
 
-    return $this->session->get(self::STORAGE_KEY);
+    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
   }
 
   /**
@@ -179,10 +179,10 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    $cart = $this->getCartFromSession();
+    $this->getCartFromSession();
 
-    if (!empty($cart['cart_id'])) {
-      return $this->getCart($cart['cart_id']);
+    if (!empty($this->sessionCartInfo['cart_id'])) {
+      return $this->getCart($this->sessionCartInfo['cart_id']);
     }
 
     // If there are not cart available.
@@ -343,11 +343,12 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   protected function createCart() {
-    $cart = $this->getCartFromSession();
-    if (!empty($cart['cart_id'])) {
-      return $cart['cart_id'];
+    $this->getCartFromSession();
+    if (!empty($this->sessionCartInfo['cart_id'])) {
+      return $this->sessionCartInfo['cart_id'];
     }
     $this->session->remove(self::STORAGE_KEY);
+    $this->sessionCartInfo = [];
     return $this->cart->createCart();
   }
 
@@ -570,18 +571,18 @@ class CartController {
    *   Json response.
    */
   public function associateCart() {
-    $cart = $this->getCartFromSession();
+    $this->getCartFromSession();
 
-    if (!empty($cart['customer_id'])) {
-      return new JsonResponse($cart);
+    if (!empty($this->sessionCartInfo['customer_id'])) {
+      return new JsonResponse($this->sessionCartInfo);
     }
 
     try {
       $customer = $this->drupal->getCustomerId();
       if ($customer !== NULL) {
-        $this->cart->associateCartToCustomer($cart['cart_id'], $customer['customer_id']);
+        $this->cart->associateCartToCustomer($this->sessionCartInfo['cart_id'], $customer['customer_id']);
         $this->session->set(self::STORAGE_KEY, [
-          'cart_id' => $cart['cart_id'],
+          'cart_id' => $this->sessionCartInfo['cart_id'],
           'customer_id' => $customer['customer_id'],
           'uid' => $customer['uid'],
         ]);
