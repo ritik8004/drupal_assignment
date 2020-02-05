@@ -141,7 +141,7 @@
 }
 
 @include breakpoint($only-tablet) {
-  #drupal-modal {
+  #drupal-modal:not(.free-gift-listing-modal) {
     #lightSlider {
       &.pager-yes {
         padding: 0 2.4375rem;
