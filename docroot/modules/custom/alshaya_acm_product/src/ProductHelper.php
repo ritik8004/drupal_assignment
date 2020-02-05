@@ -95,7 +95,7 @@ class ProductHelper {
     $limit = ($limit == NULL) ? $this->productDisplaySettings->get('short_desc_characters') : $limit;
     $desc_stripped = strip_tags($html);
     // It is very unlikely but description might be too short to process.
-    if (Unicode::strlen($html) <= $limit || Unicode::strlen($desc_stripped) <= $limit) {
+    if (mb_strlen($html) <= $limit || mb_strlen($desc_stripped) <= $limit) {
       $return = [
         'html' => $html,
       ];
