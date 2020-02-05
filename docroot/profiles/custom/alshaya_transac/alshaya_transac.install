@@ -20,6 +20,7 @@ use Drupal\taxonomy\Entity\Term;
 function alshaya_transac_update_8125() {
   if (!(\Drupal::moduleHandler()->moduleExists('crop'))) {
     \Drupal::logger('alshaya_transac')->notice('Crop module already in disabled state.');
+    return;
   }
 
   $crops = \Drupal::entityTypeManager()->getStorage('crop')->loadMultiple();
