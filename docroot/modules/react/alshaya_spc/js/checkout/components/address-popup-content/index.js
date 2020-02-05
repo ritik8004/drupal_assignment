@@ -4,8 +4,7 @@ import AddressForm from "../address-form";
 
 export default class AddressContent extends React.Component {
   render() {
-    let uid = window.drupalSettings.user.uid;
-    if (uid > 0) {
+    if (window.drupalSettings.user.uid > 0) {
       return <AddressList/>;
     }
     else {

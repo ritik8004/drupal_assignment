@@ -29,9 +29,7 @@ export default class EmptyDeliveryText extends React.Component {
   }
 
   getAddressPopupClassName = () => {
-    let uid = window.drupalSettings.user.uid;
-    // return uid === 0 ? 'spc-address-form-guest' : 'spc-address-list-member';
-    return uid > 0 ? 'spc-address-list-member' : 'spc-address-form-guest';
+    return window.drupalSettings.user.uid > 0 ? 'spc-address-list-member' : 'spc-address-form-guest';
   };
 
   /**
