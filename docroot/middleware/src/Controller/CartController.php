@@ -65,6 +65,13 @@ class CartController {
   protected $session;
 
   /**
+   * Current cart session info.
+   *
+   * @var array
+   */
+  protected $sessionCartInfo;
+
+  /**
    * CartController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -101,6 +108,37 @@ class CartController {
     }
 
     return $this->session->get(self::STORAGE_KEY);
+  }
+
+  /**
+   * Update cart id to middleware session.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   */
+  protected function updateSessionCartId(int $cart_id) {
+    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    if (empty($this->sessionCartInfo['cart_id'])) {
+      $this->sessionCartInfo['cart_id'] = $cart_id;
+      $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
+    }
+  }
+
+  /**
+   * Return user id from current session.
+   *
+   * @return int|null
+   *   Return user id or null.
+   */
+  protected function getSessionUid() {
+    if (!empty($this->sessionCartInfo['uid'])) {
+      return $this->sessionCartInfo['uid'];
+    }
+
+    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    return !empty($this->sessionCartInfo['uid'])
+      ? $this->sessionCartInfo['uid']
+      : NULL;
   }
 
   /**
@@ -286,9 +324,8 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->session->set(self::STORAGE_KEY, [
-        'cart_id' => $data['cart_id'],
-      ]);
+      $this->updateSessionCartId($data['cart_id']);
+      $data['uid'] = $this->getSessionUid();
     }
     catch (\Exception $e) {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
@@ -536,7 +573,7 @@ class CartController {
     $cart = $this->getCartFromSession();
 
     if (!empty($cart['customer_id'])) {
-      return new JsonResponse($cart['customer_id']);
+      return new JsonResponse($cart);
     }
 
     try {
@@ -546,6 +583,7 @@ class CartController {
         $this->session->set(self::STORAGE_KEY, [
           'cart_id' => $cart['cart_id'],
           'customer_id' => $customer['customer_id'],
+          'uid' => $customer['uid'],
         ]);
       }
     }

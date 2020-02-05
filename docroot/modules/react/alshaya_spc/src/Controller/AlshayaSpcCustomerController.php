@@ -129,6 +129,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
   public function getUserCustomerId() {
     $response = [
       'customer_id' => NULL,
+      'uid' => $this->currentUser->getAccount()->id(),
     ];
 
     if (!$this->currentUser->isAnonymous()) {

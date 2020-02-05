@@ -11,6 +11,7 @@ import EmptyResult from "../../../utilities/empty-result";
 import Loading from "../../../utilities/loading";
 import VatFooterText from "../../../utilities/vat-footer";
 import { stickyMobileCartPreview, stickySidebar } from "../../../utilities/stickyElements/stickyElements";
+import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 
 export default class Cart extends React.Component {
 
@@ -64,6 +65,7 @@ export default class Cart extends React.Component {
         // Make side bar sticky.
         stickySidebar();
       }
+      checkCartCustomer(data);
 
       // To show the success/error message on cart top.
       if (data.message !== undefined) {

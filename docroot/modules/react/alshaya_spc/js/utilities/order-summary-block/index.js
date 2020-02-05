@@ -7,8 +7,9 @@ class OrderSummaryBlock extends React.Component {
  render() {
    const promo_data = this.props.cart_promo ? this.props.cart_promo : null;
    let order_summary_title = Drupal.t('order summary');
+   let continue_checkout_link = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
+   // To be used on checkout page.
    if (this.props.item_qty !== undefined) {
-     // Thi to be used on checkout page.
      order_summary_title = Drupal.t('order summary (@qty items)', {'@qty': this.props.item_qty});
    }
 
@@ -29,7 +30,7 @@ class OrderSummaryBlock extends React.Component {
          {this.props.show_checkout_button &&
           <div className="actions">
            <div className="checkout-link submit">
-             <a href={Drupal.url('cart/login')} className="checkout-link">{Drupal.t('continue to checkout')}</a>
+              <a href={Drupal.url(continue_checkout_link)} className="checkout-link">{Drupal.t('continue to checkout')}</a>
            </div>
          </div>
          }
