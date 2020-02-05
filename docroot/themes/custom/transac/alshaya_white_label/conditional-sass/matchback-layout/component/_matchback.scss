@@ -6,6 +6,7 @@
   .cross-sell-product-component-left {
     @include breakpoint($tablet) {
       width: 23%;
+      flex-shrink: 0;
     }
 
     .cloudzoom-matchback_gallery {
@@ -18,6 +19,7 @@
   .cross-sell-product-component-center {
     @include breakpoint($tablet) {
       width: 27%;
+      flex-shrink: 0;
       text-align: $left;
       margin-#{$left}: 0.625rem;
     }
@@ -87,6 +89,12 @@
       @include breakpoint($tablet) {
         padding-top: 0 !important;
       }
+    }
+  }
+
+  .field--name-field-skus .sku-base-form > div {
+    @include breakpoint($tablet) {
+      margin-right: 0;
     }
   }
 }
@@ -173,6 +181,12 @@
   button.slick-arrow {
     @include breakpoint($tablet) {
       bottom: -0.25rem;
+    }
+  }
+
+  .imagezoom-wrap img {
+    @include breakpoint($tablet) {
+      max-width: 224px;
     }
   }
 }

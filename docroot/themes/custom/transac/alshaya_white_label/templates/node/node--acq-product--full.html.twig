@@ -15,6 +15,9 @@ set classes = [
         {% else %}
           <div id="product-zoom-container"></div>
         {% endif %}
+        {% if show_crosssell_as_matchback == false %}
+          {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
+        {% endif %}
       </div>
     {% endblock %}
 
@@ -179,7 +182,9 @@ set classes = [
     {% block desktopCS %}
     {% endblock %}
 
-    {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
+    {% if show_crosssell_as_matchback == true %}
+      {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
+    {% endif %}
 
   </div>
 </article>
