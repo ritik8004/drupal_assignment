@@ -105,6 +105,12 @@
         right: -2.05rem !important;
       }
     }
+
+    .views-row {
+      @include breakpoint($only-tablet) {
+        padding: 0 0.5rem;
+      }
+    }
   }
 
   .views-row {
@@ -112,8 +118,6 @@
       .price {
         max-width: 100% !important;
       }
-
-      padding: 0 0.5rem;
     }
 
     .use-ajax {
@@ -172,14 +176,6 @@
 
     @include breakpoint($upto-desktop) {
       object-fit: cover;
-    }
-  }
-
-  &.view-display-id-block_matchback {
-    .slick-slider .slick-slide img {
-      @include breakpoint($tablet) {
-        max-width: 100%;
-      }
     }
   }
 }
