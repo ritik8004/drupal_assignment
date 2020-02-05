@@ -3,8 +3,6 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\Core\Url;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -31,11 +29,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class CategoryProductListResource extends ResourceBase {
-
-  /**
-   * Sub Category ID.
-   */
-  const SUBCATEGORY_IDS_CACHE_TAG = 'sub_category_ids';
 
   /**
    * Search API Index ID.
@@ -102,13 +95,6 @@ class CategoryProductListResource extends ResourceBase {
   protected $productCategoryTree;
 
   /**
-   * Cache Backend object for "cache.data".
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -135,10 +121,8 @@ class CategoryProductListResource extends ResourceBase {
    *   Entity repository.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend object for "cache.data".
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository, ProductCategoryTree $product_category_tree, CacheBackendInterface $cache) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->parseModeManager = $parse_mode_manager;
@@ -147,7 +131,6 @@ class CategoryProductListResource extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
     $this->productCategoryTree = $product_category_tree;
-    $this->cache = $cache;
   }
 
   /**
@@ -166,8 +149,7 @@ class CategoryProductListResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('language_manager'),
       $container->get('entity.repository'),
-      $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('cache.data')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
@@ -232,26 +214,15 @@ class CategoryProductListResource extends ResourceBase {
    *   Data array.
    */
   protected function getSubCategoryData(int $id) {
-    // Drupal cache.
-    $cache = $this->cache->get(self::SUBCATEGORY_IDS_CACHE_TAG);
-    if ($cache && $cache->data) {
-      $data = $cache->data;
-      return $data;
-    }
-
     $terms = $this->productCategoryTree->allChildTerms($this->languageManager->getCurrentLanguage()->getId(), $id, FALSE, TRUE);
     $data = [];
-    $tags = [];
     foreach ($terms as $term) {
       $data[] = [
         'id' => $term->tid,
         'label' => $term->name,
         'deeplink' => $this->mobileAppUtility->getDeepLink($term),
       ];
-      $tags[] = 'sub_category:' . $term->tid;
     }
-
-    $this->cache->set(self::SUBCATEGORY_IDS_CACHE_TAG, $data, Cache::PERMANENT, $tags);
 
     return $data;
   }
