@@ -13,6 +13,21 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add new field "visible on" to promo block paragraph.
+ */
+function alshaya_paragraphs_update_8127() {
+  $configs = [
+    'core.entity_form_display.paragraph.promo_block.default',
+    'core.entity_view_display.paragraph.promo_block.default',
+    'field.field.paragraph.promo_block.field_promo_block_visible_on',
+    'field.storage.paragraph.field_promo_block_visible_on',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update description of promo block paragraph field.
  */
 function alshaya_paragraphs_update_8126() {
