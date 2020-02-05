@@ -1,8 +1,7 @@
 import React from 'react';
 
 import Popup from 'reactjs-popup';
-import AddressForm from '../address-form';
-import AddressList from '../address-list';
+import AddressContent from "../address-popup-content";
 import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
 
 export default class EmptyDeliveryText extends React.Component {
@@ -28,6 +27,12 @@ export default class EmptyDeliveryText extends React.Component {
       this.closeModal();
     }, false);
   }
+
+  getAddressPopupClassName = () => {
+    let uid = window.drupalSettings.user.uid;
+    // return uid === 0 ? 'spc-address-form-guest' : 'spc-address-list-member';
+    return uid > 0 ? 'spc-address-list-member' : 'spc-address-form-guest';
+  };
 
   /**
    * Process the address form data on sumbit.
@@ -55,12 +60,12 @@ export default class EmptyDeliveryText extends React.Component {
   	return (
       <div className='spc-empty-delivery-information'>
         <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
-          {Drupal.t('Please add yor contact details and address.')}
+          {Drupal.t('Please add your contact details and address.')}
         </div>
-        <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+        <Popup className={this.getAddressPopupClassName()} open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
           <React.Fragment>
             <a className='close' onClick={this.closeModal}>&times;</a>
-            <AddressForm default_val={null} processAddress={this.processAddress}/>
+            <AddressContent/>
           </React.Fragment>
         </Popup>
       </div>

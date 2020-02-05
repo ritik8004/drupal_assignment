@@ -6,6 +6,7 @@ import {
   updateUserDefaultAddress,
   deleteUserAddress
 } from '../../../utilities/address_util';
+import EditAddressSVG from "../edit-address-svg";
 
 export default class AddressItem extends React.Component {
 
@@ -26,23 +27,23 @@ export default class AddressItem extends React.Component {
     this.setState({
       open: false
     });
-  }
+  };
 
   /**
    * When user changes address.
    */
   changeDefaultAddress = (id) => {
+    document.getElementById('address-' + id).checked = true;
     let addressList = updateUserDefaultAddress(id);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
         if (response.status === true) {
-          document.getElementById('address-' + id).checked = true;
           // Refresh the address list.
           this.props.refreshAddressList(response.data);
         }
       });
     }
-  }
+  };
 
   /**
    * Deletes the user address.
@@ -74,11 +75,14 @@ export default class AddressItem extends React.Component {
     editAddressData['static']['telephone'] = address['mobile']['local_number'];
 
     return (
-      <React.Fragment>
-        <div>{address.given_name} {address.family_name}</div>
-        <div>{addressData}</div>
-        <div>+{window.drupalSettings.country_mobile_code} {address.mobile.local_number}</div>
-        <div className='address delivery-method' onClick={() => this.changeDefaultAddress(address['address_id'])}>
+      <div className='spc-address-tile'>
+      <div className='spc-address-metadata'>
+        <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
+        <div className='spc-address-fields'>{addressData}</div>
+        <div className='spc-address-mobile'>+{window.drupalSettings.country_mobile_code} {address.mobile.local_number}</div>
+      </div>
+      <div className='spc-address-tile-actions'>
+        <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address['address_id'])}>
           <input
             id={'address-' + address['address_id']}
             type='radio'
@@ -87,26 +91,27 @@ export default class AddressItem extends React.Component {
             name='address-book-address'/>
 
           <label className='radio-sim radio-label'>
-            {Drupal.t('Preferred address')}
+            {Drupal.t('preferred address')}
           </label>
         </div>
-        <div>
-          <div onClick={this.openModal}>
-            {Drupal.t('Edit')}
+        <div className='spc-address-btns'>
+          <div title={Drupal.t('Edit Address')} className='spc-address-tile-edit' onClick={this.openModal}>
+            <EditAddressSVG/>
+            <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+              <React.Fragment>
+                <a className='close' onClick={this.closeModal}>&times;</a>
+                <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData}/>
+              </React.Fragment>
+            </Popup>
           </div>
-          <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-            <React.Fragment>
-              <a className='close' onClick={this.closeModal}>&times;</a>
-              <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData}/>
-            </React.Fragment>
-          </Popup>
+          {address['is_default'] === true &&
+            <div className='spc-address-tile-delete-btn'>
+              <button title={Drupal.t('Delete Address')}  id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
+            </div>
+          }
         </div>
-        {address['is_default'] === false &&
-          <div>
-            <button title={Drupal.t('Delete')} id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
-          </div>
-        }
-      </React.Fragment>
+      </div>
+      </div>
     );
   }
 

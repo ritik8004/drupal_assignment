@@ -17,7 +17,7 @@ class OrderSummaryBlock extends React.Component {
        <SectionTitle>{order_summary_title}</SectionTitle>
        {/*To Be used on Checkout Delivery pages.*/}
          {!this.props.show_checkout_button &&
-          <div className="product-content">
+          <div className={'product-content product-count-' + this.props.item_qty}>
             <CheckoutCartItems items={this.props.items}/>
           </div>
          }
