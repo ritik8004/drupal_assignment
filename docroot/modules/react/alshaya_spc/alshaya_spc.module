@@ -215,6 +215,8 @@ function alshaya_spc_module_implements_alter(&$implementations, $hook) {
  */
 function alshaya_spc_user_logout(AccountInterface $account) {
   $cookies = \Drupal::request()->cookies->all();
+  // Expire the cookie set by middleware on logout, So spc can not fetch
+  // existing cart related info.
   if (isset($cookies['PHPSESSID'])) {
     setrawcookie('PHPSESSID', '', REQUEST_TIME - 3600, '/');
   }
