@@ -11,9 +11,9 @@ field_name: field_promo_block_visible_on
 entity_type: paragraph
 bundle: promo_block
 label: 'Visible on'
-description: ''
+description: 'Determines where the promo blocks should be visible.'
 required: false
-translatable: true
+translatable: false
 skip_translation_check: 0
 default_value:
   -
