@@ -670,12 +670,13 @@
           }
         }
       }
-
-      #drupal-modal {
-        height: 100% !important;
-        padding: 1.5em 2.5rem;
-      }
     }
+  }
+}
+
+body:not(.ie) {
+  #drupal-modal.free-gift-listing-modal {
+    height: 100% !important;
   }
 }
 
