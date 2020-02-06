@@ -16,7 +16,7 @@
 
   // Get markup for the cart notification.
   Drupal.theme.cartNotificationMarkup = function(data) {
-    var markup = '<div class ="notification">';
+    var markup = '<div class="notification">';
     markup += '<div class="col-1">';
     markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
     markup += '<span class="qty">' + data.quantity + '</span></div>';
@@ -45,7 +45,7 @@
         if ($(addedProduct).attr('gtm-sku-type') === 'configurable') {
           var selected_variant = $('.selected-variant-sku', addedProduct).val();
           product_name = settings.productInfo[selected_sku].variants[selected_variant].cart_title;
-          image = settings.productInfo[selected_sku].variants[selected_variant  ].cart_image;
+          image = settings.productInfo[selected_sku].variants[selected_variant].cart_image;
         }
 
         // Scroll and show cart notification.
