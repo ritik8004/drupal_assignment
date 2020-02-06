@@ -240,7 +240,7 @@
   };
 
   // Submit form on success.
-  $.fn.checkoutPaymentSuccess = function () {
+  $.fn.checkoutCardPaymentSuccess = function () {
     Drupal.checkoutComProcessed = true;
     // On resolve, submit form and redirect for confirmation.
     var promiseResolve = function () {
