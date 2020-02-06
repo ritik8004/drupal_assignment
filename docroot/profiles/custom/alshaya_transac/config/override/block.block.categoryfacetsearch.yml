@@ -1,3 +1,8 @@
+dependencies:
+  theme:
+    - alshaya_pottery_barn
+    - alshaya_footlocker
+    - alshaya_hnm
 region: sidebar_first
 settings:
   label: Category (Search LHS)

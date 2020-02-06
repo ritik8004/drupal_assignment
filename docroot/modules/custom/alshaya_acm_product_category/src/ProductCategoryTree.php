@@ -937,7 +937,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Category.
    *
    * @return \Drupal\taxonomy\TermInterface
-   *   L1 category for the category.
+   *   L2 category for the category.
    */
   public function getL2Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());

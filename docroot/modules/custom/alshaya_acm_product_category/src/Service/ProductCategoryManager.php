@@ -367,6 +367,12 @@ class ProductCategoryManager {
    * @throws \Exception
    */
   public function processSalesCategoryCheckForSku(SKUInterface $sku) {
+    // Return if enable_auto_sale_categorisation is set to FALSE.
+    $product_settings_form = $this->configFactory->get('alshaya_acm_product_category.settings');
+    $enable_auto_sale_categorisation = $product_settings_form->get('enable_auto_sale_categorisation');
+    if (!($enable_auto_sale_categorisation == 1)) {
+      return;
+    }
     // Use old categorization if enabled.
     // @Todo: Remove this once old categorization not required.
     if ($this->isOldCategorizationRuleEnabled()) {
