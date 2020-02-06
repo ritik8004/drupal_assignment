@@ -11,6 +11,42 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for - Tap Image to Enlarge & Large view.
+ */
+function alshaya_master_update_8035() {
+  $strings = [
+    'Tap Image to Enlarge' => [
+      'ar' => ' اضغط على الصورة للتكبير',
+    ],
+    'Large view' => [
+      'ar' => 'وضعية التكبير',
+    ],
+    'each' => [
+      'ar' => 'كل منتج',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding arabic translations for - at.
+ */
+function alshaya_master_update_8034() {
+  $strings = [
+    'at' => [
+      'ar' => ' تبدأ من',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding arabic translations for - Your search did not return any results.
  */
 function alshaya_master_update_8033() {
@@ -1782,6 +1818,15 @@ function alshaya_master_install() {
     ],
     'continue as a guest' => [
       'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
+    'Tap Image to Enlarge' => [
+      'ar' => ' اضغط على الصورة للتكبير',
+    ],
+    'Large view' => [
+      'ar' => 'وضعية التكبير',
+    ],
+    'each' => [
+      'ar' => 'كل منتج',
     ],
   ];
 

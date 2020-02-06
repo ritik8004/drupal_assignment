@@ -627,12 +627,14 @@
     color: $pdp_sidebar_link;
     cursor: pointer;
 
-    @include breakpoint($only-mobile) {
-      display: none !important;
-    }
-
     @include breakpoint($tablet) {
       display: inline-block;
+    }
+  }
+
+  .read-more-description-link {
+    @include breakpoint($only-mobile) {
+      display: none !important;
     }
   }
 
@@ -644,8 +646,10 @@
     color: $pdp_sidebar_link;
     cursor: pointer;
 
-    @include breakpoint($tablet) {
-      display: none !important;
+    &:not(.matchback-readmore) {
+      @include breakpoint($tablet) {
+        display: none !important;
+      }
     }
   }
 }
@@ -2061,6 +2065,10 @@ html[lang=ar] {
   .mobilegallery {
     #product-image-gallery-mobile {
       min-height: 18rem;
+
+      &.slick-slider {
+        touch-action: pan-y pinch-zoom;
+      }
     }
   }
 }

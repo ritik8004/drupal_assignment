@@ -1,0 +1,18 @@
+{% if show_cart_matchback %}
+  <div class ="matchback-notification notification">
+    <div class="matchback-cart-notification-close"></div>
+{% else %}
+  <div class ="notification">
+{% endif %}
+    <div class="col-1">
+      {{ image }}
+      <div class="notification-qty">{% trans %}Qty{% endtrans %}: <span class = "qty">{{ quantity }}</span></div>
+    </div>
+    <div class="col-2">
+      <div class ="name">{{ product_name }}</div>
+      <div class="prod-added-text">{% trans %}has been added to your cart.{% endtrans %}</div>
+      <div class="matchback-notification-qty"> {% trans %}Quantity{% endtrans %}: <span class = "qty">{{ quantity }}</span></div>
+      <div class="matchback-prod-added-text"> {% trans %}has been added to your cart.{% endtrans %} </div>
+      <a href="{{ link }}">{{ link_text }}</a>
+    </div>
+  </div>

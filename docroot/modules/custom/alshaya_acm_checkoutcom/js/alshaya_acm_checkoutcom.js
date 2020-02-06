@@ -41,10 +41,12 @@
     }
   };
 
-  // Handle api error which triggered on card tokenisation fail.
-  CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
-    $(this).removeCheckoutLoader();
-  });
+  if (typeof CheckoutKit !== 'undefined') {
+    // Handle api error which triggered on card tokenisation fail.
+    CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
+      $(this).removeCheckoutLoader();
+    });
+  }
 
   // Display loader while payment form is submitted.
   $(document).on('checkoutcom_form_validated', function(e) {

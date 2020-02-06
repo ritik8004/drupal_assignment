@@ -4,6 +4,7 @@ namespace Drupal\alshaya_master\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Class AlshayaEntityHelper.
@@ -71,6 +72,22 @@ class AlshayaEntityHelper {
     }
 
     return $entity->label();
+  }
+
+  /**
+   * Query to get the product nodes.
+   *
+   * @return \Drupal\Core\Database\Query\AlterableInterface
+   *   Return a query object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function getNodesQuery() {
+    $query = $this->entityTypeManager->getStorage('node')->getQuery();
+    return $query->condition('type', 'acq_product')
+      ->condition('status', NodeInterface::PUBLISHED)
+      ->addTag('get_display_node_for_sku');
   }
 
 }

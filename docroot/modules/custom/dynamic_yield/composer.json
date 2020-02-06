@@ -1,0 +1,13 @@
+{
+    "name": "dynamic_yield",
+    "type": "drupal-module",
+    "description": "Integrate Dynamic yield JS.",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/dynamic_yield",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/dynamic_yield",
+        "source": "http://cgit.drupalcode.org/dynamic_yield"
+    }
+}

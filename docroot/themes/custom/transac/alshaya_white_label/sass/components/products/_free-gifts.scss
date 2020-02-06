@@ -1,5 +1,6 @@
 .nodetype--acq_product {
-  .select-free-gift {
+  .select-free-gift.form-submit,
+  .select-free-gift-link {
     display: none !important;
   }
 
@@ -127,10 +128,9 @@
 
   .ui-dialog {
     #drupal-modal {
-      overflow: auto !important;
-
       @include breakpoint($only-mobile) {
         padding: 0 !important;
+        overflow: auto !important;
       }
 
       .content__main {
@@ -256,8 +256,8 @@
       @include breakpoint($only-mobile) {
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 0;
-        margin-top: 5.8875rem;
+        margin-bottom: 1.875rem;
+        margin-top: 0;
         justify-content: space-between;
         overflow-y: scroll;
       }
@@ -399,7 +399,6 @@
 
       a {
         color: $free-gifts-coupon-code-text !important;
-        text-transform: uppercase;
       }
     }
 
@@ -445,12 +444,6 @@
 }
 
 .acq-content-product-modal {
-  .short-description-wrapper {
-    .read-more-description-link-gift {
-      display: block !important;
-    }
-  }
-
   .mobilegallery {
     .labels-container {
       display: none;
@@ -478,6 +471,8 @@
       line-height: 1.29;
       color: $free-gifts-title-text;
       text-decoration: underline;
+      margin-bottom: 1.4375rem;
+      display: inline-block;
 
       @include breakpoint($only-mobile) {
         margin-#{$left}: 1.5rem;
@@ -539,11 +534,13 @@
     }
   }
 
-  .sku-base-form {
-    .ajax-progress-throbber {
-      display: block !important;
+  .ajax-progress-throbber {
+    display: block !important;
 
-      @include fullPageLoader();
+    @include fullPageLoader();
+
+    .throbber {
+      @include throbberLoader();
     }
   }
 }
@@ -561,13 +558,25 @@
 
     a:first-child {
       flex-grow: 1;
+      display: block;
+      width: 100%;
+
+      img {
+        @include breakpoint($desktop) {
+          width: 18.1875rem;
+          margin: auto;
+        }
+      }
     }
 
     .ajax-progress-throbber {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 0.625rem;
+      display: block !important;
+
+      @include fullPageLoader();
+
+      .throbber {
+        @include throbberLoader();
+      }
     }
 
     .select-free-gift-link {
@@ -577,9 +586,9 @@
         font-family: $alshaya-bold;
         font-size: 0.875rem;
         margin-top: 1.125rem;
-        background: #ef5f96;
-        border-radius: 5px;
-        color: #fff;
+        background: $free-gifts-select-button-bg;
+        border-radius: 0.3125rem;
+        color: $white-five;
         border: 0;
         text-transform: uppercase;
         padding: 0.5rem 1.3701rem;
@@ -593,22 +602,83 @@
   }
 }
 
-.free-gift-promo-list-overlay {
+.path--cart.free-gift-promo-list-overlay {
   .ui-dialog {
-    .ui-dialog-titlebar {
-      .ui-dialog-title {
-        display: block;
-        position: absolute;
-        color: $free-gifts-modal-promo-list-title-color;
-        z-index: 1;
-        #{$left}: 1.5rem;
-        top: 1.5rem;
-        text-transform: capitalize;
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 27.2rem) / 2) calc((100vw - 45rem) / 2) !important;
+    }
 
-        @include breakpoint($only-mobile) {
-          #{$left}: 0.5rem;
+    @include breakpoint($desktop) {
+      padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+    }
+  }
+}
+
+.nodetype--acq_product.free-gift-promo-list-overlay {
+  .ui-dialog {
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 27.2rem) / 2) calc((100vw - 45rem) / 2) !important;
+    }
+
+    @include breakpoint($desktop) {
+      padding: calc((100vh - 35rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+    }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  &.free-gifts-modal-overlay {
+    .ui-dialog {
+      @include breakpoint($only-mobile) {
+        background: $modal_bg !important;
+      }
+
+      .ui-dialog-titlebar {
+        .ui-dialog-title {
+          display: block;
+          position: absolute;
+          color: $free-gifts-modal-promo-list-title-color;
+          z-index: 1;
+          #{$left}: 1.5rem;
+          top: 1.5rem;
+          text-transform: capitalize;
+
+          @include breakpoint($only-mobile) {
+            #{$left}: 0.5rem;
+            padding: 1.25rem 0.625rem 2.5rem;
+            float: none;
+            position: static;
+          }
+        }
+
+        .ui-dialog-titlebar-close {
+          @include breakpoint($only-mobile) {
+            top: 0;
+          }
         }
       }
+
+      #drupal-modal.free-gift-listing-modal {
+        height: 100% !important;
+      }
+    }
+  }
+}
+
+.free-gift-promo-list-overlay,
+.free-gifts-modal-overlay {
+  .slick-slider {
+    .slick-arrow {
+      top: 30% !important;
+    }
+
+    .slick-prev {
+      #{$left}: -1.65rem;
+    }
+
+    .slick-next {
+      #{$right}: -1.65rem;
     }
   }
 }

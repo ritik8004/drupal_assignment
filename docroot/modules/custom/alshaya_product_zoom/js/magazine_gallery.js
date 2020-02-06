@@ -13,28 +13,30 @@
       var desktop_sidebar_width = $('.content__sidebar').width();
       $('#cloud-zoom-big').css('width', desktop_sidebar_width + 'px');
 
-      var desktopElement = $('#product-image-gallery-container');
+      var desktopElement = $('#product-full-screen-gallery-container');
       var mobileElement = $('#product-image-gallery-container-mobile');
 
       // Open Gallery mobile modal when we click on the image.
-      var desktopDialog = Drupal.dialog(desktopElement, desktopdialogsettings);
-      var mobileDialog = Drupal.dialog(mobileElement, mobiledialogsettings);
+      this.desktopDialog = Drupal.dialog(desktopElement, desktopdialogsettings);
+      this.mobileDialog = Drupal.dialog(mobileElement, mobiledialogsettings);
 
       if ($(window).width() < 768) {
         $('#product-zoom-container .pdp-image a').on('click', function (e) {
           e.preventDefault();
         });
 
-        $('.pdp-image').off().on('click', function () {
+        $('.pdp-image').once('modal-overlay').on('click', function () {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
           $(this).addClass('clicked');
-          mobileDialog.show();
-          mobileDialog.showModal();
+          Drupal.behaviors.magazine_gallery.mobileDialog.show();
+          Drupal.behaviors.magazine_gallery.mobileDialog.showModal();
           if (typeof Drupal.blazy !== 'undefined') {
             Drupal.blazy.revalidate();
           }
         });
+
+        this.attachMagazineDialogClose('mobile', context);
       }
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
@@ -42,12 +44,14 @@
           items.addClass('cloud-zoom-processed').CloudZoom();
         }
 
-        $('.pdp-image').off().on('click', function (e) {
+        $('.pdp-image')
+        .once('modal-overlay')
+        .on('click', function (e) {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
           $(this).addClass('clicked');
-          desktopDialog.show();
-          desktopDialog.showModal();
+          Drupal.behaviors.magazine_gallery.desktopDialog.show();
+          Drupal.behaviors.magazine_gallery.desktopDialog.showModal();
           // Adding timeout to revalidate blazy once modal is completely loaded.
           setTimeout(function () {
             if (typeof Drupal.blazy !== 'undefined') {
@@ -55,7 +59,52 @@
             }
           }, 700);
         });
+
+        this.attachMagazineDialogClose('desktop', context);
       }
+
+      // Zoom effect on image hover for desktop.
+      if ($(window).width() > 1025) {
+        $('.pdp-image')
+        .on('mouseover', function(){
+          $(this).addClass('magazine-image-zoomed');
+          $(this).children('.magazine-image-zoom-placeholder').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
+        })
+        .on('mouseout', function(){
+          $(this).removeClass('magazine-image-zoomed');
+          $(this).children('.magazine-image-zoom-placeholder').css({'transform': 'scale(1)'});
+        })
+        .on('mousemove', function(e){
+          $(this).children('.magazine-image-zoom-placeholder').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
+        })
+        .each(function(){
+          $(this)
+          .once('magazine-image-zoom-placeholder-appended')
+          // Add a magazine image zoom placeholder.
+          .append('<div class="magazine-image-zoom-placeholder"></div>')
+          // Set up a background image for each magazine image zoom placeholder based on data-src attribute.
+          .children('.magazine-image-zoom-placeholder').css({'background-image': 'url('+ $(this).find('img').attr('data-src') +')'});
+        })
+      }
+    },
+
+    // Attach 'dialog close on click' event for product full screen gallery image.
+    attachMagazineDialogClose: function (device, context) {
+      $(window).once('dialogopened').on('dialog:aftercreate', function (event) {
+        var $productGallery = (device === 'mobile') ? $('#product-image-gallery-mob', context) : $('#product-full-screen-gallery', context);
+        // Closing modal window on click of the full screen slider images.
+        $productGallery.find('img').once('attached').on('click', function (e) {
+          if ($(window).width() < 768) {
+            Drupal.behaviors.magazine_gallery.mobileDialog.close();
+          }
+          else {
+            Drupal.behaviors.magazine_gallery.desktopDialog.close();
+          }
+          $productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
+        });
+      });
     }
   };
 
@@ -78,10 +127,18 @@
    * Zoom modal dialog.
    */
   function _magazine_dialog_open() {
-    var gallery = $('#product-image-gallery');
+    var gallery = $('#product-full-screen-gallery');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
     slickModalOptions.initialSlide = currentSlide;
     Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
+
+    // Create Instagram Dots.
+    if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
+      // Do initial setup again for slick dots.
+      Drupal.behaviors.pdpInstagranDots.initialSetup(gallery);
+      // Attach the change event explicitly.
+      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
+    }
 
     if (gallery.hasClass('pager-no')) {
       $('li[data-slick-index="' + currentSlide + '"]', gallery).addClass('slick-current', function () {
@@ -92,7 +149,7 @@
       gallery.slick('slickGoTo', currentSlide);
     }
 
-    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="' + currentSlide + '"]');
+    var defaultMainImage = $('#product-full-screen-gallery-container li[data-slick-index="' + currentSlide + '"]');
     var bigImgUrl = defaultMainImage.children('a').attr('href');
     $('#full-image-wrapper img').attr('src', bigImgUrl);
     $('#full-image-wrapper img').css('transform', 'scale(1)');
@@ -100,7 +157,7 @@
     $('#full-image-wrapper img').show();
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
-      var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
       // Closing modal window before slick library gets removed.
       $(this).click();
       productGallery.slick('unslick');
@@ -234,6 +291,14 @@
     slickMobileModalOptions.initialSlide = parseInt(currentSlide);
     Drupal.productZoomApplyRtl(gallery, slickMobileModalOptions, document);
 
+    // Create Instagram Dots.
+    if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
+      // Do initial setup again for slick dots.
+      Drupal.behaviors.pdpInstagranDots.initialSetup(gallery);
+      // Attach the change event explicitly.
+      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
+    }
+
     gallery.on('swipe', function (event, slick) {
       var image = '.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img';
       if (!($(image).attr('data-scale') === 1 || $(image).attr('data-translate-x') === 0 || $(image).attr('data-translate-y') === 0)) {
@@ -297,18 +362,19 @@
   };
 
   var slickModalOptions = {
-    slidesToShow: 3,
-    vertical: true,
+    slidesToShow: 1,
+    vertical: false,
+    dots: true,
     arrows: true,
     infinite: false,
-    centerMode: true,
+    centerMode: false,
     focusOnSelect: false,
     touchThreshold: 1000,
     responsive: [
       {
         breakpoint: 1025,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 1,
           vertical: false,
           touchThreshold: 1000,
           centerMode: false

@@ -55,6 +55,26 @@
 
     img {
       width: 100%;
+      cursor: pointer;
+    }
+
+    &.magazine-image-zoomed {
+      overflow: hidden;
+
+      .magazine-image-zoom-placeholder {
+        z-index: 1;
+      }
+    }
+
+    .magazine-image-zoom-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-repeat: no-repeat;
+      z-index: -1;
+      background-size: cover;
     }
   }
 
@@ -161,50 +181,13 @@
   }
 
   .pdp-image {
-    .cloud-zoom-lens {
-      border: 1px solid $cloudzoom_hovertext;
-      background-color: rgba(255, 255, 255, 0.5);
-      display: none;
-
-      @include breakpoint($desktop) {
-        display: block;
-      }
-    }
-
-    &:nth-child(2n) {
-      #cloud-zoom-big {
-        #{$left}: calc(100% + 0.875rem) !important;
-      }
-    }
-
-    &:nth-child(2n+1) {
-      #cloud-zoom-big {
-        #{$left}: calc(200% + 1.625rem) !important;
-      }
-    }
+    cursor: pointer;
 
     @include breakpoint($tablet) {
-      &:nth-child(2n) {
-        grid-column: 2 / -1;
-      }
-
-      &:nth-child(2n+1) {
-        grid-column: 1 / 2;
-      }
-
-      &.last {
-        &:nth-child(2n+1) {
-          grid-column: 1 / -1;
-
-          #wrap {
-            width: 47%;
-            margin: 0 auto;
-
-            #cloud-zoom-big {
-              #{$left}: calc(150% + 3.125rem) !important;
-            }
-          }
-        }
+      &.last:nth-child(odd) {
+        width: 47%;
+        margin: 0 auto;
+        grid-column: 1 / -1;
       }
     }
 
@@ -383,6 +366,10 @@
       }
     }
   }
+}
+
+.magazine-layout-node .gallery-wrapper .pdp-image {
+  position: relative;
 }
 
 @include breakpoint($mobile) {

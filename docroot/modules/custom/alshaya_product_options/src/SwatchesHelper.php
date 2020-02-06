@@ -6,6 +6,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -14,6 +15,7 @@ use Drupal\facets\FacetInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
+use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
 
 /**
  * Class SwatchesHelper.
@@ -106,6 +108,13 @@ class SwatchesHelper {
   protected $httpClient;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * SwatchesHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -122,6 +131,8 @@ class SwatchesHelper {
    *   SKU Fields Manager.
    * @param \GuzzleHttp\Client $http_client
    *   GuzzleHttp\Client object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelInterface $logger,
@@ -129,7 +140,8 @@ class SwatchesHelper {
                               CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
                               SKUFieldsManager $sku_fields_manager,
-                              Client $http_client) {
+                              Client $http_client,
+                              ConfigFactoryInterface $config_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->fileStorage = $this->entityTypeManager->getStorage('file');
     $this->logger = $logger;
@@ -138,6 +150,7 @@ class SwatchesHelper {
     $this->languageManager = $language_manager;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->httpClient = $http_client;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -150,6 +163,7 @@ class SwatchesHelper {
    */
   public function updateAttributeOptionSwatch(TermInterface $term, array $swatch_info) {
     $save_term = FALSE;
+    $logo_attribute = AlshayaBrandListHelper::getLogoAttribute();
 
     // Save again if type changed.
     if ($swatch_info['swatch_type'] != $term->get('field_attribute_swatch_type')->getString()) {
@@ -157,6 +171,10 @@ class SwatchesHelper {
     }
     // Save again if value changed.
     elseif ($term->get('field_attribute_swatch_value')->getString() != $swatch_info['swatch']) {
+      $save_term = TRUE;
+    }
+    // Save again if swatch original image is not avaialable.
+    elseif (($swatch_info['swatch_type'] == self::SWATCH_TYPE_VISUAL_IMAGE) && $term->get('field_sku_attribute_code')->getString() === $logo_attribute && empty($term->get('field_attribute_swatch_org_image')->getString())) {
       $save_term = TRUE;
     }
 
@@ -195,6 +213,18 @@ class SwatchesHelper {
         case self::SWATCH_TYPE_VISUAL_IMAGE:
           try {
             $file = $this->downloadSwatchImage($swatch_info['swatch']);
+            // We will allow to store swatch original image
+            // If it's settings mdc_swatch_image_style is available.
+            $mdcSwatchImageStyle = $this->configFactory
+              ->get('alshaya_product_options.settings')
+              ->get('mdc_swatch_image_style') ?? '';
+            if (!empty($mdcSwatchImageStyle)) {
+              $swatchOriginalImageUrl = str_replace($mdcSwatchImageStyle . '/', '', $swatch_info['swatch']);
+              $swatchOriginalImagefile = $this->downloadSwatchImage($swatchOriginalImageUrl);
+              if (!empty($swatchOriginalImagefile)) {
+                $term->get('field_attribute_swatch_org_image')->setValue($swatchOriginalImagefile);
+              }
+            }
           }
           catch (\Exception $e) {
             $this->logger->error($e->getMessage());

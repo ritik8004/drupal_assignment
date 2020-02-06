@@ -132,11 +132,11 @@ $basket_continue_shopping_link: $PB_black_one;
 $basket_empty_message: $PB_black_one;
 $basket_available_code: $PB_black_one;
 
-// Basket top promotions.
-$basket_free_delivery_inactive_header_promo_bg: $PB_blue;
-$basket_free_delivery_inactive_header_promo_txt: $white-two;
-$basket_free_delivery_active_header_promo_bg: $white-two;
-$basket_free_delivery_active_header_promo_txt: $PB_blue;
+// Basket Promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $PB_deep_red;
+$basket_fixed_percentage_active_header_promo_txt: $PB_deep_red;
+$basket_free_delivery_inactive_header_promo_bg: $PB_grey_one;
+$basket_free_delivery_active_header_promo_txt: $PB_grey_one;
 
 // Totals.
 $total_td_2nd_child_bg: $_gray_seven;

@@ -388,16 +388,24 @@ class AlshayaPromoLabelManager {
       'dynamic_label' => '',
     ];
 
-    if (!empty($this->isDynamicLabelsEnabled())
-      && $this->isPromotionLabelDynamic($promotion)) {
+    if (!empty($this->isDynamicLabelsEnabled()) && $this->isPromotionLabelDynamic($promotion)) {
       $cartSKUs = $this->cartManager->getCartSkus();
-      $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion, TRUE);
 
       // If cart is not empty and has matching products.
-      if (!empty($cartSKUs)
-        && in_array($currentSKU->getSku(), $eligibleSKUs)
-        && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
-        $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
+      if (!empty($cartSKUs)) {
+        $eligibleSKUs = $this->skuManager->getSkutextsForPromotion($promotion);
+
+        // Get children of eligible parents in cart.
+        $parents = $this->skuManager->getParentSkus($cartSKUs);
+        $eligible_parents = array_intersect($parents, $eligibleSKUs);
+        if (!empty($eligible_parents)) {
+          $eligible_children = $this->skuManager->fetchChildSkuTexts($eligible_parents);
+          $eligibleSKUs = array_merge($eligibleSKUs, $eligible_children);
+        }
+
+        if (in_array($currentSKU->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
+          $this->overridePromotionLabel($label, $promotion, $eligibleSKUs);
+        }
       }
     }
 

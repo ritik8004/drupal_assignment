@@ -11,6 +11,7 @@
     {% for category in product.categoryCollection %}
     <category>
       <name><![CDATA[{{ category.name }}]]></name>
+      <google_product_category>{{ category.google_product_category }}</google_product_category>
       <id>{{ category.id }}</id>
       <url>{{ category.url }}</url>
     </category>
@@ -18,12 +19,12 @@
   </categories>
   <short_description>
     {% if product.short_description is not empty %}
-      {{ product.short_description | striptags }}
+      {{ product.short_description | spaceless | striptags }}
     {% endif %}
   </short_description>
   <description>
     {% if product.description is not empty %}
-      {{ product.description | striptags }}
+      {{ product.description | spaceless | striptags }}
     {% endif %}
   </description>
   <custom_attributes>
@@ -33,7 +34,7 @@
       {% endfor %}
     {% endif %}
   </custom_attributes>
-  {% if product.type_id == 'simple' %}
+  {% if product.product_type == 'simple' %}
     <stock>
       <quantity>{{ product.stock.qty }}</quantity>
       <availability>{{ product.stock.status }}</availability>

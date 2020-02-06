@@ -12,9 +12,11 @@ global $source_app_id, $source_app_secret_admin, $source_index;
 global $languages, $sorts, $facets, $query_facets, $query_generate;
 global $searchable_attributes, $ranking;
 
-$source_app_id = 'VP3QKEIIC5';
-$source_app_secret_admin = 'a695124fb2716596ee47a1521e3fb2a0';
-$source_index = 'template';
+$source_app_id = 'HGR051I5XN';
+$source_index = '01live_hmkw';
+
+// Please enter admin key below for HM.
+$source_app_secret_admin = '';
 
 $languages = [
   'en',
@@ -71,25 +73,22 @@ $query_generate = [
   ['field_category_name'],
 ];
 
-// For backup.
 $searchable_attributes = [
   'title',
-  'field_category_name',
-  'attr_product_brand',
+  'field_category_name.lvl0',
+  'field_category_name.lvl2',
+  'field_category_name.lvl1',
   'sku',
-  'field_configured_skus',
-  'attr_product_collection',
-  'attr_concept',
-  'attr_color',
-  'attr_size',
-  'body',
 ];
 
 $ranking = [
   'desc(stock)',
-  'desc(search_api_relevance)',
+  'attribute',
+  'typo',
+  'geo',
   'words',
   'filters',
+  'proximity',
   'exact',
   'custom',
 ];
