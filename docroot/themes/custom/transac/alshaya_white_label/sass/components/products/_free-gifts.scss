@@ -160,10 +160,6 @@
       .content--item-code {
         margin-bottom: 0;
 
-        @include breakpoint($only-mobile) {
-          border-bottom: 1px solid $free-gift-modal-item-code-border;
-        }
-
         @include breakpoint($tablet) {
           margin-bottom: 0.75rem;
         }
@@ -463,7 +459,7 @@
   }
 }
 
-.free-gift-detail-modal {
+.free-gift-detail-modal.ui-dialog-content {
   article {
     > a {
       font-size: 0.875rem;
@@ -592,13 +588,23 @@
     .ajax-progress-throbber {
       display: block !important;
 
-      @include fullPageLoader {
-        position: absolute !important;
+      @include breakpoint($only-mobile) {
+        @include fullPageLoader();
+
+        .throbber {
+          @include throbberLoader();
+        }
       }
 
-      .throbber {
-        @include throbberLoader {
-          position: absolute;
+      @include breakpoint($tablet) {
+        @include fullPageLoader {
+          position: absolute !important;
+        }
+
+        .throbber {
+          @include throbberLoader {
+            position: absolute;
+          }
         }
       }
     }
@@ -677,6 +683,7 @@
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
     height: 100% !important;
+    padding: 1.5em 2.5rem;
   }
 }
 
