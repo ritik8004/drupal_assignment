@@ -34,8 +34,13 @@
     attach: function (context, settings) {
       $('.sku-base-form').once('click-collect').on('variant-selected', function (event, variant, code) {
         var node = $(this).parents('article.entity--type-node:first');
+        if (node.length < 1) {
+          return;
+        }
+
         var sku = $(this).attr('data-sku');
-        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        var productKey = (node.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
         $('#pdp-stores-container', node).data('sku', variant);
 
         if (variantInfo.click_collect) {

@@ -3,18 +3,25 @@
  * Handles cart level promotions.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal) {
   'use strict';
 
   Drupal.behaviors.alshayaPromotionsCartCodes = {
     attach: function (context) {
-      var customer_cart_form = $('form.customer-cart-form', context);
-      $('.promotion-coupon-code.available', context).on('click', function () {
-        var coupon = $('.promotion-coupon-code.available', customer_cart_form).text();
-        $('input[name="coupon"]', customer_cart_form).focus().val(coupon);
-        customer_cart_form.submit();
+      $('.promotion-coupon-code.available').once('alshayaPromotionsCartCodes').on('click', function () {
+        // Get coupon from data attribute to ensure we copy it as is.
+        var coupon = $(this).attr('data-coupon-code');
+
+        // We will have only one cart form.
+        var form = $('form.customer-cart-form');
+
+        // Add coupon to input.
+        $('input[name="coupon"]', form).focus().val(coupon);
+
+        // Submit form.
+        form.submit();
       });
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal);

@@ -131,14 +131,14 @@
 
       font-family: $hnm-bold;
       text-transform: uppercase;
-      background: $basket_free_delivery_inactive_header_promo_bg;
-      color: $basket_free_delivery_inactive_header_promo_txt;
+      background: $basket_header_promo_bg;
+      color: $basket_header_promo_txt;
       font-size: 0.8125rem;
       letter-spacing: 1px;
     }
 
     &.remove {
-      color: $basket_free_delivery_inactive_header_promo_bg;
+      color: $basket_header_promo_bg;
       font-family: $hnm-bold;
     }
   }
@@ -182,8 +182,6 @@
 
 .cart-promotions-wrapper {
   @include arabic-letter-spacing;
-
-  background: $basket_promo_wrapper;
 
   .continue-shopping a {
     font-family: $hnm-bold;

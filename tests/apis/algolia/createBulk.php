@@ -8,13 +8,9 @@ $app_id = 'testing24192T8KHZ';
 $app_secret_admin = '81c93293993d87fb67f2af22749ecbeb';
 
 $brands = [
-  'mckw',
-  'mcsa',
-  'mcae',
-  'hmkw',
-  'hmsa',
-  'hmae',
-  'hmeg',
+  'bbwkw',
+  'bbwsa',
+  'bbwae',
 ];
 
 $envs = [
@@ -23,7 +19,6 @@ $envs = [
   '01dev2',
   '01dev3',
   '01qa2',
-  '01test',
 ];
 
 global $languages;
@@ -32,7 +27,39 @@ foreach ($envs as $env) {
   foreach ($brands as $brand) {
     $prefix = $env . '_' . $brand;
     foreach ($languages as $language) {
-      algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
+      try {
+        algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
+      }
+      catch (\Exception $e) {
+        print 'Error occurred for ' . $prefix . '_' . $language . PHP_EOL;
+        print $e->getMessage() . PHP_EOL . PHP_EOL;
+      }
+    }
+  }
+}
+
+// Settings for live app.
+$app_id = '6TOQSJY0O6';
+$app_secret_admin = ''; // Admin Key.
+
+$envs = [
+  '01test',
+  '01uat',
+  '01pprod',
+  '01live',
+];
+
+foreach ($envs as $env) {
+  foreach ($brands as $brand) {
+    $prefix = $env . '_' . $brand;
+    foreach ($languages as $language) {
+      try {
+        algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
+      }
+      catch (\Exception $e) {
+        print 'Error occurred for ' . $prefix . '_' . $language . PHP_EOL;
+        print $e->getMessage() . PHP_EOL . PHP_EOL;
+      }
     }
   }
 }

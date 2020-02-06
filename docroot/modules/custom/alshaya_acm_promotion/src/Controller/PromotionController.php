@@ -16,6 +16,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableAjaxResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -147,20 +148,14 @@ class PromotionController extends ControllerBase {
     $build['#cache']['tags'] = $node->getCacheTags();
     $node = $this->entityRepository->getTranslationFromContext($node);
 
-    $free_gifts = [];
-    foreach ($node->get('field_free_gift_skus')->getValue() as $free_gift) {
-      $sku = SKU::loadFromSku($free_gift['value']);
-
-      if ($sku instanceof SKUInterface) {
-        $free_gifts[] = $sku;
-        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $sku->getCacheTags());
-      }
-    }
+    $free_gifts = $this->promotionsManager->getFreeGiftSkuEntitiesByPromotionId($node->id());
 
     $items = [];
 
     /** @var \Drupal\acq_sku\Entity\SKU $free_gift */
     foreach ($free_gifts as $free_gift) {
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $free_gift->getCacheTags());
+
       $item = [];
 
       $item['#title']['#markup'] = $free_gift->label();
@@ -293,6 +288,10 @@ class PromotionController extends ControllerBase {
               ];
             }
 
+            // Allow other modules to update the options info sent to ACM.
+            // Duplicate here for now, done in Drupal\alshaya_acm\CartHelper.
+            $this->moduleHandler()->alter('acq_sku_configurable_cart_options', $options, $sku);
+
             $updated_cart->addRawItemToCart([
               'name' => $sku->label(),
               'sku' => $sku->getSKU(),
@@ -348,30 +347,26 @@ class PromotionController extends ControllerBase {
    *   Ajax command to update promo label.
    */
   public function getPromotionDynamicLabel(SKUInterface $sku) {
-    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
+    $response = new CacheableAjaxResponse();
 
-    $response = [];
-    if (!empty($label)) {
-      $response = $this->promoLabelManager->prepareResponse($label, $sku->id());
-      $promotionLabel = '.promotions-dynamic-label';
-      $response->addCommand(new InvokeCommand($promotionLabel, 'trigger', ['dynamic:promotion:label:ajax:complete']));
+    // Add cache metadata.
+    $cache_array = [
+      'tags' => ['node_type:acq_promotion'],
+      'contexts' => ['cookies:Drupal_visitor_acq_cart_id'],
+    ];
 
-      // Add cache metadata.
-      $cache_array = [
-        'tags' => [
-          'node_type:acq_promotion',
-        ],
-        'contexts' => [
-          'cookies:Drupal_visitor_acq_cart_id',
-        ],
-      ];
-      $cart_id = $this->cartStorage->getCartId(FALSE);
-      if ($cart_id) {
-        $cache_array['tags'][] = 'cart:' . $cart_id;
-      }
-      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
+    $cart_id = $this->cartStorage->getCartId(FALSE);
+    if (!empty($cart_id)) {
+      $cache_array['tags'][] = 'cart:' . $cart_id;
     }
 
+    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
+    if (!empty($label)) {
+      $response = $this->promoLabelManager->prepareResponse($label, $sku->id(), $response);
+      $response->addCommand(new InvokeCommand('.promotions-dynamic-label', 'trigger', ['dynamic:promotion:label:ajax:complete']));
+    }
+
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
   }
 

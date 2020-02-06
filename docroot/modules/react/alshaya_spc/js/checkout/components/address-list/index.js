@@ -65,16 +65,19 @@ export default class AddressList extends React.Component {
 
     return (
       <React.Fragment>
-        <div onClick={this.openModal}>
-          {Drupal.t('Add new address')}
+        <header className='spc-change-address'>{Drupal.t('change address')}</header>
+        <div className='address-list-content'>
+          <div className='spc-add-new-address-btn' onClick={this.openModal}>
+            {Drupal.t('Add new address')}
+          </div>
+          <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+            <React.Fragment>
+              <a className='close' onClick={this.closeModal}>&times;</a>
+              <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress}/>
+            </React.Fragment>
+          </Popup>
+          <div className='spc-checkout-address-list'>{addressItem}</div>
         </div>
-        <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-          <React.Fragment>
-            <a className='close' onClick={this.closeModal}>&times;</a>
-            <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress}/>
-          </React.Fragment>
-        </Popup>
-        <div className='spc-checkout-delivery-methods'>{addressItem}</div>
       </React.Fragment>
     );
   }

@@ -182,6 +182,7 @@ $modal_subtext: $white-five;
 $modal_subtext_bg: $black;
 $modal_close_bg: $marine-blue;
 $modal_close_icon: $white-two;
+$modal_header_border: $warm-grey-two;
 
 // VAT text
 $vat: $grey-light;
@@ -906,14 +907,14 @@ $basket_promotion_input_border: $white;
 $basket_remove_link: $cerulean-two;
 $basket_horizontal_recommendation_slider_dots: $marine-blue-two;
 // Basket top promotions.
-$basket_fixed_percentage_inactive_header_promo_bg: $rosy-pink;
+$basket_fixed_percentage_inactive_header_promo_bg: $pumpkin-orange;
 $basket_fixed_percentage_inactive_header_promo_txt: $white-five;
 $basket_fixed_percentage_active_header_promo_bg: $white-five;
-$basket_fixed_percentage_active_header_promo_txt: $rosy-pink;
-$basket_free_delivery_inactive_header_promo_bg: $peacock-blue;
+$basket_fixed_percentage_active_header_promo_txt: $pumpkin-orange;
+$basket_free_delivery_inactive_header_promo_bg: $_algolia_search_icon_bg;
 $basket_free_delivery_inactive_header_promo_txt: $white-five;
 $basket_free_delivery_active_header_promo_bg: $white-five;
-$basket_free_delivery_active_header_promo_txt: $peacock-blue;
+$basket_free_delivery_active_header_promo_txt: $_algolia_search_icon_bg;
 $basket_active_promotion_icon: $white-five;
 // Basket top OOS.
 $basket_header_oos_bg: $cherry;
@@ -985,6 +986,7 @@ $free-gifts-title-text: $grey-ash;
 $free-gifts-coupon-code-text: $marine-blue;
 $free-gifts-border: $marine-blue;
 $free-gifts-text: $grey-ash;
+$free-gifts-select-button-bg: $pumpkin-orange;
 $free-gifts-modal-product-name: $black;
 $free-gift-modal-item-code-border: $warm-grey-two;
 $free-gifts-modal-product-description-label: $black;
@@ -1100,17 +1102,20 @@ $attribute-description-text: $grey-light;
 $divider-border: $white-two;
 $divider-separator-border: $black;
 $attribute-detail-link-text: $white-five;
-$attribute-detail-link-background: $black;
+$attribute-detail-link-background: $pumpkin-orange;
 $attribute-filter-option-background: $white-five;
 $attribute-filter-block-title: $peacock-blue;
 $attribute-filter-header-container-background: $white-five;
 $attribute-filter-group-heading-background: $white-smoke-light;
 $options-list-autocomplete-form-background: $white-five;
-$options-list-autocomplete-form-border: $warm-grey-two;
+$options-list-autocomplete-form-border: $light-blue-border;
+$option-brand-logo-border: $light-blue-border;
 $attribute-filter-name-list-text: $black;
 $attribute-swatch-title-text: $white-five;
 $options-list-heading-group-border: $white-two;
-$option-list-search-icon-color: $marine-blue-two;
+$option-list-search-icon-color: $white-five;
+$option-list-search-icon-bg: $algolia-search-icon-background;
+$option-list-search-placeholder-text: $marine-blue-two;
 
 // Option list menu.
 $option-list-menu-link: $grey-light;
@@ -1125,6 +1130,10 @@ $megamenu-inline-layout-right-category-seperator: $white-two;
 
 // App navigation links
 $app-navigation-link-seperator-border: $white-smoke-light;
+
+// Matchback Block.
+$matchback_item_code_color: #777;
+$matchback_cart_notification_bg: #f6f6f6;
 
 // SPC
 $spc-cart-background: $white-smoke-light;
@@ -1188,3 +1197,5 @@ $spc-deliver-button: $marine-blue-two;
 $spc-delivery-info-text: $grey-light;
 $spc-delivery-customer-info-highlight: $marine-blue-two;
 $spc-delivery-info-separator: $warm-grey-two;
+$spc-checkout-add-new-address-bg: $white-five;
+$spc-checkout-address-tile-bg: $white-five;
