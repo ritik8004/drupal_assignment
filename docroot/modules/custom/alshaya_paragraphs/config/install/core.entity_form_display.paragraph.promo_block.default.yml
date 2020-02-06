@@ -14,9 +14,10 @@ dependencies:
     - image.style.thumbnail
     - paragraphs.paragraphs_type.promo_block
   module:
+    - content_moderation
+    - image
     - link
     - paragraphs
-    - svg_image
     - text
 id: paragraph.promo_block.default
 targetEntityType: paragraph
@@ -95,6 +96,12 @@ content:
     settings:
       preview_image_style: thumbnail
       progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 9
+    settings: {  }
     region: content
     third_party_settings: {  }
   translation:
