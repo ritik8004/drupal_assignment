@@ -123,8 +123,7 @@
 }
 
 .free-gifts-modal-overlay {
-  position: fixed;
-  width: 100%;
+  overflow: hidden;
 
   .ui-dialog {
     #drupal-modal {
@@ -260,12 +259,12 @@
         margin-top: 0;
         justify-content: space-between;
         overflow-y: scroll;
+        padding-bottom: 4.5rem;
       }
 
       @include breakpoint($upto-desktop) {
         -webkit-overflow-scrolling: touch;
         white-space: nowrap;
-        padding-bottom: 1.5rem;
       }
     }
 
@@ -468,21 +467,24 @@
   article {
     > a {
       font-size: 0.875rem;
-      line-height: 1.29;
+      line-height: 2.285;
       color: $free-gifts-title-text;
       text-decoration: underline;
       margin-bottom: 1.4375rem;
       display: inline-block;
+      padding-#{$left}: 1.125rem;
+      position: relative;
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: 1.5rem;
+        margin-#{$left}: 1rem;
+        margin-top: 1rem;
       }
 
       @include icon(chevrondown, after) {
-        font-size: 1.5rem;
+        font-size: 2rem;
         position: absolute;
-        #{$left}: 0;
-        top: 1.375rem;
+        #{$left}: -0.625rem;
+        top: 0;
         transform: rotate(90deg);
 
         html[lang=ar] & {
@@ -543,10 +545,28 @@
       @include throbberLoader();
     }
   }
+
+  .sku-base-form {
+    .ajax-progress-throbber {
+      display: block !important;
+
+      @include fullPageLoader();
+
+      .throbber {
+        @include throbberLoader();
+      }
+    }
+  }
 }
 
 .free-gift-listing-modal {
   display: flex;
+
+  ul.slick-slider {
+    li {
+      position: relative;
+    }
+  }
 
   .free-gift-view {
     display: flex;
@@ -572,10 +592,14 @@
     .ajax-progress-throbber {
       display: block !important;
 
-      @include fullPageLoader();
+      @include fullPageLoader {
+        position: absolute !important;
+      }
 
       .throbber {
-        @include throbberLoader();
+        @include throbberLoader {
+          position: absolute;
+        }
       }
     }
 
@@ -587,7 +611,6 @@
         font-size: 0.875rem;
         margin-top: 1.125rem;
         background: $free-gifts-select-button-bg;
-        border-radius: 0.3125rem;
         color: $white-five;
         border: 0;
         text-transform: uppercase;
@@ -599,35 +622,24 @@
 
   .free-gift-image {
     width: auto;
-  }
-}
-
-.path--cart.free-gift-promo-list-overlay {
-  .ui-dialog {
-    @include breakpoint($tablet) {
-      padding: calc((100vh - 27.2rem) / 2) calc((100vw - 45rem) / 2) !important;
-    }
-
-    @include breakpoint($desktop) {
-      padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
-    }
-  }
-}
-
-.nodetype--acq_product.free-gift-promo-list-overlay {
-  .ui-dialog {
-    @include breakpoint($tablet) {
-      padding: calc((100vh - 27.2rem) / 2) calc((100vw - 45rem) / 2) !important;
-    }
-
-    @include breakpoint($desktop) {
-      padding: calc((100vh - 35rem) / 2) calc((100vw - 60.13rem) / 2) !important;
-    }
+    text-align: center;
   }
 }
 
 .nodetype--acq_product,
 .path--cart {
+  &.free-gift-detail-modal {
+    .ui-dialog {
+      @include breakpoint($tablet) {
+        padding: calc((100vh - 42rem) / 2) calc((100vw - 45rem) / 2) !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 40rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+
   &.free-gifts-modal-overlay {
     .ui-dialog {
       @include breakpoint($only-mobile) {
@@ -658,9 +670,37 @@
           }
         }
       }
+    }
+  }
+}
 
-      #drupal-modal.free-gift-listing-modal {
-        height: 100% !important;
+body:not(.ie) {
+  #drupal-modal.free-gift-listing-modal {
+    height: 100% !important;
+  }
+}
+
+.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+  &.path--cart {
+    .ui-dialog {
+      @include breakpoint($tablet) {
+        padding: calc((100vh - 28rem) / 2) calc((100vw - 45rem) / 2) !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+
+  &.nodetype--acq_product {
+    .ui-dialog {
+      @include breakpoint($tablet) {
+        padding: calc((100vh - 26rem) / 2) calc((100vw - 45rem) / 2) !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 33rem) / 2) calc((100vw - 60.13rem) / 2) !important;
       }
     }
   }
