@@ -31,11 +31,26 @@
       // Hide apply coupon button on page load.
       $('.customer-cart-form', context).once('bind-events').each(function () {
         $('#coupon-button', $(this)).on('click', function (e) {
+          var triggeringPopup = false;
           if ($(this).hasClass('remove')) {
             e.preventDefault();
             e.stopPropagation();
             $('input.cancel-promocode').val('');
           }
+          else {
+            $('.free-gift-container .coupon-code a').each(function () {
+              if ($(this).text() == $('[data-drupal-selector="edit-coupon"]').val()) {
+                $(this).trigger('click');
+                triggeringPopup = true;
+                return;
+              }
+            });
+          }
+
+          if (triggeringPopup) {
+            return;
+          }
+
           $('[data-drupal-selector="edit-update"]').trigger('click');
         });
 
@@ -60,7 +75,17 @@
         $(this).data('applied-coupon', $('[data-drupal-selector="edit-coupon"]').val().trim());
       });
 
-      $('[data-drupal-selector="edit-coupon"]').on('bind-events').on('keyup', function () {
+      $('[data-drupal-selector="edit-coupon"]').on('bind-events').on('keydown', function (event) {
+        // Prevent directly pressing enter.
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          if ($('#coupon-button').is(':visible')) {
+            $('#coupon-button').trigger('click');
+          }
+        }
+      });
+
+      $('[data-drupal-selector="edit-coupon"]').on('bind-events').on('keyup input', function () {
         var applied_coupon = $('#coupon-button').data('applied-coupon');
         var new_value = $(this).val().trim();
 
