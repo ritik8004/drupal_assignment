@@ -97,17 +97,16 @@ class CartController {
   }
 
   /**
-   * Start session and return cart data.
-   *
-   * @return mixed
-   *   return array of cart data from session or null.
+   * Start session and set cart data.
    */
-  protected function getCartFromSession() {
+  protected function loadCartFromSession() {
     if (!$this->session->isStarted()) {
       $this->session->start();
     }
 
-    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    if (!empty($this->sessionCartInfo)) {
+      $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    }
   }
 
   /**
@@ -117,7 +116,7 @@ class CartController {
    *   The cart id.
    */
   protected function updateSessionCartId(int $cart_id) {
-    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    $this->loadCartFromSession();
     if (empty($this->sessionCartInfo['cart_id'])) {
       $this->sessionCartInfo['cart_id'] = $cart_id;
       $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
@@ -135,7 +134,7 @@ class CartController {
       return $this->sessionCartInfo['uid'];
     }
 
-    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    $this->loadCartFromSession();
     return !empty($this->sessionCartInfo['uid'])
       ? $this->sessionCartInfo['uid']
       : NULL;
@@ -179,7 +178,7 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    $this->getCartFromSession();
+    $this->loadCartFromSession();
 
     if (!empty($this->sessionCartInfo['cart_id'])) {
       return $this->getCart($this->sessionCartInfo['cart_id']);
@@ -343,7 +342,7 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   protected function createCart() {
-    $this->getCartFromSession();
+    $this->loadCartFromSession();
     if (!empty($this->sessionCartInfo['cart_id'])) {
       return $this->sessionCartInfo['cart_id'];
     }
@@ -366,7 +365,7 @@ class CartController {
   public function updateCart(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
 
-    $this->getCartFromSession();
+    $this->loadCartFromSession();
 
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
@@ -571,7 +570,7 @@ class CartController {
    *   Json response.
    */
   public function associateCart() {
-    $this->getCartFromSession();
+    $this->loadCartFromSession();
 
     if (!empty($this->sessionCartInfo['customer_id'])) {
       return new JsonResponse($this->sessionCartInfo);
