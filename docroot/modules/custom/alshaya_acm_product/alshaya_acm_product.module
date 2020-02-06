@@ -702,10 +702,28 @@ function alshaya_acm_product_get_home_delivery_config() {
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  if (in_array($view_mode, ['modal', 'free_gift'])) {
+    // Add PDP slider position config to variable so it is available in themes.
+    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
+
+    // Add PDP slider position config to drupalSettings so we can use it in JS.
+    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
+
+    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+
+    // Number of items to show in a slider on PDP.
+    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
+    $build['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
+  }
+
   if ($view_mode == 'modal') {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
@@ -720,31 +738,14 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     // Attach libraries.
     $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-
     $build['price_block']['#markup'] = '<div class="free-price-markup">' . t('FREE') . '</div>';
-
     $build['item_code']['#markup'] = $entity->getSku();
-
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
 
     $sku_media = $skuImagesManager->getFirstImage($entity);
-
     if ($sku_media) {
       $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $entity->label(), '192x168');
     }
-
-    // Add PDP slider position config to variable so it is available in themes.
-    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
-
-    // Add PDP slider position config to drupalSettings so we can use it in JS.
-    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
-
-    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
-    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
-    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
-    // Number of items to show in a slider on PDP.
-    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
-    $build['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
   }
 }
 
