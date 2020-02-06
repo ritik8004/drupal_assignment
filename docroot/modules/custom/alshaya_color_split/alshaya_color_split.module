@@ -218,6 +218,11 @@ function alshaya_color_split_acq_sku_indexes_alter(array &$indexes) {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  // Sanity check.
+  if (empty($form['sku_id'])) {
+    return;
+  }
+
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -225,7 +230,7 @@ function alshaya_color_split_form_sku_base_form_alter(&$form, FormStateInterface
   $sku = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
 
   // Grouping here is done only for simple products.
-  if ($sku->bundle() !== 'simple') {
+  if (!($sku instanceof SKU) || $sku->bundle() !== 'simple') {
     return;
   }
 

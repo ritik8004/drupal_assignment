@@ -15,6 +15,26 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall un-wanted crop modules.
+ */
+function alshaya_transac_update_8125() {
+  if (!(\Drupal::moduleHandler()->moduleExists('crop'))) {
+    \Drupal::logger('alshaya_transac')->notice('Crop module already in disabled state.');
+    return;
+  }
+
+  $crops = \Drupal::entityTypeManager()->getStorage('crop')->loadMultiple();
+  foreach ($crops as $crop) {
+    \Drupal::logger('alshaya_transac')->warning('Deleting crop entity with id @id', ['@id' => $crop->id()]);
+    $crop->delete();
+  }
+
+  \Drupal::service('module_installer')->uninstall(['image_widget_crop', 'crop']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya feed module.
  */
 function alshaya_transac_update_8124() {

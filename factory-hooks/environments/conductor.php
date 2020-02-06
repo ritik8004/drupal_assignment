@@ -25,6 +25,7 @@ $conductors = [
   'mckw_dev2' => [
     'hmac_id' => '65769d9ba82c4ffd8c26ed830de1e6c2',
     'hmac_secret' => 'Y2MyMTVlYTQtMGQ0Yi00',
+    'site_id' => 133,
   ],
   'mckw_uat' => [
     'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
@@ -77,6 +78,7 @@ $conductors = [
   'hmkw_dev' => [
     'hmac_id' => '03551dee94ad4f91a20bf41459c02bdd',
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
+    'site_id' => 135,
   ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
@@ -288,6 +290,11 @@ $conductors = [
     'site_id' => 83,
   ],
   // VictoriaSecret AE.
+  'vsae_dev3' => [
+    'hmac_id' => '235f0ce579f6439c97e928b0ffa37224',
+    'hmac_secret' => 'MzU0ZWQ5YWYtNjYwNi00',
+    'site_id' => 147,
+  ],
   'vsae_dev' => [
     'hmac_id' => 'fcf0bc0e491a4d5d8c615973f4cd91ec',
     'hmac_secret' => 'NWJmNjRlODItN2JkZi00',
@@ -361,29 +368,41 @@ $conductors = [
     'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
     'site_id' => 129,
   ],
-  // Westelm KW.
+  // West Elm.
   'wekw_qa' => [
     'hmac_id' => '2546a170c84c49248207de3a8665a920',
     'hmac_secret' => 'N2Q4ZjhlY2YtMTA1Yy00',
     'site_id' => 165,
   ],
-  // Westelm SA.
   'wesa_qa' => [
     'hmac_id' => 'f8415a9cef1d46aeb0ffeafb5937682f',
     'hmac_secret' => 'ZjI2YjYzZWItZDYyZi00',
     'site_id' => 166,
   ],
-  // Westelm AE.
   'weae_qa' => [
     'hmac_id' => '868bd73816b6425987a7d43b96c0ed84',
     'hmac_secret' => 'OGY5ODFiM2MtYTk0Mi00',
     'site_id' => 167,
   ],
-  // Westelm AE.
   'weae_dev2' => [
     'hmac_id' => '82e9dce9da1e4cc7a25a61658f359576',
     'hmac_secret' => 'YzI0ZjNmNzUtMzgyNS00',
     'site_id' => 159,
+  ],
+  'wekw_uat' => [
+    'hmac_id' => '4d673878644c45a0908049f5e26be993',
+    'hmac_secret' => 'NDIzZDBkOTktZGJiNi00',
+    'site_id' => 171,
+  ],
+  'wesa_uat' => [
+    'hmac_id' => '0d0a24af21ef4399b7dc5b3eae90bd69',
+    'hmac_secret' => 'NjgyMDA1MDMtYzUxOC00',
+    'site_id' => 172,
+  ],
+  'weae_uat' => [
+    'hmac_id' => 'cb7192b7d39840f8b72aa5393c6034fe',
+    'hmac_secret' => 'NzI5M2M1MjYtMTE5ZS00',
+    'site_id' => 173,
   ],
 ];
 

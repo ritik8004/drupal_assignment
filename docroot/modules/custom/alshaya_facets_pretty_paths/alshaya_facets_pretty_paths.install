@@ -7,6 +7,39 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update values for facet meta type info.
+ */
+function alshaya_facets_pretty_paths_update_8002() {
+  // We do it only for PLP here, live sites only have it for PLP.
+  $facets = \Drupal::service('facets.manager')->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_1');
+
+  // Done in drush pretty-paths-toggle --action=en for new sites.
+  foreach ($facets as $facet) {
+    $meta_info_type = [
+      'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
+      'prefix_text' => '',
+      'visibility' => [
+        AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
+        AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
+      ],
+    ];
+    if (strpos($facet->id(), 'price') > -1) {
+      $meta_info_type['type'] = AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX;
+      $meta_info_type['prefix_text'] = 'at';
+      $meta_info_type['visibility'] = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION];
+    }
+    elseif (strpos($facet->id(), 'size') > -1) {
+      $meta_info_type['prefix_text'] = 'Size';
+    }
+    $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'meta_info_type', $meta_info_type);
+    $facet->save();
+  }
+}
 
 /**
  * Implements hook_update_N().

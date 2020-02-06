@@ -1,5 +1,6 @@
 .nodetype--acq_product {
-  .select-free-gift {
+  .select-free-gift.form-submit,
+  .select-free-gift-link {
     display: none !important;
   }
 
@@ -122,15 +123,13 @@
 }
 
 .free-gifts-modal-overlay {
-  position: fixed;
-  width: 100%;
+  overflow: hidden;
 
   .ui-dialog {
     #drupal-modal {
-      overflow: auto !important;
-
       @include breakpoint($only-mobile) {
         padding: 0 !important;
+        overflow: auto !important;
       }
 
       .content__main {
@@ -256,16 +255,16 @@
       @include breakpoint($only-mobile) {
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 0;
-        margin-top: 5.8875rem;
+        margin-bottom: 1.875rem;
+        margin-top: 0;
         justify-content: space-between;
         overflow-y: scroll;
+        padding-bottom: 4.5rem;
       }
 
       @include breakpoint($upto-desktop) {
         -webkit-overflow-scrolling: touch;
         white-space: nowrap;
-        padding-bottom: 1.5rem;
       }
     }
 
@@ -399,7 +398,6 @@
 
       a {
         color: $free-gifts-coupon-code-text !important;
-        text-transform: uppercase;
       }
     }
 
@@ -445,12 +443,6 @@
 }
 
 .acq-content-product-modal {
-  .short-description-wrapper {
-    .read-more-description-link-gift {
-      display: block !important;
-    }
-  }
-
   .mobilegallery {
     .labels-container {
       display: none;
@@ -475,19 +467,24 @@
   article {
     > a {
       font-size: 0.875rem;
-      line-height: 1.29;
+      line-height: 2.285;
       color: $free-gifts-title-text;
       text-decoration: underline;
+      margin-bottom: 1.4375rem;
+      display: inline-block;
+      padding-#{$left}: 1.125rem;
+      position: relative;
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: 1.5rem;
+        margin-#{$left}: 1rem;
+        margin-top: 1rem;
       }
 
       @include icon(chevrondown, after) {
-        font-size: 1.5rem;
+        font-size: 2rem;
         position: absolute;
-        #{$left}: 0;
-        top: 1.375rem;
+        #{$left}: -0.625rem;
+        top: 0;
         transform: rotate(90deg);
 
         html[lang=ar] & {
@@ -539,17 +536,37 @@
     }
   }
 
+  .ajax-progress-throbber {
+    display: block !important;
+
+    @include fullPageLoader();
+
+    .throbber {
+      @include throbberLoader();
+    }
+  }
+
   .sku-base-form {
     .ajax-progress-throbber {
       display: block !important;
 
       @include fullPageLoader();
+
+      .throbber {
+        @include throbberLoader();
+      }
     }
   }
 }
 
 .free-gift-listing-modal {
   display: flex;
+
+  ul.slick-slider {
+    li {
+      position: relative;
+    }
+  }
 
   .free-gift-view {
     display: flex;
@@ -561,13 +578,29 @@
 
     a:first-child {
       flex-grow: 1;
+      display: block;
+      width: 100%;
+
+      img {
+        @include breakpoint($desktop) {
+          width: 18.1875rem;
+          margin: auto;
+        }
+      }
     }
 
     .ajax-progress-throbber {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 0.625rem;
+      display: block !important;
+
+      @include fullPageLoader {
+        position: absolute !important;
+      }
+
+      .throbber {
+        @include throbberLoader {
+          position: absolute;
+        }
+      }
     }
 
     .select-free-gift-link {
@@ -577,9 +610,8 @@
         font-family: $alshaya-bold;
         font-size: 0.875rem;
         margin-top: 1.125rem;
-        background: #ef5f96;
-        border-radius: 5px;
-        color: #fff;
+        background: $free-gifts-select-button-bg;
+        color: $white-five;
         border: 0;
         text-transform: uppercase;
         padding: 0.5rem 1.3701rem;
@@ -590,25 +622,103 @@
 
   .free-gift-image {
     width: auto;
+    text-align: center;
   }
 }
 
-.free-gift-promo-list-overlay {
-  .ui-dialog {
-    .ui-dialog-titlebar {
-      .ui-dialog-title {
-        display: block;
-        position: absolute;
-        color: $free-gifts-modal-promo-list-title-color;
-        z-index: 1;
-        #{$left}: 1.5rem;
-        top: 1.5rem;
-        text-transform: capitalize;
+.nodetype--acq_product,
+.path--cart {
+  &.free-gift-detail-modal {
+    .ui-dialog {
+      @include breakpoint($tablet) {
+        padding: calc((100vh - 42rem) / 2) calc((100vw - 45rem) / 2) !important;
+      }
 
-        @include breakpoint($only-mobile) {
-          #{$left}: 0.5rem;
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 40rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+
+  &.free-gifts-modal-overlay {
+    .ui-dialog {
+      @include breakpoint($only-mobile) {
+        background: $modal_bg !important;
+      }
+
+      .ui-dialog-titlebar {
+        .ui-dialog-title {
+          display: block;
+          position: absolute;
+          color: $free-gifts-modal-promo-list-title-color;
+          z-index: 1;
+          #{$left}: 1.5rem;
+          top: 1.5rem;
+          text-transform: capitalize;
+
+          @include breakpoint($only-mobile) {
+            #{$left}: 0.5rem;
+            padding: 1.25rem 0.625rem 2.5rem;
+            float: none;
+            position: static;
+          }
+        }
+
+        .ui-dialog-titlebar-close {
+          @include breakpoint($only-mobile) {
+            top: 0;
+          }
         }
       }
+    }
+  }
+}
+
+body:not(.ie) {
+  #drupal-modal.free-gift-listing-modal {
+    height: 100% !important;
+  }
+}
+
+.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+  &.path--cart {
+    .ui-dialog {
+      @include breakpoint($tablet) {
+        padding: calc((100vh - 28rem) / 2) calc((100vw - 45rem) / 2) !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+
+  &.nodetype--acq_product {
+    .ui-dialog {
+      @include breakpoint($tablet) {
+        padding: calc((100vh - 26rem) / 2) calc((100vw - 45rem) / 2) !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding: calc((100vh - 33rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+      }
+    }
+  }
+}
+
+.free-gift-promo-list-overlay,
+.free-gifts-modal-overlay {
+  .slick-slider {
+    .slick-arrow {
+      top: 30% !important;
+    }
+
+    .slick-prev {
+      #{$left}: -1.65rem;
+    }
+
+    .slick-next {
+      #{$right}: -1.65rem;
     }
   }
 }

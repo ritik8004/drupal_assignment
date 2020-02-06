@@ -11,10 +11,8 @@
             <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </div>
         {% elseif loop.first %}
-          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
-            <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
-              <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-            </a>
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
+            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             {%  if labels|length > 0 %}
               <div class="product-labels">
                 {{ labels }}
@@ -22,10 +20,8 @@
             {% endif %}
           </figure>
         {% else %}
-          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
-            <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
-              <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-            </a>
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }} data-scale="2">
+            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
           </figure>
         {% endif %}
       {% endfor %}
@@ -36,41 +32,28 @@
     </div>
   {% endblock %}
   {% block modalGallery %}
-    <div id="product-image-gallery-container" class="imagegallery {{ image_slider_position_pdp }}" style="display: none;">
+    <div id="product-full-screen-gallery-container" style="display: none;">
       <div class="imagegallery__wrapper thumbnail-count-{{ thumbnails|length }}">
-          {% set firstItem =  thumbnails | first %}
-        <div id="full-image-wrapper" class="imagegallery__full" style="width: 100%; height: 700px; overflow: hidden;">
-            {% if firstItem.type == 'youtube' %}
-              <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src="{{ firstItem.thumburl }}"/>
-            {% elseif firstItem.type == 'vimeo' %}
-              <img class="imagegallery__full__video" width='{{ firstItem.width }}' height='{{ firstItem.height }}' src=""/>
-            {% else %}
-              <img class="imagegallery__full__image b-lazy" style="max-width: none;" id="full-image" data-src="{{ firstItem.fullurl }}"  src="{{ lazy_load_placeholder }}" alt="{{ firstItem.label }}" title="{{ firstItem.label }}" />
-            {% endif %}
-        </div>
         <div class="yt-vi-container cloudzoom__video_modal"></div>
-        <ul id="product-image-gallery" class="imagegallery__thumbnails {{ pager_flag }}">
-            {% for thumbs in thumbnails %}
-                {% if thumbs.type == 'youtube' %}
-                  <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
-                    <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
-                  </li>
-                {% elseif thumbs.type == 'vimeo' %}
-                  <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
-                    <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
-                  </li>
-                {% else %}
-                  <li>
-                    <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                      <img class="b-lazy" data-src="{{ thumbs.thumburl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-                    </a>
-                  </li>
-                {% endif %}
-            {% endfor %}
+        <ul id="product-full-screen-gallery">
+          {% for thumbs in thumbnails %}
+            {% if thumbs.type == 'youtube' %}
+              <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video youtube">
+                <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              </li>
+            {% elseif thumbs.type == 'vimeo' %}
+              <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
+                <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              </li>
+            {% else %}
+              <li>
+                <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
+                  <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
         </ul>
-      </div>
-      <div class="button__wrapper">
-        <button class="zoomin"></button><button class="zoomout"></button>
       </div>
     </div>
   {% endblock %}
@@ -103,7 +86,6 @@
                 {{ labels }}
             </div>
           {% endif %}
-        <div class="subtext"><p>{{ 'Double tap to zoom'|t }}</p></div>
       </div>
     </div>
   {% endblock %}

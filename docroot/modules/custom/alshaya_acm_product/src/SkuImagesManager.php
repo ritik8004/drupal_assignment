@@ -747,6 +747,7 @@ class SkuImagesManager {
       case 'modal':
       case 'pdp':
       case 'modal-magazine':
+      case 'matchback':
         $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
         $thumbnails = $mediaItems['thumbnails'];
         $main_image = $mediaItems['main_image'];
@@ -816,8 +817,9 @@ class SkuImagesManager {
             $library_array[] = 'alshaya_product_zoom/magazine_gallery';
           }
 
-          $gallery['product_zoom'] = [
-            '#theme' => 'product_zoom',
+          $theme = $context == 'matchback' ? 'matchback_gallery' : 'product_zoom';
+          $gallery[$theme] = [
+            '#theme' => $theme,
             '#mainImage' => $main_image,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,

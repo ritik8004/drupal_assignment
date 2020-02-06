@@ -235,6 +235,8 @@ body {
   z-index: 9999;
   visibility: visible;
 
+  @content;
+
   .message {
     display: none;
   }
@@ -265,6 +267,8 @@ body {
   background-size: 1.5rem;
   padding-left: 0.625rem;
   padding-right: 0.625rem;
+
+  @content;
 }
 
 // Mixin styles the label input fields.

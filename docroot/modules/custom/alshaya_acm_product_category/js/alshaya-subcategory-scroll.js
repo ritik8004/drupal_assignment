@@ -52,7 +52,7 @@
       }
       else {
         // Removing extra added 20px for top margin here when filters are not sticky.
-        stickyFilterPosition = -20;
+        stickyFilterPosition = -$('.site-brand-home').outerHeight();
       }
     }
 

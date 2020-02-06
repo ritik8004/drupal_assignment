@@ -63,6 +63,11 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
    * {@inheritdoc}
    */
   public function build(FacetsSummaryInterface $facets_summary) {
+    static $build = NULL;
+    if (!empty($build)) {
+      return $build;
+    }
+
     // Let the facet_manager build the facets.
     $facetsource_id = $facets_summary->getFacetSourceId();
 

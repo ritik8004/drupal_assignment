@@ -54,13 +54,20 @@ class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   protected function getCurrentPagePlpSortOptions():array {
-    if (($term = $this->getTermForRoute())
-        && $options = $this->getPlpSortConfigForTerm($term, 'options')
-    ) {
-      return array_filter($options);
+    static $options;
+
+    if (!empty($options)) {
+      return $options;
     }
 
-    return array_filter($this->configSortOptions->get('sort_options'));
+    if (($term = $this->getTermForRoute()) && $options = $this->getPlpSortConfigForTerm($term, 'options')) {
+      $options = array_filter($options);
+    }
+    else {
+      $options = array_filter($this->configSortOptions->get('sort_options'));
+    }
+
+    return $options;
   }
 
 }

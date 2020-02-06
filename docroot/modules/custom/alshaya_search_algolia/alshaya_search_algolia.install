@@ -9,6 +9,17 @@ use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_update_N().
+ *
+ * Queue all products for re-indexation.
+ * Done to add changed in Algolia for all products.
+ * Done to add attr_color_label for HM.
+ */
+function alshaya_search_algolia_update_8002() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_search_algolia_update_8001() {
   // Install algolia index.
@@ -41,11 +52,6 @@ function alshaya_search_algolia_install() {
     \Drupal::service('theme_handler')->getDefault(),
     'alshaya_white_label'
   );
-
-  // Reset Algolia keys in configs.
-  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
-  $config_check = \Drupal::service('alshaya_acm.config_check');
-  $config_check->checkConfig(TRUE, 'search_api.server.algolia');
 
   $strings = [
     'Search' => [
