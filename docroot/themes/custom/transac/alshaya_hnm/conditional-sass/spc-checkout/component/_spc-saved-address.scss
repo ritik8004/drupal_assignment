@@ -1,0 +1,18 @@
+.spc-address-list-member-content {
+  header.spc-change-address {
+    font-family: $hnm-demibold;
+    text-transform: capitalize;
+  }
+
+  .spc-checkout-address-list {
+    .spc-address-tile {
+      .spc-address-tile-actions {
+        .spc-address-preferred {
+          label {
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+  }
+}

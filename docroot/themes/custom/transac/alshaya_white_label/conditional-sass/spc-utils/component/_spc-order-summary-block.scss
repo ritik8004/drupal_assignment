@@ -88,6 +88,12 @@
       overflow-x: auto;
       overflow-y: visible;
       white-space: nowrap;
+
+      &.product-count-1 {
+        .product-item {
+          width: 100%;
+        }
+      }
     }
 
     .product-item {
