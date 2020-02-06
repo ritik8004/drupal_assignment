@@ -45,10 +45,10 @@
       if ($('.free-gifts-modal-overlay').length > 0) {
         if ($('.free-gift-view').length > 0) {
           $('#drupal-modal').addClass('free-gift-listing-modal');
-          $('#drupal-modal').removeClass('free-gift-detail-modal');
+          $('#drupal-modal, body').removeClass('free-gift-detail-modal');
         }
         else {
-          $('#drupal-modal').addClass('free-gift-detail-modal');
+          $('#drupal-modal, body').addClass('free-gift-detail-modal');
           $('#drupal-modal').removeClass('free-gift-listing-modal');
         }
       }
@@ -78,6 +78,19 @@
             $('.ui-dialog-title').show();
           }
         }
+      });
+      $('#drupal-modal .short-description-wrapper').once('readmore').each(function () {
+        $(this).on('click', '.read-more-description-link-gift', function () {
+          $(this).parent().find('.desc-wrapper:first-child').slideToggle('slow');
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).parent().scroll();
+          $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
+        });
+        $(this).on('click', '.show-less-link', function () {
+          $(this).parent().find('.desc-wrapper:first-child').slideToggle('slow');
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).replaceWith('<span class="read-more-description-link-gift">' + Drupal.t('Read more') + '</span>');
+        });
       });
     }
   };
