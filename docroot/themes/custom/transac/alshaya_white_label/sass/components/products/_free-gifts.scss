@@ -550,6 +550,12 @@
 .free-gift-listing-modal {
   display: flex;
 
+  ul.slick-slider {
+    li {
+      position: relative;
+    }
+  }
+
   .free-gift-view {
     display: flex;
     justify-content: center;
@@ -574,10 +580,14 @@
     .ajax-progress-throbber {
       display: block !important;
 
-      @include fullPageLoader();
+      @include fullPageLoader {
+        position: absolute !important;
+      }
 
       .throbber {
-        @include throbberLoader();
+        @include throbberLoader {
+          position: absolute;
+        }
       }
     }
 
