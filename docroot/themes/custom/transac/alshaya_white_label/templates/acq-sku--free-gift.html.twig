@@ -45,6 +45,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </div>
 
     <div class="content__sidebar">
+      {% if sku.select_free_gift is not empty %}
+        {{ sku.select_free_gift }}
+      {% endif %}
       <div class="short-description-wrapper">
         <div class="content--short-description">
           {% if sku.short_desc is not empty or sku.description is not empty %}
@@ -88,11 +91,6 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
             {% endif %}
           </div>
           {% endif %}
-
-          {% if sku.select_free_gift is not empty %}
-            {{ sku.select_free_gift }}
-          {% endif %}
-
         </div>
       </div>
     </div>
