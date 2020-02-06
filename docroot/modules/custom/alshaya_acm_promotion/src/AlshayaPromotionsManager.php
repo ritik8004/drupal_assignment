@@ -494,24 +494,43 @@ class AlshayaPromotionsManager {
       // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
       if ($promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
         $route_parameters['node'] = $promotion_id;
+        $link_route = 'alshaya_acm_promotion.free_gifts_list';
+        $message_arguments = [];
+        $message = 'Click <span class="coupon-code">@coupon</span> to get a <span class="label">Free Gift</span> from @collection';
+
+        // If only one product is available, display the detail view directly.
+        if (count($free_skus) === 1) {
+          $free_sku_entity = reset($free_skus);
+          $route_parameters['acq_sku'] = $free_sku_entity->id();
+          $link_route = 'alshaya_acm_promotion.free_gift_modal';
+          $options['query']['promotion_id'] = $promotion_id;
+          $promotion['text'] = $free_sku_entity->label();
+          $message = 'Click <span class="coupon-code">@coupon</span> to get a <span class="label">Free Gift</span> @title';
+        }
+
+        $route_parameters['node'] = $promotion_id;
         $link_coupons = Link::createFromRoute(
           reset($coupons),
-          'alshaya_acm_promotion.free_gifts_list',
+          $link_route,
           $route_parameters,
           $options
         )->toString();
 
         $link_collection = Link::createFromRoute(
           $promotion['text'],
-          'alshaya_acm_promotion.free_gifts_list',
+          $link_route,
           $route_parameters,
           $options
         )->toString();
 
-        $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t('Click <span class="coupon-code">@coupon</span> to get a <span class="label">Free Gift</span> from @collection', [
-          '@coupon' => $link_coupons,
-          '@collection' => $link_collection,
-        ]);
+        $message_arguments['@coupon'] = $link_coupons;
+        $message_arguments['@collection'] = $link_collection;
+        $message_arguments['@title'] = $link_collection;
+
+        // Ignoring variable in t() error, we prepare the variable above
+        // and use as variable as there are two scenarios.
+        // @codingStandardsIgnoreLine
+        $free_gift_promos[$promotion_id]['link']['#markup'] = $this->t($message, $message_arguments);
       }
       else {
         $free_sku_entity = reset($free_skus);
