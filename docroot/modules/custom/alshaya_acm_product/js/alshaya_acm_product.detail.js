@@ -331,6 +331,7 @@
     Drupal.ajax({
       url: url,
       progress: {type: 'throbber'},
+      type: 'GET',
     }).execute();
   }
 
