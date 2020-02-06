@@ -98,13 +98,16 @@ class CartController {
 
   /**
    * Start session and set cart data.
+   *
+   * @param bool $force
+   *   TRUE to load cart info from session forcefully, false otherwise.
    */
-  protected function loadCartFromSession() {
+  protected function loadCartFromSession($force = FALSE) {
     if (!$this->session->isStarted()) {
       $this->session->start();
     }
 
-    if (!empty($this->sessionCartInfo)) {
+    if (empty($this->sessionCartInfo) || $force) {
       $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
     }
   }
@@ -116,7 +119,7 @@ class CartController {
    *   The cart id.
    */
   protected function updateSessionCartId(int $cart_id) {
-    $this->loadCartFromSession();
+    $this->loadCartFromSession(TRUE);
     if (empty($this->sessionCartInfo['cart_id'])) {
       $this->sessionCartInfo['cart_id'] = $cart_id;
       $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
