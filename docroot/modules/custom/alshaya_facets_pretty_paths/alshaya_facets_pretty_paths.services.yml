@@ -21,3 +21,11 @@ services:
       - '@facets.manager'
       - '@config.factory'
       - '@alshaya_acm_product.skumanager'
+      - '@facets_summary.manager'
+      - '@cache.pretty_paths'
+  cache.pretty_paths:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [pretty_paths]

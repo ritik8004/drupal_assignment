@@ -1,0 +1,8 @@
+# Schema for the configuration files of the Dynamic yield module.
+dynamic_yield.settings:
+  type: config_object
+  label: 'Dynamic yield settings'
+  mapping:
+    section_id:
+      type: int
+      label: 'Section ID'

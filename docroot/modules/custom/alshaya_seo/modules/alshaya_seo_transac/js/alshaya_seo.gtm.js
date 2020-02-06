@@ -15,11 +15,12 @@
       $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
         var product = $(this).closest('article[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings.productInfo[sku]['variants'][variant];
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
         product.attr('gtm-product-sku', variant);
         product.attr('gtm-price', variantInfo['gtm_price']);
@@ -28,11 +29,12 @@
       // For simple grouped products.
       $('article.entity--type-node').once('alshaya-seo-gtm-simple-grouped').on('group-item-selected', function (event, variant) {
         var sku = $(this).attr('data-sku');
-        if (typeof drupalSettings.productInfo[sku] === 'undefined') {
+        var productKey = ($(this).attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
-        var variantInfo = drupalSettings.productInfo[sku]['group'][variant];
+        var variantInfo = drupalSettings[productKey][sku]['group'][variant];
 
         $(this).attr('gtm-main-sku', variant);
         $(this).attr('gtm-product-sku', variant);
@@ -91,6 +93,32 @@
           }
         };
 
+        dataLayer.push(productData);
+      });
+
+      // Push GTM event on add to cart failure.
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function () {
+        var sku = $(this).closest('article[gtm-type="gtm-product-link"]').attr('gtm-main-sku');
+        var errorMessage = $('.errors-container .error .message', $(this)).text();
+        // Get selected attributes.
+        var attributes = [];
+        $('#configurable_ajax select', $(this)).each(function() {
+          var configLabel = $(this).attr('data-default-title');
+          var configValue = $('option:selected', $(this)).text();
+          var attribute = configLabel + ': ' + configValue;
+          attributes.push(attribute);
+        });
+        // Set Event label.
+        var label = 'Update cart failed for Product [' + sku + '] ';
+        label = label + attributes.join(', ');
+        var productData = {
+          event: 'eventTracker',
+          eventCategory: 'Update cart error',
+          eventAction: errorMessage,
+          eventLabel: label,
+          eventValue: 0,
+          nonInteraction: 0,
+        };
         dataLayer.push(productData);
       });
 

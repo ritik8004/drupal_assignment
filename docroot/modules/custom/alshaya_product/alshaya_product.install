@@ -12,6 +12,24 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Adding new view mode for acq_product node bundle and a new views display.
+ */
+function alshaya_product_update_8027() {
+  $configs = [
+    'core.entity_view_mode.node.matchback',
+    'core.entity_view_display.node.acq_product.matchback',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_product');
+
+  $configs = [
+    'views.view.product_slider',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update views to change row render style.
  */
 function alshaya_product_update_8026() {

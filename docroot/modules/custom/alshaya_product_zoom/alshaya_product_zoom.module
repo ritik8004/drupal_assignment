@@ -35,6 +35,17 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'alshaya_magazine',
     ],
+    'matchback_gallery' => [
+      'variables' => [
+        'mainImage' => '',
+        'thumbnails' => '',
+        'pager_flag' => '',
+        'properties' => '',
+        'labels' => '',
+        'image_slider_position_pdp' => '',
+      ],
+      'template' => 'matchback_gallery',
+    ],
   ];
 }
 

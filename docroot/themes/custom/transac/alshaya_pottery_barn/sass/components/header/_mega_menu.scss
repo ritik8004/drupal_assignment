@@ -168,6 +168,12 @@
   }
 }
 
+.block-alshaya-main-menu:not(.megamenu-inline-layout) li.menu--one__list-item ul.menu--two__list .menu--two__list-item {
+  @include breakpoint($desktop) {
+    padding-bottom: 0;
+  }
+}
+
 .menu--two__list {
   .menu--two__list-item {
     .menu-two__link {
@@ -178,12 +184,24 @@
 
     .menu--three__list {
       @include breakpoint($desktop) {
-        margin-bottom: 2rem;
+        padding-bottom: 2rem;
       }
 
       li {
         @include breakpoint($desktop) {
           padding-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-main-menu.megamenu-inline-layout {
+  .menu--two__list {
+    .menu--two__list-item {
+      .menu--three__list {
+        @include breakpoint($desktop) {
+          padding-bottom: 2rem;
         }
       }
     }

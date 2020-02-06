@@ -6,8 +6,10 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Service\AddToCartFormHelper;
+use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -50,6 +52,13 @@ class SelectFreeGiftForm extends FormBase {
   protected $nodeStorage;
 
   /**
+   * SKU Info Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
+   */
+  protected $skuInfoHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -57,7 +66,8 @@ class SelectFreeGiftForm extends FormBase {
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.add_to_cart_form_helper'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_acm_product.sku_info')
     );
   }
 
@@ -72,15 +82,19 @@ class SelectFreeGiftForm extends FormBase {
    *   Add to cart form helper.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
+   * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
+   *   SKU Info Helper.
    */
   public function __construct(AlshayaPromotionsManager $promotions_manager,
                               SkuManager $sku_manager,
                               AddToCartFormHelper $add_to_cart_form_helper,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              SkuInfoHelper $sku_info_helper) {
     $this->promotionsManager = $promotions_manager;
     $this->skuManager = $sku_manager;
     $this->formHelper = $add_to_cart_form_helper;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->skuInfoHelper = $sku_info_helper;
   }
 
   /**
@@ -153,7 +167,6 @@ class SelectFreeGiftForm extends FormBase {
     $form['#attributes']['class'][] = 'sku-base-form';
 
     if ($sku->bundle() == 'configurable') {
-      $form['select']['#attributes']['disabled'] = 'disabled';
       $configurables = Configurable::getSortedConfigurableAttributes($sku);
 
       $form['selected_variant_sku'] = [
@@ -171,6 +184,8 @@ class SelectFreeGiftForm extends FormBase {
       $combinations = [];
 
       foreach ($children as $child) {
+        $form['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['variants'][$child->getSku()] = $this->skuInfoHelper->getVariantInfo($child, 'pdp', $sku);
+
         $child_attributes = array_column($child->get('attributes')->getValue(), 'value', 'key');
         foreach ($attributes as $attribute) {
           $combinations['by_sku'][$child->getSku()][$attribute] = $child_attributes[$attribute];
@@ -201,11 +216,18 @@ class SelectFreeGiftForm extends FormBase {
         ];
 
         $this->formHelper->alterConfigurableFormItem($sku, $form['configurations'][$attribute_code], $swatch_processed);
+
+        $combinations['combinations'] = [];
+
+        foreach ($combinations['by_sku'] as $options) {
+          $combinations['combinations'] = NestedArray::mergeDeepArray([$combinations['combinations'], $this->skuManager->getCombinationArray($options)], TRUE);
+        }
       }
 
-      $form['#attached']['library'][] = 'alshaya_acm_promotion/free_gift';
-      $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['bySku'] = $combinations['bySku'];
+      $form['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+      $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['bySku'] = $combinations['by_sku'];
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['byAttribute'] = $combinations['by_attribute'];
+      $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['combinations'] = $combinations['combinations'] ?? [];
 
       $display_settings = $this->config('alshaya_acm_product.display_settings');
       $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');

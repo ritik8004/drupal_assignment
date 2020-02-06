@@ -1,0 +1,8 @@
+name: Dynamic yield
+type: module
+description: Creates integration between dynamic yield and drupal.
+package: Others
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: dynamic_yield.settings_form

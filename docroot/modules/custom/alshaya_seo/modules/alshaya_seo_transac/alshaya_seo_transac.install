@@ -6,6 +6,26 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable metatag_twitter_cards module & their default configs.
+ */
+function alshaya_seo_transac_update_8409() {
+  // Install metatag_twitter_cards module.
+  \Drupal::service('module_installer')->install(['metatag_twitter_cards']);
+  // Set default value for twitter cards creator.
+  $config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
+  $metatag_defaults_settings = Settings::get('metatag.metatag_defaults.global');
+  if (!empty($metatag_defaults_settings)) {
+    foreach ($metatag_defaults_settings as $key => $value) {
+      $config->set($key, $value);
+    }
+  }
+  $config->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -161,6 +181,15 @@ function alshaya_seo_transac_install() {
 
   // Configure default variant.
   _alshaya_seo_transac_configure_default_variant();
+  // Set default value for twitter cards creator.
+  $config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
+  $metatag_defaults_settings = Settings::get('metatag.metatag_defaults.global');
+  if (!empty($metatag_defaults_settings)) {
+    foreach ($metatag_defaults_settings as $key => $value) {
+      $config->set($key, $value);
+    }
+  }
+  $config->save();
 }
 
 /**

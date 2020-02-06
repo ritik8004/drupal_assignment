@@ -591,7 +591,8 @@ function alshaya_acm_price_format($price, array $promotions = [], $tooltip = '')
     $output['#tooltip'] = $tooltip;
   }
 
-  return render($output);
+  $render = \Drupal::service('renderer')->renderPlain($output);
+  return $render;
 }
 
 /**

@@ -23,6 +23,7 @@ services:
       - '@language_manager'
       - '@acq_sku.fields_manager'
       - '@http_client'
+      - '@config.factory'
 
   logger.channel.alshaya_product_options:
     parent: logger.channel_base
@@ -46,3 +47,7 @@ services:
       - '@plugin.manager.facets.facet_source'
       - '@plugin.manager.facets_summary.processor'
       - '@facets.manager'
+  alshaya_product_options.brand_list_helper:
+    class: Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper
+    arguments:
+      - '@database'
