@@ -333,7 +333,7 @@
       progress: {type: 'throbber'},
       type: 'GET',
     }).execute();
-  }
+  };
 
   Drupal.getRelatedProductPosition = function () {
     var sku = $('article[data-vmode="full"]').attr('data-sku');
@@ -348,15 +348,15 @@
       matchback.addClass('matchback-processed');
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
     }
-    if (!upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
+    if ((upsell.length > 0) && !upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
       upsell.addClass('upsell-processed');
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
     }
-    if (!related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
+    if ((related.length > 0) && !related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
       related.addClass('related-processed');
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
     }
-  }
+  };
 
   // This event is triggered on page load itself in attach (Drupal.behaviors.configurableAttributeBoxes)
   // once size boxes are shown properly
