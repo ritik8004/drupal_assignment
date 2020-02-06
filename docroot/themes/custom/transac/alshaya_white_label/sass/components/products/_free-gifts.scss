@@ -668,11 +668,13 @@
           }
         }
       }
-
-      #drupal-modal.free-gift-listing-modal {
-        height: 100% !important;
-      }
     }
+  }
+}
+
+body:not(.ie) {
+  #drupal-modal.free-gift-listing-modal {
+    height: 100% !important;
   }
 }
 
