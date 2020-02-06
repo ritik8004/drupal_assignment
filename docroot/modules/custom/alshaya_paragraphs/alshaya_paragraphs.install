@@ -17,10 +17,10 @@ use Symfony\Component\Yaml\Yaml;
  */
 function alshaya_paragraphs_update_8127() {
   $configs = [
+    'field.storage.paragraph.field_promo_block_visible_on',
+    'field.field.paragraph.promo_block.field_promo_block_visible_on',
     'core.entity_form_display.paragraph.promo_block.default',
     'core.entity_view_display.paragraph.promo_block.default',
-    'field.field.paragraph.promo_block.field_promo_block_visible_on',
-    'field.storage.paragraph.field_promo_block_visible_on',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 }
