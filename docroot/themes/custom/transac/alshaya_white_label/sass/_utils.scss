@@ -225,7 +225,7 @@ body {
 
 // Mixin for adding a full page spinner. Used on Slug modal links and campaign-plp-style-1 static modal links.
 // Can be used anywhere when you need a full screen loader.
-@mixin fullPageLoader {
+@mixin fullPageLoader() {
   position: fixed !important;
   width: 100% !important;
   height: 100%;
@@ -260,7 +260,7 @@ body {
 
 // Mixin to add a spinner.
 // Can be used anywhere when you need a loader
-@mixin throbberLoader {
+@mixin throbberLoader() {
   background-image: url(#{$base_theme_loader_img_directory_path}) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
