@@ -15,7 +15,7 @@
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
 
       // Process main pdp gallery only once.
-      var zoomContainer = $('.acq-content-product #product-zoom-container');
+      var zoomContainer = $('.acq-content-product .content__main #product-zoom-container');
       if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
         zoomContainer.addClass('product-zoom-processed');
 
@@ -214,7 +214,7 @@
     toggleProductImageGallery();
   });
 
-  $(document).once('bind-slick-nav').on('click', '.slick-prev, .slick-next', function () {
+  $(document).once('bind-slick-nav').on('click', '#product-zoom-container .slick-prev, #product-zoom-container .slick-next', function () {
     var slider = $(this).closest('.slick-slider');
     setTimeout(function () {
       var currentSlide = slider.find('li.slick-current');
