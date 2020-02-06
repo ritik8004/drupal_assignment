@@ -45,10 +45,10 @@
       if ($('.free-gifts-modal-overlay').length > 0) {
         if ($('.free-gift-view').length > 0) {
           $('#drupal-modal').addClass('free-gift-listing-modal');
-          $('#drupal-modal').removeClass('free-gift-detail-modal');
+          $('#drupal-modal, body').removeClass('free-gift-detail-modal');
         }
         else {
-          $('#drupal-modal').addClass('free-gift-detail-modal');
+          $('#drupal-modal, body').addClass('free-gift-detail-modal');
           $('#drupal-modal').removeClass('free-gift-listing-modal');
         }
       }
