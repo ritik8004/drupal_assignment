@@ -79,6 +79,19 @@
           }
         }
       });
+      $('#drupal-modal .short-description-wrapper').once('readmore').each(function () {
+        $(this).on('click', '.read-more-description-link-gift', function () {
+          $(this).parent().find('.desc-wrapper:first-child').slideToggle('slow');
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).parent().scroll();
+          $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
+        });
+        $(this).on('click', '.show-less-link', function () {
+          $(this).parent().find('.desc-wrapper:first-child').slideToggle('slow');
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).replaceWith('<span class="read-more-description-link-gift">' + Drupal.t('Read more') + '</span>');
+        });
+      });
     }
   };
 
