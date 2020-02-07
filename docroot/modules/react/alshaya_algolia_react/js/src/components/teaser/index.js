@@ -40,15 +40,15 @@ const Teaser = ({hit}) => {
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
-            href={`${hit.url}?queryID=${hit.__queryID}`}
-            data--original-url={`${hit.url}?queryID=${hit.__queryID}`}
+            href={`${hit.url}`}
+            data--original-url={`${hit.url}`}
             onClick={(event) => localStorageStore(event)}
             className="list-product-gallery product-selected-url">
             <Gallery media={hit.media} title={hit.title} />
           </a>
           <div className="product-plp-detail-wrapper">
             <h2 className="field--name-name">
-              <a href={`${hit.url}?queryID=${hit.__queryID}`} className="product-selected-url">
+              <a href={`${hit.url}`} className="product-selected-url">
                 <CustomHighlight attribute="title" hit={hit} />
               </a>
             </h2>
