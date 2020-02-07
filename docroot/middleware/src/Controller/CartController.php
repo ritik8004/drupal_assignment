@@ -69,7 +69,7 @@ class CartController {
    *
    * @var array
    */
-  protected $sessionCartInfo;
+  protected $sessionCartInfo = [];
 
   /**
    * CartController constructor.
@@ -97,17 +97,19 @@ class CartController {
   }
 
   /**
-   * Start session and return cart data.
+   * Start session and set cart data.
    *
-   * @return mixed
-   *   return array of cart data from session or null.
+   * @param bool $force
+   *   TRUE to load cart info from session forcefully, false otherwise.
    */
-  protected function getCartFromSession() {
+  protected function loadCartFromSession($force = FALSE) {
     if (!$this->session->isStarted()) {
       $this->session->start();
     }
 
-    return $this->session->get(self::STORAGE_KEY);
+    if (empty($this->sessionCartInfo) || $force) {
+      $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    }
   }
 
   /**
@@ -117,7 +119,7 @@ class CartController {
    *   The cart id.
    */
   protected function updateSessionCartId(int $cart_id) {
-    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    $this->loadCartFromSession(TRUE);
     if (empty($this->sessionCartInfo['cart_id'])) {
       $this->sessionCartInfo['cart_id'] = $cart_id;
       $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
@@ -135,7 +137,7 @@ class CartController {
       return $this->sessionCartInfo['uid'];
     }
 
-    $this->sessionCartInfo = $this->session->get(self::STORAGE_KEY);
+    $this->loadCartFromSession();
     return !empty($this->sessionCartInfo['uid'])
       ? $this->sessionCartInfo['uid']
       : NULL;
@@ -179,10 +181,10 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    $cart = $this->getCartFromSession();
+    $this->loadCartFromSession();
 
-    if (!empty($cart['cart_id'])) {
-      return $this->getCart($cart['cart_id']);
+    if (!empty($this->sessionCartInfo['cart_id'])) {
+      return $this->getCart($this->sessionCartInfo['cart_id']);
     }
 
     // If there are not cart available.
@@ -343,11 +345,12 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   protected function createCart() {
-    $cart = $this->getCartFromSession();
-    if (!empty($cart['cart_id'])) {
-      return $cart['cart_id'];
+    $this->loadCartFromSession();
+    if (!empty($this->sessionCartInfo['cart_id'])) {
+      return $this->sessionCartInfo['cart_id'];
     }
     $this->session->remove(self::STORAGE_KEY);
+    $this->sessionCartInfo = [];
     return $this->cart->createCart();
   }
 
@@ -365,7 +368,7 @@ class CartController {
   public function updateCart(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
 
-    $this->getCartFromSession();
+    $this->loadCartFromSession();
 
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
@@ -570,18 +573,18 @@ class CartController {
    *   Json response.
    */
   public function associateCart() {
-    $cart = $this->getCartFromSession();
+    $this->loadCartFromSession();
 
-    if (!empty($cart['customer_id'])) {
-      return new JsonResponse($cart);
+    if (!empty($this->sessionCartInfo['customer_id'])) {
+      return new JsonResponse($this->sessionCartInfo);
     }
 
     try {
       $customer = $this->drupal->getCustomerId();
       if ($customer !== NULL) {
-        $this->cart->associateCartToCustomer($cart['cart_id'], $customer['customer_id']);
+        $this->cart->associateCartToCustomer($this->sessionCartInfo['cart_id'], $customer['customer_id']);
         $this->session->set(self::STORAGE_KEY, [
-          'cart_id' => $cart['cart_id'],
+          'cart_id' => $this->sessionCartInfo['cart_id'],
           'customer_id' => $customer['customer_id'],
           'uid' => $customer['uid'],
         ]);
