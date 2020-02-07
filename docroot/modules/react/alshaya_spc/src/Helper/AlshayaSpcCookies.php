@@ -66,10 +66,17 @@ class AlshayaSpcCookies {
   /**
    * Helper method to get session data from table for middleware cookie.
    *
+   * @param bool $force
+   *   True to fetch from database, otherwise false.
+   *
    * @return array|null
    *   Return array of data or null.
    */
-  protected function getMiddleWareSessionFromCookie() {
+  protected function getMiddleWareSessionFromCookie($force = FALSE) {
+    if (!empty($this->spcSession) && !$force) {
+      return $this->spcSession;
+    }
+
     $this->cookies = $this->request->cookies->all();
     if (empty($this->cookies[self::MIDDLEWARE_COOKIE_KEY])) {
       return NULL;
@@ -107,9 +114,18 @@ class AlshayaSpcCookies {
    * @return string|null
    *   Return the array which contains the cart id.
    */
-  public function getSessionCartId($force = TRUE) {
+  public function getSessionCartId($force = FALSE) {
     if ($force) {
-      $this->getMiddleWareSessionFromCookie();
+      $this->getMiddleWareSessionFromCookie($force);
+    }
+
+    $cart_id = &drupal_static(__METHOD__, NULL);
+    if (!empty($cart_id)) {
+      return $cart_id;
+    }
+
+    if (empty($this->spcSession)) {
+      return NULL;
     }
 
     // Get the middleware session key from the record.
@@ -124,7 +140,8 @@ class AlshayaSpcCookies {
       }
     }
 
-    return $session_data['cart_id'] ?? NULL;
+    $cart_id = $session_data['cart_id'] ?? NULL;
+    return $cart_id;
   }
 
   /**
@@ -132,8 +149,15 @@ class AlshayaSpcCookies {
    *
    * @param string $cart_id
    *   Cart id to be updated.
+   *
+   * @return \Drupal\Core\Database\StatementInterface|int|void|null
+   *   Return updated id or null.
    */
   public function setSessionCartId($cart_id) {
+    if (empty($this->spcSession)) {
+      return NULL;
+    }
+
     $prepare_session = [];
     foreach (explode('|', $this->spcSession) as $session_data) {
       $unserialized = @unserialize($session_data);
@@ -151,7 +175,7 @@ class AlshayaSpcCookies {
     }
 
     $session = implode('|', $prepare_session);
-    $this->updateMiddleWareSession($session);
+    return $this->updateMiddleWareSession($session);
   }
 
   /**
@@ -159,12 +183,15 @@ class AlshayaSpcCookies {
    *
    * @param string $session
    *   Processed string to update the middleware session.
+   *
+   * @return \Drupal\Core\Database\StatementInterface|int|null
+   *   Return updated id or null.
    */
   protected function updateMiddleWareSession(string $session) {
     $query = $this->connection->update('sessions');
     $query->fields(['session' => $session])
       ->condition('sid', Crypt::hashBase64($this->cookies[self::MIDDLEWARE_COOKIE_KEY]));
-    $query->execute();
+    return $query->execute();
   }
 
 }

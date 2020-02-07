@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Helper;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class AlshayaSpcCustomerHelper.
@@ -39,6 +40,13 @@ class AlshayaSpcCustomerHelper {
   protected $spcCookies;
 
   /**
+   * The session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\Session
+   */
+  protected $session;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -49,17 +57,21 @@ class AlshayaSpcCustomerHelper {
    *   The module handler.
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCookies $spc_cookies
    *   The spc cookies handler.
+   * @param \Symfony\Component\HttpFoundation\Session\Session $session
+   *   The session.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaSpcApiHelper $api_wrapper,
     ModuleHandlerInterface $module_handler,
-    AlshayaSpcCookies $spc_cookies
+    AlshayaSpcCookies $spc_cookies,
+    Session $session
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
     $this->moduleHandler = $module_handler;
     $this->spcCookies = $spc_cookies;
+    $this->session = $session;
   }
 
   /**
@@ -190,9 +202,11 @@ class AlshayaSpcCustomerHelper {
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
         $cart_id = $this->spcCookies->getSessionCartId();
-        if (empty($cart_id) && !empty($customer['cart_id'])) {
+        if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
           // @todo: Check if we can associate user id as well.
-          $this->spcCookies->setSessionCartId($cart_id);
+          if (empty($this->spcCookies->setSessionCartId($customer['extension']['cart_id']))) {
+            $this->session->set('customer_cart_id', $customer['extension']['cart_id']);
+          }
         }
 
         // Check if user exists in Drupal.

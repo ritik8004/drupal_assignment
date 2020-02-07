@@ -183,6 +183,11 @@ class CartController {
   public function restoreCart() {
     $this->loadCartFromSession();
 
+    if (empty($this->sessionCartInfo['cart_id'])) {
+      $this->sessionCartInfo = $this->drupal->getCustomerCart();
+      $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
+    }
+
     if (!empty($this->sessionCartInfo['cart_id'])) {
       return $this->getCart($this->sessionCartInfo['cart_id']);
     }

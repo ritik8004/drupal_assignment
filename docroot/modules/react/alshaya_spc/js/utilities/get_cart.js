@@ -58,6 +58,21 @@ export const fetchCartData = function () {
     if (cart.cart_id === null) {
       return null;
     }
+
+    // On logout cart object will havee a user id and drupalSettings uid will be
+    // set to 0. Comparing this to figure out the user is logged out and hence the
+    // cart data which is already there in localstorage is not valid and hence,
+    // initiating object with empty data will show empty cart and mini cart.
+    // Clearing the local storage will be taken care by emptyCustomerCart().
+    if (cart.uid !== window.drupalSettings.user.uid && cart.uid.length > 0) {
+      cart = {
+        cart_id: null,
+        cart_total: null,
+        items_qty: null,
+        items: []
+      }
+    }
+
     return Promise.resolve(cart);
   }
 
