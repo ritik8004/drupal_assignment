@@ -1,8 +1,3 @@
-/**
- * @file
- * Gulp file to call all the gulp related task.
- */
-
 // -------------------------------------
 //
 //   Gulpfile
