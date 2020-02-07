@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update config for enable_lhn_tree_search
+ * for sidebar visibility in search page.
+ */
+function alshaya_fl_update_8002() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
+  $config->set('enable_lhn_tree_search', 1);
+  $config->save();
+}
+
+/**
  * Implements hook_update_n().
  *
  * Update translation of meta content.

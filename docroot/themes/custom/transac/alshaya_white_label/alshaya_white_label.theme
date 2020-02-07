@@ -270,6 +270,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Attach the plp search js library to Search page.
   if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+    // Sidebar visibility for Search page.
+    $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree_search');
   }
 
   // Adding vat text footer to the page.
@@ -285,11 +287,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $variables['site_logo'] = theme_get_setting('logo.url');
   $mobile_logo = alshaya_master_get_mobile_logo();
   $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
-
-  if ($routematch->getRouteName() == 'view.search.page') {
-    // Sidebar visibility for Search page.
-    $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
-  }
 }
 
 /**

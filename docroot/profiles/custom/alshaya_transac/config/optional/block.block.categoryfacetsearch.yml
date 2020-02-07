@@ -18,7 +18,7 @@ settings:
   id: 'facet_block:category_facet_search'
   label: Category (Search LHS)
   provider: facets
-  label_display: '0'
+  label_display: visible
 visibility:
   request_path:
     id: request_path

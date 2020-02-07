@@ -69,6 +69,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       ->set('enable_lhn_tree', $form_state->getValue('enable_lhn_tree'))
       ->set('grouping_page_header_style', $form_state->getValue('grouping_page_header_style'))
       ->set('enable_auto_sale_categorisation', $form_state->getValue('enable_auto_sale_categorisation'))
+      ->set('enable_lhn_tree_search', $form_state->getValue('enable_lhn_tree_search'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -137,6 +138,13 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#title' => $this->t('Enable LHN'),
       '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on PLP pages for Desktop.'),
       '#default_value' => $config->get('enable_lhn_tree'),
+    ];
+
+    $form['enable_lhn_tree_search'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable LHN For Search Page'),
+      '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on search pages for Desktop.'),
+      '#default_value' => $config->get('enable_lhn_tree_search'),
     ];
 
     $form['grouping_page_header_style'] = [
