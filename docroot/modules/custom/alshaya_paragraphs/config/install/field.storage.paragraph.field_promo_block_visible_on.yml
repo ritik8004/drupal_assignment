@@ -12,10 +12,13 @@ settings:
   allowed_values:
     -
       value: all
-      label: 'All devices'
+      label: All
+    -
+      value: website
+      label: 'Website only'
     -
       value: mobile_app
-      label: 'Mobile App Only'
+      label: 'Mobile App only'
   allowed_values_function: ''
 module: options
 locked: false
