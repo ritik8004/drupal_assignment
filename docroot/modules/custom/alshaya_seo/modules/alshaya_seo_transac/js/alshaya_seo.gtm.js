@@ -226,17 +226,6 @@
         }
       });
 
-      // List of Pages where we need to push out list of product being rendered to GTM.
-      var impressionPages = [
-        'home page',
-        'search result page',
-        'product listing page',
-        'product detail page',
-        'advanced page',
-        'department page',
-        'promotion page'
-      ];
-
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
         if (document.location.pathname.startsWith('/' + drupalSettings.path.currentLanguage + '/user')) {
@@ -466,28 +455,6 @@
         });
 
         Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-      }
-      else if ($.inArray(gtmPageType, impressionPages) !== -1) {
-        var count = productLinkProcessedSelector.length + 1;
-
-        if (productLinkSelector.length > 0) {
-          productLinkSelector.each(function () {
-            if (!$(this).hasClass('impression-processed')) {
-              $(this).addClass('impression-processed');
-              var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-              impression.list = listName;
-              impression.position = count;
-              // Keep variant empty for impression pages. Populated only post add to cart action.
-              impression.variant = '';
-              impressions.push(impression);
-              count++;
-            }
-          });
-
-          if (impressions.length > 0) {
-            Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
-          }
-        }
       }
 
       /**
@@ -1254,6 +1221,66 @@
     }
 
     return selectedMethodLabel;
+  };
+
+  /**
+   * Helper function to push productImpression to GTM.
+   *
+   * @param customerType
+   */
+  Drupal.alshaya_seo_gtm_prepare_and_push_product_impression = function (context, settings) {
+    var impressions = [];
+    var body = $('body');
+    var currencyCode = body.attr('gtm-currency');
+    var productLinkSelector = $('main [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    var productLinkProcessedSelector = $('main .impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    var listName = body.attr('gtm-list-name');
+    // Send impression for each product added on page (page 1 or X).
+    var count = productLinkProcessedSelector.length + 1;
+
+    if (productLinkSelector.length > 0) {
+      productLinkSelector.each(function () {
+        if (!$(this).hasClass('impression-processed') && Drupal.isOnScreen($(this))) {
+          $(this).addClass('impression-processed');
+          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+          impression.list = listName;
+          impression.position = count;
+          // Keep variant empty for impression pages. Populated only post add to cart action.
+          impression.variant = '';
+          impressions.push(impression);
+          count++;
+        }
+      });
+      if (impressions.length > 0) {
+        Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
+      }
+    }
+  };
+
+  /**
+   * Helper function to check element visibility on view port.
+   *
+   * @param elem
+   *
+   * @returns true/false
+   */
+  Drupal.isOnScreen = function (elem) {
+    // if the element doesn't exist, abort
+    if( elem.length == 0 ) {
+      return;
+    }
+    var $window = jQuery(window)
+    var viewport_top = $window.scrollTop()
+    var viewport_height = $window.height()
+    var viewport_bottom = viewport_top + viewport_height
+    var $elem = jQuery(elem)
+    var top = $elem.offset().top
+    var height = $elem.height()
+    var bottom = top + height
+
+    return (top >= viewport_top && top < viewport_bottom) ||
+    (bottom > viewport_top && bottom <= viewport_bottom) ||
+    (height > viewport_height && top <= viewport_top && bottom >= viewport_bottom)
   };
 
   // Ajax command to push deliveryAddress Event.

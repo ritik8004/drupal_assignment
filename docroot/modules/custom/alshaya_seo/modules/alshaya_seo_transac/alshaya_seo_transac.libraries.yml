@@ -22,3 +22,15 @@ checkout_login:
     js/alshaya_seo.gtm.checkout_login.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+product_list:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.product_list.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+product_slider:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.product_slider.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm

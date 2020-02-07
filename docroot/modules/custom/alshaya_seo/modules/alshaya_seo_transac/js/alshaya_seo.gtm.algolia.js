@@ -12,6 +12,10 @@
   // Bind for Algolia Search page. No impact if Algolia search not enabled
   // as selector won't be available.
   $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
+    // Allow for aloglia search result.
+    if (!$('#alshaya-algolia-search').hasClass('show-algolia-result')) {
+      return;
+    }
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
     if (_.indexOf(searchQuery, currentsearch) < 0 && initNoOfResults !== noOfResult) {
@@ -30,10 +34,22 @@
       });
     }
 
+    Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
+    $(window).on('scroll', function (event) {
+      Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
+    });
+  });
+
+  /**
+   * Helper function to push productImpression to GTM.
+   *
+   * @param customerType
+   */
+  Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression = function () {
     // Send impression for each product added on page (page 1 or X).
     var searchImpressions = [];
-    $('[gtm-type="gtm-product-link"]', $(this)).each(function () {
-      if (!$(this).hasClass('impression-processed')) {
+    $('#alshaya-algolia-search [gtm-type="gtm-product-link"]').each(function () {
+      if (!$(this).hasClass('impression-processed') && Drupal.isOnScreen($(this))) {
         $(this).addClass('impression-processed');
         var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
         impression.list = 'Search Results Page';
@@ -53,6 +69,6 @@
     if (searchImpressions.length > 0) {
       Drupal.alshaya_seo_gtm_push_impressions(drupalSettings.reactTeaserView.price.currency, searchImpressions);
     }
-  });
+  };
 
 })(jQuery, Drupal, dataLayer);
