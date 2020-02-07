@@ -81,8 +81,8 @@ $icons: (
   pinterestselect: "\e925",
   play: "\e926",
   prize: "\e927",
-  radioempty: "\e928",
-  radiofull: "\e929",
+  radio-empty: "\e928",
+  radio-filled: "\e929",
   rating: "\e92a",
   ratingfull: "\e92b",
   rewards: "\e92c",
@@ -103,7 +103,8 @@ $icons: (
   marquee-plus: "\e083",
   price-tag: "\e93a",
   check: "\e93b",
-  filter: "\e93c"
+  filter: "\e93c",
+  bin: "\e9ac"
 );
 
 @mixin iconbase() {

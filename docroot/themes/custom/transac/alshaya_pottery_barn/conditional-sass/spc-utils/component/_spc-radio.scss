@@ -1,0 +1,29 @@
+input[type=radio] {
+  ~ .radio-sim {
+    @include icon(radio-empty, before) {
+      font-size: 1.25rem;
+    }
+  }
+
+  &:checked {
+    ~ .radio-sim {
+      &::before {
+        content: '';
+        border: 5px solid $spc-checkout-radio-filled;
+        border-radius: 100%;
+        width: 1.0625rem;
+        height: 1.0625rem;
+        margin-#{$left}: 0.875rem;
+      }
+    }
+  }
+
+  ~ .radio-label {
+    text-transform: capitalize;
+
+    .impress {
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+  }
+}
