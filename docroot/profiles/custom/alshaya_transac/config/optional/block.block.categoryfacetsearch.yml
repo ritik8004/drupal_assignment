@@ -10,15 +10,15 @@ dependencies:
     - alshaya_white_label
 id: categoryfacetsearch
 theme: alshaya_white_label
-region: content
+region: sidebar_first
 weight: -32
 provider: null
 plugin: 'facet_block:category_facet_search'
 settings:
   id: 'facet_block:category_facet_search'
-  label: Category
+  label: Category (Search LHS)
   provider: facets
-  label_display: visible
+  label_display: '0'
 visibility:
   request_path:
     id: request_path
