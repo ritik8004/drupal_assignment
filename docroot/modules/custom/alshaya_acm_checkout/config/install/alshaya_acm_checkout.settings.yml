@@ -14,7 +14,7 @@ click_collect_method_method_code: 'click_and_collect'
 click_collect_method_carrier_code: 'click_and_collect'
 checkout_display_magento_error: 1
 checkout_show_tax_info: false
-cod_surcharge_status: 0
+cod_surcharge_status: 1
 cod_surcharge_label: 'COD Service Charge'
 cod_surcharge_short_description: '[Additional [surcharge] Service Charge]'
 cod_surcharge_description: 'You pay for the merchandise upon delivery. <br>Cash on delivery orders will be charged an additional service charge of [surcharge] per order'
