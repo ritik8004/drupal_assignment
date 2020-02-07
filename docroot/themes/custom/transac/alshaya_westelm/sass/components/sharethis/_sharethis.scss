@@ -28,4 +28,8 @@
       background: url("../imgs/icons/ic-youtubeselect.svg") no-repeat center;
     }
   }
+
+  > span {
+    margin-#{$right}: 0.625rem;
+  }
 }
