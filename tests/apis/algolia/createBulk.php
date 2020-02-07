@@ -21,8 +21,24 @@ $envs = [
   '01qa2',
 ];
 
-// Settings for live app.
+global $languages;
 
+foreach ($envs as $env) {
+  foreach ($brands as $brand) {
+    $prefix = $env . '_' . $brand;
+    foreach ($languages as $language) {
+      try {
+        algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
+      }
+      catch (\Exception $e) {
+        print 'Error occurred for ' . $prefix . '_' . $language . PHP_EOL;
+        print $e->getMessage() . PHP_EOL . PHP_EOL;
+      }
+    }
+  }
+}
+
+// Settings for live app.
 $app_id = '6TOQSJY0O6';
 $app_secret_admin = ''; // Admin Key.
 
@@ -33,13 +49,17 @@ $envs = [
   '01live',
 ];
 
-global $languages;
-
 foreach ($envs as $env) {
   foreach ($brands as $brand) {
     $prefix = $env . '_' . $brand;
     foreach ($languages as $language) {
-      algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
+      try {
+        algolia_create_index($app_id, $app_secret_admin, $language, $prefix);
+      }
+      catch (\Exception $e) {
+        print 'Error occurred for ' . $prefix . '_' . $language . PHP_EOL;
+        print $e->getMessage() . PHP_EOL . PHP_EOL;
+      }
     }
   }
 }
