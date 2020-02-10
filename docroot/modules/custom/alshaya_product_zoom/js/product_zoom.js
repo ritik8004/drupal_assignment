@@ -83,9 +83,10 @@
           else {
             // Handle click on image thumbnails.
             var imageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('href');
+            var zoomImageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('data-zoom-url');
             if (imageUrl !== null || imageUrl !== 'undefined') {
               $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl)
-              .parent().find('.product-image-zoom-placeholder-content').css({'background-image': 'url(' + imageUrl + ')'});
+              .parent().find('.product-image-zoom-placeholder-content').css({'background-image': 'url(' + zoomImageUrl + ')'});
             }
           }
           // Hide Product labels on video slides.
@@ -198,7 +199,7 @@
             $(this).parent().find('img').trigger('click');
           })
           .children('.product-image-zoom-placeholder-content')
-          .css({'background-image': 'url('+ $(this).find('img').attr('src') +')'});
+          .css({'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')'});
           $(this).find('img').on('load', function () {
             var imgWidth = $(this).width();
             var containerWidth = $(this).parent().width();
