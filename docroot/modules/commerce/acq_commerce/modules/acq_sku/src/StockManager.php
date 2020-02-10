@@ -299,11 +299,17 @@ class StockManager {
     $new = [
       'quantity' => $quantity,
       'status' => $status,
-      'max_sale_qty' => $max_sale_qty,
     ];
 
+    if ($max_sale_qty !== NULL) {
+      $new['max_sale_qty'] = $max_sale_qty;
+    }
+
     // Update only if value changed.
-    if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity || $current['max_sale_qty'] != $max_sale_qty) {
+    if (empty($current) ||
+      $current['status'] != $status ||
+      $current['quantity'] != $quantity ||
+      ($max_sale_qty !== NULL && $current['max_sale_qty'] != $max_sale_qty)) {
       $this->connection->merge('acq_sku_stock')
         ->key(['sku' => $sku])
         ->fields($new)
@@ -372,8 +378,9 @@ class StockManager {
     // We get qty in product data and quantity in stock push or from stock api.
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
+    $max_sale_qty = isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : NULL;
 
-    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status, $stock['max_sale_qty']);
+    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status, $max_sale_qty);
 
     $this->logger->info('@operation stock for sku @sku. Message: @message', [
       '@operation' => $changed ? 'Updated' : 'Processed',
