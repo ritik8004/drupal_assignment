@@ -14,7 +14,7 @@ $dir: rtl;
 @import "../../alshaya_white_label/sass/config/**/*";
 @import "config/**/*";
 @import "../../alshaya_white_label/sass/utils";
-//@import "utils";
+@import "utils";
 
 // Utilities for building multilingual websites.
 @import "../../alshaya_white_label/sass/directional";
@@ -29,4 +29,4 @@ $dir: rtl;
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
 @import "../../alshaya_white_label/sass/components/**/*";
-//@import "components/**/*";
+@import "components/**/*";
