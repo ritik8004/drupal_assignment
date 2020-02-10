@@ -459,14 +459,19 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Check config state as a part of post-command to reset.
+   * Check config state as a part of pre-command to reset.
    *
-   * Added (*) to execute after each drush command.
+   * Added (*) to execute before each drush command.
    *
-   * @hook post-command *
+   * @hook pre-command *
    */
-  public function resetConfigPostCommand($result, CommandData $commandData) {
-    $this->alshayaAcmConfigCheck->checkConfig();
+  public function resetConfigPostCommand(CommandData $commandData) {
+    try {
+      $this->alshayaAcmConfigCheck->checkConfig();
+    }
+    catch (\Throwable $e) {
+      $this->io()->error($e->getMessage());
+    }
   }
 
   /**

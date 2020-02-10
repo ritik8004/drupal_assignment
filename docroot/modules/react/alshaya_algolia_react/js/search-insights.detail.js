@@ -6,10 +6,17 @@
 (function ($, Drupal) {
   'use strict';
 
-  // Copy queryID from query string to tag in html.
+  // Copy queryID from local store to tag in html.
   // This is to ensure we have queryID even after we update URL in cases
   // where color split is enabled.
-  $('html').attr('data-algolia-query-id', Drupal.getQueryVariable('queryID'));
+  var sku = $('.sku-base-form').closest('article[gtm-type="gtm-product-link"]').attr('gtm-main-sku');
+  if (localStorage.getItem('algolia_search_clicks') !== null) {
+    var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
+    $('html').attr('data-algolia-query-id', algolia_clicks[sku]);
+  }
+  else {
+    $('html').attr('data-algolia-query-id', '');
+  }
 
   Drupal.behaviors.alshayaAlgoliaInsightsDetail = {
     attach: function (context) {

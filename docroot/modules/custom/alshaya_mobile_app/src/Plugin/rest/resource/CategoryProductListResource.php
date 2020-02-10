@@ -2,17 +2,18 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\Core\Url;
-use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\taxonomy\TermInterface;
 use Drupal\search_api\Entity\Index;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
-use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
+use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -87,6 +88,13 @@ class CategoryProductListResource extends ResourceBase {
   protected $entityRepository;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $productCategoryTree;
+
+  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -111,8 +119,10 @@ class CategoryProductListResource extends ResourceBase {
    *   Language manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
+   *   Product category tree.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->parseModeManager = $parse_mode_manager;
@@ -120,6 +130,7 @@ class CategoryProductListResource extends ResourceBase {
     $this->mobileAppUtility = $mobile_app_utility;
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
+    $this->productCategoryTree = $product_category_tree;
   }
 
   /**
@@ -137,7 +148,8 @@ class CategoryProductListResource extends ResourceBase {
       $container->get('alshaya_mobile_app.alshaya_search_api_query_execute'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('language_manager'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
@@ -184,8 +196,35 @@ class CategoryProductListResource extends ResourceBase {
     // Filter the empty products.
     $response_data['products'] = array_filter($response_data['products']);
 
+    // Get sub categories for the current term.
+    $response_data['sub_categories'] = $this->getSubcategoryData($id);
+
     $response_data['total'] = $this->alshayaSearchApiQueryExecute->getResultTotalCount();
+
     return (new ModifiedResourceResponse($response_data));
+  }
+
+  /**
+   * Get sub category data for response.
+   *
+   * @param int $id
+   *   Term id.
+   *
+   * @return array
+   *   Data array.
+   */
+  protected function getSubCategoryData(int $id) {
+    $terms = $this->productCategoryTree->allChildTerms($this->languageManager->getCurrentLanguage()->getId(), $id, FALSE, TRUE);
+    $data = [];
+    foreach ($terms as $term) {
+      $data[] = [
+        'id' => $term->tid,
+        'label' => $term->name,
+        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+      ];
+    }
+
+    return $data;
   }
 
   /**
