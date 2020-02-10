@@ -580,10 +580,8 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
     return;
   }
 
-  $logger = \Drupal::logger('alshaya_acm_product');
+  $logger = \Drupal::logger('alshaya_acm_product_category');
 
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
   /** @var \Drupal\alshaya_acm_product_category\Service $product_category_manager */
@@ -597,9 +595,8 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
     $object = $item->getOriginalObject()->getValue();
     $l1 = [];
 
-    // Deal with all indexable fields not available by default in configurable
-    // parent but available in the variants.
-    // Deal with final price of configurable that needs to come from variants.
+    // Storing l2 menu items in field_category for sale categories
+    // and l1 menu items for others.
     if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
       try {
         $node_field_category = $object->get('field_category')->getValue();
@@ -622,7 +619,6 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
           }
           $item->getField('field_category')->setValues(array_unique($l1));
         }
-        $skuManager->processIndexItem($object, $item);
       }
       catch (\Throwable $e) {
         $logger->warning('Indexing failed for the node:@nid message:@message', [
