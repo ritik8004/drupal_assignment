@@ -301,12 +301,12 @@ class StockManager {
       'status' => $status,
     ];
 
-    if (!$max_sale_qty) {
+    if ($max_sale_qty !== NULL) {
       $new['max_sale_qty'] = $max_sale_qty;
     }
 
     // Update only if value changed.
-    if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity || $current['max_sale_qty'] != $max_sale_qty) {
+    if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity || ($max_sale_qty !== NULL && $current['max_sale_qty'] != $max_sale_qty)) {
       $this->connection->merge('acq_sku_stock')
         ->key(['sku' => $sku])
         ->fields($new)
