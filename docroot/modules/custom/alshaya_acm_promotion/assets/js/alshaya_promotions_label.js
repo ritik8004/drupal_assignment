@@ -13,23 +13,16 @@
 
         // If cart is not empty.
         if (cartQuantity.length || force) {
-          // Check if we already have fetched dynamic label.
-          if (drupalSettings.alshayaAcmPromotionslabels !== undefined && drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku] !== undefined) {
-            var promotionLabelDiv = $('.promotions-dynamic-label.sku-' + dynamicPromotionSku).html(drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku]);
-            promotionLabelDiv.trigger('dynamic:promotion:label:ajax:complete');
-          }
-          else {
-            var getPromoLabel = new Drupal.ajax({
-              url: Drupal.url('get-promotion-dynamic-label/' + dynamicPromotionSku),
-              element: false,
-              base: false,
-              progress: {type: 'throbber'},
-              submit: {js: true}
-            });
+          var getPromoLabel = new Drupal.ajax({
+            url: Drupal.url('get-promotion-dynamic-label/' + dynamicPromotionSku),
+            element: false,
+            base: false,
+            progress: {type: 'throbber'},
+            submit: {js: true}
+          });
 
-            getPromoLabel.options.type = 'GET';
-            getPromoLabel.execute();
-          }
+          getPromoLabel.options.type = 'GET';
+          getPromoLabel.execute();
         }
       }
     }
