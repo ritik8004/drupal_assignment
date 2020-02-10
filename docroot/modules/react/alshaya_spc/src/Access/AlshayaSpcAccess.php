@@ -25,11 +25,15 @@ class AlshayaSpcAccess {
     if (empty($cart_id)) {
       $access = AccessResult::forbidden();
     }
+    elseif (!empty($cart_id) && !$account->isAnonymous()) {
+      // @todo: Instead of forbidden(), Redirect to /checkout page.
+      $access = AccessResult::forbidden();
+    }
     else {
       $access = AccessResult::allowedIf($account->isAnonymous());
     }
 
-    return $access->addCacheContexts(['user', 'session']);
+    return $access->addCacheContexts(['user', 'session'])->mergeCacheMaxAge(0);
   }
 
   /**
@@ -51,7 +55,7 @@ class AlshayaSpcAccess {
       $access = AccessResult::allowed();
     }
 
-    return $access->addCacheContexts(['user', 'session']);
+    return $access->mergeCacheMaxAge(['user', 'session'])->mergeCacheMaxAge(0);
   }
 
 }
