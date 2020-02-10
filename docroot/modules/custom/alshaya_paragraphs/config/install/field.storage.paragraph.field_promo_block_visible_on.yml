@@ -14,11 +14,8 @@ settings:
       value: all
       label: All
     -
-      value: website
-      label: 'Website only'
-    -
       value: mobile_app
-      label: 'Mobile App only'
+      label: 'Mobile App'
   allowed_values_function: ''
 module: options
 locked: false

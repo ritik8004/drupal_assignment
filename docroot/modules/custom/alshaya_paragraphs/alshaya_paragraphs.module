@@ -152,13 +152,11 @@ function alshaya_paragraphs_preprocess_paragraph(&$variables) {
 function alshaya_paragraphs_paragraph_access(EntityInterface $entity, $operation, AccountInterface $account) {
   // We do not display promo blocks on website which are meant to be displayed
   // only in mobile app.
-  if ($operation === 'view') {
-    if (($entity->bundle() === 'promo_block') && ($entity->hasField('field_promo_block_visible_on')) && ($visible_on = $entity->get('field_promo_block_visible_on')->getValue()) && (!empty($visible_on) && ($visible_on = $visible_on[0]['value']))) {
-      $route_name = \Drupal::routeMatch()->getRouteName();
+  if (($operation === 'view') && ($entity->bundle() === 'promo_block') && $entity->hasField('field_promo_block_visible_on')) {
+    $visible_on = $entity->get('field_promo_block_visible_on')->getString();
 
-      if (($visible_on === 'mobile_app') && ($route_name === 'entity.node.canonical')) {
-        return AccessResult::forbidden();
-      }
+    if (($visible_on === 'mobile_app') && (\Drupal::routeMatch()->getRouteName() === 'entity.node.canonical')) {
+      return AccessResult::forbidden();
     }
   }
 
