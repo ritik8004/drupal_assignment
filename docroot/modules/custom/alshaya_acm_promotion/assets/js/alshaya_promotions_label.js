@@ -6,13 +6,13 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  function updateAlshayaPromotionsLabel(alshayaAcmPromotions) {
+  function updateAlshayaPromotionsLabel(alshayaAcmPromotions, force) {
     for (var dynamicPromotionSku in alshayaAcmPromotions) {
       if (alshayaAcmPromotions.hasOwnProperty(dynamicPromotionSku)) {
         var cartQuantity = $('#block-cartminiblock #mini-cart-wrapper span.quantity');
 
         // If cart is not empty.
-        if (cartQuantity.length) {
+        if (cartQuantity.length || force) {
           // Check if we already have fetched dynamic label.
           if (drupalSettings.alshayaAcmPromotionslabels !== undefined && drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku] !== undefined) {
             var promotionLabelDiv = $('.promotions-dynamic-label.sku-' + dynamicPromotionSku).html(drupalSettings.alshayaAcmPromotionslabels[dynamicPromotionSku]);
@@ -38,20 +38,13 @@
   Drupal.behaviors.alshayaPromotionsLabelManager = {
     attach: function (context) {
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
-      // Update promotion label after cart notification is complete when cart is empty.
-      $('.promotions-dynamic-label', context).once('js-process-promo-label').on('cart:notification:animation:complete', function () {
-        var alshayaAcmPromotions = drupalSettings.alshayaAcmPromotions;
-        if (alshayaAcmPromotions !== undefined) {
-          updateAlshayaPromotionsLabel(alshayaAcmPromotions);
-        }
-      });
       // Update promotion label on product-add-to-cart-success.
       $('.sku-base-form', context).once('js-process-promo-label').on('product-add-to-cart-success', function () {
         var alshayaAcmPromotions = drupalSettings.alshayaAcmPromotions;
         // Unset any existing promo label for an update on cart changes.
         drupalSettings.alshayaAcmPromotionslabels = undefined;
         if (alshayaAcmPromotions !== undefined) {
-          updateAlshayaPromotionsLabel(alshayaAcmPromotions);
+          updateAlshayaPromotionsLabel(alshayaAcmPromotions, true);
         }
       });
     }
@@ -112,7 +105,7 @@
 
       // Go ahead and display dynamic promotions.
       $('.acq-content-product .content__title_wrapper .promotions .promotions-dynamic-label', context).once('update-promo-label-pdp').each(function () {
-        updateAlshayaPromotionsLabel(alshayaAcmPromotions);
+        updateAlshayaPromotionsLabel(alshayaAcmPromotions, false);
       });
 
 
