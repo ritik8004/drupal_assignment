@@ -16,3 +16,6 @@ services:
     arguments:
       - '@config.factory'
       - '@language_manager'
+
+  alshaya_api.mdc_helper:
+    class: Drupal\alshaya_api\Helper\MagentoApiHelper

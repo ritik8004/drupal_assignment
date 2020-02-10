@@ -17,6 +17,8 @@ services:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper
     arguments:
       - '@alshaya_api.api'
+      - '@alshaya_api.mdc_helper'
+      - '@module_handler'
 
   alshaya_spc.cookies:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcCookies

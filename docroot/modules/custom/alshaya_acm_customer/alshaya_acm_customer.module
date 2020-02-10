@@ -273,8 +273,8 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
   $email = $form['user']['#value']->getEmail();
   if (!empty($email)) {
     try {
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
+      /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_wrapper */
+      $api_wrapper = \Drupal::service('alshaya_spc.api_helper');
       // Get customer from MDC.
       $customer = $api_wrapper->getCustomer($email);
       $user = user_load_by_mail($email);
@@ -495,9 +495,8 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
   $customer_id = $form_state->getValue('acq_customer_id') ? $form_state->getValue('acq_customer_id')[0]['value'] : NULL;
 
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_spc.api_helper');
     $customer = $api_wrapper->getCustomer($mail);
 
     // Allow if returned customer array is empty or customer id is the same as
@@ -539,11 +538,19 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
   $last_name = $form_state->getValue('field_last_name')[0]['value'];
   $pass = $form_state->getValue('pass');
 
-  /** @var \Drupal\alshaya_acm_customer\CustomerHelper $customer_helper */
-  $customer_helper = \Drupal::service('alshaya_acm_customer.helper');
+  /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_wrapper */
+  $api_wrapper = \Drupal::service('alshaya_spc.api_helper');
 
   try {
-    $customer = $customer_helper->updateCustomer($customer_id, $email, $first_name, $last_name, $pass);
+    $customer_array = [
+      'customer_id' => $customer_id,
+      'firstname' => $first_name,
+      'lastname' => $last_name,
+      'email' => $email,
+    ];
+    $customer = $api_wrapper->updateCustomer($customer_array, [
+      'password' => $pass,
+    ]);
   }
   catch (\Exception $e) {
     // Do nothing except for downtime exception, we will do other validations
@@ -646,9 +653,8 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
   }
 
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_spc.customer_helper');
     $customer = $api_wrapper->authenticateCustomer($user->getEmail(), $current_pass_input);
 
     // If a valid customer array is returned, it means current pass is valid.
@@ -723,8 +729,8 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
 
   // Try API now.
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_spc.api_helper');
     $customer = $api_wrapper->getCustomer($name);
 
     if (!empty($customer)) {

@@ -265,6 +265,12 @@ class AlshayaApiWrapper {
         $options['json'] = $data;
         $method = 'POST';
       }
+      elseif ($method == 'GET') {
+        $options['query'] = $data;
+      }
+      elseif ($method == 'PUT') {
+        $options['json'] = $data;
+      }
 
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();

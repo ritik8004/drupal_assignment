@@ -2,7 +2,12 @@
 
 namespace Drupal\alshaya_spc\Helper;
 
+use Drupal\acq_commerce\Conductor\RouteException;
+use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Component\Serialization\Json;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class AlshayaSpcApiHelper.
@@ -17,15 +22,37 @@ class AlshayaSpcApiHelper {
   protected $apiWrapper;
 
   /**
+   * The mdc helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
+   * Th module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaSpcApiHelper constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   The api wrapper.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento api helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(
-    AlshayaApiWrapper $api_wrapper
+    AlshayaApiWrapper $api_wrapper,
+    MagentoApiHelper $mdc_helper,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->apiWrapper = $api_wrapper;
+    $this->mdcHelper = $mdc_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -57,7 +84,7 @@ class AlshayaSpcApiHelper {
     }
 
     if ($response && is_string($response)) {
-      $response = json_decode($response, TRUE);
+      $response = Json::decode($response, TRUE);
       // Move the cart_id into the customer object.
       if (isset($response['cart_id'])) {
         $response['customer']['custom_attributes'][] = [
@@ -70,6 +97,109 @@ class AlshayaSpcApiHelper {
     }
 
     return [];
+  }
+
+  /**
+   * Get customer by email, helpful for logged in user.
+   *
+   * @param string $email
+   *   The email id.
+   *
+   * @return array
+   *   Return array of customer data or empty array.
+   *
+   * @throws \Exception
+   */
+  public function getCustomer($email) {
+    $query_string_values = [
+      'condition_type' => 'eq',
+      'field' => 'email',
+      'value' => $email,
+    ];
+    $query_string_array = [];
+    foreach ($query_string_values as $key => $value) {
+      $query_string_array["searchCriteria[filterGroups][0][filters][0][{$key}]"] = $value;
+    }
+
+    $customer = [];
+    try {
+      $response = $this->apiWrapper->invokeApi("customers/search", $query_string_array, 'GET');
+      $result = Json::decode($response);
+      if (!empty($result['items'])) {
+        $customer = $this->customerFromSearchResult(reset($result['items']));
+        $customer = $this->mdcHelper->cleanCustomerData($customer);
+      }
+    }
+    catch (\Exception $e) {
+      throw new \Exception($e->getMessage(), $e->getCode(), $e);
+    }
+
+    return $customer;
+  }
+
+  /**
+   * Update customer with details.
+   *
+   * @param array $customer
+   *   The array of customer details.
+   * @param array $options
+   *   The options.
+   *
+   * @return array|mixed
+   *   Return array of customer details or null.
+   */
+  public function updateCustomer(array $customer, array $options = []) {
+    $opt['json']['customer'] = $customer;
+
+    if (isset($options['password']) && !empty($options['password'])) {
+      $opt['json']['password'] = $options['password'];
+    }
+
+    if (isset($options['password_old']) && !empty($options['password_old'])) {
+      $opt['json']['password_old'] = $options['password_old'];
+    }
+
+    if (isset($options['password_token']) && !empty($options['password_token'])) {
+      $opt['json']['password_token'] = $options['password_token'];
+    }
+
+    if (isset($options['access_token']) && !empty($options['access_token'])) {
+      $opt['json']['token'] = $options['access_token'];
+    }
+
+    // Invoke the alter hook to allow all modules to update the customer data.
+    $this->moduleHandler->alter('acq_commerce_update_customer_api_request', $opt);
+
+    // Do some cleanup.
+    $opt['json']['customer'] = $this->mdcHelper->cleanCustomerData($opt['json']['customer']);
+    $opt['json']['customer'] = MagentoApiHelper::prepareCustomerDataForApi($opt['json']['customer']);
+
+    $endpoint = 'customers';
+    $method = 'JSON';
+    if (!empty($opt['json']['customer']['id'])) {
+      $endpoint .= '/' . $opt['json']['customer']['id'];
+      $method = 'PUT';
+    }
+
+    try {
+      $response = $this->apiWrapper->invokeApi($endpoint, $opt['json'], $method);
+      $response = Json::decode($response);
+      if (!empty($response)) {
+        // Move the cart_id into the customer object.
+        if (isset($response['cart_id'])) {
+          $response['custom_attributes'][] = [
+            'attribute_code' => 'cart_id',
+            'value' => $response['cart_id'],
+          ];
+        }
+        $response = self::customerFromSearchResult($response);
+      }
+    }
+    catch (ConnectorException $e) {
+      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    }
+
+    return $response;
   }
 
   /**

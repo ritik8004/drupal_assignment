@@ -578,7 +578,7 @@ class CartController {
    *   Json response.
    */
   public function associateCart() {
-    $this->loadCartFromSession();
+    $this->loadCartFromSession(TRUE);
 
     if (!empty($this->sessionCartInfo['customer_id'])) {
       return new JsonResponse($this->sessionCartInfo);
