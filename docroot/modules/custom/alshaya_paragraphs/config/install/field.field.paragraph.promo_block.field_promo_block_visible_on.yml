@@ -13,8 +13,8 @@ bundle: promo_block
 label: 'Visible on'
 description: 'Specifies whether the promo blocks should be shown in Mobile App only or everywhere.'
 required: false
-translatable: true
-skip_translation_check: 0
+translatable: false
+skip_translation_check: 1
 default_value:
   -
     value: all
