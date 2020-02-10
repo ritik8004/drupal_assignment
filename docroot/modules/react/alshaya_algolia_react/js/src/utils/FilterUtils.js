@@ -32,8 +32,6 @@ function hasCategoryFilter() {
   // category hierarchical menu in lhn side.
   let filters = getAllFilters();
   const isCategoryPresent = _.findIndex(filters, { 'identifier': 'field_category_name' });
-  console.log(drupalSettings.algoliaSearch.enable_lhn_tree_search);
-  console.log(isCategoryPresent);
   if (isCategoryPresent && drupalSettings.algoliaSearch.enable_lhn_tree_search) {
     return true;
   } else {
