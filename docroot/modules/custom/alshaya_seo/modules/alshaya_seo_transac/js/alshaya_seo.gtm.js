@@ -1240,7 +1240,11 @@
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if (!$(this).hasClass('impression-processed') && Drupal.isOnScreen($(this))) {
+        var offset = 0;
+        if ($('.product-plp-detail-wrapper', $(this)).height() !== undefined) {
+          var offset = $('.product-plp-detail-wrapper', $(this)).height();
+        }
+        if (!$(this).hasClass('impression-processed') && $(this).is(':visible') && $(this).isElementInViewPort(offset)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
@@ -1255,32 +1259,6 @@
         Drupal.alshaya_seo_gtm_push_impressions(currencyCode, impressions);
       }
     }
-  };
-
-  /**
-   * Helper function to check element visibility on view port.
-   *
-   * @param elem
-   *
-   * @returns true/false
-   */
-  Drupal.isOnScreen = function (elem) {
-    // if the element doesn't exist, abort
-    if( elem.length == 0 ) {
-      return;
-    }
-    var $window = jQuery(window)
-    var viewport_top = $window.scrollTop()
-    var viewport_height = $window.height()
-    var viewport_bottom = viewport_top + viewport_height
-    var $elem = jQuery(elem)
-    var top = $elem.offset().top
-    var height = $elem.height()
-    var bottom = top + height
-
-    return (top >= viewport_top && top < viewport_bottom) ||
-    (bottom > viewport_top && bottom <= viewport_bottom) ||
-    (height > viewport_height && top <= viewport_top && bottom >= viewport_bottom)
   };
 
   // Ajax command to push deliveryAddress Event.

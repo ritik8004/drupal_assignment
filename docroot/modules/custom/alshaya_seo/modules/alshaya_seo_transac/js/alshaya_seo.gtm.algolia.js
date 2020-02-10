@@ -49,7 +49,7 @@
     // Send impression for each product added on page (page 1 or X).
     var searchImpressions = [];
     $('#alshaya-algolia-search [gtm-type="gtm-product-link"]').each(function () {
-      if (!$(this).hasClass('impression-processed') && Drupal.isOnScreen($(this))) {
+      if (!$(this).hasClass('impression-processed') && $(this).is(':visible') && $(this).isElementInViewPort($('.product-plp-detail-wrapper', $(this)).height())) {
         $(this).addClass('impression-processed');
         var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
         impression.list = 'Search Results Page';
