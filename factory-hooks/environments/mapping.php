@@ -102,6 +102,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'fl_qa',
         'conductor' => 'flsa_dev',
       ],
+      'dev2' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flsa_dev2',
+      ],
     ],
     'bbwae' => [
       'dev' => [
