@@ -18,9 +18,17 @@ services:
     arguments:
       - '@alshaya_api.api'
 
+  alshaya_spc.cookies:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcCookies
+    arguments:
+      - '@database'
+      - '@request_stack'
+
   alshaya_spc.customer_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
     arguments:
       - '@entity_type.manager'
       - '@alshaya_spc.api_helper'
       - '@module_handler'
+      - '@alshaya_spc.cookies'
+      - '@session'

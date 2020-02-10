@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Helper;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class AlshayaSpcCustomerHelper.
@@ -32,6 +33,20 @@ class AlshayaSpcCustomerHelper {
   protected $moduleHandler;
 
   /**
+   * The spc cookies handler..
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcCookies
+   */
+  protected $spcCookies;
+
+  /**
+   * The session.
+   *
+   * @var \Symfony\Component\HttpFoundation\Session\Session
+   */
+  protected $session;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -40,15 +55,23 @@ class AlshayaSpcCustomerHelper {
    *   The api wrapper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCookies $spc_cookies
+   *   The spc cookies handler.
+   * @param \Symfony\Component\HttpFoundation\Session\Session $session
+   *   The session.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaSpcApiHelper $api_wrapper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    AlshayaSpcCookies $spc_cookies,
+    Session $session
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
     $this->moduleHandler = $module_handler;
+    $this->spcCookies = $spc_cookies;
+    $this->session = $session;
   }
 
   /**
@@ -59,6 +82,9 @@ class AlshayaSpcCustomerHelper {
    *
    * @return array
    *   Address list.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getCustomerAllAddresses(int $uid) {
     $user = $this->entityTypeManager->getStorage('user')->load($uid);
@@ -95,6 +121,10 @@ class AlshayaSpcCustomerHelper {
    *
    * @return bool
    *   True if profile is saved as default.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function updateCustomerDefaultAddress(int $profile, int $uid) {
     /* @var \Drupal\profile\Entity\Profile $profile */
@@ -170,6 +200,14 @@ class AlshayaSpcCustomerHelper {
       if (!empty($customer) && !empty($customer['customer_id'])) {
         $_alshaya_acm_custom_cart_association_processed = TRUE;
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+        $cart_id = $this->spcCookies->getSessionCartId();
+        if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
+          // @todo: Check if we can associate user id as well.
+          if (empty($this->spcCookies->setSessionCartId($customer['extension']['cart_id']))) {
+            $this->session->set('customer_cart_id', $customer['extension']['cart_id']);
+          }
+        }
 
         // Check if user exists in Drupal.
         if ($user = user_load_by_mail($mail)) {
