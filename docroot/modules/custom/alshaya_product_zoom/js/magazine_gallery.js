@@ -82,8 +82,8 @@
           .once('magazine-image-zoom-placeholder-appended')
           // Add a magazine image zoom placeholder.
           .append('<div class="magazine-image-zoom-placeholder"></div>')
-          // Set up a background image for each magazine image zoom placeholder based on data-src attribute.
-          .children('.magazine-image-zoom-placeholder').css({'background-image': 'url('+ $(this).find('img').attr('data-src') +')'});
+          // Set up a background image for each magazine image zoom placeholder based on data-zoom attribute.
+          .children('.magazine-image-zoom-placeholder').css({'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')'});
         })
       }
     },
