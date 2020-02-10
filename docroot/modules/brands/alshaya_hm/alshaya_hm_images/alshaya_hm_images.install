@@ -12,7 +12,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * PDP - Change dimensions for PDP image style.
  */
-function alshaya_image_styles_update_8107() {
+function alshaya_hm_images_update_8011() {
   $configs = [
     'image.style.product_zoom_medium_606x504',
   ];
