@@ -607,7 +607,7 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
         if (!($product_category_manager->isProductWithSalesOrNewArrival($object, ['attr_is_sale']))) {
           foreach ($node_field_category as $value) {
             $term = $term_storage->load($value['target_id']);
-            if ($term->get('field_category_include_menu')->value == 1) {
+            if ($term->get('field_category_include_menu')->getString()) {
               $l1[] = $product_category_tree->getL1Category($term)->id();
             }
           }
@@ -616,7 +616,7 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
         else {
           foreach ($node_field_category as $value) {
             $term = $term_storage->load($value['target_id']);
-            if ($term->get('field_category_include_menu')->value == 1) {
+            if ($term->get('field_category_include_menu')->getString()) {
               $l1[] = $product_category_tree->getL2Category($term)->id();
             }
           }
