@@ -137,6 +137,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     }
     $currency = $this->configFactory->get('acq_commerce.currency');
     $configuration = $this->getConfiguration();
+    $product_category_settings = $this->configFactory->get('alshaya_acm_product_category.settings');
 
     return [
       '#type' => 'markup',
@@ -156,6 +157,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'itemsPerPage' => $configuration['items_per_page'] ?? 12,
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/algolia/search-insights@1.3.0.min.js',
             'filters' => $this->getFilters($index_name),
+            'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,

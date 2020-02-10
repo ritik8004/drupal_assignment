@@ -29,12 +29,16 @@ function getFilters() {
  * which is used for hierarchical menu facet in lhn sidebar.
  */
 function hasCategoryFilter() {
-  // @todo: remove this line once finalized that we want to show
   // category hierarchical menu in lhn side.
-  return false;
   let filters = getAllFilters();
   const isCategoryPresent = _.findIndex(filters, { 'identifier': 'field_category_name' });
-  return (isCategoryPresent >= 0);
+  console.log(drupalSettings.algoliaSearch.enable_lhn_tree_search);
+  console.log(isCategoryPresent);
+  if (isCategoryPresent && drupalSettings.algoliaSearch.enable_lhn_tree_search) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export {
