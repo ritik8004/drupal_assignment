@@ -34,8 +34,6 @@
       // Update promotion label on product-add-to-cart-success.
       $('.sku-base-form', context).once('js-process-promo-label').on('product-add-to-cart-success', function () {
         var alshayaAcmPromotions = drupalSettings.alshayaAcmPromotions;
-        // Unset any existing promo label for an update on cart changes.
-        drupalSettings.alshayaAcmPromotionslabels = undefined;
         if (alshayaAcmPromotions !== undefined) {
           updateAlshayaPromotionsLabel(alshayaAcmPromotions, true);
         }
