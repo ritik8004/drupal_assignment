@@ -406,7 +406,7 @@ $conductors = [
     'hmac_secret' => 'NzI5M2M1MjYtMTE5ZS00',
     'site_id' => 173,
   ],
-  // American Eagle Online.
+  // American Eagle Outfitters.
   'aeokw_qa' => [
     'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
     'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
@@ -426,6 +426,11 @@ $conductors = [
     'hmac_id' => '5e49e396d2ec416f9216a3a287f738fc',
     'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
     'site_id' => 177,
+  ],
+  'aeokw_dev' => [
+    'hmac_id' => '9c9e527db24446d98cde69829ffde832',
+    'hmac_secret' => 'N2QzZGUxMzEtZTNjYy00',
+    'site_id' => 178,
   ],
 ];
 
