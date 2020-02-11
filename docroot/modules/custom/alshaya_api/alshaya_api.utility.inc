@@ -18,7 +18,7 @@ use Drupal\user\Entity\User;
  * @return array
  *   Customer array.
  */
-function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
+function alshaya_api_update_customer_data($mail, $password = NULL) {
   // Get the fresh user object.
   /** @var \Drupal\user\Entity\User $user */
   $user = user_load_by_mail($mail);
@@ -30,9 +30,6 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
     return NULL;
   }
 
-  /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
-  $api_wrapper = \Drupal::service('alshaya_api.api');
-
   $customer_array = [
     'customer_id' => $user->get('acq_customer_id')->getString(),
     'firstname' => $user->get('field_first_name')->getString(),
@@ -41,6 +38,8 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
   ];
 
   try {
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_api.api');
     $customer = $api_wrapper->updateCustomer($customer_array, [
       'password' => $password,
     ]);
@@ -67,9 +66,9 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
  * @return \Drupal\user\Entity\User|null
  *   User object or null.
  */
-function alshaya_acm_customer_create_drupal_user(array $customer) {
+function alshaya_api_create_drupal_user(array $customer) {
   $lock = \Drupal::lock();
-  $lock_key = 'alshaya_acm_customer_create_drupal_user_' . $customer['email'];
+  $lock_key = 'alshaya_api_create_drupal_user_' . $customer['email'];
   // Lock the process for concurrent requests, to avoid creating multiple
   // accounts with same email-id.
   if ($lock->acquire($lock_key)) {
@@ -91,7 +90,7 @@ function alshaya_acm_customer_create_drupal_user(array $customer) {
       $user->setPassword(user_password(25));
 
       // Update the data in Drupal to match the values in Magento.
-      alshaya_acm_customer_update_user_data($user, $customer);
+      alshaya_api_update_user_data($user, $customer);
 
       // Release the lock.
       $lock->release($lock_key);
@@ -101,13 +100,13 @@ function alshaya_acm_customer_create_drupal_user(array $customer) {
     catch (\Exception $e) {
       // Release the lock.
       $lock->release($lock_key);
-      \Drupal::logger('alshaya_acm_customer')->error('Error occurred during creating user @message', [
+      \Drupal::logger('alshaya_api')->error('Error occurred during creating user @message', [
         '@message' => $e->getMessage(),
       ]);
     }
   }
   else {
-    \Drupal::logger('alshaya_acm_customer')->error('Trying to re-create the account with the email:@email', [
+    \Drupal::logger('alshaya_api')->error('Trying to re-create the account with the email:@email', [
       '@email' => $customer['email'],
     ]);
   }
@@ -124,7 +123,7 @@ function alshaya_acm_customer_create_drupal_user(array $customer) {
  * @param array $customer
  *   Customer data received from Magento.
  */
-function alshaya_acm_customer_update_user_data(User $user, array $customer) {
+function alshaya_api_update_user_data(User $user, array $customer) {
   // Set fields.
   $user->get('field_first_name')->setValue($customer['firstname']);
   $user->get('field_last_name')->setValue($customer['lastname']);
@@ -136,13 +135,13 @@ function alshaya_acm_customer_update_user_data(User $user, array $customer) {
   }
 
   // Invoke the alter hook to allow all modules to update the account.
-  \Drupal::moduleHandler()->alter('alshaya_acm_customer_update_account', $user, $customer);
+  \Drupal::moduleHandler()->alter('alshaya_api_update_account', $user, $customer);
 
   $user->save();
 
   // Special case for communication_preference handled below.
   if (isset($customer['extension'], $customer['extension']['communication_preference'])) {
-    $preference = alshaya_acm_customer_get_communication_preference_drupal_value($customer['extension']['communication_preference']);
+    $preference = alshaya_api_get_communication_preference_drupal_value($customer['extension']['communication_preference']);
     $user_data = \Drupal::service('user.data');
     $user_data->set('user', $user->id(), 'communication_preference', $preference);
   }
@@ -159,7 +158,7 @@ function alshaya_acm_customer_update_user_data(User $user, array $customer) {
  * @return array
  *   Drupal value.
  */
-function alshaya_acm_customer_get_communication_preference_drupal_value($value, $default = FALSE) {
+function alshaya_api_get_communication_preference_drupal_value($value, $default = FALSE) {
   $values = [];
 
   // We get the values separated by comma from API.
@@ -185,7 +184,7 @@ function alshaya_acm_customer_get_communication_preference_drupal_value($value, 
  * @return string
  *   API value.
  */
-function alshaya_acm_customer_get_communication_preference_api_value(array $value, $default = TRUE) {
+function alshaya_api_get_communication_preference_api_value(array $value, $default = TRUE) {
   $values = [];
 
   // We send array of values to API.

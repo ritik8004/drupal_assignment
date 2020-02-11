@@ -3,18 +3,19 @@ services:
     class: Drupal\alshaya_addressbook\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+
   alshaya_addressbook.address_subscriber:
     class: Drupal\alshaya_addressbook\EventSubscriber\AddressFormatSubscriber
     arguments:
       - '@alshaya_addressbook.manager'
     tags:
       - { name: event_subscriber }
+
   alshaya_addressbook.manager:
     class: Drupal\alshaya_addressbook\AlshayaAddressBookManager
     arguments:
       - '@entity_type.manager'
       - '@entity.repository'
-      - '@acq_commerce.api'
       - '@mobile_number.util'
       - '@logger.factory'
       - '@alshaya_api.api'
@@ -24,6 +25,7 @@ services:
       - '@module_handler'
       - '@alshaya_addressbook.area_terms_helper'
       - '@alshaya_acm.cart_helper'
+
   alshaya_addressbook.area_terms_helper:
     class: Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
     arguments:
@@ -32,6 +34,7 @@ services:
       - '@language_manager'
       - '@config.factory'
       - '@cache.data'
+
   cache.addressbook:
     class: Drupal\Core\Cache\CacheBackendInterface
     arguments: [addressbook]

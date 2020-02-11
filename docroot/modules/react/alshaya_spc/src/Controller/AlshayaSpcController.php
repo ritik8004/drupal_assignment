@@ -5,7 +5,6 @@ namespace Drupal\alshaya_spc\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
-use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -40,13 +39,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $paymentMethodManager;
 
   /**
-   * SPC helper.
-   *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
-   */
-  protected $spcHelper;
-
-  /**
    * Mobile utility.
    *
    * @var \Drupal\mobile_number\MobileNumberUtilInterface
@@ -76,8 +68,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Payment method manager.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
    *   Checkout option manager.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
-   *   SPC helper.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -89,7 +79,6 @@ class AlshayaSpcController extends ControllerBase {
     ConfigFactoryInterface $config_factory,
     AlshayaSpcPaymentMethodManager $payment_method_manager,
     CheckoutOptionsManager $checkout_options_manager,
-    AlshayaSpcHelper $spc_helper,
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager
@@ -97,7 +86,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
-    $this->spcHelper = $spc_helper;
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
@@ -111,7 +99,6 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('config.factory'),
       $container->get('plugin.manager.alshaya_spc_payment_method'),
       $container->get('alshaya_acm_checkout.options_manager'),
-      $container->get('alshaya_spc.helper'),
       $container->get('mobile_number.util'),
       $container->get('current_user'),
       $container->get('entity_type.manager')

@@ -487,9 +487,9 @@ function alshaya_loyalty_format_card_number($number, $space = FALSE) {
 }
 
 /**
- * Implements hook_alshaya_acm_customer_update_account_alter().
+ * Implements hook_alshaya_api_update_account_alter().
  */
-function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+function alshaya_loyalty_alshaya_api_update_account_alter(User $user, array $customer) {
   // Update privilege card number if available in customer data.
   if (isset($customer['extension'], $customer['extension']['loyalty_card_number'])) {
     $user->get('field_privilege_card_number')->setValue($customer['extension']['loyalty_card_number']);
@@ -497,9 +497,9 @@ function alshaya_loyalty_alshaya_acm_customer_update_account_alter(User $user, a
 }
 
 /**
- * Implements hook_acq_commerce_update_customer_api_request_alter().
+ * Implements hook_alshaya_api_update_customer_api_request_alter().
  */
-function alshaya_loyalty_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+function alshaya_loyalty_alshaya_api_update_customer_api_request_alter(array &$request_options) {
   if (isset($request_options['json'], $request_options['json']['customer']['email'])) {
     /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($request_options['json']['customer']['email']);
