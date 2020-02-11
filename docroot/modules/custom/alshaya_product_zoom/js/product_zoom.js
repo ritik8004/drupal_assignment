@@ -56,17 +56,15 @@
           myDialog.showModal();
         });
 
-        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
-          // Closing modal window on click of the full screen slider images.
-          $('#product-full-screen-gallery li').once('attached').on('click', function (e) {
-            var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
-
-            // Closing modal window before slick library gets removed.
-            myDialog.close();
-            productGallery.slick('unslick');
-            $('body').removeClass('pdp-modal-overlay');
-            e.preventDefault();
-          });
+        // $(document).once() because we need the same functionality for free gifts pdp modal too and we are
+        // using HtmlCommand to render the free gifts pdp (Check viewProduct() in FreeGiftController.php).
+        $(document).once('dialog-opened').on('click','.dialog-product-image-gallery-container #product-full-screen-gallery img', function (e) {
+          var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+          // Closing modal window before slick library gets removed.
+          $(this).closest('.dialog-product-image-gallery-container').find($('button.ui-dialog-titlebar-close')).trigger('mousedown');
+          productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
         });
 
         // Videos inside main PDP slider.
