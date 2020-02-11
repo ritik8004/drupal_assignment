@@ -10,6 +10,8 @@ services:
       - '@acq_commerce.i18n_helper'
       - '@state'
       - '@file_system'
+      - '@alshaya_api.mdc_helper'
+      - '@module_handler'
 
   alshaya_api.i18n_helper:
     class: Drupal\alshaya_api\AlshayaI18nHelper

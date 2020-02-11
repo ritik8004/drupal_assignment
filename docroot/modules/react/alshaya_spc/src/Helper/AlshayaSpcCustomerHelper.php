@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Helper;
 
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -21,7 +22,7 @@ class AlshayaSpcCustomerHelper {
   /**
    * The api wrapper.
    *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
   protected $apiWrapper;
 
@@ -51,7 +52,7 @@ class AlshayaSpcCustomerHelper {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_wrapper
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   The api wrapper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
@@ -62,7 +63,7 @@ class AlshayaSpcCustomerHelper {
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    AlshayaSpcApiHelper $api_wrapper,
+    AlshayaApiWrapper $api_wrapper,
     ModuleHandlerInterface $module_handler,
     AlshayaSpcCookies $spc_cookies,
     Session $session
@@ -199,7 +200,7 @@ class AlshayaSpcCustomerHelper {
 
       if (!empty($customer) && !empty($customer['customer_id'])) {
         $_alshaya_acm_custom_cart_association_processed = TRUE;
-        $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+        $this->moduleHandler->loadInclude('alshaya_api', 'inc', 'alshaya_api.utility');
 
         $cart_id = $this->spcCookies->getSessionCartId();
         if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
@@ -212,15 +213,15 @@ class AlshayaSpcCustomerHelper {
         // Check if user exists in Drupal.
         if ($user = user_load_by_mail($mail)) {
           // Update the data in Drupal to match the values in Magento.
-          alshaya_acm_customer_update_user_data($user, $customer);
+          alshaya_api_update_user_data($user, $customer);
         }
         // Create user.
         else {
           /** @var \Drupal\user\Entity\User $user */
-          $user = alshaya_acm_customer_create_drupal_user($customer);
+          $user = alshaya_api_create_drupal_user($customer);
         }
 
-        return $user->id();
+        return array_merge($customer, ['user' => $user]);
       }
     }
     catch (\Exception $e) {
