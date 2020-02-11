@@ -58,7 +58,7 @@
 
         $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
           // Closing modal window on click of the full screen slider images.
-          $('#product-full-screen-gallery img').once('attached').on('click', function (e) {
+          $('#product-full-screen-gallery li').once('attached').on('click', function (e) {
             var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
 
             // Closing modal window before slick library gets removed.
