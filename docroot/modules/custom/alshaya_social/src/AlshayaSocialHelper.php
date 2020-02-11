@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_social;
 
-use Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\social_api\Plugin\NetworkManager;
@@ -26,9 +26,9 @@ class AlshayaSocialHelper {
   /**
    * API Helper object.
    *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
-  protected $apiHelper;
+  protected $apiWrapper;
 
   /**
    * The data handler.
@@ -56,7 +56,7 @@ class AlshayaSocialHelper {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config storage object.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper $api_helper
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   ApiWrapper object.
    * @param \Drupal\social_auth\SocialAuthDataHandler $data_handler
    *   Used to manage session variables.
@@ -67,13 +67,13 @@ class AlshayaSocialHelper {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    AlshayaSpcApiHelper $api_helper,
+    AlshayaApiWrapper $api_wrapper,
     SocialAuthDataHandler $data_handler,
     NetworkManager $network_manager,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
-    $this->apiHelper = $api_helper;
+    $this->apiWrapper = $api_wrapper;
     $this->dataHandler = $data_handler;
     $this->networkManager = $network_manager;
     $this->logger = $logger_factory->get('alshaya_social');
@@ -147,7 +147,7 @@ class AlshayaSocialHelper {
 
       try {
         // Get the customer id for existing user.
-        $existing_customer = $this->apiHelper->getCustomer($fields['mail']);
+        $existing_customer = $this->apiWrapper->getCustomer($fields['mail']);
 
         $customer_array = [
           'customer_id' => $existing_customer['customer_id'] ?? NULL,
@@ -156,7 +156,7 @@ class AlshayaSocialHelper {
           'email' => $fields['mail'],
         ];
 
-        $customer = $this->apiHelper->updateCustomer($customer_array, [
+        $customer = $this->apiWrapper->updateCustomer($customer_array, [
           'password' => $fields['pass'],
         ]);
       }

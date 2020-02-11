@@ -55,7 +55,7 @@ class AlshayaSpcAccess {
       $access = AccessResult::allowed();
     }
 
-    return $access->mergeCacheMaxAge(['user', 'session'])->mergeCacheMaxAge(0);
+    return $access->addCacheContexts(['user', 'session'])->mergeCacheMaxAge(0);
   }
 
 }
