@@ -1184,6 +1184,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       foreach ($configurable_options as $configurable_option) {
         if (in_array($configurable_option, $size_guide['attributes'])) {
           $form['ajax']['configurables'][$configurable_option]['#prefix'] = $size_guide['link'];
+          break;
         }
       }
     }
