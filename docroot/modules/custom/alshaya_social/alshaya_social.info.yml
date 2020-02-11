@@ -5,3 +5,4 @@ dependencies:
   - drupal:block
   - social_auth:social_auth
   - alshaya_user:alshaya_user
+  - alshaya_spc:alshaya_spc
