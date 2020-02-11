@@ -593,7 +593,6 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
   foreach ($items as $item_id => $item) {
     /** @var \Drupal\node\NodeInterface $object */
     $object = $item->getOriginalObject()->getValue();
-    $l1 = [];
 
     // Storing l2 menu items in field_category for sale categories
     // and l1 menu items for others.
