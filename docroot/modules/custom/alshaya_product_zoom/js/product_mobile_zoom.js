@@ -50,7 +50,7 @@
               touchThreshold: 5
             };
 
-            var gallery = $('#product-full-screen-gallery');
+            var gallery = $('#product-full-screen-gallery-container.ui-dialog-content #product-full-screen-gallery');
             if (!gallery.hasClass('slick-initialized')) {
               // Slick Slider initialisation.
               applyRtl(gallery, slickModalOptions);
