@@ -79,3 +79,64 @@ $aeo_theme_img_directory_path: '/themes/custom/transac/alshaya_american_eagle/im
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@mixin facet-arrow ($position, $direction: false, $topborder: false, $rightborder:false, $bottomborder:false, $leftborder:false) {
+  &:#{$position} {
+    position: absolute;
+    top: 1.1875rem;
+    #{$right}: 0;
+    font-size: 0;
+    content: '';
+    border-style: solid;
+    height: 0;
+    width: 0;
+
+    @if $topborder == false and $rightborder == false and $bottomborder == false and $leftborder == false {
+      border-width: 0.25rem 0 0.25rem 0.4rem;
+    }
+
+    @else {
+      border-width: $topborder $rightborder $bottomborder $leftborder;
+    }
+
+    border-color: transparent transparent transparent $mm_mob_arrow_icon;
+
+    @if $direction == false {
+      @if $position == after {
+        transform: rotate(0deg);
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+
+      @if $position == before {
+        transform: rotate(180deg);
+
+        html[lang=ar] & {
+          transform: rotate(0deg);
+        }
+      }
+    }
+
+    @else {
+      @if $direction == up {
+        transform: rotate(270deg);
+      }
+
+      @if $direction == down {
+        transform: rotate(90deg);
+      }
+
+      @if $direction == right {
+        transform: rotate(0deg);
+      }
+
+      @if $direction == left {
+        transform: rotate(180deg);
+      }
+    }
+
+    @content;
+  }
+}

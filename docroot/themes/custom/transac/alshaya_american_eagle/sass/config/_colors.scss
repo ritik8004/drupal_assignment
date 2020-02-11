@@ -79,7 +79,7 @@ $lang_switch_close_icon_bg: $white;
 $lang_switch_close_icon: $black;
 
 // Accordion
-$accordion_border: $grey;
+$accordion_border: $grey-light;
 $accordion_title: $black;
 $accordion_sub_title: $grey;
 $accordion_title_arrow: $black;
@@ -96,6 +96,10 @@ $pdp_sidebar_description: $black;
 $pdp_sell_title: $black;
 $pdp_product_qty_text: $grey-light;
 $pdp_cross_sell_title: $black;
+$pdp_product_price: $black;
+$pdp_product_special_price: $alizarin-crimson;
+$pdp_product_color_swatch_border: $black;
+$pdp_accordion_title: $black;
 
 // Product Add to cart form.
 $pdp_sidebar_label: $black;
@@ -104,6 +108,8 @@ $pdp_cc_btn_bg: $black;
 $pdp_desc_wrapper_border: $gallery;
 $pdp_cc_storefinder_link: $azure-blue;
 $pdp_cc_top_stores_list_border: $gallery;
+$pdp_sidebar_offerprice_bg: $alizarin-crimson;
+$pdp_sidebar_offerprice_text: $white;
 
 // Out of stock button.
 $oos_btn_bg: $alizarin-crimson;
@@ -189,6 +195,7 @@ $mm_highlight_title: $black;
 $mm_highlight_description: $black;
 $mm_p_a_text: $grey;
 $highlights_subtitle_hover: $black;
+$mm_mob_arrow_icon: $black;
 
 //  Mini Cart.
 $primary_minicart_text: $black;

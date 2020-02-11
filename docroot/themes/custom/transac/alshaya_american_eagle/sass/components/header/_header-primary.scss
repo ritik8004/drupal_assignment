@@ -63,12 +63,6 @@
           margin-top: 0.625rem;
         }
       }
-
-      // @include breakpoint($only-tablet) {
-      //   html[lang='ar'] & {
-      //     max-width: 9rem;
-      //   }
-      // }
     }
   }
 }
@@ -339,10 +333,6 @@ header.c-header {
   #mini-cart-wrapper {
     .cart-link-total {
       padding-#{$right}: 0.5rem;
-
-      // @include breakpoint($only-tablet) {
-      //   display: none;
-      // }
     }
   }
 
@@ -362,15 +352,6 @@ header.c-header {
         }
       }
     }
-
-    // img {
-    //   html[lang=ar] & {
-    //     @include breakpoint($only-tablet) {
-    //       max-width: 18.1875rem;
-    //       width: 18.1875rem !important;
-    //     }
-    //   }
-    // }
   }
 }
 
