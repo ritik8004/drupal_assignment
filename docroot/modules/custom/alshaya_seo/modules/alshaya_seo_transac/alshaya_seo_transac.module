@@ -575,17 +575,15 @@ function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &
  * Implements hook_views_pre_render().
  */
 function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
   if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
     // Attach GTM product js on product list/search view.
-    if (_alshaya_seo_process_gtm()) {
-      $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_list';
-    }
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_list';
   }
-
-  // Attach GTM slider js on product slider.
-  if ($view->id() == 'product_slider') {
-    if (_alshaya_seo_process_gtm()) {
-      $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
-    }
+  elseif ($view->id() == 'product_slider') {
+    // Attach GTM slider js on product slider.
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_slider';
   }
 }
