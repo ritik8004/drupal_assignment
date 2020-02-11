@@ -465,7 +465,6 @@
       font-size: 0.875rem;
       line-height: 2.285;
       color: $free-gifts-title-text;
-      text-decoration: underline;
       margin-bottom: 1.4375rem;
       display: inline-block;
       padding-#{$left}: 1.125rem;
@@ -473,7 +472,7 @@
 
       @include breakpoint($only-mobile) {
         margin-#{$left}: 1rem;
-        margin-top: 1rem;
+        margin-top: 0.5rem;
       }
 
       @include icon(chevrondown, after) {
@@ -490,6 +489,16 @@
         @include breakpoint($only-mobile) {
           top: 0;
         }
+      }
+
+      &::before {
+        content: '';
+        width: calc(100% - 1.125rem);
+        height: 0.0625rem;
+        background: $free-gifts-title-text;
+        display: block;
+        bottom: 0.4375rem;
+        position: absolute;
       }
     }
   }
@@ -676,6 +685,12 @@
           }
         }
       }
+
+      #drupal-modal.free-gift-detail-modal {
+        @include breakpoint($desktop) {
+          height: 40.31rem !important;
+        }
+      }
     }
   }
 }
@@ -698,6 +713,12 @@ body:not(.ie) {
         padding: calc((100vh - 38.2rem) / 2) calc((100vw - 60.13rem) / 2) !important;
       }
     }
+
+    .slick-slider {
+      .slick-arrow {
+        top: 38% !important;
+      }
+    }
   }
 
   &.nodetype--acq_product {
@@ -709,6 +730,12 @@ body:not(.ie) {
       @include breakpoint($desktop) {
         padding: calc((100vh - 33rem) / 2) calc((100vw - 60.13rem) / 2) !important;
       }
+
+      .slick-slider {
+        .slick-arrow {
+          top: 42% !important;
+        }
+      }
     }
   }
 }
@@ -716,10 +743,6 @@ body:not(.ie) {
 .free-gift-promo-list-overlay,
 .free-gifts-modal-overlay {
   .slick-slider {
-    .slick-arrow {
-      top: 30% !important;
-    }
-
     .slick-prev {
       #{$left}: -1.65rem;
     }
