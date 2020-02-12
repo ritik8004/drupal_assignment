@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_acm_customer\Commands;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -15,17 +15,17 @@ class AlshayaCustomerCommands extends DrushCommands {
   /**
    * Conductor Api wrapper.
    *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
   private $apiWrapper;
 
   /**
    * AlshayaCustomerCommands constructor.
    *
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $apiWrapper
    *   Conductor API Wrapper.
    */
-  public function __construct(APIWrapper $apiWrapper) {
+  public function __construct(AlshayaApiWrapper $apiWrapper) {
     $this->apiWrapper = $apiWrapper;
   }
 
