@@ -446,7 +446,7 @@ class SkuInfoHelper {
     // then get order limit for each variant.
     $max_sale_qty = (isset($max_sale_qty) && $max_sale_qty !== NULL) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
     // Check product qty in cart for variant.
-    $current_variant_in_cart_qty = $this->skuManager->getCartVariantQty($variant_sku);
+    $current_variant_in_cart_qty = $this->skuManager->getCartItemQtyLimit($variant_sku);
 
     if ($max_sale_qty !== NULL) {
       $order_limit_msg = ($current_variant_in_cart_qty >= $max_sale_qty) ? $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE) : $this->skuManager->maxSaleQtyMessage($max_sale_qty);
@@ -458,13 +458,13 @@ class SkuInfoHelper {
     $variant['stock'] = [
       'status' => (int) $stockInfo['in_stock'],
       'qty' => (float) $stockInfo['stock'],
-      'maxSaleQty' => ($max_sale_qty !== NULL) ? (int) $max_sale_qty : '',
+      'maxSaleQty' => (int) $max_sale_qty,
     ];
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
     $variant['orderLimitMsg'] = isset($order_limit_msg) ? $order_limit_msg : '';
-    $variant['orderLimitExceeded'] = $current_variant_in_cart_qty >= $max_sale_qty ? TRUE : FALSE;
+    $variant['orderLimitExceeded'] = (($max_sale_qty !== NULL) && ($current_variant_in_cart_qty >= $max_sale_qty)) ? TRUE : FALSE;
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 

@@ -135,14 +135,14 @@ class ProductStockController extends ControllerBase {
         );
 
         // Get product qty in cart for variant.
-        $current_variant_in_cart_qty = $this->skuManager->getCartVariantQty($variant_sku);
+        $current_variant_in_cart_qty = $this->skuManager->getCartItemQtyLimit($variant_sku);
         // Get max sale qty for the variant being added.
         $plugin = $entity->getPluginInstance();
         $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
 
         // If items in cart is more than max_sale_qty then
         // disable ADD TO BAG and quantity dropdown.
-        if ($current_variant_in_cart_qty >= $max_sale_qty) {
+        if ($max_sale_qty !== NULL && $current_variant_in_cart_qty >= $max_sale_qty) {
           $render_array['#attached']['drupalSettings']['productInfo'][$data['selected_parent_sku']]['variants'][$variant_sku]['orderLimitMsg'] = $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE);
           $render_array['#attached']['drupalSettings']['productInfo'][$data['selected_parent_sku']]['variants'][$variant_sku]['orderLimitExceeded'] = TRUE;
           render($render_array);

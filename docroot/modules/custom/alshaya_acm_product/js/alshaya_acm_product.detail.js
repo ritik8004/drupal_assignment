@@ -126,7 +126,7 @@
 
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
-            if (($(this).val() > variantInfo.stock.qty) || ($(this).val() > variantInfo.stock.maxSaleQty)) {
+            if (($(this).val() > variantInfo.stock.qty) || (variantInfo.stock.maxSaleQty !== 0 && ($(this).val() > variantInfo.stock.maxSaleQty))) {
               if ($(this).is(':selected')) {
                 $('select[name="quantity"] option:first').attr('selected', 'selected').prop('selected', true);
               }

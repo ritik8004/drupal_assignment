@@ -3575,13 +3575,28 @@ class SkuManager {
    *   Variant Sku.
    *
    * @return array
-   *   Current variant in cart qty.
+   *   Quantity limit.
    */
-  public function getCartVariantQty($variant_sku) {
+  public function getCartItemQtyLimit($variant_sku) {
     $cart_items = array_column($this->cartHelper->getCart()->items(), 'qty', 'sku');
-    $current_variant_in_cart_qty = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
+    $qty_limit = 0;
 
-    return $current_variant_in_cart_qty;
+    if (!empty($cart_items)) {
+      $variant_parent_sku = $this->getParentSkuBySku($variant_sku)->getSku();
+      if ($variant_parent_sku) {
+        foreach ($cart_items as $item => $qty) {
+          $cart_item_parent_sku = $this->getParentSkuBySku($item)->getSku();
+          if ($cart_item_parent_sku === $variant_parent_sku) {
+            $qty_limit += $qty;
+          }
+        }
+      }
+      else {
+        $qty_limit = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
+      }
+    }
+
+    return $qty_limit;
   }
 
 }
