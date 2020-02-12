@@ -1566,6 +1566,10 @@ function alshaya_white_label_preprocess_breadcrumb(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  if (empty($variables['attributes']['data-drupal-facet-id'])) {
+    return;
+  }
+
   // Flag to determine if category facet has active item.
   $category_active_facet = FALSE;
 

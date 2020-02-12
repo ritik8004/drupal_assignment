@@ -581,14 +581,13 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
   }
 
   $logger = \Drupal::logger('alshaya_acm_product_category');
+  $term_storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
 
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-  /** @var Drupal\alshaya_acm_product_category\Service\ProductCategoryManagerOld $product_category_manager_old */
-  $product_category_manager_old = \Drupal::service('alshaya_acm_product_category.sales_category_manager.old');
-  /** @var \Drupal\Core\Entity\EntityManager $entity_type_manager */
-  $entity_type_manager = \Drupal::service('entity_type.manager');
-  $term_storage = $entity_type_manager->getStorage('taxonomy_term');
+
+  // Get sales categories to index L2 for sales terms.
+  $sale_categories = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds()['sale'] ?? [];
 
   foreach ($items as $item_id => $item) {
     /** @var \Drupal\node\NodeInterface $object */
@@ -598,19 +597,22 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
     // and l1 menu items for others.
     if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
       try {
-        $sale_categories = $product_category_manager_old->getSalesCategoryIds();
         $terms = [];
-        $node_field_category = $object->get('field_category')->getValue();
+
+        $node_field_category = array_column($object->get('field_category')->getValue(), 'target_id');
         foreach ($node_field_category as $value) {
-          $term = $term_storage->load($value['target_id']);
-          if (!($term->get('field_category_include_menu')->getString())) {
+          $term = $term_storage->load($value);
+
+          if (!($term->get('field_commerce_status')->getString()) || !($term->get('field_category_include_menu')->getString())) {
             continue;
           }
+
           // Index L2 for sale categories.
           $terms[] = in_array($term->id(), $sale_categories)
-          ? $product_category_tree->getL2Category($term)->id()
-          : $product_category_tree->getL1Category($term)->id();
+            ? $product_category_tree->getL2Category($term)->id()
+            : $product_category_tree->getL1Category($term)->id();
         }
+
         $item->getField('field_category')->setValues(array_unique($terms));
       }
       catch (\Throwable $e) {
