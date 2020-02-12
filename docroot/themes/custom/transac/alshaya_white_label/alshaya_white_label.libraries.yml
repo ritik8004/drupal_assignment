@@ -286,6 +286,7 @@ free_gifts:
   dependencies:
     - core/jquery
     - alshaya_white_label/slick
+    - alshaya_product_zoom/cloud_zoom_common
 
 app-navigation-links:
   css:
