@@ -9,6 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class AlshayaSpcLoginController.
@@ -73,6 +74,12 @@ class AlshayaSpcLoginController extends ControllerBase {
    * Cart login page.
    */
   public function login() {
+    if ($this->currentUser()->isAuthenticated()) {
+      $response = new RedirectResponse(Url::fromRoute('alshaya_spc.checkout')->toString(), 302);
+      $response->send();
+      exit();
+    }
+
     $build['login_form'] = [
       '#parents' => ['login_form'],
       '#type' => 'fieldset',
