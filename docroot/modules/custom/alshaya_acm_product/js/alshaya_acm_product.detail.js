@@ -105,7 +105,7 @@
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
-          var orderLimitSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
+          var parentSku = variantInfo.parent_sku;
 
           if (typeof variantInfo === 'undefined') {
             return;
@@ -120,8 +120,10 @@
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
 
-          // Add order quantity limit message.
-          orderLimitSelector.html(variantInfo.orderLimitMsg);
+          // On variant change, disable/enable Add to bag, quantity dropdown
+          // and show message based on value in drupalSettings.
+          Drupal.disableLimitExceededProducts(parentSku, selected);
+
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
             if (($(this).val() > variantInfo.stock.qty) || ($(this).val() > variantInfo.stock.maxSaleQty)) {
@@ -360,6 +362,32 @@
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
     }
   };
+
+  // Disable Add to bag and quantity dropdown when order limit exceed.
+  Drupal.disableLimitExceededProducts = function (sku, selected) {
+    var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
+    var variantInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku]['variants'][selected] : '';
+
+    var orderLimitExceeded = (variantInfo !== '' && typeof(variantInfo.orderLimitExceeded) !== "undefined") ? variantInfo.orderLimitExceeded : false;
+
+    if (orderLimitExceeded) {
+      var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
+
+      variantToDisableSelector.find('.edit-add-to-cart.button').prop('disabled', true);
+      variantToDisableSelector.find('#edit-quantity').prop('disabled', true);
+    } else {
+      $('.edit-add-to-cart.button').prop('disabled', false);
+      $('#edit-quantity').prop('disabled', false);
+    }
+
+    // Add order quantity limit message.
+    orderLimitMsgSelector.html(variantInfo.orderLimitMsg);
+  };
+
+  // Cart limit exceeded for a variant.
+  $.fn.LimitExceededInCart = function (sku, selected) {
+    Drupal.disableLimitExceededProducts(sku, selected);
+  }
 
   // This event is triggered on page load itself in attach (Drupal.behaviors.configurableAttributeBoxes)
   // once size boxes are shown properly

@@ -40,6 +40,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_acm\CartHelper;
 
 /**
  * Class SkuManager.
@@ -246,6 +247,13 @@ class SkuManager {
   protected $productCacheManager;
 
   /**
+   * Cart Helper.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -292,6 +300,8 @@ class SkuManager {
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
    *   Alshaya array utility service.
+   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
+   *   Cart Helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -317,7 +327,8 @@ class SkuManager {
                               Simplesitemap $generator,
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
-                              AlshayaArrayUtils $alshayaArrayUtils) {
+                              AlshayaArrayUtils $alshayaArrayUtils,
+                              CartHelper $cart_helper) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -343,6 +354,7 @@ class SkuManager {
     $this->productInfoHelper = $product_info_helper;
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
+    $this->cartHelper = $cart_helper;
   }
 
   /**
@@ -3554,6 +3566,22 @@ class SkuManager {
     }
 
     return $order_limit_msg;
+  }
+
+  /**
+   * Wrapper function get qty of current variant in cart.
+   *
+   * @param string $variant_sku
+   *   Variant Sku.
+   *
+   * @return array
+   *   Current variant in cart qty.
+   */
+  public function getCartVariantQty($variant_sku) {
+    $cart_items = array_column($this->cartHelper->getCart()->items(), 'qty', 'sku');
+    $current_variant_in_cart_qty = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
+
+    return $current_variant_in_cart_qty;
   }
 
 }

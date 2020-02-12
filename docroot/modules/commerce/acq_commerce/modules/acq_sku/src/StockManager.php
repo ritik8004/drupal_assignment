@@ -501,7 +501,7 @@ class StockManager {
    * @param string $sku
    *   SKU string.
    *
-   * @return
+   * @return int
    *   Max sale qty.
    */
   public function getMaxSaleQty(string $sku) {

@@ -1071,7 +1071,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
   // We will take lower value for quantity options from
   // available quantity and order limit.
-  $max_sale_qty = \Drupal::service('acq_sku.stock_manager')->getMaxSaleQty($sku_entity->getSku());
+  $plugin = $sku_entity->getPluginInstance();
+  $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
 
   $form['quantity']['#prefix'] = '<span class="quantity-' . $sku_identifier . '">';
   $form['quantity']['#suffix'] = '</span>';

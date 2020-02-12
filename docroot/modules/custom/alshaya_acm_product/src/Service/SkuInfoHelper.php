@@ -435,6 +435,7 @@ class SkuInfoHelper {
     $price = $this->priceHelper->getPriceBlockForSku($child);
     $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
     $plugin = $child->getPluginInstance();
+    $variant_sku = $child->getSku();
 
     // Get Max sale qty for parent SKU.
     if ($parent !== NULL) {
@@ -443,8 +444,13 @@ class SkuInfoHelper {
 
     // If order limit is not set for parent
     // then get order limit for each variant.
-    $max_sale_qty = (isset($max_sale_qty) && $max_sale_qty !== NULL) ? $max_sale_qty : $plugin->getMaxSaleQty($child->getSku());
-    $order_limit_msg = ($max_sale_qty !== NULL) ? $this->skuManager->maxSaleQtyMessage($max_sale_qty) : '';
+    $max_sale_qty = (isset($max_sale_qty) && $max_sale_qty !== NULL) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
+    // Check product qty in cart for variant.
+    $current_variant_in_cart_qty = $this->skuManager->getCartVariantQty($variant_sku);
+
+    if ($max_sale_qty !== NULL) {
+      $order_limit_msg = ($current_variant_in_cart_qty >= $max_sale_qty) ? $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE) : $this->skuManager->maxSaleQtyMessage($max_sale_qty);
+    }
 
     $variant = [];
     $variant['id'] = (int) $child->id();
@@ -457,7 +463,8 @@ class SkuInfoHelper {
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
-    $variant['orderLimitMsg'] = empty($order_limit_msg) ? '' : $order_limit_msg;
+    $variant['orderLimitMsg'] = isset($order_limit_msg) ? $order_limit_msg : '';
+    $variant['orderLimitExceeded'] = $current_variant_in_cart_qty >= $max_sale_qty ? TRUE : FALSE;
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
