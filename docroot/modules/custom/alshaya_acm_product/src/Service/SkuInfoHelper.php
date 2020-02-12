@@ -525,6 +525,8 @@ class SkuInfoHelper {
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
       'in_stock' => $this->skuManager->isProductInStock($sku),
+      'is_new' => $sku->get('attr_is_new')->getString(),
+      'is_sale' => $sku->get('attr_is_sale')->getString(),
       'promo' => $promotions,
       'medias' => $images,
       'labels' => $labels,
