@@ -119,7 +119,7 @@ class CartController {
    *   The cart id.
    */
   protected function updateSessionCartId(int $cart_id) {
-    $this->loadCartFromSession(TRUE);
+    $this->loadCartFromSession();
     if (empty($this->sessionCartInfo['cart_id'])) {
       $this->sessionCartInfo['cart_id'] = $cart_id;
       $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
@@ -578,7 +578,7 @@ class CartController {
    *   Json response.
    */
   public function associateCart() {
-    $this->loadCartFromSession();
+    $this->loadCartFromSession(TRUE);
 
     if (!empty($this->sessionCartInfo['customer_id'])) {
       return new JsonResponse($this->sessionCartInfo);
