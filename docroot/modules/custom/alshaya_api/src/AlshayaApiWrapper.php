@@ -2,9 +2,6 @@
 
 namespace Drupal\alshaya_api;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\acq_commerce\Conductor\RouteException;
-use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\alshaya_api\Helper\MagentoApiHelper;
 use Drupal\alshaya_api\Helper\MagentoApiRequestHelper;
@@ -308,13 +305,13 @@ class AlshayaApiWrapper {
       try {
         $json = Json::decode($result);
         if (is_array($json) && !empty($json['message']) && count($json) === 1) {
-          throw new \Exception($json['message'], APIWrapper::API_DOWN_ERROR_CODE);
+          throw new \Exception($json['message'], 600);
         }
       }
       catch (\Exception $e) {
         // Let the outer catch handle logging of error and handling response.
         // We avoid other exceptions related to JSON parsing here.
-        if ($e->getCode() === APIWrapper::API_DOWN_ERROR_CODE) {
+        if ($e->getCode() === 600) {
           throw $e;
         }
       }
@@ -1073,6 +1070,8 @@ class AlshayaApiWrapper {
    *
    * @return array|mixed
    *   Return array of customer details or null.
+   *
+   * @throws \Exception
    */
   public function updateCustomer(array $customer, array $options = []) {
     $opt['json']['customer'] = $customer;
@@ -1105,8 +1104,6 @@ class AlshayaApiWrapper {
     if (!empty($opt['json']['customer']['id'])) {
       $endpoint .= '/' . $opt['json']['customer']['id'];
       $method = 'PUT';
-      // @todo: Get group_id dynamically for put request.
-      $opt['json']['customer']['group_id'] = 1;
     }
 
     try {
@@ -1122,9 +1119,66 @@ class AlshayaApiWrapper {
         }
         $response = MagentoApiResponseHelper::customerFromSearchResult($response);
       }
+
+      // Update password api.
+      if (!empty($response) && !empty($options['password'])) {
+        try {
+          $this->updateCustomerPass($customer, $options['password']);
+        }
+        catch (\Exception $e) {
+          throw $e;
+        }
+      }
     }
-    catch (ConnectorException $e) {
-      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    catch (\Exception $e) {
+      throw $e;
+    }
+
+    return $response;
+  }
+
+  /**
+   * Update customer password.
+   *
+   * @param array $customer
+   *   The customer array.
+   * @param string $password
+   *   The password to update for customer.
+   *
+   * @return array|null
+   *   Return array response.
+   *
+   * @throws \Exception
+   */
+  protected function updateCustomerPass(array $customer, $password) {
+    $cid = (int) $customer['customer_id'];
+    $password = (string) $password;
+    if ($cid < 1) {
+      throw new \Exception(
+        'updateCustomerPass: Missing customer id.'
+      );
+    }
+    if (!strlen($password)) {
+      throw new \Exception(
+        'updateCustomerPass: Missing customer password.'
+      );
+    }
+    $endpoint = sprintf('customers/%d/set-password?', $cid);
+    $endpoint .= 'password=' . urlencode($password);
+
+    try {
+      $response = $this->invokeApi(
+        $endpoint,
+        [
+          'customer_id' => $cid,
+          'password' => $password,
+        ],
+        'JSON'
+      );
+      $response = Json::decode($response);
+    }
+    catch (\Exception $e) {
+      throw $e;
     }
 
     return $response;
