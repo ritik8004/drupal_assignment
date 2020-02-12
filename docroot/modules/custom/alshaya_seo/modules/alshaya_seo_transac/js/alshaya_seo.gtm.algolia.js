@@ -13,7 +13,7 @@
   // as selector won't be available.
   $(document).once('seoGoogleTagManager').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
     // Allow for aloglia search result.
-    if (!$('#alshaya-algolia-search').hasClass('show-algolia-result')) {
+    if (!$('#alshaya-algolia-search').hasClass('show-algolia-result') && !$('#alshaya-algolia-search').is(':visible')) {
       return;
     }
     // Avoid triggering again for each page.
