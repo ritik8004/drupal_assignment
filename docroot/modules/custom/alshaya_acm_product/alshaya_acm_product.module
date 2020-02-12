@@ -1158,7 +1158,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // Get the first child from attribute_sku which has values sorted
     // same as add to cart form.
-    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+    $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = reset($sorted_variants);
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
