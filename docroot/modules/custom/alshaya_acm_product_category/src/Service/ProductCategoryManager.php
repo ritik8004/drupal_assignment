@@ -94,9 +94,6 @@ class ProductCategoryManager {
   public function getCategorizationIds(): array {
     // Return if enable_auto_sale_categorisation is set to FALSE.
     $config = $this->configFactory->get('alshaya_acm_product_category.settings');
-    if (!($config->get('enable_auto_sale_categorisation') == 1)) {
-      return [];
-    }
     // Use old categorization if enabled.
     // @Todo: Remove this once old categorization not required.
     if ($this->isOldCategorizationRuleEnabled()) {

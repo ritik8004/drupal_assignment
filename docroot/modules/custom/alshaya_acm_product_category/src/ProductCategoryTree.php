@@ -941,11 +941,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getL2Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
-    if (count($parents) < $this->getL1DepthLevel()) {
+    if (count($parents) < ($this->getL1DepthLevel() + 1)) {
       return $category;
     }
 
-    $parent = array_reverse($parents, FALSE)[1];
+    $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel()];
     return $this->entityRepository->getTranslationFromContext($parent);
   }
 

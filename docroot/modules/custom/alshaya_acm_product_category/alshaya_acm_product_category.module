@@ -584,8 +584,8 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
 
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-  /** @var \Drupal\alshaya_acm_product_category\Service $product_category_manager */
-  $product_category_manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
+  /** @var Drupal\alshaya_acm_product_category\Service\ProductCategoryManagerOld $product_category_manager_old */
+  $product_category_manager_old = \Drupal::service('alshaya_acm_product_category.sales_category_manager.old');
   /** @var \Drupal\Core\Entity\EntityManager $entity_type_manager */
   $entity_type_manager = \Drupal::service('entity_type.manager');
   $term_storage = $entity_type_manager->getStorage('taxonomy_term');
@@ -593,32 +593,25 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
   foreach ($items as $item_id => $item) {
     /** @var \Drupal\node\NodeInterface $object */
     $object = $item->getOriginalObject()->getValue();
-    $l1 = [];
 
     // Storing l2 menu items in field_category for sale categories
     // and l1 menu items for others.
     if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
       try {
+        $sale_categories = $product_category_manager_old->getSalesCategoryIds();
+        $terms = [];
         $node_field_category = $object->get('field_category')->getValue();
-        // Check if the product is not a sale category.
-        if (!($product_category_manager->isProductWithSalesOrNewArrival($object, ['attr_is_sale']))) {
-          foreach ($node_field_category as $value) {
-            $term = $term_storage->load($value['target_id']);
-            if ($term->get('field_category_include_menu')->getString()) {
-              $l1[] = $product_category_tree->getL1Category($term)->id();
-            }
+        foreach ($node_field_category as $value) {
+          $term = $term_storage->load($value['target_id']);
+          if (!($term->get('field_category_include_menu')->getString())) {
+            continue;
           }
-          $item->getField('field_category')->setValues(array_unique($l1));
+          // Index L2 for sale categories.
+          $terms[] = in_array($term->id(), $sale_categories)
+          ? $product_category_tree->getL2Category($term)->id()
+          : $product_category_tree->getL1Category($term)->id();
         }
-        else {
-          foreach ($node_field_category as $value) {
-            $term = $term_storage->load($value['target_id']);
-            if ($term->get('field_category_include_menu')->getString()) {
-              $l1[] = $product_category_tree->getL2Category($term)->id();
-            }
-          }
-          $item->getField('field_category')->setValues(array_unique($l1));
-        }
+        $item->getField('field_category')->setValues(array_unique($terms));
       }
       catch (\Throwable $e) {
         $logger->warning('Indexing failed for the node:@nid message:@message', [

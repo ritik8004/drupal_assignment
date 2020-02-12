@@ -82,10 +82,6 @@ class ProductCategoryManagerOld {
   public function getSalesCategoryIds(): array {
     // Return if enable_auto_sale_categorisation is set to FALSE.
     $config = $this->configFactory->get('alshaya_acm_product_category.settings');
-    $enable_auto_sale_categorisation = $config->get('enable_auto_sale_categorisation');
-    if (!($enable_auto_sale_categorisation == 1)) {
-      return [];
-    }
     // Static cache.
     static $salesCategoryIds = NULL;
     if (is_array($salesCategoryIds)) {
