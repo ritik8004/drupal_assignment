@@ -25,7 +25,7 @@
           if ($('.click-collect-all-stores').hasClass('desc-open')) {
             $('.click-collect-all-stores').toggleClass('desc-open');
           }
-          $('.c-pdp .description-wrapper').toggleClass('desc-open');
+          $(this).parents('.short-description-wrapper').siblings('.description-wrapper').toggleClass('desc-open');
         });
         var mobileStickyHeaderHeight = $('.branding__menu').height();
 
@@ -52,7 +52,7 @@
         });
 
         $('.close').once('readmore').on('click', function () {
-          $('.c-pdp .description-wrapper').toggleClass('desc-open');
+          $(this).parents('.description-wrapper').toggleClass('desc-open');
         });
 
         $(document).on('click', function (e) {
