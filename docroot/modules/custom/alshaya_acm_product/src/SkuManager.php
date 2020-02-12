@@ -3534,4 +3534,26 @@ class SkuManager {
     return $config[$key];
   }
 
+  /**
+   * Wrapper function get max sale qty message.
+   *
+   * @param string $max_sale_qty
+   *   Max sale qty.
+   * @param bool $limit_exceeded
+   *   Limit exceeded.
+   *
+   * @return string
+   *   Order limit message.
+   */
+  public function maxSaleQtyMessage($max_sale_qty, $limit_exceeded = FALSE) {
+    if ($limit_exceeded) {
+      $order_limit_msg = $this->t('Purchase limit has been reached');
+    }
+    else {
+      $order_limit_msg = ($max_sale_qty !== NULL) ? $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]) : '';
+    }
+
+    return $order_limit_msg;
+  }
+
 }

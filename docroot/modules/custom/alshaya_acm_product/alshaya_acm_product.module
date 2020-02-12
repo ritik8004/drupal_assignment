@@ -1069,11 +1069,16 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#cache']['tags'] = Cache::mergeTags($form['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+  // We will take lower value for quantity options from
+  // available quantity and order limit.
+  $max_sale_qty = \Drupal::service('acq_sku.stock_manager')->getMaxSaleQty($sku_entity->getSku());
+
   $form['quantity']['#prefix'] = '<span class="quantity-' . $sku_identifier . '">';
   $form['quantity']['#suffix'] = '</span>';
 
   $form['quantity']['#type'] = 'select';
-  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
+  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($max_sale_qty);
+
   $form['quantity']['#validated'] = TRUE;
   $form['quantity']['#attributes']['class'][] = 'edit-quantity';
   unset($form['quantity']['#size']);
@@ -1190,6 +1195,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   }
   // Stock check for quantity for all other products.
   elseif ($quantity = $sku_manager->getStockQuantity($sku_entity)) {
+    // Using the lower value of available quantity and max sale qty.
+    $quantity = ($quantity < $max_sale_qty) ? $quantity : $max_sale_qty;
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {

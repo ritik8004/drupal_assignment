@@ -105,6 +105,7 @@
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          var orderLimitSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
 
           if (typeof variantInfo === 'undefined') {
             return;
@@ -119,9 +120,11 @@
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
 
+          // Add order quantity limit message.
+          orderLimitSelector.html(variantInfo.orderLimitMsg);
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
-            if ($(this).val() > variantInfo.stock.qty) {
+            if (($(this).val() > variantInfo.stock.qty) || ($(this).val() > variantInfo.stock.maxSaleQty)) {
               if ($(this).is(':selected')) {
                 $('select[name="quantity"] option:first').attr('selected', 'selected').prop('selected', true);
               }
