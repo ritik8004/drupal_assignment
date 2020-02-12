@@ -1232,8 +1232,8 @@
     var impressions = [];
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
-    var productLinkSelector = $('main [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
-    var productLinkProcessedSelector = $('main .impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
     // Send impression for each product added on page (page 1 or X).
     var count = productLinkProcessedSelector.length + 1;

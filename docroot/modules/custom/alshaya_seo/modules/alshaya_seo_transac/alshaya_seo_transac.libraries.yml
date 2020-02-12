@@ -28,9 +28,18 @@ product_list:
     js/alshaya_seo.gtm.product_list.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+    - alshaya_seo_master/jquery_is_in_viewport
+search_list:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.search_list.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - alshaya_seo_master/jquery_is_in_viewport
 product_slider:
   version: 1.x
   js:
     js/alshaya_seo.gtm.product_slider.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+    - alshaya_seo_master/jquery_is_in_viewport

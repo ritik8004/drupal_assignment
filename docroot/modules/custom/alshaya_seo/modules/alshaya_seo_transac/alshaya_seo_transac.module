@@ -578,8 +578,12 @@ function alshaya_seo_transac_views_pre_render(ViewExecutable $view) {
   if (!_alshaya_seo_process_gtm()) {
     return;
   }
-  if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
-    // Attach GTM product js on product list/search view.
+  if ($view->id() == 'search') {
+    // Attach GTM product js on product search view.
+    $view->element['#attached']['library'][] = 'alshaya_seo_transac/search_list';
+  }
+  if ($view->id() == 'alshaya_product_list') {
+    // Attach GTM product js on product list view.
     $view->element['#attached']['library'][] = 'alshaya_seo_transac/product_list';
   }
   elseif ($view->id() == 'product_slider') {
