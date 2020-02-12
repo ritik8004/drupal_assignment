@@ -328,6 +328,11 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
+  // Do nothing for free gifts.
+  if ($skuManager->isSkuFreeGift($child)) {
+    return;
+  }
+
   /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
   $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
 
