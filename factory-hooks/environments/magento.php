@@ -399,7 +399,7 @@ $magentos = [
     ],
   ],
   'we_prod' => [
-    'url' => 'http://wes.store.alshaya.com',
+    'url' => 'https://wes.store.alshaya.com',
     'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 14],
