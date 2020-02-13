@@ -3559,11 +3559,10 @@ class SkuManager {
    */
   public function maxSaleQtyMessage($max_sale_qty, $limit_exceeded = FALSE) {
     if ($limit_exceeded) {
-      $order_limit_msg = '<div class="order-quantity-limit-message limit-reached">' . $this->t('Purchase limit has been reached') . '</div>';
+      $order_limit_msg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' . $this->t('Purchase limit has been reached') . '</span>';
     }
     else {
-      $order_limit_msg = ($max_sale_qty !== NULL) ?
-        '<div class="order-quantity-limit-message">' . $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]) . '</div>' : '';
+      $order_limit_msg = ($max_sale_qty !== NULL) ? '<span class="order-qty-limit-msg-inner-wrapper">' . $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]) . '</span>' : '';
     }
 
     return $order_limit_msg;
@@ -3581,8 +3580,11 @@ class SkuManager {
   public function getCartItemQtyLimit($variant_sku) {
     $qty_limit = 0;
     $variant_parent = $this->getParentSkuBySku($variant_sku);
-    // Get cart items.
-    $cart_items = $this->cartHelper->getCart() ? array_column($this->cartHelper->getCart()->items(), 'qty', 'sku') : [];
+    // Variant itself is parent if it's NULL here.
+    $variant_parent = $variant_parent === NULL ? $variant_sku : $variant_parent;
+    // Get cart items by sku.
+    $cart_items = alshaya_acm_get_cart_items_by_sku();
+    $cart_items = !empty($cart_items) ? array_column($cart_items, 'qty', 'sku') : [];
 
     if (!empty($cart_items)) {
       if ($variant_parent) {
@@ -3604,6 +3606,64 @@ class SkuManager {
       }
     }
     return $qty_limit;
+  }
+
+  /**
+   * Wrapper function to get max sale qty variables.
+   *
+   * @param string $sku
+   *   Sku.
+   * @param string $max_sale_qty
+   *   Max sale qty.
+   *
+   * @return array
+   *   Max sale qty variables.
+   */
+  public function getMaxSaleQtyVariables($sku, $max_sale_qty) {
+    if ($max_sale_qty !== NULL) {
+      // Check product qty in cart.
+      $cart_qty = $this->getCartItemQtyLimit($sku);
+
+      if ($cart_qty && ($cart_qty >= $max_sale_qty)) {
+        $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty, TRUE);
+        $limit_exceeded = TRUE;
+      }
+      else {
+        $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty);
+        $limit_exceeded = FALSE;
+      }
+    }
+    $max_sale_qty_variables = [
+      'maxSaleQty' => (int) $max_sale_qty,
+      'orderLimitMsg' => isset($order_limit_msg) ? $order_limit_msg : '',
+      'orderLimitExceeded' => isset($limit_exceeded) ? $limit_exceeded : FALSE,
+    ];
+
+    return $max_sale_qty_variables;
+  }
+
+  /**
+   * Helper function to get parent max sale qty if set.
+   *
+   * @param string $sku
+   *   Sku.
+   *
+   * @return array
+   *   Parent max sale qty.
+   */
+  public function getParentMaxSaleQty($sku) {
+    $parent_sku = $this->getParentSkuBySku($sku);
+
+    if ($parent_sku instanceof SKUInterface) {
+      $plugin = $parent_sku->getPluginInstance();
+      $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
+    }
+    else {
+      $plugin = $sku->getPluginInstance();
+      $max_sale_qty = $plugin->getMaxSaleQty($sku);
+    }
+
+    return isset($max_sale_qty) ? $max_sale_qty : NULL;
   }
 
 }

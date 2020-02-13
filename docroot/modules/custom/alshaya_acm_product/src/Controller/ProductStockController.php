@@ -135,30 +135,44 @@ class ProductStockController extends ControllerBase {
           new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
         );
 
-        // Get product qty in cart for variant.
-        $current_variant_in_cart_qty = $this->skuManager->getCartItemQtyLimit($variant_sku);
-        // Get max sale qty for the variant being added.
-        $plugin = $entity->getPluginInstance();
-        $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
-
-        // If items in cart is more than max_sale_qty then
-        // disable ADD TO BAG and quantity dropdown.
-        if ($max_sale_qty !== NULL && $current_variant_in_cart_qty >= $max_sale_qty) {
+        // Check if max sale qty limit is set for parent.
+        $max_sale_qty = $this->skuManager->getParentMaxSaleQty($variant_sku);
+        if ($max_sale_qty !== NULL) {
+          // Get max sale qty variables.
+          $max_sale_qty_variables = $this->skuManager->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
           $orderLimitData = [
             'productInfo' => [
               $data['selected_parent_sku'] => [
-                'variants' => [
-                  $variant_sku => [
-                    'orderLimitMsg' => $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE),
-                    'orderLimitExceeded' => TRUE,
-                  ],
-                ],
+                'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
+                'orderLimitExceeded' => $max_sale_qty_variables['orderLimitExceeded'],
               ],
             ],
           ];
-          $return->addCommand(new SettingsCommand($orderLimitData, TRUE));
-          $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$data['selected_parent_sku'], $variant_sku]));
         }
+        else {
+          // If max sale qty for parent is not set then get for the variant.
+          $plugin = $variant->getPluginInstance();
+          $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
+          if ($max_sale_qty !== NULL) {
+            // Get max sale qty variables.
+            $max_sale_qty_variables = $this->skuManager->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
+
+            $orderLimitData = [
+              'productInfo' => [
+                $data['selected_parent_sku'] => [
+                  'variants' => [
+                    $variant_sku => [
+                      'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
+                      'orderLimitExceeded' => $max_sale_qty_variables['orderLimitExceeded'],
+                    ],
+                  ],
+                ],
+              ],
+            ];
+          }
+        }
+        $return->addCommand(new SettingsCommand($orderLimitData, TRUE));
+        $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$data['selected_parent_sku'], $variant_sku]));
       }
       else {
         $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));

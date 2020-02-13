@@ -367,13 +367,22 @@
   Drupal.disableLimitExceededProducts = function (sku, selected) {
     var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
     var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
+    var parentInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku] : '';
     var variantInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku]['variants'][selected] : '';
 
-    var orderLimitExceeded = (variantInfo !== '' && typeof(variantInfo.orderLimitExceeded) !== "undefined") ? variantInfo.orderLimitExceeded : false;
+    // If limit exists at parent level.
+    if ((parentInfo !== '') && parentInfo.maxSaleQty) {
+      var orderLimitMsg = parentInfo.orderLimitMsg;
+      var orderLimitExceeded = parentInfo.orderLimitExceeded ? parentInfo.orderLimitExceeded : false;
+      var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');
+
+    } else {
+      var orderLimitMsg = variantInfo.orderLimitMsg;
+      var orderLimitExceeded = variantInfo.orderLimitExceeded ? variantInfo.orderLimitExceeded : false;
+      var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
+    }
 
     if (orderLimitExceeded) {
-      var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
-
       variantToDisableSelector.find('.edit-add-to-cart.button').prop('disabled', true);
       variantToDisableSelector.find('#edit-quantity').prop('disabled', true);
     } else {
@@ -382,8 +391,8 @@
     }
 
     // Add order quantity limit message.
-    orderLimitMsgSelector.html(variantInfo.orderLimitMsg);
-    orderLimitMobileMsgSelector.html(variantInfo.orderLimitMsg);
+    orderLimitMsgSelector.html(orderLimitMsg);
+    orderLimitMobileMsgSelector.html(orderLimitMsg);
   };
 
   // Cart limit exceeded for a variant.
