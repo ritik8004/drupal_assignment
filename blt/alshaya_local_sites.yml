@@ -118,3 +118,19 @@ sites:
     module: alshaya_jus
     type: alshaya_non_transac
     country: sa
+  aeokw:
+    module: alshaya_aeo
+    type: alshaya_transac
+    country: kw
+  aeosa:
+    module: alshaya_aeo
+    type: alshaya_transac
+    country: sa
+  aeoae:
+    module: alshaya_aeo
+    type: alshaya_transac
+    country: ae
+  aeoeg:
+    module: alshaya_aeo
+    type: alshaya_transac
+    country: eg
