@@ -1123,7 +1123,7 @@ class AlshayaApiWrapper {
       // Update password api.
       if (!empty($response) && !empty($options['password'])) {
         try {
-          $this->updateCustomerPass($customer, $options['password']);
+          $this->updateCustomerPass($response, $options['password']);
         }
         catch (\Exception $e) {
           throw $e;

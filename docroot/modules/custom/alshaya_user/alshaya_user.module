@@ -276,9 +276,9 @@ function alshaya_user_preprocess_page_title(&$variables) {
 }
 
 /**
- * Implements hook_alshaya_api_update_account_alter().
+ * Implements hook_alshaya_acm_customer_update_account_alter().
  */
-function alshaya_user_alshaya_api_update_account_alter(User $user, array $customer) {
+function alshaya_user_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
   // Update phone_number if available in customer data.
   if (isset($customer['extension'], $customer['extension']['phone_number'])) {
     $user->get('field_mobile_number')

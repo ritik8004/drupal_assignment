@@ -200,7 +200,7 @@ class AlshayaSpcCustomerHelper {
 
       if (!empty($customer) && !empty($customer['customer_id'])) {
         $_alshaya_acm_custom_cart_association_processed = TRUE;
-        $this->moduleHandler->loadInclude('alshaya_api', 'inc', 'alshaya_api.utility');
+        $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
         $cart_id = $this->spcCookies->getSessionCartId();
         if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
@@ -213,12 +213,12 @@ class AlshayaSpcCustomerHelper {
         // Check if user exists in Drupal.
         if ($user = user_load_by_mail($mail)) {
           // Update the data in Drupal to match the values in Magento.
-          alshaya_api_update_user_data($user, $customer);
+          alshaya_acm_customer_update_user_data($user, $customer);
         }
         // Create user.
         else {
           /** @var \Drupal\user\Entity\User $user */
-          $user = alshaya_api_create_drupal_user($customer);
+          $user = alshaya_acm_customer_create_drupal_user($customer);
         }
 
         return array_merge($customer, ['user' => $user]);
