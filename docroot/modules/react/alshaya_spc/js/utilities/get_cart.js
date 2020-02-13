@@ -16,12 +16,12 @@ export const cartAvailableInStorage = function () {
   var cart_data = localStorage.getItem('cart_data');
   // If data is not available in storage, we flag it to check/fetch from api.
   if (!cart_data) {
-    return false;
+    return null;
   }
 
   // 1m time for expire.
   // @Todo: Make this 10m (configurable from BE).
-  var expire_time = 1*60*1000;
+  var expire_time = 1 * 60 * 1000;
   var current_time = new Date().getTime();
   var cart_data = JSON.parse(cart_data);
 
@@ -39,11 +39,7 @@ export const cartAvailableInStorage = function () {
 export const fetchCartData = function () {
   // Check if cart available in storage.
   var cart = cartAvailableInStorage();
-
-  if (cart === null) {
-    return null;
-  }
-  else if (cart === false) {
+  if (!cart) {
     // Prepare api url.
     var api_url = restoreCartApiUrl();
 
@@ -62,6 +58,21 @@ export const fetchCartData = function () {
     if (cart.cart_id === null) {
       return null;
     }
+
+    // On logout cart object will havee a user id and drupalSettings uid will be
+    // set to 0. Comparing this to figure out the user is logged out and hence the
+    // cart data which is already there in localstorage is not valid and hence,
+    // initiating object with empty data will show empty cart and mini cart.
+    // Clearing the local storage will be taken care by emptyCustomerCart().
+    if (cart.uid !== window.drupalSettings.user.uid && cart.uid.length > 0) {
+      cart = {
+        cart_id: null,
+        cart_total: null,
+        items_qty: null,
+        items: []
+      }
+    }
+
     return Promise.resolve(cart);
   }
 
@@ -71,9 +82,9 @@ export const fetchCartData = function () {
   return axios.get(api_url)
     .then(response => {
       return response.data
-  })
-  .catch(error => {
-    // Processing of error here.
-  });
+    })
+    .catch(error => {
+      // Processing of error here.
+    });
 
 }

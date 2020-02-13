@@ -1,0 +1,23 @@
+input[type=radio] {
+  ~ .radio-sim {
+    @include icon(radio-empty, before) {
+      font-size: 3rem;
+    }
+  }
+
+  &:checked {
+    ~ .radio-sim {
+      @include icon(radio-filled, before) {
+        font-size: 3rem;
+      }
+    }
+  }
+
+  ~ .radio-label {
+    text-transform: capitalize;
+
+    .impress {
+      text-transform: uppercase;
+    }
+  }
+}

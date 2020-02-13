@@ -5,7 +5,6 @@
  * Contains general hooks and alters.
  */
 
-use Drupal\acq_cart\Cart;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -423,10 +422,8 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       }
     }
     catch (\Exception $e) {
-      if (acq_commerce_is_exception_api_down_exception($e)) {
-        $form_state->setErrorByName('name', $e->getMessage());
-        return;
-      }
+      $form_state->setErrorByName('name', $e->getMessage());
+      return;
     }
   }
 
@@ -447,65 +444,20 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
  *
  * @return int|null
  *   User id of user if successful or null.
+ *
+ * @throws \Exception
  */
-function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associate_cart = FALSE) {
-  global $_alshaya_acm_custom_cart_association_processed;
-
+function _alshaya_acm_customer_authenticate_customer($mail, $pass) {
   try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-
-    $customer = $api_wrapper->authenticateCustomer($mail, $pass);
-
-    if (!empty($customer) && !empty($customer['customer_id'])) {
-      $_alshaya_acm_custom_cart_association_processed = TRUE;
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-
-      try {
-        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-        $cart_storage = \Drupal::service('acq_cart.cart_storage');
-
-        // If we get a cart_id in the customer response, load it and store it
-        // in the session.
-        if (!$force_associate_cart && isset($customer['extension']['cart_id'])) {
-          $cart = (object) $api_wrapper->getCart($customer['extension']['cart_id']);
-          $cart = new Cart($cart);
-
-          $cart_storage->addCart($cart);
-        }
-        // Otherwise, associate the current cart with the authenticated user.
-        else {
-          // Check first if we have a cart in session.
-          if ($cart = $cart_storage->getCart(FALSE)) {
-            // Associate the cart to returning customer.
-            $cart_storage->associateCart($customer['customer_id'], $customer['email']);
-          }
-        }
-      }
-      catch (\Exception $e) {
-        // Some error occurred while associating cart, not doing anything
-        // here to allow normal login to work.
-      }
-
-      // Check if user exists in Drupal.
-      if ($user = user_load_by_mail($mail)) {
-        // Update the data in Drupal to match the values in Magento.
-        alshaya_acm_customer_update_user_data($user, $customer);
-      }
-      // Create user.
-      else {
-        /** @var \Drupal\user\Entity\User $user */
-        $user = alshaya_acm_customer_create_drupal_user($customer);
-      }
-
-      return $user->id();
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_spc.customer_helper');
+    $uid = $api_wrapper->authenticateCustomer($mail, $pass);
+    if (!empty($uid)) {
+      return $uid;
     }
   }
   catch (\Exception $e) {
-    // Could be admin user, do nothing except for downtime exception.
-    if (acq_commerce_is_exception_api_down_exception($e)) {
-      throw $e;
-    }
+    throw $e;
   }
 
   return NULL;
@@ -525,33 +477,13 @@ function alshaya_acm_customer_user_login($account) {
     return;
   }
 
-  /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-  $cart_storage = \Drupal::service('acq_cart.cart_storage');
-
   // We do all checks only for normal users.
   if (alshaya_acm_customer_is_customer($account)) {
-    // Check first if we have a cart in session.
-    if ($cart = $cart_storage->getCart(FALSE)) {
-      // Check if current cart is not associated to another user.
-      if ($cart->customerEmail() && $cart->customerEmail() != $account->getEmail()) {
-        // It is associated to someone else. We clear the cart in session.
-        $cart_storage->clearCart();
-      }
-      else {
-        // Cart is not assigned or assigned to same customer.
-        try {
-          $cart_storage->associateCart($account->get('acq_customer_id')->getString(), $account->getEmail());
-        }
-        catch (\Exception $e) {
-          // Some error occurred while associating cart, not doing anything
-          // here to allow normal login to work.
-        }
-      }
-    }
+
   }
   else {
     // Admin just logged in, lets clear the cart if it exists.
-    $cart_storage->clearCart();
+    // $cart_storage->clearCart();
   }
 }
 

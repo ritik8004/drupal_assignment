@@ -115,9 +115,6 @@
 
       .slick-dots-container {
         li {
-          color: $mothercare-black;
-          background: currentColor !important;
-
           @include breakpoint($desktop) {
             .ie & {
               min-width: 0.6875rem;

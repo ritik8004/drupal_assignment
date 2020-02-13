@@ -32,7 +32,7 @@
 
   Drupal.behaviors.freeGiftsSlider = {
     attach: function (context, settings) {
-      var shopByStory = $('#drupal-modal .item-list ul');
+      var shopByStory = $('.free-gifts-modal-overlay #drupal-modal .item-list ul');
 
       if ($(window).width() > 767) {
         setTimeout(function () {
@@ -92,6 +92,27 @@
           $(this).replaceWith('<span class="read-more-description-link-gift">' + Drupal.t('Read more') + '</span>');
         });
       });
+
+      $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
+        var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+        // Closing modal window before slick library gets removed.
+        $(this).click();
+        productGallery.slick('unslick');
+        $('body').removeClass('pdp-modal-overlay');
+      });
+
+      // Only for cart page because on PDP we already get product_zoom.js.
+      // So we will get that functionality there.
+      if ($('.path--cart').length > 0 && $(window).width() < 768) {
+        $(document).once('dialog-opened').on('click', '.dialog-product-image-gallery-container #product-full-screen-gallery img', function (e) {
+          var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+          // Closing modal window before slick library gets removed.
+          $(this).closest('.dialog-product-image-gallery-container').find($('button.ui-dialog-titlebar-close')).trigger('mousedown');
+          productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
+        });
+      }
     }
   };
 

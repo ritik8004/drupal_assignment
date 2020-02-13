@@ -47,7 +47,6 @@ magazine_gallery:
   version: 1.x
   js:
     js/magazine_gallery.js: {}
-    js/doubletap/directive.js: {}
   dependencies:
   - core/drupalSettings
   - alshaya_white_label/slick

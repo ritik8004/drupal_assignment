@@ -1,0 +1,10 @@
+.spc-promo-code-block {
+  .promo-submit {
+    text-transform: uppercase;
+    font-family: $alshaya-thin;
+  }
+
+  input#promo-code::placeholder {
+    font-family: $alshaya-thin;
+  }
+}

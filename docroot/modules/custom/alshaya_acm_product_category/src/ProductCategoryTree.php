@@ -930,12 +930,30 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   public function getL1Category(TermInterface $category) {
     $parents = $this->termStorage->loadAllParents($category->id());
-
     if (count($parents) < $this->getL1DepthLevel()) {
       return $category;
     }
 
     $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel() - 1];
+    return $this->entityRepository->getTranslationFromContext($parent);
+  }
+
+  /**
+   * Get L2 Parent Category for given category.
+   *
+   * @param \Drupal\taxonomy\TermInterface $category
+   *   Category.
+   *
+   * @return \Drupal\taxonomy\TermInterface
+   *   L2 category for the category.
+   */
+  public function getL2Category(TermInterface $category) {
+    $parents = $this->termStorage->loadAllParents($category->id());
+    if (count($parents) < ($this->getL1DepthLevel() + 1)) {
+      return $category;
+    }
+
+    $parent = array_reverse($parents, FALSE)[$this->getL1DepthLevel()];
     return $this->entityRepository->getTranslationFromContext($parent);
   }
 

@@ -4,10 +4,10 @@ namespace Drupal\alshaya_spc\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper;
-use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class AlshayaSpcCustomerController.
@@ -22,24 +22,26 @@ class AlshayaSpcCustomerController extends ControllerBase {
   protected $spcCustomerHelper;
 
   /**
-   * Current user.
+   * The session.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Symfony\Component\HttpFoundation\Session\Session
    */
-  protected $currentUser;
+  protected $session;
 
   /**
    * AlshayaSpcCustomerController constructor.
    *
    * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $spc_customer_helper
    *   SPC customer helper.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   Current user.
+   * @param \Symfony\Component\HttpFoundation\Session\Session $session
+   *   The session.
    */
-  public function __construct(AlshayaSpcCustomerHelper $spc_customer_helper,
-                              AccountInterface $current_user) {
+  public function __construct(
+    AlshayaSpcCustomerHelper $spc_customer_helper,
+    Session $session
+  ) {
     $this->spcCustomerHelper = $spc_customer_helper;
-    $this->currentUser = $current_user;
+    $this->session = $session;
   }
 
   /**
@@ -48,7 +50,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_spc.customer_helper'),
-      $container->get('current_user')
+      $container->get('session')
     );
   }
 
@@ -59,7 +61,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
    *   Json response.
    */
   public function getCustomerAddressList() {
-    $uid = $this->currentUser->getAccount()->id();
+    $uid = $this->currentUser()->getAccount()->id();
     $addressList = $this->spcCustomerHelper->getCustomerAllAddresses($uid);
 
     return new JsonResponse($addressList);
@@ -79,7 +81,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
     $request->request->replace(is_array($data) ? $data : []);
     $response = [];
     try {
-      $uid = $this->currentUser->getAccount()->id();
+      $uid = $this->currentUser()->getAccount()->id();
       if ($this->spcCustomerHelper->updateCustomerDefaultAddress($data['address_id'], $uid)) {
         $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid);
         $response['status'] = TRUE;
@@ -108,7 +110,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
     $response = [];
     $data = json_decode($request->getContent(), TRUE);
     $request->request->replace(is_array($data) ? $data : []);
-    $uid = $this->currentUser->getAccount()->id();
+    $uid = $this->currentUser()->getAccount()->id();
     if ($this->spcCustomerHelper->deleteCustomerAddress($data['address_id'], $uid)) {
       $response['status'] = TRUE;
       $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid);
@@ -127,15 +129,25 @@ class AlshayaSpcCustomerController extends ControllerBase {
    *   Json response.
    */
   public function getUserCustomerId() {
+    $currentUser = $this->currentUser()->getAccount();
     $response = [
-      'customer_id' => NULL,
-      'uid' => $this->currentUser->getAccount()->id(),
+      'customer_id' => $currentUser->acq_customer_id,
+      'uid' => $currentUser->id(),
     ];
 
-    if (!$this->currentUser->isAnonymous()) {
-      $response['customer_id'] = $this->currentUser->getAccount()->acq_customer_id;
-    }
     return new JsonResponse($response);
+  }
+
+  /**
+   * Get customer cart for logged in user.
+   */
+  public function getUserCustomerCart() {
+    $currentUser = $this->currentUser()->getAccount();
+    return new JsonResponse([
+      'cart_id' => $this->session->get('customer_cart_id'),
+      'customer_id' => $currentUser->acq_customer_id,
+      'uid' => $currentUser->id(),
+    ]);
   }
 
 }

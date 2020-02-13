@@ -12,6 +12,19 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Enable hierarchy for category facet.
+ */
+function alshaya_search_update_8032() {
+  alshaya_config_install_configs(
+    ['facets.facet.category_facet_search'],
+    'alshaya_search',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change path of search page of acquia_search.
  */
 function alshaya_search_update_8031() {
