@@ -3578,7 +3578,6 @@ class SkuManager {
    *   Quantity limit.
    */
   public function getCartItemQtyLimit($variant_sku) {
-    $cart_items = array_column($this->cartHelper->getCart()->items(), 'qty', 'sku');
     $qty_limit = 0;
     $variant_parent = $this->getParentSkuBySku($variant_sku);
     // Get cart items.
