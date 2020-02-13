@@ -857,20 +857,24 @@
 
         // Track facet filters.
         $('li.facet-item').once('js-event').on('click', function () {
-          if ($(this).find('input.facets-checkbox').attr('checked') === undefined) {
-            var selectedVal = $(this).find('label>span.facet-item__value').text();
-            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-            var filterValue = facetTitle + ':' + selectedVal;
-            filterValue = filterValue.trim();
-
-            var data = {
-              event: 'filter',
-              siteSection: section.trim(),
-              filterValue: filterValue
-            };
-
-            dataLayer.push(data);
+          var selectedVal = '';
+          var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
+          if ($(this).find('input.facets-checkbox').length > 0) {
+            // Select value of facets other than color and remove item count.
+            selectedVal = $(this).find('label>span.facet-item__value').text();
           }
+          else {
+            // Select value for color facet filtered and remove item count.
+            selectedVal = $(this).find('a>span.facet-item__value').text();
+          }
+          var data = {
+            event: 'filter',
+            siteSection: section.trim(),
+            filterType: facetTitle,
+            filterValue: selectedVal.trim(),
+          };
+
+          dataLayer.push(data);
         });
 
         // Track sorts.
