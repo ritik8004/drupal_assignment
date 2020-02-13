@@ -233,6 +233,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Processed term data.
    */
   public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
+    $language = $this->languageManager->getLanguage($langcode);
+    $uri_options = ['language' => $language];
+
     $data = [];
 
     $exclude_not_in_menu = $this->getExcludeNotInMenu();
@@ -260,7 +263,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
+        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid], $uri_options)->toString(),
         'active_class' => '',
         'class' => [],
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
@@ -286,7 +289,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if ($term->field_override_target_link_value) {
-        $data[$term->tid]['path'] = UrlHelper::isExternal($term->field_target_link_uri) ? $term->field_target_link_uri : Url::fromUri($term->field_target_link_uri)->toString();
+        $data[$term->tid]['path'] = UrlHelper::isExternal($term->field_target_link_uri)
+          ? $term->field_target_link_uri
+          : Url::fromUri($term->field_target_link_uri, $uri_options)->toString();
         $data[$term->tid]['class'][] = 'overridden-link';
       }
 
@@ -344,6 +349,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Highlight paragraphs array.
    */
   protected function getHighlightParagraph($tid, $langcode, $vid) {
+    $language = $this->languageManager->getLanguage($langcode);
+    $uri_options = ['language' => $language];
+
     $highlight_paragraphs = [];
 
     // We fetch this from first request and shouldn't be empty. If empty,
@@ -382,7 +390,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           ->view('default');
         $paragraph_type = $paragraph->getType();
         if (!empty($image)) {
-          $url = Url::fromUri($image_link[0]['uri']);
+          $url = Url::fromUri($image_link[0]['uri'], $uri_options);
           $highlight_paragraphs[] = [
             'image_link' => $url->toString(),
             'img' => $renderable_image,
@@ -408,7 +416,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
               $subheading_links[] = [
                 'subheading_link_uri' => $sublink['uri'],
                 'subheading_link_title' => $sublink['title'],
-                'link' => $sublink['uri'] == 'internal:#' ? '' : Url::fromUri($sublink['uri']),
+                'link' => $sublink['uri'] == 'internal:#' ? '' : Url::fromUri($sublink['uri'], $uri_options),
               ];
             }
           }
@@ -416,7 +424,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           $highlight_paragraphs[] = [
             'heading_link_uri' => $heading_link[0]['uri'],
             'heading_link_title' => $heading_link[0]['title'],
-            'link' => $heading_link[0]['uri'] == 'internal:#' ? '' : Url::fromUri($heading_link[0]['uri']),
+            'link' => $heading_link[0]['uri'] == 'internal:#' ? '' : Url::fromUri($heading_link[0]['uri'], $uri_options),
             'subheading' => $subheading_links,
             'paragraph_type' => $paragraph->getType(),
           ];

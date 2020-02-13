@@ -72,6 +72,10 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `vagrant ssh` to ssh into your vm
+  * `blt:init:git-hooks`
+  * `blt:init:settings`
+  * `blt frontend:setup`
+  * `blt frontend:build`
   * `blt refresh:local` (from inside of your vm)
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
@@ -90,10 +94,10 @@ Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt 
 
 #### Build React files for local.
 if someone wants to just rebuild the files to use in local `blt react-build` can be used.
-For 
+For
 
 #### React module development.
-Go through the [README file](./docroot/modules/react/README.md) to start with react module development. 
+Go through the [README file](./docroot/modules/react/README.md) to start with react module development.
 
 ### Running behat tests with headless Chrome locally on MacOS
 This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.

@@ -1,0 +1,147 @@
+.matchback-cart-notification-wrapper {
+  position: relative;
+}
+
+@include breakpoint($only-mobile) {
+  #cart_notification {
+    &.matchback-cart-notification {
+      position: fixed;
+      #{$right}: 0;
+      top: -62.5rem;
+      width: 100vw;
+      background: $modal_bg;
+      transition: all 0.5s ease;
+      max-height: 100vh;
+      overflow-y: auto;
+
+      &.has--notification {
+        &::before {
+          content: unset;
+        }
+      }
+
+      .notification,
+      .error {
+        position: relative;
+        padding: 0.9375rem 0.9375rem 4.625rem;
+        background: $matchback_cart_notification_bg;
+        box-shadow: none;
+        border: none;
+        width: 100%;
+        display: flex;
+
+        .col-1 {
+          img {
+            margin-bottom: 0;
+          }
+        }
+
+        .col-2 {
+          position: static;
+          display: flex;
+          flex-direction: column;
+          width: auto;
+          flex-grow: 1;
+
+          a {
+            width: calc(100% - 1.6rem);
+            height: 2.75rem;
+            position: absolute;
+            #{$left}: 0.8rem;
+            margin-top: 0.9375rem;
+            bottom: 0.9375rem;
+            font-size: 1.1875rem;
+            line-height: 2.75rem;
+          }
+
+          .name {
+            font-size: 0.9375rem;
+            line-height: 1.125rem;
+            max-width: 6.125rem;
+            color: $black;
+          }
+
+          .matchback-notification-qty {
+            font-size: 0.875rem;
+            line-height: 1.125rem;
+            color: $matchback_item_code_color;
+            flex-basis: 100%;
+          }
+
+          .matchback-prod-added-text {
+            font-size: 0.875rem;
+            line-height: 1rem;
+          }
+        }
+      }
+
+      .horizontal-crossell {
+        margin-top: 0;
+
+        .view-product-slider {
+          margin-bottom: 0;
+        }
+      }
+
+      .notification-qty,
+      .prod-added-text {
+        display: none;
+      }
+
+      .matchback-cart-notification-close {
+        @include icon(close) {
+          font-size: 1.875rem;
+        }
+
+        position: absolute;
+        #{$right}: 0;
+        #{$left}: auto;
+        top: 0;
+        width: 1.875rem;
+        margin: 0;
+        height: 1.875rem;
+        border: none;
+        z-index: 9;
+        font-size: 0;
+        color: $modal_close_icon;
+        background-color: $modal_close_bg;
+        border-radius: 0;
+        outline: solid transparent;
+        text-indent: inherit;
+
+        &::before {
+          position: absolute;
+          #{$right}: 0;
+          top: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          #{$right}: -1.4rem;
+        }
+      }
+
+      a {
+        &::after {
+          content: unset;
+        }
+      }
+    }
+  }
+
+  .matchback-notification-overlay {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 7;
+      opacity: 1;
+      height: 100%;
+    }
+  }
+}

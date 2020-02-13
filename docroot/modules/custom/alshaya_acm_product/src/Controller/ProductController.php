@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
@@ -10,11 +11,21 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Cache\CacheableAjaxResponse;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Cache\CacheableMetadata;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ProductController.
  */
 class ProductController extends ControllerBase {
+
+  use StringTranslationTrait;
 
   /**
    * SKU Manager.
@@ -32,12 +43,20 @@ class ProductController extends ControllerBase {
   protected $request;
 
   /**
+   * ACM config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $acmConfig;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('config.factory')
     );
   }
 
@@ -48,10 +67,13 @@ class ProductController extends ControllerBase {
    *   SKU Manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
-  public function __construct(SkuManager $sku_manager, RequestStack $request_stack) {
+  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
+    $this->acmConfig = $config_factory->get('alshaya_acm.settings');
   }
 
   /**
@@ -117,6 +139,90 @@ class ProductController extends ControllerBase {
       ];
     }
     return $build;
+  }
+
+  /**
+   * Get related products.
+   *
+   * @param string $sku
+   *   SKU as string.
+   * @param string $type
+   *   Type of related products to get.
+   * @param string $device
+   *   Device type.
+   *
+   * @return \Drupal\Core\Cache\CacheableAjaxResponse
+   *   Response object.
+   */
+  public function getRelatedProducts(string $sku, string $type, string $device) {
+    $response = new CacheableAjaxResponse();
+
+    // Sanity check.
+    if (!in_array($type, [
+      AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL,
+      AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL,
+      AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED,
+    ])) {
+      throw new NotFoundHttpException();
+    }
+
+    $sku_entity = SKU::loadFromSku($sku);
+    if (!($sku_entity instanceof SKU)) {
+      throw new NotFoundHttpException();
+    }
+
+    $node = $this->skuManager->getDisplayNode($sku_entity);
+    if (!($node instanceof NodeInterface)) {
+      throw new NotFoundHttpException();
+    }
+
+    $build = [];
+    $build['#cache']['tags'] = $this->acmConfig->getCacheTags();
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $node->getCacheTags());
+
+    $related_skus = $this->skuManager->getLinkedSkusWithFirstChild($sku_entity, $type);
+    if (!empty($related_skus)) {
+      $related_skus = $this->skuManager->filterRelatedSkus(array_unique($related_skus));
+      $selector = ($device == 'mobile') ? '.mobile-only-block ' : '.above-mobile-block ';
+      $data = [];
+
+      if ($type === 'crosssell') {
+        if ($this->acmConfig->get('display_crosssell')) {
+          $data = [
+            'section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
+            'views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
+          ];
+        }
+      }
+      elseif ($type === 'upsell') {
+        $data = [
+          'section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
+          'views_display_id' => 'block_product_slider',
+        ];
+      }
+      elseif ($type === 'related') {
+        $data = [
+          'section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+          'views_display_id' => 'block_product_slider',
+        ];
+      }
+
+      if (!empty($data)) {
+        $build['related'] = [
+          '#theme' => 'products_horizontal_slider',
+          '#data' => $related_skus,
+          '#section_title' => $data['section_title'],
+          '#views_name' => 'product_slider',
+          '#views_display_id' => $data['views_display_id'],
+        ];
+        $response->addCommand(new ReplaceCommand($selector . '.' . $type . '-products', render($build)));
+      }
+    }
+
+    // Add cache metadata.
+    $response->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
+
+    return $response;
   }
 
 }

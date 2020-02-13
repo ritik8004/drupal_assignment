@@ -1,0 +1,9 @@
+@include breakpoint($only-mobile) {
+  #cart_notification {
+    &.matchback-cart-notification {
+      &.has--notification {
+        top: -2.875rem;
+      }
+    }
+  }
+}

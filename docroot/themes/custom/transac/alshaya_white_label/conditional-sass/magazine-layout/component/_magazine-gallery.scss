@@ -181,50 +181,13 @@
   }
 
   .pdp-image {
-    .cloud-zoom-lens {
-      border: 1px solid $cloudzoom_hovertext;
-      background-color: rgba(255, 255, 255, 0.5);
-      display: none;
-
-      @include breakpoint($desktop) {
-        display: block;
-      }
-    }
-
-    &:nth-child(2n) {
-      #cloud-zoom-big {
-        #{$left}: calc(100% + 0.875rem) !important;
-      }
-    }
-
-    &:nth-child(2n+1) {
-      #cloud-zoom-big {
-        #{$left}: calc(200% + 1.625rem) !important;
-      }
-    }
+    cursor: pointer;
 
     @include breakpoint($tablet) {
-      &:nth-child(2n) {
-        grid-column: 2 / -1;
-      }
-
-      &:nth-child(2n+1) {
-        grid-column: 1 / 2;
-      }
-
-      &:nth-child(3n+2):not(:nth-child(2)) {
+      &.last:nth-child(odd) {
         width: 47%;
         margin: 0 auto;
-      }
-
-      &.last {
-        &:nth-child(2n+1) {
-          grid-column: 1 / -1;
-
-          #cloud-zoom-big {
-            #{$left}: calc(150% + 3.125rem) !important;
-          }
-        }
+        grid-column: 1 / -1;
       }
     }
 

@@ -15,7 +15,7 @@
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
 
       // Process main pdp gallery only once.
-      var zoomContainer = $('.acq-content-product #product-zoom-container');
+      var zoomContainer = $('.acq-content-product .content__main #product-zoom-container');
       if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
         zoomContainer.addClass('product-zoom-processed');
 
@@ -56,17 +56,15 @@
           myDialog.showModal();
         });
 
-        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
-          // Closing modal window on click of the full screen slider images.
-          $('#product-full-screen-gallery img').once('attached').on('click', function (e) {
-            var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
-
-            // Closing modal window before slick library gets removed.
-            myDialog.close();
-            productGallery.slick('unslick');
-            $('body').removeClass('pdp-modal-overlay');
-            e.preventDefault();
-          });
+        // $(document).once() because we need the same functionality for free gifts pdp modal too and we are
+        // using HtmlCommand to render the free gifts pdp (Check viewProduct() in FreeGiftController.php).
+        $(document).once('dialog-opened').on('click','.dialog-product-image-gallery-container #product-full-screen-gallery li.slick-slide', function (e) {
+          var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+          // Closing modal window before slick library gets removed.
+          $(this).closest('.dialog-product-image-gallery-container').find($('button.ui-dialog-titlebar-close')).trigger('mousedown');
+          productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
         });
 
         // Videos inside main PDP slider.
@@ -83,9 +81,10 @@
           else {
             // Handle click on image thumbnails.
             var imageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('href');
+            var zoomImageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('data-zoom-url');
             if (imageUrl !== null || imageUrl !== 'undefined') {
               $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl)
-              .parent().find('.product-image-zoom-placeholder-content').css({'background-image': 'url(' + imageUrl + ')'});
+              .parent().find('.product-image-zoom-placeholder-content').css({'background-image': 'url(' + zoomImageUrl + ')'});
             }
           }
           // Hide Product labels on video slides.
@@ -198,7 +197,7 @@
             $(this).parent().find('img').trigger('click');
           })
           .children('.product-image-zoom-placeholder-content')
-          .css({'background-image': 'url('+ $(this).find('img').attr('src') +')'});
+          .css({'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')'});
           $(this).find('img').on('load', function () {
             var imgWidth = $(this).width();
             var containerWidth = $(this).parent().width();
@@ -214,7 +213,7 @@
     toggleProductImageGallery();
   });
 
-  $(document).once('bind-slick-nav').on('click', '.slick-prev, .slick-next', function () {
+  $(document).once('bind-slick-nav').on('click', '#product-zoom-container .slick-prev, #product-zoom-container .slick-next', function () {
     var slider = $(this).closest('.slick-slider');
     setTimeout(function () {
       var currentSlide = slider.find('li.slick-current');
@@ -578,7 +577,7 @@
     slidesToShow: 1,
     vertical: false,
     dots: true,
-    arrows: false,
+    arrows: true,
     centerMode: false,
     infinite: false,
     focusOnSelect: true,

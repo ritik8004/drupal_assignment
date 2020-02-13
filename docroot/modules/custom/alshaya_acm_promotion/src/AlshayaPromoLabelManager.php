@@ -400,7 +400,7 @@ class AlshayaPromoLabelManager {
         $eligible_parents = array_intersect($parents, $eligibleSKUs);
         if (!empty($eligible_parents)) {
           $eligible_children = $this->skuManager->fetchChildSkuTexts($eligible_parents);
-          $eligibleSKUs += $eligible_children;
+          $eligibleSKUs = array_merge($eligibleSKUs, $eligible_children);
         }
 
         if (in_array($currentSKU->getSku(), $eligibleSKUs) && !empty(array_intersect($eligibleSKUs, $cartSKUs))) {
@@ -645,8 +645,15 @@ class AlshayaPromoLabelManager {
    *   Render array.
    */
   protected function getFreeGiftDisplay($promotion_id, array $free_gift_promotion, array $free_skus) {
+    $coupon = $free_gift_promotion['coupon_code'][0]['value'] ?? '';
+
     // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
-    if ($free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
+    // This is for PDP. On PDP we display the list only if there are
+    // more than one free gift available.
+    if (
+      $free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU
+      && count($free_skus) > 1
+    ) {
       $link = Link::createFromRoute(
         $free_gift_promotion['text'],
         'alshaya_acm_promotion.free_gifts_list',
@@ -655,9 +662,7 @@ class AlshayaPromoLabelManager {
           'js' => 'nojs',
         ],
         [
-          'query' => [
-            'coupon' => $free_gift_promotion['coupon_code'][0]['value'] ?? '',
-          ],
+          'query' => ['coupon' => $coupon],
           'attributes' => [
             'class' => ['use-ajax'],
             'data-dialog-type' => 'modal',
@@ -705,11 +710,19 @@ class AlshayaPromoLabelManager {
 
       $free_sku_title = $free_sku_image = [
         '#type' => 'link',
-        '#url' => Url::fromRoute('alshaya_acm_promotion.free_gift_modal',
+        '#url' => Url::fromRoute(
+          'alshaya_acm_promotion.free_gift_modal',
           [
             'acq_sku' => $free_sku_entity->id(),
             'js' => 'nojs',
-          ]),
+          ],
+          [
+            'query' => [
+              'promotion_id' => $promotion_id,
+              'coupon' => $coupon,
+            ],
+          ]
+        ),
         '#attributes' => [
           'class' => ["use-ajax"],
           'data-dialog-type' => "modal",

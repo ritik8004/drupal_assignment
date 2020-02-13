@@ -18,22 +18,6 @@
         });
       }
 
-      $('#drupal-modal .short-description-wrapper').once('readmore').each(function () {
-        $(this).on('click', '.read-more-description-link-gift', function () {
-          $(this).parent().toggleClass('show-gift-detail');
-          $(this).parent().find('.desc-wrapper:first-child').hide();
-          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
-          $(this).parent().scroll();
-          $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
-        });
-        $(this).on('click', '.show-less-link', function () {
-          $(this).parent().toggleClass('show-gift-detail');
-          $(this).parent().find('.desc-wrapper:first-child').show();
-          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
-          $(this).replaceWith('<span class="read-more-description-link-gift">' + Drupal.t('Read more') + '</span>');
-        });
-      });
-
       if (context === document) {
         // Toggle for Product description.
         $('.read-more-description-link').once('readmore').on('click', function () {
@@ -41,30 +25,34 @@
           if ($('.click-collect-all-stores').hasClass('desc-open')) {
             $('.click-collect-all-stores').toggleClass('desc-open');
           }
-          $('.c-pdp .description-wrapper').toggleClass('desc-open');
+          $(this).parents('.short-description-wrapper').siblings('.description-wrapper').toggleClass('desc-open');
         });
         var mobileStickyHeaderHeight = $('.branding__menu').height();
 
-        $('.c-pdp .short-description-wrapper', context).once('readmore').each(function () {
-          $(this).on('click', '.read-more-description-link-mobile', function () {
-            $(this).parent().toggleClass('show-detail');
-            $(this).parent().find('.desc-wrapper:first-child').hide();
-            $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
-            $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
-          });
-          $(this).on('click', '.show-less-link', function () {
-            $(this).parent().toggleClass('show-detail');
-            $(this).parent().find('.desc-wrapper:first-child').show();
-            $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+        $(document).on('click', '.read-more-description-link-mobile', function () {
+          $(this).parent().toggleClass('show-detail');
+          $(this).parent().find('.desc-wrapper:first-child').hide();
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
+        });
+        $(document).on('click', '.show-less-link', function () {
+          $(this).parent().toggleClass('show-detail');
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).parent().find('.desc-wrapper:first-child').show();
+          var animate = $(this).parents('.matchback-description-wrapper') ? false : true;
+          if (animate) {
             $(this).replaceWith('<span class="read-more-description-link-mobile">' + Drupal.t('Read more') + '</span>');
             $('html,body').animate({
               scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
             }, 'slow');
-          });
+          }
+          else {
+            $(this).replaceWith('<span class="read-more-description-link-mobile matchback-readmore">' + Drupal.t('Read more') + '</span>');
+          }
         });
 
         $('.close').once('readmore').on('click', function () {
-          $('.c-pdp .description-wrapper').toggleClass('desc-open');
+          $(this).parents('.description-wrapper').toggleClass('desc-open');
         });
 
         $(document).on('click', function (e) {

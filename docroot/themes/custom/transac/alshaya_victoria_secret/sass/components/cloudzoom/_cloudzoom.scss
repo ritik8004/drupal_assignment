@@ -61,6 +61,7 @@
           height: auto;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 25rem;
+          margin: auto;
 
           img {
             height: auto !important;
@@ -141,7 +142,7 @@
 }
 
 @include breakpoint($only-tablet) {
-  #drupal-modal {
+  #drupal-modal:not(.free-gift-listing-modal) {
     #lightSlider {
       &.pager-yes {
         padding: 0 2.4375rem;

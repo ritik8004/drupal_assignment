@@ -181,8 +181,8 @@
 .paragraph--type--product-carousel-category,
 .horizontal-upell,
 .horizontal-related,
-.horizontal-crossell,
-.block-basket-horizontal-recommendation {
+.block-basket-horizontal-recommendation,
+.horizontal-crossell {
   .view-product-slider {
     @include breakpoint($upto-desktop) {
       .ajax-progress-throbber .throbber {

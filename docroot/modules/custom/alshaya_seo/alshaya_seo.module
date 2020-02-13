@@ -431,5 +431,5 @@ function alshaya_seo_metatags_alter(array &$metatags, array $context) {
   $metatags['twitter_cards_page_url'] = ($metatags['canonical_url']) ?? '';
   $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
   $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
-  $metatags['twitter_cards_image'] = ($metatags['image']) ?? '';
+  $metatags['twitter_cards_image'] = ($metatags['image_src']) ?? '';
 }

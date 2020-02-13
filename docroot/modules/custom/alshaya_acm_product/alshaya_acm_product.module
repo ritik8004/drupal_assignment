@@ -6,7 +6,6 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
@@ -527,46 +526,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attributes']['class'][] = 'product-out-of-stock';
         }
 
-        // Get cross-sell block for the product.
-        if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
-          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_CROSSSELL))) {
-            $build['cross_sell'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
-              '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-              '#views_name' => 'product_slider',
-              '#views_display_id' => 'block_product_slider',
-            ];
-
-            // Weight will have no effect later once template is modified.
-            $build['cross_sell']['#weight'] = 11;
-          }
-        }
-
-        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_UPSELL))) {
-          $build['up_sell'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
-            '#section_title' => t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
-            '#views_name' => 'product_slider',
-            '#views_display_id' => 'block_product_slider',
-          ];
-          // Weight will have no effect later once template is modified.
-          $build['up_sell']['#weight'] = 10;
-        }
-
-        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, AcqSkuLinkedSku::LINKED_SKU_TYPE_RELATED))) {
-          $build['related'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
-            '#section_title' => t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
-            '#views_name' => 'product_slider',
-            '#views_display_id' => 'block_product_slider',
-          ];
-          // Weight will have no effect later once template is modified.
-          $build['related']['#weight'] = 11;
-        }
-
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
@@ -649,23 +608,34 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
 
       }
+      elseif ($view_mode == 'matchback') {
+        $context = 'matchback';
 
-      // Process price block and gallery for modal and full view mode.
-      if (in_array($view_mode, ['modal', 'full'])) {
+        $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
+        $build['item_code']['#markup'] = $sku;
+      }
+
+      // Process price block and gallery for modal,
+      // matchback and full view mode.
+      if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
 
-        $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
-        if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
-          $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
-        }
-        else {
-          $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+        // To attach these libraries for full and modal view mode.
+        if (in_array($view_mode, ['modal', 'full'])) {
+          $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+          $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
+          $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
+          if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
+            $build['#attached']['library'][] = 'alshaya_product_zoom/magazine_gallery';
+          }
+          else {
+            $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
+          }
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($gallery)
+        $settingsKey = ($view_mode == 'matchback') ? 'matchback' : 'productInfo';
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
 
@@ -678,15 +648,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
           if (!empty($child)) {
             $childVariant = $skuInfo->getVariantInfo($child, $pdp_layout);
-            $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
+            $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($childVariant['gallery']) ? $childVariant['gallery'] : '';
           }
         }
 
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['layout'] = $pdp_layout;
-        $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['identifier'] = $sku_identifier;
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['layout'] = $pdp_layout;
+        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['identifier'] = $sku_identifier;
 
         if ($sku_entity->bundle() == 'configurable') {
-          $build['#attached']['drupalSettings']['productInfo'][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
           $build['#attached']['drupalSettings']['showImagesFromChildrenAfterAllOptionsSelected'] = $skuManager->showImagesFromChildrenAfterAllOptionsSelected();
         }
 
@@ -732,10 +702,28 @@ function alshaya_acm_product_get_home_delivery_config() {
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  if (in_array($view_mode, ['modal', 'free_gift'])) {
+    // Add PDP slider position config to variable so it is available in themes.
+    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
+
+    // Add PDP slider position config to drupalSettings so we can use it in JS.
+    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
+
+    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+
+    // Number of items to show in a slider on PDP.
+    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
+    $build['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
+  }
+
   if ($view_mode == 'modal') {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
@@ -750,31 +738,14 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     // Attach libraries.
     $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-
     $build['price_block']['#markup'] = '<div class="free-price-markup">' . t('FREE') . '</div>';
-
     $build['item_code']['#markup'] = $entity->getSku();
-
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
 
     $sku_media = $skuImagesManager->getFirstImage($entity);
-
     if ($sku_media) {
       $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $entity->label(), '192x168');
     }
-
-    // Add PDP slider position config to variable so it is available in themes.
-    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
-
-    // Add PDP slider position config to drupalSettings so we can use it in JS.
-    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
-
-    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
-    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
-    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
-    // Number of items to show in a slider on PDP.
-    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
-    $build['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
   }
 }
 
@@ -1174,6 +1145,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['combinations'] = $combinations;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'];
 
+    // Get the first child from attribute_sku which has values sorted
+    // same as add to cart form.
+    $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = reset($sorted_variants);
+
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
     /** @var \Drupal\alshaya_acm_product\Service\AddToCartFormHelper $addToCartFormHelper */
@@ -1213,6 +1189,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       foreach ($configurable_options as $configurable_option) {
         if (in_array($configurable_option, $size_guide['attributes'])) {
           $form['ajax']['configurables'][$configurable_option]['#prefix'] = $size_guide['link'];
+          break;
         }
       }
     }
@@ -1739,5 +1716,19 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
         $all_block->save();
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_acq_commerce_price().
+ */
+function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
+  $acm_settings = \Drupal::config('alshaya_acm.settings');
+  $append_each_to_price = $acm_settings->get('append_each_to_price');
+  // With matchback enabled, we will have 'each' word added to price
+  // based on the quantity for main product as well as matchback products
+  // following the host site implementation.
+  if ($acm_settings->get('show_crosssell_as_matchback') && $append_each_to_price) {
+    $variables['append_each_to_price'] = $append_each_to_price;
   }
 }
