@@ -1,0 +1,32 @@
+.order-quantity-limit-message {
+  min-width: 12.625rem;
+  height: 2.125rem;
+  border-radius: 2px;
+  background-color: $order_qty_limit_bg;
+  padding-#{$left}: 0.3125rem;
+  padding-#{$right}: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $order_qty_limit_txt;
+  position: relative;
+  font-size: 0.875rem;
+  font-family: $alshaya-bold;
+  font-weight: normal;
+
+  @include icon(infomation, before) {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding-#{$right}: 0.3125rem;
+  }
+
+  &.limit-reached {
+    @include icon(warning, before) {
+      color: $order_qty_limit_reached_icon;
+    }
+
+    border: 1px solid $order_limit_border;
+    color: $order_qty_limit_reached_txt;
+    background-color: $order_qty_limit_reached_bg;
+  }
+}
