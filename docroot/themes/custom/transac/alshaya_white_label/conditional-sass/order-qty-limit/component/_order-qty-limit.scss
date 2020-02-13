@@ -1,4 +1,18 @@
 .order-quantity-limit-message {
+  &.mobile-only {
+    @include breakpoint($tablet) {
+      display: none;
+    }
+
+    @include breakpoint($mobile) {
+      display: inline-flex;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+
   min-width: 12.625rem;
   height: 2.125rem;
   border-radius: 2px;
