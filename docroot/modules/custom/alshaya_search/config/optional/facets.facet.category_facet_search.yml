@@ -25,8 +25,8 @@ widget:
     show_numbers: true
     soft_limit: 0
 query_operator: or
-use_hierarchy: false
-expand_hierarchy: false
+use_hierarchy: true
+expand_hierarchy: true
 enable_parent_when_child_gets_disabled: true
 hard_limit: 0
 exclude: false
