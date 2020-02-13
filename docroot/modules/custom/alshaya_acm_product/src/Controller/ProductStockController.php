@@ -144,8 +144,18 @@ class ProductStockController extends ControllerBase {
         // If items in cart is more than max_sale_qty then
         // disable ADD TO BAG and quantity dropdown.
         if ($max_sale_qty !== NULL && $current_variant_in_cart_qty >= $max_sale_qty) {
-          $orderLimitData['#attached']['drupalSettings']['productInfo'][$data['selected_parent_sku']]['variants'][$variant_sku]['orderLimitMsg'] = $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE);
-          $orderLimitData['#attached']['drupalSettings']['productInfo'][$data['selected_parent_sku']]['variants'][$variant_sku]['orderLimitExceeded'] = TRUE;
+          $orderLimitData = [
+            'productInfo' => [
+              $data['selected_parent_sku'] => [
+                'variants' => [
+                  $variant_sku => [
+                    'orderLimitMsg' => $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE),
+                    'orderLimitExceeded' => TRUE,
+                  ],
+                ],
+              ],
+            ],
+          ];
           $return->addCommand(new SettingsCommand($orderLimitData, TRUE));
           $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$data['selected_parent_sku'], $variant_sku]));
         }
