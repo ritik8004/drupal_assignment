@@ -432,6 +432,18 @@ $conductors = [
     'hmac_secret' => 'N2QzZGUxMzEtZTNjYy00',
     'site_id' => 178,
   ],
+  'wekw_prod' => [
+    'site_id' => 183,
+  ],
+  'wesa_prod' => [
+    'site_id' => 184,
+  ],
+  'weae_prod' => [
+    'site_id' => 185,
+  ],
+  'weeg_prod' => [
+    'site_id' => 186,
+  ],
 ];
 
 // Default values for each ACM middleware.

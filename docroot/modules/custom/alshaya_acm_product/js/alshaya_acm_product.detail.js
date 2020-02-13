@@ -144,8 +144,17 @@
 
         if (drupalSettings[productKey][sku]['variants']) {
           var variants = drupalSettings[productKey][sku]['variants'];
-          var selectedSku = Object.keys(variants)[0];
-          var selected = parseInt(Drupal.getQueryVariable('selected'));
+
+          // Use first child provided in settings if available.
+          // Use the first variant otherwise.
+          var selectedSku = (typeof drupalSettings.configurableCombinations[sku]['firstChild'] === 'undefined')
+            ? Object.keys(variants)[0]
+            : drupalSettings.configurableCombinations[sku]['firstChild'];
+
+          // Use selected from query parameter only for main product.
+          var selected = ($(node).attr('data-vmode') === 'full')
+            ? parseInt(Drupal.getQueryVariable('selected'))
+            : 0;
 
           if (selected > 0) {
             for (var i in variants) {

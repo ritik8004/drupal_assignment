@@ -419,6 +419,22 @@ $magentos = [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
+  'we_prod' => [
+    'url' => 'https://wes.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 14],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 5],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 8, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [
