@@ -8,8 +8,9 @@
   .multistep-login {
     fieldset {
       .fieldset-legend {
-        font-family: $hnm-demibold;
-        display: inline-block;
+        font-family: $primary-font;
+        text-transform: capitalize;
+        font-weight: 600;
       }
     }
 
@@ -18,31 +19,24 @@
       text-transform: uppercase;
     }
 
-    .form-submit {
-      letter-spacing: 1px;
-    }
-
-    .edit-checkout-as-guest {
-      letter-spacing: 1px;
-    }
-
     .ashaya-spc-login-form {
       .form-actions {
         button {
-          font-family: $hnm-demibold;
+          font-family: $primary-font;
         }
       }
 
       .request-password-link {
-        font-family: $hnm-demibold;
-        text-decoration: underline;
+        font-family: $primary-font;
+        font-weight: 600;
       }
     }
 
     .checkout-login-actions-wrapper {
       a {
-        font-family: $hnm-demibold;
+        font-family: $primary-font;
         display: inline-block;
+        font-weight: 600;
       }
     }
 

@@ -1,16 +1,14 @@
 .alias--cart-login {
-  .block-page-title-block {
-    h1 {
-      letter-spacing: 1px;
-    }
-  }
-
   .multistep-login {
     fieldset {
       .fieldset-legend {
-        font-family: $hnm-demibold;
-        display: inline-block;
+        font-family: $bbw-thin;
+        text-transform: capitalize;
       }
+    }
+
+    .edit-checkout-as-guest {
+      font-family: $bbw-bold;
     }
 
     .form-submit,
@@ -18,31 +16,24 @@
       text-transform: uppercase;
     }
 
-    .form-submit {
-      letter-spacing: 1px;
-    }
-
-    .edit-checkout-as-guest {
-      letter-spacing: 1px;
-    }
-
     .ashaya-spc-login-form {
       .form-actions {
         button {
-          font-family: $hnm-demibold;
+          font-family: $bbw-thin;
         }
       }
 
       .request-password-link {
-        font-family: $hnm-demibold;
-        text-decoration: underline;
+        font-family: $bbw-thin;
+        font-weight: 700;
       }
     }
 
     .checkout-login-actions-wrapper {
       a {
-        font-family: $hnm-demibold;
+        font-family: $bbw-thin;
         display: inline-block;
+        font-weight: 700;
       }
     }
 
