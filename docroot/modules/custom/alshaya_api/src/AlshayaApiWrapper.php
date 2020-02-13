@@ -979,7 +979,7 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to get customer address form.
+   * Authenticate customer through magento api.
    *
    * @param string $mail
    *   The mail address.
@@ -987,7 +987,7 @@ class AlshayaApiWrapper {
    *   The customer password.
    *
    * @return array
-   *   The Form array from API response OR empty array.
+   *   The array customer data OR empty array.
    */
   public function authenticateCustomerOnMagento(string $mail, string $pass) {
     $endpoint = 'customers/by-login-and-password';
@@ -1123,7 +1123,7 @@ class AlshayaApiWrapper {
       // Update password api.
       if (!empty($response) && !empty($options['password'])) {
         try {
-          $this->updateCustomerPass($customer, $options['password']);
+          $this->updateCustomerPass($response, $options['password']);
         }
         catch (\Exception $e) {
           throw $e;

@@ -302,10 +302,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     try {
       $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
-      $this->moduleHandler->loadInclude('alshaya_api', 'inc', 'alshaya_api.utility');
+      $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
       // Update the data in Drupal to match the values in Magento.
-      alshaya_api_update_user_data($account, $updated_customer);
+      alshaya_acm_customer_update_user_data($account, $updated_customer);
 
       // This is not reliable but only solution available.
       // @TODO: Try and find a better solution for this.
@@ -359,10 +359,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     try {
       $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
-      $this->moduleHandler->loadInclude('alshaya_api', 'inc', 'alshaya_api.utility');
+      $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
       // Update the data in Drupal to match the values in Magento.
-      alshaya_api_update_user_data($account, $updated_customer);
+      alshaya_acm_customer_update_user_data($account, $updated_customer);
 
       return TRUE;
     }
