@@ -192,6 +192,26 @@ class AlshayaSpcController extends ControllerBase {
   }
 
   /**
+   * Checkout Confirmation page.
+   *
+   * @return array
+   *   Markup for checkout confirmation page.
+   */
+  public function checkoutConfirmation() {
+    // @todo: Pull order details from MDC for the recent order.
+    return [
+      '#type' => 'markup',
+      '#markup' => '<div id="spc-checkout-confirmation"></div>',
+      '#attached' => [
+        'library' => [
+          'alshaya_spc/checkout-confirmation',
+          'alshaya_white_label/spc-checkout-confirmation',
+        ],
+      ],
+    ];
+  }
+
+  /**
    * Verifies the mobile number.
    *
    * @param string $mobile

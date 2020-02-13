@@ -7,6 +7,15 @@ alshaya_spc.checkout:
     # All user should able to access login page, validation on frontend.
     _access: 'TRUE'
 
+alshaya_spc.checkout.confirmation:
+  path: '/checkout/confirmation'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkoutConfirmation'
+    _title: 'Order Confirmation'
+  requirements:
+    # All user should able to access login page, validation on frontend.
+    _access: 'TRUE'
+
 alshaya_spc.login:
   path: '/cart/login'
   defaults:

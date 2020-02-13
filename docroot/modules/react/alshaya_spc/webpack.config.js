@@ -4,7 +4,8 @@ var config = {
   entry: {
     cart: './js/cart',
     minicart: './js/minicart',
-    checkout: './js/checkout'
+    checkout: './js/checkout',
+    checkout_confirmation: './js/checkout-confirmation'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

@@ -21,7 +21,7 @@ function getPosition (element) {
  */
 function getSiderBarOffsetTop() {
   let offSet = 0;
-  if (document.getElementsByClassName('page-standard')[0].classList.contains('spc-checkout')) {
+  if (document.getElementsByClassName('page-standard')[0].classList.contains('spc-checkout-sticky-sidebar')) {
     offSet = document.getElementsByClassName('site-brand-wrapper')[0].offsetHeight
       + document.getElementById('block-page-title').offsetHeight;
   }

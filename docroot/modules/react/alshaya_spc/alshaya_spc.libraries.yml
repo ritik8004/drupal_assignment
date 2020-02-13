@@ -31,3 +31,11 @@ add_to_cart:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+
+checkout-confirmation:
+  version: 1.x
+  footer: true
+  js:
+    dist/checkout_confirmation.bundle.js: { }
+  dependencies:
+    - alshaya_react/react
