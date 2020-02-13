@@ -1,0 +1,22 @@
+#hits {
+  .js-pager__items.pager {
+    margin-bottom: 1.125rem;
+
+    li.pager__item {
+      button {
+        text-transform: uppercase;
+        font-family: $bbw-thin;
+        font-size: 0.875rem;
+        padding-top: 0.55rem;
+      }
+    }
+
+    .ais-Stats-text {
+      text-transform: capitalize;
+    }
+
+    .progressbar-progress {
+      color: $peacock-blue;
+    }
+  }
+}
