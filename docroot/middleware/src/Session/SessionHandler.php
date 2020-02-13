@@ -82,8 +82,8 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
         'timestamp' => (int) $_SERVER['REQUEST_TIME'],
       ];
 
-      $query = "INSERT INTO sessions (sid, uid, hostname, session, timestamp) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE sid = ?";
-      $values = array_merge(array_values($fields), [$fields['sid']]);
+      $query = "INSERT INTO sessions (sid, uid, hostname, session, timestamp) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE session = ?, timestamp = ?";
+      $values = array_merge(array_values($fields), [$fields['session'], $fields['timestamp']]);
       $stmt = $this->connection->executeQuery($query, $values);
       $stmt->execute();
       return TRUE;

@@ -461,7 +461,7 @@ class ProductResource extends ResourceBase {
     $attr_values = array_column($attributes, 'value', 'attribute_code');
     foreach ($values as $attribute_code => &$value) {
       $value['attribute_code'] = $attribute_code;
-      if ($attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
+      if (isset($attr_values[str_replace('attr_', '', $attribute_code)]) && $attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
         $value['value'] = (string) $attr_value;
       }
     }

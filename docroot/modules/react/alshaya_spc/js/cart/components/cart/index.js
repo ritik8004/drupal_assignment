@@ -34,10 +34,12 @@ export default class Cart extends React.Component {
     // Listen to `refreshCart` event triggered from `mini-cart/index.js`.
     document.addEventListener('refreshCart', (e) => {
       const data = e.detail.data();
+      checkCartCustomer(data);
 
       if (typeof data === 'undefined' || data.cart_id === null) {
         const prevState = this.state;
-        this.setState({ ...prevState, wait: false});
+        console.log(prevState);
+        this.setState({ ...prevState, wait: false });
       }
       else {
         this.setState(state => ({
@@ -65,7 +67,6 @@ export default class Cart extends React.Component {
         // Make side bar sticky.
         stickySidebar();
       }
-      checkCartCustomer(data);
 
       // To show the success/error message on cart top.
       if (data.message !== undefined) {
@@ -86,44 +87,44 @@ export default class Cart extends React.Component {
   };
 
   render() {
-      if (this.state.wait) {
-        return <Loading loadingMessage={Drupal.t('loading your cart ...')}/>
-      }
+    if (this.state.wait) {
+      return <Loading loadingMessage={Drupal.t('loading your cart ...')} />
+    }
 
-      if (!this.state.wait && this.state.items.length === 0) {
-        return (
-          <React.Fragment>
-            <EmptyResult Message={Drupal.t('your shopping basket is empty.')}/>
-          </React.Fragment>
-        );
-      }
-
+    if (!this.state.wait && this.state.items.length === 0) {
       return (
         <React.Fragment>
-          <div className="spc-pre-content">
-            <CheckoutMessage type={this.state.message_type}>
-              {this.state.message}
-            </CheckoutMessage>
-            <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} />
-          </div>
-          <div className="spc-main">
-            <div className="spc-content">
-              <SectionTitle>
-                {Drupal.t('my shopping bag (@qty items)', {'@qty': this.state.total_items})}
-              </SectionTitle>
-              <CartItems items={this.state.items} />
-              <VatFooterText />
-            </div>
-            <div className="spc-sidebar">
-              <CartPromoBlock coupon_code={this.state.coupon_code} />
-              <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button={true} />
-            </div>
-          </div>
-          <div className="spc-post-content">
-            <CartRecommendedProducts recommended_products={this.state.recommended_products} />
-          </div>
+          <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
         </React.Fragment>
       );
+    }
+
+    return (
+      <React.Fragment>
+        <div className="spc-pre-content">
+          <CheckoutMessage type={this.state.message_type}>
+            {this.state.message}
+          </CheckoutMessage>
+          <MobileCartPreview total_items={this.state.total_items} totals={this.state.totals} />
+        </div>
+        <div className="spc-main">
+          <div className="spc-content">
+            <SectionTitle>
+              {Drupal.t('my shopping bag (@qty items)', { '@qty': this.state.total_items })}
+            </SectionTitle>
+            <CartItems items={this.state.items} />
+            <VatFooterText />
+          </div>
+          <div className="spc-sidebar">
+            <CartPromoBlock coupon_code={this.state.coupon_code} />
+            <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button={true} />
+          </div>
+        </div>
+        <div className="spc-post-content">
+          <CartRecommendedProducts recommended_products={this.state.recommended_products} />
+        </div>
+      </React.Fragment>
+    );
   }
 
 }

@@ -144,7 +144,7 @@ class LocalCommand extends BltTasks {
 
     $info = $this->validateAndPrepareInfo($site, $env);
 
-    if ($env == 'live') {
+    if (strpos($env, 'live') > -1) {
       $this->say('=========================');
       $this->say('=========================');
       $this->say('Please DO NOT SLOW DOWN THE PRODUCTION SERVER');

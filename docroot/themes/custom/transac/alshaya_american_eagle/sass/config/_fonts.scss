@@ -1,0 +1,82 @@
+// Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_american_eagle/fonts';
+
+@font-face {
+  font-family: "AvenirNext-DemiBold";
+  src: url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext-DemiBold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNext";
+  src: url("#{$base_theme_fonts_directory_path}/AvenirNext.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/AvenirNext.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/AvenirNext.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma";
+  src: url("#{$base_theme_fonts_directory_path}/Tahoma.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Tahoma.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Font Family
+$aeo-bold: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
+$aeo-bold-nodir: 'AvenirNext-DemiBold', 'Tahoma-Bold', 'Arial';
+
+$aeo-thin: 'AvenirNext', 'Tahoma', 'Arial';
+$aeo-thin-nodir: 'AvenirNext', 'Tahoma', 'Arial';
+
+$aeo-arabic-bold: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';
+$aeo-arabic-bold-nodir: 'Tahoma-Bold', 'AvenirNext-DemiBold', 'Arial';
+
+$aeo-arabic-thin: 'Tahoma', 'AvenirNext', 'Arial';
+$aeo-arabic-thin-nodir: 'Tahoma', 'AvenirNext', 'Arial';
+
+$arial: $aeo-thin;
+$arial-nodir: $aeo-thin-nodir;
+$alshaya-bold: $aeo-bold;
+$alshaya-arabic-bold: $aeo-arabic-bold;
+$alshaya-thin: $aeo-thin;
+$alshaya-arabic-thin: $aeo-arabic-thin;

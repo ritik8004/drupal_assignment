@@ -10,7 +10,7 @@
         return false;
       });
 
-      $('.edit-add-to-cart', context).on('mousedown', function () {
+      $('.edit-add-to-cart', context).once('spc-add-to-cart').on('mousedown', function () {
         var that = this;
         setTimeout(function () {
           // If no ife error, we process further for add to cart.
