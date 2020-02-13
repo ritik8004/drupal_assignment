@@ -3578,27 +3578,31 @@ class SkuManager {
    *   Quantity limit.
    */
   public function getCartItemQtyLimit($variant_sku) {
+    $cart_items = array_column($this->cartHelper->getCart()->items(), 'qty', 'sku');
     $qty_limit = 0;
-    if ($this->cartHelper->getCart()) {
-      $cart_items = array_column($this->cartHelper->getCart()
-        ->items(), 'qty', 'sku');
-    }
+    $variant_parent = $this->getParentSkuBySku($variant_sku);
+    // Get cart items.
+    $cart_items = $this->cartHelper->getCart() ? array_column($this->cartHelper->getCart()->items(), 'qty', 'sku') : [];
 
     if (!empty($cart_items)) {
-      $variant_parent_sku = $this->getParentSkuBySku($variant_sku)->getSku();
-      if ($variant_parent_sku) {
-        foreach ($cart_items as $item => $qty) {
-          $cart_item_parent_sku = $this->getParentSkuBySku($item)->getSku();
-          if ($cart_item_parent_sku === $variant_parent_sku) {
-            $qty_limit += $qty;
+      if ($variant_parent) {
+        // Check if limit set at parent level.
+        $plugin = $variant_parent->getPluginInstance();
+        $variant_parent_sku = $variant_parent->getSku();
+        $parent_max_sale_qty = $plugin->getMaxSaleQty($variant_parent_sku);
+        if ($parent_max_sale_qty !== NULL) {
+          foreach ($cart_items as $item => $qty) {
+            $cart_item_parent_sku = $this->getParentSkuBySku($item)->getSku();
+            if ($cart_item_parent_sku === $variant_parent_sku) {
+              $qty_limit += $qty;
+            }
           }
         }
-      }
-      else {
-        $qty_limit = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
+        else {
+          $qty_limit = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
+        }
       }
     }
-
     return $qty_limit;
   }
 
