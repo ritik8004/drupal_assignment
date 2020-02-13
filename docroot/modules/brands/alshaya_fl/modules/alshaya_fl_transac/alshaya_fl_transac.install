@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Site\Settings;
-use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_update_N().
@@ -14,7 +13,7 @@ use Drupal\search_api\Entity\Index;
  * Queue items for acquia_search_index.
  */
 function alshaya_fl_transac_update_8009() {
-  $index = Index::load('acquia_search_index');
+  $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('acquia_search_index');
   $index->reindex();
 }
 
