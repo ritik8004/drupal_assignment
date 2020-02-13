@@ -9,16 +9,11 @@
   Drupal.behaviors.seoGoogleTagManagerSearchList = {
     attach: function (context, settings) {
       // Trigger incase of filter selected.
-      drupalSettings.alshayaSeoGtmFilTertriggered = false;
-      $(document).once('alshaya-seo-gtm-filter-search').ready(function(context, settings) {
-        if ( drupalSettings.alshayaSeoGtmFilTertriggered ) {
-          return;
-        }
-        drupalSettings.alshayaSeoGtmFilTertriggered = true;
+      $(document).once('alshaya-seo-gtm-search-filter').ready(function(context, settings) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
       });
 
-      $(window).on('load scroll', function (event) {
+      $(window).once('alshaya-seo-gtm-product-search').on('scroll', function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression($('.view-search'), settings);
       });
     }
