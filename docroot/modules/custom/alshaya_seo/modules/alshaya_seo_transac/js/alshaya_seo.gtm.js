@@ -1198,11 +1198,7 @@
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        var offset = 0;
-        if ($('.product-plp-detail-wrapper', $(this)).height() !== undefined) {
-          var offset = $('.product-plp-detail-wrapper', $(this)).height();
-        }
-        if (!$(this).hasClass('impression-processed') && $(this).is(':visible') && $(this).isElementInViewPort(offset)) {
+        if (!$(this).hasClass('impression-processed') && $(this).is(':visible') && $(this).isElementInViewPort(0)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;

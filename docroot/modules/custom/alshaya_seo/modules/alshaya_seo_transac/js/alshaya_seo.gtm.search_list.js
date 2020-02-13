@@ -10,7 +10,7 @@
     attach: function (context, settings) {
       // Trigger incase of filter selected.
       drupalSettings.alshayaSeoGtmFilTertriggered = false;
-      $(context).once('alshaya-seo-gtm-filter-search').ready(function(context, settings) {
+      $(document).once('alshaya-seo-gtm-filter-search').ready(function(context, settings) {
         if ( drupalSettings.alshayaSeoGtmFilTertriggered ) {
           return;
         }
