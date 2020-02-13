@@ -1016,9 +1016,7 @@ class AlshayaApiWrapper {
         ];
       }
       return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
-
     }
-
     return [];
   }
 
