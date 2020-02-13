@@ -90,6 +90,9 @@ $_algolia_search_page_sidebar_count: #707070;
 $_peackock_blue_10: rgba(0, 86, 153, 0.1);
 $_dynamic_promo_text: #04599b;
 $_dynamic_promo_text_bg: #e7effc;
+$_order_limit_txt: #4285f4;
+$_order_limit_light_orange: #ffa6a6;
+$_order_limit_error_red: #c00;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1128,3 +1131,11 @@ $app-navigation-link-seperator-border: $white-smoke-light;
 // Matchback Block.
 $matchback_item_code_color: #777;
 $matchback_cart_notification_bg: #f6f6f6;
+
+// Order QTY Limit.
+$order_qty_limit_bg: $_dynamic_promo_text_bg;
+$order_qty_limit_txt: $_order_limit_txt;
+$order_limit_border: $_order_limit_light_orange;
+$order_qty_limit_reached_txt: $mothercare-black;
+$order_qty_limit_reached_bg: $white-five;
+$order_qty_limit_reached_icon: $_order_limit_error_red;

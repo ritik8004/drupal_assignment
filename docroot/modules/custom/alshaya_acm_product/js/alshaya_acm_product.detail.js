@@ -366,6 +366,7 @@
   // Disable Add to bag and quantity dropdown when order limit exceed.
   Drupal.disableLimitExceededProducts = function (sku, selected) {
     var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
+    var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
     var variantInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku]['variants'][selected] : '';
 
     var orderLimitExceeded = (variantInfo !== '' && typeof(variantInfo.orderLimitExceeded) !== "undefined") ? variantInfo.orderLimitExceeded : false;
@@ -381,7 +382,8 @@
     }
 
     // Add order quantity limit message.
-    orderLimitMsgSelector.replaceWith(variantInfo.orderLimitMsg);
+    orderLimitMsgSelector.html(variantInfo.orderLimitMsg);
+    orderLimitMobileMsgSelector.html(variantInfo.orderLimitMsg);
   };
 
   // Cart limit exceeded for a variant.
