@@ -3559,10 +3559,11 @@ class SkuManager {
    */
   public function maxSaleQtyMessage($max_sale_qty, $limit_exceeded = FALSE) {
     if ($limit_exceeded) {
-      $order_limit_msg = $this->t('Purchase limit has been reached');
+      $order_limit_msg = '<div class="order-quantity-limit-message limit-reached">' . $this->t('Purchase limit has been reached') . '</div>';
     }
     else {
-      $order_limit_msg = ($max_sale_qty !== NULL) ? $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]) : '';
+      $order_limit_msg = ($max_sale_qty !== NULL) ?
+        '<div class="order-quantity-limit-message">' . $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]) . '</div>' : '';
     }
 
     return $order_limit_msg;

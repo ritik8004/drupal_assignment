@@ -381,7 +381,7 @@
     }
 
     // Add order quantity limit message.
-    orderLimitMsgSelector.html(variantInfo.orderLimitMsg);
+    orderLimitMsgSelector.replaceWith(variantInfo.orderLimitMsg);
   };
 
   // Cart limit exceeded for a variant.

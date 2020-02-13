@@ -210,6 +210,23 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $item['quantity']['#suffix'] = '</div>';
       $item['quantity']['#suffix'] .= alshaya_acm_get_remove_from_basket_link($cart, $sku_entity);
 
+      // Get product qty in cart for variant.
+      $current_variant_in_cart_qty = $skuManager->getCartItemQtyLimit($id);
+      if ($current_variant_in_cart_qty) {
+        // Get max sale qty for the variant in cart.
+        $plugin = $sku_entity->getPluginInstance();
+        $max_sale_qty = $plugin->getMaxSaleQty($id);
+
+        if ($max_sale_qty !== NULL && $current_variant_in_cart_qty >= $max_sale_qty) {
+          // Show msg and disable quantity dropdown if order limit is reached.
+          $item['quantity']['#suffix'] .= $skuManager->maxSaleQtyMessage($max_sale_qty, TRUE);
+          $item['quantity']['#attributes']['disabled'] = 'disabled';
+        }
+        else {
+          $item['quantity']['#suffix'] .= $skuManager->maxSaleQtyMessage($max_sale_qty);
+        }
+      }
+
       _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message);
 
       // Add sub total price of product.
