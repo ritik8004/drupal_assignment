@@ -430,7 +430,6 @@ class AlshayaSearchApiQueryExecute {
       foreach ($facets as $facet) {
         // New category facets ids.
         $new_category_facets = [
-          'category_facet_search',
           'category_facet_promo',
           'category_facet_plp',
         ];

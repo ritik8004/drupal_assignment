@@ -16,6 +16,22 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Set config based on sale categorization ids.
+ */
+function alshaya_acm_product_category_update_8040() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
+  if (empty($config->get('sale_category_ids'))) {
+    $config->set('enable_auto_sale_categorisation', 1);
+  }
+  else {
+    $config->set('enable_auto_sale_categorisation', 0);
+  }
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create new field (Google Category) for acq_product_category taxonomy.
  */
 function alshaya_acm_product_category_update_8039() {
