@@ -70,6 +70,22 @@
         min-height: 25.5625rem;
       }
     }
+
+    @include breakpoint($only-mobile) {
+      position: relative;
+
+      .order-quantity-limit-message.mobile-only {
+        position: absolute;
+        bottom: 2rem;
+        #{$left}: 50%;
+        transform: translateX(-50%);
+        min-width: 16.625rem;
+
+        html[lang=ar] & {
+          transform: translateX(50%);
+        }
+      }
+    }
   }
 
   &__sidebar {
