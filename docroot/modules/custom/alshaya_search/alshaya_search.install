@@ -12,16 +12,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Queue index for acquia_search_index items.
- */
-function alshaya_search_update_8033() {
-  $index = Index::load('acquia_search_index');
-  $index->reindex();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable hierarchy for category facet.
  */
 function alshaya_search_update_8032() {
