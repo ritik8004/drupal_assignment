@@ -861,13 +861,13 @@
           var facetTitle = '';
           if ($(this).find('input.facets-checkbox').length > 0) {
             // Select value of facets other than color and remove item count.
-            selectedVal = $(this).find('label>span.facet-item__value').children().remove().end().text();
+            selectedVal = $(this).find('label>span.facet-item__value').text();
           }
           else {
             // Select value for color facet filtered and remove item count.
-            selectedVal = $(this).find('a>span.facet-item__value').children().remove().end().text();
+            selectedVal = $(this).find('a>span.facet-item__value').text();
           }
-          facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').children().remove().end().text();
+          facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
           var filterValue = selectedVal;
           filterValue = filterValue.trim();
           var data = {
