@@ -14,10 +14,12 @@ use Drupal\search_api\Entity\Index;
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  */
-function alshaya_bb_update_8011() {
+function alshaya_bbw_transac_update_8011() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
   $config->set('enable_lhn_tree_search', 1);
   $config->save();
+  $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('acquia_search_index');
+  $index->reindex();
 }
 
 /**
