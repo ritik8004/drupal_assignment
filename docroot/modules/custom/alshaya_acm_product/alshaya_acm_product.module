@@ -656,23 +656,24 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['layout'] = $pdp_layout;
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['identifier'] = $sku_identifier;
 
+        $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
         // Get max sale qty for simple product.
         if ($sku_entity->bundle() == 'simple') {
           $plugin = $entity->getPluginInstance();
           $max_sale_qty = $plugin->getMaxSaleQty($sku_entity);
 
-          if ($max_sale_qty !== NULL) {
+          if (!empty($max_sale_qty)) {
             // Get max sale qty variables.
-            $max_sale_qty_variables = $skuManager->getMaxSaleQtyVariables($sku_entity, $max_sale_qty);
+            $max_sale_qty_variables = $productOrderLimit->getMaxSaleQtyVariables($sku_entity, $max_sale_qty);
           }
         }
 
         if ($sku_entity->bundle() == 'configurable') {
           // Check if max sale qty limit is set for parent.
-          $max_sale_qty = $skuManager->getParentMaxSaleQty($sku_entity);
-          if ($max_sale_qty !== NULL) {
+          $max_sale_qty = $productOrderLimit->getParentMaxSaleQty($sku_entity);
+          if (!empty($max_sale_qty)) {
             // Get max sale qty variables.
-            $max_sale_qty_variables = $skuManager->getMaxSaleQtyVariables($sku_entity, $max_sale_qty);
+            $max_sale_qty_variables = $productOrderLimit->getMaxSaleQtyVariables($sku_entity, $max_sale_qty);
           }
 
           $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
@@ -1221,7 +1222,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // Stock check for quantity for all other products.
   elseif ($quantity = $sku_manager->getStockQuantity($sku_entity)) {
     // Using the lower value of available quantity and max sale qty.
-    $quantity = ($max_sale_qty !== NULL && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
+    $quantity = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {

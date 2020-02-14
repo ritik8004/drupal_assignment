@@ -12,11 +12,10 @@ set classes = [
       <div class="content__main {{ image_slider_position_pdp }}">
         {% if content.gallery is not empty %}
           {{ content.gallery }}
-          <div class="order-quantity-limit-message mobile-only"></div>
         {% else %}
           <div id="product-zoom-container"></div>
-          <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
+        <div class="order-quantity-limit-message mobile-only"></div>
         {% if show_crosssell_as_matchback == false %}
           {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
         {% endif %}

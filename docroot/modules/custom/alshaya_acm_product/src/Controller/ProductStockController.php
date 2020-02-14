@@ -19,6 +19,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Ajax\SettingsCommand;
+use Drupal\alshaya_acm_product\Service\ProductOrderLimit;
 
 /**
  * Class ProductStockController.
@@ -56,6 +57,13 @@ class ProductStockController extends ControllerBase {
   protected $eventDispatcher;
 
   /**
+   * Product Order Limit service object.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit
+   */
+  protected $productOrderLimit;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -63,7 +71,8 @@ class ProductStockController extends ControllerBase {
       $container->get('renderer'),
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm.cart_helper'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('alshaya_acm_product.product_order_limit')
     );
   }
 
@@ -78,15 +87,19 @@ class ProductStockController extends ControllerBase {
    *   Cart Helper.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   Event Dispatcher.
+   * @param \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit
+   *   Product Order Limit.
    */
   public function __construct(Renderer $renderer,
                               SkuManager $sku_manager,
                               CartHelper $cart_helper,
-                              EventDispatcherInterface $eventDispatcher) {
+                              EventDispatcherInterface $eventDispatcher,
+                              ProductOrderLimit $product_order_limit) {
     $this->renderer = $renderer;
     $this->skuManager = $sku_manager;
     $this->cartHelper = $cart_helper;
     $this->eventDispatcher = $eventDispatcher;
+    $this->productOrderLimit = $product_order_limit;
   }
 
   /**
@@ -136,10 +149,10 @@ class ProductStockController extends ControllerBase {
         );
 
         // Check if max sale qty limit is set for parent.
-        $max_sale_qty = $this->skuManager->getParentMaxSaleQty($variant_sku);
-        if ($max_sale_qty !== NULL) {
+        $max_sale_qty = $this->productOrderLimit->getParentMaxSaleQty($variant);
+        if (!empty($max_sale_qty)) {
           // Get max sale qty variables.
-          $max_sale_qty_variables = $this->skuManager->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
+          $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
           $orderLimitData = [
             'productInfo' => [
               $data['selected_parent_sku'] => [
@@ -153,9 +166,9 @@ class ProductStockController extends ControllerBase {
           // If max sale qty for parent is not set then get for the variant.
           $plugin = $variant->getPluginInstance();
           $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
-          if ($max_sale_qty !== NULL) {
+          if (!empty($max_sale_qty)) {
             // Get max sale qty variables.
-            $max_sale_qty_variables = $this->skuManager->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
+            $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
 
             $orderLimitData = [
               'productInfo' => [

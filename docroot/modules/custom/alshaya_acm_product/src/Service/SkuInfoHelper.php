@@ -87,6 +87,13 @@ class SkuInfoHelper {
   protected $languageManager;
 
   /**
+   * Product Order Limit service object.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit
+   */
+  protected $productOrderLimit;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -107,6 +114,8 @@ class SkuInfoHelper {
    *   The stock manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit
+   *   Product Order Limit.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -117,7 +126,8 @@ class SkuInfoHelper {
     ModuleHandlerInterface $module_handler,
     Connection $database,
     StockManager $acq_stock_manager,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ProductOrderLimit $product_order_limit
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -128,6 +138,7 @@ class SkuInfoHelper {
     $this->database = $database;
     $this->acqSkuStockManager = $acq_stock_manager;
     $this->languageManager = $language_manager;
+    $this->productOrderLimit = $product_order_limit;
   }
 
   /**
@@ -444,12 +455,12 @@ class SkuInfoHelper {
 
     // If order limit is not set for parent
     // then get order limit for each variant.
-    $max_sale_qty = (isset($max_sale_qty) && $max_sale_qty !== NULL) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
+    $max_sale_qty = (isset($max_sale_qty) && !empty($max_sale_qty)) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
     // Check product qty in cart for variant.
-    $current_variant_in_cart_qty = $this->skuManager->getCartItemQtyLimit($variant_sku);
+    $current_variant_in_cart_qty = $this->productOrderLimit->getCartItemQtyLimit($variant_sku);
 
-    if ($max_sale_qty !== NULL) {
-      $order_limit_msg = ($current_variant_in_cart_qty >= $max_sale_qty) ? $this->skuManager->maxSaleQtyMessage($max_sale_qty, TRUE) : $this->skuManager->maxSaleQtyMessage($max_sale_qty);
+    if (!empty($max_sale_qty)) {
+      $order_limit_msg = ($current_variant_in_cart_qty >= $max_sale_qty) ? $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) : $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
     }
 
     $variant = [];
@@ -464,7 +475,7 @@ class SkuInfoHelper {
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
     $variant['orderLimitMsg'] = isset($order_limit_msg) ? $order_limit_msg : '';
-    $variant['orderLimitExceeded'] = (($max_sale_qty !== NULL) && ($current_variant_in_cart_qty >= $max_sale_qty)) ? TRUE : FALSE;
+    $variant['orderLimitExceeded'] = (!empty($max_sale_qty) && ($current_variant_in_cart_qty >= $max_sale_qty)) ? TRUE : FALSE;
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
