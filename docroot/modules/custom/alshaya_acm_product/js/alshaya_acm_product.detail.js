@@ -98,6 +98,9 @@
           return;
         }
 
+        // On form load set order qty limit message.
+        Drupal.disableLimitExceededProducts(sku, sku);
+
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
 
@@ -368,7 +371,7 @@
     var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
     var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
     var parentInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku] : '';
-    var variantInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku]['variants'][selected] : '';
+    var variantInfo = typeof(drupalSettings['productInfo'][sku]['variants']) !== "undefined" ? drupalSettings['productInfo'][sku]['variants'][selected] : '';
 
     // If limit exists at parent level.
     if ((parentInfo !== '') && parentInfo.maxSaleQty) {

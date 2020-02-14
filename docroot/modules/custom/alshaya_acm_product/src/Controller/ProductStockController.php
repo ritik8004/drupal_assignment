@@ -148,14 +148,16 @@ class ProductStockController extends ControllerBase {
           new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
         );
 
+        $orderLimitData = [];
+        $parent_sku = isset($data['selected_parent_sku']) ? $data['selected_parent_sku'] : $variant_sku;
         // Check if max sale qty limit is set for parent.
         $max_sale_qty = $this->productOrderLimit->getParentMaxSaleQty($variant);
         if (!empty($max_sale_qty)) {
           // Get max sale qty variables.
-          $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
+          $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);
           $orderLimitData = [
             'productInfo' => [
-              $data['selected_parent_sku'] => [
+              $parent_sku => [
                 'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
                 'orderLimitExceeded' => $max_sale_qty_variables['orderLimitExceeded'],
               ],
@@ -168,11 +170,11 @@ class ProductStockController extends ControllerBase {
           $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
           if (!empty($max_sale_qty)) {
             // Get max sale qty variables.
-            $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant_sku, $max_sale_qty);
+            $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);
 
             $orderLimitData = [
               'productInfo' => [
-                $data['selected_parent_sku'] => [
+                $parent_sku => [
                   'variants' => [
                     $variant_sku => [
                       'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
@@ -184,8 +186,10 @@ class ProductStockController extends ControllerBase {
             ];
           }
         }
-        $return->addCommand(new SettingsCommand($orderLimitData, TRUE));
-        $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$data['selected_parent_sku'], $variant_sku]));
+        if (!empty($orderLimitData)) {
+          $return->addCommand(new SettingsCommand($orderLimitData, TRUE));
+          $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$parent_sku, $variant_sku]));
+        }
       }
       else {
         $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));

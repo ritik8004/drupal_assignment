@@ -213,7 +213,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
       // Check if max sale qty limit is set for parent.
       $parent_sku = $skuManager->getParentSkuBySku($id);
-      $max_sale_qty = $productOrderLimit->getParentMaxSaleQty($parent_sku);
+      $max_sale_qty = $parent_sku ? $productOrderLimit->getParentMaxSaleQty($parent_sku) : 0;
       // Get product qty in cart for variant.
       $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
       if ($current_variant_in_cart_qty) {
@@ -886,7 +886,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
 
   // Check if max sale qty limit is set for parent.
   $parent_sku = $skuManager->getParentSkuBySku($sku_entity);
-  $max_sale_qty = $productOrderLimit->getParentMaxSaleQty($parent_sku);
+  $max_sale_qty = $parent_sku ? $productOrderLimit->getParentMaxSaleQty($parent_sku) : 0;
 
   // If item is not available in stock.
   if ($quantity = $skuManager->getStockQuantity($sku_entity)) {

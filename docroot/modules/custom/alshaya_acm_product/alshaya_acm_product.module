@@ -659,7 +659,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
         // Get max sale qty for simple product.
         if ($sku_entity->bundle() == 'simple') {
-          $plugin = $entity->getPluginInstance();
+          $plugin = $sku_entity->getPluginInstance();
           $max_sale_qty = $plugin->getMaxSaleQty($sku_entity);
 
           if (!empty($max_sale_qty)) {
