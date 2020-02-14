@@ -13,13 +13,13 @@ function getAllFilters() {
  * Get all the filters that we want to show for sticky filter
  * panel on top and "All filters".
  *
- * As of now, filtering out field_category_name, as it is not
+ * As of now, filtering out field_category, as it is not
  * displayed anywhere and ideally it will be part of lhn sidebar.
  */
 function getFilters() {
   let filters = getAllFilters();
   _.remove(filters, function (filter) {
-    return filter.identifier === 'field_category_name';
+    return filter.identifier === 'field_category';
   });
   return filters;
 }
@@ -31,9 +31,9 @@ function getFilters() {
 function hasCategoryFilter() {
   // category hierarchical menu in lhn side.
   let filters = getAllFilters();
-  const isCategoryPresent = _.findIndex(filters, { 'identifier': 'field_category_name' });
+  const isCategoryPresent = _.findIndex(filters, { 'identifier': 'field_category' });
   if (isCategoryPresent && drupalSettings.algoliaSearch.enable_lhn_tree_search) {
-    return true;
+    return (isCategoryPresent >= 0);
   } else {
     return false;
   }

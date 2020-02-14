@@ -57,9 +57,8 @@ const SearchResultsComponent = props => {
             <li>
               <HierarchicalMenu
                 attributes={[
-                  'field_category_name.lvl0',
-                  'field_category_name.lvl1',
-                  'field_category_name.lvl2',
+                  'field_category.lvl0',
+                  'field_category.lvl1',
                 ]}
               />
             </li>
