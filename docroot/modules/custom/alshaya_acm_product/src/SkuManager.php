@@ -40,7 +40,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\alshaya_acm\CartHelper;
 
 /**
  * Class SkuManager.
@@ -247,13 +246,6 @@ class SkuManager {
   protected $productCacheManager;
 
   /**
-   * Cart Helper.
-   *
-   * @var \Drupal\alshaya_acm\CartHelper
-   */
-  protected $cartHelper;
-
-  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -300,8 +292,6 @@ class SkuManager {
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
    *   Alshaya array utility service.
-   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
-   *   Cart Helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -327,8 +317,7 @@ class SkuManager {
                               Simplesitemap $generator,
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
-                              AlshayaArrayUtils $alshayaArrayUtils,
-                              CartHelper $cart_helper) {
+                              AlshayaArrayUtils $alshayaArrayUtils) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -354,7 +343,6 @@ class SkuManager {
     $this->productInfoHelper = $product_info_helper;
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
-    $this->cartHelper = $cart_helper;
   }
 
   /**
