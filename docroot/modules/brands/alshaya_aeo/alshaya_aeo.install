@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_we.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_aeo_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_aeo', 'inc', 'alshaya_aeo.content');
+
+  // Create default content for the site.
+  alshaya_aeo_create_default_content();
+}

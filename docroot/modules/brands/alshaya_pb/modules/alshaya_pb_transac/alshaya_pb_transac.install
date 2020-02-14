@@ -12,23 +12,16 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Queue items for acquia_search_index.
- */
-function alshaya_pb_transac_update_8040() {
-  $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('acquia_search_index');
-  $index->reindex();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
+ * Queue items for acquia_search_index.
  */
 function alshaya_pb_transac_update_8016() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
   $config->set('enable_lhn_tree_search', 1);
   $config->save();
+  $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('acquia_search_index');
+  $index->reindex();
 }
 
 /**

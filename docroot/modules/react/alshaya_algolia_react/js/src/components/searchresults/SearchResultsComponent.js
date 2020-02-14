@@ -31,7 +31,7 @@ import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
 const SearchResultsComponent = props => {
   const { query } = props;
   // Do not show out of stock products.
-  const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
+  const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : '';
   const indexName = drupalSettings.algoliaSearch.indexName;
 
   // Get default page to display for back to search,
