@@ -30,8 +30,11 @@ const Gallery = (props) => {
     if (drupalSettings.reactTeaserView.gallery.showHoverImage) {
       return (<AssetGallery {...props}/>);
     }
-    else {
+    else if (drupalSettings.reactTeaserView.gallery.showThumbnails){
       return (<SearchGallery {...props}/>);
+    }
+    else {
+      return (<AssetGallery {...props} />);
     }
   }
 
