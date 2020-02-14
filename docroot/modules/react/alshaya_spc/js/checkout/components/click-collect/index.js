@@ -11,7 +11,8 @@ export default class ClickCollect extends React.Component {
     super(props);
     this.searchplaceInput = React.createRef();
     this.state = {
-      'store_list': null,
+      coords: {},
+      store_list: null
     };
   }
 
@@ -29,6 +30,13 @@ export default class ClickCollect extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+      coords = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+    }
+
     // this.panMapToGivenCoords(place.geometry.location);
     // Get geocode details for address.
     // this.geocodeFromLatLng(place.geometry.location);
