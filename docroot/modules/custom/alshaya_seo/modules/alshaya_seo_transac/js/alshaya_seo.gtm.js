@@ -849,46 +849,48 @@
       /**
        * Tracking clicks on fitler & sort options.
        */
-      if (listName.includes('PLP') || listName === 'Search Results Page') {
-        var section = listName;
-        if (listName.includes('PLP')) {
-          section = $('h1.c-page-title').text().toLowerCase();
+      if (listName !== undefined) {
+        if (listName.includes('PLP') || listName === 'Search Results Page') {
+          var section = listName;
+          if (listName.includes('PLP')) {
+            section = $('h1.c-page-title').text().toLowerCase();
+          }
+
+          // Track facet filters.
+          $('li.facet-item').once('js-event').on('click', function () {
+            var selectedVal = '';
+            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
+            if ($(this).find('input.facets-checkbox').length > 0) {
+              // Select value of facets other than color and remove item count.
+              selectedVal = $(this).find('label>span.facet-item__value').text();
+            }
+            else {
+              // Select value for color facet filtered and remove item count.
+              selectedVal = $(this).find('a>span.facet-item__value').text();
+            }
+            var data = {
+              event: 'filter',
+              siteSection: section.trim(),
+              filterType: facetTitle,
+              filterValue: selectedVal.trim(),
+            };
+
+            dataLayer.push(data);
+          });
+
+          // Track sorts.
+          $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
+            var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
+            sortValue.trim();
+            var data = {
+              event: 'sort',
+              siteSection: section.trim(),
+              sortValue: sortValue
+            };
+
+            dataLayer.push(data);
+          });
         }
-
-        // Track facet filters.
-        $('li.facet-item').once('js-event').on('click', function () {
-          var selectedVal = '';
-          var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-          if ($(this).find('input.facets-checkbox').length > 0) {
-            // Select value of facets other than color and remove item count.
-            selectedVal = $(this).find('label>span.facet-item__value').text();
-          }
-          else {
-            // Select value for color facet filtered and remove item count.
-            selectedVal = $(this).find('a>span.facet-item__value').text();
-          }
-          var data = {
-            event: 'filter',
-            siteSection: section.trim(),
-            filterType: facetTitle,
-            filterValue: selectedVal.trim(),
-          };
-
-          dataLayer.push(data);
-        });
-
-        // Track sorts.
-        $('input[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
-          var sortValue = $("label[for='" + $(this).attr('id') + "']").first().text();
-          sortValue.trim();
-          var data = {
-            event: 'sort',
-            siteSection: section.trim(),
-            sortValue: sortValue
-          };
-
-          dataLayer.push(data);
-        });
       }
 
       gtm_execute_onetime_events = false;
