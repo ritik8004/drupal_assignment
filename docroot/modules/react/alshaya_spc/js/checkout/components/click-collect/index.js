@@ -31,22 +31,11 @@ export default class ClickCollect extends React.Component {
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
     if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
-      coords = {
+      this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
-      };
+      });
     }
-
-    // this.panMapToGivenCoords(place.geometry.location);
-    // Get geocode details for address.
-    // this.geocodeFromLatLng(place.geometry.location);
-  }
-
-  /**
-   * When user click on deliver to current location.
-   */
-  deliverToCurrentLocation = () => {
-
   }
 
   /**
@@ -64,27 +53,26 @@ export default class ClickCollect extends React.Component {
     }
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
-        let currentCoords = {
+        this.fetchAvailableStores({
           'lat': pos.coords.latitude,
           'lng': pos.coords.longitude,
-        };
-
-        this.fetchAvailableStores(currentCoords);
+        });
       });
     }
   }
 
   fetchAvailableStores(coords) {
-
+    this.setState({
+      coords: coords
+    });
   }
-
-
 
   render() {
     return(
       <div className="spc-address-form">
         { window.innerWidth > 768 &&
           <div className='spc-address-form-map'>
+            <GMap coords={this.state.coords} />
           </div>
         }
         <div className='spc-address-form-sidebar'>
@@ -92,7 +80,7 @@ export default class ClickCollect extends React.Component {
           <div className='spc-address-form-wrapper'>
             { window.innerWidth < 768 &&
               <div className='spc-address-form-map'>
-                <GMap />
+                <GMap coords={this.state.coords} />
               </div>
             }
             <div className='spc-address-form-content'>
