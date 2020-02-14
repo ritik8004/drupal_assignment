@@ -613,7 +613,9 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
             : $product_category_tree->getL1Category($term)->id();
         }
 
-        $item->getField('field_category')->setValues(array_unique($terms));
+        if (!empty($terms)) {
+          $item->getField('field_category')->setValues(array_unique($terms));
+        }
       }
       catch (\Throwable $e) {
         $logger->warning('Indexing failed for the node:@nid message:@message', [
