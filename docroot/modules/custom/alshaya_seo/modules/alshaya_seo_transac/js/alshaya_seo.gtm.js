@@ -849,9 +849,9 @@
       /**
        * Tracking clicks on fitler & sort options.
        */
-      if (listName === 'PLP' || listName === 'Search Results Page') {
+      if (listName.includes('PLP') || listName === 'Search Results Page') {
         var section = listName;
-        if (listName === 'PLP') {
+        if (listName.includes('PLP')) {
           section = $('h1.c-page-title').text().toLowerCase();
         }
 
