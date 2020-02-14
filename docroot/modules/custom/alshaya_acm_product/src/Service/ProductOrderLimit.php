@@ -13,7 +13,7 @@ use Drupal\acq_commerce\SKUInterface;
  */
 class ProductOrderLimit {
 
-    use StringTranslationTrait;
+  use StringTranslationTrait;
 
   /**
    * SKU Manager service object.
