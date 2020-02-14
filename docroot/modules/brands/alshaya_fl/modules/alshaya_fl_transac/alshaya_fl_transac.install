@@ -12,6 +12,7 @@ use Drupal\Core\Site\Settings;
  *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
+ * Queue items for acquia_search_index.
  */
 function alshaya_fl_transac_update_8008() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');

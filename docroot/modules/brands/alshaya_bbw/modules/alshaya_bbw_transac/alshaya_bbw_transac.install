@@ -13,6 +13,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
+ * Queue items for acquia_search_index.
  */
 function alshaya_bbw_transac_update_8011() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.settings');
