@@ -1,0 +1,29 @@
+.spc-pre-content {
+  .impress-msg {
+    font-size: 1.25rem;
+    font-family: $alshaya-bold;
+    color: $spc-checkout-confirmation-success-txt;
+
+    @include breakpoint($only-mobile) {
+      max-width: 17.125rem;
+      text-align: center;
+      font-size: 1.125rem;
+      line-height: 25px;
+      margin: 1.25rem auto 0;
+    }
+  }
+
+  .impress-subtitle {
+    font-size: 1.125rem;
+    color: $spc-checkout-confirmation-success-txt;
+    font-family: $alshaya-thin;
+
+    @include breakpoint($only-mobile) {
+      max-width: 17.125rem;
+      text-align: center;
+      line-height: 25px;
+      font-size: 1rem;
+      margin: 0 auto 0.3125rem;
+    }
+  }
+}

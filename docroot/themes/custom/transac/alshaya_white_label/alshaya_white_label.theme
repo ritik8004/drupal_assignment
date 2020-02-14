@@ -794,8 +794,13 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   }
 
   // SPC checkout.
-  if ($routmatch->getRouteName() == 'alshaya_spc.checkout') {
+  if ($routmatch->getRouteName() === 'alshaya_spc.checkout') {
     $suggestions[] = 'page__spc_checkout';
+  }
+
+  // SPC checkout confirmation.
+  if ($routmatch->getRouteName() === 'alshaya_spc.checkout.confirmation') {
+    $suggestions[] = 'page__spc_checkout_confirmation';
   }
 }
 
