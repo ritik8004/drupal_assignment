@@ -16,9 +16,9 @@ provider: null
 plugin: 'facet_block:category_facet_search'
 settings:
   id: 'facet_block:category_facet_search'
-  label: Category (Search LHN)
+  label: Category
   provider: facets
-  label_display: '0'
+  label_display: visible
 visibility:
   request_path:
     id: request_path
