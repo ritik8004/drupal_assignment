@@ -384,7 +384,7 @@
       var orderLimitExceeded = parentInfo.orderLimitExceeded ? parentInfo.orderLimitExceeded : false;
       var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');
     }
-    elseif (variantInfo !== '') {
+    else if (variantInfo !== '') {
       var orderLimitMsg = variantInfo.orderLimitMsg;
       var orderLimitExceeded = variantInfo.orderLimitExceeded ? variantInfo.orderLimitExceeded : false;
       var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
