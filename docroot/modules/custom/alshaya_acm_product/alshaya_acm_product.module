@@ -1120,6 +1120,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     '#default_value' => ($sku_entity->bundle() === 'simple') ? $sku_entity->getSku() : '',
   ];
 
+  // Add hidden view mode field.
+  $form['product_view_mode'] = [
+    '#type' => 'hidden',
+    '#attributes' => [
+      'class' => [
+        'product-view-mode',
+      ],
+    ],
+    '#default_value' => '',
+  ];
+
   // We need to change the markup for submit button.
   // @see alshaya_white_label_theme_suggestions_input_alter().
   $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';

@@ -93,6 +93,10 @@
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
         var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var viewMode = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'full';
+
+        // Fill the view mode form field.
+        $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
 
         if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
@@ -122,7 +126,6 @@
           else {
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
-
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
           Drupal.disableLimitExceededProducts(parentSku, selected);
@@ -370,24 +373,26 @@
   Drupal.disableLimitExceededProducts = function (sku, selected) {
     var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
     var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
-    var parentInfo = typeof(drupalSettings['productInfo'][sku]) !== "undefined" ? drupalSettings['productInfo'][sku] : '';
-    var variantInfo = typeof(drupalSettings['productInfo'][sku]['variants']) !== "undefined" ? drupalSettings['productInfo'][sku]['variants'][selected] : '';
+    var productKey = ($('input[value=' + selected + ']').parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+    var parentInfo = typeof(drupalSettings[productKey][sku]) !== "undefined" ? drupalSettings[productKey][sku] : '';
+    // At parent level, sku and selected will be same.
+    var variantInfo = (typeof(drupalSettings[productKey][sku]['variants']) !== "undefined" && sku !== selected) ? drupalSettings[productKey][sku]['variants'][selected] : '';
 
     // If limit exists at parent level.
-    if ((parentInfo !== '') && parentInfo.maxSaleQty) {
+    if ((parentInfo !== '') && (parentInfo.maxSaleQty !== '')) {
       var orderLimitMsg = parentInfo.orderLimitMsg;
       var orderLimitExceeded = parentInfo.orderLimitExceeded ? parentInfo.orderLimitExceeded : false;
       var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');
-
-    } else {
+    }
+    elseif (variantInfo !== '') {
       var orderLimitMsg = variantInfo.orderLimitMsg;
       var orderLimitExceeded = variantInfo.orderLimitExceeded ? variantInfo.orderLimitExceeded : false;
       var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
     }
 
-    if (orderLimitExceeded) {
+    if (typeof(orderLimitExceeded) !== "undefined" && orderLimitExceeded) {
       variantToDisableSelector.find('.edit-add-to-cart.button').prop('disabled', true);
-      variantToDisableSelector.find('#edit-quantity').prop('disabled', true);
+      variantToDisableSelector.find('.edit-quantity').prop('disabled', true);
     } else {
       $('.edit-add-to-cart.button').prop('disabled', false);
       $('#edit-quantity').prop('disabled', false);

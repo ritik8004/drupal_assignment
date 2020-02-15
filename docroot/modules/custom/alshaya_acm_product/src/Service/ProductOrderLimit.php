@@ -79,8 +79,10 @@ class ProductOrderLimit {
       if ($variant->bundle() === 'simple' && $variant_parent === NULL) {
         $qty_limit = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
       }
-      elseif (($variant->bundle() === 'configurable' && $variant_parent === NULL) || ($variant->bundle() === 'simple' && $variant_parent !== NULL)) {
-        $variant_parent = $variant_parent === NULL ? $variant : $variant_parent;
+      else {
+        // If variant bundle is not simple and parent is NULL
+        // then variant itself is parent.
+        $variant_parent = $variant_parent == NULL ? $variant : $variant_parent;
         $variant_parent = $variant_parent instanceof SKU ? $variant_parent : SKU::loadFromSku($variant_parent);
         // Check if limit set at parent level.
         $variant_parent_sku = $variant_parent->getSku();
@@ -96,6 +98,9 @@ class ProductOrderLimit {
               $qty_limit += $qty;
             }
           }
+        }
+        else {
+          $qty_limit = in_array($variant_sku, array_keys($cart_items)) ? $cart_items[$variant_sku] : 0;
         }
       }
     }
