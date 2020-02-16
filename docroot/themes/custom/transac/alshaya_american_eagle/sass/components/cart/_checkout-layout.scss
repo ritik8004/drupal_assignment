@@ -1,0 +1,8 @@
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-login,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
+  .c-post-content {
+    border-bottom: 1px solid $checkout_footer_border-top;
+  }
+}

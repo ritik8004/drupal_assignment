@@ -1,0 +1,13 @@
+.alias--cart-checkout-delivery {
+  #edit-guest-delivery-collect,
+  #edit-member-delivery-collect {
+    #store-finder-wrapper {
+      .current-location,
+      .cc-near-me {
+        &::before {
+          background: url('#{$aeo_theme_img_directory_path}/icons/current.svg') no-repeat;
+        }
+      }
+    }
+  }
+}
