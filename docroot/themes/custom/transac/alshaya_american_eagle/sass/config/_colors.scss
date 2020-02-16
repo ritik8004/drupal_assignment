@@ -12,6 +12,8 @@ $dove-gray: #707070;
 $cod-gray: #1a1a1a;
 $turquoise-blue: #5cf0cb;
 $forest-green: #2d9921;
+$royal-blue: #385adc;
+$windows-blue: $black;
 
 /* ------- 2. Primary Colors ------- */
 
@@ -24,8 +26,8 @@ $primary_text: $black;
 $primary_link: $grey;
 $primary_link-hover: $black;
 $primary_link-active: $black;
-$primary_border: $grey; // Global border color
-$content_link_color: $azure-blue;
+$primary_border: $gallery;
+$content_link_color: $black;
 
 // Form elements.
 $primary_form_selector_border: $grey;
@@ -79,7 +81,7 @@ $lang_switch_close_icon_bg: $white;
 $lang_switch_close_icon: $black;
 
 // Accordion
-$accordion_border: $grey-light;
+$accordion_border: $light-greyish;
 $accordion_title: $black;
 $accordion_sub_title: $grey;
 $accordion_title_arrow: $black;
@@ -144,21 +146,21 @@ $primary_search_text: $grey;
 $header_c_menu_text: $grey;
 $header_c_menu_icon_color: $black;
 $header_c_menu_icon_text: $black;
-$header_toggle_sign_default: $grey;
+$header_toggle_sign_default: $wild-sand;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $white;
 $header_mobile_menu_arrow: $black;
 $header_mobile_menu_active: $white;
 $header_mobile_menu_close_bg: $black;
 $header_mobile_menu_close: $white;
-$header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+$header_mobile_menu_overlay: rgba(1, 1, 1, 0.6);
 $header_c_menu_border: $gallery;
 
 // Branding menu mobile.
 $header_branding_shadow: $shadow;
 
 // Header secondary: ie: top header.
-$header_secondary_bg_upto_desk: $wild-sand;
+$header_secondary_bg_upto_desk: $white;
 $header_secondary_menu_link_mobile: $black;
 $header_secondary_menu_link: $black-two;
 $header_secondary_menu_link_hover_bg: $white;
@@ -169,12 +171,17 @@ $header_my_account_bg: $white;
 $header_my_account_link_hover: $black;
 $header_my_account_icon: $black;
 $my_account_nav_active : $black;
-$my_account_nav_hover: $black;
+$my_account_nav_hover: $grey;
+$my_account_nav: $black;
+
+//slider dots
+$hp_slider_dots: $black;
 
 // Mega menu.
 $mm_bg: $white;
 $mm_bg_desk: $white;
 $mm_l1_border: $gallery;
+$mm_l1_link: $black;
 $mm_l1_link_bg: $white;
 $mm_l1_link_hover: $black;
 $mm_l1_link_hover_bg: $grey;
@@ -206,7 +213,7 @@ $primary_counter_bg: $black;
 $secondary_counter_bg: $grey;
 
 // Checkout Progress.
-$checkout_seperator: $gallery;
+$checkout_seperator: $light-greyish;
 $checkout_counter_border: $black;
 
 // Checkout Payment.
@@ -217,13 +224,14 @@ $checkout_payment_method_title: $black;
 
 $checkout_tab_default_title: $black;
 $checkout_tab_active_title: $black;
-$checkout_tab_active_border: $black;
+$checkout_tab_active_border: $light-greyish;
 $checkout_tab_description: $black;
 $checkout_section_titles: $black;
 $checkout_tab_separator: $black;
 $secure_checkout_back_link: $black;
 $checkout_transaction_type_color: $black;
-$checkout_form_actions_footer: $grey;
+$checkout_form_actions_footer: $wild-sand;
+$delivery_tab_active_bg: $wild-sand;
 
 // Checkout mobile back link.
 $checkout_mobile_back_link_icon: $black;
@@ -271,7 +279,7 @@ $promo_text: $black;
 
 // Product listing page and search page.
 $plp_category_desc: $black;
-$plp_facet_filter_bg: $black;
+$plp_facet_filter_bg: $white;
 $plp_facet_clear_border: $black;
 $plp_facet_clear_border_mobile: $black;
 $plp_facet_clear_text: $black;
@@ -280,7 +288,7 @@ $plp_facet_dropdown_bg: $white;
 $plp_facet_dropdown_icon: $black;
 $plp_facet_label_border_mobile: $gallery;
 $plp_facet_border: $gallery;
-$plp_facet_summary_filter_icon: $white;
+$plp_facet_summary_filter_icon: $cod-gray;
 $plp_item_label: $black;
 $plp_promotion_description: $gallery;
 $plp_promotion_link: $alizarin-crimson;
@@ -293,6 +301,8 @@ $plp_clear_all_btn_disabled: $grey;
 $plp_all_filter_button_color: $black;
 $plp_filter_icon: $black;
 $plp_filter_active_tick: $black;
+$facet_selected_badges_border: $cod-gray;
+$facet_selected_badges_text: $cod-gray;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
@@ -318,12 +328,16 @@ $store_finder_border_hover: $black;
 $store_finder_text_hover: $black;
 $store_finder_search_input_mobile_border: $gallery;
 $store_finder_search_input_border: $gallery;
+$store_finder_search_label: $black;
+$store_finder_search_input: $gallery;
 
 // Store finder gloassary.
 $store_finder_glossary_alphabet: $black;
 $store_finder_glossary_text: $grey;
-$store_finder_glossary_text_border: $black;
+$store_finder_glossary_text_border: $gallery;
 $store_finder_glossary_border: $gallery;
+$store_finder_glossary_text_hover: $black;
+$store_finder_backbtn: $black;
 
 // Store finder search results.
 $store_finder_search_results_border: $gallery;
@@ -333,24 +347,28 @@ $store_finder_search_results_tile_icon: $black;
 $store_finder_search_results_hour_label: $grey;
 $store_finder_search_results_title: $black;
 $store_finder_search_results_counter_bg: $grey;
-$store_finder_search_results_store_address: $grey;
+$store_finder_search_results_store_address: $black-two;
 $store_finder_search_results_down_arrow: $black;
+$store_finder_search_results_label: $black;
+$store_finder_search_results_hour_value: $black-two;
 
 // User Form.
-$user_form_layout_divider_color: $grey;
+$user_form_layout_divider_color: $gallery;
 $user_block_link: $black;
 $user_sidebar_block_title: $black;
 $default_msg_bg: $forest-green;
 $user_login_section_title: $black;
 $user_ui_dialog_border: $gallery;
+$user_login_link_btn_text: $black;
+$user_field_link: $grey;
 
 // Contact Page
 $webform_contact_legend: $black;
 
 // Breadcrumb.
-$breadcrumb_bg: $wild-sand;
+$breadcrumb_bg: $white;
 $breadcrumb_link: $grey;
-$breadcrumb_link_hover: $black;
+$breadcrumb_link_hover: $grey;
 $breadcrumb_link_active: $black;
 
 // Address book
@@ -370,6 +388,11 @@ $checkout_login_tab_text: $black;
 $checkout_login_border_active: $black;
 $checkout_section_title_border: $gallery;
 $checkout_login_btn_bg: $primary_btn_bg;
+$checkout_guest_button_border: $black;
+$checkout_guest_button_txt: $black;
+$checkout_guest_button_bg: $white;
+$social_auth_login_button_border: $black;
+$social-network-text: $black;
 
 //checkout layout
 $checkout_securely_icon_bg: $black;
@@ -379,6 +402,7 @@ $checkout_footer_txt: $grey;
 $checkout_delivery_options_border: $gallery;
 $checkout_default_address_border: $black;
 $checkout_address_edit_link: $black;
+$checkout_footer_border-top: $gallery;
 
 // Address form.
 $address_button_border: $black;
@@ -405,6 +429,8 @@ $checkout_cc_selected_store_content_bg: $white;
 $checkout_cc_individual_store_hours_label_border: $gallery;
 $checkout_cc_map_hours_icon: $black;
 $checkout_cc_search_icon: $black;
+$checkout_progress_text: $dove-gray;
+$checkout_tab_active_hr: $black;
 
 // Tables.
 $primary_th_bg: $wild-sand;
@@ -426,11 +452,19 @@ $basket_page_title: $black;
 $basket_img_border: $light-greyish;
 $basket_th_4th_child: $primary_td_highlight3;
 $basket_continue_shopping_btn_border: $black;
-$basket_continue_shopping_link: $grey;
+$basket_continue_shopping_link: $black;
 $basket_content_link_color: $black;
 $basket_empty_continue_shopping_link: $white;
 $basket_empty_continue_shopping_btn_bg: $black;
 $basket_available_code: $black;
+$basket_td_pri_txt: $black;
+$basket_checkout_securely_btn_bg: $royal-blue;
+$mobile_continue_shopping_btn_text: $white;
+$mobile_continue_shopping_btn_border: $black;
+$mobile_continue_shopping_btn_bg: $black;
+$desktop_continue_shopping_btn_text: $black;
+$desktop_continue_shopping_btn_border: $black;
+$desktop_continue_shopping_btn_bg: $white;
 
 // Sec text is Size, color, item code attributes.
 $basket_td_sec_txt: $grey;
@@ -450,8 +484,11 @@ $basket_free_delivery_active_header_promo_txt: $black;
 $user_order_help_bg: $azure-blue;
 $user_order_help_text : $white;
 $user_order_help_text_links: $user_order_help_text;
-$password_tooltip_list: $black;
+$password_tooltip_list: $alizarin-crimson;
 $_password_tooltip_list_error: $alizarin-crimson;
+$block_acm_customer_txt: $black;
+$order_search_form_icon: $white;
+$order_search_form_border: $gallery;
 
 // Checkout order summary block.
 $checkout_order_summary_title_border: $gallery;
@@ -461,6 +498,7 @@ $order_summary_section_border: $gallery;
 $order_summary_subtotal: $black;
 $order_summary_order_status: $grey;
 $order_summary_product_img_border: $light-greyish;
+$order_summary_border: $light-greyish;
 
 // Form Items
 $formitem_label: $grey;
@@ -487,7 +525,8 @@ $checkout_confirm_order_summary_row: $azure-blue;
 $order_print_btn_bg: $azure-blue;
 $order_print_btn_border: $gallery;
 $order_print_btn_text: $white;
-$order_recent_order_order_detail_link_bg: $grey;
+$order_recent_order_order_detail_link: $black;
+$order_recent_order_order_detail_link_bg: $wild-sand;
 $recent_order_table_row_border: $grey;
 $order_accordion_open_bg: $wild-sand;
 $order_detail_delivery_details_row_bg: $azure-blue;
@@ -521,9 +560,11 @@ $progress_loader: $black;
 
 // PLP LHN block.
 $lhn_l2: $black;
-$lhn_l3: $grey;
+$lhn_l3: $black;
 $lhn_l4: $grey;
 $l3-link-hover: $black;
+$lhn_l3_active_bg: $black;
+$lhn_l3_active_text: $white;
 
 // Megamenu inline layout.
 $megamenu-inline-layout-active-border-color: $black;

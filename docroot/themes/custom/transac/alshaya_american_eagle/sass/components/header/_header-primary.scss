@@ -140,6 +140,7 @@ header.c-header {
       width: 2.8125rem;
       height: 2.5rem;
       background-position: -0.25rem;
+      #{$left}: -2.75rem;
 
       html[lang=ar] & {
         background-position: 0.25rem;
@@ -204,9 +205,9 @@ header.c-header {
 
         input[type="text"],
         input[type="search"] {
-          width: 21rem;
+          width: 24rem;
           font-size: 0.875rem;
-          padding-#{$right}: 2.1875rem;
+          padding-#{$right}: 2.875rem;
           max-width: 24.6875rem;
           text-transform: none;
           border-#{$right}: 0;
@@ -332,6 +333,10 @@ header.c-header {
 
   #mini-cart-wrapper {
     .cart-link-total {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+
       padding-#{$right}: 0.5rem;
       margin-top: 0.625rem;
       margin-#{$right}: 1.25rem;
@@ -389,24 +394,23 @@ header {
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     max-width: 76.75rem;
+    text-align: center;
 
     ul.menu--one__list {
-      width: auto;
       background: $mm_bg_desk;
     }
 
     li.menu--one__list-item {
       display: inline-block;
-      text-transform: uppercase;
+      text-transform: capitalize;
       text-align: center;
       height: 2.5rem;
 
       .menu--one__link {
         border: 0;
         height: 2.5rem;
-        font-size: 1rem;
+        font-size: 0.875rem;
         padding: 0.625rem 1.5rem;
-        font-family: $alshaya-bold;
         line-height: 1;
         color: $mm_l1_link;
         margin-top: 0;
@@ -420,7 +424,6 @@ header {
 
       &:hover {
         .menu--one__link {
-          background: $mm_l1_link_hover_bg;
           border: 0;
         }
       }
@@ -436,13 +439,6 @@ header {
         background: $mm_l2_bg;
       }
     }
-  }
-}
-
-.c-pre-content__region {
-  @include breakpoint($desktop) {
-    border: 0;
-    height: auto;
   }
 }
 
@@ -591,18 +587,283 @@ header {
   }
 }
 
-.menu--active {
-  .mobile--close {
-    height: 2.125rem;
-    padding-top: 0.3125rem;
+.c-pre-content {
+  @include breakpoint($desktop) {
+    background: $mm_bg_desk;
+  }
+}
 
+/*
+	SITE HEADER - MAIN NAVIGATION
+*/
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      display: block !important;
+      text-align: center;
+      font-size: 0;
+    }
+
+    li.menu--one__list-item {
+      display: inline-block;
+      vertical-align: middle;
+
+      a.menu--one__link {
+        @include arabic-letter-spacing;
+
+        display: block;
+        border-top: 2px solid transparent !important;
+        border-bottom: none !important;
+        margin-top: 0.3125rem;
+        font-size: 0.875rem;
+        text-transform: capitalize;
+        font-family: $alshaya-thin;
+        height: 2.5rem;
+        margin-#{$left}: 1.5625rem;
+        margin-#{$right}: 1.5625rem;
+        padding-#{$left}: 1.125rem;
+        padding-#{$right}: 1.125rem;
+
+        &::after {
+          content: '';
+          height: 0.1875rem;
+          background-color: $mm_l1_link_bg;
+          width: 100%;
+          margin-top: 0.375rem;
+          position: absolute;
+          #{$left}: 0;
+          bottom: 0.125rem;
+          transition: all 0.3s ease-out;
+          visibility: hidden;
+
+          html[lang='ar'] & {
+            margin-top: 0.5625rem;
+          }
+        }
+      }
+
+      &:hover {
+        a.menu--one__link {
+          &::after {
+            background-color: $primary_link-hover;
+            visibility: visible;
+          }
+        }
+      }
+
+      .menu--one__link {
+        &.active {
+          border-bottom: none;
+          color: $mm_l1_link;
+
+          &::after {
+            background-color: $primary_link-hover;
+            visibility: visible;
+          }
+        }
+      }
+
+      &:hover {
+        & > ul.menu--two__list {
+          border-bottom: 2px solid $mm_l1_border;
+          transform: none;
+
+          &::after {
+            content: '';
+            height: 1px;
+            width: 100%;
+            background: $mm_l1_link_bg;
+            position: absolute;
+            top: -0.9375rem;
+            opacity: 0.24;
+            transition: all 0.3s ease-out;
+            #{$left}: 0;
+          }
+        }
+      }
+
+      ul.menu--two__list {
+        display: block;
+        overflow: hidden;
+        transform: none;
+        border-top: none;
+      }
+    }
+  }
+
+  .menu--two__list {
+    .menu--two__list-item {
+      > .menu-two__link-wrapper {
+        width: 13.125rem;
+
+        .menu__link {
+          @include arabic-letter-spacing;
+
+          line-height: 1.69;
+          text-transform: uppercase;
+        }
+
+        p {
+          font-family: $alshaya-thin;
+          font-size: 0.75rem;
+          margin-top: 0.375rem;
+        }
+
+        &:hover {
+          background: transparent;
+        }
+      }
+
+      .menu__link-wrapper {
+        .menu-two__link {
+          font-size: 0.75rem;
+        }
+      }
+
+      .menu--three__list {
+        li {
+          padding: 0.3125rem 0;
+        }
+
+        a {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .highlights {
+    .highlighted {
+      margin: 0 0.625rem;
+    }
+  }
+
+  .block-alshaya-main-menu {
+    text-align: center;
+
+    .main--menu {
+      display: inline-block !important;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .mobile--overlay {
+    .branding__menu {
+      border-bottom: 0;
+    }
+  }
+
+  .main--menu {
+    ul.menu--one__list {
+      @include breakpoint ($only-tablet) {
+        width: 20rem;
+      }
+    }
+  }
+
+  .main--menu {
+    .menu__link {
+      @include arabic-letter-spacing;
+
+      font-size: 0.875rem;
+      color: $mm_l1_link;
+      height: 3rem;
+      line-height: 1.5;
+    }
+  }
+
+  .menu__list-item {
+    @include arabic-letter-spacing;
+
+    font-family: $alshaya-thin;
+    text-transform: capitalize;
+    font-weight: normal;
+    display: block;
+    font-size: 0.875rem;
+    border-bottom: 1px solid $mm_l1_border;
+  }
+
+  .menu--two__list-item {
+    > .menu-two__link-wrapper {
+      border-bottom: none;
+    }
+
+    .menu__in {
+      float: $right;
+      margin-top: -2.5rem;
+      margin-#{$right}: 0.51rem;
+    }
+  }
+
+  .menu--three__list-item {
+    > .menu-two__link-wrapper {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  }
+
+  .menu--three__list-item,
+  .menu--four__list-item {
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+  }
+
+  .menu__in {
+    margin-top: -2.5rem;
+    margin-#{$right}: 0.51rem;
+
+    @include icon(chevron#{$right}, after) {
+      font-size: 2rem;
+      display: inline-block;
+      font-weight: bold;
+    }
+  }
+
+  .menu__back {
+    background: transparent;
+
+    @include icon(chevron#{$left}, after) {
+      color: $header_c_menu_icon_color;
+      font-size: 2rem;
+      display: inline-block;
+      cursor: pointer;
+      pointer-events: none;
+      position: absolute;
+      top: 0.375rem;
+      #{$left}: 0.25rem;
+    }
+  }
+
+  .menu--two__list,
+  .menu--three__list,
+  .menu--four__list {
     @include breakpoint ($only-tablet) {
-      #{$left}: 20.5rem;
+      width: 20rem;
+    }
+  }
+}
+
+.mobile--close {
+  span {
+    @include icon(close) {
+      width: 1.563rem;
+      height: 1.563rem;
+      font-size: 2.5rem;
+      position: absolute;
+      top: -0.3125rem;
+      #{$left}: -2px;
+      color: $header_mobile_menu_close;
     }
   }
 }
 
 .toggle--sign {
+  @include arabic-letter-spacing;
+
   font-size: 0.875rem;
   font-family: $alshaya-thin;
   font-weight: normal;
@@ -615,6 +876,8 @@ header {
   }
 
   .one {
+    @include arabic-letter-spacing;
+
     flex: 1;
     font-family: $alshaya-thin;
 
@@ -635,8 +898,13 @@ header {
       }
     }
 
+    @include breakpoint($only-tablet) {
+      color: $header_c_menu_icon_text;
+    }
+
     @include breakpoint($only-mobile) {
       width: 100%;
+      color: $header_c_menu_icon_text;
 
       html[lang=ar] & {
         padding: 0.9rem 0;
@@ -669,72 +937,94 @@ header {
   }
 }
 
-.main--menu {
-  ul.menu--one__list {
-    @include breakpoint($only-tablet) {
+// Tablet Specific menu width
+@include breakpoint($upto-desktop) {
+  .menu--active .toggle--sign {
+    @include breakpoint ($only-tablet) {
       width: 20rem;
     }
   }
-}
 
-@include breakpoint($upto-desktop) {
-  .main--menu {
-    .menu__link {
-      font-size: 0.875rem;
-      text-transform: capitalize;
-      color: $mm_l2_link;
+  .menu--active .mobile--close {
+    #{$left}: 87.375%;
+
+    @include breakpoint ($only-tablet) {
+      #{$left}: 20.5rem;
     }
   }
 
-  .menu__in {
-    margin-top: -2.5rem;
-    width: 1.875rem;
-
-    .menu--two__list-item & {
-      margin-top: -2.5rem;
-      margin-#{$right}: 0.0625rem;
-    }
-
-    &::after {
-      font-size: 2rem;
-    }
-  }
-
-  .menu__list-item,
-  .back--link {
-    text-transform: capitalize;
-    font-family: $alshaya-thin;
-    font-size: 0.875rem;
-  }
-
-  .menu__back {
-    width: 0.9375rem;
-    margin-#{$left}: 0.625rem;
-    background: none;
-
-    @include icon(chevron#{$left}) {
-      width: 1rem;
-      height: 1.4375rem;
-      font-size: 2rem;
-      position: relative;
-      top: -0.75rem;
-      #{$left}: -0.75rem;
+  .main--menu ul.menu--one__list {
+    @include breakpoint ($only-tablet) {
+      width: 20rem;
     }
   }
 }
 
 .logged-in {
   .c-menu-primary {
-    .hamburger--menu {
-      @include breakpoint($only-mobile) {
-        padding: 0.3125rem 0.25rem;
+    @include breakpoint($only-mobile) {
+      .hamburger--menu {
+        padding: 0.3125rem;
       }
     }
   }
 }
 
-.c-pre-content {
-  @include breakpoint($desktop) {
-    background: $mm_bg_desk;
+.block-alshaya-main-menu {
+  .active--menu--links {
+    li {
+      &.menu--one__list-item {
+        &:hover {
+          a {
+            &.menu--one__link {
+              border: none;
+              border-top: 2px solid transparent;
+
+              @include breakpoint($desktop) {
+                color: $header_c_menu_text;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li {
+        &.menu--one__list-item {
+          a {
+            &.menu--one__link {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.highlights {
+  .title {
+    display: none;
+  }
+
+  .hightlight__title {
+    text-transform: uppercase;
+  }
+
+  .hightlight__description {
+    html[lang="ar"] & {
+      line-height: 1.4;
+    }
+  }
+
+  .highlighted {
+    a {
+      &:hover {
+        .hightlight__description {
+          text-decoration: none;
+        }
+      }
+    }
   }
 }
