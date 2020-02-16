@@ -10,8 +10,8 @@
 
         &.active--tab--head {
           @include breakpoint($only-tablet) {
-            #{$right}: -1px;
-            margin-#{$left}: -1px;
+            #{$right}: -0.0625rem;
+            margin-#{$left}: -0.0625rem;
           }
 
           &::before {
@@ -61,7 +61,7 @@
 
       &.tab-home-delivery {
         &:not(.active--tab--head) {
-          margin-#{$left}: -1px;
+          margin-#{$left}: -0.0625rem;
         }
       }
 
