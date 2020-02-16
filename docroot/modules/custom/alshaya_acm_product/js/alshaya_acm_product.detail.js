@@ -395,7 +395,7 @@
       variantToDisableSelector.find('.edit-quantity').prop('disabled', true);
     } else {
       $('.edit-add-to-cart.button').prop('disabled', false);
-      $('#edit-quantity').prop('disabled', false);
+      $('.edit-quantity').prop('disabled', false);
     }
 
     // Add order quantity limit message.
