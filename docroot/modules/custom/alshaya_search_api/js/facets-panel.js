@@ -555,7 +555,7 @@
       var total_selected = 0;
       var facets_to_show_in_label = 2;
       // If any facet item active.
-      var active_facets = $(facet_block).find('ul li.is-active a span.facet-item__value');
+      var active_facets = $(facet_block).find('ul li.is-active:not(.facet-item--expanded) a span.facet-item__value');
       $.each(active_facets, function(index, element) {
         total_selected = total_selected + 1;
         // Show only two facets in title.

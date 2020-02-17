@@ -12,7 +12,7 @@
       }
 
       li {
-        &.is-active {
+        &.is-active:not(.facet-item--expanded) {
           background: none;
 
           .facet-item__value {
@@ -89,8 +89,11 @@
 
           > li {
             padding-top: 0.75rem !important;
-            padding-bottom: 0.75rem !important;
             border-bottom: 0.0625rem solid $plp_mobile_separator;
+
+            &:not(.active):not(.facet-item--active-trail) {
+              padding-bottom: 0.75rem !important;
+            }
 
             &:last-child {
               border-bottom: none;
@@ -125,11 +128,92 @@
           font-size: 0.75rem;
           line-height: 1.3125rem;
           display: inline-flex;
+          margin: 0;
         }
 
         &.is-active::after {
           font-size: 1.3125rem;
           line-height: 1.3125rem;
+        }
+      }
+    }
+
+    .facet-item.facet-item--expanded {
+      ul {
+        display: none;
+        position: static;
+        max-height: none;
+        min-width: auto;
+        margin-top: 1.25rem;
+        width: auto;
+        border: none;
+
+        @include breakpoint($upto-desktop) {
+          margin-#{$left}: -1.125rem;
+          margin-top: 0.75rem;
+        }
+
+        li {
+          margin-#{$left}: 0;
+
+          @include breakpoint($upto-desktop) {
+            border-top: 0.0625rem solid $plp_mobile_separator;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 0.9375rem;
+          }
+        }
+      }
+
+      & > label {
+        @include breakpoint($upto-desktop) {
+          position: relative;
+          cursor: pointer;
+
+          @include icon(chevrondown, after) {
+            font-size: 1.1875rem;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            #{$right}: 0.6875rem;
+            transition: transform 0.4s ease-in-out;
+          }
+        }
+
+        .facet-item__value {
+          @include breakpoint($desktop) {
+            @include icon(chevrondown, after) {
+              font-size: 1.3125rem;
+              line-height: 1.3125rem;
+              transition: transform 0.4s ease-in-out;
+            }
+          }
+        }
+      }
+
+      &.facet-item--active-trail,
+      &.active {
+        & > label {
+          &::after {
+            @include breakpoint($upto-desktop) {
+              transform: translateY(-50%) rotate(180deg);
+            }
+          }
+
+          .facet-item__value {
+            &::after {
+              @include breakpoint($desktop) {
+                transform: rotate(180deg);
+              }
+            }
+          }
+        }
+      }
+
+      &.facet-item--active-trail {
+        ul {
+          display: block !important;
         }
       }
     }

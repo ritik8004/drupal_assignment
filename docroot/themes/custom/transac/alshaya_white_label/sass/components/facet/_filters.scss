@@ -63,7 +63,7 @@
       min-height: auto;
       position: relative;
 
-      &.is-active {
+      &.is-active:not(.facet-item--expanded) {
         background: $plp_filter_active_item;
 
         @include icon(check, after) {

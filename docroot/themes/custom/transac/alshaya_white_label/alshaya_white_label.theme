@@ -1598,10 +1598,18 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
       && in_array('is-active', $item['value']['#attributes']['class'])) {
       if ($variables['items'][$key]['attributes'] instanceof Attribute) {
         $variables['items'][$key]['attributes']->addClass('is-active');
-
         // Update flag as there is active category facet.
         if ($is_category_facet) {
           $category_active_facet = TRUE;
+        }
+      }
+    }
+    // Checking if there are any L2 items.
+    if (isset($item['value']['children']['#items'])) {
+      foreach ($item['value']['children']['#items'] as $key1 => $children) {
+        if ($children['#title']['#is_active'] == TRUE) {
+          // Setting 'is-active' class for L2 items.
+          $variables['items'][$key]['value']['children']['#items'][$key1]['#wrapper_attributes']['class'][] = 'is-active';
         }
       }
     }
