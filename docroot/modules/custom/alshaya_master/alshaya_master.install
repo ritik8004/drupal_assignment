@@ -12,19 +12,16 @@ use Drupal\Core\Config\FileStorage;
  * Implements hook_update_N().
  *
  * Adding arabic translations for -
- * 'Purchase limit has been reached',
- * 'Limited to' and 'per customer'.
+ * 'Purchase limit has been reached' and
+ * 'Limited to @max_sale_qty per customer'.
  */
 function alshaya_master_update_8036() {
   $strings = [
     'Purchase limit has been reached' => [
       'ar' => 'تم الوصول إلى حد الشراء',
     ],
-    'Limited to' => [
-      'ar' => 'الحد الأقصى',
-    ],
-    'per customer' => [
-      'ar' => 'لكل زبون',
+    'Limited to @max_sale_qty per customer' => [
+      'ar' => 'الحد الأقصى @max_sale_qty لكل زبون',
     ],
   ];
 
@@ -1854,11 +1851,8 @@ function alshaya_master_install() {
     'Purchase limit has been reached' => [
       'ar' => 'تم الوصول إلى حد الشراء',
     ],
-    'Limited to' => [
-      'ar' => 'الحد الأقصى',
-    ],
-    'per customer' => [
-      'ar' => 'لكل زبون',
+    'Limited to @max_sale_qty per customer' => [
+      'ar' => 'الحد الأقصى @max_sale_qty لكل زبون',
     ],
   ];
 

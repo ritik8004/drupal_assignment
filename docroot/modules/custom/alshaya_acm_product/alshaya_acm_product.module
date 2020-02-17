@@ -362,6 +362,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_order_quantity_limit'] = [
+    'variables' => [
+      'message' => NULL,
+      'limit_reached' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -635,7 +642,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $settingsKey = ($view_mode == 'matchback') ? 'matchback' : 'productInfo';
+        $settingsKey = ($view_mode === 'full') ? 'productInfo' : $view_mode;
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
@@ -667,10 +674,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $max_sale_qty_variables = $productOrderLimit->getMaxSaleQtyVariables($sku_entity, $max_sale_qty);
           }
         }
-
-        if ($sku_entity->bundle() == 'configurable') {
+        elseif ($sku_entity->bundle() == 'configurable') {
           // Check if max sale qty limit is set for parent.
           $max_sale_qty = $productOrderLimit->getParentMaxSaleQty($sku_entity);
+          $max_sale_qty_variables = [];
+
           if (!empty($max_sale_qty)) {
             // Get max sale qty variables.
             $max_sale_qty_variables = $productOrderLimit->getMaxSaleQtyVariables($sku_entity, $max_sale_qty);
@@ -681,10 +689,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         // Setting max sale qty variables at parent level.
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['maxSaleQty'] = isset($max_sale_qty_variables) ? $max_sale_qty_variables['maxSaleQty'] : '';
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = isset($max_sale_qty_variables) ? $max_sale_qty_variables['orderLimitMsg'] : '';
-        $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitExceeded'] = isset($max_sale_qty_variables) ? $max_sale_qty_variables['orderLimitExceeded'] : FALSE;
-
+        if (!empty($max_sale_qty_variables)) {
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['maxSaleQty'] = $max_sale_qty_variables['maxSaleQty'];
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = $max_sale_qty_variables['orderLimitMsg'];
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitExceeded'] = $max_sale_qty_variables['orderLimitExceeded'];
+        }
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
       }
 

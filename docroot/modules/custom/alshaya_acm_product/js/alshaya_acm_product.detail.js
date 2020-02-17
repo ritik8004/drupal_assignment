@@ -92,8 +92,8 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
-        var viewMode = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'full';
+        var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
+        var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
 
         // Fill the view mode form field.
         $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
@@ -373,13 +373,14 @@
   Drupal.disableLimitExceededProducts = function (sku, selected) {
     var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
     var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
-    var productKey = ($('input[value=' + selected + ']').parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+    var viewMode = $('input[value=' + selected + ']').parents('article.entity--type-node').attr('data-vmode');
+    var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
     var parentInfo = typeof(drupalSettings[productKey][sku]) !== "undefined" ? drupalSettings[productKey][sku] : '';
     // At parent level, sku and selected will be same.
     var variantInfo = (typeof(drupalSettings[productKey][sku]['variants']) !== "undefined" && sku !== selected) ? drupalSettings[productKey][sku]['variants'][selected] : '';
 
     // If limit exists at parent level.
-    if ((parentInfo !== '') && (parentInfo.maxSaleQty !== '')) {
+    if ((parentInfo !== '') && (typeof(parentInfo.maxSaleQty) !== "undefined")) {
       var orderLimitMsg = parentInfo.orderLimitMsg;
       var orderLimitExceeded = parentInfo.orderLimitExceeded ? parentInfo.orderLimitExceeded : false;
       var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');

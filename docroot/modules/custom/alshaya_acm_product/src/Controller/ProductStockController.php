@@ -149,10 +149,12 @@ class ProductStockController extends ControllerBase {
         );
 
         $orderLimitData = [];
-        $viewModeKey = isset($data['product_view_mode']) ? $data['product_view_mode'] : 'productInfo';
+        $viewModeKey = isset($data['product_view_mode']) && ($data['product_view_mode'] !== 'full') ?
+          $data['product_view_mode'] : 'productInfo';
         $parent_sku = isset($data['selected_parent_sku']) ? $data['selected_parent_sku'] : $variant_sku;
         // Check if max sale qty limit is set for parent.
         $max_sale_qty = $this->productOrderLimit->getParentMaxSaleQty($variant);
+
         if (!empty($max_sale_qty)) {
           // Get max sale qty variables.
           $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);

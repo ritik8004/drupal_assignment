@@ -47,11 +47,23 @@ class ProductOrderLimit {
    *   Order limit message.
    */
   public function maxSaleQtyMessage($max_sale_qty, $limit_exceeded = FALSE) {
+    $order_limit_msg = '';
+
     if ($limit_exceeded) {
-      $order_limit_msg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' . $this->t('Purchase limit has been reached') . '</span>';
+      $build = [
+        '#theme' => 'product_order_quantity_limit',
+        '#message' => $this->t('Purchase limit has been reached'),
+        '#limit_reached' => TRUE,
+      ];
+      $order_limit_msg = render($build);
     }
-    else {
-      $order_limit_msg = (!empty($max_sale_qty)) ? '<span class="order-qty-limit-msg-inner-wrapper">' . $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]) . '</span>' : '';
+    elseif (!empty($max_sale_qty)) {
+      $build = [
+        '#theme' => 'product_order_quantity_limit',
+        '#message' => $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]),
+        '#limit_reached' => FALSE,
+      ];
+      $order_limit_msg = render($build);
     }
 
     return $order_limit_msg;
@@ -64,7 +76,7 @@ class ProductOrderLimit {
    *   Variant Sku.
    *
    * @return array
-   *   Quantity limit.
+   *   Quantity currently in cart.
    */
   public function getCartItemQtyLimit($variant_sku) {
     $qty_limit = 0;
@@ -159,11 +171,12 @@ class ProductOrderLimit {
       $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
     }
     else {
+      $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
       $plugin = $sku->getPluginInstance();
       $max_sale_qty = $plugin->getMaxSaleQty($sku);
     }
 
-    return isset($max_sale_qty) ? $max_sale_qty : 0;
+    return $max_sale_qty ?? 0;
   }
 
 }

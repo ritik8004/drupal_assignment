@@ -211,25 +211,25 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $item['quantity']['#suffix'] .= alshaya_acm_get_remove_from_basket_link($cart, $sku_entity);
 
       $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+      $plugin = $sku_entity->getPluginInstance();
+
       // Check if max sale qty limit is set for parent.
       $parent_sku = $skuManager->getParentSkuBySku($id);
-      $max_sale_qty = $parent_sku ? $productOrderLimit->getParentMaxSaleQty($parent_sku) : 0;
-      // Get product qty in cart for variant.
-      $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
-      if ($current_variant_in_cart_qty) {
-        // Get max sale qty for the variant in cart.
-        $plugin = $sku_entity->getPluginInstance();
-        $max_sale_qty = !empty($max_sale_qty) ? $max_sale_qty : $plugin->getMaxSaleQty($id);
+      // Get max sale qty for the variant in cart if not present for parent.
+      $max_sale_qty = ($parent_sku && $productOrderLimit->getParentMaxSaleQty($parent_sku)) ?
+        $productOrderLimit->getParentMaxSaleQty($parent_sku) : $plugin->getMaxSaleQty($id);
 
-        if (!empty($max_sale_qty)) {
-          if ($current_variant_in_cart_qty >= $max_sale_qty) {
-            // Show msg and disable quantity dropdown if order limit is reached.
-            $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) . '</div>';
-            $item['quantity']['#attributes']['disabled'] = 'disabled';
-          }
-          else {
-            $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty) . '</div>';
-          }
+      if (!empty($max_sale_qty)) {
+        // Get product qty in cart for variant.
+        $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
+
+        if ($current_variant_in_cart_qty && ($current_variant_in_cart_qty >= $max_sale_qty)) {
+          // Show msg and disable quantity dropdown if order limit is reached.
+          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) . '</div>';
+          $item['quantity']['#attributes']['disabled'] = 'disabled';
+        }
+        else {
+          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty) . '</div>';
         }
       }
 
@@ -883,16 +883,16 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   /** @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit */
   $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+  $plugin = $sku_entity->getPluginInstance();
 
   // Check if max sale qty limit is set for parent.
   $parent_sku = $skuManager->getParentSkuBySku($sku_entity);
-  $max_sale_qty = $parent_sku ? $productOrderLimit->getParentMaxSaleQty($parent_sku) : 0;
+  // Get max sale qty for the variant in cart if not set for parent.
+  $max_sale_qty = ($parent_sku && $productOrderLimit->getParentMaxSaleQty($parent_sku)) ?
+    $productOrderLimit->getParentMaxSaleQty($parent_sku) : $plugin->getMaxSaleQty($sku_entity);
 
   // If item is not available in stock.
   if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
-    // Get max sale qty for the variant in cart if not set for parent.
-    $plugin = $sku_entity->getPluginInstance();
-    $max_sale_qty = !empty($max_sale_qty) ? $max_sale_qty : $plugin->getMaxSaleQty($sku_entity);
     // We show lower of available quantity and max_sale_qty in dropdown.
     $quantity = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
 

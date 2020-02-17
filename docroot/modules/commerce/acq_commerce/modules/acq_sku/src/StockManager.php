@@ -506,7 +506,7 @@ class StockManager {
    */
   public function getMaxSaleQty(string $sku) {
     $stock = $this->getStock($sku);
-    return isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : 0;
+    return $stock['max_sale_qty'] ?? 0;
   }
 
 }

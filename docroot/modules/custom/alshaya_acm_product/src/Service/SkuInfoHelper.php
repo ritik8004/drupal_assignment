@@ -377,7 +377,7 @@ class SkuInfoHelper {
     return [
       'in_stock' => $this->skuManager->isProductInStock($sku_entity),
       'stock' => (float) $this->skuManager->getStockQuantity($sku_entity),
-      'max_sale_qty' => (int) ($plugin ? $plugin->getMaxSaleQty($sku_entity) : 0),
+      'max_sale_qty' => (int) $plugin->getMaxSaleQty($sku_entity),
     ];
   }
 
