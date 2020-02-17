@@ -378,6 +378,9 @@ $address_pp_delete_closebtn_cross: $white;
 $address_book_list_border: $gallery;
 $address_book_change_link: $black;
 $address_default_color: $black;
+$address_form_radio: $black;
+$address_book_delete_close: $white;
+$address_book_delete_cancel: $black;
 
 // Checkout Login
 $checkout_section_titles: $black;
@@ -399,9 +402,10 @@ $checkout_securely_icon_bg: $black;
 $checkout_securely_icon_mobile_txt: $white;
 $checkout_securely_txt: $white;
 $checkout_footer_txt: $grey;
-$checkout_delivery_options_border: $gallery;
-$checkout_default_address_border: $black;
+$checkout_delivery_options_border: $light-greyish;
+$checkout_default_address_border: $grey;
 $checkout_address_edit_link: $black;
+$checkout_deliverto_address_label: $grey;
 $checkout_footer_border-top: $gallery;
 
 // Address form.
@@ -414,6 +418,8 @@ $address_default_color: $black;
 $checkout_cc_cnc_form_title_border: $gallery;
 
 // Checkout Click & collect.
+$checkout_cc_list_map_link_active_border: $black;
+$checkout_cc_list_map_link_active: $black;
 $checkout_cc_list_hours_label: $black;
 $checkout_cc_list_hours_label_icon: $black;
 $checkout_cc_list_delivery_time: $grey;
@@ -499,6 +505,8 @@ $order_summary_subtotal: $black;
 $order_summary_order_status: $grey;
 $order_summary_product_img_border: $light-greyish;
 $order_summary_border: $light-greyish;
+$order_summary_title: $black;
+$total_order_total_txt: $black;
 
 // Form Items
 $formitem_label: $grey;
@@ -507,37 +515,32 @@ $formitem_label: $grey;
 $order_summary_sec_text: $grey;
 
 // Order Confirmation
-$order_detail_table_bg: $white;
+$order_detail_table_bg: $wild-sand;
 $checkout_confirm_order_message: $grey;
 $checkout_confirm_order_summary_row_text: $white;
 $checkout_order_print_btn_bg: false;
 $checkout_order_print_btn_text: $white;
-$checkout_order_print_btn_border: $gallery;
-$order_detail_order_details_row: $allport-blue;
-$checkout_order_details_label: $black;
+$checkout_order_print_btn_border: $white;
+$checkout_order_details_label: $grey;
 $checkout_order_details_product_count_border: $gallery;
 $checkout_order_details_icon: $black;
 $checkout_confirm_discount_row: $white;
-$order_detail_order_details_row_td_blend: $allport-blue;
+$checkout_confirm_continue_shopping_border: $black;
 
 // Order Print
 $checkout_confirm_order_summary_row: $azure-blue;
 $order_print_btn_bg: $azure-blue;
-$order_print_btn_border: $gallery;
+$order_print_btn_border: $white;
 $order_print_btn_text: $white;
 $order_recent_order_order_detail_link: $black;
 $order_recent_order_order_detail_link_bg: $wild-sand;
 $recent_order_table_row_border: $grey;
 $order_accordion_open_bg: $wild-sand;
-$order_detail_delivery_details_row_bg: $azure-blue;
-$order_detail_delivery_details_row_td_blend: $azure-blue;
 $order_detail_delivery_details_row_text: $white;
-$order_detail_delivery_details_row_content: $black;
 $order_print_delivery_details_row: $white;
 $order_print_delivery_details_row_text: $black;
 $order_print_delivery_details_row_border: $black;
 $order_print_product_count_row_border: $gallery;
-$order_print_delivery_subtotal_row_blend: $white;
 $order_print_total_row: $grey;
 
 // 404 and maintenance

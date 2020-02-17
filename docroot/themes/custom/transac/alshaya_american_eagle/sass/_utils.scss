@@ -1,4 +1,5 @@
 $aeo_theme_img_directory_path: '/themes/custom/transac/alshaya_american_eagle/imgs';
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_american_eagle/imgs/icons/AEO-loader.svg';
 
 @mixin icon_img_styles($height, $width) {
   speak: none;
@@ -72,6 +73,8 @@ $aeo_theme_img_directory_path: '/themes/custom/transac/alshaya_american_eagle/im
       @include pdp_icon_img_styles($height, $width);
     }
   }
+
+  @content;
 }
 
 @mixin ellipsis-text {
