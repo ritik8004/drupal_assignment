@@ -351,3 +351,10 @@ spc-login:
       css/conditional-sass/spc-login/spc-login.ltr.css: {}
   dependencies:
     - alshaya_white_label/spc-utils
+
+spc-checkout-confirmation:
+  css:
+    theme:
+      css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/spc-utils

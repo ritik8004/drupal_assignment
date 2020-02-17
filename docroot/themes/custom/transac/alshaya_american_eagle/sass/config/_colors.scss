@@ -1,0 +1,529 @@
+/* ------- 1. Brand Colors ------- */
+$black: #000;
+$white: #fff;
+$alizarin-crimson: #e51b23;
+$grey: #888;
+$success-green: #39b54a;
+$wild-sand: #f6f6f6;
+$gallery: #eee;
+$azure-blue: #007aff;
+$allport-blue: #006ba6;
+$dove-gray: #707070;
+$cod-gray: #1a1a1a;
+$turquoise-blue: #5cf0cb;
+$forest-green: #2d9921;
+
+/* ------- 2. Primary Colors ------- */
+
+// Global elements.
+//$primary_bg: $white;
+$body_bg: $primary_bg;
+$content_pagetitle: $black;
+$content_pagetitle_border: $white-five;
+$primary_text: $black;
+$primary_link: $grey;
+$primary_link-hover: $black;
+$primary_link-active: $black;
+$primary_border: $grey; // Global border color
+$content_link_color: $azure-blue;
+
+// Form elements.
+$primary_form_selector_border: $grey;
+$primary_form_selector: $black;
+$primary_form_link: $black;
+$primary_input_focus_border: $black-two;
+$primary_input_inline_error: $alizarin-crimson;
+
+// Dropdown.
+$primary_dropdown_arrow_bg: false;
+$primary_dropdown_arrow: $black;
+$primary_dropdown_text: $black;
+$primary_dropdown_border: $gallery;
+$primary_dropdown_option_hover: $wild-sand;
+$primary_dropdown_option_border: $gallery;
+
+// Checkbox & Radio.
+$primary_radiobtn_filled: $black;
+$primary_radiobtn_empty: $black;
+$primary_checkbox_filled: $black;
+$primary_checkbox_empty: $black;
+
+// Buttons.
+$primary_btn_bg: $black;
+$primary_btn_text: $white;
+$primary_empty_btn: $black;
+$primary_empty_btn_border: $black;
+$primary_brand_button: $black;
+
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+
+/* ------- 3. Secondary color  ----- */
+// Global elements.
+$secondary_text: $grey;
+$secondary_link: $black;
+
+/* ------- 5. Components --------------- */
+
+// Language Switcher
+$lang_switch: $black;
+$lang_switch_active: $black;
+$lang_switch_firsttime_bg: $white;
+$lang_switch_firsttime_border: $white;
+$lang_switch_list_bg: $black;
+$lang_switch_list: $white;
+$lang_switch_close_icon_bg: $white;
+$lang_switch_close_icon: $black;
+
+// Accordion
+$accordion_border: $grey-light;
+$accordion_title: $black;
+$accordion_sub_title: $grey;
+$accordion_title_arrow: $black;
+$accordion_title_disabled: $grey;
+
+// Product detail page.
+$pdp_product_title: $black;
+$pdp_product_itemcode: $grey-light;
+$pdp_product_brand_text: $grey-light;
+$pdp_product_form_text: $grey-light;
+$pdp_product_volume_label: $grey-light;
+$pdp_product_volume_value: $black;
+$pdp_sidebar_description: $black;
+$pdp_sell_title: $black;
+$pdp_product_qty_text: $grey-light;
+$pdp_cross_sell_title: $black;
+$pdp_product_price: $black;
+$pdp_product_special_price: $alizarin-crimson;
+$pdp_product_color_swatch_border: $black;
+$pdp_accordion_title: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $black;
+$pdp_sidebar_link: $grey;
+$pdp_cc_btn_bg: $black;
+$pdp_desc_wrapper_border: $gallery;
+$pdp_cc_storefinder_link: $azure-blue;
+$pdp_cc_top_stores_list_border: $gallery;
+$pdp_sidebar_offerprice_bg: $alizarin-crimson;
+$pdp_sidebar_offerprice_text: $white;
+
+// Out of stock button.
+$oos_btn_bg: $alizarin-crimson;
+$oos_pdp_text: $white;
+
+// Department page
+$department_category_list_hover: $black;
+$department_category_accordion_title: $black;
+
+/* ------- 6. Sections and Pages --------------- */
+
+// Header.
+$header_bg: $white;
+$header_search_block_bg: $white;
+$header_border: $gallery;
+
+// Header mobile search.
+$header_search_border_mobile: $gallery;
+$header_search_active_bg: false;
+$header_search_active_text: $black;
+
+// Header - Search.
+$primary_search_btn: $black;
+$primary_search_btn_icon: $black;
+$primary_search_input: $black;
+$primary_search_input_placeholder: $grey;
+$primary_search_border: $gallery;
+$primary_search_result_hover: $grey;
+$primary_search_text: $grey;
+
+// C-menu primary i:e Mobile and tablet header menu links.
+$header_c_menu_text: $grey;
+$header_c_menu_icon_color: $black;
+$header_c_menu_icon_text: $black;
+$header_toggle_sign_default: $grey;
+$header_toggle_sign_active_tab: $black;
+$header_toggle_sign_active_tab_bg: $white;
+$header_mobile_menu_arrow: $black;
+$header_mobile_menu_active: $white;
+$header_mobile_menu_close_bg: $black;
+$header_mobile_menu_close: $white;
+$header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+$header_c_menu_border: $gallery;
+
+// Branding menu mobile.
+$header_branding_shadow: $shadow;
+
+// Header secondary: ie: top header.
+$header_secondary_bg_upto_desk: $wild-sand;
+$header_secondary_menu_link_mobile: $black;
+$header_secondary_menu_link: $black-two;
+$header_secondary_menu_link_hover_bg: $white;
+
+// Header my account nav.
+$header_my_account_h3_title: $black;
+$header_my_account_bg: $white;
+$header_my_account_link_hover: $black;
+$header_my_account_icon: $black;
+$my_account_nav_active : $black;
+$my_account_nav_hover: $black;
+
+// Mega menu.
+$mm_bg: $white;
+$mm_bg_desk: $white;
+$mm_l1_border: $gallery;
+$mm_l1_link_bg: $white;
+$mm_l1_link_hover: $black;
+$mm_l1_link_hover_bg: $grey;
+$mm_l1_link_hover_active: $black;
+$mm_l1_link_hover_border_to_fill_space: $black;
+$mm_l1_link_active_border: $black;
+$mm_l2_bg: $white;
+$mm_l2_link: $black;
+$mm_l2_link_hover: $black;
+$mm_l2_p: $grey;
+$mm_l3_link: $grey;
+$mm_l3_link_bg: $white;
+$mm_l3_link_hover: $black;
+$mm_highlight_label: $black;
+$mm_p_a_text: $black;
+$mm_highlight_label: $black;
+$mm_highlight_title: $black;
+$mm_highlight_description: $black;
+$mm_p_a_text: $grey;
+$highlights_subtitle_hover: $black;
+$mm_mob_arrow_icon: $black;
+
+//  Mini Cart.
+$primary_minicart_text: $black;
+$primary_minicart_quantity_bg: $alizarin-crimson;
+
+// Counters.
+$primary_counter_bg: $black;
+$secondary_counter_bg: $grey;
+
+// Checkout Progress.
+$checkout_seperator: $gallery;
+$checkout_counter_border: $black;
+
+// Checkout Payment.
+$checkout_payment_form_border: $gallery;
+$checkout_payment_method_title: $black;
+
+// Checkout tabs & form.
+
+$checkout_tab_default_title: $black;
+$checkout_tab_active_title: $black;
+$checkout_tab_active_border: $black;
+$checkout_tab_description: $black;
+$checkout_section_titles: $black;
+$checkout_tab_separator: $black;
+$secure_checkout_back_link: $black;
+$checkout_transaction_type_color: $black;
+$checkout_form_actions_footer: $grey;
+
+// Checkout mobile back link.
+$checkout_mobile_back_link_icon: $black;
+
+// Notification popup.
+$minicart_notification_border: $black;
+$minicart_notification_background: $white;
+$minicart_notification_text: $black;
+$minicart_notification_btn_bg: $black;
+$minicart_notification_product_title: $black;
+$minicart_notification_shadow: $shadow;
+$minicart_notification_qty_text: $grey;
+
+//3. Footer
+$footer_bg: $white;
+$footer_border_top: $light-greyish;
+$footer_accordion_border: $gallery;
+$footer_title_h3: $black;
+$footer_link_mobile: $grey;
+$footer_link: $grey;
+$footer_link_hover: $black;
+
+// Social links.
+$social_links: $black;
+
+//1. Copyright
+$copyright_footer_bg: $white;
+$copyright_footer_text: $black;
+$copyright_footer_paragraph: $black;
+
+//7. Newsletter-signup
+$newsletter_title_h3: $black;
+$newsletter_block_text: $black;
+$newsletter_input_placeholder: $grey;
+$newsletter_input_border: $light-greyish;
+$newsletter_submit_btn: $black;
+$newsletter_submit_btn_text: $white;
+$newsletter_success: $success-green;
+
+// Promo Blocks
+$promo_link: $grey;
+$promo_text: $black;
+
+/* ------- 7. Pages ----- */
+
+// Product listing page and search page.
+$plp_category_desc: $black;
+$plp_facet_filter_bg: $black;
+$plp_facet_clear_border: $black;
+$plp_facet_clear_border_mobile: $black;
+$plp_facet_clear_text: $black;
+$plp_facet_input_border: $gallery;
+$plp_facet_dropdown_bg: $white;
+$plp_facet_dropdown_icon: $black;
+$plp_facet_label_border_mobile: $gallery;
+$plp_facet_border: $gallery;
+$plp_facet_summary_filter_icon: $white;
+$plp_item_label: $black;
+$plp_promotion_description: $gallery;
+$plp_promotion_link: $alizarin-crimson;
+$plp_facet_filter_count_background: $black;
+$plp_grid_active_color: $black;
+$plp_all_filter_title: $black;
+$plp_clear_all_btn_text: $black;
+$plp_clear_all_btn_disabled: $grey;
+$plp_clear_all_btn_disabled: $grey;
+$plp_all_filter_button_color: $black;
+$plp_filter_icon: $black;
+$plp_filter_active_tick: $black;
+
+// PLP Product tile.
+$plp_tile_product_title: $black;
+$plp_tile_product_title_hover: $grey;
+
+// PLP Product title hover.
+$plp_pager_link: $white;
+$plp_pager_link_border: $gallery;
+$plp_pager_link_bg: $black;
+
+// Facet
+$category_facet_active_icon: $black;
+$category_facet_active_text: $white;
+
+// Store finder page.
+
+// Store finder header form.
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $black;
+$store_finder_text: $black;
+$store_finder_icon: $black;
+$store_finder_border_hover: $black;
+$store_finder_text_hover: $black;
+$store_finder_search_input_mobile_border: $gallery;
+$store_finder_search_input_border: $gallery;
+
+// Store finder gloassary.
+$store_finder_glossary_alphabet: $black;
+$store_finder_glossary_text: $grey;
+$store_finder_glossary_text_border: $black;
+$store_finder_glossary_border: $gallery;
+
+// Store finder search results.
+$store_finder_search_results_border: $gallery;
+$store_finder_search_results_tile_hover_bg: $wild-sand;
+$store_finder_search_results_tile_link: $grey;
+$store_finder_search_results_tile_icon: $black;
+$store_finder_search_results_hour_label: $grey;
+$store_finder_search_results_title: $black;
+$store_finder_search_results_counter_bg: $grey;
+$store_finder_search_results_store_address: $grey;
+$store_finder_search_results_down_arrow: $black;
+
+// User Form.
+$user_form_layout_divider_color: $grey;
+$user_block_link: $black;
+$user_sidebar_block_title: $black;
+$default_msg_bg: $forest-green;
+$user_login_section_title: $black;
+$user_ui_dialog_border: $gallery;
+
+// Contact Page
+$webform_contact_legend: $black;
+
+// Breadcrumb.
+$breadcrumb_bg: $wild-sand;
+$breadcrumb_link: $grey;
+$breadcrumb_link_hover: $black;
+$breadcrumb_link_active: $black;
+
+// Address book
+$address_list_background: rgba(51, 51, 51, 0.06);
+$address_pp_delete_closebtn: $black;
+$address_pp_delete_closebtn_cross: $white;
+$address_book_list_border: $gallery;
+$address_book_change_link: $black;
+$address_default_color: $black;
+
+// Checkout Login
+$checkout_section_titles: $black;
+$checkout_login_guest_email_text: $black;
+$checkout_login_guest_email_text_mobile: $black;
+$checkout_login_tab_border: $grey;
+$checkout_login_tab_text: $black;
+$checkout_login_border_active: $black;
+$checkout_section_title_border: $gallery;
+$checkout_login_btn_bg: $primary_btn_bg;
+
+//checkout layout
+$checkout_securely_icon_bg: $black;
+$checkout_securely_icon_mobile_txt: $white;
+$checkout_securely_txt: $white;
+$checkout_footer_txt: $grey;
+$checkout_delivery_options_border: $gallery;
+$checkout_default_address_border: $black;
+$checkout_address_edit_link: $black;
+
+// Address form.
+$address_button_border: $black;
+$address_button_text: $white;
+$address_book_border: $black;
+$address_default_color: $black;
+
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $gallery;
+
+// Checkout Click & collect.
+$checkout_cc_list_hours_label: $black;
+$checkout_cc_list_hours_label_icon: $black;
+$checkout_cc_list_delivery_time: $grey;
+$checkout_cc_list_delivery_time_tablet: $grey;
+$checkout_cc_store_address: $grey;
+$checkout_cc_list_select_store_btn_txt: $black;
+$checkout_cc_list_select_store_btn_border: $black;
+$checkout_cc_list_map_link_default: $black;
+$checkout_cc_list_map_link_border: $gallery;
+$checkout_cc_list_map_link_bg: $wild-sand;
+$checkout_cc_store_location_input_label_mobile_color: $black;
+$checkout_cc_selected_store_content_bg: $white;
+$checkout_cc_individual_store_hours_label_border: $gallery;
+$checkout_cc_map_hours_icon: $black;
+$checkout_cc_search_icon: $black;
+
+// Tables.
+$primary_th_bg: $wild-sand;
+$primary_th_bg_highlight: $grey;
+$primary_td_highlight3: rgba(218, 218, 218, 0.19); // used on blend class.
+$primary_td_bg_highlight: rgba(218, 218, 218, 0.19);
+$primary_tr_hover: rgba(218, 218, 218, 0.19);
+$primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
+
+// Tooltip
+$tooltip_bg: $white;
+$tooltip_text: $azure-blue;
+$tooltip_border: $azure-blue;
+$tooltip_icon: $azure-blue;
+$tooltip_link: $grey;
+
+// Basket
+$basket_page_title: $black;
+$basket_img_border: $light-greyish;
+$basket_th_4th_child: $primary_td_highlight3;
+$basket_continue_shopping_btn_border: $black;
+$basket_continue_shopping_link: $grey;
+$basket_content_link_color: $black;
+$basket_empty_continue_shopping_link: $white;
+$basket_empty_continue_shopping_btn_bg: $black;
+$basket_available_code: $black;
+
+// Sec text is Size, color, item code attributes.
+$basket_td_sec_txt: $grey;
+$basket_item_bundle: $black;
+$basket_tooltip_not_available: $grey;
+$basket_promotion_input_border: $gallery;
+$basket_remove_link: $black;
+$basket_horizontal_recommendation_slider_dots: $black;
+
+// Basket Promotions.
+$basket_fixed_percentage_inactive_header_promo_bg: $allport-blue;
+$basket_fixed_percentage_active_header_promo_txt: $allport-blue;
+$basket_free_delivery_inactive_header_promo_bg: $black;
+$basket_free_delivery_active_header_promo_txt: $black;
+
+// My Account Pages
+$user_order_help_bg: $azure-blue;
+$user_order_help_text : $white;
+$user_order_help_text_links: $user_order_help_text;
+$password_tooltip_list: $black;
+$_password_tooltip_list_error: $alizarin-crimson;
+
+// Checkout order summary block.
+$checkout_order_summary_title_border: $gallery;
+$checkout_order_summary_no_of_items: $black;
+$order_summary_dropdown_icon: $black;
+$order_summary_section_border: $gallery;
+$order_summary_subtotal: $black;
+$order_summary_order_status: $grey;
+$order_summary_product_img_border: $light-greyish;
+
+// Form Items
+$formitem_label: $grey;
+
+// Color for attributes and qty.
+$order_summary_sec_text: $grey;
+
+// Order Confirmation
+$order_detail_table_bg: $white;
+$checkout_confirm_order_message: $grey;
+$checkout_confirm_order_summary_row_text: $white;
+$checkout_order_print_btn_bg: false;
+$checkout_order_print_btn_text: $white;
+$checkout_order_print_btn_border: $gallery;
+$order_detail_order_details_row: $allport-blue;
+$checkout_order_details_label: $black;
+$checkout_order_details_product_count_border: $gallery;
+$checkout_order_details_icon: $black;
+$checkout_confirm_discount_row: $white;
+$order_detail_order_details_row_td_blend: $allport-blue;
+
+// Order Print
+$checkout_confirm_order_summary_row: $azure-blue;
+$order_print_btn_bg: $azure-blue;
+$order_print_btn_border: $gallery;
+$order_print_btn_text: $white;
+$order_recent_order_order_detail_link_bg: $grey;
+$recent_order_table_row_border: $grey;
+$order_accordion_open_bg: $wild-sand;
+$order_detail_delivery_details_row_bg: $azure-blue;
+$order_detail_delivery_details_row_td_blend: $azure-blue;
+$order_detail_delivery_details_row_text: $white;
+$order_detail_delivery_details_row_content: $black;
+$order_print_delivery_details_row: $white;
+$order_print_delivery_details_row_text: $black;
+$order_print_delivery_details_row_border: $black;
+$order_print_product_count_row_border: $gallery;
+$order_print_delivery_subtotal_row_blend: $white;
+$order_print_total_row: $grey;
+
+// 404 and maintenance
+$page_not_found_text: $black;
+$page_not_found_link: $white;
+$page_not_found_link_border: $black;
+$page_not_found_mobile_bg: $black;
+$maintenance_container_border: $white-smoke-light;
+$maintenance_container_bg: $white;
+$maintenance_container_text: $black;
+$maintenance_info_bg: $white;
+$maintenance_info_title-text: $black;
+
+// Product modal
+$pdp_modal_full_prodlink: $black;
+$modal_close_bg: $black;
+
+// Pace progress color
+$progress_loader: $black;
+
+// PLP LHN block.
+$lhn_l2: $black;
+$lhn_l3: $grey;
+$lhn_l4: $grey;
+$l3-link-hover: $black;
+
+// Megamenu inline layout.
+$megamenu-inline-layout-active-border-color: $black;

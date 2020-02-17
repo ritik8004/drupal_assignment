@@ -1,0 +1,137 @@
+.path--search {
+  .c-sidebar-first .c-facet__blocks {
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($desktop) {
+        margin-top: 5.625rem;
+      }
+
+      ul {
+        @include breakpoint($desktop) {
+          padding-top: 0;
+        }
+      }
+
+      li {
+        &.is-active {
+          background: none;
+
+          .facet-item__value {
+            @include icon(check, after) {
+              font-size: 1.3125rem;
+              line-height: 1.3125rem;
+              color: $plp_filter_active_tick;
+            }
+          }
+
+          &::after {
+            content: none;
+          }
+
+          span {
+            font-family: $alshaya-bold;
+            font-weight: bold;
+          }
+        }
+
+        .facet-item__count {
+          position: absolute;
+          #{$right}: 0;
+        }
+      }
+
+      h3 {
+        @include breakpoint($desktop) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
+        width: 50%;
+        float: $left;
+        display: block;
+        margin: 0;
+        border-bottom: 0.0625rem solid $plp_mobile_separator;
+        border-#{$right}: 0.0625rem solid $plp_mobile_separator;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 0;
+        margin-#{$right}: 0.5625rem;
+      }
+
+      @include breakpoint($desktop) {
+        display: none;
+      }
+
+      ul {
+        @include breakpoint($only-mobile) {
+          width: 100vw;
+          top: 100%;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 2.25rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+          overflow-y: auto;
+          max-height: calc(100vh - 15rem);
+          position: absolute;
+          background: $plp_facet_active_bg;
+          z-index: 2;
+          min-width: 15.5rem;
+          border: 0.0625rem solid $plp_facet_border;
+
+          > li {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+            border-bottom: 0.0625rem solid $plp_mobile_separator;
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+
+      h3.active {
+        @include breakpoint($only-mobile) {
+          background: $search_facet_active_title_bg;
+        }
+      }
+    }
+  }
+
+  .block-facet-blockcategory-facet-search.c-facet.c-accordion {
+    ul {
+      li {
+        line-height: 1.3125rem;
+        margin-bottom: 0;
+
+        @include breakpoint($desktop) {
+          margin-bottom: 1.25rem !important;
+        }
+
+        label {
+          top: 0;
+        }
+
+        span {
+          font-size: 0.75rem;
+          line-height: 1.3125rem;
+          display: inline-flex;
+        }
+
+        &.is-active::after {
+          font-size: 1.3125rem;
+          line-height: 1.3125rem;
+        }
+      }
+    }
+  }
+}

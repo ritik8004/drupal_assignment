@@ -5,7 +5,7 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 
-import { searchClient } from '../../config/SearchClient';
+import { algoliaSearchClient } from '../../config/SearchClient';
 
 import NoResults from '../algolia/NoResults';
 import SearchResultInfiniteHits from '../algolia/SearchResultInfiniteHits';
@@ -31,7 +31,7 @@ import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
 const SearchResultsComponent = props => {
   const { query } = props;
   // Do not show out of stock products.
-  const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : [];
+  const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : '';
   const indexName = drupalSettings.algoliaSearch.indexName;
 
   // Get default page to display for back to search,
@@ -44,7 +44,7 @@ const SearchResultsComponent = props => {
 
   return (
     <InstantSearch
-      searchClient={searchClient}
+      searchClient={algoliaSearchClient}
       indexName={indexName}
       searchState={props.searchState}
       createURL={props.createURL}
@@ -108,6 +108,6 @@ const SearchResultsComponent = props => {
       </MainContent>
     </InstantSearch>
   );
-}
+};
 
 export default withURLSync(SearchResultsComponent);

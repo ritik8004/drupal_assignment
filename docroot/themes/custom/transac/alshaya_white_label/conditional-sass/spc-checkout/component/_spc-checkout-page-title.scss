@@ -7,6 +7,11 @@
     padding-bottom: 0.375rem;
     border-bottom: 1px solid $spc-checkout-page-title-border;
 
+    @include breakpoint($only-tablet) {
+      margin-left: 1.25rem;
+      margin-right: 1.25rem;
+    }
+
     h1 {
       letter-spacing: 1px;
     }

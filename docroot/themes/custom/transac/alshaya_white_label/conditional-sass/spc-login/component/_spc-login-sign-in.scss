@@ -24,7 +24,7 @@
 
   .block-page-title-block {
     @include breakpoint($only-mobile) {
-      margin-bottom: 1rem;
+      margin-bottom: 1.6rem;
     }
 
     @include breakpoint($desktop) {
@@ -34,7 +34,6 @@
     .c-page-title {
       position: relative;
       top: 0;
-      text-transform: uppercase;
 
       @include breakpoint($only-mobile) {
         text-align: center;
@@ -43,9 +42,9 @@
     }
 
     h1 {
-      padding: 0.25rem 0 0.55rem;
-      border-bottom: 1px solid $white;
-      margin-left: 0;
+      padding: 0.1875rem 0 0.375rem;
+      border-bottom: 1px solid $checkout_login_page_title;
+      margin-#{$left}: 0;
 
       @include breakpoint($only-mobile) {
         margin-top: 0.25rem;
@@ -56,7 +55,7 @@
       }
 
       @include breakpoint($desktop) {
-        padding-bottom: 0.4375rem;
+        padding-bottom: 0.375rem;
       }
     }
   }
@@ -64,7 +63,7 @@
   .checkout-login-wrapper {
     max-width: 100%;
     font-size: 12px;
-    color: $grey-ash;
+    color: $checkout_login_wrapper_text;
     line-height: 1.43;
 
     .fieldset-wrapper {
@@ -86,6 +85,10 @@
         }
       }
 
+      input {
+        font-size: 0.875rem;
+      }
+
       .order-3 {
         display: none;
       }
@@ -100,16 +103,16 @@
       }
 
       @include breakpoint($tablet) {
-        float: left;
-        clear: left;
+        float: $left;
+        clear: $left;
       }
 
       a {
-        color: $mothercare-black;
+        color: $checkout_login_back_to_basket_text;
         font-size: 0.875rem;
-        font-family: $alshaya-bold;
-        display: inline-block;
+        font-family: $arial;
         text-decoration: underline;
+        font-weight: 700;
 
         &::first-letter {
           text-transform: uppercase;
@@ -123,12 +126,18 @@
         font-family: $alshaya-bold;
         letter-spacing: 0.8px;
         text-transform: uppercase;
+        font-size: 1rem;
+        margin: 2.45rem 0;
       }
     }
 
     .checkout-login-separator {
       @include breakpoint($only-mobile) {
         margin: 0;
+
+        > span {
+          margin: 1rem 0;
+        }
       }
 
       @include breakpoint($tablet) {
@@ -154,16 +163,17 @@
       width: 100%;
       border: 0;
       padding: 0;
-      text-align: left;
+      text-align: $left;
       margin-top: 2.5rem;
 
       @include breakpoint($only-mobile) {
         display: block;
         order: 6;
+        margin-top: 2rem;
       }
 
       @include breakpoint($tablet) {
-        float: right;
+        float: $right;
         width: 50%;
         display: inline-block;
         vertical-align: top;
@@ -174,7 +184,7 @@
 
       @include breakpoint($desktop) {
         margin-top: 2.5rem;
-        padding-left: 7.875rem;
+        padding-#{$left}: 7.875rem;
       }
     }
 
@@ -192,7 +202,7 @@
         width: 50%;
         display: inline-block;
         vertical-align: top;
-        float: left;
+        float: $left;
         margin-left: 0;
         margin-right: 0;
         margin-top: 2.05rem;
@@ -202,8 +212,7 @@
         font-size: 1.125rem;
         font-family: $alshaya-bold;
         line-height: 1.29;
-        color: $mothercare-black;
-        display: inline-block;
+        color: $checkout_section_titles;
 
         &::first-letter {
           text-transform: uppercase;
@@ -212,31 +221,31 @@
     }
 
     .edit-checkout-login {
-      text-align: left;
+      text-align: $left;
       order: 4;
 
       .form-item {
         @include breakpoint($only-mobile) {
-          margin-top: 3em;
+          margin-top: 2.7em;
         }
       }
 
       @include breakpoint($tablet) {
-        padding-right: 3.5rem;
+        padding-#{$right}: 3.5rem;
 
         &::after {
           content: '';
           height: 125%;
           width: 1px;
-          background: $white;
+          background: $checkout_login_border_background;
           position: absolute;
           top: 0;
-          right: 0;
+          #{$right}: 0;
         }
       }
 
       @include breakpoint($desktop) {
-        padding-right: 7.4375rem;
+        padding-#{$right}: 7.4375rem;
         margin-top: 2.5rem;
       }
 
@@ -264,7 +273,7 @@
 
       .form-actions {
         margin-top: 1.4rem;
-        float: left;
+        float: $left;
 
         @include breakpoint($only-mobile) {
           margin-top: 0;
@@ -272,7 +281,7 @@
         }
 
         @include breakpoint($only-tablet) {
-          margin-right: 1rem;
+          margin-#{$right}: 1rem;
         }
 
         button {
@@ -292,6 +301,10 @@
 
       .form-type-password {
         margin-top: 2.8rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: 4rem;
+        }
       }
 
       input ~ label {
@@ -303,8 +316,8 @@
       }
 
       .request-password-link {
-        font-family: $alshaya-bold;
-        color: $mothercare-black;
+        font-family: $arial;
+        color: $checkout_login_link_text;
         height: 2.875rem;
         display: inline-flex;
         align-items: center;
@@ -312,16 +325,20 @@
         position: relative;
         margin-top: 2.4375rem;
         font-size: 0.875rem;
-        text-decoration: underline;
+        font-weight: 700;
 
         @include breakpoint($only-mobile) {
           margin-top: 0.625rem;
-          left: 50%;
+          #{$left}: 50%;
           transform: translateX(-50%);
+
+          html[lang=ar] & {
+            transform: translateX(-50%);
+          }
         }
 
         @include breakpoint($desktop) {
-          left: 2.4rem;
+          #{$left}: 2.4rem;
         }
       }
     }
@@ -329,10 +346,6 @@
     .fieldset-wrapper {
       font-size: 0.75rem;
       margin-top: 0.5625rem;
-
-      @include breakpoint($only-mobile) {
-        color: $black;
-      }
     }
 
     .form-item,
@@ -353,13 +366,12 @@
     }
 
     .form-submit {
-      background: $mothercare-black;
-      text-transform: uppercase;
+      background: $checkout_login_submit_button_background;
+      text-transform: lowercase;
       margin-top: 1em;
       width: 100%;
-      color: $white-five;
-      font-size: 0.875rem;
-      letter-spacing: 1px;
+      color: $checkout_login_submit_button_text;
+      font-size: 0.813rem;
       padding: 0.625rem 1.6rem;
       border: 0;
 
@@ -372,12 +384,7 @@
       font-size: 1rem;
 
       .js-form-required {
-        position: absolute;
-        color: $greyish;
-        left: 0;
-        top: -0.125rem;
-        transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-        pointer-events: none;
+        @include placeholder-label;
       }
 
       input {
@@ -389,18 +396,14 @@
       input:not(:active):valid ~ label:not(.error),
       input.error ~ label:not(.error),
       input:active ~ label:not(.error) {
-        top: -1.25em;
-        bottom: 0;
-        left: 0;
-        opacity: 1;
-        font-size: 0.75rem;
+        @include placeholder-active;
       }
     }
 
     .edit-checkout-as-guest {
-      background: $white-five;
-      border: 2px solid $mothercare-black;
-      color: $mothercare-black;
+      background: $checkout_guest_button_bg;
+      border: 2px solid $checkout_guest_button_border;
+      color: $checkout_guest_button_txt;
       font-size: 0.875rem;
       font-family: $alshaya-bold;
       margin: 1em 0;
@@ -409,10 +412,12 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      text-transform: uppercase;
       width: 12.5625rem;
       height: 2.875rem;
-      letter-spacing: 1px;
+
+      &:hover {
+        background-color: $social-auth-bg-hover;
+      }
 
       @include breakpoint($only-mobile) {
         width: 100%;
@@ -427,7 +432,7 @@
 
     .social-signin-enabled {
       padding: 0;
-      padding-left: 7.875rem;
+      padding-#{$left}: 7.875rem;
 
       @include breakpoint($desktop) {
         margin-top: 2.5rem;
@@ -441,8 +446,8 @@
     .social-signin-enabled,
     .above-mobile-block {
       @include breakpoint($only-tablet) {
-        padding-left: 4rem;
-        float: right;
+        padding-#{$left}: 4rem;
+        float: $right;
       }
 
       .fieldset-wrapper {
@@ -454,18 +459,33 @@
           }
 
           .alshaya-social {
-            margin-top: 1rem;
+            margin-top: 1.25rem;
           }
 
           .auth-link:first-child() {
             margin-top: 0;
           }
         }
+
+        @include breakpoint($desktop) {
+          .social_auth_facebook.auth-link {
+            margin-top: 1.875rem;
+          }
+
+          .auth-link {
+            margin-top: 1.25rem;
+          }
+        }
+
+        .social-network-text {
+          display: inline-flex;
+        }
       }
 
       legend {
         @include breakpoint($only-mobile) {
-          display: none;
+          text-align: center;
+          margin-bottom: 1.25rem;
         }
       }
 

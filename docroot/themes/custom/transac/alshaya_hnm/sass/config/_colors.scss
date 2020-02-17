@@ -174,6 +174,7 @@ $category_facet_active_icon: $hnm-black-two;
 $category_facet_active_text: $hnm-black-two;
 $plp_facet_filter_count_background: $hnm-red;
 $plp-color-facet-label-color: $hnm-black-four;
+$search_facet_active_title_bg: $hnm-grey;
 
 // Delivery Menu
 $delivery_color: $link-hover;
@@ -417,8 +418,12 @@ $checkout_login_btn_txt: $primary_btn_text;
 $checkout_mobile_back_link_icon: $black-two;
 $checkout_guest_button_border: $hnm-black-two;
 $checkout_guest_button_txt: $hnm-black-two;
+$checkout_guest_button_bg: $white-five;
 $checkout_login_separtor_txt: $hnm-black-two;
 $checkout_section_titles: $hnm-black-two;
+$checkout_login_submit_button_background: $hnm-black-two;
+$checkout_login_link_text: $hnm-black-two;
+$checkout_login_back_to_basket_text: $hnm-black-two;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-two;
@@ -639,3 +644,5 @@ $spc-checkout-close-icon: $hnm-black-two;
 $spc-form-input: $hnm-black-two;
 $spc-deliver-button: $hnm-black-two;
 $spc-delivery-customer-info-highlight: $hnm-black-two;
+$spc-checkout-order-detail-label: $hnm-black-two;
+$spc-checkout-confirmation-success-txt: $hnm-black-two;

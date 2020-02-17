@@ -276,6 +276,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Attach the plp search js library to Search page.
   if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+    // Sidebar visibility for Search page.
+    $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree_search');
   }
 
   // Adding vat text footer to the page if SPC not enabled.
@@ -792,8 +794,13 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   }
 
   // SPC checkout.
-  if ($routmatch->getRouteName() == 'alshaya_spc.checkout') {
+  if ($routmatch->getRouteName() === 'alshaya_spc.checkout') {
     $suggestions[] = 'page__spc_checkout';
+  }
+
+  // SPC checkout confirmation.
+  if ($routmatch->getRouteName() === 'alshaya_spc.checkout.confirmation') {
+    $suggestions[] = 'page__spc_checkout_confirmation';
   }
 }
 
@@ -1583,6 +1590,10 @@ function alshaya_white_label_preprocess_breadcrumb(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  if (empty($variables['attributes']['data-drupal-facet-id'])) {
+    return;
+  }
+
   // Flag to determine if category facet has active item.
   $category_active_facet = FALSE;
 
