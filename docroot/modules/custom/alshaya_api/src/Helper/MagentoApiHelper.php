@@ -104,7 +104,7 @@ class MagentoApiHelper {
       $address['default_shipping'] = (bool) $address['default_shipping'];
     }
 
-    return $this->normaliseExtension($address);
+    return $address;
   }
 
   /**

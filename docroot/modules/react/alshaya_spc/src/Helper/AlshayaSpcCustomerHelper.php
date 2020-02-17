@@ -193,13 +193,12 @@ class AlshayaSpcCustomerHelper {
    * @throws \Exception
    */
   public function authenticateCustomer($mail, $pass) {
-    global $_alshaya_acm_custom_cart_association_processed;
+    global $_alshaya_acm_customer_addressbook_processed;
 
     try {
       $customer = $this->apiWrapper->authenticateCustomerOnMagento($mail, $pass);
 
       if (!empty($customer) && !empty($customer['customer_id'])) {
-        $_alshaya_acm_custom_cart_association_processed = TRUE;
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
         $cart_id = $this->spcCookies->getSessionCartId();
@@ -220,6 +219,7 @@ class AlshayaSpcCustomerHelper {
           /** @var \Drupal\user\Entity\User $user */
           $user = alshaya_acm_customer_create_drupal_user($customer);
         }
+        $_alshaya_acm_customer_addressbook_processed = TRUE;
 
         return array_merge($customer, ['user' => $user]);
       }

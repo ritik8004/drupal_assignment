@@ -464,6 +464,42 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass) {
 }
 
 /**
+ * Implements hook_user_login().
+ */
+function alshaya_acm_customer_user_login(UserInterface $account) {
+  global $_alshaya_acm_customer_addressbook_processed;
+
+  if (isset($_alshaya_acm_customer_addressbook_processed) && $_alshaya_acm_customer_addressbook_processed) {
+    return;
+  }
+
+  if (!alshaya_acm_customer_is_customer($account)) {
+    return;
+  }
+
+  try {
+    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('alshaya_api.api');
+    $customer = $api_wrapper->getCustomer($account->getEmail());
+
+    // Allow if returned customer array is empty or customer id is the same as
+    // what is available in the form.
+    if (!empty($customer) && !empty($customer['customer_id']) && $customer['customer_id'] != $account->get('acq_customer_id')->getString()) {
+      return;
+    }
+
+    // Update the user info from MDC to Drupal.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+    alshaya_acm_customer_update_user_data($account, $customer);
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_acm_customer')->error('Error while resetting information for user: @email.', [
+      '@email' => $account->getEmail(),
+    ]);
+  }
+}
+
+/**
  * Validate callback for user registration form to validate against Magento.
  */
 function alshaya_acm_customer_register_validate(array &$form, FormStateInterface &$form_state) {
