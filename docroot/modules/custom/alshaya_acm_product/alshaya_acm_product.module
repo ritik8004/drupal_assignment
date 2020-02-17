@@ -1188,12 +1188,15 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       foreach ($configurable_options as $configurable_option) {
         if (in_array($configurable_option, $size_guide['attributes'])) {
-          $form['ajax']['configurables'][$configurable_option]['#prefix'] = $size_guide['link'];
+          $form['ajax']['configurables'][$configurable_option]['#prefix'] = '<div class="size-guide-form-and-link-wrapper">';
+          $form['ajax']['configurables'][$configurable_option]['#prefix'] .= $size_guide['link'];
+          $form['ajax']['configurables'][$configurable_option]['#suffix'] = '</div>';
           break;
         }
       }
     }
   }
+
   // Stock check for quantity for all other products.
   elseif ($quantity = $sku_manager->getStockQuantity($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
