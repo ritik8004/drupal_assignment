@@ -69,6 +69,13 @@ class AlshayaApiWrapper {
   protected $cache;
 
   /**
+   * The LoggerFactory object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * I18n Helper.
    *
    * @var \Drupal\acq_commerce\I18nHelper
@@ -140,11 +147,11 @@ class AlshayaApiWrapper {
     ModuleHandlerInterface $module_handler
   ) {
     $this->config = $config_factory->get('alshaya_api.settings');
-    $this->logger = $logger_factory->get('alshaya_api');
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->dateTime = $date_time;
     $this->cache = $cache;
+    $this->logger = $logger_factory->get('alshaya_api');
     $this->i18nHelper = $i18n_helper;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -1072,22 +1079,12 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   public function updateCustomer(array $customer, array $options = []) {
+    $endpoint = 'customers';
+
     $opt['json']['customer'] = $customer;
 
     if (isset($options['password']) && !empty($options['password'])) {
       $opt['json']['password'] = $options['password'];
-    }
-
-    if (isset($options['password_old']) && !empty($options['password_old'])) {
-      $opt['json']['password_old'] = $options['password_old'];
-    }
-
-    if (isset($options['password_token']) && !empty($options['password_token'])) {
-      $opt['json']['password_token'] = $options['password_token'];
-    }
-
-    if (isset($options['access_token']) && !empty($options['access_token'])) {
-      $opt['json']['token'] = $options['access_token'];
     }
 
     // Invoke the alter hook to allow all modules to update the customer data.
@@ -1097,7 +1094,6 @@ class AlshayaApiWrapper {
     $opt['json']['customer'] = $this->mdcHelper->cleanCustomerData($opt['json']['customer']);
     $opt['json']['customer'] = MagentoApiRequestHelper::prepareCustomerDataForApi($opt['json']['customer']);
 
-    $endpoint = 'customers';
     $method = 'JSON';
     if (!empty($opt['json']['customer']['id'])) {
       $endpoint .= '/' . $opt['json']['customer']['id'];
@@ -1129,7 +1125,12 @@ class AlshayaApiWrapper {
       }
     }
     catch (\Exception $e) {
-      throw $e;
+      $response = NULL;
+      $this->logger->error('Exception while invoking method @method for API @api. Message: @message.', [
+        '@method' => __METHOD__,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
     }
 
     return $response;
@@ -1149,8 +1150,11 @@ class AlshayaApiWrapper {
    * @throws \Exception
    */
   protected function updateCustomerPass(array $customer, $password) {
+    $endpoint = 'customers/%d/set-password?';
+
     $cid = (int) $customer['customer_id'];
     $password = (string) $password;
+
     if ($cid < 1) {
       throw new \Exception(
         'updateCustomerPass: Missing customer id.'
@@ -1161,7 +1165,8 @@ class AlshayaApiWrapper {
         'updateCustomerPass: Missing customer password.'
       );
     }
-    $endpoint = sprintf('customers/%d/set-password?', $cid);
+
+    $endpoint = sprintf($endpoint, $cid);
     $endpoint .= 'password=' . urlencode($password);
 
     try {
@@ -1176,7 +1181,12 @@ class AlshayaApiWrapper {
       $response = Json::decode($response);
     }
     catch (\Exception $e) {
-      throw $e;
+      $response = NULL;
+      $this->logger->error('Exception while invoking method @method for API @api. Message: @message.', [
+        '@method' => __METHOD__,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
     }
 
     return $response;
