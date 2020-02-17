@@ -1,6 +1,5 @@
 import React from 'react';
 import Gallery from '../gallery';
-import Price from '../price';
 import Promotions from '../promotions';
 import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
