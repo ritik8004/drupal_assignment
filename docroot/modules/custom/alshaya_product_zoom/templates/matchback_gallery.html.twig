@@ -5,7 +5,7 @@
         <ul id="machbackSlider" class="{{ pager_flag }} machbackSlider">
           {% for thumbs in thumbnails %}
               <li class="views-row">
-                <div data-zoom-src="{{ thumbs.zoomurl }}" class="imagezoom-wrap">
+                <div data-zoom-src="{{ thumbs.fullurl }}" class="imagezoom-wrap">
                   <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                 </div>
               </li>

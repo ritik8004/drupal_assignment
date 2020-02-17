@@ -66,3 +66,21 @@
     }
   }
 }
+
+.size-guide-form-and-link-wrapper {
+  @include breakpoint($tablet) {
+    position: relative;
+  }
+
+  .size-guide-link {
+    @include breakpoint($tablet) {
+      position: absolute;
+    }
+  }
+
+  .form-item-configurables-size {
+    @include breakpoint($mobile) {
+      clear: both;
+    }
+  }
+}
