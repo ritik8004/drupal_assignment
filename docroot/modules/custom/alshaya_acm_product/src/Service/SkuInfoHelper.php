@@ -369,12 +369,15 @@ class SkuInfoHelper {
    *   The sku entity.
    *
    * @return array
-   *   The array with in_stock and stock.
+   *   The array with in_stock, stock and max_sale_qty.
    */
   public function stockInfo(SKUInterface $sku_entity): array {
+    $plugin = $sku_entity->getPluginInstance();
+
     return [
       'in_stock' => $this->skuManager->isProductInStock($sku_entity),
       'stock' => (float) $this->skuManager->getStockQuantity($sku_entity),
+      'max_sale_qty' => (int) ($plugin ? $plugin->getMaxSaleQty($sku_entity) : 0),
     ];
   }
 
