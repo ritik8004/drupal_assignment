@@ -5,6 +5,7 @@ import Promotions from '../promotions';
 import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
 import { getCurrentSearchQueryString, setClickedItem } from '../../utils';
+import Parser from 'html-react-parser';
 
 const Teaser = ({hit}) => {
   const swatches = (null);
@@ -52,7 +53,7 @@ const Teaser = ({hit}) => {
                 <CustomHighlight attribute="title" hit={hit} />
               </a>
             </h2>
-            <Price price={hit.original_price} final_price={hit.final_price}/>
+            {Parser(hit.rendered_price)}
             <Promotions promotions={hit.promotions}/>
             {swatches}
           </div>
