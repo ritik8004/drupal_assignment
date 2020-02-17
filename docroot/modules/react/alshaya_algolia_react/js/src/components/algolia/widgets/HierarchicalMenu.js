@@ -4,10 +4,9 @@ import { connectHierarchicalMenu } from 'react-instantsearch-dom';
 const HierarchicalMenu = ({ items, refine, createURL }) => (
   <ul>
     {items.map(item => (
-      <li key={item.label}>
+      <li key={item.label} className={ item.isRefined ? 'active' : '' }>
         <a
           href={`#${createURL(item.value)}`}
-          className={ item.isRefined ? 'active' : '' }
           onClick={event => {
             event.preventDefault();
             refine(item.value);
