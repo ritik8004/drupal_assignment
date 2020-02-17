@@ -294,6 +294,28 @@ class AlshayaPromotionsManager {
   }
 
   /**
+   * Get Promotion condition operator.
+   *
+   * @param array $promotion_data
+   *   Promotion node data.
+   *
+   * @return mixed|string
+   *   Operator.
+   */
+  public function getPromotionOperator(array $promotion_data) {
+    $operator = '';
+    if (!empty($promotion_data['condition'])
+      && !empty($promotion_data['condition']['conditions'])) {
+      foreach ($promotion_data['condition']['conditions'] as $condition) {
+        if ($condition['attribute'] === 'base_subtotal') {
+          $operator = $condition['operator'];
+        }
+      }
+    }
+    return $operator;
+  }
+
+  /**
    * Helper function to fetch all cart promotions.
    *
    * @param array $selected_promotions
