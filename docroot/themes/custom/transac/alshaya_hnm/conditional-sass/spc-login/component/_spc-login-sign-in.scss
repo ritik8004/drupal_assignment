@@ -1,9 +1,29 @@
 .alias--cart-login {
+  .block-page-title-block {
+    h1 {
+      letter-spacing: 1px;
+    }
+  }
+
   .multistep-login {
     fieldset {
       .fieldset-legend {
         font-family: $hnm-demibold;
+        display: inline-block;
       }
+    }
+
+    .form-submit,
+    .edit-checkout-as-guest {
+      text-transform: uppercase;
+    }
+
+    .form-submit {
+      letter-spacing: 1px;
+    }
+
+    .edit-checkout-as-guest {
+      letter-spacing: 1px;
     }
 
     .ashaya-spc-login-form {
@@ -15,12 +35,22 @@
 
       .request-password-link {
         font-family: $hnm-demibold;
+        text-decoration: underline;
       }
     }
 
     .checkout-login-actions-wrapper {
       a {
         font-family: $hnm-demibold;
+        display: inline-block;
+      }
+    }
+
+    .social-signin-enabled {
+      .fieldset-wrapper {
+        .social-network-text {
+          display: block;
+        }
       }
     }
   }

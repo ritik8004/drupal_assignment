@@ -576,7 +576,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
  * Implements hook_search_api_index_items_alter().
  */
 function alshaya_acm_product_category_search_api_index_items_alter(IndexInterface $index, array &$items) {
-  if (!in_array($index->id(), ['alshaya_algolia_index', 'acquia_search_index'])) {
+  if (!in_array($index->id(), ['acquia_search_index'])) {
     return;
   }
 

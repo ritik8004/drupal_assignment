@@ -1,0 +1,51 @@
+.alias--cart-login {
+  .block-page-title-block {
+    h1 {
+      letter-spacing: 1px;
+    }
+  }
+
+  .multistep-login {
+    fieldset {
+      .fieldset-legend {
+        font-family: $primary-font;
+        text-transform: capitalize;
+        font-weight: 600;
+      }
+    }
+
+    .form-submit,
+    .edit-checkout-as-guest {
+      text-transform: uppercase;
+    }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          font-family: $primary-font;
+        }
+      }
+
+      .request-password-link {
+        font-family: $primary-font;
+        font-weight: 600;
+      }
+    }
+
+    .checkout-login-actions-wrapper {
+      a {
+        font-family: $primary-font;
+        display: inline-block;
+        font-weight: 600;
+      }
+    }
+
+    .social-signin-enabled {
+      .fieldset-wrapper {
+        .social-network-text {
+          display: block;
+        }
+      }
+    }
+  }
+}

@@ -4,7 +4,16 @@ alshaya_spc.checkout:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkout'
     _title: 'Secure Checkout'
   requirements:
-    # All user should able to access login page, validation on frontend.
+    # All user should able to access checkout pages, validation on frontend.
+    _access: 'TRUE'
+
+alshaya_spc.checkout.confirmation:
+  path: '/checkout/confirmation'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcController::checkoutConfirmation'
+    _title: 'Order Confirmation'
+  requirements:
+    # All user should able to access checkout pages, validation on frontend.
     _access: 'TRUE'
 
 alshaya_spc.login:
@@ -13,7 +22,7 @@ alshaya_spc.login:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcLoginController::login'
     _title: 'Secure Checkout'
   requirements:
-    # All user should able to access login page, validation on frontend.
+    # All user should able to access checkout pages, validation on frontend.
     _access: 'TRUE'
 
 alshaya_spc.mobile_number_verfication:

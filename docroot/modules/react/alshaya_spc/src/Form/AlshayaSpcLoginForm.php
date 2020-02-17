@@ -174,8 +174,9 @@ class AlshayaSpcLoginForm extends FormBase {
     }
 
     try {
-      if ($uid = $this->customerHelper->authenticateCustomer($mail, $pass)) {
-        $account = $this->entityTypeManager->getStorage('user')->load($uid);
+      if ($customer = $this->customerHelper->authenticateCustomer($mail, $pass)) {
+        /** @var \Drupal\user\Entity\User $account */
+        $account = $customer['user'];
 
         if ($account->isActive()) {
           $form_state->setRedirect('alshaya_spc.checkout');

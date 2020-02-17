@@ -1,0 +1,7 @@
+.spc-order-summary-order-detail {
+  label {
+    @include icon('dropdown-expand', 'after') {
+      font-size: 2rem;
+    }
+  }
+}

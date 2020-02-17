@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_cart\CartInterface;
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -121,8 +120,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   EntityTypeManager object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity Repository object.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   ApiWrapper object.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   The MobileNumber util service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -144,7 +141,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
-                              APIWrapper $api_wrapper,
                               MobileNumberUtilInterface $mobile_util,
                               LoggerChannelFactoryInterface $logger_factory,
                               AlshayaApiWrapper $alshayaApiWrapper,
@@ -158,7 +154,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->userStorage = $entity_type_manager->getStorage('user');
-    $this->apiWrapper = $api_wrapper;
     $this->mobileUtil = $mobile_util;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->languageManager = $languageManager;
@@ -260,11 +255,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // We always set the address last added or edited as primary.
     $entity->setDefault(TRUE);
 
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
     $account = $this->userStorage->load($entity->getOwnerId());
 
     try {
-      $customer = $this->apiWrapper->getCustomer($account->getEmail());
+      $customer = $this->alshayaApiWrapper->getCustomer($account->getEmail());
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
@@ -306,7 +300,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     try {
-      $updated_customer = $this->apiWrapper->updateCustomer($customer);
+      $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
       $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
@@ -339,10 +333,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Address Entity.
    */
   public function deleteUserAddressFromApi(Profile $entity) {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
     $account = $this->userStorage->load($entity->getOwnerId());
 
-    $customer = $this->apiWrapper->getCustomer($account->getEmail());
+    $customer = $this->alshayaApiWrapper->getCustomer($account->getEmail());
     unset($customer['extension']);
 
     $address_id = $entity->get('field_address_id')->getString();
@@ -364,7 +357,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     try {
-      $updated_customer = $this->apiWrapper->updateCustomer($customer);
+      $updated_customer = $this->alshayaApiWrapper->updateCustomer($customer);
 
       $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 

@@ -21,15 +21,18 @@ function getPosition (element) {
  */
 function getSiderBarOffsetTop() {
   let offSet = 0;
-  if (document.getElementsByClassName('page-standard')[0].classList.contains('spc-checkout')) {
+  let preContentOffset = 0;
+  preContentOffset = document.getElementsByClassName('spc-pre-content')[0].offsetHeight === 0 ? 0 : document.getElementsByClassName('spc-pre-content')[0].offsetHeight + 20;
+  if (document.getElementsByClassName('page-standard')[0].classList.contains('spc-checkout-sticky-sidebar')) {
     offSet = document.getElementsByClassName('site-brand-wrapper')[0].offsetHeight
-      + document.getElementById('block-page-title').offsetHeight;
+      + document.getElementById('block-page-title').offsetHeight
+      + preContentOffset;
   }
   else {
     offSet = document.getElementsByClassName('header--wrapper')[0].offsetHeight
       + document.getElementsByClassName('branding__menu')[0].offsetHeight
       + document.getElementsByClassName('c-breadcrumb')[0].offsetHeight
-      + document.getElementsByClassName('spc-pre-content')[0].offsetHeight
+      + preContentOffset
       + 40;
   }
 
@@ -67,7 +70,6 @@ function stickySidebar() {
     // Desktop & Tablet sticky right column.
     if (window.innerWidth > 767) {
       let offSet = getSiderBarOffsetTop();
-
       // Sidebar.
       let spcSidebar = document.getElementsByClassName('spc-sidebar');
       let spcSidebarWidth = spcSidebar[0].offsetWidth;

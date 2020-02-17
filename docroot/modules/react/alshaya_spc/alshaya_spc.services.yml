@@ -8,16 +8,6 @@ services:
     class: Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager
     parent: default_plugin_manager
 
-  alshaya_spc.helper:
-    class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
-    arguments:
-      - '@entity_type.manager'
-
-  alshaya_spc.api_helper:
-    class: Drupal\alshaya_spc\Helper\AlshayaSpcApiHelper
-    arguments:
-      - '@alshaya_api.api'
-
   alshaya_spc.cookies:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcCookies
     arguments:
@@ -28,7 +18,7 @@ services:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
     arguments:
       - '@entity_type.manager'
-      - '@alshaya_spc.api_helper'
+      - '@alshaya_api.api'
       - '@module_handler'
       - '@alshaya_spc.cookies'
       - '@session'

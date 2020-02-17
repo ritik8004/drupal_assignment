@@ -1,0 +1,30 @@
+.spc-checkout-confirmation {
+  .block-page-title-block {
+    max-width: 64.125rem;
+    margin: 0 auto;
+    margin-bottom: 2.5rem;
+    padding-top: 2.5rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid $spc-checkout-page-title-border;
+
+    @include breakpoint($only-tablet) {
+      margin-left: 1.25rem;
+      margin-right: 1.25rem;
+    }
+
+    h1 {
+      letter-spacing: 1px;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 0 1.25rem;
+      padding-top: 1.25rem;
+      padding-bottom: 0.5rem;
+      text-align: center;
+
+      h1 {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}

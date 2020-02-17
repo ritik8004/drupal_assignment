@@ -487,6 +487,7 @@ $plp_grid_active_color: $marine-blue-two;
 $plp_all_filter_filter_arrow: $grey-ash;
 $plp_filter_icon: $grey-ash;
 $plp_filter_active_tick: $marine-blue-two;
+$search_facet_active_title_bg: $grey-light-two;
 
 // PLP All filter colors
 $plp_all_filter_bg: $white-five;
@@ -695,6 +696,14 @@ $checkout_login_footer_actions_bg: $white-four;
 $checkout_login_content_mobile: $black;
 $checkout_login_guest_email_text: $grey-ash;
 $checkout_login_guest_email_text_mobile: $light-ash;
+$checkout_login_page_title: $white;
+$checkout_login_wrapper_text: $grey-ash;
+$checkout_login_back_to_basket_text: $content_link_color;
+$checkout_login_border_background: $white;
+$checkout_login_submit_button_background: $primary_btn_bg;
+$checkout_login_submit_button_text: $white-five;
+$checkout_login_link_text: $content_link_color;
+
 // Checkout Login page - Mobile tabs redesign.
 $checkout_login_btn_bg: $primary_btn_bg;
 $checkout_login_btn_txt: $primary_btn_text;
@@ -1199,3 +1208,6 @@ $spc-delivery-customer-info-highlight: $marine-blue-two;
 $spc-delivery-info-separator: $warm-grey-two;
 $spc-checkout-add-new-address-bg: $white-five;
 $spc-checkout-address-tile-bg: $white-five;
+$spc-checkout-order-detail-bg: $white-five;
+$spc-checkout-order-detail-label: $marine-blue-two;
+$spc-checkout-confirmation-success-txt: $cerulean-two;

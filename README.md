@@ -72,8 +72,8 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `vagrant ssh` to ssh into your vm
-  * `blt:init:git-hooks`
-  * `blt:init:settings`
+  * `blt blt:init:git-hooks`
+  * `blt blt:init:settings`
   * `blt frontend:setup`
   * `blt frontend:build`
   * `blt refresh:local` (from inside of your vm)
