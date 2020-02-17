@@ -6,3 +6,24 @@
     border-bottom: 1px solid $checkout_footer_border-top;
   }
 }
+
+.block-checkout-summary-block {
+  .delivery-type,
+  .address {
+    font-family: $alshaya-bold;
+    text-transform: capitalize;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
+    .method,
+    .delivery-address {
+      font-family: $alshaya-thin;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

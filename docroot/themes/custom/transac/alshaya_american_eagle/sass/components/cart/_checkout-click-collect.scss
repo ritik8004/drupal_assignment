@@ -11,3 +11,52 @@
     }
   }
 }
+
+#edit-guest-delivery-collect,
+#edit-member-delivery-collect {
+  #store-finder-wrapper {
+    #click-and-collect-list-view {
+      ul {
+        li {
+          .store-open-hours {
+            .hours--label {
+              @include breakpoint($tablet) {
+                @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+                  #{$left}: 6.5rem;
+                  top: 0.6875rem;
+                }
+
+                &.open {
+                  @include facet-arrow(after, up, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+                    #{$left}: 6.5rem;
+                    top: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #selected-store-wrapper {
+    .store-open-hours {
+      .hours--label {
+        @include breakpoint($tablet) {
+          @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+            #{$left}: 6.5rem;
+            top: 0.6875rem;
+          }
+
+          &.open {
+            @include facet-arrow(after, up, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+              #{$left}: 6.5rem;
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

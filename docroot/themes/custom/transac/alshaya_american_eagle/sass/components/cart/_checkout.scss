@@ -1,5 +1,13 @@
 .acq-cart-summary {
+  @include breakpoint($upto-desktop) {
+    font-size: 0.875rem;
+  }
+
   .content-head {
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
     @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/plus.svg', 2rem, 2rem, after);
   }
 
@@ -7,5 +15,32 @@
     .content-head {
       @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
     }
+  }
+
+  .caption {
+    .title {
+      font-family: $alshaya-bold;
+      text-transform: capitalize;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 0.875rem;
+      }
+    }
+
+    a {
+      text-decoration: underline;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.totals {
+  @include breakpoint($upto-desktop) {
+    font-size: 0.875rem;
+  }
+
+  .order-total {
+    font-family: $alshaya-bold;
+    text-transform: capitalize;
   }
 }

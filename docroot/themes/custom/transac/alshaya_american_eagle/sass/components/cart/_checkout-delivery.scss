@@ -88,3 +88,17 @@
     }
   }
 }
+
+#payment_details_wrapper {
+  > .form-wrapper {
+    .payment-plugin-wrapper-div {
+      .method {
+        &-title {
+          @include breakpoint($only-mobile) {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}
