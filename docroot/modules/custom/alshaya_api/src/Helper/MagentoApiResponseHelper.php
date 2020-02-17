@@ -1,76 +1,13 @@
 <?php
 
-namespace Drupal\alshaya_spc\Helper;
-
-use Drupal\alshaya_api\AlshayaApiWrapper;
+namespace Drupal\alshaya_api\Helper;
 
 /**
- * Class AlshayaSpcApiHelper.
+ * Class MagentoApiResponseHelper.
+ *
+ * @package Drupal\alshaya_api\Helper
  */
-class AlshayaSpcApiHelper {
-
-  /**
-   * The api wrapper.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  protected $apiWrapper;
-
-  /**
-   * AlshayaSpcApiHelper constructor.
-   *
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   The api wrapper.
-   */
-  public function __construct(
-    AlshayaApiWrapper $api_wrapper
-  ) {
-    $this->apiWrapper = $api_wrapper;
-  }
-
-  /**
-   * Function to get customer address form.
-   *
-   * @param string $mail
-   *   The mail address.
-   * @param string $pass
-   *   The customer password.
-   *
-   * @return array
-   *   The Form array from API response OR empty array.
-   */
-  public function authenticateCustomerOnMagento(string $mail, string $pass) {
-    $endpoint = 'customers/by-login-and-password';
-
-    try {
-      $response = $this->apiWrapper->invokeApi(
-        $endpoint,
-        [
-          'username' => $mail,
-          'password' => $pass,
-        ],
-        'JSON'
-      );
-    }
-    catch (\Exception $e) {
-      return [];
-    }
-
-    if ($response && is_string($response)) {
-      $response = json_decode($response, TRUE);
-      // Move the cart_id into the customer object.
-      if (isset($response['cart_id'])) {
-        $response['customer']['custom_attributes'][] = [
-          'attribute_code' => 'cart_id',
-          'value' => $response['cart_id'],
-        ];
-      }
-      return self::customerFromSearchResult($response['customer']);
-
-    }
-
-    return [];
-  }
+class MagentoApiResponseHelper {
 
   /**
    * Prepare Customer data same as ACM.

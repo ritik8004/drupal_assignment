@@ -620,9 +620,9 @@ function _alshaya_addressbook_array_insert(array $array, array $pairs, $key, $po
 }
 
 /**
- * Implements hook_acq_commerce_update_customer_api_request_alter().
+ * Implements hook_alshaya_api_update_customer_api_request_alter().
  */
-function alshaya_addressbook_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+function alshaya_addressbook_alshaya_api_update_customer_api_request_alter(array &$request_options) {
   if (isset($request_options['json'], $request_options['json']['customer']['email'])
     && empty($request_options['json']['customer']['addresses'])) {
     /** @var \Drupal\user\Entity\User $user */

@@ -2,12 +2,15 @@
 
 namespace Drupal\alshaya_api;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
+use Drupal\alshaya_api\Helper\MagentoApiRequestHelper;
+use Drupal\alshaya_api\Helper\MagentoApiResponseHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -66,6 +69,13 @@ class AlshayaApiWrapper {
   protected $cache;
 
   /**
+   * The LoggerFactory object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * I18n Helper.
    *
    * @var \Drupal\acq_commerce\I18nHelper
@@ -87,6 +97,20 @@ class AlshayaApiWrapper {
   protected $fileSystem;
 
   /**
+   * The mdc helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
+   * Th module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -105,24 +129,34 @@ class AlshayaApiWrapper {
    *   The state factory.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   The filesystem service.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento api helper.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              LanguageManagerInterface $language_manager,
-                              TimeInterface $date_time,
-                              CacheBackendInterface $cache,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              I18nHelper $i18n_helper,
-                              StateInterface $state,
-                              FileSystemInterface $fileSystem) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    LanguageManagerInterface $language_manager,
+    TimeInterface $date_time,
+    CacheBackendInterface $cache,
+    LoggerChannelFactoryInterface $logger_factory,
+    I18nHelper $i18n_helper,
+    StateInterface $state,
+    FileSystemInterface $fileSystem,
+    MagentoApiHelper $mdc_helper,
+    ModuleHandlerInterface $module_handler
+  ) {
     $this->config = $config_factory->get('alshaya_api.settings');
-    $this->logger = $logger_factory->get('alshaya_api');
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->dateTime = $date_time;
     $this->cache = $cache;
+    $this->logger = $logger_factory->get('alshaya_api');
     $this->i18nHelper = $i18n_helper;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
+    $this->mdcHelper = $mdc_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -265,6 +299,12 @@ class AlshayaApiWrapper {
         $options['json'] = $data;
         $method = 'POST';
       }
+      elseif ($method == 'GET') {
+        $options['query'] = $data;
+      }
+      elseif ($method == 'PUT') {
+        $options['json'] = $data;
+      }
 
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
@@ -272,13 +312,13 @@ class AlshayaApiWrapper {
       try {
         $json = Json::decode($result);
         if (is_array($json) && !empty($json['message']) && count($json) === 1) {
-          throw new \Exception($json['message'], APIWrapper::API_DOWN_ERROR_CODE);
+          throw new \Exception($json['message'], 600);
         }
       }
       catch (\Exception $e) {
         // Let the outer catch handle logging of error and handling response.
         // We avoid other exceptions related to JSON parsing here.
-        if ($e->getCode() === APIWrapper::API_DOWN_ERROR_CODE) {
+        if ($e->getCode() === 600) {
           throw $e;
         }
       }
@@ -919,7 +959,7 @@ class AlshayaApiWrapper {
    */
   public function updateCart(string $cart_id, array $cart) {
     $endpoint = 'carts/' . $cart_id . '/updateCart';
-    return $this->invokeApi($endpoint, $cart, 'JSON', FALSE);
+    return $this->invokeApi($endpoint, $cart, 'JSON');
   }
 
   /**
@@ -943,6 +983,213 @@ class AlshayaApiWrapper {
     $response = $this->invokeApi($endpoint, $data, 'JSON');
 
     return Json::decode($response);
+  }
+
+  /**
+   * Authenticate customer through magento api.
+   *
+   * @param string $mail
+   *   The mail address.
+   * @param string $pass
+   *   The customer password.
+   *
+   * @return array
+   *   The array customer data OR empty array.
+   */
+  public function authenticateCustomerOnMagento(string $mail, string $pass) {
+    $endpoint = 'customers/by-login-and-password';
+
+    try {
+      $response = $this->invokeApi(
+        $endpoint,
+        [
+          'username' => $mail,
+          'password' => $pass,
+        ],
+        'JSON'
+      );
+    }
+    catch (\Exception $e) {
+      return [];
+    }
+
+    if ($response && is_string($response)) {
+      $response = Json::decode($response);
+      // Move the cart_id into the customer object.
+      if (isset($response['cart_id'])) {
+        $response['customer']['custom_attributes'][] = [
+          'attribute_code' => 'cart_id',
+          'value' => $response['cart_id'],
+        ];
+      }
+      return MagentoApiResponseHelper::customerFromSearchResult($response['customer']);
+    }
+    return [];
+  }
+
+  /**
+   * Get customer by email, helpful for logged in user.
+   *
+   * @param string $email
+   *   The email id.
+   *
+   * @return array
+   *   Return array of customer data or empty array.
+   *
+   * @throws \Exception
+   */
+  public function getCustomer($email) {
+    $query_string_values = [
+      'condition_type' => 'eq',
+      'field' => 'email',
+      'value' => $email,
+    ];
+    $query_string_array = [];
+    foreach ($query_string_values as $key => $value) {
+      $query_string_array["searchCriteria[filterGroups][0][filters][0][{$key}]"] = $value;
+    }
+
+    $customer = [];
+    try {
+      $response = $this->invokeApi("customers/search", $query_string_array, 'GET');
+      $result = Json::decode($response);
+      if (!empty($result['items'])) {
+        $customer = MagentoApiResponseHelper::customerFromSearchResult(reset($result['items']));
+        $customer = $this->mdcHelper->cleanCustomerData($customer);
+      }
+    }
+    catch (\Exception $e) {
+      throw new \Exception($e->getMessage(), $e->getCode(), $e);
+    }
+
+    return $customer;
+  }
+
+  /**
+   * Update customer with details.
+   *
+   * @param array $customer
+   *   The array of customer details.
+   * @param array $options
+   *   The options.
+   *
+   * @return array|mixed
+   *   Return array of customer details or null.
+   *
+   * @throws \Exception
+   */
+  public function updateCustomer(array $customer, array $options = []) {
+    $endpoint = 'customers';
+
+    $opt['json']['customer'] = $customer;
+
+    if (isset($options['password']) && !empty($options['password'])) {
+      $opt['json']['password'] = $options['password'];
+    }
+
+    // Invoke the alter hook to allow all modules to update the customer data.
+    $this->moduleHandler->alter('alshaya_api_update_customer_api_request', $opt);
+
+    // Do some cleanup.
+    $opt['json']['customer'] = $this->mdcHelper->cleanCustomerData($opt['json']['customer']);
+    $opt['json']['customer'] = MagentoApiRequestHelper::prepareCustomerDataForApi($opt['json']['customer']);
+
+    $method = 'JSON';
+    if (!empty($opt['json']['customer']['id'])) {
+      $endpoint .= '/' . $opt['json']['customer']['id'];
+      $method = 'PUT';
+    }
+
+    try {
+      $response = $this->invokeApi($endpoint, $opt['json'], $method);
+      $response = Json::decode($response);
+      if (!empty($response)) {
+        // Move the cart_id into the customer object.
+        if (isset($response['cart_id'])) {
+          $response['custom_attributes'][] = [
+            'attribute_code' => 'cart_id',
+            'value' => $response['cart_id'],
+          ];
+        }
+        $response = MagentoApiResponseHelper::customerFromSearchResult($response);
+      }
+
+      // Update password api.
+      if (!empty($response) && !empty($options['password'])) {
+        try {
+          $this->updateCustomerPass($response, $options['password']);
+        }
+        catch (\Exception $e) {
+          throw $e;
+        }
+      }
+    }
+    catch (\Exception $e) {
+      $response = NULL;
+      $this->logger->error('Exception while invoking method @method for API @api. Message: @message.', [
+        '@method' => __METHOD__,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $response;
+  }
+
+  /**
+   * Update customer password.
+   *
+   * @param array $customer
+   *   The customer array.
+   * @param string $password
+   *   The password to update for customer.
+   *
+   * @return array|null
+   *   Return array response.
+   *
+   * @throws \Exception
+   */
+  protected function updateCustomerPass(array $customer, $password) {
+    $endpoint = 'customers/%d/set-password?';
+
+    $cid = (int) $customer['customer_id'];
+    $password = (string) $password;
+
+    if ($cid < 1) {
+      throw new \Exception(
+        'updateCustomerPass: Missing customer id.'
+      );
+    }
+    if (!strlen($password)) {
+      throw new \Exception(
+        'updateCustomerPass: Missing customer password.'
+      );
+    }
+
+    $endpoint = sprintf($endpoint, $cid);
+    $endpoint .= 'password=' . urlencode($password);
+
+    try {
+      $response = $this->invokeApi(
+        $endpoint,
+        [
+          'customer_id' => $cid,
+          'password' => $password,
+        ],
+        'JSON'
+      );
+      $response = Json::decode($response);
+    }
+    catch (\Exception $e) {
+      $response = NULL;
+      $this->logger->error('Exception while invoking method @method for API @api. Message: @message.', [
+        '@method' => __METHOD__,
+        '@api' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $response;
   }
 
 }
