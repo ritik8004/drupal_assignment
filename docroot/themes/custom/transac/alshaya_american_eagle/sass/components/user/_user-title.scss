@@ -1,0 +1,23 @@
+.order-detail .block-page-title-block,
+.c-change-password .block-page-title-block,
+.c-communication-preferences .block-page-title-block,
+.c-user-edit .block-page-title-block,
+.c-order-list .block-page-title-block,
+.c-user--node .block-page-title-block,
+.c-address-book .block-page-title-block,
+.c-payment-cards .block-page-title-block {
+  .back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevronleft, before) {
+        font-weight: bold;
+        top: 0;
+        transform: rotate(0deg);
+        color: $secure_checkout_back_link;
+      }
+
+      html[lang=ar] & {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
