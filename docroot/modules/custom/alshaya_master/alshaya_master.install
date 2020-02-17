@@ -11,6 +11,29 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for -
+ * 'Purchase limit has been reached',
+ * 'Limited to' and 'per customer'.
+ */
+function alshaya_master_update_8036() {
+  $strings = [
+    'Purchase limit has been reached' => [
+      'ar' => 'تم الوصول إلى حد الشراء',
+    ],
+    'Limited to' => [
+      'ar' => 'الحد الأقصى',
+    ],
+    'per customer' => [
+      'ar' => 'لكل زبون',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding arabic translations for - Tap Image to Enlarge & Large view.
  */
 function alshaya_master_update_8035() {
@@ -1827,6 +1850,15 @@ function alshaya_master_install() {
     ],
     'each' => [
       'ar' => 'كل منتج',
+    ],
+    'Purchase limit has been reached' => [
+      'ar' => 'تم الوصول إلى حد الشراء',
+    ],
+    'Limited to' => [
+      'ar' => 'الحد الأقصى',
+    ],
+    'per customer' => [
+      'ar' => 'لكل زبون',
     ],
   ];
 
