@@ -1,6 +1,6 @@
 import React from 'react';
 import PriceElement from './PriceElement';
-import { calculateDiscount } from '../../utils';
+import {calculateDiscount} from '../../utils';
 
 const PriceBlock = props => {
   return (
@@ -14,11 +14,11 @@ const PriceBlock = props => {
   );
 }
 
-const Price = ({ price, final_price }) => {
+const Price = ({price, final_price}) => {
   if (price > 0 && final_price > 0 && final_price < price) {
     const discount = calculateDiscount(price, final_price);
     const discountTxt = (discount > 0)
-      ? (<div className="price--discount">({Drupal.t('Save @discount%', { '@discount': discount })})</div>)
+      ? (<div className="price--discount">({Drupal.t('Save @discount%', {'@discount': discount})})</div>)
       : '';
 
     return (
