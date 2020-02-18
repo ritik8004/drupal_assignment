@@ -4,8 +4,7 @@ import SectionTitle from '../../../utilities/section-title';
 import GMap from './gmap';
 import Axios from 'axios';
 import { getGlobalCart } from '../../../utilities/get_cart';
-// import GoogleMap from '../../../utilities/map/GoogleMap';
-// import {getArea, getBlock, createMarker, getMap} from '../../../utilities/map/map_utils';
+import StoreList from '../store-list';
 
 export default class ClickCollect extends React.Component {
 
@@ -65,7 +64,6 @@ export default class ClickCollect extends React.Component {
    * Fetch available stores for given lat and lng.
    */
   fetchAvailableStores = async (coords) => {
-    coords = { lat: 29.31166, lng: 47.481766 };
     let {cart_id} = getGlobalCart();
     const GET_STORE_URL = `/cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`;
 
@@ -85,8 +83,7 @@ export default class ClickCollect extends React.Component {
         { window.innerWidth > 768 &&
           <div className='spc-address-form-map'>
             <GMap
-              // coords={this.state.coords}
-              coords={{ lat: 29.31166, lng: 47.481766 }}
+              coords={this.state.coords}
               onCoordsUpdate={this.fetchAvailableStores}
               markers={store_list}
             />
@@ -121,7 +118,9 @@ export default class ClickCollect extends React.Component {
                   />
                   <button className="cc-near-me" id="edit-near-me" onClick={this.getCurrentPosition}>{Drupal.t('Near me')}</button>
                 </div>
-                <div id="click-and-collect-list-view"></div>
+                <div id="click-and-collect-list-view">
+                  <StoreList store_list={store_list}/>
+                </div>
               </form>
             </div>
           </div>
