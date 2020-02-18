@@ -894,7 +894,6 @@
       }
 
       gtm_execute_onetime_events = false;
-
     }
   };
 
