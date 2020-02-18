@@ -584,7 +584,7 @@ class SkuImagesManager {
     $is_configurable = $sku->bundle() == 'configurable';
 
     if ($this->skuManager->isSkuFreeGift($sku)) {
-      $configurable_use_parent_images = 'never';
+      $configurable_use_parent_images = 'fallback';
     }
     elseif (!empty($case) && $configurable_use_parent_images != 'never') {
       $configurable_use_parent_images = $case;
