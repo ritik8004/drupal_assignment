@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\Core\Url;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
@@ -117,6 +118,13 @@ class ProductResource extends ResourceBase {
   private $requestStack;
 
   /**
+   * Alshaya Gtm Manager.
+   *
+   * @var \Drupal\alshaya_seo_transac\AlshayaGtmManager
+   */
+  protected $alshayaGtmManager;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -147,6 +155,8 @@ class ProductResource extends ResourceBase {
    *   Language manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager
+   *   Alshaya Gtm Manager.
    */
   public function __construct(
     array $configuration,
@@ -162,7 +172,8 @@ class ProductResource extends ResourceBase {
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
     LanguageManagerInterface $language_manager,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    AlshayaGtmManager $alshayaGtmManager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -179,6 +190,7 @@ class ProductResource extends ResourceBase {
     $this->skuInfoHelper = $sku_info_helper;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack;
+    $this->alshayaGtmManager = $alshayaGtmManager;
   }
 
   /**
@@ -199,7 +211,8 @@ class ProductResource extends ResourceBase {
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('language_manager'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('alshaya_seo_transac.gtm_manager')
     );
   }
 
@@ -381,6 +394,9 @@ class ProductResource extends ResourceBase {
     // Allow other modules to alter light product data.
     $type = 'full';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+
+    // SET cart product GTM attributes.
+    $data['gtm_attributes'] = $this->fetchCartProductAttributes($sku->getSku());
 
     return $data;
   }
@@ -580,6 +596,41 @@ class ProductResource extends ResourceBase {
       }
     }
     return $return;
+  }
+
+  /**
+   * Get cart products GTM attributes.
+   *
+   * @param string $skuId
+   *   Sku Id.
+   *
+   * @return array
+   *   Gtm attributes.
+   */
+  public function fetchCartProductAttributes($skuId) {
+    $attributes = [];
+    $dimension7 = '';
+    $dimension8 = '';
+    $attributes = $this->alshayaGtmManager->fetchSkuAtttributes($skuId);
+    // Fetch product for this sku to get the category.
+    $productNode = $this->skuManager->getDisplayNode($skuId);
+    if ($productNode instanceof NodeInterface) {
+      // Get product media.
+      $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
+      $attributes['gtm-category'] = implode('/', $this->alshayaGtmManager->fetchProductCategories($productNode));
+      $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
+    }
+    $delivery_page = ($this->alshayaGtmManager->convertCurrentRouteToGtmPageName($this->alshayaGtmManager->getGtmContainer()) === 'checkout payment page');
+
+    if (($dimension7) && ($delivery_page)) {
+      $attributes['gtm-dimension7'] = trim($dimension7);
+    }
+
+    if (($dimension8) && ($delivery_page)) {
+      $attributes['gtm-dimension8'] = trim($dimension8);
+    }
+
+    return $attributes;
   }
 
 }
