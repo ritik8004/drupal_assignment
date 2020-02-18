@@ -35,8 +35,6 @@ function hasCategoryFilter() {
     const isCategoryPresent = _.findIndex(filters, { 'identifier': 'field_category' });
     if (isCategoryPresent) {
       return (isCategoryPresent >= 0);
-    } else {
-      return false;
     }
   } else {
     return false;

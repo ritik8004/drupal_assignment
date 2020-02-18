@@ -158,6 +158,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/algolia/search-insights@1.3.0.min.js',
             'filters' => $this->getFilters($index_name),
             'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
+            'category_facet_label' => $this->t('Category'),
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,

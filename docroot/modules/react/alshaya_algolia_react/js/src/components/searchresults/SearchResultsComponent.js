@@ -24,6 +24,7 @@ import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
 import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
+import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -51,7 +52,7 @@ const SearchResultsComponent = props => {
       onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
-      {hasCategoryFilter() && (
+      {hasCategoryFilter() && isDesktop() && (
         <SideBar>
           <ul>
             <li>
@@ -70,6 +71,17 @@ const SearchResultsComponent = props => {
           {(callback) => (
             <React.Fragment>
               <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
+              {hasCategoryFilter() && !isDesktop() && (
+                <div className="block-alshaya-category-lhn-block c-facet c-accordion c-collapse-item non-desktop">
+                  <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
+                  <HierarchicalMenu
+                    attributes={[
+                      'field_category.lvl0',
+                      'field_category.lvl1',
+                    ]}
+                  />
+                </div>
+              )}
               <div className="show-all-filters-algolia hide-for-desktop">
                 <span className="desktop">{Drupal.t('all filters')}</span>
                 <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
