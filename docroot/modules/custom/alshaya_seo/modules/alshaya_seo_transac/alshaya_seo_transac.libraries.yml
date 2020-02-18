@@ -22,3 +22,7 @@ checkout_login:
     js/alshaya_seo.gtm.checkout_login.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+
+gtm_spc_cart:
+  js:
+    js/alshaya_seo.gtm.spc_cart.js: {}
