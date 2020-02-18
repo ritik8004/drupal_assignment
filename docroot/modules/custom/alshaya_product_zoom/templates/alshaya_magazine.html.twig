@@ -12,7 +12,7 @@
           </div>
         {% elseif loop.first %}
           <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}  data-scale="2">
-            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+            <img data-zoom-url="{{ thumbs.zoomurl }}" class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }} "alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
             {%  if labels|length > 0 %}
               <div class="product-labels">
                 {{ labels }}
@@ -21,7 +21,7 @@
           </figure>
         {% else %}
           <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }} data-scale="2">
-            <img class="b-lazy" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
+            <img class="b-lazy" data-zoom-url="{{ thumbs.zoomurl }}" data-src="{{ thumbs.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}"/>
           </figure>
         {% endif %}
       {% endfor %}
@@ -29,6 +29,7 @@
         <div class="magazine-swatch-placeholder"></div>
         <div class="magazine-desc-wrapper"> {{ description }}</div>
       </div>
+
     </div>
   {% endblock %}
   {% block modalGallery %}

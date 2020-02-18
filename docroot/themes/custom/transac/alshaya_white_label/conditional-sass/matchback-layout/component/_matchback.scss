@@ -115,9 +115,6 @@
 
       .slick-dots-container {
         li {
-          color: $mothercare-black;
-          background: currentColor !important;
-
           @include breakpoint($desktop) {
             .ie & {
               min-width: 0.6875rem;
@@ -155,15 +152,21 @@
       @include breakpoint($tablet) {
         padding: 0;
       }
+
+      html[lang=ar] & {
+        transform: rotate(180deg);
+      }
     }
   }
 
   .slick-prev {
     @include breakpoint($tablet) {
       #{$left}: 1rem;
+      #{$right}: auto;
     }
 
     @include breakpoint($desktop) {
+      #{$right}: auto;
       #{$left}: 2.65rem;
     }
   }
@@ -171,10 +174,12 @@
   .slick-next {
     @include breakpoint($tablet) {
       #{$right}: 1rem;
+      #{$left}: auto;
     }
 
     @include breakpoint($desktop) {
       #{$right}: 2.65rem;
+      #{$left}: auto;
     }
   }
 

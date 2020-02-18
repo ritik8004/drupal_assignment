@@ -11,3 +11,21 @@
     color: $matchback_hover_text;
   }
 }
+
+.acq-content-product-matchback {
+  .size-guide-form-and-link-wrapper {
+    @include breakpoint($tablet) {
+      position: relative;
+    }
+
+    .size-guide-link {
+      @include breakpoint($tablet) {
+        position: absolute;
+        top: 0.875rem;
+        padding-top: 0;
+        left: 50%;
+        transform: translateX(-53%);
+      }
+    }
+  }
+}

@@ -1145,6 +1145,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['combinations'] = $combinations;
     $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['byAttribute'] = $product_tree['combinations']['by_attribute'];
 
+    // Get the first child from attribute_sku which has values sorted
+    // same as add to cart form.
+    $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+    $form['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = reset($sorted_variants);
+
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
     /** @var \Drupal\alshaya_acm_product\Service\AddToCartFormHelper $addToCartFormHelper */
@@ -1183,11 +1188,15 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       foreach ($configurable_options as $configurable_option) {
         if (in_array($configurable_option, $size_guide['attributes'])) {
-          $form['ajax']['configurables'][$configurable_option]['#prefix'] = $size_guide['link'];
+          $form['ajax']['configurables'][$configurable_option]['#prefix'] = '<div class="size-guide-form-and-link-wrapper">';
+          $form['ajax']['configurables'][$configurable_option]['#prefix'] .= $size_guide['link'];
+          $form['ajax']['configurables'][$configurable_option]['#suffix'] = '</div>';
+          break;
         }
       }
     }
   }
+
   // Stock check for quantity for all other products.
   elseif ($quantity = $sku_manager->getStockQuantity($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);

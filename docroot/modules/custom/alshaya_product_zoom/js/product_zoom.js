@@ -56,17 +56,15 @@
           myDialog.showModal();
         });
 
-        $(window).once('dialogopened').on( "dialog:aftercreate", function (event) {
-          // Closing modal window on click of the full screen slider images.
-          $('#product-full-screen-gallery img').once('attached').on('click', function (e) {
-            var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
-
-            // Closing modal window before slick library gets removed.
-            myDialog.close();
-            productGallery.slick('unslick');
-            $('body').removeClass('pdp-modal-overlay');
-            e.preventDefault();
-          });
+        // $(document).once() because we need the same functionality for free gifts pdp modal too and we are
+        // using HtmlCommand to render the free gifts pdp (Check viewProduct() in FreeGiftController.php).
+        $(document).once('dialog-opened').on('click','.dialog-product-image-gallery-container #product-full-screen-gallery li.slick-slide', function (e) {
+          var productGallery = $('#product-full-screen-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+          // Closing modal window before slick library gets removed.
+          $(this).closest('.dialog-product-image-gallery-container').find($('button.ui-dialog-titlebar-close')).trigger('mousedown');
+          productGallery.slick('unslick');
+          $('body').removeClass('pdp-modal-overlay');
+          e.preventDefault();
         });
 
         // Videos inside main PDP slider.
@@ -84,8 +82,7 @@
             // Handle click on image thumbnails.
             var imageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('href');
             if (imageUrl !== null || imageUrl !== 'undefined') {
-              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl)
-              .parent().find('.product-image-zoom-placeholder-content').css({'background-image': 'url(' + imageUrl + ')'});
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl);
             }
           }
           // Hide Product labels on video slides.
@@ -134,9 +131,10 @@
 
           $(this).parent().siblings('.slick-slide').removeClass('slick-current');
           $(this).parent().addClass('slick-current');
-          var bigImage = $(this).attr('href');
+
           // Put the big image in our main container.
-          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
+          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', $(this).attr('href'));
+          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', $(this).attr('data-zoom-url'));
           $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
           $('.acq-content-product-modal #cloud-zoom-wrap').show();
@@ -174,38 +172,43 @@
 
       // Zoom effect on image hover for desktop.
       if ($(window).width() > 1025) {
-        $('#product-zoom-container .img-wrap')
-        .on('mouseover', function (){
-          $(this).addClass('product-image-zoomed');
-          $(this).find('.product-image-zoom-placeholder-content').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
-        })
-        .on('mouseout', function (){
-          $(this).removeClass('product-image-zoomed');
-          $(this).find('.product-image-zoom-placeholder-content').css({'transform': 'scale(1)'});
-        })
-        .on('mousemove', function (e){
-          $(this).find('.product-image-zoom-placeholder-content').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
-        })
-        .each(function (){
-          $(this)
-          .once('product-image-zoom-placeholder-appended')
-          // Add a magazine image zoom placeholder.
-          .append('<div class="product-image-zoom-placeholder"><div class="product-image-zoom-placeholder-content"></div></div>')
+        $('#product-zoom-container .img-wrap').each(function () {
+          $(this).on('mousemove', function (e) {
+            $(this).find('.product-image-zoom-placeholder-content').css({
+              'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'
+            });
+          });
+
+          $(this).on('mouseout', function () {
+            $(this).removeClass('product-image-zoomed');
+            $(this).find('.product-image-zoom-placeholder-content').css({
+              'transform': 'scale(1)'
+            });
+          });
+
+          $(this).on('mouseover', function () {
+            $(this).addClass('product-image-zoomed');
+            $(this).find('.product-image-zoom-placeholder-content').css({
+              'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')',
+              'transform': 'scale('+ $(this).attr('data-scale') +')'
+            });
+          });
+
           // Set up a background image for each magazine image zoom placeholder based on data-src attribute.
-          .children('.product-image-zoom-placeholder')
+          $(this).once('product-image-zoom-placeholder-appended').append('<div class="product-image-zoom-placeholder"><div class="product-image-zoom-placeholder-content"></div></div>');
+
           // Binding click event to image zoom placeholder sibling.
-          .on('click', function (){
+          $(this).children('.product-image-zoom-placeholder').on('click', function (){
             $(this).parent().find('img').trigger('click');
-          })
-          .children('.product-image-zoom-placeholder-content')
-          .css({'background-image': 'url('+ $(this).find('img').attr('src') +')'});
+          });
+
           $(this).find('img').on('load', function () {
             var imgWidth = $(this).width();
             var containerWidth = $(this).parent().width();
             var leftPosition = (containerWidth - imgWidth)/2;
             $(this).parent().find('.product-image-zoom-placeholder').css({'width': imgWidth + 'px', 'left': leftPosition + 'px'})
-          })
-        })
+          });
+        });
       }
     }
   };
