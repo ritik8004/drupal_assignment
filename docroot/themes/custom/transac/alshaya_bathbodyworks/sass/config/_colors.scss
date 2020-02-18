@@ -173,7 +173,7 @@ $header_my_account_h3_title: $black;
 $header_my_account_bg: $white;
 $header_my_account_link_hover: $peacock-blue;
 $header_my_account_icon: $peacock-blue;
-$my_account_nav_active : $peacock-blue;
+$my_account_nav_active: $peacock-blue;
 $my_account_nav_hover: $peacock-blue;
 
 // Checkbox & Radio.
@@ -487,7 +487,7 @@ $basket_free_delivery_active_header_promo_txt: $peacock-blue;
 
 // My Account Pages
 $user_order_help_bg: $info-blue;
-$user_order_help_text : $white;
+$user_order_help_text: $white;
 $user_order_help_text_links: $user_order_help_text;
 $password_tooltip_list: $peacock-blue;
 $_password_tooltip_list_error: $error-red;
@@ -590,3 +590,8 @@ $free-gifts-select-button-bg: $peacock-blue;
 $cart-free-gifts-message: $black;
 $cart-free-gifts-title: $black;
 $cart-free-gifts-label-background: $peacock-blue;
+
+//Algolia search bar.
+$algolia-react-search-page-title: $page_title;
+$algolia-react-highlighted-bg: $peacock-blue;
+$algolia-react-progressbar-fill: $peacock-blue;

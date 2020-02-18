@@ -5,7 +5,7 @@ import {
   Stats,
 } from 'react-instantsearch-dom';
 
-import { searchClient } from '../../config/SearchClient';
+import { algoliaSearchClient } from '../../config/SearchClient';
 
 import NoResults from '../algolia/NoResults';
 import SearchResultInfiniteHits from '../algolia/SearchResultInfiniteHits';
@@ -45,7 +45,7 @@ const SearchResultsComponent = props => {
 
   return (
     <InstantSearch
-      searchClient={searchClient}
+      searchClient={algoliaSearchClient}
       indexName={indexName}
       searchState={props.searchState}
       createURL={props.createURL}
@@ -119,6 +119,6 @@ const SearchResultsComponent = props => {
       </MainContent>
     </InstantSearch>
   );
-}
+};
 
 export default withURLSync(SearchResultsComponent);

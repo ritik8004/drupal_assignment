@@ -10,4 +10,5 @@ services:
       - '@entity_type.manager'
       - '@entity.repository'
       - '@datetime.time'
+      - '@alshaya_acm_product.price_helper'
       - '@alshaya_acm_product_category.sales_category_manager'

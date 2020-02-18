@@ -15,7 +15,7 @@ const PriceBlock = props => {
 }
 
 const Price = ({price, final_price}) => {
-  if (price > 0 && final_price > 0 &&  final_price < price) {
+  if (price > 0 && final_price > 0 && final_price < price) {
     const discount = calculateDiscount(price, final_price);
     const discountTxt = (discount > 0)
       ? (<div className="price--discount">({Drupal.t('Save @discount%', {'@discount': discount})})</div>)
