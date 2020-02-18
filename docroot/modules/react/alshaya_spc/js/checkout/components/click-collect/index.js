@@ -1,5 +1,9 @@
 import React from 'react';
+
 import SectionTitle from '../../../utilities/section-title';
+import GMap from './gmap';
+// import GoogleMap from '../../../utilities/map/GoogleMap';
+// import {getArea, getBlock, createMarker, getMap} from '../../../utilities/map/map_utils';
 
 export default class ClickCollect extends React.Component {
 
@@ -7,12 +11,35 @@ export default class ClickCollect extends React.Component {
     super(props);
     this.searchplaceInput = React.createRef();
     this.state = {
-      'store_list': null,
+      coords: {},
+      store_list: null
     };
   }
 
   componentDidMount() {
+    // For autocomplete textfield.
+    this.autocomplete = new window.google.maps.places.Autocomplete(this.searchplaceInput.current, {
+      types: [],
+      componentRestrictions: {country: window.drupalSettings.country_code}
+    });
+    this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
+  }
 
+  /**
+   * Autocomplete handler for the places list.
+   */
+  placesAutocompleteHandler = () => {
+    const place = this.autocomplete.getPlace();
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+      coords = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+    }
+
+    // this.panMapToGivenCoords(place.geometry.location);
+    // Get geocode details for address.
+    // this.geocodeFromLatLng(place.geometry.location);
   }
 
   /**
@@ -21,6 +48,37 @@ export default class ClickCollect extends React.Component {
   deliverToCurrentLocation = () => {
 
   }
+
+  /**
+   * Get current location coordinates.
+   */
+  getCurrentPosition = () => {
+    // If location access is enabled by user.
+    try {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successCall, ErrorCall, {timeout: 10000});
+      }
+    }
+    catch (e) {
+      // Empty.
+    }
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        let currentCoords = {
+          'lat': pos.coords.latitude,
+          'lng': pos.coords.longitude,
+        };
+
+        this.fetchAvailableStores(currentCoords);
+      });
+    }
+  }
+
+  fetchAvailableStores(coords) {
+
+  }
+
+
 
   render() {
     return(
@@ -34,6 +92,7 @@ export default class ClickCollect extends React.Component {
           <div className='spc-address-form-wrapper'>
             { window.innerWidth < 768 &&
               <div className='spc-address-form-map'>
+                <GMap />
               </div>
             }
             <div className='spc-address-form-content'>

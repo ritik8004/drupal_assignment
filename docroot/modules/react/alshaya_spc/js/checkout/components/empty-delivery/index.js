@@ -3,6 +3,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import AddressContent from "../address-popup-content";
 import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
+import ClickCollect from '../click-collect';
 
 export default class EmptyDeliveryText extends React.Component {
 
@@ -49,7 +50,10 @@ export default class EmptyDeliveryText extends React.Component {
             {Drupal.t('Select your preferred collection store')}
           </div>
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-            <a className='close' onClick={this.closeModal}>&times;</a>
+            <React.Fragment>
+              <a className='close' onClick={this.closeModal}>&times;</a>
+              <ClickCollect default_val={null} processAddress={this.processAddress}/>
+            </React.Fragment>
           </Popup>
         </div>
       );
