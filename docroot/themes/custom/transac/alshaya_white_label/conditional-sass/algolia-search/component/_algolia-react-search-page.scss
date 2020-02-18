@@ -18,47 +18,73 @@
     }
   }
 
-  .block-alshaya-category-lhn-block {
+  .block-facet-blockcategory-facet-search {
+    @include breakpoint($desktop) {
+      margin-top: 0;
+    }
+
     a {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.375rem 0;
-      text-decoration: none;
+      display: block;
+      cursor: pointer;
+      text-transform: capitalize;
 
-      .ais-HierarchicalMenu-label {
-        font-size: 0.75rem;
-        color: $algolia-react-sidebar-label-color;
-        font-family: $alshaya-thin;
-        font-weight: 600;
-        text-transform: capitalize;
-      }
-
-      .ais-HierarchicalMenu-count {
-        font-size: 0.6875rem;
-        color: $algolia_react-search_page_sidebar_count;
+      &.is-active {
+        font-family: $alshaya-bold;
       }
     }
 
-    > ul {
-      > li {
-        > ul {
-          > li {
-            &:first-child {
-              a {
-                padding-top: 0;
+    li {
+      margin-bottom: 0;
+      min-height: auto;
+    }
+  }
+
+  .c-sidebar-first .c-facet__blocks {
+    &.block-facet-blockcategory-facet-search {
+      > ul {
+        margin-top: 0.90625rem;
+
+        > li {
+          > ul {
+            padding-#{$left}: 1.125rem;
+          }
+        }
+      }
+
+      a {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .c-content__region {
+    @include breakpoint($upto-desktop) {
+      .block-facet-blockcategory-facet-search {
+        .facet-item {
+          padding-top: 0.75rem !important;
+          border-bottom: 0.0625rem solid $plp_all_filter_item_border;
+          padding-bottom: 0.75rem !important;
+          margin-top: 0;
+        }
+
+        & > ul > li {
+          @include breakpoint($upto-desktop) {
+            &:last-child {
+              .facet-item {
+                border-bottom: none;
               }
             }
 
-            ul {
-              margin-#{$left}: 0.625rem;
+            & > ul {
+              margin: 0;
+
+              .facet-item {
+                border-top: none;
+              }
             }
           }
         }
       }
-    }
-
-    > ul {
-      margin-top: 0.75rem;
     }
   }
 
@@ -84,7 +110,7 @@
           background: #fff;
           display: inline-block;
           border-radius: 100%;
-          border: 1px solid $primary_radiobtn_empty;
+          border: 0.0625rem solid $primary_radiobtn_empty;
           margin-#{$right}: 1rem;
           vertical-align: middle;
         }
@@ -170,13 +196,18 @@
 
   .show-all-filters-algolia {
     @include breakpoint($only-mobile) {
-      height: 2.9375rem;
+      height: 3rem;
       display: flex;
       align-items: center;
     }
   }
 
   .c-content__region {
+    @include breakpoint($desktop) {
+      width: 80%;
+      float: $right;
+    }
+
     .sticky-filter-wrapper {
       .c-collapse-item {
         .c-collapse__title {

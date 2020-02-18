@@ -1,11 +1,24 @@
 #alshaya-algolia-search {
   .filter-fixed-top {
     .show-all-filters-algolia {
+      &.empty-category {
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
+
       @include breakpoint($only-mobile) {
         position: fixed;
         background: $algolia-search-bar-background;
         z-index: 1;
-        width: 100%;
+        width: 50%;
+        top: 3.625rem;
+        right: 0;
+      }
+    }
+
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
         top: 3.625rem;
       }
     }

@@ -1,13 +1,8 @@
 /**
  * @file
  * Facets Views AJAX handling.
-<<<<<<< HEAD
  * Override drupal.facets.views-ajax library to update facetsViewsAjax behavior to open accordion if facet-item
  * has child items, else update views output.
-=======
- * Override drupal.facets.views-ajax library to update facetsViewsAjax behavior to make
- * sure that our code runs after updateFacetsView() is called.
->>>>>>> CORE-11129: Theme category search facet hierarcial facet item for potterybarn.
  */
 
 /**
@@ -164,4 +159,5 @@
       facetItem.find('ul').slideDown();
     }
   };
+
 })(jQuery, Drupal);
