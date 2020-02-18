@@ -83,3 +83,9 @@ fields:
     index: 1
     facet: 1
     swatch: 1
+
+  size_group_code:
+    label: 'Size group code'
+    type: 'string'
+    description: 'Size group attribute for the product.'
+    index: 1
