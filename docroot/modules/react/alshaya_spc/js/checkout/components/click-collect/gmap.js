@@ -17,10 +17,16 @@ export default class GMap extends React.Component {
     this.geoCoder = null;
   }
 
+  /**
+   * Initiate geocoder.
+   */
   initGeoCoder = () => {
     this.geocoder = new google.maps.Geocoder();
   }
 
+  /**
+   * Center rendered map to coords if we already have, or center it to site country.
+   */
   centerMap = () => {
     if (!_isEmpty(this.props.coords)) {
       window.spcMap.setCenter(this.props.coords);
@@ -32,21 +38,17 @@ export default class GMap extends React.Component {
       componentRestrictions: {
         country: window.drupalSettings.country_code
       }
-    }, function(results, status){
+    }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-          // console.log(results[0].geometry.location);
+          // Just center the map and don't do anything.
           window.spcMap.setCenter(results[0].geometry.location);
-          return;
         }
     });
   }
 
   componentDidMount() {
-    // This data can be passed from caller in props.
-    let data = [];
     // Initiate geocoder.
     this.initGeoCoder();
-
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     this.googleMap = this.createGoogleMap({});
@@ -54,8 +56,63 @@ export default class GMap extends React.Component {
     this.centerMap();
   }
 
-  componentDidUpdate() {
-    this.centerMap();
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.coords !== this.props.coords || prevProps.markers !== this.props.markers) {
+      this.centerMap();
+      this.placeMarkers();
+    }
+  }
+
+  /**
+   * @todo: IN WIP.
+   * Removes all markers from map.
+   */
+  removeAllMarkersFromMap = () => {
+    if (!this.markers) {
+      return;
+    }
+    // First clear all existing marker on map.
+    for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
+    this.markers = [];
+    window.spcMarkers = this.markers;
+  }
+
+  /**
+   * Place markers on map.
+   */
+  placeMarkers = async () => {
+    let { markers } = this.props;
+    if (!markers || !markers.length) {
+      return;
+    }
+
+    // Initiate bounds object.
+    window.spcMap.bounds = new google.maps.LatLngBounds();
+    await markers.forEach(function (store) {
+      let marker = createMarker({
+        lat: parseFloat(store.lat),
+        lng: parseFloat(store.lng)
+      }, window.spcMap);
+      // Add new marker position to bounds.
+      window.spcMap.bounds.extend(marker.getPosition());
+      // window.spcMap.panToBounds(window.spcMap.bounds);
+      // let infowindow = createInfoWindow(markers[i]['content']);
+      // // When marker is clicked.
+      // marker.addListener('click', function () {
+      //   infowindow.open(window.spcMap, marker);
+      // });
+
+      // Add marker to the array.
+      // this.markers.push(marker);
+    });
+
+    // Auto zoom.
+    window.spcMap.fitBounds(window.spcMap.bounds);
+
+    // Auto center.
+    window.spcMap.panToBounds(window.spcMap.bounds);
   }
 
   /**

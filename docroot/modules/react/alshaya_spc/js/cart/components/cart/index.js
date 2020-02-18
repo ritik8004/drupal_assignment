@@ -38,7 +38,6 @@ export default class Cart extends React.Component {
 
       if (typeof data === 'undefined' || data.cart_id === null) {
         const prevState = this.state;
-        console.log(prevState);
         this.setState({ ...prevState, wait: false });
       }
       else {

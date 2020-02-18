@@ -2,6 +2,8 @@ import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
 import GMap from './gmap';
+import Axios from 'axios';
+import { getGlobalCart } from '../../../utilities/get_cart';
 // import GoogleMap from '../../../utilities/map/GoogleMap';
 // import {getArea, getBlock, createMarker, getMap} from '../../../utilities/map/map_utils';
 
@@ -23,6 +25,7 @@ export default class ClickCollect extends React.Component {
       componentRestrictions: {country: window.drupalSettings.country_code}
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
+    this.getCurrentPosition();
   }
 
   /**
@@ -44,35 +47,49 @@ export default class ClickCollect extends React.Component {
   getCurrentPosition = () => {
     // If location access is enabled by user.
     try {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successCall, ErrorCall, {timeout: 10000});
+      if (navigator && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          this.fetchAvailableStores({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          });
+        });
       }
     }
     catch (e) {
       // Empty.
     }
-    if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        this.fetchAvailableStores({
-          'lat': pos.coords.latitude,
-          'lng': pos.coords.longitude,
-        });
+  }
+
+  /**
+   * Fetch available stores for given lat and lng.
+   */
+  fetchAvailableStores = async (coords) => {
+    coords = { lat: 29.31166, lng: 47.481766 };
+    let {cart_id} = getGlobalCart();
+    const GET_STORE_URL = `/cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`;
+
+    let storesResponse = await Axios.get(GET_STORE_URL);
+    if (storesResponse && storesResponse.data) {
+      this.setState({
+        store_list: storesResponse.data
       });
     }
   }
 
-  fetchAvailableStores(coords) {
-    this.setState({
-      coords: coords
-    });
-  }
-
   render() {
+    let {coords, store_list} = this.state;
+
     return(
       <div className="spc-address-form">
         { window.innerWidth > 768 &&
           <div className='spc-address-form-map'>
-            <GMap coords={this.state.coords} />
+            <GMap
+              // coords={this.state.coords}
+              coords={{ lat: 29.31166, lng: 47.481766 }}
+              onCoordsUpdate={this.fetchAvailableStores}
+              markers={store_list}
+            />
           </div>
         }
         <div className='spc-address-form-sidebar'>
@@ -80,7 +97,11 @@ export default class ClickCollect extends React.Component {
           <div className='spc-address-form-wrapper'>
             { window.innerWidth < 768 &&
               <div className='spc-address-form-map'>
-                <GMap coords={this.state.coords} />
+                <GMap
+                  coords={coords}
+                  onCoordsUpdate={this.fetchAvailableStores}
+                  markers={store_list}
+                />
               </div>
             }
             <div className='spc-address-form-content'>

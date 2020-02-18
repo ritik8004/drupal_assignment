@@ -12,6 +12,7 @@ import TermsConditions from '../terms-conditions';
 import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { addInfoInStorage, getInfoFromStorage } from '../../../utilities/storage';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
+import { connectScrollTo } from 'react-instantsearch-dom';
 
 export default class Checkout extends React.Component {
 
@@ -30,17 +31,22 @@ export default class Checkout extends React.Component {
       var cart_data = fetchCartData();
       if (cart_data instanceof Promise) {
         cart_data.then((result) => {
-            let cart_data = getInfoFromStorage();
-            if (!cart_data) {
-              cart_data = {cart: result};
+            let cart_obj = getInfoFromStorage();
+            if (!cart_obj) {
+              cart_obj = {cart: result};
             }
-
-            addInfoInStorage(cart_data);
-            checkCartCustomer(cart_data);
-            this.setState({
-              wait: false,
-              cart: cart_data
+            addInfoInStorage(cart_obj);
+            checkCartCustomer(cart_obj).then(updated => {
+              if (updated) {
+                cart_obj = getInfoFromStorage();
+              }
+              window.cart_data = cart_obj;
+              this.setState({
+                wait: false,
+                cart: cart_obj
+              });
             });
+
         });
       }
 
