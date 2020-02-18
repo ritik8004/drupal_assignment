@@ -88,3 +88,7 @@ export const fetchCartData = function () {
     });
 
 }
+
+export const getGlobalCart = () => {
+  return (window.cart_data && window.cart_data.cart) ? window.cart_data.cart : null;
+}

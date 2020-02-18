@@ -1,7 +1,7 @@
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from "./storage";
 import Axios from "axios";
 
-export function checkCartCustomer(cart_data = null) {
+export async function checkCartCustomer(cart_data = null) {
   if (cart_data && typeof cart_data.cart_id !== 'undefined') {
     cart_data = cart_data;
   }
@@ -15,20 +15,22 @@ export function checkCartCustomer(cart_data = null) {
       cart_data.uid = window.drupalSettings.user.uid;
       if (window.drupalSettings.user.uid === 0) {
         addInfoInStorage({ cart: cart_data });
+        return false;
       }
       else {
-        associateCart(cart_data);
+        await associateCart(cart_data);
+        return true;
       }
     }
-    else {
-      emptyCustomerCart();
-    }
+    emptyCustomerCart();
+    return false;
   }
+  return false;
 }
 
 const associateCart = (cart_data) => {
   let url = window.drupalSettings.alshaya_spc.middleware_url + '/associate-cart';
-  Axios.get(url)
+  return Axios.get(url)
     .then(response => {
       if (response.data) {
         cart_data.uid = response.data.uid;
