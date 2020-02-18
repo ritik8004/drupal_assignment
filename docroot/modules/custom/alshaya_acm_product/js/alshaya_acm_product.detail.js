@@ -55,9 +55,11 @@
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
         if (!$('.acq-content-product-matchback .select2Option').hasClass('matchback-color-processed')) {
           var selected = $(this).val();
-          var selectedList = $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]');
-          var selectedIndex = selectedList.index();
-          selectedList.parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
+
+          $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
+            var selectedIndex = $(this).index();
+            $(this).parent().siblings('.select2Option').find('a[data-select-index="' + selectedIndex + '"]').click();
+          });
         }
       });
 
