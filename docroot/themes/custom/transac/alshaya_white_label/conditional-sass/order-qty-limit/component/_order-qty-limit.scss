@@ -2,6 +2,8 @@
   &.mobile-only {
     @include breakpoint($mobile) {
       display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     @include breakpoint($tablet) {
@@ -15,7 +17,7 @@
 
   .order-qty-limit-msg-inner-wrapper {
     min-width: 12.625rem;
-    height: 2.125rem;
+    min-height: 2.125rem;
     border-radius: 2px;
     background-color: $order_qty_limit_bg;
     padding-#{$left}: 0.3125rem;
@@ -50,5 +52,15 @@
 .path--cart {
   .order-quantity-limit-message {
     display: block;
+
+    .order-qty-limit-msg-inner-wrapper {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.matchback-container {
+  .order-quantity-limit-message {
+    text-align: $left;
   }
 }
