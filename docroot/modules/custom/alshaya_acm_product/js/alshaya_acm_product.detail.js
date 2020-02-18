@@ -53,16 +53,16 @@
       });
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
-          var selected = $(this).val();
+        var selected = $(this).val();
 
-          $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
-            var swatchSelector = $(this).parent().siblings('.select2Option');
+        $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
+          var swatchSelector = $(this).parent().siblings('.select2Option');
 
-            if (typeof(swatchSelector) !== 'undefined' && !swatchSelector.hasClass('matchback-color-processed')) {
-              var selectedIndex = $(this).index();
-              swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').click();
-            }
-          });
+          if (typeof(swatchSelector) !== 'undefined' && !swatchSelector.hasClass('matchback-color-processed')) {
+            var selectedIndex = $(this).index();
+            swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
+          }
+        });
       });
 
       $('.form-select[data-configurable-code]').once('bind-js').on('change', function () {
