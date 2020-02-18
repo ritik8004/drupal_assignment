@@ -91,7 +91,10 @@ do
 
   echo
   echo "Droppping and importing database again for $current_site"
-  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < /tmp/manual-stage/$current_site.sql; drush -l $uri status"
+  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < /tmp/manual-stage/$current_site.sql"
+
+  echo "Execute drush status for the target site to ensure config reset is executed after database restore"
+  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri status"
 
   echo "Executing post-db-copy operations on $current_site"
   site_db=`drush acsf-tools-info | grep $current_site | cut -d"	" -f3`
