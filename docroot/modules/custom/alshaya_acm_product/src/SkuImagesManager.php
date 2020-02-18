@@ -409,11 +409,14 @@ class SkuImagesManager {
    *   SKU entity.
    * @param string $context
    *   Context for image.
+   * @param bool $add_default_image
+   *   Flag to mention if default image needs to be added or not.
    *
    * @return array
    *   Media item array.
    */
-  public function getFirstImage(SKUInterface $sku, string $context = 'plp') {
+  public function getFirstImage(SKUInterface $sku, string $context = 'plp', $add_default_image = FALSE) {
+    $first_image = [];
 
     try {
       $sku = $this->getSkuForGallery($sku);
@@ -426,10 +429,21 @@ class SkuImagesManager {
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {
-      return reset($media['media_items']['images']);
+      $first_image = reset($media['media_items']['images']);
+    }
+    elseif ($add_default_image) {
+      $default_image = $this->getProductDefaultImage();
+      if (!empty($default_image)) {
+        $first_image = [
+          'label' => '',
+          'media_type' => 'image',
+          'fid' => $default_image->id(),
+          'drupal_uri' => $default_image->getFileUri(),
+        ];
+      }
     }
 
-    return [];
+    return $first_image;
   }
 
   /**
@@ -569,7 +583,10 @@ class SkuImagesManager {
     $configurable_use_parent_images = $this->productDisplaySettings->get('configurable_use_parent_images');
     $is_configurable = $sku->bundle() == 'configurable';
 
-    if (!empty($case) && $configurable_use_parent_images != 'never') {
+    if ($this->skuManager->isSkuFreeGift($sku)) {
+      $configurable_use_parent_images = 'never';
+    }
+    elseif (!empty($case) && $configurable_use_parent_images != 'never') {
       $configurable_use_parent_images = $case;
     }
 
@@ -770,6 +787,7 @@ class SkuImagesManager {
             ];
 
             $thumbnails[] = [
+              'zoomurl' => $image_zoom,
               'fullurl' => $default_image->url(),
               'label' => $sku->label(),
             ];
