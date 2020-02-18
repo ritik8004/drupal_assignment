@@ -192,13 +192,15 @@ class AlshayaApiCommands extends DrushCommands {
       '@langcode' => $langcode,
     ]));
 
-    $this->ingestApiWrapper->productFullSync(
-      $store_id,
-      $langcode,
-      $skus,
-      NULL,
-      $page_size
-    );
+    foreach (array_chunk($skus, $page_size) as $chunk) {
+      $this->ingestApiWrapper->productFullSync(
+        $store_id,
+        $langcode,
+        $chunk,
+        NULL,
+        $page_size
+      );
+    }
   }
 
   /**
