@@ -1,5 +1,6 @@
 import React from 'react';
 import Gallery from '../gallery';
+import Price from '../price';
 import Promotions from '../promotions';
 import Lables from '../labels';
 import CustomHighlight from '../algolia/CustomHighlight';
@@ -52,7 +53,11 @@ const Teaser = ({hit}) => {
                 <CustomHighlight attribute="title" hit={hit} />
               </a>
             </h2>
-            {Parser(hit.rendered_price)}
+            {hit.rendered_price ?
+               Parser(hit.rendered_price)
+            :
+              <Price price={hit.original_price} final_price={hit.final_price} />
+            }
             <Promotions promotions={hit.promotions}/>
             {swatches}
           </div>
