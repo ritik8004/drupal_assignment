@@ -459,11 +459,9 @@ class SkuInfoHelper {
     // If order limit is not set for parent
     // then get order limit for each variant.
     $max_sale_qty = (isset($max_sale_qty) && !empty($max_sale_qty)) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
-    // Check product qty in cart for variant.
-    $current_variant_in_cart_qty = $this->productOrderLimit->getCartItemQtyLimit($variant_sku);
 
     if (!empty($max_sale_qty)) {
-      $order_limit_msg = ($current_variant_in_cart_qty >= $max_sale_qty) ? $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) : $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+      $order_limit_msg = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
     }
 
     $variant = [];
@@ -477,8 +475,7 @@ class SkuInfoHelper {
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
-    $variant['orderLimitMsg'] = isset($order_limit_msg) ? $order_limit_msg : '';
-    $variant['orderLimitExceeded'] = (!empty($max_sale_qty) && ($current_variant_in_cart_qty >= $max_sale_qty)) ? TRUE : FALSE;
+    $variant['orderLimitMsg'] = $order_limit_msg ?? '';
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 

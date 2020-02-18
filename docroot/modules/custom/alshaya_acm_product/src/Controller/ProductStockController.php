@@ -162,7 +162,6 @@ class ProductStockController extends ControllerBase {
             $viewModeKey => [
               $parent_sku => [
                 'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
-                'orderLimitExceeded' => $max_sale_qty_variables['orderLimitExceeded'],
               ],
             ],
           ];
@@ -181,7 +180,6 @@ class ProductStockController extends ControllerBase {
                   'variants' => [
                     $variant_sku => [
                       'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
-                      'orderLimitExceeded' => $max_sale_qty_variables['orderLimitExceeded'],
                     ],
                   ],
                 ],
@@ -190,7 +188,7 @@ class ProductStockController extends ControllerBase {
           }
         }
         if (!empty($orderLimitData)) {
-          $return->addCommand(new SettingsCommand($orderLimitData, TRUE));
+          $return->addCommand(new SettingsCommand($orderLimitData));
           $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$parent_sku, $variant_sku]));
         }
       }

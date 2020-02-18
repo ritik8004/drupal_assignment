@@ -692,9 +692,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if (!empty($max_sale_qty_variables)) {
           $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['maxSaleQty'] = $max_sale_qty_variables['maxSaleQty'];
           $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = $max_sale_qty_variables['orderLimitMsg'];
-          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitExceeded'] = $max_sale_qty_variables['orderLimitExceeded'];
         }
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+
+        // Get cart items by sku.
+        $cart_items = alshaya_acm_get_cart_items_by_sku();
+        // Add cart items in drupalSettings.
+        $build['#attached']['drupalSettings']['cart_items'] = $cart_items;
+
+        // Set order limit exceeded message.
+        $build['#attached']['drupalSettings']['order_limit_exceeded'] = $productOrderLimit->maxSaleQtyMessage(0, TRUE);
       }
 
       if (isset($context)) {

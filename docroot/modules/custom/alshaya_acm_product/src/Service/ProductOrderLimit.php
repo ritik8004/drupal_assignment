@@ -138,17 +138,14 @@ class ProductOrderLimit {
 
       if ($cart_qty && ($cart_qty >= $max_sale_qty)) {
         $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty, TRUE);
-        $limit_exceeded = TRUE;
       }
       else {
         $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty);
-        $limit_exceeded = FALSE;
       }
     }
     $max_sale_qty_variables = [
       'maxSaleQty' => (int) $max_sale_qty,
       'orderLimitMsg' => isset($order_limit_msg) ? $order_limit_msg : '',
-      'orderLimitExceeded' => isset($limit_exceeded) ? $limit_exceeded : FALSE,
     ];
 
     return $max_sale_qty_variables;
