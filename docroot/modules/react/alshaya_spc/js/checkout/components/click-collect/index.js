@@ -1,17 +1,18 @@
 import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
-import GMap from './gmap';
 import Axios from 'axios';
 import { getGlobalCart } from '../../../utilities/get_cart';
-// import GoogleMap from '../../../utilities/map/GoogleMap';
-// import {getArea, getBlock, createMarker, getMap} from '../../../utilities/map/map_utils';
+import StoreList from '../store-list';
+import ClicknCollectMap from './ClicknCollectMap';
 
 export default class ClickCollect extends React.Component {
 
   constructor(props) {
     super(props);
     this.searchplaceInput = React.createRef();
+    this.cncListView = React.createRef();
+    this.cncMapView = React.createRef();
     this.state = {
       coords: {},
       store_list: null
@@ -44,28 +45,54 @@ export default class ClickCollect extends React.Component {
   /**
    * Get current location coordinates.
    */
-  getCurrentPosition = () => {
+  getCurrentPosition = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
     // If location access is enabled by user.
     try {
       if (navigator && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          this.fetchAvailableStores({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            this.fetchAvailableStores({
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude,
+            });
+          },
+          error => {
+            if (error.code == error.PERMISSION_DENIED) {
+              // Display dialog when location access is blocked from browser.
+              let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your browser settings.');
+              let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
+                modal: true,
+                width: "auto",
+                height: "auto",
+                title: Drupal.t('Location access denied'),
+                dialogClass: 'location-disabled-notice',
+                resizable: false,
+                closeOnEscape: true,
+                close: function close(event) {
+                  Drupal.dialog(event.target).close();
+                }
+              });
+              locationErrorDialog.showModal();
+            }
+          },
+          {
+            timeout: 10000
           });
-        });
       }
     }
     catch (e) {
       // Empty.
     }
+    return false;
   }
 
   /**
    * Fetch available stores for given lat and lng.
    */
   fetchAvailableStores = async (coords) => {
-    coords = { lat: 29.31166, lng: 47.481766 };
     let {cart_id} = getGlobalCart();
     const GET_STORE_URL = `/cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`;
 
@@ -77,33 +104,64 @@ export default class ClickCollect extends React.Component {
     }
   }
 
+  // View selected store on map.
+  storeViewOnMapSelected = function (makerIndex) {
+    // Adjust the map, when we trigger the map view.
+    // google.maps.event.trigger(map.googleMap, 'resize');
+    let map = window.spcMap;
+    // Zoom the current map to store location.
+    map.googleMap.setZoom(11);
+    // Make the marker by default open.
+    google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
+    // Get the lat/lng of current store to center the map.
+    // var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
+    // Set the google map center.
+    // map.googleMap.setCenter(newLocation);
+    // Pan Google maps to accommodate the info window.
+    map.googleMap.panBy(0, -150);
+  };
+
+  toggleStoreView = (e, activeView) => {
+    e.preventDefault();
+    if (activeView === 'map') {
+      this.cncMapView.current.style.display = "block";
+      this.cncListView.current.style.display = "none";
+      let map = window.spcMap;
+        // Adjust the map, when we trigger the map view.
+      google.maps.event.trigger(map.googleMap, 'resize');
+      // Auto zoom.
+      map.googleMap.fitBounds(map.googleMap.bounds);
+      // Auto center.
+      map.googleMap.panToBounds(map.googleMap.bounds);
+    }
+    else {
+      this.cncMapView.current.style.display = "none";
+      this.cncListView.current.style.display = "block";
+    }
+    return false;
+  };
+
   render() {
     let {coords, store_list} = this.state;
+
+    let mapView = (
+      <ClicknCollectMap
+        coords={coords}
+        onCoordsUpdate={this.fetchAvailableStores}
+        markers={store_list}
+      />
+    );
 
     return(
       <div className="spc-address-form">
         { window.innerWidth > 768 &&
           <div className='spc-address-form-map'>
-            <GMap
-              // coords={this.state.coords}
-              coords={{ lat: 29.31166, lng: 47.481766 }}
-              onCoordsUpdate={this.fetchAvailableStores}
-              markers={store_list}
-            />
+            { mapView }
           </div>
         }
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
-            { window.innerWidth < 768 &&
-              <div className='spc-address-form-map'>
-                <GMap
-                  coords={coords}
-                  onCoordsUpdate={this.fetchAvailableStores}
-                  markers={store_list}
-                />
-              </div>
-            }
             <div className='spc-address-form-content'>
               <div>{Drupal.t('Find your nearest store')}</div>
               <form className='spc-address-add' onSubmit={this.handleSubmit}>
@@ -119,9 +177,26 @@ export default class ClickCollect extends React.Component {
                     placeholder={Drupal.t('enter a location')}
                     autoComplete="off"
                   />
-                  <button className="cc-near-me" id="edit-near-me" onClick={this.getCurrentPosition}>{Drupal.t('Near me')}</button>
+                  <button className="cc-near-me" id="edit-near-me" onClick={(e) => this.getCurrentPosition(e)}>{Drupal.t('Near me')}</button>
                 </div>
-                <div id="click-and-collect-list-view"></div>
+                { window.innerWidth < 768 &&
+                  <div className='toggle-store-view'>
+                    <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
+                      {Drupal.t('List view')}
+                    </button>
+                    <button  className="stores-map-view"  onClick={(e) => this.toggleStoreView(e, 'map')}>
+                      {Drupal.t('Map view')}
+                    </button>
+                  </div>
+                }
+                <div id="click-and-collect-list-view" ref={this.cncListView}>
+                  <StoreList store_list={store_list} onStoreClick={this.storeViewOnMapSelected}/>
+                </div>
+                { window.innerWidth < 768 &&
+                  <div className='click-and-collect-map-view' style={{display: 'none', width: '100%', height: '500px' }} ref={this.cncMapView}>
+                    { mapView }
+                  </div>
+                }
               </form>
             </div>
           </div>

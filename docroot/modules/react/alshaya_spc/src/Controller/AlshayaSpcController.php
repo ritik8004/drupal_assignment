@@ -153,7 +153,7 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
-
+    $marker = $this->configFactory->get('alshaya_stores_finder.settings');
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-checkout"></div>',
@@ -171,7 +171,10 @@ class AlshayaSpcController extends ControllerBase {
           'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
-          'map_marker_icon' => $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url'),
+          'map_marker' => [
+            'icon' => $marker->get('marker.url'),
+            'label_position' => $marker->get('marker.label_position'),
+          ],
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
         ],
       ],
