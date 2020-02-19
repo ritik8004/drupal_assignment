@@ -495,4 +495,18 @@ class StockManager {
       ->execute();
   }
 
+  /**
+   * Get max sale qty.
+   *
+   * @param string $sku
+   *   SKU string.
+   *
+   * @return int
+   *   Max sale qty.
+   */
+  public function getMaxSaleQty(string $sku) {
+    $stock = $this->getStock($sku);
+    return $stock['max_sale_qty'] ?? 0;
+  }
+
 }

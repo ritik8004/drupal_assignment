@@ -1,0 +1,9 @@
+{% if message is not empty %}
+  {% if limit_reached %}
+    <span class="order-qty-limit-msg-inner-wrapper limit-reached">
+  {% else %}
+    <span class="order-qty-limit-msg-inner-wrapper">
+  {% endif %}
+    {{ message }}
+  </span>
+{% endif %}
