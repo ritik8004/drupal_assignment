@@ -285,7 +285,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             $identifier = 'promotions';
           }
           elseif ($facet->getFieldIdentifier() === 'field_category') {
-            // For category we have index hierarchy in field_category_name
+            // For category we have index hierarchy in field_category
             // so, updating field_name and type for react.
             $identifier = 'field_category';
             $widget['type'] = 'hierarchy';

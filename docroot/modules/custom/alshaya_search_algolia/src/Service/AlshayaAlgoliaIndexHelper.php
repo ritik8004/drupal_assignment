@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
@@ -24,6 +25,8 @@ use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
  * @package Drupal\alshaya_search_algolia\Service
  */
 class AlshayaAlgoliaIndexHelper {
+
+  use StringTranslationTrait;
 
   /**
    * SKU Manager service object.
@@ -257,6 +260,7 @@ class AlshayaAlgoliaIndexHelper {
       $this->removeAttributesFromIndex($object);
     }
     $object['changed'] = $this->dateTime->getRequestTime();
+    $object['field_category'] = $this->getFieldCategoryHierarchy($node, $node->language()->getId());
   }
 
   /**
@@ -437,6 +441,7 @@ class AlshayaAlgoliaIndexHelper {
   public function getFieldCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
     $list = [];
+    $list['all']['lvl0'] = $this->t('All');
     // Get sales categories to index L2 for sales terms.
     $sale_categories = $this->productCategoryManager->getCategorizationIds()['sale'] ?? [];
     foreach ($categories as $category) {

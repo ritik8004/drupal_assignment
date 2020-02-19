@@ -146,8 +146,6 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
 
     try {
       $algolia_index->processIndexItem($object, $node);
-      $term_hierarchy = $algolia_index->getFieldCategoryHierarchy($node, $node->language()->getId());
-      $object['field_category'] = $term_hierarchy;
     }
     catch (\Throwable $e) {
       $logger->warning('Indexing failed for the node:@nid message:@message', [

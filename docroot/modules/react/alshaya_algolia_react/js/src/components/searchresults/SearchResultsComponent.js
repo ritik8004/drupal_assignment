@@ -57,6 +57,7 @@ const SearchResultsComponent = props => {
           <ul>
             <li>
               <HierarchicalMenu
+                sortResults={true}
                 attributes={[
                   'field_category.lvl0',
                   'field_category.lvl1',
