@@ -8,6 +8,7 @@ export default class Gmap {
         zoom: 9,
         maxZoom: 18,
         zoomControl: true,
+        fullscreenControl: false,
         mapTypeControl: true,
         scrollwheel: true,
         disableDoubleClickZoom: false,
@@ -18,7 +19,7 @@ export default class Gmap {
           icon: null,
           label_position: null,
         },
-        streetViewControl: true,
+        streetViewControl: false,
         info_auto_display: false
       },
       googleMap: null,
@@ -37,18 +38,19 @@ export default class Gmap {
       zoom: this.map.settings.zoom,
       maxZoom: this.map.settings.maxZoom,
       minZoom: this.map.settings.minZoom,
+      fullscreenControl: this.map.settings.fullscreenControl,
       mapTypeId: google.maps.MapTypeId['ROADMAP'],
       mapTypeControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_BOTTOM
+        position: google.maps.ControlPosition.LEFT_BOTTOM
       },
       zoomControl: this.map.settings.zoomControl,
       zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.LARGE,
-        position: google.maps.ControlPosition.RIGHT_CENTER
+        style: google.maps.ZoomControlStyle.SMALL,
+        position: google.maps.ControlPosition.LEFT_CENTER
       },
       streetViewControl: this.map.settings.streetViewControl,
       streetViewControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_CENTER
+        position: google.maps.ControlPosition.LEFT_CENTER
       },
       mapTypeControl: this.map.settings.mapTypeControl,
       scrollwheel: this.map.settings.scrollwheel,
@@ -90,7 +92,7 @@ export default class Gmap {
     }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
           // Just center the map and don't do anything.
-          window.spcMap.setCenter(results[0].geometry.location);
+          window.spcMap.googleMap.setCenter(results[0].geometry.location);
           if (callBackFunc) {
             callBackFunc.call(results)
           }
@@ -154,10 +156,17 @@ export default class Gmap {
         }
         // Set the marker to center of the map on click.
         map.googleMap.setCenter(currentMarker.getPosition());
-        map.googleMap.setZoom(100);
+        map.googleMap.setZoom(11);
         map.googleMap.panBy(0, -150);
 
         currentInfoWindow.open(map.googleMap, currentMarker);
+      });
+
+      google.maps.event.addListener(currentInfoWindow, 'closeclick', function() {
+        // Auto zoom.
+        map.googleMap.fitBounds(map.googleMap.bounds);
+        // Auto center.
+        map.googleMap.panToBounds(map.googleMap.bounds);
       });
 
       if (map.settings.info_auto_display) {

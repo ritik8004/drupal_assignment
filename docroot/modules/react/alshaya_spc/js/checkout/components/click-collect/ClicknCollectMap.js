@@ -6,13 +6,14 @@ import _isEmpty from 'lodash/isEmpty';
 import Gmap from '../../../utilities/map/Gmap';
 import StoreItemInfoWindow from '../store-item-infowindow';
 
-export default class GMap extends React.Component {
+class ClicknCollectMap extends React.Component {
 
   constructor(props) {
     super(props);
     this.googleMapRef = React.createRef();
     // Global map object.
     this.googleMap = new Gmap();
+    window.spcMap = this.googleMap;
     // Global for list of markers on map.
     this.markers = [];
     this.geoCoder = null;
@@ -28,7 +29,7 @@ export default class GMap extends React.Component {
   componentDidMount() {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    window.spcMap = this.createGoogleMap({});
+    window.spcMap.googleMap = this.createGoogleMap({});
     this.googleMap.setCenter();
   }
 
@@ -53,8 +54,9 @@ export default class GMap extends React.Component {
     }
 
     // Initiate bounds object.
-    this.googleMap.setCurrentMap(window.spcMap);
-    window.spcMap.bounds = new google.maps.LatLngBounds();
+    this.googleMap.setCurrentMap(window.spcMap.googleMap);
+    this.googleMap.removeMapMarker();
+    window.spcMap.googleMap.bounds = new google.maps.LatLngBounds();
     let self = this;
     await markers.forEach(function (store, index) {
 
@@ -63,19 +65,20 @@ export default class GMap extends React.Component {
         position: position,
         title: store.name,
         infoWindowContent: renderToString(<StoreItemInfoWindow store={store} />),
-        infoWindowSolitary: false,
-        label: (index).toString(),
+        infoWindowSolitary: true,
+        label: (index + 1).toString(),
+        // Require When markers overlap on each other, show the latest one on top,
         zIndex: index + 1
       };
       self.googleMap.setMapMarker(markerConfig, false);
 
       // Add new marker position to bounds.
-      window.spcMap.bounds.extend(position);
+      window.spcMap.googleMap.bounds.extend(position);
     });
     // Auto zoom.
-    window.spcMap.fitBounds(window.spcMap.bounds);
+    window.spcMap.googleMap.fitBounds(window.spcMap.googleMap.bounds);
     // Auto center.
-    window.spcMap.panToBounds(window.spcMap.bounds);
+    window.spcMap.googleMap.panToBounds(window.spcMap.googleMap.bounds);
   }
 
   /**
@@ -92,3 +95,5 @@ export default class GMap extends React.Component {
   }
 
 }
+
+export default ClicknCollectMap;

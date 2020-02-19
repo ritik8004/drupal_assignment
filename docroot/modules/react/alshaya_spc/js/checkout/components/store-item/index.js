@@ -3,12 +3,12 @@ import React from 'react';
 const StoreItem = ({ store }) => {
   return (
     <>
-      <div className="store-name-and-address">
+      <span className="store-name-and-address">
         <span className="store-name">{ store.name }</span>
-        <span className="store-address">{store.address }</span>
-      </div>
+        <span className="store-address">{ store.address }</span>
+      </span>
       <div className="store-delivery-time">
-        <span className="label--delivery-time">{Drupal.t('Collect in store from')}</span>
+        <span className="label--delivery-time">{ Drupal.t('Collect in store from') }</span>
         <span className="delivery--time--value">{ store.delivery_time }</span>
       </div>
       <div className="store-open-hours">
@@ -17,7 +17,7 @@ const StoreItem = ({ store }) => {
             <div className="open--hours">
               {store.open_hours.map(function(item) {
                 return (
-                  <div key={item.key}>
+                  <div key={ item.key }>
                     <span className="key-value-key">{ item.key }</span>
                     <span className="key-value-value">{ item.value }</span>
                   </div>
