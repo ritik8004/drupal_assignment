@@ -39,9 +39,10 @@ const HierarchicalMenu = (props) => {
   return (
     <ul>
       {sortedItems.map(item => (
-        <li key={item.label} className={ item.isRefined ? 'active' : '' } >
+        <li key={item.label}>
           <a
             href={`#${createURL(item.value)}`}
+            className={"facet-item " + (item.isRefined ? 'is-active' : '')}
             onClick={event => {
               event.preventDefault();
               if (item.value === window.Drupal.t('All')) {
@@ -52,8 +53,10 @@ const HierarchicalMenu = (props) => {
               refine(item.value);
             }}
           >
-            <span className="ais-HierarchicalMenu-label">{item.label}</span>
-            <span className="ais-HierarchicalMenu-count">{item.count}</span>
+          <span className="facet-item__value">
+            {item.label}
+            <span className="facet-item__count">{`(${item.count})`}</span>
+          </span>
           </a>
           {item.items && (
             <HierarchicalMenu
@@ -68,6 +71,5 @@ const HierarchicalMenu = (props) => {
     </ul>
   );
 };
-
 
 export default connectHierarchicalMenu(HierarchicalMenu);
