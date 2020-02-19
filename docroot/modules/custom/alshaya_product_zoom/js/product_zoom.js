@@ -80,9 +80,10 @@
           }
           else {
             // Handle click on image thumbnails.
-            var imageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('href');
-            if (imageUrl !== null || imageUrl !== 'undefined') {
-              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl);
+            var anchor = $(this).find('a.cloudzoom__thumbnails__image');
+            if (anchor !== undefined && anchor.length > 0) {
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', anchor.attr('href'));
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('data-zoom-url', anchor.attr('data-zoom-url'));
             }
           }
           // Hide Product labels on video slides.
