@@ -87,13 +87,15 @@ export default class Cart extends React.Component {
 
   render() {
     if (this.state.wait) {
-      return <Loading loadingMessage={Drupal.t('loading your cart ...')} />
+      return <Loading/>
     }
 
     if (!this.state.wait && this.state.items.length === 0) {
       return (
         <React.Fragment>
-          <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
+          <EmptyResult Message={Drupal.t('your shopping bag is empty.')} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={this.state.recommended_products} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={this.state.recommended_products} />
         </React.Fragment>
       );
     }
@@ -120,7 +122,7 @@ export default class Cart extends React.Component {
           </div>
         </div>
         <div className="spc-post-content">
-          <CartRecommendedProducts recommended_products={this.state.recommended_products} />
+          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={this.state.recommended_products} />
         </div>
       </React.Fragment>
     );

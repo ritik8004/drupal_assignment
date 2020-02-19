@@ -1,12 +1,38 @@
 .spc-empty-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding-top: 1.875rem;
+  min-height: 14.25rem;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 4.375rem;
+    min-height: 20rem;
+  }
 
   .spc-empty-text {
     font-family: $alshaya-thin;
     color: $spc-empty-text;
     min-width: 1.25rem;
     font-size: 1.125rem;
+  }
+
+  .spc-shopping-link {
+    a {
+      min-width: 20rem;
+      height: 3.25rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      font-size: 1rem;
+      letter-spacing: 1.14px;
+    }
+
+    margin-top: 1.875rem;
   }
 }

@@ -28,14 +28,13 @@ export default class CartRecommendedProducts extends React.Component {
 
   render() {
     const recommended_products = this.props.recommended_products;
+    const sectionTitle = this.props.sectionTitle;
 
     // If recommended products available.
     if (Object.keys(recommended_products).length > 0) {
       return (
         <React.Fragment>
-          <SectionTitle>
-            {Drupal.t('you may also like')}
-          </SectionTitle>
+          <SectionTitle>{sectionTitle}</SectionTitle>
           <div className="spc-recommended-products">
             <button className="nav-prev" onClick={() => {this.listHorizontalScroll('prev')}}/>
             <div className="block-content">
