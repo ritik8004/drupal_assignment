@@ -694,14 +694,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = $max_sale_qty_variables['orderLimitMsg'];
         }
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
-
-        // Get cart items by sku.
-        $cart_items = alshaya_acm_get_cart_items_by_sku();
-        // Add cart items in drupalSettings.
-        $build['#attached']['drupalSettings']['cart_items'] = $cart_items;
-
-        // Set order limit exceeded message.
-        $build['#attached']['drupalSettings']['order_limit_exceeded'] = $productOrderLimit->maxSaleQtyMessage(0, TRUE);
       }
 
       if (isset($context)) {
@@ -1784,5 +1776,15 @@ function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
   // following the host site implementation.
   if ($acm_settings->get('show_crosssell_as_matchback') && $append_each_to_price) {
     $variables['append_each_to_price'] = $append_each_to_price;
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function alshaya_acm_product_preprocess_block(&$variables) {
+  if ($variables['base_plugin_id'] == 'cart_mini_block') {
+    // Add cart items in drupalSettings.
+    $variables['#attached']['drupalSettings']['cart_items'] = alshaya_acm_get_cart_items_by_sku();
   }
 }

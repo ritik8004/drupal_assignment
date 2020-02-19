@@ -408,22 +408,29 @@
 
         if (itemQtyInCart >= parentInfo.maxSaleQty) {
           var orderLimitExceeded = true;
-          var orderLimitMsg = drupalSettings['order_limit_exceeded'];
+          var orderLimitMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
+            Drupal.t('Purchase limit has been reached') +
+            '</span>';
         }
       }
     }
     else if (variantInfo !== '') {
-      var selectedItemInCart = $.inArray(selected, Object.keys(drupalSettings['cart_items']));
       var orderLimitMsg = variantInfo.orderLimitMsg;
       var orderLimitExceeded =  false;
+      var cart_items = drupalSettings['cart_items'];
 
-       // If selected item is in cart.
-       if (selectedItemInCart >= 0) {
-        var itemQtyInCart = drupalSettings['cart_items'][selected]['qty'];
+      if (typeof(cart_items) !== "undefined") {
+        var selectedItemInCart = $.inArray(selected, Object.keys(cart_items));
+        // If selected item is in cart.
+        if (selectedItemInCart >= 0) {
+          var itemQtyInCart = drupalSettings['cart_items'][selected]['qty'];
 
-        if (itemQtyInCart >= variantInfo.stock.maxSaleQty) {
-          var orderLimitExceeded = true;
-          var orderLimitMsg = drupalSettings['order_limit_exceeded'];
+          if (itemQtyInCart >= variantInfo.stock.maxSaleQty) {
+            var orderLimitExceeded = true;
+            var orderLimitMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
+              Drupal.t('Purchase limit has been reached') +
+              '</span>';
+          }
         }
       }
     }
