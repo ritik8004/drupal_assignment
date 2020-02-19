@@ -199,6 +199,7 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
   public function getCacheContexts() {
     // Vary based on cart id and route.
     return Cache::mergeContexts(parent::getCacheContexts(), [
+      'session',
       'cookies:Drupal_visitor_acq_cart_id',
       'route',
     ]);
