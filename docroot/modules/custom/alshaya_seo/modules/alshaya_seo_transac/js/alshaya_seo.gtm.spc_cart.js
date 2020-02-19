@@ -12,6 +12,23 @@
       document.addEventListener('refreshCart', function (e) {
         Drupal.alshaya_spc_cart_gtm();
       });
+
+      document.addEventListener('updateCart', function (e) {
+        var gtmEvent = '';
+        var item = e.detail.data.item;
+        var qty = e.detail.data.qty;
+        if (item.qty > qty) {
+          item.qty = item.qty - qty;
+          gtmEvent = 'removeFromCart';
+          Drupal.alshaya_spc_cart_gtm_update_cart(item, gtmEvent);
+        }
+        else if (item.qty < qty) {
+          item.qty = qty - item.qty;
+          gtmEvent = 'addToCart';
+          Drupal.alshaya_spc_cart_gtm_update_cart(item, gtmEvent);
+        }
+
+      });
     }
   };
 
@@ -27,62 +44,72 @@
       dataLayer[0].ecommerce.checkout.products = [];
       dataLayer[0].cartItemsFlocktory = [];
       Object.entries(items).forEach(([key, product]) => {
-        var attributes = product.attributes;
-        var i = 0;
-        for (i = 0; i < attributes.length; i++) {
-          if (attributes[i]['key'] === 'product_brand') {
-            var productBrand = attributes[i]['value'];
-          }
-        }
-
         dataLayer[0].productStyleCode.push(product.parent_sku);
         dataLayer[0].productSKU.push(key);
-
-        var productData = {
-          name: product.gtm_attributes['gtm-name'],
-          id: product.id,
-          price: product.final_price,
-          brand: productBrand,
-          category: product.gtm_attributes['gtm-category'],
-          variant: key,
-          quantity: product.qty,
-        };
-
-        productData.dimension1 = product.gtm_attributes.dimension1;
-
-        if (product.hasOwnProperty('configurable_values')) {
-          productData.dimension2 = 'configurable';
-        }
-
-        if (product.final_price != product.original_price) {
-          productData.dimension3 = 'discounted';
-        }
-
-        if (product.gtm_attributes.hasOwnProperty('dimension4')) {
-          productData.dimension4 = product.gtm_attributes.dimension4;
-        }
-
-        if (product.gtm_attributes.hasOwnProperty('dimension5')) {
-          productData.dimension5 = product.gtm_attributes.dimension5;
-        }
-
-        if (product.gtm_attributes.hasOwnProperty('dimension6')) {
-          productData.dimension6 = product.gtm_attributes.dimension6;
-        }
-
+        var productData = Drupal.alshaya_spc_gtm_product(product);
         dataLayer[0].ecommerce.checkout.products.push(productData);
-
         var flocktory = {
-          id: product.id,
+          id: product.parent_sku,
           price: product.final_price,
           count: product.qty,
           title: product.gtm_attributes['gtm-name'],
           image: product.extra_data.cart_image,
         };
         dataLayer[0].cartItemsFlocktory.push(flocktory);
-
       });
     }
+  };
+
+  Drupal.alshaya_spc_cart_gtm_update_cart = function (product, gtmEvent) {
+    var productData = {
+      event: gtmEvent,
+      ecommerce: {
+        currencyCode: drupalSettings.alshaya_spc.currency_config.currency_code,
+        add: {
+          product: []
+        }
+      }
+    };
+    var productDetails = Drupal.alshaya_spc_gtm_product(product);
+    productDetails.metric2 = product.final_price;
+    productData.ecommerce.add.product.push(productDetails);
+    dataLayer.push(productData);
+  };
+
+  Drupal.alshaya_spc_gtm_product = function (product) {
+    var attributes = product.attributes;
+    var i = 0;
+    for (i = 0; i < attributes.length; i++) {
+      if (attributes[i]['key'] === 'product_brand') {
+        var productBrand = attributes[i]['value'];
+      }
+    }
+    var productDetails = {
+      name: product.gtm_attributes['gtm-name'],
+      id: product.parent_sku,
+      price: product.final_price,
+      brand: productBrand,
+      category: product.gtm_attributes['gtm-category'],
+      variant: product.sku,
+      quantity: product.qty,
+    };
+    productDetails.dimension1 = product.gtm_attributes.dimension1;
+    if (product.hasOwnProperty('configurable_values')) {
+      productDetails.dimension2 = 'configurable';
+    }
+    if (product.final_price != product.original_price) {
+      productDetails.dimension3 = 'discounted';
+    }
+    if (product.gtm_attributes.hasOwnProperty('dimension4')) {
+      productDetails.dimension4 = product.gtm_attributes.dimension4;
+    }
+    if (product.gtm_attributes.hasOwnProperty('dimension5')) {
+      productDetails.dimension5 = product.gtm_attributes.dimension5;
+    }
+    if (product.gtm_attributes.hasOwnProperty('dimension6')) {
+      productDetails.dimension6 = product.gtm_attributes.dimension6;
+    }
+    return productDetails;
   };
 
 })(jQuery, Drupal, dataLayer);

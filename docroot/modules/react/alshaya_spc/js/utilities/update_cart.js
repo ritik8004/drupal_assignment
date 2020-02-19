@@ -58,6 +58,16 @@ export const updateCartItemData = function (action, sku, quantity) {
     return null;
   }
 
+  // Dispatch event with sku details before localStorage update.
+  if (cart.items.hasOwnProperty(sku)) {
+    var data = {
+      qty: quantity,
+      item: cart.items[sku],
+    }
+    var event = new CustomEvent('updateCart', {bubbles: true, detail: { data: data }});
+    document.dispatchEvent(event);
+  }
+
   if (!Number.isInteger(cart)) {
     cart = cart.cart_id;
   }
