@@ -43,10 +43,10 @@ export default class Checkout extends React.Component {
             });
         });
       }
-
     }
     catch(error) {
       // In case of error, do nothing.
+      console.error(error);
     }
 
     // Make sidebar sticky.

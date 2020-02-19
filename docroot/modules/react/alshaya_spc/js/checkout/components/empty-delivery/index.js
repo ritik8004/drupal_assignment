@@ -63,7 +63,7 @@ export default class EmptyDeliveryText extends React.Component {
         <Popup className={this.getAddressPopupClassName()} open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
           <React.Fragment>
             <a className='close' onClick={this.closeModal}>&times;</a>
-            <AddressContent/>
+            <AddressContent processAddress={this.processAddress} />
           </React.Fragment>
         </Popup>
       </div>

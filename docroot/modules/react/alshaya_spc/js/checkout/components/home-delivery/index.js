@@ -56,7 +56,7 @@ export default class HomeDeliveryInfo extends React.Component {
           closeOnDocumentClick={false}
         >
           <a className="close" onClick={this.closeModal}>&times;</a>
-          <AddressForm default_val={address}  processAddress={this.processAddress}/>
+          <AddressForm showEmail={(window.drupalSettings.user.uid === 0)} default_val={address}  processAddress={this.processAddress}/>
         </Popup>
         <div className='spc-delivery-shipping-methods'>
           <ShippingMethods cart={this.props.cart} refreshCart={this.props.refreshCart}/>
