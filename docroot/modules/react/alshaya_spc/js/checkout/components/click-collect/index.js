@@ -5,8 +5,12 @@ import Axios from 'axios';
 import { getGlobalCart } from '../../../utilities/get_cart';
 import StoreList from '../store-list';
 import ClicknCollectMap from './ClicknCollectMap';
+import _find from 'lodash/find';
+import  { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
+import SelectedStore from '../selected-store';
 
 export default class ClickCollect extends React.Component {
+  static contextType = ClicknCollectContext;
 
   constructor(props) {
     super(props);
@@ -14,9 +18,8 @@ export default class ClickCollect extends React.Component {
     this.cncListView = React.createRef();
     this.cncMapView = React.createRef();
     this.state = {
-      coords: {},
-      store_list: null
-    };
+      selectStoreOpen: this.props.selectedStore || false,
+    }
   }
 
   componentDidMount() {
@@ -26,7 +29,10 @@ export default class ClickCollect extends React.Component {
       componentRestrictions: {country: window.drupalSettings.country_code}
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
-    this.getCurrentPosition();
+    // Ask for location access when we don't have any coords.
+    if (!this.context.coords) {
+      this.getCurrentPosition();
+    }
   }
 
   /**
@@ -97,9 +103,10 @@ export default class ClickCollect extends React.Component {
 
     let storesResponse = await Axios.get(GET_STORE_URL);
     if (storesResponse && storesResponse.data) {
-      this.setState({
-        store_list: storesResponse.data
-      });
+      this.context.updateCoordsAndStoreList(coords, storesResponse.data.length > 0 ?  storesResponse.data : null);
+    }
+    else {
+      this.context.updateCoords(coords);
     }
   }
 
@@ -136,8 +143,21 @@ export default class ClickCollect extends React.Component {
     return false;
   };
 
+  selectStore = (e, store_code) => {
+    e.preventDefault();
+    // Find the store object with the given store-code from the store list.
+    let store = _find(this.context.store_list, {code: store_code});
+    this.context.updateSelectStore(store);
+    this.setState({
+      selectStoreOpen: true
+    });
+  }
+
   render() {
-    let {coords, store_list} = this.state;
+    let {coords, store_list, selected: selectedStore } = this.context;
+    let {selectStoreOpen} = this.state;
+
+    console.log(selectStoreOpen);
 
     let mapView = (
       <ClicknCollectMap
@@ -157,7 +177,7 @@ export default class ClickCollect extends React.Component {
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
-            <div className='spc-address-form-content'>
+            <div className='spc-address-form-content' style={{display: selectStoreOpen ? 'none' : 'block', width: '100%' }}>
               <div>{Drupal.t('Find your nearest store')}</div>
                 <div>
                   <input
@@ -184,7 +204,11 @@ export default class ClickCollect extends React.Component {
                   </div>
                 }
                 <div id="click-and-collect-list-view" ref={this.cncListView}>
-                  <StoreList store_list={store_list} onStoreClick={this.storeViewOnMapSelected}/>
+                  <StoreList
+                    store_list={store_list}
+                    onStoreClick={this.storeViewOnMapSelected}
+                    onSelectStore={this.selectStore}
+                  />
                 </div>
                 { window.innerWidth < 768 &&
                   <div className='click-and-collect-map-view' style={{display: 'none', width: '100%', height: '500px' }} ref={this.cncMapView}>
@@ -192,6 +216,7 @@ export default class ClickCollect extends React.Component {
                   </div>
                 }
             </div>
+            <SelectedStore store={selectedStore} open={selectStoreOpen} />
           </div>
         </div>
       </div>

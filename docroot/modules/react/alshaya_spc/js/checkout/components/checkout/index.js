@@ -13,6 +13,7 @@ import { stickySidebar } from '../../../utilities/stickyElements/stickyElements'
 import { addInfoInStorage, getInfoFromStorage } from '../../../utilities/storage';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { connectScrollTo } from 'react-instantsearch-dom';
+import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 
 export default class Checkout extends React.Component {
 
@@ -91,7 +92,9 @@ export default class Checkout extends React.Component {
           <div className="spc-main">
             <div className="spc-content">
               <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} />
-              <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
+              <ClicknCollectContextProvider>
+                <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
+              </ClicknCollectContextProvider>
               <PaymentMethods refreshCart={this.refreshCart} payment_methods={this.state.payment_methods} cart={this.state.cart}/>
               {window.innerWidth > 768 &&
                 <TermsConditions/>

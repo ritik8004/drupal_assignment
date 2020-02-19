@@ -1,7 +1,7 @@
 import React from 'react';
 import StoreItem from '../store-item';
 
-const StoreList = ({store_list, onStoreClick}) => {
+const StoreList = ({store_list, onStoreClick, onSelectStore}) => {
   if (!store_list) {
     return (null);
   }
@@ -18,7 +18,7 @@ const StoreList = ({store_list, onStoreClick}) => {
             key={store.code}
             onClick={() => onStoreClick(parseInt(index))}
           >
-            <StoreItem store={store}/>
+            <StoreItem store={store} onSelectStore={onSelectStore}/>
           </li>
         );
       })}
