@@ -1,0 +1,10 @@
+.checkout-link {
+  a {
+    text-transform: uppercase;
+    font-family: $we-bold;
+
+    &:hover {
+      color: $WE_white;
+    }
+  }
+}

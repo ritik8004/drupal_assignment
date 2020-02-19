@@ -10,3 +10,4 @@ services:
       - '@entity_type.manager'
       - '@entity.repository'
       - '@datetime.time'
+      - '@alshaya_acm_product.price_helper'
