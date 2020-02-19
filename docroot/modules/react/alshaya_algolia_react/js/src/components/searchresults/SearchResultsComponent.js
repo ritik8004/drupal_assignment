@@ -44,9 +44,11 @@ const SearchResultsComponent = props => {
   }
 
   function getSortedItems(items) {
-    let sortedItems = {};
+    // Sort facet items in order of the megamenu.
+    let sortedItems = [];
     if (items !== null && items.length > 0) {
-      let weight = {};
+      let weight = [];
+      // Getting the title attribute for L1 items from the menu.
       let l1MenuItems = document.getElementsByClassName('menu--one__link');
       for (let i in l1MenuItems) {
         try {
@@ -59,7 +61,6 @@ const SearchResultsComponent = props => {
         }
       }
 
-
       for (let i in items) {
         if (weight[items[i].label] !== undefined) {
           sortedItems[weight[items[i].label]] = items[i];
@@ -70,10 +71,10 @@ const SearchResultsComponent = props => {
         }
       }
 
-       sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+      sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
     }
     else {
-       sortedItems = items;
+      sortedItems = items;
     }
 
     return sortedItems;

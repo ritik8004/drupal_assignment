@@ -441,7 +441,7 @@ class AlshayaAlgoliaIndexHelper {
   public function getFieldCategoryHierarchy(NodeInterface $node, $langcode): array {
     $categories = $node->get('field_category')->referencedEntities();
     $list = [];
-    $list['all']['lvl0'] = $this->t('All');
+    $list['all']['lvl0'] = $this->t('All', [], ['langcode' => $langcode]);
     // Get sales categories to index L2 for sales terms.
     $sale_categories = $this->productCategoryManager->getCategorizationIds()['sale'] ?? [];
     foreach ($categories as $category) {
