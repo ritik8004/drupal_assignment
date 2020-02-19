@@ -353,7 +353,7 @@ class PromotionController extends ControllerBase {
     // Add cache metadata.
     $cache_array = [
       'tags' => ['node_type:acq_promotion'],
-      'contexts' => ['cookies:Drupal_visitor_acq_cart_id'],
+      'contexts' => ['session', 'cookies:Drupal_visitor_acq_cart_id'],
     ];
 
     $cart_id = $this->cartStorage->getCartId(FALSE);
