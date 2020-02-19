@@ -1,0 +1,10 @@
+.spc-promo-code-block {
+  .promo-submit {
+    font-family: $fl-thin;
+    text-transform: uppercase;
+  }
+
+  input#promo-code::placeholder {
+    text-transform: capitalize;
+  }
+}
