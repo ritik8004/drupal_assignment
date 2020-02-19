@@ -27,10 +27,6 @@
       }
     }
 
-    @include breakpoint($upto-desktop) {
-      display: none;
-    }
-
     @include breakpoint($only-mobile) {
       padding-#{$left}: 1.25rem;
     }
@@ -43,19 +39,6 @@
   }
 
   ul {
-    position: absolute;
-    top: 2.25rem;
-    background: $plp_facet_active_bg;
-    z-index: 2;
-    min-width: 15.5rem;
-    padding: 1.125rem 0;
-    border: 1px solid $plp_facet_border;
-
-    @include breakpoint($desktop) {
-      max-height: 35rem;
-      overflow-y: auto;
-    }
-
     li {
       span {
         font-size: 0.75rem;
@@ -80,7 +63,7 @@
       min-height: auto;
       position: relative;
 
-      &.is-active {
+      &.is-active:not(.facet-item--expanded) {
         background: $plp_filter_active_item;
 
         @include icon(check, after) {
@@ -99,14 +82,12 @@
     display: none;
   }
 
-  ul,
   &.hide-facet-block {
     display: none;
   }
 
   &.block-facet-blockcategory-facet-plp,
-  &.block-facet-blockcategory-facet-promo,
-  &.block-facet-blockcategory-facet-search {
+  &.block-facet-blockcategory-facet-promo {
     @include breakpoint($desktop) {
       display: none !important;
     }
@@ -550,20 +531,42 @@
 .nodetype--acq_promotion {
   .c-plp .c-content__region {
     .block-facet-blockcategory-facet-plp,
-    .block-facet-blockcategory-facet-promo,
-    .block-facet-blockcategory-facet-search {
+    .block-facet-blockcategory-facet-promo {
       display: none;
     }
 
     .block-alshaya-plp-facets-block-all,
-    .block-alshaya-promo-facets-block-all,
-    .block-alshaya-search-facets-block-all {
+    .block-alshaya-promo-facets-block-all {
       @include breakpoint ($only-mobile) {
         width: 100% !important;
       }
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.nodetype--acq_promotion {
+  .c-plp .c-content__region {
+    .block-facet-blockcategory-facet-search {
+      display: none;
+    }
+
+    .block-alshaya-search-facets-block-all {
+      @include breakpoint ($only-mobile) {
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+.path--search {
+  .c-plp .c-content__region {
+    .block-alshaya-search-facets-block-all.empty-category {
+      @include breakpoint ($only-mobile) {
+        width: 100% !important;
       }
     }
   }
@@ -627,6 +630,7 @@
 
     .block-alshaya-plp-facets-block-all,
     .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
@@ -758,6 +762,32 @@ body {
           }
         }
       }
+    }
+  }
+}
+
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-collapse-item {
+  ul {
+    display: none;
+    position: absolute;
+    top: 2.25rem;
+    background: $plp_facet_active_bg;
+    z-index: 2;
+    min-width: 15.5rem;
+    padding: 1.125rem 0;
+    border: 1px solid $plp_facet_border;
+
+    @include breakpoint($desktop) {
+      max-height: 35rem;
+      overflow-y: auto;
+    }
+  }
+
+  .c-accordion__title,
+  .c-collapse__title {
+    @include breakpoint($upto-desktop) {
+      display: none;
     }
   }
 }

@@ -1,0 +1,9 @@
+logo:
+  path: 'themes/custom/transac/alshaya_american_eagle/site-logo.svg'
+  use_default: false
+
+features:
+  favicon: 1
+
+favicon:
+  use_default: 1

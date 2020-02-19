@@ -1,0 +1,37 @@
+name: Alshaya American Eagle Online
+type: theme
+description: 'Theme for American Eagle Online (Transactional).'
+core: 8.x
+base theme: alshaya_white_label
+alshaya_theme_type: transac
+
+regions:
+  banner_top: 'Top Banner'
+  menu_primary: 'Menu Primary'
+  menu_secondary: 'Menu Secondary'
+  header: Header
+  pre_content: 'Pre content'
+  breadcrumb: Breadcrumb
+  hero_content: 'Hero Content'
+  highlighted: 'Highlight Content'
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  post_content: 'Post content'
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - alshaya_white_label/ucfix
+  - alshaya_american_eagle/global_styles
+
+libraries-override:
+  alshaya_white_label/ltr_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/ltr-print.css
+
+  alshaya_white_label/rtl_print_styles:
+    css:
+      theme:
+        css/ltr-print.css: css/rtl-print.css

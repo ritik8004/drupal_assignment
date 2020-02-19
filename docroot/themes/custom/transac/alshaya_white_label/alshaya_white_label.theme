@@ -276,6 +276,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Attach the plp search js library to Search page.
   if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+    // Sidebar visibility for Search page.
+    $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree_search');
   }
 
   // Adding vat text footer to the page.
@@ -1576,8 +1578,15 @@ function alshaya_white_label_preprocess_breadcrumb(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  if (empty($variables['attributes']['data-drupal-facet-id'])) {
+    return;
+  }
+
   // Flag to determine if category facet has active item.
   $category_active_facet = FALSE;
+
+  // Flag to determine if child of a category facet item is active.
+  $active_children = FALSE;
 
   // Category facet array.
   $category_facets = [
@@ -1592,17 +1601,27 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
       && in_array('is-active', $item['value']['#attributes']['class'])) {
       if ($variables['items'][$key]['attributes'] instanceof Attribute) {
         $variables['items'][$key]['attributes']->addClass('is-active');
-
         // Update flag as there is active category facet.
         if ($is_category_facet) {
           $category_active_facet = TRUE;
         }
       }
     }
+    // Checking if there are any L2 items.
+    if (isset($item['value']['children']['#items'])) {
+      foreach ($item['value']['children']['#items'] as $key1 => $children) {
+        if ($children['#title']['#is_active'] == TRUE) {
+          // Setting 'is-active' class for L2 items.
+          $variables['items'][$key]['value']['children']['#items'][$key1]['#wrapper_attributes']['class'][] = 'is-active';
+          // Setting $active_children to TRUE.
+          $active_children = TRUE;
+        }
+      }
+    }
   }
 
   // If its category facet and it has no active item, then mark `All` active.
-  if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0])) {
+  if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0]) && !$active_children) {
     $variables['items'][0]['attributes']->addClass('is-active');
   }
 

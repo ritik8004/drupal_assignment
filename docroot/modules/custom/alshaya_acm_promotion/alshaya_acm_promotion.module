@@ -343,7 +343,11 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
  */
 function alshaya_acm_promotion_form_customer_cart_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $available_code = \Drupal::service('alshaya_acm_promotion.manager')->getAvailableCartCode();
-  if (!empty($available_code)) {
+  $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
+  if (!empty($cart)) {
+    $items = $cart->items();
+  }
+  if (!empty($available_code) && !empty($items)) {
     $form['promotion_code_wrapper']['available_code'] = [
       '#type' => '#markup',
       '#markup' => '<div class="promotion-available-code">' . $available_code . '</div>',
