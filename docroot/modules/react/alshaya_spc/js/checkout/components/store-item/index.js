@@ -1,11 +1,12 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 const StoreItem = ({ store }) => {
   return (
     <>
       <span className="store-name-and-address">
         <span className="store-name">{ store.name }</span>
-        <span className="store-address">{ store.address }</span>
+        <span className="store-address">{ parse(store.address) }</span>
       </span>
       <div className="store-delivery-time">
         <span className="label--delivery-time">{ Drupal.t('Collect in store from') }</span>
@@ -26,7 +27,7 @@ const StoreItem = ({ store }) => {
             </div>
         </div>
       </div>
-      <div className="store-actions" gtm-store-address="{store.address.replace(/(<([^>]+)>)/ig,'')}" gtm-store-title="{ store.name }">
+      <div className="store-actions" gtm-store-address={store.address.replace(/(<([^>]+)>)/ig,'')} gtm-store-title={ store.name }>
         <a href="#" className="select-store">{ Drupal.t('select this store') }</a>
       </div>
     </>

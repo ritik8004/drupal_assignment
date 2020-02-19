@@ -129,10 +129,10 @@ export default class ClickCollect extends React.Component {
       let map = window.spcMap;
         // Adjust the map, when we trigger the map view.
       google.maps.event.trigger(map.googleMap, 'resize');
+      // Auto zoom.
       map.googleMap.fitBounds(map.googleMap.bounds);
+      // Auto center.
       map.googleMap.panToBounds(map.googleMap.bounds);
-      // Zoom the current map to store location.
-      // map.googleMap.setZoom(9);
     }
     else {
       this.cncMapView.current.style.display = "none";

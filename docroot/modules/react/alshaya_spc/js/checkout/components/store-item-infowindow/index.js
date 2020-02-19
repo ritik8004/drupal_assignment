@@ -1,11 +1,12 @@
 import React from 'react'
+import parse from 'html-react-parser';
 
 const StoreItemInfoWindow = ({store}) => {
   return (
     <>
       <div className="store-name-and-address">
         <span className="store-name">{ store.name }</span>
-        <span className="store-address">{ store.address }</span>
+        <span className="store-address">{ parse(store.address) }</span>
       </div>
       <div className="store-open-hours">
         <div className="hours--wrapper selector--hours">
