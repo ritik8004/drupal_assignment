@@ -43,6 +43,42 @@ const SearchResultsComponent = props => {
     defaultpageRender = storedvalues.page;
   }
 
+  function getSortedItems(items) {
+    let sortedItems = {};
+    if (items !== null && items.length > 0) {
+      let weight = {};
+      let l1MenuItems = document.getElementsByClassName('menu--one__link');
+      for (let i in l1MenuItems) {
+        try {
+          if (l1MenuItems[i].getAttribute('title') !== null) {
+            // Add 10 to allow adding All at top.
+            weight[l1MenuItems[i].getAttribute('title')] = parseInt(i) + 10;
+          }
+        }
+        catch (e) {
+        }
+      }
+
+
+      for (let i in items) {
+        if (weight[items[i].label] !== undefined) {
+          sortedItems[weight[items[i].label]] = items[i];
+        }
+        else if (items[i].label === window.Drupal.t('All')) {
+          // Use 1 for All to ensure Object.values work properly.
+          sortedItems[1] = items[i];
+        }
+      }
+
+       sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+    }
+    else {
+       sortedItems = items;
+    }
+
+    return sortedItems;
+  }
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -55,7 +91,7 @@ const SearchResultsComponent = props => {
       {hasCategoryFilter() && isDesktop() && (
         <SideBar>
           <HierarchicalMenu
-            sortResults={true}
+            transformItems={items => getSortedItems(items)}
             attributes={[
               'field_category.lvl0',
               'field_category.lvl1',
@@ -72,6 +108,7 @@ const SearchResultsComponent = props => {
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop">
                   <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                   <HierarchicalMenu
+                    transformItems={items => getSortedItems(items)}
                     attributes={[
                       'field_category.lvl0',
                       'field_category.lvl1',
