@@ -24,9 +24,12 @@
     }
 
     a {
+      font-family: $alshaya-thin;
+      font-weight: normal;
       display: block;
       cursor: pointer;
       text-transform: capitalize;
+      color: $plp_facet_count_number;
 
       &.is-active {
         font-family: $alshaya-bold;
@@ -42,7 +45,7 @@
   .c-sidebar-first .c-facet__blocks {
     &.block-facet-blockcategory-facet-search {
       > ul {
-        margin-top: 0.90625rem;
+        margin-top: 0.40625rem;
 
         > li {
           > ul {
