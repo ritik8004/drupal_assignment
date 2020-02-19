@@ -375,27 +375,31 @@
     var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
     var viewMode = $('input[value=' + selected + ']').parents('article.entity--type-node').attr('data-vmode');
     var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
-    var parentInfo = typeof(drupalSettings[productKey][sku]) !== "undefined" ? drupalSettings[productKey][sku] : '';
+    var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
     // At parent level, sku and selected will be same.
-    var variantInfo = (typeof(drupalSettings[productKey][sku]) !== "undefined" &&
-      typeof(drupalSettings[productKey][sku]['variants']) !== "undefined" &&
+    var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined" &&
+      typeof drupalSettings[productKey][sku]['variants'] !== "undefined" &&
       sku !== selected) ?
       drupalSettings[productKey][sku]['variants'][selected] : '';
     var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
     var orderLimitExceeded =  false;
+    var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
+      Drupal.t('Purchase limit has been reached') +
+      '</span>';
+    var cart_items = drupalSettings['cart_items'];
 
     // If limit exists at parent level.
-    if ((parentInfo !== '') && (typeof(parentInfo.maxSaleQty) !== "undefined")) {
+    if ((parentInfo !== '') && (typeof parentInfo.maxSaleQty !== "undefined")) {
       var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');
       var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
 
       // If cart is not empty.
-      if (typeof(drupalSettings['cart_items']) !== "undefined") {
+      if (typeof cart_items !== "undefined") {
         var itemQtyInCart = 0;
         var orderLimitMsg = parentInfo.orderLimitMsg;
 
         if (allVariants.length !== 0) {
-          $.each( drupalSettings['cart_items'], function( item, value ) {
+          $.each( cart_items, function( item, value ) {
             if ($.inArray( item, allVariants ) >= 0) {
               itemQtyInCart += value.qty;
             }
@@ -403,23 +407,20 @@
         }
         else {
           itemQtyInCart = ($.inArray(selected, Object.keys(drupalSettings['cart_items'])) >= 0) ?
-            drupalSettings['cart_items'][selected]['qty'] : 0;
+          cart_items[selected]['qty'] : 0;
         }
 
         if (itemQtyInCart >= parentInfo.maxSaleQty) {
           var orderLimitExceeded = true;
-          var orderLimitMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
-            Drupal.t('Purchase limit has been reached') +
-            '</span>';
+          var orderLimitMsg = orderLimitExceededMsg;
         }
       }
     }
     else if (variantInfo !== '') {
       var orderLimitMsg = variantInfo.orderLimitMsg;
-      var orderLimitExceeded =  false;
-      var cart_items = drupalSettings['cart_items'];
 
-      if (typeof(cart_items) !== "undefined") {
+      // If cart is not empty.
+      if (typeof cart_items !== "undefined") {
         var selectedItemInCart = $.inArray(selected, Object.keys(cart_items));
         // If selected item is in cart.
         if (selectedItemInCart >= 0) {
@@ -427,9 +428,7 @@
 
           if (itemQtyInCart >= variantInfo.stock.maxSaleQty) {
             var orderLimitExceeded = true;
-            var orderLimitMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
-              Drupal.t('Purchase limit has been reached') +
-              '</span>';
+            var orderLimitMsg = orderLimitExceededMsg;
           }
         }
       }
