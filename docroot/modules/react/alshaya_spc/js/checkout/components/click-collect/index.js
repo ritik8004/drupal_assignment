@@ -52,41 +52,40 @@ export default class ClickCollect extends React.Component {
     // If location access is enabled by user.
     try {
       if (navigator && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          pos => {
-            this.fetchAvailableStores({
-              lat: pos.coords.latitude,
-              lng: pos.coords.longitude,
-            });
-          },
-          error => {
-            if (error.code == error.PERMISSION_DENIED) {
-              // Display dialog when location access is blocked from browser.
-              let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your browser settings.');
-              let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
-                modal: true,
-                width: "auto",
-                height: "auto",
-                title: Drupal.t('Location access denied'),
-                dialogClass: 'location-disabled-notice',
-                resizable: false,
-                closeOnEscape: true,
-                close: function close(event) {
-                  Drupal.dialog(event.target).close();
-                }
-              });
-              locationErrorDialog.showModal();
-            }
-          },
-          {
-            timeout: 10000
-          });
+        navigator.geolocation.getCurrentPosition(this.LocationSuccess, this.LocationFail, { timeout: 1000 });
       }
     }
     catch (e) {
       // Empty.
     }
     return false;
+  }
+
+  LocationSuccess = pos => {
+    this.fetchAvailableStores({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+    });
+  }
+
+  LocationFail = error => {
+    if (error.code == error.PERMISSION_DENIED) {
+      // Display dialog when location access is blocked from browser.
+      let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your browser settings.');
+      let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
+        modal: true,
+        width: "auto",
+        height: "auto",
+        title: Drupal.t('Location access denied'),
+        dialogClass: 'location-disabled-notice',
+        resizable: false,
+        closeOnEscape: true,
+        close: function close(event) {
+          Drupal.dialog(event.target).close();
+        }
+      });
+      locationErrorDialog.showModal();
+    }
   }
 
   /**
@@ -113,10 +112,6 @@ export default class ClickCollect extends React.Component {
     map.googleMap.setZoom(11);
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
-    // Get the lat/lng of current store to center the map.
-    // var newLocation = new google.maps.LatLng(parseFloat(StoreObj.lat), parseFloat(StoreObj.lng));
-    // Set the google map center.
-    // map.googleMap.setCenter(newLocation);
     // Pan Google maps to accommodate the info window.
     map.googleMap.panBy(0, -150);
   };
@@ -164,7 +159,6 @@ export default class ClickCollect extends React.Component {
           <div className='spc-address-form-wrapper'>
             <div className='spc-address-form-content'>
               <div>{Drupal.t('Find your nearest store')}</div>
-              <form className='spc-address-add' onSubmit={this.handleSubmit}>
                 <div>
                   <input
                     ref={this.searchplaceInput}
@@ -197,7 +191,6 @@ export default class ClickCollect extends React.Component {
                     { mapView }
                   </div>
                 }
-              </form>
             </div>
           </div>
         </div>
