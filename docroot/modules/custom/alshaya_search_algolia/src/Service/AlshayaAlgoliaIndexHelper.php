@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -80,6 +81,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $dateTime;
 
   /**
+   * The SKU Price Helper service.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+   */
+  protected $skuPriceHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -98,6 +106,8 @@ class AlshayaAlgoliaIndexHelper {
    *   Entity Repository object.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The date time service.
+   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $sku_price_helper
+   *   The SKU price helper service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -110,7 +120,8 @@ class AlshayaAlgoliaIndexHelper {
     LoggerChannelFactoryInterface $logger_factory,
     EntityTypeManagerInterface $entity_type_manager,
     EntityRepositoryInterface $entity_repository,
-    TimeInterface $date_time
+    TimeInterface $date_time,
+    SkuPriceHelper $sku_price_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -120,6 +131,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->entityRepository = $entity_repository;
     $this->dateTime = $date_time;
+    $this->skuPriceHelper = $sku_price_helper;
   }
 
   /**
@@ -157,7 +169,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['body'] = $this->renderer->renderPlain($description);
 
     $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
-
+    $object['rendered_price'] = $this->renderer->renderPlain($this->skuPriceHelper->getPriceBlockForSku($sku));
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
