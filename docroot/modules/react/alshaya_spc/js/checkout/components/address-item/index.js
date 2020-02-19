@@ -100,7 +100,7 @@ export default class AddressItem extends React.Component {
             <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
               <React.Fragment>
                 <a className='close' onClick={this.closeModal}>&times;</a>
-                <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData}/>
+                <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData} processAddress={this.processAddress} />
               </React.Fragment>
             </Popup>
           </div>

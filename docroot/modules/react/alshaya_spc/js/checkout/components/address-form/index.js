@@ -116,7 +116,7 @@ export default class AddressForm extends React.Component {
               <div className='spc-address-form-map'><GoogleMap/></div>
             }
             <div className='spc-address-form-content'>
-              <form className='spc-address-add' onSubmit={this.handleSubmit}>
+              <form className='spc-address-add' onSubmit={(e) => this.handleSubmit(e)}>
                 <div className='delivery-address-fields'> {dynamicFields} </div>
                 {this.props.show_prefered &&
                   <div>
