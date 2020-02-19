@@ -163,24 +163,6 @@
   padding-bottom: 1.75rem;
   position: relative;
 
-  .subtext {
-    width: 100%;
-    padding: 1rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $gallery_subtext;
-    line-height: 1;
-    background: $gallery_subtext_bg;
-    margin-top: 0;
-    opacity: 0.62;
-    position: absolute;
-    bottom: 4.125rem;
-
-    p {
-      margin: 0.1875rem;
-    }
-  }
-
   .lSAction {
     & > a {
       height: 2.188rem;
