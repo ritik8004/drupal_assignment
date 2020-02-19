@@ -59,6 +59,9 @@ export default class CartPromoBlock extends React.Component {
           document.getElementById('promo-message').innerHTML = result.response_message.msg;
           document.getElementById('promo-message').classList.add('error');
           document.getElementById('promo-code').classList.add('error');
+          // Dispatch event promoCodeFailed for GTM.
+          var event = new CustomEvent('promoCodeFailed', {bubbles: true, detail: { data: promo_value }});
+          document.dispatchEvent(event);
         }
         else if(result.response_message.status === 'success') {
           document.getElementById('promo-message').innerHTML = '';

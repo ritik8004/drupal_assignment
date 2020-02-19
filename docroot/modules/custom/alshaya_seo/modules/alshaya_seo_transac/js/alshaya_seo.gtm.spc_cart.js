@@ -15,6 +15,16 @@
       document.addEventListener('refreshCart', function (e) {
         var cart_data = e.detail.data();
         Drupal.alshaya_spc_cart_gtm(cart_data);
+
+        // Push promoCode event into dataLayer.
+        if (cart_data.hasOwnProperty('coupon_code') && cart_data.coupon_code) {
+          var data = {
+            event: 'promoCode',
+            couponCode: cart_data.coupon_code,
+            couponStatus: 'pass',
+          };
+          dataLayer.push(data);
+        }
       });
 
       document.addEventListener('updateCart', function (e) {
@@ -32,6 +42,16 @@
           Drupal.alshaya_spc_cart_gtm_update_cart(item, gtmEvent);
         }
 
+      });
+
+      document.addEventListener('promoCodeFailed', function (e) {
+        var promoCode = e.detail.data;
+        var data = {
+          event: 'promoCode',
+          couponCode: promoCode,
+          couponStatus: 'fail',
+        };
+        dataLayer.push(data);
       });
     }
   };
@@ -98,8 +118,8 @@
    *
    * @param product
    *   Product Object with gtm attributes.
-   * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *, brand: *}}
-   *   Product details object with gtm attributes.
+   * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *,
+   *   brand: *}} Product details object with gtm attributes.
    */
   Drupal.alshaya_spc_gtm_product = function (product) {
     var attributes = product.attributes;
