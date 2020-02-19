@@ -8,9 +8,13 @@
 
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
-      Drupal.alshaya_spc_cart_gtm();
+      if (localStorage.hasOwnProperty('cart_data')) {
+        var cart_data = JSON.parse(localStorage.getItem('cart_data'));
+        Drupal.alshaya_spc_cart_gtm(cart_data.cart);
+      }
       document.addEventListener('refreshCart', function (e) {
-        Drupal.alshaya_spc_cart_gtm();
+        var cart_data = e.detail.data();
+        Drupal.alshaya_spc_cart_gtm(cart_data);
       });
 
       document.addEventListener('updateCart', function (e) {
@@ -32,15 +36,20 @@
     }
   };
 
-  Drupal.alshaya_spc_cart_gtm = function() {
+  /**
+   * GTM dataLayer checkout event.
+   *
+   * @param cart_data
+   *   Cart data Object from localStorage.
+   */
+  Drupal.alshaya_spc_cart_gtm = function(cart_data) {
     // GTM data for SPC cart.
-    if (localStorage.hasOwnProperty('cart_data')) {
-      var cart_data = JSON.parse(localStorage.getItem('cart_data'));
+    if (cart_data !== undefined) {
       dataLayer[0].productSKU = [];
       dataLayer[0].productStyleCode = [];
-      dataLayer[0].cartTotalValue = cart_data.cart.cart_total;
-      dataLayer[0].cartItemsCount = cart_data.cart.items_qty;
-      var items = cart_data.cart.items;
+      dataLayer[0].cartTotalValue = cart_data.cart_total;
+      dataLayer[0].cartItemsCount = cart_data.items_qty;
+      var items = cart_data.items;
       dataLayer[0].ecommerce.checkout.products = [];
       dataLayer[0].cartItemsFlocktory = [];
       Object.entries(items).forEach(([key, product]) => {
@@ -60,6 +69,14 @@
     }
   };
 
+  /**
+   * GTM datalayer removeFromcart, addToCart events.
+   *
+   * @param product
+   *   Product object with gtm attributes.
+   * @param gtmEvent
+   *   GTM event string removeFromcart, addToCart.
+   */
   Drupal.alshaya_spc_cart_gtm_update_cart = function (product, gtmEvent) {
     var productData = {
       event: gtmEvent,
@@ -76,6 +93,14 @@
     dataLayer.push(productData);
   };
 
+  /**
+   * Helper function to get product GTM attributes.
+   *
+   * @param product
+   *   Product Object with gtm attributes.
+   * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *, brand: *}}
+   *   Product details object with gtm attributes.
+   */
   Drupal.alshaya_spc_gtm_product = function (product) {
     var attributes = product.attributes;
     var i = 0;
