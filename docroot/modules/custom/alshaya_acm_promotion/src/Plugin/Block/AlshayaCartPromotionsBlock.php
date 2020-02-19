@@ -304,7 +304,10 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   public function getCacheContexts() {
     // Cart will be different for every session, even guests will have session
     // as soon as they add something to cart.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['cookies:Drupal_visitor_acq_cart_id']);
+    return Cache::mergeContexts(
+      parent::getCacheContexts(),
+      ['session', 'cookies:Drupal_visitor_acq_cart_id']
+    );
   }
 
   /**
