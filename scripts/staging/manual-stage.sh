@@ -93,6 +93,9 @@ do
   echo "Droppping and importing database again for $current_site"
   ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < /tmp/manual-stage/$current_site.sql"
 
+  echo "Execute drush status for the target site to ensure config reset is executed after database restore"
+  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri status"
+
   echo "Executing post-db-copy operations on $current_site"
   site_db=`drush acsf-tools-info | grep $current_site | cut -d"	" -f3`
   ssh $target "php -f /var/www/html/$AH_SITE_GROUP.$target_env/hooks/common/post-db-copy/000-acquia_required_scrub.php $AH_SITE_GROUP $target_env $site_db"
@@ -124,6 +127,8 @@ do
   rsync -a $files_folder/labels $target:$target_files_folder
   rsync -a $files_folder/maintenance_mode_image $target:$target_files_folder
   rsync -a $files_folder/media-icons $target:$target_files_folder
+  rsync -a $files_folder/hero-image $target:$target_files_folder
+  rsync -a $files_folder/desktop-image $target:$target_files_folder
   rsync -t $files_folder/* $target:$target_files_folder
 
   if [[ "$type" == "iso" ]]; then
@@ -131,6 +136,9 @@ do
     echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
     screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder"
     screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder"
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c acquia_search_index"
+    ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_index"
+    ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-i\""
   fi
 
   if [[ "$type" == "proxy" ]]; then
@@ -143,4 +151,3 @@ do
   fi
 done
 ssh $target 'rm -rf /tmp/manual-stage'
-
