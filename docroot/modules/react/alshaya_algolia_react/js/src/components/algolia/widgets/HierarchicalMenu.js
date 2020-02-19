@@ -1,19 +1,21 @@
 import React from 'react';
 import { connectHierarchicalMenu } from 'react-instantsearch-dom';
-
 const HierarchicalMenu = ({ items, refine, createURL }) => (
   <ul>
     {items.map(item => (
-      <li key={item.label} className={ item.isRefined ? 'active' : '' }>
+      <li key={item.label}>
         <a
           href={`#${createURL(item.value)}`}
+          className={"facet-item " + (item.isRefined ? 'is-active' : '')}
           onClick={event => {
             event.preventDefault();
             refine(item.value);
           }}
         >
-          <span className="ais-HierarchicalMenu-label">{item.label}</span>
-          <span className="ais-HierarchicalMenu-count">{item.count}</span>
+          <span className="facet-item__value">
+            {item.label}
+            <span className="facet-item__count">{`(${item.count})`}</span>
+            </span>
         </a>
         {item.items && (
           <HierarchicalMenu
@@ -26,5 +28,4 @@ const HierarchicalMenu = ({ items, refine, createURL }) => (
     ))}
   </ul>
 );
-
 export default connectHierarchicalMenu(HierarchicalMenu);

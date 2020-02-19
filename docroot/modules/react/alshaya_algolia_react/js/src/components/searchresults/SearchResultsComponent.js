@@ -54,16 +54,12 @@ const SearchResultsComponent = props => {
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
       {hasCategoryFilter() && isDesktop() && (
         <SideBar>
-          <ul>
-            <li>
-              <HierarchicalMenu
-                attributes={[
-                  'field_category.lvl0',
-                  'field_category.lvl1',
-                ]}
-              />
-            </li>
-          </ul>
+          <HierarchicalMenu
+            attributes={[
+              'field_category.lvl0',
+              'field_category.lvl1',
+            ]}
+          />
         </SideBar>
       )}
       <MainContent>
@@ -72,7 +68,7 @@ const SearchResultsComponent = props => {
             <React.Fragment>
               <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
               {hasCategoryFilter() && !isDesktop() && (
-                <div className="block-alshaya-category-lhn-block c-facet c-accordion c-collapse-item non-desktop">
+                <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop">
                   <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                   <HierarchicalMenu
                     attributes={[
@@ -82,7 +78,7 @@ const SearchResultsComponent = props => {
                   />
                 </div>
               )}
-              <div className="show-all-filters-algolia hide-for-desktop">
+              <div className={"show-all-filters-algolia hide-for-desktop " + (!hasCategoryFilter() ? 'empty-category' : '')}>
                 <span className="desktop">{Drupal.t('all filters')}</span>
                 <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
               </div>
