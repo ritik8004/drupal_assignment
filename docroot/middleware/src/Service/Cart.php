@@ -212,6 +212,67 @@ class Cart {
   }
 
   /**
+   * Add click n collect shipping on the cart.
+   *
+   * @param int $cart_id
+   *   Cart id.
+   * @param array $shipping_data
+   *   Shipping address info.
+   * @param string $action
+   *   Action to perform.
+   * @param bool $create_customer
+   *   True to create customer, false otherwise.
+   *
+   * @return array
+   *   Cart data.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function addCncShippingInfo(int $cart_id, array $shipping_data, string $action, $create_customer = TRUE) {
+    $data = [
+      'extension' => (object) [
+        'action' => $action,
+      ],
+    ];
+    $store = $shipping_data['store'];
+    $static_fields = array_merge($shipping_data['store']['cart_address'], $shipping_data['static']);
+    // Unset as not needed in further processing.
+    unset($static_fields['extension']);
+    $carrier_info = $shipping_data['carrier_info'];
+
+    $shipping_data = array_merge($shipping_data, $shipping_data['store']['cart_address']['extension']);
+    // Unset as not needed in further processing.
+    unset($shipping_data['carrier_info'], $shipping_data['static'], $shipping_data['store']);
+
+    $custom_attributes = [];
+    foreach ($shipping_data as $field_name => $val) {
+      $custom_attributes[] = [
+        'attributeCode' => $field_name,
+        'value' => $val,
+      ];
+    }
+
+    $fields_data = [];
+    foreach ($static_fields as $key => $field) {
+      $fields_data[$key] = ($key == 'street') ? [$field] : $field;
+    }
+
+    $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
+    $data['shipping']['shipping_address'] = $fields_data;
+    $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
+    $data['shipping']['shipping_method_code'] = $carrier_info['method'];
+    $data['shipping']['extension_attributes'] = (object) [
+      'click_and_collect_type' => !empty($store['rnc_available']) ? 'reserve_and_collect' : 'ship_to_store',
+      'store_code' => $store['code'],
+    ];
+    if ($create_customer) {
+      $customer = $this->createCustomer($data['shipping']['shipping_address']);
+      $this->associateCartToCustomer($cart_id, $customer['id']);
+    }
+    return $this->updateCart($data, $cart_id);
+  }
+
+  /**
    * Update billing info on cart.
    *
    * @param int $cart_id

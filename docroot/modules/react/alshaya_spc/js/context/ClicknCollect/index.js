@@ -6,7 +6,8 @@ export class ClicknCollectContextProvider extends React.Component {
   state = {
     coords: null,
     storeList: null,
-    selectedStore: null
+    selectedStore: null,
+    contactInfo: null
   }
 
   updateSelectStore = (store) => {
@@ -28,6 +29,12 @@ export class ClicknCollectContextProvider extends React.Component {
     });
   }
 
+  updateContactInfo = (contactInfo) => {
+    this.setState({
+      contactInfo: contactInfo
+    });
+  }
+
   render() {
     return (
       <ClicknCollectContext.Provider
@@ -36,7 +43,8 @@ export class ClicknCollectContextProvider extends React.Component {
             ...this.state,
             updateSelectStore: this.updateSelectStore,
             updateCoordsAndStoreList: this.updateCoordsAndStoreList,
-            updateCoords: this.updateCoords
+            updateCoords: this.updateCoords,
+            updateContactInfo: this.updateContactInfo
           }
         }>
         {this.props.children}

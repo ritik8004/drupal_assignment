@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 import {removeCartFromStorage} from './storage';
+import { updateCartApiUrl } from './update_cart';
+import { cartAvailableInStorage } from './get_cart';
 
 /**
  * Get shipping methods.
@@ -65,4 +67,27 @@ export const placeOrder = function (cart_id , payment_method) {
   }, (error) => {
     // Processing of error here.
   });
+}
+
+export const addShippingInCart = function (action, data) {
+  var cart = cartAvailableInStorage();
+  if (cart === false) {
+    return null;
+  }
+
+  if (!Number.isInteger(cart)) {
+    cart = cart.cart_id;
+  }
+
+  const api_url = updateCartApiUrl();
+  return axios.post(api_url, {
+      action: action,
+      shipping_info: data,
+      cart_id: cart,
+    })
+    .then((response) => {
+      return response.data;
+    }, (error) => {
+      // Processing of error here.
+    });
 }

@@ -257,7 +257,7 @@ class StoresFinderUtility {
     $nodes = $this->nodeStorage->loadMultiple($nids);
     $prepared_stores = [];
     $config = $this->configFactory->get('alshaya_click_collect.settings');
-
+    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
     foreach ($nodes as $nid => $node) {
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
@@ -268,6 +268,20 @@ class StoresFinderUtility {
       if (!empty($store['rnc_available'])) {
         $store['delivery_time'] = $config->get('click_collect_rnc');
       }
+
+      $store['cart_address'] = $address;
+      // V1 - we update only area in address.
+      $store['cart_address']['extension']['address_area_segment'] = $node->get('field_store_area')->getString();
+
+      // V2 - copy address from Store.
+      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+        $store_address = $node->get('field_address')->getValue();
+
+        if ($store_address) {
+          $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+        }
+      }
+
       $prepared_stores[$nid] += $store;
       // Unset the store for which we found the node, so that we can log the
       // store codes for which nodes are missing.

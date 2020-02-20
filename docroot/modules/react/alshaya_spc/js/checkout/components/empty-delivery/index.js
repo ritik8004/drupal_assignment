@@ -27,6 +27,13 @@ export default class EmptyDeliveryText extends React.Component {
       // Close the modal.
       this.closeModal();
     }, false);
+
+    document.addEventListener('refreshCartOnCnCSelect', (e) => {
+      var data = e.detail.data();
+      this.props.refreshCart(data);
+      // Close the modal.
+      this.closeModal();
+    }, false);
   }
 
   getAddressPopupClassName = () => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getShippingMethods } from './checkout_util';
-import { addShippingInCart } from './update_cart';
+import { addShippingInCart } from './checkout_util';
 
 /**
  * Process the data got from address form submission.
