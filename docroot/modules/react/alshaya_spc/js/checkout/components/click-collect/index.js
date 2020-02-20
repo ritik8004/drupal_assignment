@@ -144,7 +144,7 @@ class ClickCollect extends React.Component {
   selectStore = (e, store_code) => {
     e.preventDefault();
     // Find the store object with the given store-code from the store list.
-    let store = _find(this.context.store_list, {code: store_code});
+    let store = _find(this.context.storeList, {code: store_code});
     this.context.updateSelectStore(store);
     this.setState({
       selectStoreOpen: true
@@ -152,14 +152,15 @@ class ClickCollect extends React.Component {
   }
 
   render() {
-    let {coords, store_list, selected: selectedStore } = this.context;
+    let {coords, storeList, selectedStore } = this.context;
     let {selectStoreOpen} = this.state;
+    console.log(selectStoreOpen);
 
     let mapView = (
       <ClicknCollectMap
         coords={coords}
         onCoordsUpdate={this.fetchAvailableStores}
-        markers={store_list}
+        markers={storeList}
       />
     );
 
@@ -173,7 +174,7 @@ class ClickCollect extends React.Component {
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
-            <div className='spc-address-form-content' style={{display: selectStoreOpen ? 'none' : 'block', width: '100%' }}>
+            <div className='spc-address-form-content' style={{ display: selectStoreOpen ? 'none' : 'block' }}>
               <div>{Drupal.t('Find your nearest store')}</div>
                 <div>
                   <input
@@ -201,7 +202,7 @@ class ClickCollect extends React.Component {
                 }
                 <div id="click-and-collect-list-view" ref={this.cncListView}>
                   <StoreList
-                    store_list={store_list}
+                    store_list={storeList}
                     onStoreClick={this.storeViewOnMapSelected}
                     onSelectStore={this.selectStore}
                   />

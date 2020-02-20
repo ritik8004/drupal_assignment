@@ -5,20 +5,20 @@ export const ClicknCollectContext = React.createContext();
 export class ClicknCollectContextProvider extends React.Component {
   state = {
     coords: null,
-    store_list: null,
-    selected: null
+    storeList: null,
+    selectedStore: null
   }
 
   updateSelectStore = (store) => {
     this.setState({
-      selected: store
+      selectedStore: store
     });
   }
 
   updateCoordsAndStoreList = (coords, storeList) => {
     this.setState({
       coords : coords,
-      store_list: storeList
+      storeList: storeList
     });
   }
 
