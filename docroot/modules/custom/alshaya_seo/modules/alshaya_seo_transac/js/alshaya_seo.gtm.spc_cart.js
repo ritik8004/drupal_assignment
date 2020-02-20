@@ -15,16 +15,6 @@
       document.addEventListener('refreshCart', function (e) {
         var cart_data = e.detail.data();
         Drupal.alshaya_spc_cart_gtm(cart_data);
-
-        // Push promoCode event into dataLayer.
-        if (cart_data.hasOwnProperty('coupon_code') && cart_data.coupon_code) {
-          var data = {
-            event: 'promoCode',
-            couponCode: cart_data.coupon_code,
-            couponStatus: 'pass',
-          };
-          dataLayer.push(data);
-        }
       });
 
       document.addEventListener('updateCart', function (e) {
@@ -42,6 +32,18 @@
           Drupal.alshaya_spc_cart_gtm_update_cart(item, gtmEvent);
         }
 
+      });
+
+      document.addEventListener('promoCodeSuccess', function (e) {
+        console.log(e.detail.data);
+        // Push promoCode event into dataLayer.
+        var promoCode = e.detail.data;
+        var data = {
+          event: 'promoCode',
+          couponCode: promoCode,
+          couponStatus: 'pass',
+        };
+        dataLayer.push(data);
       });
 
       document.addEventListener('promoCodeFailed', function (e) {
@@ -153,6 +155,12 @@
     }
     if (product.gtm_attributes.hasOwnProperty('dimension6')) {
       productDetails.dimension6 = product.gtm_attributes.dimension6;
+    }
+    if ($.cookie('product-list') !== undefined) {
+      var listValues = JSON.parse($.cookie('product-list'));
+      if (listValues.hasOwnProperty(product.parent_sku)) {
+        productDetails.list = listValues[product.parent_sku];
+      }
     }
     return productDetails;
   };

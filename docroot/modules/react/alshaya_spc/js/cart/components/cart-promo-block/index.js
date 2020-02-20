@@ -73,6 +73,9 @@ export default class CartPromoBlock extends React.Component {
               button_text: Drupal.t('applied'),
               disabled: true
             });
+            // Dispatch event promoCodeSuccess for GTM.
+            var event = new CustomEvent('promoCodeSuccess', {bubbles: true, detail: { data: promo_value }});
+            document.dispatchEvent(event);
           }
           else {
             // It means promo is removed.
