@@ -1,0 +1,44 @@
+.c-plp .c-content__region {
+  .all-filters,
+  .all-filters-algolia {
+    .filter {
+      &__foot {
+        text-transform: uppercase;
+      }
+
+      &__inner {
+        .block-views-exposed-filter-blockalshaya-product-list-block-1,
+        .block-views-exposed-filter-blockalshaya-product-list-block-2,
+        .block-views-exposed-filter-blocksearch-page {
+          fieldset.form-wrapper {
+            .fieldset-legend {
+              &::after {
+                font-weight: bold;
+                top: 1.625rem;
+              }
+            }
+          }
+        }
+
+        .c-facet.c-accordion {
+          .c-accordion__title {
+            &::after {
+              background: none;
+              font-weight: bold;
+              top: 1.8125rem;
+            }
+          }
+        }
+      }
+
+      &__head {
+        .facet-all-back,
+        .back-facet-list {
+          &::before {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
