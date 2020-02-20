@@ -17,10 +17,6 @@
       .c-collapse-item {
         .c-collapse__title {
           text-transform: capitalize;
-
-          @include breakpoint($only-mobile) {
-            line-height: normal;
-          }
         }
       }
     }
