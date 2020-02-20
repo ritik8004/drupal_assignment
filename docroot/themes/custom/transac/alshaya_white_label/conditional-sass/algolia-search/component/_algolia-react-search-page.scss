@@ -20,16 +20,20 @@
 
   .block-facet-blockcategory-facet-search {
     @include breakpoint($desktop) {
-      margin-top: 0;
+      margin-top: 1.03125rem;
+      border: none;
     }
 
     a {
       font-family: $alshaya-thin;
       font-weight: normal;
-      display: block;
+      position: relative;
       cursor: pointer;
       text-transform: capitalize;
       color: $plp_facet_count_number;
+      display: flex;
+      align-items: center;
+      margin-top: 0;
 
       &.is-active {
         font-family: $alshaya-bold;
@@ -39,55 +43,6 @@
     li {
       margin-bottom: 0;
       min-height: auto;
-    }
-  }
-
-  .c-sidebar-first .c-facet__blocks {
-    &.block-facet-blockcategory-facet-search {
-      > ul {
-        margin-top: 0.40625rem;
-
-        > li {
-          > ul {
-            padding-#{$left}: 1.125rem;
-          }
-        }
-      }
-
-      a {
-        margin-top: 0;
-      }
-    }
-  }
-
-  .c-content__region {
-    @include breakpoint($upto-desktop) {
-      .block-facet-blockcategory-facet-search {
-        .facet-item {
-          padding-top: 0.75rem !important;
-          border-bottom: 0.0625rem solid $plp_all_filter_item_border;
-          padding-bottom: 0.75rem !important;
-          margin-top: 0;
-        }
-
-        & > ul > li {
-          @include breakpoint($upto-desktop) {
-            &:last-child {
-              .facet-item {
-                border-bottom: none;
-              }
-            }
-
-            & > ul {
-              margin: 0;
-
-              .facet-item {
-                border-top: none;
-              }
-            }
-          }
-        }
-      }
     }
   }
 
