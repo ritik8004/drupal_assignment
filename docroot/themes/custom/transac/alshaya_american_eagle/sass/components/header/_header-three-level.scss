@@ -1,0 +1,22 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--two__list {
+      padding-top: 1rem;
+
+      .menu--three__list li a:hover {
+        text-decoration: none;
+      }
+    }
+
+    .menu--three__list-item {
+      max-width: 10.9375rem;
+
+      & > .menu-two__link-wrapper {
+        .menu__link {
+          font-size: 0.875rem !important;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}

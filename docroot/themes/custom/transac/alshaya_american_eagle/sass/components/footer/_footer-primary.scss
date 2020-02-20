@@ -102,6 +102,12 @@
       }
     }
   }
+
+  &__tab {
+    @include breakpoint($only-mobile) {
+      border-bottom: 0.0625rem solid $footer_accordion_border;
+    }
+  }
 }
 
 .c-footer-menu--about,
