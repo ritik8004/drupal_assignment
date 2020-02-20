@@ -1,0 +1,59 @@
+.c-plp {
+  .region__content {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      .filter-list-label {
+        text-transform: capitalize;
+        font-size: 0.8125rem;
+        color: $plp_facet_clear_text;
+      }
+
+      ul {
+        li {
+          a {
+            span {
+              &.facet-item__value {
+                border: 1px solid $facet_selected_badges_border;
+                color: $facet_selected_badges_text;
+                border-#{$right}: 0;
+
+                &::after {
+                  color: $facet_selected_badges_text;
+                }
+              }
+
+              &.js-facet-deactivate {
+                border: 1px solid $facet_selected_badges_border;
+                background: $plp_facet_filter_bg;
+                border-#{$left}: 0;
+              }
+            }
+          }
+
+          &.clear-all a {
+            text-transform: capitalize;
+            font-size: 0.8125rem !important;
+            color: $plp_facet_clear_text;
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item {
+    .product-plp-detail-wrapper {
+      text-align: $left;
+      color: $plp_tile_product_title;
+
+      .field--name-name {
+        text-transform: uppercase;
+        padding-#{$left}: 0;
+      }
+
+      .price-block {
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}
