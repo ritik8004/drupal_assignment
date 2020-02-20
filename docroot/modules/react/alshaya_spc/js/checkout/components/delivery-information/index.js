@@ -3,6 +3,7 @@ import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import EmptyDeliveryText from '../empty-delivery';
 import HomeDeliveryInfo from '../home-delivery';
+import ClicknCollectDeiveryInfo from '../cnc-delivery';
 
 export default class DeliveryInformation extends React.Component {
 
@@ -46,6 +47,9 @@ export default class DeliveryInformation extends React.Component {
         }
         {!this.state.showEmpty && cart.delivery_type === 'hd' &&
           <HomeDeliveryInfo cart={cart} refreshCart={this.props.refreshCart}/>
+        }
+        {!this.state.showEmpty && cart.delivery_type === 'cnc' &&
+          <ClicknCollectDeiveryInfo cart={cart} refreshCart={this.props.refreshCart}/>
         }
       </div>
     );
