@@ -9,7 +9,7 @@ import _find from 'lodash/find';
 import  { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
 import SelectedStore from '../selected-store';
 
-export default class ClickCollect extends React.Component {
+class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
 
   constructor(props) {
@@ -112,8 +112,6 @@ export default class ClickCollect extends React.Component {
 
   // View selected store on map.
   storeViewOnMapSelected = function (makerIndex) {
-    // Adjust the map, when we trigger the map view.
-    // google.maps.event.trigger(map.googleMap, 'resize');
     let map = window.spcMap;
     // Zoom the current map to store location.
     map.googleMap.setZoom(11);
@@ -156,8 +154,6 @@ export default class ClickCollect extends React.Component {
   render() {
     let {coords, store_list, selected: selectedStore } = this.context;
     let {selectStoreOpen} = this.state;
-
-    console.log(selectStoreOpen);
 
     let mapView = (
       <ClicknCollectMap
@@ -224,3 +220,5 @@ export default class ClickCollect extends React.Component {
   }
 
 }
+
+export default ClickCollect;
