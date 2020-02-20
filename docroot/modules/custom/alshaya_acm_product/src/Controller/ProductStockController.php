@@ -154,39 +154,47 @@ class ProductStockController extends ControllerBase {
         $parent_sku = isset($data['selected_parent_sku']) ? $data['selected_parent_sku'] : $variant_sku;
         // Check if max sale qty limit is set for parent.
         $max_sale_qty = $this->productOrderLimit->getParentMaxSaleQty($variant);
+        // Check product qty in cart.
+        $cart_qty = $this->productOrderLimit->getCartItemQtyLimit($variant_sku);
+        $order_limit_msg = '';
 
-        if (!empty($max_sale_qty)) {
-          // Get max sale qty variables.
-          $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);
+        if (empty($max_sale_qty)) {
+          // If max sale qty for parent is not set then get for the variant.
+          $plugin = $variant->getPluginInstance();
+          $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
+          $parent_limit = FALSE;
+        }
+
+        if ($cart_qty && ($cart_qty >= $max_sale_qty)) {
+          $order_limit_msg = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE);
+        }
+        else {
+          $order_limit_msg = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+        }
+
+        if (isset($parent_limit)) {
           $orderLimitData = [
             $viewModeKey => [
               $parent_sku => [
-                'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
+                'orderLimitMsg' => $order_limit_msg,
               ],
             ],
           ];
         }
         else {
-          // If max sale qty for parent is not set then get for the variant.
-          $plugin = $variant->getPluginInstance();
-          $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
-          if (!empty($max_sale_qty)) {
-            // Get max sale qty variables.
-            $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);
-
-            $orderLimitData = [
-              $viewModeKey => [
-                $parent_sku => [
-                  'variants' => [
-                    $variant_sku => [
-                      'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
-                    ],
+          $orderLimitData = [
+            $viewModeKey => [
+              $parent_sku => [
+                'variants' => [
+                  $variant_sku => [
+                    'orderLimitMsg' => $order_limit_msg,
                   ],
                 ],
               ],
-            ];
-          }
+            ],
+          ];
         }
+
         if (!empty($orderLimitData)) {
           $return->addCommand(new SettingsCommand($orderLimitData));
           $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$parent_sku, $variant_sku]));

@@ -121,37 +121,6 @@ class ProductOrderLimit {
   }
 
   /**
-   * Wrapper function to get max sale qty variables.
-   *
-   * @param object $sku
-   *   Sku.
-   * @param string $max_sale_qty
-   *   Max sale qty.
-   *
-   * @return array
-   *   Max sale qty variables.
-   */
-  public function getMaxSaleQtyVariables($sku, $max_sale_qty) {
-    if (!empty($max_sale_qty)) {
-      // Check product qty in cart.
-      $cart_qty = $this->getCartItemQtyLimit($sku->getSku());
-
-      if ($cart_qty && ($cart_qty >= $max_sale_qty)) {
-        $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty, TRUE);
-      }
-      else {
-        $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty);
-      }
-    }
-    $max_sale_qty_variables = [
-      'maxSaleQty' => (int) $max_sale_qty,
-      'orderLimitMsg' => isset($order_limit_msg) ? $order_limit_msg : '',
-    ];
-
-    return $max_sale_qty_variables;
-  }
-
-  /**
    * Helper function to get parent max sale qty if set.
    *
    * @param string $sku
