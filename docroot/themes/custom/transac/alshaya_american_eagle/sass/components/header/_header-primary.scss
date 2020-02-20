@@ -403,7 +403,6 @@ header {
     li.menu--one__list-item {
       display: inline-block;
       text-transform: capitalize;
-      text-align: center;
       height: 2.5rem;
 
       .menu--one__link {
@@ -610,8 +609,6 @@ header {
       vertical-align: middle;
 
       a.menu--one__link {
-        @include arabic-letter-spacing;
-
         display: block;
         border-top: 2px solid transparent !important;
         border-bottom: none !important;
@@ -698,8 +695,6 @@ header {
         width: 13.125rem;
 
         .menu__link {
-          @include arabic-letter-spacing;
-
           line-height: 1.69;
           text-transform: uppercase;
         }
@@ -767,8 +762,6 @@ header {
 
   .main--menu {
     .menu__link {
-      @include arabic-letter-spacing;
-
       font-size: 0.875rem;
       color: $mm_l1_link;
       height: 3rem;
@@ -777,8 +770,6 @@ header {
   }
 
   .menu__list-item {
-    @include arabic-letter-spacing;
-
     font-family: $alshaya-thin;
     text-transform: capitalize;
     font-weight: normal;
@@ -862,8 +853,6 @@ header {
 }
 
 .toggle--sign {
-  @include arabic-letter-spacing;
-
   font-size: 0.875rem;
   font-family: $alshaya-thin;
   font-weight: normal;
@@ -876,8 +865,6 @@ header {
   }
 
   .one {
-    @include arabic-letter-spacing;
-
     flex: 1;
     font-family: $alshaya-thin;
 
