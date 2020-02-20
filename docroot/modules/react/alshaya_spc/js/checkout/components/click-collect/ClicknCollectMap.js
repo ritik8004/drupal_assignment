@@ -30,7 +30,12 @@ class ClicknCollectMap extends React.Component {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     window.spcMap.googleMap = this.createGoogleMap({});
-    this.googleMap.setCenter();
+    if (this.props.markers) {
+      this.placeMarkers();
+    }
+    else {
+      this.googleMap.setCenter();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {

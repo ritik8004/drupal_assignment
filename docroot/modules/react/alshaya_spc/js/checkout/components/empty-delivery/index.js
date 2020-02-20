@@ -49,12 +49,12 @@ export default class EmptyDeliveryText extends React.Component {
           <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
             {Drupal.t('Select your preferred collection store')}
           </div>
-          <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-            <React.Fragment>
-              <a className='close' onClick={this.closeModal}>&times;</a>
-              <ClickCollect default_val={null} processAddress={this.processAddress}/>
-            </React.Fragment>
-          </Popup>
+            <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+              <React.Fragment>
+                <a className='close' onClick={this.closeModal}>&times;</a>
+                <ClickCollect processAddress={this.processAddress}/>
+              </React.Fragment>
+            </Popup>
         </div>
       );
   	}

@@ -1,7 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 
-const StoreItem = ({ store }) => {
+const StoreItem = ({ store, onSelectStore }) => {
   return (
     <>
       <span className="store-name-and-address">
@@ -14,7 +14,7 @@ const StoreItem = ({ store }) => {
       </div>
       <div className="store-open-hours">
         <div className="hours--wrapper selector--hours">
-            <div className="hours--label">{ Drupal.t('Opening Hours')  }</div>
+            <div className="hours--label">{ Drupal.t('Opening Hours') }</div>
             <div className="open--hours">
               {store.open_hours.map(function(item) {
                 return (
@@ -28,7 +28,7 @@ const StoreItem = ({ store }) => {
         </div>
       </div>
       <div className="store-actions" gtm-store-address={store.address.replace(/(<([^>]+)>)/ig,'')} gtm-store-title={ store.name }>
-        <a href="#" className="select-store">{ Drupal.t('select this store') }</a>
+        <button className="select-store" onClick={(e) => onSelectStore(e, store.code)}>{ Drupal.t('select this store') }</button>
       </div>
     </>
   );
