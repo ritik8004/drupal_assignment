@@ -845,7 +845,7 @@ class ProductSyncResource extends ResourceBase {
     $current_media = unserialize($current_value);
     $current_mapping = [];
     // Checks for non-empty value to be used in loop.
-    if (is_array($current_media) || is_object($current_media)) {
+    if (!empty($current_media) && is_iterable($current_media)) {
       foreach ($current_media ?? [] as $value) {
         if (!empty($value['fid'])) {
           $current_mapping[$value['value_id']]['fid'] = $value['fid'];
