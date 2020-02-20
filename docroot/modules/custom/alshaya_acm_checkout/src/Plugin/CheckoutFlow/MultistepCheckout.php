@@ -88,6 +88,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     // We always want this cache context and tag.
     $form['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
+    $form['#cache']['contexts'][] = 'session';
 
     // On final step we won't have cart to add the cache tag.
     if ($this->stepId != 'confirmation') {
