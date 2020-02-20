@@ -50,3 +50,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css: css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css
+
+  alshaya_white_label/algolia_search:
+    css:
+      theme:
+        css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css

@@ -49,13 +49,6 @@ class CartSessionStorage implements CartStorageInterface {
    * {@inheritdoc}
    */
   public function getCartId($create_new = TRUE) {
-    $cookies = \Drupal::request()->cookies->all();
-    $cart_id = NULL;
-
-    if (isset($cookies['Drupal_visitor_acq_cart_id'])) {
-      return $cookies['Drupal_visitor_acq_cart_id'];
-    }
-
     $cart = $this->session->get(self::STORAGE_KEY);
 
     if ($cart) {
@@ -65,10 +58,8 @@ class CartSessionStorage implements CartStorageInterface {
       $cart = $this->createCart();
       return $cart->id();
     }
-    else {
-      return NULL;
-    }
 
+    return NULL;
   }
 
   /**
