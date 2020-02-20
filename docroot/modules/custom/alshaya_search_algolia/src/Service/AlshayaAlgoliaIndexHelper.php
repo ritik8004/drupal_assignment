@@ -443,7 +443,15 @@ class AlshayaAlgoliaIndexHelper {
     $list = [];
     $list['all']['lvl0'] = $this->t('All', [], ['langcode' => $langcode]);
     // Get sales categories to index L2 for sales terms.
-    $sale_categories = $this->productCategoryManager->getCategorizationIds()['sale'] ?? [];
+    $old_categorization_rule = $this->productCategoryManager->isOldCategorizationRuleEnabled();
+    // If old categorization rule is not enabled
+    // call getCategorizationIds() with ['sale'].
+    if ($old_categorization_rule) {
+      $sale_categories = $this->productCategoryManager->getCategorizationIds() ?? [];
+    }
+    else {
+      $sale_categories = $this->productCategoryManager->getCategorizationIds()['sale'] ?? [];
+    }
     foreach ($categories as $category) {
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
