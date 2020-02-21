@@ -234,10 +234,6 @@ class CartController {
 
     // Store delivery method when required.
     if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
-      $data['delivery_method'] = 'hd';
-      if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
-        $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
-      }
       $data['carrier_info'] = $shipping_info['method'];
 
       $data['shipping_address'] = NULL;
@@ -249,6 +245,12 @@ class CartController {
         }
         unset($data['shipping_address']['custom_attributes']);
         $data['shipping_address'] += $custom_shipping_attributes;
+      }
+
+      $data['delivery_method'] = 'hd';
+      if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
+        $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
+        $data['store_code'] = $shipping_info['extension_attributes']['store_code'];
       }
     }
 

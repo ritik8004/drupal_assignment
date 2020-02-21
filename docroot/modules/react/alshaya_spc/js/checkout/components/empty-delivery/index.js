@@ -50,6 +50,7 @@ export default class EmptyDeliveryText extends React.Component {
 
   render() {
     const { delivery_type } = this.props.cart;
+
     if (delivery_type === 'cnc') {
   	  return (
         <div className='spc-empty-delivery-information'>

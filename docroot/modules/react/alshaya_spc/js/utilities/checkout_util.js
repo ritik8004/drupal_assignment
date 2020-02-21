@@ -91,3 +91,23 @@ export const addShippingInCart = function (action, data) {
       // Processing of error here.
     });
 }
+
+/**
+ * Place ajax fulll screen loader.
+ */
+export const showLoader = () => {
+  const loaderDiv = document.createElement( 'div' );
+  loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
+  document.body.appendChild( loaderDiv );
+}
+
+/**
+ * Remove ajax loader.
+ */
+export const removeLoader = () => {
+  const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
+  // Check if loader div is present algolia is not redirecting to other language.
+  if (loaderDiv.length > 0) {
+    document.body.removeChild(loaderDiv[0]);
+  }
+}
