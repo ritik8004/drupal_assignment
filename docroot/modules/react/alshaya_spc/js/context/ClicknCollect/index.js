@@ -3,11 +3,36 @@ import React from 'react'
 export const ClicknCollectContext = React.createContext();
 
 export class ClicknCollectContextProvider extends React.Component {
-  state = {
-    coords: null,
-    storeList: null,
-    selectedStore: null,
-    contactInfo: null
+
+  constructor(props) {
+    super(props);
+    // console.log(props);
+    let coords = null;
+    let selectedStore = null;
+    let contactInfo = null;
+    if (props.cart.delivery_type === 'cnc') {
+      let { cart: { store_info, shipping_address: { firstname, lastname, email, telephone } } } = props.cart;
+      if (store_info) {
+        coords = {
+          lat: parseFloat(store_info.lat),
+          lng: parseFloat(store_info.lng)
+        };
+        selectedStore = store_info;
+        contactInfo = {
+          firstname,
+          lastname,
+          email,
+          telephone,
+        }
+      }
+    }
+
+    this.state = {
+      coords: coords,
+      storeList: null,
+      selectedStore: selectedStore,
+      contactInfo: contactInfo
+    }
   }
 
   updateSelectStore = (store) => {
@@ -18,7 +43,7 @@ export class ClicknCollectContextProvider extends React.Component {
 
   updateCoordsAndStoreList = (coords, storeList) => {
     this.setState({
-      coords : coords,
+      coords: coords,
       storeList: storeList
     });
   }

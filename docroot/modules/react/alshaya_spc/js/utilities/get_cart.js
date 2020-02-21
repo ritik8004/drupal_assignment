@@ -64,7 +64,7 @@ export const fetchCartData = function () {
     // cart data which is already there in localstorage is not valid and hence,
     // initiating object with empty data will show empty cart and mini cart.
     // Clearing the local storage will be taken care by emptyCustomerCart().
-    if (cart.uid !== window.drupalSettings.user.uid && cart.uid.length > 0) {
+    if (cart.uid !== window.drupalSettings.user.uid && cart.uid > 0) {
       cart = {
         cart_id: null,
         cart_total: null,

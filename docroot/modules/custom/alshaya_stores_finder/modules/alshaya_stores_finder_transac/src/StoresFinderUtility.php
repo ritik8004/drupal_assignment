@@ -227,6 +227,31 @@ class StoresFinderUtility {
   }
 
   /**
+   * Get store nodes.
+   *
+   * @param array $store_codes
+   *   The array of store codes.
+   * @param string $langcode
+   *   (Optional) The language code.
+   *
+   * @return array
+   *   Return array of stores.
+   */
+  public function getStoreNodes(array $store_codes, $langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    }
+    // Get the nids for given store code with custom query.
+    $query = $this->database->select('node_field_data', 'n');
+    $query->addField('n', 'nid');
+    $query->addField('ns', 'field_store_locator_id_value');
+    $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
+    $query->condition('ns.field_store_locator_id_value', $store_codes, 'IN');
+    $query->condition('n.langcode', $langcode);
+    return $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
+  }
+
+  /**
    * Return store extra data info for given store codes.
    *
    * @param array $stores
@@ -243,15 +268,7 @@ class StoresFinderUtility {
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     }
 
-    // Get the nids for given store code with custom query.
-    $query = $this->database->select('node_field_data', 'n');
-    $query->addField('n', 'nid');
-    $query->addField('ns', 'field_store_locator_id_value');
-    $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
-    $query->condition('ns.field_store_locator_id_value', $store_codes, 'IN');
-    $query->condition('n.langcode', $langcode);
-    $store_nodes = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
-
+    $store_nodes = $this->getStoreNodes($store_codes, $langcode);
     // Load multiple nodes all together.
     $nids = array_keys($store_nodes);
     $nodes = $this->nodeStorage->loadMultiple($nids);
@@ -262,7 +279,7 @@ class StoresFinderUtility {
     foreach ($nodes as $nid => $node) {
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
       $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
-      $store = $stores[$store_nodes[$nid]['field_store_locator_id_value']];
+      $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
       $store['rnc_available'] = (int) $store['rnc_available'];
       $store['sts_available'] = (int) $store['sts_available'];
       if (!empty($store['rnc_available'])) {

@@ -5,7 +5,7 @@ export default class Gmap {
   constructor() {
     this.map = {
       settings: {
-        zoom: 9,
+        zoom: 11,
         maxZoom: 18,
         zoomControl: true,
         fullscreenControl: false,
@@ -90,13 +90,13 @@ export default class Gmap {
         country: window.drupalSettings.country_code
       }
     }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          // Just center the map and don't do anything.
-          window.spcMap.googleMap.setCenter(results[0].geometry.location);
-          if (callBackFunc) {
-            callBackFunc.call(results)
-          }
+      if (status == google.maps.GeocoderStatus.OK) {
+        // Just center the map and don't do anything.
+        window.spcMap.googleMap.setCenter(results[0].geometry.location);
+        if (callBackFunc) {
+          callBackFunc.call(results)
         }
+      }
     });
   }
 
@@ -114,7 +114,7 @@ export default class Gmap {
     this.map.mapMarkers = this.map.mapMarkers || [];
     skipInfoWindow = skipInfoWindow || false;
 
-    let {icon: marker_icon_path, label_position} = this.map.settings.map_marker;
+    let { icon: marker_icon_path, label_position } = this.map.settings.map_marker;
 
     if (typeof marker_icon_path === 'string') {
       // Add the marker icon.
@@ -162,7 +162,7 @@ export default class Gmap {
         currentInfoWindow.open(map.googleMap, currentMarker);
       });
 
-      google.maps.event.addListener(currentInfoWindow, 'closeclick', function() {
+      google.maps.event.addListener(currentInfoWindow, 'closeclick', function () {
         // Auto zoom.
         map.googleMap.fitBounds(map.googleMap.bounds);
         // Auto center.
@@ -186,7 +186,7 @@ export default class Gmap {
   removeMapMarker = function (map = null) {
     map = map || this.map;
     map.mapMarkers.forEach(function (item) {
-        item.setMap();
+      item.setMap();
     });
   };
 

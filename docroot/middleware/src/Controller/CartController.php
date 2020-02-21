@@ -236,6 +236,10 @@ class CartController {
     if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
       $data['carrier_info'] = $shipping_info['method'];
 
+      if (empty($shipping_info['method']) && !empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
+        $shipping_info['method'] = 'click_and_collect_click_and_collect';
+      }
+
       $data['shipping_address'] = NULL;
       if (!empty($shipping_info['method'])) {
         $custom_shipping_attributes = [];
@@ -247,10 +251,11 @@ class CartController {
         $data['shipping_address'] += $custom_shipping_attributes;
       }
 
-      $data['delivery_method'] = 'hd';
+      $data['delivery_type'] = 'hd';
       if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
-        $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
+        $data['delivery_type'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
         $data['store_code'] = $shipping_info['extension_attributes']['store_code'];
+        $data['store_info'] = $this->drupal->getStoreInfo($data['store_code']);
       }
     }
 

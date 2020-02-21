@@ -6,7 +6,6 @@ import { checkoutAddressProcess } from '../../../utilities/checkout_address_proc
 import ClickCollect from '../click-collect';
 
 export default class EmptyDeliveryText extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -52,22 +51,22 @@ export default class EmptyDeliveryText extends React.Component {
     const { delivery_type } = this.props.cart;
 
     if (delivery_type === 'cnc') {
-  	  return (
+      return (
         <div className='spc-empty-delivery-information'>
           <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
             {Drupal.t('Select your preferred collection store')}
           </div>
-            <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-              <React.Fragment>
-                <a className='close' onClick={this.closeModal}>&times;</a>
-                <ClickCollect processAddress={this.processAddress}/>
-              </React.Fragment>
-            </Popup>
+          <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
+            <React.Fragment>
+              <a className='close' onClick={this.closeModal}>&times;</a>
+              <ClickCollect />
+            </React.Fragment>
+          </Popup>
         </div>
       );
-  	}
+    }
 
-  	return (
+    return (
       <div className='spc-empty-delivery-information'>
         <div onClick={this.openModal} className="spc-checkout-empty-delivery-text">
           {Drupal.t('Please add your contact details and address.')}

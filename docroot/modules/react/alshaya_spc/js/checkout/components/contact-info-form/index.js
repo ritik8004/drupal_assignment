@@ -72,7 +72,7 @@ class ContactInfoForm extends React.Component {
     }
 
     if (customerEmailValidate.data.exists === 'wrong') {
-      document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', {'%mail': customerEmailValidate.data.email});
+      document.getElementById('email-error').innerHTML = Drupal.t('The email address %mail is not valid.', { '%mail': customerEmailValidate.data.email });
       document.getElementById('email-error').classList.add('error');
       isError = true;
     }
@@ -100,7 +100,7 @@ class ContactInfoForm extends React.Component {
         updateContactInfo(form_data.static);
         let cart_data = {
           'cart': cart_result,
-          'delivery_type': cart_result.delivery_method,
+          'delivery_type': cart_result.delivery_type,
           'address': form_data.store.address
         }
         var event = new CustomEvent('refreshCartOnCnCSelect', {
@@ -116,12 +116,12 @@ class ContactInfoForm extends React.Component {
   }
 
   render() {
-    let {store} = this.props;
-    let {contactInfo} = this.context;
+    let { store } = this.props;
+    let { contactInfo } = this.context;
 
     return (
       <form className='spc-contact-form' onSubmit={(e) => this.handleSubmit(e, store)}>
-        <FixedFields showEmail={true} default_val={ contactInfo ? {static: contactInfo} : []} />
+        <FixedFields showEmail={true} default_val={contactInfo ? { static: contactInfo } : []} />
         <div className='spc-address-form-actions'>
           <button id='save-address' className='spc-address-form-submit' type="submit">{Drupal.t('Save')}</button>
         </div>

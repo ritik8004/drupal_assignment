@@ -1,53 +1,81 @@
-import React from 'react';
-
-import Popup from 'reactjs-popup';
-import ShippingMethods from '../shipping-methods';
-import AddressForm from '../address-form';
-import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
+import React from "react";
+import Popup from "reactjs-popup";
+import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
+import ClickCollect from "../click-collect";
 
 class ClicknCollectDeiveryInfo extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = { open: false };
+    this.state = {
+      open: false,
+      showSelectedStore: false
+    };
   }
 
-  openModal = () => {
-    this.setState({ open: true });
-  }
+  openModal = showSelectedStore => {
+    this.setState({
+      open: true,
+      showSelectedStore: showSelectedStore || false
+    });
+  };
 
   closeModal = () => {
     this.setState({ open: false });
-  }
+  };
 
-  processAddress = (e) => {
+  processAddress = e => {
     const { cart } = this.props.cart;
     checkoutAddressProcess(e, cart);
-  }
+  };
 
   componentDidMount() {
-    document.addEventListener('refreshCartOnAddress', (e) => {
-      var data = e.detail.data();
-      this.props.refreshCart(data);
-      // Close the modal.
-      this.closeModal();
-    }, false);
+    document.addEventListener(
+      "refreshCartOnAddress",
+      e => {
+        var data = e.detail.data();
+        this.props.refreshCart(data);
+        // Close the modal.
+        this.closeModal();
+      },
+      false
+    );
   }
 
   render() {
-    const address = this.props.cart.address;
+    const {
+      cart: {
+        store_info: { name, cart_address: address },
+        shipping_address
+      }
+    } = this.props.cart;
+
     return (
-      <div className='delivery-information-preview'>
-        <div className='spc-delivery-customer-info'>
-          <div className='delivery-name'>{address.static.firstname} {address.static.lastname}</div>
-          <div className='delivery-address'>
-            {address.address_block_segment}
-            , {address.address_building_segment}
-            , {address.address_apartment_segment}
-            , {address.street}
+      <div className="delivery-information-preview">
+        <div className="spc-delivery-store-info">
+          <div className="store-name">{name}</div>
+          <div className="store-address">
+            {address.extension.address_block_segment},{" "}
+            {address.extension.address_building_segment},{" "}
+            {address.extension.address_apartment_segment}, {address.street}
           </div>
-          <div className='spc-address-form-edit-link' onClick={this.openModal}>
-            {Drupal.t('Change')}
+          <div
+            className="spc-change-address-link"
+            onClick={() => this.openModal(false)}
+          >
+            {Drupal.t("Change")}
+          </div>
+        </div>
+        <div className="spc-delivery-contact-info">
+          <div className="contact-info-label">{Drupal.t("Collection by")}</div>
+          <div className="contact-name">
+            {shipping_address.firstname} {shipping_address.lastname}
+          </div>
+          <div className="contact-telephone">{shipping_address.telephone}</div>
+          <div
+            className="spc-change-address-link"
+            onClick={() => this.openModal(true)}
+          >
+            {Drupal.t("Change")}
           </div>
         </div>
         <Popup
@@ -55,16 +83,16 @@ class ClicknCollectDeiveryInfo extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <a className="close" onClick={this.closeModal}>&times;</a>
-          <AddressForm showEmail={(window.drupalSettings.user.uid === 0)} default_val={address}  processAddress={this.processAddress}/>
+          <React.Fragment>
+            <a className="close" onClick={this.closeModal}>
+              &times;
+            </a>
+            <ClickCollect openSelectedStore={this.state.showSelectedStore} />
+          </React.Fragment>
         </Popup>
-        <div className='spc-delivery-shipping-methods'>
-          <ShippingMethods cart={this.props.cart} refreshCart={this.props.refreshCart}/>
-        </div>
       </div>
     );
   }
-
 }
 
 export default ClicknCollectDeiveryInfo;
