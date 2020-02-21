@@ -1779,7 +1779,8 @@ function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
  */
 function alshaya_acm_product_preprocess_block(&$variables) {
   if ($variables['base_plugin_id'] == 'cart_mini_block') {
-    // Add cart items in drupalSettings.
+    // Add cart items in drupalSettings to check if qty limit is exceeded or not
+    // for a product at js level and accordingly show message.
     $variables['#attached']['drupalSettings']['cart_items'] = alshaya_acm_get_cart_items_by_sku();
   }
 }
