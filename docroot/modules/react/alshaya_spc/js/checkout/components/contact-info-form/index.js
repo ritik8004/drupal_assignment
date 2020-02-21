@@ -98,7 +98,6 @@ class ContactInfoForm extends React.Component {
       let { updateContactInfo } = this.context;
       cart_info.then((cart_result) => {
         updateContactInfo(form_data.static);
-        console.log(cart_result);
         let cart_data = {
           'cart': cart_result,
           'delivery_type': cart_result.delivery_method,
