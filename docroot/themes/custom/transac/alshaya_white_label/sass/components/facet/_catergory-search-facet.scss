@@ -258,5 +258,9 @@
         }
       }
     }
+
+    .is-active.category-all {
+      pointer-events: none;
+    }
   }
 }
