@@ -84,11 +84,18 @@
 
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
-        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
+        var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
+
+        // Fill the view mode form field.
+        $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
 
         if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
+
+        // On form load set order qty limit message.
+        Drupal.disableLimitExceededProducts(sku, sku);
 
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
@@ -97,6 +104,7 @@
           var sku = $(this).attr('data-sku');
           var selected = $('[name="selected_variant_sku"]', $(this)).val();
           var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+          var parentSku = variantInfo.parent_sku;
 
           if (typeof variantInfo === 'undefined') {
             return;
@@ -110,10 +118,13 @@
           else {
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
           }
+          // On variant change, disable/enable Add to bag, quantity dropdown
+          // and show message based on value in drupalSettings.
+          Drupal.disableLimitExceededProducts(parentSku, selected);
 
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
-            if ($(this).val() > variantInfo.stock.qty) {
+            if (($(this).val() > variantInfo.stock.qty) || (variantInfo.stock.maxSaleQty !== 0 && ($(this).val() > variantInfo.stock.maxSaleQty))) {
               if ($(this).is(':selected')) {
                 $('select[name="quantity"] option:first').attr('selected', 'selected').prop('selected', true);
               }
@@ -358,6 +369,85 @@
       Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
     }
   };
+
+  // Disable Add to bag and quantity dropdown when order limit exceed.
+  Drupal.disableLimitExceededProducts = function (sku, selected) {
+    var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
+    var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
+    var viewMode = $('input[value=' + selected + ']').parents('article.entity--type-node').attr('data-vmode');
+    var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
+    var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
+    // At parent level, sku and selected will be same.
+    var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined" &&
+      typeof drupalSettings[productKey][sku]['variants'] !== "undefined" &&
+      sku !== selected) ?
+      drupalSettings[productKey][sku]['variants'][selected] : '';
+    var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
+    var orderLimitExceeded =  false;
+    var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
+      Drupal.t('Purchase limit has been reached') +
+      '</span>';
+    var cart_items = drupalSettings['cart_items'];
+
+    // If limit exists at parent level.
+    if ((parentInfo !== '') && (typeof parentInfo.maxSaleQty !== "undefined")) {
+      var variantToDisableSelector = $('input[value=' + sku + ']').closest('.sku-base-form');
+      var allVariants = parentInfo.variants ? Object.keys(parentInfo.variants) : [];
+
+      // If cart is not empty.
+      if (typeof cart_items !== "undefined") {
+        var itemQtyInCart = 0;
+        var orderLimitMsg = parentInfo.orderLimitMsg;
+
+        if (allVariants.length !== 0) {
+          $.each( cart_items, function( item, value ) {
+            if ($.inArray( item, allVariants ) >= 0) {
+              itemQtyInCart += value.qty;
+            }
+          });
+        }
+        else {
+          itemQtyInCart = ($.inArray(selected, Object.keys(cart_items)) >= 0) ?
+          cart_items[selected]['qty'] : 0;
+        }
+
+        if (itemQtyInCart >= parentInfo.maxSaleQty) {
+          var orderLimitExceeded = true;
+          var orderLimitMsg = orderLimitExceededMsg;
+        }
+      }
+    }
+    else if (variantInfo !== '') {
+      var orderLimitMsg = variantInfo.orderLimitMsg;
+
+      // If cart is not empty.
+      if (typeof cart_items !== "undefined") {
+        var selectedItemInCart = $.inArray(selected, Object.keys(cart_items));
+        // If selected item is in cart.
+        if (selectedItemInCart >= 0) {
+          var itemQtyInCart = cart_items[selected]['qty'];
+
+          if (itemQtyInCart >= variantInfo.stock.maxSaleQty) {
+            var orderLimitExceeded = true;
+            var orderLimitMsg = orderLimitExceededMsg;
+          }
+        }
+      }
+    }
+
+    // Disable/Enable Add to Bag and quantity dropdown.
+    variantToDisableSelector.find('.edit-add-to-cart.button').prop('disabled', orderLimitExceeded);
+    variantToDisableSelector.find('.edit-quantity').prop('disabled', orderLimitExceeded);
+
+    // Add order quantity limit message.
+    orderLimitMsgSelector.html(orderLimitMsg);
+    orderLimitMobileMsgSelector.html(orderLimitMsg);
+  };
+
+  // Cart limit exceeded for a variant.
+  $.fn.LimitExceededInCart = function (sku, selected) {
+    Drupal.disableLimitExceededProducts(sku, selected);
+  }
 
   // This event is triggered on page load itself in attach (Drupal.behaviors.configurableAttributeBoxes)
   // once size boxes are shown properly

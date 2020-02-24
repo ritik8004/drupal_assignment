@@ -87,6 +87,13 @@ class SkuInfoHelper {
   protected $languageManager;
 
   /**
+   * Product Order Limit service object.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit
+   */
+  protected $productOrderLimit;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -107,6 +114,8 @@ class SkuInfoHelper {
    *   The stock manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit
+   *   Product Order Limit.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -117,7 +126,8 @@ class SkuInfoHelper {
     ModuleHandlerInterface $module_handler,
     Connection $database,
     StockManager $acq_stock_manager,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ProductOrderLimit $product_order_limit
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -128,6 +138,7 @@ class SkuInfoHelper {
     $this->database = $database;
     $this->acqSkuStockManager = $acq_stock_manager;
     $this->languageManager = $language_manager;
+    $this->productOrderLimit = $product_order_limit;
   }
 
   /**
@@ -358,12 +369,15 @@ class SkuInfoHelper {
    *   The sku entity.
    *
    * @return array
-   *   The array with in_stock and stock.
+   *   The array with in_stock, stock and max_sale_qty.
    */
   public function stockInfo(SKUInterface $sku_entity): array {
+    $plugin = $sku_entity->getPluginInstance();
+
     return [
       'in_stock' => $this->skuManager->isProductInStock($sku_entity),
       'stock' => (float) $this->skuManager->getStockQuantity($sku_entity),
+      'max_sale_qty' => (int) $plugin->getMaxSaleQty($sku_entity),
     ];
   }
 
@@ -434,6 +448,21 @@ class SkuInfoHelper {
     $stockInfo = $this->stockInfo($child);
     $price = $this->priceHelper->getPriceBlockForSku($child);
     $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
+    $plugin = $child->getPluginInstance();
+    $variant_sku = $child->getSku();
+
+    // Get Max sale qty for parent SKU.
+    if ($parent !== NULL) {
+      $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
+    }
+
+    // If order limit is not set for parent
+    // then get order limit for each variant.
+    $max_sale_qty = (isset($max_sale_qty) && !empty($max_sale_qty)) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
+
+    if (!empty($max_sale_qty)) {
+      $order_limit_msg = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+    }
 
     $variant = [];
     $variant['id'] = (int) $child->id();
@@ -441,10 +470,12 @@ class SkuInfoHelper {
     $variant['stock'] = [
       'status' => (int) $stockInfo['in_stock'],
       'qty' => (float) $stockInfo['stock'],
+      'maxSaleQty' => (int) $max_sale_qty,
     ];
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
+    $variant['orderLimitMsg'] = $order_limit_msg ?? '';
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
