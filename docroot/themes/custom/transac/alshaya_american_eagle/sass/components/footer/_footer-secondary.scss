@@ -53,6 +53,10 @@
 .c-footer-secondary {
   .l-container {
     @include container(75.3125rem);
+
+    .path--cart & {
+      @include container(64.3125rem);
+    }
   }
 }
 
