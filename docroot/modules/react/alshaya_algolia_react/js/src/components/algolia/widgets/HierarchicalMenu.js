@@ -23,7 +23,7 @@ const HierarchicalMenu = (props) => {
             href={`#${createURL(item.value)}`}
             className={
               (item.value === window.Drupal.t('All')? "facet-item " + (noActiveFilters(items) ?
-              'is-active' : '') : "facet-item " + (item.isRefined ? 'is-active' : ''))
+              'is-active category-all' : '') : "facet-item " + (item.isRefined ? 'is-active' : ''))
             }
             onClick={event => {
               event.preventDefault();
