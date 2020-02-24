@@ -130,12 +130,12 @@ class CartController {
       $this->sessionCartInfo['cart_id'] = $cart_id;
     }
 
-    if (!empty($customer_id) && empty($this->sessionCartInfo['customer_id'])) {
+    if (!empty($customer_id)) {
       $update = TRUE;
       $this->sessionCartInfo['customer_id'] = $customer_id;
     }
 
-    if (!empty($email) && empty($this->sessionCartInfo['customer_email'])) {
+    if (!empty($email)) {
       $update = TRUE;
       $this->sessionCartInfo['customer_email'] = $email;
     }
@@ -358,8 +358,8 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['mail']);
-      $data['uid'] = $this->getSessionUid();
+      $this->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['email']);
+      $data['uid'] = $this->getSessionUid() ?: 0;
     }
     catch (\Exception $e) {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
@@ -463,7 +463,10 @@ class CartController {
           // Unset as not needed in further processing.
           unset($request_content['shipping_info']['shipping_type']);
           // Create customer if the condition resolves to true.
-          $create_customer = !($this->sessionCartInfo['cart_id'] == $cart_id && !empty($this->sessionCartInfo['customer_id']));
+          $create_customer = !(
+            $this->sessionCartInfo['cart_id'] == $cart_id
+            && !empty($this->sessionCartInfo['customer_id'])
+          ) || ($this->sessionCartInfo['customer_email'] != $request_content['shipping_info']['static']['email']);
           $cart = $this->cart->addCncShippingInfo($cart_id, $request_content['shipping_info'], $action, $create_customer);
         }
         else {
@@ -621,12 +624,14 @@ class CartController {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function associateCart() {
     $this->loadCartFromSession(TRUE);
 
     if (!empty($this->sessionCartInfo['customer_id'])) {
-      return new JsonResponse($this->sessionCartInfo);
+      return $this->getCart($this->sessionCartInfo['cart_id']);
     }
 
     try {
@@ -638,6 +643,7 @@ class CartController {
           'customer_id' => $customer['customer_id'],
           'uid' => $customer['uid'],
         ]);
+        $this->loadCartFromSession(TRUE);
       }
     }
     catch (\Exception $e) {
@@ -645,7 +651,7 @@ class CartController {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    return new JsonResponse($customer);
+    return $this->getCart($this->sessionCartInfo['cart_id']);
   }
 
 }

@@ -9,6 +9,7 @@ import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
 import { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
 import SelectedStore from '../selected-store';
+import { showLoader, removeLoader } from '../../../utilities/checkout_util';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -32,13 +33,15 @@ class ClickCollect extends React.Component {
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
     // Ask for location access when we don't have any coords.
     if (this.context.coords !== null) {
+      let skipOpenMarker = false;
       if (!this.context.storeList) {
+        skipOpenMarker = true;
         this.fetchAvailableStores(this.context.coords);
       }
-      else if (this.state.openSelectedStore) {
+
+      if (this.state.openSelectedStore && !skipOpenMarker) {
         this.showOpenMarker(this.context.storeList);
       }
-
     }
     else if (!this.context.coords) {
       this.getCurrentPosition();
@@ -110,9 +113,10 @@ class ClickCollect extends React.Component {
   fetchAvailableStores = async (coords) => {
     let { cart_id } = getGlobalCart();
     const GET_STORE_URL = `/cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`;
-
+    showLoader();
     let storesResponse = await Axios.get(GET_STORE_URL);
     if (storesResponse && storesResponse.data) {
+      removeLoader();
       if (this.state.openSelectedStore) {
         // Wait for all markers are placed on map, before we open a marker.
         let self = this;

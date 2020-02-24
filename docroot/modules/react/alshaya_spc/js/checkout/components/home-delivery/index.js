@@ -34,6 +34,10 @@ export default class HomeDeliveryInfo extends React.Component {
     }, false);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('refreshCartOnAddress');
+  }
+
   render() {
     const address = this.props.cart.address;
     return (
@@ -56,10 +60,10 @@ export default class HomeDeliveryInfo extends React.Component {
           closeOnDocumentClick={false}
         >
           <a className="close" onClick={this.closeModal}>&times;</a>
-          <AddressForm showEmail={(window.drupalSettings.user.uid === 0)} default_val={address}  processAddress={this.processAddress}/>
+          <AddressForm showEmail={(window.drupalSettings.user.uid === 0)} default_val={address} processAddress={this.processAddress} />
         </Popup>
         <div className='spc-delivery-shipping-methods'>
-          <ShippingMethods cart={this.props.cart} refreshCart={this.props.refreshCart}/>
+          <ShippingMethods cart={this.props.cart} refreshCart={this.props.refreshCart} />
         </div>
       </div>
     );

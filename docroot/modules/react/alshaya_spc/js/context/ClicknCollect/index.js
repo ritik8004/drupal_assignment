@@ -6,25 +6,35 @@ export class ClicknCollectContextProvider extends React.Component {
 
   constructor(props) {
     super(props);
-    // console.log(props);
     let coords = null;
     let selectedStore = null;
     let contactInfo = null;
-    if (props.cart.delivery_type === 'cnc') {
-      let { cart: { store_info, shipping_address } } = props.cart;
-      if (store_info) {
-        coords = {
-          lat: parseFloat(store_info.lat),
-          lng: parseFloat(store_info.lng)
-        };
-        selectedStore = store_info;
-        contactInfo = {
-          firstname: shipping_address.firstname || '',
-          lastname: shipping_address.lastname || '',
-          email: shipping_address.email || '',
-          telephone: shipping_address.telephone || '',
-        }
+
+    let { cart: { customer, store_info, shipping_address } } = props.cart;
+
+    if (!shipping_address && customer.email) {
+      contactInfo = {
+        firstname: customer.firstname || '',
+        lastname: customer.lastname || '',
+        email: customer.email || '',
+        telephone: customer.telephone || '',
       }
+    }
+    else if (shipping_address) {
+      contactInfo = {
+        firstname: shipping_address.firstname || '',
+        lastname: shipping_address.lastname || '',
+        email: shipping_address.email || '',
+        telephone: shipping_address.telephone || '',
+      }
+    }
+
+    if (store_info) {
+      coords = {
+        lat: parseFloat(store_info.lat),
+        lng: parseFloat(store_info.lng)
+      };
+      selectedStore = store_info;
     }
 
     this.state = {

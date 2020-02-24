@@ -13,15 +13,14 @@ import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import TermsConditions from '../terms-conditions';
 
-
 export default class Checkout extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      'wait': true,
-      'cart': null,
-      'payment_methods': window.drupalSettings.payment_methods,
+      wait: true,
+      cart: null,
+      payment_methods: window.drupalSettings.payment_methods,
     };
   }
 
@@ -72,6 +71,7 @@ export default class Checkout extends React.Component {
 
   render() {
     // While page loads and all info available.
+
     if (this.state.wait) {
       return <Loading />
     }

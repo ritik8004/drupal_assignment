@@ -44,6 +44,11 @@ export default class EmptyDeliveryText extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("refreshCartOnAddress");
+    document.removeEventListener("refreshCartOnCnCSelect");
+  }
+
   getAddressPopupClassName = () => {
     return window.drupalSettings.user.uid > 0
       ? "spc-address-list-member"

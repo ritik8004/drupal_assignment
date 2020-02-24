@@ -30,7 +30,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
 
   componentDidMount() {
     document.addEventListener(
-      "refreshCartOnAddress",
+      "refreshCartOnCnCSelect",
       e => {
         var data = e.detail.data();
         this.props.refreshCart(data);
@@ -39,6 +39,10 @@ class ClicknCollectDeiveryInfo extends React.Component {
       },
       false
     );
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('refreshCartOnCnCSelect');
   }
 
   render() {
