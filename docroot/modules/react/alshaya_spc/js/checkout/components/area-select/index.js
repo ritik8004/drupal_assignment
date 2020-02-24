@@ -1,13 +1,12 @@
 import React from 'react';
 
-import Select from 'react-select';
 import axios from 'axios';
+import FilterList from '../../../utilities/filter-list';
 
 export default class AreaSelect extends React.Component {
 
   constructor(props) {
     super(props);
-    this.selectRef = React.createRef();
     let current_option = new Array();
     // If default value is available, process that.
     if (this.props.default_val.length !== 0
@@ -16,22 +15,31 @@ export default class AreaSelect extends React.Component {
     }
     this.state = {
       'areas': [],
-      'current_option': current_option
+      'current_option': current_option,
+      'showFilterList': false
     };
   }
 
-  onMenuOpen = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-select').classList.add('open');
-    this.selectRef.current.select.inputRef.closest('.popup-content').classList.add('overlay');
-  };
-
-  onMenuClose = () => {
-    this.selectRef.current.select.inputRef.closest('.spc-select').classList.remove('open');
-    this.selectRef.current.select.inputRef.closest('.popup-content').classList.remove('overlay');
-  };
-
   componentDidMount() {
     this.getAreaList();
+  }
+
+  /**
+   * Whether filter list component need to shown or not.
+   */
+  toggleFilterList = () => {
+    this.setState({
+      showFilterList: !this.state.showFilterList
+    });
+  }
+
+  /**
+   * Process the value when get from the select list.
+   */
+  processSelectedItem = (val) => {
+    this.setState({
+      current_option: val
+    });
   }
 
   // Get area list.
@@ -41,10 +49,6 @@ export default class AreaSelect extends React.Component {
       return axios.get('areas')
       .then(response => {
         let data = new Array();
-        data[0] = {
-          value: '',
-          label: Drupal.t('Select @field', {'@field': this.props.field.label})
-        }
         Object.entries(response.data).forEach(([key, term]) => {
           data[key] = {
             value: key,
@@ -63,33 +67,37 @@ export default class AreaSelect extends React.Component {
 
   }
 
-  handleChange = (selectedOption) => {
-    this.setState({
-      current_option: selectedOption.value
-    });
-  };
-
   render() {
     let options = this.state.areas;
     if (this.props.area_list !== null) {
       options = this.props.area_list;
     }
 
+    if (options.length === 0) {
+      return(null);
+    }
+
     return (
       <div className='spc-type-select'>
         <label>{this.props.field.label}</label>
-        <Select
-          ref={this.selectRef}
-          name={this.props.field_key}
-          classNamePrefix='spcSelect'
-          className={'spc-select'}
-          onMenuOpen={this.onMenuOpen}
-          onMenuClose={this.onMenuClose}
-          onChange={this.handleChange}
-          options={options}
-          value={options[this.state.current_option]}
-          isSearchable={true}
-        />
+        {this.state.current_option.length !== 0 ? (
+          <div onClick={() => this.toggleFilterList()}>
+            {options[this.state.current_option]['label']}
+          </div>
+        ) : (
+          <div onClick={() => this.toggleFilterList()}>
+            {Drupal.t('Select area')}
+          </div>
+        )}
+        {this.state.showFilterList &&
+          <FilterList
+            selected={options[this.state.current_option]}
+            options={options}
+            placeHolderText={Drupal.t('Select for an area')}
+            processingCallback={this.processSelectedItem}
+          />
+        }
+        <input type='hidden' name={this.props.field_key} value={this.state.current_option}/>
         <div id={this.props.field_key + '-error'}></div>
       </div>
     );
