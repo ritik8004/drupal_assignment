@@ -4,7 +4,6 @@ namespace Drupal\alshaya_acm_product\Service;
 
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
@@ -118,62 +117,6 @@ class ProductOrderLimit {
     }
 
     return $qty_limit;
-  }
-
-  /**
-   * Wrapper function to get max sale qty variables.
-   *
-   * @param object $sku
-   *   Sku.
-   * @param string $max_sale_qty
-   *   Max sale qty.
-   *
-   * @return array
-   *   Max sale qty variables.
-   */
-  public function getMaxSaleQtyVariables($sku, $max_sale_qty) {
-    if (!empty($max_sale_qty)) {
-      // Check product qty in cart.
-      $cart_qty = $this->getCartItemQtyLimit($sku->getSku());
-
-      if ($cart_qty && ($cart_qty >= $max_sale_qty)) {
-        $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty, TRUE);
-      }
-      else {
-        $order_limit_msg = $this->maxSaleQtyMessage($max_sale_qty);
-      }
-    }
-    $max_sale_qty_variables = [
-      'maxSaleQty' => (int) $max_sale_qty,
-      'orderLimitMsg' => isset($order_limit_msg) ? $order_limit_msg : '',
-    ];
-
-    return $max_sale_qty_variables;
-  }
-
-  /**
-   * Helper function to get parent max sale qty if set.
-   *
-   * @param string $sku
-   *   Sku.
-   *
-   * @return int
-   *   Parent max sale qty.
-   */
-  public function getParentMaxSaleQty($sku) {
-    $parent_sku = $this->skuManager->getParentSkuBySku($sku);
-
-    if ($parent_sku instanceof SKUInterface) {
-      $plugin = $parent_sku->getPluginInstance();
-      $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
-    }
-    else {
-      $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-      $plugin = $sku->getPluginInstance();
-      $max_sale_qty = $plugin->getMaxSaleQty($sku);
-    }
-
-    return $max_sale_qty ?? 0;
   }
 
 }

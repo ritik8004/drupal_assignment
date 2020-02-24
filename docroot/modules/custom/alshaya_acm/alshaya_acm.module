@@ -216,8 +216,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       // Check if max sale qty limit is set for parent.
       $parent_sku = $skuManager->getParentSkuBySku($id);
       // Get max sale qty for the variant in cart if not present for parent.
-      $max_sale_qty = ($parent_sku && $productOrderLimit->getParentMaxSaleQty($parent_sku)) ?
-        $productOrderLimit->getParentMaxSaleQty($parent_sku) : $plugin->getMaxSaleQty($id);
+      $parent_max_sale_qty = $parent_sku ? $plugin->getMaxSaleQty($parent_sku) : 0;
+      $max_sale_qty = !empty($parent_max_sale_qty) ? $parent_max_sale_qty : $plugin->getMaxSaleQty($id);
 
       if (!empty($max_sale_qty)) {
         // Get product qty in cart for variant.

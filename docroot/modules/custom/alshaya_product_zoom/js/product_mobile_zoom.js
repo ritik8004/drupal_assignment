@@ -27,9 +27,6 @@
         }
       }
 
-      // Mobile grey block hiding over the image after 3secs.
-      $('.mobilegallery .subtext').delay(3000).fadeOut();
-
       // Modal view for mobile when clicking on PDP image on mobile.
       $('#product-full-screen-gallery-container', context).once('js-event').each(function () {
         var element = $(this);

@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\alshaya_acm_product\Service\ProductOrderLimit;
 
 /**
@@ -148,49 +147,9 @@ class ProductStockController extends ControllerBase {
           new AddToCartFormSubmitEvent($entity, $return, $variant ?? NULL)
         );
 
-        $orderLimitData = [];
-        $viewModeKey = isset($data['product_view_mode']) && ($data['product_view_mode'] !== 'full') ?
-          $data['product_view_mode'] : 'productInfo';
         $parent_sku = isset($data['selected_parent_sku']) ? $data['selected_parent_sku'] : $variant_sku;
-        // Check if max sale qty limit is set for parent.
-        $max_sale_qty = $this->productOrderLimit->getParentMaxSaleQty($variant);
 
-        if (!empty($max_sale_qty)) {
-          // Get max sale qty variables.
-          $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);
-          $orderLimitData = [
-            $viewModeKey => [
-              $parent_sku => [
-                'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
-              ],
-            ],
-          ];
-        }
-        else {
-          // If max sale qty for parent is not set then get for the variant.
-          $plugin = $variant->getPluginInstance();
-          $max_sale_qty = $plugin->getMaxSaleQty($variant_sku);
-          if (!empty($max_sale_qty)) {
-            // Get max sale qty variables.
-            $max_sale_qty_variables = $this->productOrderLimit->getMaxSaleQtyVariables($variant, $max_sale_qty);
-
-            $orderLimitData = [
-              $viewModeKey => [
-                $parent_sku => [
-                  'variants' => [
-                    $variant_sku => [
-                      'orderLimitMsg' => $max_sale_qty_variables['orderLimitMsg'],
-                    ],
-                  ],
-                ],
-              ],
-            ];
-          }
-        }
-        if (!empty($orderLimitData)) {
-          $return->addCommand(new SettingsCommand($orderLimitData));
-          $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$parent_sku, $variant_sku]));
-        }
+        $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$parent_sku, $variant_sku]));
       }
       else {
         $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));
