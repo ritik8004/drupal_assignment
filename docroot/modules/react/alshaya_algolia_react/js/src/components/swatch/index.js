@@ -2,7 +2,7 @@ import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
 const Swatch = (props) => {
-  const selected_image = props.url + '?selected=' + props.key;
+  const selected_image = props.url + '?selected=' + props.swatch.child_id;
   return (
     <a href={selected_image}>
       <span className='swatch-block swatch-image'>
@@ -27,7 +27,6 @@ const Swatches = (props) => {
   if (diff > 0) {
      swatch_more_text = diff + ' colors';
   }
-  console.log(swatch_more_text);
 
   return (
     <React.Fragment>
