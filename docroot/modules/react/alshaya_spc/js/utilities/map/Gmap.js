@@ -83,6 +83,7 @@ export default class Gmap {
     if (!_isEmpty(coords)) {
       this.map.googleMap.setCenter(coords);
       this.map.googleMap.setZoom(11);
+      return;
     }
 
     this.map.geoCoder.geocode({
