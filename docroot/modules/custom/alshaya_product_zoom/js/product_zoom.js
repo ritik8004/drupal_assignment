@@ -80,11 +80,10 @@
           }
           else {
             // Handle click on image thumbnails.
-            var imageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('href');
-            var zoomImageUrl = $(this).find('a.cloudzoom__thumbnails__image').attr('data-zoom-url');
-            if (imageUrl !== null || imageUrl !== 'undefined') {
-              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', imageUrl)
-              .parent().find('.product-image-zoom-placeholder-content').css({'background-image': 'url(' + zoomImageUrl + ')'});
+            var anchor = $(this).find('a.cloudzoom__thumbnails__image');
+            if (anchor !== undefined && anchor.length > 0) {
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('src', anchor.attr('href'));
+              $('#product-zoom-container #cloud-zoom-wrap .img-wrap img').attr('data-zoom-url', anchor.attr('data-zoom-url'));
             }
           }
           // Hide Product labels on video slides.
@@ -133,9 +132,10 @@
 
           $(this).parent().siblings('.slick-slide').removeClass('slick-current');
           $(this).parent().addClass('slick-current');
-          var bigImage = $(this).attr('href');
+
           // Put the big image in our main container.
-          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
+          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', $(this).attr('href'));
+          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('data-zoom-url', $(this).attr('data-zoom-url'));
           $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
           $('.acq-content-product-modal #cloud-zoom-wrap').show();
@@ -173,38 +173,43 @@
 
       // Zoom effect on image hover for desktop.
       if ($(window).width() > 1025) {
-        $('#product-zoom-container .img-wrap')
-        .on('mouseover', function (){
-          $(this).addClass('product-image-zoomed');
-          $(this).find('.product-image-zoom-placeholder-content').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
-        })
-        .on('mouseout', function (){
-          $(this).removeClass('product-image-zoomed');
-          $(this).find('.product-image-zoom-placeholder-content').css({'transform': 'scale(1)'});
-        })
-        .on('mousemove', function (e){
-          $(this).find('.product-image-zoom-placeholder-content').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
-        })
-        .each(function (){
-          $(this)
-          .once('product-image-zoom-placeholder-appended')
-          // Add a magazine image zoom placeholder.
-          .append('<div class="product-image-zoom-placeholder"><div class="product-image-zoom-placeholder-content"></div></div>')
+        $('#product-zoom-container .img-wrap').each(function () {
+          $(this).on('mousemove', function (e) {
+            $(this).find('.product-image-zoom-placeholder-content').css({
+              'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'
+            });
+          });
+
+          $(this).on('mouseout', function () {
+            $(this).removeClass('product-image-zoomed');
+            $(this).find('.product-image-zoom-placeholder-content').css({
+              'transform': 'scale(1)'
+            });
+          });
+
+          $(this).on('mouseover', function () {
+            $(this).addClass('product-image-zoomed');
+            $(this).find('.product-image-zoom-placeholder-content').css({
+              'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')',
+              'transform': 'scale('+ $(this).attr('data-scale') +')'
+            });
+          });
+
           // Set up a background image for each magazine image zoom placeholder based on data-src attribute.
-          .children('.product-image-zoom-placeholder')
+          $(this).once('product-image-zoom-placeholder-appended').append('<div class="product-image-zoom-placeholder"><div class="product-image-zoom-placeholder-content"></div></div>');
+
           // Binding click event to image zoom placeholder sibling.
-          .on('click', function (){
+          $(this).children('.product-image-zoom-placeholder').on('click', function (){
             $(this).parent().find('img').trigger('click');
-          })
-          .children('.product-image-zoom-placeholder-content')
-          .css({'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')'});
+          });
+
           $(this).find('img').on('load', function () {
             var imgWidth = $(this).width();
             var containerWidth = $(this).parent().width();
             var leftPosition = (containerWidth - imgWidth)/2;
             $(this).parent().find('.product-image-zoom-placeholder').css({'width': imgWidth + 'px', 'left': leftPosition + 'px'})
-          })
-        })
+          });
+        });
       }
     }
   };

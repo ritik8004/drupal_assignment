@@ -67,6 +67,7 @@ class CustomerCartForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // We always want this cache context.
+    $form['#cache']['contexts'][] = 'session';
     $form['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
 
     $cart = $this->cartStorage->getCart(FALSE);

@@ -200,7 +200,7 @@
             .js-form-type-tel {
               position: unset;
               margin-top: 1.25rem;
-              width: calc(100% - 2.6875rem);
+              width: calc(100% - 43px); // here we keep 'px' unit to work in IE also
 
               input {
                 padding-bottom: 0 !important;
@@ -269,6 +269,10 @@
       .fieldset-wrapper {
         max-width: 24.6875rem;
         width: 100%;
+      }
+
+      .form-item--error-message {
+        position: absolute;
       }
     }
 
@@ -563,6 +567,7 @@
 
         a {
           display: block;
+          margin: 0.5rem 0;
         }
       }
 

@@ -98,7 +98,6 @@
       Drupal.plpListingProductTileHeight('full_page', null);
     });
 
-
     // Add dropdown effect for facets filters.
     $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
       if ($(this).hasClass('active')) {

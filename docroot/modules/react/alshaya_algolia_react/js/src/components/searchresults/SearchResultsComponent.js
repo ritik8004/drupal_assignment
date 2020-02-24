@@ -24,6 +24,7 @@ import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
 import { hasCategoryFilter, getAlgoliaStorageValues } from '../../utils';
+import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -42,6 +43,43 @@ const SearchResultsComponent = props => {
     defaultpageRender = storedvalues.page;
   }
 
+  function getSortedItems(items) {
+    // Sort facet items in order of the megamenu.
+    let sortedItems = [];
+    if (items !== null && items.length > 0) {
+      let weight = [];
+      // Getting the title attribute for L1 items from the menu.
+      let l1MenuItems = document.getElementsByClassName('menu--one__link');
+      for (let i in l1MenuItems) {
+        try {
+          if (l1MenuItems[i].getAttribute('title') !== null) {
+            // Add 10 to allow adding All at top.
+            weight[l1MenuItems[i].getAttribute('title')] = parseInt(i) + 10;
+          }
+        }
+        catch (e) {
+        }
+      }
+
+      for (let i in items) {
+        if (weight[items[i].label] !== undefined) {
+          sortedItems[weight[items[i].label]] = items[i];
+        }
+        else if (items[i].label === window.Drupal.t('All')) {
+          // Use 1 for All to ensure Object.values work properly.
+          sortedItems[1] = items[i];
+        }
+      }
+
+      sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+    }
+    else {
+      sortedItems = items;
+    }
+
+    return sortedItems;
+  }
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -51,19 +89,15 @@ const SearchResultsComponent = props => {
       onSearchStateChange={props.onSearchStateChange}
     >
       <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
-      {hasCategoryFilter() && (
+      {hasCategoryFilter() && isDesktop() && (
         <SideBar>
-          <ul>
-            <li>
-              <HierarchicalMenu
-                attributes={[
-                  'field_category_name.lvl0',
-                  'field_category_name.lvl1',
-                  'field_category_name.lvl2',
-                ]}
-              />
-            </li>
-          </ul>
+          <HierarchicalMenu
+            transformItems={items => getSortedItems(items)}
+            attributes={[
+              'field_category.lvl0',
+              'field_category.lvl1',
+            ]}
+          />
         </SideBar>
       )}
       <MainContent>
@@ -71,7 +105,19 @@ const SearchResultsComponent = props => {
           {(callback) => (
             <React.Fragment>
               <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
-              <div className="show-all-filters-algolia hide-for-desktop">
+              {hasCategoryFilter() && !isDesktop() && (
+                <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop">
+                  <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
+                  <HierarchicalMenu
+                    transformItems={items => getSortedItems(items)}
+                    attributes={[
+                      'field_category.lvl0',
+                      'field_category.lvl1',
+                    ]}
+                  />
+                </div>
+              )}
+              <div className={"show-all-filters-algolia hide-for-desktop " + (!hasCategoryFilter() ? 'empty-category' : '')}>
                 <span className="desktop">{Drupal.t('all filters')}</span>
                 <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
               </div>
