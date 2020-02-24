@@ -93,13 +93,6 @@
             #{$right}: 1rem;
           }
         }
-
-        &__count {
-          @include breakpoint($upto-desktop) {
-            position: absolute;
-            bottom: 1.125rem;
-          }
-        }
       }
 
       & > ul {
