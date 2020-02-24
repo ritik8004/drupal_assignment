@@ -1,5 +1,4 @@
-import React from 'react'
-import parse from 'html-react-parser';
+import React from 'react';
 import ContactInfoForm from '../contact-info-form';
 import StoreItem from '../store-item';
 

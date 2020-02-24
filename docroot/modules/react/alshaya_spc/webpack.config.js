@@ -1,4 +1,5 @@
-var path  = require("path");
+var path = require("path");
+var buildPath = '/modules/react/alshaya_spc/dist/';
 
 var config = {
   entry: {
@@ -10,11 +11,11 @@ var config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
-    publicPath: '/dist/'
+    publicPath: buildPath
   },
   devServer: {
     contentBase: './',
-    publicPath: '/dist/'
+    publicPath: buildPath
   },
   externals: {
     react: 'React',

@@ -1,7 +1,7 @@
 import React from "react";
 import Popup from "reactjs-popup";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
-import ClickCollect from "../click-collect";
+let ClickCollect = React.lazy(() => import("../click-collect"));
 
 class ClicknCollectDeiveryInfo extends React.Component {
   constructor(props) {
@@ -83,12 +83,12 @@ class ClicknCollectDeiveryInfo extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <React.Fragment>
+          <React.Suspense fallback={<div>Loading...</div>}>
             <a className="close" onClick={this.closeModal}>
               &times;
             </a>
             <ClickCollect openSelectedStore={this.state.showSelectedStore} />
-          </React.Fragment>
+          </React.Suspense>
         </Popup>
       </div>
     );

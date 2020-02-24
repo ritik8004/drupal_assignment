@@ -11,7 +11,7 @@ export class ClicknCollectContextProvider extends React.Component {
     let selectedStore = null;
     let contactInfo = null;
     if (props.cart.delivery_type === 'cnc') {
-      let { cart: { store_info, shipping_address: { firstname, lastname, email, telephone } } } = props.cart;
+      let { cart: { store_info, shipping_address } } = props.cart;
       if (store_info) {
         coords = {
           lat: parseFloat(store_info.lat),
@@ -19,10 +19,10 @@ export class ClicknCollectContextProvider extends React.Component {
         };
         selectedStore = store_info;
         contactInfo = {
-          firstname,
-          lastname,
-          email,
-          telephone,
+          firstname: shipping_address.firstname || '',
+          lastname: shipping_address.lastname || '',
+          email: shipping_address.email || '',
+          telephone: shipping_address.telephone || '',
         }
       }
     }
