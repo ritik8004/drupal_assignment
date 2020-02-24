@@ -8,15 +8,11 @@
 .c-payment-cards .block-page-title-block {
   .back-link {
     @include breakpoint($only-mobile) {
-      @include icon(chevronleft, before) {
+      @include icon(chevron#{$left}, before) {
         font-weight: bold;
         top: 0;
         transform: rotate(0deg);
         color: $secure_checkout_back_link;
-      }
-
-      html[lang=ar] & {
-        transform: rotate(180deg);
       }
     }
   }

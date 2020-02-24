@@ -18,12 +18,4 @@
       }
     }
   }
-
-  .form-item input:focus ~ label:not(.error),
-  .form-item input:not(:focus):valid ~ label:not(.error),
-  .form-item input:active ~ label:not(.error),
-  .form-item input:not(:active):valid ~ label:not(.error),
-  .form-item input.error ~ label:not(.error) {
-    font-size: 0.875rem;
-  }
 }
