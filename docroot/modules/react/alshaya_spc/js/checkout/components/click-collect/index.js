@@ -6,7 +6,7 @@ import { getGlobalCart } from '../../../utilities/get_cart';
 import StoreList from '../store-list';
 import ClicknCollectMap from './ClicknCollectMap';
 import _find from 'lodash/find';
-import  { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
+import { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
 import SelectedStore from '../selected-store';
 
 class ClickCollect extends React.Component {
@@ -154,7 +154,6 @@ class ClickCollect extends React.Component {
   render() {
     let {coords, storeList, selectedStore } = this.context;
     let {selectStoreOpen} = this.state;
-    console.log(selectStoreOpen);
 
     let mapView = (
       <ClicknCollectMap

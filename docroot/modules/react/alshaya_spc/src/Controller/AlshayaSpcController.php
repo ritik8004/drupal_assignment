@@ -151,6 +151,8 @@ class AlshayaSpcController extends ControllerBase {
       ];
     }
 
+    $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
+
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
     $marker = $this->configFactory->get('alshaya_stores_finder.settings');
@@ -176,6 +178,10 @@ class AlshayaSpcController extends ControllerBase {
             'label_position' => $marker->get('marker.label_position'),
           ],
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
+          'cnc_shipping' => [
+            'code' => $cncTerm->get('field_shipping_carrier_code')->getString(),
+            'method' => $cncTerm->get('field_shipping_method_code')->getString(),
+          ],
         ],
       ],
     ];

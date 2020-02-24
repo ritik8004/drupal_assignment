@@ -1,5 +1,6 @@
 import React from 'react'
 import parse from 'html-react-parser';
+import ContactInfoForm from '../contact-info-form';
 
 const SelectedStore = ({store,  open}) => {
   if (!store) {
@@ -33,6 +34,9 @@ const SelectedStore = ({store,  open}) => {
               </div>
           </div>
         </div>
+      </div>
+      <div className='spc-cnc-contact-form'>
+        <ContactInfoForm store={store} />
       </div>
     </div>
   )
