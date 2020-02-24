@@ -727,9 +727,8 @@ body {
   }
 }
 
-.c-facet.c-accordion,
-.c-facet.c-collapse-item,
-.block-facet-blockcategory-facet-search {
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
   ul {
     .facet-item {
       span {
