@@ -22,11 +22,8 @@ const Swatches = (props) => {
   }
   const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
   const total_no_of_swatches = props.swatches.length;
-  var swatch_more_text = null;
   const diff = total_no_of_swatches - limit;
-  if (diff > 0) {
-     swatch_more_text = diff + ' colors';
-  }
+  var swatch_more_text = (diff > 0) ? diff + ' colors' : null;
 
   return (
     <React.Fragment>
