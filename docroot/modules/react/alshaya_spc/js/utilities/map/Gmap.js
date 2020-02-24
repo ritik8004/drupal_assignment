@@ -1,4 +1,5 @@
 import _isEmpty from 'lodash/isEmpty';
+import { isRTL } from '../rtl';
 
 export default class Gmap {
 
@@ -8,8 +9,8 @@ export default class Gmap {
         zoom: 11,
         maxZoom: 18,
         zoomControl: true,
-        fullscreenControl: false,
-        mapTypeControl: true,
+        fullscreenControl: true,
+        mapTypeControl: false,
         scrollwheel: true,
         disableDoubleClickZoom: false,
         draggable: true,
@@ -39,20 +40,23 @@ export default class Gmap {
       maxZoom: this.map.settings.maxZoom,
       minZoom: this.map.settings.minZoom,
       fullscreenControl: this.map.settings.fullscreenControl,
-      mapTypeId: google.maps.MapTypeId['ROADMAP'],
       mapTypeControlOptions: {
-        position: google.maps.ControlPosition.LEFT_BOTTOM
+        position: isRTL() === true ? google.maps.ControlPosition.TOP_RIGHT : google.maps.ControlPosition.TOP_LEFT
+      },
+      mapTypeId: google.maps.MapTypeId['ROADMAP'],
+      mapTypeControl: this.map.settings.mapTypeControl,
+      mapTypeControlOptions: {
+        position: isRTL() === true ? google.maps.ControlPosition.RIGHT_BOTTOM : google.maps.ControlPosition.LEFT_BOTTOM
       },
       zoomControl: this.map.settings.zoomControl,
       zoomControlOptions: {
         style: google.maps.ZoomControlStyle.SMALL,
-        position: google.maps.ControlPosition.LEFT_CENTER
+        position: isRTL() === true ? google.maps.ControlPosition.RIGHT_BOTTOM : google.maps.ControlPosition.LEFT_BOTTOM,
       },
       streetViewControl: this.map.settings.streetViewControl,
       streetViewControlOptions: {
-        position: google.maps.ControlPosition.LEFT_CENTER
+        position: isRTL() === true ? google.maps.ControlPosition.RIGHT_CENTER : google.maps.ControlPosition.LEFT_CENTER
       },
-      mapTypeControl: this.map.settings.mapTypeControl,
       scrollwheel: this.map.settings.scrollwheel,
       disableDoubleClickZoom: this.map.settings.disableDoubleClickZoom,
       draggable: this.map.settings.draggable,

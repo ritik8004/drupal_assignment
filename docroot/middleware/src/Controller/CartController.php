@@ -119,8 +119,10 @@ class CartController {
    *   The cart id.
    * @param int|null $customer_id
    *   (Optional) the customer id.
+   * @param string|null $email
+   *   (Optional) the customer email.
    */
-  protected function updateCartSession(int $cart_id, int $customer_id = NULL) {
+  protected function updateCartSession(int $cart_id, int $customer_id = NULL, $email = NULL) {
     $this->loadCartFromSession();
     $update = FALSE;
     if (empty($this->sessionCartInfo['cart_id'])) {
@@ -128,9 +130,14 @@ class CartController {
       $this->sessionCartInfo['cart_id'] = $cart_id;
     }
 
-    if (!empty($customer_id)) {
+    if (!empty($customer_id) && empty($this->sessionCartInfo['customer_id'])) {
       $update = TRUE;
       $this->sessionCartInfo['customer_id'] = $customer_id;
+    }
+
+    if (!empty($email) && empty($this->sessionCartInfo['customer_email'])) {
+      $update = TRUE;
+      $this->sessionCartInfo['customer_email'] = $email;
     }
 
     if ($update) {
@@ -222,7 +229,7 @@ class CartController {
     $data = [];
     $data['langcode'] = $this->request->query->get('lang', 'en');
     $data['cart_id'] = $cart_data['cart']['id'];
-    $data['customer_id'] = $cart_data['cart']['customer']['id'] ?? NULL;
+    $data['customer'] = $cart_data['cart']['customer'] ?? NULL;
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];
     $data['totals'] = [
@@ -351,7 +358,7 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->updateCartSession($data['cart_id'], $data['customer_id']);
+      $this->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['mail']);
       $data['uid'] = $this->getSessionUid();
     }
     catch (\Exception $e) {
