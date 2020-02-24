@@ -6,7 +6,10 @@ const StoreItem = ({ store, onSelectStore }) => {
     <>
       <span className="store-name-and-address">
         <span className="store-name">{store.name}</span>
-        <span className="store-address">{parse(store.address)}</span>
+        <span className="store-distance">{store.formatted_distance}</span>
+      </span>
+      <span className="store-address">
+        {parse(store.address)}
       </span>
       <div className="store-delivery-time">
         <span className="label--delivery-time">{Drupal.t('Collect in store from')}</span>
@@ -22,9 +25,13 @@ const StoreItem = ({ store, onSelectStore }) => {
           ))
         }
       </div>
-      <div className="store-actions" gtm-store-address={store.address.replace(/(<([^>]+)>)/ig, '')} gtm-store-title={store.name}>
-        <button className="select-store" onClick={(e) => onSelectStore(e, store.code)}>{Drupal.t('select this store')}</button>
-      </div>
+      {
+        typeof onSelectStore !== 'undefined' && (
+          <div className="store-actions" gtm-store-address={store.address.replace(/(<([^>]+)>)/ig, '')} gtm-store-title={store.name}>
+            <button className="select-store" onClick={(e) => onSelectStore(e, store.code)}>{Drupal.t('select this store')}</button>
+          </div>
+        )
+      }
     </>
   );
 }

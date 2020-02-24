@@ -1,15 +1,16 @@
 import _isEmpty from 'lodash/isEmpty';
+import { isRTL } from '../rtl';
 
 export default class Gmap {
 
   constructor() {
     this.map = {
       settings: {
-        zoom: 9,
+        zoom: 11,
         maxZoom: 18,
         zoomControl: true,
-        fullscreenControl: false,
-        mapTypeControl: true,
+        fullscreenControl: true,
+        mapTypeControl: false,
         scrollwheel: true,
         disableDoubleClickZoom: false,
         draggable: true,
@@ -39,20 +40,23 @@ export default class Gmap {
       maxZoom: this.map.settings.maxZoom,
       minZoom: this.map.settings.minZoom,
       fullscreenControl: this.map.settings.fullscreenControl,
-      mapTypeId: google.maps.MapTypeId['ROADMAP'],
       mapTypeControlOptions: {
-        position: google.maps.ControlPosition.LEFT_BOTTOM
+        position: isRTL() === true ? google.maps.ControlPosition.TOP_RIGHT : google.maps.ControlPosition.TOP_LEFT
+      },
+      mapTypeId: google.maps.MapTypeId['ROADMAP'],
+      mapTypeControl: this.map.settings.mapTypeControl,
+      mapTypeControlOptions: {
+        position: isRTL() === true ? google.maps.ControlPosition.RIGHT_BOTTOM : google.maps.ControlPosition.LEFT_BOTTOM
       },
       zoomControl: this.map.settings.zoomControl,
       zoomControlOptions: {
         style: google.maps.ZoomControlStyle.SMALL,
-        position: google.maps.ControlPosition.LEFT_CENTER
+        position: isRTL() === true ? google.maps.ControlPosition.RIGHT_BOTTOM : google.maps.ControlPosition.LEFT_BOTTOM,
       },
       streetViewControl: this.map.settings.streetViewControl,
       streetViewControlOptions: {
-        position: google.maps.ControlPosition.LEFT_CENTER
+        position: isRTL() === true ? google.maps.ControlPosition.RIGHT_CENTER : google.maps.ControlPosition.LEFT_CENTER
       },
-      mapTypeControl: this.map.settings.mapTypeControl,
       scrollwheel: this.map.settings.scrollwheel,
       disableDoubleClickZoom: this.map.settings.disableDoubleClickZoom,
       draggable: this.map.settings.draggable,
@@ -83,6 +87,7 @@ export default class Gmap {
     if (!_isEmpty(coords)) {
       this.map.googleMap.setCenter(coords);
       this.map.googleMap.setZoom(11);
+      return;
     }
 
     this.map.geoCoder.geocode({
@@ -90,13 +95,13 @@ export default class Gmap {
         country: window.drupalSettings.country_code
       }
     }, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          // Just center the map and don't do anything.
-          window.spcMap.googleMap.setCenter(results[0].geometry.location);
-          if (callBackFunc) {
-            callBackFunc.call(results)
-          }
+      if (status == google.maps.GeocoderStatus.OK) {
+        // Just center the map and don't do anything.
+        window.spcMap.googleMap.setCenter(results[0].geometry.location);
+        if (callBackFunc) {
+          callBackFunc.call(results)
         }
+      }
     });
   }
 
@@ -114,7 +119,7 @@ export default class Gmap {
     this.map.mapMarkers = this.map.mapMarkers || [];
     skipInfoWindow = skipInfoWindow || false;
 
-    let {icon: marker_icon_path, label_position} = this.map.settings.map_marker;
+    let { icon: marker_icon_path, label_position } = this.map.settings.map_marker;
 
     if (typeof marker_icon_path === 'string') {
       // Add the marker icon.
@@ -162,7 +167,7 @@ export default class Gmap {
         currentInfoWindow.open(map.googleMap, currentMarker);
       });
 
-      google.maps.event.addListener(currentInfoWindow, 'closeclick', function() {
+      google.maps.event.addListener(currentInfoWindow, 'closeclick', function () {
         // Auto zoom.
         map.googleMap.fitBounds(map.googleMap.bounds);
         // Auto center.
@@ -186,7 +191,7 @@ export default class Gmap {
   removeMapMarker = function (map = null) {
     map = map || this.map;
     map.mapMarkers.forEach(function (item) {
-        item.setMap();
+      item.setMap();
     });
   };
 

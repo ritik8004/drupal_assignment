@@ -27,7 +27,7 @@ export default class AddressList extends React.Component {
     });
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // If user is logged in, only then get area lists.
     if (window.drupalSettings.user.uid > 0) {
       let addressList = getUserAddressList();
@@ -51,16 +51,16 @@ export default class AddressList extends React.Component {
     console.log('Address submission processing here');
   }
 
-  render () {
+  render() {
     // If no address list available.
     if (this.state.addressList === undefined
-      ||this.state.addressList.length === 0) {
+      || this.state.addressList.length === 0) {
       return (null);
     }
 
     let addressItem = [];
     Object.entries(this.state.addressList).forEach(([key, address]) => {
-      addressItem.push( <AddressItem key={key} address={address} refreshAddressList={this.refreshAddressList}/>);
+      addressItem.push(<AddressItem key={key} address={address} refreshAddressList={this.refreshAddressList} />);
     });
 
     return (
@@ -73,7 +73,7 @@ export default class AddressList extends React.Component {
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <React.Fragment>
               <a className='close' onClick={this.closeModal}>&times;</a>
-              <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress}/>
+              <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress} />
             </React.Fragment>
           </Popup>
           <div className='spc-checkout-address-list'>{addressItem}</div>

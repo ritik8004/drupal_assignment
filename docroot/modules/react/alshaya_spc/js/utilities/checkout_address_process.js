@@ -90,7 +90,7 @@ export const checkoutAddressProcess = function (e, cart) {
             cart_info.then((cart_result) => {
               let cart_data = {
                 'cart': cart_result,
-                'delivery_type': cart_result.delivery_method,
+                'delivery_type': cart_result.delivery_type,
                 'shipping_methods': shipping,
                 'address': form_data
               }

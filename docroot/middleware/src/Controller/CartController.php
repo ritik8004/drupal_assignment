@@ -119,8 +119,10 @@ class CartController {
    *   The cart id.
    * @param int|null $customer_id
    *   (Optional) the customer id.
+   * @param string|null $email
+   *   (Optional) the customer email.
    */
-  protected function updateCartSession(int $cart_id, int $customer_id = NULL) {
+  protected function updateCartSession(int $cart_id, int $customer_id = NULL, $email = NULL) {
     $this->loadCartFromSession();
     $update = FALSE;
     if (empty($this->sessionCartInfo['cart_id'])) {
@@ -131,6 +133,11 @@ class CartController {
     if (!empty($customer_id)) {
       $update = TRUE;
       $this->sessionCartInfo['customer_id'] = $customer_id;
+    }
+
+    if (!empty($email)) {
+      $update = TRUE;
+      $this->sessionCartInfo['customer_email'] = $email;
     }
 
     if ($update) {
@@ -222,7 +229,7 @@ class CartController {
     $data = [];
     $data['langcode'] = $this->request->query->get('lang', 'en');
     $data['cart_id'] = $cart_data['cart']['id'];
-    $data['customer_id'] = $cart_data['cart']['customer']['id'] ?? NULL;
+    $data['customer'] = $cart_data['cart']['customer'] ?? NULL;
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];
     $data['totals'] = [
@@ -236,6 +243,10 @@ class CartController {
     if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
       $data['carrier_info'] = $shipping_info['method'];
 
+      if (empty($shipping_info['method']) && !empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
+        $shipping_info['method'] = 'click_and_collect_click_and_collect';
+      }
+
       $data['shipping_address'] = NULL;
       if (!empty($shipping_info['method'])) {
         $custom_shipping_attributes = [];
@@ -247,10 +258,11 @@ class CartController {
         $data['shipping_address'] += $custom_shipping_attributes;
       }
 
-      $data['delivery_method'] = 'hd';
+      $data['delivery_type'] = 'hd';
       if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
-        $data['delivery_method'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
+        $data['delivery_type'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
         $data['store_code'] = $shipping_info['extension_attributes']['store_code'];
+        $data['store_info'] = $this->drupal->getStoreInfo($data['store_code']);
       }
     }
 
@@ -346,8 +358,8 @@ class CartController {
         $data['recommended_products'] = $recommended_products_data;
       }
 
-      $this->updateCartSession($data['cart_id'], $data['customer_id']);
-      $data['uid'] = $this->getSessionUid();
+      $this->updateCartSession($data['cart_id'], $data['customer']['id'], $data['customer']['email']);
+      $data['uid'] = $this->getSessionUid() ?: 0;
     }
     catch (\Exception $e) {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
@@ -451,7 +463,10 @@ class CartController {
           // Unset as not needed in further processing.
           unset($request_content['shipping_info']['shipping_type']);
           // Create customer if the condition resolves to true.
-          $create_customer = !($this->sessionCartInfo['cart_id'] == $cart_id && !empty($this->sessionCartInfo['customer_id']));
+          $create_customer = !(
+            $this->sessionCartInfo['cart_id'] == $cart_id
+            && !empty($this->sessionCartInfo['customer_id'])
+          ) || ($this->sessionCartInfo['customer_email'] != $request_content['shipping_info']['static']['email']);
           $cart = $this->cart->addCncShippingInfo($cart_id, $request_content['shipping_info'], $action, $create_customer);
         }
         else {
@@ -609,12 +624,14 @@ class CartController {
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function associateCart() {
     $this->loadCartFromSession(TRUE);
 
     if (!empty($this->sessionCartInfo['customer_id'])) {
-      return new JsonResponse($this->sessionCartInfo);
+      return $this->getCart($this->sessionCartInfo['cart_id']);
     }
 
     try {
@@ -626,6 +643,7 @@ class CartController {
           'customer_id' => $customer['customer_id'],
           'uid' => $customer['uid'],
         ]);
+        $this->loadCartFromSession(TRUE);
       }
     }
     catch (\Exception $e) {
@@ -633,7 +651,7 @@ class CartController {
       return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    return new JsonResponse($customer);
+    return $this->getCart($this->sessionCartInfo['cart_id']);
   }
 
 }

@@ -6,8 +6,10 @@ import { getGlobalCart } from '../../../utilities/get_cart';
 import StoreList from '../store-list';
 import ClicknCollectMap from './ClicknCollectMap';
 import _find from 'lodash/find';
+import _findIndex from 'lodash/findIndex';
 import { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
 import SelectedStore from '../selected-store';
+import { showLoader, removeLoader } from '../../../utilities/checkout_util';
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -18,7 +20,7 @@ class ClickCollect extends React.Component {
     this.cncListView = React.createRef();
     this.cncMapView = React.createRef();
     this.state = {
-      selectStoreOpen: this.props.selectedStore || false,
+      openSelectedStore: this.props.openSelectedStore || false,
     }
   }
 
@@ -26,11 +28,22 @@ class ClickCollect extends React.Component {
     // For autocomplete textfield.
     this.autocomplete = new window.google.maps.places.Autocomplete(this.searchplaceInput.current, {
       types: [],
-      componentRestrictions: {country: window.drupalSettings.country_code}
+      componentRestrictions: { country: window.drupalSettings.country_code }
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
     // Ask for location access when we don't have any coords.
-    if (!this.context.coords) {
+    if (this.context.coords !== null) {
+      let skipOpenMarker = false;
+      if (!this.context.storeList) {
+        skipOpenMarker = true;
+        this.fetchAvailableStores(this.context.coords);
+      }
+
+      if (this.state.openSelectedStore && !skipOpenMarker) {
+        this.showOpenMarker(this.context.storeList);
+      }
+    }
+    else if (!this.context.coords) {
       this.getCurrentPosition();
     }
   }
@@ -98,41 +111,42 @@ class ClickCollect extends React.Component {
    * Fetch available stores for given lat and lng.
    */
   fetchAvailableStores = async (coords) => {
-    let {cart_id} = getGlobalCart();
+    let { cart_id } = getGlobalCart();
     const GET_STORE_URL = `/cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`;
-
+    showLoader();
     let storesResponse = await Axios.get(GET_STORE_URL);
     if (storesResponse && storesResponse.data) {
-      this.context.updateCoordsAndStoreList(coords, storesResponse.data.length > 0 ?  storesResponse.data : null);
+      removeLoader();
+      if (this.state.openSelectedStore) {
+        // Wait for all markers are placed on map, before we open a marker.
+        let self = this;
+        setTimeout(() => {
+          self.showOpenMarker(storesResponse.data);
+        }, 500);
+      }
+      this.context.updateCoordsAndStoreList(coords, storesResponse.data.length > 0 ? storesResponse.data : null);
     }
     else {
       this.context.updateCoords(coords);
     }
   }
 
-  // View selected store on map.
-  storeViewOnMapSelected = function (makerIndex) {
-    let map = window.spcMap;
-    // Zoom the current map to store location.
-    map.googleMap.setZoom(11);
-    // Make the marker by default open.
-    google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
-    // Pan Google maps to accommodate the info window.
-    map.googleMap.panBy(0, -150);
-  };
+  selectStore = (e, store_code) => {
+    e.preventDefault();
+    // Find the store object with the given store-code from the store list.
+    let store = _find(this.context.storeList, { code: store_code });
+    this.context.updateSelectStore(store);
+    this.setState({
+      openSelectedStore: true
+    });
+  }
 
   toggleStoreView = (e, activeView) => {
     e.preventDefault();
     if (activeView === 'map') {
       this.cncMapView.current.style.display = "block";
       this.cncListView.current.style.display = "none";
-      let map = window.spcMap;
-        // Adjust the map, when we trigger the map view.
-      google.maps.event.trigger(map.googleMap, 'resize');
-      // Auto zoom.
-      map.googleMap.fitBounds(map.googleMap.bounds);
-      // Auto center.
-      map.googleMap.panToBounds(map.googleMap.bounds);
+      this.refreshMap();
     }
     else {
       this.cncMapView.current.style.display = "none";
@@ -141,19 +155,39 @@ class ClickCollect extends React.Component {
     return false;
   };
 
-  selectStore = (e, store_code) => {
-    e.preventDefault();
-    // Find the store object with the given store-code from the store list.
-    let store = _find(this.context.storeList, {code: store_code});
-    this.context.updateSelectStore(store);
-    this.setState({
-      selectStoreOpen: true
-    });
+  // View selected store on map.
+  storeViewOnMapSelected = function (makerIndex) {
+    let map = window.spcMap;
+    // Zoom the current map to store location.
+    // map.googleMap.setZoom(11);
+    // Make the marker by default open.
+    google.maps.event.trigger(map.map.mapMarkers[makerIndex], 'click');
+    // Pan Google maps to accommodate the info window.
+    map.googleMap.panBy(0, -150);
+  };
+
+  showOpenMarker = (storeList) => {
+    if (!this.context.selectedStore) {
+      return;
+    }
+
+    let index = _findIndex(storeList, { code: this.context.selectedStore.code });
+    this.storeViewOnMapSelected(index);
+  }
+
+  refreshMap = () => {
+    let map = window.spcMap;
+    // Adjust the map, when we trigger the map view.
+    google.maps.event.trigger(map.googleMap, 'resize');
+    // Auto zoom.
+    map.googleMap.fitBounds(map.googleMap.bounds);
+    // Auto center.
+    map.googleMap.panToBounds(map.googleMap.bounds);
   }
 
   render() {
-    let {coords, storeList, selectedStore } = this.context;
-    let {selectStoreOpen} = this.state;
+    let { coords, storeList, selectedStore } = this.context;
+    let { openSelectedStore } = this.state;
 
     let mapView = (
       <ClicknCollectMap
@@ -163,56 +197,56 @@ class ClickCollect extends React.Component {
       />
     );
 
-    return(
+    return (
       <div className="spc-address-form">
-        { window.innerWidth > 768 &&
+        {window.innerWidth > 768 &&
           <div className='spc-address-form-map'>
-            { mapView }
+            {mapView}
           </div>
         }
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
           <div className='spc-address-form-wrapper'>
-            <div className='spc-address-form-content' style={{ display: selectStoreOpen ? 'none' : 'block' }}>
+            <div className='spc-address-form-content' style={{ display: openSelectedStore ? 'none' : 'block' }}>
               <div>{Drupal.t('Find your nearest store')}</div>
-                <div>
-                  <input
-                    ref={this.searchplaceInput}
-                    className="form-search"
-                    type="search"
-                    id="edit-store-location"
-                    name="store_location"
-                    size="60"
-                    maxLength="128"
-                    placeholder={Drupal.t('enter a location')}
-                    autoComplete="off"
-                  />
-                  <button className="cc-near-me" id="edit-near-me" onClick={(e) => this.getCurrentPosition(e)}>{Drupal.t('Near me')}</button>
+              <div>
+                <input
+                  ref={this.searchplaceInput}
+                  className="form-search"
+                  type="search"
+                  id="edit-store-location"
+                  name="store_location"
+                  size="60"
+                  maxLength="128"
+                  placeholder={Drupal.t('enter a location')}
+                  autoComplete="off"
+                />
+                <button className="cc-near-me" id="edit-near-me" onClick={(e) => this.getCurrentPosition(e)}>{Drupal.t('Near me')}</button>
+              </div>
+              {window.innerWidth < 768 &&
+                <div className='toggle-store-view'>
+                  <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
+                    {Drupal.t('List view')}
+                  </button>
+                  <button className="stores-map-view" onClick={(e) => this.toggleStoreView(e, 'map')}>
+                    {Drupal.t('Map view')}
+                  </button>
                 </div>
-                { window.innerWidth < 768 &&
-                  <div className='toggle-store-view'>
-                    <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
-                      {Drupal.t('List view')}
-                    </button>
-                    <button  className="stores-map-view"  onClick={(e) => this.toggleStoreView(e, 'map')}>
-                      {Drupal.t('Map view')}
-                    </button>
-                  </div>
-                }
-                <div id="click-and-collect-list-view" ref={this.cncListView}>
-                  <StoreList
-                    store_list={storeList}
-                    onStoreClick={this.storeViewOnMapSelected}
-                    onSelectStore={this.selectStore}
-                  />
+              }
+              <div id="click-and-collect-list-view" ref={this.cncListView}>
+                <StoreList
+                  store_list={storeList}
+                  onStoreClick={this.storeViewOnMapSelected}
+                  onSelectStore={this.selectStore}
+                />
+              </div>
+              {window.innerWidth < 768 &&
+                <div className='click-and-collect-map-view' style={{ display: 'none', width: '100%', height: '500px' }} ref={this.cncMapView}>
+                  {mapView}
                 </div>
-                { window.innerWidth < 768 &&
-                  <div className='click-and-collect-map-view' style={{display: 'none', width: '100%', height: '500px' }} ref={this.cncMapView}>
-                    { mapView }
-                  </div>
-                }
+              }
             </div>
-            <SelectedStore store={selectedStore} open={selectStoreOpen} />
+            <SelectedStore store={selectedStore} open={openSelectedStore} />
           </div>
         </div>
       </div>
