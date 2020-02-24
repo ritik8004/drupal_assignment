@@ -1,0 +1,19 @@
+alshaya_exponea.settings:
+  type: config_object
+  label: 'Exponea settings'
+  mapping:
+    name:
+      type: string
+      label: 'Site full name'
+    short_name:
+      type: string
+      label: 'Site short name'
+    start_url:
+      type: string
+      label: 'Site base url'
+    display:
+      type: string
+      label: 'Display value'
+    gcm_sender_id:
+      type: string
+      label: 'GCM Sender ID value'

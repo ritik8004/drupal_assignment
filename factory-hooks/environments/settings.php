@@ -29,6 +29,15 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_site' => '@mothercareuk',
           ],
         ],
+        'live' => [
+          'alshaya_exponea.settings' => [
+            "name" => "Mothercare",
+            "short_name" => "MC",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
+          ],
+        ],
       ],
       'kw' => [
         'uat' => [
@@ -69,6 +78,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         'live' => [
           'dynamic_yield.settings' => [
             'section_id' => '9876644',
+          ],
+          'alshaya_exponea.settings' => [
+            "name" => "H&M",
+            "short_name" => "H&M",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -144,6 +160,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876648',
           ],
+          'alshaya_exponea.settings' => [
+            "name" => "Bath and Body Works",
+            "short_name" => "BBW",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
+          ],
         ],
       ],
       'ae' => [
@@ -180,6 +203,15 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_site' => '@footlocker',
           ],
         ],
+        'live' => [
+          'alshaya_exponea.settings' => [
+            "name" => "Footlocker",
+            "short_name" => "FL",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
+          ],
+        ],
       ],
       'ae' => [
         'uat' => [
@@ -213,6 +245,15 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@potterybarn',
             'tags.twitter_cards_site' => '@potterybarn',
+          ],
+        ],
+        'live' => [
+          'alshaya_exponea.settings' => [
+            "name" => "Pottery Barn",
+            "short_name" => "PB",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -259,6 +300,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         'live' => [
           'dynamic_yield.settings' => [
             'section_id' => '9876645',
+          ],
+          'alshaya_exponea.settings' => [
+            "name" => "Victoria's Secret",
+            "short_name" => "VS",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],

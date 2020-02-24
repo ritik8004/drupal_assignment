@@ -15,6 +15,15 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Installs Alshaya Exponea module.
+ */
+function alshaya_transac_update_8127() {
+  \Drupal::service('module_installer')->install(['alshaya_exponea']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updates category block config.
  */
 function alshaya_transac_update_8126() {
@@ -726,6 +735,7 @@ function alshaya_transac_install() {
     'alshaya_contact',
     'alshaya_default_content',
     'alshaya_default_content_transac',
+    'alshaya_exponea',
     'alshaya_feed',
     'alshaya_i18n',
     'alshaya_loyalty',
