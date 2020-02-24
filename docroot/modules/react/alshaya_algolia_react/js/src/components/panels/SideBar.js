@@ -6,7 +6,7 @@ export default function SideBar(props) {
       <div className="c-sidebar-first__region">
         <div className="region region__sidebar-first clearfix">
           <div className="c-facet__blocks">
-            <div className="c-facet__blocks c-facet block-facet-blockcategory-facet-search">
+            <div className="c-facet__blocks c-facet block-facet-blockcategory-facet-search c-accordion c-collapse-item">
               {props.children}
             </div>
           </div>

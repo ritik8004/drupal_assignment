@@ -1,6 +1,8 @@
 .path--search {
   .c-sidebar-first .c-facet__blocks {
     .block-facet-blockcategory-facet-search {
+      display: block;
+
       @include breakpoint($desktop) {
         margin-top: 5.2rem;
       }
@@ -13,6 +15,12 @@
         }
       }
 
+      .facet-item__count {
+        position: absolute;
+        #{$right}: 0;
+        top: 0.125rem;
+      }
+
       .facet-item {
         &.is-active:not(.facet-item--expanded) {
           background: none;
@@ -22,8 +30,8 @@
               font-size: 1.3125rem;
               line-height: 1.3125rem;
               color: $plp_filter_active_tick;
-              display: inline-block;
-              vertical-align: middle;
+              position: absolute;
+              bottom: 0;
             }
           }
 
@@ -35,12 +43,6 @@
             font-family: $alshaya-bold;
             font-weight: bold;
           }
-        }
-
-        .facet-item__count {
-          position: absolute;
-          #{$right}: 0;
-          bottom: 0;
         }
       }
 
@@ -78,6 +80,28 @@
         display: none;
       }
 
+      .facet-item {
+        &.is-active:not(.facet-item--expanded) {
+          background: $plp_filter_active_item;
+
+          @include icon(check, after) {
+            font-size: 1.5rem;
+            position: absolute;
+            top: 50%;
+            color: $plp_filter_active_tick;
+            transform: translateY(-50%);
+            #{$right}: 1rem;
+          }
+        }
+
+        &__count {
+          @include breakpoint($upto-desktop) {
+            position: absolute;
+            bottom: 1.125rem;
+          }
+        }
+      }
+
       & > ul {
         @include breakpoint($upto-desktop) {
           display: none;
@@ -89,7 +113,7 @@
           min-width: 15.5rem;
           border: 0.0625rem solid $plp_facet_border;
 
-          > .facet-item {
+          & > li:not(:last-child) {
             border-bottom: 0.0625rem solid $plp_all_filter_item_border;
           }
         }
@@ -110,16 +134,9 @@
           background: $plp_facet_active_bg;
           z-index: 2;
 
-          > .facet-item {
+          > a.facet-item,
+          label {
             padding-top: 0.75rem !important;
-
-            &:not(.active):not(.facet-item--active-trail) {
-              padding-bottom: 0.75rem !important;
-            }
-
-            &:last-child {
-              border-bottom: none;
-            }
           }
         }
       }
@@ -133,70 +150,99 @@
   }
 
   .block-facet-blockcategory-facet-search.c-facet.c-accordion {
-    ul > li > ul {
-      @include breakpoint($upto-desktop) {
-        margin-#{$left}: -1.125rem;
-        margin-top: 0.75rem;
-      }
+    @include breakpoint($desktop) {
+      display: block;
+      margin-top: 5.2rem;
     }
-  }
 
-  .block-facet-blockcategory-facet-search.c-facet {
     ul {
-      .facet-item {
-        line-height: 1.3125rem;
+      a.facet-item,
+      label,
+      .is-active.category-all {
+        line-height: normal;
         margin-bottom: 0;
 
         @include breakpoint($desktop) {
-          margin-bottom: 0.625rem !important;
+          margin-bottom: 1.25rem !important;
         }
 
-        label {
-          top: 0;
+        @include breakpoint($upto-desktop) {
+          padding: 1.125rem !important;
         }
 
         span {
           font-size: 0.75rem;
-          line-height: 1.3125rem;
-          display: inline-flex;
+          line-height: 1.0625rem;
           margin: 0;
-
-          @include breakpoint($desktop) {
-            line-height: 2rem;
-            display: inline-block;
-          }
         }
 
         &.is-active::after {
           font-size: 1.3125rem;
-          line-height: 1.3125rem;
+          line-height: normal;
         }
       }
 
-      & > li > ul {
+      label {
+        top: 0;
         position: static;
-        max-height: none;
-        min-width: auto;
-        margin-top: 0;
-        width: auto !important;
-        border: none;
+      }
 
-        .facet-item {
-          margin-#{$left}: 0;
+      & > li {
+        margin-left: 0;
 
-          @include breakpoint($upto-desktop) {
-            border-top: 0.0625rem solid $plp_all_filter_item_border;
-            padding-#{$left}: 2.25rem !important;
-          }
+        & > ul {
+          position: static;
+          max-height: none;
+          min-width: auto;
+          margin-top: 0;
+          width: auto !important;
+          border: none;
 
-          @include breakpoint($desktop) {
-            padding-#{$left}: 0.9375rem;
+          a.facet-item,
+          label,
+          .is-active.category-all {
+            margin-#{$left}: 0;
 
-            &:last-child {
-              margin-bottom: 0 !important;
+            @include breakpoint($upto-desktop) {
+              border-top: 0.0625rem solid $plp_all_filter_item_border;
+              padding-#{$left}: 2.25rem !important;
+            }
+
+            @include breakpoint($desktop) {
+              padding-#{$left}: 0.9375rem;
             }
           }
         }
+      }
+
+      li {
+        padding: 0 !important;
+        min-height: auto;
+        position: relative;
+      }
+
+      .facet-item {
+        span {
+          font-size: 0.75rem;
+          margin-#{$left}: 0;
+
+          &.facet-item__count {
+            color: $plp_facet_count_number;
+            padding-#{$left}: 0.5rem;
+          }
+        }
+
+        label {
+          &::before {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .facet-item__value {
+      @include breakpoint($desktop) {
+        padding-#{$right}: 2.5rem;
       }
     }
 
@@ -224,10 +270,10 @@
           @include breakpoint($desktop) {
             @include icon(chevrondown, after) {
               font-size: 1.3125rem;
-              line-height: 1.3125rem;
+              line-height: 1.0625rem;
               transition: transform 0.4s ease-in-out;
-              display: inline-block;
-              vertical-align: middle;
+              position: absolute;
+              top: 0;
             }
           }
         }
