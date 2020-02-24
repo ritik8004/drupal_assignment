@@ -16,19 +16,14 @@ const StoreItem = ({ store, onSelectStore }) => {
         <span className="delivery--time--value">{store.delivery_time}</span>
       </div>
       <div className="store-open-hours">
-        <div className="hours--wrapper selector--hours">
-          <div className="hours--label">{Drupal.t('Opening Hours')}</div>
-          <div className="open--hours">
-            {store.open_hours.map(function (item) {
-              return (
-                <div key={item.key}>
-                  <span className="key-value-key">{item.key}</span>
-                  <span className="key-value-value">{item.value}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        {
+          Object.entries(store.open_hours_group).map(([weekdays, timings]) => (
+            <div key={weekdays}>
+              <span className="key-value-key">{weekdays}</span>
+              <span className="key-value-value">({timings})</span>
+            </div>
+          ))
+        }
       </div>
       {
         typeof onSelectStore !== 'undefined' && (
