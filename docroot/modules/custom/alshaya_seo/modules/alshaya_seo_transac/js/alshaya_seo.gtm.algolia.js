@@ -3,7 +3,7 @@
  * JS code to integrate with GTM for Algolia.
  */
 
-(function ($, Drupal, dataLayer) {
+(function ($, Drupal, dataLayer, debounce) {
   'use strict';
 
   var searchQuery = [];
@@ -35,9 +35,9 @@
     }
 
     Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
-    $(window).on('scroll', function (event) {
+    $(window).once('alshaya-seo-gtm-product-search-algolia').on('scroll', debounce(function (event) {
       Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression();
-    });
+    }, 500));
   });
 
   /**
@@ -48,23 +48,21 @@
   Drupal.alshaya_seo_gtm_prepare_and_push_algolia_product_impression = function () {
     // Send impression for each product added on page (page 1 or X).
     var searchImpressions = [];
-    $('#alshaya-algolia-search [gtm-type="gtm-product-link"]').each(function () {
-      if ($(this).is(':visible')) {
-        if (!$(this).hasClass('impression-processed') && $(this).isElementInViewPort(0)) {
-          $(this).addClass('impression-processed');
-          var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
-          impression.list = 'Search Results Page';
-          impression.position = $(this).attr('data-insights-position');
-          // Keep variant empty for impression pages. Populated only post add to cart action.
-          impression.variant = '';
-          searchImpressions.push(impression);
+    $('#alshaya-algolia-search [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible').each(function () {
+      if ($(this).isElementInViewPort(0)) {
+        $(this).addClass('impression-processed');
+        var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
+        impression.list = 'Search Results Page';
+        impression.position = $(this).attr('data-insights-position');
+        // Keep variant empty for impression pages. Populated only post add to cart action.
+        impression.variant = '';
+        searchImpressions.push(impression);
 
-          $(this).once('js-event').on('click', function (e) {
-            var that = $(this);
-            var position = $(this).attr('data-insights-position');
-            Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position);
-          });
-        }
+        $(this).once('js-event').on('click', function (e) {
+          var that = $(this);
+          var position = $(this).attr('data-insights-position');
+          Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.reactTeaserView.price.currency, 'Search Results Page', position);
+        });
       }
     });
 
@@ -73,4 +71,4 @@
     }
   };
 
-})(jQuery, Drupal, dataLayer);
+})(jQuery, Drupal, dataLayer, Drupal.debounce);

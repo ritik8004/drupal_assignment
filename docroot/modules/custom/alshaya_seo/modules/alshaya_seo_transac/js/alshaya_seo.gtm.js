@@ -1190,7 +1190,7 @@
     var impressions = [];
     var body = $('body');
     var currencyCode = body.attr('gtm-currency');
-    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
+    var productLinkSelector = $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible', context);
     var productLinkProcessedSelector = $('.impression-processed[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context);
     var listName = body.attr('gtm-list-name');
     // Send impression for each product added on page (page 1 or X).
@@ -1198,7 +1198,7 @@
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {
-        if (!$(this).hasClass('impression-processed') && $(this).is(':visible') && $(this).isElementInViewPort(0)) {
+        if ($(this).isElementInViewPort(0)) {
           $(this).addClass('impression-processed');
           var impression = Drupal.alshaya_seo_gtm_get_product_values($(this));
           impression.list = listName;
