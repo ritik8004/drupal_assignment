@@ -92,33 +92,36 @@
       var algolia_wrapper = $(this).parents('#alshaya-algolia-search');
       $('.small-col-grid', algolia_wrapper).removeClass('active');
       $(this).addClass('active');
-      $('body').addClass('large-grid')
+      $('body').addClass('large-grid');
       $('.c-products-list', algolia_wrapper).removeClass('product-small').addClass('product-large');
       // Adjust height of PLP tiles.
       Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     // Add dropdown effect for facets filters.
-    $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
-      if ($(this).hasClass('active')) {
-        $(this).removeClass('active');
-        // We want to run this only on main page facets.
-        if (!$(this).parent().parent().hasClass('filter__inner')) {
-          $(this).siblings('ul').slideUp();
+    // Condition to attach this on pages except promotion and plps as on those pages we get facets-panel.js with same code.
+    if (!$('body').hasClass('nodetype--acq_promotion') && !$('body').hasClass('plp-page-only')) {
+      $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
+        if ($(this).hasClass('active')) {
+          $(this).removeClass('active');
+          // We want to run this only on main page facets.
+          if (!$(this).parent().parent().hasClass('filter__inner')) {
+            $(this).siblings('ul').slideUp();
+          }
         }
-      }
-      else {
-        if (!$(this).parent().parent().hasClass('filter__inner')) {
-          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
-        }
-        $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+        else {
+          if (!$(this).parent().parent().hasClass('filter__inner')) {
+            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
+          }
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
 
-        $(this).addClass('active');
-        if (!$(this).parent().parent().hasClass('filter__inner')) {
-          $(this).siblings('ul').slideDown();
+          $(this).addClass('active');
+          if (!$(this).parent().parent().hasClass('filter__inner')) {
+            $(this).siblings('ul').slideDown();
+          }
         }
-      }
-    });
+      });
+    }
 
     $('.sticky-filter-wrapper .show-all-filters-algolia').once('algolia-search').on('click', function() {
       $('.all-filters-algolia').addClass('filters-active');
