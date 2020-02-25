@@ -65,7 +65,7 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
         }
       }
 
-      $results = [0 => $all_result_item] + $results;
+      $results = array_merge([$all_result_item], $results);
     }
 
     // Return the results.
