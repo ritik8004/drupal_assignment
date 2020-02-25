@@ -261,8 +261,10 @@ class CartController {
       $data['delivery_type'] = 'hd';
       if (!empty($shipping_info['extension_attributes']['click_and_collect_type'])) {
         $data['delivery_type'] = $shipping_info['extension_attributes']['click_and_collect_type'] == 'home_delivery' ? 'hd' : 'cnc';
-        $data['store_code'] = $shipping_info['extension_attributes']['store_code'];
-        $data['store_info'] = $this->drupal->getStoreInfo($data['store_code']);
+        if ($data['delivery_type'] == 'cnc' && !empty($shipping_info['extension_attributes']['store_code'])) {
+          $data['store_code'] = $shipping_info['extension_attributes']['store_code'];
+          $data['store_info'] = $this->drupal->getStoreInfo($data['store_code']);
+        }
       }
     }
 
