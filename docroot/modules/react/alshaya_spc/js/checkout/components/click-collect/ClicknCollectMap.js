@@ -1,11 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server'
-
-import _isEmpty from 'lodash/isEmpty';
-
 import Gmap from '../../../utilities/map/Gmap';
 import StoreItemInfoWindow from '../store-item-infowindow';
-import {isRTL} from "../../../utilities/rtl";
 
 class ClicknCollectMap extends React.Component {
 
@@ -30,8 +26,7 @@ class ClicknCollectMap extends React.Component {
   componentDidMount() {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    let control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
-    window.spcMap.googleMap = this.createGoogleMap(control_position);
+    window.spcMap.googleMap = this.createGoogleMap();
     if (this.props.markers) {
       this.placeMarkers();
     }
@@ -91,10 +86,8 @@ class ClicknCollectMap extends React.Component {
   /**
    * Create google map.
    */
-  createGoogleMap = (control_position) => {
+  createGoogleMap = () => {
     let map = this.googleMap.initMap(this.googleMapRef.current);
-    map.mapTypeControl = false;
-    map.zoomControlOptions.position = control_position;
     return map;
   };
 

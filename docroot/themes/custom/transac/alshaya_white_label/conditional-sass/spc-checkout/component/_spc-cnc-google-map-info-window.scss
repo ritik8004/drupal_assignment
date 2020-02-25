@@ -1,0 +1,37 @@
+#google-map-cnc {
+  .gm-style {
+    .gm-style-iw-c {
+      width: 17.6875rem;
+      padding: 1.125rem 1.375rem !important;
+      border: solid 1px $spc-cnc-info-window-border;
+      border-radius: 0;
+    }
+
+    .gm-style-iw-d {
+      font-size: 0.875rem;
+      font-family: $alshaya-thin;
+      color: $spc-cnc-map-info-window-text;
+      overflow: auto !important;
+
+      .spc-cnc-store-name {
+        .store-name {
+          color: $spc-cnc-map-info-window-impress;
+        }
+
+        .store-distance {
+          float: $right;
+        }
+
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .store-delivery-time {
+        color: $spc-cnc-map-info-window-impress;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+    }
+  }
+}

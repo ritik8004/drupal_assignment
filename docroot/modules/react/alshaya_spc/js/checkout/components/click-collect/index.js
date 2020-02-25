@@ -7,7 +7,7 @@ import StoreList from '../store-list';
 import ClicknCollectMap from './ClicknCollectMap';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
-import { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
+import { ClicknCollectContext} from "../../../context/ClicknCollect";
 import SelectedStore from '../selected-store';
 import { showLoader, removeLoader } from '../../../utilities/checkout_util';
 
@@ -21,7 +21,7 @@ class ClickCollect extends React.Component {
     this.cncMapView = React.createRef();
     this.state = {
       openSelectedStore: this.props.openSelectedStore || false,
-    }
+    };
   }
 
   componentDidMount() {

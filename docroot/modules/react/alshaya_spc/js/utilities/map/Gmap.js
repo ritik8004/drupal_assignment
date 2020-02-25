@@ -9,7 +9,7 @@ export default class Gmap {
         zoom: 11,
         maxZoom: 18,
         zoomControl: true,
-        fullscreenControl: true,
+        fullscreenControl: false,
         mapTypeControl: false,
         scrollwheel: true,
         disableDoubleClickZoom: false,

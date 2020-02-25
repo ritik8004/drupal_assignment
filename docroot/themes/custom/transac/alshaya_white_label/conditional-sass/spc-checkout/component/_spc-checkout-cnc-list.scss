@@ -40,6 +40,7 @@
       }
 
       .spc-cnc-store-name {
+        cursor: pointer;
         height: 3.25rem;
         line-height: 3.25rem;
         padding: 0 1.25rem;
@@ -66,6 +67,18 @@
           #{$right}: 0.875rem;
           top: 50%;
           transform: translateY(-50%);
+        }
+
+        .store-name {
+          pointer-events: none;
+        }
+
+        .store-distance {
+          float: $right;
+          display: inline-block;
+          padding-#{$right}: 2rem;
+          pointer-events: none;
+          color: $spc-cnc-store-list-distance;
         }
       }
 

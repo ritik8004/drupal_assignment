@@ -11,7 +11,7 @@ const StoreItem = ({ store, onSelectStore }) => {
       <div className="store-address-content">
         <div className="store-address">{parse(store.address)}</div>
         <div className="store-delivery-time">
-          <span className="label--delivery-time">{Drupal.t('Collect in store from')}</span>
+          <span className="label--delivery-time">{Drupal.t('Collect in store from ')}</span>
           <span className="delivery--time--value">{store.delivery_time}</span>
         </div>
         <div className="store-open-hours">
