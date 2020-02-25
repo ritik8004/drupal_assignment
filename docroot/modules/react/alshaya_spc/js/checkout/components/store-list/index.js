@@ -6,6 +6,22 @@ const StoreList = ({ store_list, onStoreClick, onSelectStore }) => {
     return (null);
   }
 
+  const storeItemClick = (e, index) => {
+    onStoreClick(index);
+    // Close already opened item.
+    if (e.target.parentElement.classList.contains('expand')) {
+      e.target.parentElement.classList.remove('expand');
+      return;
+    }
+    // Add Class expand to the currently opened li.
+    let storeList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    // Remove class expand from all.
+    storeList.forEach(function (storeElement) {
+      storeElement.classList.remove('expand');
+    });
+    e.target.parentElement.classList.add('expand');
+  };
+
   return (
     <ul>
       {store_list.map(function (store, index) {
@@ -16,7 +32,7 @@ const StoreList = ({ store_list, onStoreClick, onSelectStore }) => {
             data-node={store.nid}
             data-index={index}
             key={store.code}
-            onClick={() => onStoreClick(parseInt(index))}
+            onClick={(e) => storeItemClick(e, parseInt(index))}
           >
             <StoreItem store={store} onSelectStore={onSelectStore} />
           </li>

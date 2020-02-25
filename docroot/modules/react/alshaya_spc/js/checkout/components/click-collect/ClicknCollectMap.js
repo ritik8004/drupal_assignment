@@ -1,8 +1,5 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server'
-
-import _isEmpty from 'lodash/isEmpty';
-
 import Gmap from '../../../utilities/map/Gmap';
 import StoreItemInfoWindow from '../store-item-infowindow';
 
@@ -24,12 +21,12 @@ class ClicknCollectMap extends React.Component {
    */
   initGeoCoder = () => {
     this.geocoder = new google.maps.Geocoder();
-  }
+  };
 
   componentDidMount() {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    window.spcMap.googleMap = this.createGoogleMap({});
+    window.spcMap.googleMap = this.createGoogleMap();
     if (this.props.markers) {
       this.placeMarkers();
     }
@@ -90,8 +87,9 @@ class ClicknCollectMap extends React.Component {
    * Create google map.
    */
   createGoogleMap = () => {
-    return this.googleMap.initMap(this.googleMapRef.current);
-  }
+    let map = this.googleMap.initMap(this.googleMapRef.current);
+    return map;
+  };
 
   render() {
     return (

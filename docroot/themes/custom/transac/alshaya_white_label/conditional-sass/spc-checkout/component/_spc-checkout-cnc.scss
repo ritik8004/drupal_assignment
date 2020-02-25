@@ -1,0 +1,96 @@
+.spc-cnc-address-form-sidebar {
+  position: relative;
+  overflow-y: auto;
+
+  > .spc-checkout-section-title {
+    height: 3.5rem;
+    box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 1.25rem;
+  }
+
+  .spc-cnc-address-form-content {
+    background: $spc-checkout-sidebar-bg;
+
+    > .spc-checkout-section-title {
+      height: 3.75rem;
+      display: inline-flex;
+      align-items: center;
+      font-size: 1.125rem;
+      justify-content: center;
+      background: $spc-checkout-sidebar-bg !important;
+      width: 100%;
+      margin-top: 1px;
+      margin-bottom: 0;
+    }
+  }
+
+  .spc-cnc-location-search-wrapper {
+    background: $spc-checkout-address-form-bg;
+    padding: 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr 3rem;
+    width: 100%;
+    margin-bottom: 0.625rem;
+
+    .spc-cnc-store-search-form-item {
+      position: relative;
+      margin-#{$right}: 0.625rem;
+      border: 1px solid $spc-cnc-checkout-store-search-border;
+
+      @include icon(search, after) {
+        color: $spc-cnc-store-search-icon;
+        font-size: 2rem;
+        height: 3rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        #{$left}: 0.375rem;
+        top: 0;
+        position: absolute;
+      }
+
+      input {
+        font-size: 0.875rem;
+        color: $spc-cnc-search-text;
+        border: none;
+        width: calc(100% - 2.75rem);
+        height: 100%;
+        padding: 0;
+        padding-#{$left}: 2.75rem;
+
+        &::placeholder {
+          color: $spc-cnc-search-placeholder;
+        }
+      }
+    }
+
+    .cc-near-me {
+      width: 3rem;
+      height: 3rem;
+      background: none;
+      border: 1px solid $spc-cnc-store-search-icon;
+      font-size: 0;
+      transition: background 0.2s ease-in-out;
+
+      @include icon('mylocation', before) {
+        font-size: 2rem;
+        color: $spc-cnc-store-search-icon;
+        transition: color 0.2s ease-in-out;
+      }
+
+      &.active,
+      &:hover {
+        background: $spc-cnc-store-search-icon;
+
+        @include icon('mylocation', before) {
+          color: $spc-cnc-store-search-icon-active;
+        }
+      }
+    }
+  }
+}

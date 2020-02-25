@@ -7,7 +7,7 @@ import StoreList from '../store-list';
 import ClicknCollectMap from './ClicknCollectMap';
 import _find from 'lodash/find';
 import _findIndex from 'lodash/findIndex';
-import { ClicknCollectContext } from '../../.../../../context/ClicknCollect';
+import { ClicknCollectContext} from "../../../context/ClicknCollect";
 import SelectedStore from '../selected-store';
 import { showLoader, removeLoader } from '../../../utilities/checkout_util';
 
@@ -21,11 +21,11 @@ class ClickCollect extends React.Component {
     this.cncMapView = React.createRef();
     this.state = {
       openSelectedStore: this.props.openSelectedStore || false,
-    }
+    };
   }
 
   componentDidMount() {
-    // For autocomplete textfield.
+    // For autocomplete text field.
     this.autocomplete = new window.google.maps.places.Autocomplete(this.searchplaceInput.current, {
       types: [],
       componentRestrictions: { country: window.drupalSettings.country_code }
@@ -71,6 +71,7 @@ class ClickCollect extends React.Component {
     // If location access is enabled by user.
     try {
       if (navigator && navigator.geolocation) {
+        e.target.classList.add('active');
         navigator.geolocation.getCurrentPosition(this.LocationSuccess, this.LocationFail, { timeout: 1000 });
       }
     }
@@ -144,11 +145,15 @@ class ClickCollect extends React.Component {
   toggleStoreView = (e, activeView) => {
     e.preventDefault();
     if (activeView === 'map') {
+      document.getElementsByClassName('stores-map-view')[0].classList.add('active');
+      document.getElementsByClassName('stores-list-view')[0].classList.remove('active');
       this.cncMapView.current.style.display = "block";
       this.cncListView.current.style.display = "none";
       this.refreshMap();
     }
     else {
+      document.getElementsByClassName('stores-list-view')[0].classList.add('active');
+      document.getElementsByClassName('stores-map-view')[0].classList.remove('active');
       this.cncMapView.current.style.display = "none";
       this.cncListView.current.style.display = "block";
     }
@@ -204,33 +209,37 @@ class ClickCollect extends React.Component {
             {mapView}
           </div>
         }
-        <div className='spc-address-form-sidebar'>
+        <div className='spc-cnc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
-          <div className='spc-address-form-wrapper'>
-            <div className='spc-address-form-content' style={{ display: openSelectedStore ? 'none' : 'block' }}>
-              <div>{Drupal.t('Find your nearest store')}</div>
-              <div>
-                <input
-                  ref={this.searchplaceInput}
-                  className="form-search"
-                  type="search"
-                  id="edit-store-location"
-                  name="store_location"
-                  size="60"
-                  maxLength="128"
-                  placeholder={Drupal.t('enter a location')}
-                  autoComplete="off"
-                />
+          <div className='spc-cnc-address-form-wrapper'>
+            <div className='spc-cnc-address-form-content' style={{ display: openSelectedStore ? 'none' : 'block' }}>
+              <SectionTitle>{Drupal.t('find your nearest store')}</SectionTitle>
+              <div className='spc-cnc-location-search-wrapper'>
+                <div className='spc-cnc-store-search-form-item'>
+                  <input
+                    ref={this.searchplaceInput}
+                    className="form-search"
+                    type="search"
+                    id="edit-store-location"
+                    name="store_location"
+                    size="60"
+                    maxLength="128"
+                    placeholder={Drupal.t('enter a location')}
+                    autoComplete="off"
+                  />
+                </div>
                 <button className="cc-near-me" id="edit-near-me" onClick={(e) => this.getCurrentPosition(e)}>{Drupal.t('Near me')}</button>
               </div>
               {window.innerWidth < 768 &&
                 <div className='toggle-store-view'>
-                  <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
-                    {Drupal.t('List view')}
-                  </button>
-                  <button className="stores-map-view" onClick={(e) => this.toggleStoreView(e, 'map')}>
-                    {Drupal.t('Map view')}
-                  </button>
+                  <div className='toggle-buttons-wrapper'>
+                    <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
+                      {Drupal.t('List view')}
+                    </button>
+                    <button className="stores-map-view" onClick={(e) => this.toggleStoreView(e, 'map')}>
+                      {Drupal.t('Map view')}
+                    </button>
+                  </div>
                 </div>
               }
               <div id="click-and-collect-list-view" ref={this.cncListView}>
@@ -241,7 +250,7 @@ class ClickCollect extends React.Component {
                 />
               </div>
               {window.innerWidth < 768 &&
-                <div className='click-and-collect-map-view' style={{ display: 'none', width: '100%', height: '500px' }} ref={this.cncMapView}>
+                <div className='click-and-collect-map-view' style={{ display: 'none' }} ref={this.cncMapView}>
                   {mapView}
                 </div>
               }

@@ -1,0 +1,121 @@
+#click-and-collect-list-view {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      background: $spc-cnc-store-item-bg;
+      border-bottom: 0.3125rem solid $spc-checkout-sidebar-bg;
+
+      .store-actions {
+        @include breakpoint($only-mobile) {
+          .select-store {
+            margin: 0;
+          }
+
+          position: fixed;
+          bottom: 0;
+          #{$left}: 0;
+          width: 100%;
+          background: $spc-checkout-address-form-bg;
+          padding: 1.25rem;
+          z-index: 1;
+          box-shadow: 0 -1px 20px 9px $sticky-btn;
+        }
+      }
+
+      .select-store {
+        background: $primary_btn_bg;
+        height: 3.25rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        justify-content: center;
+        color: $primary_btn_text;
+        font-family: $alshaya-bold;
+        font-weight: normal;
+        font-size: 1rem;
+        width: 100%;
+        margin-top: 1.25rem;
+        text-transform: uppercase;
+      }
+
+      .store-address-content {
+        display: none;
+        font-size: 0.875rem;
+        padding-#{$left}: 2.9375rem;
+        padding-#{$right}: 1.25rem;
+        color: $spc-cnc-store-item-text;
+      }
+
+      .store-delivery-time {
+        color: $spc-cnc-store-item-text-impress;
+        margin-top: 0.625rem;
+        margin-bottom: 0.625rem;
+        display: block;
+      }
+
+      .spc-cnc-store-name {
+        cursor: pointer;
+        height: 3.25rem;
+        line-height: 3.25rem;
+        padding: 0 1.25rem;
+        display: block;
+        font-size: 0.875rem;
+        color: $spc-cnc-store-item-text-impress;
+        position: relative;
+        padding-#{$left}: 3rem;
+
+        @include icon(radio-empty, before) {
+          position: absolute;
+          #{$left}: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 3.125rem;
+          width: 3rem;
+          text-align: center;
+          color: $spc-checkout-radio-empty;
+        }
+
+        @include icon(chevrondown, after) {
+          font-size: 2rem;
+          position: absolute;
+          #{$right}: 0.875rem;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .store-name {
+          pointer-events: none;
+        }
+
+        .store-distance {
+          float: $right;
+          display: inline-block;
+          padding-#{$right}: 2rem;
+          pointer-events: none;
+          color: $spc-cnc-store-list-distance;
+        }
+      }
+
+      &.expand {
+        padding-bottom: 1.25rem;
+
+        .store-address-content {
+          display: block;
+        }
+
+        .spc-cnc-store-name {
+          @include icon(radio-filled, before) {
+            color: $spc-checkout-radio-filled;
+          }
+
+          @include icon(chevronup, after) {
+            font-size: 2rem;
+          }
+        }
+      }
+    }
+  }
+}

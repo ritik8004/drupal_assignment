@@ -25,7 +25,7 @@ export default class AddressList extends React.Component {
     this.setState({
       open: false
     });
-  }
+  };
 
   componentDidMount() {
     // If user is logged in, only then get area lists.
@@ -45,11 +45,11 @@ export default class AddressList extends React.Component {
     this.setState({
       addressList: addressList
     });
-  }
+  };
 
   processAddress = (e) => {
     console.log('Address submission processing here');
-  }
+  };
 
   render() {
     // If no address list available.
