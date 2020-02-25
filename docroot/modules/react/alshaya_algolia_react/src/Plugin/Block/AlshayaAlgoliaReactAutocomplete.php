@@ -182,6 +182,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
               'showColorImages' => $display_settings->get('show_color_images_on_filter'),
               'showProductImage' => $display_settings->get('color_swatches_show_product_image'),
               'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
+              'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
             ],
           ],
         ],
