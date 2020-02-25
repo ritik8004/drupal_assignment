@@ -46,6 +46,14 @@
       color: $order_qty_limit_reached_txt;
       background-color: $order_qty_limit_reached_bg;
     }
+
+    &:not(:empty) {
+      @include breakpoint($tablet) {
+        .c-pdp & {
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
   }
 }
 
@@ -54,7 +62,7 @@
     display: block;
 
     .order-qty-limit-msg-inner-wrapper {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
     }
   }
 }
