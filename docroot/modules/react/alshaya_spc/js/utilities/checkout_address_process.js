@@ -77,32 +77,19 @@ export const checkoutAddressProcess = function (e, cart) {
     }
     else {
       // Get shipping methods based on address info.
-      let shipping_methods = getShippingMethods(cart.cart_id, form_data);
-      if (shipping_methods instanceof Promise) {
-        shipping_methods.then((shipping) => {
-          // Add shipping method in cart.
-          form_data['carrier_info'] = {
-            'code': shipping[0].carrier_code,
-            'method': shipping[0].method_code
-          };
-          var cart_info = addShippingInCart('update shipping', form_data);
-          if (cart_info instanceof Promise) {
-            cart_info.then((cart_result) => {
-              let cart_data = {
-                'cart': cart_result,
-                'delivery_type': cart_result.delivery_type,
-                'shipping_methods': shipping,
-                'address': form_data
-              }
-              var event = new CustomEvent('refreshCartOnAddress', {
-                bubbles: true,
-                detail: {
-                  data: () => cart_data
-                }
-              });
-              document.dispatchEvent(event);
-            });
+      var cart_info = addShippingInCart('update shipping', form_data);
+      if (cart_info instanceof Promise) {
+        cart_info.then((cart_result) => {
+          let cart_data = {
+            'cart': cart_result
           }
+          var event = new CustomEvent('refreshCartOnAddress', {
+            bubbles: true,
+            detail: {
+              data: () => cart_data
+            }
+          });
+          document.dispatchEvent(event);
         });
       }
     }
