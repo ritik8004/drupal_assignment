@@ -1,7 +1,7 @@
 import React from 'react';
 import StoreItem from '../store-item';
 
-const StoreList = ({ store_list, onStoreClick, onSelectStore }) => {
+const StoreList = ({ store_list, onStoreClick, onSelectStore, selected: selectedStore }) => {
   if (!store_list) {
     return (null);
   }
@@ -24,10 +24,10 @@ const StoreList = ({ store_list, onStoreClick, onSelectStore }) => {
 
   return (
     <ul>
-      {store_list.map(function (store, index) {
+      {store_list.map((store, index) => {
         return (
           <li
-            className="select-store"
+            className={`select-store ${(selectedStore && store.code === selectedStore.code) ? 'expand' : ''}`}
             data-store-code={store.code}
             data-node={store.nid}
             data-index={index}

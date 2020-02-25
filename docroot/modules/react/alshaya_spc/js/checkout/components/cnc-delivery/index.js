@@ -4,6 +4,7 @@ import { checkoutAddressProcess } from "../../../utilities/checkout_address_proc
 let ClickCollect = React.lazy(() => import("../click-collect"));
 
 class ClicknCollectDeiveryInfo extends React.Component {
+  _isMounted = true;
   constructor(props) {
     super(props);
     this.state = {
@@ -29,6 +30,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     document.addEventListener(
       "refreshCartOnCnCSelect",
       this.eventListener,
@@ -37,6 +39,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     document.removeEventListener(
       "refreshCartOnCnCSelect",
       this.eventListener,
@@ -47,8 +50,9 @@ class ClicknCollectDeiveryInfo extends React.Component {
   eventListener = e => {
     var data = e.detail.data();
     this.props.refreshCart(data);
-    // Close the modal.
-    this.closeModal();
+    if (this._isMounted) {
+      this.closeModal();
+    }
   };
 
   render() {

@@ -204,7 +204,9 @@ class CartController {
 
     if (empty($this->sessionCartInfo['cart_id'])) {
       $this->sessionCartInfo = $this->drupal->getCustomerCart();
-      $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
+      if (!empty($this->sessionCartInfo)) {
+        $this->session->set(self::STORAGE_KEY, $this->sessionCartInfo);
+      }
     }
 
     if (!empty($this->sessionCartInfo['cart_id'])) {
