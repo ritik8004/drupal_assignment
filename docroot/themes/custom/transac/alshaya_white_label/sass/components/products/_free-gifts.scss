@@ -217,6 +217,8 @@
     font-size: 1rem;
     line-height: 1.25;
     color: $free-gifts-modal-product-name;
+    font-family: $alshaya-thin;
+    font-weight: normal;
   }
 
   .content--item-code {
@@ -460,6 +462,10 @@
 }
 
 .free-gift-detail-modal.ui-dialog-content {
+  .content__main .gallery-wrapper {
+    min-height: auto;
+  }
+
   article {
     > a {
       font-size: 0.875rem;
@@ -697,7 +703,7 @@
 
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
-    height: 100% !important;
+    height: auto !important;
     padding: 1.5em 2.5rem;
   }
 }
