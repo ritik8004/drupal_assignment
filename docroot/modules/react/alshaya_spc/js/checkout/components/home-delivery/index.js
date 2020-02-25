@@ -1,12 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import Popup from 'reactjs-popup';
-import ShippingMethods from '../shipping-methods';
-import AddressForm from '../address-form';
-import { checkoutAddressProcess } from '../../../utilities/checkout_address_process';
+import Popup from "reactjs-popup";
+import ShippingMethods from "../shipping-methods";
+import AddressForm from "../address-form";
+import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
 
 export default class HomeDeliveryInfo extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -14,44 +13,54 @@ export default class HomeDeliveryInfo extends React.Component {
 
   openModal = () => {
     this.setState({ open: true });
-  }
+  };
 
   closeModal = () => {
     this.setState({ open: false });
-  }
+  };
 
-  processAddress = (e) => {
+  processAddress = e => {
     const { cart } = this.props.cart;
     checkoutAddressProcess(e, cart);
-  }
+  };
 
   componentDidMount() {
-    document.addEventListener('refreshCartOnAddress', (e) => {
-      var data = e.detail.data();
-      this.props.refreshCart(data);
-      // Close the modal.
-      this.closeModal();
-    }, false);
+    document.addEventListener(
+      "refreshCartOnAddress",
+      this.eventListener,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('refreshCartOnAddress');
+    document.removeEventListener(
+      "refreshCartOnAddress",
+      this.eventListener,
+      false
+    );
   }
+
+  eventListener = e => {
+    var data = e.detail.data();
+    this.props.refreshCart(data);
+    // Close the modal.
+    this.closeModal();
+  };
 
   render() {
     const address = this.props.cart.address;
     return (
-      <div className='delivery-information-preview'>
-        <div className='spc-delivery-customer-info'>
-          <div className='delivery-name'>{address.static.firstname} {address.static.lastname}</div>
-          <div className='delivery-address'>
-            {address.address_block_segment}
-            , {address.address_building_segment}
-            , {address.address_apartment_segment}
-            , {address.street}
+      <div className="delivery-information-preview">
+        <div className="spc-delivery-customer-info">
+          <div className="delivery-name">
+            {address.static.firstname} {address.static.lastname}
           </div>
-          <div className='spc-address-form-edit-link' onClick={this.openModal}>
-            {Drupal.t('Change')}
+          <div className="delivery-address">
+            {address.address_block_segment}, {address.address_building_segment},{" "}
+            {address.address_apartment_segment}, {address.street}
+          </div>
+          <div className="spc-address-form-edit-link" onClick={this.openModal}>
+            {Drupal.t("Change")}
           </div>
         </div>
         <Popup
@@ -59,14 +68,22 @@ export default class HomeDeliveryInfo extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <a className="close" onClick={this.closeModal}>&times;</a>
-          <AddressForm showEmail={(window.drupalSettings.user.uid === 0)} default_val={address} processAddress={this.processAddress} />
+          <a className="close" onClick={this.closeModal}>
+            &times;
+          </a>
+          <AddressForm
+            showEmail={window.drupalSettings.user.uid === 0}
+            default_val={address}
+            processAddress={this.processAddress}
+          />
         </Popup>
-        <div className='spc-delivery-shipping-methods'>
-          <ShippingMethods cart={this.props.cart} refreshCart={this.props.refreshCart} />
+        <div className="spc-delivery-shipping-methods">
+          <ShippingMethods
+            cart={this.props.cart}
+            refreshCart={this.props.refreshCart}
+          />
         </div>
       </div>
     );
   }
-
 }

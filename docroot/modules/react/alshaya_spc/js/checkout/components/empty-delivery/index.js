@@ -21,33 +21,34 @@ export default class EmptyDeliveryText extends React.Component {
   };
 
   componentDidMount() {
-    document.addEventListener(
-      "refreshCartOnAddress",
-      e => {
-        var data = e.detail.data();
-        this.props.refreshCart(data);
-        // Close the modal.
-        this.closeModal();
-      },
-      false
-    );
+    document.addEventListener("refreshCartOnAddress", this.eventListener, false);
 
     document.addEventListener(
       "refreshCartOnCnCSelect",
-      e => {
-        var data = e.detail.data();
-        this.props.refreshCart(data);
-        // Close the modal.
-        this.closeModal();
-      },
+      this.eventListener,
       false
     );
   }
 
   componentWillUnmount() {
-    document.removeEventListener("refreshCartOnAddress");
-    document.removeEventListener("refreshCartOnCnCSelect");
+    document.removeEventListener(
+      "refreshCartOnAddress",
+      this.eventListener,
+      false
+    );
+    document.removeEventListener(
+      "refreshCartOnCnCSelect",
+      this.eventListener,
+      false
+    );
   }
+
+  eventListener = e => {
+    var data = e.detail.data();
+    this.props.refreshCart(data);
+    // Close the modal.
+    this.closeModal();
+  };
 
   getAddressPopupClassName = () => {
     return window.drupalSettings.user.uid > 0

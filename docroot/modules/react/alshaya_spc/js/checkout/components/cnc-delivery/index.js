@@ -31,19 +31,25 @@ class ClicknCollectDeiveryInfo extends React.Component {
   componentDidMount() {
     document.addEventListener(
       "refreshCartOnCnCSelect",
-      e => {
-        var data = e.detail.data();
-        this.props.refreshCart(data);
-        // Close the modal.
-        this.closeModal();
-      },
+      this.eventListener,
       false
     );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('refreshCartOnCnCSelect');
+    document.removeEventListener(
+      "refreshCartOnCnCSelect",
+      this.eventListener,
+      false
+    );
   }
+
+  eventListener = e => {
+    var data = e.detail.data();
+    this.props.refreshCart(data);
+    // Close the modal.
+    this.closeModal();
+  };
 
   render() {
     const {

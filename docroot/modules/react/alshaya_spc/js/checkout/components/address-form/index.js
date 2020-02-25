@@ -27,19 +27,17 @@ export default class AddressForm extends React.Component {
 
   componentDidMount() {
     // Listen to the map click event.
-    document.addEventListener(
-      "mapClicked",
-      e => {
-        var coords = e.detail.coords();
-        this.positionMapAndUpdateAddress(coords);
-      },
-      false
-    );
+    document.addEventListener("mapClicked", this.eventListener, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("mapClicked");
+    document.removeEventListener("mapClicked", this.eventListener, false);
   }
+
+  eventListener = e => {
+    var coords = e.detail.coords();
+    this.positionMapAndUpdateAddress(coords);
+  };
 
   /**
    * Refresh the child areas list on selection / change
