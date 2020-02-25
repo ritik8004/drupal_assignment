@@ -34,6 +34,7 @@ const associateCart = (cart_data) => {
     .then(response => {
       if (response.data) {
         cart_data.uid = response.data.uid;
+        cart_data.customer = response.data.customer;
         addInfoInStorage({ cart: cart_data });
       }
     })

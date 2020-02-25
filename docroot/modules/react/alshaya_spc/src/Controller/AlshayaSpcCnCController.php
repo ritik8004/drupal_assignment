@@ -56,4 +56,18 @@ class AlshayaSpcCnCController extends ControllerBase {
     return new JsonResponse($stores);
   }
 
+  /**
+   * Get store info for given code.
+   *
+   * @param string $store_code
+   *   The store code.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getStoreInfoJson(string $store_code) {
+    $stores = $this->clickCollect->getStoreInfo($store_code);
+    return new JsonResponse(!empty($stores) ? reset($stores) : []);
+  }
+
 }

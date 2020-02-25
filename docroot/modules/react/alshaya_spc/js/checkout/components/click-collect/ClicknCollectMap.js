@@ -98,9 +98,9 @@ class ClicknCollectMap extends React.Component {
     return map;
   };
 
-  render () {
+  render() {
     return (
-      <div id='google-map-cnc' ref={this.googleMapRef} style={{width: '100%', height: '100%'}} />
+      <div id='google-map-cnc' ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />
     );
   }
 

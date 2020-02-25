@@ -84,4 +84,17 @@ class AlshayaClickCollect {
     return [];
   }
 
+  /**
+   * Get store info for given store code.
+   *
+   * @param string $store_code
+   *   The store code.
+   *
+   * @return array
+   *   Return array of store related info.
+   */
+  public function getStoreInfo(string $store_code) {
+    return $this->storesFinderUtility->getMultipleStoresExtraData([$store_code => []]);
+  }
+
 }

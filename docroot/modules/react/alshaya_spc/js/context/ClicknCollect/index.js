@@ -3,10 +3,46 @@ import React from 'react'
 export const ClicknCollectContext = React.createContext();
 
 export class ClicknCollectContextProvider extends React.Component {
-  state = {
-    coords: null,
-    storeList: null,
-    selectedStore: null
+
+  constructor(props) {
+    super(props);
+    let coords = null;
+    let selectedStore = null;
+    let contactInfo = null;
+
+    let { cart: { customer, store_info, shipping_address } } = props.cart;
+
+    if (!shipping_address && customer.email) {
+      contactInfo = {
+        firstname: customer.firstname || '',
+        lastname: customer.lastname || '',
+        email: customer.email || '',
+        telephone: customer.telephone || '',
+      }
+    }
+    else if (shipping_address) {
+      contactInfo = {
+        firstname: shipping_address.firstname || '',
+        lastname: shipping_address.lastname || '',
+        email: shipping_address.email || '',
+        telephone: shipping_address.telephone || '',
+      }
+    }
+
+    if (store_info) {
+      coords = {
+        lat: parseFloat(store_info.lat),
+        lng: parseFloat(store_info.lng)
+      };
+      selectedStore = store_info;
+    }
+
+    this.state = {
+      coords: coords,
+      storeList: null,
+      selectedStore: selectedStore,
+      contactInfo: contactInfo
+    }
   }
 
   updateSelectStore = (store) => {
@@ -17,7 +53,7 @@ export class ClicknCollectContextProvider extends React.Component {
 
   updateCoordsAndStoreList = (coords, storeList) => {
     this.setState({
-      coords : coords,
+      coords: coords,
       storeList: storeList
     });
   }
@@ -25,6 +61,12 @@ export class ClicknCollectContextProvider extends React.Component {
   updateCoords = (coords) => {
     this.setState({
       coords: coords
+    });
+  }
+
+  updateContactInfo = (contactInfo) => {
+    this.setState({
+      contactInfo: contactInfo
     });
   }
 
@@ -36,7 +78,8 @@ export class ClicknCollectContextProvider extends React.Component {
             ...this.state,
             updateSelectStore: this.updateSelectStore,
             updateCoordsAndStoreList: this.updateCoordsAndStoreList,
-            updateCoords: this.updateCoords
+            updateCoords: this.updateCoords,
+            updateContactInfo: this.updateContactInfo
           }
         }>
         {this.props.children}

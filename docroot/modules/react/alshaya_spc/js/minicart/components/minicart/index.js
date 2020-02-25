@@ -1,8 +1,8 @@
 import React from 'react';
 
 import 'promise-polyfill/src/polyfill';
-import {fetchCartData} from '../../../utilities/get_cart';
-import {addInfoInStorage} from '../../../utilities/storage';
+import { fetchCartData } from '../../../utilities/get_cart';
+import { addInfoInStorage } from '../../../utilities/storage';
 import EmptyMiniCartContent from '../empty-mini-cart-content';
 import MiniCartContent from "../mini-cart-content";
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
@@ -21,7 +21,7 @@ export default class MiniCart extends React.Component {
 
   dispatchRefereshCart = (result) => {
     // Trigger event so that data can be passed to other components.
-    var event = new CustomEvent('refreshCart', {bubbles: true, detail: { data: () => result }});
+    var event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
     document.dispatchEvent(event);
     checkCartCustomer(result);
   }
@@ -97,13 +97,13 @@ export default class MiniCart extends React.Component {
   render() {
     if (this.state.wait || !this.state.qty) {
       return <div className="acq-mini-cart">
-        <EmptyMiniCartContent/>
+        <EmptyMiniCartContent />
       </div>
     }
 
     return <div className="acq-mini-cart">
-      <MiniCartContent amount={this.state.amount} qty={this.state.qty}/>
-      </div>
+      <MiniCartContent amount={this.state.amount} qty={this.state.qty} />
+    </div>
   }
 
 }

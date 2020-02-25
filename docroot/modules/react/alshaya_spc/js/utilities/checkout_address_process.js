@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getShippingMethods } from './checkout_util';
-import { addShippingInCart } from './update_cart';
+import { addShippingInCart } from './checkout_util';
 
 /**
  * Process the data got from address form submission.
@@ -90,7 +90,7 @@ export const checkoutAddressProcess = function (e, cart) {
             cart_info.then((cart_result) => {
               let cart_data = {
                 'cart': cart_result,
-                'delivery_type': cart_result.delivery_method,
+                'delivery_type': cart_result.delivery_type,
                 'shipping_methods': shipping,
                 'address': form_data
               }

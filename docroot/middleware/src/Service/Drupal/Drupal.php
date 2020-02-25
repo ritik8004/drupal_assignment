@@ -137,4 +137,27 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
+  /**
+   * Get store info for given store code.
+   *
+   * @param string $store_code
+   *   The store code.
+   *
+   * @return mixed
+   *   Return store info.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function getStoreInfo($store_code) {
+    $client = $this->drupalInfo->getDrupalApiClient();
+    $url = sprintf('/%s/cnc/store/%s', $this->drupalInfo->getDrupalLangcode(), $store_code);
+    $response = $client->request('GET', $url, [
+      'headers' => [
+        'Host' => $this->drupalInfo->getDrupalBaseUrl(),
+      ],
+    ]);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
 }

@@ -17,11 +17,14 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class StoresFinderUtility.
  */
 class StoresFinderUtility {
+
+  use StringTranslationTrait;
 
   /**
    * Node storage.
@@ -214,6 +217,21 @@ class StoresFinderUtility {
       $store['address'] = $this->getStoreAddress($store_node);
       $store['phone_number'] = $store_node->get('field_store_phone')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+      $store['open_hours_group'] = $hours = [];
+      $init_day = '';
+      foreach ($store['open_hours'] as $open_hours) {
+        // Check the hours are present or not. ['value'] contains timings.
+        // ['Key'] contains week day.
+        if (empty($hours[$open_hours['value']])) {
+          $hours[$open_hours['value']] = $open_hours['key'];
+          $init_day = $open_hours['key'];
+        }
+        else {
+          // Prepare text like "Monday - Friday".
+          $hours[$open_hours['value']] = $init_day . ' - ' . $open_hours['key'];
+        }
+      }
+      $store['open_hours_group'] = array_flip($hours);
       $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
       $store['nid'] = $store_node->id();
       $store['view_on_map_link'] = Url::fromRoute('alshaya_click_collect.cc_store_map_view', ['node' => $store_node->id()])->toString();
@@ -224,6 +242,31 @@ class StoresFinderUtility {
       }
     }
     return $store;
+  }
+
+  /**
+   * Get store nodes.
+   *
+   * @param array $store_codes
+   *   The array of store codes.
+   * @param string $langcode
+   *   (Optional) The language code.
+   *
+   * @return array
+   *   Return array of stores.
+   */
+  public function getStoreNodes(array $store_codes, $langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    }
+    // Get the nids for given store code with custom query.
+    $query = $this->database->select('node_field_data', 'n');
+    $query->addField('n', 'nid');
+    $query->addField('ns', 'field_store_locator_id_value');
+    $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
+    $query->condition('ns.field_store_locator_id_value', $store_codes, 'IN');
+    $query->condition('n.langcode', $langcode);
+    return $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
   }
 
   /**
@@ -243,31 +286,40 @@ class StoresFinderUtility {
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
     }
 
-    // Get the nids for given store code with custom query.
-    $query = $this->database->select('node_field_data', 'n');
-    $query->addField('n', 'nid');
-    $query->addField('ns', 'field_store_locator_id_value');
-    $query->innerJoin('node__field_store_locator_id', 'ns', 'n.nid = ns.entity_id and n.langcode = ns.langcode');
-    $query->condition('ns.field_store_locator_id_value', $store_codes, 'IN');
-    $query->condition('n.langcode', $langcode);
-    $store_nodes = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
-
+    $store_nodes = $this->getStoreNodes($store_codes, $langcode);
     // Load multiple nodes all together.
     $nids = array_keys($store_nodes);
     $nodes = $this->nodeStorage->loadMultiple($nids);
     $prepared_stores = [];
     $config = $this->configFactory->get('alshaya_click_collect.settings');
-
+    $address = $this->addressBookManager->getAddressStructureWithEmptyValues();
     // Loop through node and add store address/opening hours/delivery time etc.
     foreach ($nodes as $nid => $node) {
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
       $prepared_stores[$nid] = $this->getStoreExtraData($store_codes, $node);
-      $store = $stores[$store_nodes[$nid]['field_store_locator_id_value']];
+      $store = is_array($stores[$store_nodes[$nid]['field_store_locator_id_value']]) ? $stores[$store_nodes[$nid]['field_store_locator_id_value']] : [];
       $store['rnc_available'] = (int) $store['rnc_available'];
       $store['sts_available'] = (int) $store['sts_available'];
+      $store['formatted_distance'] = $this->t('@distance miles', [
+        '@distance' => number_format((float) $store['distance'], 2, '.', ''),
+      ]);
       if (!empty($store['rnc_available'])) {
         $store['delivery_time'] = $config->get('click_collect_rnc');
       }
+
+      $store['cart_address'] = $address;
+      // V1 - we update only area in address.
+      $store['cart_address']['extension']['address_area_segment'] = $node->get('field_store_area')->getString();
+
+      // V2 - copy address from Store.
+      if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+        $store_address = $node->get('field_address')->getValue();
+
+        if ($store_address) {
+          $store['cart_address'] = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+        }
+      }
+
       $prepared_stores[$nid] += $store;
       // Unset the store for which we found the node, so that we can log the
       // store codes for which nodes are missing.
