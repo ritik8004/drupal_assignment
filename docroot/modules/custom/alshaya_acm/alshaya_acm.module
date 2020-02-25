@@ -210,7 +210,29 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $item['quantity']['#suffix'] = '</div>';
       $item['quantity']['#suffix'] .= alshaya_acm_get_remove_from_basket_link($cart, $sku_entity);
 
-      _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message);
+      $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+      $plugin = $sku_entity->getPluginInstance();
+
+      // Check if max sale qty limit is set for parent.
+      $parent_sku = $skuManager->getParentSkuBySku($id);
+      // Get max sale qty for the variant in cart if not present for parent.
+      $parent_max_sale_qty = $parent_sku ? $plugin->getMaxSaleQty($parent_sku) : 0;
+      $max_sale_qty = !empty($parent_max_sale_qty) ? $parent_max_sale_qty : $plugin->getMaxSaleQty($id);
+
+      if (!empty($max_sale_qty)) {
+        // Get product qty in cart for variant.
+        $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
+
+        if ($current_variant_in_cart_qty && ($current_variant_in_cart_qty >= $max_sale_qty)) {
+          // Show msg if order limit is reached.
+          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) . '</div>';
+        }
+        else {
+          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty) . '</div>';
+        }
+      }
+
+      _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message, $max_sale_qty);
 
       // Add sub total price of product.
       if ($is_item_free) {
@@ -852,12 +874,13 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
  * @param string $out_of_stock_message
  *   Out of stock message.
  */
-function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out_of_stock_message) {
+function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out_of_stock_message, $max_sale_qty) {
   $item_stock_error = '';
   $selected_quantity = $item['quantity']['#default_value'];
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  /** @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit */
 
   // If item is not available in stock.
   if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
@@ -869,6 +892,8 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
       $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
     }
     else {
+      // We show lower of available quantity and max_sale_qty in dropdown.
+      $quantity = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
       $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
     }
   }

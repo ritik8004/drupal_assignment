@@ -1,9 +1,9 @@
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 3rem;
+    margin-top: 4rem;
 
     html[lang=ar] & {
-      margin-top: 3rem;
+      margin-top: 4rem;
     }
   }
 
@@ -65,10 +65,15 @@ body {
   li {
     height: 1.75rem;
 
+    @include breakpoint($upto-desktop) {
+      height: auto;
+    }
+
     &::after {
       margin-top: -2.5rem;
       font-size: 2rem;
       width: 1.875rem;
+      font-weight: bold;
     }
   }
 

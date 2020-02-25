@@ -137,6 +137,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     }
     $currency = $this->configFactory->get('acq_commerce.currency');
     $configuration = $this->getConfiguration();
+    $product_category_settings = $this->configFactory->get('alshaya_acm_product_category.settings');
 
     return [
       '#type' => 'markup',
@@ -156,6 +157,8 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'itemsPerPage' => $configuration['items_per_page'] ?? 12,
             'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/algolia/search-insights@1.3.0.min.js',
             'filters' => $this->getFilters($index_name),
+            'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
+            'category_facet_label' => $this->t('Category'),
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,
@@ -179,6 +182,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
               'showColorImages' => $display_settings->get('show_color_images_on_filter'),
               'showProductImage' => $display_settings->get('color_swatches_show_product_image'),
               'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
+              'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
             ],
           ],
         ],
@@ -282,9 +286,9 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             $identifier = 'promotions';
           }
           elseif ($facet->getFieldIdentifier() === 'field_category') {
-            // For category we have index hierarchy in field_category_name
+            // For category we have index hierarchy in field_category
             // so, updating field_name and type for react.
-            $identifier = 'field_category_name';
+            $identifier = 'field_category';
             $widget['type'] = 'hierarchy';
           }
           else {

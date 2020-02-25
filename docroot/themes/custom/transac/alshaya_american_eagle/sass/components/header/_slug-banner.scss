@@ -1,0 +1,29 @@
+.slug-banner-processed {
+  &:not(.header--fixed) {
+    .c-header {
+      .block-views-exposed-filter-blocksearch-page {
+        @include breakpoint($only-mobile) {
+          top: 3.5625rem;
+
+          .ui-autocomplete {
+            top: 2.9375rem !important;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 4.5625rem;
+        }
+      }
+    }
+  }
+
+  &.header--fixed {
+    .c-header {
+      .block-views-exposed-filter-blocksearch-page {
+        @include breakpoint($only-tablet) {
+          top: 4.5625rem;
+        }
+      }
+    }
+  }
+}

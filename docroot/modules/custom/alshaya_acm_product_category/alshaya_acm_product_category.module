@@ -576,7 +576,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
  * Implements hook_search_api_index_items_alter().
  */
 function alshaya_acm_product_category_search_api_index_items_alter(IndexInterface $index, array &$items) {
-  if (!in_array($index->id(), ['alshaya_algolia_index', 'acquia_search_index'])) {
+  if (!in_array($index->id(), ['acquia_search_index'])) {
     return;
   }
 
@@ -585,9 +585,19 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
 
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
 
   // Get sales categories to index L2 for sales terms.
-  $sale_categories = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds()['sale'] ?? [];
+  $old_categorization_rule = $product_category_manager->isOldCategorizationRuleEnabled();
+  // If old categorization rule is not enabled
+  // call getCategorizationIds() with ['sale'].
+  if ($old_categorization_rule) {
+    $sale_categories = $product_category_manager->getCategorizationIds() ?? [];
+  }
+  else {
+    $sale_categories = $product_category_manager->getCategorizationIds()['sale'] ?? [];
+  }
 
   foreach ($items as $item_id => $item) {
     /** @var \Drupal\node\NodeInterface $object */

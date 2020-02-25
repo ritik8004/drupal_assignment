@@ -49,10 +49,13 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
 
           if ($query) {
             $options = $query['f'];
-            foreach ($options as $key => $option) {
-              // Unset all active items of this facet to prepare url for the
-              // `All` facet item.
-              unset($options[$key]);
+            // Checks for non-empty value to be used in loop.
+            if (!empty($options) && is_iterable($options)) {
+              foreach ($options as $key => $option) {
+                // Unset all active items of this facet to prepare url for the
+                // `All` facet item.
+                unset($options[$key]);
+              }
             }
 
             $query['f'] = $options;

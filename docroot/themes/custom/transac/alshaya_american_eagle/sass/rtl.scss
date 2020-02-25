@@ -22,7 +22,7 @@ $dir: rtl;
 
 // These are the default base styles applied to HTML elements.
 @import "../../alshaya_white_label/sass/base/**/*";
-//@import "base/**/*";
+@import "base/**/*";
 @import "../../alshaya_white_label/sass/layout/**/*";
 @import "../../alshaya_white_label/sass/state/**/*";
 
@@ -33,4 +33,4 @@ $dir: rtl;
 
 // Importing browser specific hot fixes.
 @import "../../alshaya_white_label/sass/hotfix";
-//@import "hotfix";
+@import "hotfix";

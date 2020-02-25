@@ -1,0 +1,35 @@
+.c-plp .c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1 legend,
+.c-plp .c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-2 legend,
+.c-plp .c-content__region .block-views-exposed-filter-blocksearch-page legend,
+.c-facet.c-accordion .c-accordion__title,
+.c-facet.c-accordion .c-collapse__title,
+.c-facet.c-collapse-item .c-accordion__title,
+.c-facet.c-collapse-item .c-collapse__title {
+  font-family: $alshaya-bold;
+  text-transform: uppercase;
+  color: $accordion_title;
+  font-size: 0.8125rem;
+
+  @include breakpoint($desktop) {
+    @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+      #{$right}: 1rem;
+      top: 1.125rem;
+    }
+  }
+
+  &.active {
+    &::after {
+      @include breakpoint($desktop) {
+        transform: translateY(-50%) rotate(270deg);
+      }
+    }
+  }
+}
+
+.show-all-filters,
+.show-all-filters-algolia {
+  font-family: $alshaya-bold;
+  text-transform: uppercase;
+  color: $accordion_title;
+  font-size: 0.8125rem;
+}

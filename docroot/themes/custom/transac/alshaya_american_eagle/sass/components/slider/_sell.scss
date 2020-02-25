@@ -1,0 +1,39 @@
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell {
+  .view-product-slider {
+    text-align: $left;
+  }
+}
+
+.subtitle.crossell-title {
+  text-transform: uppercase;
+}
+
+.view-product-slider {
+  .c-products__item__label {
+    font-size: 0.875rem;
+    max-width: none;
+    text-transform: uppercase;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5rem;
+    }
+  }
+
+  .price-wrapper {
+    font-family: $alshaya-bold;
+  }
+
+  .special--price {
+    .price {
+      font-size: 0.875rem;
+    }
+  }
+
+  .price-block {
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.5rem;
+    }
+  }
+}
