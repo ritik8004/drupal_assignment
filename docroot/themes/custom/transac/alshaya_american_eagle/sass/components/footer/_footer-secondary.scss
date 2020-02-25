@@ -1,0 +1,104 @@
+.c-footer__logo--verisign,
+.c-footer__logo--visa,
+.c-footer__logo--mastercard {
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 4.3125rem;
+}
+
+.c-footer__logo--visa,
+.c-footer__logo--verisign {
+  width: 3.3125rem;
+}
+
+.c-footer__copy {
+  .field--name-body {
+    p {
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 8rem;
+        text-align: $left;
+      }
+
+      & + p {
+        display: block;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 1rem 1.25rem;
+  }
+
+  .c-footer-secondary & {
+    .country-ae & {
+      html[lang=ar] & {
+        padding: 1.875rem 0;
+      }
+    }
+  }
+}
+
+.c-footer-secondary {
+  .l-container {
+    @include container(75.3125rem);
+
+    .path--cart & {
+      @include container(64.3125rem);
+    }
+  }
+}
+
+.region__footer-secondary {
+  display: flex;
+  flex-flow: row wrap;
+
+  .c-footer__copy {
+    order: 1;
+
+    @include breakpoint($tablet) {
+      flex-basis: 78%;
+      margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      flex-basis: 100%;
+      border-top: 0.0625rem solid $footer_border_top;
+      border-bottom: 0.0625rem solid $footer_border_top;
+    }
+  }
+
+  .c-footer__logos {
+    order: 2;
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 0;
+      line-height: normal;
+    }
+
+    @include breakpoint($only-mobile) {
+      flex-basis: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    li {
+      &:not(:last-child) {
+        @include breakpoint($tablet) {
+          margin-#{$right}: 1.5rem;
+        }
+      }
+    }
+  }
+}

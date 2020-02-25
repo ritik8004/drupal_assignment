@@ -59,5 +59,8 @@ libraries-override:
   facets/soft-limit:
     js:
       js/soft-limit.js: js/soft-limit.js
+  facets/drupal.facets.views-ajax:
+    js:
+      js/facets-views-ajax.js: js/facets-views-ajax.js
 ckeditor_stylesheets:
   - css/ckeditor.css

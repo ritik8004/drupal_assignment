@@ -1,7 +1,6 @@
 import React from 'react';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { Configure, Hits } from "react-instantsearch-dom";
-import {searchClient} from './config/SearchClient';
 import AutoComplete from './components/algolia/Autocomplete';
 import SearchResults from './components/searchresults';
 import Portal from './components/portal';
@@ -12,6 +11,7 @@ import {
   redirectToOtherLang,
   setSearchQuery
 } from './utils';
+import {algoliaSearchClient} from "./config/SearchClient";
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -61,7 +61,7 @@ class App extends React.PureComponent {
 
     return (
       <div>
-        <InstantSearch indexName={ `${drupalSettings.algoliaSearch.indexName}_query` } searchClient={searchClient}>
+        <InstantSearch indexName={ `${drupalSettings.algoliaSearch.indexName}_query` } searchClient={algoliaSearchClient}>
           <Configure hitsPerPage={drupalSettings.autocomplete.hits}/>
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
@@ -72,7 +72,7 @@ class App extends React.PureComponent {
         {isMobile() && (
           <Portal id="top-results" conditional query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
-            <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={searchClient}>
+            <InstantSearch indexName={drupalSettings.algoliaSearch.indexName} searchClient={algoliaSearchClient}>
               <Configure hitsPerPage={drupalSettings.autocomplete.hits} query={query}/>
               <Hits hitComponent={Teaser}/>
             </InstantSearch>

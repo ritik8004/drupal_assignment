@@ -134,7 +134,6 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
   if ($index->id() !== 'alshaya_algolia_index') {
     return;
   }
-
   $logger = \Drupal::logger('alshaya_search_algolia');
   /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
   $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');

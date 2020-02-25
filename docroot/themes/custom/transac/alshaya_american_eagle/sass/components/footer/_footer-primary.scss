@@ -1,0 +1,414 @@
+.c-footer-primary {
+  border-top-width: 0.0625rem;
+
+  .l-container {
+    @include container(75.3125rem);
+  }
+
+  @include breakpoint($tablet) {
+    padding-bottom: 3.125rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 0.0625rem solid $footer_border_top;
+    border-top-width: 0.0625rem;
+  }
+
+  .primary--footer--right {
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 5%;
+    }
+
+    @include breakpoint($tablet) {
+      float: $right;
+      width: 38%;
+      margin-top: 0.75rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 27%;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .footer--categories {
+      width: 35%;
+      float: $left;
+    }
+
+    .footer--abouthelp {
+      width: 65%;
+      float: $left;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .footer--categories {
+      float: $left;
+      width: 30%;
+      padding-#{$right}: 5%;
+    }
+
+    .footer--abouthelp {
+      width: 65%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 0;
+      padding-#{$right}: 1.25rem;
+    }
+  }
+
+  .footer--menu {
+    @include breakpoint($tablet) {
+      width: 62%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 72%;
+    }
+
+    @include breakpoint($mobile) {
+      margin: 0;
+    }
+  }
+}
+
+.c-footer-menu {
+  @extend %list-clear;
+
+  @include breakpoint($tablet) {
+    width: 90%;
+  }
+
+  a {
+    text-transform: capitalize;
+
+    @include breakpoint($tablet) {
+      line-height: 1.5;
+      margin: 0.3125rem 0;
+      display: inline-block;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .cols-6 & {
+    &:last-child {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+
+  &__tab {
+    @include breakpoint($only-mobile) {
+      border-bottom: 0.0625rem solid $footer_accordion_border;
+    }
+  }
+}
+
+.c-footer-menu--about,
+.c-footer-menu--help,
+.c-footer-menu--category,
+.c-footer-menu--static-links {
+  h3 {
+    font-size: 0.875rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.875rem 1rem;
+
+      &::after {
+        #{$right}: 1rem;
+      }
+
+      @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/plus.svg', 2rem, 2rem, after);
+    }
+  }
+
+  @include breakpoint ($only-mobile) {
+    border-top-color: $footer_border_top;
+    border-bottom-color: $footer_border_top;
+  }
+
+  li.c-footer-menu__tab:not(:last-child) {
+    @include breakpoint ($only-mobile) {
+      border-bottom: 0.0625rem solid $footer_accordion_border;
+    }
+  }
+}
+
+.c-footer-is-accordion .accordion--body {
+  border-top-color: $footer_border_top;
+}
+
+.c-footer-menu--help {
+  @include breakpoint($desktop) {
+    margin-#{$left}: 0;
+    padding-#{$left}: 5%;
+  }
+
+  @include breakpoint($tablet) {
+    width: 40%;
+    float: $left;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  @include breakpoint($only-mobile) {
+    margin: 2.5rem 1rem 2rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    min-width: initial;
+    margin-bottom: 2.8125rem;
+  }
+
+  @include breakpoint($tablet) {
+    #footer-newsletter-form-wrapper {
+      width: auto;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 100%;
+  }
+
+  #edit-email {
+    border: 0.0625rem solid $newsletter_input_border;
+    border-width: 0.0625rem;
+    padding-#{$left}: 0.3125rem;
+    height: 2.5rem;
+
+    @include ellipsis-text;
+
+    @include breakpoint($tablet) {
+      margin-top: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 40% !important;
+
+      html[lang=ar] & {
+        padding-#{$right}: 44% !important;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+  }
+
+  .form-submit {
+    @extend %btn;
+
+    font-family: $alshaya-thin;
+    font-size: 0.875rem;
+    padding: 0.6875rem 2.6875rem;
+    height: 2.5rem;
+    text-transform: uppercase;
+
+    @include breakpoint($only-tablet) {
+      #{$right}: 0;
+      padding: 0.6875rem;
+    }
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background-color: $primary_btn_bg;
+
+    .ladda-spinner {
+      top: 1.25rem;
+    }
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
+}
+
+.c-footer-menu--about {
+  @include breakpoint($desktop) {
+    margin-#{$left}: 0;
+    padding-#{$right}: 5%;
+    width: 49% !important;
+  }
+
+  @include breakpoint($tablet) {
+    float: $left;
+    width: 60%;
+  }
+}
+
+.newsletter-block-label {
+  text-transform: none;
+  text-align: $left;
+  padding: 0;
+  font-size: 0.875rem;
+  color: $newsletter_block_text;
+  margin-bottom: 1rem;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.375rem;
+    text-align: center;
+  }
+}
+
+.language--switcher {
+  @include breakpoint($tablet) {
+    margin-top: 1.75rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 0 0.875rem 0.875rem;
+  }
+}
+
+.c-footer-primary .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  ul {
+    li {
+      &:first-child {
+        position: relative;
+
+        a {
+          text-transform: capitalize;
+          font-family: $alshaya-thin;
+        }
+      }
+
+      &.en.is-active a {
+        font-family: $alshaya-thin;
+      }
+
+      &.en.is-active a,
+      &.ar.is-active a {
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+
+      &.ar a {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}
+
+.language--switcher.only-first-time {
+  padding: 0;
+  background: $lang_switch_list;
+
+  ul {
+    height: 2.5rem;
+    position: relative;
+    left: 50%;
+    transform: translateX(-56%);
+
+    html[lang="ar"] & {
+      transform: translateX(-42%);
+    }
+
+    li {
+      padding: 0;
+
+      a {
+        color: $lang_switch_list;
+        height: 2.5rem;
+        width: 7.75rem;
+        display: inline-block;
+        padding: 0.875rem 0;
+        line-height: 0.875rem;
+        margin: 0 0.875rem 0 0;
+        text-transform: uppercase !important;
+        text-decoration: none;
+        background-color: $lang_switch_active;
+
+        &.is-active {
+          background-color: $lang_switch_active;
+          margin: 0 0.5rem 0 0;
+        }
+      }
+
+      &:first-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .language-switcher-close {
+    display: block;
+    height: 2.5rem;
+    width: 2.5rem;
+    #{$right}: 0;
+    top: 0;
+
+    @include icon(close, after) {
+      line-height: 2.5rem;
+    }
+  }
+}
+
+.footer--social {
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+  }
+
+  .c-social-links {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 0;
+      margin-top: 3.125rem;
+    }
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 0;
+
+      li:not(:last-child) {
+        margin-#{$right}: 0.875rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: -0.75rem;
+    }
+
+    h3 {
+      color: $black;
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 2.375rem;
+        margin-bottom: 1.25rem;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.c-footer-primary .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  ul {
+    li {
+      &:first-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.open--accordion .is-accordion {
+  @include pdp_icon_img('#{$aeo_theme_img_directory_path}/icons/minus.svg', 2rem, 2rem, after);
+}

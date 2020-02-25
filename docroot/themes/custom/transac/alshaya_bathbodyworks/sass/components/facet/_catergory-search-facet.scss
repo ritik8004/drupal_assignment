@@ -1,0 +1,9 @@
+.path--search {
+  .c-sidebar-first .c-facet__blocks {
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($desktop) {
+        margin-top: 5.875rem !important;
+      }
+    }
+  }
+}

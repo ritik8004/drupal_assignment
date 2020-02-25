@@ -25,9 +25,9 @@ widget:
     show_numbers: true
     soft_limit: 0
 query_operator: or
-use_hierarchy: false
-expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
+use_hierarchy: true
+expand_hierarchy: true
+enable_parent_when_child_gets_disabled: false
 hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: false
@@ -47,12 +47,6 @@ processor_configs:
     weights:
       build: 5
     settings: {  }
-  raw_value_widget_order:
-    processor_id: raw_value_widget_order
-    weights:
-      sort: 50
-    settings:
-      sort: ASC
   term_weight_widget_order:
     processor_id: term_weight_widget_order
     weights:
