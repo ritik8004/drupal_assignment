@@ -8,6 +8,23 @@
       background: $spc-cnc-store-item-bg;
       border-bottom: 0.3125rem solid $spc-checkout-sidebar-bg;
 
+      .store-actions {
+        @include breakpoint($only-mobile) {
+          .select-store {
+            margin: 0;
+          }
+
+          position: fixed;
+          bottom: 0;
+          #{$left}: 0;
+          width: 100%;
+          background: $spc-checkout-address-form-bg;
+          padding: 1.25rem;
+          z-index: 1;
+          box-shadow: 0 -1px 20px 9px $sticky-btn;
+        }
+      }
+
       .select-store {
         background: $primary_btn_bg;
         height: 3.25rem;

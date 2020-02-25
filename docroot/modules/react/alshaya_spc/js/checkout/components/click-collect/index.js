@@ -145,11 +145,15 @@ class ClickCollect extends React.Component {
   toggleStoreView = (e, activeView) => {
     e.preventDefault();
     if (activeView === 'map') {
+      document.getElementsByClassName('stores-map-view')[0].classList.add('active');
+      document.getElementsByClassName('stores-list-view')[0].classList.remove('active');
       this.cncMapView.current.style.display = "block";
       this.cncListView.current.style.display = "none";
       this.refreshMap();
     }
     else {
+      document.getElementsByClassName('stores-list-view')[0].classList.add('active');
+      document.getElementsByClassName('stores-map-view')[0].classList.remove('active');
       this.cncMapView.current.style.display = "none";
       this.cncListView.current.style.display = "block";
     }
@@ -228,12 +232,14 @@ class ClickCollect extends React.Component {
               </div>
               {window.innerWidth < 768 &&
                 <div className='toggle-store-view'>
-                  <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
-                    {Drupal.t('List view')}
-                  </button>
-                  <button className="stores-map-view" onClick={(e) => this.toggleStoreView(e, 'map')}>
-                    {Drupal.t('Map view')}
-                  </button>
+                  <div className='toggle-buttons-wrapper'>
+                    <button className="stores-list-view" onClick={(e) => this.toggleStoreView(e, 'list')}>
+                      {Drupal.t('List view')}
+                    </button>
+                    <button className="stores-map-view" onClick={(e) => this.toggleStoreView(e, 'map')}>
+                      {Drupal.t('Map view')}
+                    </button>
+                  </div>
                 </div>
               }
               <div id="click-and-collect-list-view" ref={this.cncListView}>
@@ -244,7 +250,7 @@ class ClickCollect extends React.Component {
                 />
               </div>
               {window.innerWidth < 768 &&
-                <div className='click-and-collect-map-view' style={{ display: 'none', width: '100%', height: '500px' }} ref={this.cncMapView}>
+                <div className='click-and-collect-map-view' style={{ display: 'none' }} ref={this.cncMapView}>
                   {mapView}
                 </div>
               }
