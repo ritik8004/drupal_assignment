@@ -50,10 +50,7 @@ export default class EmptyDeliveryText extends React.Component {
             {Drupal.t('Select your preferred collection store')}
           </div>
             <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-              <React.Fragment>
-                <a className='close' onClick={this.closeModal}>&times;</a>
-                <ClickCollect processAddress={this.processAddress}/>
-              </React.Fragment>
+              <ClickCollect closeModal={this.closeModal} processAddress={this.processAddress}/>
             </Popup>
         </div>
       );

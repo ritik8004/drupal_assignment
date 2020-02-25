@@ -110,6 +110,7 @@ export default class AddressForm extends React.Component {
         }
         <div className='spc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Delivery information')}</SectionTitle>
+          <a className='close' onClick={this.props.closeModal}>&times;</a>
           <div className='spc-address-form-wrapper'>
             <div className='spc-deliver-button' onClick={() => this.deliverToCurrentLocation()}>{Drupal.t('Deliver to my location')}</div>
             { window.innerWidth < 768 &&

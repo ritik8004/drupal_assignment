@@ -96,6 +96,7 @@ $_gray: #c8c8c8;
 $_gray_1: #eaeaea;
 $_transparent_overlay: rgba(255, 255, 255, 0);
 $_white_five_alpha_80: rgba(255, 255, 255, 0.8);
+$_spc_search_icon: #4285f4;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1211,3 +1212,12 @@ $spc-checkout-address-tile-bg: $white-five;
 $spc-checkout-order-detail-bg: $white-five;
 $spc-checkout-order-detail-label: $marine-blue-two;
 $spc-checkout-confirmation-success-txt: $cerulean-two;
+$spc-cnc-checkout-store-search-border: $warm-grey-two;
+$spc-cnc-store-search-icon: $_spc_search_icon;
+$spc-search-icon: $_spc_search_icon;
+$spc-cnc-search-text: $grey-light;
+$spc-cnc-store-search-icon-active: $white-five;
+$spc-cnc-search-placeholder: $grey-light;
+$spc-cnc-store-item-text-impress: $marine-blue-two;
+$spc-cnc-store-item-text: $grey-light;
+$spc-cnc-store-item-bg: $white-five;

@@ -5,6 +5,7 @@ import _isEmpty from 'lodash/isEmpty';
 
 import Gmap from '../../../utilities/map/Gmap';
 import StoreItemInfoWindow from '../store-item-infowindow';
+import {isRTL} from "../../../utilities/rtl";
 
 class ClicknCollectMap extends React.Component {
 
@@ -24,12 +25,13 @@ class ClicknCollectMap extends React.Component {
    */
   initGeoCoder = () => {
     this.geocoder = new google.maps.Geocoder();
-  }
+  };
 
   componentDidMount() {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    window.spcMap.googleMap = this.createGoogleMap({});
+    let control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
+    window.spcMap.googleMap = this.createGoogleMap(control_position);
     if (this.props.markers) {
       this.placeMarkers();
     }
@@ -89,9 +91,12 @@ class ClicknCollectMap extends React.Component {
   /**
    * Create google map.
    */
-  createGoogleMap = () => {
-    return this.googleMap.initMap(this.googleMapRef.current);
-  }
+  createGoogleMap = (control_position) => {
+    let map = this.googleMap.initMap(this.googleMapRef.current);
+    map.mapTypeControl = false;
+    map.zoomControlOptions.position = control_position;
+    return map;
+  };
 
   render () {
     return (

@@ -25,7 +25,7 @@ export default class AddressList extends React.Component {
     this.setState({
       open: false
     });
-  }
+  };
 
   componentDidMount () {
     // If user is logged in, only then get area lists.
@@ -45,11 +45,11 @@ export default class AddressList extends React.Component {
     this.setState({
       addressList: addressList
     });
-  }
+  };
 
   processAddress = (e) => {
     console.log('Address submission processing here');
-  }
+  };
 
   render () {
     // If no address list available.
@@ -71,10 +71,7 @@ export default class AddressList extends React.Component {
             {Drupal.t('Add new address')}
           </div>
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
-            <React.Fragment>
-              <a className='close' onClick={this.closeModal}>&times;</a>
-              <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress}/>
-            </React.Fragment>
+            <AddressForm closeModal= {this.closeModal} show_prefered={true} default_val={null} processAddress={this.processAddress}/>
           </Popup>
           <div className='spc-checkout-address-list'>{addressItem}</div>
         </div>

@@ -19,11 +19,11 @@ class ClickCollect extends React.Component {
     this.cncMapView = React.createRef();
     this.state = {
       selectStoreOpen: this.props.selectedStore || false,
-    }
+    };
   }
 
   componentDidMount() {
-    // For autocomplete textfield.
+    // For autocomplete text field.
     this.autocomplete = new window.google.maps.places.Autocomplete(this.searchplaceInput.current, {
       types: [],
       componentRestrictions: {country: window.drupalSettings.country_code}
@@ -58,6 +58,7 @@ class ClickCollect extends React.Component {
     // If location access is enabled by user.
     try {
       if (navigator && navigator.geolocation) {
+        e.target.classList.add('active');
         navigator.geolocation.getCurrentPosition(this.LocationSuccess, this.LocationFail, { timeout: 1000 });
       }
     }
@@ -154,7 +155,6 @@ class ClickCollect extends React.Component {
   render() {
     let {coords, storeList, selectedStore } = this.context;
     let {selectStoreOpen} = this.state;
-    console.log(selectStoreOpen);
 
     let mapView = (
       <ClicknCollectMap
@@ -171,23 +171,24 @@ class ClickCollect extends React.Component {
             { mapView }
           </div>
         }
-        <div className='spc-address-form-sidebar'>
+        <div className='spc-cnc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
-          <div className='spc-address-form-wrapper'>
-            <div className='spc-address-form-content' style={{ display: selectStoreOpen ? 'none' : 'block' }}>
-              <div>{Drupal.t('Find your nearest store')}</div>
-                <div>
-                  <input
-                    ref={this.searchplaceInput}
-                    className="form-search"
-                    type="search"
-                    id="edit-store-location"
-                    name="store_location"
-                    size="60"
-                    maxLength="128"
-                    placeholder={Drupal.t('enter a location')}
-                    autoComplete="off"
-                  />
+          <a className='close' onClick={this.props.closeModal}>&times;</a>
+          <div className='spc-cnc-address-form-wrapper'>
+            <div className='spc-cnc-address-form-content' style={{ display: selectStoreOpen ? 'none' : 'block' }}>
+              <SectionTitle>{Drupal.t('Find your nearest store')}</SectionTitle>
+                <div className='spc-cnc-location-search-wrapper'>
+                  <div className='spc-cnc-store-search-form-item'>
+                    <input
+                      ref={this.searchplaceInput}
+                      className="form-search"
+                      type="search"
+                      id="edit-store-location"
+                      name="store_location"
+                      placeholder={Drupal.t('e.g. Salmiya')}
+                      autoComplete="off"
+                    />
+                  </div>
                   <button className="cc-near-me" id="edit-near-me" onClick={(e) => this.getCurrentPosition(e)}>{Drupal.t('Near me')}</button>
                 </div>
                 { window.innerWidth < 768 &&

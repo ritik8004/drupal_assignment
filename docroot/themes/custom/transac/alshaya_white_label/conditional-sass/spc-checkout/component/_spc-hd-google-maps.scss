@@ -37,7 +37,7 @@
     }
 
     @include icon(search, after) {
-      color: #4285f4;
+      color: $spc-search-icon;
       font-size: 1.75rem;
       height: 2.25rem;
       display: inline-flex;
