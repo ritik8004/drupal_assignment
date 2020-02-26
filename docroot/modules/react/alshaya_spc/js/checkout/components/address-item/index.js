@@ -5,7 +5,7 @@ import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
   deleteUserAddress,
-  editCustomerAddress
+  addEditAddressToCustomer
 } from '../../../utilities/address_util';
 import EditAddressSVG from "../edit-address-svg";
 
@@ -65,36 +65,7 @@ export default class AddressItem extends React.Component {
    * Process the address form data on sumbit.
    */
   processAddress = (e) => {
-    let form_data = {};
-    form_data['address'] = {
-      'given_name': e.target.elements.fname.value,
-      'family_name': e.target.elements.lname.value,
-      'address_id': e.target.elements.address_id.value,
-      'city': 'Dummy Value'
-    };
-
-    form_data['mobile'] = e.target.elements.mobile.value
-
-    // Getting dynamic fields data.
-    Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-      form_data['address'][key] = e.target.elements[key].value
-    });
-
-    let addressList = editCustomerAddress(form_data);
-    if (addressList instanceof Promise) {
-      addressList.then((list) => {
-        // Close the addresslist popup.
-        let event = new CustomEvent('closeAddressListPopup', {
-          bubbles: true,
-          detail: {
-            close: () => true
-          }
-        });
-        document.dispatchEvent(event);
-        // Close the address modal.
-        this.closeModal();
-      });
-    }
+    addEditAddressToCustomer(e);
   };
 
   render() {

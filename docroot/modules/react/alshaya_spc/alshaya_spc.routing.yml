@@ -73,18 +73,10 @@ alshaya_spc.set_default_address:
   requirements:
     _role: 'authenticated'
 
-alshaya_spc.add_address:
-  path: '/add-address'
+alshaya_spc.add_edit_address:
+  path: '/add-edit-address'
   defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::addNewAddress'
-  methods:  [POST]
-  requirements:
-    _role: 'authenticated'
-
-alshaya_spc.edit_address:
-  path: '/edit-address'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::editCustomerAddress'
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::addEditCustomerAddress'
   methods:  [POST]
   requirements:
     _role: 'authenticated'

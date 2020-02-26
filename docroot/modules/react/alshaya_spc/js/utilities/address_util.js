@@ -48,12 +48,12 @@ export const deleteUserAddress = function (address_id) {
 }
 
 /**
- * Add new address for customer.
+ * Add / Edit address for customer.
  *
  * @param {*} address
  */
-export const addNewUserAddress = function (address) {
-  return axios.post('add-address', {
+export const addEditUserAddress = function (address) {
+  return axios.post('add-edit-address', {
       'address': address
     })
     .then(response => {
@@ -65,18 +65,39 @@ export const addNewUserAddress = function (address) {
 }
 
 /**
- * Edit address for customer.
+ * Prepare data for customer address add/edit and save.
  *
- * @param {*} address
+ * @param {*} e
  */
-export const editCustomerAddress = function (address) {
-  return axios.post('edit-address', {
-      'address': address
-    })
-    .then(response => {
-      return response.data
-    })
-    .catch(error => {
-      // Processing of error here.
+export const addEditAddressToCustomer = (e) => {
+  let form_data = {};
+  form_data['address'] = {
+    'given_name': e.target.elements.fname.value,
+    'family_name': e.target.elements.lname.value,
+    'city': 'Dummy Value',
+    'address_id': e.target.elements.address_id.value
+  };
+
+  form_data['mobile'] = e.target.elements.mobile.value
+
+  // Getting dynamic fields data.
+  Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+    form_data['address'][key] = e.target.elements[key].value
+  });
+
+  let addressList = addEditUserAddress(form_data);
+  if (addressList instanceof Promise) {
+    addressList.then((list) => {
+      // Close the addresslist popup.
+      let event = new CustomEvent('closeAddressListPopup', {
+        bubbles: true,
+        detail: {
+          close: () => true
+        }
+      });
+      document.dispatchEvent(event);
+      // Close the address modal.
+      this.closeModal();
     });
+  }
 }
