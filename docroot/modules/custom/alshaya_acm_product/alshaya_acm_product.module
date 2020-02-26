@@ -672,9 +672,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
         elseif ($sku_entity->bundle() == 'configurable') {
           $max_sale_qty = 0;
-          // Check if max sale qty limit is set for parent.
-          $parent_sku = $skuManager->getParentSkuBySku($sku_entity);
+          // Sku itself is parent if it's NULL.
+          $parent_sku = $skuManager->getParentSkuBySku($sku_entity) ?? $sku_entity;
 
+          // Check if max sale qty limit is set for parent.
           if ($parent_sku instanceof SKUInterface) {
             $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
           }
