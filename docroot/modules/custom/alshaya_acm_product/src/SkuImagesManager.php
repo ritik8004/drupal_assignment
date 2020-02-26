@@ -1017,6 +1017,14 @@ class SkuImagesManager {
 
       $swatches['attribute_code'] = $attribute_code;
 
+      $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+
+      $index_image_url = TRUE;
+      // Swatch image URL will not be indexed if image is not selected in
+      // product display settings.
+      if (!$display_settings->get('color_swatches_show_product_image')) {
+        $index_image_url = FALSE;
+      }
       foreach ($attribute_data as $value => $child_sku_codes) {
         foreach ($child_sku_codes as $child_sku_code) {
           $child = SKU::loadFromSku($child_sku_code);
@@ -1024,8 +1032,11 @@ class SkuImagesManager {
           if (empty($data)) {
             continue;
           }
-
+          if (!$index_image_url) {
+            unset($data['image_url']);
+          }
           $data['value'] = $value;
+          $data['child_id'] = $child->id();
           $swatches['swatches'][$value] = $data;
 
           break;
