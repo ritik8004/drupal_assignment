@@ -15,7 +15,7 @@ gtm_algolia:
     js/alshaya_seo.gtm.algolia.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
-    - core/misc/debounce.js
+    - core/drupal.debounce
 
 checkout_login:
   version: 1.x
@@ -30,7 +30,7 @@ product_list:
   dependencies:
     - alshaya_seo_transac/gtm
     - alshaya_seo_master/jquery_is_in_viewport
-    - core/misc/debounce.js
+    - core/drupal.debounce
 search_list:
   version: 1.x
   js:
@@ -38,7 +38,7 @@ search_list:
   dependencies:
     - alshaya_seo_transac/gtm
     - alshaya_seo_master/jquery_is_in_viewport
-    - core/misc/debounce.js
+    - core/drupal.debounce
 product_slider:
   version: 1.x
   js:
@@ -46,4 +46,4 @@ product_slider:
   dependencies:
     - alshaya_seo_transac/gtm
     - alshaya_seo_master/jquery_is_in_viewport
-    - core/misc/debounce.js
+    - core/drupal.debounce
