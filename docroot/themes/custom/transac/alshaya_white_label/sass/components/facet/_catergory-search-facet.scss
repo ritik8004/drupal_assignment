@@ -30,7 +30,7 @@
             line-height: 1.3125rem;
             color: $plp_filter_active_tick;
             position: absolute;
-            bottom: 0;
+            bottom: -2px;
           }
         }
 
@@ -227,8 +227,14 @@
   }
 
   .facet-item__value {
+    padding-#{$right}: 2.5rem;
+    word-break: break-word;
+
     @include breakpoint($desktop) {
-      padding-#{$right}: 2.5rem;
+      .ie & {
+        word-wrap: break-word;
+        width: 12.5rem;
+      }
     }
   }
 
@@ -296,8 +302,6 @@
   }
 
   li.category-all {
-    @include breakpoint($upto-desktop) {
-      line-height: 1.0625rem;
-    }
+    line-height: 1.0625rem;
   }
 }
