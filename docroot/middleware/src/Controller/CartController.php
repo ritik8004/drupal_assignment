@@ -269,7 +269,9 @@ class CartController {
         }
       }
 
-      $data['shipping_methods'] = $this->cart->shippingMethods(['address' => $shipping_info['address']], $data['cart_id']);
+      if ($data['delivery_type'] == 'hd') {
+        $data['shipping_methods'] = $this->cart->shippingMethods(['address' => $shipping_info['address']], $data['cart_id']);
+      }
     }
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
@@ -467,18 +469,6 @@ class CartController {
         $cart_id = $request_content['cart_id'];
         $shipping_info = $request_content['shipping_info'];
 
-        $shipping_data = $this->cart->prepareShippingData($shipping_info);
-        $shipping_methods = $this->cart->shippingMethods($shipping_data, $cart_id);
-        // If no shipping method.
-        if (empty($shipping_methods)) {
-          return new JsonResponse(['error' => TRUE]);
-        }
-
-        $shipping_info['carrier_info'] = [
-          'code' => $shipping_methods[0]['carrier_code'],
-          'method' => $shipping_methods[0]['method_code'],
-        ];
-
         if ($shipping_info['shipping_type'] == 'cnc') {
           // Unset as not needed in further processing.
           unset($shipping_info['shipping_type']);
@@ -491,6 +481,17 @@ class CartController {
           $cart = $this->cart->addCncShippingInfo($cart_id, $shipping_info, $action, $create_customer);
         }
         else {
+          $shipping_data = $this->cart->prepareShippingData($shipping_info);
+          $shipping_methods = $this->cart->shippingMethods($shipping_data, $cart_id);
+          // If no shipping method.
+          if (empty($shipping_methods)) {
+            return new JsonResponse(['error' => TRUE]);
+          }
+
+          $shipping_info['carrier_info'] = [
+            'code' => $shipping_methods[0]['carrier_code'],
+            'method' => $shipping_methods[0]['method_code'],
+          ];
           $cart = $this->cart->addShippingInfo($cart_id, $shipping_info, $action);
         }
 
