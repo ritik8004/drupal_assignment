@@ -5,6 +5,11 @@
     @include breakpoint($desktop) {
       margin-top: 5.625rem !important;
     }
+
+    .facet-item__value,
+    .facet-item__count {
+      display: block;
+    }
   }
 
   .block-facet-blockcategory-facet-search {
@@ -147,6 +152,7 @@
     li:not(.category-all) label,
     li.category-all {
       margin-bottom: 0;
+      display: block;
 
       @include breakpoint($desktop) {
         margin-bottom: 1.25rem !important;
