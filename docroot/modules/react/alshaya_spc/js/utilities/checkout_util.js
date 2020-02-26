@@ -86,9 +86,16 @@ export const addShippingInCart = function (action, data) {
       cart_id: cart,
     })
     .then((response) => {
+      if (typeof response.data !== 'object') {
+        removeLoader();
+        return null;
+      }
       return response.data;
     }, (error) => {
       // Processing of error here.
+    })
+    .catch(error => {
+      console.error(error);
     });
 }
 

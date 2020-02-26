@@ -94,6 +94,17 @@ class ContactInfoForm extends React.Component {
       let { updateContactInfo } = this.context;
       cart_info
         .then(cart_result => {
+          removeLoader();
+
+          if (!cart_result) {
+            return null;
+          }
+
+          if (cart_result.error) {
+            console.error(cart_result.error_message);
+            return null;
+          }
+
           updateContactInfo(form_data.static);
           let cart_data = {
             cart: cart_result,
@@ -107,7 +118,6 @@ class ContactInfoForm extends React.Component {
             }
           });
           document.dispatchEvent(event);
-          removeLoader();
         })
         .catch(error => {
           console.error(error);

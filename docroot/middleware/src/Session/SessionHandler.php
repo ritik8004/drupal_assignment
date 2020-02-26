@@ -74,6 +74,10 @@ class SessionHandler extends SessionHandlerProxy implements \SessionHandlerInter
 
     try {
       $request = $this->requestStack->getCurrentRequest();
+      if (empty($request)) {
+        return FALSE;
+      }
+
       $fields = [
         'sid' => Crypt::hashBase64($sid),
         'uid' => $request->getSession()->get('uid', 0),
