@@ -159,3 +159,11 @@ services:
     arguments:
       - '@queue'
       - '@database'
+  alshaya_acm_product.meta_image_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProductMetaImageEventSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+    tags:
+      - { name: event_subscriber }

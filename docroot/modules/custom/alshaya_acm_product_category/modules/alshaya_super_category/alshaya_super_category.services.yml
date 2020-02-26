@@ -21,3 +21,11 @@ services:
   alshaya_super_category.super_category_feature_manager:
     class: Drupal\alshaya_super_category\AlshayaSuperCategoryManager
     arguments: ['@alshaya_acm_product_category.product_category_tree', '@config.factory', '@entity_type.manager', '@module_handler', '@alshaya_config.manager']
+  alshaya_super_category.super_category_meta_image_subscriber:
+    class: Drupal\alshaya_super_category\EventSubscriber\SuperCategoryMetaImageEventSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+    tags:
+      - { name: event_subscriber }

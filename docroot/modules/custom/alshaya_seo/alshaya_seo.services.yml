@@ -35,3 +35,9 @@ services:
       - '@module_handler'
       - '@router.route_provider'
       - '@path.alias_manager'
+  alshaya_seo.meta_image_event:
+    class: 'Drupal\alshaya_seo\EventSubscriber\DefaultMetaImageEventSubscriber'
+    arguments:
+      - '@current_route_match'
+    tags:
+      - { name: 'event_subscriber' }
