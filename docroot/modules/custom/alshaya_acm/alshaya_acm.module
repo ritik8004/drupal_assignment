@@ -501,9 +501,9 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
       $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
       return $response;
     }
-    // Show error if error is one of order limit exceeded.
-    if (_alshaya_acm_is_order_limit_exceeded_exception($errors)) {
-      drupal_set_message(reset($errors), 'error');
+    elseif (_alshaya_acm_is_order_limit_exceeded_exception($errors)) {
+      // Show error if error is one of order limit exceeded.
+      \Drupal::service('messenger')->addError(reset($errors));
     }
   }
 
@@ -895,20 +895,18 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
       // We display dropdown with selected quantity to avoid confusions.
       $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
     }
+    elseif (!empty($max_sale_qty)) {
+      if ($selected_quantity > $max_sale_qty) {
+        // We display dropdown with selected quantity.
+        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
+      }
+      elseif ($quantity > $max_sale_qty) {
+        // We show lower of available quantity and max_sale_qty in dropdown.
+        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($max_sale_qty, $selected_quantity);
+      }
+    }
     else {
-      if (!empty($max_sale_qty)) {
-        if ($selected_quantity > $max_sale_qty) {
-          // We display dropdown with selected quantity.
-          $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
-        }
-        elseif ($quantity > $max_sale_qty) {
-          // We show lower of available quantity and max_sale_qty in dropdown.
-          $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($max_sale_qty, $selected_quantity);
-        }
-      }
-      else {
-        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
-      }
+      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
     }
   }
   else {
@@ -1073,7 +1071,7 @@ function _alshaya_acm_is_order_limit_exceeded_exception(array $errors) {
   // It is contributor's responsibility to add the translation in Magento
   // and in Drupal.
   $ole_messages = [
-    t("The maximum quantity per item has been exceeded")->render(),
+    t('The maximum quantity per item has been exceeded')->render(),
   ];
 
   foreach ($ole_messages as $message) {
