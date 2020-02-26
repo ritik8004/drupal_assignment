@@ -14,3 +14,4 @@ dependencies:
   - drupal:views
   - simple_sitemap:simple_sitemap
   - queue_unique:queue_unique
+  - alshaya_seo:alshaya_seo
