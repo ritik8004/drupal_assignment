@@ -565,6 +565,28 @@ html[lang="ar"] {
   }
 }
 
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 3rem;
+      }
+    }
+  }
+}
+
+.c-pdp {
+  .order-quantity-limit-message {
+    .order-qty-limit-msg-inner-wrapper {
+      &:not(:empty) {
+        @include breakpoint($tablet) {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+
 .acq-content-product,
 .acq-content-product-modal {
   .content__title_wrapper {
