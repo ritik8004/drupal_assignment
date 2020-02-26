@@ -279,13 +279,15 @@ class StockManager {
    *   Quantity.
    * @param int $status
    *   Stock status.
+   * @param int $max_sale_qty
+   *   Stock max sale quantity.
    *
    * @return bool
    *   TRUE if stock status changed.
    *
    * @throws \Exception
    */
-  public function updateStock($sku, $quantity, $status) {
+  public function updateStock($sku, $quantity, $status, $max_sale_qty) {
     // Update the stock now.
     $this->acquireLock($sku);
 
@@ -299,8 +301,15 @@ class StockManager {
       'status' => $status,
     ];
 
+    if ($max_sale_qty !== NULL) {
+      $new['max_sale_qty'] = $max_sale_qty;
+    }
+
     // Update only if value changed.
-    if (empty($current) || $current['status'] != $status || $current['quantity'] != $quantity) {
+    if (empty($current) ||
+      $current['status'] != $status ||
+      $current['quantity'] != $quantity ||
+      ($max_sale_qty !== NULL && $current['max_sale_qty'] != $max_sale_qty)) {
       $this->connection->merge('acq_sku_stock')
         ->key(['sku' => $sku])
         ->fields($new)
@@ -369,8 +378,9 @@ class StockManager {
     // We get qty in product data and quantity in stock push or from stock api.
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
+    $max_sale_qty = isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : NULL;
 
-    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status);
+    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status, $max_sale_qty);
 
     $this->logger->info('@operation stock for sku @sku. Message: @message', [
       '@operation' => $changed ? 'Updated' : 'Processed',
@@ -483,6 +493,20 @@ class StockManager {
     $this->connection->delete('acq_sku_stock')
       ->condition('sku', $sku)
       ->execute();
+  }
+
+  /**
+   * Get max sale qty.
+   *
+   * @param string $sku
+   *   SKU string.
+   *
+   * @return int
+   *   Max sale qty.
+   */
+  public function getMaxSaleQty(string $sku) {
+    $stock = $this->getStock($sku);
+    return $stock['max_sale_qty'] ?? 0;
   }
 
 }

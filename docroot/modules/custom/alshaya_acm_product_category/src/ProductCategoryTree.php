@@ -300,7 +300,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       ) {
         $image = $this->fileStorage->load($file->field_icon_target_id);
         $data[$term->tid]['icon'] = [
-          'url' => file_create_url($image->getFileUri()),
+          'url' => file_url_transform_relative(file_create_url($image->getFileUri())),
           'width' => (int) $file->field_icon_width,
           'height' => (int) $file->field_icon_height,
         ];

@@ -153,6 +153,7 @@ services:
       - '@database'
       - '@acq_sku.stock_manager'
       - '@language_manager'
+      - '@alshaya_acm_product.product_order_limit'
 
   alshaya_acm_product.product_queue_utility:
     class: Drupal\alshaya_acm_product\Service\ProductQueueUtility
@@ -167,3 +168,7 @@ services:
       - '@alshaya_acm_product.sku_images_manager'
     tags:
       - { name: event_subscriber }
+  alshaya_acm_product.product_order_limit:
+    class: Drupal\alshaya_acm_product\Service\ProductOrderLimit
+    arguments:
+      - '@alshaya_acm_product.skumanager'

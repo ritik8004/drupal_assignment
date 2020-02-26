@@ -69,6 +69,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
+          <div class="order-quantity-limit-message"></div>
         </div>
 
         {% if sku_out_of_stock %}

@@ -456,16 +456,18 @@
       }
 
       &.focused {
-        .algolia-search-back-icon {
-          visibility: visible;
+        &.show-algolia-search-bar {
+          .algolia-search-back-icon {
+            visibility: visible;
 
-          @include icon(arrow-#{$left}) {
-            font-size: 2.25rem;
+            @include icon(arrow-#{$left}) {
+              font-size: 2.25rem;
+            }
           }
-        }
 
-        .react-autosuggest__input {
-          padding-#{$left}: 2.3125rem !important;
+          .react-autosuggest__input {
+            padding-#{$left}: 2.3125rem !important;
+          }
         }
       }
     }
