@@ -1,0 +1,60 @@
+diff --git a/core/lib/Drupal/Core/Extension/ModuleHandler.php b/core/lib/Drupal/Core/Extension/ModuleHandler.php
+index 3b60d528bf..25bad1bc18 100644
+--- a/core/lib/Drupal/Core/Extension/ModuleHandler.php
++++ b/core/lib/Drupal/Core/Extension/ModuleHandler.php
+@@ -334,6 +334,18 @@ public function getImplementations($hook) {
+    */
+   public function writeCache() {
+     if ($this->cacheNeedsWriting) {
++      if (empty($this->implementations['module_implements_alter'])) {
++        error_log('Writing module cache, but set of module_implements_alter hooks is empty');
++
++        $log = '';
++
++        foreach (debug_backtrace() as $trace) {
++          $log .= $trace['function'] . ' < ';
++        }
++
++        error_log($log);
++      }
++
+       $this->cacheBackend->set('module_implements', $this->implementations);
+       $this->cacheNeedsWriting = FALSE;
+     }
+@@ -588,6 +600,18 @@ protected function getImplementationInfo($hook) {
+       $this->cacheNeedsWriting = TRUE;
+       // Discover implementations.
+       $this->implementations[$hook] = $this->buildImplementationInfo($hook);
++
++      if (empty($this->implementations['module_implements_alter'])) {
++        error_log('The set of module_implements_alter hooks is empty');
++        $log = '';
++
++        foreach (debug_backtrace() as $trace) {
++          $log .= $trace['function'] . ' < ';
++        }
++
++        error_log($log);
++      }
++
+       // Implementations are always "verified" as part of the discovery.
+       $this->verified[$hook] = TRUE;
+     }
+@@ -596,6 +620,17 @@ protected function getImplementationInfo($hook) {
+         // One or more of the implementations did not exist and need to be
+         // removed in the cache.
+         $this->cacheNeedsWriting = TRUE;
++
++        if (empty($this->implementations['module_implements_alter'])) {
++          error_log('The set of module_implements_alter hooks is empty');
++          $log = '';
++
++          foreach (debug_backtrace() as $trace) {
++            $log .= $trace['function'] . ' < ';
++          }
++
++          error_log($log);
++        }
+       }
+       $this->verified[$hook] = TRUE;
+     }
