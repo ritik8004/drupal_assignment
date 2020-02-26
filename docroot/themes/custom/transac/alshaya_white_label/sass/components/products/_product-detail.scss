@@ -563,6 +563,10 @@
 }
 
 .short-description-wrapper {
+  .c-pdp & {
+    border-top: 1px solid $pdp_skus_border;
+  }
+
   .field {
     &__label {
       font-size: 1rem;
@@ -1433,10 +1437,6 @@
 
 .field--name {
   &-field-skus {
-    .c-pdp & {
-      border-bottom: 1px solid $pdp_skus_border;
-    }
-
     .acq-content-product-modal & {
       border-bottom: none;
     }
