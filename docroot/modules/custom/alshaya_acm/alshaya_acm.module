@@ -501,6 +501,10 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
       $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
       return $response;
     }
+    elseif (_alshaya_acm_is_order_limit_exceeded_exception($errors)) {
+      // Show error if error is one of order limit exceeded.
+      \Drupal::service('messenger')->addError(reset($errors));
+    }
   }
 
   // Refresh the page.
@@ -891,9 +895,17 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
       // We display dropdown with selected quantity to avoid confusions.
       $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
     }
+    elseif (!empty($max_sale_qty)) {
+      if ($selected_quantity > $max_sale_qty) {
+        // We display dropdown with selected quantity.
+        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
+      }
+      elseif ($quantity > $max_sale_qty) {
+        // We show lower of available quantity and max_sale_qty in dropdown.
+        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($max_sale_qty, $selected_quantity);
+      }
+    }
     else {
-      // We show lower of available quantity and max_sale_qty in dropdown.
-      $quantity = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
       $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
     }
   }
@@ -1042,4 +1054,31 @@ function _alshaya_acm_exclude_sync_from_shield() {
       ->set('paths', implode(PHP_EOL, $paths))
       ->save();
   }
+}
+
+/**
+ * Check if Exception is for Order Limit Exceeded products in cart.
+ *
+ * @param array $errors
+ *   Errors to check.
+ *
+ * @return bool
+ *   TRUE if exception matches Order Limit Exceeded criteria.
+ */
+function _alshaya_acm_is_order_limit_exceeded_exception(array $errors) {
+  // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
+  // We use t() to match translated message.
+  // It is contributor's responsibility to add the translation in Magento
+  // and in Drupal.
+  $ole_messages = [
+    t('The maximum quantity per item has been exceeded')->render(),
+  ];
+
+  foreach ($ole_messages as $message) {
+    if (in_array($message, $ole_messages) >= 0) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
