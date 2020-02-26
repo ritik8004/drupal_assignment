@@ -899,6 +899,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
       if ($selected_quantity > $max_sale_qty) {
         // We display dropdown with selected quantity.
         $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
+        $item['#attributes']['class'][] = 'sku-max-quantity-limit-reached';
       }
       elseif ($quantity > $max_sale_qty) {
         // We show lower of available quantity and max_sale_qty in dropdown.
