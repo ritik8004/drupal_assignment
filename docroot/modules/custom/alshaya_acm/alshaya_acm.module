@@ -534,15 +534,16 @@ function alshaya_acm_preprocess_page_title(&$variables) {
  *   Array of all skus assiciated by sku key.
  */
 function alshaya_acm_get_cart_items_by_sku() {
-  $skus = [];
-  $cartStorage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cartStorage->getCart(FALSE);
-  $items = $cart ? $cart->items() : [];
-  if (!empty($items)) {
-    foreach ($items as $line_item) {
-      $skus[$line_item['sku']] = $line_item;
-    }
+  $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
+  if (!($cart instanceof CartInterface)) {
+    return [];
   }
+
+  $skus = [];
+  foreach ($cart->items() ?? [] as $line_item) {
+    $skus[$line_item['sku']] = $line_item;
+  }
+
   return $skus;
 }
 
