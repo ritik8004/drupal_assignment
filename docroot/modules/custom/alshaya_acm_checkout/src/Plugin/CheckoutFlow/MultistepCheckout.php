@@ -387,7 +387,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         ]);
 
         if (_alshaya_acm_is_out_of_stock_exception($e)) {
-          $this->refreshStock();
+          $this->handleException();
         }
 
         // Show message from Magento to user if allowed in config.
@@ -401,7 +401,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         // Refresh stock and redirect to basket page with message
         // if we get order limit exception.
         if (_alshaya_acm_is_order_limit_exceeded_exception($e)) {
-          $this->refreshStock();
+          $this->handleException();
         }
 
         $this->redirectToStep($current_step_id);
@@ -436,7 +436,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   /**
    * Helper method for actions on exceptions.
    */
-  public function refreshStock() {
+  public function handleException() {
     if ($cart = $this->getCart()) {
       $cart->setCheckoutStep('');
       $this->getCheckoutHelper()->refreshStockForProductsInCart($cart);
