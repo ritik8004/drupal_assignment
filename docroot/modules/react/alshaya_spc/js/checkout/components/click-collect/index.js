@@ -215,7 +215,6 @@ class ClickCollect extends React.Component {
     let mapView = (
       <ClicknCollectMap
         coords={coords}
-        onCoordsUpdate={this.fetchAvailableStores}
         markers={storeList}
       />
     );

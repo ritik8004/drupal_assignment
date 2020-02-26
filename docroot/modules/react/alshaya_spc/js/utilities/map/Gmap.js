@@ -86,7 +86,7 @@ export default class Gmap {
   setCenter = (coords, callBackFunc = null) => {
     if (!_isEmpty(coords)) {
       this.map.googleMap.setCenter(coords);
-      this.map.googleMap.setZoom(11);
+      this.map.googleMap.setZoom(7);
       return;
     }
 
@@ -98,6 +98,7 @@ export default class Gmap {
       if (status == google.maps.GeocoderStatus.OK) {
         // Just center the map and don't do anything.
         window.spcMap.googleMap.setCenter(results[0].geometry.location);
+        window.spcMap.googleMap.setZoom(7);
         if (callBackFunc) {
           callBackFunc.call(results)
         }

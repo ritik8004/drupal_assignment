@@ -3,7 +3,7 @@ import StoreItem from '../store-item';
 
 const StoreList = ({ store_list, onStoreClick, onSelectStore, selected: selectedStore }) => {
   if (!store_list) {
-    return (null);
+    return <>{Drupal.t('Sorry, No store found for your location.')}</>;
   }
 
   const storeItemClick = (e, index) => {
