@@ -46,3 +46,37 @@ export const deleteUserAddress = function (address_id) {
       // Processing of error here.
     });
 }
+
+/**
+ * Add new address for customer.
+ *
+ * @param {*} address
+ */
+export const addNewUserAddress = function (address) {
+  return axios.post('add-address', {
+      'address': address
+    })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      // Processing of error here.
+    });
+}
+
+/**
+ * Edit address for customer.
+ *
+ * @param {*} address
+ */
+export const editCustomerAddress = function (address) {
+  return axios.post('edit-address', {
+      'address': address
+    })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      // Processing of error here.
+    });
+}

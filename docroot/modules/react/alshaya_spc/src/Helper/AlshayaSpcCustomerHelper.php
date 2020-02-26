@@ -5,6 +5,7 @@ namespace Drupal\alshaya_spc\Helper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -48,6 +49,13 @@ class AlshayaSpcCustomerHelper {
   protected $session;
 
   /**
+   * Address book manager.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
    * AlshayaSpcCustomerHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -60,19 +68,23 @@ class AlshayaSpcCustomerHelper {
    *   The spc cookies handler.
    * @param \Symfony\Component\HttpFoundation\Session\Session $session
    *   The session.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address book manager.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaApiWrapper $api_wrapper,
     ModuleHandlerInterface $module_handler,
     AlshayaSpcCookies $spc_cookies,
-    Session $session
+    Session $session,
+    AlshayaAddressBookManager $address_book_manager
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
     $this->moduleHandler = $module_handler;
     $this->spcCookies = $spc_cookies;
     $this->session = $session;
+    $this->addressBookManager = $address_book_manager;
   }
 
   /**
@@ -164,8 +176,10 @@ class AlshayaSpcCustomerHelper {
         }
         else {
           // Delete the address.
-          $profile->delete();
-          $return = TRUE;
+          if ($this->addressBookManager->deleteUserAddressFromApi($profile)) {
+            $profile->delete();
+            $return = TRUE;
+          }
         }
       }
       else {
@@ -177,6 +191,52 @@ class AlshayaSpcCustomerHelper {
     }
 
     return $return;
+  }
+
+  /**
+   * Adds customer address.
+   *
+   * @param array $address
+   *   Address array.
+   * @param int $uid
+   *   User id.
+   *
+   * @return bool|string
+   *   Response.
+   */
+  public function addEditCustomerAddress(array $address, int $uid) {
+    $address_data = $address['address'];
+    // If address already exists.
+    if (!empty($address_data['address_id'])) {
+      $profile = $this->entityTypeManager->getStorage('profile')->load($address_data['address_id']);
+    }
+    else {
+      $profile = $this->entityTypeManager->getStorage('profile')->create([
+        'type' => 'address_book',
+        'uid' => $uid,
+      ]);
+      $profile->setOwnerId($uid);
+    }
+
+    // Prepare mobile info.
+    $mobile_info = [
+      'country' => _alshaya_custom_get_site_level_country_code(),
+      'local_number' => $address['mobile'],
+      'value' => '+' . _alshaya_spc_get_country_mobile_code() . $address['mobile'],
+    ];
+
+    // Get and use location term based on location id.
+    if (!empty($address_data['administrative_area'])) {
+      if ($location_term = _alshaya_spc_get_location_term_by_location_id($address_data['administrative_area'])) {
+        $address_data['administrative_area'] = $location_term->id();
+      }
+    }
+
+    $address_data['country_code'] = _alshaya_custom_get_site_level_country_code();
+    $profile->get('field_address')->setValue($address_data);
+    $profile->get('field_mobile_number')->setValue($mobile_info);
+
+    return $this->addressBookManager->pushUserAddressToApi($profile);
   }
 
   /**

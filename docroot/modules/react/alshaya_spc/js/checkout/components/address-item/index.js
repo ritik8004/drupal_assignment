@@ -4,7 +4,8 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
-  deleteUserAddress
+  deleteUserAddress,
+  editCustomerAddress
 } from '../../../utilities/address_util';
 import EditAddressSVG from "../edit-address-svg";
 
@@ -60,8 +61,46 @@ export default class AddressItem extends React.Component {
     }
   }
 
+  /**
+   * Process the address form data on sumbit.
+   */
+  processAddress = (e) => {
+    let form_data = {};
+    form_data['address'] = {
+      'given_name': e.target.elements.fname.value,
+      'family_name': e.target.elements.lname.value,
+      'address_id': e.target.elements.address_id.value,
+      'city': 'Dummy Value'
+    };
+
+    form_data['mobile'] = e.target.elements.mobile.value
+
+    // Getting dynamic fields data.
+    Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+      form_data['address'][key] = e.target.elements[key].value
+    });
+
+    let addressList = editCustomerAddress(form_data);
+    if (addressList instanceof Promise) {
+      addressList.then((list) => {
+        // Close the addresslist popup.
+        let event = new CustomEvent('closeAddressListPopup', {
+          bubbles: true,
+          detail: {
+            close: () => true
+          }
+        });
+        document.dispatchEvent(event);
+        // Close the address modal.
+        this.closeModal();
+      });
+    }
+  };
+
   render() {
     const { address } = this.props;
+    const mobile_value = address.mobile.value;
+    const mob_default_val = mobile_value.replace('+' + window.drupalSettings.country_mobile_code, '');
     let addressData = [];
     let editAddressData = {};
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
@@ -72,14 +111,15 @@ export default class AddressItem extends React.Component {
     editAddressData['static'] = {};
     editAddressData['static']['firstname'] = address['given_name'];
     editAddressData['static']['lastname'] = address['family_name'];
-    editAddressData['static']['telephone'] = address['mobile']['local_number'];
+    editAddressData['static']['telephone'] = mob_default_val;
+    editAddressData['static']['address_id'] = address['address_id'];
 
     return (
       <div className='spc-address-tile'>
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
         <div className='spc-address-fields'>{addressData}</div>
-        <div className='spc-address-mobile'>+{window.drupalSettings.country_mobile_code} {address.mobile.local_number}</div>
+        <div className='spc-address-mobile'>+{window.drupalSettings.country_mobile_code} {mob_default_val}</div>
       </div>
       <div className='spc-address-tile-actions'>
         <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address['address_id'])}>
@@ -104,7 +144,7 @@ export default class AddressItem extends React.Component {
               </React.Fragment>
             </Popup>
           </div>
-          {address['is_default'] === true &&
+          {address['is_default'] !== true &&
             <div className='spc-address-tile-delete-btn'>
               <button title={Drupal.t('Delete Address')}  id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
             </div>

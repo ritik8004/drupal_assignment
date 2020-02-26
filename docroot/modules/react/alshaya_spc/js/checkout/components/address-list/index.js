@@ -3,7 +3,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import AddressItem from '../address-item';
 import AddressForm from '../address-form';
-import { getUserAddressList } from '../../../utilities/address_util';
+import { getUserAddressList, addNewUserAddress } from '../../../utilities/address_util';
 
 export default class AddressList extends React.Component {
 
@@ -47,8 +47,41 @@ export default class AddressList extends React.Component {
     });
   };
 
+  /**
+   * Process add new address.
+   */
   processAddress = (e) => {
-    console.log('Address submission processing here');
+    let form_data = {};
+    form_data['address'] = {
+      'given_name': e.target.elements.fname.value,
+      'family_name': e.target.elements.lname.value,
+      'city': 'Dummy Value',
+      'address_id': null
+    };
+
+    form_data['mobile'] = e.target.elements.mobile.value
+
+    // Getting dynamic fields data.
+    Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+      form_data['address'][key] = e.target.elements[key].value
+    });
+
+    let addressList = addNewUserAddress(form_data);
+    if (addressList instanceof Promise) {
+      addressList.then((list) => {
+        // Close the addresslist popup.
+        let event = new CustomEvent('closeAddressListPopup', {
+          bubbles: true,
+          detail: {
+            close: () => true
+          }
+        });
+        document.dispatchEvent(event);
+        // Close the address modal.
+        this.closeModal();
+      });
+    }
+
   };
 
   render() {
@@ -63,6 +96,13 @@ export default class AddressList extends React.Component {
       addressItem.push(<AddressItem key={key} address={address} refreshAddressList={this.refreshAddressList} />);
     });
 
+    let default_val = {
+      'static': {
+        'firstname': window.drupalSettings.user_name.fname,
+        'lastname': window.drupalSettings.user_name.lname
+      }
+    }
+
     return (
       <React.Fragment>
         <header className='spc-change-address'>{Drupal.t('change address')}</header>
@@ -73,7 +113,7 @@ export default class AddressList extends React.Component {
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <React.Fragment>
               <a className='close' onClick={this.closeModal}>&times;</a>
-              <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress} />
+              <AddressForm show_prefered={true} default_val={default_val} processAddress={this.processAddress} />
             </React.Fragment>
           </Popup>
           <div className='spc-checkout-address-list'>{addressItem}</div>

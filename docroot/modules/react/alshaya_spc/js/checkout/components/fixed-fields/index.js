@@ -22,6 +22,7 @@ export default class FixedFields extends React.Component {
             <TextField type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''} label={Drupal.t('Email')}/>
           }
           <TextField type='tel' name='mobile' defaultValue={default_val !== '' ? default_val['telephone'] : ''} label={Drupal.t('Mobile Number')}/>
+          < input type = 'hidden' name = 'address_id' value = {default_val !== '' && default_val['address_id'] !== null ? default_val['address_id'] : 0}/>
         </div>
       </div>
     );
