@@ -379,6 +379,7 @@
 
     @include breakpoint($only-mobile) {
       width: 9.75rem;
+      margin-bottom: 0.5rem !important;
     }
 
     &:empty {
