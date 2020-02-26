@@ -98,10 +98,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
           closeOnDocumentClick={false}
         >
           <React.Suspense fallback={<div>Loading...</div>}>
-            <a className="close" onClick={this.closeModal}>
-              &times;
-            </a>
-            <ClickCollect openSelectedStore={this.state.showSelectedStore} />
+            <ClickCollect openSelectedStore={this.state.showSelectedStore} closeModal={this.closeModal}/>
           </React.Suspense>
         </Popup>
       </div>
