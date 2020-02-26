@@ -501,10 +501,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
       $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
       return $response;
     }
-    elseif (_alshaya_acm_is_order_limit_exceeded_exception($errors)) {
-      // Show error if error is one of order limit exceeded.
-      \Drupal::service('messenger')->addError(reset($errors));
-    }
+    \Drupal::service('messenger')->addError(reset($errors));
   }
 
   // Refresh the page.
@@ -1061,13 +1058,13 @@ function _alshaya_acm_exclude_sync_from_shield() {
 /**
  * Check if Exception is for Order Limit Exceeded products in cart.
  *
- * @param array $errors
- *   Errors to check.
+ * @param \Exception $e
+ *   Exception to check.
  *
  * @return bool
  *   TRUE if exception matches Order Limit Exceeded criteria.
  */
-function _alshaya_acm_is_order_limit_exceeded_exception(array $errors) {
+function _alshaya_acm_is_order_limit_exceeded_exception(\Exception $e) {
   // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
   // We use t() to match translated message.
   // It is contributor's responsibility to add the translation in Magento
@@ -1077,7 +1074,7 @@ function _alshaya_acm_is_order_limit_exceeded_exception(array $errors) {
   ];
 
   foreach ($ole_messages as $message) {
-    if (in_array($message, $ole_messages) >= 0) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
       return TRUE;
     }
   }
