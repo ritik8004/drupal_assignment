@@ -2,6 +2,7 @@ import React from "react";
 
 import Popup from "reactjs-popup";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
+import Loader from "../loader";
 
 let ClickCollect = React.lazy(() => import("../click-collect"));
 let AddressContent = React.lazy(() => import("../address-popup-content"));
@@ -85,10 +86,7 @@ export default class EmptyDeliveryText extends React.Component {
             onClose={this.closeModal}
             closeOnDocumentClick={false}
           >
-            <React.Suspense fallback={<div>Loading...</div>}>
-              <a className="close" onClick={this.closeModal}>
-                &times;
-              </a>
+            <React.Suspense fallback={<Loader/>}>
               <ClickCollect />
             </React.Suspense>
           </Popup>
