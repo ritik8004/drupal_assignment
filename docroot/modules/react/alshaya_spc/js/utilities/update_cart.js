@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import {cartAvailableInStorage} from './get_cart';
+import { i18nMiddleWareUrl } from './i18n_url';
 
 /**
  * Get the middleware update cart endpoint.
@@ -8,8 +9,7 @@ import {cartAvailableInStorage} from './get_cart';
  * @returns {string}
  */
 export function updateCartApiUrl() {
-  const langcode = window.drupalSettings.path.currentLanguage;
-  return window.drupalSettings.alshaya_spc.middleware_url + '/update-cart?lang=' + langcode;
+  return i18nMiddleWareUrl('update-cart');
 }
 
 /**
@@ -18,7 +18,7 @@ export function updateCartApiUrl() {
  * @returns {string}
  */
 export function restoreCartApiUrl() {
-  return window.drupalSettings.alshaya_spc.middleware_url + '/restore-cart';
+  return i18nMiddleWareUrl('restore-cart');
 }
 
 /**

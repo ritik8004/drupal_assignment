@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -155,7 +156,7 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
-    $marker = $this->configFactory->get('alshaya_stores_finder.settings');
+    $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-checkout"></div>',
@@ -173,15 +174,23 @@ class AlshayaSpcController extends ControllerBase {
           'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
-          'map_marker' => [
-            'icon' => $marker->get('marker.url'),
-            'label_position' => $marker->get('marker.label_position'),
-          ],
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
-          'cnc_shipping' => [
-            'code' => $cncTerm->get('field_shipping_carrier_code')->getString(),
-            'method' => $cncTerm->get('field_shipping_method_code')->getString(),
+          'cnc' => [
+            'placeholder' => $store_finder_config->get('store_search_placeholder'),
+            'map_marker' => [
+              'icon' => $store_finder_config->get('marker.url'),
+              'label_position' => $store_finder_config->get('marker.label_position'),
+            ],
+            'cnc_shipping' => [
+              'code' => $cncTerm->get('field_shipping_carrier_code')->getString(),
+              'method' => $cncTerm->get('field_shipping_method_code')->getString(),
+            ],
           ],
+        ],
+      ],
+      '#cache' => [
+        'contexts' => [
+          'languages:' . LanguageInterface::TYPE_INTERFACE,
         ],
       ],
     ];

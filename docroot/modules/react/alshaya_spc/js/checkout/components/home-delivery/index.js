@@ -6,6 +6,7 @@ import AddressForm from "../address-form";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
 
 export default class HomeDeliveryInfo extends React.Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -25,6 +26,7 @@ export default class HomeDeliveryInfo extends React.Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     document.addEventListener(
       "refreshCartOnAddress",
       this.eventListener,
@@ -33,6 +35,7 @@ export default class HomeDeliveryInfo extends React.Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     document.removeEventListener(
       "refreshCartOnAddress",
       this.eventListener,
@@ -43,8 +46,9 @@ export default class HomeDeliveryInfo extends React.Component {
   eventListener = e => {
     var data = e.detail.data();
     this.props.refreshCart(data);
-    // Close the modal.
-    this.closeModal();
+    if (this._isMounted) {
+      this.closeModal();
+    }
   };
 
   render() {

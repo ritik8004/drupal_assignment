@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { restoreCartApiUrl } from './update_cart';
+import { i18nMiddleWareUrl } from './i18n_url';
 
 /**
  * Get the middleware get cart endpoint.
@@ -7,8 +8,7 @@ import { restoreCartApiUrl } from './update_cart';
  * @returns {string}
  */
 export function getCartApiUrl(cart_id) {
-  const langcode = window.drupalSettings.path.currentLanguage;
-  return window.drupalSettings.alshaya_spc.middleware_url + '/cart/' + cart_id + '?lang=' + langcode;
+  return i18nMiddleWareUrl('cart/' + cart_id);
 }
 
 export const cartAvailableInStorage = function () {

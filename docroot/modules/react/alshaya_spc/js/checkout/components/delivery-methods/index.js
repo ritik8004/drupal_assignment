@@ -7,8 +7,12 @@ export default class DeliveryMethods extends React.Component {
   constructor(props) {
     super(props);
     let delivery_type = 'hd';
-    if (this.props.cart.delivery_type !== undefined) {
+
+    if (this.props.cart.delivery_type) {
       delivery_type = this.props.cart.delivery_type;
+    }
+    else if (this.props.cart.cart.delivery_type) {
+      delivery_type = this.props.cart.cart.delivery_type;
     }
 
     this.state = {
@@ -43,7 +47,7 @@ export default class DeliveryMethods extends React.Component {
       <div className='spc-checkout-delivery-methods'>
         <SectionTitle>{Drupal.t('delivery method')}</SectionTitle>
         <div className='delivery-method' onClick={() => this.changeDeliveryMethod('hd')}>
-          <input id='delivery-method-hd' defaultChecked={this.state.selectedOption === 'hd'} value='hd' name='delivery-method' type='radio'/>
+          <input id='delivery-method-hd' defaultChecked={this.state.selectedOption === 'hd'} value='hd' name='delivery-method' type='radio' />
           <label className='radio-sim radio-label'>
             <span className='icon'></span>
             <span className='impress'>{Drupal.t('home delivery')}</span>
@@ -51,7 +55,7 @@ export default class DeliveryMethods extends React.Component {
           </label>
         </div>
         <div className='delivery-method' onClick={() => this.changeDeliveryMethod('cnc')}>
-          <input id='delivery-method-cnc' defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value='cnc' name='delivery-method' type='radio'/>
+          <input id='delivery-method-cnc' defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value='cnc' name='delivery-method' type='radio' />
           <label className='radio-sim radio-label'>
             <span className='icon'></span>
             <span className='impress'>{Drupal.t('click & collect')}</span>

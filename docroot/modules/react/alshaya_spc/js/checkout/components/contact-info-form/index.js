@@ -1,12 +1,13 @@
 import React from "react";
-import FixedFields from "../fixed-fields";
 import Axios from "axios";
+import { ClicknCollectContext } from "../../../context/ClicknCollect";
 import {
   addShippingInCart,
-  showLoader,
-  removeLoader
+  removeLoader,
+  showLoader
 } from "../../../utilities/checkout_util";
-import { ClicknCollectContext } from "../../.../../../context/ClicknCollect";
+import FixedFields from "../fixed-fields";
+import { i18nMiddleWareUrl } from "../../../utilities/i18n_url";
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -15,24 +16,32 @@ class ContactInfoForm extends React.Component {
     e.preventDefault();
     showLoader();
     let form_data = {
-      static: null,
+      static: {
+        firstname: e.target.elements.fname.value,
+        lastname: e.target.elements.lname.value,
+        email: e.target.elements.email.value,
+        telephone: e.target.elements.mobile.value,
+        country_id: drupalSettings.country_code
+      },
       shipping_type: "cnc",
-      store: store,
-      carrier_info: { ...drupalSettings.cnc_shipping }
-    };
-    form_data.static = {
-      firstname: e.target.elements.fname.value,
-      lastname: e.target.elements.lname.value,
-      email: e.target.elements.email.value,
-      city: "",
-      telephone: e.target.elements.mobile.value,
-      country_id: window.drupalSettings.country_code
+      store: {
+        name: store.name,
+        code: store.code,
+        rnc_available: store.rnc_available,
+        cart_address: store.cart_address
+      },
+      carrier_info: { ...drupalSettings.cnc.cnc_shipping }
     };
 
     this.processShippingUpdate(form_data);
   };
 
+  /**
+   * Validate mobile number and email address and on success process shipping address update.
+   */
   processShippingUpdate = form_data => {
+    // Mimic axio request when we don't want to validate email address for existing
+    // or recently created customer.
     let customerValidationReuest = new Promise((resolve, reject) => {
       resolve({
         data: {
@@ -47,14 +56,12 @@ class ContactInfoForm extends React.Component {
         this.context.contactInfo.email !== form_data.static.email)
     ) {
       customerValidationReuest = Axios.get(
-        window.drupalSettings.alshaya_spc.middleware_url +
-        "/customer/" +
-        form_data.static.email
+        i18nMiddleWareUrl("customer/" + form_data.static.email)
       );
     }
 
     const mobileValidationRequest = Axios.get(
-      "verify-mobile/" + form_data.static.telephone
+      Drupal.url("verify-mobile/" + form_data.static.telephone)
     );
 
     // API call to validate mobile number and email address.
@@ -76,6 +83,36 @@ class ContactInfoForm extends React.Component {
       .catch(errors => {
         // React on errors.
       });
+  };
+
+  /**
+   * Update cart with shipping address.
+   */
+  updateShipping = form_data => {
+    let cart_info = addShippingInCart("update shipping", form_data);
+    if (cart_info instanceof Promise) {
+      let { updateContactInfo } = this.context;
+      cart_info
+        .then(cart_result => {
+          updateContactInfo(form_data.static);
+          let cart_data = {
+            cart: cart_result,
+            delivery_type: cart_result.delivery_type,
+            address: form_data.store.address
+          };
+          let event = new CustomEvent("refreshCartOnCnCSelect", {
+            bubbles: true,
+            detail: {
+              data: () => cart_data
+            }
+          });
+          document.dispatchEvent(event);
+          removeLoader();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   };
 
   /**
@@ -119,36 +156,6 @@ class ContactInfoForm extends React.Component {
     }
 
     return isError;
-  };
-
-  /**
-   * Update cart with shipping address.
-   */
-  updateShipping = form_data => {
-    let cart_info = addShippingInCart("update shipping", form_data);
-    if (cart_info instanceof Promise) {
-      let { updateContactInfo } = this.context;
-      cart_info
-        .then(cart_result => {
-          updateContactInfo(form_data.static);
-          let cart_data = {
-            cart: cart_result,
-            delivery_type: cart_result.delivery_type,
-            address: form_data.store.address
-          };
-          let event = new CustomEvent("refreshCartOnCnCSelect", {
-            bubbles: true,
-            detail: {
-              data: () => cart_data
-            }
-          });
-          document.dispatchEvent(event);
-          removeLoader();
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
   };
 
   render() {

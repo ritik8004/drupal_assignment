@@ -28,9 +28,9 @@ export default class Gmap {
       mapMarkers: []
     };
 
-    if (typeof drupalSettings.map_marker !== 'undefined' && drupalSettings.map_marker !== 'undefined') {
-      this.map.settings.map_marker.icon = drupalSettings.map_marker.icon;
-      this.map.settings.map_marker.label_position = drupalSettings.map_marker.label_position;
+    if (typeof drupalSettings.cnc !== 'undefined' && typeof drupalSettings.cnc.map_marker !== 'undefined') {
+      this.map.settings.map_marker.icon = drupalSettings.cnc.map_marker.icon;
+      this.map.settings.map_marker.label_position = drupalSettings.cnc.map_marker.label_position;
     }
   }
 

@@ -1,5 +1,6 @@
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from "./storage";
 import Axios from "axios";
+import { i18nMiddleWareUrl } from "./i18n_url";
 
 export async function checkCartCustomer(cart_data = null) {
   if (cart_data && typeof cart_data.cart_id !== 'undefined') {
@@ -29,7 +30,7 @@ export async function checkCartCustomer(cart_data = null) {
 }
 
 const associateCart = (cart_data) => {
-  let url = window.drupalSettings.alshaya_spc.middleware_url + '/associate-cart';
+  let url = i18nMiddleWareUrl('associate-cart');
   return Axios.get(url)
     .then(response => {
       if (response.data) {
