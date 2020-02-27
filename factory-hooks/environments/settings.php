@@ -33,9 +33,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'exponea.settings' => [
             "name" => "Mothercare",
             "short_name" => "MC",
-            "start_url" => "/",
-            "display" => "standalone",
-            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -82,9 +79,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'exponea.settings' => [
             "name" => "H&M",
             "short_name" => "H&M",
-            "start_url" => "/",
-            "display" => "standalone",
-            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -163,9 +157,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'exponea.settings' => [
             "name" => "Bath and Body Works",
             "short_name" => "BBW",
-            "start_url" => "/",
-            "display" => "standalone",
-            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -207,9 +198,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'exponea.settings' => [
             "name" => "Footlocker",
             "short_name" => "FL",
-            "start_url" => "/",
-            "display" => "standalone",
-            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -251,9 +239,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'exponea.settings' => [
             "name" => "Pottery Barn",
             "short_name" => "PB",
-            "start_url" => "/",
-            "display" => "standalone",
-            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
@@ -304,9 +289,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'exponea.settings' => [
             "name" => "Victoria's Secret",
             "short_name" => "VS",
-            "start_url" => "/",
-            "display" => "standalone",
-            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
