@@ -71,7 +71,6 @@
         position: relative;
         overflow-y: auto;
         background: $spc-checkout-sidebar-bg;
-        position: relative;
 
         @include breakpoint($only-mobile) {
           float: none;

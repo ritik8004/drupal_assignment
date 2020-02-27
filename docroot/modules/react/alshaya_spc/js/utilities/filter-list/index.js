@@ -38,13 +38,13 @@ export default class FilterList extends React.Component {
    */
   handleLiClick = (e) => {
     this.setState({
-      selected: e.target.value
+      selected: e.target.parentElement.value
     });
 
     this.props.toggleFilterList();
 
     // Call the process.
-    this.props.processingCallback(e.target.value);
+    this.props.processingCallback(e.target.parentElement.value);
   };
 
   backButtonClick = () => {
@@ -73,19 +73,20 @@ export default class FilterList extends React.Component {
         <div className='spc-filter-panel-search-form-item'>
           <input className='spc-filter-panel-search-field' type='text' placeholder={this.props.placeHolderText} onChange={this.filterList}/>
         </div>
-        <ul>{
-          items.map((item) => {
-            return(
-              <li
-                key={item.value}
-                value={item.value}
-                className={this.state.selected == item.value ? 'active' : 'in-active'}
-                onClick={this.handleLiClick}
-              >
-              {item.label}
-            </li>)})
-          }
-        </ul>
+        <div className='spc-filter-area-panel-list-wrapper'>
+          <ul>{
+            items.map((item) => {
+              return(
+                <li
+                  key={item.value}
+                  value={item.value}
+                  className={this.state.selected == item.value ? 'active' : 'in-active'}
+                >
+                  <span onClick={(e) => this.handleLiClick(e)} className='spc-area-panel-item'>{item.label}</span>
+              </li>)})
+            }
+          </ul>
+        </div>
       </div>
     );
   }

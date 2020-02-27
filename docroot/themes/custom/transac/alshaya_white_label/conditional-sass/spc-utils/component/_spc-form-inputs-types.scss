@@ -23,7 +23,7 @@
 }
 
 .spc-type-select {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 // Type = Text.
@@ -65,12 +65,12 @@
     #{$left}: 0;
     top: 1.35rem;
     z-index: 1;
-    color: $spc-form-input;
+    color: $spc-mobile-code;
   }
 
   input[type=text] {
     height: 1.5rem;
-    padding-#{$left}: 2.5rem !important;
+    padding-#{$left}: 2.75rem !important;
     background: transparent;
     color: $spc-form-input;
   }

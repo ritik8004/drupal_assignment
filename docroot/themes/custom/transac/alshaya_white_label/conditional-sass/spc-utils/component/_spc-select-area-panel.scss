@@ -1,9 +1,23 @@
 .filter-list {
   position: absolute;
   top: 0;
-  #{$left}: 0;
+  left: 0;
   right: 0;
+  bottom: 0;
+  height: 100%;
   z-index: 3;
+  background: $spc-checkout-sidebar-bg;
+
+  .spc-filter-area-panel-list-wrapper {
+    @include breakpoint($tablet) {
+      height: calc(100% - 10.25rem);
+
+      ul {
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
+  }
 
   .spc-filter-panel-header {
     position: relative;
@@ -13,6 +27,7 @@
       height: 2.25rem;
       display: inline-block;
       position: absolute;
+      cursor: pointer;
       #{$left}: 0.5rem;
       top: 50%;
       transform: translateY(-50%);
@@ -32,19 +47,95 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    background: $spc-checkout-area-panel-header-bg;
+    background: $spc-checkout-area-list-bg;
+
+    li {
+      background: $spc-checkout-area-list-item-bg;
+      padding: 0 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      color: $spc-area-panel-item-color;
+
+      span {
+        display: inline-block;
+        width: 100%;
+        padding: 1rem 0.75rem;
+        border-bottom: 1px solid $spc-area-panel-item-border;
+        position: relative;
+      }
+
+      &.active {
+        span {
+          @include icon(check, after) {
+            font-size: 1.75rem;
+            line-height: 1.75rem;
+            color: $spc-area-panel-item-color;
+            position: absolute;
+            #{$right}: 0.5rem;
+          }
+        }
+      }
+
+      &:hover {
+        background: $spc-checkout-sidebar-bg;
+      }
+
+      &:last-child {
+        span {
+          border-bottom: none;
+        }
+      }
+    }
   }
 
   .spc-filter-panel-search-form-item {
-    @include icon('search', 'before') {
+    position: relative;
+    margin-#{$right}: 0.625rem;
+    padding: 1.25rem;
+    background: $spc-checkout-area-panel-header-bg;
+    margin-bottom: 0.625rem;
+    width: 100%;
+
+    @include icon(search, after) {
+      color: $spc-cnc-store-search-icon;
       font-size: 2rem;
-      color: $spc-select-text;
+      height: 3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      #{$left}: 1.5rem;
+      top: 50%;
       position: absolute;
-      #{$left}: 0;
+      transform: translateY(-50%);
+      z-index: 1;
     }
 
-    .spc-filter-panel-search-field {
-      padding-#{$left}: 44px;
+    input {
+      border: 1px solid $spc-cnc-checkout-store-search-border !important;
+      height: 3rem;
+      font-size: 0.875rem;
+      width: 100% !important;
+      padding-#{$left}: 2.375rem !important;
+
+      &::placeholder {
+        color: $spc-checkout-area-panel-search-placeholder;
+      }
     }
+  }
+}
+
+.spc-area-select-selected {
+  font-size: 0.875rem;
+  color: $spc-area-panel-item-color;
+  border-bottom: 1px solid $primary_input_border;
+  padding: 0.3125rem 0;
+  position: relative;
+
+  @include icon('chevrondown', after) {
+    position: absolute;
+    font-size: 1.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    #{$right}: 0;
   }
 }
