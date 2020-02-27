@@ -264,6 +264,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $stockInfo = $this->skuInfoHelper->stockInfo($sku);
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
+    $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
