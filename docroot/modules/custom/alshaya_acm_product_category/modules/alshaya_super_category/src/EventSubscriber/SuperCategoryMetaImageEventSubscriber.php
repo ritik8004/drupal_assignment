@@ -52,7 +52,7 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route Match Object.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $productCategoryTree
    *   Product category tree manager.
