@@ -31,7 +31,7 @@ export default class ShippingMethod extends React.Component {
       	  id={'shipping-method-' + method.method_code}
       	  className={method.method_code}
       	  type='radio'
-      	  checked={this.state.selectedOption === method.method_code}
+      	  defaultChecked={this.state.selectedOption === method.method_code}
       	  value={method.method_code}
       	  name='shipping-method' />
 
