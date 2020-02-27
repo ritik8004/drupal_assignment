@@ -1,3 +1,5 @@
+@import "../../../alshaya_white_label/sass/config/_colors.scss";
+
 /* ------- 1. Brand Colors ------- */
 $peacock-blue: #005699;
 $cool-blue: #a8c6e7;
@@ -45,9 +47,7 @@ $primary_form_link: $peacock-blue;
 $primary_input: $black;
 $primary_input_label: $warm-grey-one;
 $primary_input_border: $warm-grey-one; // Global form input border
-$primary_input_disabled: $greyish;
 $primary_input_focus_border: $peacock-blue;
-$primary_input_inline_error: $red-error;
 
 // Dropdown.
 $primary_dropdown_bg: $white;
@@ -57,7 +57,6 @@ $primary_dropdown_text: $black;
 $primary_dropdown_border: $warm-grey-two;
 $primary_dropdown_option_hover: $warm-grey-three;
 $primary_dropdown_option_border: $warm-grey-two;
-$primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
 
 /* ------- 3. Secondary color  ----- */
@@ -254,7 +253,6 @@ $deliverybanner_border: $peacock-blue;
 $deliverybanner_shadow: transparent;
 
 //3. Footer
-$footer_bg: $white-five;
 $footer_border_top: $peacock-blue;
 $footer_title_h3: $black;
 $footer_link_mobile: $warm-grey-one;
