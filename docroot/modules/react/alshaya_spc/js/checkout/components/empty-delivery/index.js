@@ -5,6 +5,9 @@ import {
   checkoutAddressProcess,
   getAddressPopupClassName
 } from "../../../utilities/checkout_address_process";
+import {
+  addEditAddressToCustomer
+} from '../../../utilities/address_util';
 
 let ClickCollect = React.lazy(() => import("../click-collect"));
 let AddressContent = React.lazy(() => import("../address-popup-content"));
@@ -63,8 +66,14 @@ export default class EmptyDeliveryText extends React.Component {
    * Process the address form data on sumbit.
    */
   processAddress = e => {
-    const { cart } = this.props.cart;
-    checkoutAddressProcess(e, cart);
+    // If logged in user.
+    if (window.drupalSettings.user.uid > 0) {
+      addEditAddressToCustomer(e);
+    }
+    else {
+      const { cart } = this.props.cart;
+      checkoutAddressProcess(e, cart);
+    }
   };
 
   render() {
@@ -92,6 +101,17 @@ export default class EmptyDeliveryText extends React.Component {
       );
     }
 
+    let default_val = null;
+    // If logged in user.
+    if (window.drupalSettings.user.uid > 0) {
+      default_val = {
+        'static': {
+          'firstname': window.drupalSettings.user_name.fname,
+          'lastname': window.drupalSettings.user_name.lname
+        }
+      }
+    }
+
     return (
       <div className="spc-empty-delivery-information">
         <div
@@ -110,7 +130,12 @@ export default class EmptyDeliveryText extends React.Component {
             <a className="close" onClick={this.closeModal}>
               &times;
             </a>
-            <AddressContent processAddress={this.processAddress} />
+            <AddressContent
+              processAddress={this.processAddress}
+              show_prefered={window.drupalSettings.user.uid > 0}
+              showEmail={window.drupalSettings.user.uid === 0}
+              default_val={default_val}
+            />
           </React.Suspense>
         </Popup>
       </div>
