@@ -39,8 +39,9 @@ export default class Checkout extends React.Component {
         // so that fresh cart is fetched and thus shipping
         // info can be set in cart.
         if (temp_cart !== null
-          && temp_cart.cart.shipping_address === null
-          && window.drupalSettings.user_name.address_available) {
+          && (temp_cart.cart === undefined
+            || (temp_cart.cart.shipping_address === null
+          && window.drupalSettings.user_name.address_available))) {
           removeCartFromStorage();
         }
       }
