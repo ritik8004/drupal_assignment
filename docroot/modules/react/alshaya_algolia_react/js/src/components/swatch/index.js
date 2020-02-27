@@ -49,7 +49,7 @@ const Swatches = (props) => {
             </div>
             :
             null
-        }
+          }
         </React.Fragment>
       }
     </React.Fragment>

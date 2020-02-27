@@ -14,20 +14,26 @@
       /**
        * Adding the hover effect to colour swatches on plp.
        */
-      if ($(window).width() >= 1024) {
-        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once().on('mouseover', debounce(function (e) {
-          e.preventDefault();
-          var ProductUrl = $(this).find('img').attr('data-sku-image');
-          $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
-        }, 100));
+      function onSwatchHoverUpdateMainImage() {
+        if ($(window).width() >= 1024) {
+          $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once().on('mouseover', debounce(function (e) {
+            e.preventDefault();
+            var ProductUrl = $(this).find('img').attr('data-sku-image');
+            $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
+          }, 100));
 
-        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseout', debounce(function (e) {
-          e.preventDefault();
+          $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseout', debounce(function (e) {
+            e.preventDefault();
 
-          var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
-          $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
-        }, 100));
+            var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
+            $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
+          }, 100));
+        }
       }
+
+      $(document).once('searchResponseAddSwatchHover').on('search-results-updated', function() {
+        onSwatchHoverUpdateMainImage();
+      });
 
       // Update ?selected param on hover and show specific variant on PDP
       // if show_variants_thumbnail_plp_gallery is set to true.
