@@ -73,6 +73,8 @@ export default class AddressItem extends React.Component {
    * Deletes the user address.
    */
   deleteAddress = (id) => {
+    // Add loading class.
+    document.getElementById('address-delete-' + id).classList.add('loading');
     let addressList = deleteUserAddress(id);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
