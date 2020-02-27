@@ -99,9 +99,9 @@ class Drupal {
   }
 
   /**
-   * Get customer id from drupal.
+   * Get Drupal uid and customer id for the user in session.
    */
-  public function getCustomerId() {
+  public function getSessionCustomerInfo() {
     $client = $this->drupalInfo->getDrupalApiClient();
     $url = sprintf('/%s/spc/customer', $this->drupalInfo->getDrupalLangcode());
     $cookies = new SetCookie($this->request->getCurrentRequest()->cookies->all());
@@ -112,7 +112,12 @@ class Drupal {
       ],
     ]);
     $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
+    $customer = json_decode($result, TRUE);
+
+    // Clean customer data.
+    $customer['customer_id'] = (int) $customer['customer_id'];
+
+    return $customer;
   }
 
   /**

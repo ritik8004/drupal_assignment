@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
+import {showFullScreenLoader} from "../../../utilities/checkout_util";
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -21,6 +22,8 @@ export default class PaymentMethod extends React.Component {
   }
 
   changePaymentMethod = (method) => {
+    showFullScreenLoader();
+
     this.setState({
       selectedOption: method
     });

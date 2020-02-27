@@ -3,13 +3,11 @@ import Axios from "axios";
 import { i18nMiddleWareUrl } from "./i18n_url";
 
 export async function checkCartCustomer(cart_data = null) {
-  if (cart_data && typeof cart_data.cart_id !== 'undefined') {
-    cart_data = cart_data;
-  }
-  else {
+  if (!(cart_data) || typeof cart_data.cart_id === 'undefined') {
     const cart_json = getInfoFromStorage();
     cart_data = cart_json.cart;
   }
+
   // If the cart user and drupal user does not match.
   if (cart_data.uid !== window.drupalSettings.user.uid) {
     if (!cart_data.uid) {
