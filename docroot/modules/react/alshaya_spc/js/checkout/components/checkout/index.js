@@ -16,7 +16,12 @@ import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import TermsConditions from '../terms-conditions';
+import { getLocationAccess } from '../../../utilities/checkout_util';
+import { fetchClicknCollectStores } from "../../../utilities/api/requests";
+import { createFetcher, checkPromise } from '../../../utilities/api/fetcher';
 import {removeFullScreenLoader} from "../../../utilities/checkout_util";
+
+window.fetchStore = 'stop';
 
 export default class Checkout extends React.Component {
 
@@ -25,6 +30,7 @@ export default class Checkout extends React.Component {
     this.state = {
       wait: true,
       cart: null,
+      storeList: null,
       payment_methods: window.drupalSettings.payment_methods,
     };
   }
@@ -91,6 +97,38 @@ export default class Checkout extends React.Component {
     removeFullScreenLoader();
   };
 
+  /**
+   * Trigger cnc event to get location details and fetch stores.
+   */
+  cncEvent = () => {
+    const storeFetcher = createFetcher(
+      fetchClicknCollectStores
+    );
+
+    getLocationAccess()
+      .then(pos => {
+        window.fetchStore = 'pending';
+        let list = storeFetcher.read({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        });
+        list.then(
+          response => {
+            if (typeof response.error === 'undefined') {
+              this.setState({storeList: response})
+              window.fetchStore = 'finished';
+            }
+          }
+        );
+      },
+      reject =>  {
+        console.log(reject);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   render() {
     // While page loads and all info available.
 
@@ -112,8 +150,8 @@ export default class Checkout extends React.Component {
         <div className="spc-pre-content" />
         <div className="spc-main">
           <div className="spc-content">
-            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} />
-            <ClicknCollectContextProvider cart={this.state.cart}>
+            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent}/>
+            <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
             <PaymentMethods refreshCart={this.refreshCart} payment_methods={this.state.payment_methods} cart={this.state.cart} />

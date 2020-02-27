@@ -1,13 +1,17 @@
 import React from 'react'
+import { fetchClicknCollectStores } from "../../utilities/api/requests";
+import _isEqual from 'lodash/isEqual';
 
 export const ClicknCollectContext = React.createContext();
 
 export class ClicknCollectContextProvider extends React.Component {
+  _isMounted = true;
 
   constructor(props) {
     super(props);
     let coords = null;
     let selectedStore = null;
+    let storeList = props.storeList;
     let contactInfo = null;
 
     let { cart: { customer, store_info, shipping_address } } = props.cart;
@@ -39,13 +43,32 @@ export class ClicknCollectContextProvider extends React.Component {
 
     this.state = {
       coords: coords,
-      storeList: null,
+      storeList: storeList,
       selectedStore: selectedStore,
-      contactInfo: contactInfo
+      contactInfo: contactInfo,
     }
   }
 
-  updateSelectStore = (store) => {
+  componentDidMount() {
+    this._isMounted = true;
+    this.setState({storeList: this.props.storeList});
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.storeList !== state.storeList) {
+      return {
+        storeList: props.storeList,
+      };
+    }
+    // Return null to indicate no change to state.
+    return null;
+  }
+
+  updateSelectedStore = (store) => {
     this.setState({
       selectedStore: store
     });
@@ -76,7 +99,7 @@ export class ClicknCollectContextProvider extends React.Component {
         value={
           {
             ...this.state,
-            updateSelectStore: this.updateSelectStore,
+            updateSelectStore: this.updateSelectedStore,
             updateCoordsAndStoreList: this.updateCoordsAndStoreList,
             updateCoords: this.updateCoords,
             updateContactInfo: this.updateContactInfo

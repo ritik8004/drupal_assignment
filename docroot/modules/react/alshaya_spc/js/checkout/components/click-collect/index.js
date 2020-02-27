@@ -1,14 +1,15 @@
 import React from "react";
-import Axios from "axios";
 import _find from "lodash/find";
 import _findIndex from "lodash/findIndex";
 import { ClicknCollectContext } from "../../../context/ClicknCollect";
-import { removeFullScreenLoader, showFullScreenLoader } from "../../../utilities/checkout_util";
-import { getGlobalCart } from "../../../utilities/get_cart";
+import { createFetcher } from "../../../utilities/api/fetcher";
+import { fetchClicknCollectStores } from "../../../utilities/api/requests";
+import { getLocationAccess, removeFullScreenLoader, showFullScreenLoader } from "../../../utilities/checkout_util";
 import SectionTitle from "../../../utilities/section-title";
 import SelectedStore from "../selected-store";
 import StoreList from "../store-list";
 import ClicknCollectMap from "./ClicknCollectMap";
+import Loading from "../../../utilities/loading";
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -19,6 +20,7 @@ class ClickCollect extends React.Component {
     this.cncListView = React.createRef();
     this.cncMapView = React.createRef();
     this.nearMeBtn = React.createRef();
+    this.autocomplete = null;
     this.state = {
       openSelectedStore: this.props.openSelectedStore || false
     };
@@ -26,30 +28,24 @@ class ClickCollect extends React.Component {
 
   componentDidMount() {
     // For autocomplete text field.
-    this.autocomplete = new window.google.maps.places.Autocomplete(
-      this.searchplaceInput.current,
-      {
-        types: [],
-        componentRestrictions: { country: window.drupalSettings.country_code }
-      }
-    );
+    console.log(this.autocomplete);
+    if (!this.autocomplete) {
+      this.autocomplete = new window.google.maps.places.Autocomplete(
+        this.searchplaceInput.current,
+        {
+          types: [],
+          componentRestrictions: { country: window.drupalSettings.country_code }
+        }
+      );
+    }
+
     this.autocomplete.addListener(
       "place_changed",
       this.placesAutocompleteHandler
     );
     // Ask for location access when we don't have any coords.
-    if (this.context.coords !== null) {
-      let skipOpenMarker = false;
-      if (!this.context.storeList) {
-        skipOpenMarker = true;
-        this.fetchAvailableStores(this.context.coords);
-      }
-
-      if (this.state.openSelectedStore && !skipOpenMarker) {
-        this.showOpenMarker(this.context.storeList);
-      }
-    } else if (!this.context.coords) {
-      this.getCurrentPosition();
+    if (this.context.coords !== null && this.state.openSelectedStore) {
+      this.showOpenMarker(this.context.storeList);
     }
   }
 
@@ -60,6 +56,7 @@ class ClickCollect extends React.Component {
     const place = this.autocomplete.getPlace();
     this.nearMeBtn.current.classList.remove("active");
     if (typeof place !== "undefined" && typeof place.geometry !== "undefined") {
+
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
@@ -74,74 +71,51 @@ class ClickCollect extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    // If location access is enabled by user.
-    try {
-      if (navigator && navigator.geolocation) {
-        this.nearMeBtn.current.classList.add("active");
-        navigator.geolocation.getCurrentPosition(
-          this.LocationSuccess,
-          this.LocationFail,
-          { timeout: 1000 }
-        );
-      }
-    } catch (e) {
-      // Empty.
-    }
-    return false;
-  };
-
-  LocationSuccess = pos => {
-    this.fetchAvailableStores({
-      lat: pos.coords.latitude,
-      lng: pos.coords.longitude
-    });
-  };
-
-  LocationFail = error => {
-    this.nearMeBtn.current.classList.remove("active");
-    if (error.code == error.PERMISSION_DENIED) {
-      // Display dialog when location access is blocked from browser.
-      let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your browser settings.');
-      let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
-        modal: true,
-        width: "auto",
-        height: "auto",
-        title: Drupal.t('Location access denied'),
-        dialogClass: 'location-disabled-notice',
-        resizable: false,
-        closeOnEscape: true,
-        close: function close(event) {
-          Drupal.dialog(event.target).close();
-        }
+    getLocationAccess()
+      .then(pos => {
+        this.fetchAvailableStores({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        });
+      },
+      reject =>  {
+        console.log(reject);
+      })
+      .catch(error => {
+        console.log(error);
       });
-      locationErrorDialog.showModal();
-    }
+    return false;
   };
 
   /**
    * Fetch available stores for given lat and lng.
    */
-  fetchAvailableStores = async coords => {
-    let { cart_id } = getGlobalCart();
-    const GET_STORE_URL = Drupal.url(`cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`);
+  fetchAvailableStores = coords => {
     showFullScreenLoader();
-    let storesResponse = await Axios.get(GET_STORE_URL);
-    if (storesResponse && storesResponse.data) {
-      removeFullScreenLoader();
-      if (this.state.openSelectedStore) {
-        // Wait for all markers are placed on map, before we open a marker.
-        let self = this;
-        setTimeout(() => {
-          self.showOpenMarker(storesResponse.data);
-        }, 500);
+    window.fetchStore = 'pending';
+    const storeFetcher = createFetcher(
+      fetchClicknCollectStores
+    );
+    let list = storeFetcher.read(coords);
+    list.then(
+      response => {
+        window.fetchStore = 'finished';
+        if (typeof response.error === 'undefined' && response.length > 0) {
+          this.context.updateCoordsAndStoreList(coords, response);
+          if (this.state.openSelectedStore) {
+            // Wait for all markers are placed on map, before we open a marker.
+            let self = this;
+            setTimeout(() => {
+              self.showOpenMarker(response);
+            }, 500);
+          }
+        }
+        else {
+          this.context.updateCoordsAndStoreList(coords, null);
+        }
+        removeFullScreenLoader();
       }
-      this.context.updateCoordsAndStoreList(
-        coords,
-        storesResponse.data.length > 0 ? storesResponse.data : null
-      );
-    } else {
-      this.context.updateCoords(coords);
-    }
+    );
   };
 
   selectStore = (e, store_code) => {
@@ -178,7 +152,7 @@ class ClickCollect extends React.Component {
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], "click");
     // Pan Google maps to accommodate the info window.
-    map.googleMap.panBy(0, -150);
+    map.googleMap.panBy(0, 10);
   };
 
   showOpenMarker = storeList => {
@@ -211,6 +185,10 @@ class ClickCollect extends React.Component {
   render() {
     let { coords, storeList, selectedStore } = this.context;
     let { openSelectedStore } = this.state;
+
+    if (window.fetchStore == 'pending') {
+      return (<Loading/>);
+    }
 
     let mapView = (
       <ClicknCollectMap

@@ -22,6 +22,13 @@ export default class DeliveryMethods extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Trigger cnc event to fetch stores.
+    if (this.state.selectedOption === 'cnc') {
+      this.props.cncEvent();
+    }
+  }
+
   // On delivery method change.
   changeDeliveryMethod = (method) => {
     this.setState({
@@ -33,6 +40,10 @@ export default class DeliveryMethods extends React.Component {
     let cart = this.props.cart;
     cart['delivery_type'] = method;
     this.props.refreshCart(cart);
+    // Trigger cnc event to fetch stores.
+    if (method === 'cnc') {
+      this.props.cncEvent();
+    }
   }
 
   render() {

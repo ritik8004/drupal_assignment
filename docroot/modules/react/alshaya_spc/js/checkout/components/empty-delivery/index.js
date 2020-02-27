@@ -12,7 +12,19 @@ import {
   showFullScreenLoader
 } from "../../../utilities/checkout_util";
 
-let ClickCollect = React.lazy(() => import("../click-collect"));
+let ClickCollect = React.lazy(async () => {
+  // Wait for fetchstore request to finish, before
+  // We show click n collect with map.
+  await new Promise((resolve, reject) => {
+    let interval = setInterval(() => {
+      if (window.fetchStore != 'pending') {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 500);
+  });
+  return import("../click-collect");
+});
 let AddressContent = React.lazy(() => import("../address-popup-content"));
 
 export default class EmptyDeliveryText extends React.Component {

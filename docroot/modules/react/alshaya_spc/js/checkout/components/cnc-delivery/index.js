@@ -2,7 +2,19 @@ import React from "react";
 import Popup from "reactjs-popup";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
 import Loading from "../../../utilities/loading";
-let ClickCollect = React.lazy(() => import("../click-collect"));
+let ClickCollect = React.lazy(async () => {
+  // Wait for fetchstore request to finish, before
+  // We show click n collect with map.
+  await new Promise((resolve, reject) => {
+    let interval = setInterval(() => {
+      if (window.fetchStore != 'pending') {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 500);
+  });
+  return import("../click-collect");
+});
 
 class ClicknCollectDeiveryInfo extends React.Component {
   _isMounted = true;
@@ -98,8 +110,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <React.Suspense fallback={<Loading/>}>
-            <ClickCollect openSelectedStore={this.state.showSelectedStore}/>
+          <React.Suspense fallback={<Loading />}>
+            <ClickCollect
+              openSelectedStore={this.state.showSelectedStore}
+              closeModal={this.closeModal}
+            />
           </React.Suspense>
         </Popup>
       </div>
