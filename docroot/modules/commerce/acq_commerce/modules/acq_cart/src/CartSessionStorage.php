@@ -172,31 +172,31 @@ class CartSessionStorage implements CartStorageInterface {
    */
   public function updateCart($create_new = TRUE) {
     $cart_id = $this->getCartId($create_new);
-    $update = NULL;
-
-    $cart = $this->session->get(self::STORAGE_KEY);
-
-    if ($cart_id && empty($cart)) {
-      $cart_restored = $this->restoreCart($cart_id);
-      if (!$cart_restored) {
-        throw new \Exception(acq_commerce_api_down_global_error_message());
+    if (empty($cart_id)) {
+      if (!$create_new) {
+        // Simply return null if request was to update existing cart only.
+        return NULL;
       }
+
+      // Throw exception if request was to create if not exists.
+      throw new \Exception(acq_commerce_api_down_global_error_message());
     }
 
-    // If cart exists, derive update array and update cookie.
+    $update = NULL;
+    $cart = $this->session->get(self::STORAGE_KEY);
+
     if ($cart) {
+      // If cart exists, derive update array and update cookie.
       user_cookie_save([
         'acq_cart_id' => $cart->id(),
       ]);
       $update = $cart->getCart();
-    }
 
-    // Don't tell conductor our stored totals for no reason.
-    if (isset($update->totals)) {
-      unset($update->totals);
-    }
+      // Don't tell conductor our stored totals for no reason.
+      if (isset($update->totals)) {
+        unset($update->totals);
+      }
 
-    if ($cart_id) {
       try {
         $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
       }
@@ -228,9 +228,8 @@ class CartSessionStorage implements CartStorageInterface {
 
       return $cart;
     }
-    else {
-      return NULL;
-    }
+
+    return NULL;
   }
 
   /**
