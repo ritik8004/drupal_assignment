@@ -4,6 +4,20 @@
  * @file
  * Installation and update functions for SKU Stock.
  */
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_update_N().
+ */
+function acq_sku_stock_update_8001() {
+  $database = \Drupal::database();
+  $schema = $database->schema();
+  $max_sale_qty = [
+    'type' => 'int',
+    'description' => 'Max Sale Quantity.',
+  ];
+  $schema->addField('acq_sku_stock', 'max_sale_qty', $max_sale_qty);
+}
 
 /**
  * Implements hook_schema().
@@ -28,6 +42,10 @@ function acq_sku_stock_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+      ],
+      'max_sale_qty' => [
+        'type' => 'int',
+        'description' => 'Max Sale Quantity.',
       ],
     ],
     'primary key' => ['sku'],

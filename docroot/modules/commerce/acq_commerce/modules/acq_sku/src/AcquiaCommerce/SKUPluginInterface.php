@@ -182,4 +182,15 @@ interface SKUPluginInterface {
    */
   public function getAvailableChildrenIds(SKUInterface $sku);
 
+  /**
+   * Returns the max sale qty for the given sku.
+   *
+   * @param string|\Drupal\acq_sku\Entity\SKU $sku
+   *   SKU code of the product.
+   *
+   * @return int
+   *   Available max sale quantity.
+   */
+  public function getMaxSaleQty(SKU $sku);
+
 }

@@ -88,6 +88,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     // We always want this cache context and tag.
     $form['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
+    $form['#cache']['contexts'][] = 'session';
 
     // On final step we won't have cart to add the cache tag.
     if ($this->stepId != 'confirmation') {
@@ -386,20 +387,21 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         ]);
 
         if (_alshaya_acm_is_out_of_stock_exception($e)) {
-          if ($cart = $this->getCart()) {
-            $cart->setCheckoutStep('');
-            $this->getCheckoutHelper()->refreshStockForProductsInCart($cart);
-          }
-
-          throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+          $this->handleException();
         }
 
         // Show message from Magento to user if allowed in config.
         if (\Drupal::config('alshaya_acm_checkout.settings')->get('checkout_display_magento_error')) {
-          drupal_set_message($e->getMessage(), 'error');
+          \Drupal::service('messenger')->addError($e->getMessage());
         }
         else {
-          drupal_set_message($this->t('Something looks wrong, please try again later.'), 'error');
+          \Drupal::service('messenger')->addError($this->t('Something looks wrong, please try again later.'));
+        }
+
+        // Refresh stock and redirect to basket page with message
+        // if we get order limit exception.
+        if (_alshaya_acm_is_order_limit_exceeded_exception($e)) {
+          $this->handleException();
         }
 
         $this->redirectToStep($current_step_id);
@@ -429,6 +431,17 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         }
       }
     }
+  }
+
+  /**
+   * Helper method for actions on exceptions.
+   */
+  public function handleException() {
+    if ($cart = $this->getCart()) {
+      $cart->setCheckoutStep('');
+      $this->getCheckoutHelper()->refreshStockForProductsInCart($cart);
+    }
+    throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
   }
 
 }

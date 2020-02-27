@@ -226,18 +226,6 @@
     }
   }
 
-  .form-item-configurables-cup-size {
-    .select2Option {
-      li {
-        a,
-        span {
-          padding: 0.5625rem 0;
-          width: 2.375rem;
-        }
-      }
-    }
-  }
-
   .form-item-configurables-color {
     .select2Option {
       li {
@@ -571,6 +559,28 @@ html[lang="ar"] {
           &.title--sub {
             font-size: 0.875rem;
           }
+        }
+      }
+    }
+  }
+}
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 3rem;
+      }
+    }
+  }
+}
+
+.c-pdp {
+  .order-quantity-limit-message {
+    .order-qty-limit-msg-inner-wrapper {
+      &:not(:empty) {
+        @include breakpoint($tablet) {
+          margin-bottom: 1rem;
         }
       }
     }

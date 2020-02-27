@@ -255,7 +255,7 @@
        */
       function addSlideEventhandlers() {
         // Add active classes on facet dropdown content.
-        $(document).once('facet-title').on('click', '.c-facet__title.c-accordion__title', function () {
+        $(document).once('facet-title').on('click', '.c-facet__title.c-accordion__title, .c-facet__title.c-collapse__title', function () {
           if ($(this).hasClass('active')) {
             $(this).removeClass('active');
             // We want to run this only on main page facets.
@@ -555,7 +555,7 @@
       var total_selected = 0;
       var facets_to_show_in_label = 2;
       // If any facet item active.
-      var active_facets = $(facet_block).find('ul li.is-active a span.facet-item__value');
+      var active_facets = $(facet_block).find('ul li.is-active:not(.facet-item--expanded) a span.facet-item__value');
       $.each(active_facets, function(index, element) {
         total_selected = total_selected + 1;
         // Show only two facets in title.

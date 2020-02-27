@@ -1,0 +1,67 @@
+diff --git a/core/lib/Drupal/Core/Extension/ModuleHandler.php b/core/lib/Drupal/Core/Extension/ModuleHandler.php
+index 3b60d52..01afa38 100644
+--- a/core/lib/Drupal/Core/Extension/ModuleHandler.php
++++ b/core/lib/Drupal/Core/Extension/ModuleHandler.php
+@@ -334,6 +334,10 @@ public function getImplementations($hook) {
+    */
+   public function writeCache() {
+     if ($this->cacheNeedsWriting) {
++      if (empty($this->implementations['module_implements_alter'])) {
++        $this->logTrace('Writing cache, but the set of module_implements_alter hooks is empty');
++      }
++
+       $this->cacheBackend->set('module_implements', $this->implementations);
+       $this->cacheNeedsWriting = FALSE;
+     }
+@@ -588,6 +592,11 @@ protected function getImplementationInfo($hook) {
+       $this->cacheNeedsWriting = TRUE;
+       // Discover implementations.
+       $this->implementations[$hook] = $this->buildImplementationInfo($hook);
++
++      if (empty($this->implementations['module_implements_alter'])) {
++        $this->logTrace('The set of module_implements_alter hooks is empty');
++      }
++
+       // Implementations are always "verified" as part of the discovery.
+       $this->verified[$hook] = TRUE;
+     }
+@@ -596,6 +605,10 @@ protected function getImplementationInfo($hook) {
+         // One or more of the implementations did not exist and need to be
+         // removed in the cache.
+         $this->cacheNeedsWriting = TRUE;
++
++        if (empty($this->implementations['module_implements_alter'])) {
++          $this->logTrace('Unverified and the set of module_implements_alter hooks is empty');
++        }
+       }
+       $this->verified[$hook] = TRUE;
+     }
+@@ -756,4 +769,28 @@ public function getName($module) {
+     }
+   }
+ 
++  /**
++  * Send the output from a backtrace to the error_log
++  * @param string $message Optional message that will be sent the the error_log before the backtrace
++  */
++  private function logTrace($message = '') {
++    $trace = debug_backtrace();
++    if ($message) {
++      error_log($message);
++    }
++
++    $caller = array_shift($trace);
++    $function_name = $caller['function'];
++    error_log(sprintf('%s: Called from %s:%s', $function_name, $caller['file'], $caller['line']));
++
++    foreach ($trace as $entry_id => $entry) {
++      $entry['file'] = $entry['file'] ? : '-';
++      $entry['line'] = $entry['line'] ? : '-';
++      if (empty($entry['class'])) {
++        error_log(sprintf('%s %3s. %s() %s:%s', $function_name, $entry_id + 1, $entry['function'], $entry['file'], $entry['line']));
++      } else {
++        error_log(sprintf('%s %3s. %s->%s() %s:%s', $function_name, $entry_id + 1, $entry['class'], $entry['function'], $entry['file'], $entry['line']));
++      }
++    }
++  }
+ }

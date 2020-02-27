@@ -1,137 +1,313 @@
-.path--search {
-  .c-sidebar-first .c-facet__blocks {
-    .block-facet-blockcategory-facet-search {
-      @include breakpoint($desktop) {
-        margin-top: 5.625rem;
-      }
+.c-sidebar-first .c-facet__blocks {
+  .block-facet-blockcategory-facet-search {
+    display: block;
 
-      ul {
-        @include breakpoint($desktop) {
-          padding-top: 0;
-        }
-      }
+    @include breakpoint($desktop) {
+      margin-top: 5.625rem !important;
+    }
 
-      li {
-        &.is-active {
-          background: none;
-
-          .facet-item__value {
-            @include icon(check, after) {
-              font-size: 1.3125rem;
-              line-height: 1.3125rem;
-              color: $plp_filter_active_tick;
-            }
-          }
-
-          &::after {
-            content: none;
-          }
-
-          span {
-            font-family: $alshaya-bold;
-            font-weight: bold;
-          }
-        }
-
-        .facet-item__count {
-          position: absolute;
-          #{$right}: 0;
-        }
-      }
-
-      h3 {
-        @include breakpoint($desktop) {
-          display: none;
-        }
-      }
+    .facet-item__value,
+    .facet-item__count {
+      display: block;
     }
   }
 
-  .c-content__region {
-    .block-facet-blockcategory-facet-search {
-      @include breakpoint($only-mobile) {
-        width: 50%;
-        float: $left;
-        display: block;
-        margin: 0;
-        border-bottom: 0.0625rem solid $plp_mobile_separator;
-        border-#{$right}: 0.0625rem solid $plp_mobile_separator;
-      }
-
-      @include breakpoint($only-tablet) {
-        margin-#{$left}: 0;
-        margin-#{$right}: 0.5625rem;
-      }
-
-      @include breakpoint($desktop) {
-        display: none;
-      }
-
-      ul {
-        @include breakpoint($only-mobile) {
-          width: 100vw;
-          top: 100%;
-        }
-
-        @include breakpoint($only-tablet) {
-          top: 2.25rem;
-        }
-
-        @include breakpoint($upto-desktop) {
-          display: none;
-          overflow-y: auto;
-          max-height: calc(100vh - 15rem);
-          position: absolute;
-          background: $plp_facet_active_bg;
-          z-index: 2;
-          min-width: 15.5rem;
-          border: 0.0625rem solid $plp_facet_border;
-
-          > li {
-            padding-top: 0.75rem !important;
-            padding-bottom: 0.75rem !important;
-            border-bottom: 0.0625rem solid $plp_mobile_separator;
-
-            &:last-child {
-              border-bottom: none;
-            }
-          }
-        }
-      }
-
-      h3.active {
-        @include breakpoint($only-mobile) {
-          background: $search_facet_active_title_bg;
-        }
-      }
-    }
-  }
-
-  .block-facet-blockcategory-facet-search.c-facet.c-accordion {
+  .block-facet-blockcategory-facet-search {
     ul {
-      li {
-        line-height: 1.3125rem;
-        margin-bottom: 0;
+      @include breakpoint($desktop) {
+        padding-top: 0;
+      }
+    }
 
-        @include breakpoint($desktop) {
-          margin-bottom: 1.25rem !important;
+    .facet-item__count {
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+    }
+
+    .facet-item {
+      &.is-active:not(.facet-item--expanded) {
+        background: none;
+
+        .facet-item__value {
+          @include icon(check, after) {
+            font-size: 1.3125rem;
+            line-height: 1.3125rem;
+            color: $plp_filter_active_tick;
+            position: absolute;
+            bottom: -2px;
+          }
         }
 
-        label {
-          top: 0;
+        &::after {
+          content: none;
         }
 
         span {
-          font-size: 0.75rem;
-          line-height: 1.3125rem;
-          display: inline-flex;
-        }
-
-        &.is-active::after {
-          font-size: 1.3125rem;
-          line-height: 1.3125rem;
+          font-family: $alshaya-bold;
+          font-weight: bold;
         }
       }
     }
+
+    h3 {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+
+    & > ul {
+      @include breakpoint($desktop) {
+        max-height: none;
+      }
+    }
+  }
+}
+
+.c-content__region {
+  .block-facet-blockcategory-facet-search {
+    @include breakpoint($only-mobile) {
+      width: 50% !important;
+      float: $left;
+      display: block !important;
+      margin: 0 !important;
+      border-bottom: 0.0625rem solid $plp_all_filter_item_border;
+      border-#{$right}: 0.0625rem solid $plp_all_filter_item_border;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: 0;
+      margin-#{$right}: 0.5625rem;
+    }
+
+    @include breakpoint($desktop) {
+      display: none;
+    }
+
+    .facet-item {
+      &.is-active:not(.facet-item--expanded) {
+        background: $plp_filter_active_item;
+
+        @include icon(check, after) {
+          font-size: 1.5rem;
+          position: absolute;
+          top: 50%;
+          color: $plp_filter_active_tick;
+          transform: translateY(-50%);
+          #{$right}: 1rem;
+        }
+      }
+    }
+
+    & > ul {
+      @include breakpoint($upto-desktop) {
+        display: none;
+        overflow-y: auto;
+        max-height: calc(100vh - 15rem);
+        position: absolute;
+        background: $plp_facet_active_bg;
+        z-index: 2;
+        min-width: 15.5rem;
+        border: 0.0625rem solid $plp_facet_border;
+
+        & > li:not(:last-child) {
+          border-bottom: 0.0625rem solid $plp_all_filter_item_border;
+        }
+      }
+    }
+
+    ul {
+      @include breakpoint($only-mobile) {
+        width: 100vw;
+        top: 100%;
+      }
+
+      @include breakpoint($only-tablet) {
+        top: 2.25rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        overflow-y: auto;
+        background: $plp_facet_active_bg;
+        z-index: 2;
+      }
+    }
+
+    h3.active {
+      @include breakpoint($only-mobile) {
+        background: $search_facet_active_title_bg;
+      }
+    }
+  }
+}
+
+.block-facet-blockcategory-facet-search.c-facet.c-accordion {
+  @include breakpoint($desktop) {
+    display: block;
+    margin-top: 5.2rem;
+  }
+
+  ul {
+    a.facet-item,
+    li:not(.category-all) label,
+    li.category-all {
+      margin-bottom: 0;
+      display: block;
+
+      @include breakpoint($desktop) {
+        margin-bottom: 1.25rem !important;
+      }
+
+      @include breakpoint($upto-desktop) {
+        padding: 1.125rem !important;
+      }
+
+      span {
+        font-size: 0.75rem;
+        line-height: 1.0625rem;
+        margin: 0;
+      }
+    }
+
+    a.facet-item,
+    li:not(.category-all) label {
+      line-height: normal;
+    }
+
+    label {
+      top: 0;
+      position: static;
+    }
+
+    & > li {
+      margin-left: 0;
+
+      & > ul {
+        position: static;
+        max-height: none;
+        min-width: auto;
+        margin-top: 0;
+        width: auto !important;
+        border: none;
+
+        a.facet-item,
+        li:not(.category-all) label,
+        li.category-all {
+          margin-#{$left}: 0;
+
+          @include breakpoint($upto-desktop) {
+            border-top: 0.0625rem solid $plp_all_filter_item_border;
+            padding-#{$left}: 2.25rem !important;
+          }
+
+          @include breakpoint($desktop) {
+            padding-#{$left}: 0.9375rem;
+          }
+        }
+      }
+    }
+
+    li {
+      padding: 0 !important;
+      min-height: auto;
+      position: relative;
+    }
+
+    .facet-item {
+      span {
+        font-size: 0.75rem;
+        margin-#{$left}: 0;
+
+        &.facet-item__count {
+          color: $plp_facet_count_number;
+          padding-#{$left}: 0.2rem;
+        }
+      }
+
+      label {
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .facet-item__value {
+    padding-#{$right}: 2.5rem;
+    word-break: break-word;
+
+    @include breakpoint($desktop) {
+      .ie & {
+        word-wrap: break-word;
+        width: 12.5rem;
+      }
+    }
+  }
+
+  .facet-item.facet-item--expanded {
+    ul {
+      display: none;
+    }
+
+    & > label {
+      @include breakpoint($upto-desktop) {
+        position: relative;
+        cursor: pointer;
+
+        @include icon(chevrondown, after) {
+          font-size: 1.1875rem;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$right}: 1rem;
+          transition: transform 0.4s ease-in-out;
+        }
+      }
+
+      .facet-item__value {
+        @include breakpoint($desktop) {
+          @include icon(chevrondown, after) {
+            font-size: 1.3125rem;
+            line-height: 1.0625rem;
+            transition: transform 0.4s ease-in-out;
+            position: absolute;
+            top: 0;
+          }
+        }
+      }
+    }
+
+    &.facet-item--active-trail,
+    &.active {
+      & > label {
+        &::after {
+          @include breakpoint($upto-desktop) {
+            transform: translateY(-50%) rotate(180deg);
+          }
+        }
+
+        .facet-item__value {
+          &::after {
+            @include breakpoint($desktop) {
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+    }
+
+    &.facet-item--active-trail {
+      ul {
+        display: block !important;
+      }
+    }
+  }
+
+  .is-active.category-all {
+    pointer-events: none;
+  }
+
+  li.category-all {
+    line-height: 1.0625rem;
   }
 }
