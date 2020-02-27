@@ -2,6 +2,7 @@ import React from "react";
 
 import Popup from "reactjs-popup";
 import ShippingMethods from "../shipping-methods";
+import Loading from "../../../utilities/loading";
 import {
   checkoutAddressProcess,
   getAddressPopupClassName
@@ -102,7 +103,7 @@ export default class HomeDeliveryInfo extends React.Component {
           <a className="close" onClick={this.closeModal}>
             &times;
           </a>
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense fallback={<Loading/>}>
             <a className="close" onClick={this.closeModal}>
               &times;
             </a>

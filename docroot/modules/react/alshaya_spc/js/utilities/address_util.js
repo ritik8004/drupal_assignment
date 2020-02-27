@@ -122,7 +122,7 @@ export const addEditAddressToCustomer = (e) => {
           let ee = new CustomEvent('closeAddressListPopup', {
             bubbles: true,
             detail: {
-              close: () => true
+              close: true
             }
           });
           document.dispatchEvent(ee);
