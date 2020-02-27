@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Exponea module.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function exponea_page_attachments(array &$attachments) {
+
+  // Add Exponea manifest to head if config values are present.
+  $config = \Drupal::configFactory()->get('exponea.settings');
+
+  if (!empty($config->get('name')) && !empty($config->get('short_name')) && !empty($config->get('start_url')) && !empty($config->get('display')) && !empty($config->get('gcm_sender_id'))) {
+    $exponea_link = [
+      '#tag' => 'link',
+      '#attributes' => [
+        'rel' => 'manifest',
+        'href' => '/manifest.json',
+      ],
+    ];
+    $attachments['#attached']['html_head'][] = [$exponea_link, 'link'];
+  }
+}
