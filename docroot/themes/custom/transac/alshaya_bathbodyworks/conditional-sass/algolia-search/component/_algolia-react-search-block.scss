@@ -40,7 +40,7 @@
 
     @include breakpoint($desktop) {
       width: 14rem;
-      padding: 0 0.75rem;
+      padding: 0 0.75rem 0 0;
       margin-bottom: 0.375rem;
     }
 
@@ -153,17 +153,12 @@
       &--open {
         margin-top: 0;
         border: 1px solid $algolia-auto-complete-border;
-        min-width: 15.25rem;
         box-shadow: none;
         border-radius: 0;
 
         @include breakpoint($only-mobile) {
           border-top: none;
           position: absolute;
-        }
-
-        @include breakpoint($desktop) {
-          margin-top: 0.4375rem;
         }
       }
     }
