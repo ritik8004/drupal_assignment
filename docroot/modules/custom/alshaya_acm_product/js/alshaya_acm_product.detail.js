@@ -379,10 +379,10 @@
     var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
     var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
     // At parent level, sku and selected will be same.
-    var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined" &&
-      typeof drupalSettings[productKey][sku]['variants'] !== "undefined" &&
-      sku !== selected) ?
-      drupalSettings[productKey][sku]['variants'][selected] : '';
+    var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined"
+      && typeof drupalSettings[productKey][sku]['variants'] !== "undefined"
+      && sku !== selected)
+      ? drupalSettings[productKey][sku]['variants'][selected] : '';
     var variantToDisableSelector = selectedInput.closest('.sku-base-form');
     var orderLimitExceeded =  false;
     var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
@@ -398,7 +398,8 @@
       // If cart is not empty.
       if (typeof cart_items !== "undefined") {
         var itemQtyInCart = 0;
-        var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined" ? parentInfo.orderLimitMsg : '';
+        var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined"
+          ? parentInfo.orderLimitMsg : '';
 
         if (allVariants.length !== 0) {
           $.each( cart_items, function( item, value ) {
@@ -419,7 +420,8 @@
       }
     }
     else if (variantInfo !== '') {
-      var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined" ? variantInfo.orderLimitMsg : '';
+      var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined"
+        ? variantInfo.orderLimitMsg : '';
 
       // If cart is not empty.
       if (typeof cart_items !== "undefined") {

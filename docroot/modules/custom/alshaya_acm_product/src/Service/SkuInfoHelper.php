@@ -469,9 +469,11 @@ class SkuInfoHelper {
 
     // If order limit is not set for parent
     // then get order limit for each variant.
-    $max_sale_qty = (isset($max_sale_qty) && !empty($max_sale_qty)) ? $max_sale_qty : $plugin->getMaxSaleQty($variant_sku);
+    $max_sale_qty = !empty($max_sale_qty)
+      ? $max_sale_qty
+      : $plugin->getMaxSaleQty($variant_sku);
 
-    if (!empty($max_sale_qty) && ($max_sale_qty > 0)) {
+    if (!empty($max_sale_qty)) {
       $variant['stock']['maxSaleQty'] = $max_sale_qty;
       $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
     }
