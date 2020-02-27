@@ -16,25 +16,28 @@
        */
       function onSwatchHoverUpdateMainImage() {
         if ($(window).width() >= 1024) {
-          $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once().on('mouseover', debounce(function (e) {
+          $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once('swatchMouseOver').on('mouseover', debounce(function (e) {
             e.preventDefault();
             var ProductUrl = $(this).find('img').attr('data-sku-image');
             $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
           }, 100));
 
-          $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseout', debounce(function (e) {
+          $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once('swatchMouseOut').on('mouseout', debounce(function (e) {
             e.preventDefault();
 
             var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
+            console.log(ProductUrl);
             $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
           }, 100));
         }
       }
 
+      // When search results load, this will fire.
       $(document).once('searchResponseAddSwatchHover').on('search-results-updated', function() {
         onSwatchHoverUpdateMainImage();
       });
 
+      onSwatchHoverUpdateMainImage();
       // Update ?selected param on hover and show specific variant on PDP
       // if show_variants_thumbnail_plp_gallery is set to true.
       if (settings.show_variants_thumbnail_plp_gallery) {

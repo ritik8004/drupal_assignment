@@ -7,7 +7,7 @@ const Swatch = (props) => {
     <a href={selected_image}>
       <span className='swatch-block swatch-image'>
         {props.url ?
-          <ImageElement data-sku-image={props.swatch.image_url} src={props.swatch.image_url} />
+          <ImageElement data-sku-image={props.swatch.product_url} src={props.swatch.image_url} />
           :
           <ImageElement src={props.swatch.image_url} />
         }
