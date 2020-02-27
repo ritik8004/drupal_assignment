@@ -207,8 +207,9 @@ class CartController {
     if (!empty($this->getSessionUid())) {
       $shipping = $data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'];
       // If shipping method is set and only HD.
-      if ($shipping['extension_attributes']['click_and_collect_type'] == 'home_delivery'
-        && !empty($shipping['method'])) {
+      if ((empty($shipping['extension_attributes'])
+        || $shipping['extension_attributes']['click_and_collect_type'] == 'home_delivery')
+        && empty($shipping['method'])) {
         $data = $this->checkAndUpdateShippinginCart($data);
       }
     }

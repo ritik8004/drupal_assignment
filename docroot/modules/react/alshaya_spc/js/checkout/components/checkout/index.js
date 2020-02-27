@@ -6,7 +6,11 @@ import { fetchCartData } from '../../../utilities/get_cart';
 import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
-import { addInfoInStorage, getInfoFromStorage } from '../../../utilities/storage';
+import {
+  addInfoInStorage,
+  getInfoFromStorage,
+  removeCartFromStorage
+} from '../../../utilities/storage';
 import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
@@ -26,6 +30,21 @@ export default class Checkout extends React.Component {
 
   componentDidMount() {
     try {
+      // If logged in user.
+      if (window.drupalSettings.user.uid > 0) {
+        let temp_cart = getInfoFromStorage();
+        // If cart available in storage and shipping address
+        // already not set in cart and user has address
+        // available, remove cart from local storage so
+        // so that fresh cart is fetched and thus shipping
+        // info can be set in cart.
+        if (temp_cart !== null
+          && temp_cart.cart.shipping_address === null
+          && window.drupalSettings.user_name.address_available) {
+          removeCartFromStorage();
+        }
+      }
+
       // Fetch cart data.
       var cart_data = fetchCartData();
       if (cart_data instanceof Promise) {
