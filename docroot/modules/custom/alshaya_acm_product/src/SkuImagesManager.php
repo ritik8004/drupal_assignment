@@ -1035,6 +1035,15 @@ class SkuImagesManager {
           if (!$index_image_url) {
             unset($data['image_url']);
           }
+          else {
+            $swatch_product_image = $child->getThumbnail();
+            // If we have image for the product.
+            if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+              $url = file_create_url($swatch_product_image['file']->getFileUri());
+              $data['product_url'] = file_url_transform_relative($url);
+            }
+          }
+
           $data['value'] = $value;
           $data['child_id'] = $child->id();
           $swatches['swatches'][$value] = $data;
