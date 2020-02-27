@@ -1,8 +1,8 @@
-alshaya_exponea.manifest:
+exponea.manifest:
   path: '/manifest.json'
   defaults:
     _title: 'Exponea Push notifications Manifest file'
-    _controller: '\Drupal\alshaya_exponea\Controller\AlshayaExponeaController::getManifest'
+    _controller: '\Drupal\exponea\Controller\ExponeaController::getManifest'
     _disable_route_normalizer: 'TRUE'
   requirements:
     _permission: 'access content'

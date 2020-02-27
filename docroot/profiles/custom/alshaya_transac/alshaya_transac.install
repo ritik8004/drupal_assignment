@@ -15,13 +15,13 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Installs Alshaya Exponea module.
+ * Installs Exponea module.
  */
 function alshaya_transac_update_8127() {
-  \Drupal::service('module_installer')->install(['alshaya_exponea']);
+  \Drupal::service('module_installer')->install(['exponea']);
   /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
   $config_check = \Drupal::service('alshaya_acm.config_check');
-  $config_check->checkConfig(TRUE, 'alshaya_exponea.settings');
+  $config_check->checkConfig(TRUE, 'exponea.settings');
 }
 
 /**
@@ -738,7 +738,6 @@ function alshaya_transac_install() {
     'alshaya_contact',
     'alshaya_default_content',
     'alshaya_default_content_transac',
-    'alshaya_exponea',
     'alshaya_feed',
     'alshaya_i18n',
     'alshaya_loyalty',
@@ -766,6 +765,7 @@ function alshaya_transac_install() {
     'alshaya_image_sitemap',
     'alshaya_options_list',
     'alshaya_facets_pretty_paths',
+    'exponea',
   ];
 
   // Add 10 MB per module we are going to enable above.

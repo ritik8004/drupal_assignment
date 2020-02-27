@@ -1,16 +1,16 @@
 <?php
 
-namespace Drupal\alshaya_exponea\Controller;
+namespace Drupal\exponea\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Returns responses for Alshaya Exponea routes.
+ * Returns responses for Exponea routes.
  */
-class AlshayaExponeaController extends ControllerBase {
+class ExponeaController extends ControllerBase {
 
-  const EXPONEA_SETTINGS = 'alshaya_exponea.settings';
+  const EXPONEA_SETTINGS = 'exponea.settings';
 
   /**
    * Builds the response.

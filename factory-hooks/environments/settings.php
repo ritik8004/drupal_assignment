@@ -30,7 +30,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
         'live' => [
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "Mothercare",
             "short_name" => "MC",
             "start_url" => "/",
@@ -79,7 +79,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876644',
           ],
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "H&M",
             "short_name" => "H&M",
             "start_url" => "/",
@@ -160,7 +160,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876648',
           ],
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "Bath and Body Works",
             "short_name" => "BBW",
             "start_url" => "/",
@@ -204,7 +204,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
         'live' => [
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "Footlocker",
             "short_name" => "FL",
             "start_url" => "/",
@@ -248,7 +248,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
         'live' => [
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "Pottery Barn",
             "short_name" => "PB",
             "start_url" => "/",
@@ -301,7 +301,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876645',
           ],
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "Victoria's Secret",
             "short_name" => "VS",
             "start_url" => "/",
@@ -323,7 +323,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_type' => 'summary',
           ],
-          'alshaya_exponea.settings' => [
+          'exponea.settings' => [
             "name" => "Alshaya",
             "short_name" => "AlshayaTest",
             "start_url" => "/",
