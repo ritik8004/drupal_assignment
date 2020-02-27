@@ -372,7 +372,7 @@
 
   // Disable Add to bag and quantity dropdown when order limit exceed.
   Drupal.disableLimitExceededProducts = function (sku, selected) {
-    var selectedInput = $('input').filter(function(){ return this.value===selected });
+    var selectedInput = $('input[value="' + selected + '"]');
     var orderLimitMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
     var orderLimitMobileMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
     var viewMode = selectedInput.parents('article.entity--type-node').attr('data-vmode');
