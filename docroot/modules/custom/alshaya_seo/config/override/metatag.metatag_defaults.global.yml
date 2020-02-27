@@ -1,3 +1,4 @@
 tags:
   og_type: website
   og_country_name: '[site:country_name]'
+  image_src: '[alshaya_seo:meta_image]'
