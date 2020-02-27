@@ -87,7 +87,7 @@ export const addShippingInCart = function (action, data) {
     })
     .then((response) => {
       if (typeof response.data !== 'object') {
-        removeLoader();
+        removeFullScreenLoader();
         return null;
       }
       return response.data;
@@ -102,7 +102,7 @@ export const addShippingInCart = function (action, data) {
 /**
  * Place ajax fulll screen loader.
  */
-export const showLoader = () => {
+export const showFullScreenLoader = () => {
   const loaderDiv = document.createElement( 'div' );
   loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
   document.body.appendChild( loaderDiv );
@@ -111,7 +111,7 @@ export const showLoader = () => {
 /**
  * Remove ajax loader.
  */
-export const removeLoader = () => {
+export const removeFullScreenLoader = () => {
   const loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
   // Check if loader div is present algolia is not redirecting to other language.
   if (loaderDiv.length > 0) {

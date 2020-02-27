@@ -3,7 +3,7 @@ import Axios from "axios";
 import _find from "lodash/find";
 import _findIndex from "lodash/findIndex";
 import { ClicknCollectContext } from "../../../context/ClicknCollect";
-import { removeLoader, showLoader } from "../../../utilities/checkout_util";
+import { removeFullScreenLoader, showFullScreenLoader } from "../../../utilities/checkout_util";
 import { getGlobalCart } from "../../../utilities/get_cart";
 import SectionTitle from "../../../utilities/section-title";
 import SelectedStore from "../selected-store";
@@ -124,10 +124,10 @@ class ClickCollect extends React.Component {
   fetchAvailableStores = async coords => {
     let { cart_id } = getGlobalCart();
     const GET_STORE_URL = Drupal.url(`cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`);
-    showLoader();
+    showFullScreenLoader();
     let storesResponse = await Axios.get(GET_STORE_URL);
     if (storesResponse && storesResponse.data) {
-      removeLoader();
+      removeFullScreenLoader();
       if (this.state.openSelectedStore) {
         // Wait for all markers are placed on map, before we open a marker.
         let self = this;

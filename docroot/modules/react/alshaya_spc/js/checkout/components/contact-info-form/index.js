@@ -3,8 +3,8 @@ import Axios from "axios";
 import { ClicknCollectContext } from "../../../context/ClicknCollect";
 import {
   addShippingInCart,
-  removeLoader,
-  showLoader
+  removeFullScreenLoader,
+  showFullScreenLoader
 } from "../../../utilities/checkout_util";
 import FixedFields from "../fixed-fields";
 import { i18nMiddleWareUrl } from "../../../utilities/i18n_url";
@@ -14,7 +14,7 @@ class ContactInfoForm extends React.Component {
 
   handleSubmit = (e, store) => {
     e.preventDefault();
-    showLoader();
+    showFullScreenLoader();
     let form_data = {
       static: {
         firstname: e.target.elements.fname.value,
@@ -76,7 +76,7 @@ class ContactInfoForm extends React.Component {
           if (!hasError) {
             this.updateShipping(form_data);
           } else {
-            removeLoader();
+            removeFullScreenLoader();
           }
         })
       )
@@ -94,7 +94,7 @@ class ContactInfoForm extends React.Component {
       let { updateContactInfo } = this.context;
       cart_info
         .then(cart_result => {
-          removeLoader();
+          removeFullScreenLoader();
 
           if (!cart_result) {
             return null;
