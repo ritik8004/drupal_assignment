@@ -132,7 +132,7 @@ class CartController {
 
     if (!empty($customer_id)) {
       $update = TRUE;
-      $this->sessionCartInfo['customer_id'] = $customer_id;
+      $this->sessionCartInfo['customer_id'] = (int) $customer_id;
     }
 
     if (!empty($email)) {
@@ -634,21 +634,26 @@ class CartController {
   public function associateCart() {
     $this->loadCartFromSession(TRUE);
 
-    if (!empty($this->sessionCartInfo['customer_id'])) {
-      return $this->getCart($this->sessionCartInfo['cart_id']);
-    }
-
     try {
-      $customer = $this->drupal->getCustomerId();
-      if ($customer !== NULL) {
-        $this->cart->associateCartToCustomer($this->sessionCartInfo['cart_id'], $customer['customer_id']);
-        $this->session->set(self::STORAGE_KEY, [
-          'cart_id' => $this->sessionCartInfo['cart_id'],
-          'customer_id' => $customer['customer_id'],
-          'uid' => $customer['uid'],
-        ]);
-        $this->loadCartFromSession(TRUE);
+      $customer = $this->drupal->getSessionCustomerInfo();
+
+      if (empty($customer)) {
+        return $this->cart->getErrorResponse('No user in session', 404);
       }
+
+      // Check if association is not required.
+      if ($customer['customer_id'] === $this->sessionCartInfo['customer_id']) {
+        return $this->getCart($this->sessionCartInfo['cart_id']);
+      }
+
+      $this->cart->associateCartToCustomer($this->sessionCartInfo['cart_id'], $customer['customer_id']);
+      $this->session->set(self::STORAGE_KEY, [
+        'cart_id' => $this->sessionCartInfo['cart_id'],
+        'customer_id' => $customer['customer_id'],
+        'uid' => $customer['uid'],
+      ]);
+
+      $this->loadCartFromSession(TRUE);
     }
     catch (\Exception $e) {
       // Exception handling here.

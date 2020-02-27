@@ -12,6 +12,7 @@ import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import TermsConditions from '../terms-conditions';
+import {removeFullScreenLoader} from "../../../utilities/checkout_util";
 
 export default class Checkout extends React.Component {
 
@@ -67,7 +68,8 @@ export default class Checkout extends React.Component {
     });
 
     addInfoInStorage(cart);
-  }
+    removeFullScreenLoader();
+  };
 
   render() {
     // While page loads and all info available.
