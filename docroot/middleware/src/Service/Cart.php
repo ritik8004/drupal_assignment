@@ -158,6 +158,39 @@ class Cart {
   }
 
   /**
+   * Format shipping info for api call.
+   *
+   * @param array $shippig_info
+   *   Shipping info.
+   *
+   * @return array
+   *   Formatted shipping info for api.
+   */
+  public function prepareShippingData(array $shippig_info) {
+    $static_fields = $shippig_info['static'];
+    unset($shippig_info['static']);
+    $custom_attributes = [];
+    foreach ($shippig_info as $field_name => $val) {
+      $custom_attributes[] = [
+        'attribute_code' => $field_name,
+        'value' => $val,
+      ];
+    }
+
+    $fields_data = [];
+    foreach ($static_fields as $key => $field) {
+      $fields_data[$key] = $field;
+    }
+
+    $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
+    $data = [
+      'address' => $fields_data,
+    ];
+
+    return $data;
+  }
+
+  /**
    * Adding shipping on the cart.
    *
    * @param int $cart_id
@@ -196,6 +229,9 @@ class Cart {
     }
 
     $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
+    if (!empty($shipping_data['street'])) {
+      $fields_data['street'] = [$shipping_data['street']];
+    }
     $data['shipping']['shipping_address'] = $fields_data;
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];

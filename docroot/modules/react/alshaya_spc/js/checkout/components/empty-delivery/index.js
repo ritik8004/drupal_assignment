@@ -30,6 +30,8 @@ export default class EmptyDeliveryText extends React.Component {
       this.eventListener,
       false
     );
+
+    document.addEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
   componentWillUnmount() {

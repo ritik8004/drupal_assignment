@@ -3,7 +3,10 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import AddressItem from '../address-item';
 import AddressForm from '../address-form';
-import { getUserAddressList } from '../../../utilities/address_util';
+import {
+  getUserAddressList,
+  addEditAddressToCustomer
+} from '../../../utilities/address_util';
 
 export default class AddressList extends React.Component {
 
@@ -47,8 +50,11 @@ export default class AddressList extends React.Component {
     });
   };
 
+  /**
+   * Process add new address.
+   */
   processAddress = (e) => {
-    console.log('Address submission processing here');
+    addEditAddressToCustomer(e);
   };
 
   render() {
@@ -63,6 +69,13 @@ export default class AddressList extends React.Component {
       addressItem.push(<AddressItem key={key} address={address} refreshAddressList={this.refreshAddressList} />);
     });
 
+    let default_val = {
+      'static': {
+        'firstname': window.drupalSettings.user_name.fname,
+        'lastname': window.drupalSettings.user_name.lname
+      }
+    }
+
     return (
       <React.Fragment>
         <header className='spc-change-address'>{Drupal.t('change address')}</header>
@@ -73,7 +86,7 @@ export default class AddressList extends React.Component {
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <React.Fragment>
               <a className='close' onClick={this.closeModal}>&times;</a>
-              <AddressForm show_prefered={true} default_val={null} processAddress={this.processAddress} />
+              <AddressForm show_prefered={true} default_val={default_val} processAddress={this.processAddress} />
             </React.Fragment>
           </Popup>
           <div className='spc-checkout-address-list'>{addressItem}</div>

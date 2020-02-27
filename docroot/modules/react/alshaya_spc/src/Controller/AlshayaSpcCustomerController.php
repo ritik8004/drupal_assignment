@@ -123,6 +123,26 @@ class AlshayaSpcCustomerController extends ControllerBase {
   }
 
   /**
+   * Adds/Edit customer address.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function addEditCustomerAddress(Request $request) {
+    $response = [];
+    $data = json_decode($request->getContent(), TRUE);
+    $request->request->replace(is_array($data) ? $data : []);
+    $uid = $this->currentUser()->getAccount()->id();
+    $this->spcCustomerHelper->addEditCustomerAddress($data['address'], $uid);
+    $response['status'] = TRUE;
+    $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid);
+    return new JsonResponse($response);
+  }
+
+  /**
    * Get user customer id.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse

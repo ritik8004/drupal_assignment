@@ -168,6 +168,31 @@ function _alshaya_spc_get_address_fields() {
 }
 
 /**
+ * Get mobile country code.
+ *
+ * @return mixed
+ *   Mobile country code.
+ */
+function _alshaya_spc_get_country_mobile_code() {
+  $country_code = _alshaya_custom_get_site_level_country_code();
+  return \Drupal::service('mobile_number.util')->getCountryCode($country_code);
+}
+
+/**
+ * Get location term.
+ *
+ * @param mixed $location_id
+ *   Location id.
+ *
+ * @return mixed
+ *   Location term.
+ */
+function _alshaya_spc_get_location_term_by_location_id($location_id) {
+  $areas_term_helper = \Drupal::service('alshaya_addressbook.area_terms_helper');
+  return $areas_term_helper->getLocationTermFromLocationId($location_id);
+}
+
+/**
  * Implements hook_alshaya_social_SOICAL_NETWORK_alter().
  */
 function alshaya_spc_alshaya_social_social_auth_facebook_alter(&$network, $route_name) {
