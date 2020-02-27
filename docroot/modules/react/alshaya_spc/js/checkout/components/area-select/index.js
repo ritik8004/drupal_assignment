@@ -31,7 +31,7 @@ export default class AreaSelect extends React.Component {
     this.setState({
       showFilterList: !this.state.showFilterList
     });
-  }
+  };
 
   /**
    * Process the value when get from the select list.
@@ -40,7 +40,7 @@ export default class AreaSelect extends React.Component {
     this.setState({
       current_option: val
     });
-  }
+  };
 
   // Get area list.
   getAreaList = () => {
@@ -64,8 +64,7 @@ export default class AreaSelect extends React.Component {
       // Processing of error here.
       });
     }
-
-  }
+  };
 
   render() {
     let options = this.state.areas;
@@ -77,6 +76,8 @@ export default class AreaSelect extends React.Component {
       return(null);
     }
 
+    let panelTitle = Drupal.t('select ') + this.props.field.label;
+
     return (
       <div className='spc-type-select'>
         <label>{this.props.field.label}</label>
@@ -85,7 +86,7 @@ export default class AreaSelect extends React.Component {
             {options[this.state.current_option]['label']}
           </div>
         ) : (
-          <div onClick={() => this.toggleFilterList()}>
+          <div className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
             {Drupal.t('Select area')}
           </div>
         )}
@@ -93,12 +94,14 @@ export default class AreaSelect extends React.Component {
           <FilterList
             selected={options[this.state.current_option]}
             options={options}
-            placeHolderText={Drupal.t('Select for an area')}
+            placeHolderText={Drupal.t('search for an area')}
             processingCallback={this.processSelectedItem}
+            toggleFilterList={this.toggleFilterList}
+            panelTitle={panelTitle}
           />
         }
         <input type='hidden' name={this.props.field_key} value={this.state.current_option}/>
-        <div id={this.props.field_key + '-error'}></div>
+        <div id={this.props.field_key + '-error'}/>
       </div>
     );
   }

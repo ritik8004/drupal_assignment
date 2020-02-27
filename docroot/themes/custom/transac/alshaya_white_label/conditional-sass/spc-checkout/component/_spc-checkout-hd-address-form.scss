@@ -68,6 +68,7 @@
       .spc-address-form-sidebar {
         float: $right;
         height: 100%;
+        position: relative;
         overflow-y: auto;
         background: $spc-checkout-sidebar-bg;
         position: relative;
@@ -170,34 +171,6 @@
           padding-top: 1.25rem;
           z-index: 1;
           box-shadow: 0 -1px 20px 9px $sticky-btn;
-        }
-      }
-
-      .spc-select {
-        .spcSelect__control {
-          &--menu-is-open {
-            z-index: 4;
-            background: $spc-select-area-bg;
-
-            + .spcSelect__menu {
-              z-index: 4;
-            }
-
-            .spcSelect__value-container {
-              padding-#{$left}: 2.125rem;
-
-              @include icon('search', 'before') {
-                font-size: 2rem;
-                color: $spc-select-text;
-                position: absolute;
-                #{$left}: 0;
-              }
-            }
-
-            .spcSelect__indicators {
-              visibility: hidden;
-            }
-          }
         }
       }
     }

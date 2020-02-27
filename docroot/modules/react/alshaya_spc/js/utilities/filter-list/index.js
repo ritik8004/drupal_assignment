@@ -1,4 +1,5 @@
 import React from 'react';
+import SectionTitle from "../section-title";
 
 export default class FilterList extends React.Component {
 
@@ -30,7 +31,7 @@ export default class FilterList extends React.Component {
    */
   getInitialItems = () => {
     return this.props.options;
-  }
+  };
 
   /**
    * Handle click on <li>.
@@ -40,9 +41,15 @@ export default class FilterList extends React.Component {
       selected: e.target.value
     });
 
+    this.props.toggleFilterList();
+
     // Call the process.
-    this.props.processingCallback(e.target.value)
-  }
+    this.props.processingCallback(e.target.value);
+  };
+
+  backButtonClick = () => {
+    this.props.toggleFilterList();
+  };
 
   componentDidMount() {
     this.setState({
@@ -59,7 +66,13 @@ export default class FilterList extends React.Component {
 
     return (
       <div className='filter-list'>
-        <input type='text' placeholder={this.props.placeHolderText} onChange={this.filterList}/>
+        <div className='spc-filter-panel-header'>
+          <span className='spc-filter-panel-back' onClick={() => this.backButtonClick()}/>
+          <SectionTitle>{this.props.panelTitle}</SectionTitle>
+        </div>
+        <div className='spc-filter-panel-search-form-item'>
+          <input className='spc-filter-panel-search-field' type='text' placeholder={this.props.placeHolderText} onChange={this.filterList}/>
+        </div>
         <ul>{
           items.map((item) => {
             return(

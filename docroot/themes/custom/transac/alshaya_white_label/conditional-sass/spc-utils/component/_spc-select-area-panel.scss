@@ -1,0 +1,50 @@
+.filter-list {
+  position: absolute;
+  top: 0;
+  #{$left}: 0;
+  right: 0;
+  z-index: 3;
+
+  .spc-filter-panel-header {
+    position: relative;
+
+    .spc-filter-panel-back {
+      width: 2.25rem;
+      height: 2.25rem;
+      display: inline-block;
+      position: absolute;
+      #{$left}: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+
+      @include icon('chevron#{$left}', before) {
+        font-size: 2.25rem;
+        color: $spc-checkout-area-panel-back-icon;
+      }
+    }
+
+    .spc-checkout-section-title {
+      background: $spc-checkout-area-panel-header-bg !important;
+    }
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: $spc-checkout-area-panel-header-bg;
+  }
+
+  .spc-filter-panel-search-form-item {
+    @include icon('search', 'before') {
+      font-size: 2rem;
+      color: $spc-select-text;
+      position: absolute;
+      #{$left}: 0;
+    }
+
+    .spc-filter-panel-search-field {
+      padding-#{$left}: 44px;
+    }
+  }
+}

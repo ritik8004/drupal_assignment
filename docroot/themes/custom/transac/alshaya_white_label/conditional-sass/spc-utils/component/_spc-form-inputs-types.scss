@@ -17,9 +17,12 @@
 }
 
 .spc-type-textfield,
-.spc-type-select,
 .spc-type-tel {
   position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.spc-type-select {
   margin-bottom: 1.5rem;
 }
 
