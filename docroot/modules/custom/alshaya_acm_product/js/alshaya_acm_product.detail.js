@@ -397,7 +397,7 @@
       // If cart is not empty.
       if (typeof cart_items !== "undefined") {
         var itemQtyInCart = 0;
-        var orderLimitMsg = parentInfo.orderLimitMsg;
+        var orderLimitMsg = typeof parentInfo.orderLimitMsg !== "undefined" ? parentInfo.orderLimitMsg : '';
 
         if (allVariants.length !== 0) {
           $.each( cart_items, function( item, value ) {
@@ -418,7 +418,7 @@
       }
     }
     else if (variantInfo !== '') {
-      var orderLimitMsg = variantInfo.orderLimitMsg;
+      var orderLimitMsg = typeof variantInfo.orderLimitMsg !== "undefined" ? variantInfo.orderLimitMsg : '';
 
       // If cart is not empty.
       if (typeof cart_items !== "undefined") {
