@@ -885,14 +885,17 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
 
   // If item is not available in stock.
   if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
+    // Maximum to show show in quantity dropdown.
+    $cart_quantity = $quantity;
+
     if ($selected_quantity > $quantity) {
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
       $item_stock_error = t('This product is not available in the selected quantity. Please adjust the quantity to proceed.');
-
-      // We display dropdown with selected quantity to avoid confusions.
-      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
     }
     elseif (!empty($max_sale_qty)) {
+      // Use lower value for showing in quantity dropdown.
+      $cart_quantity = ($max_sale_qty < $quantity) ? $max_sale_qty : $quantity;
+
       /** @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit $productOrderLimit */
       $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
       // Get product qty in cart for variant considering parent as well.
@@ -901,19 +904,14 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
       if ($current_variant_in_cart_qty > $max_sale_qty) {
         $item['#attributes']['class'][] = 'sku-max-quantity-limit-reached';
       }
+    }
 
-      if ($selected_quantity > $max_sale_qty) {
-        // We display dropdown with selected quantity.
-        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
-      }
-      elseif ($quantity > $max_sale_qty) {
-        // We show lower of available quantity and max_sale_qty in dropdown.
-        $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($max_sale_qty, $selected_quantity);
-      }
-    }
-    else {
-      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
-    }
+    // We display dropdown with selected quantity to avoid confusions.
+    $cart_quantity = ($selected_quantity > $cart_quantity)
+      ? $selected_quantity
+      : $cart_quantity;
+
+    $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($cart_quantity, $selected_quantity);
   }
   else {
     $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
