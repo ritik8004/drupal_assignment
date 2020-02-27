@@ -163,6 +163,23 @@ class CartController {
   }
 
   /**
+   * Return customer id from current session.
+   *
+   * @return int|null
+   *   Return customer id or null.
+   */
+  protected function getSessionCustomerId() {
+    if (!empty($this->sessionCartInfo['customer_id'])) {
+      return $this->sessionCartInfo['customer_id'];
+    }
+
+    $this->loadCartFromSession();
+    return !empty($this->sessionCartInfo['customer_id'])
+      ? $this->sessionCartInfo['customer_id']
+      : NULL;
+  }
+
+  /**
    * Get cart data.
    *
    * @param int $cart_id
@@ -184,6 +201,16 @@ class CartController {
         'error' => json_encode($data),
       ]);
       return new JsonResponse($data);
+    }
+
+    // If logged in user.
+    if (!empty($this->getSessionUid())) {
+      $shipping = $data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'];
+      // If shipping method is set and only HD.
+      if ($shipping['extension_attributes']['click_and_collect_type'] == 'home_delivery'
+        && !empty($shipping['method'])) {
+        $data = $this->checkAndUpdateShippinginCart($data);
+      }
     }
 
     // Here we will do the processing of cart to make it in required format.
@@ -488,10 +515,28 @@ class CartController {
             return new JsonResponse(['error' => TRUE]);
           }
 
-          $shipping_info['carrier_info'] = [
-            'code' => $shipping_methods[0]['carrier_code'],
-            'method' => $shipping_methods[0]['method_code'],
-          ];
+          // If we update/add shipping in cart by address id.
+          if (!empty($shipping_info['address_id'])) {
+            $shipping_info = [
+              'customer_address_id' => $shipping_info['address_id'],
+              'address' => [
+                'customer_address_id' => $shipping_info['address_id'],
+                'country_id' => $shipping_info['country_id'],
+                'customer_id' => $this->getSessionCustomerId(),
+              ],
+              'carrier_info' => [
+                'code' => $shipping_methods[0]['carrier_code'],
+                'method' => $shipping_methods[0]['method_code'],
+              ],
+            ];
+          }
+          else {
+            $shipping_info['carrier_info'] = [
+              'code' => $shipping_methods[0]['carrier_code'],
+              'method' => $shipping_methods[0]['method_code'],
+            ];
+          }
+
           $cart = $this->cart->addShippingInfo($cart_id, $shipping_info, $action);
         }
 
@@ -656,6 +701,43 @@ class CartController {
     }
 
     return $this->getCart($this->sessionCartInfo['cart_id']);
+  }
+
+  /**
+   * Adds shipping info for logged in user.
+   *
+   * @param array $data
+   *   Cart data.
+   *
+   * @return array
+   *   Updated cart data.
+   */
+  public function checkAndUpdateShippinginCart(array $data) {
+    // If Customer address available for cart.
+    if (!empty($data['cart']['customer']['addresses'])) {
+      foreach ($data['cart']['customer']['addresses'] as $address) {
+        // If address is set as default for shipping.
+        if (!empty($address['default_shipping']) && $address['default_shipping']) {
+          $shipping_methods = $this->cart->shippingMethods(['address_id' => $address['id']], $data['cart']['id']);
+          $shipping_data = [
+            'customer_address_id' => $address['id'],
+            'address' => [
+              'customer_address_id' => $address['id'],
+              'country_id' => $address['country_id'],
+              'customer_id' => $address['customer_id'],
+            ],
+            'carrier_info' => [
+              'code' => $shipping_methods[0]['carrier_code'],
+              'method' => $shipping_methods[0]['method_code'],
+            ],
+          ];
+          $data = $this->cart->addShippingInfo($data['cart']['id'], $shipping_data, CartActions::CART_SHIPPING_UPDATE);
+          break;
+        }
+      }
+    }
+
+    return $data;
   }
 
 }

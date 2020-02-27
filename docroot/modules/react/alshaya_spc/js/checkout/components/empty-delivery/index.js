@@ -1,7 +1,10 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
 import Loading from "../../../utilities/loading";
+import {
+  checkoutAddressProcess,
+  getAddressPopupClassName
+} from "../../../utilities/checkout_address_process";
 
 let ClickCollect = React.lazy(() => import("../click-collect"));
 let AddressContent = React.lazy(() => import("../address-popup-content"));
@@ -56,12 +59,6 @@ export default class EmptyDeliveryText extends React.Component {
     }
   };
 
-  getAddressPopupClassName = () => {
-    return window.drupalSettings.user.uid > 0
-      ? "spc-address-list-member"
-      : "spc-address-form-guest";
-  };
-
   /**
    * Process the address form data on sumbit.
    */
@@ -104,7 +101,7 @@ export default class EmptyDeliveryText extends React.Component {
           {Drupal.t("Please add your contact details and address.")}
         </div>
         <Popup
-          className={this.getAddressPopupClassName()}
+          className={getAddressPopupClassName()}
           open={this.state.open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}

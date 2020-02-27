@@ -9,7 +9,7 @@ export default class AddressContent extends React.Component {
       return <AddressList/>;
     }
     else {
-      return <AddressForm default_val={null} showEmail={true} processAddress={this.props.processAddress}/>;
+      return <AddressForm default_val={this.props.default_val} showEmail={true} processAddress={this.props.processAddress}/>;
     }
   }
 };

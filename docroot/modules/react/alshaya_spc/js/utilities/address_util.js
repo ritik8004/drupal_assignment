@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+import {
+  addShippingInCart
+} from './checkout_util';
+
 /**
  * Get the address list of the current logged in user.
  */
@@ -88,16 +92,37 @@ export const addEditAddressToCustomer = (e) => {
   let addressList = addEditUserAddress(form_data);
   if (addressList instanceof Promise) {
     addressList.then((list) => {
-      // Close the addresslist popup.
-      let event = new CustomEvent('closeAddressListPopup', {
-        bubbles: true,
-        detail: {
-          close: () => true
-        }
-      });
-      document.dispatchEvent(event);
-      // Close the address modal.
-      this.closeModal();
+      let firstKey = Object.keys(list.data)[0]
+      let data = {
+        'address_id': list.data[firstKey]['address_mdc_id'],
+        'country_id': window.drupalSettings.country_code
+      };
+
+      // Add shipping info in cart.
+      var cart_info = addShippingInCart('update shipping', data);
+      if (cart_info instanceof Promise) {
+        cart_info.then((cart_result) => {
+          let cart_data = {
+            'cart': cart_result
+          }
+          var event = new CustomEvent('refreshCartOnAddress', {
+            bubbles: true,
+            detail: {
+              data: () => cart_data
+            }
+          });
+          document.dispatchEvent(event);
+
+          // Close the addresslist popup.
+          let ee = new CustomEvent('closeAddressListPopup', {
+            bubbles: true,
+            detail: {
+              close: () => true
+            }
+          });
+          document.dispatchEvent(ee);
+        });
+      }
     });
   }
 }

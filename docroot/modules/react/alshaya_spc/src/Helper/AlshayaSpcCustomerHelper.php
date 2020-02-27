@@ -92,6 +92,8 @@ class AlshayaSpcCustomerHelper {
    *
    * @param int $uid
    *   User id.
+   * @param bool $default
+   *   If we want only default address.
    *
    * @return array
    *   Address list.
@@ -99,10 +101,19 @@ class AlshayaSpcCustomerHelper {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getCustomerAllAddresses(int $uid) {
+  public function getCustomerAllAddresses(int $uid, bool $default = FALSE) {
     $user = $this->entityTypeManager->getStorage('user')->load($uid);
-    $profiles = $this->entityTypeManager->getStorage('profile')
-      ->loadMultipleByUser($user, 'address_book');
+    if ($default) {
+      $profiles = [];
+      if ($default_profile = $this->entityTypeManager->getStorage('profile')
+        ->loadDefaultByUser($user, 'address_book')) {
+        $profiles[] = $default_profile;
+      }
+    }
+    else {
+      $profiles = $this->entityTypeManager->getStorage('profile')
+        ->loadMultipleByUser($user, 'address_book');
+    }
 
     $addressList = [];
     foreach ($profiles as $profile) {
@@ -110,6 +121,7 @@ class AlshayaSpcCustomerHelper {
       $addressList[$profile->id()]['mobile'] = $profile->get('field_mobile_number')->first()->getValue();
       $addressList[$profile->id()]['is_default'] = $profile->isDefault();
       $addressList[$profile->id()]['address_id'] = $profile->id();
+      $addressList[$profile->id()]['address_mdc_id'] = $profile->get('field_address_id')->first()->getValue()['value'];
       // We get the area as term id but we need the location id
       // of that term.
       if ($addressList[$profile->id()]['administrative_area']) {

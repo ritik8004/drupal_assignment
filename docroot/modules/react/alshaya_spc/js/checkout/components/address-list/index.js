@@ -42,6 +42,8 @@ export default class AddressList extends React.Component {
         });
       }
     }
+
+    document.addEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
   refreshAddressList = (addressList) => {

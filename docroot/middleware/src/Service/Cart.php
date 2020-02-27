@@ -167,25 +167,31 @@ class Cart {
    *   Formatted shipping info for api.
    */
   public function prepareShippingData(array $shippig_info) {
-    $static_fields = $shippig_info['static'];
-    unset($shippig_info['static']);
-    $custom_attributes = [];
-    foreach ($shippig_info as $field_name => $val) {
-      $custom_attributes[] = [
-        'attribute_code' => $field_name,
-        'value' => $val,
+    // If address id available.
+    if (!empty($shippig_info['address_id'])) {
+      $data['address_id'] = $shippig_info['address_id'];
+    }
+    else {
+      $static_fields = $shippig_info['static'];
+      unset($shippig_info['static']);
+      $custom_attributes = [];
+      foreach ($shippig_info as $field_name => $val) {
+        $custom_attributes[] = [
+          'attribute_code' => $field_name,
+          'value' => $val,
+        ];
+      }
+
+      $fields_data = [];
+      foreach ($static_fields as $key => $field) {
+        $fields_data[$key] = $field;
+      }
+
+      $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
+      $data = [
+        'address' => $fields_data,
       ];
     }
-
-    $fields_data = [];
-    foreach ($static_fields as $key => $field) {
-      $fields_data[$key] = $field;
-    }
-
-    $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
-    $data = [
-      'address' => $fields_data,
-    ];
 
     return $data;
   }
@@ -212,25 +218,32 @@ class Cart {
       ],
     ];
 
-    $static_fields = $shipping_data['static'];
-    $carrier_info = $shipping_data['carrier_info'];
-    unset($shipping_data['carrier_info'], $shipping_data['static']);
-    $custom_attributes = [];
-    foreach ($shipping_data as $field_name => $val) {
-      $custom_attributes[] = [
-        'attributeCode' => $field_name,
-        'value' => $val,
-      ];
+    // If shipping address add by address id.
+    if (!empty($shipping_data['customer_address_id'])) {
+      $fields_data = $shipping_data['address'];
+      $carrier_info = $shipping_data['carrier_info'];
     }
+    else {
+      $static_fields = $shipping_data['static'];
+      $carrier_info = $shipping_data['carrier_info'];
+      unset($shipping_data['carrier_info'], $shipping_data['static']);
+      $custom_attributes = [];
+      foreach ($shipping_data as $field_name => $val) {
+        $custom_attributes[] = [
+          'attributeCode' => $field_name,
+          'value' => $val,
+        ];
+      }
 
-    $fields_data = [];
-    foreach ($static_fields as $key => $field) {
-      $fields_data[$key] = $field;
-    }
+      $fields_data = [];
+      foreach ($static_fields as $key => $field) {
+        $fields_data[$key] = $field;
+      }
 
-    $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
-    if (!empty($shipping_data['street'])) {
-      $fields_data['street'] = [$shipping_data['street']];
+      $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
+      if (!empty($shipping_data['street'])) {
+        $fields_data['street'] = [$shipping_data['street']];
+      }
     }
     $data['shipping']['shipping_address'] = $fields_data;
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
@@ -239,11 +252,12 @@ class Cart {
     $cart = $this->updateCart($data, $cart_id);
     // If cart has no customer or email provided is different,
     // then create and assign customer to the cart.
-    if (empty($cart['cart']['customer']['id']) ||
-      $cart['cart']['customer']['email'] !== $data['shipping']['shipping_address']['email']) {
+    if (empty($shipping_data['customer_address_id']) && (empty($cart['cart']['customer']['id']) ||
+      $cart['cart']['customer']['email'] !== $data['shipping']['shipping_address']['email'])) {
       $customer = $this->createCustomer($data['shipping']['shipping_address']);
       $this->associateCartToCustomer($cart_id, $customer['id']);
     }
+
     return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
   }
 
@@ -483,7 +497,11 @@ class Cart {
    */
   public function shippingMethods(array $data, int $cart_id) {
     $client = $this->magentoInfo->getMagentoApiClient();
-    $shipping_method_url = '/carts/' . $cart_id . '/estimate-shipping-methods';
+
+    $shipping_url = !empty($data['address_id'])
+      ? 'estimate-shipping-methods-by-address-id'
+      : 'estimate-shipping-methods';
+    $shipping_method_url = '/carts/' . $cart_id . '/' . $shipping_url;
     $url = $this->magentoInfo->getMagentoUrl() . $shipping_method_url;
     try {
       $response = $client->request('POST', $url, ['json' => $data]);
