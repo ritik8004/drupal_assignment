@@ -181,6 +181,9 @@ class CartSessionStorage implements CartStorageInterface {
       if (!$cart_restored) {
         throw new \Exception(acq_commerce_api_down_global_error_message());
       }
+
+      // Populate cart variable again.
+      $cart = $this->session->get(self::STORAGE_KEY);
     }
 
     // If cart exists, derive update array and update cookie.
