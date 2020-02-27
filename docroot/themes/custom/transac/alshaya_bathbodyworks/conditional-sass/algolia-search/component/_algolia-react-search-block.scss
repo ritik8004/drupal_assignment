@@ -164,6 +164,10 @@
           border-top: none;
           position: absolute;
         }
+
+        @include breakpoint($desktop) {
+          border-top: none;
+        }
       }
     }
   }
