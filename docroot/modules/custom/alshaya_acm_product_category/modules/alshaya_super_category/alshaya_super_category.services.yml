@@ -28,5 +28,6 @@ services:
       - '@language_manager'
       - '@alshaya_acm_product_category.product_category_tree'
       - '@theme.manager'
+      - '@config.factory'
     tags:
       - { name: event_subscriber }

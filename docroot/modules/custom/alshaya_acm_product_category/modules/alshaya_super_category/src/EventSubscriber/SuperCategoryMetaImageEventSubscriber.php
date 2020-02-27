@@ -11,6 +11,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class SuperCtegoryMetaImageEventSubscriber.
@@ -48,6 +49,13 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
   protected $themeManager;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * DefaultMetaImageEventSubscriber constructor.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -58,12 +66,15 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    *   Product category tree manager.
    * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
    *   Theme Manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
-  public function __construct(RouteMatchInterface $route_match, LanguageManagerInterface $language_manager, ProductCategoryTree $productCategoryTree, ThemeManagerInterface $theme_manager) {
+  public function __construct(RouteMatchInterface $route_match, LanguageManagerInterface $language_manager, ProductCategoryTree $productCategoryTree, ThemeManagerInterface $theme_manager, ConfigFactoryInterface $config_factory) {
     $this->routeMatch = $route_match;
     $this->languageManager = $language_manager;
     $this->productCategoryTree = $productCategoryTree;
     $this->themeManager = $theme_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -81,6 +92,10 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    *   The dispatch event.
    */
   public function setSuperCategoryLogoMetaImage(MetaImageRenderEvent $event) {
+    if (empty($this->configFactory->get('alshaya_super_category.settings')->get('status'))) {
+      return;
+    }
+
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     if (empty($term)) {
       return;
