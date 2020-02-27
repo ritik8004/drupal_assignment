@@ -323,6 +323,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_type' => 'summary',
           ],
+          'alshaya_exponea.settings' => [
+            "name" => "Alshaya",
+            "short_name" => "AlshayaTest",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
+          ],
         ],
       ],
     ],

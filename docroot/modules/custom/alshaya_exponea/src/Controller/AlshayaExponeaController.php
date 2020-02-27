@@ -17,25 +17,17 @@ class AlshayaExponeaController extends ControllerBase {
    */
   public function getManifest() {
     // Get all data stored in configuration.
-    $config = $this->config(static::EXPONEA_SETTINGS)->get();
+    $config = $this->config(static::EXPONEA_SETTINGS);
 
-    // Remove _core key.
-    if (isset($config['_core'])) {
-      unset($config['_core']);
-    }
-
-    // Remove langcode key.
-    if (isset($config['langcode'])) {
-      unset($config['langcode']);
-    }
-
-    $ret_val = NULL;
-    foreach ($config as $key => $value) {
-      $ret_val[$key] = $value;
-    }
+    $ret_val = [
+      'name' => $config->get('name'),
+      'short_name' => $config->get('short_name'),
+      'start_url' => $config->get('start_url'),
+      'display' => $config->get('display'),
+      'gcm_sender_id' => $config->get('gcm_sender_id'),
+    ];
 
     return new JsonResponse($ret_val);
-
   }
 
 }

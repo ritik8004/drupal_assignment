@@ -159,6 +159,7 @@ class AlshayaAcmConfigCheck {
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.container.primary',
+      'alshaya_exponea.settings',
     ];
 
     $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);

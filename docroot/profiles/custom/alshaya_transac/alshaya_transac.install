@@ -19,6 +19,9 @@ use Drupal\taxonomy\Entity\Term;
  */
 function alshaya_transac_update_8127() {
   \Drupal::service('module_installer')->install(['alshaya_exponea']);
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'alshaya_exponea.settings');
 }
 
 /**
