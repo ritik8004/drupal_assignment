@@ -372,9 +372,10 @@
 
   // Disable Add to bag and quantity dropdown when order limit exceed.
   Drupal.disableLimitExceededProducts = function (sku, selected) {
-    var orderLimitMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
-    var orderLimitMobileMsgSelector = $('input[value=' + selected + ']').closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
-    var viewMode = $('input[value=' + selected + ']').parents('article.entity--type-node').attr('data-vmode');
+    var selectedInput = $('input').filter(function(){ return this.value===selected });
+    var orderLimitMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
+    var orderLimitMobileMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
+    var viewMode = selectedInput.parents('article.entity--type-node').attr('data-vmode');
     var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
     var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
     // At parent level, sku and selected will be same.
@@ -382,7 +383,7 @@
       typeof drupalSettings[productKey][sku]['variants'] !== "undefined" &&
       sku !== selected) ?
       drupalSettings[productKey][sku]['variants'][selected] : '';
-    var variantToDisableSelector = $('input[value=' + selected + ']').closest('.sku-base-form');
+    var variantToDisableSelector = selectedInput.closest('.sku-base-form');
     var orderLimitExceeded =  false;
     var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
       Drupal.t('Purchase limit has been reached') +
