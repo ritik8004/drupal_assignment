@@ -102,6 +102,11 @@ export const addEditAddressToCustomer = (e) => {
       var cart_info = addShippingInCart('update shipping', data);
       if (cart_info instanceof Promise) {
         cart_info.then((cart_result) => {
+          // If cart id not available, no need to process.
+          if (cart_result.cart_id === null) {
+            return;
+          }
+
           let cart_data = {
             'cart': cart_result
           }
