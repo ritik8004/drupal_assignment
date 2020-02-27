@@ -9,6 +9,7 @@ $warm-grey-three: #f2f2f2;
 $warm-grey-two: #dadada;
 $warm-grey-one: #777;
 $black: #333;
+$bbw-black-two: #666;
 $success-green: #39b54a;
 $info-blue: #4285f4;
 $tomato: #e6591b;
@@ -592,6 +593,13 @@ $cart-free-gifts-title: $black;
 $cart-free-gifts-label-background: $peacock-blue;
 
 //Algolia search bar.
+$algolia-input-text: $bbw-black-two;
+$algolia-input-box-shadow: $warm-grey-three;
+$algolia-input-placeholder-text: $warm-grey-one;
+$algolia-auto-complete-border: $warm-grey-two;
+$algolia-search-suggestion-hover-bg: $warm-grey-three;
+$algolia-search-clear-text-icon: $peacock-blue;
+$algolia-trending-title-text: $peacock-blue;
 $algolia-react-search-page-title: $page_title;
 $algolia-react-highlighted-bg: $peacock-blue;
 $algolia-react-progressbar-fill: $peacock-blue;

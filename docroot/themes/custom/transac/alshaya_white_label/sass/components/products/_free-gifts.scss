@@ -217,6 +217,8 @@
     font-size: 1rem;
     line-height: 1.25;
     color: $free-gifts-modal-product-name;
+    font-family: $alshaya-thin;
+    font-weight: normal;
   }
 
   .content--item-code {
@@ -377,6 +379,7 @@
 
     @include breakpoint($only-mobile) {
       width: 9.75rem;
+      margin-bottom: 0.5rem !important;
     }
 
     &:empty {
@@ -460,6 +463,10 @@
 }
 
 .free-gift-detail-modal.ui-dialog-content {
+  .content__main .gallery-wrapper {
+    min-height: auto;
+  }
+
   article {
     > a {
       font-size: 0.875rem;
@@ -483,7 +490,7 @@
         transform: rotate(90deg);
 
         html[lang=ar] & {
-          transform: rotate(180deg);
+          transform: rotate(-90deg);
         }
 
         @include breakpoint($only-mobile) {
@@ -697,7 +704,7 @@
 
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
-    height: 100% !important;
+    height: auto !important;
     padding: 1.5em 2.5rem;
   }
 }
@@ -745,10 +752,21 @@ body:not(.ie) {
   .slick-slider {
     .slick-prev {
       #{$left}: -1.65rem;
+      #{$right}: auto;
     }
 
     .slick-next {
       #{$right}: -1.65rem;
+      #{$left}: auto;
+    }
+  }
+
+  .slick-prev,
+  .slick-next {
+    &::before {
+      html[lang=ar] & {
+        transform: rotate(180deg);
+      }
     }
   }
 }
