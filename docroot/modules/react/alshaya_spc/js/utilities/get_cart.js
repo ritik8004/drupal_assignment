@@ -45,6 +45,13 @@ export const fetchCartData = function () {
 
     return axios.get(api_url)
       .then(response => {
+        if (typeof response !== 'object') {
+          redirectToCart();
+          return null;
+        }
+        if (response.data.error) {
+          redirectToCart();
+        }
         return response.data
       })
       .catch(error => {
@@ -92,3 +99,10 @@ export const fetchCartData = function () {
 export const getGlobalCart = () => {
   return (window.cart_data && window.cart_data.cart) ? window.cart_data.cart : null;
 }
+
+export const redirectToCart = () => {
+  if (window.location.pathname.search(/checkout/i) >= 0) {
+    window.location = Drupal.url('cart');
+  }
+};
+

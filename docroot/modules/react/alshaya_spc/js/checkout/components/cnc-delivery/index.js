@@ -1,6 +1,7 @@
 import React from "react";
 import Popup from "reactjs-popup";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
+import Loading from "../../../utilities/loading";
 let ClickCollect = React.lazy(() => import("../click-collect"));
 
 class ClicknCollectDeiveryInfo extends React.Component {
@@ -97,8 +98,8 @@ class ClicknCollectDeiveryInfo extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <React.Suspense fallback={<div>Loading...</div>}>
-            <ClickCollect openSelectedStore={this.state.showSelectedStore} closeModal={this.closeModal}/>
+          <React.Suspense fallback={<Loading/>}>
+            <ClickCollect openSelectedStore={this.state.showSelectedStore}/>
           </React.Suspense>
         </Popup>
       </div>
