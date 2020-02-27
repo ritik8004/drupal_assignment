@@ -17,6 +17,33 @@
       .c-collapse-item {
         .c-collapse__title {
           text-transform: capitalize;
+
+          &::after {
+            color: $primary_dropdown_arrow;
+            top: 49%;
+          }
+        }
+      }
+    }
+
+    .filter__inner {
+      .c-collapse-item {
+        .facet-item__value {
+          text-transform: capitalize;
+          display: inline-block;
+          color: $plp_item_label;
+
+          &::before {
+            color: $primary_checkbox_empty;
+          }
+        }
+      }
+    }
+
+    .all-filters-algolia {
+      .filter__foot {
+        .facet-clear-all {
+          text-transform: uppercase;
         }
       }
     }
