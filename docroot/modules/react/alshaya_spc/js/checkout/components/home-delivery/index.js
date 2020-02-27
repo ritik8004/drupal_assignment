@@ -51,13 +51,35 @@ export default class HomeDeliveryInfo extends React.Component {
     }
   };
 
+  /**
+   * Format address for edit address.
+   */
+  formatAddressData = (address) => {
+    let formatted_address = {
+      'static': {
+        'firstname': address.firstname,
+        'lastname': address.lastname,
+        'email': address.email,
+        'telephone': address.telephone
+      }
+    };
+
+    Object.entries(window.drupalSettings.address_fields).forEach(
+      ([key, field]) => {
+        formatted_address[field['key']] = address[field['key']];
+      }
+    );
+
+    return formatted_address;
+  }
+
   render() {
-    const address = this.props.cart.address;
+    const address = this.props.cart.cart.shipping_address;
     return (
       <div className="delivery-information-preview">
         <div className="spc-delivery-customer-info">
           <div className="delivery-name">
-            {address.static.firstname} {address.static.lastname}
+            {address.firstname} {address.lastname}
           </div>
           <div className="delivery-address">
             {address.address_block_segment}, {address.address_building_segment},{" "}
@@ -77,7 +99,7 @@ export default class HomeDeliveryInfo extends React.Component {
           </a>
           <AddressForm
             showEmail={window.drupalSettings.user.uid === 0}
-            default_val={address}
+            default_val={this.formatAddressData(address)}
             processAddress={this.processAddress}
           />
         </Popup>

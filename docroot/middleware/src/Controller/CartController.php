@@ -268,6 +268,10 @@ class CartController {
           $data['store_info'] = $this->drupal->getStoreInfo($data['store_code']);
         }
       }
+
+      if ($data['delivery_type'] == 'hd') {
+        $data['shipping_methods'] = $this->cart->shippingMethods(['address' => $shipping_info['address']], $data['cart_id']);
+      }
     }
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
@@ -463,18 +467,32 @@ class CartController {
 
       case CartActions::CART_SHIPPING_UPDATE:
         $cart_id = $request_content['cart_id'];
-        if ($request_content['shipping_info']['shipping_type'] == 'cnc') {
+        $shipping_info = $request_content['shipping_info'];
+
+        if ($shipping_info['shipping_type'] == 'cnc') {
           // Unset as not needed in further processing.
-          unset($request_content['shipping_info']['shipping_type']);
+          unset($shipping_info['shipping_type']);
+
           // Create customer if the condition resolves to true.
           $create_customer = !(
             $this->sessionCartInfo['cart_id'] == $cart_id
             && !empty($this->sessionCartInfo['customer_id'])
-          ) || ($this->sessionCartInfo['customer_email'] != $request_content['shipping_info']['static']['email']);
-          $cart = $this->cart->addCncShippingInfo($cart_id, $request_content['shipping_info'], $action, $create_customer);
+          ) || ($this->sessionCartInfo['customer_email'] != $shipping_info['static']['email']);
+          $cart = $this->cart->addCncShippingInfo($cart_id, $shipping_info, $action, $create_customer);
         }
         else {
-          $cart = $this->cart->addShippingInfo($cart_id, $request_content['shipping_info'], $action);
+          $shipping_data = $this->cart->prepareShippingData($shipping_info);
+          $shipping_methods = $this->cart->shippingMethods($shipping_data, $cart_id);
+          // If no shipping method.
+          if (empty($shipping_methods)) {
+            return new JsonResponse(['error' => TRUE]);
+          }
+
+          $shipping_info['carrier_info'] = [
+            'code' => $shipping_methods[0]['carrier_code'],
+            'method' => $shipping_methods[0]['method_code'],
+          ];
+          $cart = $this->cart->addShippingInfo($cart_id, $shipping_info, $action);
         }
 
         if (!empty($cart['error'])) {
@@ -516,25 +534,7 @@ class CartController {
       return new JsonResponse($this->cart->getErrorResponse('Invalid request', '500'));
     }
 
-    $static_fields = $request_content['data']['static'];
-    unset($request_content['data']['static']);
-    $custom_attributes = [];
-    foreach ($request_content['data'] as $field_name => $val) {
-      $custom_attributes[] = [
-        'attribute_code' => $field_name,
-        'value' => $val,
-      ];
-    }
-
-    $fields_data = [];
-    foreach ($static_fields as $key => $field) {
-      $fields_data[$key] = $field;
-    }
-
-    $fields_data = array_merge($fields_data, ['custom_attributes' => $custom_attributes]);
-    $data = [
-      'address' => $fields_data,
-    ];
+    $data = $this->cart->prepareShippingData($request_content['data']);
 
     $methods = $this->cart->shippingMethods($data, $request_content['cart_id']);
     return new JsonResponse($methods);

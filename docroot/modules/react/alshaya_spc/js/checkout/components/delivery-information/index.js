@@ -21,12 +21,12 @@ export default class DeliveryInformation extends React.Component {
   }
 
   showEmpty = (cart) => {
-    let delivery_type = (typeof cart.delivery_type !== 'undefined')
-      ? cart.delivery_type
-      : cart.cart.delivery_type;
+    let delivery_type = (typeof cart.cart.delivery_type !== 'undefined')
+      ? cart.cart.delivery_type
+      : 'hd';
 
     let showEmpty = true;
-    if (delivery_type === 'hd' && typeof cart.cart.address !== 'undefined') {
+    if (delivery_type === 'hd' && cart.cart.shipping_address !== null) {
       showEmpty = false;
     } else if (delivery_type === 'cnc' && typeof cart.cart.store_info !== 'undefined') {
       showEmpty = false;

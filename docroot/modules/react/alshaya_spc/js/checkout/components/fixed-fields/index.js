@@ -16,12 +16,13 @@ export default class FixedFields extends React.Component {
       <div className='spc-checkout-contact-information'>
         <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
         <div className='spc-checkout-contact-information-fields'>
-          <TextField type='text' name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''} label={Drupal.t('First Name')}/>
-          <TextField type='text' name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''} label={Drupal.t('Last Name')}/>
+          <TextField type='text' required={true} name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''} label={Drupal.t('First Name')}/>
+          <TextField type='text' required={true} name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''} label={Drupal.t('Last Name')}/>
           {this.props.showEmail &&
             <TextField type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''} label={Drupal.t('Email')}/>
           }
           <TextField type='tel' name='mobile' defaultValue={default_val !== '' ? default_val['telephone'] : ''} label={Drupal.t('Mobile Number')}/>
+          < input type = 'hidden' name = 'address_id' value = {default_val !== '' && default_val['address_id'] !== null ? default_val['address_id'] : 0}/>
         </div>
       </div>
     );

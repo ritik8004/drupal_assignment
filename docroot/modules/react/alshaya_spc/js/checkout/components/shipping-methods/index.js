@@ -13,7 +13,7 @@ export default class ShippingMethods extends React.Component {
 
   render() {
     const { cart } = this.props;
-    const shipping_methods = cart.shipping_methods;
+    const shipping_methods = cart.cart.shipping_methods;
     let methods = [];
     Object.entries(shipping_methods).forEach(([key, method]) => {
       let carrirer_info = method.carrier_code + '_' + method.method_code;

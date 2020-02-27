@@ -223,6 +223,7 @@ class ClickCollect extends React.Component {
         }
         <div className='spc-cnc-address-form-sidebar'>
           <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
+          <a className="close" onClick={this.props.closeModal}>&times;</a>
           <div className='spc-cnc-address-form-wrapper'>
             <div className='spc-cnc-address-form-content' style={{ display: openSelectedStore ? 'none' : 'block' }}>
               <SectionTitle>{Drupal.t('find your nearest store')}</SectionTitle>

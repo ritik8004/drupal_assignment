@@ -30,6 +30,8 @@ export default class EmptyDeliveryText extends React.Component {
       this.eventListener,
       false
     );
+
+    document.addEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
   componentWillUnmount() {
@@ -86,7 +88,7 @@ export default class EmptyDeliveryText extends React.Component {
             closeOnDocumentClick={false}
           >
             <React.Suspense fallback={<Loading/>}>
-              <ClickCollect />
+              <ClickCollect closeModal={this.closeModal}/>
             </React.Suspense>
           </Popup>
         </div>

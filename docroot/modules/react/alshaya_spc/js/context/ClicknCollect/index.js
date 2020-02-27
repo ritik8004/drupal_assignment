@@ -12,7 +12,7 @@ export class ClicknCollectContextProvider extends React.Component {
 
     let { cart: { customer, store_info, shipping_address } } = props.cart;
 
-    if (!shipping_address && customer.email) {
+    if (!shipping_address && customer !== undefined) {
       contactInfo = {
         firstname: customer.firstname || '',
         lastname: customer.lastname || '',

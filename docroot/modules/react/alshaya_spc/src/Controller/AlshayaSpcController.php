@@ -154,6 +154,16 @@ class AlshayaSpcController extends ControllerBase {
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
 
+    $user_name = [];
+    // If logged in user.
+    if ($this->currentUser->isAuthenticated()) {
+      $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
+      $user_name = [
+        'fname' => $user->get('field_first_name')->first()->getString(),
+        'lname' => $user->get('field_last_name')->first()->getString(),
+      ];
+    }
+
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
@@ -174,6 +184,7 @@ class AlshayaSpcController extends ControllerBase {
           'address_fields' => _alshaya_spc_get_address_fields(),
           'country_code' => $country_code,
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+          'user_name' => $user_name,
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'cnc' => [
             'placeholder' => $store_finder_config->get('store_search_placeholder'),

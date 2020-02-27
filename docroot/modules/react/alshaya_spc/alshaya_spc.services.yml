@@ -22,3 +22,4 @@ services:
       - '@module_handler'
       - '@alshaya_spc.cookies'
       - '@session'
+      - '@alshaya_addressbook.manager'
