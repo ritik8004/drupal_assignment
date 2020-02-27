@@ -98,3 +98,12 @@ export const checkoutAddressProcess = function (e, cart) {
   })
 
 }
+
+/**
+ * Get the address popup class.
+ */
+export const getAddressPopupClassName = () => {
+  return window.drupalSettings.user.uid > 0 ?
+    "spc-address-list-member" :
+    "spc-address-form-guest";
+};

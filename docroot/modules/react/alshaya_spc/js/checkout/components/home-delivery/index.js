@@ -2,8 +2,13 @@ import React from "react";
 
 import Popup from "reactjs-popup";
 import ShippingMethods from "../shipping-methods";
-import AddressForm from "../address-form";
-import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
+import Loading from "../../../utilities/loading";
+import {
+  checkoutAddressProcess,
+  getAddressPopupClassName
+} from "../../../utilities/checkout_address_process";
+
+let AddressContent = React.lazy(() => import("../address-popup-content"));
 
 export default class HomeDeliveryInfo extends React.Component {
   _isMounted = false;
@@ -93,15 +98,25 @@ export default class HomeDeliveryInfo extends React.Component {
           open={this.state.open}
           onClose={this.closeModal}
           closeOnDocumentClick={false}
+          className={getAddressPopupClassName()}
         >
           <a className="close" onClick={this.closeModal}>
             &times;
           </a>
-          <AddressForm
-            showEmail={window.drupalSettings.user.uid === 0}
-            default_val={this.formatAddressData(address)}
-            processAddress={this.processAddress}
-          />
+          <React.Suspense fallback={<Loading/>}>
+            <a className="close" onClick={this.closeModal}>
+              &times;
+            </a>
+            <AddressContent
+              processAddress={this.processAddress}
+              showEmail={window.drupalSettings.user.uid === 0}
+              default_val = {
+                window.drupalSettings.user.uid === 0
+                  ? this.formatAddressData(address)
+                  : null
+              }
+            />
+          </React.Suspense>
         </Popup>
         <div className="spc-delivery-shipping-methods">
           <ShippingMethods

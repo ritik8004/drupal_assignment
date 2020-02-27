@@ -138,7 +138,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
     $uid = $this->currentUser()->getAccount()->id();
     $this->spcCustomerHelper->addEditCustomerAddress($data['address'], $uid);
     $response['status'] = TRUE;
-    $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid);
+    $response['data'] = $this->spcCustomerHelper->getCustomerAllAddresses($uid, TRUE);
     return new JsonResponse($response);
   }
 

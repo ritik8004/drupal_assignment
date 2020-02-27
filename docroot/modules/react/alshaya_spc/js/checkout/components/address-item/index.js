@@ -7,6 +7,9 @@ import {
   deleteUserAddress,
   addEditAddressToCustomer
 } from '../../../utilities/address_util';
+import {
+  addShippingInCart
+} from '../../../utilities/checkout_util';
 import EditAddressSVG from "../edit-address-svg";
 
 export default class AddressItem extends React.Component {
@@ -33,14 +36,39 @@ export default class AddressItem extends React.Component {
   /**
    * When user changes address.
    */
-  changeDefaultAddress = (id) => {
-    document.getElementById('address-' + id).checked = true;
-    let addressList = updateUserDefaultAddress(id);
+  changeDefaultAddress = (address) => {
+    document.getElementById('address-' + address['address_id']).checked = true;
+    let addressList = updateUserDefaultAddress(address['address_id']);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
         if (response.status === true) {
           // Refresh the address list.
-          this.props.refreshAddressList(response.data);
+          let data = {
+            'address_id': address['address_mdc_id'],
+            'country_id': window.drupalSettings.country_code
+          };
+          var cart_info = addShippingInCart('update shipping', data);
+          if (cart_info instanceof Promise) {
+            cart_info.then((cart_result) => {
+              // If cart id not available, no need to process.
+              if (cart_result.cart_id === null) {
+                return;
+              }
+
+              let cart_data = {
+                'cart': cart_result
+              }
+              var event = new CustomEvent('refreshCartOnAddress', {
+                bubbles: true,
+                detail: {
+                  data: () => cart_data
+                }
+              });
+              document.dispatchEvent(event);
+
+              this.props.refreshAddressList(response.data);
+            });
+          }
         }
       });
     }
@@ -50,6 +78,8 @@ export default class AddressItem extends React.Component {
    * Deletes the user address.
    */
   deleteAddress = (id) => {
+    // Add loading class.
+    document.getElementById('address-delete-' + id).classList.add('loading');
     let addressList = deleteUserAddress(id);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
@@ -59,6 +89,11 @@ export default class AddressItem extends React.Component {
         }
       });
     }
+  }
+
+  componentDidMount() {
+    // Close the modal
+    document.addEventListener('closeAddressListPopup', this.closeModal, false);
   }
 
   /**
@@ -93,7 +128,7 @@ export default class AddressItem extends React.Component {
         <div className='spc-address-mobile'>+{window.drupalSettings.country_mobile_code} {mob_default_val}</div>
       </div>
       <div className='spc-address-tile-actions'>
-        <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address['address_id'])}>
+        <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address)}>
           <input
             id={'address-' + address['address_id']}
             type='radio'

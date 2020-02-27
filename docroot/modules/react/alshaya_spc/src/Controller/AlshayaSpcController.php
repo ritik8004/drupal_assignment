@@ -162,6 +162,12 @@ class AlshayaSpcController extends ControllerBase {
         'fname' => $user->get('field_first_name')->first()->getString(),
         'lname' => $user->get('field_last_name')->first()->getString(),
       ];
+
+      $default_profile = $this->entityTypeManager->getStorage('profile')
+        ->loadDefaultByUser($user, 'address_book');
+      if ($default_profile) {
+        $user_name['address_available'] = TRUE;
+      }
     }
 
     // Get country code.

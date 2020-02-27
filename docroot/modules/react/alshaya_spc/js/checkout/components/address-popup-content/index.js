@@ -5,11 +5,19 @@ import AddressForm from "../address-form";
 export default class AddressContent extends React.Component {
 
   render() {
-    if (window.drupalSettings.user.uid > 0) {
+    if (window.drupalSettings.user.uid > 0
+      && window.drupalSettings.user_name.address_available) {
       return <AddressList/>;
     }
     else {
-      return <AddressForm default_val={null} showEmail={true} processAddress={this.props.processAddress}/>;
+      return (
+        <AddressForm
+          show_prefered={this.props.show_prefered}
+          default_val={this.props.default_val}
+          showEmail={this.props.showEmail}
+          processAddress={this.props.processAddress}
+        />
+      );
     }
   }
 };

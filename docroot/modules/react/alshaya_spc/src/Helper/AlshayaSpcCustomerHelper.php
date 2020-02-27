@@ -92,6 +92,8 @@ class AlshayaSpcCustomerHelper {
    *
    * @param int $uid
    *   User id.
+   * @param bool $default
+   *   If we want only default address.
    *
    * @return array
    *   Address list.
@@ -99,27 +101,45 @@ class AlshayaSpcCustomerHelper {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function getCustomerAllAddresses(int $uid) {
+  public function getCustomerAllAddresses(int $uid, bool $default = FALSE) {
     $user = $this->entityTypeManager->getStorage('user')->load($uid);
-    $profiles = $this->entityTypeManager->getStorage('profile')
-      ->loadMultipleByUser($user, 'address_book');
+    if ($default) {
+      $profiles = [];
+      if ($default_profile = $this->entityTypeManager->getStorage('profile')
+        ->loadDefaultByUser($user, 'address_book')) {
+        $profiles[] = $default_profile;
+      }
+    }
+    else {
+      $profiles = $this->entityTypeManager->getStorage('profile')
+        ->loadMultipleByUser($user, 'address_book');
+    }
 
     $addressList = [];
     foreach ($profiles as $profile) {
-      $addressList[$profile->id()] = array_filter($profile->get('field_address')->first()->getValue());
-      $addressList[$profile->id()]['mobile'] = $profile->get('field_mobile_number')->first()->getValue();
-      $addressList[$profile->id()]['is_default'] = $profile->isDefault();
-      $addressList[$profile->id()]['address_id'] = $profile->id();
+      $address_data = [];
+      $address_data[$profile->id()] = array_filter($profile->get('field_address')->first()->getValue());
+      $address_data[$profile->id()]['mobile'] = $profile->get('field_mobile_number')->first()->getValue();
+      $address_data[$profile->id()]['is_default'] = $profile->isDefault();
+      $address_data[$profile->id()]['address_id'] = $profile->id();
+      $address_data[$profile->id()]['address_mdc_id'] = $profile->get('field_address_id')->first()->getValue()['value'];
       // We get the area as term id but we need the location id
       // of that term.
-      if ($addressList[$profile->id()]['administrative_area']) {
+      if ($address_data[$profile->id()]['administrative_area']) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')
-          ->load($addressList[$profile->id()]['administrative_area']);
+          ->load($address_data[$profile->id()]['administrative_area']);
         if ($term) {
-          $addressList[$profile->id()]['administrative_area'] = $term->get('field_location_id')->first()->getValue()['value'];
+          $address_data[$profile->id()]['administrative_area'] = $term->get('field_location_id')->first()->getValue()['value'];
         }
       }
+
+      $addressList[] = $address_data[$profile->id()];
     }
+
+    // Sort the address list so that primary address is always first.
+    usort($addressList, function ($a, $b) {
+      return ($a['is_default'] < $b['is_default']) ? 1 : -1;
+    });
 
     return $addressList;
   }
