@@ -103,7 +103,7 @@
         }
       }
 
-      &.sku-out-stock {
+      &.sku-out-stock, &.sku-max-quantity-limit-reached {
         opacity: 0.7;
         background-color: $basket_oos_tr_bg;
       }
