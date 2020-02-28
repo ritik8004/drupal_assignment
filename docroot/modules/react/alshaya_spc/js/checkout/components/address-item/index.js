@@ -115,8 +115,7 @@ export default class AddressItem extends React.Component {
     })
 
     editAddressData['static'] = {};
-    editAddressData['static']['firstname'] = address['given_name'];
-    editAddressData['static']['lastname'] = address['family_name'];
+    editAddressData['static']['fullname'] = address['given_name'] + ' ' + address['family_name'];
     editAddressData['static']['telephone'] = mob_default_val;
     editAddressData['static']['address_id'] = address['address_id'];
 

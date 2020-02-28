@@ -3,6 +3,9 @@ import axios from 'axios';
 import {
   addShippingInCart
 } from './checkout_util';
+import {
+  validateAddressFields
+} from './checkout_address_process';
 
 /**
  * Get the address list of the current logged in user.
@@ -71,62 +74,93 @@ export const addEditUserAddress = function (address) {
 /**
  * Prepare data for customer address add/edit and save.
  *
- * @param {*} e
+ * @param {*} val
  */
 export const addEditAddressToCustomer = (e) => {
-  let form_data = {};
-  form_data['address'] = {
-    'given_name': e.target.elements.fname.value,
-    'family_name': e.target.elements.lname.value,
-    'city': 'Dummy Value',
-    'address_id': e.target.elements.address_id.value
-  };
+  let notValidAddress = validateAddressFields(e, false);
+  // If address form is not valid.
+  if (notValidAddress) {
+    return;
+  }
 
-  form_data['mobile'] = e.target.elements.mobile.value
+  let target = e.target.elements;
+  // Validate mobile number.
+  let mobile = e.target.elements.mobile.value.trim();
+  let mobile_valid = axios.get('verify-mobile/' + mobile);
+  if (mobile_valid instanceof Promise) {
+    mobile_valid.then(result => {
+      if (result.status === 200) {
+        // If not valid mobile number.
+        if (result.data.status === false) {
+          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').classList.add('error');
+        }
+        else {
+          // If valid mobile number, remove error message.
+          document.getElementById('mobile-error').innerHTML = '';
+          document.getElementById('mobile-error').classList.remove('error');
 
-  // Getting dynamic fields data.
-  Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-    form_data['address'][key] = e.target.elements[key].value
-  });
+          // Prepare form data.
+          let form_data = {};
+          let name = target.fullname.value.trim();
+          form_data['address'] = {
+            'given_name': name.split(' ')[0],
+            'family_name': name.substring(name.indexOf(' ') + 1),
+            'city': 'Dummy Value',
+            'address_id': target.address_id.value
+          };
 
-  let addressList = addEditUserAddress(form_data);
-  if (addressList instanceof Promise) {
-    addressList.then((list) => {
-      let firstKey = Object.keys(list.data)[0]
-      let data = {
-        'address_id': list.data[firstKey]['address_mdc_id'],
-        'country_id': window.drupalSettings.country_code
-      };
+          form_data['mobile'] = mobile;
 
-      // Add shipping info in cart.
-      var cart_info = addShippingInCart('update shipping', data);
-      if (cart_info instanceof Promise) {
-        cart_info.then((cart_result) => {
-          // If cart id not available, no need to process.
-          if (cart_result.cart_id === null) {
-            return;
+          // Getting dynamic fields data.
+          Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+            form_data['address'][key] = target[key].value
+          });
+
+          // Add/update user address.
+          let addressList = addEditUserAddress(form_data);
+          if (addressList instanceof Promise) {
+            addressList.then((list) => {
+              let firstKey = Object.keys(list.data)[0]
+              let data = {
+                'address_id': list.data[firstKey]['address_mdc_id'],
+                'country_id': window.drupalSettings.country_code
+              };
+
+              // Add shipping info in cart.
+              var cart_info = addShippingInCart('update shipping', data);
+              if (cart_info instanceof Promise) {
+                cart_info.then((cart_result) => {
+                  // If cart id not available, no need to process.
+                  if (cart_result.cart_id === null) {
+                    return;
+                  }
+
+                  let cart_data = {
+                    'cart': cart_result
+                  }
+                  var event = new CustomEvent('refreshCartOnAddress', {
+                    bubbles: true,
+                    detail: {
+                      data: () => cart_data
+                    }
+                  });
+                  document.dispatchEvent(event);
+
+                  // Close the addresslist popup.
+                  let ee = new CustomEvent('closeAddressListPopup', {
+                    bubbles: true,
+                    detail: {
+                      close: true
+                    }
+                  });
+                  document.dispatchEvent(ee);
+                });
+              }
+            });
           }
 
-          let cart_data = {
-            'cart': cart_result
-          }
-          var event = new CustomEvent('refreshCartOnAddress', {
-            bubbles: true,
-            detail: {
-              data: () => cart_data
-            }
-          });
-          document.dispatchEvent(event);
-
-          // Close the addresslist popup.
-          let ee = new CustomEvent('closeAddressListPopup', {
-            bubbles: true,
-            detail: {
-              close: true
-            }
-          });
-          document.dispatchEvent(ee);
-        });
+        }
       }
     });
   }
