@@ -40,7 +40,7 @@ const HierarchicalMenu = (props) => {
             <span className="facet-item__count">{`(${item.count})`}</span>
           </span>
           </a>
-          {item.items && (
+          {item.items && item.items.length > 0 && (
             <HierarchicalMenu
               sortResults={false}
               items={item.items}

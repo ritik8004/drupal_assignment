@@ -14,15 +14,27 @@
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
         var facet_block = $('.container-without-product .c-collapse-item');
-        if ($(facet_block).find(event.target).length == 0) {
+        if ($(facet_block).find(event.target).length === 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
           $(facet_block).find('ul').slideUp();
         }
       });
       $(window).on('load', function(event) {
         $('body').once('bind-facet-item-click').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
-          $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
+          // All facets except category search block.
+          if($(this).parents('.block-facet-blockcategory-facet-search').length === 0) {
+            $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
+          }
         });
+      });
+
+      // After Algolia search results have been updated from category search filter, check if L1 has child-items.
+      // Close accordion if it doesn't has children.
+      $(document).once('updatedAlgoliaResults').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
+        var category_facet_search_block = $('.block-facet-blockcategory-facet-search');
+        if (category_facet_search_block.find('.facet-item.is-active').siblings('ul').length === 0 && $(window).width() < 1025) {
+          category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
+        }
       });
 
       if ($('#alshaya-algolia-search').length > 0) {
