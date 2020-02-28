@@ -14,6 +14,8 @@ use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_module_implements_alter().
@@ -394,6 +396,21 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $fp = fopen($log_name, 'w');
       fwrite($fp, print_r($module_implements_cache, TRUE));
       fclose($fp);
+    }
+
+    // Temporary fix to login issue.
+    // Clear bootstrap cache when no data in module_implements_alter.
+    if (empty($log_name)) {
+      \Drupal::service('cache.bootstrap')->invalidateAll();
+      $currentURL = Url::fromRoute('<current>');
+      $response = new RedirectResponse($currentURL->toString());
+      $request = \Drupal::request();
+      // Save the session so things like messages get saved.
+      $request->getSession()->save();
+      $response->prepare($request);
+      // Make sure to trigger kernel events.
+      \Drupal::service('kernel')->terminate($request, $response);
+      $response->send();
     }
 
     $modules = array_keys(\Drupal::getContainer()->getParameter('container.modules'));
