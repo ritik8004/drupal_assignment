@@ -7,6 +7,8 @@ export const fetchClicknCollectStores = coords => {
     return new Promise(resolve => resolve(null));
   }
 
-  const GET_STORE_URL = Drupal.url(`cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`);
+  const GET_STORE_URL = Drupal.url(
+    `cnc/stores/${cart_id}/${coords.lat}/${coords.lng}`
+  );
   return Axios.get(GET_STORE_URL);
 };

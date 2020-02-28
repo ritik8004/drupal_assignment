@@ -6,7 +6,7 @@ let ClickCollect = React.lazy(async () => {
   // We show click n collect with map.
   await new Promise((resolve, reject) => {
     let interval = setInterval(() => {
-      if (window.fetchStore != 'pending') {
+      if (window.fetchStore != "pending") {
         clearInterval(interval);
         resolve();
       }
@@ -15,12 +15,15 @@ let ClickCollect = React.lazy(async () => {
   return import("./click-collect");
 });
 
-const ClickCollectContainer = ({closeModal, openSelectedStore}) => {
+const ClickCollectContainer = ({ closeModal, openSelectedStore }) => {
   return (
-    <React.Suspense fallback={<Loading/>}>
-      <ClickCollect closeModal={closeModal} openSelectedStore={openSelectedStore}/>
+    <React.Suspense fallback={<Loading />}>
+      <ClickCollect
+        closeModal={closeModal}
+        openSelectedStore={openSelectedStore}
+      />
     </React.Suspense>
-  )
-}
+  );
+};
 
 export default ClickCollectContainer;

@@ -1,4 +1,3 @@
-import {  } from "../cache/cnc";
 import { createCacheObject } from "../cache/cache-objects";
 
 /**
@@ -24,39 +23,35 @@ export const createFetcher = promiseFunc => {
       let cachedResults = cachedObj.getResults(arg);
       if (!cachedResults) {
         try {
-          return promiseFunc(arg)
-            .then(response => {
+          return promiseFunc(arg).then(
+            response => {
               if (!response) {
-                return {error: 'error!'};
+                return { error: "error!" };
               }
 
-              if (typeof response.data !== 'object') {
-                return {error: 'error!'};
+              if (typeof response.data !== "object") {
+                return { error: "error!" };
               }
 
               if (!response.data.error && response.data.error) {
                 console.error(cart_result.error_message);
-                return {error: 'error!'};
+                return { error: "error!" };
               }
 
               cachedObj.cacheResult(response.data);
               return response.data;
             },
             reject => {
-              return {error: reject};
-            });
-        }
-        catch (error) {
-          return new Promise(
-            resolve => resolve({error: error})
+              return { error: reject };
+            }
           );
+        } catch (error) {
+          return new Promise(resolve => resolve({ error: error }));
         }
       }
       // read: should always return promise, so that we don't have to
       // check at api call point if it's a promise or not.
-      return new Promise(
-        resolve => resolve(cachedResults)
-      );
+      return new Promise(resolve => resolve(cachedResults));
     }
-  }
-}
+  };
+};

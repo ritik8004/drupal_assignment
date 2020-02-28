@@ -4,12 +4,17 @@ import _findIndex from "lodash/findIndex";
 import { ClicknCollectContext } from "../../../context/ClicknCollect";
 import { createFetcher } from "../../../utilities/api/fetcher";
 import { fetchClicknCollectStores } from "../../../utilities/api/requests";
-import { getLocationAccess, removeFullScreenLoader, showFullScreenLoader, getDefaultMapCenter } from "../../../utilities/checkout_util";
+import {
+  getDefaultMapCenter,
+  getLocationAccess,
+  removeFullScreenLoader,
+  showFullScreenLoader
+} from "../../../utilities/checkout_util";
+import Loading from "../../../utilities/loading";
 import SectionTitle from "../../../utilities/section-title";
 import SelectedStore from "../selected-store";
 import StoreList from "../store-list";
 import ClicknCollectMap from "./ClicknCollectMap";
-import Loading from "../../../utilities/loading";
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -56,7 +61,6 @@ class ClickCollect extends React.Component {
     const place = this.autocomplete.getPlace();
     this.nearMeBtn.current.classList.remove("active");
     if (typeof place !== "undefined" && typeof place.geometry !== "undefined") {
-
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
@@ -72,19 +76,21 @@ class ClickCollect extends React.Component {
       e.preventDefault();
     }
 
-    this.searchplaceInput.current.value = '';
+    this.searchplaceInput.current.value = "";
     this.nearMeBtn.current.classList.add("active");
     getLocationAccess()
-      .then(pos => {
-        this.fetchAvailableStores({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        });
-      },
-      reject =>  {
-        this.nearMeBtn.current.classList.remove("active");
-        this.fetchAvailableStores(getDefaultMapCenter());
-      })
+      .then(
+        pos => {
+          this.fetchAvailableStores({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          });
+        },
+        reject => {
+          this.nearMeBtn.current.classList.remove("active");
+          this.fetchAvailableStores(getDefaultMapCenter());
+        }
+      )
       .catch(error => {
         console.log(error);
       });
@@ -97,29 +103,20 @@ class ClickCollect extends React.Component {
   fetchAvailableStores = coords => {
     showFullScreenLoader();
     // Create fetcher object to fetch stores.
-    const storeFetcher = createFetcher(
-      fetchClicknCollectStores
-    );
+    const storeFetcher = createFetcher(fetchClicknCollectStores);
     // Make api request.
     let list = storeFetcher.read(coords);
-    list.then(
-      response => {
-        if (typeof response.error === 'undefined' && response.length > 0) {
-          this.context.updateCoordsAndStoreList(coords, response);
-          if (this.state.openSelectedStore) {
-            // Wait for all markers are placed on map, before we open a marker.
-            // let self = this;
-            // setTimeout(() => {
-              this.showOpenMarker(response);
-            // }, 500);
-          }
+    list.then(response => {
+      if (typeof response.error === "undefined" && response.length > 0) {
+        this.context.updateCoordsAndStoreList(coords, response);
+        if (this.state.openSelectedStore) {
+          this.showOpenMarker(response);
         }
-        else {
-          this.context.updateCoordsAndStoreList(coords, null);
-        }
-        removeFullScreenLoader();
+      } else {
+        this.context.updateCoordsAndStoreList(coords, null);
       }
-    );
+      removeFullScreenLoader();
+    });
   };
 
   selectStore = (e, store_code) => {
@@ -134,14 +131,15 @@ class ClickCollect extends React.Component {
 
   toggleStoreView = (e, activeView) => {
     e.preventDefault();
-    e.target.parentNode.childNodes.forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-    if (activeView === 'map') {
+    e.target.parentNode.childNodes.forEach(btn =>
+      btn.classList.remove("active")
+    );
+    e.target.classList.add("active");
+    if (activeView === "map") {
       this.cncMapView.current.style.display = "block";
       this.cncListView.current.style.display = "none";
       this.refreshMap();
-    }
-    else {
+    } else {
       this.cncMapView.current.style.display = "none";
       this.cncListView.current.style.display = "block";
     }
@@ -190,33 +188,33 @@ class ClickCollect extends React.Component {
     let { coords, storeList, selectedStore } = this.context;
     let { openSelectedStore } = this.state;
 
-    if (window.fetchStore == 'pending') {
-      return (<Loading/>);
+    if (window.fetchStore == "pending") {
+      return <Loading />;
     }
 
-    let mapView = (
-      <ClicknCollectMap
-        coords={coords}
-        markers={storeList}
-      />
-    );
+    let mapView = <ClicknCollectMap coords={coords} markers={storeList} />;
 
     return (
       <div className="spc-address-form">
-        {window.innerWidth > 768 &&
-          <div className='spc-address-form-map'>
-            {mapView}
-          </div>
-        }
-        <div className='spc-cnc-address-form-sidebar'>
-          <div className='spc-cnc-stores-list-map' style={{ display: openSelectedStore ? 'none' : 'block' }}>
-            <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
-            <a className="close" onClick={this.props.closeModal}>&times;</a>
-            <div className='spc-cnc-address-form-wrapper'>
-              <div className='spc-cnc-address-form-content'>
-                <SectionTitle>{Drupal.t('find your nearest store')}</SectionTitle>
-                <div className='spc-cnc-location-search-wrapper'>
-                  <div className='spc-cnc-store-search-form-item'>
+        {window.innerWidth > 768 && (
+          <div className="spc-address-form-map">{mapView}</div>
+        )}
+        <div className="spc-cnc-address-form-sidebar">
+          <div
+            className="spc-cnc-stores-list-map"
+            style={{ display: openSelectedStore ? "none" : "block" }}
+          >
+            <SectionTitle>{Drupal.t("Collection Store")}</SectionTitle>
+            <a className="close" onClick={this.props.closeModal}>
+              &times;
+            </a>
+            <div className="spc-cnc-address-form-wrapper">
+              <div className="spc-cnc-address-form-content">
+                <SectionTitle>
+                  {Drupal.t("find your nearest store")}
+                </SectionTitle>
+                <div className="spc-cnc-location-search-wrapper">
+                  <div className="spc-cnc-store-search-form-item">
                     <input
                       ref={this.searchplaceInput}
                       className="form-search"
@@ -276,7 +274,11 @@ class ClickCollect extends React.Component {
               </div>
             </div>
           </div>
-          <SelectedStore store={selectedStore} open={openSelectedStore} closePanel={this.closePanel}/>
+          <SelectedStore
+            store={selectedStore}
+            open={openSelectedStore}
+            closePanel={this.closePanel}
+          />
         </div>
       </div>
     );

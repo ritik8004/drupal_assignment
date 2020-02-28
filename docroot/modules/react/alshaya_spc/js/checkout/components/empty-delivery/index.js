@@ -5,12 +5,8 @@ import {
   checkoutAddressProcess,
   getAddressPopupClassName
 } from "../../../utilities/checkout_address_process";
-import {
-  addEditAddressToCustomer
-} from '../../../utilities/address_util';
-import {
-  showFullScreenLoader
-} from "../../../utilities/checkout_util";
+import { addEditAddressToCustomer } from "../../../utilities/address_util";
+import { showFullScreenLoader } from "../../../utilities/checkout_util";
 import ClickCollectContainer from "../click-collect";
 
 let AddressContent = React.lazy(() => import("../address-popup-content"));
@@ -32,7 +28,11 @@ export default class EmptyDeliveryText extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    document.addEventListener("refreshCartOnAddress", this.eventListener, false);
+    document.addEventListener(
+      "refreshCartOnAddress",
+      this.eventListener,
+      false
+    );
 
     document.addEventListener(
       "refreshCartOnCnCSelect",
@@ -40,7 +40,7 @@ export default class EmptyDeliveryText extends React.Component {
       false
     );
 
-    document.addEventListener('closeAddressListPopup', this.closeModal, false);
+    document.addEventListener("closeAddressListPopup", this.closeModal, false);
   }
 
   componentWillUnmount() {
@@ -75,8 +75,7 @@ export default class EmptyDeliveryText extends React.Component {
     // If logged in user.
     if (window.drupalSettings.user.uid > 0) {
       addEditAddressToCustomer(e);
-    }
-    else {
+    } else {
       const { cart } = this.props.cart;
       checkoutAddressProcess(e, cart);
     }
@@ -99,7 +98,7 @@ export default class EmptyDeliveryText extends React.Component {
             onClose={this.closeModal}
             closeOnDocumentClick={false}
           >
-            <ClickCollectContainer closeModal={this.closeModal}/>
+            <ClickCollectContainer closeModal={this.closeModal} />
           </Popup>
         </div>
       );
@@ -108,11 +107,12 @@ export default class EmptyDeliveryText extends React.Component {
     let default_val = null;
     // If logged in user.
     if (window.drupalSettings.user.uid > 0) {
+      let { fname, lname } = window.drupalSettings.user_name;
       default_val = {
-        'static': {
-          'fullname': window.drupalSettings.user_name.fname + ' ' + window.drupalSettings.user_name.lname
+        static: {
+          fullname: `${fname} ${lname}`
         }
-      }
+      };
     }
 
     return (
@@ -129,7 +129,7 @@ export default class EmptyDeliveryText extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <React.Suspense fallback={<Loading/>}>
+          <React.Suspense fallback={<Loading />}>
             <a className="close" onClick={this.closeModal}>
               &times;
             </a>
