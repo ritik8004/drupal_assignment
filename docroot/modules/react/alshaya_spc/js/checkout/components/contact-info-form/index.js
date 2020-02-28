@@ -30,7 +30,7 @@ class ContactInfoForm extends React.Component {
         rnc_available: store.rnc_available,
         cart_address: store.cart_address
       },
-      carrier_info: { ...drupalSettings.cnc.cnc_shipping }
+      carrier_info: { ...drupalSettings.map.cnc_shipping }
     };
 
     this.processShippingUpdate(form_data);

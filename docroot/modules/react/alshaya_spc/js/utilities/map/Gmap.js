@@ -28,9 +28,9 @@ export default class Gmap {
       mapMarkers: []
     };
 
-    if (typeof drupalSettings.cnc !== 'undefined' && typeof drupalSettings.cnc.map_marker !== 'undefined') {
-      this.map.settings.map_marker.icon = drupalSettings.cnc.map_marker.icon;
-      this.map.settings.map_marker.label_position = drupalSettings.cnc.map_marker.label_position;
+    if (typeof drupalSettings.map !== 'undefined' && typeof drupalSettings.map.map_marker !== 'undefined') {
+      this.map.settings.map_marker.icon = drupalSettings.map.map_marker.icon;
+      this.map.settings.map_marker.label_position = drupalSettings.map.map_marker.label_position;
     }
   }
 
@@ -86,6 +86,14 @@ export default class Gmap {
   setCenter = (coords, callBackFunc = null) => {
     if (!_isEmpty(coords)) {
       this.map.googleMap.setCenter(coords);
+      this.map.googleMap.setZoom(7);
+      return;
+    }
+
+    if (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center)) {
+      let {latitude, longitude} = drupalSettings.map.center;
+      let position = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+      window.spcMap.googleMap.setCenter(position);
       this.map.googleMap.setZoom(7);
       return;
     }

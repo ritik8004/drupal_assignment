@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import _isEmpty from 'lodash/isEmpty';
 import { removeCartFromStorage } from "./storage";
 import { updateCartApiUrl } from "./update_cart";
 import { cartAvailableInStorage, getGlobalCart } from "./get_cart";
@@ -150,3 +150,11 @@ export const getLocationAccess = () => {
     );
   }
 };
+
+export const getDefaultMapCenter = () => {
+  if (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center)) {
+    let {latitude: lat, longitude: lng} = drupalSettings.map.center;
+    return {lat, lng};
+  }
+  return {};
+}
