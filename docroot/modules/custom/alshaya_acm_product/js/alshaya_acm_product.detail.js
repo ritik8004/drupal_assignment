@@ -85,7 +85,9 @@
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
         var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
-        var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
+        var productKey = (viewMode === 'matchback')
+          ? 'matchback'
+          : 'productInfo';
 
         // Fill the view mode form field.
         $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
@@ -376,7 +378,7 @@
     var orderLimitMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
     var orderLimitMobileMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
     var viewMode = selectedInput.parents('article.entity--type-node').attr('data-vmode');
-    var productKey = (viewMode === 'full') ? 'productInfo' : viewMode;
+    var productKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
     var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
     // At parent level, sku and selected will be same.
     var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined"
