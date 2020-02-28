@@ -143,6 +143,9 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
       $term->get('field_category_include_menu')->setValue(0);
     }
   }
+  // Set field_show_in_lhn with same value as field_category_include_menu
+  // when creating a new taxonomy term.
+  $term->get('field_show_in_lhn')->setValue($term->get('field_category_include_menu')->getString());
 }
 
 /**
