@@ -2,8 +2,8 @@
 
 namespace Drupal\exponea\Controller;
 
+use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Returns responses for Exponea routes.
@@ -27,7 +27,11 @@ class ExponeaController extends ControllerBase {
       'gcm_sender_id' => $config->get('gcm_sender_id'),
     ];
 
-    return new JsonResponse($ret_val);
+    $response = new CacheableJsonResponse($ret_val);
+    // Handle caching.
+    $response->addCacheableDependency($config);
+
+    return $response;
   }
 
 }

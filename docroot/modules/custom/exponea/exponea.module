@@ -20,6 +20,9 @@ function exponea_page_attachments(array &$attachments) {
         'rel' => 'manifest',
         'href' => '/manifest.json',
       ],
+      '#cache' => [
+        'tags' => $config->getCacheTags(),
+      ],
     ];
     $attachments['#attached']['html_head'][] = [$exponea_link, 'link'];
   }
