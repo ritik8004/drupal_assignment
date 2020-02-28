@@ -110,7 +110,7 @@ export default class AddressItem extends React.Component {
     let addressData = [];
     let editAddressData = {};
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
-      addressData.push(<span key={key}>{address[key]}</span>)
+      addressData.push(<span key={key}>{address[key]}, </span>)
       editAddressData[val['key']] = address[key];
     })
 

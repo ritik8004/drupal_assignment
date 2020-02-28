@@ -158,17 +158,11 @@ export default class AddressForm extends React.Component {
                 onSubmit={e => this.handleSubmit(e)}
               >
                 <div className="delivery-address-fields"> {dynamicFields} </div>
-                {this.props.show_prefered && (
-                  <div>
-                    <input type="checkbox" name="prefered-address" />
-                    {Drupal.t("Preferred address")}
-                  </div>
-                )}
                 <FixedFields
                   showEmail={this.props.showEmail}
                   default_val={default_val}
                 />
-                <div className="spc-address-form-actions">
+                <div className="spc-address-form-actions" id='address-form-action'>
                   <button
                     id="save-address"
                     className="spc-address-form-submit"
