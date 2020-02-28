@@ -17,7 +17,6 @@ use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Url;
 
-
 /**
  * Implements hook_module_implements_alter().
  */
@@ -402,7 +401,6 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
     // Temporary fix to login issue.
     // Clear bootstrap cache when no data in module_implements_alter.
     if (empty($log_name)) {
-      \Drupal::logger('alshaya_acm_customer')->warning('begin test');
       \Drupal::service('cache.bootstrap')->invalidateAll();
       $currentURL = Url::fromRoute('<current>');
       $response = new RedirectResponse($currentURL->toString());
@@ -412,7 +410,6 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $response->prepare($request);
       // Make sure to trigger kernel events.
       \Drupal::service('kernel')->terminate($request, $response);
-      \Drupal::logger('alshaya_acm_customer')->warning('end test');
       $response->send();
     }
 
