@@ -69,6 +69,7 @@ notifications:
     secure: "QW/vcMfCY0FtGTzNJrtnG32uOgmOfrgaFeo68inAcrMQaesAWpppJVG5C4guOwHiYMoaZR3wbQA0cecho7XYTUILrFCEuWRQ/+T7zMs+lg69AYj2HGvq3Ef+Wn16TkdSZFShKZwFd9cPjqCaPVPJ994HEKxWqw5p1q0xzLme10y4Fk7TphpnhqW+6Z8JADY9WQ/YgtCOsrwOMuSsgsP7uKFJFCIVwLcg2o7JukBjY67hOceFfhxpC1gC/b7ohHlDZfn8owbzZazRCTKEEJM1KBc3s0APXBwjqh/l4laGRqB6PGCSR2TwhvfD2z9ZF6woicOZNT9kbK1iWQ0gT824gmM6FiEG9I+Skwnvc0QkavIccYEuwV4yOtzk2Eh3vcBNrPItN3g05nNL1zk+S2eTNG7olB0/fG18rHiqaUozIIRabbPr2FVBc7jQeLzSJ3oi7zPQRPFG39tkRncvDnj9S4V6gQE+BKFGHhXRCMK8/UASLhK5IASuO+4OPwZMxXtLUZsOD+bNSsZFhtG2J35dGl3PrBWJ1gGY1wBiEzEErmH3bgi79XNSNQONrJ2wFffriP+4cRuZGJ8w/+AwZYvDnpfCIKfKlASmJ4vHx1ILCPKXlAWnuobekHyCukEElvKkfiFgkjVIYpfINz5QpCkcWln8Hu4sifAkfPNf2oq8hn4="
 
 before_install:
+  - npm install -g gulp-cli
   # Disable xdebug.
   - phpenv config-rm xdebug.ini
   - composer self-update
@@ -77,7 +78,6 @@ before_install:
   - composer install --no-interaction
   # Exit build early if only documentation was changed in a Pull Request.
   - source ${BLT_DIR}/scripts/travis/exit_early
-  - npm install -g gulp-cli
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
