@@ -6,7 +6,7 @@ const Swatch = (props) => {
   return (
     <a href={selected_image}>
       <span className='swatch-block swatch-image'>
-        {props.url ?
+        {props.swatch.product_url ?
           <ImageElement data-sku-image={props.swatch.product_url} src={props.swatch.image_url} />
           :
           <ImageElement src={props.swatch.image_url} />
@@ -28,30 +28,34 @@ const Swatches = (props) => {
   const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
   const total_no_of_swatches = props.swatches.length;
   const diff = total_no_of_swatches - limit;
-  const swatch_color_count = total_no_of_swatches + (total_no_of_swatches > 1 ? ' colors' : ' color')
-  const swatch_more_text = (diff > 0) ? diff + ' colors' : null;
+  const swatch_color_count = Drupal.formatPlural(total_no_of_swatches, '1 color', '@count colors');
+  const swatch_more_text = Drupal.formatPlural(diff, '+1 color', '+@count colors');
+  var swatches;
+
+  if (total_no_of_swatches > 0 && !show_variants_thumbnail_plp_gallery) {
+    swatches = <div className="swatches">
+                {props.swatches.slice(0, limit).map((swatch, key) => <Swatch swatch={swatch} key={key} url={props.url} />)}
+                {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={props.url}>{swatch_more_text}</a> : null}
+              </div>
+  }
+  else {
+    swatches = <React.Fragment>
+                  {total_no_of_swatches > 0 ?
+                    <div className="swatches">
+                      <div className="swatch-color-count-wrapper mobile-only-block">
+                        <a className="swatch-color-count product-selected-url"
+                          href={props.url}>{swatch_color_count}</a>
+                      </div>
+                    </div>
+                  :
+                  null
+                  }
+                </React.Fragment>
+  }
 
   return (
     <React.Fragment>
-      {total_no_of_swatches > 0 && !show_variants_thumbnail_plp_gallery ?
-        <div className="swatches">
-          {props.swatches.slice(0, limit).map((swatch, key) => <Swatch swatch={swatch} key={key} url={props.url} />)}
-          {swatch_more_text ? <a className="swatch-more-link product-selected-url" href={props.url}>+ {swatch_more_text}</a> : null}
-        </div>
-        :
-        <React.Fragment>
-          {total_no_of_swatches > 0 ?
-            <div className="swatches">
-              <div className="swatch-color-count-wrapper mobile-only-block">
-                <a className="swatch-color-count product-selected-url"
-                  href={props.url}>{swatch_color_count}</a>
-              </div>
-            </div>
-            :
-            null
-          }
-        </React.Fragment>
-      }
+      {swatches}
     </React.Fragment>
   )
 }

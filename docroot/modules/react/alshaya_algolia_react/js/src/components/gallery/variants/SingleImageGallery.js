@@ -4,7 +4,7 @@ import ImageElement from '../imageHelper/ImageElement';
 const SingleImageGallery = (props) => {
   const images = [...props.media];
   const mainImage = images.length > 0 ? images.shift() : {};
-  const mainImageUrl = typeof mainImage.url != 'undefined' ? mainImage.url : '';
+  const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
 
   return(
     <div className="alshaya_search_gallery">
