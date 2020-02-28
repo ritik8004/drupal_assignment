@@ -385,7 +385,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
     // We will add log file name in watchdog.
     // Since log is too big we store in file.
-    if (Settings::get('log_module_implements_cache_data', 0)) {
+    if ((strpos($mail, '@') === FALSE) && Settings::get('log_module_implements_cache_data', 0)) {
       $module_implements = $bootstrap->get('module_implements');
       $module_implements_cache = $module_implements->data ?? [];
 
