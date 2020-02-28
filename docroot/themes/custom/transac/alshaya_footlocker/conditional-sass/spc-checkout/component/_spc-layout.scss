@@ -1,0 +1,18 @@
+.alias--checkout,
+.alias--checkout-confirmation {
+  .site-brand-home {
+    background: $header-bg;
+
+    a {
+      @include breakpoint($tablet) {
+        max-width: 17.75rem;
+        width: 100%;
+      }
+
+      @include breakpoint($only-mobile) {
+        max-width: 8.625rem;
+        width: 100%;
+      }
+    }
+  }
+}
