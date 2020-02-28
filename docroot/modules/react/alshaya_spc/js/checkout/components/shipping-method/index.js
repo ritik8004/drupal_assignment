@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Price from '../../../utilities/price';
+import PriceElement from "../../../utilities/special-price/PriceElement";
 
 export default class ShippingMethod extends React.Component {
 
@@ -17,13 +17,13 @@ export default class ShippingMethod extends React.Component {
     });
 
     document.getElementById('shipping-method-' + method.method_code).checked = true;
-  }
+  };
 
   render () {
     let method = this.props.method;
     let price = Drupal.t('FREE');
     if (method.amount > 0) {
-      price = <Price price={method.amount}/>
+      price = <PriceElement amount={method.amount}/>
     }
   	return(
       <div className='shipping-method' onClick={() => this.changeShippingMethod(method)}>
