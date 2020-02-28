@@ -10,11 +10,11 @@
     attach: function (context, settings) {
       if (localStorage.hasOwnProperty('cart_data')) {
         var cart_data = JSON.parse(localStorage.getItem('cart_data'));
-        Drupal.alshaya_spc_cart_gtm(cart_data.cart);
+        Drupal.alshayaSpcCartGtm(cart_data.cart);
       }
       document.addEventListener('refreshCart', function (e) {
         var cart_data = e.detail.data();
-        Drupal.alshaya_spc_cart_gtm(cart_data);
+        Drupal.alshayaSpcCartGtm(cart_data);
       });
 
       document.addEventListener('updateCartItemData', function (e) {
@@ -24,12 +24,12 @@
         if (item.qty > qty) {
           item.qty = item.qty - qty;
           gtmEvent = 'removeFromCart';
-          Drupal.alshaya_spc_cart_gtm_update_cart(item, gtmEvent);
+          Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
         }
         else if (item.qty < qty) {
           item.qty = qty - item.qty;
           gtmEvent = 'addToCart';
-          Drupal.alshaya_spc_cart_gtm_update_cart(item, gtmEvent);
+          Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
         }
 
       });
@@ -64,7 +64,7 @@
    * @param cart_data
    *   Cart data Object from localStorage.
    */
-  Drupal.alshaya_spc_cart_gtm = function(cart_data) {
+  Drupal.alshayaSpcCartGtm = function(cart_data) {
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
       dataLayer[0].productSKU = [];
@@ -77,7 +77,7 @@
       Object.entries(items).forEach(([key, product]) => {
         dataLayer[0].productStyleCode.push(product.parent_sku);
         dataLayer[0].productSKU.push(key);
-        var productData = Drupal.alshaya_spc_gtm_product(product);
+        var productData = Drupal.alshayaSpcGtmProduct(product);
         dataLayer[0].ecommerce.checkout.products.push(productData);
         var flocktory = {
           id: product.parent_sku,
@@ -99,7 +99,7 @@
    * @param gtmEvent
    *   GTM event string removeFromcart, addToCart.
    */
-  Drupal.alshaya_spc_cart_gtm_update_cart = function (product, gtmEvent) {
+  Drupal.alshayaSpcGtmUpdateCartItem = function (product, gtmEvent) {
     var productData = {
       event: gtmEvent,
       ecommerce: {
@@ -109,7 +109,7 @@
         }
       }
     };
-    var productDetails = Drupal.alshaya_spc_gtm_product(product);
+    var productDetails = Drupal.alshayaSpcGtmProduct(product);
     productDetails.metric2 = product.final_price;
     productData.ecommerce.add.product.push(productDetails);
     dataLayer.push(productData);
@@ -123,7 +123,7 @@
    * @returns {{quantity: *, price, name: *, variant: *, id: *, category: *,
    *   brand: *}} Product details object with gtm attributes.
    */
-  Drupal.alshaya_spc_gtm_product = function (product) {
+  Drupal.alshayaSpcGtmProduct = function (product) {
     var attributes = product.attributes;
     var i = 0;
     for (i = 0; i < attributes.length; i++) {
