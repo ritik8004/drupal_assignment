@@ -562,11 +562,13 @@
   }
 }
 
-.short-description-wrapper {
+.short-description-wrapper:not(.matchback-description-wrapper) {
   .c-pdp & {
     border-top: 1px solid $pdp_skus_border;
   }
+}
 
+.short-description-wrapper {
   .field {
     &__label {
       font-size: 1rem;
