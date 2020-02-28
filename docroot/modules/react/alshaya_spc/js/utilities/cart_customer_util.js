@@ -62,3 +62,18 @@ const emptyCustomerCart = () => {
   var event = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => empty_cart } });
   document.dispatchEvent(event);
 }
+
+export const extractFirstAndLastName = (name) => {
+  return {
+    firstname: name.split(' ')[0],
+    lastname: name.substring(name.indexOf(' ') + 1),
+  }
+};
+
+export const makeFullName = (fname, lname) => {
+  if (fname.trim() === '' || lname.trim() === '') {
+    return '';
+  }
+
+  return `${fname} ${lname}`;
+};

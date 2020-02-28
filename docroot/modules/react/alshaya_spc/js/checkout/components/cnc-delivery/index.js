@@ -85,7 +85,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
           <div className="contact-name">
             {shipping_address.firstname} {shipping_address.lastname}
           </div>
-          <div className="contact-telephone">{shipping_address.telephone}</div>
+          <div className="contact-telephone">+{drupalSettings.country_mobile_code} {shipping_address.telephone}</div>
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(true)}

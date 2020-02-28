@@ -1,6 +1,7 @@
 import React from 'react'
 import { fetchClicknCollectStores } from "../../utilities/api/requests";
 import _isEqual from 'lodash/isEqual';
+import { makeFullName } from '../../utilities/cart_customer_util';
 
 export const ClicknCollectContext = React.createContext();
 
@@ -18,16 +19,14 @@ export class ClicknCollectContextProvider extends React.Component {
 
     if (!shipping_address && customer !== undefined) {
       contactInfo = {
-        firstname: customer.firstname || '',
-        lastname: customer.lastname || '',
+        fullname: makeFullName(customer.firstname || '', customer.lastname || ''),
         email: customer.email || '',
         telephone: customer.telephone || '',
       }
     }
     else if (shipping_address) {
       contactInfo = {
-        firstname: shipping_address.firstname || '',
-        lastname: shipping_address.lastname || '',
+        fullname: makeFullName(shipping_address.firstname || '', shipping_address.lastname || ''),
         email: shipping_address.email || '',
         telephone: shipping_address.telephone || '',
       }

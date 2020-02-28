@@ -102,10 +102,11 @@ export const checkoutAddressProcess = function (e, cart) {
 
 }
 
+
 /**
- * Validate address fields.
+ * Validate contact information.
  */
-export const validateAddressFields = (e, validateEmail) => {
+export const validateContactInfo = (e, validateEmail) => {
   let isError = false;
   let name = e.target.elements.fullname.value.trim();
   let splited_name = name.split(' ');
@@ -142,6 +143,14 @@ export const validateAddressFields = (e, validateEmail) => {
       document.getElementById('email-error').classList.remove('error');
     }
   }
+  return isError;
+}
+
+/**
+ * Validate address fields.
+ */
+export const validateAddressFields = (e, validateEmail) => {
+  let isError = validateContactInfo(e, validateEmail);
 
   // Iterate over address fields.
   Object.entries(window.drupalSettings.address_fields).forEach(
