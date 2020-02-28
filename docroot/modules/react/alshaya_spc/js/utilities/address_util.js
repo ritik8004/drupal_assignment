@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 import {
-  addShippingInCart
+  addShippingInCart,
+  removeFullScreenLoader
 } from './checkout_util';
 import {
   validateAddressFields
@@ -80,6 +81,8 @@ export const addEditAddressToCustomer = (e) => {
   let notValidAddress = validateAddressFields(e, false);
   // If address form is not valid.
   if (notValidAddress) {
+    // Removing loader in case validation fail.
+    removeFullScreenLoader();
     return;
   }
 
@@ -92,6 +95,8 @@ export const addEditAddressToCustomer = (e) => {
       if (result.status === 200) {
         // If not valid mobile number.
         if (result.data.status === false) {
+          // Removing loader in case validation fail.
+          removeFullScreenLoader();
           document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
           document.getElementById('mobile-error').classList.add('error');
         }
@@ -139,6 +144,10 @@ export const addEditAddressToCustomer = (e) => {
                   let cart_data = {
                     'cart': cart_result
                   }
+
+                  // Removing loader when process finishes.
+                  removeFullScreenLoader();
+
                   var event = new CustomEvent('refreshCartOnAddress', {
                     bubbles: true,
                     detail: {

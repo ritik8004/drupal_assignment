@@ -8,6 +8,9 @@ import {
 import {
   addEditAddressToCustomer
 } from '../../../utilities/address_util';
+import {
+  showFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 let ClickCollect = React.lazy(() => import("../click-collect"));
 let AddressContent = React.lazy(() => import("../address-popup-content"));
@@ -66,6 +69,9 @@ export default class EmptyDeliveryText extends React.Component {
    * Process the address form data on sumbit.
    */
   processAddress = e => {
+    // Show the loader.
+    showFullScreenLoader();
+
     // If logged in user.
     if (window.drupalSettings.user.uid > 0) {
       addEditAddressToCustomer(e);

@@ -7,6 +7,9 @@ import {
   checkoutAddressProcess,
   getAddressPopupClassName
 } from "../../../utilities/checkout_address_process";
+import {
+  showFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 let AddressContent = React.lazy(() => import("../address-popup-content"));
 
@@ -27,6 +30,8 @@ export default class HomeDeliveryInfo extends React.Component {
 
   processAddress = e => {
     const { cart } = this.props.cart;
+    // Show the loader.
+    showFullScreenLoader();
     checkoutAddressProcess(e, cart);
   };
 

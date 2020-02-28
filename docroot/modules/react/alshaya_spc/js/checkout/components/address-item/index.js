@@ -10,6 +10,10 @@ import {
 import {
   addShippingInCart
 } from '../../../utilities/checkout_util';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader
+} from "../../../utilities/checkout_util";
 import EditAddressSVG from "../edit-address-svg";
 
 export default class AddressItem extends React.Component {
@@ -37,6 +41,8 @@ export default class AddressItem extends React.Component {
    * When user changes address.
    */
   changeDefaultAddress = (address) => {
+    // Show loader.
+    showFullScreenLoader();
     document.getElementById('address-' + address['address_id']).checked = true;
     let addressList = updateUserDefaultAddress(address['address_id']);
     if (addressList instanceof Promise) {
@@ -50,6 +56,8 @@ export default class AddressItem extends React.Component {
           var cart_info = addShippingInCart('update shipping', data);
           if (cart_info instanceof Promise) {
             cart_info.then((cart_result) => {
+              // Remove loader.
+              removeFullScreenLoader();
               // If cart id not available, no need to process.
               if (cart_result.cart_id === null) {
                 return;
@@ -100,6 +108,8 @@ export default class AddressItem extends React.Component {
    * Process the address form data on sumbit.
    */
   processAddress = (e) => {
+    // Show loader.
+    showFullScreenLoader();
     addEditAddressToCustomer(e);
   };
 

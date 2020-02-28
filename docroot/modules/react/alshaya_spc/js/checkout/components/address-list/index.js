@@ -7,6 +7,9 @@ import {
   getUserAddressList,
   addEditAddressToCustomer
 } from '../../../utilities/address_util';
+import {
+  showFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 export default class AddressList extends React.Component {
 
@@ -56,6 +59,8 @@ export default class AddressList extends React.Component {
    * Process add new address.
    */
   processAddress = (e) => {
+    // Show loader.
+    showFullScreenLoader();
     addEditAddressToCustomer(e);
   };
 
