@@ -299,7 +299,7 @@ class AlshayaApiWrapper {
         $options['json'] = $data;
         $method = 'POST';
       }
-      elseif ($method == 'GET') {
+      elseif ($method == 'GET' && !empty($data)) {
         $options['query'] = $data;
       }
       elseif ($method == 'PUT') {
