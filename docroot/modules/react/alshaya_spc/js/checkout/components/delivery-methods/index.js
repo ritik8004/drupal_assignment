@@ -1,6 +1,8 @@
 import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
+import HomeDeliverySVG from "../hd-svg";
+import ClickCollectSVG from "../cc-svg";
 
 export default class DeliveryMethods extends React.Component {
 
@@ -49,7 +51,7 @@ export default class DeliveryMethods extends React.Component {
         <div className='delivery-method' onClick={() => this.changeDeliveryMethod('hd')}>
           <input id='delivery-method-hd' defaultChecked={this.state.selectedOption === 'hd'} value='hd' name='delivery-method' type='radio' />
           <label className='radio-sim radio-label'>
-            <span className='icon'></span>
+            <span className='icon'><HomeDeliverySVG/></span>
             <span className='impress'>{Drupal.t('home delivery')}</span>
             <span className='sub-title'>{hd_subtitle}</span>
           </label>
@@ -57,7 +59,7 @@ export default class DeliveryMethods extends React.Component {
         <div className='delivery-method' onClick={() => this.changeDeliveryMethod('cnc')}>
           <input id='delivery-method-cnc' defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value='cnc' name='delivery-method' type='radio' />
           <label className='radio-sim radio-label'>
-            <span className='icon'></span>
+            <span className='icon'><ClickCollectSVG/></span>
             <span className='impress'>{Drupal.t('click & collect')}</span>
             <span className='sub-title'>{cnc_subtitle}</span>
           </label>
