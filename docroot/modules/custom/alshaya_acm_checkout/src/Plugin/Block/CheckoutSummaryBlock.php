@@ -530,6 +530,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     // Vary based on cart id and route.
     return Cache::mergeContexts(parent::getCacheContexts(), [
       'cookies:Drupal_visitor_acq_cart_id',
+      'session',
       'route',
     ]);
   }
