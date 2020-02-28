@@ -12,7 +12,8 @@ export default class FixedFields extends React.Component {
       default_val = this.props.default_val['static'];
     }
 
-    let hasSubTitle = this.props.subTitle.length > 0 ? 'subtitle-yes' : 'subtitle-no';
+    let hasSubTitle = this.props.subTitle !== undefined && this.props.subTitle.length > 0
+      ? 'subtitle-yes' : 'subtitle-no';
 
     return (
       <div className={'spc-checkout-contact-information ' + hasSubTitle} id='spc-checkout-contact-info'>
