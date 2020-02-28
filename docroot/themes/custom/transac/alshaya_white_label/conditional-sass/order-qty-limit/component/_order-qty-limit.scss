@@ -24,16 +24,20 @@
     padding-#{$right}: 0.625rem;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: $order_qty_limit_txt;
     position: relative;
     font-size: 0.875rem;
     font-family: $alshaya-bold;
     font-weight: normal;
+    padding-#{$left}: 1.65rem;
 
     @include icon(infomation, before) {
       font-size: 1.25rem;
       font-weight: bold;
+      padding-right: 0.3125rem;
+      position: absolute;
+      #{$left}: 0.25rem;
       padding-#{$right}: 0.3125rem;
     }
 
@@ -60,6 +64,7 @@
 .path--cart {
   .order-quantity-limit-message {
     display: block;
+    margin-top: 0.5rem;
 
     .order-qty-limit-msg-inner-wrapper {
       font-size: 0.75rem;
