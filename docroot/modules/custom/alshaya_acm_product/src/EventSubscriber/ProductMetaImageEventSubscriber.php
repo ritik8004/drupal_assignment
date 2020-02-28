@@ -9,7 +9,6 @@ use Drupal\alshaya_seo\Event\MetaImageRenderEvent;
 use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class ProductMetaImageEventSubscriber.
@@ -79,9 +78,9 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
         $sku = $this->skuManager->getSkuForNode($node);
         $sku_entity = SKU::loadFromSku($sku);
         $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
-        if (!empty($sku_media['drupal_uri'])) {
-          $image_path = ImageStyle::load('thumbnail')->buildUrl($sku_media['drupal_uri']);
-          $event->setMetaImage($image_path);
+        $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+        if (!empty($teaser_image['#uri'])) {
+          $event->setMetaImage(file_create_url($teaser_image['#uri']));
           $event->stopPropagation();
         }
       }
