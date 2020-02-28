@@ -20,6 +20,7 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * ApiHelper.
@@ -72,6 +73,13 @@ class CartHelper {
   protected $logger;
 
   /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -86,19 +94,23 @@ class CartHelper {
    *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
    *   Logger Factory.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
    */
   public function __construct(CartStorageInterface $cart_storage,
                               EventDispatcherInterface $dispatcher,
                               ModuleHandlerInterface $module_handler,
                               AlshayaApiWrapper $api_wrapper,
                               ConfigFactoryInterface $config_factory,
-                              LoggerChannelFactoryInterface $logger_channel) {
+                              LoggerChannelFactoryInterface $logger_channel,
+                              SkuManager $sku_manager) {
     $this->cartStorage = $cart_storage;
     $this->dispatcher = $dispatcher;
     $this->moduleHandler = $module_handler;
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
     $this->logger = $logger_channel->get('CartHelper');
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -309,6 +321,8 @@ class CartHelper {
    *   Cart.
    */
   public function refreshStockForProductsInCart(CartInterface $cart = NULL) {
+    $parent_skus = [];
+
     if (empty($cart)) {
       $cart = $this->cartStorage->getCart(FALSE);
     }
@@ -321,6 +335,14 @@ class CartHelper {
     foreach ($cart->items() ?? [] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {
         $sku_entity->refreshStock();
+        $current_parent = $this->skuManager->getParentSkuBySku($item['sku']);
+        $current_parent_sku = $current_parent->getSku();
+
+        // Refresh parent stock once if exists for cart items.
+        if ($current_parent && !in_array($current_parent_sku, $parent_skus)) {
+          $parent_skus[] = $current_parent_sku;
+          $current_parent->refreshStock();
+        }
       }
     }
   }
