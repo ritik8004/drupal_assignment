@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { addShippingInCart } from './checkout_util';
+import {
+  addShippingInCart,
+  removeFullScreenLoader
+} from './checkout_util';
 
 /**
  * Process the data got from address form submission.
@@ -13,6 +16,8 @@ export const checkoutAddressProcess = function (e, cart) {
   let notValidAddress = validateAddressFields(e, true);
   // If address form is not valid.
   if (notValidAddress) {
+    // Remove the loader.
+    removeFullScreenLoader();
     return;
   }
 
@@ -64,6 +69,7 @@ export const checkoutAddressProcess = function (e, cart) {
     }
 
     if (isError) {
+      removeFullScreenLoader();
       // Remove loading class.
       document.getElementById('save-address').classList.remove('loading');
       return false;
@@ -76,6 +82,10 @@ export const checkoutAddressProcess = function (e, cart) {
           let cart_data = {
             'cart': cart_result
           }
+
+          // Remove the loader.
+          removeFullScreenLoader();
+
           var event = new CustomEvent('refreshCartOnAddress', {
             bubbles: true,
             detail: {
