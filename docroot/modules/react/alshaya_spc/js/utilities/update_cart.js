@@ -64,7 +64,7 @@ export const updateCartItemData = function (action, sku, quantity) {
       qty: quantity,
       item: cart.items[sku],
     }
-    var event = new CustomEvent('updateCart', {bubbles: true, detail: { data: data }});
+    var event = new CustomEvent('updateCartItemData', {bubbles: true, detail: { data: data }});
     document.dispatchEvent(event);
   }
 

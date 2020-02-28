@@ -17,7 +17,7 @@
         Drupal.alshaya_spc_cart_gtm(cart_data);
       });
 
-      document.addEventListener('updateCart', function (e) {
+      document.addEventListener('updateCartItemData', function (e) {
         var gtmEvent = '';
         var item = e.detail.data.item;
         var qty = e.detail.data.qty;
