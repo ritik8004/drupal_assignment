@@ -33,7 +33,7 @@ export default class HomeDeliveryInfo extends React.Component {
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener(
-      "refreshCartOnAddress",
+      'refreshCartOnAddress',
       this.eventListener,
       false
     );
@@ -99,9 +99,6 @@ export default class HomeDeliveryInfo extends React.Component {
           closeOnDocumentClick={false}
           className={getAddressPopupClassName()}
         >
-          <a className="close" onClick={this.closeModal}>
-            &times;
-          </a>
           <React.Suspense fallback={<Loading/>}>
             <a className="close" onClick={this.closeModal}>
               &times;
