@@ -180,6 +180,7 @@ class ContactInfoForm extends React.Component {
         <FixedFields
           showEmail={true}
           default_val={contactInfo ? { static: contactInfo } : []}
+          subTitle={this.props.subTitle}
         />
         <div className="spc-address-form-actions">
           <button

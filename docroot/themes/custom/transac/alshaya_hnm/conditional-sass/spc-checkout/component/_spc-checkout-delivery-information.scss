@@ -1,7 +1,11 @@
 .spc-checkout-delivery-information {
   .delivery-information-preview {
-    .spc-delivery-customer-info {
-      .delivery-name {
+    .spc-delivery-customer-info,
+    .spc-delivery-store-info,
+    .spc-delivery-contact-info {
+      .delivery-name,
+      .store-name,
+      .contact-info-label {
         font-family: $hnm-demibold;
       }
     }

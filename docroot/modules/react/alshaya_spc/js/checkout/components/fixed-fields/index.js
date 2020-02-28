@@ -12,9 +12,14 @@ export default class FixedFields extends React.Component {
       default_val = this.props.default_val['static'];
     }
 
+    let hasSubTitle = this.props.subTitle.length > 0 ? 'subtitle-yes' : 'subtitle-no';
+
     return (
-      <div className='spc-checkout-contact-information' id='spc-checkout-contact-info'>
-        <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
+      <div className={'spc-checkout-contact-information ' + hasSubTitle} id='spc-checkout-contact-info'>
+        <div className='spc-contact-information-header'>
+          <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
+          <span className='spc-contact-info-desc'>{this.props.subTitle}</span>
+        </div>
         <div className='spc-checkout-contact-information-fields'>
           <TextField type='text' required={true} name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''} label={Drupal.t('First Name')}/>
           <TextField type='text' required={true} name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''} label={Drupal.t('Last Name')}/>

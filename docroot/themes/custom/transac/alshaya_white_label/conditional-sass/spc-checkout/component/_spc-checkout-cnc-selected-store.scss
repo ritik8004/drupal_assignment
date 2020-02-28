@@ -1,0 +1,80 @@
+#click-and-collect-selected-store {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 6.25rem;
+  }
+
+  .spc-cnc-selected-store-header {
+    position: relative;
+
+    .spc-cnc-selected-store-back {
+      width: 2.25rem;
+      height: 2.25rem;
+      display: inline-block;
+      position: absolute;
+      cursor: pointer;
+      #{$left}: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+
+      @include icon('chevron#{$left}', before) {
+        font-size: 2.25rem;
+        color: $spc-checkout-area-panel-back-icon;
+      }
+    }
+
+    .spc-checkout-section-title {
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0;
+      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+    }
+  }
+
+  > .spc-checkout-section-title {
+    height: 3.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    background: $spc-checkout-cnc-selected-store-sub-section-title;
+  }
+
+  .store-details-wrapper {
+    font-size: 0.875rem;
+    padding: 0.875rem 1.25rem;
+
+    .store-address-content {
+      line-height: 1.3;
+      max-width: 14.8125rem;
+      color: $spc-cnc-store-item-text;
+    }
+
+    .store-delivery-time {
+      color: $spc-cnc-store-item-text-impress;
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
+      display: block;
+    }
+
+    .spc-cnc-store-name {
+      color: $spc-cnc-store-item-text-impress;
+
+      .store-name {
+        display: inline-block;
+        margin-bottom: 0.875rem;
+      }
+
+      .store-distance {
+        float: $right;
+        display: inline-block;
+        color: $spc-cnc-store-list-distance;
+      }
+    }
+  }
+
+  .spc-checkout-contact-information-fields {
+    margin: 1.5rem 1.25rem;
+  }
+}
