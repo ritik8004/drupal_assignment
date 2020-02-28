@@ -77,6 +77,7 @@ before_install:
   - composer install --no-interaction
   # Exit build early if only documentation was changed in a Pull Request.
   - source ${BLT_DIR}/scripts/travis/exit_early
+  - npm install -g gulp-cli
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
