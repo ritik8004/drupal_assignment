@@ -49,7 +49,6 @@ services:
       - '@alshaya_api.api'
       - '@config.factory'
       - '@logger.factory'
-      - '@alshaya_acm_product.skumanager'
 
   alshaya_acm.config_check:
     class: Drupal\alshaya_acm\AlshayaAcmConfigCheck
