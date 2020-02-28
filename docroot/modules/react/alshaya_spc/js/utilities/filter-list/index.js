@@ -80,7 +80,9 @@ export default class FilterList extends React.Component {
                 <li
                   key={item.value}
                   value={item.value}
-                  className={this.state.selected == item.value ? 'active' : 'in-active'}
+                  className={
+                    this.state.selected !== undefined && this.state.selected.value == item.value
+                    ? 'active' : 'in-active'}
                 >
                   <span onClick={(e) => this.handleLiClick(e)} className='spc-area-panel-item'>{item.label}</span>
               </li>)})
