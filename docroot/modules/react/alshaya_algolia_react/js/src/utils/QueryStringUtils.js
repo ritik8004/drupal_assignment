@@ -97,7 +97,7 @@ function isMobile() {
  * Return true if current view is desktop otherwise false.
  */
 function isDesktop() {
-  return (window.innerWidth > 1025);
+  return (window.innerWidth > 1024);
 }
 
 /**
