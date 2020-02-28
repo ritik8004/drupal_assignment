@@ -12,51 +12,52 @@
         var cart_data = JSON.parse(localStorage.getItem('cart_data'));
         Drupal.alshayaSpcCartGtm(cart_data.cart);
       }
-      document.addEventListener('refreshCart', function (e) {
-        var cart_data = e.detail.data();
-        Drupal.alshayaSpcCartGtm(cart_data);
-      });
-
-      document.addEventListener('updateCartItemData', function (e) {
-        var gtmEvent = '';
-        var item = e.detail.data.item;
-        var qty = e.detail.data.qty;
-        if (item.qty > qty) {
-          item.qty = item.qty - qty;
-          gtmEvent = 'removeFromCart';
-          Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
-        }
-        else if (item.qty < qty) {
-          item.qty = qty - item.qty;
-          gtmEvent = 'addToCart';
-          Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
-        }
-
-      });
-
-      document.addEventListener('promoCodeSuccess', function (e) {
-        console.log(e.detail.data);
-        // Push promoCode event into dataLayer.
-        var promoCode = e.detail.data;
-        var data = {
-          event: 'promoCode',
-          couponCode: promoCode,
-          couponStatus: 'pass',
-        };
-        dataLayer.push(data);
-      });
-
-      document.addEventListener('promoCodeFailed', function (e) {
-        var promoCode = e.detail.data;
-        var data = {
-          event: 'promoCode',
-          couponCode: promoCode,
-          couponStatus: 'fail',
-        };
-        dataLayer.push(data);
-      });
     }
   };
+
+  document.addEventListener('refreshCart', function (e) {
+    var cart_data = e.detail.data();
+    Drupal.alshayaSpcCartGtm(cart_data);
+  });
+
+  document.addEventListener('updateCartItemData', function (e) {
+    var gtmEvent = '';
+    var item = e.detail.data.item;
+    var qty = e.detail.data.qty;
+    if (item.qty > qty) {
+      item.qty = item.qty - qty;
+      gtmEvent = 'removeFromCart';
+      Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
+    }
+    else if (item.qty < qty) {
+      item.qty = qty - item.qty;
+      gtmEvent = 'addToCart';
+      Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
+    }
+
+  });
+
+  document.addEventListener('promoCodeSuccess', function (e) {
+    console.log(e.detail.data);
+    // Push promoCode event into dataLayer.
+    var promoCode = e.detail.data;
+    var data = {
+      event: 'promoCode',
+      couponCode: promoCode,
+      couponStatus: 'pass',
+    };
+    dataLayer.push(data);
+  });
+
+  document.addEventListener('promoCodeFailed', function (e) {
+    var promoCode = e.detail.data;
+    var data = {
+      event: 'promoCode',
+      couponCode: promoCode,
+      couponStatus: 'fail',
+    };
+    dataLayer.push(data);
+  });
 
   /**
    * GTM dataLayer checkout event.
