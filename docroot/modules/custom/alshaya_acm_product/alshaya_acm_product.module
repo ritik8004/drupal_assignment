@@ -642,7 +642,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $settingsKey = ($view_mode === 'full') ? 'productInfo' : $view_mode;
+        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
