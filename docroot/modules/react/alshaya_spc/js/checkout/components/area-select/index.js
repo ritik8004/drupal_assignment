@@ -91,7 +91,8 @@ export default class AreaSelect extends React.Component {
     return (
       <div className='spc-type-select'>
         <label>{this.props.field.label}</label>
-        {this.state.current_option !== undefined ? (
+        {
+          (this.state.current_option !== undefined && this.state.current_option.length !== 0) ? (
           <div className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
             {options[this.state.current_option]['label']}
           </div>
