@@ -1,5 +1,5 @@
 import React from 'react';
-import Price from "../../../utilities/price";
+import PriceElement from "../../../utilities/special-price/PriceElement";
 
 export default class MobileCartPreview extends React.Component {
 
@@ -13,7 +13,7 @@ export default class MobileCartPreview extends React.Component {
       <div className="spc-mobile-cart-preview">
         <span className="cart-quantity">{Drupal.t('@qty items', {'@qty': this.props.total_items})}</span>
         <span className="cart-text">{total_text + ' :'}</span>
-        <span className="cart-value"><Price price={this.props.totals.base_grand_total} /></span>
+        <span className="cart-value"><PriceElement amount={this.props.totals.base_grand_total}/></span>
       </div>
     </React.Fragment>
     );
