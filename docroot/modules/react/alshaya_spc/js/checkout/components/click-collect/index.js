@@ -202,6 +202,12 @@ class ClickCollect extends React.Component {
     map.googleMap.panToBounds(map.googleMap.bounds);
   };
 
+  closePanel = () => {
+    this.setState({
+      openSelectedStore: false
+    });
+  };
+
   render() {
     let { coords, storeList, selectedStore } = this.context;
     let { openSelectedStore } = this.state;
@@ -222,72 +228,74 @@ class ClickCollect extends React.Component {
           </div>
         }
         <div className='spc-cnc-address-form-sidebar'>
-          <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
-          <a className="close" onClick={this.props.closeModal}>&times;</a>
-          <div className='spc-cnc-address-form-wrapper'>
-            <div className='spc-cnc-address-form-content' style={{ display: openSelectedStore ? 'none' : 'block' }}>
-              <SectionTitle>{Drupal.t('find your nearest store')}</SectionTitle>
-              <div className='spc-cnc-location-search-wrapper'>
-                <div className='spc-cnc-store-search-form-item'>
-                  <input
-                    ref={this.searchplaceInput}
-                    className="form-search"
-                    type="search"
-                    id="edit-store-location"
-                    name="store_location"
-                    size="60"
-                    maxLength="128"
-                    placeholder={drupalSettings.cnc.placeholder}
-                    autoComplete="off"
+          <div className='spc-cnc-stores-list-map' style={{ display: openSelectedStore ? 'none' : 'block' }}>
+            <SectionTitle>{Drupal.t('Collection Store')}</SectionTitle>
+            <a className="close" onClick={this.props.closeModal}>&times;</a>
+            <div className='spc-cnc-address-form-wrapper'>
+              <div className='spc-cnc-address-form-content' >
+                <SectionTitle>{Drupal.t('find your nearest store')}</SectionTitle>
+                <div className='spc-cnc-location-search-wrapper'>
+                  <div className='spc-cnc-store-search-form-item'>
+                    <input
+                      ref={this.searchplaceInput}
+                      className="form-search"
+                      type="search"
+                      id="edit-store-location"
+                      name="store_location"
+                      size="60"
+                      maxLength="128"
+                      placeholder={drupalSettings.cnc.placeholder}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <button
+                    className="cc-near-me"
+                    id="edit-near-me"
+                    ref={this.nearMeBtn}
+                    onClick={e => this.getCurrentPosition(e)}
+                  >
+                    {Drupal.t("Near me")}
+                  </button>
+                </div>
+                {window.innerWidth < 768 && (
+                  <div className="toggle-store-view">
+                    <div className="toggle-buttons-wrapper">
+                      <button
+                        className="stores-list-view active"
+                        onClick={e => this.toggleStoreView(e, "list")}
+                      >
+                        {Drupal.t("List view")}
+                      </button>
+                      <button
+                        className="stores-map-view"
+                        onClick={e => this.toggleStoreView(e, "map")}
+                      >
+                        {Drupal.t("Map view")}
+                      </button>
+                    </div>
+                  </div>
+                )}
+                <div id="click-and-collect-list-view" ref={this.cncListView}>
+                  <StoreList
+                    store_list={storeList}
+                    onStoreClick={this.storeViewOnMapSelected}
+                    onSelectStore={this.selectStore}
+                    selected={this.context.selectedStore}
                   />
                 </div>
-                <button
-                  className="cc-near-me"
-                  id="edit-near-me"
-                  ref={this.nearMeBtn}
-                  onClick={e => this.getCurrentPosition(e)}
-                >
-                  {Drupal.t("Near me")}
-                </button>
-              </div>
-              {window.innerWidth < 768 && (
-                <div className="toggle-store-view">
-                  <div className="toggle-buttons-wrapper">
-                    <button
-                      className="stores-list-view active"
-                      onClick={e => this.toggleStoreView(e, "list")}
-                    >
-                      {Drupal.t("List view")}
-                    </button>
-                    <button
-                      className="stores-map-view"
-                      onClick={e => this.toggleStoreView(e, "map")}
-                    >
-                      {Drupal.t("Map view")}
-                    </button>
+                {window.innerWidth < 768 && (
+                  <div
+                    className="click-and-collect-map-view"
+                    style={{ display: "none" }}
+                    ref={this.cncMapView}
+                  >
+                    {mapView}
                   </div>
-                </div>
-              )}
-              <div id="click-and-collect-list-view" ref={this.cncListView}>
-                <StoreList
-                  store_list={storeList}
-                  onStoreClick={this.storeViewOnMapSelected}
-                  onSelectStore={this.selectStore}
-                  selected={this.context.selectedStore}
-                />
+                )}
               </div>
-              {window.innerWidth < 768 && (
-                <div
-                  className="click-and-collect-map-view"
-                  style={{ display: "none" }}
-                  ref={this.cncMapView}
-                >
-                  {mapView}
-                </div>
-              )}
             </div>
-            <SelectedStore store={selectedStore} open={openSelectedStore} />
           </div>
+          <SelectedStore closePanel={this.closePanel} store={selectedStore} open={openSelectedStore} />
         </div>
       </div>
     );

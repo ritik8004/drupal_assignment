@@ -28,16 +28,35 @@
     font-size: 0.875rem;
     color: $spc-delivery-info-text;
 
-    .spc-delivery-customer-info {
+    .spc-delivery-store-info {
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid $spc-delivery-info-separator;
+    }
+
+    .store-address,
+    .contact-name {
+      max-width: 12.5rem;
+    }
+
+    .spc-delivery-contact-info {
+      margin-top: 1.25rem;
+    }
+
+    .spc-delivery-customer-info,
+    .spc-delivery-store-info,
+    .spc-delivery-contact-info {
       position: relative;
 
-      .delivery-name {
+      .delivery-name,
+      .store-name,
+      .contact-info-label {
         font-family: $alshaya-bold;
         color: $spc-delivery-customer-info-highlight;
         margin-bottom: 0.3125rem;
       }
 
-      .spc-address-form-edit-link {
+      .spc-address-form-edit-link,
+      .spc-change-address-link {
         position: absolute;
         #{$right}: 0;
         top: 0;

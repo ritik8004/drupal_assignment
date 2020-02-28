@@ -39,7 +39,11 @@
     }
 
     .spc-checkout-section-title {
-      background: $spc-checkout-area-panel-header-bg !important;
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
     }
   }
 

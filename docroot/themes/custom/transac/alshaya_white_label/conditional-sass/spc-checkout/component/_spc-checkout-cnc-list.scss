@@ -1,4 +1,8 @@
 #click-and-collect-list-view {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 6.25rem;
+  }
+
   ul {
     list-style: none;
     padding: 0;
