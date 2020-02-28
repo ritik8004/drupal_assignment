@@ -16,8 +16,7 @@
   };
 
   document.addEventListener('refreshCart', function (e) {
-    var cart_data = e.detail.data();
-    Drupal.alshayaSpcCartGtm(cart_data);
+    Drupal.alshayaSpcCartGtm(e.detail.data());
   });
 
   document.addEventListener('updateCartItemData', function (e) {
@@ -27,18 +26,15 @@
     if (item.qty > qty) {
       item.qty = item.qty - qty;
       gtmEvent = 'removeFromCart';
-      Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
     }
     else if (item.qty < qty) {
       item.qty = qty - item.qty;
       gtmEvent = 'addToCart';
-      Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
     }
-
+    Drupal.alshayaSpcGtmUpdateCartItem(item, gtmEvent);
   });
 
   document.addEventListener('promoCodeSuccess', function (e) {
-    console.log(e.detail.data);
     // Push promoCode event into dataLayer.
     var promoCode = e.detail.data;
     var data = {
