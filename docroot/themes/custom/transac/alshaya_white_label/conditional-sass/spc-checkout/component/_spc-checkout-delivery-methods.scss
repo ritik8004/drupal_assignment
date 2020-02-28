@@ -11,8 +11,33 @@
     padding-#{$left}: 3rem;
     position: relative;
 
+    input[type=radio] ~ .radio-label {
+      @include breakpoint($tablet) {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 93%;
+      }
+    }
+
     &:last-child {
       margin-bottom: 0;
+    }
+
+    .icon {
+      @include breakpoint($tablet) {
+        margin-#{$right}: 0.625rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        float: $left;
+      }
+    }
+
+    svg g {
+      fill: $spc-checkout-delivery-method-impress;
     }
 
     @include breakpoint($tablet) {
