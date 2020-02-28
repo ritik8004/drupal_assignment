@@ -20,6 +20,16 @@ alshaya_stores_finder.settings:
     store_search_placeholder:
       type: label
       label: 'Placeholder for store search'
+    country_center:
+      type: mapping
+      label: 'Center of Country to fetch stores'
+      mapping:
+        latitude:
+          type: float
+          label: 'latitude'
+        longitude:
+          type: float
+          label: 'longitude'
     marker:
       type: mapping
       label: 'Marker settings'
