@@ -590,10 +590,6 @@ function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $s
   }
   $data['gtm_attributes']['dimension1'] = $sku->get('attribute_set')->getString();
   $data['gtm_attributes']['dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
-  if ($sku->get('attr_product_collection')->getString() != '') {
-    $data['gtm_attributes']['dimension5'] = $sku->get('attr_product_collection')->getString();
-  }
-  if ($sku->get('attr_product_collection')->getString() != '') {
-    $data['gtm_attributes']['dimension6'] = $sku->get('attr_product_collection')->getString();
-  }
+  $data['gtm_attributes']['dimension5'] = $sku->get('attr_product_collection')->getString();
+  $data['gtm_attributes']['dimension6'] = $sku->get('attr_product_collection')->getString();
 }
