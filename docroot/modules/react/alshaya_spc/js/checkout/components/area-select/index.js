@@ -31,6 +31,16 @@ export default class AreaSelect extends React.Component {
     this.setState({
       showFilterList: !this.state.showFilterList
     });
+
+    if (!this.state.showFilterList) {
+      // Hide contact info and save button on filter list show.
+      document.getElementById('spc-checkout-contact-info').classList.add('visually-hidden');
+      document.getElementById('address-form-action').classList.add('visually-hidden');
+    }
+    else {
+      document.getElementById('spc-checkout-contact-info').classList.remove('visually-hidden');
+      document.getElementById('address-form-action').classList.remove('visually-hidden');
+    }
   };
 
   /**

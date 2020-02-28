@@ -13,7 +13,7 @@ export default class FixedFields extends React.Component {
     }
 
     return (
-      <div className='spc-checkout-contact-information'>
+      <div className='spc-checkout-contact-information' id='spc-checkout-contact-info'>
         <SectionTitle>{Drupal.t('contact information')}</SectionTitle>
         <div className='spc-checkout-contact-information-fields'>
           <TextField type='text' required={true} name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''} label={Drupal.t('First Name')}/>
