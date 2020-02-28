@@ -5,8 +5,10 @@ import AddressForm from "../address-form";
 export default class AddressContent extends React.Component {
 
   render() {
+    const cart = this.props.cart.cart;
+
     if (window.drupalSettings.user.uid > 0
-      && window.drupalSettings.user_name.address_available) {
+      && cart.shipping_address !== null) {
       return <AddressList/>;
     }
     else {

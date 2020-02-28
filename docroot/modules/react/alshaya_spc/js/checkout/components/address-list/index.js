@@ -73,8 +73,7 @@ export default class AddressList extends React.Component {
 
     let default_val = {
       'static': {
-        'firstname': window.drupalSettings.user_name.fname,
-        'lastname': window.drupalSettings.user_name.lname
+        'fullname': window.drupalSettings.user_name.fname + ' ' + window.drupalSettings.user_name.lname
       }
     }
 

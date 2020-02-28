@@ -21,8 +21,7 @@ export default class FixedFields extends React.Component {
           <span className='spc-contact-info-desc'>{this.props.subTitle}</span>
         </div>
         <div className='spc-checkout-contact-information-fields'>
-          <TextField type='text' required={true} name='fname' defaultValue={default_val !== '' ? default_val['firstname'] : ''} label={Drupal.t('First Name')}/>
-          <TextField type='text' required={true} name='lname' defaultValue={default_val !== '' ? default_val['lastname'] : ''} label={Drupal.t('Last Name')}/>
+          <TextField type='text' required={false} name='fullname' defaultValue={default_val !== '' ? default_val['fullname'] : ''} label={Drupal.t('Full Name')}/>
           {this.props.showEmail &&
             <TextField type='email' name='email' defaultValue={default_val !== '' ? default_val['email'] : ''} label={Drupal.t('Email')}/>
           }

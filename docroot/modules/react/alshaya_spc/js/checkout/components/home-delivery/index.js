@@ -62,8 +62,7 @@ export default class HomeDeliveryInfo extends React.Component {
   formatAddressData = (address) => {
     let formatted_address = {
       'static': {
-        'firstname': address.firstname,
-        'lastname': address.lastname,
+        'fullname': address.firstname + ' ' + address.lastname,
         'email': address.email,
         'telephone': address.telephone
       }
@@ -108,6 +107,7 @@ export default class HomeDeliveryInfo extends React.Component {
               &times;
             </a>
             <AddressContent
+              cart={this.props.cart}
               processAddress={this.processAddress}
               showEmail={window.drupalSettings.user.uid === 0}
               default_val = {

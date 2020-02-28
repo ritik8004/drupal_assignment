@@ -8,7 +8,7 @@ class TextField extends React.Component {
     if (this.props.type === 'email') {
       return (
         <div className='spc-type-textfield'>
-          <input type='email' name={this.props.name} required='required' defaultValue={this.props.defaultValue}/>
+          <input type='email' name={this.props.name} defaultValue={this.props.defaultValue}/>
           <div className='c-input__bar'/>
           <label>{this.props.label}</label>
           <div id={this.props.name + '-error'} className='error'/>
@@ -21,7 +21,7 @@ class TextField extends React.Component {
           <label>{this.props.label}</label>
           <span className='country-code'>{'+' + countryMobileCode}</span>
           <input maxLength={countryMobileCodeMaxLength}
-                 type='text' name={this.props.name} required='required'
+                 type='text' name={this.props.name}
                  defaultValue={this.props.defaultValue}/>
           <div className='c-input__bar'/>
           <div id={this.props.name + '-error'} className='error'/>
@@ -31,7 +31,7 @@ class TextField extends React.Component {
     else {
       return (
         <div className='spc-type-textfield'>
-          <input type='text' id={this.props.id} name={this.props.name} required={this.props.required} defaultValue={this.props.defaultValue}/>
+          <input type='text' id={this.props.name} name={this.props.name} defaultValue={this.props.defaultValue}/>
           <div className='c-input__bar'/>
           <label>{this.props.label}</label>
           <div id={this.props.name + '-error'} className='error'/>
