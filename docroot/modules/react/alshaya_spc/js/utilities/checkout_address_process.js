@@ -85,7 +85,7 @@ export const checkoutAddressProcess = function (e, cart) {
 
           // If any error, don't process further.
           if (cart_result.error !== undefined) {
-
+            return;
           }
 
           let cart_data = {
