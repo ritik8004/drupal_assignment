@@ -382,8 +382,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
   }
   elseif (Settings::get('auto_fix_module_implements_cache_data', 1)) {
     // Feature-toggle workaround to clear bootstrap cache and reload the page
-    // when we detect cache corruption.
-    // Clear bootstrap cache when no data in module_implements_alter.
+    // when we detect cache corruption; when no data in module_implements_alter.
     $bootstrap = \Drupal::cache('bootstrap');
     $module_implements = $bootstrap->get('module_implements');
     $module_implements_cache = $module_implements->data ?? [];
