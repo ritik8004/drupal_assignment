@@ -12,8 +12,6 @@ import {
  * @param {*} cart
  */
 export const checkoutAddressProcess = function (e, cart) {
-  // Show loader.
-  showFullScreenLoader();
   let notValidAddress = validateAddressFields(e, true);
   // If address form is not valid.
   if (notValidAddress) {
