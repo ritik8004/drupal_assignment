@@ -43,11 +43,11 @@ export default class AddressItem extends React.Component {
   changeDefaultAddress = (address) => {
     // Show loader.
     showFullScreenLoader();
-    document.getElementById('address-' + address['address_id']).checked = true;
     let addressList = updateUserDefaultAddress(address['address_id']);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
-        if (response.status === true) {
+        if (response.status === 200 && response.data.status === true) {
+          document.getElementById('address-' + address['address_id']).checked = true;
           // Refresh the address list.
           let data = {
             'address_id': address['address_mdc_id'],
@@ -58,25 +58,27 @@ export default class AddressItem extends React.Component {
             cart_info.then((cart_result) => {
               // Remove loader.
               removeFullScreenLoader();
-              // If cart id not available, no need to process.
-              if (cart_result.cart_id === null) {
-                return;
-              }
-
-              let cart_data = {
-                'cart': cart_result
-              }
-              var event = new CustomEvent('refreshCartOnAddress', {
-                bubbles: true,
-                detail: {
-                  data: () => cart_data
+              // If no error.
+              if (cart_result.error === undefined) {
+                let cart_data = {
+                  'cart': cart_result
                 }
-              });
-              document.dispatchEvent(event);
+                var event = new CustomEvent('refreshCartOnAddress', {
+                  bubbles: true,
+                  detail: {
+                    data: () => cart_data
+                  }
+                });
+                document.dispatchEvent(event);
 
-              this.props.refreshAddressList(response.data);
+                this.props.refreshAddressList(response.data);
+              }
             });
           }
+        }
+        else {
+          // Remove the loader.
+          removeFullScreenLoader();
         }
       });
     }
@@ -86,12 +88,13 @@ export default class AddressItem extends React.Component {
    * Deletes the user address.
    */
   deleteAddress = (id) => {
-    // Add loading class.
-    document.getElementById('address-delete-' + id).classList.add('loading');
+    // Show loader.
+    showFullScreenLoader()
     let addressList = deleteUserAddress(id);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
-        if (response.status === true) {
+        removeFullScreenLoader();
+        if (response.status === 200 && response.data.status === true) {
           // Refresh the address list.
           this.props.refreshAddressList(response.data);
         }

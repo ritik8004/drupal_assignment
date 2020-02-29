@@ -31,7 +31,7 @@ export const updateUserDefaultAddress = function (address_id) {
       'address_id': address_id
     })
     .then(response => {
-      return response.data
+      return response
     })
     .catch(error => {
       // Processing of error here.
@@ -48,7 +48,7 @@ export const deleteUserAddress = function (address_id) {
       'address_id': address_id
     })
     .then(response => {
-      return response.data
+      return response
     })
     .catch(error => {
       // Processing of error here.
@@ -126,6 +126,13 @@ export const addEditAddressToCustomer = (e) => {
           let addressList = addEditUserAddress(form_data);
           if (addressList instanceof Promise) {
             addressList.then((list) => {
+              // If any error.
+              if (list.status === false) {
+                // Remove loader.
+                removeFullScreenLoader();
+                return;
+              }
+
               let firstKey = Object.keys(list.data)[0]
               let data = {
                 'address_id': list.data[firstKey]['address_mdc_id'],
@@ -136,17 +143,16 @@ export const addEditAddressToCustomer = (e) => {
               var cart_info = addShippingInCart('update shipping', data);
               if (cart_info instanceof Promise) {
                 cart_info.then((cart_result) => {
-                  // If cart id not available, no need to process.
-                  if (cart_result.cart_id === null) {
+                  // Remove loader.
+                  removeFullScreenLoader();
+                  // If error, no need to process.
+                  if (cart_result.error !== undefined) {
                     return;
                   }
 
                   let cart_data = {
                     'cart': cart_result
                   }
-
-                  // Removing loader when process finishes.
-                  removeFullScreenLoader();
 
                   var event = new CustomEvent('refreshCartOnAddress', {
                     bubbles: true,
@@ -168,7 +174,6 @@ export const addEditAddressToCustomer = (e) => {
               }
             });
           }
-
         }
       }
     });

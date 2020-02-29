@@ -160,16 +160,23 @@ class AlshayaSpcCustomerHelper {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function updateCustomerDefaultAddress(int $profile, int $uid) {
-    /* @var \Drupal\profile\Entity\Profile $profile */
-    $profile = $this->entityTypeManager->getStorage('profile')->load($profile);
-    // If profile is valid and belongs to the user.
-    if ($profile && $profile->getOwnerId() == $uid) {
-      $profile->setDefault(TRUE);
-      $profile->save();
-      return TRUE;
+    $return = FALSE;
+    try {
+      /* @var \Drupal\profile\Entity\Profile $profile */
+      $profile = $this->entityTypeManager->getStorage('profile')->load($profile);
+      // If profile is valid and belongs to the user.
+      if ($profile && $profile->getOwnerId() == $uid) {
+        $profile->setDefault(TRUE);
+        if ($this->addressBookManager->pushUserAddressToApi($profile)) {
+          $return = TRUE;
+        }
+      }
+    }
+    catch (\Exception $e) {
+      $return = FALSE;
     }
 
-    return FALSE;
+    return $return;
   }
 
   /**
@@ -225,38 +232,43 @@ class AlshayaSpcCustomerHelper {
    *   Response.
    */
   public function addEditCustomerAddress(array $address, int $uid) {
-    $address_data = $address['address'];
-    // If address already exists.
-    if (!empty($address_data['address_id'])) {
-      $profile = $this->entityTypeManager->getStorage('profile')->load($address_data['address_id']);
-    }
-    else {
-      $profile = $this->entityTypeManager->getStorage('profile')->create([
-        'type' => 'address_book',
-        'uid' => $uid,
-      ]);
-      $profile->setOwnerId($uid);
-    }
-
-    // Prepare mobile info.
-    $mobile_info = [
-      'country' => _alshaya_custom_get_site_level_country_code(),
-      'local_number' => $address['mobile'],
-      'value' => '+' . _alshaya_spc_get_country_mobile_code() . $address['mobile'],
-    ];
-
-    // Get and use location term based on location id.
-    if (!empty($address_data['administrative_area'])) {
-      if ($location_term = _alshaya_spc_get_location_term_by_location_id($address_data['administrative_area'])) {
-        $address_data['administrative_area'] = $location_term->id();
+    try {
+      $address_data = $address['address'];
+      // If address already exists.
+      if (!empty($address_data['address_id'])) {
+        $profile = $this->entityTypeManager->getStorage('profile')->load($address_data['address_id']);
       }
+      else {
+        $profile = $this->entityTypeManager->getStorage('profile')->create([
+          'type' => 'address_book',
+          'uid' => $uid,
+        ]);
+        $profile->setOwnerId($uid);
+      }
+
+      // Prepare mobile info.
+      $mobile_info = [
+        'country' => _alshaya_custom_get_site_level_country_code(),
+        'local_number' => $address['mobile'],
+        'value' => '+' . _alshaya_spc_get_country_mobile_code() . $address['mobile'],
+      ];
+
+      // Get and use location term based on location id.
+      if (!empty($address_data['administrative_area'])) {
+        if ($location_term = _alshaya_spc_get_location_term_by_location_id($address_data['administrative_area'])) {
+          $address_data['administrative_area'] = $location_term->id();
+        }
+      }
+
+      $address_data['country_code'] = _alshaya_custom_get_site_level_country_code();
+      $profile->get('field_address')->setValue($address_data);
+      $profile->get('field_mobile_number')->setValue($mobile_info);
+
+      return $this->addressBookManager->pushUserAddressToApi($profile);
     }
-
-    $address_data['country_code'] = _alshaya_custom_get_site_level_country_code();
-    $profile->get('field_address')->setValue($address_data);
-    $profile->get('field_mobile_number')->setValue($mobile_info);
-
-    return $this->addressBookManager->pushUserAddressToApi($profile);
+    catch (\Exception $e) {
+      return FALSE;
+    }
   }
 
   /**
