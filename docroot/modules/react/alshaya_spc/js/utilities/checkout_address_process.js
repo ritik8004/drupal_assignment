@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   addShippingInCart,
+  showFullScreenLoader,
   removeFullScreenLoader
 } from './checkout_util';
 
@@ -11,8 +12,8 @@ import {
  * @param {*} cart
  */
 export const checkoutAddressProcess = function (e, cart) {
-  // Add loading class.
-  document.getElementById('save-address').classList.add('loading');
+  // Show loader.
+  showFullScreenLoader();
   let notValidAddress = validateAddressFields(e, true);
   // If address form is not valid.
   if (notValidAddress) {
@@ -79,12 +80,17 @@ export const checkoutAddressProcess = function (e, cart) {
       var cart_info = addShippingInCart('update shipping', form_data);
       if (cart_info instanceof Promise) {
         cart_info.then((cart_result) => {
+          // Remove the loader.
+          removeFullScreenLoader();
+
+          // If any error, don't process further.
+          if (cart_result.error !== undefined) {
+
+          }
+
           let cart_data = {
             'cart': cart_result
           }
-
-          // Remove the loader.
-          removeFullScreenLoader();
 
           var event = new CustomEvent('refreshCartOnAddress', {
             bubbles: true,
