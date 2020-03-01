@@ -60,7 +60,7 @@ export class ClicknCollectContextProvider extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (props.storeList !== state.storeList) {
       return {
-        storeList: props.storeList,
+        storeList: state.storeList === null ? props.storeList : state.storeList,
       };
     }
     // Return null to indicate no change to state.

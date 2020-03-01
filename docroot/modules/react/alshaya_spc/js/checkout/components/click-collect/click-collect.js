@@ -107,13 +107,11 @@ class ClickCollect extends React.Component {
     // Make api request.
     let list = storeFetcher.read(coords);
     list.then(response => {
-      if (typeof response.error === "undefined" && response.length > 0) {
+      if (typeof response.error === "undefined") {
         this.context.updateCoordsAndStoreList(coords, response);
         if (this.state.openSelectedStore) {
           this.showOpenMarker(response);
         }
-      } else {
-        this.context.updateCoordsAndStoreList(coords, null);
       }
       removeFullScreenLoader();
     });

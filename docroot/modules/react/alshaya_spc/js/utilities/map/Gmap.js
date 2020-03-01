@@ -93,7 +93,7 @@ export default class Gmap {
     if (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center)) {
       let {latitude, longitude} = drupalSettings.map.center;
       let position = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
-      window.spcMap.googleMap.setCenter(position);
+      this.map.googleMap.setCenter(position);
       this.map.googleMap.setZoom(7);
       return;
     }
