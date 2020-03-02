@@ -59,7 +59,7 @@
       &.brand-swim {
         &::after {
           background: url("../imgs/logos/super-category/vs-swim-logo.svg?h1yOhx") no-repeat center;
-          background-size: contain;
+          background-size: 1.8125rem;
         }
 
         &:hover::after {
@@ -84,7 +84,7 @@
       &.brand-swimwear::after,
       &.brand-swim::after {
         background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
-        background-size: contain;
+        background-size: 1.8125rem;
       }
     }
   }
@@ -154,6 +154,19 @@
         a {
           width: 5rem;
           margin-top: 0.3125rem;
+        }
+      }
+    }
+  }
+}
+
+.super-category-swim,
+.super-category-swimwear {
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home img {
+          max-height: 2.5rem;
         }
       }
     }
