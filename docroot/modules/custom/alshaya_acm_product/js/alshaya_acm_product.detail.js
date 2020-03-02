@@ -130,7 +130,9 @@
 
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
-            if (($(this).val() > variantInfo.stock.qty) || (variantInfo.stock.maxSaleQty !== 0 && ($(this).val() > variantInfo.stock.maxSaleQty))) {
+            if ((parseInt($(this).val()) > parseInt(variantInfo.stock.qty))
+              || (parseInt(variantInfo.stock.maxSaleQty) !== 0
+              && (parseInt($(this).val()) > parseInt(variantInfo.stock.maxSaleQty)))) {
               if ($(this).is(':selected')) {
                 $('select[name="quantity"] option:first').attr('selected', 'selected').prop('selected', true);
               }
@@ -419,7 +421,7 @@
           cart_items[selected]['qty'] : 0;
         }
 
-        if (itemQtyInCart >= parentInfo.maxSaleQty) {
+        if (itemQtyInCart >= parseInt(parentInfo.maxSaleQty)) {
           var orderLimitExceeded = true;
           var orderLimitMsg = orderLimitExceededMsg;
         }
@@ -436,7 +438,7 @@
         if (selectedItemInCart >= 0) {
           var itemQtyInCart = cart_items[selected]['qty'];
 
-          if (itemQtyInCart >= variantInfo.stock.maxSaleQty) {
+          if (itemQtyInCart >= parseInt(variantInfo.stock.maxSaleQty)) {
             var orderLimitExceeded = true;
             var orderLimitMsg = orderLimitExceededMsg;
           }
