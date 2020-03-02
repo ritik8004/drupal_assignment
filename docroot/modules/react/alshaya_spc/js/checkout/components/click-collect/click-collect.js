@@ -215,8 +215,6 @@ class ClickCollect extends React.Component {
                       type="search"
                       id="edit-store-location"
                       name="store_location"
-                      size="60"
-                      maxLength="128"
                       placeholder={drupalSettings.map.placeholder}
                       autoComplete="off"
                     />
