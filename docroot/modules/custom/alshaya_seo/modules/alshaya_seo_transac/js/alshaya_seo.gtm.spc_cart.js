@@ -20,6 +20,13 @@
           Drupal.alshayaSeoGtmPushCheckoutOption('Home Delivery', 2);
         }
       }
+
+      /**
+       * Fire checkoutOption on cart page.
+       */
+      if (drupalSettings.user.uid !== 0) {
+        Drupal.alshayaSeoGtmPushCheckoutOption('Logged In', 1);
+      }
     }
   };
 
@@ -131,6 +138,28 @@
       step = 2;
     }
     return step;
+  };
+
+  /**
+   * Helper function to push checkout option to GTM.
+   *
+   * @param optionLabel
+   * @param step
+   */
+  Drupal.alshayaSeoGtmPushCheckoutOption = function (optionLabel, step) {
+    var data = {
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: step,
+            option: optionLabel
+          }
+        }
+      }
+    };
+
+    dataLayer.push(data);
   };
 
   /**
