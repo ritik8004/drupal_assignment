@@ -83,6 +83,11 @@
           text-decoration: underline;
           padding-#{$right}: 0.25rem;
           padding-#{$left}: 0.125rem;
+          color: inherit;
+
+          &:hover {
+            color: $primary_link-hover;
+          }
         }
       }
     }
@@ -311,8 +316,6 @@
   }
 
   .gift-message {
-    font-size: 0.75rem;
-    line-height: 1.33;
     color: $cart-free-gifts-message;
 
     @include breakpoint($tablet) {
@@ -329,9 +332,9 @@
   #table-cart-items {
     tr {
       td {
-        .free-gift-title {
+        .gift-message {
           a {
-            display: inherit;
+            display: inline;
             font-size: 0.75rem !important;
             line-height: 1.33;
             color: $cart-free-gifts-title;
@@ -401,11 +404,6 @@
     }
 
     .gift-message {
-      > a {
-        display: inline !important;
-        text-decoration: underline;
-      }
-
       .label {
         color: $free-gifts-coupon-code-text;
       }
@@ -706,6 +704,10 @@ body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
     height: auto !important;
     padding: 1.5em 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      height: 100% !important;
+    }
   }
 }
 
