@@ -46,7 +46,9 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
 
     // Add GTM events for SPC cart.
     $route_match = \Drupal::routeMatch();
-    if ($route_match->getRouteName() == 'acq_cart.cart' || $route_match->getRouteName() == 'alshaya_spc.checkout.confirmation') {
+    if ($route_match->getRouteName() == 'acq_cart.cart'
+      || $route_match->getRouteName() == 'alshaya_spc.checkout'
+      || $route_match->getRouteName() == 'alshaya_spc.checkout.confirmation') {
       if (\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
         $page['#attached']['library'][] = 'alshaya_seo_transac/gtm_spc_cart';
       }
@@ -184,8 +186,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     switch ($current_route['route_name']) {
       case 'acq_checkout.form':
       case 'acq_cart.cart':
-        if ((isset($current_route['route_params']['step']) && in_array($current_route['route_params']['step'],
-          ['delivery', 'payment'], TRUE)) || $current_route['route_name'] == 'acq_cart.cart') {
+      case 'alshaya_spc.checkout':
+        if ($current_route['route_name'] == 'acq_cart.cart' || $current_route['route_name'] == 'alshaya_spc.checkout') {
 
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
@@ -204,16 +206,8 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           if ($current_route['route_name'] == 'acq_cart.cart') {
             $step = 1;
           }
-
-          // Set the correct step id.
-          switch ($current_route['route_params']['step'] ?? '') {
-            case 'delivery':
-              $step = 2;
-              break;
-
-            case 'payment':
-              $step = 3;
-              break;
+          elseif ($current_route['route_name'] == 'alshaya_spc.checkout') {
+            $step = 2;
           }
 
           $data_layer_cart = [

@@ -12,6 +12,10 @@
         var cart_data = JSON.parse(localStorage.getItem('cart_data'));
         Drupal.alshayaSpcCartGtm(cart_data.cart);
       }
+
+      if (window.location.pathname.indexOf('/checkout') !== -1) {
+        Drupal.alshayaSpcCheckoutGtmDeliveryMethod('Home Delivery');
+      }
     }
   };
 
@@ -51,6 +55,55 @@
       event: 'promoCode',
       couponCode: promoCode,
       couponStatus: 'fail',
+    };
+    dataLayer.push(data);
+  });
+
+  document.addEventListener('deliveryMethodChange', function (e) {
+    var deliveryMethod = e.detail.data;
+    if (deliveryMethod === 'hd') {
+      Drupal.alshayaSpcCheckoutGtmDeliveryMethod('Home Delivery');
+    }
+    else {
+      Drupal.alshayaSpcCheckoutGtmDeliveryMethod('Click & Collect');
+    }
+  });
+
+  document.addEventListener('refreshCartOnCnCSelect', function (e) {
+    var cart_data = e.detail.data();
+    var data = {
+      event: 'storeSelect',
+      storeName: cart_data.cart.store_info.name,
+      storeAddress: cart_data.cart.store_info.address,
+    };
+    dataLayer.push(data);
+    var data = {
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: 2,
+            option: 'Click & Collect',
+            action: 'checkout_option',
+          }
+        }
+      }
+    };
+    dataLayer.push(data);
+  });
+
+  document.addEventListener('refreshCartOnAddress', function (e) {
+    var data = {
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: 2,
+            option: 'Home Delivery - subdelivery',
+            action: 'checkout_option',
+          }
+        }
+      }
     };
     dataLayer.push(data);
   });
@@ -191,6 +244,14 @@
       }
     }
     return productDetails;
+  };
+
+  Drupal.alshayaSpcCheckoutGtmDeliveryMethod = function (method) {
+    var data = {
+      event: 'deliveryOption',
+      eventLabel: method,
+    };
+    dataLayer.push(data);
   };
 
 })(jQuery, Drupal, dataLayer);
