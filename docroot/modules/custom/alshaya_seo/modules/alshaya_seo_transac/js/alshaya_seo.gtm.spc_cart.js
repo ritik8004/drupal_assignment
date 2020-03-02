@@ -55,6 +55,33 @@
     dataLayer.push(data);
   });
 
+  document.addEventListener('changeShippingMethod', function (e) {
+    var deliveryType = e.detail.data.carrier_title;
+    Drupal.alshayaSeoGtmPushCheckoutOption(deliveryType, 2);
+  });
+
+  /**
+   * Helper function to push checkout option to GTM.
+   *
+   * @param optionLabel
+   * @param step
+   */
+  Drupal.alshayaSeoGtmPushCheckoutOption = function (optionLabel, step) {
+    var data = {
+      event: 'checkoutOption',
+      ecommerce: {
+        checkout_option: {
+          actionField: {
+            step: step,
+            option: optionLabel
+          }
+        }
+      }
+    };
+
+    dataLayer.push(data);
+  };
+
   /**
    * GTM dataLayer checkout event.
    *
