@@ -1,6 +1,6 @@
 import React from 'react';
-import Price from "../price";
 import ToolTip from "../tooltip";
+import PriceElement from "../special-price/PriceElement";
 
 class TotalLineItem extends React.Component {
   render() {
@@ -23,7 +23,7 @@ class TotalLineItem extends React.Component {
           <span className={this.props.name}>{this.props.title}
             <ToolTip content={this.props.tooltipContent} enable={this.props.tooltip}/>
           </span>
-          <span className="value"><Price price={this.props.value}/></span>
+          <span className="value"><PriceElement amount={this.props.value}/></span>
         </div>
       );
     }

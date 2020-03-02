@@ -69,6 +69,18 @@ function stickySidebar() {
   window.addEventListener('scroll', () => {
     // Desktop & Tablet sticky right column.
     if (window.innerWidth > 767) {
+      // Before we begin we need to check if the content is smaller than sidebar,
+      // if yes no sticky needed.
+      // 40 is margin bottom which is fixed.
+      let spcPromoCodeBlockH = document.getElementsByClassName('spc-promo-code-block')[0].offsetHeight + 40;
+      let orderSummaryBlockH = document.getElementsByClassName('spc-order-summary-block')[0].offsetHeight;
+      // 42 is height of section title for cart items.
+      let cartItemsH = document.getElementsByClassName('spc-cart-items')[0].offsetHeight + 42;
+      if (cartItemsH < spcPromoCodeBlockH + orderSummaryBlockH) {
+        // Content not eligible for sticky.
+        return;
+      }
+
       let offSet = getSiderBarOffsetTop();
       // Sidebar.
       let spcSidebar = document.getElementsByClassName('spc-sidebar');
@@ -87,7 +99,9 @@ function stickySidebar() {
       if (window.pageYOffset > offSet) {
         if (!spcSidebar[0].classList.contains('sticky')) {
           spcSidebar[0].style.width = spcSidebarWidth + 'px';
-          spcSidebar[0].style.left = spcSidebarOffset.left + 'px';
+          if (!spcSidebar[0].classList.contains('fluid')) {
+            spcSidebar[0].style.left = spcSidebarOffset.left + 'px';
+          }
           spcSidebar[0].classList.add('sticky');
         }
 

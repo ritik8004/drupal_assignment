@@ -107,7 +107,7 @@ export default class CartPromoBlock extends React.Component {
       <div className="spc-promo-code-block">
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
-          <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('enter your promo code here')} />
+          <input id="promo-code" disabled={this.state.disabled} type="text" placeholder={Drupal.t('Promo code')} />
           <button id="promo-remove-button" className={"promo-remove " + promo_remove_active} onClick={()=>{this.promoAction(this.state.promo_applied)}}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" disabled={this.state.disabled} className="promo-submit" onClick={()=>{this.promoAction(this.state.promo_applied)}}>{this.state.button_text}</button>
           <div id="promo-message"/>
