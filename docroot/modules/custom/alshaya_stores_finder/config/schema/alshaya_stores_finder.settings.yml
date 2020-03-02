@@ -30,6 +30,9 @@ alshaya_stores_finder.settings:
         longitude:
           type: float
           label: 'longitude'
+        zoom:
+          type: integer
+          label: 'map zoom for country.'
     marker:
       type: mapping
       label: 'Marker settings'

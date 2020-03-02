@@ -147,12 +147,8 @@ class ClickCollect extends React.Component {
   // View selected store on map.
   storeViewOnMapSelected = makerIndex => {
     let map = window.spcMap;
-    // Zoom the current map to store location.
-    // map.googleMap.setZoom(11);
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], "click");
-    // Pan Google maps to accommodate the info window.
-    map.googleMap.panBy(0, 10);
   };
 
   showOpenMarker = storeList => {
