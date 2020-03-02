@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_super_category\EventSubscriber;
 
 use Drupal\alshaya_seo\Event\MetaImageRenderEvent;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
@@ -19,13 +18,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  * @package Drupal\alshaya_super_category\EventSubscriber
  */
 class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface {
-
-  /**
-   * Route match.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
 
   /**
    * Language manager.
@@ -58,8 +50,6 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
   /**
    * DefaultMetaImageEventSubscriber constructor.
    *
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   Route Match Object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $productCategoryTree
@@ -69,8 +59,7 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
    */
-  public function __construct(RouteMatchInterface $route_match, LanguageManagerInterface $language_manager, ProductCategoryTree $productCategoryTree, ThemeManagerInterface $theme_manager, ConfigFactoryInterface $config_factory) {
-    $this->routeMatch = $route_match;
+  public function __construct(LanguageManagerInterface $language_manager, ProductCategoryTree $productCategoryTree, ThemeManagerInterface $theme_manager, ConfigFactoryInterface $config_factory) {
     $this->languageManager = $language_manager;
     $this->productCategoryTree = $productCategoryTree;
     $this->themeManager = $theme_manager;

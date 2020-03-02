@@ -69,11 +69,7 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
    *   Dispatched Event.
    */
   public function setProductMetaImage(MetaImageRenderEvent $event) {
-    if ($this->routeMatch->getRouteName() !== 'entity.node.canonical') {
-      return;
-    }
-
-    if (($node = $this->routeMatch->getParameter('node')) && $node instanceof NodeInterface) {
+    if (($node = $event->getContext()) && $node instanceof NodeInterface) {
       if ($node->bundle() == 'acq_product') {
         $sku = $this->skuManager->getSkuForNode($node);
         $sku_entity = SKU::loadFromSku($sku);

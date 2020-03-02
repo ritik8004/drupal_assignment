@@ -160,7 +160,7 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
       switch ($name) {
         case 'meta_image':
           // Dispatch the MetaImageRender event to set the meta image.
-          $event = new MetaImageRenderEvent();
+          $event = new MetaImageRenderEvent(\Drupal::routeMatch());
           // Get the event_dispatcher service and dispatch the event.
           \Drupal::service('event_dispatcher')->dispatch(MetaImageRenderEvent::EVENT_NAME, $event);
           if ($event && $event instanceof MetaImageRenderEvent) {

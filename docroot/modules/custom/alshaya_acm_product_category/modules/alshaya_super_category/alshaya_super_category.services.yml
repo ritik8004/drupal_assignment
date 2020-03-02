@@ -24,7 +24,6 @@ services:
   alshaya_super_category.super_category_meta_image_subscriber:
     class: Drupal\alshaya_super_category\EventSubscriber\SuperCategoryMetaImageEventSubscriber
     arguments:
-      - '@current_route_match'
       - '@language_manager'
       - '@alshaya_acm_product_category.product_category_tree'
       - '@theme.manager'
