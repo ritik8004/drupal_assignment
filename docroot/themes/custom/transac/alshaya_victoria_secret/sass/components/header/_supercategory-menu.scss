@@ -54,6 +54,18 @@
           background-size: contain;
         }
       }
+
+      &.brand-swimwear {
+        &::after {
+          background: url("../imgs/logos/super-category/vs-swim-logo.svg?h1yOhx") no-repeat center;
+          background-size: contain;
+        }
+
+        &:hover::after {
+          background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
+          background-size: contain;
+        }
+      }
     }
 
     .active {
@@ -65,6 +77,11 @@
 
       .brand-beauty::after {
         background: url("../imgs/logos/super-category/beauty-active.svg?4nGDK4") no-repeat center;
+        background-size: contain;
+      }
+
+      &.brand-swimwear::after {
+        background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
         background-size: contain;
       }
     }
