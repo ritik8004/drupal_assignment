@@ -171,4 +171,14 @@
       }
     }
   }
+
+  .filter-fixed-top {
+    .sticky-filter-wrapper {
+      .site-brand-home a {
+        img {
+          max-height: calc(100% - 1.75rem);
+        }
+      }
+    }
+  }
 }
