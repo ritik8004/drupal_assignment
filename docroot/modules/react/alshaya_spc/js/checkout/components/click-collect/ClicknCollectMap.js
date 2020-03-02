@@ -27,11 +27,10 @@ class ClicknCollectMap extends React.Component {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
     window.spcMap.googleMap = this.createGoogleMap();
+    this.googleMap.setCurrentMap(window.spcMap.googleMap);
+    this.googleMap.setCenter();
     if (this.props.markers) {
       this.placeMarkers();
-    }
-    else {
-      this.googleMap.setCenter();
     }
   }
 
@@ -50,6 +49,7 @@ class ClicknCollectMap extends React.Component {
    * Place markers on map.
    */
   placeMarkers = async () => {
+    this.googleMap.removeMapMarker();
     let { markers } = this.props;
     if (!markers || !markers.length) {
       return;
@@ -57,7 +57,6 @@ class ClicknCollectMap extends React.Component {
 
     // Initiate bounds object.
     this.googleMap.setCurrentMap(window.spcMap.googleMap);
-    this.googleMap.removeMapMarker();
     window.spcMap.googleMap.bounds = new google.maps.LatLngBounds();
     let self = this;
     await markers.forEach(function (store, index) {
@@ -87,8 +86,7 @@ class ClicknCollectMap extends React.Component {
    * Create google map.
    */
   createGoogleMap = () => {
-    let map = this.googleMap.initMap(this.googleMapRef.current);
-    return map;
+    return this.googleMap.initMap(this.googleMapRef.current);
   };
 
   render() {

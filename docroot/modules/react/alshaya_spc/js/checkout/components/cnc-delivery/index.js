@@ -2,7 +2,7 @@ import React from "react";
 import Popup from "reactjs-popup";
 import { checkoutAddressProcess } from "../../../utilities/checkout_address_process";
 import Loading from "../../../utilities/loading";
-let ClickCollect = React.lazy(() => import("../click-collect"));
+import ClickCollectContainer from "../click-collect";
 
 class ClicknCollectDeiveryInfo extends React.Component {
   _isMounted = true;
@@ -85,7 +85,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
           <div className="contact-name">
             {shipping_address.firstname} {shipping_address.lastname}
           </div>
-          <div className="contact-telephone">{shipping_address.telephone}</div>
+          <div className="contact-telephone">+{drupalSettings.country_mobile_code} {shipping_address.telephone}</div>
           <div
             className="spc-change-address-link"
             onClick={() => this.openModal(true)}
@@ -98,8 +98,11 @@ class ClicknCollectDeiveryInfo extends React.Component {
           onClose={this.closeModal}
           closeOnDocumentClick={false}
         >
-          <React.Suspense fallback={<Loading/>}>
-            <ClickCollect openSelectedStore={this.state.showSelectedStore}/>
+          <React.Suspense fallback={<Loading />}>
+            <ClickCollectContainer
+              openSelectedStore={this.state.showSelectedStore}
+              closeModal={this.closeModal}
+            />
           </React.Suspense>
         </Popup>
       </div>
