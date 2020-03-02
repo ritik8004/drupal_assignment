@@ -1,6 +1,5 @@
 import React from 'react';
 
-import axios from 'axios';
 import FilterList from '../../../utilities/filter-list';
 
 export default class AreaSelect extends React.Component {
@@ -55,23 +54,21 @@ export default class AreaSelect extends React.Component {
    * Get the areas list.
    */
   getAreasList = () => {
-    return axios.get('parent-areas')
-    .then(response => {
-      let data = new Array();
-      Object.entries(response.data).forEach(([key, term]) => {
-        data[key] = {
-          value: key,
-          label: term,
+    let data = new Array();
+    let areas = document.querySelectorAll('[data-list=areas-list]');
+    if (areas.length > 0) {
+      for (let i = 0; i < areas.length; i++) {
+        let id = areas[i].getAttribute('data-parent-id');
+        data[id] = {
+          value: id,
+          label: areas[i].getAttribute('data-parent-label'),
         };
-      });
+      }
 
       this.setState({
         areas: data
       });
-    })
-    .catch(error => {
-    // Processing of error here.
-    });
+    }
   }
 
   // Handle change of 'area_parent' list.
@@ -80,16 +77,7 @@ export default class AreaSelect extends React.Component {
       current_option: selectedOption.value
     });
 
-    // Get child areas list.
-    var api_url = 'area-list/' + selectedOption.value;
-    return axios.get(api_url)
-      .then(response => {
-        // Refresh child select list.
-        this.props.areasUpdate(response.data);
-    })
-    .catch(error => {
-      // Processing of error here.
-    });
+    this.props.areasUpdate(selectedOption.value);
   };
 
   render() {

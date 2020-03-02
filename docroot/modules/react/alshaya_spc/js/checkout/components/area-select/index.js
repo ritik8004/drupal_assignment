@@ -1,6 +1,5 @@
 import React from 'react';
 
-import axios from 'axios';
 import FilterList from '../../../utilities/filter-list';
 
 export default class AreaSelect extends React.Component {
@@ -22,6 +21,15 @@ export default class AreaSelect extends React.Component {
 
   componentDidMount() {
     this.getAreaList();
+
+    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+  }
+
+  updateAreaFromGoogleMap = (e) => {
+    let data = e.detail.data();
+    this.setState({
+      current_option: data.id,
+    });
   }
 
   /**
@@ -56,23 +64,21 @@ export default class AreaSelect extends React.Component {
   getAreaList = () => {
     // If no area parent to select.
     if (window.drupalSettings.address_fields.area_parent === undefined) {
-      return axios.get('areas')
-      .then(response => {
-        let data = new Array();
-        Object.entries(response.data).forEach(([key, term]) => {
-          data[key] = {
-            value: key,
-            label: term,
+      let data = new Array();
+      let areas = document.querySelectorAll('[data-list=areas-list]');
+      if (areas.length > 0) {
+        for (let i = 0; i < areas.length; i++) {
+          let id = areas[i].getAttribute('data-id');
+          data[id] = {
+            value: id,
+            label: areas[i].getAttribute('data-label'),
           };
-        });
+        }
 
         this.setState({
           areas: data
         });
-      })
-      .catch(error => {
-      // Processing of error here.
-      });
+      }
     }
   };
 
@@ -93,11 +99,11 @@ export default class AreaSelect extends React.Component {
         <label>{this.props.field.label}</label>
         {
           (this.state.current_option !== undefined && this.state.current_option.length !== 0) ? (
-          <div className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
+          <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
             {options[this.state.current_option]['label']}
           </div>
         ) : (
-          <div className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
+          <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
             {Drupal.t('Select area')}
           </div>
         )}
@@ -111,7 +117,7 @@ export default class AreaSelect extends React.Component {
             panelTitle={panelTitle}
           />
         }
-        <input type='hidden' name={this.props.field_key} value={this.state.current_option}/>
+        <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={this.state.current_option}/>
         <div id={this.props.field_key + '-error'}/>
       </div>
     );

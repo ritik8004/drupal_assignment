@@ -1,4 +1,15 @@
 /**
+ * Prepare mapping of the google geocode.
+ */
+export const mapAddressMap = function () {
+  let mapping = [];
+  mapping['street'] = ['route', 'street_number'];
+  mapping['address_block_segment'] = ['park', 'point_of_interest', 'establishment', 'premise'];
+  mapping['area'] = ['sublocality_level_1', 'administrative_area_level_1'];
+  return mapping;
+}
+
+/**
  * Get the map from window object.
  *
  * This is stored in window object in <GoogleMap:componentDidMount>
@@ -51,79 +62,82 @@ export const createInfoWindow = function (content) {
 }
 
 /**
-  * Get the city.
-  *
-  * @param addressArray
-  * @return {string}
-  */
-export const getCity = function (addressArray) {
-  let city = '';
-  for( let i = 0; i < addressArray.length; i++ ) {
-    if ( addressArray[ i ].types[0] && 'administrative_area_level_2' === addressArray[ i ].types[0] ) {
-      city = addressArray[ i ].long_name;
-    }
-  }
-
-  return city;
-}
-
-/**
-  * Get the area.
-  *
-  * @param addressArray
-  * @return {string}
-  */
-export const getArea = function (addressArray) {
-  let area = '';
-  for( let i = 0; i < addressArray.length; i++ ) {
-    if ( addressArray[ i ].types[0]  ) {
-      for ( let j = 0; j < addressArray[ i ].types.length; j++ ) {
-        if ( 'sublocality_level_1' === addressArray[ i ].types[j] || 'locality' === addressArray[ i ].types[j] ) {
-          area = addressArray[ i ].long_name;
+ * Get value from google geocode for address form.
+ *
+ * @param {*} addressArray
+ * @param {*} key
+ */
+export const getAddressFieldVal = function (addressArray, key) {
+  let fieldVal = '';
+  const addressMap = mapAddressMap();
+  for (let i = 0; i < addressArray.length; i++) {
+    if (addressArray[i].types[0]) {
+      for (let j = 0; j < addressArray[i].types.length; j++) {
+        // If mapping set.
+        if (addressMap[key] !== undefined) {
+          for (let k = 0; k < addressMap[key].length; k++) {
+            if (addressArray[i].types[j] === addressMap[key][k]) {
+              return addressArray[i].long_name;
+            }
+          }
         }
       }
     }
   }
 
-  return area;
+  return fieldVal;
 }
 
 /**
-  * Get the state.
-  *
-  * @param addressArray
-  * @return {string}
-  */
- export const getState = function (addressArray) {
-  let state = '';
-  for( let i = 0; i < addressArray.length; i++ ) {
-    for( let i = 0; i < addressArray.length; i++ ) {
-      if ( addressArray[ i ].types[0] && 'administrative_area_level_1' === addressArray[ i ].types[0] ) {
-        state = addressArray[ i ].long_name;
+ * Fill the address form based on geocode info.
+ *
+ * @param {*} address
+ */
+export const fillValueInAddressFromGeocode = function (address) {
+  Object.entries(window.drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      let val = getAddressFieldVal(address, field['key']).trim();
+      // Some handling for select list fields (areas/city).
+      if (field.key === 'area'
+        && val.length > 0) {
+        let areaVal = deduceAreaVal(val, field.key);
+        if (areaVal !== null) {
+          var event = new CustomEvent('updateAreaOnMapSelect', {
+            bubbles: true,
+            detail: {
+              data: () => areaVal
+            }
+          });
+          document.dispatchEvent(event);
+        }
+      }
+      else {
+        document.getElementById(key).value = val;
       }
     }
-  }
-
-  return state;
+  );
 }
 
 /**
-  * Get the block.
-  *
-  * @param addressArray
-  * @return {string}
-  */
- export const getBlock = function (addressArray) {
-  let block = '';
-  for( let i = 0; i < addressArray.length; i++ ) {
-    if ( addressArray[ i ].types[0]  ) {
-      for ( let j = 0; j < addressArray[ i ].types.length; j++ ) {
-        if ( 'sublocality_level_2' === addressArray[ i ].types[j] ) {
-          block = addressArray[ i ].long_name;
+ * Deduce area name from available areas based from google.
+ *
+ * @param {*} area
+ */
+export const deduceAreaVal = function (area) {
+  let areas = document.querySelectorAll('[data-list=areas-list]');
+  if (areas.length > 0) {
+    for (let i = 0; i < areas.length; i++) {
+      let areaLable = areas[i].getAttribute('data-label');
+      // If it matches with some value.
+      if (areaLable.indexOf(area) !== -1 ||
+      area.indexOf(areaLable) !== -1) {
+        return {
+          id: areas[i].getAttribute('data-id'),
+          label: areaLable
         }
       }
     }
   }
 
-  return block;
+  return null;
 }

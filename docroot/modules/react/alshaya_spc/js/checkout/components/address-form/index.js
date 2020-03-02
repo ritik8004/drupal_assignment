@@ -2,10 +2,9 @@ import React from "react";
 import GoogleMap from "../../../utilities/map/GoogleMap";
 import {
   createMarker,
-  getArea,
-  getBlock,
   getMap,
-  removeAllMarkersFromMap
+  removeAllMarkersFromMap,
+  fillValueInAddressFromGeocode
 } from "../../../utilities/map/map_utils";
 import SectionTitle from "../../../utilities/section-title";
 import DynamicFormField from "../dynamic-form-field";
@@ -49,17 +48,24 @@ export default class AddressForm extends React.Component {
    * of the parent area.
    */
   refreshAreas = area_list => {
-    let data = new Array();
-    Object.entries(area_list).forEach(([tid, tname]) => {
-      data[tid] = {
-        value: tid,
-        label: tname
-      };
-    });
+    let areas = document.querySelectorAll('[data-list=areas-list]');
+    if (areas.length > 0) {
+      let data = new Array();
+      for (let i = 0; i < areas.length; i++) {
+        let id = areas[i].getAttribute('data-id');
+        let parent_id = areas[i].getAttribute('data-parent-id');
+        if (parent_id === id) {
+          data[id] = {
+            value: id,
+            label: areas[i].getAttribute('data-label'),
+          };
+        }
+      }
 
-    this.setState({
-      area_list: data
-    });
+      this.setState({
+        area_list: data
+      });
+    }
   };
 
   /**
@@ -76,11 +82,8 @@ export default class AddressForm extends React.Component {
           if (results[0]) {
             // Use this address info.
             const address = results[0].address_components;
-            let area = getArea(address);
-            let block = getBlock(address);
-            // Fill the address form.
-            document.getElementById("address_line2").value = area;
-            document.getElementById("locality").value = block;
+            // Fill the info in address form.
+            fillValueInAddressFromGeocode(address);
             // Remove all markers from the map.
             removeAllMarkersFromMap();
             // Pan the map to location.

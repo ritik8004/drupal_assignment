@@ -84,6 +84,20 @@ export default class HomeDeliveryInfo extends React.Component {
 
   render() {
     const address = this.props.cart.cart.shipping_address;
+    let addressData = [];
+    Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
+      let fillVal = address[val.key];
+      // Handling for area field.
+      if (key === 'administrative_area') {
+        const area = document.querySelectorAll('[data-id="' + fillVal + '"]');
+        // If area available only then use.
+        if (area.length > 0) {
+          fillVal = area[0].getAttribute('data-label')
+        }
+      }
+      addressData.push(<span key={key}>{fillVal}, </span>)
+    })
+
     return (
       <div className="delivery-information-preview">
         <div className="spc-delivery-customer-info">
@@ -91,8 +105,7 @@ export default class HomeDeliveryInfo extends React.Component {
             {address.firstname} {address.lastname}
           </div>
           <div className="delivery-address">
-            {address.address_block_segment}, {address.address_building_segment},{" "}
-            {address.address_apartment_segment}, {address.street}
+            {addressData}
           </div>
           <div className="spc-address-form-edit-link" onClick={this.openModal}>
             {Drupal.t("Change")}

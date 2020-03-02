@@ -130,6 +130,7 @@ class AlshayaSpcCustomerHelper {
           ->load($address_data[$profile->id()]['administrative_area']);
         if ($term) {
           $address_data[$profile->id()]['administrative_area'] = $term->get('field_location_id')->first()->getValue()['value'];
+          $address_data[$profile->id()]['area_label'] = $term->label();
         }
       }
 

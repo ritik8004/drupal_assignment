@@ -1,0 +1,10 @@
+<div>
+    <div id='spc-checkout'></div>
+    {% if areas %}
+        {% for location_id, area in areas %}
+            {% for id, name in area.areas %}
+                <input data-list='areas-list' type='hidden' data-parent-label='{{ area.name }}' data-parent-id={{ location_id }} data-id={{ id }} data-label='{{ name }}'  />
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+</div>
