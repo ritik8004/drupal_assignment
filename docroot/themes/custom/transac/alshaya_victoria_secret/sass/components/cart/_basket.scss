@@ -1,3 +1,4 @@
+# File comment - to test fe validation in travis.
 .alias--cart {
   .edit-checkout,
   #edit-actions-top .checkout-top-button {
@@ -357,7 +358,8 @@
     top: 3.1rem;
   }
 
-  .notification, .error {
+  .notification,
+  .error {
     .col-1 {
       width: 4.875rem;
     }
