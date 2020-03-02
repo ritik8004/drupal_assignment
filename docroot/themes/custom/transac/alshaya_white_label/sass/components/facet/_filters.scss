@@ -1,3 +1,29 @@
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
+  ul {
+    display: none;
+    position: absolute;
+    top: 2.25rem;
+    background: $plp_facet_active_bg;
+    z-index: 2;
+    min-width: 15.5rem;
+    padding: 1.125rem 0;
+    border: 1px solid $plp_facet_border;
+
+    @include breakpoint($desktop) {
+      max-height: 35rem;
+      overflow-y: auto;
+    }
+  }
+
+  .c-accordion__title,
+  .c-collapse__title {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+}
+
 .c-facet.c-accordion,
 .c-facet.c-collapse-item {
   float: $left;
@@ -766,32 +792,6 @@ body {
           #{$right}: 1rem;
         }
       }
-    }
-  }
-}
-
-.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
-.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
-  ul {
-    display: none;
-    position: absolute;
-    top: 2.25rem;
-    background: $plp_facet_active_bg;
-    z-index: 2;
-    min-width: 15.5rem;
-    padding: 1.125rem 0;
-    border: 1px solid $plp_facet_border;
-
-    @include breakpoint($desktop) {
-      max-height: 35rem;
-      overflow-y: auto;
-    }
-  }
-
-  .c-accordion__title,
-  .c-collapse__title {
-    @include breakpoint($upto-desktop) {
-      display: none;
     }
   }
 }

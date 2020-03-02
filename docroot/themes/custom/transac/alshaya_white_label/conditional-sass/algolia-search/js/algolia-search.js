@@ -65,6 +65,11 @@
           stickyAlgoliaHeader();
         }
       }
+      if ($(window).width() >= 768 && $(window).width() <= 1024) {
+        setTimeout(function() {
+          showAlgoliaSearchBar();
+        }, 100);
+      }
     }
   };
 
