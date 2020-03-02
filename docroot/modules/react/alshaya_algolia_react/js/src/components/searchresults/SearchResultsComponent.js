@@ -114,6 +114,7 @@ const SearchResultsComponent = props => {
                       'field_category.lvl0',
                       'field_category.lvl1',
                     ]}
+                    facetLevel={1}
                   />
                 </div>
               )}
