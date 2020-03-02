@@ -16,6 +16,17 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add config to enable/disable quantity limit.
+ */
+function alshaya_acm_update_8013() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_acm.settings'], 'alshaya_acm');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete unused image styles.
  * Clear all cache tags related to oauth2_token.
  */

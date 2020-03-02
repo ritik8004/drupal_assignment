@@ -15,7 +15,9 @@ set classes = [
         {% else %}
           <div id="product-zoom-container"></div>
         {% endif %}
-        <div class="order-quantity-limit-message mobile-only"></div>
+        {% if quantity_limit_enabled == true %}
+          <div class="order-quantity-limit-message mobile-only"></div>
+        {% endif %}
         {% if show_crosssell_as_matchback == false %}
           {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
         {% endif %}
@@ -76,7 +78,9 @@ set classes = [
           <div class="mobile-content-wrapper">
             <div class="basic-details-wrapper">
               {{ content.field_skus }}
-              <div class="order-quantity-limit-message"></div>
+              {% if quantity_limit_enabled == true %}
+                <div class="order-quantity-limit-message"></div>
+              {% endif %}
             </div>
 
             {% block shortDescBlock %}
