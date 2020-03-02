@@ -15,13 +15,15 @@
     }
   }
 
-  .all-filters {
+  .all-filters-algolia {
     .filter__foot {
       text-transform: uppercase;
     }
 
-    .filter-sort-title {
-      text-transform: capitalize;
+    .filter__head {
+      .filter-sort-title {
+        text-transform: capitalize;
+      }
     }
   }
 }

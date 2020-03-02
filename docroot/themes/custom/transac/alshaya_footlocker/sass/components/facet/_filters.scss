@@ -27,3 +27,13 @@
     }
   }
 }
+
+.c-plp .block-facets-summary-blockfilter-bar {
+  .filter-list-label {
+    text-transform: capitalize;
+  }
+
+  ul li a span.facet-item__value {
+    text-transform: uppercase !important;
+  }
+}
