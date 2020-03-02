@@ -70,6 +70,8 @@ export const placeOrder = function (cart_id, payment_method) {
       (response) => {
         // Remove cart info from storage.
         removeCartFromStorage();
+
+        window.location = Drupal.url('checkout/confirmation');
       },
       (error) => {
         // Processing of error here.

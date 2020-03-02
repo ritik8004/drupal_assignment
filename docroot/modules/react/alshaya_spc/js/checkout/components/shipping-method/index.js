@@ -1,6 +1,10 @@
 import React from 'react';
 
 import PriceElement from "../../../utilities/special-price/PriceElement";
+import {
+  addShippingInCart, removeFullScreenLoader,
+  showFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 export default class ShippingMethod extends React.Component {
 
@@ -12,11 +16,18 @@ export default class ShippingMethod extends React.Component {
   }
 
   changeShippingMethod = (method) => {
+    if (this.state.selectedOption === method.method_code) {
+      return;
+    }
+
+    showFullScreenLoader();
+
     this.setState({
       selectedOption: method.method_code
     });
 
     document.getElementById('shipping-method-' + method.method_code).checked = true;
+
     var event = new CustomEvent('changeShippingMethod', {
       bubbles: true,
       detail: {
@@ -24,6 +35,19 @@ export default class ShippingMethod extends React.Component {
       }
     });
     document.dispatchEvent(event);
+
+    let data = {};
+    if (window.drupalSettings.user.uid > 0) {
+      data['address_id'] = this.props.cart.cart.shipping_address.customer_address_id;
+      data['country_id'] = window.drupalSettings.country_code;
+    }
+    else {
+      // @TODO: Do the same for anonymous users.
+    }
+
+    let cart_data = addShippingInCart('update shipping', data);
+    this.props.refreshCart(cart_data);
+    removeFullScreenLoader();
   };
 
   render () {

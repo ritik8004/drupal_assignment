@@ -415,8 +415,13 @@ class CartController {
   protected function createCart() {
     $this->loadCartFromSession();
     if (!empty($this->sessionCartInfo['cart_id'])) {
-      return $this->sessionCartInfo['cart_id'];
+      // Validate the cart again to ensure session data is not corrupt.
+      $data = $this->cart->getCart($this->sessionCartInfo['cart_id']);
+      if (empty($data['error'])) {
+        return $this->sessionCartInfo['cart_id'];
+      }
     }
+
     $this->session->remove(self::STORAGE_KEY);
     $this->sessionCartInfo = [];
     return $this->cart->createCart();
@@ -604,6 +609,12 @@ class CartController {
     }
 
     $result = $this->cart->placeOrder($request_content['cart_id'], $request_content['data']);
+    if (is_string($result)) {
+      $this->session->remove(self::STORAGE_KEY);
+      $last_order = str_replace('"', '', $result);
+      $this->session->set(OrdersController::SESSION_STORAGE_KEY, (int) $last_order);
+    }
+
     return new JsonResponse($result);
   }
 
@@ -672,7 +683,7 @@ class CartController {
   /**
    * Associate cart with active user.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|null
    *   Json response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -681,6 +692,10 @@ class CartController {
     $this->loadCartFromSession(TRUE);
 
     try {
+      if (empty($this->sessionCartInfo['cart_id'])) {
+        return NULL;
+      }
+
       $customer = $this->drupal->getSessionCustomerInfo();
 
       if (empty($customer)) {

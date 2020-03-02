@@ -37,3 +37,8 @@ associate_cart:
     path: /associate-cart
     controller: App\Controller\CartController::associateCart
     methods: GET
+
+get_order:
+    path: /order/{order_id}
+    controller: App\Controller\OrdersController::getOrder
+    methods: GET
