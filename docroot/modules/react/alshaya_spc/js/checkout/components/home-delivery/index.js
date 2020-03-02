@@ -7,6 +7,9 @@ import {
   checkoutAddressProcess,
   getAddressPopupClassName
 } from "../../../utilities/checkout_address_process";
+import {
+  showFullScreenLoader
+} from "../../../utilities/checkout_util";
 
 let AddressContent = React.lazy(() => import("../address-popup-content"));
 
@@ -27,13 +30,15 @@ export default class HomeDeliveryInfo extends React.Component {
 
   processAddress = e => {
     const { cart } = this.props.cart;
+    // Show the loader.
+    showFullScreenLoader();
     checkoutAddressProcess(e, cart);
   };
 
   componentDidMount() {
     this._isMounted = true;
     document.addEventListener(
-      "refreshCartOnAddress",
+      'refreshCartOnAddress',
       this.eventListener,
       false
     );
@@ -62,8 +67,7 @@ export default class HomeDeliveryInfo extends React.Component {
   formatAddressData = (address) => {
     let formatted_address = {
       'static': {
-        'firstname': address.firstname,
-        'lastname': address.lastname,
+        'fullname': address.firstname + ' ' + address.lastname,
         'email': address.email,
         'telephone': address.telephone
       }
@@ -100,14 +104,12 @@ export default class HomeDeliveryInfo extends React.Component {
           closeOnDocumentClick={false}
           className={getAddressPopupClassName()}
         >
-          <a className="close" onClick={this.closeModal}>
-            &times;
-          </a>
           <React.Suspense fallback={<Loading/>}>
             <a className="close" onClick={this.closeModal}>
               &times;
             </a>
             <AddressContent
+              cart={this.props.cart}
               processAddress={this.processAddress}
               showEmail={window.drupalSettings.user.uid === 0}
               default_val = {

@@ -24,7 +24,7 @@ export default class GoogleMap extends React.Component {
 
     // This can be called conditionally from props
     // if map points for current location.
-    this.setCurrentLocationCoords();
+    data[0] = this.setCurrentLocationCoords();
 
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
@@ -43,21 +43,6 @@ export default class GoogleMap extends React.Component {
       this.googleMap.addListener('click', this.onMapClick);
     }
 
-    // If there are multiple markers.
-    // This will be the case of CnC and thus can be used
-    // conditionally and can be determined by props.
-    for (var i = 0; i < data.length; i++) {
-      let marker = createMarker({lat: data[i]['lat'], lng: data[i]['lng']}, this.googleMap);
-      let infowindow = createInfoWindow(data[i]['content']);
-      // When marker is clicked.
-      marker.addListener('click', function () {
-        infowindow.open(this.googleMap, marker);
-      });
-
-      // Add marker to the array.
-      this.markers.push(marker);
-    }
-
     // Storing all markers in global so that can be accessed from anywhere.
     window.spcMarkers = this.markers;
 
@@ -73,21 +58,22 @@ export default class GoogleMap extends React.Component {
    * Get current location coordinates.
    */
   setCurrentLocationCoords = () => {
-    // This can be passed from props if map needs
-    // to be centered around current location.
-    let centerAroundCurrentLocation = true;
-    if (centerAroundCurrentLocation) {
-      // If location access is enabled by user.
-      if (navigator && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          let currentCoords = {
-            'lat': pos.coords.latitude,
-            'lng': pos.coords.longitude,
-          };
+    // If location access is enabled by user.
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        let currentCoords = {
+          'lat': pos.coords.latitude,
+          'lng': pos.coords.longitude,
+        };
 
-          this.panMapToGivenCoords(currentCoords);
-        });
-      }
+        this.panMapToGivenCoords(currentCoords);
+        return;
+      });
+    }
+
+    return {
+      'lat': 29.3117,
+      'lng': 47.4818,
     }
   }
 

@@ -1,3 +1,5 @@
+@import "../../../alshaya_white_label/sass/config/_colors.scss";
+
 /* ------- 1. Brand Colors ------- */
 $peacock-blue: #005699;
 $cool-blue: #a8c6e7;
@@ -9,6 +11,7 @@ $warm-grey-three: #f2f2f2;
 $warm-grey-two: #dadada;
 $warm-grey-one: #777;
 $black: #333;
+$bbw-black-two: #666;
 $success-green: #39b54a;
 $info-blue: #4285f4;
 $tomato: #e6591b;
@@ -44,9 +47,7 @@ $primary_form_link: $peacock-blue;
 $primary_input: $black;
 $primary_input_label: $warm-grey-one;
 $primary_input_border: $warm-grey-one; // Global form input border
-$primary_input_disabled: $greyish;
 $primary_input_focus_border: $peacock-blue;
-$primary_input_inline_error: $red-error;
 
 // Dropdown.
 $primary_dropdown_bg: $white;
@@ -56,7 +57,6 @@ $primary_dropdown_text: $black;
 $primary_dropdown_border: $warm-grey-two;
 $primary_dropdown_option_hover: $warm-grey-three;
 $primary_dropdown_option_border: $warm-grey-two;
-$primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
 
 /* ------- 3. Secondary color  ----- */
@@ -253,7 +253,6 @@ $deliverybanner_border: $peacock-blue;
 $deliverybanner_shadow: transparent;
 
 //3. Footer
-$footer_bg: $white-five;
 $footer_border_top: $peacock-blue;
 $footer_title_h3: $black;
 $footer_link_mobile: $warm-grey-one;
@@ -595,6 +594,13 @@ $cart-free-gifts-title: $black;
 $cart-free-gifts-label-background: $peacock-blue;
 
 //Algolia search bar.
+$algolia-input-text: $bbw-black-two;
+$algolia-input-box-shadow: $warm-grey-three;
+$algolia-input-placeholder-text: $warm-grey-one;
+$algolia-auto-complete-border: $warm-grey-two;
+$algolia-search-suggestion-hover-bg: $warm-grey-three;
+$algolia-search-clear-text-icon: $peacock-blue;
+$algolia-trending-title-text: $peacock-blue;
 $algolia-react-search-page-title: $page_title;
 $algolia-react-highlighted-bg: $peacock-blue;
 $algolia-react-progressbar-fill: $peacock-blue;

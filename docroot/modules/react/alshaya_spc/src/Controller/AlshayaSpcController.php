@@ -192,7 +192,8 @@ class AlshayaSpcController extends ControllerBase {
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'user_name' => $user_name,
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
-          'cnc' => [
+          'map' => [
+            'center' => $store_finder_config->get('country_center'),
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
             'map_marker' => [
               'icon' => $store_finder_config->get('marker.url'),

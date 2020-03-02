@@ -17,6 +17,13 @@ export default class ShippingMethod extends React.Component {
     });
 
     document.getElementById('shipping-method-' + method.method_code).checked = true;
+    var event = new CustomEvent('changeShippingMethod', {
+      bubbles: true,
+      detail: {
+        data: method
+      }
+    });
+    document.dispatchEvent(event);
   };
 
   render () {

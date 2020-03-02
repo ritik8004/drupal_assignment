@@ -62,3 +62,21 @@ const emptyCustomerCart = () => {
   var event = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => empty_cart } });
   document.dispatchEvent(event);
 }
+
+export const extractFirstAndLastName = (name) => {
+  var splitName = name.split(' ');
+  // Check if the name has space in string.
+  // if user has enters only firstname lastname should be empty.
+  return {
+    firstname: splitName[0],
+    lastname: splitName[1] ? name.substring(name.indexOf(' ') + 1) : '',
+  }
+};
+
+export const makeFullName = (fname = '', lname = '') => {
+  if (fname.trim() === '' || lname.trim() === '') {
+    return fname.trim().concat(lname.trim());
+  }
+
+  return `${fname} ${lname}`;
+};

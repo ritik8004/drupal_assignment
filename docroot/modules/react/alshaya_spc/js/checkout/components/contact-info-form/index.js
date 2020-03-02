@@ -8,17 +8,27 @@ import {
 } from "../../../utilities/checkout_util";
 import FixedFields from "../fixed-fields";
 import { i18nMiddleWareUrl } from "../../../utilities/i18n_url";
+import { validateContactInfo } from "../../../utilities/checkout_address_process";
+import { extractFirstAndLastName } from "../../../utilities/cart_customer_util";
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
 
   handleSubmit = (e, store) => {
     e.preventDefault();
+
+    let notValidAddress = validateContactInfo(e, false);
+    if (notValidAddress) {
+      return;
+    }
+
     showFullScreenLoader();
+    let name = e.target.elements.fullname.value.trim();
+    let { firstname, lastname } = extractFirstAndLastName(name);
     let form_data = {
       static: {
-        firstname: e.target.elements.fname.value,
-        lastname: e.target.elements.lname.value,
+        firstname: firstname,
+        lastname: lastname,
         email: e.target.elements.email.value,
         telephone: e.target.elements.mobile.value,
         country_id: drupalSettings.country_code
@@ -30,7 +40,7 @@ class ContactInfoForm extends React.Component {
         rnc_available: store.rnc_available,
         cart_address: store.cart_address
       },
-      carrier_info: { ...drupalSettings.cnc.cnc_shipping }
+      carrier_info: { ...drupalSettings.map.cnc_shipping }
     };
 
     this.processShippingUpdate(form_data);

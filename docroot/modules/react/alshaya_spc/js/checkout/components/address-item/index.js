@@ -10,6 +10,10 @@ import {
 import {
   addShippingInCart
 } from '../../../utilities/checkout_util';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader
+} from "../../../utilities/checkout_util";
 import EditAddressSVG from "../edit-address-svg";
 
 export default class AddressItem extends React.Component {
@@ -37,11 +41,13 @@ export default class AddressItem extends React.Component {
    * When user changes address.
    */
   changeDefaultAddress = (address) => {
-    document.getElementById('address-' + address['address_id']).checked = true;
+    // Show loader.
+    showFullScreenLoader();
     let addressList = updateUserDefaultAddress(address['address_id']);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
-        if (response.status === true) {
+        if (response.status === 200 && response.data.status === true) {
+          document.getElementById('address-' + address['address_id']).checked = true;
           // Refresh the address list.
           let data = {
             'address_id': address['address_mdc_id'],
@@ -50,25 +56,29 @@ export default class AddressItem extends React.Component {
           var cart_info = addShippingInCart('update shipping', data);
           if (cart_info instanceof Promise) {
             cart_info.then((cart_result) => {
-              // If cart id not available, no need to process.
-              if (cart_result.cart_id === null) {
-                return;
-              }
-
-              let cart_data = {
-                'cart': cart_result
-              }
-              var event = new CustomEvent('refreshCartOnAddress', {
-                bubbles: true,
-                detail: {
-                  data: () => cart_data
+              // Remove loader.
+              removeFullScreenLoader();
+              // If no error.
+              if (cart_result.error === undefined) {
+                let cart_data = {
+                  'cart': cart_result
                 }
-              });
-              document.dispatchEvent(event);
+                var event = new CustomEvent('refreshCartOnAddress', {
+                  bubbles: true,
+                  detail: {
+                    data: () => cart_data
+                  }
+                });
+                document.dispatchEvent(event);
 
-              this.props.refreshAddressList(response.data);
+                this.props.refreshAddressList(response.data);
+              }
             });
           }
+        }
+        else {
+          // Remove the loader.
+          removeFullScreenLoader();
         }
       });
     }
@@ -78,12 +88,13 @@ export default class AddressItem extends React.Component {
    * Deletes the user address.
    */
   deleteAddress = (id) => {
-    // Add loading class.
-    document.getElementById('address-delete-' + id).classList.add('loading');
+    // Show loader.
+    showFullScreenLoader()
     let addressList = deleteUserAddress(id);
     if (addressList instanceof Promise) {
       addressList.then((response) => {
-        if (response.status === true) {
+        removeFullScreenLoader();
+        if (response.status === 200 && response.data.status === true) {
           // Refresh the address list.
           this.props.refreshAddressList(response.data);
         }
@@ -100,6 +111,8 @@ export default class AddressItem extends React.Component {
    * Process the address form data on sumbit.
    */
   processAddress = (e) => {
+    // Show loader.
+    showFullScreenLoader();
     addEditAddressToCustomer(e);
   };
 
@@ -115,8 +128,7 @@ export default class AddressItem extends React.Component {
     })
 
     editAddressData['static'] = {};
-    editAddressData['static']['firstname'] = address['given_name'];
-    editAddressData['static']['lastname'] = address['family_name'];
+    editAddressData['static']['fullname'] = address['given_name'] + ' ' + address['family_name'];
     editAddressData['static']['telephone'] = mob_default_val;
     editAddressData['static']['address_id'] = address['address_id'];
 

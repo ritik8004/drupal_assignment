@@ -20,39 +20,50 @@ export default class DeliveryInformation extends React.Component {
     });
   }
 
-  showEmpty = (cart) => {
-    let delivery_type = (typeof cart.cart.delivery_type !== 'undefined')
-      ? cart.cart.delivery_type
-      : 'hd';
-
-    let showEmpty = true;
-    if (delivery_type === 'hd' && cart.cart.shipping_address !== null) {
-      showEmpty = false;
-    } else if (delivery_type === 'cnc' && typeof cart.cart.store_info !== 'undefined') {
-      showEmpty = false;
+  showEmpty = (deliveryType, cart) => {
+    if (deliveryType === 'hd' && cart.cart.shipping_address !== null) {
+      return false;
+    } else if (deliveryType === 'cnc' && typeof cart.cart.store_info !== 'undefined') {
+      return false;
     }
-    return showEmpty;
+    return true;
+  }
+
+  getDeliveryMethodToShow = (cart) => {
+    if (typeof cart.delivery_type !== 'undefined') {
+      return cart.delivery_type;
+    }
+    else if (typeof cart.cart.delivery_type !== 'undefined') {
+      return cart.cart.delivery_type
+    }
+
+    return 'hd';
   }
 
   render() {
-    const { cart } = this.props;
+    const { cart, refreshCart } = this.props;
 
     let title = cart.cart.delivery_type === 'cnc'
       ? Drupal.t('Collection store')
       : Drupal.t('Delivery information');
 
+    let deliveryType = this.getDeliveryMethodToShow(cart);
+
+    let deliveryComponent = null;
+    if (this.showEmpty(deliveryType, cart)) {
+      deliveryComponent = <EmptyDeliveryText cart={cart} refreshCart={refreshCart} />;
+    }
+    else if (deliveryType === 'hd') {
+      deliveryComponent = <HomeDeliveryInfo cart={cart} refreshCart={refreshCart} />;
+    }
+    else if (deliveryType === 'cnc') {
+      deliveryComponent = <ClicknCollectDeiveryInfo cart={cart} refreshCart={refreshCart} />;
+    }
+
     return (
       <div className="spc-checkout-delivery-information">
         <SectionTitle>{title}</SectionTitle>
-        {this.state.showEmpty &&
-          <EmptyDeliveryText cart={cart} refreshCart={this.props.refreshCart} />
-        }
-        {!this.state.showEmpty && cart.cart.delivery_type === 'hd' &&
-          <HomeDeliveryInfo cart={cart} refreshCart={this.props.refreshCart} />
-        }
-        {!this.state.showEmpty && cart.cart.delivery_type === 'cnc' &&
-          <ClicknCollectDeiveryInfo cart={cart} refreshCart={this.props.refreshCart} />
-        }
+        {deliveryComponent}
       </div>
     );
   }
