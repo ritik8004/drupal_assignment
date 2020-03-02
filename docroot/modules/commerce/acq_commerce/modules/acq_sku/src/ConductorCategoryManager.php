@@ -372,7 +372,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
 
         $this->results['updated'][] = $category['category_id'];
-        $term->isNew = 0;
       }
       else {
         // Create the term entity.
@@ -384,7 +383,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           'weight' => $position,
           'langcode' => $langcode,
         ]);
-        $term->isNew = 1;
+
         $this->results['created'][] = $category['category_id'];
       }
 
