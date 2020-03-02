@@ -64,15 +64,18 @@ const emptyCustomerCart = () => {
 }
 
 export const extractFirstAndLastName = (name) => {
+  var splitName = name.split(' ');
+  // Check if the name has space in string.
+  // if user has enters only firstname lastname should be empty.
   return {
-    firstname: name.split(' ')[0],
-    lastname: name.substring(name.indexOf(' ') + 1),
+    firstname: splitName[0],
+    lastname: splitName[1] ? name.substring(name.indexOf(' ') + 1) : '',
   }
 };
 
-export const makeFullName = (fname, lname) => {
+export const makeFullName = (fname = '', lname = '') => {
   if (fname.trim() === '' || lname.trim() === '') {
-    return '';
+    return fname.trim().concat(lname.trim());
   }
 
   return `${fname} ${lname}`;
