@@ -97,7 +97,9 @@
         }
 
         // On form load set order qty limit message.
-        Drupal.disableLimitExceededProducts(sku, sku);
+        if ($('.order-quantity-limit-message').length > 0) {
+          Drupal.disableLimitExceededProducts(sku, sku);
+        }
 
         var node = $(this).parents('article.entity--type-node:first');
         Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
@@ -122,7 +124,9 @@
           }
           // On variant change, disable/enable Add to bag, quantity dropdown
           // and show message based on value in drupalSettings.
-          Drupal.disableLimitExceededProducts(parentSku, selected);
+          if ($('.order-quantity-limit-message').length > 0) {
+            Drupal.disableLimitExceededProducts(parentSku, selected);
+          }
 
           // Update quantity dropdown based on stock available for the variant.
           $('select[name="quantity"] option', this).each(function () {
@@ -451,7 +455,9 @@
 
   // Cart limit exceeded for a variant.
   $.fn.LimitExceededInCart = function (sku, selected) {
-    Drupal.disableLimitExceededProducts(sku, selected);
+    if ($('.order-quantity-limit-message').length > 0) {
+      Drupal.disableLimitExceededProducts(sku, selected);
+    }
   }
 
   // This event is triggered on page load itself in attach (Drupal.behaviors.configurableAttributeBoxes)

@@ -626,6 +626,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // matchback and full view mode.
       if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
+        $quantity_limit_enabled = \Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled');
 
         // To attach these libraries for full and modal view mode.
         if (in_array($view_mode, ['modal', 'full'])) {
@@ -638,7 +639,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           else {
             $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
           }
-          if (\Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+          if ($quantity_limit_enabled) {
             $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
           }
         }
@@ -670,16 +671,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Get max sale qty for simple product.
         if ($sku_entity->bundle() == 'simple') {
-          $max_sale_qty = $plugin->getMaxSaleQty($sku_entity);
+          $max_sale_qty = $quantity_limit_enabled ? $plugin->getMaxSaleQty($sku_entity) : 0;
         }
         elseif ($sku_entity->bundle() == 'configurable') {
           $max_sale_qty = 0;
-          // Sku itself is parent if it's NULL.
-          $parent_sku = $skuManager->getParentSkuBySku($sku_entity) ?? $sku_entity;
 
-          // Check if max sale qty limit is set for parent.
-          if ($parent_sku instanceof SKUInterface) {
-            $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
+          if ($quantity_limit_enabled) {
+            // Sku itself is parent if it's NULL.
+            $parent_sku = $skuManager->getParentSkuBySku($sku_entity) ?? $sku_entity;
+
+            // Check if max sale qty limit is set for parent.
+            if ($parent_sku instanceof SKUInterface) {
+              $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
+            }
           }
 
           $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
@@ -1100,10 +1104,14 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#cache']['tags'] = Cache::mergeTags($form['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
-  // We will take lower value for quantity options from
-  // available quantity and order limit.
-  $plugin = $sku_entity->getPluginInstance();
-  $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+  $max_sale_qty = 0;
+
+  if (\Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+    // We will take lower value for quantity options from
+    // available quantity and order limit.
+    $plugin = $sku_entity->getPluginInstance();
+    $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+  }
 
   $form['quantity']['#prefix'] = '<span class="quantity-' . $sku_identifier . '">';
   $form['quantity']['#suffix'] = '</span>';
