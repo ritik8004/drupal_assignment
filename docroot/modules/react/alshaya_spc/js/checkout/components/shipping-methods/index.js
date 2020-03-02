@@ -16,6 +16,11 @@ export default class ShippingMethods extends React.Component {
     const shipping_methods = cart.cart.shipping_methods;
     let methods = [];
     Object.entries(shipping_methods).forEach(([key, method]) => {
+      // Don't show CNC in HD methods.
+      if (method.carrier_code === window.drupalSettings.cnc.cnc_shipping.code) {
+        return;
+      }
+
       let carrirer_info = method.carrier_code + '_' + method.method_code;
       let selected = cart.cart.carrier_info === carrirer_info
         ? method.method_code
