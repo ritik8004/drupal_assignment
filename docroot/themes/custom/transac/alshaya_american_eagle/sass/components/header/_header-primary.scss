@@ -38,7 +38,7 @@
     }
 
     a {
-      max-width: 9.75rem;
+      max-width: 10.9375rem;
       margin: auto 0;
 
       html[lang='ar'] & {
@@ -231,13 +231,20 @@ header.c-header {
     .cart-link {
       background: url(#{$aeo_theme_img_directory_path}/icons/basket.svg) no-repeat;
       margin-bottom: 0;
-      background-size: cover;
+
+      &:hover {
+        background: url(#{$aeo_theme_img_directory_path}/icons/basket-filled.svg) no-repeat;
+
+        .quantity {
+          color: $primary_minicart_hover;
+        }
+      }
 
       @include breakpoint($desktop) {
         top: -0.125rem;
-        height: 2.125rem;
-        width: 2.125rem;
-        #{$left}: -1.25rem;
+        height: 1.875rem;
+        width: 1.6875rem;
+        #{$left}: 0.1875rem;
 
         html[lang=ar] & {
           right: -0.5rem;
@@ -259,17 +266,23 @@ header.c-header {
         height: 2rem;
         width: 2rem;
         margin-#{$right}: -0.125rem;
-        margin-top: 0.75rem;
+        margin-top: 0.4375rem;
 
         html[lang=ar] & {
-          margin-top: 0.75rem;
+          margin-top: 0.6875rem;
         }
       }
     }
 
     .quantity {
+      font-size: 0.625rem;
+      #{$left}: 0.125rem;
+      background: transparent;
+      padding-top: 0.5rem;
+
       @include breakpoint($only-mobile) {
-        bottom: -0.125rem;
+        bottom: 0.5625rem;
+        #{$left}: 0.3125rem;
       }
     }
 
@@ -339,7 +352,7 @@ header.c-header {
 
       padding-#{$right}: 0.5rem;
       margin-top: 0.625rem;
-      margin-#{$right}: 1.25rem;
+      margin-#{$right}: 0;
     }
   }
 
@@ -368,12 +381,12 @@ header {
       width: 1rem;
       height: 1rem;
       #{$left}: 1.125rem;
-      font-size: 0.75rem;
+      font-size: 0.625rem;
 
       @include breakpoint($tablet) {
-        width: 1.125rem;
-        height: 1.125rem;
-        bottom: -0.5625rem;
+        width: 1.4375rem;
+        height: 1.875rem;
+        bottom: 0;
       }
     }
   }
@@ -776,6 +789,10 @@ header {
     display: block;
     font-size: 0.875rem;
     border-bottom: 1px solid $mm_l1_border;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .menu--two__list-item {
@@ -808,7 +825,7 @@ header {
     margin-#{$right}: 0.51rem;
 
     @include icon(chevron#{$right}, after) {
-      font-size: 2rem;
+      font-size: 1.75rem;
       display: inline-block;
       font-weight: bold;
     }
@@ -819,13 +836,14 @@ header {
 
     @include icon(chevron#{$left}, after) {
       color: $header_c_menu_icon_color;
-      font-size: 2rem;
+      font-size: 1.75rem;
       display: inline-block;
       cursor: pointer;
       pointer-events: none;
       position: absolute;
-      top: 0.375rem;
-      #{$left}: 0.25rem;
+      top: 0.5625rem;
+      #{$left}: 0.5rem;
+      font-weight: bold;
     }
   }
 
