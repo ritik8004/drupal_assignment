@@ -32,7 +32,7 @@ export const createFetcher = promiseFunc => {
               }
 
               if (!response.data.error && response.data.error) {
-                console.error(cart_result.error_message);
+                console.error(response.error_message);
                 return { error: "error!" };
               }
 

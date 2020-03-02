@@ -12,20 +12,27 @@ import {
 } from "../../../utilities/checkout_util";
 import Loading from "../../../utilities/loading";
 import SectionTitle from "../../../utilities/section-title";
-import SelectedStore from "../selected-store";
-import StoreList from "../store-list";
-import ClicknCollectMap from "./ClicknCollectMap";
+import SelectedStore from "./components/SelectedStore";
+import StoreList from "./components/StoreList";
+import ClicknCollectMap from "./components/ClicknCollectMap";
+import ToggleButton from "./components/ToggleButton";
+import LocationSearchForm from "./components/LocationSearchForm";
+import ConditionalView from "../../../common/components/conditional-view";
+import DeviceView from "../../../common/components/device-view";
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
 
   constructor(props) {
     super(props);
-    this.searchplaceInput = React.createRef();
+    this.searchRef = React.createRef();
     this.cncListView = React.createRef();
     this.cncMapView = React.createRef();
-    this.nearMeBtn = React.createRef();
+
+    this.mapStoreList = React.createRef();
     this.autocomplete = null;
+    this.searchplaceInput = null;
+    this.nearMeBtn = null;
     this.state = {
       openSelectedStore: this.props.openSelectedStore || false
     };
@@ -33,9 +40,10 @@ class ClickCollect extends React.Component {
 
   componentDidMount() {
     // For autocomplete text field.
-    if (!this.autocomplete && this.searchplaceInput) {
+    if (!this.autocomplete && this.searchRef) {
+      this.searchplaceInput = this.searchRef.current.getElementsByTagName('input')[0];
       this.autocomplete = new window.google.maps.places.Autocomplete(
-        this.searchplaceInput.current,
+        this.searchplaceInput,
         {
           types: [],
           componentRestrictions: { country: window.drupalSettings.country_code }
@@ -47,25 +55,30 @@ class ClickCollect extends React.Component {
         this.placesAutocompleteHandler
       );
     }
+    this.nearMeBtn = this.searchRef.current.getElementsByTagName('button')[0];
 
     // Ask for location access when we don't have any coords.
     if (this.context.coords !== null && this.state.openSelectedStore) {
       this.showOpenMarker(this.context.storeList);
     }
-    document.addEventListener('mapTriggered', this.mapMakrerClick);
+    document.addEventListener('mapTriggered', this.mapMarkerClick);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mapTriggered', this.mapMakrerClick);
+    document.removeEventListener('mapTriggered', this.mapMarkerClick);
   }
 
-  mapMakrerClick = e => {
+  mapMarkerClick = e => {
     let index = e.detail.markerSettings.zIndex - 1;
     let allStores = this.cncListView.current.querySelectorAll('.select-store');
     [].forEach.call(allStores, function(el) {
-      el.classList.remove("expand");
+      el.classList.remove("selected");
     });
-    this.cncListView.current.querySelector('[data-index="' + index +'"]').classList.add('expand');
+    this.cncListView.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
+    if (window.innerWidth < 768 && this.cncMapView.current.style.display == "block") {
+      this.toggleFullScreen();
+      this.mapStoreList.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
+    }
   }
 
   /**
@@ -73,7 +86,7 @@ class ClickCollect extends React.Component {
    */
   placesAutocompleteHandler = () => {
     const place = this.autocomplete.getPlace();
-    this.nearMeBtn.current.classList.remove("active");
+    this.nearMeBtn.classList.remove("active");
     if (typeof place !== "undefined" && typeof place.geometry !== "undefined") {
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
@@ -90,8 +103,8 @@ class ClickCollect extends React.Component {
       e.preventDefault();
     }
 
-    this.searchplaceInput.current.value = "";
-    this.nearMeBtn.current.classList.add("active");
+    this.searchplaceInput.value = "";
+    this.nearMeBtn.classList.add("active");
     getLocationAccess()
       .then(
         pos => {
@@ -101,7 +114,7 @@ class ClickCollect extends React.Component {
           });
         },
         reject => {
-          this.nearMeBtn.current.classList.remove("active");
+          this.nearMeBtn.classList.remove("active");
           this.fetchAvailableStores(getDefaultMapCenter());
         }
       )
@@ -131,7 +144,7 @@ class ClickCollect extends React.Component {
     });
   };
 
-  selectStore = (e, store_code) => {
+  finalizeStore = (e, store_code) => {
     e.preventDefault();
     // Find the store object with the given store-code from the store list.
     let store = _find(this.context.storeList, { code: store_code });
@@ -159,7 +172,7 @@ class ClickCollect extends React.Component {
   };
 
   // View selected store on map.
-  storeViewOnMapSelected = makerIndex => {
+  hightlightMapMarker = makerIndex => {
     let map = window.spcMap;
     // Make the marker by default open.
     google.maps.event.trigger(map.map.mapMarkers[makerIndex], "click");
@@ -177,7 +190,7 @@ class ClickCollect extends React.Component {
     // Wait for all markers to be placed in map before
     // Clicking on the marker.
     setTimeout(() => {
-      this.storeViewOnMapSelected(index);
+      this.hightlightMapMarker(index);
     }, 100);
 
   };
@@ -198,9 +211,33 @@ class ClickCollect extends React.Component {
     });
   };
 
+  finalizeCurrentStore = (e) => {
+    let selectedStore = this.cncListView.current.querySelector('.selected');
+    this.finalizeStore(e, selectedStore.dataset.storeCode);
+  }
+
+  toggleFullScreen = () => {
+    if (document.fullscreenElement) {
+      let self = this;
+      document.exitFullscreen()
+        .then(() => {
+          console.log('should come heree');
+          self.refreshMap()
+        })
+        .catch((err) => console.error(err))
+    } else {
+      this.cncMapView.current.requestFullscreen();
+    }
+  }
+
+  onStoreClose = () => {
+    this.refreshMap();
+  }
+
   render() {
     let { coords, storeList, selectedStore } = this.context;
     let { openSelectedStore } = this.state;
+    let { closeModal } = this.props;
 
     if (window.fetchStore == "pending") {
       return <Loading />;
@@ -210,16 +247,16 @@ class ClickCollect extends React.Component {
 
     return (
       <div className="spc-address-form">
-        {window.innerWidth > 768 && (
+        <DeviceView device="!mobile">
           <div className="spc-address-form-map">{mapView}</div>
-        )}
+        </DeviceView>
         <div className="spc-cnc-address-form-sidebar">
           <div
             className="spc-cnc-stores-list-map"
             style={{ display: openSelectedStore ? "none" : "block" }}
           >
             <SectionTitle>{Drupal.t("Collection Store")}</SectionTitle>
-            <a className="close" onClick={this.props.closeModal}>
+            <a className="close" onClick={closeModal}>
               &times;
             </a>
             <div className="spc-cnc-address-form-wrapper">
@@ -227,64 +264,48 @@ class ClickCollect extends React.Component {
                 <SectionTitle>
                   {Drupal.t("find your nearest store")}
                 </SectionTitle>
-                <div className="spc-cnc-location-search-wrapper">
-                  <div className="spc-cnc-store-search-form-item">
-                    <input
-                      ref={this.searchplaceInput}
-                      className="form-search"
-                      type="search"
-                      id="edit-store-location"
-                      name="store_location"
-                      placeholder={drupalSettings.map.placeholder}
-                      autoComplete="off"
-                    />
-                  </div>
-                  <button
-                    className="cc-near-me"
-                    id="edit-near-me"
-                    ref={this.nearMeBtn}
-                    onClick={e => this.getCurrentPosition(e)}
-                  >
-                    {Drupal.t("Near me")}
-                  </button>
-                </div>
-                {window.innerWidth < 768 && (
-                  <div className="toggle-store-view">
-                    <div className="toggle-buttons-wrapper">
-                      <button
-                        className="stores-list-view active"
-                        onClick={e => this.toggleStoreView(e, "list")}
-                      >
-                        {Drupal.t("List view")}
-                      </button>
-                      <button
-                        className="stores-map-view"
-                        onClick={e => this.toggleStoreView(e, "map")}
-                      >
-                        {Drupal.t("Map view")}
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <LocationSearchForm ref={this.searchRef} getCurrentPosition={this.getCurrentPosition}/>
+                <DeviceView device="mobile">
+                  <ToggleButton toggleStoreView={this.toggleStoreView}/>
+                </DeviceView>
                 <div id="click-and-collect-list-view" ref={this.cncListView}>
                   <StoreList
+                    display="accordion"
                     store_list={storeList}
-                    onStoreClick={this.storeViewOnMapSelected}
-                    onSelectStore={this.selectStore}
                     selected={this.context.selectedStore}
+                    onStoreRadio={this.hightlightMapMarker}
+                    onStoreFinalize={this.finalizeStore}
                   />
                 </div>
-                {window.innerWidth < 768 && (
+                <DeviceView device="mobile">
                   <div
                     className="click-and-collect-map-view"
                     style={{ display: "none" }}
                     ref={this.cncMapView}
                   >
                     {mapView}
+                    <button onClick={() => this.toggleFullScreen()}>Full screen</button>
+                    <div className="map-store-list" ref={this.mapStoreList}>
+                      <StoreList
+                        display="default"
+                        store_list={storeList}
+                        selected={this.context.selectedStore}
+                        onStoreRadio={this.hightlightMapMarker}
+                        onStoreFinalize={this.finalizeStore}
+                        onStoreClose={this.onStoreClose}
+                      />
+                    </div>
                   </div>
-                )}
+                </DeviceView>
               </div>
             </div>
+            <ConditionalView condition={(storeList && storeList.length > 0)}>
+              <div className="store-actions">
+                <button className="select-store" onClick={e => this.finalizeCurrentStore(e)}>
+                  {Drupal.t('select this store')}
+                </button>
+              </div>
+            </ConditionalView>
           </div>
           <SelectedStore
             store={selectedStore}

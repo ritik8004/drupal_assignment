@@ -124,6 +124,9 @@ export default class Gmap {
 
   /**
    * Set marker for map.
+   *
+   * Pass second parameter true to not show infowindo and
+   * false to add infowindow and it's close event.
    */
   setMapMarker = (markerSettings, skipInfoWindow) => {
     this.map.mapMarkers = this.map.mapMarkers || [];
@@ -160,22 +163,24 @@ export default class Gmap {
         maxWidth: 209,
         disableAutoPan: this.map.disableAutoPan
       });
+    }
 
-      let map = this.map;
-      currentMarker.addListener('click', function () {
-        if (markerSettings.infoWindowSolitary) {
-          if (typeof map.infoWindow !== 'undefined') {
-            map.infoWindow.close();
-          }
-          map.infoWindow = currentInfoWindow;
+    let map = this.map;
+    currentMarker.addListener('click', function () {
+      if (markerSettings.infoWindowSolitary && skipInfoWindow !== true) {
+        if (typeof map.infoWindow !== 'undefined') {
+          map.infoWindow.close();
         }
-        // Set the marker to center of the map on click.
-        map.googleMap.setCenter(currentMarker.getPosition());
-        map.googleMap.setZoom(12);
+        map.infoWindow = currentInfoWindow;
         currentInfoWindow.open(map.googleMap, currentMarker);
-        dispatchCustomEvent('mapTriggered', { marker: currentMarker,  markerSettings});
-      });
+      }
+      // Set the marker to center of the map on click.
+      map.googleMap.setCenter(currentMarker.getPosition());
+      map.googleMap.setZoom(12);
+      dispatchCustomEvent('mapTriggered', { marker: currentMarker,  markerSettings});
+    });
 
+    if (skipInfoWindow !== true) {
       google.maps.event.addListener(currentInfoWindow, 'closeclick', function () {
         // Auto zoom.
         map.googleMap.fitBounds(map.googleMap.bounds);
