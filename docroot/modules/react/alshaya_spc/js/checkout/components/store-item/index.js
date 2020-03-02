@@ -1,12 +1,13 @@
 import React from 'react';
 import parse from 'html-react-parser';
 
-const StoreItem = ({ store, onSelectStore }) => {
+const StoreItem = ({ store, onSelectStore, display, onExpand }) => {
   return (
     <React.Fragment>
       <span className="spc-cnc-store-name">
         <span className="store-name">{store.name}</span>
         <span className="store-distance">{store.formatted_distance}</span>
+        <button onClick={e => onExpand(e, parseInt(index))}>Expand</button>
       </span>
       <div className="store-address-content">
         <div className="store-address">{parse(store.address)}</div>

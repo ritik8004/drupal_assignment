@@ -32,9 +32,14 @@ const StoreList = ({ store_list, onStoreClick, onSelectStore, selected: selected
             data-node={store.nid}
             data-index={index}
             key={store.code}
-            onClick={(e) => storeItemClick(e, parseInt(index))}
           >
-            <StoreItem store={store} onSelectStore={onSelectStore} />
+            <StoreItem
+              store={store}
+              onSelectStore={onSelectStore}
+              onExpand={storeItemClick}
+              index={parseInt(index)}
+              display="accordion"
+            />
           </li>
         );
       })}
