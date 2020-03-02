@@ -2,37 +2,41 @@ import React from 'react';
 import Loading from '../../utilities/loading';
 import OrderSummary from './OrderSummary';
 import { fetchOrderData } from '../../utilities/get_order';
+import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
+import { redirectToCart } from '../../utilities/get_cart';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       wait: true,
-      cart: null,
+      order: null,
     };
   }
 
   componentDidMount() {
     try {
       // Fetch order data.
-      const order_data = fetchOrderData('last');
+      const orderData = fetchOrderData('last');
 
-      if (order_data instanceof Promise) {
-        order_data.then((result) => {
+      if (orderData instanceof Promise) {
+        orderData.then((result) => {
           const prevState = this.state;
-          this.setState({ ...prevState, wait: false });
-
-          console.log(result);
+          this.setState({ ...prevState, wait: false, order: result });
         });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      redirectToCart();
     }
+
+    // Make sidebar sticky.
+    stickySidebar();
   }
 
   render() {
+    const { wait } = this.state;
     // While page loads and all info available.
-    if (this.state.wait) {
+    if (wait) {
       return <Loading loadingMessage={Drupal.t('loading order ...')} />;
     }
 
