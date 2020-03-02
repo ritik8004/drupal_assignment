@@ -7,6 +7,9 @@
 
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
+      // Variable to determine facet-item level in category block facet.
+      var facet_item_level;
+
       $(window).on('blazySuccess', function(event, element) {
         Drupal.plpListingProductTileHeight('row', element);
       });
@@ -25,6 +28,9 @@
           if($(this).parents('.block-facet-blockcategory-facet-search').length === 0) {
             $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
           }
+          else {
+            facet_item_level = $(this).data('level');
+          }
         });
       });
 
@@ -32,7 +38,7 @@
       // Close accordion if it doesn't has children.
       $(document).once('updatedAlgoliaResults').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
         var category_facet_search_block = $('.block-facet-blockcategory-facet-search');
-        if (category_facet_search_block.find('.facet-item.is-active').last().siblings('ul').length === 0 && $(window).width() < 1025) {
+        if (category_facet_search_block.find("[data-level='" + facet_item_level + "'].facet-item.is-active").siblings('ul').length === 0 && $(window).width() < 1025) {
           category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
         }
       });
