@@ -75,3 +75,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/spc-utils/spc-utils.ltr.css: css/conditional-sass/spc-utils/spc-utils.ltr.css
+
+  alshaya_white_label/order-qty-limit:
+    css:
+      theme:
+        css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css: css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css

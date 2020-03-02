@@ -64,8 +64,9 @@
         }
       });
 
-      $('.sku-base-form').once('cart-notification').on('product-add-to-cart-failed', function () {
+      $('.sku-base-form').once('cart-notification-error').on('product-add-to-cart-failed', function () {
         spinner_stop();
+        scrollToErrorPDP();
       });
 
       $(window).on('click', function () {
@@ -91,24 +92,12 @@
         // we might have some client side validation error preventing
         // ajax call.
         setTimeout(function () {
-          if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
-            // Scroll to error.
-            scrollToErrorPDP();
-            return;
-          }
-
           // Start loading
           spinner_start();
         }, 10);
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
-        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
-          // Scroll to error.
-          scrollToErrorPDP();
-          return;
-        }
-
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
           spinner_start();
@@ -170,7 +159,7 @@
           // Doing this for the JS conflict.
           setTimeout(function () {
             // First error label.
-            var first_error_label = $('form.ajax-submit-prevented label.error').first();
+            var first_error_label = $('#edit-errors-container');
             // If button is sticky (fix), just scroll.
             var is_button_sticky = $('button.edit-add-to-cart').hasClass('fix-button');
 

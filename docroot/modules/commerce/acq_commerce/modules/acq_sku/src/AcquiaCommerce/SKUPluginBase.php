@@ -306,4 +306,21 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     return $manager;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getMaxSaleQty($sku) {
+    $static = &drupal_static(self::class . '_' . __FUNCTION__, []);
+
+    $sku_string = ($sku instanceof SKU) ? $sku->getSku() : $sku;
+
+    if (isset($static[$sku_string])) {
+      return $static[$sku_string];
+    }
+
+    $static[$sku_string] = $this->getStockManager()->getMaxSaleQty($sku_string);
+
+    return $static[$sku_string];
+  }
+
 }

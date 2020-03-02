@@ -179,14 +179,6 @@
   }
 }
 
-.mobilegallery {
-  .subtext {
-    @include breakpoint($only-mobile) {
-      bottom: 2rem;
-    }
-  }
-}
-
 #lightSlider {
   .slick-next {
     @include breakpoint($desktop) {

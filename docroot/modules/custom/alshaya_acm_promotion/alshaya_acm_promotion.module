@@ -16,6 +16,7 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Utility\Html;
 
 /**
  * Implements hook_views_data_alter().
@@ -296,6 +297,7 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
 
   // Add PDP slider position config to drupalSettings so we can use it in JS.
   $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $skuManager->getImageSliderPosition($entity);
+  $build['image_slider_position_pdp']['#markup'] = 'slider-position-' . Html::cleanCssIdentifier($skuManager->getImageSliderPosition($entity));
 
   // Add PDP slider position config to variable so it is available in themes.
   $build['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');

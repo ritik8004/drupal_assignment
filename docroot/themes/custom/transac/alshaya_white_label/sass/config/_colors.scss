@@ -97,6 +97,9 @@ $_gray_1: #eaeaea;
 $_transparent_overlay: rgba(255, 255, 255, 0);
 $_white_five_alpha_80: rgba(255, 255, 255, 0.8);
 $_spc_search_icon: #4285f4;
+$_order_limit_txt: #4285f4;
+$_order_limit_light_orange: #ffa6a6;
+$_order_limit_error_red: #c00;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1237,3 +1240,10 @@ $spc-area-panel-item-border: $warm-grey-two;
 $spc-mobile-code: $grey-light;
 $spc-checkout-cnc-selected-store-sub-section-title: $white-smoke-light;
 $spc-checkout-contact-info-desc: $grey-light;
+// Order QTY Limit.
+$order_qty_limit_bg: $_dynamic_promo_text_bg;
+$order_qty_limit_txt: $_order_limit_txt;
+$order_limit_border: $_order_limit_light_orange;
+$order_qty_limit_reached_txt: $mothercare-black;
+$order_qty_limit_reached_bg: $white-five;
+$order_qty_limit_reached_icon: $_order_limit_error_red;

@@ -15,6 +15,18 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Installs Exponea module.
+ */
+function alshaya_transac_update_8127() {
+  \Drupal::service('module_installer')->install(['exponea']);
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'exponea.settings');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updates category block config.
  */
 function alshaya_transac_update_8126() {
@@ -753,6 +765,7 @@ function alshaya_transac_install() {
     'alshaya_image_sitemap',
     'alshaya_options_list',
     'alshaya_facets_pretty_paths',
+    'exponea',
   ];
 
   // Add 10 MB per module we are going to enable above.

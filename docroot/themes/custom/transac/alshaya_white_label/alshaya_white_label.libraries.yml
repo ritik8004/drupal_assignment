@@ -251,6 +251,7 @@ cart_js:
     - core/jquery
     - core/jquery.once
     - core/drupal
+    - alshaya_white_label/order-qty-limit
 
 product-category-accordion:
   js:
@@ -358,3 +359,8 @@ spc-checkout-confirmation:
       css/conditional-sass/spc-checkout-confirmation/spc-checkout-confirmation.ltr.css: {}
   dependencies:
     - alshaya_white_label/spc-utils
+
+order-qty-limit:
+  css:
+    theme:
+      css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css: {}

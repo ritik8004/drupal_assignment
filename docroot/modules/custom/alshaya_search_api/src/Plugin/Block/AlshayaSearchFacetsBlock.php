@@ -85,8 +85,8 @@ class AlshayaSearchFacetsBlock extends BlockBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function build() {
-    // Get all sorted facet blocks.
-    $facet_blocks = $this->alshayaFacetManager->getBlocksForFacets(self::FACET_SOURCE);
+    // Get all sorted facet blocks for content region.
+    $facet_blocks = $this->alshayaFacetManager->getBlocksForFacets(self::FACET_SOURCE, 'content');
     $block = $this->entityTypeManager->getStorage('block')->load(self::PLP_EXPOSED_SORT_BLOCK);
     if ($block instanceof BlockInterface) {
       $block_view = $this->entityTypeManager->getViewBuilder('block')->view($block);

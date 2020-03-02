@@ -143,3 +143,12 @@ $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_american_
     @content;
   }
 }
+
+// Apply on imput:foucs, etc.
+@mixin placeholder-active() {
+  top: -1.25em;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.875rem;
+}

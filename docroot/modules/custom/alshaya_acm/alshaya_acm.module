@@ -210,7 +210,29 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $item['quantity']['#suffix'] = '</div>';
       $item['quantity']['#suffix'] .= alshaya_acm_get_remove_from_basket_link($cart, $sku_entity);
 
-      _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message);
+      $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+      $plugin = $sku_entity->getPluginInstance();
+
+      // Check if max sale qty limit is set for parent.
+      $parent_sku = $skuManager->getParentSkuBySku($id);
+      // Get max sale qty for the variant in cart if not present for parent.
+      $parent_max_sale_qty = $parent_sku ? $plugin->getMaxSaleQty($parent_sku) : 0;
+      $max_sale_qty = !empty($parent_max_sale_qty) ? $parent_max_sale_qty : $plugin->getMaxSaleQty($id);
+
+      if (!empty($max_sale_qty)) {
+        // Get product qty in cart for variant.
+        $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($id);
+
+        if ($current_variant_in_cart_qty && ($current_variant_in_cart_qty >= $max_sale_qty)) {
+          // Show msg if order limit is reached.
+          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty, TRUE) . '</div>';
+        }
+        else {
+          $item['quantity']['#suffix'] .= '<div class="order-quantity-limit-message">' . $productOrderLimit->maxSaleQtyMessage($max_sale_qty) . '</div>';
+        }
+      }
+
+      _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message, $max_sale_qty);
 
       // Add sub total price of product.
       if ($is_item_free) {
@@ -479,6 +501,7 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
       $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
       return $response;
     }
+    \Drupal::service('messenger')->addError(reset($errors));
   }
 
   // Refresh the page.
@@ -511,15 +534,16 @@ function alshaya_acm_preprocess_page_title(&$variables) {
  *   Array of all skus assiciated by sku key.
  */
 function alshaya_acm_get_cart_items_by_sku() {
-  $skus = [];
-  $cartStorage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cartStorage->getCart();
-  $items = $cart->items();
-  if (!empty($items)) {
-    foreach ($items as $line_item) {
-      $skus[$line_item['sku']] = $line_item;
-    }
+  $cart = \Drupal::service('acq_cart.cart_storage')->getCart(FALSE);
+  if (!($cart instanceof CartInterface)) {
+    return [];
   }
+
+  $skus = [];
+  foreach ($cart->items() ?? [] as $line_item) {
+    $skus[$line_item['sku']] = $line_item;
+  }
+
   return $skus;
 }
 
@@ -852,7 +876,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity,
  * @param string $out_of_stock_message
  *   Out of stock message.
  */
-function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out_of_stock_message) {
+function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out_of_stock_message, $max_sale_qty) {
   $item_stock_error = '';
   $selected_quantity = $item['quantity']['#default_value'];
 
@@ -861,16 +885,33 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
 
   // If item is not available in stock.
   if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
+    // Maximum to show show in quantity dropdown.
+    $cart_quantity = $quantity;
+
     if ($selected_quantity > $quantity) {
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
       $item_stock_error = t('This product is not available in the selected quantity. Please adjust the quantity to proceed.');
+    }
+    elseif (!empty($max_sale_qty)) {
+      // Use lower value for showing in quantity dropdown.
+      $cart_quantity = ($max_sale_qty < $quantity) ? $max_sale_qty : $quantity;
 
-      // We display dropdown with selected quantity to avoid confusions.
-      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($selected_quantity);
+      /** @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit $productOrderLimit */
+      $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+      // Get product qty in cart for variant considering parent as well.
+      $current_variant_in_cart_qty = $productOrderLimit->getCartItemQtyLimit($sku_entity->getSku());
+
+      if ($current_variant_in_cart_qty > $max_sale_qty) {
+        $item['#attributes']['class'][] = 'sku-max-quantity-limit-reached';
+      }
     }
-    else {
-      $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity, $selected_quantity);
-    }
+
+    // We display dropdown with selected quantity to avoid confusions.
+    $cart_quantity = ($selected_quantity > $cart_quantity)
+      ? $selected_quantity
+      : $cart_quantity;
+
+    $item['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($cart_quantity, $selected_quantity);
   }
   else {
     $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
@@ -1017,4 +1058,31 @@ function _alshaya_acm_exclude_sync_from_shield() {
       ->set('paths', implode(PHP_EOL, $paths))
       ->save();
   }
+}
+
+/**
+ * Check if Exception is for Order Limit Exceeded products in cart.
+ *
+ * @param \Exception $e
+ *   Exception to check.
+ *
+ * @return bool
+ *   TRUE if exception matches Order Limit Exceeded criteria.
+ */
+function _alshaya_acm_is_order_limit_exceeded_exception(\Exception $e) {
+  // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
+  // We use t() to match translated message.
+  // It is contributor's responsibility to add the translation in Magento
+  // and in Drupal.
+  $ole_messages = [
+    t('The maximum quantity per item has been exceeded')->render(),
+  ];
+
+  foreach ($ole_messages as $message) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }

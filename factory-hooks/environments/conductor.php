@@ -430,7 +430,24 @@ $conductors = [
     'hmac_secret' => 'NzI5M2M1MjYtMTE5ZS00',
     'site_id' => 173,
   ],
+  'wekw_prod' => [
+    'site_id' => 183,
+  ],
+  'wesa_prod' => [
+    'site_id' => 184,
+  ],
+  'weae_prod' => [
+    'site_id' => 185,
+  ],
+  'weeg_prod' => [
+    'site_id' => 186,
+  ],
   // American Eagle Outfitters.
+  'aeokw_dev' => [
+    'hmac_id' => '9c9e527db24446d98cde69829ffde832',
+    'hmac_secret' => 'N2QzZGUxMzEtZTNjYy00',
+    'site_id' => 178,
+  ],
   'aeokw_qa' => [
     'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
     'hmac_secret' => 'OGU4Yjg1ZDMtNWI5NS00',
@@ -451,22 +468,25 @@ $conductors = [
     'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
     'site_id' => 177,
   ],
-  'aeokw_dev' => [
-    'hmac_id' => '9c9e527db24446d98cde69829ffde832',
-    'hmac_secret' => 'N2QzZGUxMzEtZTNjYy00',
-    'site_id' => 178,
+  'aeokw_uat' => [
+    'hmac_id' => 'afb8c24dfb574debaebfe6b680a9fc43',
+    'hmac_secret' => 'MjU1NmIzMjYtNDc1My00',
+    'site_id' => 191,
   ],
-  'wekw_prod' => [
-    'site_id' => 183,
+  'aeosa_uat' => [
+    'hmac_id' => '8d9331c4d4aa4a529ed05055b3ca5e67',
+    'hmac_secret' => 'ZGJmMWFiYTktY2JiNS00',
+    'site_id' => 192,
   ],
-  'wesa_prod' => [
-    'site_id' => 184,
+  'aeoae_uat' => [
+    'hmac_id' => '05168cbe2e664f4c9d9b676a96d185a4',
+    'hmac_secret' => 'YmJmZTAxNzgtMTdhNy00',
+    'site_id' => 193,
   ],
-  'weae_prod' => [
-    'site_id' => 185,
-  ],
-  'weeg_prod' => [
-    'site_id' => 186,
+  'aeoeg_uat' => [
+    'hmac_id' => 'a37e371caae3434ea9372ea053607857',
+    'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
+    'site_id' => 194,
   ],
 ];
 
