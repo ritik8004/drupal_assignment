@@ -36,6 +36,13 @@ export default class DeliveryMethods extends React.Component {
     });
 
     document.getElementById('delivery-method-' + method).checked = true;
+    var event = new CustomEvent("deliveryMethodChange", {
+      bubbles: true,
+      detail: {
+        data: method
+      }
+    });
+    document.dispatchEvent(event);
     // Add delivery method in cart storage.
     let cart = this.props.cart;
     cart['delivery_type'] = method;
