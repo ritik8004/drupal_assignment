@@ -159,3 +159,16 @@
     }
   }
 }
+
+.super-category-swim,
+.super-category-swimwear {
+  .branding__menu {
+    .c-header__region {
+      .block-system-branding-block {
+        .site-brand-home img {
+          max-height: 2.5rem;
+        }
+      }
+    }
+  }
+}
