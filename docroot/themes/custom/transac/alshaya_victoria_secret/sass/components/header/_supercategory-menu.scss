@@ -55,7 +55,8 @@
         }
       }
 
-      &.brand-swimwear {
+      &.brand-swimwear,
+      &.brand-swim {
         &::after {
           background: url("../imgs/logos/super-category/vs-swim-logo.svg?h1yOhx") no-repeat center;
           background-size: contain;
@@ -80,7 +81,8 @@
         background-size: contain;
       }
 
-      &.brand-swimwear::after {
+      &.brand-swimwear::after,
+      &.brand-swim::after {
         background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
         background-size: contain;
       }
