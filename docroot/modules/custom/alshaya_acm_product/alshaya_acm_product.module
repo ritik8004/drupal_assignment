@@ -363,6 +363,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_order_quantity_limit'] = [
+    'variables' => [
+      'message' => NULL,
+      'limit_reached' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -624,6 +631,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // To attach these libraries for full and modal view mode.
         if (in_array($view_mode, ['modal', 'full'])) {
           $build['#attached']['library'][] = 'alshaya_acm_product/product_detail';
+          $build['#attached']['library'][] = 'alshaya_white_label/order-qty-limit';
           $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
           $build['#attached']['library'][] = 'alshaya_product_zoom/product.cloud_zoom';
           if ($view_mode == 'full' && strpos($pdp_layout, 'magazine') > -1) {
@@ -635,7 +643,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $gallery = $skuImagesManager->getGallery($sku_entity, $pdp_layout, '', FALSE);
-        $settingsKey = ($view_mode == 'matchback') ? 'matchback' : 'productInfo';
+        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['gallery'] = !empty($gallery)
           ? \Drupal::service('renderer')->renderPlain($gallery)
           : '';
@@ -664,9 +672,30 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
         }
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['cart_image'] = is_string($image) ? $image : '';
-        // If configurable type product.
-        if ($sku_entity->bundle() == 'configurable') {
+        $productOrderLimit = \Drupal::service('alshaya_acm_product.product_order_limit');
+        $plugin = $sku_entity->getPluginInstance();
+
+        // Get max sale qty for simple product.
+        if ($sku_entity->bundle() == 'simple') {
+          $max_sale_qty = $plugin->getMaxSaleQty($sku_entity);
+        }
+        elseif ($sku_entity->bundle() == 'configurable') {
+          $max_sale_qty = 0;
+          // Sku itself is parent if it's NULL.
+          $parent_sku = $skuManager->getParentSkuBySku($sku_entity) ?? $sku_entity;
+
+          // Check if max sale qty limit is set for parent.
+          if ($parent_sku instanceof SKUInterface) {
+            $max_sale_qty = $plugin->getMaxSaleQty($parent_sku);
+          }
+
           $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['variants'] = $skuInfo->getConfigurableProductData($sku_entity, $context ?? 'pdp');
+        }
+
+        // Setting max sale qty variables at parent level.
+        if (!empty($max_sale_qty)) {
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['maxSaleQty'] = $max_sale_qty;
+          $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()]['orderLimitMsg'] = $productOrderLimit->maxSaleQtyMessage($max_sale_qty);
         }
         $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
       }
@@ -1079,11 +1108,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#cache']['tags'] = Cache::mergeTags($form['#cache']['tags'] ?? [], $sku_entity->getCacheTags());
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
+  // We will take lower value for quantity options from
+  // available quantity and order limit.
+  $plugin = $sku_entity->getPluginInstance();
+  $max_sale_qty = $plugin->getMaxSaleQty($sku_entity->getSku());
+
   $form['quantity']['#prefix'] = '<span class="quantity-' . $sku_identifier . '">';
   $form['quantity']['#suffix'] = '</span>';
 
   $form['quantity']['#type'] = 'select';
-  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
+  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($max_sale_qty);
+
   $form['quantity']['#validated'] = TRUE;
   $form['quantity']['#attributes']['class'][] = 'edit-quantity';
   unset($form['quantity']['#size']);
@@ -1097,6 +1132,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       ],
     ],
     '#default_value' => ($sku_entity->bundle() === 'simple') ? $sku_entity->getSku() : '',
+  ];
+
+  // Add hidden view mode field.
+  $form['product_view_mode'] = [
+    '#type' => 'hidden',
+    '#attributes' => [
+      'class' => [
+        'product-view-mode',
+      ],
+    ],
+    '#default_value' => '',
   ];
 
   // We need to change the markup for submit button.
@@ -1210,6 +1256,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
   // Stock check for quantity for all other products.
   elseif ($quantity = $sku_manager->getStockQuantity($sku_entity)) {
+    // Using the lower value of available quantity and max sale qty.
+    $quantity = (!empty($max_sale_qty) && ($quantity > $max_sale_qty)) ? $max_sale_qty : $quantity;
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
@@ -1744,5 +1792,16 @@ function alshaya_acm_product_preprocess_acq_commerce_price(&$variables) {
   // following the host site implementation.
   if ($acm_settings->get('show_crosssell_as_matchback') && $append_each_to_price) {
     $variables['append_each_to_price'] = $append_each_to_price;
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function alshaya_acm_product_preprocess_block(&$variables) {
+  if ($variables['base_plugin_id'] == 'cart_mini_block') {
+    // Add cart items in drupalSettings to check if qty limit is exceeded or not
+    // for a product at js level and accordingly show message.
+    $variables['#attached']['drupalSettings']['cart_items'] = alshaya_acm_get_cart_items_by_sku();
   }
 }

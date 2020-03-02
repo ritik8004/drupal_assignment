@@ -20,7 +20,7 @@
 
   .block-facet-blockcategory-facet-search {
     @include breakpoint($desktop) {
-      margin-top: 1.03125rem;
+      margin-top: 0.96875rem !important;
       border: none;
     }
 
@@ -43,6 +43,12 @@
     li {
       margin-bottom: 0;
       min-height: auto;
+    }
+
+    .facet-item__count {
+      @include breakpoint($desktop) {
+        margin-top: 0 !important;
+      }
     }
   }
 
@@ -215,6 +221,7 @@
     .block-alshaya-promo-facets-block-all,
     .block-alshaya-search-facets-block-all {
       height: 0;
+      z-index: 2;
     }
   }
 }

@@ -48,6 +48,14 @@
       float: $right;
       padding-#{$left}: 1rem;
 
+      .order-quantity-limit-message {
+        .order-qty-limit-msg-inner-wrapper {
+          &:not(:empty) {
+            margin-bottom: 0.875rem;
+          }
+        }
+      }
+
       .content__title_wrapper {
         width: 100%;
         float: none;
@@ -125,6 +133,15 @@
 
         @include breakpoint($desktop) {
           width: calc((33 * 66.375rem) / 100);
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message {
+        &.mobile-only {
+          margin: 0 auto;
+          padding-bottom: 1rem;
         }
       }
     }

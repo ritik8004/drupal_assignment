@@ -238,4 +238,23 @@ class AlshayaAcmApiWrapper extends APIWrapper {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function skuStockCheck($sku) {
+    $sku = urlencode($sku);
+    $endpoint = 'stockItems/' . $sku;
+    $response = $this->alshayaApi->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return NULL;
+    }
+
+    $response = json_decode($response, TRUE);
+    // Add sku to message to allow processing it the same way as stock push.
+    $response['sku'] = $sku;
+
+    return $response;
+  }
+
 }

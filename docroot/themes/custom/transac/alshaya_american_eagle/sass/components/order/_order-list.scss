@@ -1,0 +1,64 @@
+.block-alshaya-acm-customer > .edit-account {
+  font-family: $alshaya-bold;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-type-select {
+    width: 11.75rem;
+    margin-#{$left}: 0;
+
+    @include breakpoint($only-mobile) {
+      width: 48%;
+    }
+
+    @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+      #{$right}: 1rem;
+      top: 0.875rem;
+    }
+
+    .select2-container {
+      .select2-selection__arrow {
+        &::after,
+        b {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .form-item {
+    label {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+
+    &-search {
+      input {
+        @include breakpoint($only-mobile) {
+          border-color: $primary_search_border;
+        }
+      }
+    }
+  }
+
+  .form-actions {
+    @include pdp_icon_img('#{$aeo_theme_img_directory_path}/assets/search.svg', 2.1875rem, 2.1875rem, after);
+
+    &::after {
+      border-#{$left}: 0;
+    }
+  }
+
+  .form-text {
+    border-#{$right}: 0;
+  }
+}
+
+.c-order-list {
+  .subtitle {
+    text-transform: capitalize;
+  }
+}

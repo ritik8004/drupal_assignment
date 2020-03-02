@@ -617,10 +617,12 @@ function alshaya_acm_product_category_search_api_index_items_alter(IndexInterfac
             continue;
           }
 
+          $terms[] = $product_category_tree->getL1Category($term)->id();
+
           // Index L2 for sale categories.
-          $terms[] = in_array($term->id(), $sale_categories)
-            ? $product_category_tree->getL2Category($term)->id()
-            : $product_category_tree->getL1Category($term)->id();
+          if (in_array($term->id(), $sale_categories)) {
+            $terms[] = $product_category_tree->getL2Category($term)->id();
+          }
         }
 
         $item->getField('field_category')->setValues(array_unique($terms));

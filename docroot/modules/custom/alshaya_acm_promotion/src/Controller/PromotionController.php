@@ -297,8 +297,10 @@ class PromotionController extends ControllerBase {
               'name' => $sku->label(),
               'sku' => $sku->getSKU(),
               'qty' => 1,
-              'options' => [
-                'configurable_item_options' => $options,
+              'product_option' => [
+                'extension_attributes' => [
+                  'configurable_item_options' => $options,
+                ],
               ],
               'extension_attributes' => [
                 'promo_rule_id' => $promotion->get('field_acq_promotion_rule_id')->getString(),

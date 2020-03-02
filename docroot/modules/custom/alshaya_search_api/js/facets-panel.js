@@ -255,7 +255,7 @@
        */
       function addSlideEventhandlers() {
         // Add active classes on facet dropdown content.
-        $(document).once('facet-title').on('click', '.c-facet__title.c-accordion__title', function () {
+        $(document).once('facet-title').on('click', '.c-facet__title.c-accordion__title, .c-facet__title.c-collapse__title', function () {
           if ($(this).hasClass('active')) {
             $(this).removeClass('active');
             // We want to run this only on main page facets.

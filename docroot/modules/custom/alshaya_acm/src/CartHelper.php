@@ -309,6 +309,8 @@ class CartHelper {
    *   Cart.
    */
   public function refreshStockForProductsInCart(CartInterface $cart = NULL) {
+    $processed_parents = [];
+
     if (empty($cart)) {
       $cart = $this->cartStorage->getCart(FALSE);
     }
@@ -320,7 +322,17 @@ class CartHelper {
 
     foreach ($cart->items() ?? [] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku_entity->getPluginInstance();
+        $parent = $plugin->getParentSku($sku_entity);
+
+        // Refresh Current Sku stock.
         $sku_entity->refreshStock();
+        // Refresh parent stock once if exists for cart items.
+        if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
+          $processed_parents[] = $parent->getSku();
+          $parent->refreshStock();
+        }
       }
     }
   }
