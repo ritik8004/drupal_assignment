@@ -13,7 +13,9 @@
   <div class="content-sidebar-wrapper">
     {% block titleBlock %}
       <div class="content__title_wrapper">
-        <div class="order-quantity-limit-message mobile-only"></div>
+        {% if quantity_limit_enabled == true %}
+          <div class="order-quantity-limit-message mobile-only"></div>
+        {% endif %}
         {% if content.brand_logo %}
           <div class="brand-logo-wrapper">
             {{ content.brand_logo }}
@@ -67,7 +69,9 @@
               {{ content.sharethis }}
             </div>
           </div>
-          <div class="order-quantity-limit-message"></div>
+          {% if quantity_limit_enabled == true %}
+            <div class="order-quantity-limit-message"></div>
+          {% endif %}
         </div>
       </div>
     {% endblock %}
