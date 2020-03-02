@@ -51,6 +51,13 @@ do
   then
     cd $docrootDir/themes/custom/$theme_type_dir
     npm run install-tools
+
+    # TODO: Increase test coverage to all the themes.
+    if ([ $theme_type_dir == 'transac' ])
+    then
+      gulp lint:css-with-fail
+      gulp lint:js-with-fail
+    fi
   else
     echo -en "No need to setup $theme_type_dir frontend. There is no change in any $theme_type_dir themes."
   fi
