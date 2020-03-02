@@ -59,7 +59,7 @@
       &.brand-swim {
         &::after {
           background: url("../imgs/logos/super-category/vs-swim-logo.svg?h1yOhx") no-repeat center;
-          background-size: contain;
+          background-size: 1.8125rem;
         }
 
         &:hover::after {
@@ -84,7 +84,7 @@
       &.brand-swimwear::after,
       &.brand-swim::after {
         background: url("../imgs/logos/super-category/vs-swim-logo-active.svg?h1yOhx") no-repeat center;
-        background-size: contain;
+        background-size: 1.8125rem;
       }
     }
   }
