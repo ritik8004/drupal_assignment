@@ -101,24 +101,19 @@
   }
 }
 
-// Fix for spacing issue on webkit.
-.chrome,
-.opera,
-.safari {
-  .c-menu-primary {
-    .block-alshaya-super-category-menu {
-      .menu--one__list {
-        @include breakpoint($upto-desktop) {
-          display: flex !important;
-        }
+.c-menu-primary {
+  .block-alshaya-super-category-menu {
+    .menu--one__list {
+      @include breakpoint($upto-desktop) {
+        display: flex !important;
+      }
 
-        li {
-          @include breakpoint($upto-desktop) {
-            display: block;
-            margin-#{$left}: -1px;
-            flex-grow: 1;
-            width: auto;
-          }
+      li {
+        @include breakpoint($upto-desktop) {
+          display: block;
+          margin-#{$left}: -1px;
+          flex-grow: 1;
+          width: auto;
         }
       }
     }
