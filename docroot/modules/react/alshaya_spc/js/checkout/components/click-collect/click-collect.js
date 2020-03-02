@@ -52,6 +52,20 @@ class ClickCollect extends React.Component {
     if (this.context.coords !== null && this.state.openSelectedStore) {
       this.showOpenMarker(this.context.storeList);
     }
+    document.addEventListener('mapTriggered', this.mapMakrerClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mapTriggered', this.mapMakrerClick);
+  }
+
+  mapMakrerClick = e => {
+    let index = e.detail.markerSettings.zIndex - 1;
+    let allStores = this.cncListView.current.querySelectorAll('.select-store');
+    [].forEach.call(allStores, function(el) {
+      el.classList.remove("expand");
+    });
+    this.cncListView.current.querySelector('[data-index="' + index +'"]').classList.add('expand');
   }
 
   /**
@@ -159,7 +173,13 @@ class ClickCollect extends React.Component {
     let index = _findIndex(storeList, {
       code: this.context.selectedStore.code
     });
-    this.storeViewOnMapSelected(index);
+
+    // Wait for all markers to be placed in map before
+    // Clicking on the marker.
+    setTimeout(() => {
+      this.storeViewOnMapSelected(index);
+    }, 100);
+
   };
 
   refreshMap = () => {

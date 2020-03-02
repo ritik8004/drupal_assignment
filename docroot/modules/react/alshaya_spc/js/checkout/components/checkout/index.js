@@ -100,19 +100,29 @@ export default class Checkout extends React.Component {
    * Trigger cnc event to get location details and fetch stores.
    */
   cncEvent = () => {
-    getLocationAccess()
-      .then(pos => {
-        this.fetchStoresHelper({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        });
-      },
-      reject =>  {
-        this.fetchStoresHelper(getDefaultMapCenter());
-      })
-      .catch(error => {
-        console.log(error);
+    let { cart: { store_info } } = this.state.cart;
+    if (store_info) {
+      this.fetchStoresHelper({
+        lat: parseFloat(store_info.lat),
+        lng: parseFloat(store_info.lng)
       });
+    }
+    else {
+      getLocationAccess()
+        .then(pos => {
+          this.fetchStoresHelper({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          });
+        },
+        reject =>  {
+          this.fetchStoresHelper(getDefaultMapCenter());
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
   };
 
   /**

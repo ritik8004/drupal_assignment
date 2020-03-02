@@ -332,6 +332,9 @@ class Cart {
     ];
     if ($create_customer) {
       $customer = $this->createCustomer($data['shipping']['shipping_address']);
+      if (!empty($customer['message'])) {
+        return $this->getErrorResponse($customer['message'], 422);
+      }
       $this->associateCartToCustomer($cart_id, $customer['id']);
     }
     return $this->updateCart($data, $cart_id);

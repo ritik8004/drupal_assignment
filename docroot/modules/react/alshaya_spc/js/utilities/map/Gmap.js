@@ -1,5 +1,6 @@
 import _isEmpty from 'lodash/isEmpty';
 import { isRTL } from '../rtl';
+import { dispatchCustomEvent } from '../events';
 
 export default class Gmap {
 
@@ -172,6 +173,7 @@ export default class Gmap {
         map.googleMap.setCenter(currentMarker.getPosition());
         map.googleMap.setZoom(12);
         currentInfoWindow.open(map.googleMap, currentMarker);
+        dispatchCustomEvent('mapTriggered', { marker: currentMarker,  markerSettings});
       });
 
       google.maps.event.addListener(currentInfoWindow, 'closeclick', function () {
