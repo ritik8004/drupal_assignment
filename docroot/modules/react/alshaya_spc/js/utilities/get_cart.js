@@ -66,7 +66,7 @@ export const fetchCartData = function () {
       return null;
     }
 
-    // On logout cart object will havee a user id and drupalSettings uid will be
+    // On logout cart object will have a user id and drupalSettings uid will be
     // set to 0. Comparing this to figure out the user is logged out and hence the
     // cart data which is already there in localstorage is not valid and hence,
     // initiating object with empty data will show empty cart and mini cart.
