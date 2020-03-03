@@ -166,7 +166,7 @@
         margin-bottom: 0;
 
         @include breakpoint($tablet) {
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.3125rem;
         }
       }
 
@@ -567,6 +567,10 @@
       }
     }
   }
+
+  form.select-free-gift {
+    margin-top: 0.9375rem;
+  }
 }
 
 .free-gift-listing-modal {
@@ -657,6 +661,10 @@
       @include breakpoint($desktop) {
         padding: calc((100vh - 40rem) / 2) calc((100vw - 60.13rem) / 2) !important;
       }
+    }
+
+    .ui-dialog-title {
+      display: none !important;
     }
   }
 
