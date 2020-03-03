@@ -19,8 +19,8 @@ class CncSearch {
   getResults(query) {
     this.query = JSON.stringify(query);
     if (this.cache[this.query]) {
-      this.cacheHits = this.cacheHits + 1;
-      this.queryCount = this.queryCount + 1;
+      this.cacheHits += 1;
+      this.queryCount += 1;
       this.cacheHitsHistory.concat(this.query);
       return this.cache[this.query];
     }
@@ -29,7 +29,7 @@ class CncSearch {
 
   cacheResult(results) {
     this.cache[this.query] = results;
-    this.queryCount = this.queryCount + 1;
+    this.queryCount += 1;
     return results;
   }
 }

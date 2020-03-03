@@ -5,5 +5,5 @@ import { checkCartCustomer } from './utilities/cart_customer_util';
 
 ReactDOM.render(
   <Cart />,
-  document.getElementById('spc-cart')
+  document.getElementById('spc-cart'),
 );

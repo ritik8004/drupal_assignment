@@ -1,24 +1,28 @@
 import React from 'react';
 import PriceElement from './PriceElement';
-import {calculateDiscount} from '../price-helper';
+import { calculateDiscount } from '../price-helper';
 
-const PriceBlock = props => {
-  return (
-    <div className="price-block">
-      {
-        (typeof props.children != 'undefined' && props.children.length > 0)
+const PriceBlock = (props) => (
+  <div className="price-block">
+    {
+        (typeof props.children !== 'undefined' && props.children.length > 0)
           ? props.children
           : <PriceElement {...props} />
       }
-    </div>
-  );
-}
+  </div>
+);
 
-const SpecialPrice = ({price, final_price}) => {
-  if (price > 0 && final_price > 0 &&  final_price < price) {
+const SpecialPrice = ({ price, final_price }) => {
+  if (price > 0 && final_price > 0 && final_price < price) {
     const discount = calculateDiscount(price, final_price);
     const discountTxt = (discount > 0)
-      ? (<div className="price--discount">({Drupal.t('Save @discount%', {'@discount': discount})})</div>)
+      ? (
+        <div className="price--discount">
+          (
+          {Drupal.t('Save @discount%', { '@discount': discount })}
+          )
+        </div>
+      )
       : '';
 
     return (
@@ -33,11 +37,11 @@ const SpecialPrice = ({price, final_price}) => {
       </PriceBlock>
     );
   }
-  else if (final_price) {
+  if (final_price) {
     return <PriceBlock amount={final_price} />;
   }
 
   return <PriceBlock amount={price} />;
-}
+};
 
 export default SpecialPrice;

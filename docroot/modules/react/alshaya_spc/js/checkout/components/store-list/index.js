@@ -1,9 +1,11 @@
 import React from 'react';
 import StoreItem from '../store-item';
 
-const StoreList = ({ store_list, onStoreClick, onSelectStore, selected: selectedStore }) => {
+const StoreList = ({
+  store_list, onStoreClick, onSelectStore, selected: selectedStore,
+}) => {
   if (!store_list || store_list.length === 0) {
-    return <div className='spc-cnc-empty-store-list'>{Drupal.t('Sorry, No store found for your location.')}</div>;
+    return <div className="spc-cnc-empty-store-list">{Drupal.t('Sorry, No store found for your location.')}</div>;
   }
 
   const storeItemClick = (e, index) => {
@@ -14,9 +16,9 @@ const StoreList = ({ store_list, onStoreClick, onSelectStore, selected: selected
       return;
     }
     // Add Class expand to the currently opened li.
-    let storeList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
+    const storeList = document.querySelectorAll('#click-and-collect-list-view li.select-store');
     // Remove class expand from all.
-    storeList.forEach(function (storeElement) {
+    storeList.forEach((storeElement) => {
       storeElement.classList.remove('expand');
     });
     e.target.parentElement.classList.add('expand');
@@ -24,22 +26,20 @@ const StoreList = ({ store_list, onStoreClick, onSelectStore, selected: selected
 
   return (
     <ul>
-      {store_list.map((store, index) => {
-        return (
-          <li
-            className={`select-store ${(selectedStore && store.code === selectedStore.code) ? 'expand' : ''}`}
-            data-store-code={store.code}
-            data-node={store.nid}
-            data-index={index}
-            key={store.code}
-            onClick={(e) => storeItemClick(e, parseInt(index))}
-          >
-            <StoreItem store={store} onSelectStore={onSelectStore} />
-          </li>
-        );
-      })}
+      {store_list.map((store, index) => (
+        <li
+          className={`select-store ${(selectedStore && store.code === selectedStore.code) ? 'expand' : ''}`}
+          data-store-code={store.code}
+          data-node={store.nid}
+          data-index={index}
+          key={store.code}
+          onClick={(e) => storeItemClick(e, parseInt(index))}
+        >
+          <StoreItem store={store} onSelectStore={onSelectStore} />
+        </li>
+      ))}
     </ul>
   );
-}
+};
 
 export default StoreList;

@@ -1,12 +1,12 @@
-import CncSearch from "./cnc";
+import CncSearch from './cnc';
 
-let tempCacheObjects = {};
+const tempCacheObjects = {};
 /**
  * Helper function to initiate only single object
  * for any given promise function name.
  */
-export const createCacheObject = func => {
-  if (typeof tempCacheObjects[func.name] === "undefined") {
+export const createCacheObject = (func) => {
+  if (typeof tempCacheObjects[func.name] === 'undefined') {
     tempCacheObjects[func.name] = new CncSearch();
   }
   return tempCacheObjects[func.name];

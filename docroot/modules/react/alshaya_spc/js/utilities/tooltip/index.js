@@ -1,7 +1,6 @@
 import React from 'react';
 
 class ToolTip extends React.Component {
-
   getHtmlMarkup() {
     return { __html: this.props.content };
   }
@@ -10,9 +9,9 @@ class ToolTip extends React.Component {
     if (this.props.enable) {
       return (
         <div className="tooltip-anchor">
-          <div className="tooltip-box" dangerouslySetInnerHTML={this.getHtmlMarkup()}/>
+          <div className="tooltip-box" dangerouslySetInnerHTML={this.getHtmlMarkup()} />
         </div>
-      )
+      );
     }
     return (null);
   }
