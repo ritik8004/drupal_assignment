@@ -16,6 +16,19 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_spc_theme($existing, $type, $theme, $path) {
+  return [
+    'spc_checkout' => [
+      'variables' => [
+        'areas' => [],
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_library_info_build().
  */
 function alshaya_spc_library_info_build() {

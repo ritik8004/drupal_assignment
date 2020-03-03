@@ -10,6 +10,9 @@ import {
 import {
   showFullScreenLoader
 } from "../../../utilities/checkout_util";
+import {
+  gerAreaLabelById
+} from '../../../utilities/address_util';
 
 let AddressContent = React.lazy(() => import("../address-popup-content"));
 
@@ -84,6 +87,19 @@ export default class HomeDeliveryInfo extends React.Component {
 
   render() {
     const address = this.props.cart.cart.shipping_address;
+    let addressData = [];
+    Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
+      let fillVal = address[val.key];
+      // Handling for area field.
+      if (key === 'administrative_area') {
+        fillVal = gerAreaLabelById(false, fillVal);
+      }
+      else if (key === 'area_parent') {
+        fillVal = gerAreaLabelById(true, fillVal);
+      }
+      addressData.push(<span key={key}>{fillVal}, </span>)
+    })
+
     return (
       <div className="delivery-information-preview">
         <div className="spc-delivery-customer-info">
@@ -91,8 +107,7 @@ export default class HomeDeliveryInfo extends React.Component {
             {address.firstname} {address.lastname}
           </div>
           <div className="delivery-address">
-            {address.address_block_segment}, {address.address_building_segment},{" "}
-            {address.address_apartment_segment}, {address.street}
+            {addressData}
           </div>
           <div className="spc-address-form-edit-link" onClick={this.openModal}>
             {Drupal.t("Change")}

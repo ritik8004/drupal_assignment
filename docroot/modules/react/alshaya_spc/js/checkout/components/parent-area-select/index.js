@@ -1,7 +1,12 @@
 import React from 'react';
 
-import axios from 'axios';
 import FilterList from '../../../utilities/filter-list';
+import {
+  getAreasList
+} from '../../../utilities/address_util';
+import {
+  geocodeAddressToLatLng
+} from '../../../utilities/map/map_utils';
 
 export default class AreaSelect extends React.Component {
 
@@ -16,7 +21,8 @@ export default class AreaSelect extends React.Component {
     this.state = {
       'areas': {},
       'current_option': current_option,
-      'showFilterList': false
+      'showFilterList': false,
+      'cityChanged': false
     };
   }
 
@@ -27,6 +33,15 @@ export default class AreaSelect extends React.Component {
     this.setState({
       showFilterList: !this.state.showFilterList
     });
+
+    if (!this.state.showFilterList) {
+      // Hide contact info and save button on filter list show.
+      document.getElementById('spc-checkout-contact-info').classList.add('visually-hidden');
+      document.getElementById('address-form-action').classList.add('visually-hidden');
+    } else {
+      document.getElementById('spc-checkout-contact-info').classList.remove('visually-hidden');
+      document.getElementById('address-form-action').classList.remove('visually-hidden');
+    }
   }
 
   /**
@@ -34,10 +49,18 @@ export default class AreaSelect extends React.Component {
    */
   processSelectedItem = (val) => {
     this.setState({
-      current_option: val
+      current_option: val,
+      cityChanged: val
     });
 
     this.handleChange(val);
+
+    // Geocoding so that map is updated.
+    // Calling in timeout to avaoid race condition as
+    // component is refreshing and thus elemtent not available.
+    setTimeout(function () {
+      geocodeAddressToLatLng();
+    }, 200);
   }
 
   componentDidMount() {
@@ -49,61 +72,53 @@ export default class AreaSelect extends React.Component {
         value: this.props.default_val[this.props.field.key]
       });
     }
+
+    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+  }
+
+  /**
+   * Update area field from value of google map.
+   */
+  updateAreaFromGoogleMap = (e) => {
+    let data = e.detail.data();
+    this.setState({
+      current_option: data.id
+    });
+
+    this.props.areasUpdate(data.id);
   }
 
   /**
    * Get the areas list.
    */
   getAreasList = () => {
-    return axios.get('parent-areas')
-    .then(response => {
-      let data = new Array();
-      Object.entries(response.data).forEach(([key, term]) => {
-        data[key] = {
-          value: key,
-          label: term,
-        };
-      });
-
-      this.setState({
-        areas: data
-      });
-    })
-    .catch(error => {
-    // Processing of error here.
+    this.setState({
+      areas: getAreasList(true, null)
     });
   }
 
   // Handle change of 'area_parent' list.
   handleChange = (selectedOption) => {
     this.setState({
-      current_option: selectedOption.value
+      current_option: selectedOption
     });
 
-    // Get child areas list.
-    var api_url = 'area-list/' + selectedOption.value;
-    return axios.get(api_url)
-      .then(response => {
-        // Refresh child select list.
-        this.props.areasUpdate(response.data);
-    })
-    .catch(error => {
-      // Processing of error here.
-    });
+    this.props.areasUpdate(selectedOption);
   };
 
   render() {
     let options = this.state.areas;
+    let panelTitle = Drupal.t('select ') + this.props.field.label;
 
     return (
-        <div>
+        < div className = 'spc-type-select' >
           <label>{this.props.field.label}</label>
             {this.state.current_option.length !== 0 ? (
-              <div onClick={() => this.toggleFilterList()}>
+              <div id='spc-area-select-selected-city' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
                 {options[this.state.current_option]['label']}
               </div>
             ) : (
-              <div onClick={() => this.toggleFilterList()}>
+              <div id='spc-area-select-selected-city' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
                 {Drupal.t('Select city')}
               </div>
           )}
@@ -111,11 +126,13 @@ export default class AreaSelect extends React.Component {
             <FilterList
               selected={options[this.state.current_option]}
               options={options}
-              placeHolderText={Drupal.t('Select for an city')}
+              placeHolderText={Drupal.t('search for a city')}
               processingCallback={this.processSelectedItem}
+              toggleFilterList={this.toggleFilterList}
+              panelTitle={panelTitle}
             />
           }
-          <input type='hidden' name={this.props.field_key} value={this.state.current_option}/>
+          <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={this.state.current_option}/>
           <div id={this.props.field_key + '-error'}></div>
         </div>
     );

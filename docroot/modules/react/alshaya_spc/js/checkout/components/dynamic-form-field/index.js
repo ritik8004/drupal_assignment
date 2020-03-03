@@ -16,14 +16,14 @@ export default class DynamicFormField extends React.Component {
       field_key, field, area_list, areasUpdate,
     } = this.props;
     if (field_key === 'administrative_area') {
-      return <AreaSelect default_val={default_val} area_list={area_list} field_key={field_key} field={field} />;
+      return <AreaSelect cityChanged={this.props.cityChanged} default_val={default_val} area_list={area_list} field_key={field_key} field={field}/>
     }
     if (field_key === 'area_parent') {
       return <ParentAreaSelect default_val={default_val} field_key={field_key} field={field} areasUpdate={areasUpdate} />;
     }
 
     return (
-      <TextField required={this.props.field.required} id={this.props.field_key} type="text" label={this.props.field.label} name={this.props.field_key} defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''} />
+      <TextField isAddressField={true} required={this.props.field.required} id={this.props.field_key} type="text" label={this.props.field.label} name={this.props.field_key} defaultValue={default_val !== '' ? default_val[this.props.field.key] : ''} />
     );
   }
 }
