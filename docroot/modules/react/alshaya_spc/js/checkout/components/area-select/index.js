@@ -9,25 +9,43 @@ export default class AreaSelect extends React.Component {
 
   constructor(props) {
     super(props);
-    let current_option = new Array();
-    // If default value is available, process that.
-    if (this.props.default_val.length !== 0
-      && this.props.default_val.length !== 'undefined') {
-      current_option = this.props.default_val[this.props.field.key];
-    }
     this.state = {
       'areas': [],
-      'current_option': current_option,
-      'showFilterList': false
+      'current_option': this.areaCurrentOption(),
+      'showFilterList': false,
+      'currentCity': props.cityChanged
     };
+  }
+
+  areaCurrentOption = () => {
+    let current_option = new Array();
+    if (this.props.default_val.length !== 0 &&
+      this.props.default_val.length !== 'undefined') {
+      current_option = this.props.default_val[this.props.field.key];
+    }
+
+    return current_option;
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.cityChanged !== state.currentCity) {
+      return {'current_option': new Array(), 'currentCity': props.cityChanged}
+    }
+
+    return null;
   }
 
   componentDidMount() {
     this.getAreaList();
-
-    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+    // Only trigger event when area parent field not available.
+    if (window.drupalSettings.address_fields.area_parent === undefined) {
+      document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+    }
   }
 
+  /**
+   * When we search in google, update address.
+   */
   updateAreaFromGoogleMap = (e) => {
     let data = e.detail.data();
     this.setState({
@@ -59,7 +77,7 @@ export default class AreaSelect extends React.Component {
    */
   processSelectedItem = (val) => {
     this.setState({
-      current_option: val
+      current_option: val,
     });
   };
 
@@ -80,17 +98,18 @@ export default class AreaSelect extends React.Component {
     }
 
     let panelTitle = Drupal.t('select ') + this.props.field.label;
+    let current_option = this.state.current_option;
 
     return (
       <div className='spc-type-select'>
         <label>{this.props.field.label}</label>
         {
-          (this.state.current_option !== undefined
-            && this.state.current_option !== null
-            && this.state.current_option.length !== 0
+          (current_option !== undefined
+            && current_option !== null
+            && current_option.length > 0
             && options.length > 0) ? (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
-            {options[this.state.current_option]['label']}
+            {options[current_option]['label']}
           </div>
         ) : (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
@@ -99,7 +118,7 @@ export default class AreaSelect extends React.Component {
         )}
         {this.state.showFilterList &&
           <FilterList
-            selected={options[this.state.current_option]}
+            selected={options[current_option]}
             options={options}
             placeHolderText={Drupal.t('search for an area')}
             processingCallback={this.processSelectedItem}
@@ -107,7 +126,7 @@ export default class AreaSelect extends React.Component {
             panelTitle={panelTitle}
           />
         }
-        <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={this.state.current_option}/>
+        <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={current_option}/>
         <div id={this.props.field_key + '-error'}/>
       </div>
     );

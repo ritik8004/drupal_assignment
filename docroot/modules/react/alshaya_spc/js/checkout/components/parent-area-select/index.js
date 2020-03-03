@@ -18,7 +18,8 @@ export default class AreaSelect extends React.Component {
     this.state = {
       'areas': {},
       'current_option': current_option,
-      'showFilterList': false
+      'showFilterList': false,
+      'cityChanged': false
     };
   }
 
@@ -45,7 +46,8 @@ export default class AreaSelect extends React.Component {
    */
   processSelectedItem = (val) => {
     this.setState({
-      current_option: val
+      current_option: val,
+      cityChanged: val
     });
 
     this.handleChange(val);
@@ -66,9 +68,7 @@ export default class AreaSelect extends React.Component {
 
   updateAreaFromGoogleMap = (e) => {
     let data = e.detail.data();
-    this.setState({
-      current_option: data.id,
-    });
+    this.handleChange(data.id);
   }
 
   /**
@@ -97,11 +97,11 @@ export default class AreaSelect extends React.Component {
         < div className = 'spc-type-select' >
           <label>{this.props.field.label}</label>
             {this.state.current_option.length !== 0 ? (
-              <div onClick={() => this.toggleFilterList()}>
+              <div id='spc-area-select-selected-city' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
                 {options[this.state.current_option]['label']}
               </div>
             ) : (
-              <div onClick={() => this.toggleFilterList()}>
+              <div id='spc-area-select-selected-city' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
                 {Drupal.t('Select city')}
               </div>
           )}

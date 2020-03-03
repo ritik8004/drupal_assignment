@@ -18,7 +18,8 @@ export default class AddressForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      area_list: null
+      area_list: null,
+      cityChanged: false
     };
   }
 
@@ -52,7 +53,8 @@ export default class AddressForm extends React.Component {
    */
   refreshAreas = parent_id => {
     this.setState({
-      area_list: getAreasList(false, parent_id)
+      area_list: getAreasList(false, parent_id),
+      cityChanged: parent_id
     });
   };
 
@@ -115,6 +117,7 @@ export default class AddressForm extends React.Component {
             default_val={default_val}
             areasUpdate={this.refreshAreas}
             area_list={this.state.area_list}
+            cityChanged={this.state.cityChanged}
             field_key={key}
             field={field}
           />

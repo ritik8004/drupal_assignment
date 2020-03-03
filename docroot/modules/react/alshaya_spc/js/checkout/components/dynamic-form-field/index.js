@@ -15,7 +15,7 @@ export default class DynamicFormField extends React.Component {
 
     const { field_key, field, area_list, areasUpdate } = this.props;
     if (field_key === 'administrative_area') {
-      return <AreaSelect default_val={default_val} area_list={area_list} field_key={field_key} field={field}/>
+      return <AreaSelect cityChanged={this.props.cityChanged} default_val={default_val} area_list={area_list} field_key={field_key} field={field}/>
     }
     else if(field_key === 'area_parent') {
       return <ParentAreaSelect default_val={default_val} field_key={field_key} field={field} areasUpdate={areasUpdate}/>

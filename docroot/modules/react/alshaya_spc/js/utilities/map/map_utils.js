@@ -103,18 +103,23 @@ export const fillValueInAddressFromGeocode = (address) => {
     ([key, field]) => {
       let val = getAddressFieldVal(address, key).trim();
       // Some handling for select list fields (areas/city).
-      if ((key === 'administrative_area' || key === 'area_parent')
-        && val.length > 0) {
-        let areaVal = deduceAreaVal(val, field.key);
-        if (areaVal !== null) {
-          var event = new CustomEvent('updateAreaOnMapSelect', {
-            bubbles: true,
-            detail: {
-              data: () => areaVal
-            }
-          });
-          document.dispatchEvent(event);
+      if ((key === 'administrative_area' || key === 'area_parent')) {
+        let areaVal = new Array();
+        // If not empty.
+        if (val.length > 0) {
+          areaVal = deduceAreaVal(val, key);
+          if (areaVal === null) {
+            areaVal = new Array();
+          }
         }
+
+        var event = new CustomEvent('updateAreaOnMapSelect', {
+          bubbles: true,
+          detail: {
+            data: () => areaVal
+          }
+        });
+        document.dispatchEvent(event);
       }
       else {
         document.getElementById(key).value = val;
