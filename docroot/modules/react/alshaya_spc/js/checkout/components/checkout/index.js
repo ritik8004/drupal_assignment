@@ -16,15 +16,20 @@ import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
 import TermsConditions from '../terms-conditions';
+import { getLocationAccess, getDefaultMapCenter } from '../../../utilities/checkout_util';
+import { fetchClicknCollectStores } from "../../../utilities/api/requests";
+import { createFetcher } from '../../../utilities/api/fetcher';
 import {removeFullScreenLoader} from "../../../utilities/checkout_util";
 
-export default class Checkout extends React.Component {
+window.fetchStore = 'stop';
 
+export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       wait: true,
       cart: null,
+      storeList: null,
       payment_methods: window.drupalSettings.payment_methods,
     };
   }
@@ -91,6 +96,55 @@ export default class Checkout extends React.Component {
     removeFullScreenLoader();
   };
 
+  /**
+   * Trigger cnc event to get location details and fetch stores.
+   */
+  cncEvent = () => {
+    let { cart: { store_info } } = this.state.cart;
+    if (store_info) {
+      this.fetchStoresHelper({
+        lat: parseFloat(store_info.lat),
+        lng: parseFloat(store_info.lng)
+      });
+    }
+    else {
+      getLocationAccess()
+        .then(pos => {
+          this.fetchStoresHelper({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          });
+        },
+        reject =>  {
+          this.fetchStoresHelper(getDefaultMapCenter());
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+  };
+
+  /**
+   * Fetch click n collect stores and update store list.
+   */
+  fetchStoresHelper = (coords) => {
+    window.fetchStore = 'pending';
+    const storeFetcher = createFetcher(
+      fetchClicknCollectStores
+    );
+    let list = storeFetcher.read(coords);
+
+    list.then(
+      response => {
+        if (typeof response.error === 'undefined') {
+          this.setState({storeList: response});
+          window.fetchStore = 'finished';
+        }
+      }
+    );
+  }
+
   render() {
     // While page loads and all info available.
 
@@ -112,8 +166,8 @@ export default class Checkout extends React.Component {
         <div className="spc-pre-content" />
         <div className="spc-main">
           <div className="spc-content">
-            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} />
-            <ClicknCollectContextProvider cart={this.state.cart}>
+            <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent}/>
+            <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
             <PaymentMethods refreshCart={this.refreshCart} payment_methods={this.state.payment_methods} cart={this.state.cart} />

@@ -1,12 +1,13 @@
 import _isEmpty from 'lodash/isEmpty';
 import { isRTL } from '../rtl';
+import { dispatchCustomEvent } from '../events';
 
 export default class Gmap {
 
   constructor() {
     this.map = {
       settings: {
-        zoom: 11,
+        zoom: (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center.zoom)) ? drupalSettings.map.center.zoom : 7,
         maxZoom: 18,
         zoomControl: true,
         fullscreenControl: false,
@@ -28,9 +29,9 @@ export default class Gmap {
       mapMarkers: []
     };
 
-    if (typeof drupalSettings.cnc !== 'undefined' && typeof drupalSettings.cnc.map_marker !== 'undefined') {
-      this.map.settings.map_marker.icon = drupalSettings.cnc.map_marker.icon;
-      this.map.settings.map_marker.label_position = drupalSettings.cnc.map_marker.label_position;
+    if (typeof drupalSettings.map !== 'undefined' && typeof drupalSettings.map.map_marker !== 'undefined') {
+      this.map.settings.map_marker.icon = drupalSettings.map.map_marker.icon;
+      this.map.settings.map_marker.label_position = drupalSettings.map.map_marker.label_position;
     }
   }
 
@@ -86,7 +87,15 @@ export default class Gmap {
   setCenter = (coords, callBackFunc = null) => {
     if (!_isEmpty(coords)) {
       this.map.googleMap.setCenter(coords);
-      this.map.googleMap.setZoom(11);
+      this.map.googleMap.setZoom(this.map.settings.zoom);
+      return;
+    }
+
+    if (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center)) {
+      let {latitude, longitude} = drupalSettings.map.center;
+      let position = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+      this.map.googleMap.setCenter(position);
+      this.map.googleMap.setZoom(this.map.settings.zoom);
       return;
     }
 
@@ -98,6 +107,7 @@ export default class Gmap {
       if (status == google.maps.GeocoderStatus.OK) {
         // Just center the map and don't do anything.
         window.spcMap.googleMap.setCenter(results[0].geometry.location);
+        window.spcMap.googleMap.setZoom(window.spcMap.settings.zoom);
         if (callBackFunc) {
           callBackFunc.call(results)
         }
@@ -161,10 +171,9 @@ export default class Gmap {
         }
         // Set the marker to center of the map on click.
         map.googleMap.setCenter(currentMarker.getPosition());
-        map.googleMap.setZoom(11);
-        map.googleMap.panBy(0, -150);
-
+        map.googleMap.setZoom(12);
         currentInfoWindow.open(map.googleMap, currentMarker);
+        dispatchCustomEvent('mapTriggered', { marker: currentMarker,  markerSettings});
       });
 
       google.maps.event.addListener(currentInfoWindow, 'closeclick', function () {

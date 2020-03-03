@@ -1,12 +1,10 @@
-import React from 'react'
+import React from 'react';
 import StoreItem from '../store-item';
 
-const StoreItemInfoWindow = ({ store }) => {
-  return (
-    <>
-      <StoreItem store={store} />
-    </>
-  );
-}
+const StoreItemInfoWindow = ({ store }) => (
+  <>
+    <StoreItem store={store} />
+  </>
+);
 
 export default StoreItemInfoWindow;

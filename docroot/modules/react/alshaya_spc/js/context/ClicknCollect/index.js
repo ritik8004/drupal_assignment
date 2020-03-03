@@ -1,29 +1,32 @@
 import React from 'react'
+import { fetchClicknCollectStores } from "../../utilities/api/requests";
+import _isEqual from 'lodash/isEqual';
+import { makeFullName } from '../../utilities/cart_customer_util';
 
 export const ClicknCollectContext = React.createContext();
 
 export class ClicknCollectContextProvider extends React.Component {
+  _isMounted = true;
 
   constructor(props) {
     super(props);
     let coords = null;
     let selectedStore = null;
+    let storeList = props.storeList;
     let contactInfo = null;
 
     let { cart: { customer, store_info, shipping_address } } = props.cart;
 
     if (!shipping_address && customer !== undefined) {
       contactInfo = {
-        firstname: customer.firstname || '',
-        lastname: customer.lastname || '',
+        fullname: makeFullName(customer.firstname || '', customer.lastname || ''),
         email: customer.email || '',
         telephone: customer.telephone || '',
       }
     }
     else if (shipping_address) {
       contactInfo = {
-        firstname: shipping_address.firstname || '',
-        lastname: shipping_address.lastname || '',
+        fullname: makeFullName(shipping_address.firstname || '', shipping_address.lastname || ''),
         email: shipping_address.email || '',
         telephone: shipping_address.telephone || '',
       }
@@ -39,13 +42,32 @@ export class ClicknCollectContextProvider extends React.Component {
 
     this.state = {
       coords: coords,
-      storeList: null,
+      storeList: storeList,
       selectedStore: selectedStore,
-      contactInfo: contactInfo
+      contactInfo: contactInfo,
     }
   }
 
-  updateSelectStore = (store) => {
+  componentDidMount() {
+    this._isMounted = true;
+    this.setState({storeList: this.props.storeList});
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.storeList !== state.storeList) {
+      return {
+        storeList: state.storeList === null ? props.storeList : state.storeList,
+      };
+    }
+    // Return null to indicate no change to state.
+    return null;
+  }
+
+  updateSelectedStore = (store) => {
     this.setState({
       selectedStore: store
     });
@@ -76,7 +98,7 @@ export class ClicknCollectContextProvider extends React.Component {
         value={
           {
             ...this.state,
-            updateSelectStore: this.updateSelectStore,
+            updateSelectStore: this.updateSelectedStore,
             updateCoordsAndStoreList: this.updateCoordsAndStoreList,
             updateCoords: this.updateCoords,
             updateContactInfo: this.updateContactInfo

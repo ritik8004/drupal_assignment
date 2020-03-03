@@ -9,6 +9,21 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update().
+ *
+ * Update the store finder config to install label position settings.
+ */
+function alshaya_stores_finder_update_8109() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_stores_finder.settings'],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add the new field for store email.

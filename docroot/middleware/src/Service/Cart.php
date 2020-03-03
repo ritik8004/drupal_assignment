@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
 
@@ -18,13 +19,35 @@ class Cart {
   protected $magentoInfo;
 
   /**
+   * Magento API Wrapper.
+   *
+   * @var \App\Service\Magento\MagentoApiWrapper
+   */
+  protected $magentoApiWrapper;
+
+  /**
+   * Utility.
+   *
+   * @var \App\Service\Utility
+   */
+  protected $utility;
+
+  /**
    * Cart constructor.
    *
-   * @param \App\Service\Magento\MagentoInfo $magentoInfo
+   * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
+   * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
+   *   Magento API Wrapper.
+   * @param \App\Service\Utility $utility
+   *   Utility Service.
    */
-  public function __construct(MagentoInfo $magentoInfo) {
-    $this->magentoInfo = $magentoInfo;
+  public function __construct(MagentoInfo $magento_info,
+                              MagentoApiWrapper $magento_api_wrapper,
+                              Utility $utility) {
+    $this->magentoInfo = $magento_info;
+    $this->magentoApiWrapper = $magento_api_wrapper;
+    $this->utility = $utility;
   }
 
   /**
@@ -39,26 +62,15 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart(int $cart_id) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/getCart', $cart_id);
+    $url = sprintf('carts/%d/getCart', $cart_id);
 
     try {
-      $response = $client->request('GET', $url);
-      $result = $response->getBody()->getContents();
-      $cart = json_decode($result, TRUE);
-
-      // In case magento not returns cart.
-      if (!$cart || !isset($cart['cart'])) {
-        throw new \Exception('Invalid cart id', 500);
-      }
-
-      return $cart;
+      return $this->magentoApiWrapper->doRequest('GET', $url);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
-
   }
 
   /**
@@ -70,16 +82,13 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function createCart() {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/carts';
+    $url = 'carts';
     try {
-      $response = $client->request('POST', $url);
-      $result = $response->getBody()->getContents();
-      return json_decode($result, TRUE);
+      return $this->magentoApiWrapper->doRequest('POST', $url);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -332,6 +341,9 @@ class Cart {
     ];
     if ($create_customer) {
       $customer = $this->createCustomer($data['shipping']['shipping_address']);
+      if (!empty($customer['message'])) {
+        return $this->getErrorResponse($customer['message'], 422);
+      }
       $this->associateCartToCustomer($cart_id, $customer['id']);
     }
     return $this->updateCart($data, $cart_id);
@@ -370,8 +382,7 @@ class Cart {
    *   Json decoded response.
    */
   public function createCustomer(array $customer_data) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/customers';
+    $url = 'customers';
 
     try {
       $data['customer'] = [
@@ -384,15 +395,11 @@ class Cart {
         'store_id' => $this->magentoInfo->getMagentoStoreId(),
       ];
 
-      $response = $client->request('POST', $url, ['json' => (object) $data]);
-      $result = $response->getBody()->getContents();
-      $rs = json_decode($result, TRUE);
-
-      return $rs;
+      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -408,8 +415,7 @@ class Cart {
    *   Response.
    */
   public function associateCartToCustomer(int $cart_id, int $customer_id) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/associate-cart', $cart_id);
+    $url = sprintf('carts/%d/associate-cart', $cart_id);
 
     try {
       $data = [
@@ -417,15 +423,12 @@ class Cart {
         'cartId' => $cart_id,
         'store_id' => $this->magentoInfo->getMagentoStoreId(),
       ];
-      $response = $client->request('POST', $url, ['json' => (object) $data]);
-      $result = $response->getBody()->getContents();
-      $rs = json_decode($result, TRUE);
 
-      return $rs;
+      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -472,28 +475,14 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updateCart(array $data, int $cart_id) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/updateCart', $cart_id);
+    $url = sprintf('carts/%d/updateCart', $cart_id);
 
     try {
-      $response = $client->request('POST', $url, ['json' => (object) $data]);
-      $result = $response->getBody()->getContents();
-      $cart = json_decode($result, TRUE);
-
-      // In case magento not returns cart data.
-      if (!$cart || !isset($cart['cart'])) {
-        $message = 'Sorry, something went wrong. Please try again later.';
-        if (!empty($cart['message'])) {
-          $message = $cart['message'];
-        }
-        throw new \Exception($message, '500');
-      }
-
-      return $cart;
+      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -511,21 +500,18 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function shippingMethods(array $data, int $cart_id) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-
     $shipping_url = !empty($data['address_id'])
       ? 'estimate-shipping-methods-by-address-id'
       : 'estimate-shipping-methods';
-    $shipping_method_url = '/carts/' . $cart_id . '/' . $shipping_url;
-    $url = $this->magentoInfo->getMagentoUrl() . $shipping_method_url;
+
+    $url = 'carts/' . $cart_id . '/' . $shipping_url;
+
     try {
-      $response = $client->request('POST', $url, ['json' => $data]);
-      $result = $response->getBody()->getContents();
-      return json_decode($result, TRUE);
+      return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -539,18 +525,14 @@ class Cart {
    *   Payment method list.
    */
   public function getPaymentMethods(int $cart_id) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/payment-methods', $cart_id);
+    $url = sprintf('carts/%d/payment-methods', $cart_id);
 
     try {
-      $response = $client->request('GET', $url);
-      $result = $response->getBody()->getContents();
-      $payment_methods = json_decode($result, TRUE);
-      return $payment_methods;
+      return $this->magentoApiWrapper->doRequest('GET', $url);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -566,18 +548,14 @@ class Cart {
    *   Status.
    */
   public function placeOrder(int $cart_id, array $data) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/' . sprintf('carts/%d/order', $cart_id);
+    $url = sprintf('carts/%d/order', $cart_id);
 
     try {
-      $response = $client->request('PUT', $url, ['json' => $data]);
-      $result = $response->getBody()->getContents();
-      $data = json_decode($result, TRUE);
-      return $data;
+      return $this->magentoApiWrapper->doRequest('PUT', $url, ['json' => $data]);
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
   }
 
@@ -591,8 +569,7 @@ class Cart {
    *   Response.
    */
   public function customerCheckByMail(string $email) {
-    $client = $this->magentoInfo->getMagentoApiClient();
-    $url = $this->magentoInfo->getMagentoUrl() . '/customers/search';
+    $url = 'customers/search';
     $query['query'] = [
       'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
       'searchCriteria[filterGroups][0][filters][0][value]' => $email,
@@ -602,28 +579,7 @@ class Cart {
       'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
     ];
 
-    $response = $client->request('GET', $url, $query);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
-  /**
-   * Method for error response.
-   *
-   * @param string $message
-   *   Error message.
-   * @param string $code
-   *   Error code.
-   *
-   * @return array
-   *   Error response array.
-   */
-  public function getErrorResponse(string $message, string $code) {
-    return [
-      'error' => TRUE,
-      'error_message' => $message,
-      'error_code' => $code,
-    ];
+    return $this->magentoApiWrapper->doRequest('GET', $url, $query);
   }
 
 }

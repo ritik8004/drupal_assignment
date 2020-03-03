@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {placeOrder} from '../../../utilities/checkout_util';
-import Price from '../../../utilities/price';
+import PriceElement from "../../../utilities/special-price/PriceElement";
 
 export default class CompletePurchase extends React.Component {
 
@@ -12,7 +12,7 @@ export default class CompletePurchase extends React.Component {
     e.preventDefault();
     const { cart } = this.props;
     placeOrder(cart.cart.cart_id, cart.selected_payment_method);
-  }
+  };
 
   render() {
     const { cart } = this.props;
@@ -25,7 +25,7 @@ export default class CompletePurchase extends React.Component {
         {window.innerWidth < 768 &&
           <div className='order-preview'>
             <span className='total-count'> {Drupal.t('Order total (@count items)', {'@count': cart.cart.items_qty})} </span>
-            <span className='total-price'> <Price price={cart.cart.cart_total}/> </span>
+            <span className='total-price'> <PriceElement amount={cart.cart.cart_total}/> </span>
           </div>
         }
         <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>

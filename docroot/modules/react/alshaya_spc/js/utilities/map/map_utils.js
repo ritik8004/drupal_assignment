@@ -11,7 +11,7 @@ export const mapAddressMap = () => {
   // For area parent.
   mapping['area_parent'] = ['administrative_area_level_1'];
   return mapping;
-}
+};
 
 /**
  * Get the map from window object.
@@ -20,7 +20,7 @@ export const mapAddressMap = () => {
  */
 export const getMap = () => {
   return window.spcMap;
-}
+};
 
 /**
  * Get the markers available on the map.
@@ -29,18 +29,18 @@ export const getMap = () => {
  */
 export const getMarkers = () => {
   return window.spcMarkers;
-}
+};
 
 /**
  * Removes all markers from map.
  */
 export const removeAllMarkersFromMap = () => {
   // First clear all existing marker on map.
-  for (var i = 0; i < window.spcMarkers.length; i++) {
+  for (let i = 0; i < window.spcMarkers.length; i++) {
     window.spcMarkers[i].setMap(null);
   }
   window.spcMarkers = [];
-}
+};
 
 /**
  * Create a marker.
@@ -50,20 +50,20 @@ export const removeAllMarkersFromMap = () => {
  */
 export const createMarker = (position, map) => {
   return new window.google.maps.Marker({
-    position: position,
-    map: map,
-    icon: '' // This can be later dynamic based on HD or CnC.
-  })
-}
+    position,
+    map,
+    icon: '', // This can be later dynamic based on HD or CnC.
+  });
+};
 
 /**
    * Create info window.
    */
 export const createInfoWindow =  (content) => {
   return new window.google.maps.InfoWindow({
-    content: content
+    content,
   });
-}
+};
 
 /**
  * Get value from google geocode for address form.
@@ -90,7 +90,7 @@ export const getAddressFieldVal = (addressArray, key) => {
   }
 
   return fieldVal;
-}
+};
 
 /**
  * Fill the address form based on geocode info.
@@ -125,6 +125,7 @@ export const fillValueInAddressFromGeocode = (address) => {
           }
         });
         document.dispatchEvent(event);
+
       }
     }
   }
@@ -151,7 +152,7 @@ export const fillValueInAddressFromGeocode = (address) => {
       document.dispatchEvent(event);
     }
   }
-}
+};
 
 /**
  * Deduce area name from available areas based from google.
@@ -175,6 +176,5 @@ export const deduceAreaVal = (area, field) => {
       }
     }
   }
-
   return null;
-}
+};
