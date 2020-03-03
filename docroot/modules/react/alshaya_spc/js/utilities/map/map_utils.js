@@ -10,6 +10,8 @@ export const mapAddressMap = () => {
   mapping['administrative_area'] = ['sublocality_level_1', 'administrative_area_level_1'];
   // For area parent.
   mapping['area_parent'] = ['administrative_area_level_1'];
+  // For locality.
+  mapping['locality'] = ['locality'];
   return mapping;
 };
 
@@ -73,17 +75,32 @@ export const createInfoWindow =  (content) => {
  */
 export const getAddressFieldVal = (addressArray, key) => {
   let fieldVal = '';
+  let fieldData = [];
+  // Get the mapping.
   const addressMap = mapAddressMap();
   for (let i = 0; i < addressArray.length; i++) {
     if (addressArray[i].types[0]) {
-      for (let j = 0; j < addressArray[i].types.length; j++) {
-        // If mapping set.
-        if (addressMap[key] !== undefined) {
-          for (let k = 0; k < addressMap[key].length; k++) {
-            if (addressArray[i].types[j] === addressMap[key][k]) {
-              return addressArray[i].long_name;
-            }
+      // If mapping set.
+      if (addressMap[key] !== undefined) {
+        for (let k = 0; k < addressMap[key].length; k++) {
+          let type = addressMap[key][k];
+          if (addressArray[i].types.indexOf(type) !== -1) {
+            let data = {
+              'type': type,
+              'val': addressArray[i].long_name
+            };
+            fieldData.push(data);
           }
+        }
+      }
+    }
+  }
+
+  if (fieldData.length > 0) {
+    for (let i = 0; i < addressMap[key].length; i++) {
+      for (let j = 0; j < fieldData.length; j++) {
+        if (fieldData[j]['type'] === addressMap[key][i]) {
+          return fieldData[j]['val'];
         }
       }
     }
@@ -167,7 +184,7 @@ export const deduceAreaVal = (area, field) => {
       let areaLable = areas[i].getAttribute(labelAttribute);
       // If it matches with some value.
       if (areaLable.toLowerCase().indexOf(area.toLowerCase()) !== -1 ||
-        area.toLowerCase().indexOf(areaLable.toLocaleLowerCase()) !== -1) {
+        area.toLowerCase().indexOf(areaLable.toLowerCase()) !== -1) {
         let idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
         return {
           id: areas[i].getAttribute(idAttribute),
