@@ -71,7 +71,7 @@ class OrdersController {
   protected $sessionCartInfo = [];
 
   /**
-   * CartController constructor.
+   * OrdersController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   RequestStack Object.
@@ -96,7 +96,7 @@ class OrdersController {
   }
 
   /**
-   * Get cart data.
+   * Get order data.
    *
    * @param int|string $order_id
    *   Use "last" for last order from session, order id for specific order.
