@@ -53,7 +53,8 @@ do
     npm run install-tools
 
     # TODO: Increase test coverage to all the themes.
-    if ([ $theme_type_dir == 'transac' ])
+    # Validate only for travis PRs.
+    if [[ $isTravisPr == 1 && $theme_type_dir == 'transac' ]]
     then
       ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
 
