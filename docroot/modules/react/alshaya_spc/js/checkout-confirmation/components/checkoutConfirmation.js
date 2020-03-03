@@ -23,6 +23,9 @@ class CheckoutConfirmation extends React.Component {
         orderData.then((result) => {
           const prevState = this.state;
           this.setState({ ...prevState, wait: false, order: result });
+          // Dispatch event for GTM.
+          var event = new CustomEvent('placeOrderConfirmation', { bubbles: true, detail: { data: result } });
+          document.dispatchEvent(event);
         });
       }
     } catch (e) {

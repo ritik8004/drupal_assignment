@@ -60,6 +60,10 @@
     Drupal.alshayaSeoGtmPushCheckoutOption(deliveryType, 2);
   });
 
+  document.addEventListener('placeOrderConfirmation', function (e) {
+    Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.data.payment.method, 2);
+  });
+
   /**
    * Helper function to push checkout option to GTM.
    *
