@@ -77,7 +77,7 @@ export default class AreaSelect extends React.Component {
    */
   processSelectedItem = (val) => {
     this.setState({
-      current_option: val,
+      current_option: val.toString(),
     });
   };
 

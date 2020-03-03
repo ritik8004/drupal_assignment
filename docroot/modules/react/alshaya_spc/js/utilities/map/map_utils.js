@@ -98,21 +98,26 @@ export const getAddressFieldVal = (addressArray, key) => {
  * @param {*} address
  */
 export const fillValueInAddressFromGeocode = (address) => {
-  console.log(address);
   Object.entries(window.drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      let val = getAddressFieldVal(address, key).trim();
       // Some handling for select list fields (areas/city).
-      if ((key === 'administrative_area' || key === 'area_parent')) {
-        let areaVal = new Array();
-        // If not empty.
-        if (val.length > 0) {
-          areaVal = deduceAreaVal(val, key);
-          if (areaVal === null) {
-            areaVal = new Array();
-          }
-        }
+      if ((key !== 'administrative_area' && key !== 'area_parent')) {
+        // We will handle area/parent area separately.
+        let val = getAddressFieldVal(address, key).trim();
+        document.getElementById(key).value = val;
+      }
+    }
+  );
 
+  // If area parent available.
+  if (window.drupalSettings.address_fields.area_parent !== undefined) {
+    let areaVal = new Array();
+    let val = getAddressFieldVal(address, 'area_parent').trim();
+    // If not empty.
+    if (val.length > 0) {
+      areaVal = deduceAreaVal(val, 'area_parent');
+      if (areaVal !== null) {
+        // Trigger event.
         var event = new CustomEvent('updateAreaOnMapSelect', {
           bubbles: true,
           detail: {
@@ -121,11 +126,31 @@ export const fillValueInAddressFromGeocode = (address) => {
         });
         document.dispatchEvent(event);
       }
-      else {
-        document.getElementById(key).value = val;
-      }
     }
-  );
+  }
+
+  // If area available and parent parent area is not available.
+  if (window.drupalSettings.address_fields.administrative_area !== undefined
+    && window.drupalSettings.address_fields.area_parent === undefined) {
+    let areaVal = new Array();
+    let val = getAddressFieldVal(address, 'administrative_area').trim();
+    // If not empty.
+    if (val.length > 0) {
+      areaVal = deduceAreaVal(val, 'administrative_area');
+      if (areaVal === null) {
+        areaVal = new Array();
+      }
+
+      // Trigger event.
+      var event = new CustomEvent('updateAreaOnMapSelect', {
+        bubbles: true,
+        detail: {
+          data: () => areaVal
+        }
+      });
+      document.dispatchEvent(event);
+    }
+  }
 }
 
 /**
@@ -137,10 +162,11 @@ export const deduceAreaVal = (area, field) => {
   let areas = document.querySelectorAll('[data-list=areas-list]');
   if (areas.length > 0) {
     for (let i = 0; i < areas.length; i++) {
-      let areaLable = areas[i].getAttribute('data-label');
+      let labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
+      let areaLable = areas[i].getAttribute(labelAttribute);
       // If it matches with some value.
-      if (areaLable.indexOf(area) !== -1 ||
-      area.indexOf(areaLable) !== -1) {
+      if (areaLable.toLowerCase().indexOf(area.toLowerCase()) !== -1 ||
+        area.toLowerCase().indexOf(areaLable.toLocaleLowerCase()) !== -1) {
         let idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
         return {
           id: areas[i].getAttribute(idAttribute),

@@ -66,9 +66,16 @@ export default class AreaSelect extends React.Component {
     document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
   }
 
+  /**
+   * Update area field from value of google map.
+   */
   updateAreaFromGoogleMap = (e) => {
     let data = e.detail.data();
-    this.handleChange(data.id);
+    this.setState({
+      current_option: data.id
+    });
+
+    this.props.areasUpdate(data.id);
   }
 
   /**
