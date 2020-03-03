@@ -1,4 +1,4 @@
-import { createCacheObject } from "../cache/cache-objects";
+import { createCacheObject } from '../cache/cache-objects';
 
 /**
  * Helper function to handle api request for GET method for now.
@@ -12,44 +12,40 @@ import { createCacheObject } from "../cache/cache-objects";
  * @param {*} promiseFunc
  *   Promise function name.
  */
-export const createFetcher = promiseFunc => {
-  return {
-    read: arg => {
-      // Initiate cache and cache responses of stores to avoid
-      // Duplicate api calls.
-      let cachedObj = createCacheObject(promiseFunc);
-      let cachedResults = cachedObj.getResults(arg);
-      if (!cachedResults) {
-        try {
-          return promiseFunc(arg).then(
-            response => {
-              if (!response) {
-                return { error: "error!" };
-              }
+export const createFetcher = (promiseFunc) => ({
+  read: (arg) => {
+    // Initiate cache and cache responses of stores to avoid
+    // Duplicate api calls.
+    const cachedObj = createCacheObject(promiseFunc);
+    const cachedResults = cachedObj.getResults(arg);
+    if (!cachedResults) {
+      try {
+        return promiseFunc(arg).then(
+          (response) => {
+            if (!response) {
+              return { error: 'error!' };
+            }
 
-              if (typeof response.data !== "object") {
-                return { error: "error!" };
-              }
+            if (typeof response.data !== 'object') {
+              return { error: 'error!' };
+            }
 
               if (!response.data.error && response.data.error) {
                 console.error(response.error_message);
                 return { error: "error!" };
               }
 
-              cachedObj.cacheResult(response.data);
-              return response.data;
-            },
-            reject => {
-              return { error: reject };
-            }
-          );
-        } catch (error) {
-          return new Promise(resolve => resolve({ error: error }));
-        }
+            cachedObj.cacheResult(response.data);
+            return response.data;
+          },
+          (reject) => ({ error: reject }),
+        );
+      } catch (error) {
+        return new Promise((resolve) => resolve({ error }));
       }
-      // read: should always return promise, so that we don't have to
-      // check at api call point if it's a promise or not.
-      return new Promise(resolve => resolve(cachedResults));
     }
-  };
-};
+    // read: should always return promise, so that we don't have to
+    // check at api call point if it's a promise or not.
+    return new Promise((resolve) => resolve(cachedResults));
+  },
+});

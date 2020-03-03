@@ -8,8 +8,7 @@ export const fixedFieldValidation = function (e) {
     document.getElementById('fname-error').innerHTML = Drupal.t('Please enter first name.');
     document.getElementById('fname-error').classList.add('error');
     valid_form = false;
-  }
-  else{
+  } else {
     // Remove error class and any error message.
     document.getElementById('fname-error').innerHTML = '';
     document.getElementById('fname-error').classList.remove('error');
@@ -20,8 +19,7 @@ export const fixedFieldValidation = function (e) {
     document.getElementById('lname-error').innerHTML = Drupal.t('Please enter last name.');
     document.getElementById('lname-error').classList.add('error');
     valid_form = false;
-  }
-  else {
+  } else {
     // Remove error class and any error message.
     document.getElementById('lname-error').innerHTML = '';
     document.getElementById('lname-error').classList.remove('error');
@@ -32,8 +30,7 @@ export const fixedFieldValidation = function (e) {
     document.getElementById('email-error').innerHTML = Drupal.t('Please enter your email.');
     document.getElementById('email-error').classList.add('error');
     valid_form = false;
-  }
-  else {
+  } else {
     // Remove error class and any error message.
     document.getElementById('email-error').innerHTML = '';
     document.getElementById('email-error').classList.remove('error');
@@ -44,10 +41,9 @@ export const fixedFieldValidation = function (e) {
     document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter your mobile number.');
     document.getElementById('mobile-error').classList.add('error');
     valid_form = false;
-  }
-  else {
+  } else {
     verifyValidMobileNumber(e.target.elements.mobile.value);
   }
 
   return valid_form;
-}
+};

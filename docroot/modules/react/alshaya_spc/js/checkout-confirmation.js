@@ -4,5 +4,5 @@ import CheckoutConfirmation
 
 ReactDOM.render(
   <CheckoutConfirmation />,
-  document.getElementById('spc-checkout-confirmation')
+  document.getElementById('spc-checkout-confirmation'),
 );

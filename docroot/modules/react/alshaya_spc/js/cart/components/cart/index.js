@@ -4,29 +4,28 @@ import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
 import MobileCartPreview from '../mobile-cart-preview';
-import OrderSummaryBlock from "../../../utilities/order-summary-block";
+import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import CheckoutMessage from '../../../utilities/checkout-message';
-import CartPromoBlock from "../cart-promo-block";
-import EmptyResult from "../../../utilities/empty-result";
-import Loading from "../../../utilities/loading";
-import VatFooterText from "../../../utilities/vat-footer";
-import { stickyMobileCartPreview, stickySidebar } from "../../../utilities/stickyElements/stickyElements";
+import CartPromoBlock from '../cart-promo-block';
+import EmptyResult from '../../../utilities/empty-result';
+import Loading from '../../../utilities/loading';
+import VatFooterText from '../../../utilities/vat-footer';
+import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 
 export default class Cart extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      'wait': true,
-      'items': [],
-      'totals': [],
-      'recommended_products': [],
-      'total_items': null,
-      'amount': null,
-      'coupon_code': null,
-      'cart_promo': null,
-      'in_stock': true
+      wait: true,
+      items: [],
+      totals: [],
+      recommended_products: [],
+      total_items: null,
+      amount: null,
+      coupon_code: null,
+      cart_promo: null,
+      in_stock: true,
     };
   }
 
@@ -39,9 +38,8 @@ export default class Cart extends React.Component {
       if (typeof data === 'undefined' || data.cart_id === null) {
         const prevState = this.state;
         this.setState({ ...prevState, wait: false });
-      }
-      else {
-        this.setState(state => ({
+      } else {
+        this.setState((state) => ({
           items: data.items,
           totals: data.totals,
           recommended_products: data.recommended_products,
@@ -50,13 +48,13 @@ export default class Cart extends React.Component {
           cart_promo: data.cart_promo,
           wait: false,
           coupon_code: data.coupon_code,
-          in_stock: data.in_stock
+          in_stock: data.in_stock,
         }));
 
         // The cart is empty.
         if (data.items.length === 0) {
           this.setState({
-            wait: false
+            wait: false,
           });
         }
 
@@ -71,37 +69,34 @@ export default class Cart extends React.Component {
       if (data.message !== undefined) {
         this.setState({
           message_type: data.message.type,
-          message: data.message.message
+          message: data.message.message,
         });
-      }
-      else if (data.in_stock === false) {
+      } else if (data.in_stock === false) {
         this.setState({
           message_type: 'error',
-          message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.')
+          message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.'),
         });
       }
-
-
     }, false);
-  };
+  }
 
   render() {
     if (this.state.wait) {
-      return <Loading/>
+      return <Loading />;
     }
 
     if (!this.state.wait && this.state.items.length === 0) {
       return (
-        <React.Fragment>
+        <>
           <EmptyResult Message={Drupal.t('your shopping bag is empty.')} />
           <CartRecommendedProducts sectionTitle={Drupal.t('new arrivals')} recommended_products={this.state.recommended_products} />
           <CartRecommendedProducts sectionTitle={Drupal.t('trending now')} recommended_products={this.state.recommended_products} />
-        </React.Fragment>
+        </>
       );
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className="spc-pre-content">
           <CheckoutMessage type={this.state.message_type}>
             {this.state.message}
@@ -118,14 +113,13 @@ export default class Cart extends React.Component {
           </div>
           <div className="spc-sidebar">
             <CartPromoBlock coupon_code={this.state.coupon_code} />
-            <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button={true} />
+            <OrderSummaryBlock totals={this.state.totals} in_stock={this.state.in_stock} cart_promo={this.state.cart_promo} show_checkout_button />
           </div>
         </div>
         <div className="spc-post-content">
           <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} recommended_products={this.state.recommended_products} />
         </div>
-      </React.Fragment>
+      </>
     );
   }
-
 }

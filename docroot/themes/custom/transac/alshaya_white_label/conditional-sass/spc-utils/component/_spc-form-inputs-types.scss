@@ -39,8 +39,7 @@
   }
 
   input:focus ~ label,
-  input:active ~ label,
-  input:valid ~ label {
+  input.focus ~ label {
     @include spc-placeholder-active;
   }
 }

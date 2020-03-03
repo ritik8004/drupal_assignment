@@ -1,7 +1,7 @@
 export const dispatchCustomEvent = (eventName, eventDetail) => {
-  let event = new CustomEvent(eventName, {
+  const event = new CustomEvent(eventName, {
     bubbles: true,
-    detail: eventDetail
+    detail: eventDetail,
   });
   document.dispatchEvent(event);
 };
