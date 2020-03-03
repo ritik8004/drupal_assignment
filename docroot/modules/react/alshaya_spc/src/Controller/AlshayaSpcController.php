@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
@@ -133,8 +134,13 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for checkout page.
    */
   public function checkout() {
+    $cache_tags = [];
+
     $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
+
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     // Get payment methods.
     $payment_methods = [];
@@ -153,11 +159,14 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
+    $cache_tags = Cache::mergeTags($cache_tags, $cncTerm->getCacheTags());
 
     $user_name = [];
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
+      $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
+
       $user_name = [
         'fname' => $user->get('field_first_name')->first()->getString(),
         'lname' => $user->get('field_last_name')->first()->getString(),
@@ -172,7 +181,10 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
+
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $store_finder_config->getCacheTags());
+
     return [
       '#type' => 'markup',
       '#markup' => '<div id="spc-checkout"></div>',
@@ -209,7 +221,9 @@ class AlshayaSpcController extends ControllerBase {
       '#cache' => [
         'contexts' => [
           'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'user',
         ],
+        'tags' => $cache_tags,
       ],
     ];
   }
