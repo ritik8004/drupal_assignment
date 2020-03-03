@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-const ConditionalView = (props) => {
-  if (props.condition === false) {
+const ConditionalView = ({ condition, children}) => {
+  if (condition === false) {
     return (null);
   }
 
   return (
-    <React.Fragment>
-      {props.children}
-    </React.Fragment>
-  )
-}
+    <>
+      {children}
+    </>
+  );
+};
 
 export default ConditionalView;

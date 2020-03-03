@@ -6,13 +6,13 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
     return <>{Drupal.t('Sorry, No store found for your location.')}</>;
   }
 
-  const cooseStoreItem = (e, index) => {
+  const chooseStoreItem = (e, index) => {
     onStoreRadio(index);
     addClassToStoreItem(e.target.parentElement.parentElement, 'selected');
   };
 
   const expandStoreItem = (e, index) => {
-    cooseStoreItem(e, index);
+    chooseStoreItem(e, index);
     addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
   }
 
@@ -45,7 +45,7 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
               display={display || 'default'}
               index={parseInt(index)}
               store={store}
-              onStoreChoose={cooseStoreItem}
+              onStoreChoose={chooseStoreItem}
               onStoreExpand={expandStoreItem}
               onStoreFinalize={onStoreFinalize}
               onStoreClose={onStoreClose}
