@@ -16,6 +16,7 @@ module.exports = {
     domready: true,
     jQuery: true,
   },
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -27,8 +28,9 @@ module.exports = {
     'react',
   ],
   rules: {
-    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
+    "react/jsx-filename-extension": [1, {"extensions": [".js"]}],
     "import/no-extraneous-dependencies": "off",
     "react/prop-types": [0],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
   }
 };
