@@ -351,26 +351,29 @@
     }).execute();
   };
 
-  Drupal.getRelatedProductPosition = function () {
-    var sku = $('article[data-vmode="full"]').attr('data-sku');
-    var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-    var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
-    var matchback = $('.horizontal-crossell' + selector);
-    var upsell =  $('.horizontal-upell' + selector);
-    var related = $('.horizontal-related' + selector);
-    var scrollPoint = window.innerHeight + window.pageYOffset;
+  Drupal.getRelatedProductPosition = function (section) {
+    if (drupalSettings.show_crosssell_as_matchback) {
+      var sku = $('article[data-vmode="full"]').attr('data-sku');
+      var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
+      var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
+      var matchback = $('.horizontal-crossell' + selector);
+      var upsell =  $('.horizontal-upell' + selector);
+      var related = $('.horizontal-related' + selector);
+      var scrollPoint = window.innerHeight + window.pageYOffset;
 
-    if ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold)) {
-      matchback.addClass('matchback-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
-    }
-    if ((upsell.length > 0) && !upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
-      upsell.addClass('upsell-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
-    }
-    if ((related.length > 0) && !related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
-      related.addClass('related-processed');
-      Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
+      if ((section === 'matchback' && !matchback.hasClass('matchback-processed') && device === 'mobile')
+        || ((matchback.length > 0) && !matchback.hasClass('matchback-processed') && (scrollPoint > matchback.offset().top - scrollThreshold))) {
+        matchback.addClass('matchback-processed');
+        Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/crosssell/' + device + '?cacheable=1'));
+      }
+      if ((upsell.length > 0) && !upsell.hasClass('upsell-processed') && (scrollPoint > upsell.offset().top - scrollThreshold)) {
+        upsell.addClass('upsell-processed');
+        Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/upsell/' + device + '?cacheable=1'));
+      }
+      if ((related.length > 0) && !related.hasClass('related-processed') && (scrollPoint > related.offset().top - scrollThreshold)) {
+        related.addClass('related-processed');
+        Drupal.updateRelatedProducts(Drupal.url('related-products/' + sku + '/related/' + device + '?cacheable=1'));
+      }
     }
   };
 
@@ -470,6 +473,11 @@
     if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
     }
+  });
+
+  // Load matchback on Add to Cart click if matchback is enabled.
+  $('.sku-base-form').once('load-matchback').on('product-add-to-cart-success', function () {
+    Drupal.getRelatedProductPosition('matchback');
   });
 
 })(jQuery, Drupal, drupalSettings);
