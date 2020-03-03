@@ -91,6 +91,7 @@ class StockResource extends ResourceBase {
     $stockInfo = $this->skuInfoHelper->stockInfo($skuEntity);
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
+    $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
 
     $response = new ResourceResponse($data);
 

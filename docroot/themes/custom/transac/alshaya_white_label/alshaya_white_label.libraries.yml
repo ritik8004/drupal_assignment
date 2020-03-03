@@ -251,6 +251,7 @@ cart_js:
     - core/jquery
     - core/jquery.once
     - core/drupal
+    - alshaya_white_label/order-qty-limit
 
 product-category-accordion:
   js:
@@ -312,9 +313,13 @@ matchback_layout:
   - core/drupal
   - alshaya_white_label/slick
   - alshaya_white_label/alshaya_image_lazy_load
-  - alshaya_product_zoom/instagram_dots
 
 matchback_cart_notification:
   css:
     theme:
       css/conditional-sass/matchback-cart-notification/matchback-cart-notification.ltr.css: {}
+
+order-qty-limit:
+  css:
+    theme:
+      css/conditional-sass/order-qty-limit/order-qty-limit.ltr.css: {}

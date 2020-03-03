@@ -21,6 +21,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ResultRow;
 use Drupal\file\FileInterface;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -567,6 +568,73 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
       $result = AccessResult::forbiddenIf($term->get('field_group_by_sub_categories')->getString());
       $result->addCacheTags($term->getCacheTags());
       return $result;
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_index_items_alter().
+ */
+function alshaya_acm_product_category_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  if (!in_array($index->id(), ['acquia_search_index'])) {
+    return;
+  }
+
+  $logger = \Drupal::logger('alshaya_acm_product_category');
+  $term_storage = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
+
+  // Get sales categories to index L2 for sales terms.
+  $old_categorization_rule = $product_category_manager->isOldCategorizationRuleEnabled();
+  // If old categorization rule is not enabled
+  // call getCategorizationIds() with ['sale'].
+  if ($old_categorization_rule) {
+    $sale_categories = $product_category_manager->getCategorizationIds() ?? [];
+  }
+  else {
+    $sale_categories = $product_category_manager->getCategorizationIds()['sale'] ?? [];
+  }
+
+  foreach ($items as $item_id => $item) {
+    /** @var \Drupal\node\NodeInterface $object */
+    $object = $item->getOriginalObject()->getValue();
+
+    // Storing l2 menu items in field_category for sale categories
+    // and l1 menu items for others.
+    if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
+      try {
+        $terms = [];
+
+        $node_field_category = array_column($object->get('field_category')->getValue(), 'target_id');
+        foreach ($node_field_category as $value) {
+          $term = $term_storage->load($value);
+
+          if (!($term->get('field_commerce_status')->getString()) || !($term->get('field_category_include_menu')->getString())) {
+            continue;
+          }
+
+          $terms[] = $product_category_tree->getL1Category($term)->id();
+
+          // Index L2 for sale categories.
+          if (in_array($term->id(), $sale_categories)) {
+            $terms[] = $product_category_tree->getL2Category($term)->id();
+          }
+        }
+
+        $item->getField('field_category')->setValues(array_unique($terms));
+      }
+      catch (\Throwable $e) {
+        $logger->warning('Indexing failed for the node:@nid message:@message', [
+          '@nid' => $object->id(),
+          '@message' => $e->getMessage(),
+        ]);
+
+        unset($items[$item_id]);
+      }
     }
   }
 }

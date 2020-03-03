@@ -46,11 +46,12 @@
 
     .h1 {
       font-size: 1.125rem;
-      text-transform: uppercase;
+      text-transform: lowercase;
       color: $title;
       margin-top: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid $form-middle-seperator;
+      font-family: $alshaya-bold;
 
       @include breakpoint($desktop) {
         font-size: 1.5rem;
@@ -156,7 +157,7 @@
       .fieldset-legend {
         font-size: 1.125rem;
         color: $form-field-legend;
-        text-transform: uppercase;
+        text-transform: lowercase;
       }
 
       .form-item {
@@ -200,7 +201,7 @@
             .js-form-type-tel {
               position: unset;
               margin-top: 1.25rem;
-              width: calc(100% - 2.6875rem);
+              width: calc(100% - 43px); // here we keep 'px' unit to work in IE also
 
               input {
                 padding-bottom: 0 !important;
@@ -270,6 +271,10 @@
         max-width: 24.6875rem;
         width: 100%;
       }
+
+      .form-item--error-message {
+        position: absolute;
+      }
     }
 
     .address-book-address {
@@ -326,7 +331,7 @@
         top: -3rem;
         font-size: 1.125rem;
         position: absolute;
-        text-transform: uppercase;
+        text-transform: lowercase;
         color: $form-field-title;
 
         &.error {
@@ -476,7 +481,7 @@
       .fieldset-legend {
         font-size: 1.125rem;
         color: $form-edit-room-legend;
-        text-transform: uppercase;
+        text-transform: lowercase;
       }
 
       .fieldset-wrapper {
@@ -521,6 +526,7 @@
         input[type=checkbox] ~ label::before {
           margin-#{$right}: 1rem;
           float: $left;
+          line-height: 0.7;
         }
       }
     }
@@ -563,6 +569,8 @@
 
         a {
           display: block;
+          color: $free_design_services_privacy_link;
+          margin: 0.5rem 0;
         }
       }
 

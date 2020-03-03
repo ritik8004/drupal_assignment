@@ -94,6 +94,13 @@ function isMobile() {
 }
 
 /**
+ * Return true if current view is desktop otherwise false.
+ */
+function isDesktop() {
+  return (window.innerWidth > 1024);
+}
+
+/**
  * Get the storage values.
  *
  * @returns {null}
@@ -114,6 +121,7 @@ export {
   updateAfter,
   redirectToOtherLang,
   isMobile,
+  isDesktop,
   getAlgoliaStorageValues,
   searchStateHasFilter
 }

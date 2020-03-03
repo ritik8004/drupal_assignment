@@ -1,0 +1,21 @@
+.user-page {
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    color: $checkout_deliverto_address_label;
+
+    .form-submit {
+      text-transform: uppercase;
+      margin-top: 2rem;
+
+      label.option {
+        p {
+          a {
+            font-family: $alshaya-bold;
+          }
+        }
+      }
+    }
+  }
+}

@@ -101,6 +101,9 @@
       <div class="mobile-content-wrapper">
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
+          {% if quantity_limit_enabled == true %}
+            <div class="order-quantity-limit-message"></div>
+          {% endif %}
         </div>
       </div>
     </div>

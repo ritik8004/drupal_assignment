@@ -3,10 +3,21 @@
     a {
       @include arabic-letter-spacing;
 
-      letter-spacing: 1px;
+      letter-spacing: 0.0625rem;
 
       .ais-HierarchicalMenu-label {
         font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  .block-facet-blockcategory-facet-search {
+    a {
+      color: $hnm-black-two;
+
+      @include breakpoint($desktop) {
+        text-transform: uppercase;
+        letter-spacing: 0.0625rem;
       }
     }
   }

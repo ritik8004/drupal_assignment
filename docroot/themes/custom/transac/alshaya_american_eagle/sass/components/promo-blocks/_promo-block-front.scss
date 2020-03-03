@@ -1,0 +1,6 @@
+.c-content__container,
+.c-content__banner {
+  @include breakpoint($desktop) {
+    @include container(1205px);
+  }
+}

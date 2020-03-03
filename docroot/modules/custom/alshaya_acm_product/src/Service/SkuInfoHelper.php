@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class SkuInfoHelper.
@@ -87,6 +88,20 @@ class SkuInfoHelper {
   protected $languageManager;
 
   /**
+   * Product Order Limit service object.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductOrderLimit
+   */
+  protected $productOrderLimit;
+
+  /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -107,6 +122,10 @@ class SkuInfoHelper {
    *   The stock manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit
+   *   Product Order Limit.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -117,7 +136,9 @@ class SkuInfoHelper {
     ModuleHandlerInterface $module_handler,
     Connection $database,
     StockManager $acq_stock_manager,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ProductOrderLimit $product_order_limit,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -128,6 +149,8 @@ class SkuInfoHelper {
     $this->database = $database;
     $this->acqSkuStockManager = $acq_stock_manager;
     $this->languageManager = $language_manager;
+    $this->productOrderLimit = $product_order_limit;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -358,12 +381,15 @@ class SkuInfoHelper {
    *   The sku entity.
    *
    * @return array
-   *   The array with in_stock and stock.
+   *   The array with in_stock, stock and max_sale_qty.
    */
   public function stockInfo(SKUInterface $sku_entity): array {
+    $plugin = $sku_entity->getPluginInstance();
+
     return [
       'in_stock' => $this->skuManager->isProductInStock($sku_entity),
       'stock' => (float) $this->skuManager->getStockQuantity($sku_entity),
+      'max_sale_qty' => (int) $plugin->getMaxSaleQty($sku_entity),
     ];
   }
 
@@ -434,6 +460,8 @@ class SkuInfoHelper {
     $stockInfo = $this->stockInfo($child);
     $price = $this->priceHelper->getPriceBlockForSku($child);
     $gallery = $this->skuImagesManager->getGallery($child, $pdp_layout, $child->label(), FALSE);
+    $plugin = $child->getPluginInstance();
+    $variant_sku = $child->getSku();
 
     $variant = [];
     $variant['id'] = (int) $child->id();
@@ -445,6 +473,24 @@ class SkuInfoHelper {
     $variant['price'] = $this->renderer->renderPlain($price);
     $variant['gallery'] = !empty($gallery) ? $this->renderer->renderPlain($gallery) : '';
     $variant['layout'] = $pdp_layout;
+
+    // Get Max sale qty for parent SKU.
+    if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+      if ($parent !== NULL) {
+        $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
+      }
+
+      // If order limit is not set for parent
+      // then get order limit for each variant.
+      $max_sale_qty = !empty($max_sale_qty)
+        ? $max_sale_qty
+        : $plugin->getMaxSaleQty($variant_sku);
+
+      if (!empty($max_sale_qty)) {
+        $variant['stock']['maxSaleQty'] = $max_sale_qty;
+        $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+      }
+    }
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
@@ -524,6 +570,8 @@ class SkuInfoHelper {
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
       'in_stock' => $this->skuManager->isProductInStock($sku),
+      'is_new' => $sku->get('attr_is_new')->getString(),
+      'is_sale' => $sku->get('attr_is_sale')->getString(),
       'promo' => $promotions,
       'medias' => $images,
       'labels' => $labels,
