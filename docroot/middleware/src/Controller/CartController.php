@@ -6,6 +6,7 @@ use App\Service\Magento\CartActions;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoInfo;
+use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +66,13 @@ class CartController {
   protected $session;
 
   /**
+   * Utility.
+   *
+   * @var \App\Service\Utility
+   */
+  protected $utility;
+
+  /**
    * Current cart session info.
    *
    * @var array
@@ -86,14 +94,23 @@ class CartController {
    *   Logger service.
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
    *   Service for session.
+   * @param \App\Service\Utility $utility
+   *   Utility Service.
    */
-  public function __construct(RequestStack $request, Cart $cart, Drupal $drupal, MagentoInfo $magento_info, LoggerInterface $logger, SessionInterface $session) {
+  public function __construct(RequestStack $request,
+                              Cart $cart,
+                              Drupal $drupal,
+                              MagentoInfo $magento_info,
+                              LoggerInterface $logger,
+                              SessionInterface $session,
+                              Utility $utility) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->magentoInfo = $magento_info;
     $this->logger = $logger;
     $this->session = $session;
+    $this->utility = $utility;
   }
 
   /**
@@ -242,7 +259,7 @@ class CartController {
     }
 
     // If there are not cart available.
-    $data = $this->cart->getErrorResponse('could not find any cart', 404);
+    $data = $this->utility->getErrorResponse('could not find any cart', 404);
     return new JsonResponse($data);
   }
 
@@ -398,7 +415,7 @@ class CartController {
       $data['uid'] = $this->getSessionUid() ?: 0;
     }
     catch (\Exception $e) {
-      return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
     return $data;
@@ -446,7 +463,7 @@ class CartController {
     // Validate request.
     if (!$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
-      return new JsonResponse($this->cart->getErrorResponse('Invalid data', '500'));
+      return new JsonResponse($this->utility->getErrorResponse('Invalid data', '500'));
     }
 
     $action = $request_content['action'];
@@ -582,7 +599,7 @@ class CartController {
   public function shippingMethods(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     if (!isset($request_content['cart_id'], $request_content['data'])) {
-      return new JsonResponse($this->cart->getErrorResponse('Invalid request', '500'));
+      return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
     $data = $this->cart->prepareShippingData($request_content['data']);
@@ -605,7 +622,7 @@ class CartController {
   public function placeOrder(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     if (!isset($request_content['cart_id'], $request_content['data'])) {
-      return new JsonResponse($this->cart->getErrorResponse('Invalid request', '500'));
+      return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
     $result = $this->cart->placeOrder($request_content['cart_id'], $request_content['data']);
@@ -699,7 +716,7 @@ class CartController {
       $customer = $this->drupal->getSessionCustomerInfo();
 
       if (empty($customer)) {
-        return $this->cart->getErrorResponse('No user in session', 404);
+        return $this->utility->getErrorResponse('No user in session', 404);
       }
 
       // Check if association is not required.
@@ -718,7 +735,7 @@ class CartController {
     }
     catch (\Exception $e) {
       // Exception handling here.
-      return $this->cart->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
     return $this->getCart($this->sessionCartInfo['cart_id']);
