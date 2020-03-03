@@ -129,7 +129,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the parents of product category.
     $term_data = $this->productCategoryTree->getCategoryRootTerms();
 
@@ -141,7 +140,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $term_data_en = $this->productCategoryTree->getCategoryTree('en', 0, FALSE, FALSE);
 
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
-    $default_language = $this->languageManager->getDefaultLanguage()->getId();
 
     // Add class for all terms.
     foreach ($term_data as $term_id => &$term_info) {
@@ -149,8 +147,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
       // We need to do this or meta tag always gets/renders value from default
       // english term.
-      if ($current_language != $default_language
-        && $term_object->hasTranslation($current_language)) {
+      if ($term_object->hasTranslation($current_language)) {
         $term_object = $term_object->getTranslation($current_language);
       }
 
@@ -163,7 +160,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         }
       }
 
-      $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
+      $term_info_en = ($current_language !== 'en') ? $term_data_en[$term_id] : $term_info;
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
 
