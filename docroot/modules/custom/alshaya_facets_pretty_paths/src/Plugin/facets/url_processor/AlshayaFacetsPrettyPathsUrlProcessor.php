@@ -96,7 +96,6 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
-
     $active_results = [];
     foreach ($results as $key => $result) {
       if ($result->isActive()) {
@@ -117,11 +116,9 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $filter_key = $facet->getUrlAlias();
       $raw_value = $result->getRawValue();
-
       // If the value is active, remove the filter string from the parameters.
       if (!empty($active_results[$result_key])) {
         $active_facet = [];
-
         foreach ($filters_current_result_array[$filter_key] as $value) {
           $active_facet[] = $this->alshayaPrettyPathHelper->decodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $value);
         }
@@ -190,8 +187,21 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url->setOption('attributes', ['rel' => 'follow index']);
       }
 
+      // Getting the item value for all filters from uri as some of
+      // the item ids(alias/raw values) are in Arabic. (colour-أبيض)
+      // Adding 'strlen' to prevent the removal of (int) 0
+      // from the array.
+      $route_param = array_filter(explode('/', $url->getUri()), 'strlen');
+      $last_param = end($route_param);
+      $filter_value = array_filter(explode('-', $last_param), 'strlen');
+      $last_filter_value = end($filter_value);
+      $url->setOption('attributes', [
+        'data-drupal-facet-label' => $facet->label(),
+        'data-drupal-facet-item-label' => $last_filter_value,
+      ]);
       $url->setOption('query', $this->getQueryParams());
       $result->setUrl($url);
+
     }
 
     return $results;
