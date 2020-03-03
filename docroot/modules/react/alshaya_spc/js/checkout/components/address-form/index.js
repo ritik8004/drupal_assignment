@@ -6,6 +6,9 @@ import {
   removeAllMarkersFromMap,
   fillValueInAddressFromGeocode
 } from "../../../utilities/map/map_utils";
+import {
+  getAreasList
+} from '../../../utilities/address_util';
 import SectionTitle from "../../../utilities/section-title";
 import DynamicFormField from "../dynamic-form-field";
 import FixedFields from "../fixed-fields";
@@ -47,25 +50,10 @@ export default class AddressForm extends React.Component {
    * Refresh the child areas list on selection / change
    * of the parent area.
    */
-  refreshAreas = area_list => {
-    let areas = document.querySelectorAll('[data-list=areas-list]');
-    if (areas.length > 0) {
-      let data = new Array();
-      for (let i = 0; i < areas.length; i++) {
-        let id = areas[i].getAttribute('data-id');
-        let parent_id = areas[i].getAttribute('data-parent-id');
-        if (parent_id === id) {
-          data[id] = {
-            value: id,
-            label: areas[i].getAttribute('data-label'),
-          };
-        }
-      }
-
-      this.setState({
-        area_list: data
-      });
-    }
+  refreshAreas = parent_id => {
+    this.setState({
+      area_list: getAreasList(false, parent_id)
+    });
   };
 
   /**

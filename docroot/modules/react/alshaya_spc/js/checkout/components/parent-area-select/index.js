@@ -1,6 +1,9 @@
 import React from 'react';
 
 import FilterList from '../../../utilities/filter-list';
+import {
+  getAreasList
+} from '../../../utilities/address_util';
 
 export default class AreaSelect extends React.Component {
 
@@ -26,6 +29,15 @@ export default class AreaSelect extends React.Component {
     this.setState({
       showFilterList: !this.state.showFilterList
     });
+
+    if (!this.state.showFilterList) {
+      // Hide contact info and save button on filter list show.
+      document.getElementById('spc-checkout-contact-info').classList.add('visually-hidden');
+      document.getElementById('address-form-action').classList.add('visually-hidden');
+    } else {
+      document.getElementById('spc-checkout-contact-info').classList.remove('visually-hidden');
+      document.getElementById('address-form-action').classList.remove('visually-hidden');
+    }
   }
 
   /**
@@ -54,37 +66,26 @@ export default class AreaSelect extends React.Component {
    * Get the areas list.
    */
   getAreasList = () => {
-    let data = new Array();
-    let areas = document.querySelectorAll('[data-list=areas-list]');
-    if (areas.length > 0) {
-      for (let i = 0; i < areas.length; i++) {
-        let id = areas[i].getAttribute('data-parent-id');
-        data[id] = {
-          value: id,
-          label: areas[i].getAttribute('data-parent-label'),
-        };
-      }
-
-      this.setState({
-        areas: data
-      });
-    }
+    this.setState({
+      areas: getAreasList(true, null)
+    });
   }
 
   // Handle change of 'area_parent' list.
   handleChange = (selectedOption) => {
     this.setState({
-      current_option: selectedOption.value
+      current_option: selectedOption
     });
 
-    this.props.areasUpdate(selectedOption.value);
+    this.props.areasUpdate(selectedOption);
   };
 
   render() {
     let options = this.state.areas;
+    let panelTitle = Drupal.t('select ') + this.props.field.label;
 
     return (
-        <div>
+        < div className = 'spc-type-select' >
           <label>{this.props.field.label}</label>
             {this.state.current_option.length !== 0 ? (
               <div onClick={() => this.toggleFilterList()}>
@@ -99,8 +100,10 @@ export default class AreaSelect extends React.Component {
             <FilterList
               selected={options[this.state.current_option]}
               options={options}
-              placeHolderText={Drupal.t('Select for an city')}
+              placeHolderText={Drupal.t('search for a city')}
               processingCallback={this.processSelectedItem}
+              toggleFilterList={this.toggleFilterList}
+              panelTitle={panelTitle}
             />
           }
           <input type='hidden' name={this.props.field_key} value={this.state.current_option}/>

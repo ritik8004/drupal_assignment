@@ -1,6 +1,9 @@
 import React from 'react';
 
 import FilterList from '../../../utilities/filter-list';
+import {
+  getAreasList
+} from '../../../utilities/address_util';
 
 export default class AreaSelect extends React.Component {
 
@@ -64,21 +67,9 @@ export default class AreaSelect extends React.Component {
   getAreaList = () => {
     // If no area parent to select.
     if (window.drupalSettings.address_fields.area_parent === undefined) {
-      let data = new Array();
-      let areas = document.querySelectorAll('[data-list=areas-list]');
-      if (areas.length > 0) {
-        for (let i = 0; i < areas.length; i++) {
-          let id = areas[i].getAttribute('data-id');
-          data[id] = {
-            value: id,
-            label: areas[i].getAttribute('data-label'),
-          };
-        }
-
-        this.setState({
-          areas: data
-        });
-      }
+      this.setState({
+        areas: getAreasList(false, null)
+      });
     }
   };
 
@@ -88,19 +79,20 @@ export default class AreaSelect extends React.Component {
       options = this.props.area_list;
     }
 
-    if (options.length === 0) {
-      return(null);
-    }
-
     let panelTitle = Drupal.t('select ') + this.props.field.label;
+    let label = options.length > 0
+      ? options[this.state.current_option]['label']
+      : '';
 
     return (
       <div className='spc-type-select'>
         <label>{this.props.field.label}</label>
         {
-          (this.state.current_option !== undefined && this.state.current_option.length !== 0) ? (
+          (this.state.current_option !== undefined
+            && this.state.current_option !== null
+            && this.state.current_option.length !== 0) ? (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
-            {options[this.state.current_option]['label']}
+            {label}
           </div>
         ) : (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>

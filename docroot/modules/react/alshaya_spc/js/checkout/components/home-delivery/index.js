@@ -10,6 +10,9 @@ import {
 import {
   showFullScreenLoader
 } from "../../../utilities/checkout_util";
+import {
+  gerAreaLabelById
+} from '../../../utilities/address_util';
 
 let AddressContent = React.lazy(() => import("../address-popup-content"));
 
@@ -89,11 +92,10 @@ export default class HomeDeliveryInfo extends React.Component {
       let fillVal = address[val.key];
       // Handling for area field.
       if (key === 'administrative_area') {
-        const area = document.querySelectorAll('[data-id="' + fillVal + '"]');
-        // If area available only then use.
-        if (area.length > 0) {
-          fillVal = area[0].getAttribute('data-label')
-        }
+        fillVal = gerAreaLabelById(false, fillVal);
+      }
+      else if (key === 'area_parent') {
+        fillVal = gerAreaLabelById(true, fillVal);
       }
       addressData.push(<span key={key}>{fillVal}, </span>)
     })
