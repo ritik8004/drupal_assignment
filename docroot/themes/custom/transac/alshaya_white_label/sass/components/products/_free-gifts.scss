@@ -708,6 +708,20 @@
   }
 }
 
+body.ie {
+  #drupal-modal.free-gift-listing-modal {
+    height: 100% !important;
+
+    .b-lazy {
+      transition-duration: 0s !important;
+    }
+  }
+
+  #drupal-modal.free-gift-detail-modal {
+    -ms-overflow-style: none;
+  }
+}
+
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
     height: auto !important;
