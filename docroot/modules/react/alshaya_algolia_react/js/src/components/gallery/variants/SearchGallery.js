@@ -73,6 +73,7 @@ class SearchGallery extends React.PureComponent {
 
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow ? 'true' : 'false';
     const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
+
     return (
       <div className="alshaya_search_gallery">
         <div className='alshaya_search_mainimage' ref={this.mainImageRef} data-sku-image={`${mainImageUrl}`}>

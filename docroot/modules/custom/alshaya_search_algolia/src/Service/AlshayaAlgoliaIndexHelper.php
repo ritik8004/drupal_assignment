@@ -507,7 +507,6 @@ class AlshayaAlgoliaIndexHelper {
     return array_values($list);
   }
 
-
   /**
    * Get Swatches Data for particular configurable sku.
    *
@@ -525,25 +524,19 @@ class AlshayaAlgoliaIndexHelper {
       return [];
     }
 
-    $index_image_url = TRUE;
+    $index_product_image_url = TRUE;
     if (!$display_settings->get('color_swatches_show_product_image')) {
-      $index_image_url = FALSE;
+      $index_product_image_url = FALSE;
     }
 
     foreach ($swatches['swatches'] as $key => $swatch) {
-      $child = SKU::loadFromSku($swatch['child_sku_code']);
-
-      $swatch['child_id'] = $child->id();
-
-      if (!$index_image_url) {
-        unset($swatch['image_url']);
-      }
-      else {
+      if ($index_product_image_url) {
+        $child = SKU::loadFromSku($swatch['child_sku_code']);
         $swatch_product_image = $child->getThumbnail();
         // If we have image for the product.
         if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
           $url = file_create_url($swatch_product_image['file']->getFileUri());
-          $swatch['product_url'] = $url;
+          $swatch['product_image_url'] = $url;
         }
       }
 

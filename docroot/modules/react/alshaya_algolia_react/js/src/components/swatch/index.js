@@ -6,8 +6,8 @@ const Swatch = (props) => {
   return (
     <a href={selected_image}>
       <span className='swatch-block swatch-image'>
-        {props.swatch.product_url ?
-          <ImageElement data-sku-image={props.swatch.product_url} src={props.swatch.image_url} />
+        {props.swatch.product_image_url ?
+          <ImageElement data-sku-image={props.swatch.product_image_url} src={props.swatch.image_url} />
           :
           <ImageElement src={props.swatch.image_url} />
         }
@@ -17,7 +17,7 @@ const Swatch = (props) => {
 }
 
 const Swatches = (props) => {
-  if ((props.swatches === undefined)) {
+  if (props.swatches === undefined) {
     return null;
   }
 
@@ -30,7 +30,7 @@ const Swatches = (props) => {
   const diff = total_no_of_swatches - limit;
   const swatch_color_count = Drupal.formatPlural(total_no_of_swatches, '1 color', '@count colors');
   const swatch_more_text = Drupal.formatPlural(diff, '+1 color', '+@count colors');
-  var swatches;
+  let swatches;
 
   if (total_no_of_swatches > 0 && !show_variants_thumbnail_plp_gallery) {
     swatches = <div className="swatches">
@@ -38,25 +38,24 @@ const Swatches = (props) => {
                 {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={props.url}>{swatch_more_text}</a> : null}
               </div>
   }
+  else if (total_no_of_swatches > 0){
+    swatches =  <div className="swatches">
+                  <div className="swatch-color-count-wrapper mobile-only-block">
+                    <a className="swatch-color-count product-selected-url"
+                      href={props.url}>{swatch_color_count}</a>
+                  </div>
+                </div>
+  }
   else {
-    swatches = <React.Fragment>
-                  {total_no_of_swatches > 0 ?
-                    <div className="swatches">
-                      <div className="swatch-color-count-wrapper mobile-only-block">
-                        <a className="swatch-color-count product-selected-url"
-                          href={props.url}>{swatch_color_count}</a>
-                      </div>
-                    </div>
-                  :
-                  null
-                  }
-                </React.Fragment>
+    swatches = null;
   }
 
-  return (
-    <React.Fragment>
-      {swatches}
-    </React.Fragment>
+  return (swatches?
+            <React.Fragment>
+              {swatches}
+            </React.Fragment>
+            :
+            null
   )
 }
 
