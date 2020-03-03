@@ -70,7 +70,7 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[MetaImageRenderEvent::EVENT_NAME][] = ['setSuperCategoryLogoMetaImage', 300];
+    $events[MetaImageRenderEvent::EVENT_NAME][] = ['setSuperCategoryLogoMetaImage', 150];
     return $events;
   }
 

@@ -35,7 +35,7 @@ class DefaultMetaImageEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[MetaImageRenderEvent::EVENT_NAME][] = ['setDefaultMetaImage', 800];
+    $events[MetaImageRenderEvent::EVENT_NAME][] = ['setDefaultMetaImage', 100];
     return $events;
   }
 

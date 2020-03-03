@@ -69,16 +69,14 @@ class ProductMetaImageEventSubscriber implements EventSubscriberInterface {
    *   Dispatched Event.
    */
   public function setProductMetaImage(MetaImageRenderEvent $event) {
-    if (($node = $event->getContext()) && $node instanceof NodeInterface) {
-      if ($node->bundle() == 'acq_product') {
-        $sku = $this->skuManager->getSkuForNode($node);
-        $sku_entity = SKU::loadFromSku($sku);
-        $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
-        $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
-        if (!empty($teaser_image['#uri'])) {
-          $event->setMetaImage(file_create_url($teaser_image['#uri']));
-          $event->stopPropagation();
-        }
+    if (($node = $event->getContext()) && $node instanceof NodeInterface && $node->bundle() == 'acq_product') {
+      $sku = $this->skuManager->getSkuForNode($node);
+      $sku_entity = SKU::loadFromSku($sku);
+      $sku_media = $this->skuImagesManager->getFirstImage($sku_entity);
+      $teaser_image = $this->skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+      if (!empty($teaser_image['#uri'])) {
+        $event->setMetaImage(file_create_url($teaser_image['#uri']));
+        $event->stopPropagation();
       }
     }
   }
