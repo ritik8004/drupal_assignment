@@ -700,7 +700,7 @@ class CartController {
   /**
    * Associate cart with active user.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse|null
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Json response.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -710,7 +710,7 @@ class CartController {
 
     try {
       if (empty($this->sessionCartInfo['cart_id'])) {
-        return NULL;
+        return $this->utility->getErrorResponse('No cart in session', 404);
       }
 
       $customer = $this->drupal->getSessionCustomerInfo();
