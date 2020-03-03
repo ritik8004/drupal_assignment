@@ -203,13 +203,6 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             $products[] = $product;
           }
 
-          if ($current_route['route_name'] == 'acq_cart.cart') {
-            $step = 1;
-          }
-          elseif ($current_route['route_name'] == 'alshaya_spc.checkout') {
-            $step = 2;
-          }
-
           $data_layer_cart = [
             'event' => 'checkout',
             'ecommerce' => [

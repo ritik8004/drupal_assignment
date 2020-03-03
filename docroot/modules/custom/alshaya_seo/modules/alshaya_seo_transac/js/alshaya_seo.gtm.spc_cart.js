@@ -6,17 +6,22 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
+  // Global variables & selectors.
+  var gtm_contanier = $('body').attr('gtm-container');
+
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
+      var cart_data = JSON.parse(localStorage.getItem('cart_data'));
       if (localStorage.hasOwnProperty('cart_data')) {
-        var cart_data = JSON.parse(localStorage.getItem('cart_data'));
-        Drupal.alshayaSpcCartGtm(cart_data.cart);
+        var step = Drupal.alshayaSpcGetStepFromContainer(gtm_contanier);
+        Drupal.alshayaSpcCartGtm(cart_data.cart, step);
       }
     }
   };
 
   document.addEventListener('refreshCart', function (e) {
-    Drupal.alshayaSpcCartGtm(e.detail.data());
+    var step = Drupal.alshayaSpcGetStepFromContainer(gtm_contanier);
+    Drupal.alshayaSpcCartGtm(e.detail.data(), step);
   });
 
   document.addEventListener('updateCartItemData', function (e) {
@@ -114,6 +119,24 @@
   });
 
   /**
+   * Helper function to get step number from body attr gtm-container.
+   */
+  Drupal.alshayaSpcGetStepFromContainer = function (gtm_container) {
+    var step = '';
+    switch (gtm_container) {
+      case 'cart page':
+        step = 1;
+        break;
+      case 'checkout delivery page':
+        step = 2;
+        break;
+      default:
+        step = 1;
+    }
+    return step;
+  };
+
+  /**
    * Helper function to push checkout option to GTM.
    *
    * @param optionLabel
@@ -140,10 +163,13 @@
    *
    * @param cart_data
    *   Cart data Object from localStorage.
+   * @param step
+   *   Checkout step for gtm checkout event.
    */
-  Drupal.alshayaSpcCartGtm = function(cart_data) {
+  Drupal.alshayaSpcCartGtm = function(cart_data, step) {
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
+      dataLayer[0].ecommerce.checkout.actionField.step = step;
       dataLayer[0].productSKU = [];
       dataLayer[0].productStyleCode = [];
       dataLayer[0].cartTotalValue = cart_data.cart_total;
