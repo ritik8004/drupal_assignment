@@ -4,6 +4,9 @@ import FilterList from '../../../utilities/filter-list';
 import {
   getAreasList
 } from '../../../utilities/address_util';
+import {
+  geocodeAddressToLatLng
+} from '../../../utilities/map/map_utils';
 
 export default class AreaSelect extends React.Component {
 
@@ -51,6 +54,13 @@ export default class AreaSelect extends React.Component {
     });
 
     this.handleChange(val);
+
+    // Geocoding so that map is updated.
+    // Calling in timeout to avaoid race condition as
+    // component is refreshing and thus elemtent not available.
+    setTimeout(function () {
+      geocodeAddressToLatLng();
+    }, 200);
   }
 
   componentDidMount() {
@@ -122,7 +132,7 @@ export default class AreaSelect extends React.Component {
               panelTitle={panelTitle}
             />
           }
-          <input type='hidden' name={this.props.field_key} value={this.state.current_option}/>
+          <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={this.state.current_option}/>
           <div id={this.props.field_key + '-error'}></div>
         </div>
     );

@@ -178,3 +178,54 @@ export const deduceAreaVal = (area, field) => {
   }
   return null;
 };
+
+/**
+ * Geocode address on the map.
+ */
+export const geocodeAddressToLatLng = () => {
+  let address = new Array();
+  Object.entries(window.drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      let fieldVal = document.getElementById(key).value;
+      if (fieldVal.trim().length > 0) {
+        if (key === 'area_parent') {
+          let city = document.getElementById('spc-area-select-selected-city').innerText;
+          address.push(city.trim());
+        }
+        else if (key === 'administrative_area') {
+          let area = document.getElementById('spc-area-select-selected').innerText;
+          address.push(area.trim());
+        }
+        else {
+          address.push(fieldVal.trim());
+        }
+      }
+    }
+  );
+
+  address = address.join(', ');
+  // If we have address available.
+  if (address.length > 0) {
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({
+      componentRestrictions: {
+        country: window.drupalSettings.country_code
+      },
+      address : address
+    }, function (results, status) {
+      if (status === 'OK') {
+        // Get the map and re-center it.
+        let map = getMap();
+        map.setCenter(results[0].geometry.location);
+        // Remove any existing markers on map and add new marker.
+        removeAllMarkersFromMap();
+        let marker = createMarker(results[0].geometry.location, map);
+        let markerArray = new Array();
+        markerArray.push(marker);
+        window.spcMarkers = markerArray;
+      } else {
+        console.log('Unable to get location:' + status);
+      }
+    });
+  }
+}
