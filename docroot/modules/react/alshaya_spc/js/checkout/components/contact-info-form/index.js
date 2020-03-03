@@ -62,7 +62,7 @@ class ContactInfoForm extends React.Component {
 
     if (
       this.context.contactInfo === null ||
-      (!this.context.contactInfo &&
+      (this.context.contactInfo.hasOwnProperty('email') &&
         this.context.contactInfo.email !== form_data.static.email)
     ) {
       customerValidationReuest = Axios.get(

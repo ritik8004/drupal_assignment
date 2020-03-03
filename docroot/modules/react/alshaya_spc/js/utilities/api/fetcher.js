@@ -17,8 +17,6 @@ export const createFetcher = promiseFunc => {
     read: arg => {
       // Initiate cache and cache responses of stores to avoid
       // Duplicate api calls.
-      // @todo: rename cache class and helper method to generalise
-      // When we use this method accross the site.
       let cachedObj = createCacheObject(promiseFunc);
       let cachedResults = cachedObj.getResults(arg);
       if (!cachedResults) {
