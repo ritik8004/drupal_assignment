@@ -54,7 +54,7 @@ const SearchResultsComponent = props => {
         try {
           if (l1MenuItems[i].getAttribute('title') !== null) {
             // Add 10 to allow adding All at top.
-            weight[l1MenuItems[i].getAttribute('title')] = parseInt(i) + 10;
+            weight[l1MenuItems[i].getAttribute('title').trim()] = parseInt(i) + 10;
           }
         }
         catch (e) {
@@ -62,7 +62,7 @@ const SearchResultsComponent = props => {
       }
 
       for (let i in items) {
-        if (weight[items[i].label] !== undefined) {
+        if (weight[items[i].label.trim()] !== undefined) {
           sortedItems[weight[items[i].label]] = items[i];
         }
         else if (items[i].label === window.Drupal.t('All')) {
