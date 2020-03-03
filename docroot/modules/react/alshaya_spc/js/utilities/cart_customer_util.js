@@ -3,9 +3,13 @@ import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './s
 import { i18nMiddleWareUrl } from './i18n_url';
 
 export async function checkCartCustomer(cart_data = null) {
-  if (!(cart_data) || typeof cart_data.cart_id === 'undefined') {
+  if (!(cart_data) || cart_data.cart_id === undefined) {
     const cart_json = getInfoFromStorage();
     cart_data = cart_json.cart;
+  }
+
+  if (cart_data.cart_id === null) {
+    return false;
   }
 
   // If the cart user and drupal user does not match.

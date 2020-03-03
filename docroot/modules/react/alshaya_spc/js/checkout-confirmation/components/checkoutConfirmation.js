@@ -1,43 +1,32 @@
 import React from 'react';
-import OrderSummaryBlock from '../../utilities/order-summary-block';
-import { fetchCartData } from '../../utilities/get_cart';
-import { addInfoInStorage, getInfoFromStorage } from '../../utilities/storage';
-import { checkCartCustomer } from '../../utilities/cart_customer_util';
-import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
 import Loading from '../../utilities/loading';
-import EmptyResult from '../../utilities/empty-result';
 import OrderSummary from './OrderSummary';
+import { fetchOrderData } from '../../utilities/get_order';
+import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
+import { redirectToCart } from '../../utilities/get_cart';
 
 class CheckoutConfirmation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       wait: true,
-      cart: null,
+      order: null,
     };
   }
 
   componentDidMount() {
     try {
-      // Fetch cart data.
-      const cart_data = fetchCartData();
-      if (cart_data instanceof Promise) {
-        cart_data.then((result) => {
-          let cart_data = getInfoFromStorage();
-          if (!cart_data) {
-            cart_data = { cart: result };
-          }
+      // Fetch order data.
+      const orderData = fetchOrderData('last');
 
-          addInfoInStorage(cart_data);
-          checkCartCustomer(cart_data);
-          this.setState({
-            wait: false,
-            cart: cart_data,
-          });
+      if (orderData instanceof Promise) {
+        orderData.then((result) => {
+          const prevState = this.state;
+          this.setState({ ...prevState, wait: false, order: result });
         });
       }
-    } catch (error) {
-      // In case of error, do nothing.
+    } catch (e) {
+      redirectToCart();
     }
 
     // Make sidebar sticky.
@@ -45,18 +34,10 @@ class CheckoutConfirmation extends React.Component {
   }
 
   render() {
+    const { wait } = this.state;
     // While page loads and all info available.
-    if (this.state.wait) {
-      return <Loading loadingMessage={Drupal.t('loading checkout ...')} />;
-    }
-
-    // If cart not available.
-    if (this.state.cart === null) {
-      return (
-        <>
-          <EmptyResult Message={Drupal.t('your shopping basket is empty.')} />
-        </>
-      );
+    if (wait) {
+      return <Loading loadingMessage={Drupal.t('loading order ...')} />;
     }
 
     return (
@@ -68,9 +49,6 @@ class CheckoutConfirmation extends React.Component {
         <div className="spc-main">
           <div className="spc-content">
             <OrderSummary />
-          </div>
-          <div className="spc-sidebar">
-            <OrderSummaryBlock item_qty={this.state.cart.cart.items_qty} items={this.state.cart.cart.items} totals={this.state.cart.cart.totals} in_stock={this.state.cart.cart.in_stock} cart_promo={this.state.cart.cart.cart_promo} show_checkout_button={false} />
           </div>
         </div>
         <div className="spc-post-content" />
