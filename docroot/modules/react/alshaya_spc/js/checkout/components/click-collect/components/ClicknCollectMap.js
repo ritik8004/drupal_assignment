@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server'
-import Gmap from '../../../utilities/map/Gmap';
-import StoreItemInfoWindow from '../store-item-infowindow';
+import Gmap from '../../../../utilities/map/Gmap';
+import StoreItemInfoWindow from './StoreItemInfowindow';
 
 class ClicknCollectMap extends React.Component {
 
@@ -71,7 +71,8 @@ class ClicknCollectMap extends React.Component {
         // Require When markers overlap on each other, show the latest one on top,
         zIndex: index + 1
       };
-      self.googleMap.setMapMarker(markerConfig, false);
+      // Pass "false" as second param, to show infowindow.
+      self.googleMap.setMapMarker(markerConfig, true);
 
       // Add new marker position to bounds.
       window.spcMap.googleMap.bounds.extend(position);

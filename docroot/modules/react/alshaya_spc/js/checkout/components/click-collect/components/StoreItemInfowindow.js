@@ -1,5 +1,5 @@
 import React from 'react';
-import StoreItem from '../store-item';
+import StoreItem from './StoreItem';
 
 const StoreItemInfoWindow = ({ store }) => (
   <>

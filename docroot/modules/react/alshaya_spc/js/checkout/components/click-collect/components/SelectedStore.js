@@ -1,7 +1,7 @@
 import React from 'react';
-import ContactInfoForm from '../contact-info-form';
-import StoreItem from '../store-item';
-import SectionTitle from '../../../utilities/section-title';
+import ContactInfoForm from '../../contact-info-form';
+import StoreItem from './StoreItem';
+import SectionTitle from "../../../../utilities/section-title";
 
 const SelectedStore = ({ store, open, closePanel }) => {
   if (!store) {

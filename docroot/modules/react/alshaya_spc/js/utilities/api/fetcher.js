@@ -30,10 +30,10 @@ export const createFetcher = (promiseFunc) => ({
               return { error: 'error!' };
             }
 
-            if (!response.data.error && response.data.error) {
-              console.error(cart_result.error_message);
-              return { error: 'error!' };
-            }
+              if (!response.data.error && response.data.error) {
+                console.error(response.error_message);
+                return { error: "error!" };
+              }
 
             cachedObj.cacheResult(response.data);
             return response.data;
