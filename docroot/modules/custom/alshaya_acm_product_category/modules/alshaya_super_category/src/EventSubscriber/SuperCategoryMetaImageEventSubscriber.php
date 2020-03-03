@@ -96,10 +96,13 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
     if (!$parent instanceof TermInterface) {
       return;
     }
-    // Create a name without spaces and any special character.
-    $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
+
     // Set the language suffix for logo based on current language.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    // Create a name without spaces and any special character.
+    $parent_lang = \Drupal::service('entity.repository')->getTranslationFromContext($parent, $langcode);
+    $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent_lang->label()));
 
     $langcode = ($langcode != 'en') ? '-' . $langcode : '';
     // Current active theme object.
