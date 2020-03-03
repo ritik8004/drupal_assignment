@@ -44,6 +44,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+      background: $spc-checkout-area-list-item-bg !important;
     }
   }
 
@@ -129,6 +130,7 @@
 }
 
 .spc-area-select-selected {
+  cursor: pointer;
   font-size: 0.875rem;
   color: $spc-area-panel-item-color;
   border-bottom: 1px solid $primary_input_border;
