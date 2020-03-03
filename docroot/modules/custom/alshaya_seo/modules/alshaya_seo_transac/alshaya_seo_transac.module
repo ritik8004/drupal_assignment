@@ -582,14 +582,21 @@ function alshaya_seo_transac_alshaya_reset_config_configs_to_reset_alter(array &
  * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
 function alshaya_seo_transac_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
-  $data['gtm_attributes']['gtm-name'] = trim($sku->label());
-  $productNode = \Drupal::service('alshaya_acm_product.skumanager')->getDisplayNode($sku->getSku());
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+  $productNode = $skuManager->getDisplayNode($sku->getSku());
   if ($productNode instanceof NodeInterface) {
-    $data['gtm_attributes']['gtm-category'] = implode('/', \Drupal::service('alshaya_seo_transac.gtm_manager')
-      ->fetchProductCategories($productNode));
+    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
+    $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+    $data['gtm_attributes']['gtm-category'] = implode('/', $gtmManager->fetchProductCategories($productNode));
   }
+
+  $data['gtm_attributes']['gtm-name'] = trim($sku->label());
   $data['gtm_attributes']['dimension1'] = $sku->get('attribute_set')->getString();
-  $data['gtm_attributes']['dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
+  $data['gtm_attributes']['dimension4'] = count($skuImagesManager->getAllMediaItems($sku)) ?: 'image not available';
   $data['gtm_attributes']['dimension5'] = $sku->get('attr_product_collection')->getString();
   $data['gtm_attributes']['dimension6'] = $sku->get('attr_product_collection')->getString();
 }
