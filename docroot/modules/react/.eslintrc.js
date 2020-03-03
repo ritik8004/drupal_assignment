@@ -9,8 +9,11 @@ module.exports = {
     'airbnb',
   ],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
+    Drupal: true,
+    drupalSettings: true,
+    drupalTranslations: true,
+    domready: true,
+    jQuery: true,
   },
   parserOptions: {
     ecmaFeatures: {
