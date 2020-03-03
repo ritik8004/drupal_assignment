@@ -1,11 +1,15 @@
 /**
  * Prepare mapping of the google geocode.
  */
-export const mapAddressMap = function () {
+export const mapAddressMap = () => {
   let mapping = [];
-  mapping['street'] = ['route', 'street_number'];
-  mapping['address_block_segment'] = ['park', 'point_of_interest', 'establishment', 'premise'];
-  mapping['area'] = ['sublocality_level_1', 'administrative_area_level_1'];
+  // For street.
+  mapping['address_line1'] = ['route', 'street_number'];
+  mapping['address_line2'] = ['park', 'point_of_interest', 'establishment', 'premise'];
+  // For area.
+  mapping['administrative_area'] = ['sublocality_level_1', 'administrative_area_level_1'];
+  // For area parent.
+  mapping['area_parent'] = ['administrative_area_level_1'];
   return mapping;
 }
 
@@ -14,7 +18,7 @@ export const mapAddressMap = function () {
  *
  * This is stored in window object in <GoogleMap:componentDidMount>
  */
-export const getMap = function () {
+export const getMap = () => {
   return window.spcMap;
 }
 
@@ -23,14 +27,14 @@ export const getMap = function () {
  *
  * See <GoogleMap> for more details.
  */
-export const getMarkers = function () {
+export const getMarkers = () => {
   return window.spcMarkers;
 }
 
 /**
  * Removes all markers from map.
  */
-export const removeAllMarkersFromMap = function () {
+export const removeAllMarkersFromMap = () => {
   // First clear all existing marker on map.
   for (var i = 0; i < window.spcMarkers.length; i++) {
     window.spcMarkers[i].setMap(null);
@@ -44,7 +48,7 @@ export const removeAllMarkersFromMap = function () {
  * @param {*} position
  * @param {*} map
  */
-export const createMarker = function (position, map) {
+export const createMarker = (position, map) => {
   return new window.google.maps.Marker({
     position: position,
     map: map,
@@ -55,7 +59,7 @@ export const createMarker = function (position, map) {
 /**
    * Create info window.
    */
-export const createInfoWindow = function (content) {
+export const createInfoWindow =  (content) => {
   return new window.google.maps.InfoWindow({
     content: content
   });
@@ -67,7 +71,7 @@ export const createInfoWindow = function (content) {
  * @param {*} addressArray
  * @param {*} key
  */
-export const getAddressFieldVal = function (addressArray, key) {
+export const getAddressFieldVal = (addressArray, key) => {
   let fieldVal = '';
   const addressMap = mapAddressMap();
   for (let i = 0; i < addressArray.length; i++) {
@@ -93,12 +97,13 @@ export const getAddressFieldVal = function (addressArray, key) {
  *
  * @param {*} address
  */
-export const fillValueInAddressFromGeocode = function (address) {
+export const fillValueInAddressFromGeocode = (address) => {
+  console.log(address);
   Object.entries(window.drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      let val = getAddressFieldVal(address, field['key']).trim();
+      let val = getAddressFieldVal(address, key).trim();
       // Some handling for select list fields (areas/city).
-      if (field.key === 'area'
+      if ((key === 'administrative_area' || key === 'area_parent')
         && val.length > 0) {
         let areaVal = deduceAreaVal(val, field.key);
         if (areaVal !== null) {
@@ -123,7 +128,7 @@ export const fillValueInAddressFromGeocode = function (address) {
  *
  * @param {*} area
  */
-export const deduceAreaVal = function (area) {
+export const deduceAreaVal = (area, field) => {
   let areas = document.querySelectorAll('[data-list=areas-list]');
   if (areas.length > 0) {
     for (let i = 0; i < areas.length; i++) {
@@ -131,8 +136,9 @@ export const deduceAreaVal = function (area) {
       // If it matches with some value.
       if (areaLable.indexOf(area) !== -1 ||
       area.indexOf(areaLable) !== -1) {
+        let idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
         return {
-          id: areas[i].getAttribute('data-id'),
+          id: areas[i].getAttribute(idAttribute),
           label: areaLable
         }
       }

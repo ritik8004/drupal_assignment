@@ -80,9 +80,6 @@ export default class AreaSelect extends React.Component {
     }
 
     let panelTitle = Drupal.t('select ') + this.props.field.label;
-    let label = options.length > 0
-      ? options[this.state.current_option]['label']
-      : '';
 
     return (
       <div className='spc-type-select'>
@@ -90,9 +87,10 @@ export default class AreaSelect extends React.Component {
         {
           (this.state.current_option !== undefined
             && this.state.current_option !== null
-            && this.state.current_option.length !== 0) ? (
+            && this.state.current_option.length !== 0
+            && options.length > 0) ? (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
-            {label}
+            {options[this.state.current_option]['label']}
           </div>
         ) : (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
