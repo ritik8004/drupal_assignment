@@ -12,10 +12,6 @@
         var cart_data = JSON.parse(localStorage.getItem('cart_data'));
         Drupal.alshayaSpcCartGtm(cart_data.cart);
       }
-
-      if (window.location.pathname.indexOf('/checkout') !== -1) {
-        Drupal.alshayaSpcCheckoutGtmDeliveryMethod('Home Delivery');
-      }
     }
   };
 
