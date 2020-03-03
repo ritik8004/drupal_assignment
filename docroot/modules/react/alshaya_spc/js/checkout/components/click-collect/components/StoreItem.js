@@ -4,7 +4,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 
 const StoreItem = ({ display, index, store, onStoreChoose, onStoreExpand, onStoreFinalize, onStoreClose }) => {
   return (
-    <React.Fragment>
+    <>
       <span className="spc-cnc-store-name">
         <span className="spc-store-name-wrapper" onClick={e => onStoreChoose(e, index)}>
           <span className="store-name">{store.name}</span>
@@ -48,7 +48,7 @@ const StoreItem = ({ display, index, store, onStoreChoose, onStoreExpand, onStor
           </div>
         </ConditionalView>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
