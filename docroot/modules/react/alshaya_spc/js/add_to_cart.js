@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 (function ($, Drupal, document) {
   'use strict';
 

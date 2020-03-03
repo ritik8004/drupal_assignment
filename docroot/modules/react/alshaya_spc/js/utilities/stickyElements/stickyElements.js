@@ -10,10 +10,12 @@
  *
  * @returns {{top: number, left: number}}
  */
-function getPosition (element) {
-  let clientRect = element.getBoundingClientRect();
-  return {left: clientRect.left + document.body.scrollLeft,
-    top: clientRect.top + document.body.scrollTop};
+function getPosition(element) {
+  const clientRect = element.getBoundingClientRect();
+  return {
+    left: clientRect.left + document.body.scrollLeft,
+    top: clientRect.top + document.body.scrollTop,
+  };
 }
 
 /**
@@ -27,8 +29,7 @@ function getSiderBarOffsetTop() {
     offSet = document.getElementsByClassName('site-brand-wrapper')[0].offsetHeight
       + document.getElementById('block-page-title').offsetHeight
       + preContentOffset;
-  }
-  else {
+  } else {
     offSet = document.getElementsByClassName('header--wrapper')[0].offsetHeight
       + document.getElementsByClassName('branding__menu')[0].offsetHeight
       + document.getElementsByClassName('c-breadcrumb')[0].offsetHeight
@@ -42,19 +43,18 @@ function getSiderBarOffsetTop() {
 /**
  * Mobile cart header preview sticky.
  */
-function stickyMobileCartPreview () {
+function stickyMobileCartPreview() {
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
     if (window.innerWidth < 768) {
-      let cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
-      let cartPreviewOffset = getPosition(cartPreview[0]);
+      const cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
+      const cartPreviewOffset = getPosition(cartPreview[0]);
       if (window.pageYOffset > cartPreviewOffset.top) {
         if (!cartPreview[0].classList.contains('sticky')) {
           cartPreview[0].classList.add('sticky');
-          document.getElementsByClassName('spc-main')[0].style.paddingTop = cartPreview[0].offsetHeight + 'px';
+          document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight}px`;
         }
-      }
-      else {
+      } else {
         cartPreview[0].classList.remove('sticky');
         document.getElementsByClassName('spc-main')[0].style.paddingTop = 0;
       }
@@ -72,35 +72,35 @@ function stickySidebar() {
       // Before we begin we need to check if the content is smaller than sidebar,
       // if yes no sticky needed.
       // 40 is margin bottom which is fixed.
-      let spcPromoCodeBlockH = document.getElementsByClassName('spc-promo-code-block')[0].offsetHeight + 40;
-      let orderSummaryBlockH = document.getElementsByClassName('spc-order-summary-block')[0].offsetHeight;
+      const spcPromoCodeBlockH = document.getElementsByClassName('spc-promo-code-block')[0].offsetHeight + 40;
+      const orderSummaryBlockH = document.getElementsByClassName('spc-order-summary-block')[0].offsetHeight;
       // 42 is height of section title for cart items.
-      let cartItemsH = document.getElementsByClassName('spc-cart-items')[0].offsetHeight + 42;
+      const cartItemsH = document.getElementsByClassName('spc-cart-items')[0].offsetHeight + 42;
       if (cartItemsH < spcPromoCodeBlockH + orderSummaryBlockH) {
         // Content not eligible for sticky.
         return;
       }
 
-      let offSet = getSiderBarOffsetTop();
+      const offSet = getSiderBarOffsetTop();
       // Sidebar.
-      let spcSidebar = document.getElementsByClassName('spc-sidebar');
-      let spcSidebarWidth = spcSidebar[0].offsetWidth;
-      let spcSidebarOffset = getPosition(spcSidebar[0]);
-      let spcSideBarBottom = spcSidebarOffset.top + spcSidebar[0].offsetHeight;
+      const spcSidebar = document.getElementsByClassName('spc-sidebar');
+      const spcSidebarWidth = spcSidebar[0].offsetWidth;
+      const spcSidebarOffset = getPosition(spcSidebar[0]);
+      const spcSideBarBottom = spcSidebarOffset.top + spcSidebar[0].offsetHeight;
 
       // SPC Content.
-      let spcMainContent = document.getElementsByClassName('spc-content');
-      let spcMainContentOffset = getPosition(spcMainContent[0]);
-      let spcMainContentBottom = spcMainContentOffset.top + spcMainContent[0].offsetHeight;
+      const spcMainContent = document.getElementsByClassName('spc-content');
+      const spcMainContentOffset = getPosition(spcMainContent[0]);
+      const spcMainContentBottom = spcMainContentOffset.top + spcMainContent[0].offsetHeight;
 
-      let sidebarStickyTop = spcMainContentBottom - spcSidebar[0].offsetHeight;
+      const sidebarStickyTop = spcMainContentBottom - spcSidebar[0].offsetHeight;
 
       // When the sidebar becomes sticky.
       if (window.pageYOffset > offSet) {
         if (!spcSidebar[0].classList.contains('sticky')) {
-          spcSidebar[0].style.width = spcSidebarWidth + 'px';
+          spcSidebar[0].style.width = `${spcSidebarWidth}px`;
           if (!spcSidebar[0].classList.contains('fluid')) {
-            spcSidebar[0].style.left = spcSidebarOffset.left + 'px';
+            spcSidebar[0].style.left = `${spcSidebarOffset.left}px`;
           }
           spcSidebar[0].classList.add('sticky');
         }
@@ -112,15 +112,11 @@ function stickySidebar() {
             spcSidebar[0].classList.add('fluid');
             spcSidebar[0].style.left = '';
           }
+        } else if (sidebarStickyTop > 35.2) {
+          spcSidebar[0].style.left = `${spcSidebarOffset.left}px`;
+          spcSidebar[0].classList.remove('fluid');
         }
-        else {
-          if (sidebarStickyTop > 35.2) {
-            spcSidebar[0].style.left = spcSidebarOffset.left + 'px';
-            spcSidebar[0].classList.remove('fluid');
-          }
-        }
-      }
-      else {
+      } else {
         spcSidebar[0].classList.remove('sticky');
         spcSidebar[0].style.left = '';
         spcSidebar[0].style.width = '';
@@ -131,5 +127,5 @@ function stickySidebar() {
 
 export {
   stickyMobileCartPreview,
-  stickySidebar
+  stickySidebar,
 };

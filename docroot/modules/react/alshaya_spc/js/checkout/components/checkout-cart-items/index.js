@@ -3,19 +3,17 @@ import React from 'react';
 import CheckoutCartItem from '../checkout-cart-item';
 
 export default class CheckoutCartItems extends React.Component {
-
   render() {
     const products = this.props.items;
-    let productItems = [];
+    const productItems = [];
     Object.entries(products).forEach(([key, product]) => {
       productItems.push(<CheckoutCartItem key={key} item={product} />);
     });
 
     return (
-      <React.Fragment>
+      <>
         {productItems}
-      </React.Fragment>
+      </>
     );
   }
-
 }

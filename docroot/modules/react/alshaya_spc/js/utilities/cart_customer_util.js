@@ -1,6 +1,6 @@
-import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from "./storage";
-import Axios from "axios";
-import { i18nMiddleWareUrl } from "./i18n_url";
+import Axios from 'axios';
+import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
+import { i18nMiddleWareUrl } from './i18n_url';
 
 export async function checkCartCustomer(cart_data = null) {
   if (!(cart_data) || typeof cart_data.cart_id === 'undefined') {
@@ -16,10 +16,9 @@ export async function checkCartCustomer(cart_data = null) {
         addInfoInStorage({ cart: cart_data });
         return false;
       }
-      else {
-        await associateCart(cart_data);
-        return true;
-      }
+
+      await associateCart(cart_data);
+      return true;
     }
     emptyCustomerCart();
     return false;
@@ -28,19 +27,19 @@ export async function checkCartCustomer(cart_data = null) {
 }
 
 const associateCart = (cart_data) => {
-  let url = i18nMiddleWareUrl('associate-cart');
+  const url = i18nMiddleWareUrl('associate-cart');
   return Axios.get(url)
-    .then(response => {
+    .then((response) => {
       if (response.data) {
         cart_data.uid = response.data.uid;
         cart_data.customer = response.data.customer;
         addInfoInStorage({ cart: cart_data });
       }
     })
-    .catch(error => {
+    .catch((error) => {
       // Processing of error here.
     });
-}
+};
 
 /**
  * Empty cart.
@@ -48,12 +47,12 @@ const associateCart = (cart_data) => {
 const emptyCustomerCart = () => {
   removeCartFromStorage();
 
-  let empty_cart = {
+  const empty_cart = {
     cart_id: null,
     cart_total: null,
     items_qty: null,
-    items: []
-  }
+    items: [],
+  };
 
   // Triggering event to notify react component.
   var event = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => empty_cart } });
@@ -61,16 +60,16 @@ const emptyCustomerCart = () => {
 
   var event = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => empty_cart } });
   document.dispatchEvent(event);
-}
+};
 
 export const extractFirstAndLastName = (name) => {
-  var splitName = name.split(' ');
+  const splitName = name.split(' ');
   // Check if the name has space in string.
   // if user has enters only firstname lastname should be empty.
   return {
     firstname: splitName[0],
     lastname: splitName[1] ? name.substring(name.indexOf(' ') + 1) : '',
-  }
+  };
 };
 
 export const makeFullName = (fname = '', lname = '') => {

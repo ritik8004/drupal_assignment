@@ -4,18 +4,15 @@
  * @returns {boolean}
  */
 function isRTL() {
-  'use strict';
-
-  let html = document.getElementsByTagName('html')[0];
-  let dir = html.getAttribute('dir');
+  const html = document.getElementsByTagName('html')[0];
+  const dir = html.getAttribute('dir');
   if (typeof dir === 'undefined' || dir === 'ltr') {
     return false;
   }
-  else {
-    return true;
-  }
+
+  return true;
 }
 
 export {
-  isRTL
+  isRTL,
 };

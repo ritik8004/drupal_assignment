@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {cartAvailableInStorage} from './get_cart';
+import { cartAvailableInStorage } from './get_cart';
 import { i18nMiddleWareUrl } from './i18n_url';
 
 /**
@@ -29,7 +29,7 @@ export function restoreCartApiUrl() {
  * @returns {boolean}
  */
 export const applyRemovePromo = function (action, promo_code) {
-  var cart = cartAvailableInStorage();
+  let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
   }
@@ -41,30 +41,28 @@ export const applyRemovePromo = function (action, promo_code) {
   const api_url = updateCartApiUrl();
 
   return axios.post(api_url, {
-    action: action,
+    action,
     promo: promo_code,
-    cart_id: cart
+    cart_id: cart,
   })
-    .then((response) => {
-      return response.data;
-  }, (error) => {
+    .then((response) => response.data, (error) => {
     // Processing of error here.
-  });
-}
+    });
+};
 
 export const updateCartItemData = function (action, sku, quantity) {
-  var cart = cartAvailableInStorage();
+  let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
   }
 
   // Dispatch event with sku details before localStorage update.
   if (cart.items.hasOwnProperty(sku)) {
-    var data = {
+    const data = {
       qty: quantity,
       item: cart.items[sku],
-    }
-    var event = new CustomEvent('updateCartItemData', {bubbles: true, detail: { data: data }});
+    };
+    const event = new CustomEvent('updateCartItemData', { bubbles: true, detail: { data } });
     document.dispatchEvent(event);
   }
 
@@ -75,20 +73,18 @@ export const updateCartItemData = function (action, sku, quantity) {
   const api_url = updateCartApiUrl();
 
   return axios.post(api_url, {
-    action: action,
-    sku: sku,
+    action,
+    sku,
     cart_id: cart,
-    quantity: quantity
+    quantity,
   })
-    .then((response) => {
-    return response.data;
-  }, (error) => {
+    .then((response) => response.data, (error) => {
     // Processing of error here.
-  });
-}
+    });
+};
 
 export const addPaymentMethodInCart = function (action, data) {
-  var cart = cartAvailableInStorage();
+  let cart = cartAvailableInStorage();
   if (cart === false) {
     return null;
   }
@@ -99,13 +95,11 @@ export const addPaymentMethodInCart = function (action, data) {
 
   const api_url = updateCartApiUrl();
   return axios.post(api_url, {
-    action: action,
+    action,
     payment_info: data,
     cart_id: cart,
   })
-    .then((response) => {
-    return response.data;
-  }, (error) => {
+    .then((response) => response.data, (error) => {
     // Processing of error here.
-  });
-}
+    });
+};
