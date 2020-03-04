@@ -226,8 +226,7 @@ class ClickCollect extends React.Component {
       let self = this;
       document.exitFullscreen()
         .then(() => {
-          console.log('should come heree');
-          self.refreshMap()
+          self.refreshMap();
         })
         .catch((err) => console.error(err))
       this.setState({
@@ -259,7 +258,7 @@ class ClickCollect extends React.Component {
 
     return (
       <div className="spc-address-form">
-        <DeviceView device="!mobile">
+        <DeviceView device="above-mobile">
           <div className="spc-address-form-map">{mapView}</div>
         </DeviceView>
         <div className="spc-cnc-address-form-sidebar">

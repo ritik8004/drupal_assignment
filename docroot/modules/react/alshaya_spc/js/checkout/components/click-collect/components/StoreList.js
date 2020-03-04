@@ -6,14 +6,14 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
     return <div className='spc-cnc-empty-store-list'>{Drupal.t('Sorry, No store found for your location.')}</div>;
   }
 
-  const cooseStoreItem = (e, index) => {
+  const chooseStoreItem = (e, index) => {
     onStoreRadio(index);
     addClassToStoreItem(e.target.parentElement.parentElement, 'selected');
     document.getElementsByClassName('spc-cnc-store-actions')[0].classList.add('show');
   };
 
   const expandStoreItem = (e, index) => {
-    cooseStoreItem(e, index);
+    chooseStoreItem(e, index);
     addClassToStoreItem(e.target.parentElement.parentElement, 'expand');
   }
 
@@ -49,7 +49,7 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
               display={display || 'default'}
               index={parseInt(index)}
               store={store}
-              onStoreChoose={cooseStoreItem}
+              onStoreChoose={chooseStoreItem}
               onStoreExpand={expandStoreItem}
               onStoreFinalize={onStoreFinalize}
               onStoreClose={onStoreClose}

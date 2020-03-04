@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager;
@@ -10,6 +11,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -61,6 +63,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * Address terms helper.
+   *
+   * @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
+   */
+  protected $areaTermsHelper;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -75,6 +84,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_term_helper
+   *   Address terms helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -82,7 +93,8 @@ class AlshayaSpcController extends ControllerBase {
     CheckoutOptionsManager $checkout_options_manager,
     MobileNumberUtilInterface $mobile_util,
     AccountProxyInterface $current_user,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    AddressBookAreasTermsHelper $areas_term_helper
   ) {
     $this->configFactory = $config_factory;
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -90,6 +102,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->mobileUtil = $mobile_util;
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
+    $this->areaTermsHelper = $areas_term_helper;
   }
 
   /**
@@ -102,7 +115,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('mobile_number.util'),
       $container->get('current_user'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_addressbook.area_terms_helper')
     );
   }
 
@@ -133,8 +147,13 @@ class AlshayaSpcController extends ControllerBase {
    *   Markup for checkout page.
    */
   public function checkout() {
+    $cache_tags = [];
+
     $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
+
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     // Get payment methods.
     $payment_methods = [];
@@ -153,11 +172,14 @@ class AlshayaSpcController extends ControllerBase {
     }
 
     $cncTerm = $this->checkoutOptionManager->getClickandColectShippingMethodTerm();
+    $cache_tags = Cache::mergeTags($cache_tags, $cncTerm->getCacheTags());
 
     $user_name = [];
     // If logged in user.
     if ($this->currentUser->isAuthenticated()) {
       $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
+      $cache_tags = Cache::mergeTags($cache_tags, $user->getCacheTags());
+
       $user_name = [
         'fname' => $user->get('field_first_name')->first()->getString(),
         'lname' => $user->get('field_last_name')->first()->getString(),
@@ -170,12 +192,27 @@ class AlshayaSpcController extends ControllerBase {
       }
     }
 
+    $areas = [];
+    $parent_list = $this->areaTermsHelper->getAllGovernates(TRUE);
+    if (!empty($parent_list)) {
+      foreach ($parent_list as $location_id => $location_name) {
+        $child_areas = $this->areaTermsHelper->getAllAreasWithParent($location_id, TRUE);
+        $areas[$location_id] = [
+          'name' => $location_name,
+          'areas' => $child_areas,
+        ];
+      }
+    }
+
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
+
     $store_finder_config = $this->configFactory->get('alshaya_stores_finder.settings');
+    $cache_tags = Cache::mergeTags($cache_tags, $store_finder_config->getCacheTags());
+
     return [
-      '#type' => 'markup',
-      '#markup' => '<div id="spc-checkout"></div>',
+      '#theme' => 'spc_checkout',
+      '#areas' => $areas,
       '#attached' => [
         'library' => [
           'alshaya_spc/checkout',
@@ -192,6 +229,7 @@ class AlshayaSpcController extends ControllerBase {
           'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
           'user_name' => $user_name,
           'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
+          'google_field_mapping' => $this->configFactory->get('alshaya_spc.google_mapping')->get('mapping'),
           'map' => [
             'center' => $store_finder_config->get('country_center'),
             'placeholder' => $store_finder_config->get('store_search_placeholder'),
@@ -209,7 +247,9 @@ class AlshayaSpcController extends ControllerBase {
       '#cache' => [
         'contexts' => [
           'languages:' . LanguageInterface::TYPE_INTERFACE,
+          'user',
         ],
+        'tags' => $cache_tags,
       ],
     ];
   }

@@ -123,7 +123,12 @@ export default class AddressItem extends React.Component {
     let addressData = [];
     let editAddressData = {};
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
-      addressData.push(<span key={key}>{address[key]}, </span>)
+      let fillVal = address[key];
+      // Handling for area field.
+      if (key === 'administrative_area') {
+        fillVal = address['area_label'];
+      }
+      addressData.push(<span key={key}>{fillVal}, </span>)
       editAddressData[val['key']] = address[key];
     })
 

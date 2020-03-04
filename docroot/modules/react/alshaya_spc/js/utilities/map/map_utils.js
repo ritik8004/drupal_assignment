@@ -1,9 +1,33 @@
 /**
+ * Prepare mapping of the google geocode.
+ */
+export const mapAddressMap = () => {
+  let mapping = [];
+  // If mapping is available in settings, use that.
+  if (window.drupalSettings.google_field_mapping !== null) {
+    mapping = window.drupalSettings.google_field_mapping;
+  }
+  else {
+    // For street.
+    mapping['address_line1'] = ['route', 'street_number'];
+    mapping['address_line2'] = ['park', 'point_of_interest', 'establishment', 'premise'];
+    // For area.
+    mapping['administrative_area'] = ['sublocality_level_1', 'administrative_area_level_1'];
+    // For area parent.
+    mapping['area_parent'] = ['administrative_area_level_1'];
+    // For locality.
+    mapping['locality'] = ['locality'];
+  }
+
+  return mapping;
+};
+
+/**
  * Get the map from window object.
  *
  * This is stored in window object in <GoogleMap:componentDidMount>
  */
-export const getMap = function () {
+export const getMap = () => {
   return window.spcMap;
 };
 
@@ -12,14 +36,14 @@ export const getMap = function () {
  *
  * See <GoogleMap> for more details.
  */
-export const getMarkers = function () {
+export const getMarkers = () => {
   return window.spcMarkers;
 };
 
 /**
  * Removes all markers from map.
  */
-export const removeAllMarkersFromMap = function () {
+export const removeAllMarkersFromMap = () => {
   // First clear all existing marker on map.
   for (let i = 0; i < window.spcMarkers.length; i++) {
     window.spcMarkers[i].setMap(null);
@@ -33,7 +57,7 @@ export const removeAllMarkersFromMap = function () {
  * @param {*} position
  * @param {*} map
  */
-export const createMarker = function (position, map) {
+export const createMarker = (position, map) => {
   return new window.google.maps.Marker({
     position,
     map,
@@ -44,86 +68,188 @@ export const createMarker = function (position, map) {
 /**
    * Create info window.
    */
-export const createInfoWindow = function (content) {
+export const createInfoWindow =  (content) => {
   return new window.google.maps.InfoWindow({
     content,
   });
 };
 
 /**
-  * Get the city.
-  *
-  * @param addressArray
-  * @return {string}
-  */
-export const getCity = function (addressArray) {
-  let city = '';
-  for (let i = 0; i < addressArray.length; i++) {
-    if (addressArray[i].types[0] && addressArray[i].types[0] === 'administrative_area_level_2') {
-      city = addressArray[i].long_name;
-    }
-  }
-
-  return city;
-};
-
-/**
-  * Get the area.
-  *
-  * @param addressArray
-  * @return {string}
-  */
-export const getArea = function (addressArray) {
-  let area = '';
+ * Get value from google geocode for address form.
+ *
+ * @param {*} addressArray
+ * @param {*} key
+ */
+export const getAddressFieldVal = (addressArray, key) => {
+  let fieldVal = '';
+  let fieldData = [];
+  // Get the mapping.
+  const addressMap = mapAddressMap();
   for (let i = 0; i < addressArray.length; i++) {
     if (addressArray[i].types[0]) {
-      for (let j = 0; j < addressArray[i].types.length; j++) {
-        if (addressArray[i].types[j] === 'sublocality_level_1' || addressArray[i].types[j] === 'locality') {
-          area = addressArray[i].long_name;
+      // If mapping set.
+      if (addressMap[key] !== undefined) {
+        for (let k = 0; k < addressMap[key].length; k++) {
+          let type = addressMap[key][k];
+          if (addressArray[i].types.indexOf(type) !== -1) {
+            let data = {
+              'type': type,
+              'val': addressArray[i].long_name
+            };
+            fieldData.push(data);
+          }
         }
       }
     }
   }
 
-  return area;
-};
-
-/**
-  * Get the state.
-  *
-  * @param addressArray
-  * @return {string}
-  */
-export const getState = function (addressArray) {
-  let state = '';
-  for (let i = 0; i < addressArray.length; i++) {
-    for (let i = 0; i < addressArray.length; i++) {
-      if (addressArray[i].types[0] && addressArray[i].types[0] === 'administrative_area_level_1') {
-        state = addressArray[i].long_name;
-      }
-    }
-  }
-
-  return state;
-};
-
-/**
-  * Get the block.
-  *
-  * @param addressArray
-  * @return {string}
-  */
-export const getBlock = function (addressArray) {
-  let block = '';
-  for (let i = 0; i < addressArray.length; i++) {
-    if (addressArray[i].types[0]) {
-      for (let j = 0; j < addressArray[i].types.length; j++) {
-        if (addressArray[i].types[j] === 'sublocality_level_2') {
-          block = addressArray[i].long_name;
+  if (fieldData.length > 0) {
+    for (let i = 0; i < addressMap[key].length; i++) {
+      for (let j = 0; j < fieldData.length; j++) {
+        if (fieldData[j]['type'] === addressMap[key][i]) {
+          return fieldData[j]['val'];
         }
       }
     }
   }
 
-  return block;
+  return fieldVal;
 };
+
+/**
+ * Fill the address form based on geocode info.
+ *
+ * @param {*} address
+ */
+export const fillValueInAddressFromGeocode = (address) => {
+  Object.entries(window.drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      // Some handling for select list fields (areas/city).
+      if ((key !== 'administrative_area' && key !== 'area_parent')) {
+        // We will handle area/parent area separately.
+        let val = getAddressFieldVal(address, key).trim();
+        document.getElementById(key).value = val;
+      }
+    }
+  );
+
+  // If area parent available.
+  if (window.drupalSettings.address_fields.area_parent !== undefined) {
+    let areaVal = new Array();
+    let val = getAddressFieldVal(address, 'area_parent').trim();
+    // If not empty.
+    if (val.length > 0) {
+      areaVal = deduceAreaVal(val, 'area_parent');
+      if (areaVal !== null) {
+        // Trigger event.
+        var event = new CustomEvent('updateAreaOnMapSelect', {
+          bubbles: true,
+          detail: {
+            data: () => areaVal
+          }
+        });
+        document.dispatchEvent(event);
+
+      }
+    }
+  }
+
+  // If area available and parent parent area is not available.
+  if (window.drupalSettings.address_fields.administrative_area !== undefined
+    && window.drupalSettings.address_fields.area_parent === undefined) {
+    let areaVal = new Array();
+    let val = getAddressFieldVal(address, 'administrative_area').trim();
+    // If not empty.
+    if (val.length > 0) {
+      areaVal = deduceAreaVal(val, 'administrative_area');
+      if (areaVal === null) {
+        areaVal = new Array();
+      }
+
+      // Trigger event.
+      var event = new CustomEvent('updateAreaOnMapSelect', {
+        bubbles: true,
+        detail: {
+          data: () => areaVal
+        }
+      });
+      document.dispatchEvent(event);
+    }
+  }
+};
+
+/**
+ * Deduce area name from available areas based from google.
+ *
+ * @param {*} area
+ */
+export const deduceAreaVal = (area, field) => {
+  let areas = document.querySelectorAll('[data-list=areas-list]');
+  if (areas.length > 0) {
+    for (let i = 0; i < areas.length; i++) {
+      let labelAttribute = field === 'area_parent' ? 'data-parent-label' : 'data-label';
+      let areaLable = areas[i].getAttribute(labelAttribute);
+      // If it matches with some value.
+      if (areaLable.toLowerCase().indexOf(area.toLowerCase()) !== -1 ||
+        area.toLowerCase().indexOf(areaLable.toLowerCase()) !== -1) {
+        let idAttribute = field === 'area_parent' ? 'data-parent-id' : 'data-id';
+        return {
+          id: areas[i].getAttribute(idAttribute),
+          label: areaLable
+        }
+      }
+    }
+  }
+  return null;
+};
+
+/**
+ * Geocode address on the map.
+ */
+export const geocodeAddressToLatLng = () => {
+  let address = new Array();
+  Object.entries(window.drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      let fieldVal = document.getElementById(key).value;
+      if (fieldVal.trim().length > 0) {
+        if (key === 'area_parent') {
+          let city = document.getElementById('spc-area-select-selected-city').innerText;
+          address.push(city.trim());
+        }
+        else if (key === 'administrative_area') {
+          let area = document.getElementById('spc-area-select-selected').innerText;
+          address.push(area.trim());
+        }
+        else {
+          address.push(fieldVal.trim());
+        }
+      }
+    }
+  );
+
+  address = address.join(', ');
+  // If we have address available.
+  if (address.length > 0) {
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({
+      componentRestrictions: {
+        country: window.drupalSettings.country_code
+      },
+      address : address
+    }, function (results, status) {
+      if (status === 'OK') {
+        // Get the map and re-center it.
+        let map = getMap();
+        map.setCenter(results[0].geometry.location);
+        // Remove any existing markers on map and add new marker.
+        removeAllMarkersFromMap();
+        let marker = createMarker(results[0].geometry.location, map);
+        let markerArray = new Array();
+        markerArray.push(marker);
+        window.spcMarkers = markerArray;
+      } else {
+        console.log('Unable to get location:' + status);
+      }
+    });
+  }
+}

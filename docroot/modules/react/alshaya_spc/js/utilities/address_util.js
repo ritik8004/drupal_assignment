@@ -170,3 +170,54 @@ export const addEditAddressToCustomer = (e) => {
     });
   }
 };
+
+/**
+ * Get Areas list.
+ *
+ * @param {*} is_parent
+ * @param {*} parent_id
+ */
+export const getAreasList = (is_parent, parent_id) => {
+  let areasList = new Array();
+  let areas = document.querySelectorAll('[data-list=areas-list]');
+  if (areas.length > 0) {
+    let idAttribute = is_parent ? 'data-parent-id' : 'data-id';
+    let labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
+    for (let i = 0; i < areas.length; i++) {
+      let id = areas[i].getAttribute(idAttribute);
+      // If we need to fetch areas of a given parent.
+      if (parent_id !== null) {
+        let parentId = areas[i].getAttribute('data-parent-id');
+        // If item's parent id not matches.
+        if (parent_id != parentId) {
+          continue;
+        }
+      }
+
+      areasList[id] = {
+        value: id,
+        label: areas[i].getAttribute(labelAttribute),
+      };
+    }
+  }
+
+  return areasList;
+};
+
+/**
+ * Get label of area based on location id.
+ *
+ * @param {*} is_parent
+ * @param {*} id
+ */
+export const gerAreaLabelById = (is_parent, id) => {
+  let label = '';
+  let idAttibute = is_parent ? 'data-parent-id' : 'data-id';
+  let labelAttribute = is_parent ? 'data-parent-label' : 'data-label';
+  const area = document.querySelectorAll('[' + idAttibute + '="' + id + '"]');
+  if (area.length > 0) {
+    label = area[0].getAttribute(labelAttribute);
+  }
+
+  return label;
+};
