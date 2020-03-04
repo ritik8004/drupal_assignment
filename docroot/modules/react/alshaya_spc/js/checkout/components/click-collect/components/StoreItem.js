@@ -11,10 +11,10 @@ const StoreItem = ({ display, index, store, onStoreChoose, onStoreExpand, onStor
           <span className="store-distance">{store.formatted_distance}</span>
         </span>
         <ConditionalView condition={display === 'accordion'}>
-          <span onClick={e => onStoreExpand(e, index)}>Expand</span>
+          <span className='expand-btn' onClick={e => onStoreExpand(e, index)}>Expand</span>
         </ConditionalView>
         <ConditionalView condition={display === 'default'}>
-          <span onClick={e => onStoreClose(e, index)}>Close</span>
+          <span className='spc-map-list-close' onClick={e => onStoreClose(e, index)}/>
         </ConditionalView>
       </span>
       <div className="store-address-content">
@@ -28,7 +28,7 @@ const StoreItem = ({ display, index, store, onStoreChoose, onStoreExpand, onStor
             Object.entries(store.open_hours_group).map(([weekdays, timings]) => (
               <div key={weekdays}>
                 <span className="key-value-key">{weekdays}</span>
-                <span className="key-value-value">({timings})</span>
+                <span className="key-value-value"> ({timings})</span>
               </div>
             ))
           }
