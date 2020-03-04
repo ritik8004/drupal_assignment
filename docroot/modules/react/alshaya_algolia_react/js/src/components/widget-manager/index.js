@@ -7,7 +7,7 @@ import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
 
 const WidgetManager = React.memo((props) => {
-  const {facet: filter, indexName, itemCount}  = props;
+  const {facet: filter, indexName, itemCount, facet: { name }}  = props;
 
   var currentWidget = '';
   var className = '';
@@ -18,16 +18,16 @@ const WidgetManager = React.memo((props) => {
 
     case 'swatch_list':
       className = 'block-facet--swatch-list';
-      currentWidget = <ColorFilter attribute={`${filter.identifier}.label`} searchable={false} itemCount={itemCount} />;
+      currentWidget = <ColorFilter name={name} attribute={`${filter.identifier}.label`} searchable={false} itemCount={itemCount} deditems={filter.widget.items} />;
       break;
 
     case 'range_checkbox':
-      currentWidget = <PriceFilter attribute={filter.identifier} granularity={parseInt(filter.widget.config.granularity)} itemCount={itemCount} />;
+      currentWidget = <PriceFilter name={name} attribute={filter.identifier} granularity={parseInt(filter.widget.config.granularity)} itemCount={itemCount} />;
       break;
 
     case 'checkbox':
     default:
-      currentWidget = <RefinementList attribute={filter.identifier} searchable={false} itemCount={itemCount} />;
+      currentWidget = <RefinementList name={name} attribute={filter.identifier} searchable={false} itemCount={itemCount} />;
   }
 
   return (

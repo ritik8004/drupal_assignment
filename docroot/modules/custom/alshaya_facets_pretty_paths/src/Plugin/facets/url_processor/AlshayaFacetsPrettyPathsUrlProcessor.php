@@ -96,6 +96,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
     $current_path = rtrim($this->request->getPathInfo(), '/');
     $filters_array = $this->alshayaPrettyPathHelper->getActiveFacetFilters();
+
     $active_results = [];
     foreach ($results as $key => $result) {
       if ($result->isActive()) {
@@ -116,6 +117,7 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
 
       $filter_key = $facet->getUrlAlias();
       $raw_value = $result->getRawValue();
+
       // If the value is active, remove the filter string from the parameters.
       if (!empty($active_results[$result_key])) {
         $active_facet = [];
@@ -201,7 +203,6 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
       ]);
       $url->setOption('query', $this->getQueryParams());
       $result->setUrl($url);
-
     }
 
     return $results;

@@ -55,25 +55,23 @@
     }
   });
   // Push Filter event to GTM.
-  $(window).on('load', function(event) {
-    $('body').once('bind-facet-item-click').on('click','.facet-item', function(event) {
-      if (!$(this).hasClass('is-active')) {
-        var selectedVal = document.createElement('div');
-        var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-        selectedVal.innerHTML = $(this).find('span.facet-item__value').html();
-        selectedVal.querySelectorAll('span.facet-item__count').forEach(function(item, index){
-          item.parentNode.removeChild(item);
-        });
-        var data = {
-          event: 'filter',
-          siteSection: 'search results',
-          filterType: Drupal.t(facetTitle),
-          filterValue: Drupal.t(selectedVal.innerHTML),
-        };
+  $('body').once('bind-facet-item-click').on('click','.facet-item', function(event) {
+    if (!$(this).hasClass('is-active')) {
+      var selectedVal = document.createElement('div');
+      var facetTitle = $(this).attr('datadrupalfacetlabel');
+      selectedVal.innerHTML = $(this).find('span.facet-item__value').html();
+      selectedVal.querySelectorAll('span.facet-item__count').forEach(function(item, index){
+        item.parentNode.removeChild(item);
+      });
+      var data = {
+        event: 'filter',
+        siteSection: 'search results',
+        filterType: facetTitle,
+        filterValue: Drupal.t(selectedVal.innerHTML),
+      };
 
-        dataLayer.push(data);
-      }
-    });
+      dataLayer.push(data);
+    }
   });
 
 })(jQuery, Drupal, dataLayer);
