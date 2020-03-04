@@ -15,6 +15,7 @@ import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
 import PaymentMethods from '../payment-methods';
+import CheckoutMessage from '../../../utilities/checkout-message';
 import TermsConditions from '../terms-conditions';
 import { getLocationAccess, getDefaultMapCenter } from '../../../utilities/checkout_util';
 import { fetchClicknCollectStores } from "../../../utilities/api/requests";
@@ -31,6 +32,8 @@ export default class Checkout extends React.Component {
       cart: null,
       storeList: null,
       payment_methods: window.drupalSettings.payment_methods,
+      message_type: null,
+      error_success_message: null
     };
   }
 
@@ -88,11 +91,24 @@ export default class Checkout extends React.Component {
    * Update the cart in storage.
    */
   refreshCart = (cart) => {
-    this.setState({
-      cart: cart
-    });
+    // If there is error on cart update.
+    if (cart.error_message !== undefined) {
+      this.setState({
+        message_type: 'error',
+        error_success_message: cart.error_message
+      });
+    }
+    else {
+      this.setState({
+        cart: cart,
+        message_type: 'success',
+        error_success_message: null
+      });
 
-    addInfoInStorage(cart);
+      addInfoInStorage(cart);
+    }
+
+    // Remove loader.
     removeFullScreenLoader();
   };
 
@@ -166,6 +182,11 @@ export default class Checkout extends React.Component {
         <div className="spc-pre-content" />
         <div className="spc-main">
           <div className="spc-content">
+            {this.state.error_success_message !== null &&
+              <CheckoutMessage type={this.state.message_type}>
+                {this.state.error_success_message}
+              </CheckoutMessage>
+            }
             <DeliveryMethods cart={this.state.cart} refreshCart={this.refreshCart} cncEvent={this.cncEvent}/>
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
