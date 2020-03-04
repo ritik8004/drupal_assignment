@@ -238,7 +238,12 @@
 #configurable_ajax {
   .configurable-swatch {
     .select2Option {
+      display: flex;
+      flex-flow: column wrap;
+
       .list-title {
+        order: 2;
+
         span {
           &:first-child {
             display: none;
@@ -251,6 +256,10 @@
           font-weight: normal;
           color: $pdp_color_attribute;
         }
+      }
+
+      .select-buttons {
+        order: 1;
       }
     }
   }
