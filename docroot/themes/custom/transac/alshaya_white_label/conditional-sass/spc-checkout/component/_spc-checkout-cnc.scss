@@ -1,6 +1,11 @@
 .spc-cnc-address-form-sidebar {
   position: relative;
   overflow-y: auto;
+  background: $spc-checkout-sidebar-bg;
+
+  @include breakpoint($only-mobile) {
+    height: 100vh;
+  }
 
   .spc-cnc-stores-list-map > .spc-checkout-section-title {
     height: 3.5rem;

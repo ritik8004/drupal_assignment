@@ -1,6 +1,12 @@
 #click-and-collect-list-view {
-  @include breakpoint($only-mobile) {
-    padding-bottom: 6.25rem;
+  @include breakpoint($desktop) {
+    height: 18.375rem;
+    overflow-y: auto;
+  }
+
+  @include breakpoint($only-tablet) {
+    height: 12.125rem;
+    overflow-y: auto;
   }
 
   ul {
@@ -8,42 +14,13 @@
     padding: 0;
     margin: 0;
 
+    @include breakpoint($only-mobile) {
+      padding-bottom: 5.9375rem;
+    }
+
     li {
       background: $spc-cnc-store-item-bg;
       border-bottom: 0.3125rem solid $spc-checkout-sidebar-bg;
-
-      .store-actions {
-        @include breakpoint($only-mobile) {
-          .select-store {
-            margin: 0;
-          }
-
-          position: fixed;
-          bottom: 0;
-          #{$left}: 0;
-          width: 100%;
-          background: $spc-checkout-address-form-bg;
-          padding: 1.25rem;
-          z-index: 1;
-          box-shadow: 0 -1px 20px 9px $sticky-btn;
-        }
-      }
-
-      .select-store {
-        background: $primary_btn_bg;
-        height: 3.25rem;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        justify-content: center;
-        color: $primary_btn_text;
-        font-family: $alshaya-bold;
-        font-weight: normal;
-        font-size: 1rem;
-        width: 100%;
-        margin-top: 1.25rem;
-        text-transform: uppercase;
-      }
 
       .store-address-content {
         display: none;
@@ -82,24 +59,36 @@
           color: $spc-checkout-radio-empty;
         }
 
-        @include icon(chevrondown, after) {
-          font-size: 2rem;
-          position: absolute;
-          #{$right}: 0.875rem;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-
-        .store-name {
-          pointer-events: none;
-        }
-
-        .store-distance {
+        .expand-btn {
           float: $right;
+          width: 2.5rem;
+          font-size: 0;
+          height: 3.25rem;
+          line-height: 3.25rem;
+
+          @include icon(chevrondown, after) {
+            font-size: 2rem;
+            position: absolute;
+            #{$right}: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+
+        .spc-store-name-wrapper {
           display: inline-block;
-          padding-#{$right}: 2rem;
-          pointer-events: none;
-          color: $spc-cnc-store-list-distance;
+          width: calc(100% - 40px);
+
+          .store-name {
+            pointer-events: none;
+          }
+
+          .store-distance {
+            float: $right;
+            display: inline-block;
+            pointer-events: none;
+            color: $spc-cnc-store-list-distance;
+          }
         }
       }
 
@@ -110,13 +99,17 @@
           display: block;
         }
 
+        .expand-btn {
+          @include icon(chevronup, after) {
+            font-size: 2rem;
+          }
+        }
+      }
+
+      &.selected {
         .spc-cnc-store-name {
           @include icon(radio-filled, before) {
             color: $spc-checkout-radio-filled;
-          }
-
-          @include icon(chevronup, after) {
-            font-size: 2rem;
           }
         }
       }
@@ -128,5 +121,40 @@
     text-align: center;
     font-size: 0.875rem;
     color: $spc-cnc-store-item-text-impress;
+  }
+}
+
+.spc-cnc-store-actions {
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  .select-store {
+    background: $primary_btn_bg;
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    color: $primary_btn_text;
+    font-family: $alshaya-bold;
+    font-weight: normal;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  position: absolute;
+  bottom: 0;
+  #{$left}: 0;
+  width: 100%;
+  background: $spc-checkout-address-form-bg;
+  padding: 1.25rem;
+  z-index: 1;
+  box-shadow: 0 -1px 20px 9px $sticky-btn;
+
+  @include breakpoint($only-mobile) {
+    position: fixed;
   }
 }

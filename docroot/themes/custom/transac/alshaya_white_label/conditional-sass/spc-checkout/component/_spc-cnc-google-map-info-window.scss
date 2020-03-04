@@ -35,3 +35,99 @@
     }
   }
 }
+
+.map-store-list {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 -1px 20px 9px $sticky-btn;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li.select-store {
+      display: none;
+      padding: 1.25rem;
+      font-size: 0.875rem;
+
+      .store-actions {
+        margin-top: 1.25rem;
+
+        .select-store {
+          background: $primary_btn_bg;
+          height: 3.25rem;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          justify-content: center;
+          color: $primary_btn_text;
+          font-family: $alshaya-bold;
+          font-weight: normal;
+          font-size: 1rem;
+          width: 100%;
+        }
+      }
+
+      &.selected {
+        display: block;
+      }
+
+      .spc-cnc-store-name {
+        display: block;
+        padding-bottom: 1rem;
+        color: $spc-cnc-store-item-text-impress;
+        position: relative;
+
+        .spc-store-name-wrapper {
+          display: inline-block;
+          width: 100%;
+
+          .store-distance {
+            float: $right;
+            color: $spc-cnc-store-list-distance;
+            padding-#{$right}: 2rem;
+          }
+        }
+      }
+
+      .store-address,
+      .store-open-hours {
+        color: $spc-cnc-store-item-text;
+      }
+
+      .store-delivery-time {
+        color: $spc-cnc-store-item-text-impress;
+        margin-top: 0.625rem;
+        margin-bottom: 0.625rem;
+        display: block;
+      }
+    }
+
+    .spc-map-list-close {
+      position: absolute;
+      top: -0.5rem;
+      #{$right}: -0.75rem;
+
+      @include icon('close') {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: $spc-checkout-close-icon;
+      }
+    }
+  }
+}
+
+button.spc-cnc-full-screen {
+  position: absolute;
+  top: -1px;
+  #{$right}: -0.5rem;
+
+  svg #expand__d,
+  svg #collapse_d {
+    fill: $spc-checkout-cnc-map-expand;
+  }
+}

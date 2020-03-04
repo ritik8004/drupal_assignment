@@ -19,6 +19,7 @@ import ToggleButton from "./components/ToggleButton";
 import LocationSearchForm from "./components/LocationSearchForm";
 import ConditionalView from "../../../common/components/conditional-view";
 import DeviceView from "../../../common/components/device-view";
+import FullScreenSVG from "../full-screen-svg";
 
 class ClickCollect extends React.Component {
   static contextType = ClicknCollectContext;
@@ -34,7 +35,8 @@ class ClickCollect extends React.Component {
     this.searchplaceInput = null;
     this.nearMeBtn = null;
     this.state = {
-      openSelectedStore: this.props.openSelectedStore || false
+      openSelectedStore: this.props.openSelectedStore || false,
+      mapFullScreen: false
     };
   }
 
@@ -214,8 +216,11 @@ class ClickCollect extends React.Component {
   finalizeCurrentStore = (e) => {
     let selectedStore = this.cncListView.current.querySelector('.selected');
     this.finalizeStore(e, selectedStore.dataset.storeCode);
-  }
+  };
 
+  /**
+   * Toggle map full screen.
+   */
   toggleFullScreen = () => {
     if (document.fullscreenElement) {
       let self = this;
@@ -225,12 +230,19 @@ class ClickCollect extends React.Component {
           self.refreshMap()
         })
         .catch((err) => console.error(err))
-    } else {
-      this.cncMapView.current.requestFullscreen();
+      this.setState({
+        mapFullScreen: false
+      });
     }
-  }
+    else {
+      this.cncMapView.current.requestFullscreen();
+      this.setState({
+        mapFullScreen: true
+      });
+    }
+  };
 
-  onStoreClose = () => {
+  onStoreClose = (e) => {
     this.refreshMap();
   }
 
@@ -284,7 +296,9 @@ class ClickCollect extends React.Component {
                     ref={this.cncMapView}
                   >
                     {mapView}
-                    <button onClick={() => this.toggleFullScreen()}>Full screen</button>
+                    <button className='spc-cnc-full-screen' onClick={() => this.toggleFullScreen()}>
+                      <FullScreenSVG mapFullScreen={this.state.mapFullScreen}/>
+                    </button>
                     <div className="map-store-list" ref={this.mapStoreList}>
                       <StoreList
                         display="default"
@@ -299,14 +313,14 @@ class ClickCollect extends React.Component {
                 </DeviceView>
               </div>
             </div>
-            <ConditionalView condition={(storeList && storeList.length > 0)}>
-              <div className="store-actions">
-                <button className="select-store" onClick={e => this.finalizeCurrentStore(e)}>
-                  {Drupal.t('select this store')}
-                </button>
-              </div>
-            </ConditionalView>
           </div>
+          <ConditionalView condition={(storeList && storeList.length > 0)}>
+            <div className={`spc-cnc-store-actions ${openSelectedStore ? '' : 'show' }`}>
+              <button className="select-store" onClick={(e) => this.finalizeCurrentStore(e)}>
+                {Drupal.t('select this store')}
+              </button>
+            </div>
+          </ConditionalView>
           <SelectedStore
             store={selectedStore}
             open={openSelectedStore}

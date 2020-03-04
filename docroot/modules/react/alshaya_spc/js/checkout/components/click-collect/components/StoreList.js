@@ -3,12 +3,13 @@ import StoreItem from './StoreItem';
 
 const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selected: selectedStore, onStoreClose }) => {
   if (!store_list || store_list.length === 0) {
-    return <>{Drupal.t('Sorry, No store found for your location.')}</>;
+    return <div className='spc-cnc-empty-store-list'>{Drupal.t('Sorry, No store found for your location.')}</div>;
   }
 
   const cooseStoreItem = (e, index) => {
     onStoreRadio(index);
     addClassToStoreItem(e.target.parentElement.parentElement, 'selected');
+    document.getElementsByClassName('spc-cnc-store-actions')[0].classList.add('show');
   };
 
   const expandStoreItem = (e, index) => {
@@ -19,6 +20,9 @@ const StoreList = ({ store_list, display, onStoreRadio, onStoreFinalize, selecte
   const addClassToStoreItem = (element, className) => {
     // Close already opened item.
     if (element.classList.contains(className)) {
+      if (className === 'expand') {
+        element.classList.remove(className);
+      }
       return;
     }
     // Add Class expand to the currently opened li.
