@@ -91,6 +91,7 @@ class ContactInfoForm extends React.Component {
         })
       )
       .catch(errors => {
+        removeFullScreenLoader();
         // React on errors.
       });
   };

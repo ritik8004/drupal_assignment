@@ -63,11 +63,17 @@ class ClickCollect extends React.Component {
     if (this.context.coords !== null && this.state.openSelectedStore) {
       this.showOpenMarker(this.context.storeList);
     }
-    document.addEventListener('mapTriggered', this.mapMarkerClick);
+
+    // Show "select this store" button, if a store is selected.
+    if (this.context.selectedStore && this.state.openSelectedStore === false) {
+      this.selectStoreButtonVisibility(true);
+    }
+
+    document.addEventListener('markerClick', this.mapMarkerClick);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mapTriggered', this.mapMarkerClick);
+    document.removeEventListener('markerClick', this.mapMarkerClick);
   }
 
   mapMarkerClick = e => {
@@ -78,7 +84,7 @@ class ClickCollect extends React.Component {
     });
     this.cncListView.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
     if (window.innerWidth < 768 && this.cncMapView.current.style.display == "block") {
-      this.toggleFullScreen();
+      this.toggleFullScreen(true);
       this.mapStoreList.current.querySelector('[data-index="' + index +'"]').classList.add('selected');
     }
   }
@@ -154,6 +160,7 @@ class ClickCollect extends React.Component {
     this.setState({
       openSelectedStore: true
     });
+    this.selectStoreButtonVisibility(false);
   };
 
   toggleStoreView = (e, activeView) => {
@@ -166,9 +173,19 @@ class ClickCollect extends React.Component {
       this.cncMapView.current.style.display = "block";
       this.cncListView.current.style.display = "none";
       this.refreshMap();
+      let selectedStore = this.mapStoreList.current.querySelector('.selected');
+      if (!selectedStore) {
+        this.selectStoreButtonVisibility(false);
+      }
+      else {
+        this.toggleFullScreen(true);
+        this._openGivenMarkerIndex(selectedStore.dataset.storeCode);
+      }
     } else {
       this.cncMapView.current.style.display = "none";
       this.cncListView.current.style.display = "block";
+      let selectedStore = this.cncListView.current.querySelector('.selected');
+      this.selectStoreButtonVisibility(!selectedStore ? false : true);
     }
     return false;
   };
@@ -184,9 +201,12 @@ class ClickCollect extends React.Component {
     if (!this.context.selectedStore) {
       return;
     }
+    this._openGivenMarkerIndex(this.context.selectedStore.code, storeList);
+  };
 
+  _openGivenMarkerIndex = (storeCode, storeList = this.context.storeList) => {
     let index = _findIndex(storeList, {
-      code: this.context.selectedStore.code
+      code: storeCode
     });
 
     // Wait for all markers to be placed in map before
@@ -194,7 +214,6 @@ class ClickCollect extends React.Component {
     setTimeout(() => {
       this.hightlightMapMarker(index);
     }, 100);
-
   };
 
   refreshMap = () => {
@@ -207,10 +226,11 @@ class ClickCollect extends React.Component {
     map.googleMap.panToBounds(map.googleMap.bounds);
   };
 
-  closePanel = () => {
+  closeSelectedStorePanel = () => {
     this.setState({
-      openSelectedStore: false
+      openSelectedStore: false,
     });
+    this.selectStoreButtonVisibility(true);
   };
 
   finalizeCurrentStore = (e) => {
@@ -221,17 +241,29 @@ class ClickCollect extends React.Component {
   /**
    * Toggle map full screen.
    */
-  toggleFullScreen = () => {
+  toggleFullScreen = (fullscreen = null) => {
+    if (fullscreen === true && document.fullscreenElement) {
+      return;
+    }
+
     if (document.fullscreenElement) {
       let self = this;
+      this.setState({
+        mapFullScreen: false
+      });
+      let selectedStore = this.mapStoreList.current.querySelector('.selected');
+      if (selectedStore) {
+        selectedStore.querySelector('.spc-map-list-close').click();
+      }
       document.exitFullscreen()
         .then(() => {
           self.refreshMap();
         })
-        .catch((err) => console.error(err))
-      this.setState({
-        mapFullScreen: false
-      });
+        .catch((err) => console.error(err));
+
+      if (!selectedStore) {
+        this.selectStoreButtonVisibility(false);
+      }
     }
     else {
       this.cncMapView.current.requestFullscreen();
@@ -241,8 +273,20 @@ class ClickCollect extends React.Component {
     }
   };
 
-  onStoreClose = (e) => {
+  onMapStoreClose = (e) => {
+    e.target.parentElement.parentElement.classList.remove('selected');
+    this.selectStoreButtonVisibility(false);
     this.refreshMap();
+  }
+
+  selectStoreButtonVisibility = (action) => {
+    const selectStoreBtn = document.getElementsByClassName('spc-cnc-store-actions')[0];
+    if (action === true) {
+      selectStoreBtn.classList.add('show');
+    }
+    else {
+      selectStoreBtn.classList.remove('show');
+    }
   }
 
   render() {
@@ -305,7 +349,7 @@ class ClickCollect extends React.Component {
                         selected={this.context.selectedStore}
                         onStoreRadio={this.hightlightMapMarker}
                         onStoreFinalize={this.finalizeStore}
-                        onStoreClose={this.onStoreClose}
+                        onStoreClose={this.onMapStoreClose}
                       />
                     </div>
                   </div>
@@ -314,7 +358,7 @@ class ClickCollect extends React.Component {
             </div>
           </div>
           <ConditionalView condition={(storeList && storeList.length > 0)}>
-            <div className={`spc-cnc-store-actions ${openSelectedStore ? '' : 'show' }`}>
+            <div className="spc-cnc-store-actions">
               <button className="select-store" onClick={(e) => this.finalizeCurrentStore(e)}>
                 {Drupal.t('select this store')}
               </button>
@@ -323,7 +367,7 @@ class ClickCollect extends React.Component {
           <SelectedStore
             store={selectedStore}
             open={openSelectedStore}
-            closePanel={this.closePanel}
+            closePanel={this.closeSelectedStorePanel}
           />
         </div>
       </div>
