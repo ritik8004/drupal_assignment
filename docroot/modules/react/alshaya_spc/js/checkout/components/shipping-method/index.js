@@ -74,8 +74,8 @@ export default class ShippingMethod extends React.Component {
       cart_data.then((cart_result) => {
         // If no error.
         if (cart_result.error === undefined) {
-          let cart_data = {
-            'cart': cart_result
+          let cart_info = {
+            cart: cart_result
           }
 
           // Update state and radio button.
@@ -84,7 +84,7 @@ export default class ShippingMethod extends React.Component {
           });
           document.getElementById('shipping-method-' + method.method_code).checked = true;
           // Refresh cart.
-          this.props.refreshCart(cart_data);
+          this.props.refreshCart(cart_info);
         }
         else {
           // In case of error, prepare error info

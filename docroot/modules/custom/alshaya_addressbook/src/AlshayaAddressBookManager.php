@@ -1253,4 +1253,16 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     return $address;
   }
 
+  /**
+   * Determines if area_parent is being used or not.
+   *
+   * @return bool
+   *   If area_parent is being used.
+   */
+  public function isAreaParentUsed() {
+    $mapping = $this->getMagentoFieldMappings();
+    $form_fields = $this->getMagentoFormFields();
+    return ($mapping['area_parent'] && isset($form_fields[$mapping['area_parent']]));
+  }
+
 }

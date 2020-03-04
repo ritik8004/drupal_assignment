@@ -128,6 +128,11 @@ export default class AddressItem extends React.Component {
       if (key === 'administrative_area') {
         fillVal = address['area_label'];
       }
+      // Handling for parent area.
+      else if (key === 'area_parent') {
+        fillVal = address['area_parent_label'];
+      }
+
       addressData.push(<span key={key}>{fillVal}, </span>)
       editAddressData[val['key']] = address[key];
     })

@@ -2,7 +2,8 @@ import React from 'react';
 
 import FilterList from '../../../utilities/filter-list';
 import {
-  getAreasList
+  getAreasList,
+  gerAreaLabelById
 } from '../../../utilities/address_util';
 import {
   geocodeAddressToLatLng
@@ -108,18 +109,26 @@ export default class AreaSelect extends React.Component {
     }
 
     let panelTitle = Drupal.t('select ') + this.props.field.label;
-    let current_option = this.state.current_option;
+    let currentOption = this.state.current_option;
+
+    let currentOptionAvailable = (currentOption !== undefined &&
+      currentOption !== null &&
+      currentOption.toString().length > 0);
+
+    let hiddenFieldValue = '';
+    let areaLabel = '';
+    if (currentOptionAvailable) {
+      hiddenFieldValue = currentOption;
+      areaLabel = gerAreaLabelById(false, currentOption).trim();
+    }
 
     return (
       <div className='spc-type-select'>
         <label>{this.props.field.label}</label>
         {
-          (current_option !== undefined
-            && current_option !== null
-            && current_option.length > 0
-            && options.length > 0) ? (
+          (areaLabel.length > 0) ? (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
-            {options[current_option]['label']}
+            {areaLabel}
           </div>
         ) : (
           <div id='spc-area-select-selected' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
@@ -128,7 +137,7 @@ export default class AreaSelect extends React.Component {
         )}
         {this.state.showFilterList &&
           <FilterList
-            selected={options[current_option]}
+            selected={options[currentOption]}
             options={options}
             placeHolderText={Drupal.t('search for an area')}
             processingCallback={this.processSelectedItem}
@@ -136,7 +145,7 @@ export default class AreaSelect extends React.Component {
             panelTitle={panelTitle}
           />
         }
-        <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={current_option}/>
+        <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={hiddenFieldValue}/>
         <div id={this.props.field_key + '-error'}/>
       </div>
     );

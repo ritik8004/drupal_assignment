@@ -2,13 +2,14 @@ import React from 'react';
 
 import FilterList from '../../../utilities/filter-list';
 import {
-  getAreasList
+  getAreasList,
+  gerAreaLabelById
 } from '../../../utilities/address_util';
 import {
   geocodeAddressToLatLng
 } from '../../../utilities/map/map_utils';
 
-export default class AreaSelect extends React.Component {
+export default class ParentAreaSelect extends React.Component {
 
   constructor(props) {
     super(props);
@@ -68,9 +69,12 @@ export default class AreaSelect extends React.Component {
     if (this.props.default_val.length !== 0
       && this.props.default_val.length !== 'undefined') {
       // Once we get parent areas list, get corresponding child areas.
-      this.handleChange({
-        value: this.props.default_val[this.props.field.key]
+      //this.handleChange(this.props.default_val[this.props.field.key]);
+      this.setState({
+        current_option: this.props.default_val[this.props.field.key]
       });
+
+      this.props.areasUpdate(this.props.default_val[this.props.field.key], false);
     }
 
     document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
@@ -85,7 +89,7 @@ export default class AreaSelect extends React.Component {
       current_option: data.id
     });
 
-    this.props.areasUpdate(data.id);
+    this.props.areasUpdate(data.id, data.id);
   }
 
   /**
@@ -103,19 +107,31 @@ export default class AreaSelect extends React.Component {
       current_option: selectedOption
     });
 
-    this.props.areasUpdate(selectedOption);
+    this.props.areasUpdate(selectedOption, selectedOption);
   };
 
   render() {
     let options = this.state.areas;
     let panelTitle = Drupal.t('select ') + this.props.field.label;
+    let currentOption = this.state.current_option;
+
+    let currentOptionAvailable = (currentOption !== undefined
+      && currentOption !== null
+      && currentOption.toString().length > 0);
+
+    let areaLabel = '';
+    let hiddenFieldValue = '';
+    if (currentOptionAvailable) {
+      hiddenFieldValue = currentOption;
+      areaLabel = gerAreaLabelById(true, currentOption).trim();
+    }
 
     return (
         < div className = 'spc-type-select' >
           <label>{this.props.field.label}</label>
-            {this.state.current_option.length !== 0 ? (
+            {areaLabel.length > 0 ? (
               <div id='spc-area-select-selected-city' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
-                {options[this.state.current_option]['label']}
+                {areaLabel}
               </div>
             ) : (
               <div id='spc-area-select-selected-city' className='spc-area-select-selected' onClick={() => this.toggleFilterList()}>
@@ -124,7 +140,7 @@ export default class AreaSelect extends React.Component {
           )}
           {this.state.showFilterList &&
             <FilterList
-              selected={options[this.state.current_option]}
+              selected={options[currentOption]}
               options={options}
               placeHolderText={Drupal.t('search for a city')}
               processingCallback={this.processSelectedItem}
@@ -132,7 +148,7 @@ export default class AreaSelect extends React.Component {
               panelTitle={panelTitle}
             />
           }
-          <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={this.state.current_option}/>
+          <input type='hidden' id={this.props.field_key} name={this.props.field_key} value={hiddenFieldValue}/>
           <div id={this.props.field_key + '-error'}></div>
         </div>
     );

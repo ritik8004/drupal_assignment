@@ -31,6 +31,7 @@ class Utility {
    *   If message contains MDC server error message.
    */
   public function isBackendServerError(string $message) {
+    // @Todo: Log the original magento error message.
     if (strpos($message, 'Report ID') !== FALSE) {
       return TRUE;
     }
