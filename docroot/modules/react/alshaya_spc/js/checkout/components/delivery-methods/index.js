@@ -63,16 +63,20 @@ export default class DeliveryMethods extends React.Component {
           <input id='delivery-method-hd' defaultChecked={this.state.selectedOption === 'hd'} value='hd' name='delivery-method' type='radio' />
           <label className='radio-sim radio-label'>
             <span className='icon'><HomeDeliverySVG/></span>
-            <span className='impress'>{Drupal.t('home delivery')}</span>
-            <span className='sub-title'>{hd_subtitle}</span>
+            <div className='delivery-method-name'>
+              <span className='impress'>{Drupal.t('home delivery')}</span>
+              <span className='sub-title'>{hd_subtitle}</span>
+            </div>
           </label>
         </div>
         <div className='delivery-method' onClick={() => this.changeDeliveryMethod('cnc')}>
           <input id='delivery-method-cnc' defaultChecked={this.state.selectedOption === 'cnc'} disabled={cnc_disabled} value='cnc' name='delivery-method' type='radio' />
           <label className='radio-sim radio-label'>
             <span className='icon'><ClickCollectSVG/></span>
-            <span className='impress'>{Drupal.t('click & collect')}</span>
-            <span className='sub-title'>{cnc_subtitle}</span>
+            <div className='delivery-method-name'>
+              <span className='impress'>{Drupal.t('click & collect')}</span>
+              <span className='sub-title'>{cnc_subtitle}</span>
+            </div>
           </label>
         </div>
       </div>

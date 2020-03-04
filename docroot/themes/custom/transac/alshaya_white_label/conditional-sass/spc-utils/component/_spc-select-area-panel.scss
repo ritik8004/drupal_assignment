@@ -8,9 +8,22 @@
   z-index: 3;
   background: $spc-checkout-sidebar-bg;
 
+  @include breakpoint($only-mobile) {
+    position: fixed;
+  }
+
   .spc-filter-area-panel-list-wrapper {
     @include breakpoint($tablet) {
       height: calc(100% - 10.25rem);
+
+      ul {
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      height: calc(100vh - 10.5rem);
 
       ul {
         height: 100%;
