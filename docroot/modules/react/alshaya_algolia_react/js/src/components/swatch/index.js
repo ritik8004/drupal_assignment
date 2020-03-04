@@ -28,10 +28,24 @@ const Swatches = (props) => {
   const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
   const total_no_of_swatches = props.swatches.length;
   const diff = total_no_of_swatches - limit;
-  const swatch_color_count = Drupal.formatPlural(total_no_of_swatches, '1 color', '@count colors');
-  const swatch_more_text = Drupal.formatPlural(diff, '+1 color', '+@count colors');
-  let swatches;
 
+  let swatch_more_text = '+';
+  if (diff > 0) {
+    swatch_more_text = (diff === 1) ? swatch_more_text + Drupal.t('1 color') : swatch_more_text + Drupal.t('@swatch_count colors', {'@swatch_count' : diff});
+  }
+  else {
+    swatch_more_text = null;
+  }
+
+  let swatch_color_count;
+  if (total_no_of_swatches > 0) {
+    swatch_color_count = (total_no_of_swatches === 1) ? Drupal.t('1 color') : Drupal.t('@swatch_count colors', {'@swatch_count' : total_no_of_swatches});
+  }
+  else {
+    swatch_color_count = null;
+  }
+
+  let swatches;
   if (total_no_of_swatches > 0 && !show_variants_thumbnail_plp_gallery) {
     swatches = <div className="swatches">
                 {props.swatches.slice(0, limit).map((swatch, key) => <Swatch swatch={swatch} key={key} url={props.url} />)}
