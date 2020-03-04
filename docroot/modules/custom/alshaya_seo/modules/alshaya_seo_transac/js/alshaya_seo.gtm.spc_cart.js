@@ -60,7 +60,7 @@
     Drupal.alshayaSeoGtmPushCheckoutOption(deliveryType, 2);
   });
 
-  document.addEventListener('placeOrderConfirmation', function (e) {
+  document.addEventListener('orderPaymentMethod', function (e) {
     Drupal.alshayaSeoGtmPushCheckoutOption(e.detail.data.payment.method, 2);
   });
 
