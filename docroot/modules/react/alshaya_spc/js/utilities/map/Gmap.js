@@ -177,7 +177,7 @@ export default class Gmap {
       // Set the marker to center of the map on click.
       map.googleMap.setCenter(currentMarker.getPosition());
       map.googleMap.setZoom(12);
-      dispatchCustomEvent('mapTriggered', { marker: currentMarker,  markerSettings});
+      dispatchCustomEvent('markerClick', { marker: currentMarker,  markerSettings });
     });
 
     if (skipInfoWindow !== true) {
