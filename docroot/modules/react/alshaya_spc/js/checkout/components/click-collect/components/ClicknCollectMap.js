@@ -65,14 +65,14 @@ class ClicknCollectMap extends React.Component {
       let markerConfig = {
         position: position,
         title: store.name,
-        infoWindowContent: renderToString(<StoreItemInfoWindow store={store} />),
+        infoWindowContent: renderToString(<StoreItemInfoWindow display="default" store={store}/>),
         infoWindowSolitary: true,
         label: (index + 1).toString(),
         // Require When markers overlap on each other, show the latest one on top,
         zIndex: index + 1
       };
       // Pass "false" as second param, to show infowindow.
-      self.googleMap.setMapMarker(markerConfig, true);
+      self.googleMap.setMapMarker(markerConfig, !(window.innerWidth < 768));
 
       // Add new marker position to bounds.
       window.spcMap.googleMap.bounds.extend(position);

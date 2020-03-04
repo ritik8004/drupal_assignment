@@ -1,9 +1,9 @@
 import React from 'react';
 import StoreItem from './StoreItem';
 
-const StoreItemInfoWindow = ({ store }) => (
+const StoreItemInfoWindow = ({ display, store }) => (
   <>
-    <StoreItem store={store} />
+    <StoreItem display={display} store={store} />
   </>
 );
 

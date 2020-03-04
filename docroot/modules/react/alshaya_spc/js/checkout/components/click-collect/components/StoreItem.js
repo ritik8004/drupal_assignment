@@ -17,37 +17,39 @@ const StoreItem = ({ display, index, store, onStoreChoose, onStoreExpand, onStor
           <span className='spc-map-list-close' onClick={e => onStoreClose(e, index)}/>
         </ConditionalView>
       </span>
-      <div className="store-address-content">
-        <div className="store-address">{parse(store.address)}</div>
-        <div className="store-delivery-time">
-          <span className="label--delivery-time">{Drupal.t('Collect in store from ')}</span>
-          <span className="delivery--time--value">{store.delivery_time}</span>
-        </div>
-        <div className="store-open-hours">
-          {
-            Object.entries(store.open_hours_group).map(([weekdays, timings]) => (
-              <div key={weekdays}>
-                <span className="key-value-key">{weekdays}</span>
-                <span className="key-value-value"> ({timings})</span>
-              </div>
-            ))
-          }
-        </div>
-        <ConditionalView condition={(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')}>
-          <div
-            className="store-actions"
-            gtm-store-address={store.address.replace(/(<([^>]+)>)/ig, '')}
-            gtm-store-title={store.name}
-          >
-            <button
-              className="select-store"
-              onClick={e => onStoreFinalize(e, store.code)}
-            >
-              {Drupal.t('select this store')}
-            </button>
+      <ConditionalView condition={display === 'accordion' || display === 'default'}>
+        <div className="store-address-content">
+          <div className="store-address">{parse(store.address)}</div>
+          <div className="store-delivery-time">
+            <span className="label--delivery-time">{Drupal.t('Collect in store from ')}</span>
+            <span className="delivery--time--value">{store.delivery_time}</span>
           </div>
-        </ConditionalView>
-      </div>
+          <div className="store-open-hours">
+            {
+              Object.entries(store.open_hours_group).map(([weekdays, timings]) => (
+                <div key={weekdays}>
+                  <span className="key-value-key">{weekdays}</span>
+                  <span className="key-value-value"> ({timings})</span>
+                </div>
+              ))
+            }
+          </div>
+          <ConditionalView condition={(typeof onStoreFinalize !== 'undefined' && display !== 'accordion')}>
+            <div
+              className="store-actions"
+              gtm-store-address={store.address.replace(/(<([^>]+)>)/ig, '')}
+              gtm-store-title={store.name}
+            >
+              <button
+                className="select-store"
+                onClick={e => onStoreFinalize(e, store.code)}
+              >
+                {Drupal.t('select this store')}
+              </button>
+            </div>
+          </ConditionalView>
+        </div>
+      </ConditionalView>
     </>
   );
 };
