@@ -103,7 +103,7 @@
       @include breakpoint($upto-desktop) {
         display: none;
         overflow-y: auto;
-        max-height: calc(100vh - 15rem);
+        max-height: calc(100vh - 17rem);
         position: absolute;
         background: $plp_facet_active_bg;
         z-index: 2;
