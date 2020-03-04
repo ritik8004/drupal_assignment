@@ -11,6 +11,13 @@
     padding-#{$left}: 3rem;
     position: relative;
 
+    .radio-sim {
+      @include breakpoint($only-mobile) {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
     input[type=radio] ~ .radio-label {
       @include breakpoint($tablet) {
         display: inline-flex;
@@ -27,9 +34,7 @@
     }
 
     .icon {
-      @include breakpoint($tablet) {
-        margin-#{$right}: 0.625rem;
-      }
+      margin-#{$right}: 0.625rem;
 
       @include breakpoint($only-mobile) {
         float: $left;

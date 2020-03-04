@@ -129,6 +129,7 @@ export const fillValueInAddressFromGeocode = (address) => {
         // We will handle area/parent area separately.
         let val = getAddressFieldVal(address, key).trim();
         document.getElementById(key).value = val;
+        document.getElementById(key).classList.add('focus');
       }
     }
   );
