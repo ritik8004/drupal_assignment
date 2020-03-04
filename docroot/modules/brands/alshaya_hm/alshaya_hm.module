@@ -8,10 +8,8 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_form_alter().
@@ -324,53 +322,4 @@ function alshaya_hm_sku_variant_info_alter(array &$variant, SKUInterface $child,
     'selector' => '.warning-wrapper',
     'markup' => $warning_markup,
   ];
-}
-
-/**
- * Implements hook_search_api_algolia_objects_alter().
- */
-function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  if ($index->id() !== 'alshaya_algolia_index') {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_product_options\SwatchesHelper $swatchesHelper */
-  $swatchesHelper = \Drupal::service('alshaya_product_options.swatches');
-
-  foreach ($objects as &$item) {
-    if (empty($item['attr_color_family'])) {
-      continue;
-    }
-
-    foreach ($item['attr_color_family'] as $key => $value) {
-      $swatch = $swatchesHelper->getSwatch('color_family', $value, $item['search_api_language']);
-      $swatch_data = [
-        'value' => $swatch['name'],
-        'label' => $swatch['name'],
-      ];
-
-      if ($swatch) {
-        switch ($swatch['type']) {
-          case SwatchesHelper::SWATCH_TYPE_TEXTUAL:
-            $swatch_data['swatch_text'] = $swatch['swatch'];
-            $swatch_data['label'] .= ', swatch_text:' . $swatch['swatch'];
-            break;
-
-          case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
-            $swatch_data['swatch_color'] = $swatch['swatch'];
-            $swatch_data['label'] .= ', swatch_color:' . $swatch['swatch'];
-            break;
-
-          case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
-            $swatch_data['swatch_image'] = $swatch['swatch'];
-            $swatch_data['label'] .= ', swatch_image:' . $swatch['swatch'];
-            break;
-
-          default:
-            continue;
-        }
-        $item['attr_color_family'][$key] = $swatch_data;
-      }
-    }
-  }
 }

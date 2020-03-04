@@ -20,6 +20,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\file\FileInterface;
+use Drupal\alshaya_product_options\SwatchesHelper;
 
 /**
  * Class AlshayaAlgoliaIndexHelper.
@@ -108,6 +109,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $configFactory;
 
   /**
+   * The Swatches Helper service.
+   *
+   * @var \Drupal\alshaya_product_options\SwatchesHelper
+   */
+  protected $swatchesHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -132,6 +140,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The product category manager service.
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   The config factory service.
+   * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches_helper
+   *   The Swatches helper service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -147,7 +157,8 @@ class AlshayaAlgoliaIndexHelper {
     TimeInterface $date_time,
     SkuPriceHelper $sku_price_helper,
     ProductCategoryManager $product_category_manager,
-    ConfigFactory $config_factory
+    ConfigFactory $config_factory,
+    SwatchesHelper $swatches_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -160,6 +171,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->skuPriceHelper = $sku_price_helper;
     $this->productCategoryManager = $product_category_manager;
     $this->configFactory = $config_factory;
+    $this->swatchesHelper = $swatches_helper;
   }
 
   /**
@@ -252,6 +264,39 @@ class AlshayaAlgoliaIndexHelper {
     $swatches = $this->getAlgoliaSwatchData($sku);
     if (isset($swatches['swatches'])) {
       $object['swatches'] = array_values($swatches['swatches']);
+    }
+
+    if (!empty($object['attr_color_family'])) {
+      foreach ($object['attr_color_family'] as $key => $value) {
+        $swatch = $this->swatchesHelper->getSwatch('color_family', $value, $object['search_api_language']);
+        $swatch_data = [
+          'value' => $swatch['name'],
+          'label' => $swatch['name'],
+        ];
+
+        if ($swatch) {
+          switch ($swatch['type']) {
+            case SwatchesHelper::SWATCH_TYPE_TEXTUAL:
+              $swatch_data['swatch_text'] = $swatch['swatch'];
+              $swatch_data['label'] .= ', swatch_text:' . $swatch['swatch'];
+              break;
+
+            case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
+              $swatch_data['swatch_color'] = $swatch['swatch'];
+              $swatch_data['label'] .= ', swatch_color:' . $swatch['swatch'];
+              break;
+
+            case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
+              $swatch_data['swatch_image'] = $swatch['swatch'];
+              $swatch_data['label'] .= ', swatch_image:' . $swatch['swatch'];
+              break;
+
+            default:
+              continue;
+          }
+          $object['attr_color_family'][$key] = $swatch_data;
+        }
+      }
     }
 
     if ($product_collection = $sku->get('attr_product_collection')->getString()) {
