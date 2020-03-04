@@ -179,7 +179,7 @@ class ClickCollect extends React.Component {
       }
       else {
         this.toggleFullScreen(true);
-        this._openGivenMarkerIndex(selectedStore.dataset.storeCode);
+        this._openMarkerOfStore(selectedStore.dataset.storeCode);
       }
     } else {
       this.cncMapView.current.style.display = "none";
@@ -201,10 +201,10 @@ class ClickCollect extends React.Component {
     if (!this.context.selectedStore) {
       return;
     }
-    this._openGivenMarkerIndex(this.context.selectedStore.code, storeList);
+    this._openMarkerOfStore(this.context.selectedStore.code, storeList);
   };
 
-  _openGivenMarkerIndex = (storeCode, storeList = this.context.storeList) => {
+  _openMarkerOfStore = (storeCode, storeList = this.context.storeList) => {
     let index = _findIndex(storeList, {
       code: storeCode
     });
