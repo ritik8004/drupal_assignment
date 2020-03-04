@@ -172,17 +172,23 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get payment methods.
     $payment_methods = [];
+    $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
     foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
+      // Avoid displaying the excluded methods.
+      if (isset($exclude_payment_methods[$payment_method['id']])) {
+        continue;
+      }
+
       $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod(
         $payment_method['id'],
         $payment_method['label']->render()
       );
+
       $payment_methods[$payment_method['id']] = [
         'name' => $payment_method_term->getName(),
         'description' => $payment_method_term->getDescription(),
         'code' => $payment_method_term->get('field_payment_code')->getString(),
         'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
-        'has_form' => $payment_method['hasForm'],
       ];
     }
 
