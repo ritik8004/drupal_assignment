@@ -315,3 +315,13 @@
     }
   }
 }
+
+.description-wrapper {
+  .field__content {
+    color: $pdp_sidebar_description;
+
+    ul {
+      padding-#{$left}: 1rem;
+    }
+  }
+}
