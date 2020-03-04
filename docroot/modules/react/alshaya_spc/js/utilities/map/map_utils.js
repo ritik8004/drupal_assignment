@@ -3,15 +3,22 @@
  */
 export const mapAddressMap = () => {
   let mapping = [];
-  // For street.
-  mapping['address_line1'] = ['route', 'street_number'];
-  mapping['address_line2'] = ['park', 'point_of_interest', 'establishment', 'premise'];
-  // For area.
-  mapping['administrative_area'] = ['sublocality_level_1', 'administrative_area_level_1'];
-  // For area parent.
-  mapping['area_parent'] = ['administrative_area_level_1'];
-  // For locality.
-  mapping['locality'] = ['locality'];
+  // If mapping is available in settings, use that.
+  if (window.drupalSettings.google_field_mapping !== null) {
+    mapping = window.drupalSettings.google_field_mapping;
+  }
+  else {
+    // For street.
+    mapping['address_line1'] = ['route', 'street_number'];
+    mapping['address_line2'] = ['park', 'point_of_interest', 'establishment', 'premise'];
+    // For area.
+    mapping['administrative_area'] = ['sublocality_level_1', 'administrative_area_level_1'];
+    // For area parent.
+    mapping['area_parent'] = ['administrative_area_level_1'];
+    // For locality.
+    mapping['locality'] = ['locality'];
+  }
+
   return mapping;
 };
 
