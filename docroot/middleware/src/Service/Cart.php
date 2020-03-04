@@ -251,7 +251,7 @@ class Cart {
 
       $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
       if (!empty($shipping_data['street'])) {
-        $fields_data['street'] = [$shipping_data['street']];
+        $fields_data['street'] = $shipping_data['street'];
       }
     }
     $data['shipping']['shipping_address'] = $fields_data;

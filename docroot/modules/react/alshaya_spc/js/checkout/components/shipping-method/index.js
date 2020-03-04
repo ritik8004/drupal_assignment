@@ -22,7 +22,11 @@ export default class ShippingMethod extends React.Component {
    * Handles shipping method change.
    */
   changeShippingMethod = (method) => {
-    if (this.state.selectedOption === method.method_code) {
+    const cart = this.props.cart.cart;
+    let selectCarrierInfo = method.carrier_code + '_' + method.method_code
+
+    // If mathod is already selected in cart.
+    if (cart.carrier_info === selectCarrierInfo) {
       return;
     }
 
@@ -37,7 +41,6 @@ export default class ShippingMethod extends React.Component {
     });
     document.dispatchEvent(event);
 
-    const cartShippingAddress = this.props.cart.cart.shipping_address;
     let data = {};
     data['carrier_info'] = {
       'carrier': method.carrier_code,
@@ -45,23 +48,23 @@ export default class ShippingMethod extends React.Component {
     }
 
     if (window.drupalSettings.user.uid > 0) {
-      data['address_id'] = cartShippingAddress.customer_address_id;
+      data['address_id'] = cart.shipping_address.customer_address_id;
       data['country_id'] = window.drupalSettings.country_code;
     }
     else {
       // For anonymous users.
       data.static = {
-        firstname: cartShippingAddress.firstname,
-        lastname: cartShippingAddress.lastname,
-        email: cartShippingAddress.email,
-        city: gerAreaLabelById(false, cartShippingAddress.area),
-        telephone: cartShippingAddress.telephone,
+        firstname: cart.shipping_address.firstname,
+        lastname: cart.shipping_address.lastname,
+        email: cart.shipping_address.email,
+        city: gerAreaLabelById(false, cart.shipping_address.area),
+        telephone: cart.shipping_address.telephone,
         country_id: window.drupalSettings.country_code,
       };
 
       // Getting dynamic fields data.
       Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-        data[field.key] = cartShippingAddress[field.key];
+        data[field.key] = cart.shipping_address[field.key];
       });
     }
 
