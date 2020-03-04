@@ -175,22 +175,24 @@
       dataLayer[0].cartTotalValue = cart_data.cart_total;
       dataLayer[0].cartItemsCount = cart_data.items_qty;
       var items = cart_data.items;
-      dataLayer[0].ecommerce.checkout.products = [];
-      dataLayer[0].cartItemsFlocktory = [];
-      Object.entries(items).forEach(([key, product]) => {
-        dataLayer[0].productStyleCode.push(product.parent_sku);
-        dataLayer[0].productSKU.push(key);
-        var productData = Drupal.alshayaSpcGtmProduct(product);
-        dataLayer[0].ecommerce.checkout.products.push(productData);
-        var flocktory = {
-          id: product.parent_sku,
-          price: product.final_price,
-          count: product.qty,
-          title: product.gtm_attributes['gtm-name'],
-          image: product.extra_data.cart_image,
-        };
-        dataLayer[0].cartItemsFlocktory.push(flocktory);
-      });
+      if (items !== undefined) {
+        dataLayer[0].ecommerce.checkout.products = [];
+        dataLayer[0].cartItemsFlocktory = [];
+        Object.entries(items).forEach(([key, product]) => {
+          dataLayer[0].productStyleCode.push(product.parent_sku);
+          dataLayer[0].productSKU.push(key);
+          var productData = Drupal.alshayaSpcGtmProduct(product);
+          dataLayer[0].ecommerce.checkout.products.push(productData);
+          var flocktory = {
+            id: product.parent_sku,
+            price: product.final_price,
+            count: product.qty,
+            title: product.gtm_attributes['gtm-name'],
+            image: product.extra_data.cart_image,
+          };
+          dataLayer[0].cartItemsFlocktory.push(flocktory);
+        });
+      }
     }
   };
 
@@ -250,13 +252,13 @@
     if (product.final_price != product.original_price) {
       productDetails.dimension3 = 'discounted';
     }
-    if (product.gtm_attributes.hasOwnProperty('dimension4')) {
+    if (product.gtm_attributes.hasOwnProperty('dimension4') && product.gtm_attributes.dimension4) {
       productDetails.dimension4 = product.gtm_attributes.dimension4;
     }
-    if (product.gtm_attributes.hasOwnProperty('dimension5')) {
+    if (product.gtm_attributes.hasOwnProperty('dimension5') && product.gtm_attributes.dimension5) {
       productDetails.dimension5 = product.gtm_attributes.dimension5;
     }
-    if (product.gtm_attributes.hasOwnProperty('dimension6')) {
+    if (product.gtm_attributes.hasOwnProperty('dimension6') && product.gtm_attributes.dimension6) {
       productDetails.dimension6 = product.gtm_attributes.dimension6;
     }
     if ($.cookie('product-list') !== undefined) {
