@@ -531,11 +531,30 @@ class CartController {
           $cart = $this->cart->addCncShippingInfo($cart_id, $shipping_info, $action, $create_customer);
         }
         else {
+          $shipping_methods = [];
+          $carrier_info = [];
+          if (!empty($shipping_info['carrier_info'])) {
+            $carrier_info = $shipping_info['carrier_info'];
+            unset($shipping_info['carrier_info']);
+          }
+
           $shipping_data = $this->cart->prepareShippingData($shipping_info);
-          $shipping_methods = $this->cart->shippingMethods($shipping_data, $cart_id);
-          // If no shipping method.
-          if (empty($shipping_methods)) {
-            return new JsonResponse(['error' => TRUE]);
+
+          // If carrier info available in request, use that
+          // instead getting shipping methods.
+          if (!empty($carrier_info)) {
+            $shipping_methods[] = [
+              'carrier_code' => $carrier_info['carrier'],
+              'method_code' => $carrier_info['method'],
+            ];
+          }
+          else {
+            $shipping_methods = $this->cart->shippingMethods($shipping_data, $cart_id);
+
+            // If no shipping method.
+            if (empty($shipping_methods)) {
+              return new JsonResponse(['error' => TRUE]);
+            }
           }
 
           // If we update/add shipping in cart by address id.

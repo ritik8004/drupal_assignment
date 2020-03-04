@@ -51,10 +51,10 @@ export default class AddressForm extends React.Component {
    * Refresh the child areas list on selection / change
    * of the parent area.
    */
-  refreshAreas = parent_id => {
+  refreshAreas = (parent_id, city_changed) => {
     this.setState({
       area_list: getAreasList(false, parent_id),
-      cityChanged: parent_id
+      cityChanged: city_changed
     });
   };
 

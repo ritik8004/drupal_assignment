@@ -123,6 +123,15 @@ class AlshayaSpcCustomerHelper {
       $address_data[$profile->id()]['is_default'] = $profile->isDefault();
       $address_data[$profile->id()]['address_id'] = $profile->id();
       $address_data[$profile->id()]['address_mdc_id'] = $profile->get('field_address_id')->first()->getValue()['value'];
+
+      if ($this->addressBookManager->isAreaParentUsed()) {
+        $parent_term = $this->addressBookManager->getLocationParentTerm($address_data[$profile->id()]['administrative_area']);
+        if ($parent_term) {
+          $address_data[$profile->id()]['area_parent'] = $parent_term->get('field_location_id')->first()->getValue()['value'];
+          $address_data[$profile->id()]['area_parent_label'] = $parent_term->label();
+        }
+      }
+
       // We get the area as term id but we need the location id
       // of that term.
       if ($address_data[$profile->id()]['administrative_area']) {

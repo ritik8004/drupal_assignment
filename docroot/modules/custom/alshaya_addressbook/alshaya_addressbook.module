@@ -769,10 +769,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       // Get full mapping to see if we need to display parent.
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $mapping = $address_book_manager->getMagentoFieldMappings();
-      $form_fields = $address_book_manager->getMagentoFormFields();
-
-      if ($mapping['area_parent'] && isset($form_fields[$mapping['area_parent']])) {
+      if ($address_book_manager->isAreaParentUsed()) {
         $parent = $address_book_manager->getLocationParentTerm($values[0]['administrative_area']);
 
         if ($parent) {

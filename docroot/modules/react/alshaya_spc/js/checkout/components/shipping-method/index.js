@@ -1,10 +1,13 @@
 import React from 'react';
 
-import PriceElement from "../../../utilities/special-price/PriceElement";
+import PriceElement from '../../../utilities/special-price/PriceElement';
 import {
   addShippingInCart, removeFullScreenLoader,
   showFullScreenLoader
-} from "../../../utilities/checkout_util";
+} from '../../../utilities/checkout_util';
+import {
+  gerAreaLabelById
+} from '../../../utilities/address_util';
 
 export default class ShippingMethod extends React.Component {
 
@@ -15,18 +18,20 @@ export default class ShippingMethod extends React.Component {
     };
   }
 
+  /**
+   * Handles shipping method change.
+   */
   changeShippingMethod = (method) => {
-    if (this.state.selectedOption === method.method_code) {
+    const cart = this.props.cart.cart;
+    let selectCarrierInfo = method.carrier_code + '_' + method.method_code
+
+    // If mathod is already selected in cart.
+    if (cart.carrier_info === selectCarrierInfo) {
       return;
     }
 
+    // Show the loader.
     showFullScreenLoader();
-
-    this.setState({
-      selectedOption: method.method_code
-    });
-
-    document.getElementById('shipping-method-' + method.method_code).checked = true;
 
     var event = new CustomEvent('changeShippingMethod', {
       bubbles: true,
@@ -37,17 +42,64 @@ export default class ShippingMethod extends React.Component {
     document.dispatchEvent(event);
 
     let data = {};
+    data['carrier_info'] = {
+      'carrier': method.carrier_code,
+      'method': method.method_code
+    }
+
     if (window.drupalSettings.user.uid > 0) {
-      data['address_id'] = this.props.cart.cart.shipping_address.customer_address_id;
+      data['address_id'] = cart.shipping_address.customer_address_id;
       data['country_id'] = window.drupalSettings.country_code;
     }
     else {
-      // @TODO: Do the same for anonymous users.
+      // For anonymous users.
+      data.static = {
+        firstname: cart.shipping_address.firstname,
+        lastname: cart.shipping_address.lastname,
+        email: cart.shipping_address.email,
+        city: gerAreaLabelById(false, cart.shipping_address.area),
+        telephone: cart.shipping_address.telephone,
+        country_id: window.drupalSettings.country_code,
+      };
+
+      // Getting dynamic fields data.
+      Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+        data[field.key] = cart.shipping_address[field.key];
+      });
     }
 
+    // Update shipping address.
     let cart_data = addShippingInCart('update shipping', data);
-    this.props.refreshCart(cart_data);
-    removeFullScreenLoader();
+    if (cart_data instanceof Promise) {
+      cart_data.then((cart_result) => {
+        // If no error.
+        if (cart_result.error === undefined) {
+          let cart_info = {
+            cart: cart_result
+          }
+
+          // Update state and radio button.
+          this.setState({
+            selectedOption: method.method_code
+          });
+          document.getElementById('shipping-method-' + method.method_code).checked = true;
+          // Refresh cart.
+          this.props.refreshCart(cart_info);
+        }
+        else {
+          // In case of error, prepare error info
+          // and call refresh cart so that message is shown.
+          let error_info = {
+            'error_code': cart_result.error_code,
+            'error_message': cart_result.error_message
+          }
+          this.props.refreshCart(error_info);
+        }
+
+        // Remove loader.
+        removeFullScreenLoader();
+      });
+    }
   };
 
   render () {
