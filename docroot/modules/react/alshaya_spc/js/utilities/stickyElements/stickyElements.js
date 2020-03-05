@@ -72,13 +72,16 @@ function stickySidebar() {
       // Before we begin we need to check if the content is smaller than sidebar,
       // if yes no sticky needed.
       // 40 is margin bottom which is fixed.
-      const spcPromoCodeBlockH = document.getElementsByClassName('spc-promo-code-block')[0].offsetHeight + 40;
-      const orderSummaryBlockH = document.getElementsByClassName('spc-order-summary-block')[0].offsetHeight;
-      // 42 is height of section title for cart items.
-      const cartItemsH = document.getElementsByClassName('spc-cart-items')[0].offsetHeight + 42;
-      if (cartItemsH < spcPromoCodeBlockH + orderSummaryBlockH) {
-        // Content not eligible for sticky.
-        return;
+      // Only on basket page.
+      if (document.getElementsByClassName('spc-promo-code-block').length > 0) {
+        const spcPromoCodeBlockH = document.getElementsByClassName('spc-promo-code-block')[0].offsetHeight + 40;
+        const orderSummaryBlockH = document.getElementsByClassName('spc-order-summary-block')[0].offsetHeight;
+        // 42 is height of section title for cart items.
+        const cartItemsH = document.getElementsByClassName('spc-cart-items')[0].offsetHeight + 42;
+        if (cartItemsH < spcPromoCodeBlockH + orderSummaryBlockH) {
+          // Content not eligible for sticky.
+          return;
+        }
       }
 
       const offSet = getSiderBarOffsetTop();
