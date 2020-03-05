@@ -156,6 +156,7 @@ class AlshayaSpcController extends ControllerBase {
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
 
     $string_keys = [
+      'cod_surcharge_label',
       'cod_surcharge_description',
       'cod_surcharge_short_description',
       'cod_surcharge_tooltip',
