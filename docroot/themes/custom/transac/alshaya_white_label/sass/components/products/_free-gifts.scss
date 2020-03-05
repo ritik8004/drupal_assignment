@@ -306,6 +306,7 @@
     @include breakpoint($only-mobile) {
       width: 7rem;
       float: $left;
+      margin-top: 1.625rem;
       margin-bottom: 1.625rem;
     }
   }
