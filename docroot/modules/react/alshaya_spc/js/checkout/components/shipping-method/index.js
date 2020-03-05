@@ -54,15 +54,15 @@ export default class ShippingMethod extends React.Component {
       email: cart.shipping_address.email,
       city: gerAreaLabelById(false, cart.shipping_address.area),
       telephone: cart.shipping_address.telephone,
-      country_id: window.drupalSettings.country_code,
+      country_id: drupalSettings.country_code,
     };
 
     // Getting dynamic fields data.
-    Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
       data[field.key] = cart.shipping_address[field.key];
     });
 
-    if (window.drupalSettings.user.uid > 0) {
+    if (drupalSettings.user.uid > 0) {
       data['static']['customer_address_id'] = cart.shipping_address.customer_address_id;
       data['static']['customer_id'] = cart.shipping_address.customer_id;
     }

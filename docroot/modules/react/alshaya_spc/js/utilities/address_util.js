@@ -95,7 +95,7 @@ export const addEditAddressToCustomer = (e) => {
           form_data.mobile = mobile;
 
           // Getting dynamic fields data.
-          Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+          Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
             form_data.address[key] = target[key].value;
           });
 
