@@ -502,7 +502,7 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function shippingMethods(array $data, int $cart_id) {
-    if (empty($data['country_id'])) {
+    if (empty($data['address']['country_id'])) {
       return [];
     }
 
