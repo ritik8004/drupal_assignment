@@ -303,7 +303,7 @@ header.c-header {
 
       html[lang=ar] & {
         top: 0;
-        left: 1px;
+        left: 0.0625rem;
       }
     }
   }
@@ -789,10 +789,10 @@ header {
     display: block;
     font-size: 0.875rem;
     border-bottom: 1px solid $mm_l1_border;
-    padding-left: 1rem;
-    padding-right: 0.5rem;
-    margin-left: 0;
-    margin-right: 0;
+    padding-#{$left}: 1rem;
+    padding-#{$right}: 0.5rem;
+    margin-#{$left}: 0;
+    margin-#{$right}: 0;
   }
 
   .menu--two__list-item {
@@ -809,15 +809,15 @@ header {
 
   .menu--three__list-item {
     > .menu-two__link-wrapper {
-      margin-left: 0 !important;
-      margin-right: 0 !important;
+      margin-#{$left}: 0 !important;
+      margin-#{$right}: 0 !important;
     }
   }
 
   .menu--three__list-item,
   .menu--four__list-item {
-    margin-left: 0.625rem;
-    margin-right: 0.625rem;
+    margin-#{$left}: 0.625rem;
+    margin-#{$right}: 0.625rem;
   }
 
   .menu__in {
@@ -864,7 +864,7 @@ header {
       font-size: 2.5rem;
       position: absolute;
       top: -0.3125rem;
-      #{$left}: -2px;
+      #{$left}: -0.125rem;
       color: $header_mobile_menu_close;
     }
   }
@@ -891,8 +891,8 @@ header {
         float: $left;
         font-size: 0.75rem;
         padding-top: 1.125rem;
-        padding-left: 0;
-        padding-right: 0;
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
       }
 
       &.account,
