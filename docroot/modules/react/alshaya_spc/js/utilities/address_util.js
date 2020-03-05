@@ -117,7 +117,6 @@ export const addEditAddressToCustomer = (e) => {
               let data = prepareAddressData(target);
               data['static']['customer_address_id'] = list.data[firstKey].address_mdc_id;
               data['static']['customer_id'] = list.data[firstKey].customer_id;
-              console.log(data);
 
               // Add shipping info in cart.
               const cart_info = addShippingInCart('update shipping', data);
