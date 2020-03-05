@@ -1,5 +1,6 @@
 $aeo_theme_img_directory_path: '/themes/custom/transac/alshaya_american_eagle/imgs';
 $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_american_eagle/imgs/icons/AEO-loader.svg';
+$base_theme_img_directory_path: $aeo_theme_img_directory_path;
 
 @mixin icon_img_styles($height, $width) {
   speak: none;
