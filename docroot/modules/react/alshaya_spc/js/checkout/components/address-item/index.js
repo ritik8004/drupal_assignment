@@ -117,18 +117,20 @@ export default class AddressItem extends React.Component {
     let addressData = [];
     let editAddressData = {};
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
-      let fillVal = address[key];
-      // Handling for area field.
-      if (key === 'administrative_area') {
-        fillVal = address['area_label'];
-      }
-      // Handling for parent area.
-      else if (key === 'area_parent') {
-        fillVal = address['area_parent_label'];
-      }
+      if (address[key] !== undefined) {
+        let fillVal = address[key];
+        // Handling for area field.
+        if (key === 'administrative_area') {
+          fillVal = address['area_label'];
+        }
+        // Handling for parent area.
+        else if (key === 'area_parent') {
+          fillVal = address['area_parent_label'];
+        }
 
-      addressData.push(<span key={key}>{fillVal}, </span>)
-      editAddressData[val['key']] = address[key];
+        addressData.push(fillVal);
+        editAddressData[val['key']] = address[key];
+      }
     })
 
     editAddressData['static'] = {};
@@ -140,7 +142,7 @@ export default class AddressItem extends React.Component {
       <div className='spc-address-tile'>
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
-        <div className='spc-address-fields'>{addressData}</div>
+        <div className='spc-address-fields'>{addressData.join(', ')}</div>
         <div className='spc-address-mobile'>+{drupalSettings.country_mobile_code} {mob_default_val}</div>
       </div>
       <div className='spc-address-tile-actions'>
@@ -161,8 +163,7 @@ export default class AddressItem extends React.Component {
             <EditAddressSVG/>
             <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
               <React.Fragment>
-                <a className='close' onClick={this.closeModal}>&times;</a>
-                <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData} processAddress={this.processAddress} />
+                <AddressForm closeModal={this.closeModal} showEmail={false} show_prefered={true} default_val={editAddressData} processAddress={this.processAddress} />
               </React.Fragment>
             </Popup>
           </div>

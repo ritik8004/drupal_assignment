@@ -89,15 +89,16 @@ export default class HomeDeliveryInfo extends React.Component {
     const address = this.props.cart.cart.shipping_address;
     let addressData = [];
     Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
-      let fillVal = address[val.key];
-      // Handling for area field.
-      if (key === 'administrative_area') {
-        fillVal = gerAreaLabelById(false, fillVal);
+      if (address[val.key] !== undefined) {
+        let fillVal = address[val.key];
+        // Handling for area field.
+        if (key === 'administrative_area') {
+          fillVal = gerAreaLabelById(false, fillVal);
+        } else if (key === 'area_parent') {
+          fillVal = gerAreaLabelById(true, fillVal);
+        }
+        addressData.push(fillVal);
       }
-      else if (key === 'area_parent') {
-        fillVal = gerAreaLabelById(true, fillVal);
-      }
-      addressData.push(<span key={key}>{fillVal}, </span>)
     })
 
     return (
@@ -107,7 +108,7 @@ export default class HomeDeliveryInfo extends React.Component {
             {address.firstname} {address.lastname}
           </div>
           <div className="delivery-address">
-            {addressData}
+            {addressData.join(', ')}
           </div>
           <div className="spc-address-form-edit-link" onClick={this.openModal}>
             {Drupal.t("Change")}
@@ -120,11 +121,9 @@ export default class HomeDeliveryInfo extends React.Component {
           className={getAddressPopupClassName()}
         >
           <React.Suspense fallback={<Loading/>}>
-            <a className="close" onClick={this.closeModal}>
-              &times;
-            </a>
             <AddressContent
               cart={this.props.cart}
+              closeModal={this.closeModal}
               processAddress={this.processAddress}
               showEmail={window.drupalSettings.user.uid === 0}
               default_val = {
