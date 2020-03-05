@@ -172,11 +172,6 @@ export default class AddressItem extends React.Component {
               </React.Fragment>
             </Popup>
           </div>
-          {address['is_default'] !== true &&
-            <div className='spc-address-tile-delete-btn'>
-              <button title={Drupal.t('Delete Address')}  id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
-            </div>
-          }
         </div>
       </div>
       </div>
