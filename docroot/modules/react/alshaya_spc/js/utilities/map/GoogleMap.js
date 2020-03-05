@@ -52,6 +52,7 @@ export default class GoogleMap extends React.Component {
       componentRestrictions: {country: window.drupalSettings.country_code}
     });
     this.autocomplete.addListener('place_changed', this.placesAutocompleteHandler);
+    window.spcAutoComplete = this.autocomplete;
   }
 
   /**
@@ -71,10 +72,7 @@ export default class GoogleMap extends React.Component {
       });
     }
 
-    return {
-      'lat': 29.3117,
-      'lng': 47.4818,
-    }
+    return {};
   }
 
   /**
@@ -93,7 +91,7 @@ export default class GoogleMap extends React.Component {
    * Autocomplete handler for the places list.
    */
   placesAutocompleteHandler = () => {
-    const place = this.autocomplete.getPlace();
+    const place = window.spcAutoComplete.getPlace();
     let event = new CustomEvent('mapClicked', {
       bubbles: true,
       detail: {
@@ -232,9 +230,39 @@ export default class GoogleMap extends React.Component {
   };
 
   /**
+   * Set coords on map by country.
+   */
+  setCountryCoords = () => {
+    // Get the coords of the country.
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({
+      'address': drupalSettings.country_code
+    }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        //this.googleMap.setCenter(results[0].geometry.location);
+        window.spcMap.setCenter(results[0].geometry.location);
+      }
+    });
+  };
+
+  /**
    * Create google map.
    */
   createGoogleMap = (centerPosition, control_position) => {
+    // If corrds not available, try country coords.
+    if (centerPosition.lat === undefined) {
+      this.setCountryCoords();
+
+      // As coords are required for initialize google
+      // map object and if user has not allowed location
+      // share, we first center the map to middle-east region
+      // and then re-center map on the country center.
+      centerPosition = {
+        'lat': 29.2985,
+        'lng': 42.5510
+      }
+    }
+
     return new window.google.maps.Map(this.googleMapDiv(), {
       zoom: 14,
       center: centerPosition,
