@@ -29,6 +29,12 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_site' => '@mothercareuk',
           ],
         ],
+        'live' => [
+          'exponea.settings' => [
+            "name" => "Mothercare",
+            "short_name" => "MC",
+          ],
+        ],
       ],
       'kw' => [
         'uat' => [
@@ -69,6 +75,10 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         'live' => [
           'dynamic_yield.settings' => [
             'section_id' => '9876644',
+          ],
+          'exponea.settings' => [
+            "name" => "H&M",
+            "short_name" => "H&M",
           ],
         ],
       ],
@@ -144,6 +154,10 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876648',
           ],
+          'exponea.settings' => [
+            "name" => "Bath and Body Works",
+            "short_name" => "BBW",
+          ],
         ],
       ],
       'ae' => [
@@ -180,6 +194,12 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_site' => '@footlocker',
           ],
         ],
+        'live' => [
+          'exponea.settings' => [
+            "name" => "Footlocker",
+            "short_name" => "FL",
+          ],
+        ],
       ],
       'ae' => [
         'uat' => [
@@ -213,6 +233,12 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_creator' => '@potterybarn',
             'tags.twitter_cards_site' => '@potterybarn',
+          ],
+        ],
+        'live' => [
+          'exponea.settings' => [
+            "name" => "Pottery Barn",
+            "short_name" => "PB",
           ],
         ],
       ],
@@ -260,6 +286,10 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'dynamic_yield.settings' => [
             'section_id' => '9876645',
           ],
+          'exponea.settings' => [
+            "name" => "Victoria's Secret",
+            "short_name" => "VS",
+          ],
         ],
       ],
     ],
@@ -274,6 +304,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
           'metatag.metatag_defaults.global' => [
             'tags.twitter_cards_type' => 'summary',
+          ],
+          'exponea.settings' => [
+            "name" => "Alshaya",
+            "short_name" => "AlshayaTest",
+            "start_url" => "/",
+            "display" => "standalone",
+            "gcm_sender_id" => "130945280786",
           ],
         ],
       ],
