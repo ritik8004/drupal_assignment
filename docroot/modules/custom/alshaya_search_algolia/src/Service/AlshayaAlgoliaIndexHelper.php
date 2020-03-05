@@ -266,9 +266,20 @@ class AlshayaAlgoliaIndexHelper {
       $object['swatches'] = array_values($swatches['swatches']);
     }
 
-    if (!empty($object['attr_color_family'])) {
-      foreach ($object['attr_color_family'] as $key => $value) {
-        $swatch = $this->swatchesHelper->getSwatch('color_family', $value, $object['search_api_language']);
+    // Index color facets.
+    $color_code_key = NULL;
+    // For VS.
+    if (isset($object['attr_actual_color_label_code'])) {
+      $color_code_key = 'attr_actual_color_label_code';
+    }
+    // For HM, FL.
+    elseif (isset($object['attr_color_family'])) {
+      $color_code_key = 'attr_color_family';
+    }
+
+    if ($color_code_key && !empty($object[$color_code_key])) {
+      foreach ($object[$color_code_key] as $key => $value) {
+        $swatch = $this->swatchesHelper->getSwatch(substr($color_code_key, 5), $value, $object['search_api_language']);
         $swatch_data = [
           'value' => $swatch['name'],
           'label' => $swatch['name'],
@@ -294,7 +305,7 @@ class AlshayaAlgoliaIndexHelper {
             default:
               continue;
           }
-          $object['attr_color_family'][$key] = $swatch_data;
+          $object[$color_code_key][$key] = $swatch_data;
         }
       }
     }
