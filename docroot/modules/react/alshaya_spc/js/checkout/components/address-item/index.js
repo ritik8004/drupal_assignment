@@ -8,12 +8,11 @@ import {
 } from '../../../utilities/address_util';
 import {
   addShippingInCart,
-  cleanMobileNumber
-} from '../../../utilities/checkout_util';
-import {
+  cleanMobileNumber,
   showFullScreenLoader,
-  removeFullScreenLoader
-} from "../../../utilities/checkout_util";
+  removeFullScreenLoader,
+  triggerCheckoutEvent
+} from '../../../utilities/checkout_util';
 import {
   prepareAddressDataForShipping
 } from '../../../utilities/checkout_address_process';
@@ -81,13 +80,7 @@ export default class AddressItem extends React.Component {
         }
 
         // Trigger event to close all popups.
-        var event = new CustomEvent('refreshCartOnAddress', {
-          bubbles: true,
-          detail: {
-            data: () => cart_data
-          }
-        });
-        document.dispatchEvent(event);
+        triggerCheckoutEvent('refreshCartOnAddress', cart_data);
       });
     }
   };
