@@ -357,13 +357,11 @@ class ClickCollect extends React.Component {
               </div>
             </div>
           </div>
-          <ConditionalView condition={(storeList && storeList.length > 0)}>
-            <div className="spc-cnc-store-actions">
-              <button className="select-store" onClick={(e) => this.finalizeCurrentStore(e)}>
-                {Drupal.t('select this store')}
-              </button>
-            </div>
-          </ConditionalView>
+          <div className="spc-cnc-store-actions" data-selected-stored={openSelectedStore}>
+            <button className="select-store" onClick={(e) => this.finalizeCurrentStore(e)}>
+              {Drupal.t('select this store')}
+            </button>
+          </div>
           <SelectedStore
             store={selectedStore}
             open={openSelectedStore}

@@ -41,12 +41,11 @@
         cursor: pointer;
         height: 3.25rem;
         line-height: 3.25rem;
-        padding: 0 1.25rem;
+        padding-#{$right}: 1.25rem;
         display: block;
         font-size: 0.875rem;
         color: $spc-cnc-store-item-text-impress;
         position: relative;
-        padding-#{$left}: 3rem;
 
         @include icon(radio-empty, before) {
           position: absolute;
@@ -57,6 +56,7 @@
           width: 3rem;
           text-align: center;
           color: $spc-checkout-radio-empty;
+          pointer-events: none;
         }
 
         .expand-btn {
@@ -78,6 +78,7 @@
         .spc-store-name-wrapper {
           display: inline-block;
           width: calc(100% - 2.5rem);
+          padding-#{$left}: 3rem;
 
           .store-name {
             pointer-events: none;
@@ -125,10 +126,30 @@
 }
 
 .spc-cnc-store-actions {
-  display: none;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $_white_five_alpha_80;
+    z-index: 3;
+    position: absolute;
+  }
 
   &.show {
     display: block;
+    pointer-events: all;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &[data-selected-stored=true] {
+    display: none;
   }
 
   .select-store {
