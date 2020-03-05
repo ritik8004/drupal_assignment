@@ -4,7 +4,8 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
-  addEditAddressToCustomer
+  addEditAddressToCustomer,
+  gerAreaLabelById
 } from '../../../utilities/address_util';
 import {
   addShippingInCart
@@ -37,6 +38,29 @@ export default class AddressItem extends React.Component {
   };
 
   /**
+   * Prepare address data to update shipping when
+   */
+  prepareAddressToUpdate = (address) => {
+    let data = {};
+    data.static = {
+      firstname: address.given_name,
+      lastname: address.family_name,
+      email: address.email,
+      city: gerAreaLabelById(false, address['administrative_area']),
+      country_id: drupalSettings.country_code,
+      customer_address_id: address.address_mdc_id,
+      customer_id: address.customer_id
+    };
+
+    // Getting dynamic fields data.
+    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+      data[field.key] = address[key];
+    });
+
+    return data;
+  };
+
+  /**
    * When user changes address.
    */
   changeDefaultAddress = (address) => {
@@ -48,10 +72,7 @@ export default class AddressItem extends React.Component {
         if (response.status === 200 && response.data.status === true) {
           document.getElementById('address-' + address['address_id']).checked = true;
           // Refresh the address list.
-          let data = {
-            'address_id': address['address_mdc_id'],
-            'country_id': window.drupalSettings.country_code
-          };
+          let data = this.prepareAddressToUpdate(address);
           var cart_info = addShippingInCart('update shipping', data);
           if (cart_info instanceof Promise) {
             cart_info.then((cart_result) => {
@@ -100,10 +121,10 @@ export default class AddressItem extends React.Component {
   render() {
     const { address } = this.props;
     const mobile_value = address.mobile.value;
-    const mob_default_val = mobile_value.replace('+' + window.drupalSettings.country_mobile_code, '');
+    const mob_default_val = mobile_value.replace('+' + drupalSettings.country_mobile_code, '');
     let addressData = [];
     let editAddressData = {};
-    Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
+    Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
       let fillVal = address[key];
       // Handling for area field.
       if (key === 'administrative_area') {
@@ -128,7 +149,7 @@ export default class AddressItem extends React.Component {
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
         <div className='spc-address-fields'>{addressData}</div>
-        <div className='spc-address-mobile'>+{window.drupalSettings.country_mobile_code} {mob_default_val}</div>
+        <div className='spc-address-mobile'>+{drupalSettings.country_mobile_code} {mob_default_val}</div>
       </div>
       <div className='spc-address-tile-actions'>
         <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address)}>

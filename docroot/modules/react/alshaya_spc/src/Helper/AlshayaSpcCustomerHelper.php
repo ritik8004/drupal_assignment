@@ -122,6 +122,8 @@ class AlshayaSpcCustomerHelper {
       $address_data[$profile->id()]['mobile'] = $profile->get('field_mobile_number')->first()->getValue();
       $address_data[$profile->id()]['is_default'] = $profile->isDefault();
       $address_data[$profile->id()]['address_id'] = $profile->id();
+      $address_data[$profile->id()]['email'] = $user->getEmail();
+      $address_data[$profile->id()]['customer_id'] = $user->get('acq_customer_id')->first()->getValue()['value'];
       $address_data[$profile->id()]['address_mdc_id'] = $profile->get('field_address_id')->first()->getValue()['value'];
 
       if ($this->addressBookManager->isAreaParentUsed()) {

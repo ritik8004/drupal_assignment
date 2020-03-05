@@ -47,25 +47,24 @@ export default class ShippingMethod extends React.Component {
       'method': method.method_code
     }
 
-    if (window.drupalSettings.user.uid > 0) {
-      data['address_id'] = cart.shipping_address.customer_address_id;
-      data['country_id'] = window.drupalSettings.country_code;
-    }
-    else {
-      // For anonymous users.
-      data.static = {
-        firstname: cart.shipping_address.firstname,
-        lastname: cart.shipping_address.lastname,
-        email: cart.shipping_address.email,
-        city: gerAreaLabelById(false, cart.shipping_address.area),
-        telephone: cart.shipping_address.telephone,
-        country_id: window.drupalSettings.country_code,
-      };
+    // For anonymous users.
+    data.static = {
+      firstname: cart.shipping_address.firstname,
+      lastname: cart.shipping_address.lastname,
+      email: cart.shipping_address.email,
+      city: gerAreaLabelById(false, cart.shipping_address.area),
+      telephone: cart.shipping_address.telephone,
+      country_id: drupalSettings.country_code,
+    };
 
-      // Getting dynamic fields data.
-      Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-        data[field.key] = cart.shipping_address[field.key];
-      });
+    // Getting dynamic fields data.
+    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+      data[field.key] = cart.shipping_address[field.key];
+    });
+
+    if (drupalSettings.user.uid > 0) {
+      data['static']['customer_address_id'] = cart.shipping_address.customer_address_id;
+      data['static']['customer_id'] = cart.shipping_address.customer_id;
     }
 
     // Update shipping address.

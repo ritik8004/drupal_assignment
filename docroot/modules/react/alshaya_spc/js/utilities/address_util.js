@@ -6,6 +6,7 @@ import {
 } from './checkout_util';
 import {
   validateAddressFields,
+  prepareAddressData
 } from './checkout_address_process';
 
 /**
@@ -94,7 +95,7 @@ export const addEditAddressToCustomer = (e) => {
           form_data.mobile = mobile;
 
           // Getting dynamic fields data.
-          Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+          Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
             form_data.address[key] = target[key].value;
           });
 
@@ -110,10 +111,12 @@ export const addEditAddressToCustomer = (e) => {
               }
 
               const firstKey = Object.keys(list.data)[0];
-              const data = {
-                address_id: list.data[firstKey].address_mdc_id,
-                country_id: window.drupalSettings.country_code,
+              target['email'] = {
+                'value': list.data[firstKey]['email']
               };
+              let data = prepareAddressData(target);
+              data['static']['customer_address_id'] = list.data[firstKey].address_mdc_id;
+              data['static']['customer_id'] = list.data[firstKey].customer_id;
 
               // Add shipping info in cart.
               const cart_info = addShippingInCart('update shipping', data);
