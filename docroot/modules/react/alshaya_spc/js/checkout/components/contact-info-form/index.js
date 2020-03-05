@@ -17,19 +17,22 @@ class ContactInfoForm extends React.Component {
   handleSubmit = (e, store) => {
     e.preventDefault();
 
-    let notValidAddress = validateContactInfo(e, false);
-    if (notValidAddress) {
-      return;
+    if (drupalSettings.user.uid === 0) {
+      let notValidAddress = validateContactInfo(e, false);
+      if (notValidAddress) {
+        return;
+      }
     }
 
     showFullScreenLoader();
-    let name = e.target.elements.fullname.value.trim();
+    const { fullname, email } = this.context.contactInfo;
+    let name = drupalSettings.user.uid > 0 ? fullname: e.target.elements.fullname.value.trim();
     let { firstname, lastname } = extractFirstAndLastName(name);
     let form_data = {
       static: {
         firstname: firstname,
         lastname: lastname,
-        email: e.target.elements.email.value,
+        email: drupalSettings.user.uid > 0 ?  email : e.target.elements.email.value,
         telephone: e.target.elements.mobile.value,
         country_id: drupalSettings.country_code
       },
@@ -60,10 +63,9 @@ class ContactInfoForm extends React.Component {
       });
     });
 
-    if (
-      this.context.contactInfo === null ||
-      (this.context.contactInfo.hasOwnProperty('email') &&
-        this.context.contactInfo.email !== form_data.static.email)
+    if (this.context.contactInfo === null
+      || (this.context.contactInfo.hasOwnProperty('email')
+        && this.context.contactInfo.email !== form_data.static.email)
     ) {
       customerValidationReuest = Axios.get(
         i18nMiddleWareUrl("customer/" + form_data.static.email)
@@ -189,7 +191,7 @@ class ContactInfoForm extends React.Component {
         onSubmit={e => this.handleSubmit(e, store)}
       >
         <FixedFields
-          showEmail={true}
+          showEmail={drupalSettings.user.uid === 0}
           default_val={contactInfo ? { static: contactInfo } : []}
           subTitle={this.props.subTitle}
         />

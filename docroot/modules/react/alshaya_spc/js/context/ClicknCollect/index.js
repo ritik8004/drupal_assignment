@@ -2,6 +2,7 @@ import React from 'react'
 import { fetchClicknCollectStores } from "../../utilities/api/requests";
 import _isEqual from 'lodash/isEqual';
 import { makeFullName } from '../../utilities/cart_customer_util';
+import { cleanMobileNumber } from '../../utilities/checkout_util';
 
 export const ClicknCollectContext = React.createContext();
 
@@ -21,14 +22,14 @@ export class ClicknCollectContextProvider extends React.Component {
       contactInfo = {
         fullname: makeFullName(customer.firstname || '', customer.lastname || ''),
         email: customer.email || '',
-        telephone: customer.telephone || '',
+        telephone: cleanMobileNumber(customer.telephone) || '',
       }
     }
     else if (shipping_address) {
       contactInfo = {
         fullname: makeFullName(shipping_address.firstname || '', shipping_address.lastname || ''),
         email: shipping_address.email || '',
-        telephone: shipping_address.telephone || '',
+        telephone: cleanMobileNumber(shipping_address.telephone) || '',
       }
     }
 
@@ -88,7 +89,11 @@ export class ClicknCollectContextProvider extends React.Component {
 
   updateContactInfo = (contactInfo) => {
     this.setState({
-      contactInfo: contactInfo
+      contactInfo: {
+        fullname: makeFullName(contactInfo.firstname || '', contactInfo.lastname || ''),
+        email: contactInfo.email || '',
+        telephone: cleanMobileNumber(contactInfo.telephone) || '',
+      }
     });
   }
 
