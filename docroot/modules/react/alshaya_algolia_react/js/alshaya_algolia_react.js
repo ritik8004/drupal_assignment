@@ -34,8 +34,8 @@
           else {
             facet_item_level = $(this).data('level');
             var curr_index = $(this).parent().index();
-            // To check if not deselecting the sale item.
-            if (sale_index !== null && curr_index !== sale_index) {
+            // To check if not deselecting the sale item and not selecting any sale child.
+            if (sale_index !== null && curr_index !== sale_index && facet_item_level === 1) {
               sale_index = null;
             }
           }
@@ -51,8 +51,8 @@
         var facet_item_height = category_facet_search_block.find('ul').first().find('li:first-child a').outerHeight();
         if ($(window).width() < 1025) {
           if (active_facet.siblings('ul').length === 0) {
-            // Close category accordion if not deselecting sale item.
-            if (sale_index === null) {
+            // Close category accordion if not deselecting sale item or selection any sale child.
+            if (sale_index === null || facet_item_level > 1) {
               category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
             }
             // Scroll category dropdown to previous value.
