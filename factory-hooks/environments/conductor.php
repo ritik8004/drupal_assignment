@@ -164,6 +164,11 @@ $conductors = [
     'site_id' => 145,
   ],
   // Pottery Barn KW.
+  'pbkw_dev2' => [
+    'hmac_id' => 'ec5997a86c504abb882545513877c234',
+    'hmac_secret' => 'ODQ1MWZlNjQtNTczYS00',
+    'site_id' => 31,
+  ],
   'pbkw_qa' => [
     'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
     'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
@@ -263,6 +268,11 @@ $conductors = [
     'hmac_secret' => 'OTk3YzBlN2UtOWM0Ny00',
     'site_id' => 132,
   ],
+  'bbwae_dev2' => [
+    'hmac_id' => 'aeffc79b7568410aafe7cbb8aaf83969',
+    'hmac_secret' => 'ZjdjZGU3MGMtYzZiMi00',
+    'site_id' => 202,
+  ],
   'bbwae_qa' => [
     'hmac_id' => '83a388d79f834d20bef67de19ee177d7',
     'hmac_secret' => 'M2MyOWQ3YjgtNTJiNy00',
@@ -311,7 +321,7 @@ $conductors = [
     'site_id' => 83,
   ],
   // VictoriaSecret AE.
-  'vsae_dev3' => [
+  'vsae_dev2' => [
     'hmac_id' => '235f0ce579f6439c97e928b0ffa37224',
     'hmac_secret' => 'MzU0ZWQ5YWYtNjYwNi00',
     'site_id' => 147,
