@@ -4,7 +4,6 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
-  deleteUserAddress,
   addEditAddressToCustomer
 } from '../../../utilities/address_util';
 import {
@@ -84,24 +83,6 @@ export default class AddressItem extends React.Component {
     }
   };
 
-  /**
-   * Deletes the user address.
-   */
-  deleteAddress = (id) => {
-    // Show loader.
-    showFullScreenLoader()
-    let addressList = deleteUserAddress(id);
-    if (addressList instanceof Promise) {
-      addressList.then((response) => {
-        removeFullScreenLoader();
-        if (response.status === 200 && response.data.status === true) {
-          // Refresh the address list.
-          this.props.refreshAddressList(response.data);
-        }
-      });
-    }
-  }
-
   componentDidMount() {
     // Close the modal
     document.addEventListener('closeAddressListPopup', this.closeModal, false);
@@ -172,11 +153,6 @@ export default class AddressItem extends React.Component {
               </React.Fragment>
             </Popup>
           </div>
-          {address['is_default'] !== true &&
-            <div className='spc-address-tile-delete-btn'>
-              <button title={Drupal.t('Delete Address')}  id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
-            </div>
-          }
         </div>
       </div>
       </div>
