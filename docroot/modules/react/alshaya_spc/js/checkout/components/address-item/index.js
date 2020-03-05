@@ -3,7 +3,6 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
-  updateUserDefaultAddress,
   addEditAddressToCustomer,
   gerAreaLabelById
 } from '../../../utilities/address_util';
@@ -56,43 +55,39 @@ export default class AddressItem extends React.Component {
   /**
    * When user changes address.
    */
-  changeDefaultAddress = (address) => {
+  updateShippingAddress = (address) => {
     // Show loader.
     showFullScreenLoader();
-    let addressList = updateUserDefaultAddress(address['address_id']);
-    if (addressList instanceof Promise) {
-      addressList.then((response) => {
-        if (response.status === 200 && response.data.status === true) {
-          document.getElementById('address-' + address['address_id']).checked = true;
-          // Refresh the address list.
-          let data = this.prepareAddressToUpdate(address);
-          var cart_info = addShippingInCart('update shipping', data);
-          if (cart_info instanceof Promise) {
-            cart_info.then((cart_result) => {
-              // Remove loader.
-              removeFullScreenLoader();
-              // If no error.
-              if (cart_result.error === undefined) {
-                let cart_data = {
-                  'cart': cart_result
-                }
-                var event = new CustomEvent('refreshCartOnAddress', {
-                  bubbles: true,
-                  detail: {
-                    data: () => cart_data
-                  }
-                });
-                document.dispatchEvent(event);
 
-                this.props.refreshAddressList(response.data);
-              }
-            });
+    // Prepare address data for shipping info update.
+    let data = this.prepareAddressToUpdate(address);
+
+    // Update shipping on cart.
+    let cart_info = addShippingInCart('update shipping', data);
+    if (cart_info instanceof Promise) {
+      cart_info.then((cart_result) => {
+        // Remove loader.
+        removeFullScreenLoader();
+
+        // Prepare cart data.
+        let cart_data = {
+          'cart': cart_result
+        }
+        // If there is any error.
+        if (cart_result.error !== undefined) {
+          cart_data = {
+            'error_message': cart_result.error_message
           }
         }
-        else {
-          // Remove the loader.
-          removeFullScreenLoader();
-        }
+
+        // Trigger event to close all popups.
+        var event = new CustomEvent('refreshCartOnAddress', {
+          bubbles: true,
+          detail: {
+            data: () => cart_data
+          }
+        });
+        document.dispatchEvent(event);
       });
     }
   };
@@ -139,25 +134,13 @@ export default class AddressItem extends React.Component {
     editAddressData['static']['address_id'] = address['address_id'];
 
     return (
-      <div className='spc-address-tile'>
+      <div className='spc-address-tile' onClick={() => this.updateShippingAddress(address)}>
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
         <div className='spc-address-fields'>{addressData.join(', ')}</div>
         <div className='spc-address-mobile'>+{drupalSettings.country_mobile_code} {mob_default_val}</div>
       </div>
       <div className='spc-address-tile-actions'>
-        <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address)}>
-          <input
-            id={'address-' + address['address_id']}
-            type='radio'
-            defaultChecked={address['is_default'] === true}
-            value={address['address_id']}
-            name='address-book-address'/>
-
-          <label className='radio-sim radio-label'>
-            {Drupal.t('preferred address')}
-          </label>
-        </div>
         <div className='spc-address-btns'>
           <div title={Drupal.t('Edit Address')} className='spc-address-tile-edit' onClick={this.openModal}>
             <EditAddressSVG/>
@@ -169,6 +152,9 @@ export default class AddressItem extends React.Component {
           </div>
         </div>
       </div>
+      {this.props.isSelected &&
+        <div>This is selected</div>
+      }
       </div>
     );
   }

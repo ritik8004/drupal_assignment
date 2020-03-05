@@ -5,6 +5,13 @@ import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage, getGlobalCart } from './get_cart';
 
 /**
+ * Default error message on checkout screen.
+ */
+export const getDefaultCheckoutErrorMessage = () => {
+  return Drupal.t('Sorry, something went wrong. Please try again later.');
+}
+
+/**
  * Get shipping methods.
  *
  * @param cart_id
@@ -106,6 +113,10 @@ export const addShippingInCart = function (action, data) {
       },
       (error) => {
         // Processing of error here.
+        return {
+          error: true,
+          error_message: getDefaultCheckoutErrorMessage()
+        }
       },
     )
     .catch((error) => {
@@ -166,4 +177,20 @@ export const cleanMobileNumber = (mobile) => {
   }
 
   return mobile.value.replace('+' + drupalSettings.country_mobile_code, '');
+};
+
+/**
+ * Trigger an event.
+ *
+ * @param {*} eventName
+ * @param {*} data
+ */
+export const triggerCheckoutEvent = (eventName, data) => {
+  const ee = new CustomEvent(eventName, {
+    bubbles: true,
+    detail: {
+      data: () => data,
+    },
+  });
+  document.dispatchEvent(ee);
 };

@@ -8,7 +8,7 @@ export default class AddressContent extends React.Component {
 
     if (window.drupalSettings.user.uid > 0
       && cart.shipping_address !== null) {
-      return <AddressList closeModal={this.props.closeModal} />;
+      return <AddressList cart={this.props.cart} closeModal={this.props.closeModal} />;
     }
 
     return (
