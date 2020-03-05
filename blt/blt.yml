@@ -48,7 +48,7 @@ modules:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [views_ui]
 command-hooks:
-  frontend-validate:
+  frontend-test:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-validate.sh ${docroot}'
   frontend-reqs:
