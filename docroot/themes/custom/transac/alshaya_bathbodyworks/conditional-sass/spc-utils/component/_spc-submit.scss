@@ -10,3 +10,13 @@
     text-transform: uppercase;
   }
 }
+
+.spc-shopping-link,
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  a,
+  button {
+    text-transform: uppercase;
+    font-family: $bbw-thin !important;
+  }
+}

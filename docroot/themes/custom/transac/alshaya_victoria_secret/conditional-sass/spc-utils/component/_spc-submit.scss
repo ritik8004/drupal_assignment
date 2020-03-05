@@ -12,3 +12,14 @@
     text-transform: capitalize;
   }
 }
+
+.spc-shopping-link,
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  a,
+  button {
+    font-family: $vs-bold;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+}

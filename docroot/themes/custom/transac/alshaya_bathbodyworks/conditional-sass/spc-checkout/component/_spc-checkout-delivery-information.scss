@@ -1,0 +1,16 @@
+.spc-checkout-delivery-information {
+  .spc-checkout-empty-delivery-text {
+    text-transform: capitalize;
+  }
+
+  .popup-overlay .popup-content {
+    .spc-deliver-button {
+      text-transform: capitalize;
+    }
+
+    .spc-address-form-actions .spc-address-form-submit {
+      text-transform: uppercase;
+      font-family: $bbw-thin;
+    }
+  }
+}

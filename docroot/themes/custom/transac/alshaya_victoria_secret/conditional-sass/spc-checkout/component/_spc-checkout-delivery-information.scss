@@ -1,11 +1,14 @@
 .spc-checkout-delivery-information {
   .popup-overlay .popup-content {
     .spc-address-form-actions .spc-address-form-submit {
+      font-weight: normal;
+      font-family: $vs-bold;
       text-transform: uppercase;
     }
 
     .spc-deliver-button {
-      font-weight: 600;
+      font-weight: normal;
+      font-family: $vs-bold;
       text-transform: uppercase;
     }
   }

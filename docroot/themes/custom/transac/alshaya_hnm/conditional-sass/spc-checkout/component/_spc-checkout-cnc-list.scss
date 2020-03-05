@@ -8,6 +8,10 @@
       }
 
       .spc-cnc-store-name {
+        @include icon(radio-empty, before) {
+          font-size: 3.125rem;
+        }
+
         .expand-btn {
           @include icon('dropdown-expand', after) {
             font-size: 2.5rem;

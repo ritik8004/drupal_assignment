@@ -21,3 +21,19 @@ input[type=radio] {
     }
   }
 }
+
+#click-and-collect-list-view li.select-store {
+  .spc-cnc-store-name {
+    @include icon(radio-empty, before) {
+      font-size: 3rem;
+    }
+  }
+
+  &.selected {
+    .spc-cnc-store-name {
+      @include icon(radio-filled, before) {
+        font-size: 3rem;
+      }
+    }
+  }
+}
