@@ -125,6 +125,8 @@ button.spc-cnc-full-screen {
   position: absolute;
   top: -1px;
   #{$right}: -0.5rem;
+  background: none;
+  border: none;
 
   svg #expand__d,
   svg #collapse_d {
