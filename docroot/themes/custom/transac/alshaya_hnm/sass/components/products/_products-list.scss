@@ -196,6 +196,26 @@
       padding: 0.5rem 0.8125rem;
       text-transform: uppercase;
     }
+
+    @include breakpoint($mobile) {
+      min-height: 18rem;
+    }
+
+    @include breakpoint($iphone) {
+      min-height: 20rem;
+    }
+
+    @include breakpoint($iphone-plus) {
+      min-height: 21.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      min-height: 22rem;
+    }
+
+    @include breakpoint($desktop) {
+      min-height: 25rem;
+    }
   }
 
   ul.js-pager__items {
