@@ -91,7 +91,7 @@ export default class EmptyDeliveryText extends React.Component {
             onClick={this.openModal}
             className="spc-checkout-empty-delivery-text"
           >
-            {Drupal.t("Select your preferred collection store")}
+            {Drupal.t("select your preferred collection store")}
           </div>
           <Popup
             open={this.state.open}
@@ -121,7 +121,7 @@ export default class EmptyDeliveryText extends React.Component {
           onClick={this.openModal}
           className="spc-checkout-empty-delivery-text"
         >
-          {Drupal.t("Please add your contact details and address.")}
+          {Drupal.t("please add your contact details and address.")}
         </div>
         <Popup
           className={getAddressPopupClassName()}

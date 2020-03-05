@@ -7,7 +7,7 @@ export default class Gmap {
   constructor() {
     this.map = {
       settings: {
-        zoom: (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center.zoom)) ? drupalSettings.map.center.zoom : 7,
+        zoom: 7,
         maxZoom: 18,
         zoomControl: true,
         fullscreenControl: false,
@@ -107,7 +107,7 @@ export default class Gmap {
       if (status == google.maps.GeocoderStatus.OK) {
         // Just center the map and don't do anything.
         window.spcMap.googleMap.setCenter(results[0].geometry.location);
-        window.spcMap.googleMap.setZoom(window.spcMap.settings.zoom);
+        window.spcMap.googleMap.setZoom(7);
         if (callBackFunc) {
           callBackFunc.call(results)
         }

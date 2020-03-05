@@ -133,13 +133,13 @@ export default class AddressForm extends React.Component {
           </div>
         )}
         <div className="spc-address-form-sidebar">
-          <SectionTitle>{Drupal.t("Delivery information")}</SectionTitle>
+          <SectionTitle>{Drupal.t("delivery information")}</SectionTitle>
           <div className="spc-address-form-wrapper">
             <div
               className="spc-deliver-button"
               onClick={() => this.deliverToCurrentLocation()}
             >
-              {Drupal.t("Deliver to my location")}
+              {Drupal.t("deliver to my location")}
             </div>
             {window.innerWidth < 768 && (
               <div className="spc-address-form-map">
