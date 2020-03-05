@@ -1,0 +1,5 @@
+name: Exponea
+type: module
+description: Provides integration with Exponea Web Push
+package: Custom
+core: 8.x
