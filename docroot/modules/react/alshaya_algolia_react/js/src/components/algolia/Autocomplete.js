@@ -23,7 +23,7 @@ const InputButtons = React.memo((props) => {
       />
       <Portal
         key="clear-button"
-        onclick={(event) => {props.clearCallback(event); document.getElementById('clear-filter').click()}}
+        onclick={(event) => props.clearCallback(event)}
         className="algolia-search-cleartext-icon"
         id="react-algolia-searchbar-clear-button"
         query=""
@@ -103,8 +103,12 @@ class Autocomplete extends React.Component {
   };
 
   onKeyUp = () => {
+    let clearFilter = document.getElementById('clear-filter');
     if (this.state.value.length < 1) {
       this.reactSearchBlock[0].classList.remove('clear-icon');
+      if(clearFilter){
+        clearFilter.click();
+      }
     }
     else {
       this.reactSearchBlock[0].classList.add('clear-icon');
@@ -177,6 +181,8 @@ class Autocomplete extends React.Component {
     this.props.onChange('');
     // Keep focus.
     this.autosuggest.current.input.focus();
+    // Clear filters if clicked on cross button.
+    document.getElementById('clear-filter').click();
   };
 
   backIconClickEvent = (event) => {
