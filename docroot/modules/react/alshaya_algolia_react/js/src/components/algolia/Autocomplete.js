@@ -11,7 +11,6 @@ import {
 } from '../../utils';
 import Portal from '../portal';
 
-
 const InputButtons = React.memo((props) => {
   return (
     <React.Fragment>
