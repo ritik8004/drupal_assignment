@@ -4,7 +4,6 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
-  deleteUserAddress,
   addEditAddressToCustomer
 } from '../../../utilities/address_util';
 import {

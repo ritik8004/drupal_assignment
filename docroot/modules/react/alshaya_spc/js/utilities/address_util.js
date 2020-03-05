@@ -35,21 +35,6 @@ export const updateUserDefaultAddress = function (address_id) {
 };
 
 /**
- * Deletes address for the user.
- *
- * @param {*} address_id
- */
-export const deleteUserAddress = function (address_id) {
-  return axios.post('delete-address', {
-    address_id,
-  })
-    .then((response) => response)
-    .catch((error) => {
-      // Processing of error here.
-    });
-};
-
-/**
  * Add / Edit address for customer.
  *
  * @param {*} address
