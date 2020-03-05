@@ -51,6 +51,36 @@ do
   then
     cd $docrootDir/themes/custom/$theme_type_dir
     npm run install-tools
+
+    # TODO: Increase test coverage to all the themes.
+    # Validate only for travis PRs.
+    if [[ $isTravisPr == 1 && $theme_type_dir == 'transac' ]]
+    then
+      ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
+
+      for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
+      do
+        theme_dir=${subdir##*/}
+        ignore=0
+
+        for ignoredDir in "${ignoredDirs[@]}"
+        do
+          if ([[ $(echo "$theme_dir" | grep $ignoredDir) ]])
+          then
+            ignore=1
+          fi
+        done
+
+        if ([ $ignore == 1 ])
+        then
+          continue
+        fi
+
+        cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
+        gulp lint:css-with-fail
+        gulp lint:js-with-fail
+      done
+    fi
   else
     echo -en "No need to setup $theme_type_dir frontend. There is no change in any $theme_type_dir themes."
   fi
