@@ -171,14 +171,14 @@
         if ($(window).height() > 480) {
           // Default value of duration in slideDown() is 400.
           setTimeout(function () {
-            facetItem.parent('ul').scrollTop( category_dropdown_height_scroll + (facet_item_height * 3.5) );
+            facetItem.parent('ul').scrollTop(category_dropdown_height_scroll + (facet_item_height * 3.5));
           }, 400);
         }
         // For mobile landscape, scroll to show 1.5 items so that user will know there are more items to scroll if any.
         else {
           // Default value of duration in slideDown() is 400.
           setTimeout(function () {
-            facetItem.parent('ul').scrollTop( category_dropdown_height_scroll + (facet_item_height * 1.5) );
+            facetItem.parent('ul').scrollTop(category_dropdown_height_scroll + (facet_item_height * 1.5));
           }, 400);
         }
       }
