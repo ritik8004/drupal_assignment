@@ -252,7 +252,7 @@ export default class GoogleMap extends React.Component {
     return (
       <div className='spc-google-map'>
         <div className='spc-location-g-map-search form-type-textfield'>
-          <input placeholder={Drupal.t('Enter a location')} ref={ref => (this.autocomplete = ref)} id='searchTextField' type='text'/>
+          <input placeholder={Drupal.t('enter a location')} ref={ref => (this.autocomplete = ref)} id='searchTextField' type='text'/>
         </div>
         <div id='google-map' ref={this.googleMapRef} style={{width: '100%', height: '100%'}}/>
       </div>

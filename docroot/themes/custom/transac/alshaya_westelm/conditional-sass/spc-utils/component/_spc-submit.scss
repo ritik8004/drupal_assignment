@@ -8,3 +8,14 @@
     }
   }
 }
+
+.spc-shopping-link,
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  a,
+  button {
+    font-family: $we-bold;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+}

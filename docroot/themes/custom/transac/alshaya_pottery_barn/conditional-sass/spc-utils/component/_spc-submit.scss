@@ -5,8 +5,11 @@
   }
 }
 
-.spc-shopping-link {
-  a {
+.spc-shopping-link,
+.spc-cnc-store-actions,
+.map-store-list .store-actions {
+  a,
+  button {
     font-weight: 600;
     text-transform: uppercase;
   }

@@ -1,0 +1,12 @@
+.alias--cart,
+.alias--checkout,
+.alias--checkout-confirmation {
+  .vat-text-footer {
+    margin: 1rem 0;
+    display: block;
+
+    @include breakpoint($only-mobile) {
+      margin: 1rem 1.25rem;
+    }
+  }
+}
