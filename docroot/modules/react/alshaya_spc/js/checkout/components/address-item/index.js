@@ -4,7 +4,8 @@ import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
   updateUserDefaultAddress,
-  addEditAddressToCustomer
+  addEditAddressToCustomer,
+  gerAreaLabelById
 } from '../../../utilities/address_util';
 import {
   addShippingInCart
@@ -37,6 +38,29 @@ export default class AddressItem extends React.Component {
   };
 
   /**
+   * Prepare address data to update shipping when
+   */
+  prepareAddressToUpdate = (address) => {
+    let data = {};
+    data.static = {
+      firstname: address.given_name,
+      lastname: address.family_name,
+      email: address.email,
+      city: gerAreaLabelById(false, address['administrative_area']),
+      country_id: window.drupalSettings.country_code,
+      customer_address_id: address.address_mdc_id,
+      customer_id: address.customer_id
+    };
+
+    // Getting dynamic fields data.
+    Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+      data[field.key] = address[key];
+    });
+
+    return data;
+  };
+
+  /**
    * When user changes address.
    */
   changeDefaultAddress = (address) => {
@@ -48,10 +72,7 @@ export default class AddressItem extends React.Component {
         if (response.status === 200 && response.data.status === true) {
           document.getElementById('address-' + address['address_id']).checked = true;
           // Refresh the address list.
-          let data = {
-            'address_id': address['address_mdc_id'],
-            'country_id': window.drupalSettings.country_code
-          };
+          let data = this.prepareAddressToUpdate(address);
           var cart_info = addShippingInCart('update shipping', data);
           if (cart_info instanceof Promise) {
             cart_info.then((cart_result) => {

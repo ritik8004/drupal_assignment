@@ -21,7 +21,7 @@ export const checkoutAddressProcess = function (e, cart) {
   }
 
   // Get form data.
-  const form_data = prepareAddressData(e);
+  const form_data = prepareAddressData(e.target.elements);
 
   const mobileValidationRequest = axios.get(`verify-mobile/${e.target.elements.mobile.value}`);
   const customerValidationReuest = axios.get(`${window.drupalSettings.alshaya_spc.middleware_url}/customer/${e.target.elements.email.value}`);
@@ -176,22 +176,22 @@ export const validateAddressFields = (e, validateEmail) => {
  *
  * @param {*} e
  */
-export const prepareAddressData = (e) => {
+export const prepareAddressData = (elements) => {
   const form_data = {};
 
-  const name = e.target.elements.fullname.value.trim();
+  const name = elements.fullname.value.trim();
   form_data.static = {
     firstname: name.split(' ')[0],
     lastname: name.substring(name.indexOf(' ') + 1),
-    email: e.target.elements.email.value,
+    email: elements.email.value,
     city: 'Dummy Value',
-    telephone: e.target.elements.mobile.value,
+    telephone: elements.mobile.value,
     country_id: window.drupalSettings.country_code,
   };
 
   // Getting dynamic fields data.
   Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-    form_data[field.key] = e.target.elements[key].value;
+    form_data[field.key] = elements[key].value;
   });
 
   return form_data;
