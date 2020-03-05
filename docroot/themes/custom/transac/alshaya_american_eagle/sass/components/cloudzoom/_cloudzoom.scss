@@ -1,0 +1,85 @@
+#lightSlider {
+  @include breakpoint($desktop) {
+    height: 39.875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    height: 7.25rem;
+  }
+
+  .slick-slide {
+    @include breakpoint($desktop) {
+      width: 4.875rem !important;
+      height: 6.5rem !important;
+      padding: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      height: 7.75rem !important;
+      padding: 0;
+    }
+
+    img {
+      height: 6.25rem;
+
+      @include breakpoint($only-tablet) {
+        height: 7.25rem;
+      }
+    }
+  }
+
+  .slick-current {
+    border: 0;
+    border-bottom: 0.1875rem solid $gallery_arrows_border;
+
+    @include breakpoint($only-tablet) {
+      border: 0 !important;
+      border-bottom: 0.1875rem solid $gallery_arrows_border !important;
+    }
+  }
+
+  .slick-next {
+    @include breakpoint($desktop) {
+      bottom: auto;
+    }
+  }
+}
+
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next,
+#lightSlider .slick-next,
+#lightSlider .slick-prev {
+  &::before {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.cloudzoom {
+  .cloudzoom__thumbnails {
+    @include breakpoint($desktop) {
+      width: 4.875rem;
+    }
+  }
+
+  &__image {
+    .img-wrap {
+      @include breakpoint($desktop) {
+        height: 39.875rem;
+        top: 0.875rem;
+      }
+    }
+  }
+}
+
+.acq-content-product-modal {
+  #lightSlider {
+    &.pager-yes {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.25rem;
+      }
+    }
+  }
+}
