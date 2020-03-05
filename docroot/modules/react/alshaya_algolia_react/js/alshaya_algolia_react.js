@@ -5,8 +5,14 @@
 (function ($, Drupal) {
   'use strict';
 
+  // Variable for sale item index in category search filter
+  var sale_index = null;
+
   Drupal.behaviors.alshayaAlgoliaReact = {
     attach: function (context, settings) {
+      // Variable to determine facet-item level in category block facet.
+      var facet_item_level;
+
       $(window).on('blazySuccess', function(event, element) {
         Drupal.plpListingProductTileHeight('row', element);
       });
@@ -25,15 +31,53 @@
           if($(this).parents('.block-facet-blockcategory-facet-search').length === 0) {
             $(this).parents('.c-facet.c-collapse-item').find('.c-facet__title.c-collapse__title.active').trigger('click');
           }
+          else {
+            facet_item_level = $(this).data('level');
+            var curr_index = $(this).parent().index();
+            // To check if not deselecting the sale item.
+            if (sale_index !== null && curr_index !== sale_index) {
+              sale_index = null;
+            }
+          }
         });
       });
 
       // After Algolia search results have been updated from category search filter, check if L1 has child-items.
       // Close accordion if it doesn't has children.
-      $(document).once('updatedAlgoliaResults').on('search-results-updated', '#alshaya-algolia-search', function (event, noOfResult) {
+      $(document).once('updatedAlgoliaResults').on('search-results-updated', '#alshaya-algolia-search', function () {
         var category_facet_search_block = $('.block-facet-blockcategory-facet-search');
-        if (category_facet_search_block.find('.facet-item.is-active').siblings('ul').length === 0 && $(window).width() < 1025) {
-          category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
+        var active_facet = category_facet_search_block.find("[data-level='" + facet_item_level + "'].facet-item.is-active");
+        var category_dropdown_height_scroll = category_facet_search_block.find('ul').first().scrollTop();
+        var facet_item_height = category_facet_search_block.find('ul').first().find('li:first-child a').outerHeight();
+        if (active_facet.siblings('ul').length === 0 && $(window).width() < 1025) {
+          // Close category accordion if not deselecting sale item.
+          if (sale_index === null) {
+            category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
+          }
+          // Scroll category dropdown to previous value.
+          else {
+            category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll);
+          }
+        }
+        else {
+          var child = active_facet.siblings('ul');
+          sale_index = child.parent().index();
+          var category_height = category_facet_search_block.outerHeight();
+          var category_height_offset = category_facet_search_block.offset().top;
+          var category_dropdown_height = category_facet_search_block.find('ul').first().outerHeight();
+          var calc_offset = category_height + category_height_offset + category_dropdown_height;
+
+          // If sale item children is not in view, scroll to show children.
+          if (child.offset().top > (calc_offset - (facet_item_height * 1.5))) {
+            // For mobile portrait, scroll to show 3.5 items so that user will know there are more items to scroll if any.
+            if ($(window).height() > 480) {
+              category_facet_search_block.find('ul').first().scrollTop( category_dropdown_height_scroll + (facet_item_height * 3.5) );
+            }
+            // For mobile landscape, scroll to show 1.5 items so that user will know there are more items to scroll if any.
+            else {
+              category_facet_search_block.find('ul').first().scrollTop( category_dropdown_height_scroll + (facet_item_height * 1.5) );
+            }
+          }
         }
       });
 

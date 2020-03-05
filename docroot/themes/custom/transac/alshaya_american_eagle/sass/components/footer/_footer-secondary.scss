@@ -51,6 +51,9 @@
 }
 
 .c-footer-secondary {
+  padding-top: 1.125rem;
+  border-top: 0.0625rem solid $checkout_footer_border-top;
+
   .l-container {
     @include container(75.3125rem);
 
@@ -78,6 +81,12 @@
       flex-basis: 100%;
       border-top: 0.0625rem solid $footer_border_top;
       border-bottom: 0.0625rem solid $footer_border_top;
+    }
+
+    .path--cart & {
+      @include breakpoint($tablet) {
+        flex-basis: 75%;
+      }
     }
   }
 

@@ -83,6 +83,11 @@
           text-decoration: underline;
           padding-#{$right}: 0.25rem;
           padding-#{$left}: 0.125rem;
+          color: inherit;
+
+          &:hover {
+            color: $primary_link-hover;
+          }
         }
       }
     }
@@ -161,7 +166,7 @@
         margin-bottom: 0;
 
         @include breakpoint($tablet) {
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.3125rem;
         }
       }
 
@@ -306,13 +311,12 @@
     @include breakpoint($only-mobile) {
       width: 7rem;
       float: $left;
+      margin-top: 1.625rem;
       margin-bottom: 1.625rem;
     }
   }
 
   .gift-message {
-    font-size: 0.75rem;
-    line-height: 1.33;
     color: $cart-free-gifts-message;
 
     @include breakpoint($tablet) {
@@ -329,9 +333,9 @@
   #table-cart-items {
     tr {
       td {
-        .free-gift-title {
+        .gift-message {
           a {
-            display: inherit;
+            display: inline;
             font-size: 0.75rem !important;
             line-height: 1.33;
             color: $cart-free-gifts-title;
@@ -401,11 +405,6 @@
     }
 
     .gift-message {
-      > a {
-        display: inline !important;
-        text-decoration: underline;
-      }
-
       .label {
         color: $free-gifts-coupon-code-text;
       }
@@ -569,6 +568,10 @@
       }
     }
   }
+
+  form.select-free-gift {
+    margin-top: 0.9375rem;
+  }
 }
 
 .free-gift-listing-modal {
@@ -660,6 +663,10 @@
         padding: calc((100vh - 40rem) / 2) calc((100vw - 60.13rem) / 2) !important;
       }
     }
+
+    .ui-dialog-title {
+      display: none !important;
+    }
   }
 
   &.free-gifts-modal-overlay {
@@ -702,10 +709,28 @@
   }
 }
 
+body.ie {
+  #drupal-modal.free-gift-listing-modal {
+    height: 100% !important;
+
+    .b-lazy {
+      transition-duration: 0s !important;
+    }
+  }
+
+  #drupal-modal.free-gift-detail-modal {
+    -ms-overflow-style: none;
+  }
+}
+
 body:not(.ie) {
   #drupal-modal.free-gift-listing-modal {
     height: auto !important;
     padding: 1.5em 2.5rem;
+
+    @include breakpoint($only-mobile) {
+      height: 100% !important;
+    }
   }
 }
 

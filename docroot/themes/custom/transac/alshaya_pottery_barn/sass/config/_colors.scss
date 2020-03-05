@@ -1,6 +1,7 @@
 /* Color palette from PB */
 
 $PB_black_one: #000;
+$PB_black_two: #757575;
 $PB_grey_one: #666;
 $PB_grey_two: #adadad;
 $PB_grey_five: #ebebeb;
@@ -598,3 +599,10 @@ $free-gifts-modal-product-description-label: $_black_two;
 $cart-free-gifts-message: $PB_grey_one;
 $cart-free-gifts-title: $PB_grey_one;
 $cart-free-gifts-label-background: $_black_two;
+
+// Algolia Autocomplete
+$algolia-auto-complete-border: $white;
+$algolia-input-text: $PB_grey_one;
+$algolia-input-placeholder-text: $PB_black_two;
+$algolia-input-border-mobile: $_black_two;
+$algolia-react-search-page-title: $_black_two;

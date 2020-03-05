@@ -46,11 +46,12 @@
 
     .h1 {
       font-size: 1.125rem;
-      text-transform: uppercase;
+      text-transform: lowercase;
       color: $title;
       margin-top: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid $form-middle-seperator;
+      font-family: $alshaya-bold;
 
       @include breakpoint($desktop) {
         font-size: 1.5rem;
@@ -156,7 +157,7 @@
       .fieldset-legend {
         font-size: 1.125rem;
         color: $form-field-legend;
-        text-transform: uppercase;
+        text-transform: lowercase;
       }
 
       .form-item {
@@ -330,7 +331,7 @@
         top: -3rem;
         font-size: 1.125rem;
         position: absolute;
-        text-transform: uppercase;
+        text-transform: lowercase;
         color: $form-field-title;
 
         &.error {
@@ -480,7 +481,7 @@
       .fieldset-legend {
         font-size: 1.125rem;
         color: $form-edit-room-legend;
-        text-transform: uppercase;
+        text-transform: lowercase;
       }
 
       .fieldset-wrapper {

@@ -26,6 +26,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   $form['#attached']['drupalSettings']['currency_code'] = \Drupal::config('acq_commerce.currency')->getRawData()['currency_code'];
   $form['#attached']['drupalSettings']['ajaxSpinnerMessageInterval'] = (int) \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
   $form['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
+  $form['#attached']['drupalSettings']['show_crosssell_as_matchback'] = \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
 }
 
 /**

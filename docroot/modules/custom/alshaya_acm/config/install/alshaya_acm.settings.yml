@@ -3,3 +3,4 @@ display_crosssell: FALSE
 pdp_show_specifications: TRUE
 show_crosssell_as_matchback: FALSE
 append_each_to_price: FALSE
+quantity_limit_enabled: FALSE

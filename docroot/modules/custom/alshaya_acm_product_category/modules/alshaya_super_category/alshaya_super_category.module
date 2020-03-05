@@ -136,7 +136,10 @@ function alshaya_super_category_preprocess_block(&$variables) {
       }
 
       // Create a name without spaces and any special character.
-      $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
+      // For the logo file name - we always want the english value.
+      // @TODO: Move this to a separate field and remove name dependency.
+      $parent_en = \Drupal::service('entity.repository')->getTranslationFromContext($parent, 'en');
+      $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent_en->label()));
       // Set the language suffix for logo based on current language.
       $langcode = \Drupal::service('language_manager')
         ->getCurrentLanguage()
@@ -160,7 +163,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
         $variables['content']['site_logo']['#uri'] = $logo_path . '.svg';
       }
       // Set image Alt based on current brand.
-      $variables['content']['site_logo']['#alt']    = $parent->label();
+      $variables['content']['site_logo']['#alt'] = $super_category->label();
       $variables['content']['site_name']['#markup'] = $meta_title;
       // Set the site path to brand page.
       if ($parent->id() != alshaya_super_category_get_default_term()) {

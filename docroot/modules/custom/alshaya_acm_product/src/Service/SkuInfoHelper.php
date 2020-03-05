@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class SkuInfoHelper.
@@ -94,6 +95,13 @@ class SkuInfoHelper {
   protected $productOrderLimit;
 
   /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -116,6 +124,8 @@ class SkuInfoHelper {
    *   Language manager.
    * @param \Drupal\alshaya_acm_product\Service\ProductOrderLimit $product_order_limit
    *   Product Order Limit.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(
     SkuManager $sku_manager,
@@ -127,7 +137,8 @@ class SkuInfoHelper {
     Connection $database,
     StockManager $acq_stock_manager,
     LanguageManagerInterface $language_manager,
-    ProductOrderLimit $product_order_limit
+    ProductOrderLimit $product_order_limit,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -139,6 +150,7 @@ class SkuInfoHelper {
     $this->acqSkuStockManager = $acq_stock_manager;
     $this->languageManager = $language_manager;
     $this->productOrderLimit = $product_order_limit;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -463,19 +475,21 @@ class SkuInfoHelper {
     $variant['layout'] = $pdp_layout;
 
     // Get Max sale qty for parent SKU.
-    if ($parent !== NULL) {
-      $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
-    }
+    if ($this->configFactory->get('alshaya_acm.settings')->get('quantity_limit_enabled')) {
+      if ($parent !== NULL) {
+        $max_sale_qty = $plugin->getMaxSaleQty($parent->getSku());
+      }
 
-    // If order limit is not set for parent
-    // then get order limit for each variant.
-    $max_sale_qty = !empty($max_sale_qty)
-      ? $max_sale_qty
-      : $plugin->getMaxSaleQty($variant_sku);
+      // If order limit is not set for parent
+      // then get order limit for each variant.
+      $max_sale_qty = !empty($max_sale_qty)
+        ? $max_sale_qty
+        : $plugin->getMaxSaleQty($variant_sku);
 
-    if (!empty($max_sale_qty)) {
-      $variant['stock']['maxSaleQty'] = $max_sale_qty;
-      $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+      if (!empty($max_sale_qty)) {
+        $variant['stock']['maxSaleQty'] = $max_sale_qty;
+        $variant['orderLimitMsg'] = $this->productOrderLimit->maxSaleQtyMessage($max_sale_qty);
+      }
     }
 
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);

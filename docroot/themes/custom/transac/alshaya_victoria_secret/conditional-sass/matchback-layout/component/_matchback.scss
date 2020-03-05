@@ -1,0 +1,9 @@
+#machbackSlider {
+  ul.slick-dots {
+    li {
+      &.slick-active {
+        background-color: $hp_slider_dots !important;
+      }
+    }
+  }
+}
