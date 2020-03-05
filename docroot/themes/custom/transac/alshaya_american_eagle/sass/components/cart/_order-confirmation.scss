@@ -1,0 +1,28 @@
+.order-confirmation {
+  .order-print-button a {
+    color: $checkout_order_print_btn_text;
+    text-transform: uppercase;
+  }
+
+  .product--count {
+    td {
+      @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+        #{$right}: 1rem;
+        top: 1.25rem;
+      }
+    }
+
+    &.expanded-row td {
+      @include facet-arrow(after, up, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+        #{$right}: 1rem;
+        top: 1.25rem;
+      }
+    }
+  }
+}
+
+.order-confirmation .continue--shopping--mobile a,
+#edit-confirmation-continue-shopping {
+  text-transform: uppercase;
+  color: $desktop_continue_shopping_btn_text;
+}
