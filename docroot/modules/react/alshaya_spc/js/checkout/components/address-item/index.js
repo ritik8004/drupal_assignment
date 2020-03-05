@@ -84,24 +84,6 @@ export default class AddressItem extends React.Component {
     }
   };
 
-  /**
-   * Deletes the user address.
-   */
-  deleteAddress = (id) => {
-    // Show loader.
-    showFullScreenLoader()
-    let addressList = deleteUserAddress(id);
-    if (addressList instanceof Promise) {
-      addressList.then((response) => {
-        removeFullScreenLoader();
-        if (response.status === 200 && response.data.status === true) {
-          // Refresh the address list.
-          this.props.refreshAddressList(response.data);
-        }
-      });
-    }
-  }
-
   componentDidMount() {
     // Close the modal
     document.addEventListener('closeAddressListPopup', this.closeModal, false);
