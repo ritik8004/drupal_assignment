@@ -130,10 +130,8 @@ export default class EmptyDeliveryText extends React.Component {
           closeOnDocumentClick={false}
         >
           <React.Suspense fallback={<Loading />}>
-            <a className="close" onClick={this.closeModal}>
-              &times;
-            </a>
             <AddressContent
+              closeModal={this.closeModal}
               cart={this.props.cart}
               processAddress={this.processAddress}
               show_prefered={window.drupalSettings.user.uid > 0}
