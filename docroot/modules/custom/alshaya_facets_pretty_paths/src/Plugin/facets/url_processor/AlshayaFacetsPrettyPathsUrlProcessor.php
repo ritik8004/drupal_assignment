@@ -189,17 +189,12 @@ class AlshayaFacetsPrettyPathsUrlProcessor extends UrlProcessorPluginBase {
         $url->setOption('attributes', ['rel' => 'follow index']);
       }
 
-      // Getting the item value for all filters from uri as some of
-      // the item ids(alias/raw values) are in Arabic. (colour-أبيض)
-      // Adding 'strlen' to prevent the removal of (int) 0
-      // from the array.
-      $route_param = array_filter(explode('/', $url->getUri()), 'strlen');
-      $last_param = end($route_param);
-      $filter_value = array_filter(explode('-', $last_param), 'strlen');
-      $last_filter_value = end($filter_value);
+      // Getting the filter item value in English.
+      // Setting attribute for the facet items.
+      $filter_value_en = $this->alshayaPrettyPathHelper->encodeFacetUrlComponents($facet->getFacetSourceId(), $facet->getUrlAlias(), $raw_value);
       $url->setOption('attributes', [
         'data-drupal-facet-label' => $facet->label(),
-        'data-drupal-facet-item-label' => $last_filter_value,
+        'data-drupal-facet-item-label' => $filter_value_en,
       ]);
       $url->setOption('query', $this->getQueryParams());
       $result->setUrl($url);
