@@ -119,6 +119,8 @@ class AlshayaSpcCustomerHelper {
     foreach ($profiles as $profile) {
       $address_data = [];
       $address_data[$profile->id()] = array_filter($profile->get('field_address')->first()->getValue());
+      $address_data[$profile->id()]['firstname'] = $address_data[$profile->id()]['given_name'];
+      $address_data[$profile->id()]['lastname'] = $address_data[$profile->id()]['family_name'];
       $address_data[$profile->id()]['mobile'] = $profile->get('field_mobile_number')->first()->getValue();
       $address_data[$profile->id()]['is_default'] = $profile->isDefault();
       $address_data[$profile->id()]['address_id'] = $profile->id();
