@@ -155,3 +155,15 @@ export const getDefaultMapCenter = () => {
   }
   return {};
 };
+
+/**
+ * Clean mobile number array.
+ */
+export const cleanMobileNumber = (mobile) => {
+  // If plain mobile number, return as is.
+  if (typeof mobile === 'string') {
+    return mobile.replace('+' + drupalSettings.country_mobile_code, '');
+  }
+
+  return mobile.value.replace('+' + drupalSettings.country_mobile_code, '');
+};

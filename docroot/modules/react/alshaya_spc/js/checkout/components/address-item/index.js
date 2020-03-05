@@ -8,12 +8,16 @@ import {
   gerAreaLabelById
 } from '../../../utilities/address_util';
 import {
-  addShippingInCart
+  addShippingInCart,
+  cleanMobileNumber
 } from '../../../utilities/checkout_util';
 import {
   showFullScreenLoader,
   removeFullScreenLoader
 } from "../../../utilities/checkout_util";
+import {
+  prepareAddressDataForShipping
+} from '../../../utilities/checkout_address_process';
 import EditAddressSVG from "../edit-address-svg";
 
 export default class AddressItem extends React.Component {
@@ -41,22 +45,11 @@ export default class AddressItem extends React.Component {
    * Prepare address data to update shipping when
    */
   prepareAddressToUpdate = (address) => {
-    let data = {};
-    data.static = {
-      firstname: address.given_name,
-      lastname: address.family_name,
-      email: address.email,
-      city: gerAreaLabelById(false, address['administrative_area']),
-      country_id: drupalSettings.country_code,
-      customer_address_id: address.address_mdc_id,
-      customer_id: address.customer_id
-    };
-
-    // Getting dynamic fields data.
-    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-      data[field.key] = address[key];
-    });
-
+    address.city = gerAreaLabelById(false, address['administrative_area']);
+    address.mobile = cleanMobileNumber(address.mobile);
+    let data = prepareAddressDataForShipping(address);
+    data['static']['customer_address_id'] = address.address_mdc_id;
+    data['static']['customer_id'] = address.customer_id;
     return data;
   };
 
@@ -120,8 +113,7 @@ export default class AddressItem extends React.Component {
 
   render() {
     const { address } = this.props;
-    const mobile_value = address.mobile.value;
-    const mob_default_val = mobile_value.replace('+' + drupalSettings.country_mobile_code, '');
+    const mob_default_val = cleanMobileNumber(address.mobile);
     let addressData = [];
     let editAddressData = {};
     Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {

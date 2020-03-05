@@ -8,6 +8,9 @@ import {
 import {
   gerAreaLabelById
 } from '../../../utilities/address_util';
+import {
+  prepareAddressDataForShipping
+} from '../../../utilities/checkout_address_process';
 
 export default class ShippingMethod extends React.Component {
 
@@ -41,27 +44,21 @@ export default class ShippingMethod extends React.Component {
     });
     document.dispatchEvent(event);
 
-    let data = {};
+    // Prepare shipping data.
+    let temp_shipping_data = cart.shipping_address;
+    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+      temp_shipping_data[key] = cart.shipping_address[field.key];
+    });
+    temp_shipping_data.mobile = cart.shipping_address['telephone'];
+
+    // Get prepared address data for shipping address update.
+    let data = prepareAddressDataForShipping(temp_shipping_data);
     data['carrier_info'] = {
       'carrier': method.carrier_code,
       'method': method.method_code
     }
 
-    // For anonymous users.
-    data.static = {
-      firstname: cart.shipping_address.firstname,
-      lastname: cart.shipping_address.lastname,
-      email: cart.shipping_address.email,
-      city: gerAreaLabelById(false, cart.shipping_address.area),
-      telephone: cart.shipping_address.telephone,
-      country_id: drupalSettings.country_code,
-    };
-
-    // Getting dynamic fields data.
-    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-      data[field.key] = cart.shipping_address[field.key];
-    });
-
+    // Extra info for logged in user.
     if (drupalSettings.user.uid > 0) {
       data['static']['customer_address_id'] = cart.shipping_address.customer_address_id;
       data['static']['customer_id'] = cart.shipping_address.customer_id;

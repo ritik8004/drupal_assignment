@@ -6,7 +6,7 @@ import {
 } from './checkout_util';
 import {
   validateAddressFields,
-  prepareAddressData
+  prepareAddressDataFromForm
 } from './checkout_address_process';
 
 /**
@@ -88,7 +88,7 @@ export const addEditAddressToCustomer = (e) => {
           form_data.address = {
             given_name: name.split(' ')[0],
             family_name: name.substring(name.indexOf(' ') + 1),
-            city: 'Dummy Value',
+            city: gerAreaLabelById(false, target['administrative_area'].value),
             address_id: target.address_id.value,
           };
 
@@ -114,7 +114,9 @@ export const addEditAddressToCustomer = (e) => {
               target['email'] = {
                 'value': list.data[firstKey]['email']
               };
-              let data = prepareAddressData(target);
+
+              // Prepare address data for shipping update.
+              let data = prepareAddressDataFromForm(target);
               data['static']['customer_address_id'] = list.data[firstKey].address_mdc_id;
               data['static']['customer_id'] = list.data[firstKey].customer_id;
 

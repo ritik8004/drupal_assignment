@@ -1,9 +1,14 @@
 import axios from 'axios';
 import {
   addShippingInCart,
-  showFullScreenLoader,
   removeFullScreenLoader,
 } from './checkout_util';
+import {
+  extractFirstAndLastName
+} from './cart_customer_util';
+import {
+  gerAreaLabelById
+} from './address_util';
 
 /**
  * Process the data got from address form submission.
@@ -20,8 +25,8 @@ export const checkoutAddressProcess = function (e, cart) {
     return;
   }
 
-  // Get form data.
-  const form_data = prepareAddressData(e.target.elements);
+  // Get Prepare address.
+  const form_data = prepareAddressDataFromForm(e.target.elements);
 
   const mobileValidationRequest = axios.get(`verify-mobile/${e.target.elements.mobile.value}`);
   const customerValidationReuest = axios.get(`${drupalSettings.alshaya_spc.middleware_url}/customer/${e.target.elements.email.value}`);
@@ -172,30 +177,55 @@ export const validateAddressFields = (e, validateEmail) => {
 };
 
 /**
- * Prepare form data.
+ * Prepare address data from form value.
  *
- * @param {*} e
+ * @param {*} elements
  */
-export const prepareAddressData = (elements) => {
-  const form_data = {};
+export const prepareAddressDataFromForm = (elements) => {
+  let {
+    firstname,
+    lastname
+  } = extractFirstAndLastName(elements.fullname.value.trim());
 
-  const name = elements.fullname.value.trim();
-  form_data.static = {
-    firstname: name.split(' ')[0],
-    lastname: name.substring(name.indexOf(' ') + 1),
+  let address = {
+    firstname: firstname,
+    lastname: lastname,
     email: elements.email.value,
-    city: 'Dummy Value',
-    telephone: elements.mobile.value,
+    city: gerAreaLabelById(false, elements['administrative_area'].value),
+    mobile: elements.mobile.value,
+  };
+
+  // Getting dynamic fields data.
+  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+    address[key] = elements[key].value;
+  });
+
+  return prepareAddressDataForShipping(address);
+}
+
+/**
+ * Prepare address data for updating shipping.
+ *
+ * @param {*} address
+ */
+export const prepareAddressDataForShipping = (address) => {
+  let data = {};
+  data.static = {
+    firstname: address.firstname,
+    lastname: address.lastname,
+    email: address.email,
+    city: address.city,
+    telephone: address.mobile,
     country_id: drupalSettings.country_code,
   };
 
   // Getting dynamic fields data.
   Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
-    form_data[field.key] = elements[key].value;
+    data[field.key] = address[key];
   });
 
-  return form_data;
-};
+  return data;
+}
 
 /**
  * Get the address popup class.
