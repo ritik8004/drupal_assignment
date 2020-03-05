@@ -100,7 +100,7 @@ class ClickCollect extends React.Component {
       this.fetchAvailableStores({
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
-      }, false);
+      });
     }
   };
 
