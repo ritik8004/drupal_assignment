@@ -23,7 +23,7 @@ const InputButtons = React.memo((props) => {
       />
       <Portal
         key="clear-button"
-        onclick={(event) => props.clearCallback(event)}
+        onclick={(event) => {props.clearCallback(event); document.getElementById('clear-filter').click()}}
         className="algolia-search-cleartext-icon"
         id="react-algolia-searchbar-clear-button"
         query=""
