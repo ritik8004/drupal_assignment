@@ -131,7 +131,6 @@ export default class Gmap {
   setMapMarker = (markerSettings, showInfoWindow) => {
     this.map.mapMarkers = this.map.mapMarkers || [];
     showInfoWindow = showInfoWindow || false;
-    console.log(showInfoWindow);
 
     let { icon: marker_icon_path, label_position } = this.map.settings.map_marker;
 
