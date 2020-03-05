@@ -11,6 +11,7 @@ import {
 } from '../../utils';
 import Portal from '../portal';
 
+
 const InputButtons = React.memo((props) => {
   return (
     <React.Fragment>
@@ -23,7 +24,7 @@ const InputButtons = React.memo((props) => {
       />
       <Portal
         key="clear-button"
-        onclick={(event) => {props.clearCallback(event); document.getElementById('clear-filter').click()}}
+        onclick={(event) => props.clearCallback(event)}
         className="algolia-search-cleartext-icon"
         id="react-algolia-searchbar-clear-button"
         query=""
@@ -177,6 +178,8 @@ class Autocomplete extends React.Component {
     this.props.onChange('');
     // Keep focus.
     this.autosuggest.current.input.focus();
+    // Clear filters if clicked on cross button.
+    document.getElementById('clear-filter').click();
   };
 
   backIconClickEvent = (event) => {
