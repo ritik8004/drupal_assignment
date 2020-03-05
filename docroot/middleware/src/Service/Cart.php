@@ -502,11 +502,11 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function shippingMethods(array $data, int $cart_id) {
-    $shipping_url = !empty($data['address_id'])
-      ? 'estimate-shipping-methods-by-address-id'
-      : 'estimate-shipping-methods';
+    if (empty($data['country_id'])) {
+      return [];
+    }
 
-    $url = 'carts/' . $cart_id . '/' . $shipping_url;
+    $url = 'carts/' . $cart_id . '/estimate-shipping-methods';
 
     try {
       return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);

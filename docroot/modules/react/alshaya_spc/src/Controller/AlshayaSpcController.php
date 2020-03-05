@@ -148,11 +148,25 @@ class AlshayaSpcController extends ControllerBase {
    */
   public function checkout() {
     $cache_tags = [];
+    $strings = [];
 
     $cc_config = $this->configFactory->get('alshaya_click_collect.settings');
     $cache_tags = Cache::mergeTags($cache_tags, $cc_config->getCacheTags());
 
     $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    $string_keys = [
+      'cod_surcharge_description',
+      'cod_surcharge_short_description',
+      'cod_surcharge_tooltip',
+    ];
+    foreach ($string_keys as $key) {
+      $strings[] = [
+        'key' => $key,
+        'value' => trim(preg_replace("/[\r\n]+/", '', $checkout_settings->get($key))),
+      ];
+    }
+
     $cache_tags = Cache::mergeTags($cache_tags, $checkout_settings->getCacheTags());
 
     // Get payment methods.
@@ -213,6 +227,7 @@ class AlshayaSpcController extends ControllerBase {
     return [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
+      '#strings' => $strings,
       '#attached' => [
         'library' => [
           'alshaya_spc/checkout',

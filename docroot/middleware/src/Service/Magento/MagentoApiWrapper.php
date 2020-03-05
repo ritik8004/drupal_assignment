@@ -65,7 +65,7 @@ class MagentoApiWrapper {
       : $result;
 
     // Exception handling.
-    if (empty($result)) {
+    if (empty($result) && $result !== FALSE) {
       throw new \Exception($this->utility->getDefaultErrorMessage(), 500);
     }
     elseif (is_array($result) && !empty($result['message'])) {

@@ -279,6 +279,7 @@ class CartController {
     $data['customer'] = $cart_data['cart']['customer'] ?? NULL;
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];
+    $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
       'base_grand_total' => $cart_data['totals']['base_grand_total'],
