@@ -858,16 +858,8 @@
 
           // Track facet filters.
           $('li.facet-item').once('js-event').on('click', function () {
-            var selectedVal = '';
-            var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
-            if ($(this).find('input.facets-checkbox').length > 0) {
-              // Select value of facets other than color and remove item count.
-              selectedVal = $(this).find('label>span.facet-item__value').text();
-            }
-            else {
-              // Select value for color facet filtered and remove item count.
-              selectedVal = $(this).find('a>span.facet-item__value').text();
-            }
+            var selectedVal = $(this).find('a').attr('data-drupal-facet-item-label');
+            var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
             var data = {
               event: 'filter',
               siteSection: section.trim(),
