@@ -155,8 +155,33 @@
       facetItem.find('ul').slideUp();
     }
     else {
+      var category_facet_search_block = facetItem.parents('.block-facet-blockcategory-facet-search');
+      var facet_item_height = facetItem.find('label').outerHeight();
+      var category_dropdown_height_scroll = facetItem.parent('ul').scrollTop();
+      var category_height = category_facet_search_block.outerHeight();
+      var category_height_offset = category_facet_search_block.offset().top;
+      var category_dropdown_height = facetItem.parent('ul').outerHeight();
+      var calc_offset = category_height + category_height_offset + category_dropdown_height;
+
       facetItem.addClass('active');
       facetItem.find('ul').slideDown();
+      // If sale item children is not in view, scroll to show children.
+      if (facetItem.offset().top > (calc_offset - (facet_item_height * 1.5))) {
+        // For mobile portrait, scroll to show 3.5 items so that user will know there are more items to scroll if any.
+        if ($(window).height() > 480) {
+          // Default value of duration in slideDown() is 400.
+          setTimeout(function () {
+            facetItem.parent('ul').scrollTop(category_dropdown_height_scroll + (facet_item_height * 3.5));
+          }, 400);
+        }
+        // For mobile landscape, scroll to show 1.5 items so that user will know there are more items to scroll if any.
+        else {
+          // Default value of duration in slideDown() is 400.
+          setTimeout(function () {
+            facetItem.parent('ul').scrollTop(category_dropdown_height_scroll + (facet_item_height * 1.5));
+          }, 400);
+        }
+      }
     }
   };
 

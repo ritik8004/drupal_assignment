@@ -34,8 +34,8 @@
           else {
             facet_item_level = $(this).data('level');
             var curr_index = $(this).parent().index();
-            // To check if not deselecting the sale item.
-            if (sale_index !== null && curr_index !== sale_index) {
+            // To check if not deselecting the sale item and not selecting any sale child.
+            if (sale_index !== null && curr_index !== sale_index && facet_item_level === 1) {
               sale_index = null;
             }
           }
@@ -49,33 +49,35 @@
         var active_facet = category_facet_search_block.find("[data-level='" + facet_item_level + "'].facet-item.is-active");
         var category_dropdown_height_scroll = category_facet_search_block.find('ul').first().scrollTop();
         var facet_item_height = category_facet_search_block.find('ul').first().find('li:first-child a').outerHeight();
-        if (active_facet.siblings('ul').length === 0 && $(window).width() < 1025) {
-          // Close category accordion if not deselecting sale item.
-          if (sale_index === null) {
-            category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
-          }
-          // Scroll category dropdown to previous value.
-          else {
-            category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll);
-          }
-        }
-        else {
-          var child = active_facet.siblings('ul');
-          sale_index = child.parent().index();
-          var category_height = category_facet_search_block.outerHeight();
-          var category_height_offset = category_facet_search_block.offset().top;
-          var category_dropdown_height = category_facet_search_block.find('ul').first().outerHeight();
-          var calc_offset = category_height + category_height_offset + category_dropdown_height;
-
-          // If sale item children is not in view, scroll to show children.
-          if (child.offset().top > (calc_offset - (facet_item_height * 1.5))) {
-            // For mobile portrait, scroll to show 3.5 items so that user will know there are more items to scroll if any.
-            if ($(window).height() > 480) {
-              category_facet_search_block.find('ul').first().scrollTop( category_dropdown_height_scroll + (facet_item_height * 3.5) );
+        if ($(window).width() < 1025) {
+          if (active_facet.siblings('ul').length === 0) {
+            // Close category accordion if not deselecting sale item or selection any sale child.
+            if (sale_index === null || facet_item_level > 1) {
+              category_facet_search_block.find('.c-facet__title.c-collapse__title.active').trigger('click');
             }
-            // For mobile landscape, scroll to show 1.5 items so that user will know there are more items to scroll if any.
+            // Scroll category dropdown to previous value.
             else {
-              category_facet_search_block.find('ul').first().scrollTop( category_dropdown_height_scroll + (facet_item_height * 1.5) );
+              category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll);
+            }
+          }
+          else {
+            var child = active_facet.siblings('ul');
+            sale_index = child.parent().index();
+            var category_height = category_facet_search_block.outerHeight();
+            var category_height_offset = category_facet_search_block.offset().top;
+            var category_dropdown_height = category_facet_search_block.find('ul').first().outerHeight();
+            var calc_offset = category_height + category_height_offset + category_dropdown_height;
+
+            // If sale item children is not in view, scroll to show children.
+            if (child.offset().top > (calc_offset - (facet_item_height * 1.5))) {
+              // For mobile portrait, scroll to show 3.5 items so that user will know there are more items to scroll if any.
+              if ($(window).height() > 480) {
+                category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll + (facet_item_height * 3.5));
+              }
+              // For mobile landscape, scroll to show 1.5 items so that user will know there are more items to scroll if any.
+              else {
+                category_facet_search_block.find('ul').first().scrollTop(category_dropdown_height_scroll + (facet_item_height * 1.5));
+              }
             }
           }
         }

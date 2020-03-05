@@ -54,5 +54,24 @@
       Drupal.alshaya_seo_gtm_push_impressions(drupalSettings.reactTeaserView.price.currency, searchImpressions);
     }
   });
+  // Push Filter event to GTM.
+  $('body').once('bind-facet-item-click').on('click','.facet-item', function(event) {
+    if (!$(this).hasClass('is-active')) {
+      var selectedVal = document.createElement('div');
+      var facetTitle = $(this).attr('datadrupalfacetlabel');
+      selectedVal.innerHTML = $(this).find('span.facet-item__value').html();
+      selectedVal.querySelectorAll('span.facet-item__count').forEach(function(item, index){
+        item.parentNode.removeChild(item);
+      });
+      var data = {
+        event: 'filter',
+        siteSection: 'search results',
+        filterType: facetTitle,
+        filterValue: Drupal.t(selectedVal.innerHTML),
+      };
+
+      dataLayer.push(data);
+    }
+  });
 
 })(jQuery, Drupal, dataLayer);
