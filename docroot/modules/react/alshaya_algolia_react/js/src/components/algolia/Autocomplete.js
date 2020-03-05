@@ -103,8 +103,12 @@ class Autocomplete extends React.Component {
   };
 
   onKeyUp = () => {
+    let clearFilter = document.getElementById('clear-filter');
     if (this.state.value.length < 1) {
       this.reactSearchBlock[0].classList.remove('clear-icon');
+      if(clearFilter){
+        clearFilter.click();
+      }
     }
     else {
       this.reactSearchBlock[0].classList.add('clear-icon');
