@@ -19,7 +19,7 @@ class OrderSummaryBlock extends React.Component {
         {/* To Be used on Checkout Delivery pages. */}
         {!this.props.show_checkout_button
           && (
-          <div className={`product-content product-count-${this.props.item_qty}`}>
+          <div className={`product-content product-count-${Object.keys(this.props.items).length}`}>
             <CheckoutCartItems items={this.props.items} />
           </div>
           )}

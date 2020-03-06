@@ -19,7 +19,7 @@
     var markup = '<div class="notification">';
     markup += '<div class="col-1">';
     markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
-    markup += '<span class="qty">' + data.quantity + '</span></div>';
+    markup += '<span class="qty">' + Drupal.t('qty: ') + data.quantity + '</span></div>';
     markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
     markup += Drupal.t('has been added to your cart');
     markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
