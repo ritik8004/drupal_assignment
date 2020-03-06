@@ -6,21 +6,25 @@
 (function ($, Drupal, dataLayer) {
   'use strict';
 
-  // Global variables & selectors.
-  var gtm_contanier = $('body').attr('gtm-container');
-
   Drupal.behaviors.spcCartGtm = {
     attach: function (context, settings) {
       var cart_data = JSON.parse(localStorage.getItem('cart_data'));
       if (localStorage.hasOwnProperty('cart_data')) {
-        var step = Drupal.alshayaSpcGetStepFromContainer(gtm_contanier);
+        var step = Drupal.alshayaSpcGetStepFromContainer();
         Drupal.alshayaSpcCartGtm(cart_data.cart, step);
+      }
+
+      if (localStorage.hasOwnProperty('userID')) {
+        var step = Drupal.alshayaSpcGetStepFromContainer();
+        if (step === 2) {
+          Drupal.alshayaSeoGtmPushCheckoutOption('Home Delivery', 2);
+        }
       }
     }
   };
 
   document.addEventListener('refreshCart', function (e) {
-    var step = Drupal.alshayaSpcGetStepFromContainer(gtm_contanier);
+    var step = Drupal.alshayaSpcGetStepFromContainer();
     Drupal.alshayaSpcCartGtm(e.detail.data(), step);
   });
 
@@ -121,17 +125,10 @@
   /**
    * Helper function to get step number from body attr gtm-container.
    */
-  Drupal.alshayaSpcGetStepFromContainer = function (gtm_container) {
-    var step = '';
-    switch (gtm_container) {
-      case 'cart page':
-        step = 1;
-        break;
-      case 'checkout delivery page':
-        step = 2;
-        break;
-      default:
-        step = 1;
+  Drupal.alshayaSpcGetStepFromContainer = function () {
+    var step = 1;
+    if (window.location.href.indexOf('checkout') > -1) {
+      step = 2;
     }
     return step;
   };
