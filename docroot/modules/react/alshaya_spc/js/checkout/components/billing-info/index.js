@@ -10,13 +10,13 @@ export default class BillingInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPopup: false
+      open: false
     };
   }
 
   showPopup = () => {
     this.setState({
-      showPopup: true
+      open: true
     });
   };
 
@@ -50,7 +50,7 @@ export default class BillingInfo extends React.Component {
             <div>{addressData.join(', ')}</div>
           </div>
           <div onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
-          {this.state.showPopup &&
+          {this.state.open &&
             <BillingPopUp billing={billing} shipping={shipping}/>
           }
         </div>

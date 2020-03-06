@@ -8,13 +8,13 @@ export default class CnCBillingAddress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPopup: false
+      open: false
     };
   }
 
   showPopup = () => {
     this.setState({
-      showPopup: true
+      open: true
     });
   };
 
@@ -51,7 +51,7 @@ export default class CnCBillingAddress extends React.Component {
           <div onClick={this.showPopup()}>
             {Drupal.t('please add your billing address.')}
           </div>
-          {this.state.showPopup &&
+          {this.state.open &&
           <BillingPopUp billing={billingAddress} shipping={shippingAddress}/>
         }
         </React.Fragment>
@@ -59,7 +59,7 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     return (
-      <BillingInfo shipping={shipping} billing={billingAddress}/>
+      <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
     );
   }
 
