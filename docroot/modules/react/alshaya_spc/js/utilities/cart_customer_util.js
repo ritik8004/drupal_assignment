@@ -35,9 +35,7 @@ const associateCart = (cart_data) => {
   return Axios.get(url)
     .then((response) => {
       if (response.data) {
-        cart_data.uid = response.data.uid;
-        cart_data.customer = response.data.customer;
-        addInfoInStorage({ cart: cart_data });
+        addInfoInStorage({ cart: response.data });
       }
     })
     .catch((error) => {
