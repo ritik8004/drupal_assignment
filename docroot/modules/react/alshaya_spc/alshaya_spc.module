@@ -23,6 +23,7 @@ function alshaya_spc_theme($existing, $type, $theme, $path) {
     'spc_checkout' => [
       'variables' => [
         'areas' => [],
+        'strings' => [],
       ],
     ],
   ];

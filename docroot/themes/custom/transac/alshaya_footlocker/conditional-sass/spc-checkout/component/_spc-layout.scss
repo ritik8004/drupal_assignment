@@ -15,4 +15,8 @@
       }
     }
   }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
 }

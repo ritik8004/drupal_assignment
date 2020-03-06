@@ -3,5 +3,14 @@
     .spc-address-form-actions .spc-address-form-submit {
       text-transform: uppercase;
     }
+
+    .spc-deliver-button {
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+
+  .spc-checkout-empty-delivery-text {
+    text-transform: capitalize;
   }
 }

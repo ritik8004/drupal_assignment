@@ -3,11 +3,10 @@ import { isRTL } from '../rtl';
 import { dispatchCustomEvent } from '../events';
 
 export default class Gmap {
-
   constructor() {
     this.map = {
       settings: {
-        zoom: (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center.zoom)) ? drupalSettings.map.center.zoom : 7,
+        zoom: (drupalSettings.map.center.length > 0 && ({}).hasOwnProperty.call(drupalSettings.map.center, 'zoom')) ? drupalSettings.map.center.zoom : 7,
         maxZoom: 18,
         zoomControl: true,
         fullscreenControl: false,
@@ -22,11 +21,11 @@ export default class Gmap {
           label_position: null,
         },
         streetViewControl: false,
-        info_auto_display: false
+        info_auto_display: false,
       },
       googleMap: null,
       geoCoder: new google.maps.Geocoder(),
-      mapMarkers: []
+      mapMarkers: [],
     };
 
     if (typeof drupalSettings.map !== 'undefined' && typeof drupalSettings.map.map_marker !== 'undefined') {
@@ -107,7 +106,7 @@ export default class Gmap {
       if (status == google.maps.GeocoderStatus.OK) {
         // Just center the map and don't do anything.
         window.spcMap.googleMap.setCenter(results[0].geometry.location);
-        window.spcMap.googleMap.setZoom(window.spcMap.settings.zoom);
+        window.spcMap.googleMap.setZoom(window.spcMap.map.settings.zoom);
         if (callBackFunc) {
           callBackFunc.call(results)
         }
@@ -128,9 +127,9 @@ export default class Gmap {
    * Pass second parameter true to not show infowindo and
    * false to add infowindow and it's close event.
    */
-  setMapMarker = (markerSettings, skipInfoWindow) => {
+  setMapMarker = (markerSettings, showInfoWindow) => {
     this.map.mapMarkers = this.map.mapMarkers || [];
-    skipInfoWindow = skipInfoWindow || false;
+    showInfoWindow = showInfoWindow || false;
 
     let { icon: marker_icon_path, label_position } = this.map.settings.map_marker;
 
@@ -155,10 +154,11 @@ export default class Gmap {
     // Add the marker to the map.
     /** @type {GoogleMarker} */
     let currentMarker = new google.maps.Marker(markerSettings);
+    let currentInfoWindow = null;
 
-    if (skipInfoWindow !== true) {
+    if (showInfoWindow === true) {
       // Set the info popup text.
-      let currentInfoWindow = new google.maps.InfoWindow({
+      currentInfoWindow = new google.maps.InfoWindow({
         content: markerSettings.infoWindowContent,
         maxWidth: 209,
         disableAutoPan: this.map.disableAutoPan
@@ -167,12 +167,14 @@ export default class Gmap {
 
     let map = this.map;
     currentMarker.addListener('click', function () {
-      if (markerSettings.infoWindowSolitary && skipInfoWindow !== true) {
+      if (markerSettings.infoWindowSolitary && showInfoWindow === true) {
         if (typeof map.infoWindow !== 'undefined') {
           map.infoWindow.close();
         }
-        map.infoWindow = currentInfoWindow;
-        currentInfoWindow.open(map.googleMap, currentMarker);
+        if (currentInfoWindow) {
+          map.infoWindow = currentInfoWindow;
+          currentInfoWindow.open(map.googleMap, currentMarker);
+        }
       }
       // Set the marker to center of the map on click.
       map.googleMap.setCenter(currentMarker.getPosition());
@@ -180,7 +182,7 @@ export default class Gmap {
       dispatchCustomEvent('markerClick', { marker: currentMarker,  markerSettings });
     });
 
-    if (skipInfoWindow !== true) {
+    if (showInfoWindow === true) {
       google.maps.event.addListener(currentInfoWindow, 'closeclick', function () {
         // Auto zoom.
         map.googleMap.fitBounds(map.googleMap.bounds);
@@ -195,6 +197,7 @@ export default class Gmap {
       }
     }
 
+    currentMarker.infoWindow = currentInfoWindow;
     this.map.mapMarkers.push(currentMarker);
     return currentMarker;
   };
@@ -202,11 +205,18 @@ export default class Gmap {
   /**
    * Remove marker(s) from map.
    */
-  removeMapMarker = function (map = null) {
+  removeMapMarker = (map = null) => {
     map = map || this.map;
-    map.mapMarkers.forEach(function (item) {
-      item.setMap();
+    map.mapMarkers.forEach(function (marker) {
+      marker.setMap();
     });
   };
+
+  closeAllInfoWindow = (map = null) => {
+    map = map || this.map;
+    map.mapMarkers.forEach(function(marker) {
+      marker.infoWindow.close(map, marker);
+    });
+  }
 
 }

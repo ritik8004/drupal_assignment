@@ -16,7 +16,7 @@ const SelectedStore = ({ store, open, closePanel }) => {
       </div>
       <SectionTitle>{Drupal.t('selected store')}</SectionTitle>
       <div className="store-details-wrapper">
-        <StoreItem store={store} />
+        <StoreItem display="default" store={store} />
       </div>
       <div className="spc-cnc-contact-form">
         <ContactInfoForm subTitle={Drupal.t('We will send you a text message once your order is ready for collection.')} store={store} />

@@ -11,6 +11,20 @@
     padding-#{$left}: 3rem;
     position: relative;
 
+    .delivery-method-name {
+      @include breakpoint($only-mobile) {
+        max-width: 15rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 16rem;
+      }
+
+      @include breakpoint($desktop) {
+        max-width: 25rem;
+      }
+    }
+
     .radio-sim {
       @include breakpoint($only-mobile) {
         display: inline-flex;

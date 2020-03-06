@@ -3,17 +3,19 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import AddressForm from '../address-form';
 import {
-  updateUserDefaultAddress,
-  deleteUserAddress,
-  addEditAddressToCustomer
+  addEditAddressToCustomer,
+  gerAreaLabelById
 } from '../../../utilities/address_util';
 import {
-  addShippingInCart
+  addShippingInCart,
+  cleanMobileNumber,
+  showFullScreenLoader,
+  removeFullScreenLoader,
+  triggerCheckoutEvent
 } from '../../../utilities/checkout_util';
 import {
-  showFullScreenLoader,
-  removeFullScreenLoader
-} from "../../../utilities/checkout_util";
+  prepareAddressDataForShipping
+} from '../../../utilities/checkout_address_process';
 import EditAddressSVG from "../edit-address-svg";
 
 export default class AddressItem extends React.Component {
@@ -38,69 +40,50 @@ export default class AddressItem extends React.Component {
   };
 
   /**
-   * When user changes address.
+   * Prepare address data to update shipping when
    */
-  changeDefaultAddress = (address) => {
-    // Show loader.
-    showFullScreenLoader();
-    let addressList = updateUserDefaultAddress(address['address_id']);
-    if (addressList instanceof Promise) {
-      addressList.then((response) => {
-        if (response.status === 200 && response.data.status === true) {
-          document.getElementById('address-' + address['address_id']).checked = true;
-          // Refresh the address list.
-          let data = {
-            'address_id': address['address_mdc_id'],
-            'country_id': window.drupalSettings.country_code
-          };
-          var cart_info = addShippingInCart('update shipping', data);
-          if (cart_info instanceof Promise) {
-            cart_info.then((cart_result) => {
-              // Remove loader.
-              removeFullScreenLoader();
-              // If no error.
-              if (cart_result.error === undefined) {
-                let cart_data = {
-                  'cart': cart_result
-                }
-                var event = new CustomEvent('refreshCartOnAddress', {
-                  bubbles: true,
-                  detail: {
-                    data: () => cart_data
-                  }
-                });
-                document.dispatchEvent(event);
-
-                this.props.refreshAddressList(response.data);
-              }
-            });
-          }
-        }
-        else {
-          // Remove the loader.
-          removeFullScreenLoader();
-        }
-      });
-    }
+  prepareAddressToUpdate = (address) => {
+    address.city = gerAreaLabelById(false, address['administrative_area']);
+    address.mobile = cleanMobileNumber(address.mobile);
+    let data = prepareAddressDataForShipping(address);
+    data['static']['customer_address_id'] = address.address_mdc_id;
+    data['static']['customer_id'] = address.customer_id;
+    return data;
   };
 
   /**
-   * Deletes the user address.
+   * When user changes address.
    */
-  deleteAddress = (id) => {
+  updateShippingAddress = (address) => {
     // Show loader.
-    showFullScreenLoader()
-    let addressList = deleteUserAddress(id);
-    if (addressList instanceof Promise) {
-      addressList.then((response) => {
+    showFullScreenLoader();
+
+    // Prepare address data for shipping info update.
+    let data = this.prepareAddressToUpdate(address);
+
+    // Update shipping on cart.
+    let cart_info = addShippingInCart('update shipping', data);
+    if (cart_info instanceof Promise) {
+      cart_info.then((cart_result) => {
+        // Remove loader.
         removeFullScreenLoader();
-        if (response.status === 200 && response.data.status === true) {
-          // Refresh the address list.
-          this.props.refreshAddressList(response.data);
+
+        // Prepare cart data.
+        let cart_data = {
+          'cart': cart_result
         }
+        // If there is any error.
+        if (cart_result.error !== undefined) {
+          cart_data = {
+            'error_message': cart_result.error_message
+          }
+        }
+
+        // Trigger event to close all popups.
+        triggerCheckoutEvent('refreshCartOnAddress', cart_data);
       });
     }
-  }
+  };
 
   componentDidMount() {
     // Close the modal
@@ -118,23 +101,24 @@ export default class AddressItem extends React.Component {
 
   render() {
     const { address } = this.props;
-    const mobile_value = address.mobile.value;
-    const mob_default_val = mobile_value.replace('+' + window.drupalSettings.country_mobile_code, '');
+    const mob_default_val = cleanMobileNumber(address.mobile);
     let addressData = [];
     let editAddressData = {};
-    Object.entries(window.drupalSettings.address_fields).forEach(([key, val]) => {
-      let fillVal = address[key];
-      // Handling for area field.
-      if (key === 'administrative_area') {
-        fillVal = address['area_label'];
-      }
-      // Handling for parent area.
-      else if (key === 'area_parent') {
-        fillVal = address['area_parent_label'];
-      }
+    Object.entries(drupalSettings.address_fields).forEach(([key, val]) => {
+      if (address[key] !== undefined) {
+        let fillVal = address[key];
+        // Handling for area field.
+        if (key === 'administrative_area') {
+          fillVal = address['area_label'];
+        }
+        // Handling for parent area.
+        else if (key === 'area_parent') {
+          fillVal = address['area_parent_label'];
+        }
 
-      addressData.push(<span key={key}>{fillVal}, </span>)
-      editAddressData[val['key']] = address[key];
+        addressData.push(fillVal);
+        editAddressData[val['key']] = address[key];
+      }
     })
 
     editAddressData['static'] = {};
@@ -143,40 +127,22 @@ export default class AddressItem extends React.Component {
     editAddressData['static']['address_id'] = address['address_id'];
 
     return (
-      <div className='spc-address-tile'>
+      <div className='spc-address-tile' onClick={() => this.updateShippingAddress(address)}>
       <div className='spc-address-metadata'>
         <div className='spc-address-name'>{address.given_name} {address.family_name}</div>
-        <div className='spc-address-fields'>{addressData}</div>
-        <div className='spc-address-mobile'>+{window.drupalSettings.country_mobile_code} {mob_default_val}</div>
+        <div className='spc-address-fields'>{addressData.join(', ')}</div>
+        <div className='spc-address-mobile'>+{drupalSettings.country_mobile_code} {mob_default_val}</div>
       </div>
       <div className='spc-address-tile-actions'>
-        <div className='spc-address-preferred default-address' onClick={() => this.changeDefaultAddress(address)}>
-          <input
-            id={'address-' + address['address_id']}
-            type='radio'
-            defaultChecked={address['is_default'] === true}
-            value={address['address_id']}
-            name='address-book-address'/>
-
-          <label className='radio-sim radio-label'>
-            {Drupal.t('preferred address')}
-          </label>
-        </div>
         <div className='spc-address-btns'>
           <div title={Drupal.t('Edit Address')} className='spc-address-tile-edit' onClick={this.openModal}>
             <EditAddressSVG/>
             <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
               <React.Fragment>
-                <a className='close' onClick={this.closeModal}>&times;</a>
-                <AddressForm showEmail={false} show_prefered={true} default_val={editAddressData} processAddress={this.processAddress} />
+                <AddressForm closeModal={this.closeModal} showEmail={false} show_prefered={true} default_val={editAddressData} processAddress={this.processAddress} />
               </React.Fragment>
             </Popup>
           </div>
-          {address['is_default'] !== true &&
-            <div className='spc-address-tile-delete-btn'>
-              <button title={Drupal.t('Delete Address')}  id={'address-delete-' + address['address_id']} onClick={() => {this.deleteAddress(address['address_id'])}}>{Drupal.t('remove')}</button>
-            </div>
-          }
         </div>
       </div>
       </div>

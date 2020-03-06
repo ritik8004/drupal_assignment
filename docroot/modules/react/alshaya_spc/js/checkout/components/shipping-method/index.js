@@ -8,6 +8,9 @@ import {
 import {
   gerAreaLabelById
 } from '../../../utilities/address_util';
+import {
+  prepareAddressDataForShipping
+} from '../../../utilities/checkout_address_process';
 
 export default class ShippingMethod extends React.Component {
 
@@ -41,60 +44,51 @@ export default class ShippingMethod extends React.Component {
     });
     document.dispatchEvent(event);
 
-    let data = {};
+    // Prepare shipping data.
+    let temp_shipping_data = cart.shipping_address;
+    Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+      temp_shipping_data[key] = cart.shipping_address[field.key];
+    });
+    temp_shipping_data.mobile = cart.shipping_address['telephone'];
+
+    // Get prepared address data for shipping address update.
+    let data = prepareAddressDataForShipping(temp_shipping_data);
     data['carrier_info'] = {
       'carrier': method.carrier_code,
       'method': method.method_code
     }
 
-    if (window.drupalSettings.user.uid > 0) {
-      data['address_id'] = cart.shipping_address.customer_address_id;
-      data['country_id'] = window.drupalSettings.country_code;
-    }
-    else {
-      // For anonymous users.
-      data.static = {
-        firstname: cart.shipping_address.firstname,
-        lastname: cart.shipping_address.lastname,
-        email: cart.shipping_address.email,
-        city: gerAreaLabelById(false, cart.shipping_address.area),
-        telephone: cart.shipping_address.telephone,
-        country_id: window.drupalSettings.country_code,
-      };
-
-      // Getting dynamic fields data.
-      Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-        data[field.key] = cart.shipping_address[field.key];
-      });
+    // Extra info for logged in user.
+    if (drupalSettings.user.uid > 0) {
+      data['static']['customer_address_id'] = cart.shipping_address.customer_address_id;
+      data['static']['customer_id'] = cart.shipping_address.customer_id;
     }
 
     // Update shipping address.
     let cart_data = addShippingInCart('update shipping', data);
     if (cart_data instanceof Promise) {
       cart_data.then((cart_result) => {
+        let cart_info = {
+          cart: cart_result
+        }
         // If no error.
         if (cart_result.error === undefined) {
-          let cart_info = {
-            cart: cart_result
-          }
-
           // Update state and radio button.
           this.setState({
             selectedOption: method.method_code
           });
           document.getElementById('shipping-method-' + method.method_code).checked = true;
-          // Refresh cart.
-          this.props.refreshCart(cart_info);
         }
         else {
           // In case of error, prepare error info
           // and call refresh cart so that message is shown.
-          let error_info = {
-            'error_code': cart_result.error_code,
+          cart_info = {
             'error_message': cart_result.error_message
           }
-          this.props.refreshCart(error_info);
         }
+
+        // Refresh cart.
+        this.props.refreshCart(cart_info);
 
         // Remove loader.
         removeFullScreenLoader();

@@ -1,14 +1,35 @@
-.alias--checkout {
+.alias--checkout,
+.alias--checkout-confirmation {
   .site-brand-home {
+    border-bottom: 1px solid $spc-checkout-header-border;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     a {
       @include breakpoint($tablet) {
-        max-width: 4.375rem;
-        width: 4.375rem;
+        max-width: 15.5625rem;
+        width: 15.5625rem;
+        margin: 0;
       }
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: 0;
+        margin: 0;
       }
     }
+
+    @include breakpoint($only-mobile) {
+      max-width: none;
+    }
+
+    @include breakpoint($tablet) {
+      max-width: none;
+      height: 6.1875rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0 !important;
   }
 }

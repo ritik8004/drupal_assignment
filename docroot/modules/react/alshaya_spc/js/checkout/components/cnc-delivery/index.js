@@ -90,7 +90,7 @@ class ClicknCollectDeiveryInfo extends React.Component {
             className="spc-change-address-link"
             onClick={() => this.openModal(true)}
           >
-            {Drupal.t("Change")}
+            {Drupal.t("Edit")}
           </div>
         </div>
         <Popup

@@ -3,9 +3,12 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
+  getDefaultCheckoutErrorMessage,
+  triggerCheckoutEvent
 } from './checkout_util';
 import {
   validateAddressFields,
+  prepareAddressDataFromForm
 } from './checkout_address_process';
 
 /**
@@ -35,21 +38,6 @@ export const updateUserDefaultAddress = function (address_id) {
 };
 
 /**
- * Deletes address for the user.
- *
- * @param {*} address_id
- */
-export const deleteUserAddress = function (address_id) {
-  return axios.post('delete-address', {
-    address_id,
-  })
-    .then((response) => response)
-    .catch((error) => {
-      // Processing of error here.
-    });
-};
-
-/**
  * Add / Edit address for customer.
  *
  * @param {*} address
@@ -58,7 +46,17 @@ export const addEditUserAddress = function (address) {
   return axios.post('add-edit-address', {
     address,
   })
-    .then((response) => response.data)
+    .then(
+      (response) => {
+        return response.data;
+      },
+      (error) => {
+        return {
+          error: true,
+          error_message: getDefaultCheckoutErrorMessage()
+        }
+      }
+    )
     .catch((error) => {
       // Processing of error here.
     });
@@ -102,14 +100,14 @@ export const addEditAddressToCustomer = (e) => {
           form_data.address = {
             given_name: name.split(' ')[0],
             family_name: name.substring(name.indexOf(' ') + 1),
-            city: 'Dummy Value',
+            city: gerAreaLabelById(false, target['administrative_area'].value),
             address_id: target.address_id.value,
           };
 
           form_data.mobile = mobile;
 
           // Getting dynamic fields data.
-          Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
+          Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
             form_data.address[key] = target[key].value;
           });
 
@@ -118,17 +116,25 @@ export const addEditAddressToCustomer = (e) => {
           if (addressList instanceof Promise) {
             addressList.then((list) => {
               // If any error.
-              if (list.status === false) {
+              if (list.error === true) {
                 // Remove loader.
                 removeFullScreenLoader();
+                let eventData = {
+                  'error_message': list.error_message
+                };
+                triggerCheckoutEvent('refreshCartOnAddress', eventData);
                 return;
               }
 
               const firstKey = Object.keys(list.data)[0];
-              const data = {
-                address_id: list.data[firstKey].address_mdc_id,
-                country_id: window.drupalSettings.country_code,
+              target['email'] = {
+                'value': list.data[firstKey]['email']
               };
+
+              // Prepare address data for shipping update.
+              let data = prepareAddressDataFromForm(target);
+              data['static']['customer_address_id'] = list.data[firstKey].address_mdc_id;
+              data['static']['customer_id'] = list.data[firstKey].customer_id;
 
               // Add shipping info in cart.
               const cart_info = addShippingInCart('update shipping', data);
@@ -136,31 +142,23 @@ export const addEditAddressToCustomer = (e) => {
                 cart_info.then((cart_result) => {
                   // Remove loader.
                   removeFullScreenLoader();
-                  // If error, no need to process.
-                  if (cart_result.error !== undefined) {
-                    return;
-                  }
 
-                  const cart_data = {
+                  let cart_data = {
                     cart: cart_result,
                   };
 
-                  const event = new CustomEvent('refreshCartOnAddress', {
-                    bubbles: true,
-                    detail: {
-                      data: () => cart_data,
-                    },
-                  });
-                  document.dispatchEvent(event);
+                  // If error, no need to process.
+                  if (cart_result.error !== undefined) {
+                    cart_data = {
+                      'error_message': cart_result.error_message
+                    }
+                  }
+
+                  // Refresh cart.
+                  triggerCheckoutEvent('refreshCartOnAddress', cart_data);
 
                   // Close the addresslist popup.
-                  const ee = new CustomEvent('closeAddressListPopup', {
-                    bubbles: true,
-                    detail: {
-                      close: true,
-                    },
-                  });
-                  document.dispatchEvent(ee);
+                  triggerCheckoutEvent('closeAddressListPopup', true);
                 });
               }
             });

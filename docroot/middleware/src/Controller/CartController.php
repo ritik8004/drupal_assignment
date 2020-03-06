@@ -279,12 +279,19 @@ class CartController {
     $data['customer'] = $cart_data['cart']['customer'] ?? NULL;
     $data['items_qty'] = $cart_data['cart']['items_qty'];
     $data['cart_total'] = $cart_data['totals']['base_grand_total'];
+    $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
     $data['totals'] = [
       'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'],
+      'shipping_incl_tax' => $cart_data['totals']['shipping_incl_tax'] ?? 0,
       'base_grand_total' => $cart_data['totals']['base_grand_total'],
       'discount_amount' => $cart_data['totals']['discount_amount'],
       'free_delivery' => FALSE,
+      'surcharge' => 0,
     ];
+
+    if (is_array($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
+      $data['totals']['surcharge'] = $data['surcharge']['amount'];
+    }
 
     // Store delivery method when required.
     if (!empty($shipping_info = $cart_data['cart']['extension_attributes']['shipping_assignments'][0]['shipping'])) {
@@ -317,6 +324,10 @@ class CartController {
       if ($data['delivery_type'] == 'hd') {
         $data['shipping_methods'] = $this->cart->shippingMethods(['address' => $shipping_info['address']], $data['cart_id']);
       }
+    }
+
+    if (!empty($data['shipping_methods'])) {
+      // If only one, just select it and go to payment.
     }
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
@@ -775,7 +786,11 @@ class CartController {
       foreach ($data['cart']['customer']['addresses'] as $address) {
         // If address is set as default for shipping.
         if (!empty($address['default_shipping']) && $address['default_shipping']) {
-          $shipping_methods = $this->cart->shippingMethods(['address_id' => $address['id']], $data['cart']['id']);
+          // Region key should be string.
+          if (!empty($address['region']) && is_array($address['region'])) {
+            unset($address['region']);
+          }
+          $shipping_methods = $this->cart->shippingMethods(['address' => $address], $data['cart']['id']);
           $shipping_data = [
             'customer_address_id' => $address['id'],
             'address' => [

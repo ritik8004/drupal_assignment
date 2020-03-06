@@ -71,9 +71,14 @@ export default class AddressList extends React.Component {
       return (null);
     }
 
+    const { cart } = this.props;
+
     let addressItem = [];
     Object.entries(this.state.addressList).forEach(([key, address]) => {
-      addressItem.push(<AddressItem key={key} address={address} refreshAddressList={this.refreshAddressList} />);
+      let isSelected = (cart.cart.shipping_address.customer_address_id == address['address_mdc_id'])
+        ? true
+        : false;
+      addressItem.push(<AddressItem isSelected={isSelected} key={key} address={address} refreshAddressList={this.refreshAddressList} />);
     });
 
     let default_val = {
@@ -85,14 +90,16 @@ export default class AddressList extends React.Component {
     return (
       <React.Fragment>
         <header className='spc-change-address'>{Drupal.t('change address')}</header>
+        <a className='close' onClick={this.props.closeModal}>
+            &times;
+        </a>
         <div className='address-list-content'>
           <div className='spc-add-new-address-btn' onClick={this.openModal}>
             {Drupal.t('Add new address')}
           </div>
           <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
             <React.Fragment>
-              <a className='close' onClick={this.closeModal}>&times;</a>
-              <AddressForm show_prefered={true} default_val={default_val} processAddress={this.processAddress} />
+              <AddressForm closeModal={this.closeModal} show_prefered={true} default_val={default_val} processAddress={this.processAddress} />
             </React.Fragment>
           </Popup>
           <div className='spc-checkout-address-list'>{addressItem}</div>

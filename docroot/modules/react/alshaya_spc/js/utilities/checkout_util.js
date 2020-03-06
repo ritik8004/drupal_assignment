@@ -5,6 +5,13 @@ import { updateCartApiUrl } from './update_cart';
 import { cartAvailableInStorage, getGlobalCart } from './get_cart';
 
 /**
+ * Default error message on checkout screen.
+ */
+export const getDefaultCheckoutErrorMessage = () => {
+  return Drupal.t('Sorry, something went wrong. Please try again later.');
+}
+
+/**
  * Get shipping methods.
  *
  * @param cart_id
@@ -106,6 +113,10 @@ export const addShippingInCart = function (action, data) {
       },
       (error) => {
         // Processing of error here.
+        return {
+          error: true,
+          error_message: getDefaultCheckoutErrorMessage()
+        }
       },
     )
     .catch((error) => {
@@ -149,9 +160,37 @@ export const getLocationAccess = () => {
 };
 
 export const getDefaultMapCenter = () => {
-  if (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center)) {
+  if (drupalSettings.map.center.length > 0 && ({}).hasOwnProperty.call(drupalSettings.map.center, 'latitude') && ({}).hasOwnProperty.call(drupalSettings.map.center, 'longitude')) {
     const { latitude: lat, longitude: lng } = drupalSettings.map.center;
     return { lat, lng };
   }
   return {};
+};
+
+/**
+ * Clean mobile number array.
+ */
+export const cleanMobileNumber = (mobile) => {
+  // If plain mobile number, return as is.
+  if (typeof mobile === 'string') {
+    return mobile.replace('+' + drupalSettings.country_mobile_code, '');
+  }
+
+  return mobile.value.replace('+' + drupalSettings.country_mobile_code, '');
+};
+
+/**
+ * Trigger an event.
+ *
+ * @param {*} eventName
+ * @param {*} data
+ */
+export const triggerCheckoutEvent = (eventName, data) => {
+  const ee = new CustomEvent(eventName, {
+    bubbles: true,
+    detail: {
+      data: () => data,
+    },
+  });
+  document.dispatchEvent(ee);
 };

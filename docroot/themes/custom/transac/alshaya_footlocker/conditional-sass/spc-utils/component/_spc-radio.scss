@@ -1,3 +1,12 @@
+@mixin fl-radio-filled {
+  content: '';
+  border: 5px solid $spc-checkout-radio-filled;
+  border-radius: 100%;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  margin-#{$left}: 0.875rem;
+}
+
 input[type=radio] {
   ~ .radio-sim {
     @include icon(radio-empty, before) {
@@ -8,12 +17,7 @@ input[type=radio] {
   &:checked {
     ~ .radio-sim {
       &::before {
-        content: '';
-        border: 5px solid $spc-checkout-radio-filled;
-        border-radius: 100%;
-        width: 1.0625rem;
-        height: 1.0625rem;
-        margin-#{$left}: 0.875rem;
+        @include fl-radio-filled;
       }
     }
   }
@@ -24,6 +28,22 @@ input[type=radio] {
     .impress {
       text-transform: capitalize;
       font-family: $fl-bold;
+    }
+  }
+}
+
+#click-and-collect-list-view li.select-store {
+  .spc-cnc-store-name {
+    @include icon(radio-empty, before) {
+      font-size: 1.25rem;
+    }
+  }
+
+  &.selected {
+    .spc-cnc-store-name {
+      &::before {
+        @include fl-radio-filled;
+      }
     }
   }
 }

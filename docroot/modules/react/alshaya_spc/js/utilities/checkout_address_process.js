@@ -1,9 +1,15 @@
 import axios from 'axios';
 import {
   addShippingInCart,
-  showFullScreenLoader,
   removeFullScreenLoader,
+  triggerCheckoutEvent
 } from './checkout_util';
+import {
+  extractFirstAndLastName
+} from './cart_customer_util';
+import {
+  gerAreaLabelById
+} from './address_util';
 
 /**
  * Process the data got from address form submission.
@@ -20,11 +26,11 @@ export const checkoutAddressProcess = function (e, cart) {
     return;
   }
 
-  // Get form data.
-  const form_data = prepareAddressData(e);
+  // Get Prepare address.
+  const form_data = prepareAddressDataFromForm(e.target.elements);
 
   const mobileValidationRequest = axios.get(`verify-mobile/${e.target.elements.mobile.value}`);
-  const customerValidationReuest = axios.get(`${window.drupalSettings.alshaya_spc.middleware_url}/customer/${e.target.elements.email.value}`);
+  const customerValidationReuest = axios.get(`${drupalSettings.alshaya_spc.middleware_url}/customer/${e.target.elements.email.value}`);
 
   // API call to validate mobile number and email address.
   return axios.all([mobileValidationRequest, customerValidationReuest]).then(axios.spread((...responses) => {
@@ -78,22 +84,19 @@ export const checkoutAddressProcess = function (e, cart) {
         // Remove the loader.
         removeFullScreenLoader();
 
-        // If any error, don't process further.
-        if (cart_result.error !== undefined) {
-          return;
-        }
-
-        const cart_data = {
+        let cart_data = {
           cart: cart_result,
         };
 
-        const event = new CustomEvent('refreshCartOnAddress', {
-          bubbles: true,
-          detail: {
-            data: () => cart_data,
-          },
-        });
-        document.dispatchEvent(event);
+        // If any error, don't process further.
+        if (cart_result.error !== undefined) {
+          cart_data = {
+            'error_message': cart_result.error_message
+          };
+        }
+
+        // Trigger event.
+        triggerCheckoutEvent('refreshCartOnAddress', cart_data);
       });
     }
   })).catch((errors) => {
@@ -150,9 +153,11 @@ export const validateAddressFields = (e, validateEmail) => {
   let isError = validateContactInfo(e, validateEmail);
 
   // Iterate over address fields.
-  Object.entries(window.drupalSettings.address_fields).forEach(
+  Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
-      if (field.required === true) {
+      if (field.required === true || (
+        key === 'area_parent' || key === 'administrative_area'
+      )) {
         const add_field = e.target.elements[key].value.trim();
         if (add_field.length === 0) {
           document.getElementById(`${key}-error`).innerHTML = Drupal.t('Please enter @label.', { '@label': field.label });
@@ -170,34 +175,59 @@ export const validateAddressFields = (e, validateEmail) => {
 };
 
 /**
- * Prepare form data.
+ * Prepare address data from form value.
  *
- * @param {*} e
+ * @param {*} elements
  */
-export const prepareAddressData = (e) => {
-  const form_data = {};
+export const prepareAddressDataFromForm = (elements) => {
+  let {
+    firstname,
+    lastname
+  } = extractFirstAndLastName(elements.fullname.value.trim());
 
-  const name = e.target.elements.fullname.value.trim();
-  form_data.static = {
-    firstname: name.split(' ')[0],
-    lastname: name.substring(name.indexOf(' ') + 1),
-    email: e.target.elements.email.value,
-    city: 'Dummy Value',
-    telephone: e.target.elements.mobile.value,
-    country_id: window.drupalSettings.country_code,
+  let address = {
+    firstname: firstname,
+    lastname: lastname,
+    email: elements.email.value,
+    city: gerAreaLabelById(false, elements['administrative_area'].value),
+    mobile: elements.mobile.value,
   };
 
   // Getting dynamic fields data.
-  Object.entries(window.drupalSettings.address_fields).forEach(([key, field]) => {
-    form_data[field.key] = e.target.elements[key].value;
+  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+    address[key] = elements[key].value;
   });
 
-  return form_data;
-};
+  return prepareAddressDataForShipping(address);
+}
+
+/**
+ * Prepare address data for updating shipping.
+ *
+ * @param {*} address
+ */
+export const prepareAddressDataForShipping = (address) => {
+  let data = {};
+  data.static = {
+    firstname: address.firstname,
+    lastname: address.lastname,
+    email: address.email,
+    city: address.city,
+    telephone: address.mobile,
+    country_id: drupalSettings.country_code,
+  };
+
+  // Getting dynamic fields data.
+  Object.entries(drupalSettings.address_fields).forEach(([key, field]) => {
+    data[field.key] = address[key];
+  });
+
+  return data;
+}
 
 /**
  * Get the address popup class.
  */
-export const getAddressPopupClassName = () => (window.drupalSettings.user.uid > 0
+export const getAddressPopupClassName = () => (drupalSettings.user.uid > 0
   ? 'spc-address-list-member'
   : 'spc-address-form-guest');

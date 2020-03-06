@@ -15,7 +15,9 @@ module.exports = {
     drupalTranslations: true,
     domready: true,
     jQuery: true,
+    google: true,
   },
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -30,5 +32,6 @@ module.exports = {
     "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
     "import/no-extraneous-dependencies": "off",
     "react/prop-types": [0],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
   }
 };

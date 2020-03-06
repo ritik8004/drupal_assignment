@@ -38,5 +38,10 @@ module.exports = (env, argv) => {
     config.externals = {};
   }
 
+  config.watchOptions = {
+    poll: 800,
+    ignored: /node_modules/
+  };
+
   return config;
-}
+};
