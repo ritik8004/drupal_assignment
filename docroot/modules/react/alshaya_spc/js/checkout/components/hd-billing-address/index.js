@@ -1,47 +1,48 @@
 import React from 'react';
 
 import BillingInfo from '../billing-info';
+import BillingPopUp from '../billing-popup';
 
 export default class HDBillingAddress extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      shippingAsBilling: this.isShippingBillingAddressSame()
+      showPopup: false,
+      shippingAsBilling: true
     };
 
   }
 
-  /**
-   * Checks if shipping and billing address same.
-   * This checks in local storage and if not found
-   * treated as true.
-   */
-  isShippingBillingAddressSame = () => {
-    const shippingBillingSame = localStorage.getItem('shipping_as_billing');
-    return (shippingBillingSame === null ||
-      shippingBillingSame === undefined);
-  };
+  showPopup = (showHide) => {
+    this.setState({
+      showPopup: showHide
+    });
+  }
 
   /**
    * On billing address change.
    */
   changeBillingAddress = (shippingAsBilling) => {
-    if (shippingAsBilling === true) {
-      // If shipping and billing both same,
-      // remove local storage.
-      localStorage.removeItem('shipping_as_billing');
-    }
-    else {
-      // Set in the user local storage if shipping address
-      // is not used for billing.
-      localStorage.setItem('shipping_as_billing', shippingAsBilling);
-    }
-
     this.setState({
       shippingAsBilling: shippingAsBilling
     });
+
+    this.showPopup(!shippingAsBilling);
   };
+
+  componentDidMount() {
+    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  /**
+   * Event handler for billing update.
+   */
+  processBillingUpdate = (e) => {
+    let data = e.detail.data();
+    // Refresh cart.
+    this.props.refreshCart(data);
+  }
 
   render() {
     const { cart } = this.props;
@@ -53,12 +54,9 @@ export default class HDBillingAddress extends React.Component {
       return (null);
     }
 
+    let billingAddress = cart.cart.billing_address;
+    let shippingAddress = cart.cart.shipping_address;
     const isShippingBillingSame = this.state.shippingAsBilling;
-    let billingAddress = isShippingBillingSame
-      ? null
-      : cart.cart.billing_address;
-
-    const shipping = cart.cart.shipping_address;
 
     return (
       <React.Fragment>
@@ -71,7 +69,12 @@ export default class HDBillingAddress extends React.Component {
           <input id='billing-address-no' defaultChecked={!isShippingBillingSame} value={false} name='billing-address' type='radio'/>
           <label className='radio-sim radio-label'>{Drupal.t('no')}</label>
         </div>
-        <BillingInfo refreshCart={this.props.refreshCart}  shipping={shipping} billing={billingAddress}/>
+        {this.state.showPopup &&
+          <BillingPopUp billing={billingAddress} shipping={shippingAddress}/>
+        }
+        {!isShippingBillingSame &&
+          <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
+        }
       </React.Fragment>
     );
   }

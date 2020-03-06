@@ -1,11 +1,6 @@
 import React from 'react';
 
-import Popup from 'reactjs-popup';
-import AddressForm from '../address-form';
-import {
-  processBillingUpdateFromForm,
-  formatAddressDataForEditForm
-} from '../../../utilities/checkout_address_process';
+import BillingPopUp from '../billing-popup';
 import {
   gerAreaLabelById
 } from '../../../utilities/address_util';
@@ -15,61 +10,18 @@ export default class BillingInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      showPopup: false
     };
   }
 
-  /**
-   * For modal open.
-   */
-  openModal = () => {
+  showPopup = () => {
     this.setState({
-      open: true
+      showPopup: true
     });
   };
-
-  /**
-   * For modal closing.
-   */
-  closeModal = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  /**
-   * Format address for edit address.
-   */
-  formatAddressData = (address) => {
-    return formatAddressDataForEditForm(address);
-  }
-
-  /**
-   * Process address submission here.
-   */
-  processAddress = (e) => {
-    const shipping = this.props.shipping;
-    return processBillingUpdateFromForm(e, shipping);
-  };
-
-  componentDidMount() {
-    document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
-  }
-
-  /**
-   * Event handler for billing update.
-   */
-  processBillingUpdate = (e) => {
-    let data = e.detail.data();
-    // Refresh cart.
-    this.props.refreshCart(data);
-
-    // Close the modal.
-    this.closeModal();
-  }
 
   render() {
-    const { billing } = this.props;
+    const { billing, shipping } = this.props;
     if (billing === undefined || billing == null) {
       return (null);
     }
@@ -93,29 +45,14 @@ export default class BillingInfo extends React.Component {
     return (
       <React.Fragment>
         <div>
-          <div className='spc-delivery-customer-info'>
-            <div className='delivery-name'>
-              {billing.firstname} {billing.lastname}
-            </div>
-            <div className='delivery-address'>
-              {addressData.join(', ')}
-            </div>
-            <div className='spc-address-form-edit-link' onClick={this.openModal}>
-              {Drupal.t('Change')}
-            </div>
+          <div>
+            <div>{billing.firstname} {billing.lastname}</div>
+            <div>{addressData.join(', ')}</div>
           </div>
-          <Popup
-            open={this.state.open}
-            onClose={this.closeModal}
-            closeOnDocumentClick={false}
-          >
-          <AddressForm
-            closeModal={this.closeModal}
-            processAddress={this.processAddress}
-            showEmail={false}
-            default_val={this.formatAddressData(billing)}
-          />
-        </Popup>
+          <div onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
+          {this.state.showPopup &&
+            <BillingPopUp billing={billing} shipping={shipping}/>
+          }
         </div>
       </React.Fragment>
     );
