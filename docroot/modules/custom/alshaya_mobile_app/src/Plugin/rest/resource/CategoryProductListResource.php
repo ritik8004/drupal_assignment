@@ -16,7 +16,7 @@ use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Database\Connection;
+use Drupal\views\Views;
 
 /**
  * Class CategoryProductListResource.
@@ -96,13 +96,6 @@ class CategoryProductListResource extends ResourceBase {
   protected $productCategoryTree;
 
   /**
-   * Database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -129,10 +122,8 @@ class CategoryProductListResource extends ResourceBase {
    *   Entity repository.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   Database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository, ProductCategoryTree $product_category_tree, Connection $connection) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->parseModeManager = $parse_mode_manager;
@@ -141,7 +132,6 @@ class CategoryProductListResource extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
     $this->productCategoryTree = $product_category_tree;
-    $this->connection = $connection;
   }
 
   /**
@@ -160,8 +150,7 @@ class CategoryProductListResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('language_manager'),
       $container->get('entity.repository'),
-      $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('database')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
@@ -228,27 +217,24 @@ class CategoryProductListResource extends ResourceBase {
    *   Child term array.
    */
   protected function getSubCategoryData($langcode, $parent_tid) {
-    $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name']);
-    $query->leftJoin('taxonomy_term__field_category_quicklink_plp_mob', 'ttfcq', 'tfd.tid = ttfcq.entity_id AND ttfcq.deleted = 0 ');
-    $query->innerJoin('taxonomy_term__field_commerce_status', 'ttfcs', 'tfd.tid = ttfcs.entity_id AND ttfcs.deleted = 0 AND ttfcs.langcode = tfd.langcode');
-    $query->leftJoin('taxonomy_term__parent', 'ttp', 'tfd.tid = ttp.entity_id AND ttp.deleted = 0');
-    $query->condition('ttfcs.field_commerce_status_value', 1);
-    $query->condition('ttp.parent_target_id', $parent_tid);
-    $query->condition('tfd.vid', 'acq_product_category', 'IN');
-    $query->condition('tfd.langcode', $langcode);
-    $query->condition('ttfcq.field_category_quicklink_plp_mob_value', 1);
-    $query->condition('tfd.status', 1);
-    $query->orderBy('tfd.weight', 'ASC');
-    $terms = $query->execute()->fetchAll();
-    foreach ($terms as $term) {
-      $data[] = [
-        'id' => $term->tid,
-        'label' => $term->name,
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-      ];
+    // Calling view to get the sub category list.
+    $sub_category_collection_list = [];
+    $subcategory_list_view = Views::getView('product_category_level_3');
+    $subcategory_list_view->setDisplay('block_2');
+    $subcategory_list_view->setArguments([$parent_tid]);
+    $subcategory_list_view->execute();
+    if (count($subcategory_list_view->result) > 0) {
+      foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
+        $sub_category_collection = [];
+        $sub_category_entity_list = $subcategory_list_view_value->_entity;
+        $sub_category_entity = $sub_category_entity_list->getTranslation($this->languageManager->getCurrentLanguage()->getId());
+        $sub_category_collection['id'] = $sub_category_entity->get('tid')->getValue()[0]['value'];
+        $sub_category_collection['label'] = $sub_category_entity->get('name')->getValue()[0]['value'];
+        $sub_category_collection['deeplink'] = $this->mobileAppUtility->getDeepLink($sub_category_entity);
+        $sub_category_collection_list[] = $sub_category_collection;
+      }
+      return $sub_category_collection_list;
     }
-    return $data;
 
   }
 
