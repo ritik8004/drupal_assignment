@@ -8,7 +8,7 @@ export default class HDBillingAddress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPopup: false,
+      open: false,
       shippingAsBilling: true
     };
 
@@ -16,7 +16,7 @@ export default class HDBillingAddress extends React.Component {
 
   showPopup = (showHide) => {
     this.setState({
-      showPopup: showHide
+      open: showHide
     });
   }
 
@@ -69,7 +69,7 @@ export default class HDBillingAddress extends React.Component {
           <input id='billing-address-no' defaultChecked={!isShippingBillingSame} value={false} name='billing-address' type='radio'/>
           <label className='radio-sim radio-label'>{Drupal.t('no')}</label>
         </div>
-        {this.state.showPopup &&
+        {this.state.open &&
           <BillingPopUp billing={billingAddress} shipping={shippingAddress}/>
         }
         {!isShippingBillingSame &&
