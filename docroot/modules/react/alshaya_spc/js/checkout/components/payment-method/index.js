@@ -17,29 +17,6 @@ export default class PaymentMethod extends React.Component {
     });
   }
 
-  getHtmlMarkup(content) {
-    return { __html: content };
-  };
-
-  getSurchargeShortDescription = () => {
-    try {
-      let {amount} = this.props.cart.cart.surcharge;
-      let description = getStringMessage('cod_surcharge_short_description');
-      if (description.length > 0) {
-        return reactStringReplace(description, '[surcharge]', this.getSurchargePriceElement);
-      }
-    }
-    catch (e) {
-    }
-
-    return '';
-  };
-
-  getSurchargePriceElement = () => {
-    let {amount} = this.props.cart.cart.surcharge;
-    return <PriceElement key="cod_surcharge_short_description" amount={amount} />;
-  };
-
   render() {
     let method = this.props.method.code;
     return(
