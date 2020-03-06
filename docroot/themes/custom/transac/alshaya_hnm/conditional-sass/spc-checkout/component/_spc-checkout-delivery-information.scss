@@ -21,8 +21,11 @@
     }
   }
 
-  .popup-overlay .popup-content .spc-deliver-button {
-    text-transform: capitalize;
+  .popup-overlay .popup-content {
+    .spc-deliver-button,
+    .spc-add-new-address-btn {
+      text-transform: capitalize;
+    }
   }
 
   .spc-checkout-empty-delivery-text {
