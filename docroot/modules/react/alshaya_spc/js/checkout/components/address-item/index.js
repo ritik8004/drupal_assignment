@@ -27,11 +27,13 @@ export default class AddressItem extends React.Component {
     };
   }
 
-  openModal = () => {
+  openModal = (e) => {
     this.setState({
       open: true
     });
-  }
+
+    e.stopPropagation();
+  };
 
   closeModal = () => {
     this.setState({
@@ -135,7 +137,7 @@ export default class AddressItem extends React.Component {
       </div>
       <div className='spc-address-tile-actions'>
         <div className='spc-address-btns'>
-          <div title={Drupal.t('Edit Address')} className='spc-address-tile-edit' onClick={this.openModal}>
+          <div title={Drupal.t('Edit Address')} className='spc-address-tile-edit' onClick={(e) => this.openModal(e)}>
             <EditAddressSVG/>
             <Popup open={this.state.open} onClose={this.closeModal} closeOnDocumentClick={false}>
               <React.Fragment>

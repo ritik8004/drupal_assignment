@@ -1,11 +1,9 @@
 import React from 'react';
-
 import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {showFullScreenLoader} from "../../../utilities/checkout_util";
 import ConditionalView from "../../../common/components/conditional-view";
-import reactStringReplace from "react-string-replace";
-import PriceElement from "../../../utilities/special-price/PriceElement";
-import {getStringMessage} from "../../../utilities/strings";
+import CodSurchargePaymentMethodDescription
+  from "../payment-description-cod-surchage";
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -23,30 +21,6 @@ export default class PaymentMethod extends React.Component {
 
   getHtmlMarkup(content) {
     return { __html: content };
-  };
-
-  getSurchargeShortDescription = () => {
-    try {
-      let {amount} = this.props.cart.cart.surcharge;
-
-      if (amount === undefined || amount === null || amount <= 0) {
-        return '';
-      }
-
-      let description = getStringMessage('cod_surcharge_short_description');
-      if (description.length > 0) {
-        return reactStringReplace(description, '[surcharge]', this.getSurchargePriceElement);
-      }
-    }
-    catch (e) {
-    }
-
-    return '';
-  };
-
-  getSurchargePriceElement = () => {
-    let {amount} = this.props.cart.cart.surcharge;
-    return <PriceElement key="cod_surcharge_short_description" amount={amount} />;
   };
 
   changePaymentMethod = (method) => {
@@ -78,7 +52,7 @@ export default class PaymentMethod extends React.Component {
   render() {
     let method = this.props.method.code;
     return(
-      <div className='payment-method' onClick={() => this.changePaymentMethod(method)}>
+      <div className={'payment-method payment-method-' + method} onClick={() => this.changePaymentMethod(method)}>
       	<input
       	  id={'payment-method-' + method}
       	  className={method}
@@ -89,19 +63,10 @@ export default class PaymentMethod extends React.Component {
 
         <label className='radio-sim radio-label'>
           {this.props.method.name}
-
           <ConditionalView condition={method === 'cashondelivery'}>
-            <span className="cod-surcharge-short-description">
-              {this.getSurchargeShortDescription()}
-            </span>
+            <CodSurchargePaymentMethodDescription surcharge={this.props.cart.cart.surcharge}/>
           </ConditionalView>
         </label>
-
-        <ConditionalView condition={this.state.selectedOption === 'cashondelivery'}>
-            <div className="cod-surcharge-message">
-              {getStringMessage('cod_surcharge_description')}
-            </div>
-          </ConditionalView>
       </div>
     );
   }
