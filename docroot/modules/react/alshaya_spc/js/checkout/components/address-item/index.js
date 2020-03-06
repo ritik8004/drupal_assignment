@@ -57,6 +57,12 @@ export default class AddressItem extends React.Component {
    * When user changes address.
    */
   updateShippingAddress = (address) => {
+    // If address we selecting is already shipping address,
+    // don't do anything.
+    if (this.props.isSelected) {
+      return;
+    }
+
     // Show loader.
     showFullScreenLoader();
 
