@@ -145,9 +145,6 @@ export default class AddressItem extends React.Component {
           </div>
         </div>
       </div>
-      {this.props.isSelected &&
-        <div>This is selected</div>
-      }
       </div>
     );
   }
