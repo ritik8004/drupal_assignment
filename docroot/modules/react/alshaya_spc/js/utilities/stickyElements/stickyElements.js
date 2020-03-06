@@ -44,12 +44,29 @@ function getSiderBarOffsetTop() {
  * Mobile cart header preview sticky.
  */
 function stickyMobileCartPreview() {
+  const cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
+  // Check for super category menu.
+  const superCategoryMenu = document.getElementById('block-supercategorymenu');
+  let superCatFlag = false;
+  let superCatHeight, brandingMenuHeight;
+  [superCatHeight, brandingMenuHeight] = [0, 0];
+  if (superCategoryMenu) {
+    superCatHeight = superCategoryMenu.offsetHeight + document.getElementById('block-mobilenavigation').offsetHeight;
+    cartPreview[0].style.top = `${superCatHeight}px`;
+    superCatFlag = true;
+  }
+  else {
+    brandingMenuHeight = document.getElementsByClassName('branding__menu')[0].offsetHeight;
+    cartPreview[0].style.top = `${brandingMenuHeight}px`;
+  }
   window.addEventListener('scroll', () => {
     // Mobile cart sticky header.
     if (window.innerWidth < 768) {
-      const cartPreview = document.getElementsByClassName('spc-mobile-cart-preview');
       const cartPreviewOffset = getPosition(cartPreview[0]);
-      if (window.pageYOffset > cartPreviewOffset.top) {
+      const cartOffsetTop = superCatFlag === false
+        ? cartPreviewOffset.top - brandingMenuHeight
+        : cartPreviewOffset.top - superCatHeight;
+      if (window.pageYOffset > cartOffsetTop) {
         if (!cartPreview[0].classList.contains('sticky')) {
           cartPreview[0].classList.add('sticky');
           document.getElementsByClassName('spc-main')[0].style.paddingTop = `${cartPreview[0].offsetHeight}px`;
