@@ -10,6 +10,7 @@ import FixedFields from "../fixed-fields";
 import { i18nMiddleWareUrl } from "../../../utilities/i18n_url";
 import { validateContactInfo } from "../../../utilities/checkout_address_process";
 import { extractFirstAndLastName } from "../../../utilities/cart_customer_util";
+import { dispatchCustomEvent } from "../../../utilities/events";
 
 class ContactInfoForm extends React.Component {
   static contextType = ClicknCollectContext;
@@ -119,18 +120,13 @@ class ContactInfoForm extends React.Component {
           }
 
           updateContactInfo(form_data.static);
-          let cart_data = {
-            cart: cart_result,
-            delivery_type: cart_result.delivery_type,
-            address: form_data.store.address
-          };
-          let event = new CustomEvent("refreshCartOnCnCSelect", {
-            bubbles: true,
-            detail: {
-              data: () => cart_data
+          dispatchCustomEvent('refreshCartOnCnCSelect', {
+            data: () => {
+              cart: cart_result,
+              delivery_type: cart_result.delivery_type,
+              address: form_data.store.address,
             }
           });
-          document.dispatchEvent(event);
         })
         .catch(error => {
           console.error(error);
