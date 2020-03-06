@@ -8,27 +8,36 @@
 (function ($, Drupal) {
   'use strict';
 
+  /**
+   * Adding the hover effect to colour swatches on plp.
+   */
+  function onSwatchHoverUpdateMainImage() {
+    if ($(window).width() >= 1024) {
+      $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once('swatchMouseOver').on('mouseover', debounce(function (e) {
+        e.preventDefault();
+        var ProductUrl = $(this).find('img').attr('data-sku-image');
+        $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
+      }, 100));
+
+      $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once('swatchMouseOut').on('mouseout', debounce(function (e) {
+        e.preventDefault();
+
+        var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
+        console.log(ProductUrl);
+        $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
+      }, 100));
+    }
+  }
+
   Drupal.behaviors.plpSwatchHover = {
     attach: function (context, settings) {
+      // This is for Algolia search that fires when Algolia search results return.
+      $(document).once('searchResponseAddSwatchHover').on('search-results-updated', function() {
+        onSwatchHoverUpdateMainImage();
+      });
 
-      /**
-       * Adding the hover effect to colour swatches on plp.
-       */
-      if ($(window).width() >= 1024) {
-        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once().on('mouseover', debounce(function (e) {
-          e.preventDefault();
-          var ProductUrl = $(this).find('img').attr('data-sku-image');
-          $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
-        }, 100));
-
-        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseout', debounce(function (e) {
-          e.preventDefault();
-
-          var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
-          $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
-        }, 100));
-      }
-
+      // This is for Non-Algolia pages.
+      onSwatchHoverUpdateMainImage();
       // Update ?selected param on hover and show specific variant on PDP
       // if show_variants_thumbnail_plp_gallery is set to true.
       if (settings.show_variants_thumbnail_plp_gallery) {

@@ -10,13 +10,14 @@ const AssetGallery = ({media, title}) => {
   const images = [...media];
   const mainImage = images.length > 0 ? images.shift() : {};
   const hoverImage = images.length > 0 ? images.shift() : {};
+  const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
 
   return (
     <div className="alshaya_search_gallery">
-      <div className='alshaya_search_mainimage'>
+      <div className='alshaya_search_mainimage' data-sku-image={`${mainImageUrl}`}>
         <ImageElement
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={ typeof mainImage.url != 'undefined' ? mainImage.url : '' }
+          data-src={mainImageUrl}
           title={title}
           className='b-lazy'
         />
