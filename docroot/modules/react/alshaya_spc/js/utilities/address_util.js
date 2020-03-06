@@ -3,6 +3,8 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
+  getDefaultCheckoutErrorMessage,
+  triggerCheckoutEvent
 } from './checkout_util';
 import {
   validateAddressFields,
@@ -44,7 +46,17 @@ export const addEditUserAddress = function (address) {
   return axios.post('add-edit-address', {
     address,
   })
-    .then((response) => response.data)
+    .then(
+      (response) => {
+        return response.data;
+      },
+      (error) => {
+        return {
+          error: true,
+          error_message: getDefaultCheckoutErrorMessage()
+        }
+      }
+    )
     .catch((error) => {
       // Processing of error here.
     });
@@ -104,9 +116,13 @@ export const addEditAddressToCustomer = (e) => {
           if (addressList instanceof Promise) {
             addressList.then((list) => {
               // If any error.
-              if (list.status === false) {
+              if (list.error === true) {
                 // Remove loader.
                 removeFullScreenLoader();
+                let eventData = {
+                  'error_message': list.error_message
+                };
+                triggerCheckoutEvent('refreshCartOnAddress', eventData);
                 return;
               }
 
@@ -126,31 +142,23 @@ export const addEditAddressToCustomer = (e) => {
                 cart_info.then((cart_result) => {
                   // Remove loader.
                   removeFullScreenLoader();
-                  // If error, no need to process.
-                  if (cart_result.error !== undefined) {
-                    return;
-                  }
 
-                  const cart_data = {
+                  let cart_data = {
                     cart: cart_result,
                   };
 
-                  const event = new CustomEvent('refreshCartOnAddress', {
-                    bubbles: true,
-                    detail: {
-                      data: () => cart_data,
-                    },
-                  });
-                  document.dispatchEvent(event);
+                  // If error, no need to process.
+                  if (cart_result.error !== undefined) {
+                    cart_data = {
+                      'error_message': cart_result.error_message
+                    }
+                  }
+
+                  // Refresh cart.
+                  triggerCheckoutEvent('refreshCartOnAddress', cart_data);
 
                   // Close the addresslist popup.
-                  const ee = new CustomEvent('closeAddressListPopup', {
-                    bubbles: true,
-                    detail: {
-                      close: true,
-                    },
-                  });
-                  document.dispatchEvent(ee);
+                  triggerCheckoutEvent('closeAddressListPopup', true);
                 });
               }
             });

@@ -68,29 +68,27 @@ export default class ShippingMethod extends React.Component {
     let cart_data = addShippingInCart('update shipping', data);
     if (cart_data instanceof Promise) {
       cart_data.then((cart_result) => {
+        let cart_info = {
+          cart: cart_result
+        }
         // If no error.
         if (cart_result.error === undefined) {
-          let cart_info = {
-            cart: cart_result
-          }
-
           // Update state and radio button.
           this.setState({
             selectedOption: method.method_code
           });
           document.getElementById('shipping-method-' + method.method_code).checked = true;
-          // Refresh cart.
-          this.props.refreshCart(cart_info);
         }
         else {
           // In case of error, prepare error info
           // and call refresh cart so that message is shown.
-          let error_info = {
-            'error_code': cart_result.error_code,
+          cart_info = {
             'error_message': cart_result.error_message
           }
-          this.props.refreshCart(error_info);
         }
+
+        // Refresh cart.
+        this.props.refreshCart(cart_info);
 
         // Remove loader.
         removeFullScreenLoader();

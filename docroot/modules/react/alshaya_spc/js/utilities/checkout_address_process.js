@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
+  triggerCheckoutEvent
 } from './checkout_util';
 import {
   extractFirstAndLastName
@@ -83,22 +84,19 @@ export const checkoutAddressProcess = function (e, cart) {
         // Remove the loader.
         removeFullScreenLoader();
 
-        // If any error, don't process further.
-        if (cart_result.error !== undefined) {
-          return;
-        }
-
-        const cart_data = {
+        let cart_data = {
           cart: cart_result,
         };
 
-        const event = new CustomEvent('refreshCartOnAddress', {
-          bubbles: true,
-          detail: {
-            data: () => cart_data,
-          },
-        });
-        document.dispatchEvent(event);
+        // If any error, don't process further.
+        if (cart_result.error !== undefined) {
+          cart_data = {
+            'error_message': cart_result.error_message
+          };
+        }
+
+        // Trigger event.
+        triggerCheckoutEvent('refreshCartOnAddress', cart_data);
       });
     }
   })).catch((errors) => {
