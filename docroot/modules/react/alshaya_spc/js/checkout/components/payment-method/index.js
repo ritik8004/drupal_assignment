@@ -25,7 +25,7 @@ export default class PaymentMethod extends React.Component {
     return { __html: content };
   };
 
-  getSurchargeShortDescription() {
+  getSurchargeShortDescription = () => {
     try {
       let {amount} = this.props.cart.cart.surcharge;
 
@@ -35,7 +35,7 @@ export default class PaymentMethod extends React.Component {
 
       let description = getStringMessage('cod_surcharge_short_description');
       if (description.length > 0) {
-        return reactStringReplace(description, '[surcharge]', this.getPrice.bind(this));
+        return reactStringReplace(description, '[surcharge]', this.getSurchargePriceElement);
       }
     }
     catch (e) {
@@ -44,10 +44,10 @@ export default class PaymentMethod extends React.Component {
     return '';
   };
 
-  getPrice() {
+  getSurchargePriceElement = () => {
     let {amount} = this.props.cart.cart.surcharge;
     return <PriceElement key="cod_surcharge_short_description" amount={amount} />;
-  }
+  };
 
   changePaymentMethod = (method) => {
     showFullScreenLoader();
@@ -105,5 +105,4 @@ export default class PaymentMethod extends React.Component {
       </div>
     );
   }
-
 }
