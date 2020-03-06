@@ -43,16 +43,18 @@
             var available_in_cart = false;
             if (cart_data) {
               cart_data = JSON.parse(cart_data);
-              cart_data = cart_data.cart;
-              if (cart_data.cart_id !== null) {
-                cart_id = cart_data.cart_id;
-                cart_action = 'add item';
+              if (cart_data.cart !== undefined) {
+                cart_data = cart_data.cart;
+                if (cart_data.cart_id !== null) {
+                  cart_id = cart_data.cart_id;
+                  cart_action = 'add item';
 
-                // Adjust the quantity as available in cart already.
-                if (cart_data.items.currentSelectedVariant !== undefined) {
-                  quantity = cart_data.items.currentSelectedVariant.qty + quantity;
-                  cart_action = 'update item';
-                  available_in_cart = true;
+                  // Adjust the quantity as available in cart already.
+                  if (cart_data.items.currentSelectedVariant !== undefined) {
+                    quantity = cart_data.items.currentSelectedVariant.qty + quantity;
+                    cart_action = 'update item';
+                    available_in_cart = true;
+                  }
                 }
               }
             }

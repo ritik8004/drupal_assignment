@@ -28,6 +28,7 @@ window.fetchStore = 'idle';
 export default class Checkout extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       wait: true,
       cart: null,
@@ -99,13 +100,13 @@ export default class Checkout extends React.Component {
       });
     }
     else {
+      addInfoInStorage(cart);
+
       this.setState({
         cart: cart,
         message_type: 'success',
         error_success_message: null
       });
-
-      addInfoInStorage(cart);
     }
 
     // Remove loader.

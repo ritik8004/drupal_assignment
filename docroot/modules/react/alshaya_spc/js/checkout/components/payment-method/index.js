@@ -24,11 +24,6 @@ export default class PaymentMethod extends React.Component {
   getSurchargeShortDescription = () => {
     try {
       let {amount} = this.props.cart.cart.surcharge;
-
-      if (amount === undefined || amount === null || amount <= 0) {
-        return '';
-      }
-
       let description = getStringMessage('cod_surcharge_short_description');
       if (description.length > 0) {
         return reactStringReplace(description, '[surcharge]', this.getSurchargePriceElement);
@@ -59,7 +54,7 @@ export default class PaymentMethod extends React.Component {
 
         <label className='radio-sim radio-label'>
           {this.props.method.name}
-          <ConditionalView condition={method === 'cashondelivery'}>
+          <ConditionalView condition={method === 'cashondelivery' && this.props.cart.cart.surcharge.amount > 0}>
             <CodSurchargePaymentMethodDescription surcharge={this.props.cart.cart.surcharge}/>
           </ConditionalView>
         </label>

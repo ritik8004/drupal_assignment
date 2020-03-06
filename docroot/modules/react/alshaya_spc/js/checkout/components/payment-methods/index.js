@@ -4,46 +4,73 @@ import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
 import {addPaymentMethodInCart} from "../../../utilities/update_cart";
 import {showFullScreenLoader} from "../../../utilities/checkout_util";
+import ConditionalView from "../../../common/components/conditional-view";
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
     super(props);
 
-    const { cart } = this.props;
-    const is_active = (cart.cart.carrier_info !== null);
-
     this.state = {
-      active: is_active,
-      selectedOption: cart.selected_payment_method,
+      active: (props.cart.carrier_info !== null),
+      selectedOption: props.cart.selected_payment_method,
+      availablePaymentMethods: props.cart.cart.payment_methods,
       paymentMethods: new Array(),
     };
   }
 
-  componentDidMount() {
-    // If shipping info is set for cart, only then get payment
-    // methods for the cart.
-    if (this.props.cart.cart.carrier_info === null) {
+  selectDefault = () => {
+    if (Object.keys(this.state.paymentMethods).length === 0) {
       return;
     }
-
-    const paymentMethods = new Array();
-    Object.entries(drupalSettings.payment_methods).forEach(([key, method]) => {
-      // If payment method from api response not exists in
-      // available payment methods in drupal.
-      if (method.code in this.props.paymentMethodsData) {
-        paymentMethods[method.code] = this.props.paymentMethodsData[method.code];
-      }
-    });
-
-    const prevState = this.state;
-    this.setState({ ...prevState, paymentMethods: paymentMethods });
 
     // Select first payment method by default.
     if (this.props.cart.selected_payment_method === 'undefined'
       || !(this.props.cart.selected_payment_method)) {
-      this.changePaymentMethod(Object.keys(paymentMethods)[0]);
+      this.changePaymentMethod(Object.keys(this.state.paymentMethods)[0]);
     }
+  };
+
+  componentDidMount() {
+    document.addEventListener('refreshCartOnAddress', this.eventListener, false);
+    document.addEventListener('refreshCartOnCnCSelect', this.eventListener, false);
+    this.selectDefault();
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener('refreshCartOnAddress', this.eventListener, false);
+    document.removeEventListener('refreshCartOnCnCSelect', this.eventListener, false);
   }
+
+  eventListener = (e) => {
+    this.setState({
+      active: (this.props.cart.carrier_info !== null),
+      selectedOption: this.props.cart.selected_payment_method,
+      availablePaymentMethods: this.props.cart.cart.payment_methods,
+      paymentMethods: new Array(),
+    });
+
+    this.selectDefault();
+  };
+
+  getPaymentMethods = () => {
+    if (Object.keys(this.state.paymentMethods).length > 0) {
+      return this.state.paymentMethods;
+    }
+
+    if (this.state.availablePaymentMethods.length === 0) {
+      return this.state.paymentMethods;
+    }
+
+    Object.entries(this.state.availablePaymentMethods).forEach(([key, method]) => {
+      // If payment method from api response not exists in
+      // available payment methods in drupal, ignore it.
+      if (method.code in drupalSettings.payment_methods) {
+        this.state.paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
+      }
+    });
+
+    return this.state.paymentMethods;
+  };
 
   changePaymentMethod = (method) => {
     if (this.state.selectedOption === method) {
@@ -52,8 +79,7 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
-    const prevState = this.state;
-    this.setState({ ...prevState, selectedOption: method });
+    this.setState({ ...this.state, selectedOption: method });
 
     document.getElementById('payment-method-' + method).checked = true;
 
@@ -76,16 +102,9 @@ export default class PaymentMethods extends React.Component {
 
   render() {
     const methods = [];
-    let i = 0;
-    Object.entries(this.state.paymentMethods).forEach(([key, method]) => {
-      let isSelected = false;
-      if (!isSelected && this.props.cart.selected_payment_method !== undefined
-        && this.props.cart.selected_payment_method === key) {
-        isSelected = key;
-      } else if (i === 0 && !isSelected) {
-        isSelected = key;
-      }
-      i++;
+
+    Object.entries(this.getPaymentMethods()).forEach(([key, method]) => {
+      let isSelected = (this.state.selectedOption === key) ? key : '';
       methods.push(<PaymentMethod cart={this.props.cart} refreshCart={this.props.refreshCart} changePaymentMethod={this.changePaymentMethod} isSelected={isSelected} key={key} method={method} />);
     });
 
@@ -95,8 +114,10 @@ export default class PaymentMethods extends React.Component {
 
     return (
       <div className="spc-checkout-payment-options">
-        <SectionTitle>{Drupal.t('payment methods')}</SectionTitle>
-        <div className={`payment-methods ${active_class}`}>{methods}</div>
+        <ConditionalView condition={Object.keys(methods).length > 0}>
+          <SectionTitle>{Drupal.t('payment methods')}</SectionTitle>
+          <div className={`payment-methods ${active_class}`}>{methods}</div>
+        </ConditionalView>
       </div>
     );
   }

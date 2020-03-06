@@ -332,9 +332,9 @@ class CartController {
       }
     }
 
-    if (!empty($shipping_info['method'])) {
-      $data['payment_methods'] = $this->cart->getPaymentMethods($cart_data['cart']['id']);
-    }
+    $data['payment_methods'] = !empty($shipping_info['method'])
+      ? $this->cart->getPaymentMethods($cart_data['cart']['id'])
+      : [];
 
     $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
 
