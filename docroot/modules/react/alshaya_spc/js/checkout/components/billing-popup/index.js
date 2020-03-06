@@ -9,6 +9,8 @@ import {
 
 export default class BillingPopUp extends React.Component {
 
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,9 +31,13 @@ export default class BillingPopUp extends React.Component {
    * For modal closing.
    */
   closeModal = () => {
-    this.setState({
-      open: false
-    });
+    if (this._isMounted) {
+      this.setState({
+        open: false
+      });
+
+      this.props.closePopup();
+    }
   };
 
   /**
@@ -51,11 +57,13 @@ export default class BillingPopUp extends React.Component {
       : formatAddressDataForEditForm(address);
   }
 
-  /**
-   * Close modal.
-   */
   componentDidMount() {
+    this._isMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.closeModal, false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {

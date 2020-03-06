@@ -3,7 +3,12 @@ import React from 'react';
 import BillingInfo from '../billing-info';
 import BillingPopUp from '../billing-popup';
 
+// Storage key for billing shipping info same or not.
+const localStorageKey = 'billing_shipping_different';
+
 export default class HDBillingAddress extends React.Component {
+
+  _isMounted = false;
 
   constructor(props) {
     super(props);
@@ -20,6 +25,14 @@ export default class HDBillingAddress extends React.Component {
     });
   }
 
+  closePopup = () => {
+    if (this._isMounted) {
+      this.setState({
+        open: false
+      });
+    }
+  };
+
   /**
    * On billing address change.
    */
@@ -28,11 +41,22 @@ export default class HDBillingAddress extends React.Component {
       shippingAsBilling: shippingAsBilling
     });
 
+    if (shippingAsBilling === true) {
+      // If shipping and billing same, we remove
+      // local storage.
+      localStorage.removeItem(localStorageKey);
+    }
+
     this.showPopup(!shippingAsBilling);
   };
 
   componentDidMount() {
+    this._isMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   /**
@@ -40,9 +64,27 @@ export default class HDBillingAddress extends React.Component {
    */
   processBillingUpdate = (e) => {
     let data = e.detail.data();
+
+    // If there is no error and update was fine, means user
+    // has changed the billing address. We set in localstorage.
+    if (data.error === undefined) {
+      if (data.cart !== undefined
+        && data.cart.delivery_type === 'hd') {
+        localStorage.setItem(localStorageKey, true);
+      }
+    }
+
     // Refresh cart.
     this.props.refreshCart(data);
-  }
+  };
+
+  /**
+   * If local storage has biliing shipping set.
+   */
+  isBillingSameAsShippingInStorage = () => {
+    let same = localStorage.getItem(localStorageKey);
+    return (same === null || same === undefined);
+  };
 
   render() {
     const { cart } = this.props;
@@ -70,9 +112,9 @@ export default class HDBillingAddress extends React.Component {
           <label className='radio-sim radio-label'>{Drupal.t('no')}</label>
         </div>
         {this.state.open &&
-          <BillingPopUp billing={billingAddress} shipping={shippingAddress}/>
+          <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress}/>
         }
-        {!isShippingBillingSame &&
+        {!this.isBillingSameAsShippingInStorage() &&
           <BillingInfo shipping={shippingAddress} billing={billingAddress}/>
         }
       </React.Fragment>

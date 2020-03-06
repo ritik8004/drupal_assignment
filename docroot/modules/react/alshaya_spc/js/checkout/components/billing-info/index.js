@@ -7,6 +7,8 @@ import {
 
 export default class BillingInfo extends React.Component {
 
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +21,16 @@ export default class BillingInfo extends React.Component {
       open: true
     });
   };
+
+  closePopup = () => {
+    this.setState({
+      open: false
+    });
+  };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render() {
     const { billing, shipping } = this.props;
@@ -51,7 +63,7 @@ export default class BillingInfo extends React.Component {
           </div>
           <div onClick={() => this.showPopup()}>{Drupal.t('change')}</div>
           {this.state.open &&
-            <BillingPopUp billing={billing} shipping={shipping}/>
+            <BillingPopUp closePopup={this.closePopup} billing={billing} shipping={shipping}/>
           }
         </div>
       </React.Fragment>
