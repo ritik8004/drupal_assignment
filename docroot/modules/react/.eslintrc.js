@@ -15,6 +15,7 @@ module.exports = {
     drupalTranslations: true,
     domready: true,
     jQuery: true,
+    google: true,
   },
   parser: "babel-eslint",
   parserOptions: {

@@ -160,7 +160,7 @@ export const getLocationAccess = () => {
 };
 
 export const getDefaultMapCenter = () => {
-  if (typeof drupalSettings.map.center !== 'undefined' && !_isEmpty(drupalSettings.map.center)) {
+  if (drupalSettings.map.center.length > 0 && ({}).hasOwnProperty.call(drupalSettings.map.center, 'latitude') && ({}).hasOwnProperty.call(drupalSettings.map.center, 'longitude')) {
     const { latitude: lat, longitude: lng } = drupalSettings.map.center;
     return { lat, lng };
   }

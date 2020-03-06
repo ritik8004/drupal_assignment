@@ -8,7 +8,7 @@ import {
   getDefaultMapCenter,
   getLocationAccess,
   removeFullScreenLoader,
-  showFullScreenLoader
+  showFullScreenLoader,
 } from "../../../utilities/checkout_util";
 import Loading from "../../../utilities/loading";
 import SectionTitle from "../../../utilities/section-title";
@@ -321,7 +321,7 @@ class ClickCollect extends React.Component {
     let { openSelectedStore } = this.state;
     let { closeModal } = this.props;
 
-    if (window.fetchStore == "pending") {
+    if (window.fetchStore !== 'finished') {
       return <Loading />;
     }
 

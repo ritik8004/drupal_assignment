@@ -6,7 +6,7 @@ let ClickCollect = React.lazy(async () => {
   // We show click n collect with map.
   await new Promise((resolve, reject) => {
     let interval = setInterval(() => {
-      if (window.fetchStore != "pending") {
+      if (window.fetchStore === "finished") {
         clearInterval(interval);
         resolve();
       }
