@@ -24,7 +24,7 @@ const HierarchicalMenu = (props) => {
             data-level={facetLevel}
             className={
               (item.value === window.Drupal.t('All')? "facet-item " + (noActiveFilters(items) ?
-              'is-active category-all' : '') : "facet-item " + (item.isRefined ? 'is-active' : ''))
+              'is-active category-all' : '') : "facet-item " + (item.isRefined ? 'is-active ' : '') + (item.items && item.items.length > 0 ? 'sale-item' : ''))
             }
             onClick={event => {
               event.preventDefault();
