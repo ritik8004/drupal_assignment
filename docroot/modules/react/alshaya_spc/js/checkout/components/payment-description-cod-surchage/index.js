@@ -5,12 +5,10 @@ import PriceElement from "../../../utilities/special-price/PriceElement";
 
 const CodSurchargePaymentMethodDescription = ({surcharge}) => {
   const getSurchargeShortDescription = () => {
-    let {amount} = surcharge;
-
-    if (!amount || amount <= 0) {
-      return '';
+    if (!surcharge || surcharge <= 0) {
+      return false;
     }
-
+    let {amount} = surcharge;
     let description = getStringMessage('cod_surcharge_short_description');
 
     if (description.length == 0) {
@@ -27,12 +25,16 @@ const CodSurchargePaymentMethodDescription = ({surcharge}) => {
     });
   };
 
+  if (getSurchargeShortDescription() === false) {
+    return '';
+  }
+
   return (
     <React.Fragment>
-      <span className="spc-payment-method-desc">
-        {getSurchargeShortDescription()}
-        <ToolTip content={getStringMessage('cod_surcharge_description')} enable />
-      </span>
+    <span className="spc-payment-method-desc">
+      {getSurchargeShortDescription()}
+      <ToolTip content={getStringMessage('cod_surcharge_description')} enable />
+    </span>
     </React.Fragment>
   );
 };
