@@ -5,7 +5,8 @@ import ShippingMethods from "../shipping-methods";
 import Loading from "../../../utilities/loading";
 import {
   checkoutAddressProcess,
-  getAddressPopupClassName
+  getAddressPopupClassName,
+  formatAddressDataForEditForm
 } from "../../../utilities/checkout_address_process";
 import {
   showFullScreenLoader
@@ -68,21 +69,7 @@ export default class HomeDeliveryInfo extends React.Component {
    * Format address for edit address.
    */
   formatAddressData = (address) => {
-    let formatted_address = {
-      'static': {
-        'fullname': address.firstname + ' ' + address.lastname,
-        'email': address.email,
-        'telephone': address.telephone
-      }
-    };
-
-    Object.entries(window.drupalSettings.address_fields).forEach(
-      ([key, field]) => {
-        formatted_address[field['key']] = address[field['key']];
-      }
-    );
-
-    return formatted_address;
+    return formatAddressDataForEditForm(address);
   }
 
   render() {
