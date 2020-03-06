@@ -9,7 +9,7 @@ import { stickySidebar } from '../../../utilities/stickyElements/stickyElements'
 import {
   addInfoInStorage,
   getInfoFromStorage,
-  removeCartFromStorage
+  removeCartFromStorage,
 } from '../../../utilities/storage';
 import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
@@ -21,8 +21,9 @@ import { getLocationAccess, getDefaultMapCenter } from '../../../utilities/check
 import { fetchClicknCollectStores } from "../../../utilities/api/requests";
 import { createFetcher } from '../../../utilities/api/fetcher';
 import {removeFullScreenLoader} from "../../../utilities/checkout_util";
+import _isEmpty from 'lodash/isEmpty';
 
-window.fetchStore = 'stop';
+window.fetchStore = 'idle';
 
 export default class Checkout extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ export default class Checkout extends React.Component {
       storeList: null,
       payment_methods: window.drupalSettings.payment_methods,
       message_type: null,
-      error_success_message: null
+      error_success_message: null,
     };
   }
 
@@ -128,10 +129,10 @@ export default class Checkout extends React.Component {
         .then(pos => {
           this.fetchStoresHelper({
             lat: pos.coords.latitude,
-            lng: pos.coords.longitude
+            lng: pos.coords.longitude,
           });
         },
-        reject =>  {
+        reject => {
           this.fetchStoresHelper(getDefaultMapCenter());
         })
         .catch(error => {
@@ -145,10 +146,13 @@ export default class Checkout extends React.Component {
    * Fetch click n collect stores and update store list.
    */
   fetchStoresHelper = (coords) => {
+    if (_isEmpty(coords)) {
+      window.fetchStore = 'finished';
+      return;
+    }
+
     window.fetchStore = 'pending';
-    const storeFetcher = createFetcher(
-      fetchClicknCollectStores
-    );
+    const storeFetcher = createFetcher(fetchClicknCollectStores);
     let list = storeFetcher.read(coords);
 
     list.then(
