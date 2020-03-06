@@ -786,6 +786,10 @@ class CartController {
       foreach ($data['cart']['customer']['addresses'] as $address) {
         // If address is set as default for shipping.
         if (!empty($address['default_shipping']) && $address['default_shipping']) {
+          // Region key should be string.
+          if (!empty($address['region']) && is_array($address['region'])) {
+            unset($address['region']);
+          }
           $shipping_methods = $this->cart->shippingMethods(['address' => $address], $data['cart']['id']);
           $shipping_data = [
             'customer_address_id' => $address['id'],
