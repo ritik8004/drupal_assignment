@@ -209,7 +209,8 @@ class AlshayaAlgoliaIndexHelper {
     $object['body'] = $this->renderer->renderPlain($description);
 
     $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
-    $object['rendered_price'] = $this->renderer->renderPlain($this->skuPriceHelper->getPriceBlockForSku($sku));
+    $sku_price_block = $this->skuPriceHelper->getPriceBlockForSku($sku);
+    $object['rendered_price'] = $this->renderer->renderPlain($sku_price_block);
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
