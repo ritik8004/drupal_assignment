@@ -32,4 +32,8 @@
   @include breakpoint($only-mobile) {
     margin: 0 !important;
   }
+
+  @include breakpoint($only-tablet) {
+    margin: 0 !important;
+  }
 }

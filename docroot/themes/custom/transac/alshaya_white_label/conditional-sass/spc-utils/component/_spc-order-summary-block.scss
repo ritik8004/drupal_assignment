@@ -29,6 +29,7 @@
   .total-line-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     color: $spc-totals-line-item-color;
     line-height: 1.125rem;
     margin-bottom: 0.625rem;
@@ -36,6 +37,12 @@
 
     .price-currency {
       padding-#{$right}: 0.3125rem;
+    }
+
+    .surcharge-total {
+      display: inline-flex;
+      height: auto;
+      align-items: center;
     }
 
     .discount-total {

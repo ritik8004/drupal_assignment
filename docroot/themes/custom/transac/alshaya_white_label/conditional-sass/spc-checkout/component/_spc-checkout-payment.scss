@@ -2,7 +2,7 @@
   margin-bottom: 2.5rem;
 
   .payment-method {
-    height: 3.25rem;
+    min-height: 3.25rem;
     background: $spc-checkout-payment-method-bg;
     margin-bottom: 0.3125rem;
     display: flex;
@@ -17,11 +17,23 @@
 
     .radio-label {
       color: $spc-checkout-payment-method-txt;
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      @include breakpoint($upto-desktop) {
+        display: block;
+      }
 
       .spc-payment-method-desc {
         color: $spc-checkout-payment-method-desc;
-        display: inline;
         padding-#{$left}: 0.3125rem;
+        display: inline-flex;
+        align-items: center;
+
+        @include breakpoint($upto-desktop) {
+          padding-#{$left}: 0;
+        }
 
         p {
           margin: 0;

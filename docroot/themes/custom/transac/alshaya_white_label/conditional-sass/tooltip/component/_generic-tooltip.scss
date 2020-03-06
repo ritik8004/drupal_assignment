@@ -42,6 +42,8 @@
 }
 
 .tooltip-anchor {
+  position: relative;
+
   @include icon(infomation, before) {
     font-size: 1.5rem;
     color: $spc_tooltip_icon;

@@ -26,7 +26,7 @@
     }
 
     .radio-sim {
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         display: inline-flex;
         align-items: center;
       }
@@ -64,7 +64,7 @@
     }
 
     .sub-title {
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         display: block;
       }
     }

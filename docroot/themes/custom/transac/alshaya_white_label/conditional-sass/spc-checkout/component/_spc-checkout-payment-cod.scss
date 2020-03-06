@@ -1,0 +1,15 @@
+.payment-method-cashondelivery {
+  @include breakpoint($upto-desktop) {
+    padding: 0.625rem 0;
+  }
+
+  .spc-payment-method-desc {
+    .price-wrapper {
+      margin: 0 0.25rem;
+    }
+
+    .tooltip-anchor {
+      margin-#{$left}: 0.25rem;
+    }
+  }
+}
