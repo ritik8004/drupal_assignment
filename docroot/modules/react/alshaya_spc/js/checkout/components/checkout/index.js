@@ -194,7 +194,7 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            <PaymentMethods refreshCart={this.refreshCart} paymentMethodsData={drupalSettings.payment_methods} cart={this.state.cart} />
+            <PaymentMethods refreshCart={this.refreshCart} cart={this.state.cart} />
             {window.innerWidth > 768 &&
               <TermsConditions />
             }
