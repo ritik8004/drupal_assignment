@@ -7,24 +7,24 @@ const CodSurchargePaymentMethodDescription = ({surcharge}) => {
   const getSurchargeShortDescription = () => {
     let {amount} = surcharge;
 
-    if (amount === undefined || amount === null || amount <= 0) {
+    if (!amount || amount <= 0) {
       return '';
     }
 
     let description = getStringMessage('cod_surcharge_short_description');
 
-    if (description.length > 0) {
-      let descriptionSplit = description.split('[surcharge]');
-      return descriptionSplit.reduce((prefix, suffix) => {
-        return [
-          prefix,
-          <PriceElement key="cod_surcharge_short_description" amount={amount} />,
-          suffix,
-        ];
-      });
+    if (description.length == 0) {
+      return '';
     }
 
-    return '';
+    let descriptionSplit = description.split('[surcharge]');
+    return descriptionSplit.reduce((prefix, suffix) => {
+      return [
+        prefix,
+        <PriceElement key="cod_surcharge_short_description" amount={amount} />,
+        suffix,
+      ];
+    });
   };
 
   return (
