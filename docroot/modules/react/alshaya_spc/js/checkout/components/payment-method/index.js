@@ -43,7 +43,7 @@ export default class PaymentMethod extends React.Component {
   render() {
     let method = this.props.method.code;
     return(
-      <div className='payment-method' onClick={() => this.props.changePaymentMethod(method)}>
+      <div className={`payment-method payment-method-${method}`} onClick={() => this.props.changePaymentMethod(method)}>
       	<input
       	  id={'payment-method-' + method}
       	  className={method}
