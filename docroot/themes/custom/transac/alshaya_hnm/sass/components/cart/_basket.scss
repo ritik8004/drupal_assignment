@@ -60,7 +60,7 @@
     font-family: $hnm-regular;
     color: $tooltip_text;
 
-    @include icon(info, after) {
+    @include icon(infomation, after) {
       color: $tooltip_icon;
     }
 
