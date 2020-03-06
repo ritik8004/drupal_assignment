@@ -1026,6 +1026,8 @@ class SkuImagesManager {
           }
 
           $data['value'] = $value;
+          $data['child_sku_code'] = $child_sku_code;
+          $data['child_id'] = $child->id();
           $swatches['swatches'][$value] = $data;
 
           break;
