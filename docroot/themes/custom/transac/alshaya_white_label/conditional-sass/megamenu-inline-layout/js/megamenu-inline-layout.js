@@ -25,9 +25,14 @@
 
     // On hover of L1 item make first L2 item active by default.
     $(parent).once().on().hover(function () {
+      // reset classes and z-index.
       $(parent).removeClass('active');
+      $("ul.menu--two__list").css("z-index", "1");
+
+      // apply classes and z-index.
       $(this).addClass('active');
       $(this).find('.menu__links__wrapper > .menu--two__list-item:not(.move-to-right):first').addClass('active');
+      $(this).find('ul.menu--two__list').css("z-index", "2");
 
       // If first L2 doesn't has L3 by default move right category to left.
       if ($(this).find('.menu__links__wrapper > .menu--two__list-item.active:not(.move-to-right):first').hasClass('last-element')) {
