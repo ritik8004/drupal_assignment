@@ -1,46 +1,21 @@
 import React from 'react';
 
-import Popup from 'reactjs-popup';
+import BillingPopUp from '../billing-popup';
 import BillingInfo from '../billing-info';
-import AddressForm from '../address-form';
-import {
-  processBillingUpdateFromForm
-} from '../../../utilities/checkout_address_process';
 
 export default class CnCBillingAddress extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      showPopup: false
     };
   }
 
-  /**
-   * For modal open.
-   */
-  openModal = () => {
+  showPopup = () => {
     this.setState({
-      open: true
+      showPopup: true
     });
-  };
-
-  /**
-   * For modal closing.
-   */
-  closeModal = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  /**
-   * Process address submission here.
-   */
-  processAddress = (e) => {
-    const shipping = this.props.cart.cart.shipping_address;
-    console.log(shipping);
-    return processBillingUpdateFromForm(e, shipping);
   };
 
   componentDidMount() {
@@ -52,12 +27,8 @@ export default class CnCBillingAddress extends React.Component {
    */
   processBillingUpdate = (e) => {
     let data = e.detail.data();
-    console.log(data);
     // Refresh cart.
     this.props.refreshCart(data);
-
-    // Close the modal.
-    this.closeModal();
   }
 
   render() {
@@ -71,33 +42,24 @@ export default class CnCBillingAddress extends React.Component {
     }
 
     const billingAddress = cart.cart.billing_address;
-    const shipping = cart.cart.shipping_address;
+    const shippingAddress = cart.cart.shipping_address;
     // If billing address is not set already.
     if (billingAddress === undefined
       || billingAddress === null) {
       return (
         <React.Fragment>
-          <div onClick={this.openModal}>
+          <div onClick={this.showPopup()}>
             {Drupal.t('please add your billing address.')}
           </div>
-          <Popup
-            open={this.state.open}
-            onClose={this.closeModal}
-            closeOnDocumentClick={false}
-          >
-          <AddressForm
-            closeModal={this.closeModal}
-            processAddress={this.processAddress}
-            showEmail={false}
-            default_val={null}
-          />
-        </Popup>
+          {this.state.showPopup &&
+          <BillingPopUp billing={billingAddress} shipping={shippingAddress}/>
+        }
         </React.Fragment>
       );
     }
 
     return (
-      <BillingInfo refreshCart={this.props.refreshCart} shipping={shipping} billing={billingAddress}/>
+      <BillingInfo shipping={shipping} billing={billingAddress}/>
     );
   }
 
