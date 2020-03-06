@@ -23,7 +23,6 @@
         e.preventDefault();
 
         var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
-        console.log(ProductUrl);
         $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
       }, 100));
     }
@@ -32,7 +31,7 @@
   Drupal.behaviors.plpSwatchHover = {
     attach: function (context, settings) {
       // This is for Algolia search that fires when Algolia search results return.
-      $(document).once('searchResponseAddSwatchHover').on('search-results-updated', function() {
+      $(document).once('searchResponseAddSwatchHover').on('search-results-updated', function () {
         onSwatchHoverUpdateMainImage();
       });
 
