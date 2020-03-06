@@ -378,7 +378,8 @@ class StockManager {
     // We get qty in product data and quantity in stock push or from stock api.
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
-    $max_sale_qty = isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : NULL;
+    $max_sale_qty = (isset($stock['use_config_max_sale_qty']) && $stock['use_config_max_sale_qty'])
+      ? 0 : (isset($stock['max_sale_qty']) ? $stock['max_sale_qty'] : 0);
 
     $changed = $this->updateStock($stock['sku'], $quantity, $stock_status, $max_sale_qty);
 
