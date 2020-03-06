@@ -74,6 +74,11 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: space-between;
+        cursor: pointer;
+
+        &:hover {
+          box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.24);
+        }
 
         .spc-address-metadata,
         .spc-address-tile-actions {

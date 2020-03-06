@@ -6,10 +6,11 @@
       text-transform: uppercase;
     }
 
-    .spc-deliver-button {
+    .spc-deliver-button,
+    .spc-add-new-address-btn {
       font-weight: normal;
       font-family: $vs-bold;
-      text-transform: uppercase;
+      text-transform: capitalize;
     }
   }
 

@@ -26,6 +26,10 @@ class TextField extends React.Component {
   render() {
     const countryMobileCode = window.drupalSettings.country_mobile_code;
     const countryMobileCodeMaxLength = window.drupalSettings.mobile_maxlength;
+    let focusClass = '';
+    if (this.props.defaultValue !== undefined || this.props.defaultValue !== "") {
+      focusClass = 'focus';
+    }
 
     if (this.props.type === 'email') {
       return (
@@ -35,6 +39,7 @@ class TextField extends React.Component {
             name={this.props.name}
             defaultValue={this.props.defaultValue}
             onBlur={(e) => this.handleEvent(e, 'blur')}
+            className={focusClass}
           />
           <div className='c-input__bar'/>
           <label>{this.props.label}</label>
@@ -65,6 +70,7 @@ class TextField extends React.Component {
             defaultValue={this.props.defaultValue}
             onChange={this.handleChange}
             onBlur={(e) => this.handleEvent(e, 'blur')}
+            className={focusClass}
           />
           <div className='c-input__bar'/>
           <label>{this.props.label}</label>
@@ -72,15 +78,6 @@ class TextField extends React.Component {
         </div>
       );
     }
-
-    return (
-      <div className="spc-type-textfield">
-        <input type="text" id={this.props.name} name={this.props.name} defaultValue={this.props.defaultValue} />
-        <div className="c-input__bar" />
-        <label>{this.props.label}</label>
-        <div id={`${this.props.name}-error`} className="error" />
-      </div>
-    );
   }
 }
 

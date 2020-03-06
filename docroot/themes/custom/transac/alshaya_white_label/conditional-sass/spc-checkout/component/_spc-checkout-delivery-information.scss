@@ -55,6 +55,11 @@
         margin-bottom: 0.3125rem;
       }
 
+      .delivery-name,
+      .delivery-address {
+        width: calc(100% - 7.1875rem);
+      }
+
       .spc-address-form-edit-link,
       .spc-change-address-link {
         position: absolute;
