@@ -233,29 +233,10 @@ class Cart {
       $carrier_info = $shipping_data['carrier_info'];
     }
     else {
-      $static_fields = $shipping_data['static'];
       $carrier_info = $shipping_data['carrier_info'];
-      unset($shipping_data['carrier_info'], $shipping_data['static']);
-      $custom_attributes = [];
-      foreach ($shipping_data as $field_name => $val) {
-        $custom_attributes[] = [
-          'attributeCode' => $field_name,
-          'value' => $val,
-        ];
-      }
-
-      $fields_data = [];
-      foreach ($static_fields as $key => $field) {
-        $fields_data[$key] = $field;
-      }
-
-      $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
-      if (!empty($shipping_data['street'])) {
-        $fields_data['street'] = is_array($shipping_data['street'])
-          ? $shipping_data['street']
-          : [$shipping_data['street']];
-      }
+      $fields_data = $this->formatAddressForShippingBilling($shipping_data);
     }
+
     $data['shipping']['shipping_address'] = $fields_data;
     $data['shipping']['shipping_carrier_code'] = $carrier_info['code'];
     $data['shipping']['shipping_method_code'] = $carrier_info['method'];
@@ -285,6 +266,49 @@ class Cart {
     }
 
     return $this->updateBilling($cart_id, $data['shipping']['shipping_address']);
+  }
+
+  /**
+   * Format the address array.
+   *
+   * Format the address array so that it can be used to update billing or
+   * shipping address in the cart.
+   *
+   * @param array $address
+   *   Address array.
+   *
+   * @return array
+   *   Formatted address array.
+   */
+  public function formatAddressForShippingBilling(array $address) {
+    $static_fields = $address['static'];
+    // Unset static and carrier info if available.
+    unset($address['static']);
+    if (!empty($address['carrier_info'])) {
+      unset($address['carrier_info']);
+    }
+
+    $custom_attributes = [];
+    foreach ($address as $field_name => $val) {
+      $custom_attributes[] = [
+        'attributeCode' => $field_name,
+        'value' => $val,
+      ];
+    }
+
+    $fields_data = [];
+    foreach ($static_fields as $key => $field) {
+      $fields_data[$key] = $field;
+    }
+
+    $fields_data = array_merge($fields_data, ['customAttributes' => $custom_attributes]);
+    if (!empty($address['street'])) {
+      $fields_data['street'] = is_array($address['street'])
+        ? $address['street']
+        : [$address['street']];
+    }
+
+    return $fields_data;
   }
 
   /**

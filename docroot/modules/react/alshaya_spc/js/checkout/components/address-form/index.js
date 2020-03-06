@@ -142,7 +142,7 @@ export default class AddressForm extends React.Component {
         )}
         <div className="spc-address-form-sidebar">
           <SectionTitle>{Drupal.t("delivery information")}</SectionTitle>
-          <a className='close dd' onClick={this.props.closeModal}>
+          <a className='close' onClick={this.props.closeModal}>
               &times;
           </a>
           <div className="spc-address-form-wrapper">

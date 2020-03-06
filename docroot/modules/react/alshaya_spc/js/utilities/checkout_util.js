@@ -106,6 +106,46 @@ export const addShippingInCart = function (action, data) {
 };
 
 /**
+ * Adds billing in the cart.
+ *
+ * @param {*} action
+ * @param {*} data
+ */
+export const addBillingInCart = function (action, data) {
+  let cart = cartAvailableInStorage();
+  if (cart === false) {
+    return null;
+  }
+
+  if (!Number.isInteger(cart)) {
+    cart = cart.cart_id;
+  }
+
+  const api_url = updateCartApiUrl();
+  return axios
+    .post(api_url, {
+      action,
+      billing_info: data,
+      cart_id: cart,
+    })
+    .then(
+      (response) => {
+        return response.data;
+      },
+      (error) => {
+        // Processing of error here.
+        return {
+          error: true,
+          error_message: getDefaultCheckoutErrorMessage()
+        }
+      },
+    )
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+/**
  * Place ajax fulll screen loader.
  */
 export const showFullScreenLoader = () => {

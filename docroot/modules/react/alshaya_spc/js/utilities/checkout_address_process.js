@@ -2,7 +2,9 @@ import axios from 'axios';
 import {
   addShippingInCart,
   removeFullScreenLoader,
-  triggerCheckoutEvent
+  showFullScreenLoader,
+  triggerCheckoutEvent,
+  addBillingInCart
 } from './checkout_util';
 import {
   extractFirstAndLastName
@@ -175,6 +177,30 @@ export const validateAddressFields = (e, validateEmail) => {
 };
 
 /**
+ * Format the address which can be used as default value
+ * for the edit address form fill.
+ *
+ * @param {*} address
+ */
+export const formatAddressDataForEditForm = (address) => {
+  let formatted_address = {
+    'static': {
+      'fullname': address.firstname + ' ' + address.lastname,
+      'email': address.email,
+      'telephone': address.telephone
+    }
+  };
+
+  Object.entries(drupalSettings.address_fields).forEach(
+    ([key, field]) => {
+      formatted_address[field['key']] = address[field['key']];
+    }
+  );
+
+  return formatted_address;
+}
+
+/**
  * Prepare address data from form value.
  *
  * @param {*} elements
@@ -231,3 +257,79 @@ export const prepareAddressDataForShipping = (address) => {
 export const getAddressPopupClassName = () => (drupalSettings.user.uid > 0
   ? 'spc-address-list-member'
   : 'spc-address-form-guest');
+
+/**
+ * Updates the address info in cart to middleware
+ * and handle proccesing.
+ *
+ * @param {*} data
+ * @param {*} data
+ */
+export const processBillingUpdateFromForm = (e, shipping) => {
+  // Start the loader.
+  showFullScreenLoader();
+
+  let isValid = validateAddressFields(e, false);
+  // If not valid.
+  if (isValid) {
+    removeFullScreenLoader();
+    return;
+  }
+
+  let target = e.target.elements;
+
+  const mobile = target.mobile.value.trim();
+  const mobile_valid = axios.get(`verify-mobile/${mobile}`);
+  if (mobile_valid instanceof Promise) {
+    mobile_valid.then((result) => {
+      if (result.status === 200) {
+        // If not valid mobile number.
+        if (result.data.status === false) {
+          // Removing loader in case validation fail.
+          removeFullScreenLoader();
+          document.getElementById('mobile-error').innerHTML = Drupal.t('Please enter valid mobile number.');
+          document.getElementById('mobile-error').classList.add('error');
+        } else {
+          // If valid mobile number, remove error message.
+          document.getElementById('mobile-error').innerHTML = '';
+          document.getElementById('mobile-error').classList.remove('error');
+
+          target.email = {
+            value: shipping.email
+          };
+          let form_data = prepareAddressDataFromForm(target);
+
+          // For logged in user add customer id from shipping.
+          if (drupalSettings.user.uid > 0) {
+            form_data['static']['customer_id'] = shipping.customer_id;
+          }
+
+          // Update billing address.
+          let cart_data = addBillingInCart('update billing', form_data);
+          if (cart_data instanceof Promise) {
+            cart_data.then((cart_result) => {
+              let cart_info = {
+                cart: cart_result
+              };
+
+              // If error.
+              if (cart_result.error !== undefined) {
+                // In case of error, prepare error info
+                // and call refresh cart so that message is shown.
+                cart_info = {
+                  'error_message': cart_result.error_message
+                }
+              }
+
+              // Trigger the event for updte.
+              triggerCheckoutEvent('onBillingAddressUpdate', cart_info);
+
+              // Remove loader.
+              removeFullScreenLoader();
+            });
+          }
+        }
+      }
+    });
+  }
+}
