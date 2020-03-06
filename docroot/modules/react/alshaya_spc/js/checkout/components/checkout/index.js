@@ -32,7 +32,6 @@ export default class Checkout extends React.Component {
       wait: true,
       cart: null,
       storeList: null,
-      payment_methods: window.drupalSettings.payment_methods,
       message_type: null,
       error_success_message: null,
     };
@@ -163,7 +162,7 @@ export default class Checkout extends React.Component {
         }
       }
     );
-  }
+  };
 
   render() {
     // While page loads and all info available.
@@ -195,7 +194,7 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={this.state.cart} storeList={this.state.storeList}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={this.state.cart} />
             </ClicknCollectContextProvider>
-            <PaymentMethods refreshCart={this.refreshCart} payment_methods={this.state.payment_methods} cart={this.state.cart} />
+            <PaymentMethods refreshCart={this.refreshCart} paymentMethodsData={drupalSettings.payment_methods} cart={this.state.cart} />
             {window.innerWidth > 768 &&
               <TermsConditions />
             }

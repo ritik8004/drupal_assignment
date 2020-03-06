@@ -2,7 +2,8 @@ import React from 'react';
 
 import SectionTitle from '../../../utilities/section-title';
 import PaymentMethod from '../payment-method';
-import { getPaymentMethods } from '../../../utilities/checkout_util';
+import {addPaymentMethodInCart} from "../../../utilities/update_cart";
+import {showFullScreenLoader} from "../../../utilities/checkout_util";
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -12,39 +13,72 @@ export default class PaymentMethods extends React.Component {
     const is_active = (cart.cart.carrier_info !== null);
 
     this.state = {
-      payment_methods: this.props.payment_methods,
       active: is_active,
+      selectedOption: cart.selected_payment_method,
+      paymentMethods: new Array(),
     };
   }
 
   componentDidMount() {
     // If shipping info is set for cart, only then get payment
     // methods for the cart.
-    if (this.props.cart.cart.carrier_info !== null) {
-      const methods = getPaymentMethods(this.props.cart.cart.cart_id);
-      if (methods instanceof Promise) {
-        methods.then((result) => {
-          const payment_methods = new Array();
-          Object.entries(result).forEach(([key, method]) => {
-            // If payment method from api response not exists in
-            // available payment methods in drupal.
-            if (method.code in this.props.payment_methods) {
-              payment_methods[method.code] = this.props.payment_methods[method.code];
-            }
-          });
+    if (this.props.cart.cart.carrier_info === null) {
+      return;
+    }
 
-          this.setState({
-            payment_methods,
-          });
-        });
+    const methods = this.props.cart.cart.payment_methods;
+    const paymentMethods = new Array();
+    Object.entries(methods).forEach(([key, method]) => {
+      // If payment method from api response not exists in
+      // available payment methods in drupal.
+      if (method.code in this.props.paymentMethodsData) {
+        paymentMethods[method.code] = this.props.paymentMethodsData[method.code];
       }
+    });
+
+    const prevState = this.state;
+    this.setState({ ...prevState, paymentMethods: paymentMethods });
+
+    // Select first payment method by default.
+    if (this.props.cart.selected_payment_method === 'undefined'
+      || !(this.props.cart.selected_payment_method)) {
+      this.changePaymentMethod(Object.keys(paymentMethods)[0]);
     }
   }
+
+  changePaymentMethod = (method) => {
+    if (this.state.selectedOption === method) {
+      return;
+    }
+
+    showFullScreenLoader();
+
+    const prevState = this.state;
+    this.setState({ ...prevState, selectedOption: method });
+
+    document.getElementById('payment-method-' + method).checked = true;
+
+    let data = {
+      'payment' : {
+        'method': method,
+        'additional_data': {}
+      }
+    };
+    let cart = addPaymentMethodInCart('update payment', data);
+    if (cart instanceof Promise) {
+      cart.then((result) => {
+        let cart_data = this.props.cart;
+        cart_data['selected_payment_method'] = method;
+        cart_data['cart'] = result;
+        this.props.refreshCart(cart_data);
+      });
+    }
+  };
 
   render() {
     const methods = [];
     let i = 0;
-    Object.entries(this.state.payment_methods).forEach(([key, method]) => {
+    Object.entries(this.state.paymentMethods).forEach(([key, method]) => {
       let isSelected = false;
       if (!isSelected && this.props.cart.selected_payment_method !== undefined
         && this.props.cart.selected_payment_method === key) {
@@ -53,7 +87,7 @@ export default class PaymentMethods extends React.Component {
         isSelected = key;
       }
       i++;
-      methods.push(<PaymentMethod cart={this.props.cart} refreshCart={this.props.refreshCart} isSelected={isSelected} key={key} method={method} />);
+      methods.push(<PaymentMethod cart={this.props.cart} refreshCart={this.props.refreshCart} changePaymentMethod={this.changePaymentMethod} isSelected={isSelected} key={key} method={method} />);
     });
 
     const active_class = this.state.active
