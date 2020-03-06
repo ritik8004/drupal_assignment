@@ -5,6 +5,8 @@ import BillingInfo from '../billing-info';
 
 export default class CnCBillingAddress extends React.Component {
 
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,8 +20,21 @@ export default class CnCBillingAddress extends React.Component {
     });
   };
 
+  closePopup = () => {
+    if (this._isMounted) {
+      this.setState({
+        open: false
+      });
+    }
+  };
+
   componentDidMount() {
+    this._isMounted = true;
     document.addEventListener('onBillingAddressUpdate', this.processBillingUpdate, false);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   /**
@@ -52,7 +67,7 @@ export default class CnCBillingAddress extends React.Component {
             {Drupal.t('please add your billing address.')}
           </div>
           {this.state.open &&
-          <BillingPopUp billing={billingAddress} shipping={shippingAddress}/>
+          <BillingPopUp closePopup={this.closePopup} billing={billingAddress} shipping={shippingAddress}/>
         }
         </React.Fragment>
       );
