@@ -144,9 +144,9 @@ $conductors = [
   ],
   // H&M EG.
   'hmeg_dev2' => [
-    'hmac_id' => '73ea7dfcd2614c7ea48145caf958ca05',
-    'hmac_secret' => 'NTJmNzUwNDItNjY2Ny00',
-    'site_id' => 190,
+    'hmac_id' => 'ef24328464034ff481bc508053f48e9a',
+    'hmac_secret' => 'YjZhMjg1YjQtYjg0NC00',
+    'site_id' => 204,
   ],
   'hmeg_qa' => [
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
