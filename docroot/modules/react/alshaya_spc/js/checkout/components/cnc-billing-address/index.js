@@ -47,17 +47,15 @@ export default class CnCBillingAddress extends React.Component {
   }
 
   render() {
-    const { cart } = this.props;
+    const { billingAddress, shippingAddress, carrierInfo } = this.props;
 
     // If carrier info not set, means shipping info not set.
     // So we don't need to show bulling.
-    if (cart.cart.carrier_info === undefined
-      || cart.cart.carrier_info === null) {
+    if (carrierInfo === undefined
+      || carrierInfo === null) {
         return (null);
     }
 
-    const billingAddress = cart.cart.billing_address;
-    const shippingAddress = cart.cart.shipping_address;
     // If billing address is not set already.
     if (billingAddress === undefined
       || billingAddress === null) {

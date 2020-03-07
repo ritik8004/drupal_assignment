@@ -87,17 +87,15 @@ export default class HDBillingAddress extends React.Component {
   };
 
   render() {
-    const { cart } = this.props;
+    const { billingAddress, shippingAddress, carrierInfo } = this.props;
     // If carrier info not set on cart, means shipping is not
     // set. Thus billing is also not set and thus no need to
     // show biiling info.
-    if (cart.cart.carrier_info === undefined
-      || cart.cart.carrier_info === null) {
+    if (carrierInfo === undefined
+      || carrierInfo === null) {
       return (null);
     }
 
-    let billingAddress = cart.cart.billing_address;
-    let shippingAddress = cart.cart.shipping_address;
     const isShippingBillingSame = this.state.shippingAsBilling;
 
     return (
