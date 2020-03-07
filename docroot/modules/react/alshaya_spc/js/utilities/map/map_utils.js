@@ -126,7 +126,6 @@ export const getAddressFieldVal = (addressArray, key) => {
  * @param {*} address
  */
 export const fillValueInAddressFromGeocode = (address) => {
-  console.log(address);
   Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
       // Some handling for select list fields (areas/city).
