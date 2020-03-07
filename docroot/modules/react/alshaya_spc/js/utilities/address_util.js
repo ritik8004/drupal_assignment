@@ -219,3 +219,30 @@ export const gerAreaLabelById = (is_parent, id) => {
 
   return label;
 };
+
+/**
+ * Get the parent areas of a given area.
+ *
+ * If we want to check via label.
+ *
+ * @param {*} isLabel
+ * @param {*} areaId
+ */
+export const getAreaParentId = (isLabel, areaId) => {
+  let parentArea = null;
+  const idAttibute = isLabel ? 'data-label' : 'data-id';
+  const area = document.querySelectorAll('[' + idAttibute + '="' + areaId + '"]');
+  // If there are parents available.
+  if (area.length > 0) {
+    parentArea = [];
+    for (let i = 0; i < area.length; i++) {
+      let city = {
+        label: area[i].getAttribute('data-parent-label'),
+        id: area[i].getAttribute('data-parent-id')
+      };
+      parentArea.push(city);
+    }
+  }
+
+  return parentArea;
+};

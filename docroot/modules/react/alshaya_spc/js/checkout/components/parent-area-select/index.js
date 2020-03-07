@@ -77,7 +77,7 @@ export default class ParentAreaSelect extends React.Component {
       this.props.areasUpdate(this.props.default_val[this.props.field.key], false);
     }
 
-    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
+    document.addEventListener('updateParentAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
   }
 
   /**

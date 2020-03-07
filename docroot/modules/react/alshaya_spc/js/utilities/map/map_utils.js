@@ -1,3 +1,7 @@
+import {
+  getAreaParentId
+} from '../address_util';
+
 /**
  * Prepare mapping of the google geocode.
  */
@@ -122,7 +126,7 @@ export const getAddressFieldVal = (addressArray, key) => {
  * @param {*} address
  */
 export const fillValueInAddressFromGeocode = (address) => {
-  Object.entries(window.drupalSettings.address_fields).forEach(
+  Object.entries(drupalSettings.address_fields).forEach(
     ([key, field]) => {
       // Some handling for select list fields (areas/city).
       if ((key !== 'administrative_area' && key !== 'area_parent')) {
@@ -134,47 +138,71 @@ export const fillValueInAddressFromGeocode = (address) => {
     }
   );
 
+  let areaParentValue = null;
   // If area parent available.
-  if (window.drupalSettings.address_fields.area_parent !== undefined) {
+  if (drupalSettings.address_fields.area_parent !== undefined) {
     let areaVal = new Array();
     let val = getAddressFieldVal(address, 'area_parent').trim();
     // If not empty.
     if (val.length > 0) {
       areaVal = deduceAreaVal(val, 'area_parent');
       if (areaVal !== null) {
+        areaParentValue = areaVal;
         // Trigger event.
-        var event = new CustomEvent('updateAreaOnMapSelect', {
+        var event = new CustomEvent('updateParentAreaOnMapSelect', {
           bubbles: true,
           detail: {
             data: () => areaVal
           }
         });
         document.dispatchEvent(event);
-
       }
     }
   }
 
-  // If area available and parent parent area is not available.
-  if (window.drupalSettings.address_fields.administrative_area !== undefined
-    && window.drupalSettings.address_fields.area_parent === undefined) {
-    let areaVal = new Array();
+  // If area field available.
+  if (drupalSettings.address_fields.administrative_area !== undefined) {
     let val = getAddressFieldVal(address, 'administrative_area').trim();
     // If not empty.
     if (val.length > 0) {
-      areaVal = deduceAreaVal(val, 'administrative_area');
-      if (areaVal === null) {
-        areaVal = new Array();
-      }
-
-      // Trigger event.
-      var event = new CustomEvent('updateAreaOnMapSelect', {
-        bubbles: true,
-        detail: {
-          data: () => areaVal
+      // Deduce value from the available area in drupal.
+      let areaVal = deduceAreaVal(val, 'administrative_area');
+      // If we have area value matching.
+      if (areaVal !== null && areaVal.id !== undefined) {
+        let triggerAreaUpdateEvent = false;
+        // If area parent field not available, then trigger event.
+        if (drupalSettings.address_fields.area_parent === undefined) {
+          triggerAreaUpdateEvent = true;
         }
-      });
-      document.dispatchEvent(event);
+        // If parent area field is available and it has value.
+        else if (areaParentValue !== null
+          && areaParentValue.id !== undefined) {
+            // Checking here if the area value we get has same
+            // parent as the parent we get for the area_parent.
+            let parentValue = getAreaParentId(true, areaVal.label);
+            // If there are parent for given area.
+            if (parentValue !== null) {
+              for (let i = 0; i < parentValue.length; i++) {
+                // If matches with a parent.
+                if (parentValue[i].id === areaParentValue.id) {
+                  triggerAreaUpdateEvent = true;
+                  break;
+                }
+              }
+            }
+        }
+
+        if (triggerAreaUpdateEvent) {
+          // Trigger event.
+          var event = new CustomEvent('updateAreaOnMapSelect', {
+            bubbles: true,
+            detail: {
+              data: () => areaVal
+            }
+          });
+          document.dispatchEvent(event);
+        }
+      }
     }
   }
 };
