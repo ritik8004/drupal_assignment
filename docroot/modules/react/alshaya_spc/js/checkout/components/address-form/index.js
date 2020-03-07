@@ -154,7 +154,7 @@ export default class AddressForm extends React.Component {
             </div>
             {window.innerWidth < 768 && (
               <div className="spc-address-form-map">
-                <GoogleMap />
+                <GoogleMap isEditAddress={isEditAddress} />
               </div>
             )}
             <div className="spc-address-form-content">
