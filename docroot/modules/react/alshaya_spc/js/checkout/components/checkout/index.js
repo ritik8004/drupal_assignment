@@ -202,9 +202,19 @@ export default class Checkout extends React.Component {
               <TermsConditions />
             }
             {this.state.cart.cart.delivery_type === 'hd' ? (
-              <HDBillingAddress refreshCart={this.refreshCart} cart={this.state.cart}/>
+              <HDBillingAddress
+                refreshCart={this.refreshCart}
+                billingAddress={this.state.cart.cart.billing_address}
+                shippingAddress={this.state.cart.cart.shipping_address}
+                carrierInfo={this.state.cart.cart.carrier_info}
+              />
             ) : (
-              <CnCBillingAddress refreshCart={this.refreshCart} cart={this.state.cart}/>
+              <CnCBillingAddress
+                refreshCart={this.refreshCart}
+                billingAddress={this.state.cart.cart.billing_address}
+                shippingAddress={this.state.cart.cart.shipping_address}
+                carrierInfo={this.state.cart.cart.carrier_info}
+              />
             )}
             <CompletePurchase cart={this.state.cart} />
           </div>
