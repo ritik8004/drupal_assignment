@@ -109,6 +109,14 @@ export default class AddressForm extends React.Component {
       default_val = this.props.default_val;
     }
 
+    let isEditAddress = false;
+    // If address has area value set on load, means
+    // we are editing address.
+    if (default_val !== null
+      && default_val.area !== undefined) {
+        isEditAddress = true;
+    }
+
     Object.entries(window.drupalSettings.address_fields).forEach(
       ([key, field]) => {
         dynamicFields.push(
@@ -129,7 +137,7 @@ export default class AddressForm extends React.Component {
       <div className="spc-address-form">
         {window.innerWidth > 768 && (
           <div className="spc-address-form-map">
-            <GoogleMap />
+            < GoogleMap isEditAddress={isEditAddress} />
           </div>
         )}
         <div className="spc-address-form-sidebar">

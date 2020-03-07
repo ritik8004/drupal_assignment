@@ -41,10 +41,8 @@ export default class AreaSelect extends React.Component {
 
   componentDidMount() {
     this.getAreaList();
-    // Only trigger event when area parent field not available.
-    if (window.drupalSettings.address_fields.area_parent === undefined) {
-      document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
-    }
+    // Trigger event for handling area update from map.
+    document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap, false);
   }
 
   /**

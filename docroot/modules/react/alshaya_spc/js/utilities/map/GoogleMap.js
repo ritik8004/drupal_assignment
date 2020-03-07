@@ -1,6 +1,9 @@
 import React from 'react';
 
-import {createMarker, createInfoWindow} from './map_utils';
+import {
+  createMarker,
+  geocodeAddressToLatLng
+} from './map_utils';
 import {isRTL} from '../rtl';
 
 export default class GoogleMap extends React.Component {
@@ -17,18 +20,18 @@ export default class GoogleMap extends React.Component {
   }
 
   componentDidMount() {
-    // This data can be passed from caller in props.
-    let data = [];
-
     let control_position = isRTL() === true ? window.google.maps.ControlPosition.RIGHT_BOTTOM : window.google.maps.ControlPosition.LEFT_BOTTOM;
 
-    // This can be called conditionally from props
-    // if map points for current location.
-    data[0] = this.setCurrentLocationCoords();
+    let data = {};
+    // If adress is being edited, means don't need to
+    // set current location.
+    if (this.props.isEditAddress === false) {
+      data = this.setCurrentLocationCoords();
+    }
 
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    this.googleMap = this.createGoogleMap(data[0], control_position);
+    this.googleMap = this.createGoogleMap(data, control_position);
 
     // Storing in global so that can be accessed byt parent and others.
     window.spcMap = this.googleMap;
@@ -251,7 +254,14 @@ export default class GoogleMap extends React.Component {
   createGoogleMap = (centerPosition, control_position) => {
     // If corrds not available, try country coords.
     if (centerPosition.lat === undefined) {
-      this.setCountryCoords();
+      // If address is being edited, get coords from
+      // address detail.
+      if (this.props.isEditAddress) {
+        geocodeAddressToLatLng();
+      }
+      else {
+        this.setCountryCoords();
+      }
 
       // As coords are required for initialize google
       // map object and if user has not allowed location
