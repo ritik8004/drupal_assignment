@@ -8,6 +8,22 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add new field as quantity set.
+ */
+function alshaya_we_transac_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->addFields();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_we_transac_install() {
