@@ -39,3 +39,32 @@ checkout-confirmation:
     dist/checkout_confirmation.bundle.js: { }
   dependencies:
     - alshaya_react/react
+
+checkout_sandbox_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }
+
+checkout_live_kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    https://cdn.checkout.com/js/checkoutkit.js: { type: external }
+
+checkout_com:
+  version: 1.x
+  js:
+    assets/js/checkout.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

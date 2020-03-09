@@ -10,6 +10,8 @@ export default class PaymentMethods extends React.Component {
   constructor(props) {
     super(props);
 
+    this.paymentMethodRefs = new Array();
+
     this.state = {
       active: (props.cart.carrier_info !== null),
       selectedOption: props.cart.selected_payment_method,
@@ -79,10 +81,6 @@ export default class PaymentMethods extends React.Component {
 
     showFullScreenLoader();
 
-    this.setState({ ...this.state, selectedOption: method });
-
-    document.getElementById('payment-method-' + method).checked = true;
-
     let data = {
       'payment' : {
         'method': method,
@@ -92,20 +90,37 @@ export default class PaymentMethods extends React.Component {
     let cart = addPaymentMethodInCart('update payment', data);
     if (cart instanceof Promise) {
       cart.then((result) => {
+        // @TODO: Handle exception.
+        document.getElementById('payment-method-' + method).checked = true;
+        this.setState({ ...this.state, selectedOption: method });
+
         let cart_data = this.props.cart;
         cart_data['selected_payment_method'] = method;
         cart_data['cart'] = result;
         this.props.refreshCart(cart_data);
+      }).catch((error) => {
+        console.error(error);
       });
     }
+  };
+
+  validateBeforePlaceOrder = () => {
+    // Trigger validate of selected component.
+    this.paymentMethodRefs[this.state.selectedOption].validateBeforePlaceOrder();
   };
 
   render() {
     const methods = [];
 
     Object.entries(this.getPaymentMethods()).forEach(([key, method]) => {
+      this.paymentMethodRefs[method] = React.createRef();
       let isSelected = (this.state.selectedOption === key) ? key : '';
-      methods.push(<PaymentMethod cart={this.props.cart} refreshCart={this.props.refreshCart} changePaymentMethod={this.changePaymentMethod} isSelected={isSelected} key={key} method={method} />);
+      methods.push(<PaymentMethod cart={this.props.cart}
+                                  ref={this.paymentMethodRefs[method]}
+                                  refreshCart={this.props.refreshCart}
+                                  changePaymentMethod={this.changePaymentMethod}
+                                  isSelected={isSelected} key={key}
+                                  method={method}/>);
     });
 
     const active_class = this.state.active

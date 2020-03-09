@@ -40,8 +40,6 @@ class PaymentMethodCheckoutCom extends React.Component {
       valid = false;
     }
 
-    console.log(luhn.validate(event.target.rawValue));
-
     if (valid) {
       event.target.classList.remove('invalid');
     }
@@ -74,8 +72,6 @@ class PaymentMethodCheckoutCom extends React.Component {
       return parseInt(x);
     });
 
-    console.log(dateParts);
-
     if (dateParts.length < 2 || dateParts[0] <= 0 || dateParts[1] <= 0) {
       valid = false;
     }
@@ -85,7 +81,6 @@ class PaymentMethodCheckoutCom extends React.Component {
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
       let today = new Date();
       if (date < today) {
-        console.log(1232);
         valid = false;
       }
     }
@@ -116,6 +111,10 @@ class PaymentMethodCheckoutCom extends React.Component {
       cvv: event.target.value,
     });
   }
+
+  validateBeforePlaceOrder = () => {
+
+  };
 
   render() {
     return (

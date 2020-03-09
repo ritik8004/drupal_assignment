@@ -7,6 +7,9 @@ import PaymentMethodCheckoutCom from "../payment-method-checkout-com";
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
+
+    this.paymentMethodCheckoutCom = React.createRef();
+
     this.state = {
       'selectedOption': this.props.isSelected
     };
@@ -16,6 +19,14 @@ export default class PaymentMethod extends React.Component {
     this.setState({
       selectedOption: nextProps.isSelected
     });
+  }
+
+  validateBeforePlaceOrder () {
+    // Do additional process for some payment methods.
+    if (this.props.method.code === 'checkout_com') {
+      console.log(this.paymentMethodCheckoutCom.current.state);
+      throw 'Stop processing for now';
+    }
   }
 
   render() {
@@ -41,7 +52,7 @@ export default class PaymentMethod extends React.Component {
 
         <ConditionalView condition={(this.state.selectedOption === 'checkout_com')}>
           <div className={['payment-method-form', 'payment-method-form-' + method]}>
-            <PaymentMethodCheckoutCom />
+            <PaymentMethodCheckoutCom ref={this.paymentMethodCheckoutCom} />
           </div>
         </ConditionalView>
       </>

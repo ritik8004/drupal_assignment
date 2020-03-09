@@ -10,6 +10,15 @@ export default class CompletePurchase extends React.Component {
    */
   placeOrder = (e) => {
     e.preventDefault();
+
+    try {
+      this.validateBeforePlaceOrder();
+    }
+    catch (error) {
+      console.error(error);
+      return;
+    }
+
     const { cart } = this.props;
     placeOrder(cart.cart.cart_id, cart.selected_payment_method);
   };

@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
-use Drupal\Component\Plugin\PluginBase;
+use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 
 /**
  * COD payment method for SPC.
@@ -13,4 +13,6 @@ use Drupal\Component\Plugin\PluginBase;
  *   hasForm = false
  * )
  */
-class CashOnDelivery extends PluginBase {}
+class CashOnDelivery extends AlshayaSpcPaymentMethodPluginBase {
+
+}
