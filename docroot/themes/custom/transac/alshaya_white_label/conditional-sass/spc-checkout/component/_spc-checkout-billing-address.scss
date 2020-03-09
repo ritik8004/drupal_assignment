@@ -94,4 +94,10 @@
       }
     }
   }
+
+  &.cnc-flow {
+    .spc-billing-bottom-panel {
+      border-top: none;
+    }
+  }
 }
