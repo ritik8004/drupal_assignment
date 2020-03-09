@@ -121,7 +121,7 @@ export default class Checkout extends React.Component {
     if (store_info) {
       this.fetchStoresHelper({
         lat: parseFloat(store_info.lat),
-        lng: parseFloat(store_info.lng)
+        lng: parseFloat(store_info.lng),
       });
     }
     else {
