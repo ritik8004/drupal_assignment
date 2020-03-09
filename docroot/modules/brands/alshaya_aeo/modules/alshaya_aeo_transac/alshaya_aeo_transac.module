@@ -14,18 +14,15 @@ use Drupal\acq_sku\Entity\SKU;
  */
 function alshaya_aeo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-    $sku = $skuManager->getSkuForNode($entity);
-    $sku_entity = SKU::loadFromSku($sku);
-
-    if ($sku_entity instanceof SKU) {
-      if ($view_mode == 'full') {
-        $return = _alshaya_aeo_transac_get_product_description($sku_entity);
-        $build['short_desc'] = $return['short_desc'];
-        $build['description'] = $return['description'];
-      }
+    if ($view_mode == 'full') {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $sku = $skuManager->getSkuForNode($entity);
+      $sku_entity = SKU::loadFromSku($sku);
+      $return = _alshaya_aeo_transac_get_product_description($sku_entity);
+      $build['short_desc'] = $return['short_desc'];
+      $build['description'] = $return['description'];
     }
   }
 }
