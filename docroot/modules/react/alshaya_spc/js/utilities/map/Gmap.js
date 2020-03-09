@@ -36,7 +36,7 @@ export default class Gmap {
   }
 
   initMap(container) {
-    this.map.googlemap = new google.maps.Map(container, {
+    this.map.googleMap = new google.maps.Map(container, {
       zoom: this.map.settings.zoom,
       maxZoom: this.map.settings.maxZoom,
       minZoom: this.map.settings.minZoom,
@@ -67,7 +67,7 @@ export default class Gmap {
       gestureHandling: this.map.settings.gestureHandling,
     });
 
-    return this.map.googlemap;
+    return this.map.googleMap;
   }
 
   /**
@@ -108,8 +108,8 @@ export default class Gmap {
     }, (results, status) => {
       if (status === google.maps.GeocoderStatus.OK) {
         // Just center the map and don't do anything.
-        window.spcMap.googleMap.setCenter(results[0].geometry.location);
-        window.spcMap.googleMap.setZoom(window.spcMap.map.settings.zoom);
+        window.spcMap.map.googleMap.setCenter(results[0].geometry.location);
+        window.spcMap.map.googleMap.setZoom(window.spcMap.map.settings.zoom);
         if (callBackFunc) {
           callBackFunc.call(results);
         }

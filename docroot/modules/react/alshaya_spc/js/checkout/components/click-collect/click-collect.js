@@ -221,13 +221,15 @@ class ClickCollect extends React.Component {
   };
 
   refreshMap = () => {
-    let map = window.spcMap;
+    const { map } = window.spcMap;
     // Adjust the map, when we trigger the map view.
-    google.maps.event.trigger(map.googleMap, "resize");
-    // Auto zoom.
-    map.googleMap.fitBounds(map.googleMap.bounds);
-    // Auto center.
-    map.googleMap.panToBounds(map.googleMap.bounds);
+    google.maps.event.trigger(map.googleMap, 'resize');
+    if (map.mapMarkers.length > 0) {
+      // Auto zoom.
+      map.googleMap.fitBounds(map.googleMap.bounds);
+      // Auto center.
+      map.googleMap.panToBounds(map.googleMap.bounds);
+    }
   };
 
   closeSelectedStorePanel = () => {

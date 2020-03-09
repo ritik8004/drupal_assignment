@@ -25,8 +25,8 @@ class ClicknCollectMap extends React.Component {
   componentDidMount() {
     // Create map object. Initial map center coordinates
     // can be provided from the caller in props.
-    window.spcMap.googleMap = this.createGoogleMap();
-    this.googleMap.setCurrentMap(window.spcMap.googleMap);
+    window.spcMap.map.googleMap = this.createGoogleMap();
+    this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
     if (this.props.markers) {
       this.placeMarkers();
     }
@@ -51,54 +51,47 @@ class ClicknCollectMap extends React.Component {
    */
   placeMarkers = async () => {
     this.googleMap.removeMapMarker();
-    let { markers } = this.props;
+    let { markers, openSelectedStore } = this.props;
     if (!markers || !markers.length) {
       return;
     }
 
     // Initiate bounds object.
-    this.googleMap.setCurrentMap(window.spcMap.googleMap);
-    window.spcMap.googleMap.bounds = new google.maps.LatLngBounds();
-    let self = this;
-    await markers.forEach(function (store, index) {
-
+    this.googleMap.setCurrentMap(window.spcMap.map.googleMap);
+    window.spcMap.map.googleMap.bounds = new google.maps.LatLngBounds();
+    const self = this;
+    await markers.forEach((store, index) => {
       let position = new google.maps.LatLng(parseFloat(store.lat), parseFloat(store.lng));
-      let markerConfig = {
+      const markerConfig = {
         position: position,
         title: store.name,
         infoWindowContent: renderToString(<StoreItemInfoWindow display="default" store={store}/>),
         infoWindowSolitary: true,
         label: (index + 1).toString(),
         // Require When markers overlap on each other, show the latest one on top,
-        zIndex: index + 1
+        zIndex: index + 1,
       };
       // Pass "false" as second param, to show infowindow.
       self.googleMap.setMapMarker(markerConfig, !(window.innerWidth < 768));
-
       // Add new marker position to bounds.
-      window.spcMap.googleMap.bounds.extend(position);
+      window.spcMap.map.googleMap.bounds.extend(position);
     });
-    if (this.props.openSelectedStore === false) {
+    if (openSelectedStore === false) {
       // Auto zoom.
-      window.spcMap.googleMap.fitBounds(window.spcMap.googleMap.bounds);
+      window.spcMap.map.googleMap.fitBounds(window.spcMap.map.googleMap.bounds);
       // Auto center.
-      window.spcMap.googleMap.panToBounds(window.spcMap.googleMap.bounds);
+      window.spcMap.map.googleMap.panToBounds(window.spcMap.map.googleMap.bounds);
     }
   }
 
   /**
    * Create google map.
    */
-  createGoogleMap = () => {
-    return this.googleMap.initMap(this.googleMapRef.current);
-  };
+  createGoogleMap = () => this.googleMap.initMap(this.googleMapRef.current);
 
   render() {
-    return (
-      <div id='google-map-cnc' ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />
-    );
+    return <div id="google-map-cnc" ref={this.googleMapRef} style={{ width: '100%', height: '100%' }} />;
   }
-
 }
 
 export default ClicknCollectMap;
